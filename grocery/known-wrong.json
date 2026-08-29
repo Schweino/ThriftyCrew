@@ -2991,6 +2991,156 @@
                         "ruled_on":  "2026-08-29",
                         "ruled_by":  "wrong-product-sweep-2026-08-29",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cucumbers|Walmart|fresh-pickling-cucumbers-each",
+                        "commodity":  "cucumbers",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Fresh Pickling Cucumbers, Each"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Landed here when the organic 2-count was blocked, and it is worse than what it replaced. Three faults: (1) pickling cucumbers are a different vegetable from the slicing cucumber every other cell on this row carries; (2) the capture records size=lb with engine_check \"1.56/lb\", so a per-POUND price is published in an each-unit cell; (3) it is not purchasable - it appears in exactly ONE capture (2026-08-06) and a live search on 2026-08-29 returns no fresh pickling cucumber except \"Cucumber Salad/pickling\" at $3.68, OUT OF STOCK. The correct product is Fresh Cucumber, Each at $0.76 - Walmart\u0027s own Overall pick, read live 2026-08-29, present in four July captures in the union. If the matcher passes those July rows over again (they predate the engine_check/qty_basis fields), the Walmart cell drops and cost-recipes falls to nomem = Aldi $0.75, which is within a cent of the truth. Either landing is right; $1.56 is not.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-coriander|Walmart|27-peaks-gourmet-all-natural-coriander-powder-16",
+                        "commodity":  "ground-coriander",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "27 Peaks Gourmet All Natural Coriander Powder, 16 oz Bottle"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party bulk seller in a size Walmart does not shelve - the same class as the Frontier Co-op bags ruled earlier today, found by asking which board brands have ZERO rows in the 11,256-row store-scoped catalogue of 2026-08-11. 27 Peaks has 16 products in the union, all 12-19 oz \"Bottle\" at $10.99-$14.27, and zero in the store-scoped catalogue. Held the Walmart CROWN at $0.7331/oz. The term \"ground coriander\" WAS searched and the only shelf coriander is Great Value Organic Ground Coriander 1.5 oz at $2.91/oz, confirmed live 2026-08-29 - the board was 4x cheap.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-ginger|Walmart|27-peaks-gourmet-all-natural-ground-ginger-powde",
+                        "commodity":  "ground-ginger",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "27 Peaks Gourmet All Natural Ground Ginger Powder, 16 oz Bottle"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party bulk seller in a size Walmart does not shelve - the same class as the Frontier Co-op bags ruled earlier today, found by asking which board brands have ZERO rows in the 11,256-row store-scoped catalogue of 2026-08-11. Held $0.8088/oz. The term \"ground ginger\" WAS searched and returned no shelf ground ginger at all; a live read on 2026-08-29 found Great Value Ground Ginger, 1.5 oz at $2.53 = $1.69/oz. The board was 52% cheap.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-turmeric|Walmart|27-peaks-gourmet-all-natural-turmeric-powder-16",
+                        "commodity":  "ground-turmeric",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "27 Peaks Gourmet All Natural Turmeric Powder, 16 oz Bottle"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party bulk seller in a size Walmart does not shelve - the same class as the Frontier Co-op bags ruled earlier today, found by asking which board brands have ZERO rows in the 11,256-row store-scoped catalogue of 2026-08-11. Held $0.6869/oz. The term \"ground turmeric\" WAS searched and the shelf item is Great Value Ground Turmeric, 6.2 oz at $5.17 = $0.8339/oz. The board was 21% cheap.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "curry-powder|Walmart|27-peaks-gourmet-no-artificial-flavors-curry-pow",
+                        "commodity":  "curry-powder",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "27 Peaks Gourmet No Artificial Flavors Curry Powder, 16 oz Bottle"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party bulk seller in a size Walmart does not shelve - the same class as the Frontier Co-op bags ruled earlier today, found by asking which board brands have ZERO rows in the 11,256-row store-scoped catalogue of 2026-08-11. This cell moved STRAIGHT INTO the slot the Frontier Co-op curry bag vacated when it was blocked this morning, at $0.7775/oz against Frontier\u0027s $0.7669 - which is the proof that the defect is a seller shape and not a brand. The shelf item is Great Value Curry Powder, 2 oz at $2.12 = $1.06/oz, confirmed live 2026-08-29.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "garam-masala|Walmart|27-peaks-gourmet-no-artificial-flavors-garam-mas",
+                        "commodity":  "garam-masala",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "27 Peaks Gourmet No Artificial Flavors Garam Masala, 12.3 oz Bottle"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party bulk seller in a size Walmart does not shelve - the same class as the Frontier Co-op bags ruled earlier today, found by asking which board brands have ZERO rows in the 11,256-row store-scoped catalogue of 2026-08-11. Held the Walmart CROWN at $0.9943/oz. Walmart L St does not shelve garam masala AT ALL: read live 2026-08-29, not one garam masala result on the search page offers pickup or delivery - every one says \"Shipping, arrives\" - while unrelated \"Buy it again\" tiles on the SAME page show \"Pickup as soon as 1pm\", which is the control that makes the absence meaningful. There is no correct product to fall through to; the honest board has no Walmart cell here.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bay-leaves|Walmart|soeos-bay-leaves-16-oz-454g-bay-leaves-bulk-bay",
+                        "commodity":  "bay-leaves",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Soeos Bay Leaves 16 oz (454g), Bay Leaves Bulk, Bay Leaves Whole Dried"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party bulk seller in a size Walmart does not shelve - the same class as the Frontier Co-op bags ruled earlier today, found by asking which board brands have ZERO rows in the 11,256-row store-scoped catalogue of 2026-08-11. Soeos is a marketplace bulk seller with zero rows in the store-scoped catalogue. Held the Walmart CROWN at $1.4369/oz. The term \"bay leaves\" WAS searched and every shelf bay leaf is a 0.12-0.15 oz jar: Great Value Bay Leaves, 0.12 oz at $3.02 = $25.1667/oz. The board was SEVENTEEN TIMES cheap - the largest per-unit error found in this sweep.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "berbere-seasoning|Walmart|ny-spice-shop-ethiopian-berbere-spice-seasoning",
+                        "commodity":  "berbere-seasoning",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "NY SPICE SHOP Ethiopian Berbere Spice Seasoning - 1 Pound"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party bulk seller in a size Walmart does not shelve - the same class as the Frontier Co-op bags ruled earlier today, found by asking which board brands have ZERO rows in the 11,256-row store-scoped catalogue of 2026-08-11. Held the Walmart CROWN at $1.1044/oz. The term \"berbere seasoning\" WAS searched and returned 12 rows, not one of them berbere. Read live 2026-08-29, no berbere product on the page offers pickup or delivery - all are shipping-only. Walmart L St does not shelve berbere, so there is no correct product to fall through to.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "brown-lentils|Walmart|genova-premium-tuna-mediterranean-lentil-grain-s",
+                        "commodity":  "brown-lentils",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Genova Premium Tuna Mediterranean Lentil \u0026 Grain Salad Bowl"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A canned TUNA salad bowl priced onto the dry brown-lentils row at $6.2268/oz. It is not lentils in any form - it is a ready-to-eat tuna product that happens to contain lentils, and the include rule matched the word. Walmart shelves Great Value Lentils, 4 lb at $5.63 = $0.088/oz (1 lb at $1.92 = $0.12/oz), both pickup-available, confirmed live 2026-08-29. The board was SEVENTY TIMES too expensive, which is why this never looked like a bargain and so was never questioned.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "harissa-paste|Walmart|alfez-rich-smoky-harissa-chicken-sauce-15-8-oz",
+                        "commodity":  "harissa-paste",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Al\u0027Fez Rich \u0026 Smoky Harissa Chicken Sauce, 15.8 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A ready-to-use CHICKEN COOKING SAUCE, not harissa paste, holding the Walmart CROWN at $0.4703/oz. The term \"harissa\" WAS searched in the store-scoped catalogue and its only hit was Tyson Chicken Bites, Harissa Style - so the rule is matching the word \"harissa\" on chicken products twice over. Walmart does shelve the real thing: Mina Harissa Mild Sauce, Homestyle Moroccan Red Pepper Harissa Paste, 10 oz at $8.87 = $0.887/oz, Walmart\u0027s own Overall pick with pickup available, read live 2026-08-29.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
