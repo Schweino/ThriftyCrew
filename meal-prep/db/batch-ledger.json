@@ -585,7 +585,7 @@
   {
       "batch":  "hunt-2026-08-27-ten-w2",
       "opened":  "2026-08-27T06:39:25",
-      "last_activity":  "2026-08-27T06:39:26",
+      "last_activity":  "2026-08-29T08:45:37",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -614,13 +614,21 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-27T06:39:26",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-29T08:45:37",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - wave never shipped: none of its 3 recipe(s) reached the site, so there is no publish and no review to owe."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-29T08:45:37",
+      "abandon_reason":  "wave never shipped: none of its 3 recipe(s) reached the site, so there is no publish and no review to owe."
   },
   {
       "batch":  "hunt-2026-08-27-ten-w3",
       "opened":  "2026-08-27T07:08:42",
-      "last_activity":  "2026-08-27T07:08:43",
+      "last_activity":  "2026-08-29T08:45:37",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -647,8 +655,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-27T07:08:43",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-29T08:45:37",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - wave never shipped: none of its 1 recipe(s) reached the site, so there is no publish and no review to owe."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-29T08:45:37",
+      "abandon_reason":  "wave never shipped: none of its 1 recipe(s) reached the site, so there is no publish and no review to owe."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w1",
@@ -689,7 +705,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w2",
       "opened":  "2026-08-27T14:20:59",
-      "last_activity":  "2026-08-27T14:21:00",
+      "last_activity":  "2026-08-29T08:45:38",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -716,8 +732,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-27T14:21:00",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-29T08:45:38",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - wave never shipped: none of its 1 recipe(s) reached the site, so there is no publish and no review to owe."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-29T08:45:38",
+      "abandon_reason":  "wave never shipped: none of its 1 recipe(s) reached the site, so there is no publish and no review to owe."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w3",
@@ -898,7 +922,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w7",
       "opened":  "2026-08-27T17:52:52",
-      "last_activity":  "2026-08-27T17:52:53",
+      "last_activity":  "2026-08-29T08:45:39",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -927,8 +951,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-27T17:52:53",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-29T08:45:39",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - superseded: 3 of its 3 recipe(s) shipped under hunt-2026-08-27-highprotein-w8 and 0 were never built. Nothing here is owed - the publishing wave stamped its own review."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-29T08:45:39",
+      "abandon_reason":  "superseded: 3 of its 3 recipe(s) shipped under hunt-2026-08-27-highprotein-w8 and 0 were never built. Nothing here is owed - the publishing wave stamped its own review."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w8",
@@ -1075,7 +1107,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w11",
       "opened":  "2026-08-28T12:54:33",
-      "last_activity":  "2026-08-28T12:54:34",
+      "last_activity":  "2026-08-29T08:45:39",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1102,8 +1134,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-28T12:54:34",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-29T08:45:39",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - superseded: 1 of its 1 recipe(s) shipped under hunt-2026-08-27-highprotein-w12 and 0 were never built. Nothing here is owed - the publishing wave stamped its own review."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-29T08:45:39",
+      "abandon_reason":  "superseded: 1 of its 1 recipe(s) shipped under hunt-2026-08-27-highprotein-w12 and 0 were never built. Nothing here is owed - the publishing wave stamped its own review."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w12",

@@ -17,10 +17,12 @@
 #   .\batch-ledger.ps1 -Stamp -Batch burrito-2026-08-07 -Stage publish -Detail '29/29 verified'
 #   .\batch-ledger.ps1 -Close -Batch burrito-2026-08-07 -Detail 'stage 8 GO'
 #   .\batch-ledger.ps1 -Reconcile -Batch <b> -Slugs a,b -Detail 'why' (OPEN rows only; records the removals)
+#   .\batch-ledger.ps1 -Abandon -Batch <b> -Detail 'why'   (a wave that will never finish; refuses one that shipped)
 #   .\batch-ledger.ps1 -Verify                 (exit 1 if any open batch is stale or missing a stage)
 #   .\batch-ledger.ps1 -SelfTest
 param(
   [switch]$Start,[switch]$Stamp,[switch]$Close,[switch]$Verify,[switch]$SelfTest,[switch]$Reconcile,
+  [switch]$Abandon,
   [string]$Batch,[string[]]$Slugs,[string]$Stage,[string]$Detail,
   [int]$MaxAgeHours = 24,
   [string]$LedgerPath
@@ -48,6 +50,72 @@ function Get-ReconcilePlan { param([string[]]$Was,[string[]]$Want)
   $added   = @($wantL | Where-Object { $wasL  -notcontains $_ })
   return [pscustomobject]@{ dropped=$dropped; added=$added; noop=($dropped.Count -eq 0 -and $added.Count -eq 0) }
 }
+# ABANDONMENT IS A CLAIM, AND THIS IS THE CHECK ON THE CLAIM - the same shape Test-ClosedIncomplete
+# applies to closing. The founding bug was a batch that PUBLISHED and never had its post-publish review;
+# a verb that silences an open row is a second door onto exactly that, so it has to be shut here rather
+# than in a caller's discipline.
+#
+# Slugs this batch carries that are LIVE in recipes-db and that NO batch anywhere records publishing.
+# If a row's recipes are on the site and nothing in the ledger owns that publish, the row is not
+# abandoned - it is the evidence, and abandoning it would bury the one thing this file exists to find.
+# w11 is the CLEAN case and the reason the check is written this way round: its recipe IS live, but w12
+# published it and stamped so, therefore w11 is genuinely superseded and owes nothing.
+function Get-OrphanLiveSlugs { param($Row,$Ledger,$Live)
+  $published = @{}
+  foreach($b in @($Ledger)){
+    $st = @(@($b.stages) | ForEach-Object { [string]$_.stage })
+    if($st -notcontains 'publish'){ continue }
+    foreach($s in @($b.slugs)){ if($s){ $published[[string]$s] = $true } }
+  }
+  $liveL = @(@($Live) | ForEach-Object { [string]$_ })
+  $out = @()
+  foreach($s in @($Row.slugs)){
+    $s = [string]$s
+    if(-not $s){ continue }
+    if($liveL -notcontains $s){ continue }        # not live: there is nothing to bury
+    if($published.ContainsKey($s)){ continue }    # live, and some batch owns the publish
+    $out += $s
+  }
+  return @($out)
+}
+
+# Slugs this batch carries that are NOT live but whose SPEC still exists - recipes that are built and
+# waiting on a publish decision. Measured 2026-08-29: 22 such specs sat across 10 of the 15 open rows,
+# and propagate calls them "built but never published - in flight, not drift". Abandoning a row holding
+# them would retire the only record that they are owed an answer, which is this file's founding failure
+# with the sign flipped: not a batch that shipped unverified, but work that quietly stops being tracked.
+# The way out is a sequence, not an exception - retire-recipe.ps1 the specs that will never ship (or
+# publish them), THEN abandon the row, which by then genuinely owes nothing.
+function Get-PendingBuiltSlugs { param($Row,$Live,$Built)
+  $liveL  = @(@($Live)  | ForEach-Object { [string]$_ })
+  $builtL = @(@($Built) | ForEach-Object { [string]$_ })
+  $out = @()
+  foreach($s in @($Row.slugs)){
+    $s = [string]$s
+    if(-not $s){ continue }
+    if($liveL -contains $s){ continue }        # already live: not pending
+    if($builtL -notcontains $s){ continue }    # no spec: the recipe genuinely does not exist
+    $out += $s
+  }
+  return @($out)
+}
+
+# Every reason this row may NOT be abandoned. Returns an array so the caller can print all of them at
+# once - a refusal that surfaces one problem at a time makes the caller re-run to discover the next.
+function Get-AbandonRefusals { param($Row,$Ledger,$Live,[string]$Reason,$Built=@())
+  $r = @()
+  if(-not $Reason){ $r += 'no reason given - pass -Detail. An abandonment with no stated cause cannot be told from someone quietly giving up' }
+  if($Row.closed){ $r += 'batch is CLOSED - a closed row is the permanent record of what shipped and is not reopened to be abandoned' }
+  if(($Row.PSObject.Properties.Name -contains 'abandoned') -and $Row.abandoned){ $r += 'batch is already abandoned' }
+  $st = @(@($Row.stages) | ForEach-Object { [string]$_.stage })
+  if($st -contains 'publish'){ $r += "batch stamped 'publish' - it SHIPPED. It owes a post-publish-review and a close, and abandoning it is the founding bug wearing a new hat" }
+  $orph = @(Get-OrphanLiveSlugs -Row $Row -Ledger $Ledger -Live $Live)
+  if($orph.Count){ $r += ('live recipe(s) that no batch records publishing: ' + ($orph -join ', ') + ' - abandoning this row would bury exactly the gap this ledger exists to find') }
+  $pend = @(Get-PendingBuiltSlugs -Row $Row -Live $Live -Built $Built)
+  if($pend.Count){ $r += ($pend.Count.ToString() + ' recipe(s) are BUILT and unpublished: ' + ($pend -join ', ') + ' - retire them (pipeline\retire-recipe.ps1) or publish them first; abandoning the row would stop anything tracking that they are owed an answer') }
+  return @($r)
+}
+
 function Test-BatchStale { param($Batch,[datetime]$Now,[int]$MaxAgeHours)
   if($Batch.closed){ return $false }
   $last = [datetime]$Batch.last_activity
@@ -66,9 +134,40 @@ function Test-FutureStamp { param($Batch,[datetime]$Now)
 # A CLOSED batch is not automatically a finished one. -Verify used to `continue` on every closed row, so the
 # founding bug - closing a batch whose post-publish review never ran - became invisible the instant someone
 # closed it. Closing is a claim; this is the check on the claim.
+function Test-BatchAbandoned { param($Batch)
+  return (($Batch.PSObject.Properties.Name -contains 'abandoned') -and [bool]$Batch.abandoned)
+}
 function Test-ClosedIncomplete { param($Batch)
   if(-not $Batch.closed){ return @() }
   return (Test-BatchComplete $Batch)
+}
+
+# THE PER-ROW -Verify DECISION. It lived inline in the loop below, which meant the one thing this file
+# is FOR - deciding whether a batch is a finding - was the one thing no fixture could reach. Two of the
+# abandon cases written against the inline version asserted their own inputs and passed without touching
+# it. Returns the finding string, or $null when the row is not a finding.
+function Get-VerifyFinding { param($Batch,[datetime]$Now,[int]$MaxAgeHours)
+  if(Test-BatchAbandoned $Batch){
+    # Exempt from staleness, NEVER exempt from having shipped.
+    $st = @(@($Batch.stages) | ForEach-Object { [string]$_.stage })
+    if($st -contains 'publish'){
+      return ("ABANDONED BUT PUBLISHED: batch '{0}' was abandoned on {1} yet stamped 'publish' - it shipped, so it still owes: {2}" -f $Batch.batch, $Batch.abandoned_at, ((Test-BatchComplete $Batch) -join ', '))
+    }
+    return $null
+  }
+  if($Batch.closed){
+    $ci = @(Test-ClosedIncomplete $Batch)
+    if($ci.Count){ return ("CLOSED INCOMPLETE: batch '{0}' was closed on {1} without ever stamping: {2}" -f $Batch.batch, $Batch.closed_at, ($ci -join ', ')) }
+    return $null
+  }
+  $miss = @(Test-BatchComplete $Batch)
+  if(Test-FutureStamp $Batch $Now){
+    return ("FUTURE STAMP: batch '{0}' claims last_activity {1}, which is ahead of now - the staleness check cannot fire on it, so it is exempt until that time passes. Missing: {2}" -f $Batch.batch, $Batch.last_activity, ($miss -join ', '))
+  }
+  if(Test-BatchStale $Batch $Now $MaxAgeHours){
+    return ("OPEN+STALE: batch '{0}' last touched {1} ({2}h ago), missing: {3}" -f $Batch.batch, $Batch.last_activity, [int]($Now-[datetime]$Batch.last_activity).TotalHours, ($miss -join ', '))
+  }
+  return $null
 }
 
 if($SelfTest){
@@ -131,6 +230,72 @@ if($SelfTest){
     (-not (Test-BatchStale $future $now 24)) 'staleness caught it after all'
   T 'CLEAN TWIN an ordinary past stamp is not called corrupt'                     (-not (Test-FutureStamp $interrupted $now)) 'spurious finding'
 
+  # ---- ABANDON. FROZEN FIXTURES from the real ledger on 2026-08-29, where 15 open rows had accumulated
+  # and -Verify had been exiting 1 for days. w11 and w12 both carry honey-bbq-chicken-mac-and-cheese: w11
+  # could not publish, was revived, and shipped as w12. That pair is the whole design.
+  $w12 = [pscustomobject]@{ batch='w12'; closed=$true; slugs=@('honey-bbq-chicken-mac-and-cheese')
+    stages=@($script:REQUIRED | ForEach-Object { @{stage=$_} }) }
+  $w11 = [pscustomobject]@{ batch='w11'; closed=$false; last_activity='2026-08-28T20:00:00'; slugs=@('honey-bbq-chicken-mac-and-cheese')
+    stages=@(@{stage='select'},@{stage='map'},@{stage='write'},@{stage='build-specs'}) }
+  $liveOne = @('honey-bbq-chicken-mac-and-cheese')
+  T 'CLEAN TWIN a superseded wave is abandonable - its recipe is live, but the wave that PUBLISHED it stamped so' `
+    ((Get-AbandonRefusals $w11 @($w11,$w12) $liveOne 'superseded by w12').Count -eq 0) `
+    ((Get-AbandonRefusals $w11 @($w11,$w12) $liveOne 'superseded by w12') -join ' | ')
+  T 'MUST FIRE  with w12 absent the SAME row is refused - the recipe is live and nothing owns the publish' `
+    (@(Get-AbandonRefusals $w11 @($w11) $liveOne 'superseded') -join ' ') -match 'no batch records publishing' `
+    ((Get-AbandonRefusals $w11 @($w11) $liveOne 'superseded') -join ' | ')
+  T 'MUST FIRE  and it NAMES the slug rather than refusing in the abstract' `
+    ((Get-OrphanLiveSlugs $w11 @($w11) $liveOne) -contains 'honey-bbq-chicken-mac-and-cheese') `
+    ((Get-OrphanLiveSlugs $w11 @($w11) $liveOne) -join ',')
+  T 'MUST FIRE  a batch that stamped publish is refused - it shipped, so it owes a review and a close' `
+    ((@(Get-AbandonRefusals $interrupted @($interrupted) @() 'gave up') -join ' ') -match 'it SHIPPED') `
+    ((Get-AbandonRefusals $interrupted @($interrupted) @() 'gave up') -join ' | ')
+  T 'MUST FIRE  no -Detail is refused' `
+    ((@(Get-AbandonRefusals $w11 @($w11,$w12) $liveOne '') -join ' ') -match 'no reason given') `
+    ((Get-AbandonRefusals $w11 @($w11,$w12) $liveOne '') -join ' | ')
+  T 'MUST FIRE  a CLOSED row is refused' `
+    ((@(Get-AbandonRefusals $w12 @($w11,$w12) $liveOne 'tidying up') -join ' ') -match 'is CLOSED') `
+    ((Get-AbandonRefusals $w12 @($w11,$w12) $liveOne 'tidying up') -join ' | ')
+  $already = [pscustomobject]@{ batch='x'; closed=$false; abandoned=$true; slugs=@(); stages=@() }
+  T 'MUST FIRE  an already-abandoned row is refused rather than re-stamped' `
+    ((@(Get-AbandonRefusals $already @($already) @() 'again') -join ' ') -match 'already abandoned') `
+    ((Get-AbandonRefusals $already @($already) @() 'again') -join ' | ')
+  $noLive = [pscustomobject]@{ batch='y'; closed=$false; slugs=@('never-built-thing'); stages=@(@{stage='select'}) }
+  T 'CLEAN TWIN a wave whose recipes never reached the site is abandonable' `
+    ((Get-AbandonRefusals $noLive @($noLive) $liveOne 'sourcing dried up' @()).Count -eq 0) `
+    ((Get-AbandonRefusals $noLive @($noLive) $liveOne 'sourcing dried up' @()) -join ' | ')
+  # THE REFUSAL THAT ACTUALLY BIT. FROZEN FIXTURE: hunt-2026-08-27-highprotein-w9 on 2026-08-29 - six
+  # recipes built, none live, the wave idle for 25 hours. It reads exactly like a dead wave and it is not:
+  # the six specs exist and propagate lists them as in flight.
+  T 'MUST FIRE  a wave still holding BUILT unpublished specs is refused, and they are NAMED' `
+    ((@(Get-AbandonRefusals $noLive @($noLive) $liveOne 'dead wave' @('never-built-thing')) -join ' ') -match 'BUILT and unpublished: never-built-thing') `
+    ((Get-AbandonRefusals $noLive @($noLive) $liveOne 'dead wave' @('never-built-thing')) -join ' | ')
+  T 'CLEAN TWIN a slug that is LIVE is not counted as pending-built' `
+    ((Get-PendingBuiltSlugs $w11 $liveOne @('honey-bbq-chicken-mac-and-cheese')).Count -eq 0) `
+    ((Get-PendingBuiltSlugs $w11 $liveOne @('honey-bbq-chicken-mac-and-cheese')) -join ',')
+  # -Verify's side of it: exempt from staleness, but NOT exempt from having shipped.
+  $abStale = [pscustomobject]@{ batch='z'; closed=$false; abandoned=$true; abandoned_at='2026-08-29T09:00:00'
+    last_activity='2026-08-01T09:00:00'; slugs=@(); stages=@(@{stage='select'}) }
+  # THESE TWO DRIVE Get-VerifyFinding, NOT THE INPUTS. Written first against the inline loop, they
+  # asserted 'the row is abandoned AND the row is stale' - both true of the fixture by construction, so
+  # they passed while testing nothing. The neuter proof is what would have caught it; extracting the
+  # decision is what makes them able to fail honestly.
+  T 'CLEAN TWIN an abandoned row is exempt: OTHERWISE STALE, yet -Verify returns no finding' `
+    ((Test-BatchStale $abStale $now 24) -and ($null -eq (Get-VerifyFinding $abStale $now 24))) `
+    ([string](Get-VerifyFinding $abStale $now 24))
+  $abPub = [pscustomobject]@{ batch='zz'; closed=$false; abandoned=$true; abandoned_at='2026-08-29T09:00:00'
+    last_activity='2026-08-01T09:00:00'; slugs=@()
+    stages=@(@{stage='select'},@{stage='publish'}) }
+  T 'MUST FIRE  an abandoned row that carries a publish stamp is STILL a -Verify finding' `
+    ([string](Get-VerifyFinding $abPub $now 24) -match 'ABANDONED BUT PUBLISHED') `
+    ([string](Get-VerifyFinding $abPub $now 24))
+  # and the ordinary lanes, which the inline loop never had a fixture for at all
+  T 'MUST FIRE  -Verify reports an open stale batch'      ([string](Get-VerifyFinding $interrupted $now 24) -match 'OPEN\+STALE') ([string](Get-VerifyFinding $interrupted $now 24))
+  T 'MUST FIRE  -Verify reports a closed-incomplete batch' ([string](Get-VerifyFinding $closedBad $now 24) -match 'CLOSED INCOMPLETE') ([string](Get-VerifyFinding $closedBad $now 24))
+  T 'MUST FIRE  -Verify reports a future stamp'            ([string](Get-VerifyFinding $future $now 24) -match 'FUTURE STAMP') ([string](Get-VerifyFinding $future $now 24))
+  T 'CLEAN TWIN -Verify says nothing about a properly closed batch' ($null -eq (Get-VerifyFinding $done $now 24)) ([string](Get-VerifyFinding $done $now 24))
+  T 'CLEAN TWIN -Verify says nothing about a young open batch'      ($null -eq (Get-VerifyFinding $fresh $now 24)) ([string](Get-VerifyFinding $fresh $now 24))
+
   if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -150,7 +315,8 @@ if($Start){
   # the FULL shape up front, including the fields only -Close sets: PowerShell cannot assign a property a
   # PSCustomObject does not already have, so a row created without them throws on close.
   $ledger += [pscustomobject]@{ batch=$Batch; opened=$now; last_activity=$now; closed=$false
-                                closed_at=$null; close_detail=$null; slugs=@($Slugs); stages=@() }
+                                closed_at=$null; close_detail=$null; abandoned=$false; abandoned_at=$null
+                                abandon_reason=$null; slugs=@($Slugs); stages=@() }
   Save-Ledger $ledger
   Write-Output ("ledger opened: {0} ({1} slug(s))" -f $Batch, @($Slugs).Count); Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
@@ -190,6 +356,50 @@ if($Reconcile){
   Write-Output ("{0}: reconciled to {1} slug(s); dropped {2}: {3}" -f $Batch, $want.Count, $dropped.Count, ($dropped -join ', '))
   Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
+# ABANDON. A wave can stop for reasons that are not failures - superseded by a re-run, sourcing dried
+# up, Brad called it off - and until now the only ways to silence the row were -Close (which claims it
+# SHIPPED, and is a lie that -Verify then repeats forever as CLOSED INCOMPLETE) or a hand edit (which
+# leaves no trace of who decided or why). Fifteen rows had piled up and -Verify had been exiting 1 for
+# days, which is how a gate stops being read.
+#
+# It is a separate flag from `closed`, never a value of it. A closed batch shipped; an abandoned one did
+# not, and the difference has to survive in the data or the ledger stops being a record of what happened.
+if($Abandon){
+  if(-not $Batch){ throw '-Batch required' }
+  $row = $ledger | Where-Object { $_.batch -eq $Batch } | Select-Object -First 1
+  if(-not $row){ throw "no ledger row for '$Batch'" }
+  # The live set is read here, not passed in: the refusal that matters is about the SITE, and a caller
+  # who could supply that list could also supply an empty one and walk straight through the check.
+  $live = @()
+  $dbPath = Join-Path $mp 'recipes-db.json'
+  if(Test-Path $dbPath){ $live = @((Get-Content $dbPath -Raw -Encoding utf8 | ConvertFrom-Json).recipes | ForEach-Object { [string]$_.slug }) }
+  else { throw "recipes-db.json not found at $dbPath - refusing to abandon without being able to check what is live" }
+  # Read from disk for the same reason the live set is: a caller who could pass this in could pass an
+  # empty one and walk through the check.
+  $built = @()
+  $specDir = Join-Path $mp 'db\recipes'
+  if(Test-Path $specDir){ $built = @(Get-ChildItem (Join-Path $specDir '*.json') | ForEach-Object { $_.BaseName }) }
+  else { throw "spec dir not found at $specDir - refusing to abandon without being able to check what is built" }
+  $refusals = @(Get-AbandonRefusals -Row $row -Ledger $ledger -Live $live -Reason $Detail -Built $built)
+  if($refusals.Count){ throw ("refusing to abandon '" + $Batch + "':" + [Environment]::NewLine + '  - ' + ($refusals -join ([Environment]::NewLine + '  - '))) }
+  # Add-Member, not assignment: rows opened before this verb existed have no such property, and PS 5.1
+  # throws rather than creating one - the same trap -Close documents two blocks down.
+  foreach($p in @('abandoned','abandoned_at','abandon_reason')){
+    if($row.PSObject.Properties.Name -notcontains $p){ $row | Add-Member -NotePropertyName $p -NotePropertyValue $null }
+  }
+  $row.abandoned = $true; $row.abandoned_at = $now; $row.abandon_reason = $Detail
+  $miss = @(Test-BatchComplete $row)
+  # The stage entry is the audit trail: it records what the batch still owed at the moment it was given
+  # up, so the row cannot later be mistaken for one that quietly finished.
+  $row.stages = @($row.stages) + @([pscustomobject]@{ stage='abandon'; at=$now
+      detail=("abandoned owing " + $miss.Count + ": " + ($miss -join ', ') + " - " + $Detail) })
+  $row.last_activity = $now
+  Save-Ledger $ledger
+  Write-Output ("{0}: ABANDONED - {1}" -f $Batch, $Detail)
+  Write-Output ("  it still owed: " + ($miss -join ', '))
+  Write-Output '  (recorded as abandoned, NOT closed - it did not ship, and -Verify will stop reporting it)'
+  Write-GuardComplete -Name 'batch-ledger'; exit 0
+}
 if($Stamp -or $Close){
   if(-not $Batch){ throw '-Batch required' }
   $row = $ledger | Where-Object { $_.batch -eq $Batch } | Select-Object -First 1
@@ -217,25 +427,19 @@ if($Stamp -or $Close){
   Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
 if($Verify){
-  $now2 = Get-Date; $findings = @()
+  $now2 = Get-Date; $findings = @(); $abandoned = @()
   foreach($b in $ledger){
-    if($b.closed){
-      # a closed batch still owes an answer if it was closed with stages unstamped
-      $ci = Test-ClosedIncomplete $b
-      if($ci.Count){ $findings += ("CLOSED INCOMPLETE: batch '{0}' was closed on {1} without ever stamping: {2}" -f $b.batch, $b.closed_at, ($ci -join ', ')) }
-      continue
-    }
-    $miss = Test-BatchComplete $b
-    if(Test-FutureStamp $b $now2){
-      $findings += ("FUTURE STAMP: batch '{0}' claims last_activity {1}, which is ahead of now - the staleness check cannot fire on it, so it is exempt until that time passes. Missing: {2}" -f $b.batch, $b.last_activity, ($miss -join ', '))
-    }
-    elseif(Test-BatchStale $b $now2 $MaxAgeHours){
-      $findings += ("OPEN+STALE: batch '{0}' last touched {1} ({2}h ago), missing: {3}" -f $b.batch, $b.last_activity, [int]($now2-[datetime]$b.last_activity).TotalHours, ($miss -join ', '))
-    } elseif($miss.Count){
-      Write-Output ("  in flight: '{0}' still owes {1}" -f $b.batch, ($miss -join ', '))
-    }
+    $find = Get-VerifyFinding $b $now2 $MaxAgeHours
+    if($find){ $findings += $find; continue }
+    if(Test-BatchAbandoned $b){ $abandoned += $b.batch; continue }
+    if($b.closed){ continue }
+    $miss = @(Test-BatchComplete $b)
+    if($miss.Count){ Write-Output ("  in flight: '{0}' still owes {1}" -f $b.batch, ($miss -join ', ')) }
   }
+  # Reported, not silent. An abandoned batch is a decision on the record, and a count that quietly
+  # went from 2 to 20 would be the ledger being managed rather than the work being finished.
+  if($abandoned.Count){ Write-Output ("  abandoned (exempt, on the record): {0} - {1}" -f $abandoned.Count, ($abandoned -join ', ')) }
   if($findings.Count){ Write-Output ("batch-ledger: {0} unfinished batch(es)" -f $findings.Count); $findings | ForEach-Object { Write-Output ("  ! " + $_) }; Write-GuardComplete -Name 'batch-ledger'; exit 1 }
   Write-Output 'batch-ledger: no stalled batches'; Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
-Write-Output 'nothing to do - pass -Start, -Stamp, -Close, -Verify or -SelfTest'
+Write-Output 'nothing to do - pass -Start, -Stamp, -Close, -Reconcile, -Abandon, -Verify or -SelfTest'
