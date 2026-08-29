@@ -1,0 +1,15 @@
+{
+  "readme": "Reviewed PER-UNIT WEIGHTS for rows whose product name counts a pack but never states the weight of one unit. repair-multipack-sizes.ps1 REFUSES those rows by design - inventing a total is exactly the guessing guard 5 exists to stop - and until 2026-08-29 the only way to clear one was a multipack-allowlist entry that would have been a lie (the allowlist means 'the size IS the pack total'; on these rows it is not, it is one unit). A hint here supplies the ONE fact the store's name omitted: the weight of a single unit, read off the package or the store's own listing. It supplies no arithmetic. repair-multipack-sizes appends the hinted weight to the name and runs the UNCHANGED Get-MpRepairedSize over it, so the multiplication is the same shared multipack-lib code path every other repair uses and the guard's verdict and the repair can never disagree. A hint is keyed on store + the exact item name + the exact recorded size: change any of the three and the hint stops matching, the row goes back to a HARD FAIL, and a human is asked again. NEVER add a hint to make a red board green - 'unit_size' has to be a weight you actually checked, because a wrong one publishes a per-unit price that is wrong by exactly the pack count.",
+  "schema": 1,
+  "hints": [
+    {
+      "store": "Aldi",
+      "item": "OH Snap Pickling CO Dilly Bites 6pk 6 EA",
+      "size": "3.25 oz",
+      "unit_size": "3.25 oz",
+      "reviewed": "2026-08-29",
+      "reviewed_by": "claude (grocery triage), ruled by Brad",
+      "why": "OH SNAP! Pickling Co. sells Dilly Bites in a single pouch size, 3.25 oz, and the recorded size is exactly that number - so this row prices a 6-pack at $5.49 against ONE pouch, publishing pickles at $1.6892/oz when the true figure is $5.49 / 19.5 oz = $0.2815/oz, 6x high. The name states the count ('6pk 6 EA') and nothing else, which is why repair-multipack-sizes could not do the multiplication itself. With the per-unit weight supplied the row repairs to '6 pk 3.25 oz' and pu-lib's existing pack-first math resolves it to 19.5 oz. NOT independently re-read against aldi.us - the 3.25 oz pouch is OH SNAP!'s only Dilly Bites format and the recorded size agrees with it, but if Aldi ever lists a different pouch weight the size will change and this hint will stop matching, which is the intended failure mode."
+    }
+  ]
+}

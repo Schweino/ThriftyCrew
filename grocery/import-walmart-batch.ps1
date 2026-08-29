@@ -38,7 +38,11 @@ $regDir = Join-Path $outRootDir 'out\regular'
 
 # ---- lift the REAL pricing math + the REAL row builder (one rule, one home - the importer borrows, never forks) ----
 $engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
+# One of THREE hand-maintained copies of this list (build-walmart-deals.ps1, build-sams-deals.ps1 carry the
+# others). A helper that a lifted function calls must be named here too, or the lift silently produces a
+# function whose callee is undefined and it dies at CALL time, not load time. See the note in
+# build-sams-deals.ps1; compare-deals.ps1 -SelfTest proves all three lists are closed.
+foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
   $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
   if (-not $m.Success) { throw "import-walmart-batch: could not lift $fn from compare-deals.ps1" }
   Invoke-Expression $m.Value

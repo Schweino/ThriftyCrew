@@ -416,6 +416,72 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
 }
 
 # ---------------------------------------------------------------- unit price for a categorized deal
+<#
+  Test-NameOffersTwoSizes - is this name an EITHER/OR ad, whose price buys one of two different packages?
+
+  WHY (2026-08-29). Kroger writes its weekly ad as one price over two products: "Kroger Ice Cream 48 fl oz
+  or Private Selection Ice Cream 16 fl oz - $1.99". The size field on those rows is "each", so Get-UnitPrice
+  falls through to reading a size out of the NAME - and a regex reading a name that states TWO sizes takes
+  the FIRST one. That is not a parse, it is a coin flip, and it is a BIASED one: ads lead with the bigger
+  package, so the guess always lands on the size that makes the row look cheapest, which is precisely the
+  direction that wins a crown. Measured on comparison-2026-08-26: 8 such rows, all Baker's, and 2 of them
+  held the crown - ice-cream published at $0.0415/fl oz off the 48 oz reading when the $1.99 may well buy
+  the 16 oz tub ($0.1244, 3x), and popsicles at "per-36-pack" off "36 ct or 12-18 ct".
+
+  So: when the name offers two DIFFERENT sizes, the basis is not derivable from it and the row must not be
+  priced from its name at all. It drops out of the ranking exactly like any other bad parse - the board
+  still ships on the runner-up. This does NOT touch the store's own size field, which is a statement about
+  the unit actually being priced; only the name fallback, which is the guess.
+
+  DELIBERATELY NARROW, AND NARROWED AGAIN THE SAME DAY. Both sides of the "or" must state a size, and they
+  must disagree WITHIN THE SAME UNIT FAMILY. The same-family rule is not tidiness - it is what separates a
+  genuine either/or from an "or" that joins two DESCRIPTIONS. thriftycrew-11 scanned the day's real captures
+  and found the only two "or" names in 415 Walmart rows were one product twice:
+      "( 2 Pack ) Lucky Leaf Premium Strawberry Rhubarb Pie Filling Or Topping, 21 oz Can"
+  Here "or" joins "Pie Filling" and "Topping", and the first version of this function refused it: it saw
+  "2 pk" on the left, "21 oz" on the right, called them different, and would have dropped a perfectly
+  priceable row while logging something that read entirely correct. A real either/or ad offers two
+  COMPARABLE packages and states them in the same measure (48 fl oz or 16 fl oz; 36 ct or 12-18 ct); a pack
+  count on one side and a jar weight on the other is a name, not an alternative.
+
+  So: "Orange or Apple Juice 64 fl oz" (one size) stays priceable, "Coke 12 pk or Pepsi 12 pk" (agreeing)
+  stays priceable, and the Lucky Leaf rows (no shared family) stay priceable. Only a genuine ambiguity is
+  refused.
+#>
+function Test-NameOffersTwoSizes([string]$name) {
+  if (-not $name) { return $false }
+  $t = ("" + $name).ToLower()
+  if ($t -notmatch '\bor\b') { return $false }
+  $parts = @([regex]::Split($t, '\bor\b'))
+  if ($parts.Count -lt 2) { return $false }
+  $sizeRx = '(\d+(?:\.\d+)?)\s*(fl\s?oz|floz|oz|ounces?|lbs?|pounds?|gal|gallons?|qt|quarts?|pt|pints?|liters?|litres?|ml|ct|count|pk|packs?)\b'
+  # per side: unit family -> the set of numbers stated in it
+  $sides = @()
+  foreach ($p in $parts) {
+    $byUnit = @{}
+    foreach ($m in [regex]::Matches($p, $sizeRx)) {
+      $u = $m.Groups[2].Value -replace '\s+', ''
+      $u = $u -replace '^(ounces?)$', 'oz' -replace '^(fl\s?oz)$', 'floz' -replace '^(lbs?|pounds?)$', 'lb' `
+              -replace '^(gallons?|gal)$', 'gal' -replace '^(quarts?|qt)$', 'qt' -replace '^(pints?|pt)$', 'pt' `
+              -replace '^(liters?|litres?)$', 'l' -replace '^(count|ct)$', 'ct' -replace '^(packs?|pk)$', 'pk'
+      if (-not $byUnit.ContainsKey($u)) { $byUnit[$u] = New-Object 'System.Collections.Generic.List[string]' }
+      [void]$byUnit[$u].Add($m.Groups[1].Value)
+    }
+    $sides += ,$byUnit
+  }
+  # a genuine either/or: some unit family appears on two different sides with DIFFERENT numbers
+  for ($i = 0; $i -lt $sides.Count; $i++) {
+    for ($j = $i + 1; $j -lt $sides.Count; $j++) {
+      foreach ($u in @($sides[$i].Keys)) {
+        if (-not $sides[$j].ContainsKey($u)) { continue }
+        $a = (@($sides[$i][$u] | Sort-Object -Unique) -join '|')
+        $b = (@($sides[$j][$u] | Sort-Object -Unique) -join '|')
+        if ($a -ne $b) { return $true }
+      }
+    }
+  }
+  return $false
+}
 function Get-PackCount($text) {
   if (-not $text) { return $null }
   $t = ("" + $text).ToLower()
@@ -528,12 +594,20 @@ function Get-UnitPrice($deal, $cat) {
       }
     }
     $amt = Get-SizeAmount $sizeForAmt $unit
-    if (($amt -eq $null) -and $deal.name) { $amt = Get-SizeAmount $deal.name $unit }
+    # The NAME is a last resort, and it is only usable when it states ONE size. An either/or ad names two
+    # (see Test-NameOffersTwoSizes) and the first-match regex would silently pick the larger, cheaper-looking
+    # one. Refuse instead: $amt stays null, the row returns UNPRICED and drops from the ranking.
+    if (($amt -eq $null) -and $deal.name -and -not (Test-NameOffersTwoSizes $deal.name)) { $amt = Get-SizeAmount $deal.name $unit }
     if ($amt -ne $null -and $amt -gt 0) { return @{ unit_price=($pr.per_item/$amt); basis="size $([math]::Round($amt,3)) $unit"; note=$pr.note } }
     return $null
   }
   if ($unit -eq 'each') {
-    $pk = Get-PackCount $deal.price_text; if (-not $pk) { $pk = Get-PackCount $deal.size_text }; if (-not $pk) { $pk = Get-PackCount $deal.name }
+    # Same either/or refusal as the weight/volume branch above: "Kroger Freezer Pops 36 ct or Budget Saver
+    # Twin Ice Pops 12-18 ct" at $2.99 read a 36-pack out of the name and published popsicles at $0.0831
+    # each. The price and the size field are the store's own statements about the priced unit and are still
+    # trusted; only reading a COUNT out of a name that offers two of them is refused.
+    $pk = Get-PackCount $deal.price_text; if (-not $pk) { $pk = Get-PackCount $deal.size_text }
+    if ((-not $pk) -and -not (Test-NameOffersTwoSizes $deal.name)) { $pk = Get-PackCount $deal.name }
     # PORTION COUNT INSIDE ONE PACKAGE IS NOT A PACK COUNT (2026-07-30, garlic bread).
     # For most 'each' commodities the count IS the unit a shopper buys - a bagel, a bun, a popsicle, an ear of
     # corn - so dividing is right, and 55 of the 56 each-commodities on the board price that way at every store.
@@ -1225,6 +1299,84 @@ if ($SelfTest) {
     _Route 'R17 twin: real spinach is untouched'           'Fresh Baby Spinach, 10 oz Clamshell' 'spinach'
     _Route 'R17 twin: real sweet potatoes are untouched'   'Sweet Potatoes, 3 lb Bag' 'sweet-potatoes'
     _Route 'R17 twin: real yogurt is untouched'            'Great Value Plain Greek Yogurt, 32 oz' 'yogurt'
+  }
+
+  # ---- 29. EITHER/OR ADS (2026-08-29). One price, two different packages, size field "each". Reading a
+  # size out of that name is a coin flip weighted toward the bigger package, so the row must go UNPRICED.
+  # The founding pair are both real crowns off comparison-2026-08-26.
+  function _Amb($label, $name, $want) {
+    $got = [bool](Test-NameOffersTwoSizes $name)
+    if ($got -eq $want) { Write-Output ("ok    $label") } else { Write-Output ("FAIL  $label  got $got want $want"); $script:fail++ }
+  }
+  _Amb 'either/or: the ice-cream crown is ambiguous'   'Kroger Ice Cream 48 fl oz or Private Selection Ice Cream 16 fl oz' $true
+  _Amb 'either/or: the popsicles crown is ambiguous'   'Kroger Freezer Pops 36 ct or Budget Saver Twin Ice Pops 12-18 ct' $true
+  _Amb 'either/or: two weights across the or'          'Eckrich Smoked Sausage 12-14 oz or Prime Fresh Lunch Meat 7-8 oz' $true
+  # MUST NOT FIRE - these stay priceable, or the refusal is a coverage bug wearing a safety badge
+  _Amb 'one size shared across an or is NOT ambiguous' 'Orange or Apple Juice 64 fl oz' $false
+  _Amb 'matching sizes across an or are NOT ambiguous' 'Coca-Cola 12 pk or Pepsi 12 pk' $false
+  _Amb 'an ordinary single-size name is NOT ambiguous' 'Kroger Ice Cream 48 fl oz' $false
+  _Amb 'a name with no "or" is NOT ambiguous'          'Private Selection Double Vanilla Ice Cream Tub 48 oz' $false
+  _Amb 'the word "original" does not contain an "or"'  'Original Ranch Dressing 16 fl oz' $false
+  # REAL PRODUCTION DATA, and the case the first version got WRONG. thriftycrew-11 scanned all 415 rows of
+  # the 2026-08-29 Walmart capture: these are the only two "or" names in it, and the "or" joins two
+  # DESCRIPTIONS ("Pie Filling Or Topping"), not two packages. The first version refused the second one -
+  # it read "2 pk" against "21 oz" as a disagreement. Different unit families are not an alternative.
+  _Amb 'an "or" joining descriptions, sizes after it'  'Lucky Leaf Premium Strawberry Rhubarb Pie Filling Or Topping, 21 oz Can (2 Pack)' $false
+  _Amb 'same row, pack count moved to the FRONT'       '( 2 Pack ) Lucky Leaf Premium Strawberry Rhubarb Pie Filling Or Topping, 21 oz Can' $false
+  _Amb 'a pack count against a weight is not a choice' 'Something 2 pk or Other Thing 21 oz' $false
+  # AND THE REFUSAL MUST REACH THE PRICE, or it is decoration. Both branches of Get-UnitPrice, with the
+  # size field unusable ("each") exactly as the real rows have it.
+  _Null 'either/or ice cream is UNPRICED (volume)'  (Get-UnitPrice (_D '$1.99' 'Kroger Ice Cream 48 fl oz or Private Selection Ice Cream 16 fl oz' $null 'each') (_C 'floz'))
+  _Null 'either/or freezer pops is UNPRICED (each)' (Get-UnitPrice (_D '$2.99' 'Kroger Freezer Pops 36 ct or Budget Saver Twin Ice Pops 12-18 ct' $null '') (_C 'each'))
+  # CLEAN TWIN: an unambiguous name in the same shape still prices off its name, so the fallback survives.
+  _Near 'single-size name still prices from the name' (Get-UnitPrice (_D '$1.99' 'Kroger Ice Cream 48 fl oz' $null 'each') (_C 'floz')).unit_price 0.0415 0.0005
+
+  # ---- 30. THE LIFT LISTS MUST BE CLOSED (2026-08-29). Three scripts - build-walmart-deals.ps1,
+  # build-sams-deals.ps1, import-walmart-batch.ps1 - do not dot-source this file (it runs a pipeline on
+  # load). They pull named functions out of it AS SOURCE TEXT and Invoke-Expression them, each from its own
+  # hand-maintained list. Nothing checked that a lifted function's own callees were also on the list, so
+  # adding Test-NameOffersTwoSizes and updating only ONE list left the other two lifting a Get-UnitPrice
+  # whose helper does not exist. The lift succeeds, load is clean, and it dies at CALL time. Two other
+  # sessions measured that as a pre-existing failure in build-sams-deals rather than as my edit.
+  # So: read each list, take the bodies of the functions it names, and assert every OTHER function defined
+  # in this file that those bodies call is on the list too.
+  # A NAME IN A COMMENT IS NOT A CALL. The first version of this check flagged all three lifters because
+  # Get-UnitPrice's prose mentions Get-MatchTexts ("the engine strips it in Get-MatchTexts for exactly...").
+  # A checker that cannot tell a call from a sentence would have had three files edited to satisfy it, so
+  # strip line comments - keeping quoted segments, which may legitimately contain '#' - before scanning.
+  function _StripComments([string]$src) {
+    $out = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($line in ($src -split "`r?`n")) {
+      $out.Add([regex]::Replace($line, "('[^']*')|(`"[^`"]*`")|#.*", {
+        param($m) if ($m.Groups[1].Success -or $m.Groups[2].Success) { $m.Value } else { '' } }))
+    }
+    return ($out -join "`n")
+  }
+  $engineText = Get-Content $PSCommandPath -Raw -Encoding UTF8
+  $engineFns = @([regex]::Matches($engineText, '(?m)^function\s+([A-Za-z][\w-]*)') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
+  $lifters = @('build-walmart-deals.ps1', 'build-sams-deals.ps1', 'import-walmart-batch.ps1')
+  foreach ($lf in $lifters) {
+    $lp = Join-Path (Split-Path -Parent $PSCommandPath) $lf
+    if (-not (Test-Path $lp)) { Write-Output ("FAIL  lift-closure: $lf is missing"); $script:fail++; continue }
+    $lsrc = Get-Content $lp -Raw -Encoding UTF8
+    # the list that is lifted FROM compare-deals: the foreach whose throw names this file
+    $lm = [regex]::Match($lsrc, "(?ms)foreach\s*\(\s*\`$fn\s+in\s+@\((?<list>[^)]*)\).*?compare-deals\.ps1")
+    if (-not $lm.Success) { Write-Output ("FAIL  lift-closure: could not find $lf's compare-deals lift list"); $script:fail++; continue }
+    $listed = @([regex]::Matches($lm.Groups['list'].Value, "'([^']+)'") | ForEach-Object { $_.Groups[1].Value })
+    $missing = @()
+    foreach ($fn in $listed) {
+      $bm = [regex]::Match($engineText, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
+      if (-not $bm.Success) { continue }
+      $body = _StripComments $bm.Value
+      foreach ($cand in $engineFns) {
+        if ($cand -eq $fn -or ($listed -contains $cand)) { continue }
+        # a call is the bare name at a token boundary in CODE (comments already removed)
+        if ($body -match ("(?<![\w-])" + [regex]::Escape($cand) + "(?![\w-])")) { $missing += ("$fn calls $cand") }
+      }
+    }
+    $missing = @($missing | Sort-Object -Unique)
+    if ($missing.Count -eq 0) { Write-Output ("ok    lift-closure: $lf lifts every function its lifted functions call") }
+    else { Write-Output ("FAIL  lift-closure: $lf lifts a function whose callee is NOT on its list - " + ($missing -join '; ') + " (it will die at CALL time, not load time)"); $script:fail++ }
   }
 
   Write-Output ('-'*54)

@@ -58,7 +58,14 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocer
 # Get-Content would honour it - but that leaves the whole pricing engine depending on a byte order
 # mark nothing asserts. Name the encoding and the dependency is gone.
 $engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UTF8
-foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
+# THIS LIST IS A DEPENDENCY GRAPH (2026-08-29). It is one of THREE hand-maintained copies of the same
+# list - build-walmart-deals.ps1 and import-walmart-batch.ps1 carry the others - and adding a helper that
+# a lifted function CALLS, without naming it here, lifts a function whose callee does not exist. The lift
+# still succeeds, so nothing throws on load; it dies at CALL time with "not recognized as the name of a
+# cmdlet". That is exactly what happened when Test-NameOffersTwoSizes was added to compare-deals.ps1 and
+# only the walmart list was updated. compare-deals.ps1 -SelfTest now proves every one of these three lists
+# is closed under the calls its own lifted functions make.
+foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
   $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
   if (-not $m.Success) { throw "build-sams-deals: could not lift $fn from compare-deals.ps1" }
   Invoke-Expression $m.Value

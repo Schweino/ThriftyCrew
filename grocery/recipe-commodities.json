@@ -1192,8 +1192,9 @@
       "unit": "oz",
       "include": [
         "honey\\s*dijon",
-        "honey\\s*mustard"
-      ],
+        "honey\\s*mustard",
+        "\\bmustard,\\s*honey\\b"
+    ],
       "exclude": [
         "dressing",
         "\\bdip\\b",
@@ -1881,7 +1882,11 @@
                         "m\u0026m",
                         "captain",
                         "\\bpuff",
-                        "wafer"
+                        "wafer",
+                        "body\\s+wash",
+                        "shower\\s+gel",
+                        "\\blotion\\b",
+                        "\\bbody\\s+scrub\\b"
                     ]
     },
     {

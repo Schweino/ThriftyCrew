@@ -19,6 +19,14 @@
       "reason": "The can is 18.8 oz by WEIGHT - the product name says '18.8 OZ' - and the size field labelled the same number as fl oz. Same number either way, so the per-oz figure is correct."
     },
     {
+      "id": "condensed-milk",
+      "store": "Sam's Club",
+      "size": "84 fl oz",
+      "reviewed": "2026-08-29",
+      "reviewed_by": "claude (grocery triage)",
+      "reason": "The product name states its own arithmetic: 'Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.' - 6 x 14 oz = 84, by WEIGHT, which is the unit condensed-milk is priced in. The size field carries the right number under the wrong label ('84 fl oz'). $11.98 / 84 oz = 0.1426, which is the published per-unit, so the conversion was done correctly and only the label is volume-shaped. Same shape as the clam-chowder and horseradish-sauce entries above: the NUMBER is right. Not an exclude, because the product IS sweetened condensed milk; had 84 been a genuine fluid measure the weight would be about 95 oz and the cell would have OVERSTATED the price, which is the safe direction and still not worth publishing."
+    },
+    {
       "id": "disinfectant-spray",
       "store": "Baker's",
       "size": "1 pk 32 fl oz",
