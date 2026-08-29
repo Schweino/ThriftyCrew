@@ -616,6 +616,11 @@ $gates = @(
   # protein. Verified by its own completion marker rather than a text line, because a detector that
   # dies mid-run is silent and 'no findings' must never read the same as 'never ran'.
   @{ label = 'audit-cost-line-coverage';  path = (Join-Path $here 'audit-cost-line-coverage.ps1');  args = @('-Slugs', ($slugs -join ',')); marker = 'audit-cost-line-coverage'; text = '' },
+  # And whether the buy line the reader actually sees is English. Both of the gates above read the cost
+  # block's NUMBERS and both pass on "Buy 2 8ozes" - seven live specs printed that until 2026-08-29,
+  # because cost-render-lib appends an "s" to the end of whatever the package label happens to be and
+  # nothing in the chain ever read a rendered line. Marker-verified for the same reason as its neighbour.
+  @{ label = 'audit-buy-label-plural';    path = (Join-Path $here 'audit-buy-label-plural.ps1');    args = @('-Slugs', ($slugs -join ',')); marker = 'audit-buy-label-plural'; text = '' },
   # Ghost's own column limits, wired in 2026-08-29 the day they cost a wave. wave 5 of
   # hunt-2026-08-15-lowcarb-100 went GO on nine recipes; seven published and two came back HTTP 422 with
   # no reason anywhere - publish.ps1's catch reports "(422) Unknown Error" without reading the response

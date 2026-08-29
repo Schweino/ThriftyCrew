@@ -778,7 +778,8 @@
         "gpu":  28.3495,
         "unit":  "oz",
         "pantry_pkg_g":  454,
-        "pantry_pkg_label":  "1lb bag (board capture)",
+        "pantry_pkg_label":  "1lb bag",
+        "note":  "pantry_pkg_g 454 = the 1 lb bag off the board capture.",
         "bulk":  true
     },
     {
@@ -1231,7 +1232,8 @@
         "gpu":  28.3495,
         "unit":  "oz",
         "pantry_pkg_g":  227,
-        "pantry_pkg_label":  "8oz jar (board capture)",
+        "pantry_pkg_label":  "8oz jar",
+        "note":  "pantry_pkg_g 227 = the 8 oz jar off the board capture.",
         "bulk":  true
     },
     {
@@ -1439,7 +1441,8 @@
         "unit":  "oz",
         "board":  "recipe",
         "pantry_pkg_g":  283,
-        "pantry_pkg_label":  "10 oz jar (Walkerswood, Walmart $4.52 captured 2026-07-25)",
+        "pantry_pkg_label":  "10oz jar",
+        "note":  "pantry_pkg_g 283 = a 10 oz Walkerswood jar, Walmart $4.52 captured 2026-07-25.",
         "bulk":  true
     },
     {
@@ -1468,7 +1471,7 @@
         "unit":  "each",
         "board":  "recipe",
         "buy_pkg_g":  400,
-        "buy_pkg_label":  "8 buns"
+        "buy_pkg_label":  "8ct bun pack"
     },
     {
         "item":  "Kidney Beans",
@@ -1747,7 +1750,10 @@
         "item":  "Pasta Shells - jumbo",
         "bid":  "jumbo-pasta-shells",
         "gpu":  28.3495,
-        "unit":  "oz"
+        "unit":  "oz",
+        "buy_pkg_g":  340.194,
+        "buy_pkg_label":  "12oz box",
+        "note":  "Package stated here so the buy line does not fall through to label-prices' brand+size desc, which rendered 'Buy 2 Great Value 12 ozes'. 340.194 g is exactly SizeToGrams('12 oz') = 12 * 28.3495 - the same number that desc path produced - so this states the package without moving the price. Priced product: Great Value Jumbo Shell, 12 oz, Walmart ip/10534075."
     },
     {
         "item":  "Peanut Butter",
@@ -2296,7 +2302,8 @@
         "unit":  "oz",
         "board":  "recipe",
         "pantry_pkg_g":  227,
-        "pantry_pkg_label":  "8oz jar (label capture)",
+        "pantry_pkg_label":  "8oz jar",
+        "note":  "pantry_pkg_g 227 = the 8 oz jar off the label capture. See also the band_max 6 refusal on ground-sumac (musakhan prices off a mail-order label).",
         "bulk":  true
     },
     {
@@ -2334,7 +2341,8 @@
         "gpu":  38,
         "unit":  "floz",
         "pantry_pkg_g":  768,
-        "pantry_pkg_label":  "20.2floz bottle (600ml)",
+        "pantry_pkg_label":  "20.2floz bottle",
+        "note":  "20.2 floz = 600 ml; pantry_pkg_g 768 uses the map's 38 g/floz kecap-manis density.",
         "bulk":  true
     },
     {
@@ -2353,7 +2361,7 @@
         "unit":  "oz",
         "board":  "recipe",
         "buy_pkg_g":  227,
-        "buy_pkg_label":  "8oz"
+        "buy_pkg_label":  "8oz package"
     },
     {
         "item":  "Taco Seasoning",
@@ -2737,7 +2745,7 @@
         "unit":  "dozen",
         "board":  "weekly",
         "buy_pkg_g":  204,
-        "buy_pkg_label":  "12ct eggs",
+        "buy_pkg_label":  "dozen-egg carton",
         "note":  "gpu = yolk grams per egg (~17 g). Priced per egg PURCHASED - you buy whole eggs to get yolks, so that is the real cost."
     },
     {
@@ -3106,7 +3114,7 @@
         "unit":  "each",
         "board":  "weekly",
         "buy_pkg_g":  300,
-        "buy_pkg_label":  "each (heart)",
+        "buy_pkg_label":  "romaine heart",
         "note":  "Registrar ruling 2026-08-28: REUSE. lettuce's include list is [\"\\blettuce\\b\",\"\\biceberg\\b\",\"\\bromaine\\b\"] - romaine is EXPLICITLY claimed already - and it is live at $0.9975/each (crown: 4-ct romaine hearts, Family Fare). Minting romaine-lettuce would put one SKU under two ids. The run's own registrar ruling inside mapped\\sriracha-chicken-tacos.json had already adjudicated this. gpu 300 = one heart; confirm against the Tanimura & Antle 4-ct label, since the crown price is per heart. A red-onion-style variety split would be an estate edit (drop \\bromaine\\b from lettuce first), not a mint."
     },
     {

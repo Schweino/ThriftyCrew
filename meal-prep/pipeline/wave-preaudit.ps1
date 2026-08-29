@@ -795,6 +795,13 @@ $sharedSpec = @(
   # still agreed with the engine row it was rendered from. It had no production caller at all until
   # now, which is why audit-guard-contract reported it DEAD: a guard nobody runs is not a guard.
   @{ name = 'audit-cost-line-coverage';  script = (Join-Path $here 'audit-cost-line-coverage.ps1');  args = @('-Slugs', $slugArg);          marker = 'audit-cost-line-coverage' }
+  # THE FIFTH QUESTION: is the rendered buy line English? The four above all read the NUMBERS in a cost
+  # block and every one of them passes on "Buy 2 8ozes" - the arithmetic is right and the ingredient is
+  # named. Seven live specs were printing that on 2026-08-29, along with "Buy 4 8 bunses", and both this
+  # and the two earlier "draineds" incidents were found by a human auditor reading cost lines, which is
+  # not a control. Also sweeps every ingredients.json label at n = 2, because a label a wave's own mapper
+  # just added has no recipe at n >= 2 yet and would otherwise be invisible until it shipped.
+  @{ name = 'audit-buy-label-plural';    script = (Join-Path $here 'audit-buy-label-plural.ps1');    args = @('-Slugs', $slugArg);          marker = 'audit-buy-label-plural' }
 )
 
 $sharedChecks = New-Object System.Collections.Generic.List[object]
