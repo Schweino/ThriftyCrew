@@ -25,11 +25,28 @@
     3. THIRD-PARTY - seller is neither empty nor Walmart(.com). Those should already have been dropped at
        import; any that reach the board mean the filter did not run on that capture.
 
-  AND IT DOES NOT CLAIM SHIP MEANS NOT-SHELVED. Nobody has yet proved that a shelved item never carries
-  fulfillmentType=SHIP. Reading the live pages on 2026-08-29 the DISPLAY was unambiguous ("Shipping,
-  arrives Mon Aug 31" against "Pickup as soon as 12pm"), but the __NEXT_DATA__ enum behind it is a
-  different question and this file must not answer it by assertion. Until a capture with the columns lands
-  and someone checks a known-shelf item's value, SHIP-ONLY is a QUESTION, printed as one.
+  THE ENUM WAS MEASURED LIVE, AND THE FIRST GUESS WAS WRONG (2026-08-29, Brad's Chrome). This file
+  originally classified STORE and FC together as SHELF and reserved SHIP-ONLY for fulfillmentType=SHIP,
+  reasoning from import-walmart-batch's comment that "STORE / FC / SHIP (first-party, keep)". Two live
+  search pages say otherwise, and they carry their own control - unrelated tiles on the SAME page offering
+  pickup:
+
+    harissa paste   every result "Shipping, arrives ..."      -> fulfillmentType FC   (incl. seller Walmart.com)
+                    sriracha tiles "Pickup as soon as ..."     -> fulfillmentType STORE
+    ground cumin    Great Value Ground Cumin 2.5 oz (pickup)   -> STORE
+                    McCormick Kosher Ground Cumin 4.5 oz       -> FC, seller Walmart.com
+                    Good Tierra 21 oz Bulk Cumin               -> FC, seller MEKOR LLC
+                    Bolner's Fiesta Comino                     -> MARKETPLACE
+
+  So FC is FULFILLMENT CENTRE - shipped from a warehouse, NOT on the L St shelf - and it is the ship-only
+  marker, not SHIP. SHIP did not appear in either page's enum at all. Crucially FC occurs with
+  sellerName='Walmart.com', so it is invisible to a SELLER test: that is precisely why
+  import-walmart-batch.ps1:104's 3P filter (which keeps STORE/FC/SHIP alike as first-party) let the whole
+  Frontier / 27 Peaks / Badia bulk class through. The seller filter is not wrong - those really are
+  first-party listings - it is answering a different question from "is this on the shelf".
+
+  This is why the refusal was never armed on the inferred enum: the inference was wrong, and a gate built
+  on it would have refused every STORE cell it should keep while admitting the FC ones it exists to catch.
 
   Usage:  audit-shelf-signal.ps1            (exit 0 always; 3 only if it could not read a board)
           audit-shelf-signal.ps1 -SelfTest
@@ -52,8 +69,9 @@ function Get-ShelfVerdict([string]$seller, [string]$fulfill) {
   if ($f -eq '' -and $s -eq '') { return 'UNKNOWN' }
   $firstParty = ($s -eq '' -or $s -match '(?i)^walmart(\.com)?$')
   if (-not $firstParty) { return 'THIRD-PARTY' }
-  if ($f -eq 'SHIP') { return 'SHIP-ONLY' }
-  if ($f -eq 'STORE' -or $f -eq 'FC') { return 'SHELF' }
+  if ($f -eq 'MARKETPLACE') { return 'THIRD-PARTY' }
+  if ($f -eq 'STORE') { return 'SHELF' }
+  if ($f -eq 'FC' -or $f -eq 'SHIP') { return 'SHIP-ONLY' }
   return 'UNKNOWN'
 }
 
@@ -64,10 +82,13 @@ if ($SelfTest) {
   # THE SAFETY PROPERTY FIRST. Every capture in the 90-day union predates these columns; if absence read
   # as anything but UNKNOWN this file would indict most of the Walmart board on no evidence.
   T ((Get-ShelfVerdict '' '') -eq 'UNKNOWN') 'no seller and no fulfillment is UNKNOWN, never SHIP-ONLY (the whole pre-2026-08-29 union looks like this)'
-  T ((Get-ShelfVerdict 'Walmart.com' 'SHIP') -eq 'SHIP-ONLY') 'first-party + SHIP is the class the 3P filter keeps by construction'
-  T ((Get-ShelfVerdict '' 'SHIP') -eq 'SHIP-ONLY') 'an empty seller is first-party, so empty + SHIP is still SHIP-ONLY'
-  T ((Get-ShelfVerdict 'Walmart.com' 'STORE') -eq 'SHELF') 'first-party + STORE is a shelf listing'
-  T ((Get-ShelfVerdict 'Walmart' 'FC') -eq 'SHELF') 'first-party + FC is a shelf listing'
+  # MEASURED LIVE 2026-08-29 on walmart.com in Brad's Chrome, two search pages, each carrying its own
+  # control (unrelated tiles offering pickup on the same page). These four are the enum as it really is.
+  T ((Get-ShelfVerdict 'Walmart.com' 'STORE') -eq 'SHELF') 'STORE is the shelf marker (Great Value Ground Cumin 2.5 oz, pickup offered)'
+  T ((Get-ShelfVerdict 'Walmart.com' 'FC') -eq 'SHIP-ONLY') 'FC is FULFILLMENT CENTRE and ship-only EVEN WHEN first-party (McCormick Kosher Cumin 4.5 oz, seller Walmart.com, no pickup)'
+  T ((Get-ShelfVerdict '' 'FC') -eq 'SHIP-ONLY') 'an empty seller is first-party, so empty + FC is still SHIP-ONLY'
+  T ((Get-ShelfVerdict 'Walmart.com' 'SHIP') -eq 'SHIP-ONLY') 'SHIP is treated as ship-only too, though it did not appear in either live page'
+  T ((Get-ShelfVerdict 'Walmart.com' 'MARKETPLACE') -eq 'THIRD-PARTY') 'MARKETPLACE is third-party even under a Walmart.com seller string'
   T ((Get-ShelfVerdict 'Pool Cue Emporium' 'MARKETPLACE') -eq 'THIRD-PARTY') 'a 3P seller is THIRD-PARTY (the Goya-beans pool-cue-shop bug)'
   T ((Get-ShelfVerdict 'Pool Cue Emporium' 'FC') -eq 'THIRD-PARTY') 'seller beats fulfillment: an FC-fulfilled 3P listing is still third-party'
   T ((Get-ShelfVerdict 'Walmart.com' 'SOMETHING-NEW') -eq 'UNKNOWN') 'an unrecognised fulfillment value is UNKNOWN, not a verdict - Walmart has moved this schema twice already'
