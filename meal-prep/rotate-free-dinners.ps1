@@ -19,18 +19,57 @@
 
   Usage: -DryRun (compute + print, change nothing) | -Force (rotate even if week unchanged)
 #>
-param([switch]$DryRun, [switch]$Force)
+param([switch]$DryRun, [switch]$Force, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $gout = Join-Path (Split-Path $root -Parent) 'grocery\out'
 $pubDir = Join-Path (Split-Path $root -Parent) 'public'
 $stateFile = Join-Path $root 'free-rotation.json'
 
-$adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY } elseif (Test-Path (Join-Path $root '.ghostkey')) { (Get-Content (Join-Path $root '.ghostkey') -Raw).Trim() } else { throw 'Ghost admin key missing' }
+# THE KEY IS RESOLVED ONLY FOR A REAL RUN. -SelfTest exercises the pure decision functions below and
+# must work on a machine with no Ghost credentials at all, or the gate that guards this script can
+# only run where the script could also publish - which is the wrong place to need a secret.
+$adminKey = if ($SelfTest) { '' } elseif ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY } elseif (Test-Path (Join-Path $root '.ghostkey')) { (Get-Content (Join-Path $root '.ghostkey') -Raw).Trim() } else { throw 'Ghost admin key missing' }
 $apiUrl = 'https://map-to-success.ghost.io'
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
 . (Join-Path $PSScriptRoot 'lib\json-db-io.ps1')     # Set-RecipeVisibility: key-scoped patch (no whole-file round-trip)
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
+
+# ---------------------------------------------------------------- SELF-TEST (must exit BEFORE any Ghost work)
+# THE SWITCH EXISTED AND DID NOTHING (found 2026-08-29). The comment above promised that -SelfTest
+# "exercises the pure decision functions below", but no body was ever written, so the flag fell straight
+# through into the PRODUCTION path: run it and it computes the live target set and walks on toward
+# Set-PostVisibility with $adminKey deliberately blanked. A switch that runs the real rotation while
+# claiming to test it is worse than no switch, because the name is what stops someone being careful.
+# It is not in run-gates' roster either, so nothing has ever executed it.
+# These are source assertions rather than behavioural ones on purpose: the functions that matter here
+# talk to Ghost, and a self-test that needs a credential can only run where it could also publish.
+if ($SelfTest) {
+  $f = 0; $p = 0
+  function T($cond, $msg) { if ($cond) { Write-Output ('  PASS  ' + $msg); $script:p++ } else { Write-Output ('  FAIL  ' + $msg); $script:f++ } }
+  Write-Output 'rotate-free-dinners -SelfTest'
+  $src = Get-Content $PSCommandPath -Raw
+  $spv = [regex]::Match($src, '(?ms)^function\s+Set-PostVisibility\s*\(.*?^\}')
+  T ($spv.Success) 'Set-PostVisibility is present'
+  if ($spv.Success) {
+    # THE FOUNDING BUG OF 2026-08-29: the PUT response was discarded and success returned on the next
+    # line, so an unconfirmed revert counted as confirmed and stranded the post public forever.
+    T ($spv.Value -match "Method Put") 'it issues the visibility PUT'
+    T ($spv.Value -match '(?s)Method Put.*fields=id,visibility') 'it RE-READS the post after the PUT - "did not throw" is not "Ghost took it"'
+    T ($spv.Value -match '(?s)Method Put.*if \(\$now -ne \$vis\) \{ throw') 'and it THROWS when Ghost still reports the old visibility'
+    $putIdx = $spv.Value.IndexOf('Method Put')
+    $retIdx = $spv.Value.IndexOf("return 'flipped-to-'")
+    $verIdx = $spv.Value.IndexOf('if ($now -ne $vis)')
+    T ($verIdx -gt $putIdx -and $retIdx -gt $verIdx) 'the verification sits BETWEEN the PUT and the success return, not after it'
+  }
+  # The throw is only useful because the revert caller already routes a failure to $stillOwned, which
+  # keeps ownership so a later run retries. Assert that handling is still there - if it is ever removed,
+  # the throw silently becomes a crash instead of a retry.
+  T ($src -match '(?s)REVERT FAILED.*stillOwned\.Add') 'a failed REVERT still keeps ownership so a later run retries it'
+  T ($src -match 'Only slugs listed here are ever reverted to paid') "the state file still declares the ownership rule the throw protects"
+  if ($f -gt 0) { Write-Output ("rotate-free-dinners SELFTEST: $f FAILED"); exit 2 }
+  Write-Output ("rotate-free-dinners SELFTEST: all $p passed"); exit 0
+}
 
 # ---------------------------------------------------------------- compute this week's target set
 $costs = Get-Content (Join-Path $gout 'recipe-costs.json') -Raw | ConvertFrom-Json
@@ -86,6 +125,25 @@ function Set-PostVisibility([string]$slug, [string]$vis) {
   $body = @{ posts = @(@{ visibility = $vis; updated_at = [string]$p.updated_at }) } | ConvertTo-Json -Depth 4
   $jwt = New-GhostJWT
   [void](Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Content-Type'='application/json'} -Body $body)
+  # RE-READ, BECAUSE "DID NOT THROW" IS NOT "GHOST TOOK IT" (2026-08-29).
+  # This used to discard the PUT response and return success on the very next line. That made an
+  # UNCONFIRMED revert count as a confirmed one: the slug dropped out of the ledger, recipes-db was
+  # patched to 'paid', and this file's own rule - "Only slugs listed here are ever reverted to paid by
+  # the rotation" - then stranded it PUBLIC forever with the database claiming paid. Nothing could heal
+  # it: rotate-free-dinners refuses by design to re-paywall a post it does not own, and publish.ps1
+  # PRESERVES live visibility on update, so a republish carried the wrong value forward instead.
+  # Measured 2026-08-29: 22 live recipes were serving their full PAID content - ingredients, all steps,
+  # cost, scaler - to anonymous visitors. 11 had free-list history, and 3 of those were freed AFTER the
+  # 2026-08-01 guards, two of them in a single run, which is the per-POST signature this produces.
+  # THE COMMENT ABOVE THIS FUNCTION SAID THE STATE FILE RECORDS WHAT GHOST ACTUALLY DID. It did not - it
+  # recorded what the API call did not throw on. That fix moved the check from intent to CALL; this moves
+  # it to OUTCOME, which is where it had to be all along.
+  # THROWING IS THE CORRECT INTEGRATION, not an inconvenience: the revert caller already catches and routes
+  # the slug to $stillOwned, which keeps ownership so a later run retries it. That handling was written on
+  # 2026-08-01 and has been correct ever since; it was simply never told when a flip failed.
+  $after = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/?fields=id,visibility" -Headers @{Authorization="Ghost " + (New-GhostJWT)}
+  $now = [string]$after.posts[0].visibility
+  if ($now -ne $vis) { throw ("Ghost did not take the visibility change for '" + $slug + "': asked for '" + $vis + "', it still reports '" + $now + "'") }
   return 'flipped-to-' + $vis
 }
 

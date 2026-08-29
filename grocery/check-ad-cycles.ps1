@@ -1122,6 +1122,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
       try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
+      # DID THE PAYWALL SURVIVE THE ROTATION? (2026-08-29) Immediately after the only thing in the estate
+      # that changes post visibility, ask the revenue question nobody was asking: is any recipe the
+      # database calls PAID being served free to anonymous visitors? 22 were, found by accident during a
+      # post-publish review of an unrelated wave. The rotation's own revert used to report success on a PUT
+      # that never landed, and build-hub-grid only ever checks the other direction - whether a slug LISTED
+      # free is actually free - so a leak in a slug nobody lists was invisible to every guard in the chain.
+      # -Alert mails on findings. Non-fatal like its neighbours: this reports, it never flips visibility,
+      # because the ledger that decides which posts may be re-paywalled belongs to the rotation alone.
+      try { (Invoke-Bounded 'paywall-leak' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-paid-not-public.ps1'),'-Alert') 900).Output | ForEach-Object { Log ('paywall-leak: ' + $_) } } catch { Log ('audit-paid-not-public threw: ' + $_.Exception.Message) }
 
       # ==== GROUP B: THE ADVISORY AUDITS, LAUNCHED TOGETHER (2026-08-23, PLAN-use-the-cores phase 1) ====
       # Every lane below is a read-only child that reports and never changes what shipped. They used to run
