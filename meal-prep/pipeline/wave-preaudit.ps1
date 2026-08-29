@@ -142,7 +142,7 @@ function Test-CostEngineConsistency {
       * first run is the true batch plus the pantry add
       * the tiers are ordered: batch <= true <= first run
       * lines_unpriced is zero  (cost-recipes prices an unbid line at $0.00 WITHOUT failing)
-      * no non-optional line costs nothing
+      * no non-optional line costs nothing WITHOUT pricing evidence (a sub-cent pinch is legitimate)
   #>
   param($Row, [int]$Servings, [double]$Tol)
   $p = New-Object System.Collections.Generic.List[string]
@@ -171,7 +171,19 @@ function Test-CostEngineConsistency {
     $p.Add(("lines_unpriced is {0} - the published cost EXCLUDES an ingredient the reader must buy" -f $Row.lines_unpriced))
   }
   foreach ($l in $lines) {
-    if ([double]$l.util_cost -le 0) { $p.Add(("'{0}' costs nothing ({1})" -f [string]$l.item, [double]$l.util_cost)) }
+    if ([double]$l.util_cost -gt 0) { continue }
+    # A zero util_cost is only a defect when the line is UNPRICED. A 1-3 g pinch of salt or sugar on a
+    # real board basis costs a fraction of a cent and the engine cent-floors it to $0.00 - three
+    # consecutive wave audits (hunt-2026-08-27-highprotein waves 9, 10 and 13) re-derived that same
+    # false positive BY HAND before this clause was narrowed on 2026-08-29, and ten live costed.json
+    # lines carry the identical shape. So the test is the PRICING EVIDENCE, not the number: a basis,
+    # and at least one of buy_cost / starter_cost. A line missing either still fires - that is the
+    # genuinely unpriced case this clause was written for. A negative util cost is never explicable.
+    $hasBasis = -not [string]::IsNullOrWhiteSpace([string]$l.basis)
+    $hasCost  = (-not [string]::IsNullOrWhiteSpace([string]$l.buy_cost)) -or (-not [string]::IsNullOrWhiteSpace([string]$l.starter_cost))
+    if ([double]$l.util_cost -lt 0 -or -not ($hasBasis -and $hasCost)) {
+      $p.Add(("'{0}' costs nothing ({1})" -f [string]$l.item, [double]$l.util_cost))
+    }
   }
   return , @($p)
 }
@@ -409,10 +421,31 @@ if ($runSelfTest) {
   $pUnpriced = Test-CostEngineConsistency $unpriced 14 $script:CENT
   T 'MUST FIRE  lines_unpriced above zero is caught (cost-recipes prices an unbid line at $0.00)' `
     (($pUnpriced -join ' ') -match 'lines_unpriced') ($pUnpriced -join ' | ')
+  # The zero-cost clause has TWO cardinalities and the fixtures below pin both, because between
+  # 2026-08-16 and 2026-08-29 it only had one and produced a false positive in three consecutive
+  # wave audits. A $0.00 line is a defect when nothing PRICED it; it is arithmetic when a real basis
+  # and a real package price cent-floor a 1-3 g pinch to zero.
   $zero = NewRow 24.25 31.56 1.73 2.25 5.67 37.23 0 @(17.31, 5.47, 1.47, 0)
   $pZero = Test-CostEngineConsistency $zero 14 $script:CENT
-  T 'MUST FIRE  a line that costs nothing is named' `
+  T 'MUST FIRE  a zero-cost line with NO basis and no package price is named (genuinely unpriced)' `
     (($pZero -join ' ') -match 'costs nothing') ($pZero -join ' | ')
+  # basis present, but neither buy_cost nor starter_cost - nothing priced it, so it still fires
+  $zeroNoCost = NewRow 24.25 31.56 1.73 2.25 5.67 37.23 0 @(17.31, 5.47, 1.47)
+  $zeroNoCost.lines += [pscustomobject]@{ item = 'Sumac'; grams = 4; util_cost = 0
+    basis = 'board:sumac:walmart'; carriage = 'CARRIED'; buy_cost = $null; starter_cost = $null }
+  $pZeroNC = Test-CostEngineConsistency $zeroNoCost 14 $script:CENT
+  T 'MUST FIRE  a zero-cost line with a basis but NO buy_cost and NO starter_cost is named' `
+    (($pZeroNC -join ' ') -match "'Sumac' costs nothing") ($pZeroNC -join ' | ')
+  # THE 2026-08-29 CASE, frozen from blackened-chicken-with-mango-salsa: 1 g of salt off
+  # board:salt:walmart, a 26oz/737g canister at $0.94, is $0.0013 - a real price the cent rounds away.
+  # Waves 9, 10 and 13 of hunt-2026-08-27-highprotein each cleared this by hand before the fix.
+  $pinch = NewRow 24.25 31.56 1.73 2.25 5.67 37.23 0 @(17.31, 5.47, 1.47)
+  $pinch.lines += [pscustomobject]@{ item = 'Salt'; grams = 1; util_cost = 0
+    basis = 'board:salt:walmart'; carriage = 'CARRIED'; bulk = $true; buy_cost = $null
+    starter_n = 1; starter_cost = 0.94; starter_pkg = '26oz canister'; starter_pkg_g = 737 }
+  $pPinch = Test-CostEngineConsistency $pinch 14 $script:CENT
+  T 'CLEAN TWIN a fully priced sub-cent pinch that rounds to $0.00 is NOT a finding' `
+    ($pPinch.Count -eq 0) ($pPinch -join ' | ')
   $badTier = NewRow 40.00 31.56 2.86 2.25 5.67 37.23 0 @(40.00)
   $pTier = Test-CostEngineConsistency $badTier 14 $script:CENT
   T 'MUST FIRE  tiers out of order (batch above true) are caught' `
