@@ -3292,5 +3292,20 @@
         "buy_pkg_g":  198,
         "buy_pkg_label":  "7 oz bag",
         "note":  "Split from the generic shredded basket on Brad 2026-08-29: lower-calorie and higher-protein recipes call for fat-free mozzarella specifically. Priced from an attended 7-store capture that found it at 3 stores, all Kraft; the earlier 1-of-7 figure was an artifact of no capture ever having searched a fat-free term."
+    },
+    {
+        "item":  "Mustard Powder",
+        "bid":  "ground-mustard",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  44,
+        "pantry_pkg_label":  "1.55oz shaker",
+        "bulk":  true,
+        "note":  "Dry ground mustard seed (mustard powder), the spice-aisle shaker - NOT prepared Dijon/yellow/whole-grain mustard, which are wet condiments on their own rows and their own price class. Board crown Kroger Ground Mustard Shaker 1.55 oz. Food-DB row is Mustard Powder (McCormick), 1 tsp = 2 g.",
+        "aliases":  [
+                        "Ground Mustard",
+                        "Dry Mustard"
+                    ]
     }
 ]

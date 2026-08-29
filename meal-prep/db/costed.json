@@ -118290,12 +118290,12 @@
     {
         "proposed_name":  "Turkey Cordon Bleu Casserole",
         "slug":  "turkey-cordon-bleu-casserole",
-        "cost_batch":  22.99,
-        "cost_per_serving":  1.64,
-        "cost_batch_true":  36.14,
+        "cost_batch":  23.04,
+        "cost_per_serving":  1.65,
+        "cost_batch_true":  36.19,
         "cost_per_serving_true":  2.58,
-        "cost_pantry_add":  10.96,
-        "cost_first_run":  47.1,
+        "cost_pantry_add":  11.65,
+        "cost_first_run":  47.84,
         "lines_priced":  14,
         "lines_unpriced":  0,
         "lines_uncarried":  0,
@@ -118432,10 +118432,10 @@
                           "starter_pkg_g":  92
                       },
                       {
-                          "item":  "Dijon Mustard",
+                          "item":  "Mustard Powder",
                           "grams":  1,
-                          "util_cost":  0.01,
-                          "basis":  "board:dijon-mustard:walmart",
+                          "util_cost":  0.06,
+                          "basis":  "board:ground-mustard:recipeboard-walmart",
                           "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
@@ -118443,9 +118443,9 @@
                           "pkg":  null,
                           "pkg_g":  null,
                           "starter_n":  1,
-                          "starter_cost":  1.72,
-                          "starter_pkg":  "12oz bottle",
-                          "starter_pkg_g":  340
+                          "starter_cost":  2.46,
+                          "starter_pkg":  "1.55oz shaker",
+                          "starter_pkg_g":  44
                       },
                       {
                           "item":  "Ground Nutmeg",

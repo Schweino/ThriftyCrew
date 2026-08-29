@@ -1,21 +1,10 @@
 ﻿{
     "specs":  587,
     "findings":  [
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-biryani-rice-bowls",
-                         "cls":  "UNMEASURABLE-QTY",
-                         "why":  "a line asks for \u00270 tbsp\u0027, which no kitchen measure shows: Milk (Fairlife): 0 tbsp (1 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-cordon-bleu-casserole",
-                         "cls":  "UNMEASURABLE-QTY",
-                         "why":  "a line asks for \u00270.07 tbsp\u0027, which no kitchen measure shows: Dijon Mustard (generic): 0.07 tbsp (1 g)"
-                     }
+
                  ],
     "generated":  "see git",
     "by_class":  {
-                     "UNMEASURABLE-QTY":  2
+
                  }
 }
