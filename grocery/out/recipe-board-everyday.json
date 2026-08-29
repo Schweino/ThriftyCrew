@@ -6709,16 +6709,8 @@
                            "commodity":  "Smoked Paprika",
                            "category":  "Baking \u0026 Spices",
                            "unit":  "oz",
-                           "cheapest_store":  "Family Fare",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.9986,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Sugar N Spice Smoked Paprika",
-                                              "size":  "7 oz"
-                                          },
                                           {
                                               "store":  "Walmart",
                                               "per_unit":  1.07,
@@ -6734,6 +6726,14 @@
                                               "bulk":  false,
                                               "item":  "Simply Nature Organic Smoked Paprika",
                                               "size":  "1.6 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  2.49,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Sugar N Spice Paprika Smoked Pp",
+                                              "size":  "1 oz"
                                           },
                                           {
                                               "store":  "Fareway",
