@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-28T07:17:48",
+ "generated": "2026-08-28T12:36:40",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -13,7 +13,7 @@
     {
      "term": "Moroccan Spice Mix",
      "state": "OK",
-     "hits": 72
+     "hits": 6
     }
    ],
    "hits": [
@@ -58,20 +58,134 @@
      "size": "10 oz",
      "relevance": null,
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24454343-fareway-seasoning-mix-10-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "juniper berries",
+   "state": "MATCHES",
+   "term_used": "juniper berries",
+   "attempts": [
+    {
+     "term": "juniper berries",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Bay Leaves",
+     "price": 4.99,
+     "size": "0.12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41222-mccormick-bay-leaves-0-12-oz"
     },
     {
-     "item": "Ortega Original Taco Seasoning Mix",
-     "price": 1.0,
+     "item": "Simply Organic Bay Leaf",
+     "price": 6.99,
+     "size": "0.14 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/54804-simply-organic-bay-leaf-0-14-oz"
+    },
+    {
+     "item": "Badia Spices Rosemary",
+     "price": 1.68,
      "size": "1 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27326325-ortega-original-taco-seasoning-mix-1-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258005-badia-spices-rosemary-1-oz"
     },
     {
-     "item": "Weber Gourmet Burger Seasoning, Kosher",
-     "price": 2.99,
-     "size": "2.75 oz",
+     "item": "McCormick Ground Sage",
+     "price": 6.99,
+     "size": "0.6 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41391-weber-gourmet-burger-seasoning-2-75-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87641-mccormick-ground-sage-0-6-oz"
+    },
+    {
+     "item": "McCormick Ground Allspice",
+     "price": 3.99,
+     "size": "0.9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72757-mccormick-ground-allspice-0-9-oz"
+    },
+    {
+     "item": "Badia Spices Bay Leaves",
+     "price": 1.68,
+     "size": "0.17 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458678-badia-spices-bay-leaves-0-17-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "broccoli rabe",
+   "state": "MATCHES",
+   "term_used": "broccoli rabe",
+   "attempts": [
+    {
+     "term": "broccoli rabe",
+     "state": "OK",
+     "hits": 49
+    }
+   ],
+   "hits": [
+    {
+     "item": "Broccoli Crown",
+     "price": 2.48,
+     "size": "$2.48 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345915-broccoli-crown-1-lb"
+    },
+    {
+     "item": "Birds Eye Steamfresh Broccoli Florets, Frozen Vegetables",
+     "price": 1.99,
+     "size": "10.8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16713422-birds-eye-steamfresh-broccoli-florets-10-8-oz"
+    },
+    {
+     "item": "Birds Eye Baby Broccoli Florets, Frozen Vegetables",
+     "price": 1.99,
+     "size": "12.6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/95917-birds-eye-baby-broccoli-florets-12-6-oz"
+    },
+    {
+     "item": "Green Giant Chopped Broccoli",
+     "price": 1.99,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72459-green-giant-chopped-broccoli-10-0-oz"
+    },
+    {
+     "item": "Green Giant Simply Steam Broccoli & Cheese Sauce, Sauced Frozen Vegetables",
+     "price": 2.99,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41847-green-giant-sauced-broccoli-cheese-sauce-12-oz"
+    },
+    {
+     "item": "Green Giant Simply Steam Tuscan Seasoned Broccoli, Seasoned Frozen Vegetables",
+     "price": 2.99,
+     "size": "9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/305664-green-giant-seasoned-tuscan-seasoned-broccoli-9-0-oz"
+    },
+    {
+     "item": "Pero Family Farms Broccoletti",
+     "price": 2.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19209521-pero-family-farms-broccoletti-8-oz"
+    },
+    {
+     "item": "Broccoli Crowns",
+     "price": 2.48,
+     "size": "$2.48 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387377-broccoli-crowns"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

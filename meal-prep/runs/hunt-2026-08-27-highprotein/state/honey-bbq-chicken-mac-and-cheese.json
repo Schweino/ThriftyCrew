@@ -3,10 +3,10 @@
     "title":  "Honey BBQ Chicken Mac and Cheese",
     "source_url":  "https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/",
     "protein":  "chicken",
-    "state":  "priced",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  12,
     "created":  "2026-08-27T18:20:34",
-    "updated":  "2026-08-27T18:30:57",
+    "updated":  "2026-08-28T20:17:52",
     "terms":  [
                   {
                       "term":  "dried parsley",
@@ -53,6 +53,48 @@
                         "at":  "2026-08-27T18:30:57",
                         "by":  "derive",
                         "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-28T12:38:21",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-28T12:38:21",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-28T12:54:32",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-28T12:54:33",
+                        "by":  "wave-close",
+                        "detail":  "wave 11"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-28T13:11:13",
+                        "by":  "auditor",
+                        "detail":  "Re-audit after repair. The repair cycle closed only 1 of the prior audit\u0027s 3 blockers (the recipe-local doubled gram token - verified fixed in spec and rebuilt card). Both SHARED-DATA blockers stand, "
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-28T20:17:47",
+                        "by":  "brad",
+                        "detail":  "revived: both shared-data blockers closed: audit-spec-contradictions green since 0f1a70ae, cheddar repriced onto reduced-fat-cheddar in c682bfb4  [audit blockers: shared-data; none recipe-local]"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-28T20:17:52",
+                        "by":  "wave-close",
+                        "detail":  "wave 12"
                     }
                 ]
 }

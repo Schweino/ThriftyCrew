@@ -1,0 +1,206 @@
+{
+    "battery":  "wave-preaudit",
+    "version":  1,
+    "run":  "hunt-2026-08-27-highprotein",
+    "wave":  11,
+    "batch":  "hunt-2026-08-27-highprotein-w11",
+    "scope":  "whole-wave",
+    "generated":  "2026-08-28T13:06:29",
+    "elapsed_sec":  17.6,
+    "wave_slugs":  [
+                       "honey-bbq-chicken-mac-and-cheese"
+                   ],
+    "slugs":  [
+                  "honey-bbq-chicken-mac-and-cheese"
+              ],
+    "inputs":  {
+                   "costed_mtime":  "2026-08-28T12:38:20",
+                   "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
+                   "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
+               },
+    "slug_checks":  {
+                        "honey-bbq-chicken-mac-and-cheese":  [
+                                                                 {
+                                                                     "check":  "spec-present",
+                                                                     "verdict":  "pass",
+                                                                     "numbers":  {
+                                                                                     "mtime":  "2026-08-28T13:06:10"
+                                                                                 },
+                                                                     "detail":  "spec present and parses"
+                                                                 },
+                                                                 {
+                                                                     "check":  "macro-recompute",
+                                                                     "verdict":  "pass",
+                                                                     "numbers":  {
+                                                                                     "servings":  14,
+                                                                                     "recompute":  {
+                                                                                                       "cal":  751.1,
+                                                                                                       "protein":  50.5,
+                                                                                                       "carbs":  84.7,
+                                                                                                       "fat":  24.4
+                                                                                                   },
+                                                                                     "stat":  {
+                                                                                                  "cal":  751,
+                                                                                                  "protein":  50,
+                                                                                                  "carbs":  85,
+                                                                                                  "fat":  24
+                                                                                              },
+                                                                                     "missing_fooddb_rows":  [
+
+                                                                                                             ]
+                                                                                 },
+                                                                     "detail":  "all four macros recompute from food-macros-db within tolerance (5 cal, 2 g)"
+                                                                 },
+                                                                 {
+                                                                     "check":  "cost-engine-consistency",
+                                                                     "verdict":  "pass",
+                                                                     "numbers":  {
+                                                                                     "cost_batch":  23.17,
+                                                                                     "cost_batch_true":  32.42,
+                                                                                     "cost_per_serving":  1.66,
+                                                                                     "cost_first_run":  43.51,
+                                                                                     "lines":  17,
+                                                                                     "lines_unpriced":  0
+                                                                                 },
+                                                                     "detail":  "the engine row is internally coherent: utils sum to the batch, both per-serving tiers derive, first run is true + pantry, nothing unpriced"
+                                                                 },
+                                                                 {
+                                                                     "check":  "cost-reconcile",
+                                                                     "verdict":  "pass",
+                                                                     "numbers":  {
+                                                                                     "spec_mtime":  "2026-08-28T13:06:10",
+                                                                                     "costed_mtime":  "2026-08-28T12:38:20",
+                                                                                     "costed_is_newer_than_spec":  false
+                                                                                 },
+                                                                     "detail":  "every spec cost field matches its engine row to the cent"
+                                                                 },
+                                                                 {
+                                                                     "check":  "protein-derivation",
+                                                                     "verdict":  "pass",
+                                                                     "numbers":  {
+                                                                                     "claimed":  "chicken",
+                                                                                     "derived":  "chicken",
+                                                                                     "derived_grams":  1400,
+                                                                                     "tally":  {
+                                                                                                   "chicken":  1400,
+                                                                                                   "turkey":  0,
+                                                                                                   "beef":  0,
+                                                                                                   "pork":  0
+                                                                                               }
+                                                                                 },
+                                                                     "detail":  "the spec\u0027s protein field matches its heaviest protein ingredient by grams (chicken, 1400 g)"
+                                                                 },
+                                                                 {
+                                                                     "check":  "voice-sweep",
+                                                                     "verdict":  "pass",
+                                                                     "numbers":  {
+                                                                                     "hits":  0
+                                                                                 },
+                                                                     "detail":  "no em or en dash anywhere in the spec"
+                                                                 },
+                                                                 {
+                                                                     "check":  "card-rebuild",
+                                                                     "verdict":  "pass",
+                                                                     "numbers":  {
+                                                                                     "scratch":  "meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-11.preaudit-cards\\honey-bbq-chicken-mac-and-cheese",
+                                                                                     "body_bytes":  70809,
+                                                                                     "make_it_steps":  1,
+                                                                                     "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
+                                                                                 },
+                                                                     "detail":  "rebuilt to a scratch dir and structurally identical to al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html: every smp-* class and anchor id present, 1 step anchors, no dash bytes, JSON-LD parses as a Recipe"
+                                                                 }
+                                                             ]
+                    },
+    "shared_checks":  [
+                          {
+                              "check":  "audit-spec-contradictions",
+                              "verdict":  "fail",
+                              "numbers":  {
+                                              "rc":  1
+                                          },
+                              "detail":  "audit-spec-contradictions is not clean (exited 1). Fix it through the owning stage - never weaken a gate to pass a wave. Tail: spec-contradictions FAIL - a class got WORSE than out\\spec-contradictions-baseline.json: PHANTOM: 3 now, baseline 0 //   A spec that states the same fact twice and disagrees with itself is wrong no matter what the source recipe says - one of the two numbers is on a live card. // SPEC-CONTRADICTIONS-COMPLETE"
+                          },
+                          {
+                              "check":  "audit-store-integrity",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: STORE-INTEGRITY-COMPLETE hard=0 warn=13"
+                          },
+                          {
+                              "check":  "audit-vocab-integrity",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-VOCAB-INTEGRITY-COMPLETE clean n=1"
+                          },
+                          {
+                              "check":  "audit-unbid-ingredients",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-UNBID-INGREDIENTS-COMPLETE clean n=1"
+                          },
+                          {
+                              "check":  "audit-cost-plausibility",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-COST-PLAUSIBILITY-COMPLETE clean n=1"
+                          },
+                          {
+                              "check":  "audit-cost-line-coverage",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-COST-LINE-COVERAGE-COMPLETE clean n=1"
+                          },
+                          {
+                              "check":  "recipes-db-dryrun",
+                              "verdict":  "fail",
+                              "numbers":  {
+                                              "rc":  1,
+                                              "null_item_ids":  -1
+                                          },
+                              "detail":  "update-recipes-db -DryRun never printed its item_id source line, so the null-id count could not be read. Could-not-look is not a clean bill. Its own last lines: + if(-not (Test-Path $RunDir)){ throw (\"RunDir not found: $RunDir\") } // +                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //     + CategoryInfo          : OperationStopped: (RunDir not foun...-27-highprotein:String) [], RuntimeException //     + FullyQualifiedErrorId : RunDir not found: meal-prep/runs/hunt-2026-08-27-highprotein"
+                          },
+                          {
+                              "check":  "p8-endpoint-provenance",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "card_feed":  "https://feed.thriftycrew.com/smp-feed.json",
+                                              "guard_feed":  "https://feed.thriftycrew.com/smp-feed.json",
+                                              "producible":  true
+                                          },
+                              "detail":  "the cards fetch a feed this estate produces, and feed-covers-published validates the same one"
+                          },
+                          {
+                              "check":  "p8-feed-liveness",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "url":  "https://feed.thriftycrew.com/smp-feed.json",
+                                              "feed_recipes":  565,
+                                              "generated":  "2026-08-28T08:12:23"
+                                          },
+                              "detail":  "200 + parseable (565 recipes, generated 2026-08-28T08:12:23)"
+                          }
+                      ],
+    "summary":  {
+                    "slugs":  1,
+                    "checks":  16,
+                    "failed":  2
+                },
+    "not_checked":  [
+                        "mapping soundness and the precedents behind a substitution",
+                        "price-class plausibility (is this the right FORM of the ingredient)",
+                        "cross-recipe checks and dish identity",
+                        "condition questions the run has not ruled on",
+                        "stat.cost_ps basis - wave-publish E2 re-anchors and hard-verifies it per slug at publish time",
+                        "whether the wave manifest, the ledger and the recipe states tell one story - wave-publish P2/P3"
+                    ]
+}

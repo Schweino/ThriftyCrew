@@ -4,125 +4,123 @@
   {
    "raw": "3 lb pork loin (trimmed)",
    "buy": "5 1/4 lb, trimmed",
-   "notes": ""
+   "notes": "Settled line; source-basis 1360.8 g."
   },
   {
    "raw": "1/3 cup salt",
-   "buy": "1/2 cup plus 1 tablespoon (for the brine)",
+   "buy": "1/2 cup plus 4 teaspoons",
    "grams_source": 96,
-   "notes": "Table salt at 288 g per cup; the table computed no weight for this line."
+   "notes": "Brine salt; no weight was computed, so weighed at the DB row's own basis (1 tsp = 6 g, so 1/3 cup = 96 g). Mostly discarded with the brine but fully purchased."
   },
   {
    "raw": "1/3 cup sugar",
-   "buy": "1/2 cup plus 1 tablespoon (for the brine)",
-   "notes": "Brine is discarded, but the shopper buys it."
-  },
-  {
-   "raw": "3 bay leaves",
-   "buy": "5 bay leaves",
-   "notes": ""
-  },
-  {
-   "raw": "12 juniper berries",
-   "buy": "21 berries (about 1 1/4 teaspoons)",
-   "grams_source": 1.5,
-   "notes": "Dried juniper berry weighed at 0.125 g each."
+   "buy": "1/2 cup plus 4 teaspoons",
+   "notes": "Brine sugar; settled at 66.7 g."
   },
   {
    "raw": "12 allspice berries",
-   "buy": "21 berries (about 1 3/4 teaspoons)",
-   "grams_source": 2,
-   "notes": "Whole allspice berry at about 0.17 g each."
+   "buy": "21 whole berries",
+   "grams_source": 1.9,
+   "notes": "No weight was computed. 12 whole berries is about 1 tsp, which the DB row weighs at 1.9 g."
+  },
+  {
+   "raw": "3 bay leaves",
+   "buy": "5 leaves",
+   "notes": "Settled at 1.8 g."
+  },
+  {
+   "raw": "12 juniper berries",
+   "buy": "21 berries",
+   "grams_source": 2.4,
+   "notes": "Dried whole berries at 0.2 g each."
   },
   {
    "raw": "12 cardamom pods",
    "buy": "21 pods",
-   "grams_source": 2.4,
-   "notes": "Green cardamom pod at 0.2 g each."
+   "grams_source": 3,
+   "notes": "Whole green pods at 0.25 g each."
   },
   {
    "raw": "1 tbsp black peppercorns",
-   "buy": "1 3/4 tablespoons whole peppercorns",
-   "grams_source": 7,
-   "notes": "Off the existing black pepper row's 2.3 g per tsp."
-  },
-  {
-   "raw": "3 tbsp olive oil (divided)",
-   "buy": "5 1/4 tablespoons, divided",
-   "notes": ""
-  },
-  {
-   "raw": "1 tsp salt (divided)",
-   "buy": "1 3/4 teaspoons, divided",
-   "notes": ""
-  },
-  {
-   "raw": "3 garlic cloves (minced)",
-   "buy": "5 cloves, minced",
-   "notes": ""
-  },
-  {
-   "raw": "1 bunch broccoli rabe (trimmed (See Note 2))",
-   "buy": "1 3/4 lb (about 2 bunches), trimmed",
-   "grams_source": 400,
-   "notes": "A 1 lb bunch trims to about 400 g of usable stems and florets."
-  },
-  {
-   "raw": "1/8 tsp crushed red pepper",
-   "buy": "scant 1/4 teaspoon",
-   "grams_source": 0.25,
-   "notes": "Flakes at 2 g per tsp."
-  },
-  {
-   "raw": "4 oz very thinly sliced prosciutto",
-   "buy": "7 oz, very thinly sliced",
-   "grams_source": 113.4,
-   "notes": "Source states 4 oz outright."
-  },
-  {
-   "raw": "2 cups chicken stock",
-   "buy": "3 1/2 cups",
-   "notes": ""
-  },
-  {
-   "raw": "1/4 cup dry white wine",
-   "buy": "scant 1/2 cup",
-   "grams_source": 59,
-   "notes": "Water-like at 236 g per cup; the table computed no weight for this line."
-  },
-  {
-   "raw": "2 yellow onions (medium and sliced)",
-   "buy": "3 1/2 medium (about 14 oz), sliced",
-   "grams_source": 220,
-   "notes": "Medium yellow onion at 110 g, against the 70 g small-onion precedent of 2026-08-26."
-  },
-  {
-   "raw": "1/4 cup balsamic syrup",
-   "buy": "7 tablespoons balsamic glaze",
-   "grams_source": 60,
-   "notes": "Label basis 15 g per tbsp."
-  },
-  {
-   "raw": "16 oz cranberries",
-   "buy": "1 3/4 lb (28 oz) fresh cranberries",
-   "notes": ""
-  },
-  {
-   "raw": "1 cup sugar",
-   "buy": "1 3/4 cups",
-   "notes": ""
+   "buy": "1 3/4 tablespoons",
+   "grams_source": 6.5,
+   "notes": "Whole peppercorns, slightly less dense than ground."
   },
   {
    "raw": "1 cup water",
    "buy": "1 3/4 cups",
    "grams_source": 240,
-   "notes": ""
+   "notes": "Brine water. Not purchased (see ruling) but kept in the ingredient list with its weight so the brine reads correctly; it carries zero macros."
+  },
+  {
+   "raw": "3 tbsp olive oil (divided)",
+   "buy": "1/3 cup, divided",
+   "notes": "Settled at 40.5 g."
+  },
+  {
+   "raw": "1 tsp salt (divided)",
+   "buy": "1 3/4 teaspoons, divided",
+   "notes": "Settled at 6 g."
+  },
+  {
+   "raw": "1/8 tsp crushed red pepper",
+   "buy": "a scant 1/4 teaspoon",
+   "notes": "Settled at 0.2 g."
+  },
+  {
+   "raw": "3 garlic cloves (minced)",
+   "buy": "5 cloves, minced",
+   "notes": "Settled at 9 g."
+  },
+  {
+   "raw": "1 bunch broccoli rabe (trimmed (See Note 2))",
+   "buy": "1 3/4 bunches, trimmed (about 1 lb 5 oz trimmed)",
+   "grams_source": 340,
+   "notes": "One retail bunch is about 1 lb untrimmed and about 340 g once the woody ends are cut."
+  },
+  {
+   "raw": "4 oz very thinly sliced prosciutto",
+   "buy": "7 oz, very thinly sliced",
+   "grams_source": 113.4,
+   "notes": "4 oz = 113.4 g."
+  },
+  {
+   "raw": "2 yellow onions (medium and sliced)",
+   "buy": "3 1/2 medium onions, sliced",
+   "notes": "Settled at 220 g."
+  },
+  {
+   "raw": "2 cups chicken stock",
+   "buy": "3 1/2 cups",
+   "notes": "Settled at 480 g."
+  },
+  {
+   "raw": "1/4 cup dry white wine",
+   "buy": "7 tablespoons",
+   "grams_source": 60,
+   "notes": "No weight was computed; wine is water-like at 1 g/ml, so 1/4 cup = 60 g."
+  },
+  {
+   "raw": "16 oz cranberries",
+   "buy": "1 3/4 lb (about 7 cups)",
+   "notes": "Settled at 453.6 g, fresh."
+  },
+  {
+   "raw": "1 cup sugar",
+   "buy": "1 3/4 cups",
+   "notes": "Settled at 200 g, for the cranberry sauce."
+  },
+  {
+   "raw": "1/4 cup balsamic syrup",
+   "buy": "7 tablespoons",
+   "grams_source": 60,
+   "notes": "Weighed on the glaze label's own basis of 1 tbsp = 15 g."
   },
   {
    "raw": "2 tsp orange extract",
-   "buy": "3 1/2 teaspoons",
-   "grams_source": 9,
-   "notes": "Alcohol-based extract just under water density."
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "grams_source": 10,
+   "notes": "1 tsp = 5 g off the existing DB row."
   }
  ],
  "rulings": [
@@ -132,17 +130,8 @@
    "canon_item": "Juniper Berries",
    "bid": null,
    "decision": "mapped-null",
-   "grams_source": 1.5,
-   "evidence": "Board absent with no capture match and no near commodity: goji berries and berry snack bars off the FDC shelf are keyword misses, not this food. Pantry-static pricing is the safe answer for 1.5 g of a brining spice; the term is reported absent so the pricing road can rule."
-  },
-  {
-   "raw": "12 allspice berries",
-   "term": "allspice berries",
-   "canon_item": "Whole Allspice",
-   "bid": "ground-allspice",
-   "decision": "mapped",
-   "grams_source": 2,
-   "evidence": "REUSE of ground-allspice, live 5 of 7 at 1.06. Whole versus ground is a grind of the identical spice sold in the identical jar at the same price class, not a fresh/dried or product-class flip."
+   "grams_source": 2.4,
+   "evidence": "Whole dried juniper for the brine. The board has no commodity and no capture match and no near id covers it, so null (pantry-static) rather than a stretch onto another spice; the term is reported absent so the pricing road can rule. 12 berries at 0.2 g each."
   },
   {
    "raw": "12 cardamom pods",
@@ -150,35 +139,26 @@
    "canon_item": "cardamom pods",
    "bid": "cardamom",
    "decision": "mapped",
-   "grams_source": 2.4,
-   "evidence": "REUSE of the live board id cardamom (2 of 7, cheapest 10.52 at Walmart); the food DB already carries a 'cardamom pods' row, so only the vocabulary name row is missing."
+   "grams_source": 3,
+   "evidence": "Follows this run's 2026-08-28 ruling on the identical phrase; cardamom is a live board id (2 of 7, 10.52), so a REUSE. The 'ground cloves or cardamom' precedent chose cloves only because that line offered either one, which this line does not."
   },
   {
    "raw": "1 tbsp black peppercorns",
    "term": "black peppercorns",
-   "canon_item": "Black Peppercorns",
+   "canon_item": "black peppercorns",
    "bid": "black-peppercorns",
    "decision": "mapped",
-   "grams_source": 7,
-   "evidence": "REUSE of the live board id black-peppercorns, 5 of 7, cheapest 0.4994 at Fareway - an exact-food id already priced, so not a proposal."
+   "grams_source": 6.5,
+   "evidence": "Same-phrase prior ruling from this run, and black-peppercorns is a live board id at 5 of 7 (0.4994 Fareway), so a REUSE. 1 tbsp of whole peppercorns is about 6.5 g, a little lighter than ground."
   },
   {
    "raw": "1 bunch broccoli rabe (trimmed (See Note 2))",
    "term": "broccoli rabe",
-   "canon_item": "Broccoli Rabe",
+   "canon_item": "broccoli rabe",
    "bid": "broccoli-rabe",
    "decision": "mapped",
-   "grams_source": 400,
-   "evidence": "Refused broccoli (7 of 7): rabe is rapini, a bitter turnip relative sold by the bunch at a higher price than broccoli crowns, and broccolini is a third plant again. A crown price on rabe is a silent cost defect."
-  },
-  {
-   "raw": "1/8 tsp crushed red pepper",
-   "term": "crushed red pepper",
-   "canon_item": "Red Pepper Flakes",
-   "bid": "red-pepper-flakes",
-   "decision": "mapped",
-   "grams_source": 0.25,
-   "evidence": "REUSE of red-pepper-flakes, 7 of 7 at 0.433. Crushed red pepper is the dried chile flake; the bell-pepper vocabulary rows are a different food entirely and are refused."
+   "grams_source": 340,
+   "evidence": "REFUSED the board's broccoli match: rabe (rapini) is a different vegetable, sold by the bunch at a markedly higher price, and mapping it to broccoli would misprice and misweigh the line. Same-phrase prior ruling this run used broccoli-rabe; one bunch trims to about 340 g."
   },
   {
    "raw": "4 oz very thinly sliced prosciutto",
@@ -187,16 +167,7 @@
    "bid": "prosciutto",
    "decision": "mapped",
    "grams_source": 113.4,
-   "evidence": "Board absent, no capture match, and no existing id prices dry-cured Italian ham: bacon, ham and deli meats are all different cures at different price classes. 'Very thinly sliced' is the deli cut, not a form flip."
-  },
-  {
-   "raw": "2 yellow onions (medium and sliced)",
-   "term": "yellow onions",
-   "canon_item": "Yellow Onion",
-   "bid": "onions",
-   "decision": "mapped",
-   "grams_source": 220,
-   "evidence": "REUSE of onions, 7 of 7 at 0.7967, matching the 2026-08-26 'small yellow onion' ruling. Green-onions is a different vegetable and is refused; medium weighed at 110 g each."
+   "evidence": "Dry-cured Italian ham at roughly ten dollars a pound, not deli ham and not bacon; 'very thinly sliced' is how prosciutto is always sold, not a form flip. Matches this run's same-phrase ruling; board has no commodity and no capture match, so the term is reported absent."
   },
   {
    "raw": "1/4 cup balsamic syrup",
@@ -205,43 +176,39 @@
    "bid": "balsamic-glaze",
    "decision": "mapped",
    "grams_source": 60,
-   "evidence": "Refused balsamic-vinegar: the glaze is a reduced, sweetened syrup at roughly four times the carbs and a different bottle price, which is both a price flip and a gram-weight flip. Board absent."
+   "evidence": "Reduced, sweetened balsamic sold as glaze: 40 cal and 10 g carbs per tbsp against vinegar's 15 cal and 3 g, a different product in a different bottle at a different price, so the balsamic-vinegar form flip is refused. Matches this run's same-phrase ruling; board absent, term reported."
   },
   {
    "raw": "1 cup water",
    "term": "water",
-   "canon_item": "Water",
+   "canon_item": "water",
    "bid": null,
-   "decision": "mapped-null",
+   "decision": "not-purchased",
    "grams_source": 240,
-   "evidence": "Tap water: no commodity claims it and none should, so pantry-static at zero cost. The food DB already carries the zero row."
+   "evidence": "Tap water for the brine: no shopper buys it and no commodity claims it, so no id and no cost. It is kept in the lines array with its weight so the brine still reads correctly, and its DB row is all zeroes."
   },
   {
    "raw": "2 tsp orange extract",
    "term": "orange extract",
-   "canon_item": "Orange Extract",
+   "canon_item": "orange extract",
    "bid": null,
    "decision": "mapped-null",
-   "grams_source": 9,
-   "evidence": "Refused oranges (7 of 7): the whole fruit is not a 1 fl oz alcohol extract, a form flip in both price and gram weight. No commodity prices extracts, so pantry-static; term reported absent."
+   "grams_source": 10,
+   "evidence": "REFUSED both the board's oranges match and the Orange Juice near-row: a small alcohol-based flavouring bottle is neither fresh fruit nor juice, in price class or in gram weight. Null is pantry-static and safe; the term is reported absent."
   }
  ],
  "absent_terms": [
   "juniper berries",
-  "broccoli rabe",
   "prosciutto",
   "balsamic glaze",
+  "broccoli rabe",
   "orange extract"
  ],
  "db_entries_written": [
-  "Black Peppercorns",
-  "Broccoli Rabe",
-  "Prosciutto",
-  "Balsamic Glaze",
-  "Orange Extract"
+  "Juniper Berries"
  ],
  "db_row_findings": [
-  "roasted-stuffed-pork-loin: the food-DB row for 'Whole Allspice' FAILED the Atwater check (Atwater 348 vs stated 263 - a 32% gap, so these four numbers do not describe one food) and was NOT written"
+  "roasted-stuffed-pork-loin: the food DB already carries 'Balsamic Glaze' and the mapper's row DIFFERS on calories, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 133.3 cal / 0.0 P / 26.7 C / 0.0 F  vs  mapper 266.7 / 0.0 / 66.7 / 0.0. On one basis (the mapper's row scaled onto the DB's 1 tbsp = 15 g) they still disagree: calories 40 vs 20; carbs_g 10 vs 4. existing={\"calories\": 20, \"carbs_g\": 4} new={\"calories\": 40, \"carbs_g\": 10}"
  ],
  "db_row_notes": [],
  "rejected": [],
@@ -250,19 +217,19 @@
   {
    "term": "broccoli rabe",
    "proposed_bid": "broccoli-rabe",
-   "evidence": "Rapini is a distinct produce item from broccoli (7 of 7) and from broccolini, which the estate already prices separately - different plant, different bunch price, sold by the bunch rather than the crown. Searched by food across the commodity, recipe-commodity and board namespaces for broccoli spellings: only broccoli and broccolini exist, neither of which is rabe.",
+   "evidence": "Rapini is a distinct brassica sold as a leafy bunch, not a crown of broccoli, and it is routinely two to three times broccoli's price per pound; the board's broccoli match is a different food. A prior ruling this run already settled the identical phrase to broccoli-rabe, so if that id exists this is a REUSE and no new mint is needed, exactly like the brown-lentils case where only the vocabulary row was missing.",
    "declared": true
   },
   {
    "term": "very thinly sliced prosciutto",
    "proposed_bid": "prosciutto",
-   "evidence": "Dry-cured Italian ham sold in 3-4 oz deli packs. Board reports no commodity and no capture match. No existing id prices it under another spelling: bacon, kielbasa, deli-ham and pork-loin are all different cures or cuts at different price classes, and the word-order variants ('prosciutto di parma', 'parma ham') name the same food I am proposing here.",
+   "evidence": "Dry-cured, unsmoked Italian ham sold in 3 to 4 oz packs at roughly 10 to 16 dollars a pound. It is not deli-ham (cooked, wet-cured lunch meat at about 5 dollars a pound), not spiral-ham or diced-ham (cooked whole-muscle roast and convenience dice), and not bacon or pancetta (smoked or belly cuts). The estate's own lookup for this term found no commodity in any namespace and no capture match, and no vocabulary row shares a core word with it. A prior ruling in this same run already settled the identical phrase to this id, so if it has since been minted this is a REUSE and not a proposal.",
    "declared": true
   },
   {
    "term": "balsamic syrup",
    "proposed_bid": "balsamic-glaze",
-   "evidence": "A reduced, sweetened balsamic sold as a squeeze bottle - 20 cal and 4 g carbs per tbsp against plain balsamic vinegar's 88 cal per 100 g, a different product at a different price. Board absent. Checked balsamic-vinegar, vinegar and syrup spellings across the namespaces: the only balsamic id is the plain vinegar, which this must not be bridged onto.",
+   "evidence": "A separate shelf product from balsamic vinegar: the vinegar is reduced with sweetener to a pourable syrup, printing 40 cal and 10 g carbs per tbsp against vinegar's 15 cal and 3 g, in a squeeze bottle at a higher price per ounce. Bridging it to balsamic-vinegar would be wrong on price and on gram weight, which is why the pre-resolve flagged the syrup/vinegar form difference rather than aliasing it. Board reports no commodity and no capture match. A prior ruling this run used this same id for the identical phrase.",
    "declared": true
   }
  ],
@@ -271,20 +238,20 @@
    "proposed_bid": "broccoli-rabe",
    "verdict": "approve",
    "bid": "broccoli-rabe",
-   "reason": "Rapini (Brassica rapa) is a different plant and purchase from broccoli ($2.09/lb Aldi) and broccolini ($3.99/each Baker's); the feed has zero rabe/rapini/raab strings, and no namespace carries the word anywhere. But the live broccoli include is the bare pattern 'broccoli', which WILL claim 'Broccoli Rabe' product names, so this id may not go live bare: mint broccoli-rabe as weekly-staples (commodities.json, unit likely each/bunch) with a full ~150-pattern exclude list modeled on broccolini's, ADD excludes 'rabe|rapini|raab' to both broccoli and broccolini, and record allowlist pairs broccoli-rabe/broccoli and broccoli-rabe/broccolini (different plant, reviewed) so the daily audit never re-flags them."
+   "reason": "No 'rabe' or 'rapini' string exists in commodities.json, recipe-commodities.json, recipe-board-everyday.json, or smp-feed.json (re-grepped, not just the dossier's word-overlap sweep), and recipe-floor-id-map.json names no pair. The near rows are different purchases: broccoli ($2.09/lb Aldi) is the crown vegetable, broccolini ($3.99/each) is the broccoli-gai-lan hybrid stalk, and rapini is a bitter turnip-family leafy bunch typically 2-3x broccoli's per-lb price - aliasing to either would silently misprice the recipe. SAME FOOD DIFFERENT... no: different food entirely, so new id in the weekly-staples namespace (commodities.json + capture worklist, unit lb) with allowlist pairs broccoli-rabe/broccoli and broccoli-rabe/broccolini recorded in commodity-dupe-allowlist.json ('distinct brassica species, 2-3x price spread'). Include should require rabe|rapini contiguously ('broccoli\\s+rabe', '\\brapini\\b'); exclude must cover broccolini, baby broccoli, florets, frozen, and seasoning/pesto look-alikes at neighboring-commodity rigor before capture. Separately for the vocabulary: no ingredients.json row exists, so a new name row 'Broccoli Rabe' is also needed - a distinct edit through the sanctioned editor, not a side effect of this id ruling. Note to caller: id exists nowhere and is NOT priced; the recipe stays unpriced until capture runs."
   },
   {
    "proposed_bid": "prosciutto",
    "verdict": "approve",
    "bid": "prosciutto",
-   "reason": "Dry-cured prosciutto is a different cure and price class from deli-ham ($0.1238/oz — prosciutto typically runs 5-8x that) and the feed contains no prosciutto or parma string, so it is genuinely unpriced, not merely unmatched. The seam to close: deli-ham's include is '\\bham\\b', which would claim products labeled 'Parma Ham', and its exclude list has no prosciutto/parma entry — mint prosciutto in weekly staples (commodities.json + capture worklist, unit oz, deli 3-4 oz pack class) with include 'prosciutto' and 'parma\\s+ham', add 'prosciutto' and 'parma' to deli-ham's excludes, and record the allowlist pair prosciutto/deli-ham (different cure, reviewed)."
+   "reason": "No 'prosciutto', 'parma', 'speck', 'capicola', or 'dry-cured' string exists anywhere in the three namespaces or the live feed (re-grepped directly; the dossier's near rows were all coincidental 'sliced' word matches). The only plausible carrier is deli-ham ($0.1238/oz, include '\\bham\\b') - a cooked wet-cured lunch meat at roughly a third of prosciutto's ~$10-16/lb; same animal, different cure, different form, different purchase, so reuse would price the wrong food. New id in the recipe-only namespace (recipe-board-everyday baseline + recipe-commodities.json for sales) unless it earns weekly-staple status, unit oz, with allowlist pair prosciutto/deli-ham ('dry-cured vs cooked deli ham, ~3x price'). Include on 'prosciutto' contiguously; excludes must block prosciutto-WRAPPED prepared items (wrapped asparagus/mozzarella, pizzas, charcuterie sampler trays, 'prosciutto style' turkey) at ~150-pattern rigor. Also flag the seam this mint creates: deli-ham's bare '\\bham\\b' include will claim any product named 'Prosciutto Ham', so deli-ham needs a 'prosciutto' exclude added in the same edit or the audit pages Brad on day one. Vocabulary: no ingredients.json row shares a core word; a new 'Prosciutto' name row is a separate required edit. Not priced today - capture needed."
   },
   {
    "proposed_bid": "balsamic-glaze",
    "verdict": "approve",
    "bid": "balsamic-glaze",
-   "reason": "Same base food, different form: a reduced sweetened glaze is a different purchase from balsamic-vinegar ($0.1704/floz Fareway), and the estate already agrees — balsamic-vinegar's live exclude list contains '\\bglaze\\b' and 'reduction', i.e. glaze products are deliberately unclaimed today, and the feed's only priced 'glaze' is a Kikkoman soy glaze under another id. Mint balsamic-glaze (recipe-only: recipe-board baseline + recipe-commodities, unit floz) with real excludes (soy glaze, teriyaki, hot honey, donut/dessert glazes, vinaigrette, dressing), FIX the recipe-commodities balsamic-vinegar include — it is the bare word 'balsamic' and would swallow glaze sale items — by adding a glaze/reduction exclude there, and record the allowlist pair balsamic-glaze/balsamic-vinegar (different form: reduction vs vinegar)."
+   "reason": "The estate itself already ruled this a different product: balsamic-vinegar's exclude list carries '\\bglaze\\b' and 'reduction' in BOTH commodities.json (line 43676) and recipe-commodities.json (line 466, with the note 'excludes glaze/reduction (sweetened, pricier per-oz)') - the vinegar id deliberately refuses this food, so aliasing to balsamic-vinegar ($0.1704/floz) would price a 15-cal vinegar for a 40-cal sweetened syrup and contradict the estate's own rules. No 'balsamic-glaze' id or feed cell exists; the only feed 'glaze' hit is Kikkoman sweet soy glaze under an unrelated id. SAME FOOD, DIFFERENT FORM -> different purchase: new id in the recipe-only namespace, unit floz, allowlist pair balsamic-glaze/balsamic-vinegar ('reduced+sweetened syrup vs straight vinegar; vinegar id already excludes glaze/reduction'). Include 'balsamic\\s+(?:glaze|reduction)'; exclude vinaigrette/dressing/marinade/spray and glazed-snack look-alikes at neighboring rigor - this passes the dupe audit only WITH the allowlist entry, so ship them together. Vocabulary: nearest row is Balsamic Vinegar, different form, so a new 'Balsamic Glaze' name row is also needed as its own edit. Not priced today - capture needed."
   }
  ],
- "macro_cross_check": "PASS. Source publishes 540 cal / 47 C / 43 P per serving at 8 servings; my lines recompute to 508 cal (-5.9%), 47.3 g carbs (+0.6%) and 40.7 g protein (-5.4%), inside the 15% protein tolerance. Protein is 279 g of the 326 g total from the 1360.8 g pork loin alone. Caveat stated loudly: this counts the whole brine (1/3 cup salt, 1/3 cup sugar) and the brine spices, which are discarded - drop the brine sugar and per-serving calories fall to about 476, which is why my figure sits under the source's. Band check at target scale: 476-508 cal is inside 450-800, but 40.7 g protein clears the 40 g floor by less than a gram, so any downward revision of the pork weight or of the prosciutto retires this recipe."
+ "macro_cross_check": "Source published 540 cal / 47 carbs / 43 g protein per serving at 8 servings. Computed from the food DB at source scale over all 22 lines: about 4133 cal, 326 g protein and 391 g carbs total, which is 517 cal / 40.8 g protein / 48.9 g carbs per serving. Protein is 5.1 percent under the published figure and carbs are 4 percent over, both well inside tolerance, so the pork loin at 1360.8 g and the 113.4 g of prosciutto are the right portions. CALLED OUT: protein clears this run's 40 g floor by only 0.8 g per serving, so any downward revision of the pork loin weight or of the prosciutto (for example treating 4 oz as post-trim) drops this recipe below the floor. Calories sit comfortably in the 450 to 800 band. The brine sugar and salt are counted as purchased and the sugar's 250 cal are counted in full even though most of the brine is discarded, which is the conservative direction."
 }

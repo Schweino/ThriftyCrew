@@ -1,0 +1,453 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 2,
+ "generated": "2026-08-28T12:42:38",
+ "batch_terms": [
+  "carnitas meat",
+  "Carnitas"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "carnitas meat",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "UNUSABLE",
+     "term_used": "carnitas meat",
+     "attempts": [
+      {
+       "term": "carnitas meat",
+       "state": "ERROR",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "ERROR: The remote server returned an error: (503) Server Unavailable.",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "carnitas",
+     "attempts": [
+      {
+       "term": "carnitas meat",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "carnitasmeat",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "carnitas",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 3 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "carnitas meat",
+     "attempts": [
+      {
+       "term": "carnitas meat",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Beef Fajita Mix",
+       "price": 9.99,
+       "size": "$0.62/oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387474-beef-fajita-mix-1-each"
+      },
+      {
+       "item": "Cilantro",
+       "price": 1.49,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+      },
+      {
+       "item": "Cookies BBQ Sauce And Fully Cooked Shredded Pork(Cookies)",
+       "price": 6.99,
+       "size": "$0.44/oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387268-bbq-sauce-and-fully-cooked-shredded-porkcookies"
+      },
+      {
+       "item": "Famous Dave's Mild Pulled Pork",
+       "price": 9.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/49463644-famous-dave-pulled-pork-16-oz"
+      },
+      {
+       "item": "Beef Enchilada",
+       "price": 3.99,
+       "size": "7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388427-beef-enchilada-7-oz"
+      },
+      {
+       "item": "Boneless Pork Shoulder Roast",
+       "price": 10.47,
+       "size": "$3.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387515-boneless-pork-shoulder-roast-1-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "carnitas meat",
+     "attempts": [
+      {
+       "term": "carnitas meat",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Gary's QuickPork, Thinly Sliced Pork with Carnitas Seasoning, Frozen, 3 pk.",
+       "price": 14.97,
+       "size": "",
+       "unit_price": "$6.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5CIHM1IZ5FY8"
+      },
+      {
+       "item": "Meat & Cheese Assorted Snack Pack, 5.2 oz.",
+       "price": 3.57,
+       "size": "",
+       "unit_price": "$0.69/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0ZKU22PG9WWE"
+      },
+      {
+       "item": "Member's Mark Fully Cooked Pork Carnitas, 2 lbs.",
+       "price": 13.98,
+       "size": "",
+       "unit_price": "$6.99/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2K6F7W4U70V4"
+      },
+      {
+       "item": "Sweet & Savory Assorted Snack Pack, 4.4 oz.",
+       "price": 3.72,
+       "size": "",
+       "unit_price": "$0.85/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5L8F9QOVYM91"
+      },
+      {
+       "item": "Member's Mark Seasoned Pulled Chicken 2 lbs.",
+       "price": 14.96,
+       "size": "",
+       "unit_price": "$7.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4QPAOVMYEFV9"
+      },
+      {
+       "item": "Member's Mark Rotisserie Chicken Enchiladas, priced per pound",
+       "price": 15.12,
+       "size": "",
+       "unit_price": "$3.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3RPD20STXXPK"
+      },
+      {
+       "item": "Member's Mark Extra Meaty Baby Back Pork Ribs 3 lbs.",
+       "price": 16.27,
+       "size": "",
+       "unit_price": "$5.42/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/79XNB761X8N9"
+      },
+      {
+       "item": "Member's Mark Hatch Chile and Chicken Enchiladas, priced per pound",
+       "price": 15.17,
+       "size": "",
+       "unit_price": "$4.74/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1AO67WOZFHJM"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "Carnitas",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "UNUSABLE",
+     "term_used": "Carnitas",
+     "attempts": [
+      {
+       "term": "Carnitas",
+       "state": "ERROR",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "ERROR: The remote server returned an error: (503) Server Unavailable.",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "Carn itas",
+     "attempts": [
+      {
+       "term": "Carnitas",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "Carn itas",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "Carnitas",
+     "attempts": [
+      {
+       "term": "Carnitas",
+       "state": "OK",
+       "hits": 57
+      }
+     ],
+     "hits": [
+      {
+       "item": "Cilantro",
+       "price": 1.49,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+      },
+      {
+       "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
+       "price": 1.99,
+       "size": "12 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
+      },
+      {
+       "item": "Beef Fajita Mix",
+       "price": 9.99,
+       "size": "$0.62/oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387474-beef-fajita-mix-1-each"
+      },
+      {
+       "item": "Bacon Wrapped Pork Tenderloin Fillet",
+       "price": 1.99,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89322078-bacon-wrapped-pork-tenderloin-fillet"
+      },
+      {
+       "item": "José Olé Beef & Cheese Mini Tacos",
+       "price": 6.99,
+       "size": "16.2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19237718-jos-ol-mini-tacos-beef-cheese-16-2-oz"
+      },
+      {
+       "item": "HERDEZ Taqueria Street Sauce Roja Medium Taco Sauce",
+       "price": 3.88,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18470595-herdez-medium-original-roja-taqueria-street-taco-sauce-9-oz"
+      },
+      {
+       "item": "Herdez Guacamole Salsa Medium",
+       "price": 3.88,
+       "size": "15.7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3081343-herdez-medium-guacamole-salsa-15-7-oz"
+      },
+      {
+       "item": "Fareway Smoked Boneless Pork Loin",
+       "price": 12.48,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388749-fareway-smoked-boneless-pork-loin-1-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "Carnitas",
+     "attempts": [
+      {
+       "term": "Carnitas",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Gary's QuickPork, Thinly Sliced Pork with Carnitas Seasoning, Frozen, 3 pk.",
+       "price": 14.97,
+       "size": "",
+       "unit_price": "$6.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5CIHM1IZ5FY8"
+      },
+      {
+       "item": "Meat & Cheese Assorted Snack Pack, 5.2 oz.",
+       "price": 3.57,
+       "size": "",
+       "unit_price": "$0.69/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0ZKU22PG9WWE"
+      },
+      {
+       "item": "Member's Mark Fully Cooked Pork Carnitas, 2 lbs.",
+       "price": 13.98,
+       "size": "",
+       "unit_price": "$6.99/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2K6F7W4U70V4"
+      },
+      {
+       "item": "Member's Mark Pitmaster Seasoned Pulled Pork, 2 lbs.",
+       "price": 10.63,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4MBOEBHWQZUV"
+      },
+      {
+       "item": "Member’s Mark Whole Boneless Pork Loin, Vacuum Pack, priced per pound",
+       "price": 17.31,
+       "size": "",
+       "unit_price": "$1.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2F125NWDOJLS"
+      },
+      {
+       "item": "Sweet & Savory Assorted Snack Pack, 4.4 oz.",
+       "price": 3.72,
+       "size": "",
+       "unit_price": "$0.85/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5L8F9QOVYM91"
+      },
+      {
+       "item": "Member's Mark Pork Stew Meat, Boneless, priced per pound",
+       "price": 15.45,
+       "size": "",
+       "unit_price": "$3.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/53KUS9U9AVDH"
+      },
+      {
+       "item": "Member's Mark Seasoned Pulled Chicken 2 lbs.",
+       "price": 14.96,
+       "size": "",
+       "unit_price": "$7.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4QPAOVMYEFV9"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

@@ -1,191 +1,134 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-28T07:36:05",
+ "generated": "2026-08-28T12:42:37",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "little potatoes",
+   "term": "carnitas meat",
    "state": "MATCHES",
-   "term_used": "little potatoes",
+   "term_used": "carnitas meat",
    "attempts": [
     {
-     "term": "little potatoes",
+     "term": "carnitas meat",
      "state": "OK",
      "hits": 6
     }
    ],
    "hits": [
     {
-     "item": "The Little Potato Co. Little Duos",
-     "price": 5.99,
-     "size": "3 lb",
+     "item": "Beef Fajita Mix",
+     "price": 9.99,
+     "size": "$0.62/oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152456-the-little-potato-company-potatoes-dynamic-duo-variety-pack-3-lb"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387474-beef-fajita-mix-1-each"
     },
     {
-     "item": "The Little Potato Co. Little Yellows",
-     "price": 4.99,
-     "size": "1.5 lb",
+     "item": "Cilantro",
+     "price": 1.49,
+     "size": "1 each",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17603689-the-little-potato-company-potatoes-fresh-creamer-boomer-gold-1-5-lb"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
     },
     {
-     "item": "The Little Potato Co. Little Yellows",
-     "price": 5.99,
-     "size": "3 lb",
+     "item": "Cookies BBQ Sauce And Fully Cooked Shredded Pork(Cookies)",
+     "price": 6.99,
+     "size": "$0.44/oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20629256-the-little-potato-company-potatoes-yellow-creamer-little-charmers-3-lb"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387268-bbq-sauce-and-fully-cooked-shredded-porkcookies"
     },
     {
-     "item": "The Little Potato Co. Little Duos",
-     "price": 4.99,
-     "size": "1.5 lb",
+     "item": "Famous Dave's Mild Pulled Pork",
+     "price": 9.99,
+     "size": "16 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152458-the-little-potato-company-potatoes-fresh-creamer-dynamic-duo-1-5-lb"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/49463644-famous-dave-pulled-pork-16-oz"
     },
     {
-     "item": "The Little Potato Co. A Little Savory Herb",
-     "price": 4.99,
-     "size": "1 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152485-the-little-potato-company-potatoes-fresh-creamer-savory-herb-1-lb"
-    },
-    {
-     "item": "The Little Potato Company A Little Roasted Garlic, Rosemary & Thyme",
-     "price": 4.99,
-     "size": "1 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25913798-roasted-garlic-tray-1-lb"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "cider vinegar",
-   "state": "MATCHES",
-   "term_used": "cider vinegar",
-   "attempts": [
-    {
-     "term": "cider vinegar",
-     "state": "OK",
-     "hits": 6
-    }
-   ],
-   "hits": [
-    {
-     "item": "Fareway Apple Cider Vinegar",
-     "price": 1.99,
-     "size": "16 fl oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/53429820-fareway-apple-cider-vinegar-16-fl-oz"
-    },
-    {
-     "item": "Fareway Apple Cider Vinegar",
-     "price": 2.79,
-     "size": "32 fl oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/52552430-fareway-apple-cider-vinegar-32-fl-oz"
-    },
-    {
-     "item": "Heinz All Natural Apple Cider Vinegar",
+     "item": "Beef Enchilada",
      "price": 3.99,
-     "size": "32 fl oz",
+     "size": "7 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71065-heinz-all-natural-apple-cider-vinegar-32-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388427-beef-enchilada-7-oz"
     },
     {
-     "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar",
-     "price": 4.69,
-     "size": "16 fl oz",
+     "item": "Boneless Pork Shoulder Roast",
+     "price": 10.47,
+     "size": "$3.49 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/218717-bragg-organic-raw-unfiltered-apple-cider-vinegar-16-oz"
-    },
-    {
-     "item": "Heinz Apple Cider Vinegar with 5% Acidity",
-     "price": 2.69,
-     "size": "16 fl oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2676633-heinz-all-natural-apple-cider-vinegar-16-oz"
-    },
-    {
-     "item": "Heinz Apple Cider Naturally Flavored Distilled Vinegar with 5% Acidity",
-     "price": 4.68,
-     "size": "64 fl oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/265976-heinz-apple-cider-naturally-flavored-distilled-vinegar-with-5-acidity-64-fl-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387515-boneless-pork-shoulder-roast-1-each"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
   },
   {
-   "term": "Baby Potatoes",
+   "term": "Carnitas",
    "state": "MATCHES",
-   "term_used": "Baby Potatoes",
+   "term_used": "Carnitas",
    "attempts": [
     {
-     "term": "Baby Potatoes",
+     "term": "Carnitas",
      "state": "OK",
-     "hits": 48
+     "hits": 57
     }
    ],
    "hits": [
     {
-     "item": "Summertime Farms Baby Gold Potatoes",
+     "item": "Cilantro",
+     "price": 1.49,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+    },
+    {
+     "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
+     "price": 1.99,
+     "size": "12 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
+    },
+    {
+     "item": "Beef Fajita Mix",
+     "price": 9.99,
+     "size": "$0.62/oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387474-beef-fajita-mix-1-each"
+    },
+    {
+     "item": "Bacon Wrapped Pork Tenderloin Fillet",
+     "price": 1.99,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89322078-bacon-wrapped-pork-tenderloin-fillet"
+    },
+    {
+     "item": "José Olé Beef & Cheese Mini Tacos",
+     "price": 6.99,
+     "size": "16.2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19237718-jos-ol-mini-tacos-beef-cheese-16-2-oz"
+    },
+    {
+     "item": "HERDEZ Taqueria Street Sauce Roja Medium Taco Sauce",
      "price": 3.88,
-     "size": "3 lb",
+     "size": "9 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387290-baby-gold-potatoes"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18470595-herdez-medium-original-roja-taqueria-street-taco-sauce-9-oz"
     },
     {
-     "item": "The Little Potato Co. Little Duos",
-     "price": 5.99,
-     "size": "3 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152456-the-little-potato-company-potatoes-dynamic-duo-variety-pack-3-lb"
-    },
-    {
-     "item": "Summertime Farms Baby Red Potatoes",
+     "item": "Herdez Guacamole Salsa Medium",
      "price": 3.88,
-     "size": "3 lb",
+     "size": "15.7 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3081343-herdez-medium-guacamole-salsa-15-7-oz"
     },
     {
-     "item": "The Little Potato Co. Little Yellows",
-     "price": 4.99,
-     "size": "1.5 lb",
+     "item": "Fareway Smoked Boneless Pork Loin",
+     "price": 12.48,
+     "size": "$4.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17603689-the-little-potato-company-potatoes-fresh-creamer-boomer-gold-1-5-lb"
-    },
-    {
-     "item": "The Little Potato Co. Little Yellows",
-     "price": 5.99,
-     "size": "3 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20629256-the-little-potato-company-potatoes-yellow-creamer-little-charmers-3-lb"
-    },
-    {
-     "item": "The Little Potato Co. Little Duos",
-     "price": 4.99,
-     "size": "1.5 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152458-the-little-potato-company-potatoes-fresh-creamer-dynamic-duo-1-5-lb"
-    },
-    {
-     "item": "Fareway Sliced Potatoes",
-     "price": 1.44,
-     "size": "15 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24218202-fareway-potatoes-sliced-15-oz"
-    },
-    {
-     "item": "Fareway Barbecue Classics Loaded Baked Potato",
-     "price": 8.88,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50521881-fareway-barbecue-classics-loaded-baked-potato-32-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388749-fareway-smoked-boneless-pork-loin-1-each"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

@@ -1,0 +1,894 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 1,
+ "generated": "2026-08-28T11:07:43",
+ "batch_terms": [
+  "Moroccan Spice Mix",
+  "juniper berries",
+  "broccoli rabe"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "Moroccan Spice Mix",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "EMPTY",
+     "term_used": "MoroccanSpiceMix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "MoroccanSpiceMix",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "MoroccanSpiceMix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "MoroccanSpiceMix",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "Moroccan Spice Mix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Chili Seasoning Mix",
+       "price": 1.68,
+       "size": "1.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38758-mccormick-chili-seasoning-mix-1-25-oz"
+      },
+      {
+       "item": "Spice Islands Beau Monde Seasoning",
+       "price": 4.99,
+       "size": "3.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+      },
+      {
+       "item": "Cavender's Seasoning, Greek, All Purpose",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/119281-cavender-s-seasoning-greek-all-purpose-8-oz"
+      },
+      {
+       "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+       "price": 7.99,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+      },
+      {
+       "item": "Badia Spices Paprika",
+       "price": 1.68,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+      },
+      {
+       "item": "Fareway Seasoning Mix",
+       "price": 1.98,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24454343-fareway-seasoning-mix-10-oz"
+      },
+      {
+       "item": "Badia Spices Paprika",
+       "price": 7.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2720763-badia-spices-paprika-16-oz"
+      },
+      {
+       "item": "Simply Organic Pumpkin Spice",
+       "price": 6.99,
+       "size": "1.94 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16401147-simply-organic-pumpkin-spice-1-94-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "Moroccan Spice Mix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "MATCHES",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
+       "price": 7.78,
+       "size": "",
+       "unit_price": "$0.65/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4LZHJ9QELZ8L"
+      },
+      {
+       "item": "Lawry's Seasoned Salt, 40 oz.",
+       "price": 7.48,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
+      },
+      {
+       "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.69/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$1.16/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+      },
+      {
+       "item": "Old Bay Seasoning, 7.5 lbs.",
+       "price": 39.88,
+       "size": "",
+       "unit_price": "$5.32/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6MGYI9AQ9VZA"
+      },
+      {
+       "item": "Kinder's Whiskey Peppercorn Seasoning, 9.7 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.72/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/538KLULEC35X"
+      },
+      {
+       "item": "Kinder's Caramelized Onion Burger Rub and Seasoning, 9.1 oz.",
+       "price": 5.48,
+       "size": "",
+       "unit_price": "$0.60/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13T9F65CNQL1"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "juniper berries",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "juniper berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Febreze Air Freshener Aerosol Spray - White Pine & Juniper Berry",
+       "price": 4.49,
+       "size": "8.1 oz",
+       "relevance": 34,
+       "url": "https://www.bakersplus.com/p/0003077223786"
+      },
+      {
+       "item": "Febreze Odor-Fighting Fade Defy PLUG Air Freshener White Pine & Juniper Berry Oil Refill",
+       "price": 9.99,
+       "size": "2 ct",
+       "relevance": 28,
+       "url": "https://www.bakersplus.com/p/0003077203424"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "juniperberries",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "berries",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Bull Pink Edition Wild Berries Energy Drink 12 Fl Oz",
+       "price": 3.49,
+       "size": "12 fl oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/energy/red_bull_pink_edition_wild_berries_energy_drink_12_fl_oz/p/1564405684716569845"
+      },
+      {
+       "item": "Stacker 2 Energy Shot, Extra Strength, Berry Flavor 2 Oz",
+       "price": null,
+       "size": "2 oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/stacker_2_energy_shot_extra_strength_berry_flavor_2_oz/p/539277"
+      },
+      {
+       "item": "Yoplait Low Fat Mixed Berry Yogurt 6 Oz",
+       "price": 0.79,
+       "size": "6 oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_mixed_berry_yogurt_6_oz/p/6003"
+      },
+      {
+       "item": "J Js Pie, Berry 4 Oz",
+       "price": 0.99,
+       "size": "4 oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/cakes_pies/j_js_pie_berry_4_oz/p/177315"
+      },
+      {
+       "item": "Powerade Mountain Berry Blast Sports Drink Bottle 28 Fl Oz",
+       "price": 1.79,
+       "size": "28 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/powerade_mountain_berry_blast_sports_drink_bottle_28_fl_oz/p/1564405684705251547"
+      },
+      {
+       "item": "Powerade Zero Sugar Mixed Berry Sports Drink Bottle 28 Fl Oz",
+       "price": 1.79,
+       "size": "28 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/powerade_zero_sugar_mixed_berry_sports_drink_bottle_28_fl_oz/p/1564405684705251545"
+      },
+      {
+       "item": "Powerade Zero Sugar Mountain Berry Enhanced Water Bottle 20 Fl Oz",
+       "price": 1.89,
+       "size": "20 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/water/specialty_enhanced/powerade_zero_sugar_mountain_berry_enhanced_water_bottle_20_fl_oz/p/1764405684715431748"
+      },
+      {
+       "item": "Gatorade Thirst Quencher, Berry, Zero Sugar 28 Fl Oz",
+       "price": 2.19,
+       "size": "28 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/gatorade_thirst_quencher_berry_zero_sugar_28_fl_oz/p/1564405684704155917"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "juniper berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Bay Leaves",
+       "price": 4.99,
+       "size": "0.12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41222-mccormick-bay-leaves-0-12-oz"
+      },
+      {
+       "item": "Simply Organic Bay Leaf",
+       "price": 6.99,
+       "size": "0.14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/54804-simply-organic-bay-leaf-0-14-oz"
+      },
+      {
+       "item": "Badia Spices Rosemary",
+       "price": 1.68,
+       "size": "1 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258005-badia-spices-rosemary-1-oz"
+      },
+      {
+       "item": "McCormick Ground Sage",
+       "price": 6.99,
+       "size": "0.6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87641-mccormick-ground-sage-0-6-oz"
+      },
+      {
+       "item": "McCormick Ground Allspice",
+       "price": 3.99,
+       "size": "0.9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72757-mccormick-ground-allspice-0-9-oz"
+      },
+      {
+       "item": "Badia Spices Bay Leaves",
+       "price": 1.68,
+       "size": "0.17 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458678-badia-spices-bay-leaves-0-17-oz"
+      },
+      {
+       "item": "McCormick Fennel Seed",
+       "price": 2.99,
+       "size": "0.85 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97839-mccormick-fennel-seed-0-85-oz"
+      },
+      {
+       "item": "McCormick Paprika",
+       "price": 3.99,
+       "size": "2.12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16408814-mccormick-paprika-2-12-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "juniper berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Envy Apples, 4 lbs.",
+       "price": 6.22,
+       "size": "",
+       "unit_price": "$1.55/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7IEL6D2PRYYW"
+      },
+      {
+       "item": "Sweet Sapphire Grapes, 3 lbs.",
+       "price": 5.87,
+       "size": "",
+       "unit_price": "$1.96/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XORD6RPT5IO"
+      },
+      {
+       "item": "Guy Laroche Drakkar Intense Men Eau De Parfum, 3.4 oz",
+       "price": 21.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1Q7MNPZ2T1Y3"
+      },
+      {
+       "item": "Febreze PLUG Air Freshener, Winter Pine & Juniper Berry & Cuddle Weather, 1 Warmer + 5 Refills, 4.35 fl. oz.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1LB72EPJAC9B"
+      },
+      {
+       "item": "Bartlett Pears, 4 lbs.",
+       "price": 6.62,
+       "size": "",
+       "unit_price": "$1.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1A1PCVOK5D9R"
+      },
+      {
+       "item": "Live 3 Gal. Purely Purple Crape Myrtle in Growers Pot",
+       "price": 39.26,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/57Z8URJBIJTH"
+      },
+      {
+       "item": "Live 3 Gal. Crimson Red Crape Myrtle in Growers Pot",
+       "price": 36.26,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6KR5UJ57A78J"
+      },
+      {
+       "item": "Live 5 Gal. Flordaking Peach Tree in Growers Pot",
+       "price": 39.64,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5OPDECO0I5BC"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "broccoli rabe",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "broccoli",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccolirabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccoli",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Broccoli Crown",
+       "price": 2.19,
+       "size": "1 lb",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0000000003082"
+      },
+      {
+       "item": "Broccoli Bunch",
+       "price": 4.09,
+       "size": "1 ct",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0000000004060"
+      },
+      {
+       "item": "Organic Broccoli Bunch",
+       "price": 4.49,
+       "size": "1 ct",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0000000094060"
+      },
+      {
+       "item": "Kroger® Frozen Broccoli Florets",
+       "price": 1.59,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111012883"
+      },
+      {
+       "item": "Kroger® Broccoli Florets 12 Oz",
+       "price": 3.49,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111060319"
+      },
+      {
+       "item": "Kroger® Broccoli Florets BIG DEAL!",
+       "price": 6,
+       "size": "32 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111079549"
+      },
+      {
+       "item": "Green Giant Simply Steam Broccoli Florets",
+       "price": 1.99,
+       "size": "10 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0002000029015"
+      },
+      {
+       "item": "Simple Truth Organic® Broccoli Florets",
+       "price": 4.79,
+       "size": "12 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111061240"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "broccoli",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccolirabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccoli",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Broccoli Crowns",
+       "price": 3.29,
+       "size": "lb",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/broccoli/broccoli_crowns/p/77935"
+      },
+      {
+       "item": "Fresh Broccoli",
+       "price": 3.99,
+       "size": "lb",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/broccoli/fresh_broccoli/p/2311257"
+      },
+      {
+       "item": "Fresh Broccoli Bacon Salad",
+       "price": 8.49,
+       "size": "lb",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/deli/salads/fresh_deli_salads/fresh_broccoli_bacon_salad/p/1564405684714191865"
+      },
+      {
+       "item": "Taylor Farms Broccoli Florets",
+       "price": 3.49,
+       "size": "12 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_prepared_fruits_vegetables/taylor_farms_broccoli_florets/p/1564405684714568886"
+      },
+      {
+       "item": "Frozen Broccoli Cuts Our Family",
+       "price": 1.39,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/broccoli/frozen_broccoli_cuts_our_family/p/1564405684703626583"
+      },
+      {
+       "item": "Michelina's Beef & Broccoli 9.6 Oz",
+       "price": 1.59,
+       "size": "9.6 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/mac_cheese/michelina_s_beef_broccoli_9_6_oz/p/1564405684703132521"
+      },
+      {
+       "item": "Birds Eye Broccoli Cuts 10.8 Oz",
+       "price": 1.59,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/broccoli/birds_eye_broccoli_cuts_10_8_oz/p/15689"
+      },
+      {
+       "item": "Frozen Broccoli Cuts Our Family",
+       "price": 2.39,
+       "size": "24 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/broccoli/frozen_broccoli_cuts_our_family/p/1564405684703626595"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "broccoli rabe",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "OK",
+       "hits": 49
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Broccoli Florets",
+       "price": 1.98,
+       "size": "14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20635158-fareway-broccoli-florets-14-oz"
+      },
+      {
+       "item": "Birds Eye Baby Broccoli Florets, Frozen Vegetables",
+       "price": 1.99,
+       "size": "12.6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/95917-birds-eye-baby-broccoli-florets-12-6-oz"
+      },
+      {
+       "item": "Birds Eye Steamfresh Broccoli Florets, Frozen Vegetables",
+       "price": 1.99,
+       "size": "10.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16713422-birds-eye-steamfresh-broccoli-florets-10-8-oz"
+      },
+      {
+       "item": "Green Giant Simply Steam Broccoli Florets, Plain Select Frozen Vegetables",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/102121-green-giant-plain-select-broccoli-florets-10-0-oz"
+      },
+      {
+       "item": "Green Giant Chopped Broccoli",
+       "price": 1.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72459-green-giant-chopped-broccoli-10-0-oz"
+      },
+      {
+       "item": "Fareway Broccoli Cuts",
+       "price": 1.98,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20585402-fareway-broccoli-cuts-16-oz"
+      },
+      {
+       "item": "Broccoli Crown",
+       "price": 2.48,
+       "size": "$2.48 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345915-broccoli-crown-1-lb"
+      },
+      {
+       "item": "Green Giant Simply Steam Broccoli & Cheese Sauce, Sauced Frozen Vegetables",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41847-green-giant-sauced-broccoli-cheese-sauce-12-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "broccoli rabe",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+      },
+      {
+       "item": "Organic Green Beans, 2 lbs.",
+       "price": 4.77,
+       "size": "",
+       "unit_price": "$2.38/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/14Q4FFWF5J7K"
+      },
+      {
+       "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+       "price": 4.92,
+       "size": "",
+       "unit_price": "$2.46/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+      },
+      {
+       "item": "Organic Sweet Petite Baby Carrots, 3 lbs.",
+       "price": 4.27,
+       "size": "",
+       "unit_price": "$1.42/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3MEMQC4EP3FM"
+      },
+      {
+       "item": "Russet Potatoes, 10 lbs.",
+       "price": 5.22,
+       "size": "",
+       "unit_price": "$0.52/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+      },
+      {
+       "item": "Wholesum Organic Mixed Squash, 3 lbs.",
+       "price": 5.44,
+       "size": "",
+       "unit_price": "$1.81/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0XCERP3C83SK"
+      },
+      {
+       "item": "Asparagus, 2 lbs.",
+       "price": 9.22,
+       "size": "",
+       "unit_price": "$4.61/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0ROABMUKP2GD"
+      },
+      {
+       "item": "Cauliflower, 1 ct.",
+       "price": 3.82,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3JP9MX5AGHKO"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

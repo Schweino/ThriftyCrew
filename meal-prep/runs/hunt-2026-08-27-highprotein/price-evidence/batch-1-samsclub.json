@@ -1,7 +1,7 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-28T07:17:45",
+ "generated": "2026-08-28T12:36:33",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -80,6 +80,164 @@
      "unit_price": "$0.60/oz",
      "relevance": null,
      "url": "https://www.samsclub.com/p/-/13T9F65CNQL1"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "juniper berries",
+   "state": "MATCHES",
+   "term_used": "juniper berries",
+   "attempts": [
+    {
+     "term": "juniper berries",
+     "state": "MATCHES",
+     "hits": 23
+    }
+   ],
+   "hits": [
+    {
+     "item": "Envy Apples, 4 lbs.",
+     "price": 6.22,
+     "size": "",
+     "unit_price": "$1.55/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7IEL6D2PRYYW"
+    },
+    {
+     "item": "Sweet Sapphire Grapes, 3 lbs.",
+     "price": 5.87,
+     "size": "",
+     "unit_price": "$1.96/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4XORD6RPT5IO"
+    },
+    {
+     "item": "Guy Laroche Drakkar Intense Men Eau De Parfum, 3.4 oz",
+     "price": 21.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1Q7MNPZ2T1Y3"
+    },
+    {
+     "item": "Febreze PLUG Air Freshener, Winter Pine & Juniper Berry & Cuddle Weather, 1 Warmer + 5 Refills, 4.35 fl. oz.",
+     "price": 19.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1LB72EPJAC9B"
+    },
+    {
+     "item": "Bartlett Pears, 4 lbs.",
+     "price": 6.62,
+     "size": "",
+     "unit_price": "$1.66/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1A1PCVOK5D9R"
+    },
+    {
+     "item": "Live 3 Gal. Purely Purple Crape Myrtle in Growers Pot",
+     "price": 39.26,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/57Z8URJBIJTH"
+    },
+    {
+     "item": "Live 3 Gal. Crimson Red Crape Myrtle in Growers Pot",
+     "price": 36.26,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6KR5UJ57A78J"
+    },
+    {
+     "item": "Live 5 Gal. Flordaking Peach Tree in Growers Pot",
+     "price": 39.64,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5OPDECO0I5BC"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "broccoli rabe",
+   "state": "MATCHES",
+   "term_used": "broccoli rabe",
+   "attempts": [
+    {
+     "term": "broccoli rabe",
+     "state": "MATCHES",
+     "hits": 17
+    }
+   ],
+   "hits": [
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+    },
+    {
+     "item": "Organic Green Beans, 2 lbs.",
+     "price": 4.77,
+     "size": "",
+     "unit_price": "$2.38/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/14Q4FFWF5J7K"
+    },
+    {
+     "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+     "price": 4.92,
+     "size": "",
+     "unit_price": "$2.46/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+    },
+    {
+     "item": "Organic Sweet Petite Baby Carrots, 3 lbs.",
+     "price": 4.27,
+     "size": "",
+     "unit_price": "$1.42/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3MEMQC4EP3FM"
+    },
+    {
+     "item": "Russet Potatoes, 10 lbs.",
+     "price": 5.22,
+     "size": "",
+     "unit_price": "$0.52/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+    },
+    {
+     "item": "Wholesum Organic Mixed Squash, 3 lbs.",
+     "price": 5.44,
+     "size": "",
+     "unit_price": "$1.81/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0XCERP3C83SK"
+    },
+    {
+     "item": "Asparagus, 2 lbs.",
+     "price": 9.22,
+     "size": "",
+     "unit_price": "$4.61/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0ROABMUKP2GD"
+    },
+    {
+     "item": "Cauliflower, 1 ct.",
+     "price": 3.82,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3JP9MX5AGHKO"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

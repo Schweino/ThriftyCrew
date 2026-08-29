@@ -62,7 +62,7 @@
     "cost_lines":  [
                        "Fat Free Cottage Cheese, 2 1/3 cups: ~$2.11. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 1 1/2 pounds (about 3 cups): ~$5.68. \u003cstrong\u003eBuy 4 8oz bricks: $7.37.\u003c/strong\u003e",
-                       "Reduced Fat Cheddar Cheese, 4 3/4 cups shredded: ~$2.82. \u003cstrong\u003eBuy 3 8oz blocks: $3.65.\u003c/strong\u003e",
+                       "Reduced Fat Cheddar Cheese, 4 3/4 cups shredded: ~$4.63. \u003cstrong\u003eBuy 3 8 oz bags: $6.01.\u003c/strong\u003e",
                        "Milk, 2 1/4 cups: ~$0.39. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
                        "Yellow Mustard, 3 1/2 teaspoons: ~$0.03. \u003cstrong\u003eBuy 1 20oz bottle: $1.00.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 3 pounds, diced: ~$6.88. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
@@ -71,9 +71,9 @@
                        "Ground Ginger, 3 1/2 teaspoons: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Ziti Pasta, 2 1/3 pounds dry (about 10 cups elbow macaroni): ~$2.24. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, dried parsley, black pepper, paprika, salt, onion powder, cooking spray): ~$1.03. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.17 across 14 servings, so roughly $1.66 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.42 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.51. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $24.98 across 14 servings, so roughly $1.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.78 across 14 servings, roughly $2.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.87. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "Here is where it gets good. All fourteen servings, chicken and cheese and pasta included, come out to ${{cost_ps}} a serving. That is restaurant comfort food for the price of a vending machine snack, and it is built on cottage cheese and cream cheese instead of a pan of butter and flour. Cook it once, eat it all week, and let the numbers do the arguing.",
     "shop_smart":  "The cheese sauce is doing the heavy lifting here, so shop the dairy first. You need 2 1/3 cups of fat free cottage cheese, 1 1/2 pounds of light cream cheese, and 4 3/4 cups of shredded reduced fat cheddar. Buy the cheddar however your store sells it plainest, block or bag, because it all goes in the blender anyway. Round it out with 2 1/4 cups of milk. The chicken is 3 pounds of boneless skinless breast, diced, and the pasta is 2 1/3 pounds dry. The honey BBQ side is small: 7 tablespoons of honey and 3/4 cup plus 2 tablespoons of BBQ sauce. Here is the quiet efficiency of this recipe. The garlic powder, paprika, black pepper, and salt each get bought one time and then pull double duty, seasoning the chicken and going into the sauce, so nothing in the spice aisle sits on the shelf unused.",
@@ -83,14 +83,14 @@
     "portion_html":  "Fourteen servings out of one batch, so a kitchen scale earns its keep here. Weigh your empty container, then weigh the full pot of mac and cheese with the chicken kept separate, subtract the container, and divide that pasta total by 14. Scoop the same weight into every container so nobody gets shorted on the cheesy part. Then split the honey BBQ chicken evenly across all fourteen and lay it on top. Eyeballing it means the first few bowls run rich and the last few run sad, and the scale fixes that in about a minute.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/\" target=\"_blank\" rel=\"noopener\"\u003etheproteinplayground.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "The board that priced this whole thing out, every commodity and every substitution, runs you a dollar a month. One recipe like this pays that back before you finish the first container. Grab the membership, cook the batch, and let the savings stack up quietly in the background while you eat well.",
-    "cost_batch":  23.17,
-    "cost_batch_true":  32.42,
-    "cost_per_serving":  1.66,
-    "cost_per_serving_true":  2.32,
+    "cost_batch":  24.98,
+    "cost_batch_true":  34.78,
+    "cost_per_serving":  1.78,
+    "cost_per_serving_true":  2.48,
     "cost_pantry_add":  11.09,
-    "cost_first_run":  43.51,
+    "cost_first_run":  45.87,
     "scaler":  {
-                   "cost":  "32.42",
+                   "cost":  "34.78",
                    "ing":  [
                                {
                                    "item":  "Fat Free Cottage Cheese",

@@ -1,0 +1,262 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "honey-bbq-chicken-mac-and-cheese",
+  "generated": "2026-08-28T12:51:10",
+  "inputs": {
+    "spec": "C:/Codex/ThriftyCrew/meal-prep/db/recipes/honey-bbq-chicken-mac-and-cheese.json",
+    "source": "C:/Codex/ThriftyCrew/meal-prep/runs/hunt-2026-08-27-highprotein/extracted/honey-bbq-chicken-mac-and-cheese.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "pass",
+      "numbers": {
+        "spec_ingredients": 17,
+        "source_ingredients": 22,
+        "matched": 17,
+        "invented": [],
+        "dropped": [],
+        "consolidated": [
+          "Garlic Powder",
+          "Paprika",
+          "Salt",
+          "Black Pepper",
+          "Salt"
+        ]
+      },
+      "detail": "17 of 22 source ingredients pair with the spec, nothing invented, nothing dropped",
+      "findings": [
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Garlic Powder' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Paprika' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Black Pepper' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 13,
+        "unrated": 3,
+        "exempt": 1,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "1/3 Fat Cream Cheese",
+            "source": "200 g",
+            "spec": "1.5 pound",
+            "ratio": 3.4019,
+            "deviation": 0.028,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Milk",
+            "source": "150 ml",
+            "spec": "2.25 cup",
+            "ratio": 3.5488,
+            "deviation": 0.0139,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic Powder",
+            "source": "1 tsp",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Dried Parsley",
+            "source": "1 tsp",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "0.5 tsp",
+            "spec": "1.75 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Paprika",
+            "source": "1 tsp",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "1 tsp",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Mustard",
+            "source": "1 tsp",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "400 g",
+            "spec": "3 pound",
+            "ratio": 3.4019,
+            "deviation": 0.028,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Honey",
+            "source": "2 tbsp",
+            "spec": "7 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Onion Powder",
+            "source": "1 tsp",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ground Ginger",
+            "source": "1 tsp",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ziti Pasta",
+            "source": "300 g",
+            "spec": "2.33333 pound",
+            "ratio": 3.5279,
+            "deviation": 0.008,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Fat Free Cottage Cheese",
+            "why": "the two measures are not the same kind (volume vs weight), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Reduced Fat Cheddar Cheese",
+            "why": "the two measures are not the same kind (volume vs weight), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "BBQ Sauce",
+            "why": "the two measures are not the same kind (volume vs weight), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Cooking Spray",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 13 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 0,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (0 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Honey BBQ Chicken Mac and Cheese",
+        "spec_source_url": "https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/",
+        "transcription_source_url": "https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 0
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Bacon and Chicken Risotto",
+  "source_url": "https://skinnyspatula.com/bacon-chicken-risotto/",
+  "servings": 4,
+  "time_total": "50 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1 tablespoon olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large shallot, finely diced",
+      "item": "large shallot",
+      "qty": "1",
+      "unit": null,
+      "prep": "finely diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "125 g (4.4 oz) unsmoked bacon lardons or pancetta",
+      "item": "unsmoked bacon lardons or pancetta",
+      "qty": "125 g (4.4 oz)",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 garlic cloves, crushed",
+      "item": "garlic cloves",
+      "qty": "2",
+      "unit": null,
+      "prep": "crushed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon fresh rosemary",
+      "item": "fresh rosemary",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "350 g (12.3 oz) chicken breast, diced",
+      "item": "chicken breast",
+      "qty": "350 g (12.3 oz)",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "75 ml (2.5 fl oz) dry white wine",
+      "item": "dry white wine",
+      "qty": "75 ml (2.5 fl oz)",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "320 g (11.2 oz) carnaroli rice",
+      "item": "carnaroli rice",
+      "qty": "320 g (11.2 oz)",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1.2 litres (5 cups) chicken stock",
+      "item": "chicken stock",
+      "qty": "1.2 litres (5 cups)",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "50 g (1.7 oz) Parmesan, grated",
+      "item": "Parmesan",
+      "qty": "50 g (1.7 oz)",
+      "unit": null,
+      "prep": "grated",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt and pepper to taste",
+      "item": "Salt and pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat the olive oil in a large pan and saute the shallot for 2-3 minutes over medium heat until softened. Add the bacon and fry for a couple of minutes, then stir in the garlic and rosemary. Continue to cook for another minute until fragrant.",
+    "Add the chicken breast and cook for 5-6 minutes or until golden, stirring from time to time. Next, add the white wine and cook for 1-2 minutes until the alcohol almost evaporates.",
+    "Stir in the rice and toast it for a minute before starting adding the chicken stock, one ladle at a time. Stir frequently so the rice doesn't stick to the bottom of the pan, but not continuously because this will add air into the risotto and make it gluey. Continue to add stock until the rice is cooked al dente and you still have some liquid left in the pan. You may not need all the stock.",
+    "Stir in the grated parmesan, season to taste, and serve immediately, topped with extra grated parmesan if you like."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 11,
+    "verified": 11,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

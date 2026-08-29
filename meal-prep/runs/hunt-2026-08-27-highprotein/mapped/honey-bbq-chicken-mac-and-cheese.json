@@ -60,15 +60,15 @@
                             "grams_from":  "ruling"
                         },
                         {
-                            "source_raw":  "1 tsp Garlic Powder",
+                            "source_raw":  "1 tsp Garlic Powder (cheese sauce) + 1 tsp Garlic Powder (chicken seasoning)",
                             "item":  "Garlic Powder",
                             "bid":  "garlic-powder",
                             "board":  "recipe",
-                            "grams":  11,
-                            "buy":  "3 1/2 teaspoons",
+                            "grams":  22,
+                            "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total)",
                             "optional":  false,
                             "decision":  "mapped",
-                            "notes":  "Chicken rub line.",
+                            "notes":  "CONSOLIDATED, one line per food. The source states garlic powder twice - 1 tsp in the sauce and 1 tsp on the chicken - so the grams are the SUM (2 tsp source x 3.5 = 7 tsp = 22 g) and the buy string names both parts. Board MAPPED: garlic-powder.",
                             "grams_from":  "engine"
                         },
                         {
@@ -84,39 +84,39 @@
                             "grams_from":  "ruling"
                         },
                         {
-                            "source_raw":  "½ tsp Black Pepper",
+                            "source_raw":  "½ tsp Black Pepper (cheese sauce) + ½ tsp Black Pepper (chicken seasoning)",
                             "item":  "Black Pepper",
                             "bid":  "black-pepper",
                             "board":  "recipe",
-                            "grams":  4,
-                            "buy":  "1 3/4 teaspoons",
+                            "grams":  8,
+                            "buy":  "1 3/4 teaspoons for the chicken; 1 3/4 teaspoons for the cheese sauce (3 1/2 teaspoons total)",
                             "optional":  false,
                             "decision":  "mapped",
-                            "notes":  "Chicken rub line.",
+                            "notes":  "CONSOLIDATED, one line per food. Black pepper is stated twice at 1/2 tsp each, so grams are the SUM (1 tsp source x 3.5 = 3 1/2 tsp = 8 g) and the buy string names both parts. Board MAPPED: black-pepper.",
                             "grams_from":  "engine"
                         },
                         {
-                            "source_raw":  "1 tsp Paprika",
+                            "source_raw":  "1 tsp Paprika (cheese sauce) + 1 tsp Paprika (chicken seasoning)",
                             "item":  "Paprika",
                             "bid":  "paprika",
                             "board":  "recipe",
-                            "grams":  8,
-                            "buy":  "3 1/2 teaspoons",
+                            "grams":  16,
+                            "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total)",
                             "optional":  false,
                             "decision":  "mapped",
-                            "notes":  "Chicken rub line.",
+                            "notes":  "CONSOLIDATED, one line per food. Paprika is stated twice - 1 tsp in the sauce and 1 tsp on the chicken - so grams are the SUM (2 tsp source x 3.5 = 7 tsp = 16 g) and the buy string names both parts. Board MAPPED: paprika.",
                             "grams_from":  "engine"
                         },
                         {
-                            "source_raw":  "1 tsp Salt",
+                            "source_raw":  "1 tsp Salt (cheese sauce) + 1 tsp Salt (chicken seasoning) + 1 tsp Salt (pasta water)",
                             "item":  "Salt",
                             "bid":  "salt",
                             "board":  "recipe",
-                            "grams":  21,
-                            "buy":  "3 1/2 teaspoons, for the pasta water",
+                            "grams":  63,
+                            "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total)",
                             "optional":  false,
                             "decision":  "mapped",
-                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "notes":  "CONSOLIDATED, one line per food. The source salts in THREE places - the sauce, the chicken and the pasta water - so grams are the SUM (3 tsp source x 3.5 = 10 1/2 tsp = 63 g). The earlier annotation \"for the pasta water\" was false on two thirds of the weight; all three destinations are now named. Board MAPPED: salt, 7 of 7 stores.",
                             "grams_from":  "engine"
                         },
                         {
@@ -156,18 +156,6 @@
                             "grams_from":  "engine"
                         },
                         {
-                            "source_raw":  "1 tsp Garlic Powder",
-                            "item":  "Garlic Powder",
-                            "bid":  "garlic-powder",
-                            "board":  "recipe",
-                            "grams":  11,
-                            "buy":  "3 1/2 teaspoons",
-                            "optional":  false,
-                            "decision":  "mapped",
-                            "notes":  "Chicken rub line.",
-                            "grams_from":  "engine"
-                        },
-                        {
                             "source_raw":  "1 tsp Onion Powder",
                             "item":  "Onion Powder",
                             "bid":  "onion-powder",
@@ -190,42 +178,6 @@
                             "decision":  "mapped",
                             "notes":  "\u0027Reduced\u0027 is an incomplete label word (the source is a UK macro site, so most likely reduced-sugar) and no such product concept exists as a separate id; the purchased bottle is BBQ sauce, vocabulary row BBQ Sauce [bbq-sauce], board 7 of 7. Macros use a standard sauce label, which is the conservative direction.",
                             "grams_from":  "ruling"
-                        },
-                        {
-                            "source_raw":  "1 tsp Paprika",
-                            "item":  "Paprika",
-                            "bid":  "paprika",
-                            "board":  "recipe",
-                            "grams":  8,
-                            "buy":  "3 1/2 teaspoons",
-                            "optional":  false,
-                            "decision":  "mapped",
-                            "notes":  "Chicken rub line.",
-                            "grams_from":  "engine"
-                        },
-                        {
-                            "source_raw":  "1 tsp Salt",
-                            "item":  "Salt",
-                            "bid":  "salt",
-                            "board":  "recipe",
-                            "grams":  21,
-                            "buy":  "3 1/2 teaspoons, for the pasta water",
-                            "optional":  false,
-                            "decision":  "mapped",
-                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
-                            "grams_from":  "engine"
-                        },
-                        {
-                            "source_raw":  "½ tsp Black Pepper",
-                            "item":  "Black Pepper",
-                            "bid":  "black-pepper",
-                            "board":  "recipe",
-                            "grams":  4,
-                            "buy":  "1 3/4 teaspoons",
-                            "optional":  false,
-                            "decision":  "mapped",
-                            "notes":  "Chicken rub line.",
-                            "grams_from":  "engine"
                         },
                         {
                             "source_raw":  "1 tsp Ground Ginger",
@@ -262,18 +214,6 @@
                             "decision":  "mapped",
                             "notes":  "Rename of the bare intake term onto the vocabulary\u0027s generic dry-pasta row Ziti Pasta [pasta] (same form, board 7 of 7); shape is not a food identity or price difference for dry short pasta. Buy string names macaroni because the dish is mac and cheese.",
                             "grams_from":  "ruling"
-                        },
-                        {
-                            "source_raw":  "1 tsp Salt",
-                            "item":  "Salt",
-                            "bid":  "salt",
-                            "board":  "recipe",
-                            "grams":  21,
-                            "buy":  "3 1/2 teaspoons, for the pasta water",
-                            "optional":  false,
-                            "decision":  "mapped",
-                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
-                            "grams_from":  "engine"
                         }
                     ],
     "pricing_terms_needed":  [

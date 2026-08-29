@@ -1,0 +1,161 @@
+﻿{
+    "slug":  "baked-cubano-chicken",
+    "title":  "Baked Cubano Chicken",
+    "source_url":  "https://keviniscooking.com/baked-chicken-cubano/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-28",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2-15 oz cans black beans",
+                            "item":  "Canned Black Beans",
+                            "bid":  "canned-black-beans",
+                            "board":  "weekly",
+                            "grams":  2977,
+                            "buy":  "Seven 15 oz cans, drained and rinsed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Whole cans go in the dish, so the can noun is the real measure. See macro_cross_check: the settled 850.5 g is gross can weight and the source\u0027s own carb figure implies a drained basis.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp Adobo Seasoning",
+                            "item":  "Adobo Seasoning",
+                            "bid":  "adobo-seasoning",
+                            "board":  "recipe",
+                            "grams":  19,
+                            "buy":  "3 1/2 tsp, divided (half on the beans, half on the chicken)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; no densities.json row and no each-noun; board MAPPED: adobo-seasoning, 4 of 7 stores, cheapest 0.1332 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 chicken breasts (2 lbs boneless and skinless)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2800,
+                            "buy":  "About 6 1/4 lb, 14 breasts (about 7 oz each)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken breasts\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T04:52:01); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breasts | Whole Chicken [whole-chicken] DIFFERENT FORM: breasts/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/boneless/skinless",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 cup yellow mustard",
+                            "item":  "Yellow Mustard",
+                            "bid":  "mustard",
+                            "board":  "weekly",
+                            "grams":  210,
+                            "buy":  "7/8 cup, for basting the chicken",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Table computed no weight; 1/4 cup prepared yellow mustard = 12 tsp at 5 g/tsp = 60 g at source scale.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "8 ham slices",
+                            "item":  "Deli Ham",
+                            "bid":  "deli-ham",
+                            "board":  null,
+                            "grams":  784,
+                            "buy":  "28 deli slices, about 1 3/4 lb (2 per breast)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Standard 1 oz deli sandwich slice, 28 g each; recipe layers 2 slices per breast. Deli ham IS sold sliced, so \u0027slices\u0027 is the product\u0027s own form and not a form flip; not diced-ham, which is a different convenience pack. The 2026-08-26 spiral-ham ruling refused deli-ham for a 7-9 lb bone-in roast, which is the opposite case and supports this one. Board 7 of 7 at 0.1238.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 cups carnitas meat",
+                            "item":  "Carnitas",
+                            "bid":  "pork-carnitas",
+                            "board":  null,
+                            "grams":  980,
+                            "buy":  "7 cups shredded cooked carnitas, about 2 1/4 lb (1/2 cup per breast)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Shredded cooked pork packs about 70 g per 1/2 cup, and the method says half a cup per breast. Fully cooked, seasoned shredded pork sold refrigerated (Del Real, Curly\u0027s); board ABSENT and no vocabulary row shares a core word. Nulling would pantry-price 280 g of the recipe\u0027s second meat, so it goes to the registrar as a new id rather than being bridged onto a raw pork cut.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "8 long dill pickle slices",
+                            "item":  "Dill Pickle Slices",
+                            "bid":  "pickles",
+                            "board":  null,
+                            "grams":  560,
+                            "buy":  "28 long sandwich-cut slices, about 1 1/4 lb (2 per breast)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Lengthwise sandwich slab off a whole dill, about 20 g each. Exact vocabulary row Dill Pickle Slices [pickles], same form; board 7 of 7 at 0.05, and the 2026-08-26 pickle-brine ruling already treats jarred dill pickles as this id.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "12 Swiss cheese slices",
+                            "item":  "Swiss Cheese",
+                            "bid":  "swiss-cheese",
+                            "board":  null,
+                            "grams":  882,
+                            "buy":  "42 slices, about 2 lb (3 per breast)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Deli-cut Swiss slice is 21 g (0.75 oz); recipe tops each breast with 2 to 3 slices. REFUSED the board\u0027s sliced-cheese bridge: at 0.145/oz that id is the generic American-class sandwich slice, while Swiss is variety-priced, exactly like the red-onion vs onions precedent. Slicing is a knife cut of the same cheese, so the vocabulary\u0027s swiss-cheese id is a reuse, not a form flip. Carriage of that bid is not shown in my table; hunt-run derives it from the mapped bid itself.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "carnitas meat"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+                            "baked-cubano-chicken: the food DB already carries \u0027Deli Ham\u0027 and the mapper\u0027s row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 164.0 cal / 16.6 P / 3.6 C / 8.8 F  vs  mapper 121.0 / 19.6 / 2.4 / 3.7. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: calories 121 vs 164; protein_g 19.6 vs 16.6; carbs_g 2.36 vs 3.63; fat_g 3.68 vs 8.8. existing={\"calories\": 164, \"protein_g\": 16.6, \"carbs_g\": 3.63, \"fat_g\": 8.8} new={\"calories\": 121, \"protein_g\": 19.6, \"carbs_g\": 2.36, \"fat_g\": 3.68}",
+                            "baked-cubano-chicken: the food DB already carries \u0027Carnitas\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 270.4 cal / 24.6 P / 0.0 C / 18.3 F  vs  mapper 238.1 / 23.8 / 0.0 / 16.7. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 cup = 135 g) they still disagree: calories 321.4 vs 365; protein_g 32.14 vs 33.2; fat_g 22.5 vs 24.7. existing={\"serving_grams\": 135, \"serving_qty\": 1, \"serving_unit\": \"cup\", \"calories\": 365, \"protein_g\": 33.2, \"fat_g\": 24.7} new={\"serving_grams\": 84, \"serving_qty\": 3, \"serving_unit\": \"oz\", \"calories\": 200, \"protein_g\": 20, \"fat_g\": 14}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "carnitas meat",
+                                        "proposed_bid":  "pork-carnitas",
+                                        "evidence":  "Fully cooked, seasoned shredded pork sold in refrigerated heat-and-serve pouches (Del Real 15 oz, Curly\u0027s, store-brand carnitas), roughly $6-8/lb - a different product concept and price class from any raw pork cut, so it cannot reuse pork-loin, pork-shoulder or ground-pork, and it is not deli-ham or diced-ham. The pre-resolve table reports board ABSENT for the term: no commodity match and no capture match across the estate\u0027s three commodity namespaces, and no vocabulary row shares a core word with it. If the estate already prices a cooked pulled-pork product under another spelling (pulled-pork, carnitas, cooked-pork), alias to that instead - that pairing is exactly the word-order/synonym case audit-commodity-dupes cannot catch. This recipe\u0027s method puts 1/2 cup on each breast, 280 g at source scale and 980 g at the 14-serving batch, so a null here would pantry-price over 2 lb of meat.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "pork-carnitas",
+                                  "verdict":  "approve",
+                                  "bid":  "pork-carnitas",
+                                  "reason":  "Not priced anywhere under another spelling: swept all three namespaces plus the live feed for carnitas/pulled/shredded/barbacoa/cooked pork and found no commodity id — the estate\u0027s only \u0027carnitas\u0027/\u0027pulled pork\u0027 strings are recipe SLUGS (slow-cooker-pork-carnitas-bowl etc.), not ids. Reuse of a raw cut is not merely unwise, it is mechanically impossible: pork-shoulder (priced $1.94/lb Sam\u0027s) excludes \u0027smoked\u0027,\u0027pulled\u0027,\u0027seasoned\u0027 and ground-pork excludes \u0027seasoned\u0027, so a Del Real 15 oz Seasoned Pork Carnitas pouch can never crown either — the estate has already ruled cooked pulled pork a different purchase from the raw cut. The one adjacent id, cooked-shredded-chicken ($0.3744/oz Aldi), is the exact product-class precedent (fully cooked heat-and-serve shredded meat, priced per oz) but excludes \\bpork\\b, so it cannot carry this food and cannot be the clone donor (self-block trap). Same food, different form =\u003e new id + allowlist pair. NAME ruling, separately: no vocabulary row resolves \u0027carnitas meat\u0027; a new vocabulary row \u0027pork carnitas\u0027 with alias \u0027carnitas meat\u0027 is needed, and macros must come from a transcribed label — every FDC row on the pre-resolve shelf (babyfood meat sticks, frankfurter) is the wrong food.",
+                                  "term":  "",
+                                  "mint":  {
+                                               "unit":  "oz",
+                                               "include":  [
+                                                               "\\bcarnitas\\b"
+                                                           ],
+                                               "clone_exclude_from":  "bratwurst",
+                                               "namespace":  "recipe-commodities",
+                                               "category":  "Meat \u0026 Poultry",
+                                               "gpu":  28.35,
+                                               "buy_pkg_qty":  15,
+                                               "buy_pkg_unit":  "oz"
+                                           }
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u00272-15 oz cans black beans\u0027: the qty engine could not ground this weight (count/each guess of 850 g against a line stating 425 g - the engine did not read the stated weight), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u00271 tsp Adobo Seasoning\u0027: the qty engine could not ground this weight (default tsp), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  "Source publishes 714 cal / 22 carbs / 100 g protein per serving at 4 servings. Recomputed from the food DB at source scale (chicken 800 g, beans 850.5 g, adobo 5.3 g, mustard 60 g, ham 224 g, carnitas 280 g, pickles 160 g, Swiss 252 g): 3684 cal / 156 g carbs / 411 g protein total = 921 cal, 39 carbs, 102.9 g protein per serving. PROTEIN AGREES: 102.9 vs 100.0, +2.9%, well inside the 15% bar, which confirms the two each-weight calls that carry it (ham slices at 28 g and Swiss slices at 21 g) and the 280 g carnitas. Calories +29% and carbs +77% both trace to ONE line, and it is a settled one I did not re-derive: \u00272-15 oz cans black beans\u0027 is weighed 850.5 g, which is gross can weight (2 x 425 g) including packing liquid, but the recipe drains the beans into the dish. On the drained basis (about 253 g per 15 oz can, 506 g) the recipe recomputes to 843 cal / 24.6 carbs / 97.8 g protein per serving - the carb figure then lands on the source\u0027s 22 almost exactly, which is the tell that the source costed drained beans too. This matters beyond accuracy: at the gross basis the recipe reads 921 cal against this run\u0027s 450-800 ceiling and would be retired, and even drained it reads 843. Protein is 2.4x the 40 g floor either way. RECOMMENDATION: have the drained-can basis for \u00272-15 oz cans black beans\u0027 checked before the macro gate rules on this recipe; the residual weights are not what is pushing it over."
+}

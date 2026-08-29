@@ -1,0 +1,43 @@
+{
+    "slug":  "bacon-and-chicken-risotto",
+    "title":  "Bacon and Chicken Risotto",
+    "source_url":  "https://skinnyspatula.com/bacon-chicken-risotto/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-28T09:05:40",
+    "updated":  "2026-08-28T09:11:54",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Counts: 4 residual lines ruled, 0 rejected as unmappable, 4 food-DB rows returned, 1 new commodity proposed, 11 buy strings written. Rejections and refusals: (1) carnaroli rice REFUSED onto the board\u0027",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T09:05:40",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/bacon-chicken-risotto/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-28T09:05:40",
+                        "by":  "decider",
+                        "detail":  "Italian white-wine Parmesan risotto with chicken breast and bacon/pancetta; no risotto anywhere in the live catalog (neighbours are burritos, bakes, scampi and marbella), a hot batch main that widens cuisine, verified 649cal/38c/52p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-28T09:05:57",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-28T09:11:54",
+                        "by":  "mapper",
+                        "detail":  "Counts: 4 residual lines ruled, 0 rejected as unmappable, 4 food-DB rows returned, 1 new commodity proposed, 11 buy strings written. Rejections and refusals: (1) carnaroli rice REFUSED onto the board\u0027"
+                    }
+                ]
+}

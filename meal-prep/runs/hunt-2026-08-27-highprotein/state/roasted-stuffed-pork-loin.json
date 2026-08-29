@@ -3,16 +3,40 @@
     "title":  "Roasted Stuffed Pork Loin",
     "source_url":  "https://keviniscooking.com/roasted-stuffed-pork-loin/",
     "protein":  "pork",
-    "state":  "extracted",
+    "state":  "parked",
     "wave":  null,
     "created":  "2026-08-28T07:21:33",
-    "updated":  "2026-08-28T07:22:19",
+    "updated":  "2026-08-28T09:22:48",
     "terms":  [
-
+                  {
+                      "term":  "juniper berries",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "prosciutto",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "balsamic glaze",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "broccoli rabe",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "orange extract",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "water",
+                      "optional":  true
+                  }
               ],
     "reject_reason":  null,
     "parked_on":  [
-
+                      "juniper berries",
+                      "broccoli rabe"
                   ],
     "history":  [
                     {
@@ -32,6 +56,24 @@
                         "at":  "2026-08-28T07:22:19",
                         "by":  "local",
                         "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-28T09:15:51",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-28T09:15:51",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-28T09:22:48",
+                        "by":  "derive",
+                        "detail":  "waiting on: juniper berries, broccoli rabe"
                     }
                 ]
 }

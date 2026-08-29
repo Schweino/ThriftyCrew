@@ -1,0 +1,1468 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 2,
+ "generated": "2026-08-28T09:16:57",
+ "batch_terms": [
+  "juniper berries",
+  "prosciutto",
+  "balsamic glaze",
+  "broccoli rabe",
+  "orange extract"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "juniper berries",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "juniper berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Febreze Air Freshener Aerosol Spray - White Pine & Juniper Berry",
+       "price": 4.49,
+       "size": "8.1 oz",
+       "relevance": 34,
+       "url": "https://www.bakersplus.com/p/0003077223786"
+      },
+      {
+       "item": "Febreze Odor-Fighting Fade Defy PLUG Air Freshener White Pine & Juniper Berry Oil Refill",
+       "price": 9.99,
+       "size": "2 ct",
+       "relevance": 28,
+       "url": "https://www.bakersplus.com/p/0003077203424"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "juniperberries",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "berries",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Bull Pink Edition Wild Berries Energy Drink 12 Fl Oz",
+       "price": 3.49,
+       "size": "12 fl oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/energy/red_bull_pink_edition_wild_berries_energy_drink_12_fl_oz/p/1564405684716569845"
+      },
+      {
+       "item": "Stacker 2 Energy Shot, Extra Strength, Berry Flavor 2 Oz",
+       "price": null,
+       "size": "2 oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/stacker_2_energy_shot_extra_strength_berry_flavor_2_oz/p/539277"
+      },
+      {
+       "item": "Yoplait Low Fat Mixed Berry Yogurt 6 Oz",
+       "price": 0.79,
+       "size": "6 oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_mixed_berry_yogurt_6_oz/p/6003"
+      },
+      {
+       "item": "J Js Pie, Berry 4 Oz",
+       "price": 0.99,
+       "size": "4 oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/cakes_pies/j_js_pie_berry_4_oz/p/177315"
+      },
+      {
+       "item": "Powerade Mountain Berry Blast Sports Drink Bottle 28 Fl Oz",
+       "price": 1.79,
+       "size": "28 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/powerade_mountain_berry_blast_sports_drink_bottle_28_fl_oz/p/1564405684705251547"
+      },
+      {
+       "item": "Powerade Zero Sugar Mixed Berry Sports Drink Bottle 28 Fl Oz",
+       "price": 1.79,
+       "size": "28 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/powerade_zero_sugar_mixed_berry_sports_drink_bottle_28_fl_oz/p/1564405684705251545"
+      },
+      {
+       "item": "Powerade Zero Sugar Mountain Berry Enhanced Water Bottle 20 Fl Oz",
+       "price": 1.89,
+       "size": "20 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/water/specialty_enhanced/powerade_zero_sugar_mountain_berry_enhanced_water_bottle_20_fl_oz/p/1764405684715431748"
+      },
+      {
+       "item": "Gatorade Thirst Quencher, Berry, Zero Sugar 28 Fl Oz",
+       "price": 2.19,
+       "size": "28 fl oz",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/gatorade_thirst_quencher_berry_zero_sugar_28_fl_oz/p/1564405684704155917"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "juniper berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Bay Leaves",
+       "price": 4.99,
+       "size": "0.12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41222-mccormick-bay-leaves-0-12-oz"
+      },
+      {
+       "item": "Simply Organic Bay Leaf",
+       "price": 6.99,
+       "size": "0.14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/54804-simply-organic-bay-leaf-0-14-oz"
+      },
+      {
+       "item": "Badia Spices Rosemary",
+       "price": 1.68,
+       "size": "1 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258005-badia-spices-rosemary-1-oz"
+      },
+      {
+       "item": "McCormick Ground Sage",
+       "price": 6.99,
+       "size": "0.6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87641-mccormick-ground-sage-0-6-oz"
+      },
+      {
+       "item": "McCormick Ground Allspice",
+       "price": 3.99,
+       "size": "0.9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72757-mccormick-ground-allspice-0-9-oz"
+      },
+      {
+       "item": "Badia Spices Bay Leaves",
+       "price": 1.68,
+       "size": "0.17 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458678-badia-spices-bay-leaves-0-17-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "juniper berries",
+     "attempts": [
+      {
+       "term": "juniper berries",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Envy Apples, 4 lbs.",
+       "price": 6.22,
+       "size": "",
+       "unit_price": "$1.55/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7IEL6D2PRYYW"
+      },
+      {
+       "item": "Sweet Sapphire Grapes, 3 lbs.",
+       "price": 5.87,
+       "size": "",
+       "unit_price": "$1.96/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XORD6RPT5IO"
+      },
+      {
+       "item": "Guy Laroche Drakkar Intense Men Eau De Parfum, 3.4 oz",
+       "price": 21.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1Q7MNPZ2T1Y3"
+      },
+      {
+       "item": "Febreze PLUG Air Freshener, Winter Pine & Juniper Berry & Cuddle Weather, 1 Warmer + 5 Refills, 4.35 fl. oz.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1LB72EPJAC9B"
+      },
+      {
+       "item": "Bartlett Pears, 4 lbs.",
+       "price": 6.62,
+       "size": "",
+       "unit_price": "$1.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1A1PCVOK5D9R"
+      },
+      {
+       "item": "Live 3 Gal. Purely Purple Crape Myrtle in Growers Pot",
+       "price": 39.26,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/57Z8URJBIJTH"
+      },
+      {
+       "item": "Live 3 Gal. Crimson Red Crape Myrtle in Growers Pot",
+       "price": 36.26,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6KR5UJ57A78J"
+      },
+      {
+       "item": "Live 5 Gal. Flordaking Peach Tree in Growers Pot",
+       "price": 39.64,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5OPDECO0I5BC"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "prosciutto",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "prosciutto",
+     "attempts": [
+      {
+       "term": "prosciutto",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Murray's® Italian Prosciutto Di Parma",
+       "price": 11.99,
+       "size": "3 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0081794401066"
+      },
+      {
+       "item": "Boar's Head Prosciutto Riserva Stradolce",
+       "price": 7.99,
+       "size": "3 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0004242150019"
+      },
+      {
+       "item": "Private Selection® Prosciutto & Mozzarella Rolls",
+       "price": 7.99,
+       "size": "6 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001111020117"
+      },
+      {
+       "item": "Veroni Italy Prosciutto Italiano Dry Cured Ham",
+       "price": 8.99,
+       "size": "4 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0085680000629"
+      },
+      {
+       "item": "Private Selection® Old World Prosciutto Deli Sliced",
+       "price": 5.99,
+       "size": "3 oz",
+       "relevance": 127,
+       "url": "https://www.bakersplus.com/p/0001111099231"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese Prosciutto & Basil Roll",
+       "price": 9.99,
+       "size": "8 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0003114200553"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "prosci utto",
+     "attempts": [
+      {
+       "term": "prosciutto",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "pros ciutto",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "prosc iutto",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "prosci utto",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 4 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "prosciutto",
+     "attempts": [
+      {
+       "term": "prosciutto",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "La Quercia Prosciutto Americano",
+       "price": 5.99,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41230436-la-quercia-americano-prosciutto-2-oz"
+      },
+      {
+       "item": "Columbus Prosciutto Paninos",
+       "price": 4.99,
+       "size": "3.9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16349856-columbus-panino-prosciutto-3-9-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "prosciutto",
+     "attempts": [
+      {
+       "term": "prosciutto",
+       "state": "MATCHES",
+       "hits": 16
+      }
+     ],
+     "hits": [
+      {
+       "item": "Rossetti Prosciutto Italiano, 7 oz., 2 pk.",
+       "price": 13.44,
+       "size": "",
+       "unit_price": "$0.96/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1W76X0Q8QDJW"
+      },
+      {
+       "item": "Principe Uncured Salami Trio, 12 oz.",
+       "price": 7.87,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1IBFAD1VXI6C"
+      },
+      {
+       "item": "Formaggio Cheese Artisan Meat & Mozzarella Variety Wraps 22 oz.",
+       "price": 12.94,
+       "size": "",
+       "unit_price": "$0.59/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4GO1R6FUV9IT"
+      },
+      {
+       "item": "Pork Belly, Tray, priced per pound",
+       "price": 14.89,
+       "size": "",
+       "unit_price": "$4.47/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6X1S1N6E861S"
+      },
+      {
+       "item": "Member's Mark Pork Belly, Cryovac, priced per pound",
+       "price": 24.73,
+       "size": "",
+       "unit_price": "$3.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U6MBNWPS942"
+      },
+      {
+       "item": "Member's Mark Uncured Boneless Quarter Sliced Ham, priced per pound",
+       "price": 15.18,
+       "size": "",
+       "unit_price": "$4.67/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5CGKBNSJPF74"
+      },
+      {
+       "item": "Smithfield Hardwood Smoked Bone In Ham Steak, priced per pound",
+       "price": 20.28,
+       "size": "",
+       "unit_price": "$3.38/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KIX0S0F5W5I"
+      },
+      {
+       "item": "Member's Mark Thick-Cut Bone-In Pork Chops, priced per pound",
+       "price": 20.58,
+       "size": "",
+       "unit_price": "$2.94/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4TMNKJPPJ854"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "balsamic glaze",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "balsamic glaze",
+     "attempts": [
+      {
+       "term": "balsamic glaze",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bertolli Balsamic Glaze Vinegar",
+       "price": 4.99,
+       "size": "6.8 fl oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0060422653362"
+      },
+      {
+       "item": "Private Selection® Balsamic Glaze",
+       "price": 5.29,
+       "size": "8.45 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111086908"
+      },
+      {
+       "item": "Filippo Berio® Glaze with Balsamic Vinegar",
+       "price": 4.99,
+       "size": "8.4 fl oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0004173607001"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "balsamic glaze",
+     "attempts": [
+      {
+       "term": "balsamic glaze",
+       "state": "OK",
+       "hits": 4
+      }
+     ],
+     "hits": [
+      {
+       "item": "Orchard Valley Harvest Balsamic Glazed Walnuts Salad Toppers 3.5 Oz",
+       "price": 3.59,
+       "size": "3.5 oz",
+       "relevance": 123,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_mixes_toppings/orchard_valley_harvest_balsamic_glazed_walnuts_salad_toppers_3_5_oz/p/1564405684714618596"
+      },
+      {
+       "item": "Ponti Glaze Balsamic Vinegar Modena",
+       "price": 5.99,
+       "size": "8.8 oz",
+       "relevance": 91,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/ponti_glaze_balsamic_vinegar_modena/p/1764405684716135273"
+      },
+      {
+       "item": "Filippo Berio Glaze With Balsamic Vinegar 8.4 Fl Oz",
+       "price": 7.29,
+       "size": "8.4 fl oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/filippo_berio_glaze_with_balsamic_vinegar_8_4_fl_oz/p/1564405684689177116"
+      },
+      {
+       "item": "Monari Federzoni Classic Glaze With Balsamic Vinegar Of Modena 9.1 Oz",
+       "price": 6.99,
+       "size": "9.1 oz",
+       "relevance": 83,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/monari_federzoni_classic_glaze_with_balsamic_vinegar_of_modena_9_1_oz/p/2439979"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "balsamic glaze",
+     "attempts": [
+      {
+       "term": "balsamic glaze",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bertolli Balsamic Glaze Vinegar",
+       "price": 4.48,
+       "size": "6.76 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/149551-bertolli-balsamic-glaze-6-76-oz"
+      },
+      {
+       "item": "Alessi Balsamic Reduction, Premium, Traditional",
+       "price": 5.39,
+       "size": "8.5 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/100665-alessi-balsamic-reduction-premium-8-5-oz"
+      },
+      {
+       "item": "Roland Foods Glaze, Original",
+       "price": 5.49,
+       "size": "5.07 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/138930-roland-foods-glaze-balsamic-vinegar-of-modena-5-1-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "balsamic glaze",
+     "attempts": [
+      {
+       "term": "balsamic glaze",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Litehouse Homestyle Ranch Dressing and Dip, 32 fl. oz.",
+       "price": 5.54,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4RFK75KZU984"
+      },
+      {
+       "item": "Wish-Bone Italian Dressing, 36 oz., 2 pk.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.11/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/75TRHYBU2FQX"
+      },
+      {
+       "item": "Member's Mark Seasoned Croutons, 32 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.22/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4JEZYDYZTFS2"
+      },
+      {
+       "item": "Olive Garden Signature Italian Dressing, 24 oz., 2 pk.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.15/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2CH49RPILGAO"
+      },
+      {
+       "item": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.56/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4F1CFKBSTLFC"
+      },
+      {
+       "item": "Fresh Gourmet Topping, Cranberry & Pecan, 20 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.45/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5DZZ6GI8TZ8Z"
+      },
+      {
+       "item": "French's Original Crispy Fried Onions, 26.5 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.34/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/52F2TKJB90S5"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "broccoli rabe",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "broccoli",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccolirabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccoli",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Broccoli Crown",
+       "price": 2.19,
+       "size": "1 lb",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0000000003082"
+      },
+      {
+       "item": "Broccoli Bunch",
+       "price": 4.09,
+       "size": "1 ct",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0000000004060"
+      },
+      {
+       "item": "Organic Broccoli Bunch",
+       "price": 4.49,
+       "size": "1 ct",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0000000094060"
+      },
+      {
+       "item": "Kroger® Frozen Broccoli Florets",
+       "price": 1.59,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111012883"
+      },
+      {
+       "item": "Kroger® Broccoli Florets 12 Oz",
+       "price": 3.49,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111060319"
+      },
+      {
+       "item": "Kroger® Broccoli Florets BIG DEAL!",
+       "price": 6,
+       "size": "32 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111079549"
+      },
+      {
+       "item": "Green Giant Simply Steam Broccoli Florets",
+       "price": 1.99,
+       "size": "10 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0002000029015"
+      },
+      {
+       "item": "Simple Truth Organic® Broccoli Florets",
+       "price": 4.79,
+       "size": "12 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111061240"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "broccoli",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccolirabe",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "broccoli",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Broccoli Crowns",
+       "price": 3.29,
+       "size": "lb",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/broccoli/broccoli_crowns/p/77935"
+      },
+      {
+       "item": "Fresh Broccoli",
+       "price": 3.99,
+       "size": "lb",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/broccoli/fresh_broccoli/p/2311257"
+      },
+      {
+       "item": "Fresh Broccoli Bacon Salad",
+       "price": 8.49,
+       "size": "lb",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/deli/salads/fresh_deli_salads/fresh_broccoli_bacon_salad/p/1564405684714191865"
+      },
+      {
+       "item": "Taylor Farms Broccoli Florets",
+       "price": 3.49,
+       "size": "12 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_prepared_fruits_vegetables/taylor_farms_broccoli_florets/p/1564405684714568886"
+      },
+      {
+       "item": "Frozen Broccoli Cuts Our Family",
+       "price": 1.39,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/broccoli/frozen_broccoli_cuts_our_family/p/1564405684703626583"
+      },
+      {
+       "item": "Michelina's Beef & Broccoli 9.6 Oz",
+       "price": 1.59,
+       "size": "9.6 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/mac_cheese/michelina_s_beef_broccoli_9_6_oz/p/1564405684703132521"
+      },
+      {
+       "item": "Birds Eye Broccoli Cuts 10.8 Oz",
+       "price": 1.59,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/broccoli/birds_eye_broccoli_cuts_10_8_oz/p/15689"
+      },
+      {
+       "item": "Frozen Broccoli Cuts Our Family",
+       "price": 2.39,
+       "size": "24 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/broccoli/frozen_broccoli_cuts_our_family/p/1564405684703626595"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "broccoli rabe",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "OK",
+       "hits": 49
+      }
+     ],
+     "hits": [
+      {
+       "item": "Pero Family Farms Broccoletti",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19209521-pero-family-farms-broccoletti-8-oz"
+      },
+      {
+       "item": "Broccoli Crowns",
+       "price": 2.48,
+       "size": "$2.48 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387377-broccoli-crowns"
+      },
+      {
+       "item": "Broccoli Crown",
+       "price": 2.48,
+       "size": "$2.48 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345915-broccoli-crown-1-lb"
+      },
+      {
+       "item": "Taylor Farms Broccoli Florets",
+       "price": 3.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29801985-taylor-farms-broccoli-florets-12-oz"
+      },
+      {
+       "item": "Pero Family Farms Broccoli Florets",
+       "price": 3.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24553503-pero-family-farms-broccoli-florets-12-oz"
+      },
+      {
+       "item": "Fareway Steamables Broccoli Florets",
+       "price": 1.44,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20610174-fareway-broccoli-florets-steamables-12-oz"
+      },
+      {
+       "item": "Fareway Broccoli Florets",
+       "price": 1.98,
+       "size": "14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20635158-fareway-broccoli-florets-14-oz"
+      },
+      {
+       "item": "Birds Eye Baby Broccoli Florets, Frozen Vegetables",
+       "price": 1.99,
+       "size": "12.6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/95917-birds-eye-baby-broccoli-florets-12-6-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "broccoli rabe",
+     "attempts": [
+      {
+       "term": "broccoli rabe",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+      },
+      {
+       "item": "Organic Green Beans, 2 lbs.",
+       "price": 4.77,
+       "size": "",
+       "unit_price": "$2.38/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/14Q4FFWF5J7K"
+      },
+      {
+       "item": "Earthbound Farm Organic Broccoli Florets, 2 lbs.",
+       "price": 6.24,
+       "size": "",
+       "unit_price": "$3.12/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/55Z6ZFCVQO52"
+      },
+      {
+       "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+       "price": 4.92,
+       "size": "",
+       "unit_price": "$2.46/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+      },
+      {
+       "item": "Organic Sweet Petite Baby Carrots, 3 lbs.",
+       "price": 4.27,
+       "size": "",
+       "unit_price": "$1.42/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3MEMQC4EP3FM"
+      },
+      {
+       "item": "Russet Potatoes, 10 lbs.",
+       "price": 5.22,
+       "size": "",
+       "unit_price": "$0.52/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+      },
+      {
+       "item": "Wholesum Organic Mixed Squash, 3 lbs.",
+       "price": 5.44,
+       "size": "",
+       "unit_price": "$1.81/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0XCERP3C83SK"
+      },
+      {
+       "item": "Cauliflower, 1 ct.",
+       "price": 3.82,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3JP9MX5AGHKO"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "orange extract",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "extract",
+     "attempts": [
+      {
+       "term": "orange extract",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "orangeextract",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "extract",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Pure Vanilla Extract",
+       "price": 7.49,
+       "size": "2 fl oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0005210007103"
+      },
+      {
+       "item": "Spice Islands Pure Vanilla Extract",
+       "price": 14.99,
+       "size": "4 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001732400390"
+      },
+      {
+       "item": "Watkins Baking Vanilla Extract",
+       "price": 19.99,
+       "size": "1 ct / 11 fl oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0081857000173"
+      },
+      {
+       "item": "Private Selection® Pure Lemon Extract",
+       "price": 3.49,
+       "size": "2 fl oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001111006758"
+      },
+      {
+       "item": "Simple Truth Organic® Lemon Extract",
+       "price": 4.99,
+       "size": "2 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001111004527"
+      },
+      {
+       "item": "Simple Truth Organic® Lemon Extract",
+       "price": 4.99,
+       "size": "2 fl oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001111006740"
+      },
+      {
+       "item": "Simple Truth Organic® Almond Extract",
+       "price": 4.99,
+       "size": "2 fl oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001111006739"
+      },
+      {
+       "item": "Spice Islands® Pure Vanilla Extract",
+       "price": 8.99,
+       "size": "2 fl oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001732400391"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "extract",
+     "attempts": [
+      {
+       "term": "orange extract",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "orangeextract",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "extract",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Almond Extract, Pure 2 Fl Oz",
+       "price": 3.59,
+       "size": "2 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/extracts/our_family_almond_extract_pure_2_fl_oz/p/1564405684709172597"
+      },
+      {
+       "item": "Our Family Vanilla Extract, Pure 1 Fl Oz",
+       "price": 5.29,
+       "size": "1 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/other_baking_necessities/our_family_vanilla_extract_pure_1_fl_oz/p/6787144"
+      },
+      {
+       "item": "Spice Islands Pure Vanilla Extract 1 Oz",
+       "price": 6.19,
+       "size": "1 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/extracts/spice_islands_pure_vanilla_extract_1_oz/p/1564405684704730626"
+      },
+      {
+       "item": "Spice Islands Almond Extract, Pure 1 Fl Oz",
+       "price": 6.49,
+       "size": "1 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/extracts/spice_islands_almond_extract_pure_1_fl_oz/p/1564405684704730627"
+      },
+      {
+       "item": "Mc Cormick Pure Vanilla Extract 1 Fl Oz",
+       "price": 6.99,
+       "size": "1 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/extracts/mc_cormick_pure_vanilla_extract_1_fl_oz/p/34834"
+      },
+      {
+       "item": "Finest Reserve Vanilla Extract 2 Fl Oz",
+       "price": 6.99,
+       "size": "2 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/extracts/finest_reserve_vanilla_extract_2_fl_oz/p/1564405684714873819"
+      },
+      {
+       "item": "Mc Cormick Pure Orange Extract 1 Fl Oz",
+       "price": 7.29,
+       "size": "1 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/extracts/mc_cormick_pure_orange_extract_1_fl_oz/p/34831"
+      },
+      {
+       "item": "Mc Cormick Pure Peppermint Extract 1 Fl Oz",
+       "price": 7.29,
+       "size": "1 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/extracts/mc_cormick_pure_peppermint_extract_1_fl_oz/p/34832"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "orange extract",
+     "attempts": [
+      {
+       "term": "orange extract",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Pure Lemon Extract",
+       "price": 3.99,
+       "size": "2 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69198-mccormick-pure-lemon-extract-2-fl-oz"
+      },
+      {
+       "item": "McCormick Pure Almond Extract",
+       "price": 3.99,
+       "size": "2 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16965733-mccormick-pure-almond-extract-2-fl-oz"
+      },
+      {
+       "item": "Navel Orange",
+       "price": 0.67,
+       "size": "$1.48 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18809441-navel-orange-1-lb"
+      },
+      {
+       "item": "McCormick Pure Vanilla Extract",
+       "price": 6.99,
+       "size": "2 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41219-mccormick-all-natural-pure-vanilla-extract-2-fl-oz"
+      },
+      {
+       "item": "McCormick Pure Mint Extract",
+       "price": 3.99,
+       "size": "1 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16408593-mccormick-pure-mint-extract-1-fl-oz"
+      },
+      {
+       "item": "Drops O' Gold Imitation Vanilla Flavor",
+       "price": 1.99,
+       "size": "16 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18827811-drops-o-gold-imitation-vanilla-flavor-16-fl-oz"
+      },
+      {
+       "item": "Fareway Mandarin Oranges in Light Syrup",
+       "price": 1.94,
+       "size": "15 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25806647-fareway-mandarin-oranges-in-light-syrup-15-oz"
+      },
+      {
+       "item": "Fareway Orange with Mango Juice",
+       "price": 3.98,
+       "size": "52 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/47164402-fareway-orange-mango-juice-52-fl-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "orange extract",
+     "attempts": [
+      {
+       "term": "orange extract",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Nature's Eats Pecan Pieces, 24 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.42/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4GO3SKKWZ4WZ"
+      },
+      {
+       "item": "Rising Star Baking Supply Pure Vanilla Extract, 8 fl. oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$1.12/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AZV4LNG7VYC"
+      },
+      {
+       "item": "Nielsen-Massey Pure Lemon Paste, 8 fl. oz.",
+       "price": 16.98,
+       "size": "",
+       "unit_price": "$2.12/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6HWPNBDIGGYX"
+      },
+      {
+       "item": "Nielsen-Massey Gourmet Pure Vanilla Bean Paste, 8 fl. oz.",
+       "price": 28.98,
+       "size": "",
+       "unit_price": "$3.62/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2CQOIGHR17GT"
+      },
+      {
+       "item": "McCormick Imitation Vanilla Flavor, 32 fl. oz.",
+       "price": 6.22,
+       "size": "",
+       "unit_price": "$0.19/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4G1RT5GAGT7Q"
+      },
+      {
+       "item": "Rising Star Baking Supply Vanilla Bean Paste, 8 fl. oz.",
+       "price": 12.98,
+       "size": "",
+       "unit_price": "$1.62/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1S9FV85RPZ7D"
+      },
+      {
+       "item": "Nielsen-Massey Pure Lemon Extract, 8 fl. oz.",
+       "price": 18.98,
+       "size": "",
+       "unit_price": "$2.37/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4JVH5EGCU6MR"
+      },
+      {
+       "item": "McCormick Pure Vanilla Extract, 8 fl. oz.",
+       "price": 10.48,
+       "size": "",
+       "unit_price": "$1.31/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2KRAUVCMWF1Z"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

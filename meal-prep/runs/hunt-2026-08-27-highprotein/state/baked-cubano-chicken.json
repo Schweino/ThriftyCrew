@@ -3,14 +3,21 @@
     "title":  "Baked Cubano Chicken",
     "source_url":  "https://keviniscooking.com/baked-chicken-cubano/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-28T07:19:40",
-    "updated":  "2026-08-28T07:20:35",
+    "updated":  "2026-08-28T12:44:10",
     "terms":  [
-
+                  {
+                      "term":  "carnitas meat",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Carnitas",
+                      "optional":  false
+                  }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "macro gate (pre-write): 971 cal above the 800 ceiling",
     "parked_on":  [
 
                   ],
@@ -32,6 +39,30 @@
                         "at":  "2026-08-28T07:20:35",
                         "by":  "local",
                         "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-28T12:42:08",
+                        "by":  "mapper",
+                        "detail":  "Residual lines ruled: 4 (ham slices -\u003e deli-ham, carnitas meat -\u003e new pork-carnitas, long dill pickle slices -\u003e pickles, Swiss cheese slices -\u003e swiss-cheese). Rejected: 0. Bridges refused: sliced-cheese for Swiss (generic American-slice price class vs variety-priced Swiss). Food-DB rows returned: 4 (Deli Ham, Carnitas, Dill Pickle Slices, Swiss Cheese); three came off this run\u0027s FDC shelf, one (Ca"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-28T12:42:09",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-28T12:44:08",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-28T12:44:10",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 971 cal above the 800 ceiling"
                     }
                 ]
 }
