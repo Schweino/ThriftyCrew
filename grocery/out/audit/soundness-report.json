@@ -1,16 +1,46 @@
 ﻿{
-    "generated":  "2026-08-28 08:17",
+    "generated":  "2026-08-29 08:17",
     "drift_vs_engine":  0,
     "moved":  [
+                  {
+                      "name":  "Private Selection Petite Red Potatoes with Smoked Gouda Onion and Thyme Seasoning Blend",
+                      "from":  "onions",
+                      "to":  "baby-potatoes"
+                  },
                   {
                       "name":  "Simply Nature Chickpea Penne 12 OZ",
                       "from":  "pasta",
                       "to":  "chickpeas"
                   },
                   {
+                      "name":  "Our Family Potatoes Red Baby Dutch",
+                      "from":  "red-potatoes",
+                      "to":  "baby-potatoes"
+                  },
+                  {
+                      "name":  "bettergoods Gruyere Cheese Block",
+                      "from":  "gruyere",
+                      "to":  "block-cheese"
+                  },
+                  {
+                      "name":  "Private Selection Avocado Oil Salt and Pepper Petite Red Potatoes",
+                      "from":  "salt",
+                      "to":  "baby-potatoes"
+                  },
+                  {
+                      "name":  "Private Selection Italian Herb Petite Red Potatoes",
+                      "from":  "red-potatoes",
+                      "to":  "baby-potatoes"
+                  },
+                  {
                       "name":  "Simple Truth Gluten Free Organic Chickpea Spaghetti",
                       "from":  "pasta",
                       "to":  "chickpeas"
+                  },
+                  {
+                      "name":  "Summertime Farms Baby Red Potatoes",
+                      "from":  "red-potatoes",
+                      "to":  "baby-potatoes"
                   }
               ],
     "dropped":  [
@@ -69,6 +99,10 @@
                     {
                         "name":  "Banza Rigatoni Pasta from Chickpeas - Gluten Free, High Protein, and Lower Carb Protein Noodles",
                         "from":  "pasta"
+                    },
+                    {
+                        "name":  "Red Creamer Potatoes",
+                        "from":  "coffee-creamer"
                     },
                     {
                         "name":  "Fresh New York Pork Chops, Boneless",
@@ -187,6 +221,10 @@
                         "from":  "pork-chops"
                     },
                     {
+                        "name":  "Alpenhaus French Gruyere Semi-Hard Cheese Wedge",
+                        "from":  "gruyere"
+                    },
+                    {
                         "name":  "Simple Truth Gluten Free Organic Red Lentil Spaghetti",
                         "from":  "pasta"
                     },
@@ -197,6 +235,7 @@
                 ],
     "new_contested":  [
                           "505 Southwestern salsa or queso, 15 oz., $3.49",
+                          "BELVITA Breakfast Bar Biscuit Sandwiches, Cinnamon Brown Sugar With Vanilla Creme 8.8 oz",
                           "Bounce, Downy, Gain dryer sheets 130 to 240 ct., fabric beads 12.2 oz., Gain Flings! 18 to 31 ct. or Gain laundry detergent 60 or 88 fl. oz., $7.50 ea. with purchase of 2",
                           "Bounty paper towels 4 triple rolls or Charmin bath tissue 6 mega XL rolls, $12.99",
                           "Burmans Asstd Squeeze Mayonnaise Bacon 12 FL OZ",
@@ -235,6 +274,7 @@
                           "Mama Cozzi Sliced Turkey Pepperoni 5 OZ",
                           "Market Grille whole rotisserie chicken 27 to 32 oz., FREE with purchase of 10 Knorr Pasta or Rice Sides 4 to 5.8 oz.,",
                           "Musselman\u0027s Watermelon Applesauce, 3.17oz, 10 Count",
+                          "Never Any Spinach Feta Chicken Sausage 12 OZ",
                           "Outshine No Sugar Added Strawberry, Tangerine, and Raspberry Frozen Fruit Pops, 12 Count",
                           "Park Street Deli Pepper Jack Raisins Honey Roasted Peanuts 4.5 OZ",
                           "Park Street Deli Pineapple Poblano 10 OZ",
@@ -250,6 +290,7 @@
                           "RXBAR Strawberry Protein Bars",
                           "Savoritz Pizza Sourdough Pita Cracker 5 OZ",
                           "Scrub Daddy Orange Pumpkin Sponge Each",
+                          "Season S Choice Garlic Riced Cauliflower 12 OZ",
                           "Simms Spicy Honey Smoked Sausages 9.25 OZ",
                           "Simply Nature Raw Almonds Pecans Pistachio Kernels 8 OZ",
                           "Simplynature Organic Apple Cinnamon Instant Oatmeal 11.29 OZ",

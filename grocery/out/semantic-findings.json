@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-28 21:32",
+    "generated":  "2026-08-29 08:17",
     "board":  "comparison-2026-08-26.json",
-    "sidecar_generated":  "2026-08-28 21:31:59",
+    "sidecar_generated":  "2026-08-29 08:17:33",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3083,
-                     "corpus":  38025,
-                     "rule_invisible":  6864
+                     "board_pairs":  3089,
+                     "corpus":  38032,
+                     "rule_invisible":  6870
                  },
     "identity_count":  0,
-    "coverage_count":  57,
+    "coverage_count":  58,
     "identity":  [
 
                  ],
@@ -177,6 +177,16 @@
                          "product":  "Friendly Farms Almond Original Milk",
                          "cos":  0.6879,
                          "score":  0.962393,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "bar-soap",
+                         "commodity":  "Bar Soap",
+                         "store":  "Baker\u0027s",
+                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
+                         "cos":  0.6829,
+                         "score":  0.95879,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -531,6 +541,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "sports-drinks",
+                         "commodity":  "Sports Drinks",
+                         "store":  "Family Fare",
+                         "product":  "Body Armor Electrolyte Drink Mix, Lemon Lime, Zero Sugar 6 Ea",
+                         "cos":  0.5868,
+                         "score":  0.903912,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "breakfast-sandwiches",
                          "commodity":  "Frozen Breakfast Sandwiches",
                          "store":  "Family Fare",
@@ -547,16 +567,6 @@
                          "product":  "Las Palmas Medium Red Chile Sauce, 28 oz",
                          "cos":  0.6431,
                          "score":  0.903476,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sports-drinks",
-                         "commodity":  "Sports Drinks",
-                         "store":  "Family Fare",
-                         "product":  "Body Armor Electrolyte Drink Mix, Lemon Lime, Zero Sugar 6 Ea",
-                         "cos":  0.5729,
-                         "score":  0.903257,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

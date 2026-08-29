@@ -1,33 +1,33 @@
 {
     "readme":  "Product identity table, one current row per (store, product key) in this namespace. Truth is the .jsonl files beside this manifest; graph.db is a rebuildable index of them (graph/schema.md commitment 3). History is git: the files are tracked and sorted, so an assignment change is a commit diff. Written by compare-deals.ps1 -IdentityNamespace; never hand-edit.",
     "namespace":  "staple",
-    "rules_hash":  "148a9e57bd444d5e32d2ce9f4d04869742b21bcdcd05e2d1c08b6a7ad809954c",
+    "rules_hash":  "8740a4d823f75f970d71cd22df9518934a248b54669de28d88d3a9a9c14718d2",
     "board_date":  "2026-08-26",
-    "built_at":  "2026-08-28T08:11:43",
-    "rows_total":  39342,
+    "built_at":  "2026-08-29T08:11:43",
+    "rows_total":  39425,
     "rows_reused_from_previous":  0,
-    "rows_rematched":  39342,
-    "rows_contested":  888,
-    "key_collisions_demoted_to_name":  587,
+    "rows_rematched":  39425,
+    "rows_contested":  890,
+    "key_collisions_demoted_to_name":  590,
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "rows":  2865,
+                       "rows":  2926,
                        "changed":  true
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7399,
+                       "rows":  7400,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  5350,
+                       "rows":  5357,
                        "changed":  true
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  1009,
+                       "rows":  1010,
                        "changed":  true
                    },
                    {
@@ -37,7 +37,7 @@
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  3594,
+                       "rows":  3607,
                        "changed":  true
                    },
                    {

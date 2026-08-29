@@ -8931,17 +8931,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:08",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.14,
+                                                     "size":  "2 oz",
+                                                     "item":  "Great Value Smoked Paprika, 2 oz",
+                                                     "evidence":  "THE STANDING CELL IS THE WRONG PRODUCT. Cell item 18807673941 with the bare name \u0027Smoked Paprika\u0027 and per-unit 0.631 resolves on its own product page to \u0027McCormick Smoked Paprika AND GARLIC Seasoning, 3.12 oz Bottle\u0027 at $2.18 / 69.9 cents per oz - a paprika-and-garlic BLEND, not smoked paprika, and neither the recorded price nor the recorded per-unit matches it. Correct replacement from /search?q=smoked+paprika (75 items, fulfillmentType STORE only): Great Value Smoked Paprika 2 oz, item 785841258, linePrice $2.14, unitPrice $1.07/oz, seller Walmart.com. Other STORE rows: McCormick Kosher Smoked Paprika 1.75 oz $3.16 ($1.81/oz), GV Organic Smoked Paprika 1.6 oz $4.36, McCormick Gourmet Organic 1.62 oz $6.36. Bulk 16 oz bags at 62-91 cents/oz were all fulfillmentType FC or MARKETPLACE (OKK EXPRESS, Nutricost/eSupplements, Frontier/Co-op Market, GeminiGoodies) and are excluded as not shelf stock. Store 5361 Omaha 68137.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  6.99,
+                                                     "size":  "2.72 oz",
+                                                     "item":  "Simply Organic Paprika, Smoked",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136, no Des Moines in cache), In-Store mode. 4 results, no no-results banner. Recording Simply Organic Paprika Smoked 2.72 oz $6.99 = $2.5699/oz, the cheapest genuine smoked paprika. Also stocked: McCormick Smoked Paprika 0.9 oz $3.99 (Aisle 6, $4.433/oz), Frontier Co-op Smoked Paprika 1.87 oz $6.49 ($3.471/oz). REJECTED: Badia Spices Paprika 2.0 oz at $1.68 (on 33% off from $2.49) - far cheaper per oz but it is PLAIN paprika, not smoked. This is a NEW cell; the board had no Fareway smoked paprika. Prices read from the labelled \u0027Current price\u0027 field, not the glued \u0027$699\u0027 node.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  6.99,
+                                                         "size":  "7 oz",
+                                                         "item":  "Sugar N Spice Smoked Paprika",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027smoked paprika\u0027 rung 1, 5 hits, all genuine. Sugar N Spice Smoked Paprika 7 oz $6.99 = $0.9986/oz, the standing cell, confirmed. Also Sugar N Spice Paprika Smoked Pp 1 oz $2.49, Mc Cormick Smoked Paprika 0.9 oz $4.39, Spice Islands 2.1 oz $6.99, Simply Organic 2.72 oz $7.49.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  8.99,
+                                                    "size":  "2.72 oz",
+                                                    "item":  "Simply Organic Smoked Paprika",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. \u00271 - 13 of 13 Results for smoked paprika\u0027, no no-results phrase, and the facet panel itself confirms the read (Flavor: Smoked (4), Form: Ground (4), Category: Dried Spices (4)) - exactly four genuine smoked paprikas. Simply Organic Smoked Paprika 2.72 oz $8.99 = $3.3051/oz, which matches the standing Hy-Vee cell EXACTLY. The other three: McCormick Smoked Paprika 0.9 oz $4.99 ($5.544/oz), McCormick Gourmet Organic 1.62 oz $6.99, Morton \u0026 Bassett 2 oz $9.99. REJECTED as plain paprika, not smoked: Hy-Vee Paprika 2.12 oz $2.99, That\u0027s Smart Paprika 2.75 oz $1.25, McCormick Paprika 6.62 oz $9.49, Morton \u0026 Bassett Paprika, Simply Organic Paprika, Nothing But The Truth Organic Ground Paprika, McCormick Hot Hungarian Paprika - several far cheaper per oz, none of them smoked.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Rung 1 \u0027smoked paprika\u0027 6 items; rung 4 head noun \u0027paprika\u0027 7 items. No no-results banner on either - these were real product grids, so this is an EMPTY after the ladder, not an UNUSABLE. The only paprika stocked is Member\u0027s Mark SPANISH STYLE Paprika 18 oz $8.44 ($0.47/oz) and Member\u0027s Mark Spanish Paprika 5 lbs $30.68 ($0.38/oz). NEAR MISS DECLARED AND REFUSED: Spanish paprika is sold both sweet (dulce) and smoked (ahumado) and neither listing says smoked, so calling it smoked paprika would be a guess. Rest of the grid was Montreal Steak Seasoning, Hidden Valley ranch mix, taco seasoning, granulated garlic. If Brad wants this re-tested, a shelf photo of the Member\u0027s Mark Spanish paprika label would settle it.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  1.99,
+                                                  "size":  "1.6 oz",
+                                                  "item":  "Simply Nature Organic Smoked Paprika",
+                                                  "evidence":  "Brad\u0027s Chrome, aldi.us. MODE VERIFIED: header reads \u0027In-Store - open 9am - 8pm\u0027, which is the price_mode proof (a cold session defaults to Delivery and would be marked up); no mode switch was needed. STORE CAVEAT, PLEASE READ: the header reads \u0027ALDI - OLA 48 - Omaha\u0027, NOT the \u0027ALDI - OLA 42 - Omaha\u0027 the pricing spec pins. It is a genuine Omaha ALDI in In-Store mode so the CARRIAGE finding is sound, but the PRICE is OLA 48\u0027s; I did not switch stores because that is Brad\u0027s own session setting. Searched via history.push(\u0027/aldi/s?k=...\u0027). NO no-results banner (checked BEFORE counting tiles, per R1): Simply Nature Organic Smoked Paprika 1.6 oz $1.99 = $1.244/oz. NOTE the standing Aldi cell records the same item at the same $1.99/1.6 oz but a per-unit of 1.3688, whereas 1.99/1.6 = 1.2438 - the stored per-unit does not match its own price and size.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.49,
+                                                          "size":  "1.75 oz",
+                                                          "item":  "McCormick Smoked Paprika",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027smoked paprika\u0027 rung 1, 4 hits, all genuine smoked paprika jars. McCormick Smoked Paprika 1.75 oz $5.49 = $3.137/oz. Others: McCormick Gourmet Organic 1.62 oz $4.74, Spice Islands 2.1 oz $9.49, Morton \u0026 Bassett 2 oz $10.99. Matches the standing Baker\u0027s cell exactly.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -8951,17 +9000,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:08",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.67,
+                                                     "size":  "8 oz (12 slices)",
+                                                     "item":  "Great Value Swiss Deli Style Sliced Cheese, 8 oz Package 12 Slices",
+                                                     "evidence":  "Product page for the cell\u0027s own item 152351343 in Brad\u0027s Chrome, store 5361 Omaha 68137. Full name \u0027Great Value Swiss Deli Style Sliced Cheese, 8 oz Package 12 Slices\u0027. SIZE IS 8 oz. Live price $1.67, unitPrice 20.9 cents/oz, seller Walmart.com, fulfillment SHIPPING:OUT_OF_STOCK / PICKUP:IN_STOCK / DELIVERY:IN_STOCK - genuine shelf stock. The standing cell ($1.67, per-unit 0.209, name \u0027Great Value Swiss Sliced, 8 oz\u0027) SURVIVES CONTACT INTACT; only the exact item name needed completing.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.48,
+                                                     "size":  "8 oz",
+                                                     "item":  "Fareway Swiss Cheese",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. Fareway Swiss Cheese 8 oz $2.48 = $0.31/oz (tile also offers \u0027Buy 4 for $7.52\u0027; $2.48 is the single-unit price). Also stocked: Fareway Swiss Cheese Slices 16 ea $2.48 (from $3.49), Fareway Swiss Cheese Slices 11 each $2.48 (from $3.29), Fareway Swiss Fancy Shredded 6 oz $2.48, Sargento Sliced Baby Swiss 11 ct $3.99, Tillamook Farmstyle Thick Cut Swiss Slices 8 oz $3.99, Kraft Natural Swiss Big Slice 10 ea $3.49, Shullsburg Creamery Baby Swiss 10 oz $5.99, deli Old Fashioned Swiss $6.99/lb. CAVEAT ON COMPLETENESS: this query returned EXACTLY 9 cards and still returned exactly 9 after four further scrolls, which is the documented 9-at-a-time lazy-load signature, so treat the list as a floor rather than an exhaustive enumeration. Carriage itself is not in doubt. This is a NEW cell; the board had no Fareway swiss cheese.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.59,
+                                                         "size":  "8 oz",
+                                                         "item":  "Our Family Natural Swiss Cheese 8 Oz",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027swiss cheese\u0027 rung 1, 14 hits. Our Family Natural Swiss Cheese 8 oz $2.59 = $0.3238/oz, matches the standing cell and is the cheapest per-oz item with an unambiguous weight. Our Family Swiss Cheese Slices 10 Ea $2.49 is cheaper per pack but priced per-each with no weight. Also Crystal Farms 7 oz $3.89, Kretschmar Baby Swiss 8 oz $5.99, Boars Head deli swiss $11.49/lb.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.98,
+                                                    "size":  "8 oz",
+                                                    "item":  "Hy-Vee Swiss Cheese",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. \u00271 - 36 of 36 Results for swiss cheese\u0027, no no-results phrase. Recording Hy-Vee Swiss Cheese 8 oz $2.98 = $0.3725/oz as the honest non-promo cell. IMPORTANT DISCREPANCY with the standing Hy-Vee cell, which reads \u0027Hy-Vee Sliced Swiss Cheese 10Ct, 5 oz, $3.29, per-unit 0.3125\u0027: the live page shows that item at EIGHT oz, not 5 oz, and priced 2 for $5.00 (i.e. $2.50 each). $2.50/8 oz = 0.3125, which is exactly the standing per-unit - so the standing per-unit was derived from a 2-for-$5 PROMO at an 8 oz size, while the size and price stored beside it (5 oz, $3.29) match neither each other nor the per-unit. That cell needs rebuilding too. Also stocked: Hy-Vee Sliced Baby Swiss 10Ct 7 oz 2/$5.00, Hy-Vee Ultra Thin Sliced Swiss 18Ct 6.84 oz 2/$5.00, Hy-Vee Finely Shredded Swiss 8 oz $2.48, Di Lusso deli sliced Wisconsin Swiss $9.99/lb.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  7.84,
+                                                             "size":  "2 lb (32 oz)",
+                                                             "item":  "Member\u0027s Mark Baby Swiss Cheese Slices 2 lbs.",
+                                                             "evidence":  "Brad\u0027s Chrome, in-page fetch(\u0027/search?q=swiss cheese\u0027) on samsclub.com, __NEXT_DATA__ parsed. Club identity verified BEFORE reading: cookie myPreferredClub=8146, page text \u0027Omaha Sams Club\u0027, delivery zip Omaha 68144. 8 items. Member\u0027s Mark Baby Swiss Cheese Slices 2 lbs., item 13602753810, linePrice $7.84, unitPrice $3.92/lb = $0.245/oz. Both linePrice and unitPrice captured. Confirms the standing board cell (which had $7.82 / 0.2444 - price up 2 cents). Also stocked: Leerdammer Original Baby Swiss Style Cheese 17.64 oz $6.84. REJECTED: Kraft Singles American (not swiss), Laughing Cow Creamy Swiss wedges (spreadable, not sliced swiss), Member\u0027s Mark Ham \u0026 Swiss Croissant (a dish).",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  1.49,
+                                                  "size":  "7 oz",
+                                                  "item":  "Happy Farms Deli Sliced Swiss Cheese",
+                                                  "evidence":  "Aldi In-Store mode verified in header; store is \u0027ALDI - OLA 48 - Omaha\u0027 (see the smoked paprika record - not the spec\u0027s OLA 42, prices are OLA 48\u0027s). NO no-results banner, 5 real tiles. Happy Farms Deli Sliced Swiss Cheese 7 oz $1.49 = $0.2129/oz - the CHEAPEST swiss per oz found at any of the seven stores today. Also stocked: Happy Farms Swiss Cheese Block 8 oz $1.75 ($0.21875/oz), Aldi Lacey Swiss Deli Sliced 8 oz $3.49, Happy Farms Swiss Cheese SINGLES 12 oz $2.19 (rejected - processed singles, not natural swiss). NOTE the standing Aldi cell is the 8 oz block at $1.75 with per-unit 0.2438, but 1.75/8 = 0.21875, so that stored per-unit is wrong too.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.69,
+                                                          "size":  "12 oz",
+                                                          "item":  "Kroger Swiss Block Cheese",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027swiss cheese\u0027 rung 1, 25 hits. Kroger Swiss Block Cheese 12 oz $3.69 = $0.3075/oz is the cheapest REAL swiss and beats the standing cell (Kroger Swiss Sliced 12 oz $3.99 = $0.3325/oz, also confirmed stocked). Explicitly REJECTED as cheaper but not the ingredient: Kroger Singles Swiss Sliced 12 oz $2.69 ($0.224/oz) is a processed cheese-product single, not natural swiss. Also stocked: Sargento Swiss Sliced 7 oz $2.99, Sargento Baby Swiss 7 oz $2.99, Private Selection Sliced Swiss 8 oz $5.99, Private Selection deli swiss 1 lb $9.99.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -8971,17 +9069,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:09",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  4.52,
+                                                     "size":  "10 oz",
+                                                     "item":  "Walkerswood Traditional Jamaican Jerk Seasoning, Hot \u0026 Spicy, 10 oz",
+                                                     "evidence":  "Product page for the cell\u0027s own item 120057337 in Brad\u0027s Chrome, store 5361 Omaha 68137. Full name is \u0027Walkerswood Traditional Jamaican Jerk Seasoning, Hot \u0026 Spicy, 10 oz\u0027 - the standing cell name was truncated and carried no size. SIZE IS 10 oz. Live price $4.52, unitPrice 45.2 cents/oz, seller Walmart.com, fulfillment SHIPPING:NOT_AVAILABLE / PICKUP:IN_STOCK / DELIVERY:IN_STOCK so it is genuine shelf stock. The standing cell said $4.97 / 0.497 per oz, i.e. the identity and the 10 oz basis survive but the price is stale by $0.45.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. Rung 1 \u0027jerk seasoning\u0027: 2 results, no no-results banner, and both are MARINADES not seasoning - Lawry\u0027s Caribbean Jerk With Papaya Marinade 12 fl oz $3.48 (from $4.19) and KC Masterpiece Caribbean Jerk Marinade 16 fl oz $3.48 (from $3.99). Rung 2 head noun \u0027jerk\u0027: 9 results, every one of them BEEF JERKY (Old Trapper, Jack Link\u0027s) - a pure word collision. The commodity\u0027s unit is oz and its board cells are dry seasonings; a 12-16 fl oz marinade is a different food. Two rungs walked, real product grids both times, so this is an EMPTY not an UNUSABLE. NOTE the rung-1 count of 2 is below the 9-item lazy-load page size, so it is a complete result set and not a truncation.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  6.79,
+                                                         "size":  "4.93 oz",
+                                                         "item":  "Lawry\u0027s Jerk Seasoning 4.93 Oz",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027jerk seasoning\u0027 returned 1 hit at rung 1 and the ladder widened to \u0027seasoning\u0027 (25 unrelated hits - Dan O\u0027s, Celestial Seasonings tea, popcorn seasoning; NONE adjudicated in, per the rule that widening the pool must not widen the ruling). Carriage rests on the rung-1 hit plus the live Freshop catalog page: Lawry\u0027s Jerk Seasoning 4.93 oz $6.79 = $1.3773/oz, /shop/pantry/mixes_spices_seasoning/special_blends/lawry_s_jerk_seasoning_4_93_oz/p/1764405684714689520. Matches the standing cell.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "not-carried",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. Rung 1 \u0027jerk seasoning\u0027: \u00271 - 2 of 2 Results\u0027, no no-results phrase, and neither is the ingredient - A Dozen Cousins Jamaican Jerk Seasoning SAUCE 3 oz $3.99 (a cooking sauce) and Hi Mountain JERKY Cure \u0026 Seasoning 7.2 oz $10.99 (a cure for making beef jerky, matched on the word jerky). Rung 2 by head noun \u0027jerk\u0027: \u00271 - 60 of 106 Results\u0027, overwhelmingly Jack Link\u0027s / Chophouse beef JERKY, plus one more near miss, Lawry\u0027s Caribbean Jerk With Papaya MARINADE 12 fl oz $4.99. The commodity\u0027s unit is oz and every board cell for it is a dry/paste seasoning (Grace 10 oz, Lawry\u0027s 4.93 oz, Walkerswood 10 oz); a 12 fl oz marinade and a 3 oz sauce are a different food and I am not stretching either into a hit. Two rungs walked, real result grids both times, so this is an EMPTY and not an UNUSABLE.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Searched \u0027jerk seasoning\u0027, 13 items, no no-results banner. The grid returned is effectively the whole seasoning set - Montreal Steak, Spanglish Asadero taco/carne asada/chipotle, Kinder\u0027s Grilled Chicken, Member\u0027s Mark Taco, Slap Ya Mama Cajun, Tajin, Lawry\u0027s Chicken \u0026 Poultry Rub, coarse black pepper, granulated garlic - and none of them is jerk seasoning. Because the result set IS the seasoning category enumerated, widening further to the head noun \u0027seasoning\u0027 could only return the same set and was not needed to conclude.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027. The page rendered the literal no-results text \u0027No results for \"jerk seasoning\"\u0027. Read the banner BEFORE counting tiles per R1: 10 product tiles were present but they are Browse-related SUGGESTIONS, not results, so the true count is ZERO. The suggestions were the Stonemill blend range (Kicked Up Chicken Grill, Sweet \u0026 Savory, Butter Garlic Grilling, Roasted Garlic \u0026 Herb, Amazing Burger, Salt Pepper Garlic, Cajun, Hot Honey, Smoky Brown Sugar) - none is jerk seasoning in any case.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.79,
+                                                          "size":  "10 oz",
+                                                          "item":  "Grace Mild Jamaican Jerk Seasoning",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027jerk seasoning\u0027 rung 1, 3 hits, all genuine jerk seasoning. Grace Mild Jamaican Jerk Seasoning 10 oz $5.79 = $0.579/oz, matches the standing Baker\u0027s cell. Also Grace Hot Jamaican Jerk 10 oz $5.79 and Lawry\u0027s Jerk Seasoning 4.93 oz $6.79.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -8991,17 +9138,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:09",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.84,
+                                                     "size":  "16 fl oz",
+                                                     "item":  "Pompeian White Wine Vinegar - 16 fl oz",
+                                                     "evidence":  "Product page for the cell\u0027s own item 15610751 in Brad\u0027s Chrome, store 5361 Omaha 68137. Name \u0027Pompeian White Wine Vinegar - 16 fl oz\u0027. SIZE IS 16 fl oz. Live price $2.84, unitPrice 17.8 cents/fl oz, seller Walmart.com, fulfillment SHIPPING:OUT_OF_STOCK / PICKUP:IN_STOCK / DELIVERY:IN_STOCK - genuine shelf stock. The standing cell ($2.84, per-unit 0.178) SURVIVES CONTACT INTACT.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.98,
+                                                     "size":  "16.9 fl oz",
+                                                     "item":  "Fareway White Wine Vinegar",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. 2 results, no no-results banner, both genuine white wine vinegar (no red-vinegar contamination here, unlike Hy-Vee). Fareway Vinegar, White Wine 16.9 oz, \u0027Store choice\u0027, REGULAR $3.98, currently 28% off at $2.88. Recording the REGULAR $3.98 = $0.2355/floz; at the promo it is $0.1704/floz. Also stocked: Bertolli Pinot Grigio White Wine Vinegar 16.9 fl oz regular $3.99, on offer at $3.48. This is a NEW cell; the board had no Fareway white wine vinegar.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.39,
+                                                         "size":  "12 fl oz",
+                                                         "item":  "Holland House White Wine Vinegar 12 Fl Oz",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027white wine vinegar\u0027 rung 1, 9 hits. Holland House White Wine Vinegar 12 fl oz $3.39 = $0.2825/floz, matches the standing cell. REJECTED: Our Family / Heinz / That\u0027s Smart distilled white vinegars and Holland House White COOKING WINE 16 oz $5.49 - all cheaper per floz and none of them white wine vinegar. Only other true white wine vinegar is Filippo Berio 16.9 fl oz $7.29.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.99,
+                                                    "size":  "16 fl oz",
+                                                    "item":  "Pompeian Gourmet White Wine Vinegar",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. \u00271 - 10 of 10 Results for white wine vinegar\u0027, no no-results phrase. Recording Pompeian Gourmet White Wine Vinegar 16 fl oz $2.99 = $0.1869/floz, the cheapest genuine non-promo white wine vinegar. IMPORTANT: the standing Hy-Vee cell is \u0027Gustare Vita White Wine Vinegar, 17 fl oz, $1.99, per-unit 0.1473\u0027 and is BADLY STALE - the live listing is Gustare Vita White Wine Vinegar 16.9 fl oz at $4.59 ($0.2716/floz), i.e. 2.3x the recorded price. That stale cell is currently the CHEAPEST white wine vinegar on the whole board, so it is setting a false floor. Also stocked: Bertolli White Wine Vinegar 16.9 fl oz on promo $2.61 (regular $4.99), Nothing But The Truth Organic White Wine Vinegar 16.9 fl oz $3.49. REJECTED: every RED wine vinegar (Pompeian Gourmet Red 16 fl oz $2.99, Gustare Vita Red, Bertolli Red, Heinz Red, Colavita Red, Nothing But The Truth Organic Red) - the search returns red and white interleaved and the red is the same price, so this is a live trap.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Rung 1 \u0027white wine vinegar\u0027 returned 11 items that were ALL COOKING OILS (Pompeian olive oil, Member\u0027s Mark avocado/soybean/corn/vegetable oil, Crisco) - a relevance fallback, so I did not treat it as an answer. Rung 2 head noun \u0027vinegar\u0027 14 items, no no-results banner: Member\u0027s Mark Distilled White Vinegar 1 gal 2pk $5.98, Bragg apple cider vinegar (liquid, gummies and capsules), and a DCT 30% concentrated vinegar CLEANER. Distilled white vinegar is not white wine vinegar and taking it would have been a false cheap at $0.02/floz. No white wine vinegar in the club.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.99,
+                                                  "size":  "16.9 fl oz",
+                                                  "item":  "Priano White Wine Vinegar (product slug reads carlini-white-wine-vinegar-16-9-fl-oz)",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027 (not the spec\u0027s OLA 42). NO no-results banner, 3 real tiles. 16.9 fl oz at $2.99 = $0.1769/floz. NAME CONFLICT WORTH FLAGGING: the product-URL slug says \u0027carlini-white-wine-vinegar-16-9-fl-oz\u0027 while the tile text says \u0027Priano White Wine Vinegar\u0027. The pricing spec says take the name from the slug, but here the slug and the card disagree on the BRAND, not merely on formatting, and the standing board cell has it both ways too (name \u0027Priano White Wine Vinegar\u0027, url .../19321103-carlini-white-wine-vinegar-16-9-fl-oz). Someone should settle which brand is on the Omaha shelf before this name is trusted. REJECTED: the other tile, slug \u0027tuscan-garden-distilled-white-vinegar-32-fl-oz\u0027 but card text \u0027Carlini Distilled White Vinegar\u0027 $1.59 - DISTILLED, not wine vinegar, and note it shows the same slug-vs-card brand disagreement. NOTE the standing cell\u0027s per-unit is 0.1947 but 2.99/16.9 = 0.1769.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.69,
+                                                          "size":  "16 fl oz",
+                                                          "item":  "Pompeian White Wine Vinegar",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027white wine vinegar\u0027 rung 1, 15 hits. Pompeian White Wine Vinegar 16 oz $2.69 = $0.1681/floz. REJECTED as the wrong food despite ranking high: Kroger White Cooking Wine 12.7 fl oz (cooking wine), Kroger Distilled White Vinegar 16 fl oz $1.39 and Smart Way White Distilled Vinegar 32 fl oz $1.79 (distilled, not wine vinegar) - taking either would have been a false cheap. NOTE the standing Baker\u0027s cell says $2.49 / $0.1556 per floz; the live API returned $2.69 today, so the standing price is stale by $0.20. Also stocked: Bertolli 16.9 fl oz $3.99, Filippo Berio 16.9 fl oz $4.99, Star Italian Kitchen 12 fl oz $3.79, Simple Truth Organic 12.7 fl oz $3.49.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -9011,17 +9207,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:09",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.28,
+                                                     "size":  "4 fl oz",
+                                                     "item":  "Colgin Liquid Smoke Natural Hickory Flavor, 4 fl oz",
+                                                     "evidence":  "THE STANDING CELL IS A SHIP-ONLY MULTIPACK. Cell item 15377320035 with the bare name \u0027Liquid Smoke\u0027 and per-unit 0.423 resolves to \u0027(6 pack) Wright\u0027s MESQUITE Liquid Smoke Concentrated Seasoning, 3.5 oz Glass Bottle\u0027 at $8.88 - a SIX-PACK (6 x 3.5 = 21 fl oz, which is exactly the 8.88/0.423 the cell implies), and its fulfillment is SHIPPING:IN_STOCK / PICKUP:OUT_OF_STOCK / DELIVERY:NOT_AVAILABLE, so it is not on the Omaha shelf at all. Correct replacement from /search?q=liquid+smoke (68 items, fulfillmentType STORE only): Colgin Liquid Smoke Natural Hickory Flavor 4 fl oz, item 10314500, linePrice $2.28, unitPrice 57.0 cents/fl oz, seller Walmart.com. Colgin Mesquite 4 fl oz, item 10314501, same $2.28, also STORE. Real shelf per-unit is 0.570/floz, not the 0.423 on the cell - the standing number was 26% low because it was priced off a six-pack. Store 5361 Omaha 68137.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.69,
+                                                     "size":  "4 fl oz",
+                                                     "item":  "Tone\u0027s Liquid Smoke",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. 3 results, no no-results banner, all genuine. Tone\u0027s Liquid Smoke 4 fl oz $2.69 = $0.6725/floz, Aisle 6 - the cheapest liquid smoke found at any of the seven stores today. Also stocked: Colgin Original Recipe Hickory Liquid Smoke 4 fl oz $2.79, Wright\u0027s Hickory Concentrated Seasoning 3.5 oz $3.19. This is a NEW cell; the board had no Fareway liquid smoke. Price read from the labelled \u0027Current price\u0027 field, not the glued \u0027$269\u0027 node.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.49,
+                                                         "size":  "4 fl oz",
+                                                         "item":  "Colgin Original Recipe Hickory Liquid Smoke 4 Fl Oz",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027liquid smoke\u0027 rung 1, 2 hits, both Colgin 4 fl oz $3.49 (hickory and mesquite) = $0.8725/floz. Matches the standing cell.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.99,
+                                                    "size":  "4 fl oz",
+                                                    "item":  "Figaro Hickory Liquid Smoke \u0026 Barbecue Marinade",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. \u00271 - 2 of 2 Results for liquid smoke\u0027, no no-results phrase. Figaro Hickory Liquid Smoke \u0026 Barbecue Marinade 4 fl oz $2.99 = $0.7475/floz - matches the standing Hy-Vee cell exactly, including its 2026-07-14 GraphQL verification. Also stocked: Figaro Mesquite Liquid Smoke and Marinade 4 fl oz $2.99.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Rung 1 \u0027liquid smoke\u0027 12 items and the relevance collapsed entirely to laundry detergent (FOCA, all, Gain, Ariel, Windfresh) plus pesto and BBQ sauces - zero flavouring products. Second rung by dominant BRAND per the Hy-Vee lesson: searched \u0027colgin\u0027 (the brand every other Omaha store stocks) and got 8 items of Member\u0027s Mark PATIO FURNITURE, i.e. the brand matches nothing at all in the club catalogue. No no-results banner on either query. Sam\u0027s is a warehouse club with a small SKU count and carries no liquid smoke.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027. The page rendered the literal no-results text \u0027No results for \"liquid smoke\"\u0027. TWENTY-ONE product tiles were present and every one is a Browse-related SUGGESTION, not a result - this is exactly the 2026-08-15 trap where a 29-tile suggestion block was mistaken for a result grid, and the honest count here is ZERO. Suggestions included Sweet Baby Ray\u0027s BBQ sauces, Burman\u0027s BBQ/steak sauce, Parkview smoked sausage and Stonemill paprika, none of them liquid smoke.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.99,
+                                                          "size":  "4 fl oz",
+                                                          "item":  "Colgin Liquid Smoke Natural Hickory Flavoring",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027liquid smoke\u0027 rung 1, 2 hits, both genuine. Colgin Liquid Smoke Natural Hickory Flavoring 4 fl oz $2.99 = $0.7475/floz; Colgin Natural Mesquite 4 fl oz $2.99. NOTE the standing Baker\u0027s cell says $2.69 / $0.6725 per floz - the live API returned $2.99 today, so the standing Baker\u0027s price is stale by $0.30.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -9031,17 +9276,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:10",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.52,
+                                                     "size":  "0.8 oz",
+                                                     "item":  "Great Value Rosemary Leaves, 0.8 oz",
+                                                     "evidence":  "THE STANDING CELL IS A THIRD-PARTY MARKETPLACE LISTING. Cell item 17814052306 with the bare name \u0027Rosemary Leaves\u0027 and per-unit 1.3 resolves to \u0027Soeos Dried Rosemary Leaves, 7.76 oz (220g)\u0027 sold by FELICIFIC INC, not Walmart, with fulfillment SHIPPING:IN_STOCK / PICKUP:OUT_OF_STOCK / DELIVERY:NOT_AVAILABLE, and its price has moved $10.10 -\u003e $7.99. A 7.76 oz bulk bag is also not the spice jar a cook buys. Correct replacement from /search?q=dried+rosemary (66 items, fulfillmentType STORE only): Great Value Rosemary Leaves 0.8 oz, item 631599094, linePrice $2.52, unitPrice $3.15/oz, seller Walmart.com. Other STORE rows: GV Organic Crushed Rosemary 1 oz $4.36, GV Organic Rosemary Leaves 0.85 oz $4.58. Every cheaper-per-oz row (Badia 8 oz $1.06/oz via DailyMart, Soeos 4.2 oz $1.79/oz, Revstar, Zhivana) was FC or MARKETPLACE. Real shelf per-unit is 3.15/oz against the standing 1.3 - the standing number was 2.4x too low. Store 5361 Omaha 68137.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.49,
+                                                     "size":  "1 oz",
+                                                     "item":  "Badia Spices Rosemary",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. 3 results, no no-results banner. Badia Spices Rosemary 1 oz, REGULAR $2.49, currently 33% off at $1.68. Recording the REGULAR $2.49 = $2.49/oz so a promo does not set a permanent floor; at the promo it is $1.68/oz. Also stocked: McCormick Whole Rosemary Leaves 0.62 oz $4.99 ($8.048/oz). REJECTED: \u0027Crazy Fresh Rosemary 0.75 oz\u0027 - its own tile says department PRODUCE, so it is the fresh herb, not dried. This is a NEW cell; the board had no Fareway dried rosemary.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.79,
+                                                         "size":  "0.62 oz",
+                                                         "item":  "Mc Cormick Whole Rosemary Leaves 0.62 Oz",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027dried rosemary\u0027 rung 1 EMPTY (0 hits), rung 2 \u0027rosemary\u0027 13 hits. Rejected: Suave Rosemary \u0026 Mint Shampoo, Triscuit and Toasteds rosemary crackers, and Fresh Og Rosemary 0.5 oz $2.99 (FRESH herb, not dried). Adjudicated in: Mc Cormick Whole Rosemary Leaves 0.62 oz $5.79 = $9.3387/oz, the standing cell. Cheaper dried candidates worth a capture-path look: Tone\u0027s Rosemary Leaf 0.2 oz $1.99, Full Circle Organic Rosemary Crushed 1.2 oz $4.49 ($3.742/oz), Dan\u0027s Pantry Rosemary 2.7 oz $4.49 ($1.663/oz) - the last sits in the fresh_spices_herbs aisle so its dried/fresh status is NOT settled by the payload and I am not asserting it.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "item":  "Hy-Vee Rosemary Leaves 0.75 oz",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. Searched \u0027rosemary leaves\u0027, \u00271 - 8 of 8 Results\u0027, no no-results phrase. Hy-Vee Rosemary Leaves 0.75 oz $2.99 = $3.9867/oz, matching the standing cell exactly. REJECTED: Johnson Family Farm FRESH Rosemary 0.75 oz $2.99 (fresh herb, not dried - identical price and size, so this one is a genuine trap). Also stocked: McCormick Whole Rosemary Leaves 0.62 oz $6.49, Simply Organic Rosemary 1.23 oz $5.99, Morton \u0026 Bassett Rosemary 1 oz $8.99, McCormick Gourmet Organic Crushed Rosemary 1 oz $6.99.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  7.18,
+                                                             "size":  "8.5 oz",
+                                                             "item":  "Member\u0027s Mark Rosemary Leaves, 8.5 oz.",
+                                                             "evidence":  "Club 8146 Omaha verified via myPreferredClub cookie. Rung 1 \u0027dried rosemary\u0027 folded into rung 2 \u0027rosemary\u0027 (9 items). Member\u0027s Mark Rosemary Leaves 8.5 oz, linePrice $7.18, unitPrice $0.84/oz - genuine dried rosemary leaves, and the CHEAPEST per-oz of any of the seven stores. REJECTED: Member\u0027s Mark Rosemary Garlic 6.25 oz $4.48 and Organic Rosemary Garlic Seasoning 7.2 oz $4.98 (both blends, not rosemary), Mielle Rosemary Mint Hair Oil, and a Balta Rosemary area RUG.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027. The page rendered the literal no-results text \u0027No results for \"dried rosemary\"\u0027; the 10 tiles are SUGGESTIONS, true count ZERO. The most dangerous suggestion was \u0027Rosemary, 0.5 oz\u0027 at $1.59 whose own tile says department PRODUCE - it is the FRESH herb, not the dried spice, so it fails twice over (a suggestion, and the wrong form). Other suggestions were Savoritz rosemary crackers, Stonemill Italian Seasoning, fresh thyme, cilantro. Aldi\u0027s Stonemill spice line does not include rosemary.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.99,
+                                                          "size":  "0.75 oz",
+                                                          "item":  "Kroger Rosemary Leaves 0.75 oz",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027dried rosemary\u0027 rung 1, 25 hits, most NOT the ingredient (34 Degrees Rosemary Crisps, Rosemary Olive Oil Round Loaf, Stacy\u0027s Rosemary pita chips, Kroger Rosemary Sourdough Crisps - all rejected as products FLAVOURED with rosemary). Adjudicated in: Kroger Rosemary Leaves 0.75 oz $1.99 = $2.6533/oz (matches the standing cell), Private Selection Rosemary Leaves Shaker 0.82 oz $4.99, Simple Truth Organic Crushed Rosemary 1.07 oz $3.99, Simple Truth Organic Rosemary 0.5 oz $2.49.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -9051,17 +9345,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:10",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.02,
+                                                     "size":  "10.5 oz",
+                                                     "item":  "Great Value Condensed French Onion Soup with Beef Stock, 10.5 oz",
+                                                     "evidence":  "Product page for the cell\u0027s own item 21274651 in Brad\u0027s Chrome, store 5361 Omaha NE 68137. Full name \u0027Great Value Condensed French Onion Soup with Beef Stock, 10.5 oz\u0027. SIZE IS 10.5 oz. Live price $1.02 with unitPrice 9.7 cents/oz, seller Walmart.com, fulfillment SHIPPING:NOT_AVAILABLE / PICKUP:IN_STOCK / DELIVERY:IN_STOCK - genuine shelf stock. Identity and the 10.5 oz basis survive; the standing cell\u0027s $1.12 per each is stale by $0.10, the price having dropped to $1.02.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.49,
+                                                     "size":  "10.5 oz",
+                                                     "item":  "Fareway Soup, French Onion with Beef Stock, Condensed",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. Searched \u0027french onion soup\u0027 (the four-word queue term is not needed here). 3 results, no no-results banner. Fareway Soup French Onion with Beef Stock CONDENSED 10.5 oz, \u0027Store choice\u0027, REGULAR $1.49, currently $1.48 - the word \u0027condensed\u0027 is in the product slug itself, so the form is proven rather than inferred. Recording the regular $1.49/each. Also stocked: Campbell\u0027s French Onion Soup 10.5 oz $1.92. REJECTED: Knorr Soup Mix And Recipe Mix French Onion 1.4 oz $1.79 (a dry mix). This is a NEW cell; the board had no Fareway condensed french onion soup.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  1.99,
+                                                         "size":  "10.5 oz",
+                                                         "item":  "Campbell\u0027s French Onion Soup 10.500 Oz",
+                                                         "evidence":  "Same four-word-term artefact as Bakers: \u0027condensed french onion soup\u0027 returned EMPTY at both rungs. Re-probed \u0027onion soup\u0027 at Family Fare: 7 hits, Campbell\u0027s French Onion Soup 10.500 Oz $1.99 = $1.99/each at /shop/pantry/broth_soups_stews_chili/condensed_soups/campbell_s_french_onion_soup_10_500_oz/p/33857 - the condensed_soups aisle path is itself the condensed proof. REJECTED: Our Family Onion Soup Mix 2 oz $1.29, Beefy Onion Soup Mix 2.2 oz $1.29, Lipton Recipe Soup \u0026 Dip Mixes $2.79 - all dry mixes.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.96,
+                                                    "size":  "10.5 oz",
+                                                    "item":  "Campbell\u0027s Condensed French Onion Soup, 10.5 oz Can",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. Searched the full four-word term \u0027condensed french onion soup\u0027 - Hy-Vee\u0027s own search handles it where the server-lane ladder could not - \u00271 - 17 of 17 Results\u0027, no no-results phrase. Campbell\u0027s Condensed French Onion Soup 10.5 oz Can $1.96 = $1.96/each, matching the standing cell exactly. The rest of the grid is the Campbell\u0027s condensed range (cream of mushroom $1.48, cream of chicken $1.48, cheddar cheese $1.96, cream of celery $1.96, cream of chicken with herbs $1.96), which confirms french onion sits in the condensed set rather than being a ready-to-serve substitute.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Rung 1 \u0027french onion soup\u0027 6 items (French\u0027s Crispy Fried Onions, Lipton Onion Recipe Soup and Dip Mix, ramen) - no condensed soup. Rung 2 \u0027condensed soup\u0027 7 items and rung 3 \u0027campbells soup\u0027 5 items, both returning the club\u0027s actual Campbell\u0027s condensed range: Cream of Mushroom 10.5 oz 8pk $8.98, Condensed Cream of Chicken 10.5 oz 8pk $8.98, Condensed Tomato 10.75 oz 12ct $12.98, Condensed Chicken Noodle 10.75 oz 12ct $12.98. The condensed Campbell\u0027s set is enumerated and FRENCH ONION IS NOT IN IT. No no-results banner on any rung.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027. Searched \u0027french onion soup\u0027 (not the four-word queue term). The page rendered the literal no-results text \u0027No results for \"french onion soup\"\u0027; TWENTY-TWO tiles were present and all are SUGGESTIONS, true count ZERO. The suggestions prove the point rather than undermining it: Aldi\u0027s own condensed line IS there (Chef\u0027s Cupboard Condensed Cream of Mushroom 10.5 oz $0.73, Campbell\u0027s Condensed Chicken Noodle 10.75 oz $1.24) but no french onion, and \u0027Friendly Farms French Onion DIP 16 oz $1.79\u0027 is a sour-cream dip, not soup.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.99,
+                                                          "size":  "10.5 oz",
+                                                          "item":  "Campbell\u0027s Condensed French Onion Soup",
+                                                          "evidence":  "probe-ingredient.ps1 on the queue term \u0027condensed french onion soup\u0027 returned EMPTY at both rungs - the retry ladder cannot strip a FOUR-word term, so that empty is a term artefact and cannot support an absence. Re-probed \u0027french onion soup\u0027: 3 hits, Campbell\u0027s Condensed French Onion Soup 10.5 oz $1.99 = $1.99/each, matching the standing cell. REJECTED: Progresso Vegetable Classics French Onion 18.5 oz $2.99 (ready-to-serve, not condensed) and Dan-Os French Onion DIP Seasoning Mix 1 oz $1.50.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -9071,17 +9414,66 @@
                                   ],
                       "added":  "2026-08-29T06:42:10",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.18,
+                                                     "size":  "5.25 oz",
+                                                     "item":  "Great Value Celery Salt, 5.25 oz",
+                                                     "evidence":  "AMBIGUITY RESOLVED, AND THE ANSWER IS BOTH. The cell\u0027s item 15918221301 is titled on its own product page \u0027(3 pack) Great Value Celery Salt, 5.25 oz\u0027 at $6.54 with unitPrice 41.5 cents/oz - so 5.25 oz is the size of EACH JAR and the pack totals 15.75 oz (6.54 / 15.75 = 0.4152, which is the cell\u0027s 0.415 exactly). Separately, /search?q=celery+salt returns the SINGLE JAR as item 248973865, \u0027Great Value Celery Salt, 5.25 oz\u0027, linePrice $2.18, unitPrice 41.5 cents/oz, seller Walmart.com, fulfillmentType STORE - i.e. $6.54 is precisely 3 x $2.18 and the per-oz is identical either way. Recording the single 5.25 oz jar at $2.18 as the honest shelf cell; the per-unit 0.415 survives contact unchanged, only the package price and basis were wrong. Also STORE: McCormick Kosher Celery Salt 4.0 oz $5.32 ($1.33/oz). Store 5361 Omaha 68137.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.49,
+                                                     "size":  "114 g (4.02 oz)",
+                                                     "item":  "Tone\u0027s Celery Salt",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. 2 results, no no-results banner, both genuine celery salt. Tone\u0027s Celery Salt 114 g $3.49, Aisle 6; 114 g = 4.021 oz so $0.868/oz. NOTE the tile states the size in GRAMS, so any cell built from this needs the gram-to-oz conversion rather than a bare \u0027114\u0027. Also stocked: McCormick Celery Salt 4 oz $6.99 ($1.7475/oz). This is a NEW cell; the board had no Fareway celery salt.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  4.99,
+                                                         "size":  "12 oz",
+                                                         "item":  "Dan\u0027s Pantry Celery Salt",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027celery salt\u0027 rung 1, 3 hits, all genuine celery salt. Dan\u0027s Pantry Celery Salt 12 oz $4.99 = $0.4158/oz (matches the standing cell); Mc Cormick Celery Salt 3.5 oz $8.79; Spice Supreme Celery Salt 7.5 oz (no price returned).",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.99,
+                                                    "size":  "1.2 oz",
+                                                    "item":  "Hy-Vee Celery Salt",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. \u00271 - 23 of 23 Results for celery salt\u0027, no no-results phrase. Hy-Vee Celery Salt 1.2 oz, REGULAR $1.99, currently ON PROMO at 99 cents (page shows 99 cents struck through $1.99) = $1.6583/oz regular, $0.825/oz promo. Recording the REGULAR $1.99, which matches the standing cell exactly; flagging the promo rather than letting it set a floor. Also stocked: McCormick Celery Salt 4 oz $6.99, McCormick Gourmet All Natural Celery Salt 2.5 oz $6.99. REJECTED: McCormick all-purpose and Perfect Pinch Cajun seasonings, 1st Phorm protein sticks (matched on \u0027seasoned\u0027).",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Rung 1 \u0027celery salt\u0027 4 items (Mrs. Dash Original, Montreal Steak Seasoning, Member\u0027s Mark Taco Seasoning, granulated garlic - none is celery salt). Rung 2 head noun \u0027celery\u0027 3 items, all fresh produce (Pure Pacific Organic Celery Sticks 2.5 lbs, cherry tomatoes, a vegetable tray). No no-results banner on either. No celery salt in the club.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027. The page rendered the literal no-results text \u0027No results for \"celery salt\"\u0027; the 10 tiles are SUGGESTIONS, true count ZERO. Suggestions were Stonemill Everything Bagel, Butter Garlic Grilling, Salt Pepper Garlic Grilling, Chili \u0026 Lime, Sweet \u0026 Savory, Reduced Sodium Chili mix, onion powder, garlic powder, plus fresh Celery at $1.99/lb from PRODUCE. No celery salt.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.29,
+                                                          "size":  "3.75 oz",
+                                                          "item":  "Kroger Celery Salt Shaker",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027celery salt\u0027 rung 1, 2 hits, both genuine. Kroger Celery Salt Shaker 3.75 oz $3.29 = $0.8773/oz (matches the standing cell); Spice Islands Celery Salt Kosher 3 oz $8.49.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -9091,17 +9483,135 @@
                                   ],
                       "added":  "2026-08-29T06:42:10",
                       "why":  "the price-setting Walmart cell on this board row carries no item name and no size, so nothing downstream can check the number it publishes",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.22,
+                                                     "size":  "13.25 oz",
+                                                     "item":  "Great Value Thai Style Sweet Chili Sauce, 13.25 oz",
+                                                     "evidence":  "THE STANDING CELL IS SHIP-ONLY. Cell item 10452295 \u0027Mae Ploy Sweet Chili Sauce 32 oz\u0027 is sold by Walmart.com but its fulfillment is SHIPPING:IN_STOCK / PICKUP:OUT_OF_STOCK / DELIVERY:NOT_AVAILABLE, so the 32 oz jar is not on the Omaha shelf; price $5.97, unit 18.7 cents/fl oz (and note Walmart bases that on 32 as if fl oz, though Mae Ploy 32 oz is a WEIGHT). Correct replacement from /search?q=sweet+chili+sauce (52 items, fulfillmentType STORE only): Great Value Thai Style Sweet Chili Sauce 13.25 oz, item 132652925, linePrice $2.22, unitPrice 16.8 cents/oz, seller Walmart.com. The shelf Mae Ploy is the 12 oz jar, item 11045990, $3.22 at 26.8 cents/fl oz. Other STORE rows: GV Asian Sweet Chili WING Sauce 12 fl oz $2.47 (rejected, wing sauce), Frank\u0027s RedHot Sweet Chili 12 fl oz $3.54, Panda Express 20.75 oz $4.48, P.F. Chang\u0027s 14.2 oz $3.97. Store 5361 Omaha 68137.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.89,
+                                                     "size":  "10 fl oz",
+                                                     "item":  "Mae Ploy Sweet Chilli Sauce",
+                                                     "evidence":  "Fareway Omaha verified (retailerLocation 531573, Audrey St, 68136), In-Store mode. 6 results, no no-results banner. Recording Mae Ploy Sweet Chilli Sauce 10 fl oz $4.89 = $0.489/floz as the identity-safe canonical Thai sweet chili sauce. Cheaper per unit and also genuine: Panda Express Sauce, Sweet Chili 20.75 oz $5.99 = $0.2886/oz - worth considering for the cell if a weight basis is acceptable. Also stocked: Thai Kitchen Gluten Free Sweet Red Chili Dipping Sauce 6.57 fl oz $5.99, Kinder\u0027s Sweet Chili Garlic Sauce $5.98 (from $6.99). REJECTED: G Hughes SUGAR-FREE Sweet Chili 18 oz $4.99 (diet variant, not the base product) and Frank\u0027s RedHot Sweet Chili HOT SAUCE 12 oz $4.99. This is a NEW cell; the board had no Fareway sweet chili sauce.",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  4.79,
+                                                         "size":  "425 g (15 oz)",
+                                                         "item":  "La Choy Sweet Chili Sauce",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027sweet chili sauce\u0027 rung 1, 5 hits. La Choy Sweet Chili Sauce 425 g $4.79; the standing cell records the same item as 15 oz = $0.3193/oz, and 425 g = 14.99 oz, so size and per-unit both check out. REJECTED: King Oscar Mackerel In Sweet Chili (a fish tin). Also stocked: Franks Red Hot Sweet Chili 12 fl oz $5.49, House Of Tsang 12 oz $5.99, Finest Reserve Thai Ger Sweet Chili WING sauce 12 fl oz $4.29.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  3.99,
+                                                    "size":  "14.5 oz",
+                                                    "item":  "Hy-Vee Thai Sweet Chili Sauce",
+                                                    "evidence":  "Store \u0027Omaha #01, NE\u0027 verified. \u00271 - 25 of 25 Results for sweet chili sauce\u0027, no no-results phrase. Hy-Vee Thai Sweet Chili Sauce 14.5 oz $3.99 = $0.2752/oz, matching the standing cell exactly. Also stocked: Blue Dragon Thai Sweet Chili Sauce 10.5 fl oz $4.99, A Taste of Thai Sweet Chili Sauce 7 fl oz $5.99. REJECTED: Lee Kum Kee Chili Crisp Hot Honey Sauce, Wuju Tropical Pineapple Sauce, Nothing But The Truth Organic Raspberry Balsamic, and a long tail of LesserEvil popcorn.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Rung 1 \u0027sweet chili sauce\u0027 7 items; rung 2 \u0027chili sauce\u0027 13 items. No no-results banner on either. REJECTED near misses: Kinder\u0027s Sweet Chili Garlic SEASONING 6.3 oz $5.48 (a dry rub, not a sauce), Member\u0027s Mark Bang Bang Sweet \u0026 Spicy Seasoning \u0026 Sauce MIX 9 oz (a mix), Royal Asia Shrimp Tempura WITH Sweet Chili (a frozen dish containing it), Chef-mate HOT DOG Chili Sauce 108 oz (a meat chili topping, a different food entirely). Real sauces present are Frank\u0027s RedHot cayenne, Cholula, Yellowbird sriracha - no Thai-style sweet chili sauce.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027. The page rendered the literal no-results text \u0027No results for \"sweet chili sauce\"\u0027; the 10 tiles are SUGGESTIONS, true count ZERO. Suggestions were Berryhill Hot Honey with Infused Chilies and the Burman\u0027s HOT SAUCE range (Honey Hot, Red Hot, Spicy Garlic, Poblano, plain) - hot sauces, not Thai-style sweet chili sauce.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.29,
+                                                          "size":  "10 fl oz",
+                                                          "item":  "Kroger Sweet Chili Sauce",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027sweet chili sauce\u0027 rung 1, 16 hits. Kroger Sweet Chili Sauce 10 fl oz $2.29 = $0.229/floz, matches the standing cell and is cheapest per floz. REJECTED as a dish containing it: Pagoda Frozen Cream Cheese Wontons with Sweet Chili Sauce 7.26 oz. Also stocked: Mae Ploy 12 oz $3.69, Blue Dragon Thai 10.5 fl oz $4.49, Melindas Thai 12 fl oz $4.99, P.F. Changs 14.2 oz $4.99, Panda Express 20.75 oz $5.99.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "ground mustard",
+                      "recipes":  [
+                                      "turkey-cordon-bleu-casserole"
+                                  ],
+                      "added":  "2026-08-29T07:18:59",
+                      "why":  "Brad ruled 2026-08-29 to mint Ground Mustard: the source recipe calls for 1/8 tsp ground mustard powder and the spec substituted Dijon at 1 g, which renders as an unmeasurable 0.07 tbsp",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.38,
+                                                     "size":  "1.5 oz",
+                                                     "item":  "Great Value Ground Mustard, 1.5 oz",
+                                                     "evidence":  "Brad\u0027s own Chrome, walmart.com store 5361 Omaha NE 68137 (read from initialData.contextualProperties.pickupLocation.storeId). /search?q=ground+mustard, 65 items, filtered on fulfillmentType===\u0027STORE\u0027 so ship-only and marketplace rows cannot manufacture carriage. Great Value Ground Mustard 1.5 oz, item 250008472, linePrice $2.38, unitPrice $1.59/oz, seller Walmart.com, fulfillmentType STORE. This is the DRY SPICE jar. Also STORE: McCormick Kosher Ground Mustard 1.75 oz $5.12 ($2.93/oz). REJECTED as prepared condiments in squeeze bottles/jars: Inglehoffer Original Stone Ground 10 oz $2.84, Grey Poupon Country Dijon Coarse Ground 8 oz $4.27, Great Value Stone Ground Mustard 12 oz $1.72, French\u0027s Classic Yellow 8 oz $1.57 - all cheaper per oz and none of them the dry spice. Shelf name used is \u0027Ground Mustard\u0027.",
+                                                     "checked":  "2026-08-29T07:30:26"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.49,
+                                                     "size":  "1.55 oz",
+                                                     "item":  "Tone\u0027s Mustard, Ground",
+                                                     "evidence":  "Brad\u0027s Chrome, shop.fareway.com. IDENTITY VERIFIED BEFORE READING ANY PRICE: Apollo cache GetRetailerLocationAddress -\u003e retailerLocation id \u0027531573\u0027 (the stable Omaha identity), \u0027Audrey\u0027 present, zip 68136, and the strings \u0027Des Moines\u0027 and \u0027513473\u0027 are BOTH ABSENT from the cache - so this is not the Des Moines session that burned the 2026-08-15 run. Header reads \u0027In-Store - open 8am - 9pm - Omaha\u0027. Searched via the SPA router (history basename is \u0027/store\u0027, so the push path is \u0027/fareway-meat-grocery/s?k=...\u0027) and scrolled twice for the 9-at-a-time lazy loader. 5 results, no no-results banner. Tone\u0027s Mustard, Ground 1.55 oz $3.49 = $2.252/oz, Aisle 6 - the dry spice. Also McCormick Ground Mustard 1.75 oz $4.99 ($2.851/oz). REJECTED as prepared condiments: Fareway Stone Ground Dijon 12 oz $2.99, Inglehoffer Stone Ground Original 10 oz $3.99, Boetje\u0027s Stone Ground Dutch 8.5 oz $4.49. Prices read from the labelled \u0027Current price\u0027 field, NOT the adjacent glued node (the tile also renders \u0027$349\u0027, the known 100x defect).",
+                                                     "checked":  "2026-08-29T07:43:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.09,
+                                                         "size":  "1.5 oz",
+                                                         "item":  "Sugar N Spice Mustard Ground Pp",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027ground mustard\u0027 rung 1, Freshop store_id 6401 Omaha pickup price, 5 hits. Dry-spice jars adjudicated in: Sugar N Spice Mustard Ground Pp 1.5 oz $2.09 ($1.393/oz, cheapest), Mc Cormick Ground Mustard 1.75 oz $7.99 ($4.566/oz), Tone\u0027s Mustard Ground 0.45 oz $1.99 ($4.422/oz). Rejected as prepared condiment: Koops Stone Ground Mustard 12 oz $3.69, French\u0027s Stone Ground Dijon Mustard 12 oz $4.59. Shelf names used: \u0027Ground Mustard\u0027 and \u0027Mustard, Ground\u0027.",
+                                                         "checked":  "2026-08-29T07:25:41"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  3.99,
+                                                    "size":  "1.75 oz",
+                                                    "item":  "Hy-Vee Ground Mustard 1.75 oz",
+                                                    "evidence":  "Brad\u0027s Chrome, hy-vee.com/aisles-online/search?search=ground+mustard, RENDERED page read (an in-page fetch returns the documented client-rendered shell - confirmed again today: 81 KB, zero product names). Store selector verified \u0027Omaha #01, NE\u0027 before reading. Banner \u00271 - 13 of 13 Results for ground mustard\u0027, no no-results phrase. Hy-Vee Ground Mustard 1.75 oz, REGULAR $3.99, currently ON PROMO at $2.49 (page shows 2.49 struck through 3.99) = $2.28/oz regular, $1.423/oz promo. Recording the REGULAR price so a promo cannot become a permanent floor. Also stocked: McCormick Gourmet Organic Ground Mustard 1.75 oz $6.99. REJECTED as prepared condiment: Hy-Vee Stone Ground Dijon 12 oz, Hy-Vee Stone Ground Honey Dijon 12 oz, French\u0027s Stone Ground Dijon 12 oz, Silver Spring Stone Ground 9.5 oz. Shelf name used is \u0027Ground Mustard\u0027.",
+                                                    "checked":  "2026-08-29T07:38:08"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club 8146 Omaha verified. Rung 1 \u0027ground mustard\u0027 12 items - the \u0027ground\u0027 matches were all other spices (Member\u0027s Mark Organic Ground Cumin 8 oz, Ground Cumin 16 oz, Ground Turmeric 20 oz, Organic Ground Turmeric 9.5 oz) plus ketchup and mayonnaise. Rung 2 head noun \u0027mustard\u0027 8 items, no no-results banner: French\u0027s 100% Natural Classic Yellow 30 oz 2pk $5.48, French\u0027s single-serve packets, Smash Kitchen Organic Yellow 20 oz 2pk, Heinz condiment variety pack - all PREPARED mustard, no dry mustard/ground mustard/mustard powder. Sam\u0027s stocks the Member\u0027s Mark ground-spice line but mustard is not one of them.",
+                                                             "checked":  "2026-08-29T07:33:45"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Aldi In-Store mode verified; store \u0027ALDI - OLA 48 - Omaha\u0027. Rung 1 \u0027ground mustard\u0027: NO no-results banner, so these were real results - but the only match is Burman\u0027s STONE GROUND Mustard 12 oz $1.49, a prepared condiment in a squeeze jar, not the dry spice. Rung 2 \u0027mustard powder\u0027: the page rendered the literal banner \u0027No results for \"mustard powder\"\u0027, so its 10 tiles are SUGGESTIONS and the true count is ZERO (the suggestions were Burman\u0027s Stone Ground / Dijon / Traditional Yellow prepared mustards plus Stonemill onion powder and garlic powder). Aldi\u0027s Stonemill spice line is well represented in these result sets (onion powder, garlic powder, paprika, ground cumin, parsley, italian seasoning) and dry ground mustard is not in it.",
+                                                  "checked":  "2026-08-29T07:45:58"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.99,
+                                                          "size":  "1.55 oz",
+                                                          "item":  "Kroger Ground Mustard Shaker",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027ground mustard\u0027 rung 1, Kroger public API locationId 61500319, 9 hits. Adjudicated: Kroger Ground Mustard Shaker 1.55 oz $1.99 is the DRY SPICE shaker ($1.284/oz) - a shaker at 1.55 oz cannot be a condiment. Colman\u0027s Mustard Powder 4 oz $8.99 also stocked, shelf name \u0027Mustard Powder\u0027. Rejected as prepared condiment not dry spice: Kroger Stone Ground Mustard 12 oz $1.89, Simple Truth Organic Stone Ground Mustard 12 oz $2.49, Grey Poupon Country Dijon Coarse Ground 8 oz $4.69, French\u0027s Stone Ground Dijon 12 oz $3.99. First probe returned HTTP 503 (UNUSABLE); re-probed and it answered.",
+                                                          "checked":  "2026-08-29T07:25:41"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
                       "notes":  null
                   }
               ]

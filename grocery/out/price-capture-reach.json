@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-28T08:14:44",
+    "updated":  "2026-08-29T08:15:00",
     "price_table":  "price-table-2026-08-26.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
@@ -7,9 +7,9 @@
                        "file":  "ingredient-queue.json",
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
-                       "captured":  391,
+                       "captured":  498,
                        "reached":  16,
-                       "missing":  375,
+                       "missing":  482,
                        "missing_rows":  [
                                             {
                                                 "key":  "chili-garlic-sauce",
@@ -393,6 +393,14 @@
                                                 "price":  7.49,
                                                 "size":  "16 oz",
                                                 "item":  "Simple Truth Gluten Free Superfine Almond Flour",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "korean-rice-cakes",
+                                                "store":  "Hy-Vee",
+                                                "price":  8.99,
+                                                "size":  "9.1 oz",
+                                                "item":  "O\u0027Food Original Tteokbokki (rice-cake + sauce kit; no plain garaetteok at this store)",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -1127,8 +1135,16 @@
                                                 "key":  "prosciutto",
                                                 "store":  "Sam\u0027s Club",
                                                 "price":  13.44,
-                                                "size":  "7 oz, 2 pk",
+                                                "size":  "7 oz x 2 pk",
                                                 "item":  "Rossetti Prosciutto Italiano",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "prosciutto",
+                                                "store":  "Aldi",
+                                                "price":  3.19,
+                                                "size":  "3 oz",
+                                                "item":  "Priano Italiano Prosciutto 3 OZ",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -1249,6 +1265,14 @@
                                                 "price":  1.99,
                                                 "size":  "16 oz",
                                                 "item":  "Kroger Wide Egg Noodles",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Moroccan seven spice blend",
+                                                "store":  "Walmart",
+                                                "price":  3.84,
+                                                "size":  "4.62 oz",
+                                                "item":  "McCormick Moroccan Style Seasoning",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -1585,30 +1609,6 @@
                                                 "price":  21.99,
                                                 "size":  "750 ml",
                                                 "item":  "Jim Beam Kentucky Straight Bourbon Whiskey 750 Ml",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "bourbon",
-                                                "store":  "Sam\u0027s Club",
-                                                "price":  16.94,
-                                                "size":  "750 ml",
-                                                "item":  "Member\u0027s Mark Kentucky Straight Bourbon Whiskey, 750 ml",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "bourbon",
-                                                "store":  "Baker\u0027s",
-                                                "price":  18.99,
-                                                "size":  "750 ml",
-                                                "item":  "Jim Beam Bourbon Whiskey",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "mozzarella cheese",
-                                                "store":  "Fareway",
-                                                "price":  2.48,
-                                                "size":  "8 oz",
-                                                "item":  "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
                                                 "commodity_known":  false
                                             }
                                         ]

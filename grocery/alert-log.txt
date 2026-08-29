@@ -1260,3 +1260,26 @@
 [2026-08-28T09:30:35] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery capture watchdog: 4 issue(s) 2026-08-28' [type: grocery capture watchdog issue s]
 [2026-08-28T10:56:42] QUEUE ABSORBED into open item 2026-08-22-5a178d (day 6 of this condition, count now 18) - no new id minted
 [2026-08-28T10:56:42] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe price inversion: 1 clamped' [type: recipe price inversion clamped]
+[2026-08-29T08:09:27] QUEUE ABSORBED into open item 2026-08-22-d913fc (day 7 of this condition, count now 7) - no new id minted
+[2026-08-29T08:09:27] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Family Fare catalog is degrading - 1 signal(s)' [type: grocery family fare catalog is degrading signal s]
+[2026-08-29T08:14:15] QUEUE ABSORBED into open item 2026-08-22-f00d92 (day 7 of this condition, count now 7) - no new id minted
+[2026-08-29T08:14:15] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: GUARDS FAILED - board not published - 2026-08-29' [type: grocery guards failed board not published]
+[2026-08-29T08:15:02] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: a commodity is in no category (no filter) - review' [type: grocery a commodity is in no category no filter review]
+[2026-08-29T08:17:24] QUEUE ABSORBED into open item 2026-08-22-6827cf (day 7 of this condition, count now 8) - no new id minted
+[2026-08-29T08:17:24] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-08-29T08:17:35] QUEUE ABSORBED into open item 2026-08-22-14416d (day 7 of this condition, count now 9) - no new id minted
+[2026-08-29T08:17:35] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 10 store(s) dropped from a commodity they carry - 2026-08-29' [type: grocery store s dropped from a commodity they carry]
+[2026-08-29T08:17:36] QUEUE ABSORBED into open item 2026-08-22-51a5b6 (day 7 of this condition, count now 6) - no new id minted
+[2026-08-29T08:17:36] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: semantic sweep found 58 product(s) no rule can see - 2026-08-29' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-29T08:17:48] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs]
+[2026-08-29T08:17:48] QUEUE BODY UPGRADED on 2026-08-22-c41c27 (1023 -> 1574 chars) - a later occurrence carried fuller evidence
+[2026-08-29T08:17:48] QUEUE ABSORBED into open item 2026-08-22-c41c27 (day 7 of this condition, count now 8) - no new id minted
+[2026-08-29T08:17:48] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe batch stalled with stages unfinished' [type: recipe batch stalled with stages unfinished]
+[2026-08-29T08:17:49] QUEUE ABSORBED into open item 2026-08-22-83012e (day 7 of this condition, count now 8) - no new id minted
+[2026-08-29T08:17:49] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Board prices aging inside a fresh file' [type: board prices aging inside a fresh file]
+[2026-08-29T08:18:55] QUEUE ABSORBED into open item 2026-08-22-8360b4 (day 7 of this condition, count now 6) - no new id minted
+[2026-08-29T08:18:55] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 45 NEW price flag(s) - 2026-08-29' [type: grocery new price flag s]
+[2026-08-29T08:19:02] QUEUE ABSORBED into open item 2026-08-22-ca099c (day 7 of this condition, count now 9) - no new id minted
+[2026-08-29T08:19:02] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Walmart full capture aging - 2026-08-29' [type: grocery walmart full capture aging]
+[2026-08-29T08:23:49] QUEUE ABSORBED into open item 2026-08-22-7e1db7 (day 7 of this condition, count now 5) - no new id minted
+[2026-08-29T08:23:49] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: a GUARD has gone blind (test-auditors failed)' [type: grocery a guard has gone blind test auditors failed]

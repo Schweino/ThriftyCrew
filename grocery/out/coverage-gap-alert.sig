@@ -1,1 +1,1 @@
-﻿beef-short-ribs|Sam's Club;beets|Family Fare;canned-butter-beans|Hy-Vee;coleslaw-mix|Fareway;cornmeal|Baker's;daiya-mozzarella-style-shreds|Baker's;dried-thyme|Aldi;garden-salad|Aldi;pie-pumpkins|Aldi;poblano-peppers|Aldi;teriyaki-sauce|Aldi
+﻿beets|Family Fare;canned-butter-beans|Hy-Vee;coleslaw-mix|Fareway;cornmeal|Baker's;daiya-mozzarella-style-shreds|Baker's;dried-thyme|Aldi;garden-salad|Aldi;pie-pumpkins|Aldi;poblano-peppers|Aldi;teriyaki-sauce|Aldi

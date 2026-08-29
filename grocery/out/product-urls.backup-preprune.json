@@ -324,20 +324,20 @@
                                                               "size":  "128 fl oz",
                                                               "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                           },
-                                              "Sam\u0027s Club":  {
-                                                                      "url":  "https://www.samsclub.com/ip/17449400028",
-                                                                      "name":  "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Watermelon 210 fl. oz.",
-                                                                      "price":  "$10.98",
-                                                                      "size":  "210 fl oz",
-                                                                      "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
-                                                                  },
                                               "Baker\u0027s":  {
                                                                    "url":  "https://www.bakersplus.com/p/kroger-mercado-lavender-multipurpose-cleaner/0001111016241",
                                                                    "name":  "Kroger Mercado Lavender Multipurpose Cleaner",
                                                                    "price":  6.29,
                                                                    "size":  "128 fl oz",
                                                                    "verified":  "2026-08-23"
-                                                               }
+                                                               },
+                                              "Sam\u0027s Club":  {
+                                                                      "url":  "https://www.samsclub.com/ip/13597517906",
+                                                                      "name":  "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Lavender 210 fl. oz.",
+                                                                      "price":  "$10.98",
+                                                                      "size":  "210 fl oz",
+                                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                                  }
                                           },
                   "all-purpose-flour":  {
                                             "commodity":  "All-Purpose Flour",
@@ -775,13 +775,6 @@
                                                 "size":  "lb",
                                                 "verified":  "2026-08-23 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13585869052",
-                                                         "price":  6.22,
-                                                         "size":  "4 lb",
-                                                         "name":  "Envy Apples, 4 lbs.",
-                                                         "board_pu":  1.555
-                                                     },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16551400-gala-apple-1-lb",
                                                  "name":  "Gala Apple",
@@ -1343,11 +1336,11 @@
                                              "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
                                          },
                                 "Family Fare":  {
-                                                    "url":  "https://www.shopfamilyfare.com/shop/meat/bacon/farmland_bacon_hickory_smoked_classic_cut_12_oz/p/5610",
-                                                    "name":  "Farmland Bacon, Hickory Smoked, Classic Cut 12 Oz",
+                                                    "url":  "https://www.shopfamilyfare.com/shop/meat/bacon/farmland_thick_cut_hickory_smoked_bacon_12_oz/p/531419",
+                                                    "name":  "Farmland Thick Cut Hickory Smoked Bacon 12 Oz",
                                                     "price":  "$3.99",
                                                     "size":  "12 oz",
-                                                    "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
+                                                    "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                                 }
                             },
                   "bagels":  {
@@ -2020,11 +2013,11 @@
                                                      "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                  },
                                      "Baker\u0027s":  {
-                                                          "url":  "https://www.bakersplus.com/p/kroger-original-smokehouse-beef-jerky/0001111080100",
-                                                          "name":  "Kroger Original Smokehouse Beef Jerky",
-                                                          "price":  10.49,
+                                                          "url":  "https://www.bakersplus.com/p/kroger-sweet-and-spicy-smokehouse-beef-jerky/0001111015951",
+                                                          "name":  "Kroger Sweet and Spicy Smokehouse Beef Jerky",
+                                                          "price":  "$10.49",
                                                           "size":  "8 oz",
-                                                          "verified":  "2026-08-23"
+                                                          "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                                       }
                                  },
                   "beef-stew":  {
@@ -2280,20 +2273,20 @@
                                                        "size":  "16 oz",
                                                        "name":  "Badia Spices Ground Black Pepper"
                                                    },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/13613903437",
-                                                               "price":  7.98,
-                                                               "size":  "18 oz",
-                                                               "name":  "Member\u0027s Mark Restaurant Coarse Black Pepper, 18 oz.",
-                                                               "board_pu":  0.4433
-                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/McCormick-Pure-Ground-Black-Pepper-8-75-oz/39326255",
                                                        "name":  "McCormick Pure Ground Black Pepper, 8.75 oz",
                                                        "price":  "$7.36",
                                                        "size":  "8.75 oz",
                                                        "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/13610868830",
+                                                               "name":  "Member\u0027s Mark Coarse Black Pepper, 5 lbs.",
+                                                               "price":  "$38.48",
+                                                               "size":  "5 lb",
+                                                               "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                           }
                                    },
                   "bleach":  {
                                  "commodity":  "bleach",
@@ -7495,11 +7488,11 @@
                                                    "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                },
                                    "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/saltine/our_family_saltine_original_crackers_16_oz/p/6787361",
-                                                       "name":  "Our Family Saltine Original Crackers 16 Oz",
+                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/saltine/our_family_unsalted_tops_saltine_crackers_16_oz/p/6787363",
+                                                       "name":  "Our Family Unsalted Tops Saltine Crackers 16 Oz",
                                                        "price":  "$2.49",
                                                        "size":  "16 oz",
-                                                       "verified":  "2026-08-18 DERIVED from the price row (same record the board priced)"
+                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                                    }
                                },
                   "cranberry-juice":  {
@@ -17213,13 +17206,6 @@
                                                       "name":  "Paprika Our Family",
                                                       "board_pu":  0.8443
                                                   },
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/15236470588",
-                                                          "price":  35.68,
-                                                          "size":  "80 oz",
-                                                          "name":  "Member\u0027s Mark Spanish Paprika, 5 lbs.",
-                                                          "board_pu":  0.446
-                                                      },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/3221000/that-s-smart-paprika",
                                                  "name":  "That\u0027s Smart Paprika",
@@ -17240,7 +17226,14 @@
                                                   "price":  "$7.99",
                                                   "size":  "16 oz",
                                                   "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/13594550259",
+                                                          "name":  "Member\u0027s Mark Spanish Style Paprika, 18 oz.",
+                                                          "price":  "$8.44",
+                                                          "size":  "18 oz",
+                                                          "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                      }
                               },
                   "parchment-paper":  {
                                           "commodity":  "parchment-paper",
@@ -17987,7 +17980,14 @@
                                                       "price":  "$2.79",
                                                       "size":  "24 fl oz",
                                                       "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/20220088-great-gherkins-hamburger-dill-pickle-chips-32-fl-oz",
+                                               "name":  "Great Gherkins Hamburger Dill Pickle Chips 32 FL OZ",
+                                               "price":  "$2.69",
+                                               "size":  "32 fl oz",
+                                               "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                           }
                               },
                   "pigeon-peas":  {
                                       "commodity":  "Pigeon Peas / Gandules (canned)",
@@ -21927,11 +21927,11 @@
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                     },
                                         "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/17582953316",
-                                                                "name":  "Gatorade Frost Thirst Quencher Variety Pack, 20 fl. oz., 24 pk.",
-                                                                "price":  "$14.38",
+                                                                "url":  "https://www.samsclub.com/ip/13814304650",
+                                                                "name":  "POWERADE ZERO Variety Pack Sports Drink, 20 fl. oz., 24 pk.",
+                                                                "price":  "$15.98",
                                                                 "size":  "480 fl oz",
-                                                                "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
+                                                                "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                                             }
                                     },
                   "spring-mix":  {
@@ -22052,13 +22052,6 @@
                                                        "name":  "Simply Done Laundry Stain Remover",
                                                        "board_pu":  0.1153
                                                    },
-                                        "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/4460030424",
-                                                                "name":  "Clorox 2 for Colors Free \u0026 Clear Stain Remover, 90 loads, 112.75 fl. oz.",
-                                                                "price":  "$13.18",
-                                                                "size":  "112.75 fl oz",
-                                                                "verified":  "2026-08-09 DERIVED from the price row (same record the board priced)"
-                                                            },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/88883-spray-n-wash-laundry-stain-remover-60-fl-oz",
                                                         "name":  "Spray \u0027n Wash Laundry Stain Remover, Value Pack",
@@ -22072,7 +22065,14 @@
                                                         "price":  "$5.98",
                                                         "size":  "60 fl oz",
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/18338800077",
+                                                                "name":  "Shout Advanced Action Gel Laundry Stain Remover, 22 oz. Trigger \u0026 60 oz. refill",
+                                                                "price":  "$11.49",
+                                                                "size":  "82.071 oz",
+                                                                "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                            }
                                     },
                   "steak-sauce":  {
                                       "commodity":  "Steak Sauce (A.1. style)",
@@ -25860,6 +25860,22 @@
                                                        "size":  "14 oz",
                                                        "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
                                                    }
-                                   }
+                                   },
+                  "baby-potatoes":  {
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes",
+                                                        "name":  "Summertime Farms Baby Red Potatoes",
+                                                        "price":  "$2.99",
+                                                        "size":  "3 lb",
+                                                        "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/private-selection-petite-gold-gourmet-potatoes/0001111066323",
+                                                             "name":  "Private Selection Petite Gold Gourmet Potatoes",
+                                                             "price":  "$6.00",
+                                                             "size":  "3 lb",
+                                                             "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                         }
+                                    }
               }
 }

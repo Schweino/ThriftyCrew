@@ -11,6 +11,18 @@
                                     "kind":  "count",
                                     "row_kind":  "volume",
                                     "holds_crown":  true
+                                },
+                                {
+                                    "id":  "condensed-milk",
+                                    "commodity":  "Sweetened Condensed Milk",
+                                    "unit":  "oz",
+                                    "store":  "Sam\u0027s Club",
+                                    "per_unit":  0.1426,
+                                    "size":  "84 fl oz",
+                                    "item":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
+                                    "kind":  "volume",
+                                    "row_kind":  "weight",
+                                    "holds_crown":  true
                                 }
                             ],
     "findings":  [
@@ -146,7 +158,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-28T08:13:37",
+    "generated":  "2026-08-29T08:13:49",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -682,7 +694,7 @@
                               "commodity":  "Heavy Whipping Cream",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.2184,
+                              "per_unit":  0.1559,
                               "size":  "32 oz",
                               "item":  "Hy Vee Heavy Whipping Cream",
                               "kind":  "weight",
@@ -831,6 +843,18 @@
                               "item":  "Eckrich Smoked Sausage 12-14 oz or Prime Fresh Lunch Meat 7-8 oz",
                               "kind":  "count",
                               "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "stain-remover",
+                              "commodity":  "Laundry Stain Remover",
+                              "unit":  "floz",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.14,
+                              "size":  "82.071 oz",
+                              "item":  "Shout Advanced Action Gel Laundry Stain Remover, 22 oz. Trigger \u0026 60 oz. refill",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -1053,10 +1077,10 @@
                               "id":  "shower-cleaner",
                               "commodity":  "Shower / Bathroom Cleaner",
                               "unit":  "floz",
-                              "store":  "Aldi",
-                              "per_unit":  0.0841,
-                              "size":  "32 oz",
-                              "item":  "Power Force Bathroom Cleaner",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.0832,
+                              "size":  "96 oz",
+                              "item":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1065,10 +1089,10 @@
                               "id":  "shower-cleaner",
                               "commodity":  "Shower / Bathroom Cleaner",
                               "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.1,
-                              "size":  "99.4 oz",
-                              "item":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Parad",
+                              "store":  "Aldi",
+                              "per_unit":  0.0841,
+                              "size":  "32 oz",
+                              "item":  "Power Force Bathroom Cleaner",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1131,7 +1155,7 @@
                               "item":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
+                              "holds_crown":  true
                           },
                           {
                               "id":  "maple-syrup",

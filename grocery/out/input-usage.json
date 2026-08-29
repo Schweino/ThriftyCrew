@@ -1,8 +1,8 @@
 {
-    "updated":  "2026-08-28T08:11:43",
+    "updated":  "2026-08-29T08:11:43",
     "last_live_build":  "2026-08-26",
     "note":  "Which files the LIVE board actually opened, and when. The engine reads a UNION of dated captures (up to the 90-day capture-policy carry for every store (14 for Walmart until 2026-08-22)) because the rotation only re-prices ~7 items per store per day, so a weeks-old file can be the only place a store\u0027s price for a commodity exists - and a dated input is named exactly like a disposable output. last_used is what tells them apart. Recorded ONLY on live builds; a pinned regression run would stamp files the board has not touched. This is a ledger, not a delete list: judge last_used against the carry window before acting.",
-    "tracked_files":  91,
+    "tracked_files":  97,
     "files":  {
                   "ads-2026-08-21.json":  {
                                               "role":  "ads",
@@ -545,6 +545,42 @@
                                                                   "uses":  1
                                                               },
                   "regular/hyvee-regular-2026-08-28.json":  {
+                                                                "role":  "everyday",
+                                                                "first_used":  "2026-08-26",
+                                                                "last_used":  "2026-08-26",
+                                                                "uses":  1
+                                                            },
+                  "sams/sams-deals-2026-08-29.json":  {
+                                                          "role":  "sams-deals",
+                                                          "first_used":  "2026-08-26",
+                                                          "last_used":  "2026-08-26",
+                                                          "uses":  1
+                                                      },
+                  "regular/aldi-regular-2026-08-28.json":  {
+                                                               "role":  "everyday",
+                                                               "first_used":  "2026-08-26",
+                                                               "last_used":  "2026-08-26",
+                                                               "uses":  1
+                                                           },
+                  "regular/bakers-regular-2026-08-29.json":  {
+                                                                 "role":  "everyday",
+                                                                 "first_used":  "2026-08-26",
+                                                                 "last_used":  "2026-08-26",
+                                                                 "uses":  1
+                                                             },
+                  "regular/family-fare-regular-2026-08-29.json":  {
+                                                                      "role":  "everyday",
+                                                                      "first_used":  "2026-08-26",
+                                                                      "last_used":  "2026-08-26",
+                                                                      "uses":  1
+                                                                  },
+                  "regular/fareway-regular-2026-08-29.json":  {
+                                                                  "role":  "everyday",
+                                                                  "first_used":  "2026-08-26",
+                                                                  "last_used":  "2026-08-26",
+                                                                  "uses":  1
+                                                              },
+                  "regular/hyvee-regular-2026-08-29.json":  {
                                                                 "role":  "everyday",
                                                                 "first_used":  "2026-08-26",
                                                                 "last_used":  "2026-08-26",

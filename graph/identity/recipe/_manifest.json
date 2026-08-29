@@ -3,47 +3,47 @@
     "namespace":  "recipe",
     "rules_hash":  "8740a4d823f75f970d71cd22df9518934a248b54669de28d88d3a9a9c14718d2",
     "board_date":  "2026-08-26",
-    "built_at":  "2026-08-29T06:32:51",
-    "rows_total":  36009,
-    "rows_reused_from_previous":  0,
-    "rows_rematched":  36009,
+    "built_at":  "2026-08-29T08:12:17",
+    "rows_total":  36014,
+    "rows_reused_from_previous":  35884,
+    "rows_rematched":  130,
     "rows_contested":  43,
-    "key_collisions_demoted_to_name":  587,
+    "key_collisions_demoted_to_name":  590,
     "stores":  [
                    {
                        "store":  "Aldi",
                        "rows":  2926,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7399,
+                       "rows":  7400,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  5350,
+                       "rows":  5357,
                        "changed":  true
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  1009,
+                       "rows":  1010,
                        "changed":  true
                    },
                    {
                        "store":  "Hy-Vee",
                        "rows":  2125,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  200,
+                       "rows":  196,
                        "changed":  true
                    },
                    {
                        "store":  "Walmart",
                        "rows":  17000,
-                       "changed":  true
+                       "changed":  false
                    }
                ]
 }

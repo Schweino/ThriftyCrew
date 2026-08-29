@@ -173,7 +173,7 @@
     {
         "id":  "bacon",
         "store":  "Family Fare",
-        "product":  "Farmland Bacon, Hickory Smoked, Classic Cut 12 Oz",
+        "product":  "Farmland Thick Cut Hickory Smoked Bacon 12 Oz",
         "dept":  "meat",
         "aisle":  "meat/bacon",
         "verdict":  "ALLOW",
@@ -983,7 +983,7 @@
     {
         "id":  "crackers",
         "store":  "Family Fare",
-        "product":  "Our Family Saltine Original Crackers 16 Oz",
+        "product":  "Our Family Unsalted Tops Saltine Crackers 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/crackers",
         "verdict":  "ALLOW",
@@ -3393,6 +3393,15 @@
         "reason":  "\u002793-7-ground-turkey\u0027 is in no estate category - refused rather than guessed"
     },
     {
+        "id":  "cheddar-cheese-shredded",
+        "store":  "Family Fare",
+        "product":  "Our Family Mild Cheddar Shredded Cheese 16 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/cheese",
+        "verdict":  "BLIND",
+        "reason":  "\u0027cheddar-cheese-shredded\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
         "id":  "greek-yogurt",
         "store":  "Family Fare",
         "product":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
@@ -3447,15 +3456,6 @@
         "reason":  "\u0027hot-italian-sausage\u0027 is in no estate category - refused rather than guessed"
     },
     {
-        "id":  "reduced-fat-mozzarella",
-        "store":  "Family Fare",
-        "product":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "BLIND",
-        "reason":  "\u0027reduced-fat-mozzarella\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
         "id":  "salsa-verde",
         "store":  "Family Fare",
         "product":  "Our Family Salsa Verde, Mild 16 Oz",
@@ -3501,6 +3501,15 @@
         "reason":  "\u0027zero-sugar-soda-2l\u0027 is in no estate category - refused rather than guessed"
     },
     {
+        "id":  "mozzarella-cheese",
+        "store":  "Family Fare",
+        "product":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/cheese",
+        "verdict":  "BLIND",
+        "reason":  "\u0027mozzarella-cheese\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
         "id":  "apple-cider",
         "store":  "Family Fare",
         "product":  "Our Family Apple Cider Juice 64 Fl Oz",
@@ -3508,6 +3517,15 @@
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "BLIND",
         "reason":  "\u0027apple-cider\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
+        "id":  "celery-salt",
+        "store":  "Family Fare",
+        "product":  "Dan\u0027s Pantry Celery Salt",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "BLIND",
+        "reason":  "\u0027celery-salt\u0027 is in no estate category - refused rather than guessed"
     },
     {
         "id":  "white-wine-vinegar",
@@ -3535,5 +3553,14 @@
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "BLIND",
         "reason":  "\u0027bone-broth\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
+        "id":  "mexican-cheese-blend",
+        "store":  "Family Fare",
+        "product":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/cheese",
+        "verdict":  "BLIND",
+        "reason":  "\u0027mexican-cheese-blend\u0027 is in no estate category - refused rather than guessed"
     }
 ]
