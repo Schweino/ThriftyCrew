@@ -3745,7 +3745,8 @@
                   {
                       "term":  "prosciutto",
                       "recipes":  [
-                                      "stuffed-baked-pork-chops-with-prosciutto-and-mozzarella"
+                                      "stuffed-baked-pork-chops-with-prosciutto-and-mozzarella",
+                                      "roasted-stuffed-pork-loin"
                                   ],
                       "added":  "2026-08-25T05:51:52",
                       "why":  "stuffed-baked-pork-chops-with-prosciutto-and-mozzarella needs it",
@@ -3757,23 +3758,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-25T05:53:10"
+                                                     "checked":  "2026-08-28T09:22:06"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  5.99,
                                                      "size":  "2 oz",
                                                      "item":  "La Quercia Prosciutto Americano",
-                                                     "evidence":  "driver rung 1 \u0027prosciutto\u0027 = 2 priced rows; La Quercia Prosciutto Americano 2 oz $5.99 is dry-cured sliced prosciutto, the ingredient itself. (Columbus Prosciutto Paninos is a prepared snack and was ruled out.)",
-                                                     "checked":  "2026-08-25T05:53:10"
+                                                     "evidence":  "driver rung 1 \u0027prosciutto\u0027=2, both rows retained: La Quercia Prosciutto Americano 2 oz 5.99 - dry-cured sliced prosciutto, exactly the ingredient - and Columbus Prosciutto Paninos 3.9 oz 4.99, a snack pack, excluded.",
+                                                     "checked":  "2026-08-28T09:22:06"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "pre-pass probe full ladder: \u0027prosciutto\u0027=1 -\u003e three spacing variants = 0 each; no candidate survived any of 4 rungs, EMPTY at the server tier",
-                                                         "checked":  "2026-08-25T05:53:10"
+                                                         "evidence":  "probe FULL ladder EMPTY: \u0027prosciutto\u0027=1 candidate that did not survive -\u003e \u0027pros ciutto\u0027=0 -\u003e \u0027prosc iutto\u0027=0 -\u003e \u0027prosci utto\u0027=0. No candidates on any rung of the server lane\u0027s complete ladder.",
+                                                         "checked":  "2026-08-28T09:22:06"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -3781,31 +3782,31 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-25T05:53:10"
+                                                    "checked":  "2026-08-28T09:22:06"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
                                                              "price":  13.44,
-                                                             "size":  "7 oz, 2 pk",
+                                                             "size":  "7 oz x 2 pk",
                                                              "item":  "Rossetti Prosciutto Italiano",
-                                                             "evidence":  "driver rung 1 \u0027prosciutto\u0027 = 17 rows; Rossetti Prosciutto Italiano 7 oz 2 pk $13.44 ($0.96/oz) is the ingredient. Pork belly, ham steak and salami trio rows were ruled out.",
-                                                             "checked":  "2026-08-25T05:53:10"
+                                                             "evidence":  "driver rung 1 \u0027prosciutto\u0027=16; top row is Rossetti Prosciutto Italiano 7 oz 2-pack 13.44 (0.96/oz), sliced dry-cured prosciutto. Remaining retained rows are salami, pork belly and ham steaks - excluded as not prosciutto.",
+                                                             "checked":  "2026-08-28T09:22:06"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
-                                                  "price":  null,
-                                                  "size":  "",
-                                                  "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-25T05:53:10"
+                                                  "state":  "carried",
+                                                  "price":  3.19,
+                                                  "size":  "3 oz",
+                                                  "item":  "Priano Italiano Prosciutto 3 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027prosciutto\u0027 returns Aldi Priano Italiano Prosciutto 3 OZ 3.19 from the week 2026-08-26 captures (comparison-2026-08-26.json). Priano is Aldi\u0027s Italian private label and this is plain sliced prosciutto, the ingredient itself.",
+                                                  "checked":  "2026-08-28T09:22:06"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  5.99,
                                                           "size":  "3 oz",
                                                           "item":  "Private Selection Old World Prosciutto Deli Sliced",
-                                                          "evidence":  "pre-pass probe rung 1 \u0027prosciutto\u0027 = 6 rows; cheapest true prosciutto is Private Selection Old World Prosciutto Deli Sliced 3 oz $5.99 (also Boar\u0027s Head Prosciutto Riserva 3 oz $7.99 and Murray\u0027s Prosciutto di Parma 3 oz $11.99). Mozzarella/prosciutto rolls were ruled out as prepared items. Corroborated on disk: price-ingredient.ps1 -Name \u0027prosciutto\u0027 shows Baker\u0027s Murray\u0027s Italian Prosciutto Di Parma $11.99 3 oz in today\u0027s captures.",
-                                                          "checked":  "2026-08-25T05:53:10"
+                                                          "evidence":  "probe ladder \u0027prosciutto\u0027=6, all rows retained; cheapest row that is plain sliced prosciutto. Also stocked: Murray\u0027s Italian Prosciutto Di Parma 3 oz 11.99, Boar\u0027s Head Prosciutto Riserva Stradolce 3 oz 7.99, Veroni Prosciutto Italiano 4 oz 8.99. Excluded the mozzarella/prosciutto rolls - prepared items, not the ingredient.",
+                                                          "checked":  "2026-08-28T09:22:06"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -5549,12 +5550,12 @@
                       "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
-                                                     "price":  null,
-                                                     "size":  "",
-                                                     "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-28T07:39:03"
+                                                     "state":  "carried",
+                                                     "price":  3.78,
+                                                     "size":  "1.5 lb bag",
+                                                     "item":  "Fresh Red Petite Potatoes",
+                                                     "evidence":  "Store 5361 / 68137 \u0027Omaha L St Supercenter\u0027, signed in. Search \u0027baby potatoes\u0027 returned 50 items, real grid. First-party sellerName \u0027Walmart.com\u0027 fresh produce: Fresh Red Petite Potatoes 1.5 lb bag linePrice $3.78, unitPrice $2.52/lb; also Fresh Yellow Petite Potatoes 1.5 lb $3.78 (15.8 c/oz) and Fresh Medley Petite Potatoes 1.5 lb $3.78. Petite potatoes are the baby-potato item; excluded Birds Eye Garlic Herb Baby Potatoes frozen seasoned side 20.5 oz $5.97 (a prepared dish), Great Value canned Whole New Potatoes, and Idahoan Baby Reds instant mashed.",
+                                                     "checked":  "2026-08-28T14:50:56"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
@@ -5592,9 +5593,9 @@
                                                   "state":  "carried",
                                                   "price":  3.29,
                                                   "size":  "24 oz",
-                                                  "item":  "MK Baby Potatoes Medley",
-                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027baby potatoes\u0027 returns Aldi MK Baby Potatoes Medley 24 oz $3.29 in today\u0027s captures; -Name \u0027potatoes\u0027 also returns Aldi \u0027Little Yellows Fresh Potatoes\u0027 24 oz $3.29 and \u0027Bite Size Yellow Potatoes Bag\u0027 24 oz $3.29. All three are fresh small whole potatoes.",
-                                                  "checked":  "2026-08-28T07:39:03"
+                                                  "item":  "Bite Size Medley Potatoes",
+                                                  "evidence":  "RE-CONFIRMED 2026-08-28. aldi.us, \u0027ALDI - OLA 48 - Omaha\u0027, In-Store mode verified. Query \u0027baby potatoes\u0027 returned NO no-results banner and 94 distinct tiles. Adjudicated: Bite Size Medley Potatoes 24 oz at 3.29 (product-URL slug mk-baby-potatoes-medley-1-5-lb confirms these are baby potatoes; size 24 oz read off the TILE, not the slug, which says 1.5 lb - same weight). Sister SKU Little Yellows Fresh Potatoes 24 oz 3.29 also stocked. Rejected: 5 lb/10 lb russet, red and yellow bags (not baby), potato skins, tots, baby-food puree.",
+                                                  "checked":  "2026-08-28T13:39:17"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
@@ -6839,23 +6840,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-28T07:19:58"
+                                                     "checked":  "2026-08-28T12:39:23"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "INSTRUMENT UNUSABLE, not an empty shelf. Driver lookup mode (pull-browser-stores.py --store fareway) returned EXACTLY 72 candidates for three different terms - \u0027Moroccan Spice Mix\u0027=72, \u0027ras el hanout\u0027=72, \u0027moroccan seasoning\u0027=72 - with overlapping spice-aisle rows (Frontier Smoked Paprika, Badia Paprika, Simply Organic Garam Masala, Tajin). An identical count across three unrelated queries is the Instacart \u0027browse related items\u0027 suggestion grid (R1), and the extractor exposes only 8 of the 72 rows with relevance null, so I can neither read the no-results banner nor see 64 of the rows. None of the 24 rows I did see is a Moroccan blend, but that cannot support not-carried. Needs an attended tab.",
-                                                     "checked":  "2026-08-28T07:19:58"
+                                                     "evidence":  "driver rung 1 only, 6 tiles, none is a Moroccan blend (McCormick Chili Seasoning, Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Badia Paprika, Fareway Seasoning Mix - all generic or wrong cuisine). Ladder rungs 2-4 and the \u0027ras el hanout\u0027 synonym rung not walked: no browser this session, so not-carried is unsupported.",
+                                                     "checked":  "2026-08-28T12:39:23"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "probe-ingredient full ladder: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (Freshop store_id 6401 Omaha). Pricer walked two synonym rungs himself: \u0027ras el hanout\u0027=0 hits both rungs, \u0027moroccan\u0027=3 hits and all three are health-and-beauty - Suave Moroccan Oil shampoo and conditioner, Nair Moroccan Argan shower cream. No spice blend.",
-                                                         "checked":  "2026-08-28T07:19:58"
+                                                         "evidence":  "server lane full ladder: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. No candidates at any rung.",
+                                                         "checked":  "2026-08-28T12:39:23"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6863,15 +6864,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-28T07:19:58"
+                                                    "checked":  "2026-08-28T12:39:23"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "not-carried",
+                                                             "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "Driver rung 1 \u0027Moroccan Spice Mix\u0027=8 hits, all 8 seen, all generic blends (McCormick taco, Lawry\u0027s seasoned salt, Salad Supreme, Montreal Steak, Old Bay, Kinder\u0027s) - none Moroccan. Pricer walked the ladder himself via the same driver: \u0027ras el hanout\u0027=6 hits and all 6 are the engine\u0027s no-match fallback (Member\u0027s Mark rotisserie chicken breast, Canadian bacon, Miracle Whip, French\u0027s mustard, mayo) - nothing spice-related at all; \u0027moroccan seasoning\u0027=19 hits headed by Montreal Steak, Member\u0027s Mark Taco, Member\u0027s Mark Italian, Weber Chicago Steak, Badia Complete, Tony Chachere\u0027s Creole. A stocked Moroccan blend would head its own exact query, not sit below Chicago Steak Seasoning. No ras el hanout or Moroccan blend on the club shelf.",
-                                                             "checked":  "2026-08-28T07:19:58"
+                                                             "evidence":  "driver rung 1 only, 8 tiles, all generic seasonings (taco, seasoned salt, Salad Supreme, Montreal Steak, ranch, Old Bay, Kinder\u0027s) - none Moroccan. Ladder/synonym rungs not walked headless, so not-carried is unsupported.",
+                                                             "checked":  "2026-08-28T12:39:23"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6879,15 +6880,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-28T07:19:58"
+                                                  "checked":  "2026-08-28T12:39:23"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "probe-ingredient full ladder: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (kroger-public-api locationId 61500319). Pricer walked two synonym rungs himself: \u0027ras el hanout\u0027=0 hits (EMPTY both rungs), \u0027moroccan\u0027=22 hits, all non-food or unrelated - Tree Hut Moroccan Rose sugar scrub/body butter/shave oil, Stash Moroccan Mint tea, RiceSelect Moroccan-Style Couscous. No Moroccan/ras el hanout spice blend in any rung.",
-                                                          "checked":  "2026-08-28T07:19:58"
+                                                          "evidence":  "server lane full ladder: rung 1 \u0027Moroccan Spice Mix\u0027=0 hits, rung 2 \u0027MoroccanSpiceMix\u0027=0 hits; three-word term so no head-noun rung. No candidates at any rung - no Moroccan/ras el hanout blend.",
+                                                          "checked":  "2026-08-28T12:39:23"
                                                       }
                                  },
                       "verdict":  "PENDING",
@@ -7110,12 +7111,12 @@
                       "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
-                                                     "price":  null,
-                                                     "size":  "",
-                                                     "item":  "",
-                                                     "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027whole wheat flour\u0027 returns only Great Value All-Purpose Enriched Bleached Wheat Flour 25 lb for Walmart. Not whole wheat; capture miss, not absence.",
-                                                     "checked":  "2026-08-27T19:05:34"
+                                                     "state":  "carried",
+                                                     "price":  2.96,
+                                                     "size":  "5 lb bag",
+                                                     "item":  "Great Value Whole Wheat Flour",
+                                                     "evidence":  "Store 5361 / 68137 \u0027Omaha L St Supercenter\u0027, signed in. Search \u0027whole wheat flour\u0027 returned 60 items, real grid. First-party base private label: Great Value Whole Wheat Flour 5 lb, linePrice $2.96, unitPrice 59.2 c/lb. Corroborated by King Arthur 100% Whole Grain Whole Wheat Flour 5 lb $5.93 and Gold Medal Whole Wheat Flour 5 lb $6.67, both sellerName Walmart.com. Great Value All-Purpose Unbleached 5 lb $2.58 excluded as not whole wheat.",
+                                                     "checked":  "2026-08-28T14:50:56"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
@@ -7134,28 +7135,28 @@
                                                          "checked":  "2026-08-27T19:05:34"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
-                                                    "price":  null,
-                                                    "size":  "",
-                                                    "item":  "",
-                                                    "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027whole wheat flour\u0027 mis-maps to commodity \u0027flour\u0027 (All-Purpose) and its Hy-Vee row is That\u0027s Smart! Bleached Enriched All-Purpose Flour, which is not whole wheat. Capture miss for this ingredient, not absence.",
-                                                    "checked":  "2026-08-27T19:05:34"
+                                                    "state":  "carried",
+                                                    "price":  3.28,
+                                                    "size":  "5 lb",
+                                                    "item":  "Hy-Vee Whole Wheat Flour",
+                                                    "evidence":  "hy-vee.com/aisles-online/search?search=whole wheat flour, store selector \u0027Omaha #01, NE\u0027, rendered page read. Header \u00271 - 11 of 11 Results for whole wheat flour\u0027, no no-results banner. Adjudicated: Hy-Vee Whole Wheat Flour 5 lb at 3.28 is a bag of whole wheat flour. Also stocked: Bob\u0027s Red Mill Whole Wheat Flour 5 lb 5.99, King Arthur Golden Whole Wheat Flour 5 lb 5.99. Rejected from the same set: Mission Carb Balance whole wheat TORTILLAS, Hy-Vee whole wheat flour tortillas, Schar breads.",
+                                                    "checked":  "2026-08-28T13:38:22"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only, 13 rows; the only whole-wheat item shown is Mission Protein Whole Wheat Flour TORTILLAS, the rest are all-purpose, bread and pizza flour. The retry ladder cannot be walked without a browser this session, so this store is unchecked past rung 1, not empty.",
-                                                             "checked":  "2026-08-27T19:05:34"
+                                                             "evidence":  "samsclub.com in-page fetch, club \u0027Omaha Sam\u0027s Club\u0027 68144, read via itemStacks. Four rungs walked: \u0027whole wheat flour\u0027 count 20, \u0027wheat flour\u0027 21, \u0027whole wheat\u0027 22, \u0027King Arthur whole wheat flour\u0027 17. The flour shelf is well stocked but has no whole-wheat entry: Member\u0027s Mark All Purpose 25 lbs 8.48, Member\u0027s Mark Bread \u0026 Pizza 25 lbs 10.48, Gold Medal All Purpose 12 lbs 6.72, King Arthur Bread 10 lbs 8.38, King Arthur 00 Pizza, King Arthur Gluten-Free M4M, Maseca Masa Corn, Nature\u0027s Eats Almond. Every \u0027whole wheat\u0027 hit across the rungs was a finished good - Mission Protein Whole Wheat Flour TORTILLAS, Sara Lee 100% Whole Wheat BREAD, Brownberry bread, Triscuit/Wheat Thins crackers - not a bag of flour.",
+                                                             "checked":  "2026-08-28T13:36:44"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
+                                                  "state":  "not-carried",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027whole wheat flour\u0027 returns only Baker\u0027s Corner ALL PURPOSE Flour 5 lb for Aldi under commodity \u0027flour\u0027. Not whole wheat; capture miss, not absence.",
-                                                  "checked":  "2026-08-27T19:05:34"
+                                                  "evidence":  "aldi.us, \u0027ALDI - OLA 48 - Omaha\u0027, mode header In-Store verified. R1 applied: rung 1 \u0027whole wheat flour\u0027 returned the literal \u0027No results for\u0027 banner, so its tiles were suggestions (all-purpose flour, almond flour, pita bread, whole wheat spaghetti) and prove nothing. Rung 2 widened to the head noun \u0027flour\u0027, NO no-results banner, and the entire flour shelf came back as three SKUs: Baker\u0027s Corner All Purpose Flour 5 lb 1.95, Baker\u0027s Corner Almond Flour 16 oz 6.65, Pueblo Lindo Instant Corn Masa Flour 4.4 lb 2.85. No whole wheat flour in the assortment.",
+                                                  "checked":  "2026-08-28T13:38:22"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
@@ -7938,12 +7939,12 @@
                       "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
-                                                     "price":  null,
-                                                     "size":  "",
-                                                     "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-28T07:52:55"
+                                                     "state":  "carried",
+                                                     "price":  2.24,
+                                                     "size":  "12 oz bag (frozen)",
+                                                     "item":  "Great Value Riced Cauliflower",
+                                                     "evidence":  "Store 5361 / 68137 \u0027Omaha L St Supercenter\u0027, signed in. Search \u0027frozen cauliflower rice\u0027 returned 47 items, real grid. First-party base private label: Great Value Riced Cauliflower 12 oz (Frozen), linePrice $2.24, unitPrice 18.7 c/oz. Corroborated by Green Giant Riced Veggies Cauliflower 10 oz $2.78 and Birds Eye Steamfresh Riced Cauliflower 10 oz $2.73. Excluded Great Value Frozen Cauliflower FLORETS 12 oz $1.22 (not riced), Birds Eye mashed cauliflower, and the Fullgreen shelf-stable pouch.",
+                                                     "checked":  "2026-08-28T14:50:56"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
@@ -7962,12 +7963,12 @@
                                                          "checked":  "2026-08-28T07:52:55"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
-                                                    "price":  null,
-                                                    "size":  "",
-                                                    "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-28T07:52:55"
+                                                    "state":  "carried",
+                                                    "price":  3.49,
+                                                    "size":  "10.5 oz",
+                                                    "item":  "Hy-Vee Riced Cauliflower Steam in Bag",
+                                                    "evidence":  "hy-vee.com/aisles-online/search?search=cauliflower rice, store \u0027Omaha #01, NE\u0027, rendered page. Header \u00271 - 18 of 18 Results for cauliflower rice\u0027, no no-results banner. Adjudicated: Hy-Vee Riced Cauliflower Steam in Bag 10.5 oz at 3.49 - frozen riced cauliflower, store brand, plain. Also stocked: Birds Eye Riced Cauliflower 10 oz 2.99 (plain, frozen). Rejected: Birds Eye Fried Rice Style and Savory Herb (flavoured), Green Giant riced cauliflower with cheese sauce, Hy-Vee Riced Broccoli.",
+                                                    "checked":  "2026-08-28T13:38:22"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
@@ -7978,12 +7979,12 @@
                                                              "checked":  "2026-08-28T07:52:55"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
-                                                  "price":  null,
-                                                  "size":  "",
-                                                  "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-28T07:52:55"
+                                                  "state":  "carried",
+                                                  "price":  1.79,
+                                                  "size":  "12 oz",
+                                                  "item":  "Season\u0027s Choice Frozen Plain Riced Cauliflower",
+                                                  "evidence":  "aldi.us, \u0027ALDI - OLA 48 - Omaha\u0027, mode header In-Store verified before reading price. Query \u0027cauliflower rice\u0027 returned NO no-results banner and two genuine product tiles. Adjudicated: Season\u0027s Choice Frozen Plain Riced Cauliflower 12 oz at 1.79, \u0027Many in stock\u0027, aisle Freezer Doors - the base plain frozen item. Season\u0027s Choice GARLIC Riced Cauliflower 12 oz 1.79 also stocked but rejected as flavoured. Size 12 oz read off the tile.",
+                                                  "checked":  "2026-08-28T13:38:22"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
@@ -7992,6 +7993,765 @@
                                                           "item":  "Kroger Recipe Beginnings Frozen Cauliflower Rice",
                                                           "evidence":  "pre-pass probe rung 1 \u0027frozen cauliflower rice\u0027: 7 hits; Kroger Recipe Beginnings Frozen Cauliflower Rice 12 oz $2.39 is plain riced cauliflower, no sauce or medley - confirmed again on my own probe of \u0027riced cauliflower\u0027 (8 hits, same SKU)",
                                                           "checked":  "2026-08-28T07:52:55"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "juniper berries",
+                      "recipes":  [
+                                      "roasted-stuffed-pork-loin"
+                                  ],
+                      "added":  "2026-08-28T09:15:51",
+                      "why":  "roasted-stuffed-pork-loin needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T12:39:23"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 only, 6 tiles, all substitute spice-aisle suggestions (McCormick/Badia Bay Leaves, Simply Organic Bay Leaf, Badia Rosemary, McCormick Ground Sage, Ground Allspice) - no juniper. Rung 2+ (\u0027juniper\u0027) not walked: no browser this session, so not-carried is unsupported.",
+                                                     "checked":  "2026-08-28T12:39:23"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server lane full ladder: \u0027juniper berries\u0027=1, \u0027juniperberries\u0027=0, head-noun rung \u0027berries\u0027=25 - all sweet/beverage berry-flavored goods (Red Bull Wild Berries, Powerade Mountain Berry, mixed berry yogurt, berry pie, Gatorade). Nothing is the dried juniper spice.",
+                                                         "checked":  "2026-08-28T12:39:23"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T12:39:23"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only, 23 hits of unrelated filler (apples, grapes, pears, crape myrtle trees, Drakkar cologne) plus Febreze PLUG White Pine \u0026 Juniper Berry air freshener - a scent name, not the spice. Rung 2+ (\u0027juniper\u0027) not walked headless, so not-carried is unsupported.",
+                                                             "checked":  "2026-08-28T12:39:23"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-28T12:39:23"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "server lane full ladder, 2 hits total and both are AIR FRESHENER: Febreze Aerosol White Pine \u0026 Juniper Berry 8.1 oz \\.49 and Febreze Fade Defy PLUG refill \\.99. No culinary juniper berries; brand/scent name only.",
+                                                          "checked":  "2026-08-28T12:39:23"
+                                                      }
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "balsamic glaze",
+                      "recipes":  [
+                                      "roasted-stuffed-pork-loin"
+                                  ],
+                      "added":  "2026-08-28T09:15:52",
+                      "why":  "roasted-stuffed-pork-loin needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T09:22:06"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.48,
+                                                     "size":  "6.76 fl oz",
+                                                     "item":  "Bertolli Balsamic Glaze Vinegar",
+                                                     "evidence":  "driver rung 1 \u0027balsamic glaze\u0027=3, all rows retained: Bertolli Balsamic Glaze Vinegar 6.76 fl oz 4.48, Alessi Balsamic Reduction Premium Traditional 8.5 fl oz 5.39, Roland Foods Glaze Original 5.07 fl oz 5.49. The Bertolli row is the ingredient by name.",
+                                                     "checked":  "2026-08-28T09:22:06"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.99,
+                                                         "size":  "8.8 oz",
+                                                         "item":  "Ponti Glaze Balsamic Vinegar Modena",
+                                                         "evidence":  "probe ladder \u0027balsamic glaze\u0027=4, all rows retained. Ponti Glaze with Balsamic Vinegar of Modena 8.8 oz 5.99 is a true balsamic reduction glaze; also Filippo Berio 8.4 fl oz 7.29 and Monari Federzoni Classic Glaze 9.1 oz 6.99. Excluded Orchard Valley Harvest Balsamic Glazed Walnuts - a snack flavoured with it, not the glaze.",
+                                                         "checked":  "2026-08-28T09:22:06"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T09:22:06"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only (\u0027balsamic glaze\u0027=20, 8 rows retained): steak seasoning, ranch dressing, Italian dressing, croutons, fried onions - the keyword search wandered into salad toppings and no glaze appeared in the retained rows. 12 of 20 rows unseen and the ladder was not walked; no browser this session, so not a not-carried.",
+                                                             "checked":  "2026-08-28T09:22:06"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-28T09:22:06"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.29,
+                                                          "size":  "8.45 oz",
+                                                          "item":  "Private Selection Balsamic Glaze",
+                                                          "evidence":  "probe ladder \u0027balsamic glaze\u0027=3, all rows retained: Private Selection Balsamic Glaze 8.45 oz 5.29 (the ingredient, store label), Bertolli Balsamic Glaze Vinegar 6.8 fl oz 4.99, Filippo Berio Glaze with Balsamic Vinegar 8.4 fl oz 4.99. Confirmed independently on disk: price-ingredient.ps1 -Name \u0027balsamic glaze\u0027 shows both Baker\u0027s rows in the 2026-08-26 captures.",
+                                                          "checked":  "2026-08-28T09:22:06"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "broccoli rabe",
+                      "recipes":  [
+                                      "roasted-stuffed-pork-loin"
+                                  ],
+                      "added":  "2026-08-28T09:15:52",
+                      "why":  "roasted-stuffed-pork-loin needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T12:39:23"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 reported 49 hits but the evidence file retains only 8; the other 41 rows are not visible to me and I have no browser to re-open the page. Of the 8 shown, the closest is Pero Family Farms Broccoletti 8 oz \\.99, which is tender-stem broccolini, not rapini. Unresolved, not empty.",
+                                                     "checked":  "2026-08-28T12:39:23"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server lane full ladder: \u0027broccoli rabe\u0027=0, \u0027broccolirabe\u0027=0, widened rung \u0027broccoli\u0027=25 - all plain broccoli (crowns, fresh, florets, frozen cuts, beef \u0026 broccoli entree). No rabe/rapini. Widening the pool does not widen the ruling.",
+                                                         "checked":  "2026-08-28T12:39:23"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T12:39:23"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only, 17 hits of unrelated produce (cherry tomatoes, green beans, brussels sprouts, baby carrots, potatoes, squash, asparagus, cauliflower) - no broccoli at all, let alone rabe, which reads as generic produce filler. Ladder not walked headless, so not-carried is unsupported.",
+                                                             "checked":  "2026-08-28T12:39:23"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-28T12:39:23"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "server lane full ladder: \u0027broccoli rabe\u0027=0, \u0027broccolirabe\u0027=0, widened rung \u0027broccoli\u0027=25 returning only ordinary broccoli (crowns, bunches, frozen florets). Broccoli rabe/rapini is a different vegetable (bitter Brassica rapa), not substitutable by a broccoli crown; no rabe/rapini tile at any rung.",
+                                                          "checked":  "2026-08-28T12:39:23"
+                                                      }
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "orange extract",
+                      "recipes":  [
+                                      "roasted-stuffed-pork-loin"
+                                  ],
+                      "added":  "2026-08-28T09:15:53",
+                      "why":  "roasted-stuffed-pork-loin needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T09:22:06"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 \u0027orange extract\u0027=72 with only 8 rows retained. Those show Fareway stocks the McCormick pure-extract line (lemon, almond, vanilla, mint) plus fresh oranges and orange juice, but no orange extract among the 8; 64 rows unseen. Absence from a truncated retention is not absence from the shelf, and I have no browser to page through it.",
+                                                     "checked":  "2026-08-28T09:22:06"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  7.29,
+                                                         "size":  "1 fl oz",
+                                                         "item":  "McCormick Pure Orange Extract",
+                                                         "evidence":  "probe ladder \u0027orange extract\u0027=1 -\u003e \u0027orangeextract\u0027=0 -\u003e \u0027extract\u0027=25; retained rows include Mc Cormick Pure Orange Extract 1 Fl Oz 7.29 - the ingredient itself, a baking extract in the form a cook buys. Verified by re-running probe-ingredient.ps1 \u0027orange extract\u0027 -Json myself this session; row is in the Freshop catalog (store_id 6401, Omaha, pickup = store shelf price).",
+                                                         "checked":  "2026-08-28T09:22:06"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T09:22:06"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only (\u0027orange extract\u0027=20, 8 rows retained): pecans, vanilla extract/paste, lemon paste, lemon extract, imitation vanilla. Bulk baking extracts are stocked but no orange in the retained rows; 12 unseen and the ladder was not walked. No browser this session.",
+                                                             "checked":  "2026-08-28T09:22:06"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-28T09:22:06"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "blocked",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "probe ladder \u0027orange extract\u0027=1 -\u003e \u0027orangeextract\u0027=1 -\u003e \u0027extract\u0027=25, but the server lane discards the hits of any rung with fewer than 2 results, so the identity of that single \u0027orange extract\u0027 hit is unknown, and the \u0027extract\u0027 rung is retained at only 8 of 25 rows (vanilla, lemon, almond - orange could be among the 17 unseen). Baker\u0027s plainly stocks the McCormick/Simple Truth extract line. Cannot rule either way from this lane; needs the attended tab.",
+                                                          "checked":  "2026-08-28T09:22:06"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "carnitas meat",
+                      "recipes":  [
+                                      "baked-cubano-chicken"
+                                  ],
+                      "added":  "2026-08-28T12:42:09",
+                      "why":  "baked-cubano-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T12:43:49"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 only: \u0027carnitas meat\u0027=6 hits, all captured and none is carnitas (closest is Boneless Pork Shoulder Roast $3.49/lb, the raw cut, and Cookies fully cooked shredded pork). The widening rung \u0027carnitas\u0027 reported 57 hits at Fareway but only 8 rows were returned to me, so I cannot see what the other 49 are and cannot complete the ladder without a browser. Not a shelf ruling.",
+                                                     "checked":  "2026-08-28T12:43:49"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "pre-pass server tier, FULL retry ladder: \u0027carnitas meat\u0027=0 -\u003e \u0027carnitasmeat\u0027=0 -\u003e \u0027carnitas\u0027=0; no candidates on any of 3 rungs, no bot wall or error",
+                                                         "checked":  "2026-08-28T12:43:49"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T12:43:49"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  13.98,
+                                                             "size":  "2 lbs",
+                                                             "item":  "Member\u0027s Mark Fully Cooked Pork Carnitas",
+                                                             "evidence":  "driver lookup, Omaha club, rung 1 \u0027carnitas meat\u0027=20 hits; adjudicated: Member\u0027s Mark Fully Cooked Pork Carnitas, 2 lbs, $13.98 ($6.99/lb) is the ingredient itself. (Gary\u0027s QuickPork thinly sliced pork with carnitas SEASONING is a near-miss and was not used.)",
+                                                             "checked":  "2026-08-28T12:43:49"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  5.99,
+                                                  "size":  "16 oz",
+                                                  "item":  "Park Street Deli Pork Carnitas",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027carnitas\u0027 returns Aldi capture rows \u0027Park Street Deli Pork Carnitas 16 OZ\u0027 $5.99 and \u0027Carnitas Seasoned Pork Shoulder Roast Per LB\u0027 $2.39/lb. The Park Street Deli item is fully cooked pork carnitas, exactly the meat this recipe buys.",
+                                                  "checked":  "2026-08-28T12:43:49"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "blocked",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "pre-pass server tier UNUSABLE: (503) Server Unavailable on ladder rung \u0027carnitas meat\u0027 - transport refusal, not an empty shelf; not re-probed per dispatch instruction",
+                                                          "checked":  "2026-08-28T12:43:49"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Carnitas",
+                      "recipes":  [
+                                      "baked-cubano-chicken"
+                                  ],
+                      "added":  "2026-08-28T12:42:09",
+                      "why":  "baked-cubano-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T12:43:49"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 \u0027Carnitas\u0027=57 hits but only 8 rows were returned in the evidence file; those 8 are cilantro, tortillas, taco sauce, mini tacos, fajita mix and smoked pork loin - none is carnitas - but 49 unseen rows mean I cannot rule the shelf, and I have no browser to re-run it.",
+                                                     "checked":  "2026-08-28T12:43:49"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "pre-pass server tier, FULL retry ladder: \u0027Carnitas\u0027=0 -\u003e \u0027Carn itas\u0027=0; no candidates on either rung, no bot wall or error",
+                                                         "checked":  "2026-08-28T12:43:49"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T12:43:49"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  13.98,
+                                                             "size":  "2 lbs",
+                                                             "item":  "Member\u0027s Mark Fully Cooked Pork Carnitas",
+                                                             "evidence":  "driver lookup, Omaha club, rung 1 \u0027Carnitas\u0027=23 hits; adjudicated: Member\u0027s Mark Fully Cooked Pork Carnitas, 2 lbs, $13.98 ($6.99/lb) is the ingredient itself.",
+                                                             "checked":  "2026-08-28T12:43:49"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  5.99,
+                                                  "size":  "16 oz",
+                                                  "item":  "Park Street Deli Pork Carnitas",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027carnitas\u0027 returns Aldi capture row \u0027Park Street Deli Pork Carnitas 16 OZ\u0027 $5.99 (also \u0027Carnitas Seasoned Pork Shoulder Roast Per LB\u0027 $2.39/lb). Fully cooked pork carnitas, the ingredient itself.",
+                                                  "checked":  "2026-08-28T12:43:49"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "blocked",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "pre-pass server tier UNUSABLE: (503) Server Unavailable on ladder rung \u0027Carnitas\u0027 - transport refusal, not an empty shelf; not re-probed per dispatch instruction",
+                                                          "checked":  "2026-08-28T12:43:49"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Reduced Fat Cheddar Cheese",
+                      "recipes":  [
+                                      "brad-ruling-2026-08-28"
+                                  ],
+                      "added":  "2026-08-28T13:28:56",
+                      "why":  "own commodity ruling; today floor-maps to shredded-cheese basket crowned by part-skim mozzarella",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Brad\u0027s own Chrome, signed in as Brad S; store identity re-verified BEFORE ruling: __NEXT_DATA__ storeId 5361, postalCode 68137, city Omaha, page header \u0027Omaha L St Supercenter\u0027 (the 3153/68123 Bellevue Neighborhood Market drift is gone). Five rungs via in-page fetch /search?q= parsing __NEXT_DATA__ searchResult.itemStacks with sellerName and priceInfo.linePrice captured: \u0027reduced fat cheddar cheese\u0027 62 items, \u00272% milk cheddar shredded\u0027 52, \u0027reduced fat shredded cheddar\u0027 48, \u0027cheddar cheese 2%\u0027 52, \u0027great value reduced fat cheddar\u0027 49, \u0027kraft 2% milk cheddar shredded\u0027 24. Real grids every time, no no-results banner. NOT ONE first-party (sellerName \u0027Walmart.com\u0027) reduced-fat/2% cheddar in shredded or block form. What the shelf actually has: full-fat Great Value Sharp Cheddar Finely Shredded 8 oz $1.97; FAT-FREE (not reduced-fat) Great Value Mild Cheddar Fat-Free Shredded 7 oz $1.97 and Kraft Natural Fat Free Cheddar Shredded 7 oz $2.98; reduced-fat BLENDS not cheddar - Great Value Finely Shredded Reduced Fat Fiesta Blend 7 oz $1.97 and Kraft Reduced Fat Mexican Four Cheese Blend 14 oz $5.64; reduced-fat cheddar only as a SNACK STICK, Kraft Reduced Fat Cheddar Protein Big Stick 10 oz $4.97, not a shredded or block cooking cheddar. The one true reduced-fat cheddar block, Land O Lakes Mild Reduced Fat Yellow Cheddar Cube 5 lb 4-per-case, is a Food Service Direct third-party marketplace case pack with an EMPTY linePrice and unitPrice - not the Omaha shelf. Honest absence at L St.",
+                                                     "checked":  "2026-08-28T14:50:56"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com, identity verified via Apollo cache: retailerLocation id 531573 (the Omaha 17070 Audrey Street store), mode header In-Store. Rung 1 \u0027reduced fat cheddar\u0027 returned the literal banner \u0027No results for reduced fat cheddar / Browse related items\u0027. Rung 2 \u00272% milk cheddar\u0027 ALSO banner-empty, and I defeated the documented lazy-load defect: link count was exactly 9 (the truncation tell), scrolled twice, count rose 9 -\u003e 108. Across all 108 distinct products: ~30 cheddar SKUs, every one full-fat (Fareway Mild Cheddar Fancy Shredded 8 oz 2.48, Fareway Sharp Cheddar Shredded 32 oz 7.48, Tillamook, Kraft, Crystal Farms, Shullsburg). Every reduced-fat/2%/lowfat hit in the 108 was MILK or a processed product (Velveeta 2% Milk cheese product, Kraft Singles 2% Milk American). No reduced-fat cheddar.",
+                                                     "checked":  "2026-08-28T13:36:44"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop store_id 6401 Omaha, queried directly at limit=100. \u0027cheddar\u0027 returned 100 rows; the ONLY name matching reduced fat/2%/light/low-fat was Fancy Feast CAT FOOD. Targeted rungs: \u0027reduced fat cheddar\u0027=1 row (not a cheddar cheese), \u0027light cheddar\u0027=1, \u00272% cheddar\u0027=9 rows all popcorn seasoning, chips, Lunchables, wax melts. Full-fat cheddar is abundant: Our Family Sharp Cheddar Shredded Cheese 8 oz 2.59, Our Family Natural Sharp Cheddar 8 oz 2.59, Kraft Fine Shred Mild Cheddar 8 oz 3.79. Cheddar shelf is stocked, no reduced-fat version on it.",
+                                                         "checked":  "2026-08-28T13:36:44"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.48,
+                                                    "size":  "7 oz",
+                                                    "item":  "Hy-Vee Finely Shredded 2% Milk Reduced Fat Sharp Cheddar Cheese",
+                                                    "evidence":  "hy-vee.com/aisles-online/search?search=reduced fat cheddar, store selector reads \u0027Omaha #01, NE\u0027, rendered page read (not in-page fetch). Header: \u00271 - 17 of 17 Results for reduced fat cheddar\u0027, no no-results banner. Adjudicated: Hy-Vee Finely Shredded 2% Milk Reduced Fat SHARP CHEDDAR Cheese 7 oz at 2.48 - reduced-fat cheddar, shredded. Sister SKU also present: Hy-Vee Finely Shredded Reduced Fat 2% Milk Mild Cheddar 7 oz 2.48. Rejected from same result set: Reduced Fat Mexican Blend and Cheddar Jack (blends, not cheddar), Velveeta loaf, SunChips Harvest Cheddar.",
+                                                    "checked":  "2026-08-28T13:36:44"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com in-page fetch of /search?q=..., club header \u0027Omaha Sam\u0027s Club, Omaha 68144\u0027. Four rungs, reading itemStacks (NOT the \u0027records\u0027 path, which returns an empty array and would have looked like an absent shelf - corrected before ruling): \u0027reduced fat cheddar cheese\u0027 count 20, \u00272% cheddar cheese\u0027 27, \u0027reduced fat cheese\u0027 27, \u0027light cheddar\u0027 21. Full-fat cheddar abundant: Member\u0027s Mark Mild Cheddar Shredded 16 oz 2pk 5.87, Member\u0027s Mark Standard Shredded Mild Yellow Cheddar 5 lbs 12.28, Member\u0027s Mark Sharp Cheddar Block 2 lbs 5.64, Tillamook Sharp 2.5 lbs 11.47. The only reduced-fat cheese in any rung was Member\u0027s Mark LIGHT STRING CHEESE (mozzarella, rejected); the rest were 2% MILK. No reduced-fat cheddar. Caveat recorded: session was signed out, so these are non-member prices.",
+                                                             "checked":  "2026-08-28T13:36:44"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.79,
+                                                  "size":  "11 oz",
+                                                  "item":  "Happy Farms Shredded 2% Milk Reduced Fat Sharp Cheddar Cheese",
+                                                  "evidence":  "aldi.us, store header \u0027ALDI - OLA 48 - Omaha\u0027, mode header \u0027In-Store open 9am-8pm\u0027 verified BEFORE reading price (not Delivery/Pickup). NOTE: store is OLA 48, not the playbook\u0027s OLA 42 - both Omaha, In-Store first-party pricing. R1 applied: direct query \u0027reduced fat cheddar\u0027 returned the literal banner \u0027No results for reduced fat cheddar / Browse related items\u0027, so its 10 tiles were SUGGESTIONS, not results. Re-queried \u0027fit active shredded cheddar\u0027 which returned NO no-results banner and the product as a genuine result: Happy Farms Shredded 2% Milk Reduced Fat Sharp Cheddar Cheese, 11 oz, Current price 2.79, \u0027Many in stock\u0027, Cooler Mdu. Product-URL slug is stale branding (fit-active-shredded-2-milk-sharp-cheddar-cheese-11-oz); tile name Happy Farms is the current label. Size 11 oz read off the tile, not the slug.",
+                                                  "checked":  "2026-08-28T13:36:44"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2,
+                                                          "size":  "8 oz",
+                                                          "item":  "Kroger Reduced Fat Sharp Cheddar Shredded Cheese",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027reduced fat cheddar\u0027, kroger-public-api locationId 61500319, rung 1 = 7 hits. Adjudicated: Kroger Reduced Fat Sharp Cheddar Shredded Cheese 8 oz at 2.00 is reduced-fat cheddar, SHREDDED. Cross-checked with rung \u0027reduced fat shredded cheese\u0027 (4 hits): same SKU returned, alongside Kroger Reduced Fat Mexican Style Shredded (a blend, rejected) and Kraft Fat Free Cheddar Shredded (fat-free, not reduced-fat, rejected).",
+                                                          "checked":  "2026-08-28T13:36:44"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Pork Carnitas",
+                      "recipes":  [
+                                      "speculative"
+                                  ],
+                      "added":  "2026-08-28T13:28:56",
+                      "why":  "baked-cubano-chicken retired by macro gate; speculative",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  8.48,
+                                                     "size":  "15 oz tray",
+                                                     "item":  "HERDEZ Carnitas Slow Cooked Pork, Refrigerated Microwaveable Entree",
+                                                     "evidence":  "Store 5361 / 68137 \u0027Omaha L St Supercenter\u0027, signed in. Search \u0027pork carnitas\u0027 returned 43 items, real grid. First-party sellerName \u0027Walmart.com\u0027: HERDEZ Carnitas Slow Cooked Pork, refrigerated, 15 oz plastic tray, linePrice $8.48, unitPrice 56.5 c/oz - actual carnitas-labelled cooked pork, not a flavoured snack. Second first-party carnitas: Chata Pork Carnitas Pouch 8 oz $4.58 (57.3 c/oz). Excluded Cholula Chili Lime Carnitas frozen burrito BOWL 8.5 oz $4.92 (a dish), and LLOYD\u0027S / Marketside seasoned shredded pork which is pulled pork, not carnitas.",
+                                                     "checked":  "2026-08-28T14:50:56"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com, identity verified earlier this session via Apollo cache retailerLocation 531573 (Omaha, 17070 Audrey Street), mode In-Store. Query \u0027carnitas\u0027 - which is already the head noun, so no further ladder rung applies - returned the literal banner \u0027No results for carnitas / Browse related items\u0027. I defeated the lazy-load defect: scrolled twice and the distinct product count rose to 72. Across all 72 related products, ZERO slugs contain \u0027carnita\u0027. The pork assortment is raw and BBQ only: boneless pork shoulder roast, pork steak, pork loin roast/filet, country-style ribs, Famous Dave\u0027s pulled pork, BBQ fully cooked shredded pork. No carnitas.",
+                                                     "checked":  "2026-08-28T13:39:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop store_id 6401 Omaha. Full ladder walked, all three rungs zero: \u0027pork carnitas\u0027=0, \u0027porkcarnitas\u0027=0, head noun \u0027carnitas\u0027=0. The catalog holds no carnitas product under any spelling.",
+                                                         "checked":  "2026-08-28T13:36:44"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  7.99,
+                                                    "size":  "15 oz",
+                                                    "item":  "HERDEZ Fully Cooked Entree Pork Carnitas",
+                                                    "evidence":  "hy-vee.com/aisles-online/search?search=carnitas, store \u0027Omaha #01, NE\u0027, rendered page. Header \u00271 - 36 of 36 Results for carnitas\u0027, no no-results banner. Adjudicated: HERDEZ Fully Cooked Entree Pork Carnitas 15 oz at 7.99 (shown struck through from 9.99, so 7.99 is a promo price - regular 9.99 noted). Rejected from the same set: Hy-Vee Carnitas COOKING SAUCE 11.8 fl oz (a sauce, not the meat), Delimex carnitas burrito bowl frozen meal, and the pulled-pork family (Famous Dave\u0027s, Curly\u0027s, Chophouse, BBQ Pulled Pork) which is not carnitas.",
+                                                    "checked":  "2026-08-28T13:39:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  13.98,
+                                                             "size":  "2 lbs",
+                                                             "item":  "Member\u0027s Mark Fully Cooked Pork Carnitas",
+                                                             "evidence":  "samsclub.com in-page fetch /search?q=pork carnitas, club \u0027Omaha Sam\u0027s Club\u0027 68144, count 24, read via itemStacks. Adjudicated: Member\u0027s Mark Fully Cooked Pork Carnitas, 2 lbs, linePrice 13.98, unitPrice 6.99/lb - both captured. Rejected: Gary\u0027s QuickPork Thinly Sliced Pork with Carnitas SEASONING (seasoned raw pork, not carnitas), Member\u0027s Mark Pitmaster Pulled Pork, Jack Daniel\u0027s Pulled Pork. Session signed out, so this is the non-member price.",
+                                                             "checked":  "2026-08-28T13:36:44"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  5.99,
+                                                  "size":  "16 oz",
+                                                  "item":  "Park Street Deli Pork Carnitas",
+                                                  "evidence":  "aldi.us, \u0027ALDI - OLA 48 - Omaha\u0027, In-Store mode verified. Query \u0027carnitas\u0027 returned NO no-results banner and 93 distinct product tiles. Adjudicated: Park Street Deli Pork Carnitas 16 oz at 5.99 (\u0027Store choice\u0027, aisle Quick Meals) - prepared pork carnitas. Also present but rejected: Carnitas Seasoned Boneless Pork Shoulder Roast per lb (raw seasoned roast, not carnitas), Aldi BBQ Seasoned Pork Shoulder Roast, and the usual taco-aisle co-hits (pico de gallo, cilantro, queso fresco, tortillas).",
+                                                  "checked":  "2026-08-28T13:38:22"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  9.49,
+                                                          "size":  "16 oz",
+                                                          "item":  "Kroger Seasoned Pork Carnitas",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027pork carnitas\u0027, kroger-public-api locationId 61500319, rung 1 = 3 hits. Adjudicated: Kroger Seasoned Pork Carnitas 16 oz at 9.49 is prepared pork carnitas. Also returned: unbranded Pork Carnitas 15 oz 12.99, and Kroger Boneless Pork Shoulder Butt Carnitas (a raw roast, rejected as not carnitas).",
+                                                          "checked":  "2026-08-28T13:36:44"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fat free shredded mozzarella cheese",
+                      "recipes":  [
+                                      "cheese-split-2026-08-29"
+                                  ],
+                      "added":  "2026-08-29T05:13:55",
+                      "why":  "Brad ruled regular and fat-free mozzarella are separate items; NO capture has ever searched a fat-free term, so the 1-of-7 figure measured our instrument, not the shelves",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  4.98,
+                                                     "size":  "7 oz",
+                                                     "item":  "Kraft Natural Fat Free Mozzarella Shredded Cheese, 7 oz Bag",
+                                                     "evidence":  "walmart.com/search?q=fat free shredded mozzarella in Brad\u0027s own Chrome. Store verified \u0027Omaha L St Supercenter\u0027, city Omaha, postalCode 68137 from __NEXT_DATA__. Flat price shape: Kraft Natural Fat Free Mozzarella Shredded Cheese 7 oz Bag linePrice $4.98, unitPrice 71.1 c/oz. Same search also returns Kraft Natural Cheese Mozzarella Fat Free Shredded 8 oz $4.98 (62.3 c/oz). Both say FAT FREE on the label. The Kraft Natural Fat Free CHEDDAR 7 oz $2.98 in the same grid is a different cheese and was excluded.",
+                                                     "checked":  "2026-08-29T05:27:52"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com, retailerLocation 531573 / 17070 Audrey Street, Omaha NE 68136, In-Store. Searched \u0027fat free cheese\u0027 with 5 scroll passes: 94 unique tiles. Every fat-free item is a non-cheese: Old El Paso and Fareway fat-free refried beans, fairlife/Kemps/Lactaid/Hiland fat-free milk, Reddi-wip Fat Free, Hidden Valley fat free ranch, Dannon Light+Fit and Yoplait fat free yogurt, Wish-Bone fat free Italian. No fat-free cheese at all. The \u0027shredded mozzarella\u0027 search (37 tiles) and \u0027reduced fat mozzarella\u0027 search (104 tiles) likewise contained none. Searched properly; nothing qualified.",
+                                                     "checked":  "2026-08-29T05:27:52"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. Rungs walked: \u0027fat free mozzarella\u0027 EMPTY, \u0027fat free shredded mozzarella\u0027 EMPTY, \u0027fat free cheese\u0027 EMPTY, \u0027nonfat mozzarella\u0027 laddered to \u0027mozzarella\u0027 and returned 25 rows with no fat-free item, and the BRAND rung \u0027kraft fat free\u0027 MATCHES but returned only Kraft Fat Free salad dressings and Jet Puffed marshmallows - no fat-free cheese of any kind. The full \u0027mozzarella shredded\u0027 list (8 rows) is plain/whole-milk/part-skim only. Brand rung tried per the Hy-Vee lesson; still nothing. Searched properly; nothing qualified.",
+                                                         "checked":  "2026-08-29T05:27:52"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.5,
+                                                    "size":  "7 oz",
+                                                    "item":  "Kraft Shredded Mozzarella Fat Free Cheese",
+                                                    "evidence":  "hy-vee.com/aisles-online/search?search=fat free mozzarella, store selector verified \u0027Shopping Omaha #01, NE\u0027. Top result: Kraft Shredded Mozzarella Fat Free Cheese, 7 oz, priced 2 / $5.00 = $2.50 each ($0.357/oz). Product page hy-vee.com/aisles-online/p/4137677/kraft-shredded-mozzarella-fat-free-cheese confirms the same 2/$5.00 with no separate single-unit price shown, so $2.50 is the promo-implied unit price. Name carries FAT FREE explicitly; NOT to be confused with the adjacent Kraft Natural LACTOSE Free Shredded Mozzarella 7 oz, also 2/$5.00, which is lactose-free and not fat-free.",
+                                                    "checked":  "2026-08-29T05:27:52"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com, \u0027Omaha Sam\u0027s Club\u0027, Omaha 68144. In-page fetch of /search?q=fat free mozzarella returned HTTP 200 and 23 priced records - a real result set, not an error. No fat-free cheese of any kind: the only reduced/low-fat hits are Member\u0027s Mark Lactose Free 2% Reduced Fat Milk and Member\u0027s Mark Light String Cheese 36 ct. All mozzarella stocked is plain part-skim (Member\u0027s Mark 5 lbs., 1 lb. 2 pk., 30 lb case) or BelGioioso fresh. Prices rendered despite a signed-out session, so this is a real read, not a block.",
+                                                             "checked":  "2026-08-29T05:27:52"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "aldi.us, In-Store mode, ALDI - OLA 48 - Omaha. Searched \u0027fat free shredded cheese\u0027 and the page rendered the literal banner: No results for (quote) fat free shredded cheese (quote). The 109 product tiles rendered BELOW that banner are SUGGESTIONS not results (the documented Aldi R1 trap) - plain Happy Farms shreds, egg whites, nonfat yogurt, fat-free half-and-half. Cross-checked against \u0027shredded mozzarella\u0027 (77 tiles) and \u00272% milk mozzarella\u0027 (103 tiles): no fat-free cheese in either. Explicit no-results banner after the ladder = genuine EMPTY.",
+                                                  "checked":  "2026-08-29T05:27:52"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.29,
+                                                          "size":  "7 oz (198g)",
+                                                          "item":  "Kraft Mozzarella Fat Free Shredded Cheese",
+                                                          "evidence":  "probe-ingredient.ps1 -Term \u0027fat free cheese\u0027 and \u0027fat free shredded cheese\u0027 against kroger-public-api locationId 61500319, both MATCHES on rung 1. Kraft Mozzarella Fat Free Shredded Cheese 7 oz (198g) $3.29 ($0.470/oz), bakersplus.com/p/0084037090126. Name carries FAT FREE explicitly and it is a shred, not string or block. Distinguished from the sibling row Kraft Natural Fat Free CHEDDAR Shredded Cheese 7 oz $3.29, a different cheese, which was not counted.",
+                                                          "checked":  "2026-08-29T05:27:52"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "shredded mozzarella cheese",
+                      "recipes":  [
+                                      "cheese-split-2026-08-29"
+                                  ],
+                      "added":  "2026-08-29T05:13:56",
+                      "why":  "mozzarella-cheese has NO search term at all; needs regular part-skim coverage across all seven stores",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.48,
+                                                     "size":  "16 oz",
+                                                     "item":  "Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese, 16 oz Bag",
+                                                     "evidence":  "walmart.com/search?q=shredded mozzarella cheese in Brad\u0027s own Chrome (attended). Store verified from page text and __NEXT_DATA__: \u0027Omaha L St Supercenter\u0027, city Omaha, postalCode 68137. FLAT price shape read (priceInfo.linePrice + priceInfo.unitPrice), 39 items. Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese 16 oz linePrice $3.48, unitPrice 21.8 c/oz; same line 8 oz $1.97 (24.6 c/oz), 32 oz $6.92 (21.6 c/oz). Part-skim, no reduced-fat wording = REGULAR tier.",
+                                                     "checked":  "2026-08-29T05:27:52"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.98,
+                                                     "size":  "16 oz",
+                                                     "item":  "Fareway Shredded Mozzarella Cheese",
+                                                     "evidence":  "shop.fareway.com, identity from Apollo cache: retailerLocation 531573, lineOneString \u002717070 Audrey Street\u0027, lineTwoString \u0027Omaha, NE 68136\u0027; mode In-Store. Searched \u0027shredded mozzarella\u0027; first read returned exactly 9 tiles (the known lazy-load tell) so I scrolled 6x and re-read to 37 unique tiles, no no-results banner. Fareway Shredded Mozzarella Cheese 16 oz $3.98 ($0.249/oz); also Fareway Low-Moisture Part-Skim Mozzarella Shredded 8 oz $2.48 and 32 oz $7.48 (orig $9.88). Glued unit strings like $398 ignored in favour of the tile Current price.",
+                                                     "checked":  "2026-08-29T05:27:52"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.99,
+                                                         "size":  "16 oz",
+                                                         "item":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
+                                                         "evidence":  "probe-ingredient.ps1 -Term \u0027mozzarella shredded\u0027 (Freshop catalog, store_id 6401 Omaha, pickup = store\u0027s own shelf price) MATCHES, 8 rows rung 1. Our Family Part Skim Mozzarella Shredded Cheese 16 oz $3.99 ($0.249/oz, shopfamilyfare.com/.../p/7081843); also 32 oz $7.89, finely cut 8 oz $2.59, Kraft part-skim 16 oz $6.49, Sargento part-skim 8 oz $3.99. Part-skim with no reduced-fat/fat-free wording = REGULAR tier.",
+                                                         "checked":  "2026-08-29T05:27:52"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.97,
+                                                    "size":  "8 oz",
+                                                    "item":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
+                                                    "evidence":  "hy-vee.com/aisles-online search, store selector verified \u0027Shopping Omaha #01, NE\u0027. Rendered grid (21 results) shows Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese 8 oz $1.97 (was $2.48; $0.246/oz on sale, $0.310 at shelf regular); same line 16 oz $4.97, 32 oz $7.98, 5 lb $19.99; plus Hy-Vee Mozzarella Shredded 8 oz $2.48 and Crystal Farms Shredded Mozzarella 8 oz $3.69. Part-skim, no fat qualifier = REGULAR tier.",
+                                                    "checked":  "2026-08-29T05:27:52"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  12.17,
+                                                             "size":  "5 lbs.",
+                                                             "item":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+                                                             "evidence":  "samsclub.com, club header read \u0027Omaha Sam\u0027s Club, Omaha, 68144\u0027. In-page fetch of /search?q=shredded mozzarella returned HTTP 200; parsed __NEXT_DATA__, 26 priced records. Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese 5 lbs. linePrice $12.17, unitPrice $2.43/lb ($0.152/oz); also Member\u0027s Mark Part-Skim Shredded Mozzarella 1 lb. 2 pk. linePrice $5.92, unitPrice $0.18/oz. Both line and unit price captured. NOTE: session was SIGNED OUT yet prices rendered, so this is a usable read, not a block; a member session could show different warehouse pricing. Pack size recorded as printed.",
+                                                             "checked":  "2026-08-29T05:27:52"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.29,
+                                                  "size":  "16 oz",
+                                                  "item":  "Happy Farms Shredded Mozzarella Cheese",
+                                                  "evidence":  "aldi.us storefront, header read \u0027In-Store - open 9am - 8pm\u0027 and store \u0027ALDI - OLA 48 - Omaha\u0027 (runbook names OLA 42; this session held OLA 48, also Omaha). Searched \u0027shredded mozzarella\u0027: 77 unique product tiles, NO no-results banner. Happy Farms Shredded Mozzarella Cheese 16 oz $3.29 ($0.206/oz, slug 19335038-happy-farms-shredded-mozzarella-cheese-16-oz); also Happy Farms Thick Cut Mozzarella Shredded 11 oz $2.79. Plain label = REGULAR tier.",
+                                                  "checked":  "2026-08-29T05:27:52"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.69,
+                                                          "size":  "16 oz",
+                                                          "item":  "Kroger Low-Moisture Part Skim Mozzarella Shredded Cheese",
+                                                          "evidence":  "probe-ingredient.ps1 -Term \u0027mozzarella shredded\u0027 (kroger-public-api, locationId 61500319) returned MATCHES with 8 rows on rung 1. Part-skim shreds confirmed: Kroger Low-Moisture Part Skim Mozzarella Shredded Cheese 16 oz $3.69 (bakersplus.com/p/0001111015129, $0.231/oz); also Kroger Mozzarella Shredded Cheese 8 oz $2.00, 16 oz $3.69, and BIG DEAL 4 lb $13.49. No fat qualifier beyond part-skim, so REGULAR tier.",
+                                                          "checked":  "2026-08-29T05:27:52"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "reduced fat shredded mozzarella cheese",
+                      "recipes":  [
+                                      "cheese-split-2026-08-29"
+                                  ],
+                      "added":  "2026-08-29T05:14:03",
+                      "why":  "the reduced-fat-mozzarella search term is a part-skim query, so 34 live recipes are priced by the wrong fat tier",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.48,
+                                                     "size":  "16 oz",
+                                                     "item":  "Great Value Reduced Fat Shredded Mozzarella Cheese, 16 oz",
+                                                     "evidence":  "walmart.com/search?q=reduced fat shredded mozzarella, attended Chrome, store \u0027Omaha L St Supercenter\u0027 68137. __NEXT_DATA__ flat shape: Great Value Reduced Fat Shredded Mozzarella Cheese 16 oz linePrice $3.48, unitPrice 21.8 c/oz. Name carries REDUCED FAT explicitly. Same grid also lists Kraft Mozzarella Shredded Cheese with 2% Milk 14 oz $5.68 (40.6 c/oz), a second reduced-fat-tier item.",
+                                                     "checked":  "2026-08-29T05:27:52"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com, retailerLocation 531573 / 17070 Audrey Street, Omaha NE 68136, In-Store mode. Searched \u0027reduced fat mozzarella\u0027 with 5 scroll passes: 104 unique tiles. Reduced-fat mozzarella appears only as STRING cheese - Sargento Reduced Fat Low Moisture Part-Skim Mozzarella Light String $3.99, Crystal Farms String Cheese Light Mozzarella $3.99. Every other low-fat hit is milk, cottage cheese, yogurt or pizza crust. The \u0027shredded mozzarella\u0027 search (37 tiles, scrolled past the 9-tile lazy-load) contained no reduced-fat or 2% shred. Searched properly; nothing qualified.",
+                                                     "checked":  "2026-08-29T05:27:52"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. Rungs: \u0027reduced fat shredded mozzarella\u0027 EMPTY, \u0027reduced fat mozzarella\u0027 EMPTY, \u00272% milk mozzarella\u0027 EMPTY, \u0027low fat mozzarella cheese\u0027 EMPTY, \u0027light shredded cheese\u0027 EMPTY. The rungs that DID return - \u0027mozzarella shredded\u0027 (8 rows) and \u0027part skim mozzarella\u0027 (8 rows) - list only plain/whole-milk/part-skim shreds (Our Family, Kraft, Crystal Farms, Sargento) with no reduced-fat, 2% or light wording on any shredded item. Searched properly; nothing qualified.",
+                                                         "checked":  "2026-08-29T05:27:52"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.48,
+                                                    "size":  "7 oz",
+                                                    "item":  "Hy-Vee Finely Shredded Reduced Fat Low-Moisture Part-Skim Mozzarella Natural Cheese",
+                                                    "evidence":  "hy-vee.com/aisles-online/search?search=fat free mozzarella, store verified \u0027Shopping Omaha #01, NE\u0027. Rendered grid includes Hy-Vee Finely Shredded Reduced Fat Low-Moisture Part-Skim Mozzarella Natural Cheese 7 oz $2.48 ($0.354/oz). Label says REDUCED FAT explicitly, distinct from the plain part-skim 8 oz line at $1.97 and from the Kraft FAT FREE 7 oz - all three tiers sit on this one result page, which is how I kept them apart.",
+                                                    "checked":  "2026-08-29T05:27:52"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com, \u0027Omaha Sam\u0027s Club\u0027, Omaha 68144. In-page fetch of /search?q=reduced fat mozzarella returned HTTP 200 with 12 priced records; fetch for \u0027fat free mozzarella\u0027 returned HTTP 200 with 23 records. Across both, the only mozzarella items are Member\u0027s Mark Part-Skim Shredded Mozzarella (5 lbs. and 1 lb. 2 pk.), Member\u0027s Mark Part-Skim Mozzarella 5 lbs., Member\u0027s Mark Cafe Shredded Mozzarella 30 lb case, and BelGioioso fresh mozzarella - all plain part-skim. The only reduced-fat cheese is Member\u0027s Mark Light String Cheese 36 ct $7.27, string not shredded. Prices rendered despite a signed-out session, so this is a real read, not a block.",
+                                                             "checked":  "2026-08-29T05:27:52"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "aldi.us, In-Store mode, ALDI - OLA 48 - Omaha. Searched \u00272% milk mozzarella\u0027: 103 unique tiles, no no-results banner. Aldi DOES run a 2% Milk reduced-fat shredded line, which is why this needed a real look, but only in other cheeses: Happy Farms Shredded 2% Milk Reduced Fat Sharp Cheddar 11 oz $2.79, Happy Farms Shredded 2% Milk Mexican Style 11 oz $2.79, Happy Farms 2% Milk Reduced Fat American Singles 10.66 oz $1.85. NO 2%/reduced-fat MOZZARELLA shred. The only reduced-fat mozzarella is Happy Farms Light Mozzarella String Cheese 10 oz $3.09, which is string not shredded. I also checked the no-percent slug spelling (slugs read fit-active-shredded-2-milk-...): still cheddar and Mexican only.",
+                                                  "checked":  "2026-08-29T05:27:52"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "Rungs against kroger-public-api locationId 61500319: \u0027reduced fat shredded mozzarella\u0027 EMPTY; \u0027reduced fat mozzarella\u0027 MATCHES 4 rows; \u00272% milk mozzarella\u0027 MATCHES 2 rows; \u0027low fat mozzarella cheese\u0027 MATCHES 4 rows; plus \u0027mozzarella shredded\u0027 (8 rows) and \u0027part skim mozzarella\u0027 (4 rows). EVERY reduced-fat mozzarella at Baker\u0027s is STRING cheese, not shredded: Kroger Reduced Fat Mozzarella String Cheese 12 ct $3, Kroger Low-Moisture Reduced Fat Part-Skim Mozzarella String Cheese 24 ct $6.49, Sargento Light String Reduced Fat 9 oz $5, Kraft String Cheese with 2% Milk 10/12 oz $5.49. No reduced-fat SHRED on any rung. Searched properly; nothing qualified.",
+                                                          "checked":  "2026-08-29T05:27:52"
                                                       }
                                  },
                       "verdict":  "CARRIED",

@@ -29,7 +29,7 @@
                  "protein":  35,
                  "carbs":  12,
                  "fat":  27,
-                 "cost_ps":  "3.97"
+                 "cost_ps":  "4.04"
              },
     "intro_html":  "Casserole usually starts with a can of cream-of-something soup and ends with a sleeve of crackers on top, and both of those are just cheap carbs in a dinner costume. This one earns the name the honest way. Roasted turkey breast, browned mushrooms, softened onion, and riced cauliflower get folded into a real sauce built from sour cream, mayo, Dijon, and two kinds of cheese, then the whole thing bakes under a blanket of mozzarella until it browns. No soup can, no breadcrumbs, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is comfort food that works for your body and your wallet at the same time.",
     "ingredients_display":  [
@@ -58,12 +58,12 @@
                        "Sour Cream, 1 3/4 cups full-fat: ~$1.46. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
                        "Mayonnaise, 3/4 cup plus 2 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Dijon Mustard, 3 1/2 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Mozzarella Cheese, 3 1/2 cups grated, divided: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
+                       "Mozzarella Cheese, 3 1/2 cups grated, divided: ~$3.04. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
                        "Parmesan Cheese, 7 tbsp coarsely grated: ~$0.59. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Pantry seasonings (dried thyme, poultry seasoning, salt, black pepper): ~$0.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $35.10 across 14 servings, so roughly $2.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.70 across 14 servings, roughly $2.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.85 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.55. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $36.02 across 14 servings, so roughly $2.57 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.74 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.85 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.59. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked, bubbling casserole that eats like the soup-can version and skips the carbs. The turkey and the cheese carry the protein; the cauliflower and mushrooms do the job the rice and the noodles used to, for a lot less.",
     "shop_smart":  [
@@ -86,14 +86,14 @@
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://kalynskitchen.com/low-carb-turkey-casserole-with-cauliflower-rice/\" target=\"_blank\" rel=\"noopener\"\u003ekalynskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  35.1,
-    "cost_batch_true":  39.7,
-    "cost_per_serving":  2.51,
-    "cost_per_serving_true":  2.84,
+    "cost_batch":  36.02,
+    "cost_batch_true":  40.74,
+    "cost_per_serving":  2.57,
+    "cost_per_serving_true":  2.91,
     "cost_pantry_add":  15.85,
-    "cost_first_run":  55.55,
+    "cost_first_run":  56.59,
     "scaler":  {
-                   "cost":  "39.70",
+                   "cost":  "40.74",
                    "ing":  [
                                {
                                    "item":  "Turkey Breast",
@@ -216,7 +216,7 @@
                  "prepTime":  "PT45M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H25M",
-                 "costPerServing":  3.97,
+                 "costPerServing":  4.04,
                  "recipeIngredient":  [
                                           "Turkey Breast, about 3 lb, roasted and diced (about 7 cups cooked) (1361 g)",
                                           "Cauliflower, 10 1/2 cups chopped (about 2 medium heads) (1124 g)",

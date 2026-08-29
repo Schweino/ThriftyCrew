@@ -923,9 +923,6 @@
         "note":  "same cottage-cheese board id as the regular row: store lines price regular and fat free at the same shelf price class"
     },
     {
-        "item":  "Fat Free Mozzarella"
-    },
-    {
         "item":  "Feta Cheese",
         "bid":  "feta",
         "gpu":  28.3495,
@@ -3285,5 +3282,15 @@
         "buy_pkg_g":  340,
         "buy_pkg_label":  "12 oz bag",
         "note":  "Minted from the commodity-registrar's APPROVE ruling and the pricer's own store evidence, executed by the map lane. Reason on record: Riced is fenced out of every existing home: frozen-cauliflower-florets excludes 'riced' and 'cauliflower rice' by name, fresh cauliflower excludes 'riced', and the rice grain id excludes 'cauliflower'. 7 of 7 stores carry it and no id can claim it - same food as florets, different form, different purchase."
+    },
+    {
+        "item":  "Fat Free Mozzarella",
+        "bid":  "fat-free-mozzarella",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  198,
+        "buy_pkg_label":  "7 oz bag",
+        "note":  "Split from the generic shredded basket on Brad 2026-08-29: lower-calorie and higher-protein recipes call for fat-free mozzarella specifically. Priced from an attended 7-store capture that found it at 3 stores, all Kraft; the earlier 1-of-7 figure was an artifact of no capture ever having searched a fat-free term."
     }
 ]

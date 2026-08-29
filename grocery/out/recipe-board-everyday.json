@@ -1,4 +1,4 @@
-﻿{
+{
     "week_of":  "2026-07-06",
     "comparison":  [
                        {
@@ -4976,64 +4976,28 @@
                        },
                        {
                            "id":  "reduced-fat-mozzarella",
-                           "commodity":  "Part-Skim Mozzarella, Shredded",
-                           "unit":  "oz",
+                           "commodity":  "Reduced Fat Mozzarella",
                            "category":  "Dairy \u0026 Eggs",
+                           "unit":  "oz",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2494,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
-                                              "size":  "16 oz"
-                                          },
-                                          {
                                               "store":  "Walmart",
-                                              "per_unit":  0.218,
-                                              "unit":  "oz",
+                                              "per_unit":  0.2175,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese, 16 oz Bag",
+                                              "item":  "Great Value Reduced Fat Shredded Mozzarella Cheese, 16 oz",
                                               "size":  "16 oz"
-                                          },
-                                          {
-                                              "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.18,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  true,
-                                              "item":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese",
-                                              "size":  "1 lb., 2 pk."
                                           },
                                           {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.31,
-                                              "unit":  "oz",
+                                              "per_unit":  0.3543,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
-                                              "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.23,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÃ‚Â® Low-Moisture Part Skim Mozzarella Shredded Cheese",
-                                              "size":  "16 oz"
+                                              "item":  "Hy-Vee Finely Shredded Reduced Fat Low-Moisture Part-Skim Mozzarella Natural Cheese",
+                                              "size":  "7 oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Sam\u0027s Club",
-                           "cheapest_price":  0.18,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "jasmine-rice",
@@ -6970,73 +6934,67 @@
                        {
                            "id":  "mozzarella-cheese",
                            "commodity":  "Mozzarella Cheese",
-                           "unit":  "oz",
                            "category":  "Dairy \u0026 Eggs",
+                           "unit":  "oz",
+                           "cheapest_store":  "Sam\u0027s Club",
                            "stores":  [
                                           {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.1519,
-                                              "unit":  "oz",
+                                              "per_unit":  0.1521,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  true,
                                               "item":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
-                                              "size":  "lb"
+                                              "size":  "5 lbs"
                                           },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  0.2056,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Happy Farms Shredded Mozzarella Cheese 16 OZ",
+                                              "item":  "Happy Farms Shredded Mozzarella Cheese",
                                               "size":  "16 oz"
                                           },
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  0.2155,
-                                              "unit":  "oz",
+                                              "per_unit":  0.2175,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Fiesta Blend Finely Shredded Cheese, 5 Pound Bag",
-                                              "size":  "80 oz"
+                                              "item":  "Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese, 16 oz Bag",
+                                              "size":  "16 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.2278,
-                                              "unit":  "oz",
+                                              "per_unit":  0.2306,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Kroger Mexican Style Blend Shredded Cheese Family Size",
-                                              "size":  "32 oz"
+                                              "item":  "Kroger Low-Moisture Part Skim Mozzarella Shredded Cheese",
+                                              "size":  "16 oz"
                                           },
                                           {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.2462,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Pepper Jack Cheese",
+                                              "item":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
                                               "size":  "8 oz"
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2466,
-                                              "unit":  "oz",
+                                              "store":  "Fareway",
+                                              "per_unit":  0.2488,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
-                                              "size":  "32 oz"
+                                              "item":  "Fareway Shredded Mozzarella Cheese",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2494,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
+                                              "size":  "16 oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Sam\u0027s Club",
-                           "cheapest_price":  0.1521,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "cucumber",
@@ -9860,8 +9818,41 @@
                                               "size":  "32 oz"
                                           }
                                       ]
-                       }
-                   ],
+                       },
+        {
+            "id":  "fat-free-mozzarella",
+            "commodity":  "Fat Free Mozzarella",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Hy-Vee",
+            "stores":  [
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.3571,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kraft Shredded Mozzarella Fat Free Cheese",
+                               "size":  "7 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.4711,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kraft Mozzarella Fat Free Shredded Cheese",
+                               "size":  "7 oz (198g)"
+                           },
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.7114,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kraft Natural Fat Free Mozzarella Shredded Cheese, 7 oz Bag",
+                               "size":  "7 oz"
+                           }
+                       ]
+        }
+    ],
     "built_at":  "2026-08-29T04:31:48",
     "reverified":  "2026-07-07 (monthly floor re-verify: Sam\u0027s+Walmart full re-pull; Aldi/Hy-Vee/Baker\u0027s spot-confirmed)"
 }
