@@ -6046,43 +6046,35 @@
                        {
                            "id":  "jerk-seasoning",
                            "commodity":  "Jerk Seasoning",
-                           "unit":  "oz",
                            "category":  "Baking \u0026 Spices",
+                           "unit":  "oz",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  1.3773,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Lawry\u0027s Jerk Seasoning 4.93 Oz",
-                                              "size":  "4.93 oz"
-                                          },
-                                          {
                                               "store":  "Walmart",
-                                              "per_unit":  0.497,
-                                              "unit":  "oz",
+                                              "per_unit":  0.452,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Walkerswood Jamaican Jerk Seasoning",
-                                              "size":  ""
+                                              "item":  "Walkerswood Traditional Jamaican Jerk Seasoning, Hot \u0026 Spicy, 10 oz",
+                                              "size":  "10 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.579,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "GraceÃ‚Â® Mild Jamaican Jerk Seasoning",
+                                              "item":  "Grace Mild Jamaican Jerk Seasoning",
                                               "size":  "10 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.3773,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Lawry\u0027s Jerk Seasoning 4.93 Oz",
+                                              "size":  "4.93 oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.497,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "dried-oregano",
@@ -6402,53 +6394,51 @@
                        {
                            "id":  "liquid-smoke",
                            "commodity":  "Liquid Smoke",
-                           "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
+                           "unit":  "floz",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.8725,
-                                              "unit":  "floz",
+                                              "store":  "Walmart",
+                                              "per_unit":  0.57,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Colgin Original Recipe Hickory Liquid Smoke 4 Fl Oz",
+                                              "item":  "Colgin Liquid Smoke Natural Hickory Flavor, 4 fl oz",
                                               "size":  "4 fl oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.423,
-                                              "unit":  "floz",
+                                              "store":  "Fareway",
+                                              "per_unit":  0.6725,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Liquid Smoke",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.7475,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Figaro Hickory Liquid Smoke \u0026 Barbecue Marinade",
+                                              "item":  "Tone\u0027s Liquid Smoke",
                                               "size":  "4 fl oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.6725,
-                                              "unit":  "floz",
+                                              "per_unit":  0.7475,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
                                               "item":  "Colgin Liquid Smoke Natural Hickory Flavoring",
                                               "size":  "4 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.7475,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Figaro Hickory Liquid Smoke \u0026 Barbecue Marinade",
+                                              "size":  "4 fl oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.8725,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Colgin Original Recipe Hickory Liquid Smoke 4 Fl Oz",
+                                              "size":  "4 fl oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.423,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "worcestershire-sauce",
@@ -6717,63 +6707,59 @@
                        {
                            "id":  "smoked-paprika",
                            "commodity":  "Smoked Paprika",
-                           "unit":  "oz",
                            "category":  "Baking \u0026 Spices",
+                           "unit":  "oz",
+                           "cheapest_store":  "Family Fare",
                            "stores":  [
                                           {
                                               "store":  "Family Fare",
                                               "per_unit":  0.9986,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Sugar \u0027N Spice Smoked Paprika 7 Oz",
+                                              "item":  "Sugar N Spice Smoked Paprika",
                                               "size":  "7 oz"
                                           },
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  0.631,
-                                              "unit":  "oz",
+                                              "per_unit":  1.07,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Smoked Paprika",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  3.3051,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Simply Organic Smoked Paprika",
-                                              "size":  "2.72 oz"
+                                              "item":  "Great Value Smoked Paprika, 2 oz",
+                                              "size":  "2 oz"
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  1.3688,
-                                              "unit":  "oz",
+                                              "per_unit":  1.2438,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
                                               "item":  "Simply Nature Organic Smoked Paprika",
                                               "size":  "1.6 oz"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  3.1371,
-                                              "unit":  "oz",
+                                              "store":  "Fareway",
+                                              "per_unit":  2.5699,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
+                                              "item":  "Simply Organic Paprika, Smoked",
+                                              "size":  "2.72 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  3.1371,
+                                              "type":  "everyday",
+                                              "bulk":  false,
                                               "item":  "McCormick Smoked Paprika",
                                               "size":  "1.75 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  3.3051,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Simply Organic Smoked Paprika",
+                                              "size":  "2.72 oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.631,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "feta-cheese",
@@ -7301,53 +7287,59 @@
                        {
                            "id":  "dried-rosemary",
                            "commodity":  "Dried Rosemary",
-                           "unit":  "oz",
                            "category":  "Baking \u0026 Spices",
+                           "unit":  "oz",
+                           "cheapest_store":  "Sam\u0027s Club",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  9.3387,
-                                              "unit":  "oz",
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.8447,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Mc Cormick Whole Rosemary Leaves 0.62 Oz",
-                                              "size":  "0.62 oz"
+                                              "item":  "Member\u0027s Mark Rosemary Leaves, 8.5 oz.",
+                                              "size":  "8.5 oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  1.3,
-                                              "unit":  "oz",
+                                              "store":  "Fareway",
+                                              "per_unit":  2.49,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Rosemary Leaves",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  3.9867,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Rosemary Leaves",
-                                              "size":  "0.75 oz"
+                                              "item":  "Badia Spices Rosemary",
+                                              "size":  "1 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  2.6533,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÃ‚Â® Rosemary Leaves",
+                                              "item":  "Kroger Rosemary Leaves 0.75 oz",
                                               "size":  "0.75 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  3.15,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Great Value Rosemary Leaves, 0.8 oz",
+                                              "size":  "0.8 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  3.9867,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Hy-Vee Rosemary Leaves 0.75 oz",
+                                              "size":  "0.75 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  9.3387,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Mc Cormick Whole Rosemary Leaves 0.62 Oz",
+                                              "size":  "0.62 oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  1.3,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "green-onions",
@@ -7525,226 +7517,214 @@
                        {
                            "id":  "condensed-french-onion-soup",
                            "commodity":  "Condensed French Onion Soup",
-                           "unit":  "each",
                            "category":  "Canned \u0026 Soup",
+                           "unit":  "each",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  1.99,
-                                              "unit":  "each",
+                                              "store":  "Walmart",
+                                              "per_unit":  1.02,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Campbell\u0027s French Onion Soup 10.5 Oz",
-                                              "size":  "10.5 oz"
+                                              "item":  "Great Value Condensed French Onion Soup with Beef Stock, 10.5 oz",
+                                              "size":  "1 each"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  1.12,
-                                              "unit":  "each",
+                                              "store":  "Fareway",
+                                              "per_unit":  1.49,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Condensed French Onion Soup, 10.5 oz",
-                                              "size":  ""
+                                              "item":  "Fareway Soup, French Onion with Beef Stock, Condensed",
+                                              "size":  "1 each"
                                           },
                                           {
                                               "store":  "Hy-Vee",
                                               "per_unit":  1.96,
-                                              "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Campbell\u0027s Condensed French Onion Soup",
-                                              "size":  "10.5 oz can"
+                                              "item":  "Campbell\u0027s Condensed French Onion Soup, 10.5 oz Can",
+                                              "size":  "1 each"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  1.99,
-                                              "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Campbell\u0027sÃ‚Â® Condensed French Onion Soup",
-                                              "size":  "10.5 oz"
+                                              "item":  "Campbell\u0027s Condensed French Onion Soup",
+                                              "size":  "1 each"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.99,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Campbell\u0027s French Onion Soup 10.500 Oz",
+                                              "size":  "1 each"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  1.12,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "celery-salt",
                            "commodity":  "Celery Salt",
-                           "unit":  "oz",
                            "category":  "Baking \u0026 Spices",
+                           "unit":  "oz",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.4152,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Great Value Celery Salt, 5.25 oz",
+                                              "size":  "5.25 oz"
+                                          },
                                           {
                                               "store":  "Family Fare",
                                               "per_unit":  0.4158,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Dan\u0027s Pantry Celery Salt 12 Oz",
+                                              "item":  "Dan\u0027s Pantry Celery Salt",
                                               "size":  "12 oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.415,
-                                              "unit":  "oz",
+                                              "store":  "Fareway",
+                                              "per_unit":  0.8682,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Celery Salt 3pk, 5.25 oz",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  1.6583,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Celery Salt",
-                                              "size":  "1.2 oz"
+                                              "item":  "Tone\u0027s Celery Salt",
+                                              "size":  "4.02 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.8773,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÃ‚Â® Celery Salt Shaker",
+                                              "item":  "Kroger Celery Salt Shaker",
                                               "size":  "3.75 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.6583,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Hy-Vee Celery Salt",
+                                              "size":  "1.2 oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.415,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "sweet-chili-sauce",
                            "commodity":  "Sweet Chili Sauce",
-                           "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
+                           "unit":  "floz",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.3193,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "La Choy Sauce, Sweet Chili 15 Oz",
-                                              "size":  "15 oz"
-                                          },
-                                          {
                                               "store":  "Walmart",
-                                              "per_unit":  0.187,
-                                              "unit":  "floz",
+                                              "per_unit":  0.1675,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Mae Ploy Sweet Chili Sauce, 32 oz",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.2752,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Thai Sweet Chili Sauce",
-                                              "size":  "14.5 oz"
+                                              "item":  "Great Value Thai Style Sweet Chili Sauce, 13.25 oz",
+                                              "size":  "13.25 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.229,
-                                              "unit":  "floz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÃ‚Â® Sweet Chili Sauce",
+                                              "item":  "Kroger Sweet Chili Sauce",
+                                              "size":  "10 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2752,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Hy-Vee Thai Sweet Chili Sauce",
+                                              "size":  "14.5 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3193,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "La Choy Sweet Chili Sauce",
+                                              "size":  "15 oz"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.489,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Mae Ploy Sweet Chilli Sauce",
                                               "size":  "10 fl oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.187,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "swiss-cheese",
                            "commodity":  "Swiss Cheese",
-                           "unit":  "oz",
                            "category":  "Dairy \u0026 Eggs",
+                           "unit":  "oz",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.2088,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Great Value Swiss Deli Style Sliced Cheese, 8 oz Package 12 Slices",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2129,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Happy Farms Deli Sliced Swiss Cheese",
+                                              "size":  "7 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.245,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Member\u0027s Mark Baby Swiss Cheese Slices 2 lbs.",
+                                              "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.3075,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Kroger Swiss Block Cheese",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.31,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Fareway Swiss Cheese",
+                                              "size":  "8 oz"
+                                          },
                                           {
                                               "store":  "Family Fare",
                                               "per_unit":  0.3238,
-                                              "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
                                               "item":  "Our Family Natural Swiss Cheese 8 Oz",
                                               "size":  "8 oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.209,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Swiss Sliced, 8 oz",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.2444,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  true,
-                                              "item":  "Member\u0027s Mark Baby Swiss Slices, 2 lb",
-                                              "size":  "2 lb"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.3125,
-                                              "unit":  "oz",
+                                              "per_unit":  0.3725,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Sliced Swiss Cheese 10Ct",
-                                              "size":  "8 oz (2/$5.00)"
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.2438,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Happy Farms Swiss Cheese Block",
+                                              "item":  "Hy-Vee Swiss Cheese",
                                               "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.3325,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÃ‚Â® Swiss Sliced Cheese",
-                                              "size":  "12 oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.209,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "half-and-half",
@@ -7820,63 +7800,59 @@
                        {
                            "id":  "white-wine-vinegar",
                            "commodity":  "White Wine Vinegar",
-                           "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
+                           "unit":  "floz",
+                           "cheapest_store":  "Baker\u0027s",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2825,
-                                              "unit":  "floz",
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.1681,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Holland House White Wine Vinegar 12 Fl Oz",
-                                              "size":  "12 fl oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.178,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Pompeian White Wine Vinegar, 16 fl oz",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.1473,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Gustare Vita White Wine Vinegar",
-                                              "size":  "16.9 fl oz"
+                                              "item":  "Pompeian White Wine Vinegar",
+                                              "size":  "16 fl oz"
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.1947,
-                                              "unit":  "floz",
+                                              "per_unit":  0.1769,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Priano White Wine Vinegar",
+                                              "item":  "Priano White Wine Vinegar (product slug reads carlini-white-wine-vinegar-16-9-fl-oz)",
                                               "size":  "16.9 fl oz"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.1556,
-                                              "unit":  "floz",
+                                              "store":  "Walmart",
+                                              "per_unit":  0.1775,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Pompeian White Wine Vinegar",
+                                              "item":  "Pompeian White Wine Vinegar - 16 fl oz",
                                               "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.1869,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Pompeian Gourmet White Wine Vinegar",
+                                              "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.2355,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Fareway White Wine Vinegar",
+                                              "size":  "16.9 fl oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2825,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Holland House White Wine Vinegar 12 Fl Oz",
+                                              "size":  "12 fl oz"
                                           }
-                                      ],
-                           "cheapest_store":  "Hy-Vee",
-                           "cheapest_price":  0.1473,
-                           "cheapest_type":  "everyday"
+                                      ]
                        },
                        {
                            "id":  "ground-nutmeg",
@@ -9783,6 +9759,55 @@
                                "bulk":  false,
                                "item":  "Kraft Natural Fat Free Mozzarella Shredded Cheese, 7 oz Bag",
                                "size":  "7 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "ground-mustard",
+            "commodity":  "Ground Mustard",
+            "category":  "Baking \u0026 Spices",
+            "unit":  "oz",
+            "cheapest_store":  "Baker\u0027s",
+            "stores":  [
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  1.2839,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Ground Mustard Shaker",
+                               "size":  "1.55 oz"
+                           },
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  1.3933,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Sugar N Spice Mustard Ground Pp",
+                               "size":  "1.5 oz"
+                           },
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  1.5867,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Great Value Ground Mustard, 1.5 oz",
+                               "size":  "1.5 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  2.2516,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Tone\u0027s Mustard, Ground",
+                               "size":  "1.55 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  2.28,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Hy-Vee Ground Mustard 1.75 oz",
+                               "size":  "1.75 oz"
                            }
                        ]
         }
