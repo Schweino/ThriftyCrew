@@ -76,7 +76,7 @@ real one, which is both fuller and more restricted.
      (window.__tcRun = ...) and POLLED, never awaited in one call. Do not try to return the CSV
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
      round trips per store and still risk a partial read. That is what the sink is for.
-Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was|rb for
+Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was|rb|sel|ff for
 Walmart, q|n|lp|up|id|was for Sam's, id|term|name|prices|unit|size|href for Aldi.
 
 STEP ZERO - MAKE SURE THE 0800 CHAIN HAS FINISHED. You run at 09:00, and the 0800 task's downstream
@@ -201,7 +201,21 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     The older nested shape (currentPrice.price / priceDetails.priceLines[0].price) may still appear -
     read both. lp MUST reach the CSV as "$x.xx"; the builder rejects a bare number as "no linePrice".
     If a page holds item nodes but you extract none, that is UNUSABLE, not EMPTY.
-    Pace 3500ms +/- 2000. Emit q|n|lp|up|id|was|rb -> out\captures\walmart-capture-<date>.csv
+    ALSO EMIT THE SHELF SIGNAL (2026-08-29): sel = p.sellerName, ff = (p.fulfillmentType||'').toUpperCase().
+    Both are on the SAME item node you already read for name and price - grocery\walmart-capture-reducer.js
+    has read them since July for import-walmart-batch's 3P filter, so this is not new extraction, it is the
+    daily path finally carrying what the manual path already had.
+    WHY IT IS WORTH TWO COLUMNS: three generations of per-product known-wrong rulings failed to converge on
+    the marketplace-bulk class (Frontier Co-op 16 oz -> 27 Peaks 12-19 oz -> Badia 16 oz / 24 Mantra), because
+    a ruling names a PRODUCT and the defect is a LISTING KIND. curry-powder was blocked at Frontier's
+    $0.7669/oz and came straight back at 27 Peaks' $0.7775/oz. Every proxy tried - brand absence, exact-item
+    absence, size shape - stands in for one fact that was on the page and not in our data: is this listing
+    purchasable at the L St store, or does it only ship? Spec:
+    design\BRIEF-marketplace-shelf-signal-2026-08-29.md.
+    EMIT EMPTY RATHER THAN GUESSING. If a node has no sellerName or no fulfillmentType, write the field
+    EMPTY. Empty means unknown and every consumer admits the row; it must never be filled with a default,
+    because "" and "SHIP" are about to mean opposite things.
+    Pace 3500ms +/- 2000. Emit q|n|lp|up|id|was|rb|sel|ff -> out\captures\walmart-capture-<date>.csv
     Then: build-walmart-deals.ps1 -In <that> -Date <date>
 
   SAM'S CLUB (everyday, only if 0800 failed). fetch('/s/<term>'), same __NEXT_DATA__ approach.

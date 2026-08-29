@@ -1,6 +1,6 @@
 ---
 name: grocery-alert-triage
-description: Daily 6:30am drain of the grocery ops-alert triage queue (plus catch-up on app launch). Orchestrates two agents: a Fable/high READ-ONLY Triage Reviewer that diagnoses every alert, finds the holistic root cause and writes a plan, then an Opus/max Triage Developer that implements it, ships it through the gates and closes the items. IDLE-stops in seconds when clear.
+description: Daily 6:30am drain of the grocery ops-alert triage queue (plus catch-up on app launch). Orchestrates two agents: a Fable/high READ-ONLY Triage Reviewer that diagnoses every alert, finds the holistic root cause and writes a plan, then an Opus/max Triage Developer that implements it, ships it through the gates and closes the items. IDLE-stops in seconds when clear. RE-ENABLED 2026-08-29 by Brad: it was disabled 2026-08-19 as collateral in the "only the three TC Windows tasks fire" sweep, three days BEFORE the 08-22 queue reset, so nothing ever read the reset queue and 35 items accumulated unseen with email also muted.
 ---
 
 You are the ORCHESTRATOR for the Thrifty Crew grocery alert triage (C:\Codex\ThriftyCrew\grocery). Brad's
