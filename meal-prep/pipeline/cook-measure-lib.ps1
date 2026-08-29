@@ -1,4 +1,4 @@
-<#
+﻿<#
   cook-measure-lib.ps1 - turn a gram amount into the measure a COOK uses, not the package a shopper buys.
 
   THE DEFECT (Brad, 2026-08-02, from the General Tso card). The Ingredients list was printing the `buy`
@@ -165,6 +165,30 @@ function Test-CmLabelTrue($densItems, [string]$item, [string]$buy, [double]$gram
   return (([math]::Abs(($q * $per) - $grams) / [math]::Max(1, $grams)) -le 0.25)
 }
 
+function Get-CmPrintedValue([string]$q) {
+  <#
+    What the PRINTED quantity is actually worth, so the unit can agree with the number a reader sees.
+
+    WHY NOT JUST USE $n (2026-08-29). Pluralising off the raw ratio printed "1 cups": 300 g of BBQ sauce
+    is 1.10 cups, Format-CmQty rounds it to "1", and 1.10 > 1 so the unit went plural against a bare 1.
+    WHY NOT JUST TEST $q -ne '1' EITHER - that was the first attempt and it broke the other end: "1/2" is
+    not the string "1", so every half-cup became "1/2 cups". The only rule that holds at both ends is the
+    printed VALUE, so parse the mixed number back: "1 3/4" -> 1.75 (plural), "1" -> 1 (singular),
+    "1/2" -> 0.5 (singular), "18" -> 18 (plural).
+  #>
+  $t = ([string]$q).Trim()
+  if (-not $t) { return 0 }
+  $m = [regex]::Match($t, '^\s*(?:(\d+)\s+)?(\d+)\s*/\s*(\d+)\s*$')   # "1 3/4" or "3/4"
+  if ($m.Success) {
+    $whole = if ($m.Groups[1].Success) { [double]$m.Groups[1].Value } else { 0 }
+    $den = [double]$m.Groups[3].Value
+    if ($den -eq 0) { return $whole }
+    return ($whole + ([double]$m.Groups[2].Value / $den))
+  }
+  $v = 0.0
+  if ([double]::TryParse($t, [ref]$v)) { return $v }
+  return 0
+}
 function Get-CookMeasure($densItems, [string]$item, [double]$grams, [string]$oldBuy) {
   <# The replacement label. Returns $null when nothing honest can be produced. #>
   if ($grams -le 0) { return $null }
@@ -191,13 +215,15 @@ function Get-CookMeasure($densItems, [string]$item, [double]$grams, [string]$old
       # nearest whole, never below one, and let the gram figure beside it carry the precision.
       if ($countable) { $n = [math]::Max(1, [math]::Round($n)) }
       $unit = $p
-      # plural the moment there is more than one of the thing: "1 3/4 cup" reads wrong, "1 3/4 cups" is
-      # right. tbsp and tsp are already correct in both numbers and are left alone.
-      if ($n -gt 1) {
+      # PLURAL FROM THE PRINTED QUANTITY, NOT THE RAW ONE (2026-08-29). This used to test $n before
+      # formatting, so any amount that is over one but ROUNDS to one printed the plural against a bare
+      # "1": 300 g of BBQ sauce is 1.10 cups, Format-CmQty prints "1", and the line read "1 cups".
+      # The number a reader sees is $q, so $q is what has to agree with the unit.
+      $q = Format-CmQty $n
+      if ((Get-CmPrintedValue $q) -gt 1) {
         if ($p -eq 'cup') { $unit = 'cups' }
         elseif ($countable -and $p -ne 'each') { $unit = $p + 's' }
       }
-      $q = Format-CmQty $n
       $out = if ($p -eq 'each') { $q } else { "$q $unit" }
       if ($tail) { $out = Join-CmTail $out $tail }
       return $out.Trim()

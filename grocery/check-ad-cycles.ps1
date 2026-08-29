@@ -1979,6 +1979,28 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
       } catch { Log ('audit-basis-reconcile threw: ' + $_.Exception.Message) }
       try {
+        # SHELF SIGNAL (2026-08-29). Launched-and-never-read is the worse half of an unwired lane: it
+        # costs its full runtime every morning and its verdict reaches nobody. test-auditors checks for
+        # exactly that, and caught this lane the day it was added.
+        # COVERAGE IS THE HEADLINE, NOT THE FINDINGS. Every Walmart capture in the 90-day union predates
+        # the sel/ff columns, so today the sweep reports 0% and says so; a 0% run must never read as a
+        # clean board. Only report findings once the signal actually exists.
+        try {
+          $ssRc = (Get-FanoutRecord 'shelf-signal' $fanRecs).ExitCode
+          $ssF = Join-Path $OutDir 'shelf-signal.json'
+          if ($ssRc -eq 3) {
+            $summary += 'REVIEW    shelf-signal could not evaluate - whether the board prices a ship-only listing is UNKNOWN this cycle, not clean'
+          } elseif (Test-Path $ssF) {
+            $ssJ = Get-Content $ssF -Raw | ConvertFrom-Json
+            $ssCov = [double]$ssJ.coverage_pct
+            $ssShip = [int]$ssJ.counts.SHIP_ONLY; $ssTp = [int]$ssJ.counts.THIRD_PARTY
+            if ($ssCov -le 0) {
+              $summary += ('REVIEW    shelf-signal: 0% of ' + [int]$ssJ.cells + ' Walmart cell(s) carry a fulfillment signal yet - the attended-Chrome pull has not written a 9-column capture, so nothing is proven about the marketplace-bulk class')
+            } elseif (($ssShip + $ssTp) -gt 0) {
+              $summary += ('REVIEW    shelf-signal: ' + $ssShip + ' ship-only and ' + $ssTp + ' third-party cell(s) are priced on the board (' + $ssCov + '% signal coverage) - see out\shelf-signal.json')
+            }
+          }
+        } catch { Log ('shelf-signal read threw: ' + $_.Exception.Message) }
         $null = (Get-FanoutRecord 'pack-basis' $fanRecs).ExitCode
         $pbF = Join-Path $OutDir 'pack-basis-audit.json'
         if (Test-Path $pbF) {

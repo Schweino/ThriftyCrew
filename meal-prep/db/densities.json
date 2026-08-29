@@ -1,4 +1,4 @@
-{
+﻿{
   "readme": "Grams per household unit per canonical item, for qty->grams conversion (R100). Weight units are universal (lb=453.592, oz=28.3495, kg=1000, g=1). Volume/each units below. Precision matters for macro-dense items; near-zero-macro items (spices, herbs, vinegars) use coarse standards - gram error there is macro- and cost-irrelevant. 'can' = default whole-can grams when no size given (parser prefers explicit parenthetical sizes). cooked_to_dry: factor applied when source says 'cooked' for rice/pasta (we list dry).",
   "defaults": { "sauce_tbsp": 16, "sauce_tsp": 5.3, "sauce_cup": 250, "spice_tsp": 2, "spice_tbsp": 6, "herb_cup": 16, "floz": 29.57 },
   "cooked_to_dry": { "Rice": 0.36, "Penne Pasta": 0.44, "Spaghetti": 0.44, "Ziti Pasta": 0.44, "Rotini Pasta": 0.44, "Egg Noodles": 0.44, "Orzo Pasta": 0.44 },
@@ -163,7 +163,7 @@
     "Ketchup": { "tbsp": 17, "cup": 274 },
     "Dijon Mustard": { "tbsp": 15, "tsp": 5 },
     "BBQ Sauce": { "tbsp": 17, "cup": 285 },
-    "BBQ Sauce (Sugar Free)": { "tbsp": 17 },
+    "BBQ Sauce (Sugar Free)": { "tbsp": 17, "cup": 272 },
     "Buffalo Wing Sauce": { "tbsp": 15, "cup": 245 },
     "Hot Sauce": { "tbsp": 15, "tsp": 5, "cup": 240 },
     "Sriracha": { "tbsp": 15, "tsp": 5 },

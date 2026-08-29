@@ -1,4 +1,4 @@
-<#
+﻿<#
   repair-cook-measures.ps1 - replace every ingredient label that states a quantity the recipe does not use.
 
   See cook-measure-lib.ps1 for the WHY and the measurement. In short: the Ingredients list was printing the
@@ -89,8 +89,24 @@ function Repair-SpecCookMeasures {
     # find the display line for this ingredient by its item name at the head of the <strong>
     $idx = -1
     for ($j = 0; $j -lt $disp.Count; $j++) {
-      $nm = [regex]::Match([string]$disp[$j], '<strong>\s*([^:(<]+?)\s*(?:\([^)]*\))?\s*:')
-      if ($nm.Success -and $nm.Groups[1].Value.Trim() -eq $item) { $idx = $j; break }
+      # MATCH THE WHOLE HEAD, THEN PEEL THE BRAND (2026-08-29).
+      # This used to read '<strong>\s*([^:(<]+?)\s*(?:\([^)]*\))?\s*:' - a name that stops at the first
+      # '(' plus AT MOST ONE parenthetical. That cannot see an ingredient whose OWN NAME contains one:
+      # '<strong>BBQ Sauce (Sugar Free) (Sweet Baby Ray's):' has two, so the capture came back
+      # 'BBQ Sauce' and never equalled the item 'BBQ Sauce (Sugar Free)'. The line was reported SKIPPED -
+      # "no matching display line to keep in step with" - which reads as a missing display line rather
+      # than as a matcher that cannot express the name, so the four pulled-pork/BBQ recipes sat in
+      # test-auditors as a live finding and this repair could never have fixed them.
+      # 7 of the catalogue's 335 distinct ingredient names carry a parenthetical, so all 7 were invisible.
+      # Now: capture everything up to the colon, then accept either the full head or the head with ONE
+      # trailing parenthetical (the brand) removed. Peeling only the LAST group keeps a name's own
+      # parenthetical intact, which is what makes 'BBQ Sauce (Sugar Free)' distinguishable from 'BBQ Sauce'.
+      $nm = [regex]::Match([string]$disp[$j], '<strong>\s*([^:<]+?)\s*:')
+      if (-not $nm.Success) { continue }
+      $head = $nm.Groups[1].Value.Trim()
+      if ($head -eq $item) { $idx = $j; break }
+      $peeled = ([regex]::Replace($head, '\s*\([^()]*\)\s*$', '')).Trim()
+      if ($peeled -eq $item) { $idx = $j; break }
     }
     if ($idx -lt 0) { $skipped.Add($item); continue }
     $newLine = Update-DisplayLine ([string]$disp[$idx]) $new $g
@@ -280,6 +296,30 @@ if ($SelfTest) {
     Chk 'MUST FIRE  8 g of garlic is not a bulb -> 2 cloves' ($by['Garlic'] -eq '2 cloves') ($by['Garlic'])
     Chk 'CLEAN TWIN a WEIGHT label is NOT touched (two-sided defect, engine worklist)' ($by['Rice'] -eq '1 lb') ($by['Rice'])
     Chk 'CLEAN TWIN a WHOLE can really is 1 can - a package noun that PROVES it equals the grams stays' ($by['Diced Tomatoes'] -eq '1 can') ($by['Diced Tomatoes'])
+
+    # ---- THE TWO BUGS FOUND 2026-08-29, pinned so neither can come back -------------------------
+    # 1. PLURAL AGAINST A ROUNDED ONE. Get-CookMeasure pluralised off the RAW ratio, so an amount just
+    #    over one that Format-CmQty rounds to "1" printed "1 cups". The first fix (test the string
+    #    against '1') broke the other end and turned every "1/2 cup" into "1/2 cups", so both ends are
+    #    asserted here: the rule is the printed VALUE, not the raw one and not the literal text.
+    Chk 'plural: a value over 1 that PRINTS as 1 stays singular' ((Get-CmPrintedValue '1') -le 1) 'Get-CmPrintedValue 1'
+    Chk 'plural: a bare fraction is worth less than one' ((Get-CmPrintedValue '1/2') -lt 1) ('got ' + [string](Get-CmPrintedValue '1/2'))
+    Chk 'plural: a mixed number is worth more than one' ((Get-CmPrintedValue '1 3/4') -gt 1) ('got ' + [string](Get-CmPrintedValue '1 3/4'))
+    Chk 'plural: a whole number is read as itself' ((Get-CmPrintedValue '18') -eq 18) ('got ' + [string](Get-CmPrintedValue '18'))
+    # 2. THE DISPLAY MATCHER COULD NOT SEE A NAME WITH ITS OWN PARENTHETICAL. It allowed at most one
+    #    parenthetical after a name that stopped at the first '(' - so
+    #    "<strong>BBQ Sauce (Sugar Free) (Sweet Baby Ray's):" never matched the item
+    #    "BBQ Sauce (Sugar Free)", the line was reported SKIPPED as if the display were missing, and all
+    #    7 catalogue ingredients whose name carries a parenthetical were invisible to this repair.
+    $dispTwo = "<strong>BBQ Sauce (Sugar Free) (Sweet Baby Ray's):</strong> 1 bottle (500 g)"
+    $mTwo = [regex]::Match($dispTwo, '<strong>\s*([^:<]+?)\s*:')
+    $headTwo = if ($mTwo.Success) { $mTwo.Groups[1].Value.Trim() } else { '' }
+    $peeledTwo = ([regex]::Replace($headTwo, '\s*\([^()]*\)\s*$', '')).Trim()
+    Chk 'display match: a name with its OWN parenthetical is found under a brand' ($peeledTwo -eq 'BBQ Sauce (Sugar Free)') ("peeled to '$peeledTwo'")
+    $dispOne = '<strong>Soy Sauce (generic):</strong> 1/2 cup (120 g)'
+    $mOne = [regex]::Match($dispOne, '<strong>\s*([^:<]+?)\s*:')
+    $peeledOne = ([regex]::Replace($mOne.Groups[1].Value.Trim(), '\s*\([^()]*\)\s*$', '')).Trim()
+    Chk 'display match: peeling removes only the LAST group, so a plain name still matches' ($peeledOne -eq 'Soy Sauce') ("peeled to '$peeledOne'")
     # A package noun we cannot weigh has not proven anything, so it goes - to a weight, which is always a
     # true statement about the food even when we know no household measure for it.
     Chk 'MUST FIRE  an unweighable JAR still is not a cooking measure -> a weight' ($by['Mystery Powder'] -match '^\d.*\s(oz|g|lb)$') ($by['Mystery Powder'])
