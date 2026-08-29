@@ -480,6 +480,44 @@ var OTHER=1;
   T 'the live preflight actually compares the second copy' `
     ($selfSrc -match '(?m)^\s*\$guardFeedUrl\s*=\s*Get-GuardFeedUrl') 'P8 never compares feed-covers-published'
 
+  # ---- THE STAMP-BEFORE-COMMIT ORDER. Measured 2026-08-29: the `published` advance ran AFTER E5's
+  # commit, so every state file it wrote sat modified-but-uncommitted (commit 6f3c734f 11:04:49 vs stamp
+  # 11:04:52) and only rode in with the NEXT wave's commit - meaning a run's last wave never committed
+  # its transition at all. This is an ORDER bug, not a missing-path bug: E5 already stages
+  # meal-prep/runs/<run>. Nothing but source order can pin it, so it is pinned on source order.
+  # THE ANCHORS ARE BUILT BY CONCATENATION ON PURPOSE. Written as whole literals they would also appear
+  # HERE, in the self-test block - which sits above E5 - so IndexOf would find the test's own copy and the
+  # order assertion would compare two positions inside itself and pass no matter what the live path does.
+  # Measured on the first run of these cases: the count check read 2 and the order check was vacuous.
+  $advAnchor = "-To published -By 'wave-publish'" + " -Detail"
+  $addAnchor = '& git -C $repo add' + ' -- @add'
+  $iAdvance = $selfSrc.IndexOf($advAnchor)
+  $iE5Add   = $selfSrc.IndexOf($addAnchor)
+  T 'MUST FIRE  the `published` advance is written BEFORE the E5 git add, or the commit predates the stamps' `
+    (($iAdvance -ge 0) -and ($iE5Add -ge 0) -and ($iAdvance -lt $iE5Add)) `
+    ("advance at {0}, E5 add at {1}" -f $iAdvance, $iE5Add)
+  T '   ...and E5 still stages the run directory the stamps live in' `
+    ($selfSrc -match "\('meal-prep/runs/' \+ \(Split-Path \`$RunDir -Leaf\)\),\r?\n\s*'meal-prep/recipes-db\.json'") `
+    'E5 no longer stages meal-prep/runs/<run>, so the stamps have no path into the commit'
+  T '   ...and the advance happens exactly once, not once per attempted order' `
+    (([regex]::Matches($selfSrc, [regex]::Escape($advAnchor))).Count -eq 1) `
+    'the advance loop appears more than once - one of them is a leftover'
+  # the ledger's own late stamp: `serveability` is written in E6, after E5 committed
+  T 'MUST FIRE  E6 has a caller for the late ledger/state commit on its failing exits' `
+    (([regex]::Matches($selfSrc, '(?m)^\s*Save-LedgerState ')).Count -eq 2) `
+    'Save-LedgerState is defined but not called on both E6 exits - the serveability stamp goes uncommitted'
+  T '   ...and E7 carries the ledger on the good exit' `
+    ($selfSrc -match "\'grocery/out/recipe-costs\.json\',[\s\S]{0,200}?'meal-prep/db/batch-ledger\.json'") `
+    'E7 stages only the feed files, so a verified wave leaves its serveability stamp uncommitted'
+  # and it must stay warn-only: the recipes are live by the time it runs, so a git problem must not be
+  # able to convert a successful publish into a REFUSED.
+  $slsStart = $selfSrc.IndexOf('function Save-LedgerState')
+  $slsEnd   = $selfSrc.IndexOf('# ---- E6. POST-PUBLISH SERVEABILITY, WITH A ROLLBACK ARM')
+  $slsBody  = if (($slsStart -ge 0) -and ($slsEnd -gt $slsStart)) { $selfSrc.Substring($slsStart, $slsEnd - $slsStart) } else { 'Fail' }
+  T 'CLEAN TWIN the late ledger/state commit is warn-only - it cannot refuse a wave that is already live' `
+    (($slsBody -notmatch '\bFail\b') -and ($slsBody -notmatch '\bexit\s')) `
+    'Save-LedgerState can now fail a publish whose recipes are live'
+
   if ($f -eq 0) { Write-Output 'wave-publish SELF-TEST PASS'; exit 0 }
   Write-Output ("wave-publish SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -735,6 +773,7 @@ if ($runDryRun) {
   Write-Output "  E2  compute-v2-perserving.ps1 + reanchor-machine-fields.ps1 (everyday cost basis)"
   Write-Output ("  E3  update-recipes-db.ps1 -SpecList {0}" -f (Split-Path $slugListPath -Leaf))
   Write-Output '  E4  propagate-recipes.ps1  (recipes-db sync -> db-agreement gate -> planner -> cards -> publish)'
+  Write-Output '  E4b advance every wave slug to `published` (BEFORE E5, so the commit records it)'
   Write-Output '  E5  git add <scoped> && git commit && git push'
   Write-Output '  E6  top5-weekly -NoPublish + export-feed, then feed-covers-published scoped to this wave'
   Write-Output '        (a slug that cannot price is rolled back to draft and moved to `held`, per slug)'
@@ -894,6 +933,26 @@ Stamp 'build-cards' ("{0} card(s) rebuilt via propagate" -f $slugs.Count)
 Stamp 'publish' ("{0}/{0} wave slug(s) published through engine\publish (visibility preserved) + {1} collateral spec(s) carried by propagate (total dirty {2})" -f $slugs.Count, $foreignTotal, $dirtyTotal)
 Write-Output ("  E4  propagate              COMPLETE")
 
+# ---- advance the recipes to `published` BEFORE E5, so the commit E5 makes actually records the
+# transition (and before E6, so a rollback has a `published` state to leave).
+#
+# WHY THE ORDER MATTERS, measured 2026-08-29. This loop used to run AFTER the E5 commit. E5's add list
+# already covers meal-prep/runs/<run>, so the state files were in scope - they just did not exist in
+# their new form yet. Result: commit 6f3c734f at 11:04:49 vs a stamp `at` of 11:04:52 in
+# hunt-2026-08-27-highprotein\state\crack-chicken-chili.json, and all 11 slugs published that day sat
+# modified-but-uncommitted afterwards. The stamps only rode in with the NEXT wave's commit
+# (honey-bbq-chicken-mac-and-cheese's wave-12 stamp shipped inside 6f3c734f), so a run that ends on its
+# last wave never commits its published-state transition at all - and a later cloud or local run then
+# reverts the working tree back to `waved`, which is the push-scripts-to-repo / uncommitted-repair
+# failure class asserting a live recipe is not live.
+#
+# Advancing first cannot lie: propagate has already proved every wave slug published (the
+# PUBLISH-UNSTAMPABLE check above Fails otherwise), so `published` is true here whether or not git then
+# succeeds. If E5 fails, the recipes ARE live and the state saying so is the accurate record.
+foreach ($s in $slugs) {
+  & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'hunt-run.ps1') -Advance -RunDir $RunDir -Slug $s -To published -By 'wave-publish' -Detail ("wave {0}" -f $Wave) | Out-Null
+}
+
 # ---- E5. push. The push IS the deploy here. NEVER `git add -A`: it sweeps whatever else is in Brad's
 # real tree into this commit.
 if ($runSkipGit) { Write-Output '  E5  git                    SKIPPED (-SkipGit)' }
@@ -939,9 +998,34 @@ else {
   } finally { $ErrorActionPreference = $prevEap }
 }
 
-# ---- advance the recipes to `published` (before E6, so a rollback has a `published` state to leave)
-foreach ($s in $slugs) {
-  & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'hunt-run.ps1') -Advance -RunDir $RunDir -Slug $s -To published -By 'wave-publish' -Detail ("wave {0}" -f $Wave) | Out-Null
+# ---- THE SAME ORDERING BUG, ONE STAGE LATER. batch-ledger.json's `publish` and `build-cards` stamps are
+# written before E5 and ride in its commit, so those are fine. But `serveability` - and the ROLLED BACK
+# rewrite of `publish` - are stamped in E6, AFTER E5 has committed, and E7 stages only the three feed
+# files. So the ledger row recording whether the wave actually verified was left uncommitted by exactly
+# the same mechanism as the state files, on all three of E6's exits. This commits it wherever E6 ends
+# (the rollback arm's `held` states too, which E5 could not have seen either).
+#
+# WARN-ONLY, NEVER Fail: by this point the recipes are live and the wave's verdict is already decided. A
+# git problem must not turn a verified publish into a refusal, and must not mask a rollback's exit 1. It
+# stages an explicit list - the same no-`git add -A` rule as E5.
+function Save-LedgerState { param([string]$Message)
+  if ($runSkipGit) { return }
+  $prev = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $lsPaths = @(('meal-prep/runs/' + (Split-Path $RunDir -Leaf)), 'meal-prep/db/batch-ledger.json')
+    $lsAdd = @($lsPaths | Where-Object { Test-Path (Join-Path $repo ($_ -replace '/', '\')) })
+    if (-not $lsAdd.Count) { return }
+    & git -C $repo add -- @lsAdd | Out-Null
+    $lsStaged = @(& git -C $repo diff --cached --name-only | Where-Object { "$_".Trim() -ne '' })
+    if (-not $lsStaged.Count) { return }
+    & git -C $repo commit -m $Message | Out-Null
+    if ($LASTEXITCODE -ne 0) { Write-Output '      ! ledger/state commit failed - the wave verdict is on disk but not in git'; return }
+    & git -C $repo push | Out-Null
+    if ($LASTEXITCODE -ne 0) { Write-Output '      ! ledger/state push failed - committed locally, push by hand' }
+  } catch {
+    Write-Output ("      ! ledger/state commit skipped ({0})" -f $_.Exception.Message)
+  } finally { $ErrorActionPreference = $prev }
 }
 
 # ---- E6. POST-PUBLISH SERVEABILITY, WITH A ROLLBACK ARM -------------------------------------------
@@ -977,6 +1061,7 @@ try {
   Write-Output '      The wave IS live but its feed was not rebuilt, so new slugs cannot price yet.'
   Write-Output '      Run: meal-prep\top5-weekly.ps1 -NoPublish ; grocery\export-feed.ps1 ; then re-run this script.'
   Stamp 'serveability' 'FEED REBUILD FAILED - wave is live and unverified'
+  Save-LedgerState ("recipes: {0} wave {1} is live, feed rebuild failed (states + ledger)" -f $batch, $Wave)
   Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} published but feed rebuild failed" -f $Wave)
   exit 1
 }
@@ -1043,6 +1128,7 @@ if (-not $rollback.Count) {
   Write-Output ''
   Write-Output '  The recipes are not lost - they are drafts in `held`. Fix what the feed cannot price,'
   Write-Output ("  then hunt-run.ps1 -Advance -To published and re-run: wave-publish.ps1 -RunDir {0} -Wave {1}" -f $RunDir, $Wave)
+  Save-LedgerState ("recipes: {0} wave {1} rolled back {2} slug(s) to held (states + ledger)" -f $batch, $Wave, $rollback.Count)
   Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} ROLLED BACK n={1}" -f $Wave, $rollback.Count)
   exit 1
 }
@@ -1053,7 +1139,10 @@ else {
   $prevEap = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
   try {
-    $feedPaths = @('public/smp-feed.json', 'grocery/out/smp-feed.json', 'grocery/out/recipe-costs.json')
+    # the run dir and the ledger ride along because E6 stamped `serveability` after E5 committed - see
+    # Save-LedgerState above, which covers E6's two failing exits; this is the same fix on the good one.
+    $feedPaths = @('public/smp-feed.json', 'grocery/out/smp-feed.json', 'grocery/out/recipe-costs.json',
+                   ('meal-prep/runs/' + (Split-Path $RunDir -Leaf)), 'meal-prep/db/batch-ledger.json')
     $fadd = @($feedPaths | Where-Object { Test-Path (Join-Path $repo ($_ -replace '/', '\')) })
     & git -C $repo add -- @fadd | Out-Null
     $fstaged = @(& git -C $repo diff --cached --name-only | Where-Object { "$_".Trim() -ne '' })
