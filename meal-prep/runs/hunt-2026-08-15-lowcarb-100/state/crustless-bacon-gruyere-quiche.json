@@ -3,17 +3,17 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "rejected-qa",
+    "state":  "written",
     "wave":  null,
     "created":  "2026-08-15T20:32:42",
-    "updated":  "2026-08-15T20:56:47",
+    "updated":  "2026-08-29T09:54:14",
     "terms":  [
                   {
                       "term":  "gruyere",
                       "optional":  false
                   }
               ],
-    "reject_reason":  "macro gate: 369 cal / 2g carbs per serving",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -77,6 +77,12 @@
                         "at":  "2026-08-15T20:56:47",
                         "by":  "macro-gate",
                         "detail":  "macro gate: 369 cal / 2g carbs per serving"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-29T09:54:14",
+                        "by":  "fable",
+                        "detail":  "rebanded: Brad ruling 2026-08-29: the calorie floor moves 400 -\u003e 350, so this rejection recorded a rule that no longer exists. Nothing about the recipe changed.  [measured 369 cal / 2 g carbs; band in force 350-650 cal, carbs \u003c= 35; source-QA still owed]"
                     }
                 ]
 }

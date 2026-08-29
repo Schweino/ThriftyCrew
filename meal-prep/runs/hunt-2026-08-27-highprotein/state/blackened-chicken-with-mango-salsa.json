@@ -3,10 +3,10 @@
     "title":  "Blackened Chicken with Mango Salsa",
     "source_url":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
     "protein":  "chicken",
-    "state":  "rejected-audit",
-    "wave":  10,
+    "state":  "qa-passed",
+    "wave":  null,
     "created":  "2026-08-27T18:20:33",
-    "updated":  "2026-08-28T08:06:54",
+    "updated":  "2026-08-29T09:45:42",
     "terms":  [
                   {
                       "term":  "blackened seasoning mix",
@@ -21,7 +21,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  "NO-GO on one shared blocker only: the audit-spec-contradictions gate is red (exit 1, PHANTOM 3 vs baseline 0) and no wave publishes against a red gate. Of the 3 phantoms, the wave-local one (blackened",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -103,6 +103,12 @@
                         "at":  "2026-08-28T08:06:54",
                         "by":  "auditor",
                         "detail":  "NO-GO on one shared blocker only: the audit-spec-contradictions gate is red (exit 1, PHANTOM 3 vs baseline 0) and no wave publishes against a red gate. Of the 3 phantoms, the wave-local one (blackened"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-29T09:45:42",
+                        "by":  "fable",
+                        "detail":  "revived: the sole blocker was the shared audit-spec-contradictions gate (PHANTOM 3 vs baseline 0); re-run 2026-08-29 reports 0 findings across 587 specs, exit 0 - the gate is back to baseline and the defect was never this recipe  [audit blockers: shared, shared-data; none recipe-local]"
                     }
                 ]
 }

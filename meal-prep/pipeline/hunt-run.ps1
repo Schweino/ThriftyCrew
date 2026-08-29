@@ -38,6 +38,13 @@
 param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
   [switch]$Revive, [string]$Reason = '',
+  # -Reband: undo a macro-band rejection after the band itself moved. It takes the SAME -CalMin /
+  # -CalMax / -CarbMax that -Init already declares below, with the same "-1 means unstated" meaning -
+  # a second set of band parameters would be two ways to say one thing and a place for them to
+  # disagree. The band is stated ON THE COMMAND rather than read from run.json on purpose: the ruling
+  # that reopens a verdict has to be written where the recipe's own history will carry it, and a band
+  # read silently from a file someone edited afterwards is not evidence of anything.
+  [switch]$Reband,
   [switch]$Lane, [switch]$LaneSummary, [switch]$StageSummary, [switch]$RecipeSummary,
   [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
@@ -89,6 +96,7 @@ $runLaneSummary = [bool]$LaneSummary -or $runStageSummary
 $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Advance
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
 $runRevive = [bool]$Revive
+$runReband = [bool]$Reband
 $runLane = [bool]$Lane; $runWaveSync = [bool]$WaveSync
 $runDrain = [bool]$Drain; $runNoLedger = [bool]$NoLedger; $runJson = [bool]$Json
 
@@ -190,6 +198,29 @@ $script:NEXT = @{
   # file behind its back would be the worse lie, and is the exact thing this file's own notes warn
   # about ("a verdict a state machine cannot express is a verdict that gets faked or lost").
   'rejected-audit' = @('qa-passed')
+  # rejected-qa -> written EXISTS FOR -Reband AND FOR NOTHING ELSE (2026-08-29), and it is the SECOND
+  # declared exception, on the same reasoning as the first. The macro band gate settles a recipe that
+  # misses the calorie window straight from `written`, and it files that verdict as `rejected-qa` even
+  # though source-QA never ran - so the state says "this recipe failed its fidelity check" about five
+  # recipes whose transcription was never checked at all. On 2026-08-29 Brad lowered the run floor
+  # from 400 to 350 calories, which un-rejects all five at a stroke: 360, 369, 376, 382 and 391 cal.
+  # Nothing about those recipes changed. THE RULE changed, and a rejection that only ever recorded a
+  # rule can be undone when the rule moves.
+  #
+  # It returns to `written`, NOT to qa-passed, and that distinction is the whole safety of it: these
+  # five have specs and cards but have never been through source-QA, so handing them qa-passed would
+  # manufacture a fidelity verdict nobody issued. `written` is where a recipe waits for exactly that
+  # check. THE EVIDENCE GATE IS THE COMMAND, NOT THIS TABLE - see -Reband, which refuses unless the
+  # rejection reason is a band verdict AND the band stated on the command line admits its numbers.
+  'rejected-qa' = @('written')
+  # rejected-macros -> written, for the SAME -Reband and the same reason. This edge is the one the
+  # five live cases did NOT need and every future case will: the daemon's band gate settles to
+  # `rejected-macros` (hunt_daemon.reject_macros), and the five from 2026-08-15 only read
+  # `rejected-qa` because they were rejected from `written`, before that route existed. Leaving this
+  # out gave -Reband a state check that admitted rejected-macros and a state machine that refused it,
+  # so the command accepted the argument and then always failed - caught by neutering the state
+  # check and finding the test still green, because every fixture happened to be rejected-qa.
+  'rejected-macros' = @('written')
   'published'  = @('verified', 'held')
   'held'       = @('published')
   'verified'   = @()
@@ -1249,9 +1280,133 @@ if ($runSelfTest) {
     T 'MUST FIRE  REVIVE a slug that is not rejected-audit is refused' `
       ($LASTEXITCODE -ne 0 -and (StRv 'rv-wrongstate') -eq 'waved') (StRv 'rv-wrongstate')
 
-    T 'CLEAN TWIN every OTHER rejected state is still terminal - the door is one declared exception' `
+    # ---- THE HEADING FORMS AUDITORS ACTUALLY WRITE ------------------------------------------------
+    # Every case above seeds `### BLOCKER n (kind, owner: x)`, a form that appears in NO audit report
+    # on disk - the fixture invented it, so the suite asserted its own input and stayed green while
+    # -Revive refused all eleven live rejections. These bodies are copied verbatim in shape from
+    # meal-prep\runs\hunt-2026-08-27-highprotein\waves\wave-{5,6,9,10}.audit.md and
+    # hunt-2026-08-15-lowcarb-100\waves\wave-2.audit.md.
+    AuditRv 15 "NO-GO`n### R1. some-slug - B2 repair INCOMPLETE: recost never run (shared-data + pipeline)`n"
+    AuditRv 16 "NO-GO`n### B1. Shared gate red: audit-spec-contradictions PHANTOM 3 vs baseline 0 (shared, pipeline + shared-data)`n"
+    AuditRv 17 "NO-GO`n### Blocker 1 - healthy-hamburger-helper: macros computed on Protein+ pasta`n### Blocker 2 - pioneer-woman-chili: trademark title, unruled`n"
+    AuditRv 18 "NO-GO`n### 1. some-slug + other-slug - re-QA still owed (recipe-local)`n"
+    # The real heading reads `### Battery failure re-derived CLEAN (not blocking)`, whose parens hold
+    # no kind word - so it would be refused whether or not the matcher ate it, and the case would
+    # prove nothing. A kind token is planted inside deliberately: now the ONLY thing standing between
+    # this fixture and a revival is the `\s` that stops the bare `B` alternative, so neutering that
+    # guard turns this case red. Found by running the neuter, which is the entire point of running it.
+    AuditRv 19 "NO-GO`n### Battery failure re-derived CLEAN (shared-data noise, not blocking)`n"
+    AuditRv 20 "NO-GO`n### Prior BLOCKER 3 (recipe-local, owner: writer) - VERIFIED FIXED`n### R1. some-slug - gate red (shared-data)`n"
+    SeedRv 'rv-rform'   'rejected-audit' 15
+    SeedRv 'rv-bform'   'rejected-audit' 16
+    SeedRv 'rv-nokind'  'rejected-audit' 17
+    SeedRv 'rv-numform' 'rejected-audit' 18
+    SeedRv 'rv-battery' 'rejected-audit' 19
+    SeedRv 'rv-prior'   'rejected-audit' 20
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-rform' -By 'test' -Reason 'shared blocker closed' | Out-Null
+    T 'REVIVE the real `### Rn. ... (shared-data + pipeline)` form is read, not refused as formless' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rv-rform') -eq 'qa-passed') (StRv 'rv-rform')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-bform' -By 'test' -Reason 'spec-contradictions back to baseline' | Out-Null
+    T 'REVIVE the real `### Bn. ... (shared, ...)` form is read, and a trailing tag counts' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rv-bform') -eq 'qa-passed') (StRv 'rv-bform')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-numform' -By 'test' -Reason 'please' | Out-Null
+    T 'MUST FIRE  REVIVE `### n. ... (recipe-local)` still refuses - widening the FORM did not widen the RULE' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-numform') -eq 'rejected-audit') (StRv 'rv-numform')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-nokind' -By 'test' -Reason 'trust me' | Out-Null
+    T 'MUST FIRE  REVIVE a blocker heading that declares no (kind) is still no evidence, so it is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-nokind') -eq 'rejected-audit') (StRv 'rv-nokind')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-battery' -By 'test' -Reason 'trust me' | Out-Null
+    T 'MUST FIRE  REVIVE `### Battery failure ...` is not a blocker - the bare B alternative must not eat it' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-battery') -eq 'rejected-audit') (StRv 'rv-battery')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-prior' -By 'test' -Reason 'the one open blocker is shared' | Out-Null
+    $rvPrior = Read-Json (Join-Path $rv 'state\rv-prior.json')
+    T 'REVIVE a CLOSED `### Prior BLOCKER n (recipe-local)` is still skipped, so it cannot veto a revival' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rv-prior') -eq 'qa-passed' -and `
+       ([string]$rvPrior.history[-1].detail) -match 'shared-data; none recipe-local') ([string]$rvPrior.history[-1].detail)
+
+    # ---- -Reband: undoing a rejection that only ever recorded a RULE ------------------------------
+    # All five live cases went `written` -> `rejected-qa` by the macro-gate with no source-QA ever
+    # run, so every case here asserts the return lands on `written` and NOT on qa-passed: the band
+    # ruling reopens the recipe, it does not certify it.
+    function SeedRb([string]$slug, [string]$state, [string]$reason) {
+      $e = [ordered]@{ slug = $slug; title = 'T'; source_url = 'u'; protein = 'chicken'; state = $state
+                       wave = $null; created = '2026-08-29T00:00:00'; updated = '2026-08-29T00:00:00'
+                       terms = @(); reject_reason = $reason; parked_on = @(); history = @() }
+      Write-JsonAtomic -Path (Join-Path $rv ('state\' + $slug + '.json')) -Obj $e
+    }
+    SeedRb 'rb-ok'      'rejected-qa' 'macro gate: 369 cal / 2g carbs per serving'
+    SeedRb 'rb-stilllow' 'rejected-qa' 'macro gate: 212 cal / 5g carbs per serving'
+    SeedRb 'rb-carbs'   'rejected-qa' 'macro gate: 500 cal / 61g carbs per serving'
+    SeedRb 'rb-realqa'  'rejected-qa' 'failed QA twice: ANCHORS: extraction + live-page disagree on 4 ingredients'
+    SeedRb 'rb-noband'  'rejected-qa' 'macro gate: 369 cal / 2g carbs per serving'
+    SeedRb 'rb-noreason' 'rejected-qa' 'macro gate: 369 cal / 2g carbs per serving'
+    SeedRb 'rb-wrongstate' 'rejected-dupe' 'macro gate: 369 cal / 2g carbs per serving'
+
+    & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-ok' -By 'test' -Reason 'Brad lowered the floor to 350 on 2026-08-29' -CalMin 350 -CalMax 650 -CarbMax 35 | Out-Null
+    $rbDoc = Read-Json (Join-Path $rv 'state\rb-ok.json')
+    T 'REBAND a band rejection the new band admits returns to WRITTEN, not to qa-passed' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rb-ok') -eq 'written') (StRv 'rb-ok')
+    T 'REBAND   ...and the measured macros AND the band in force land on the history' `
+      (([string]$rbDoc.history[-1].detail) -match 'measured 369 cal / 2 g carbs' -and `
+       ([string]$rbDoc.history[-1].detail) -match 'band in force 350-650' -and `
+       ([string]$rbDoc.history[-1].detail) -match 'source-QA still owed' -and `
+       $null -eq $rbDoc.reject_reason) ([string]$rbDoc.history[-1].detail)
+
+    & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-stilllow' -By 'test' -Reason 'same ruling' -CalMin 350 -CalMax 650 -CarbMax 35 | Out-Null
+    T 'MUST FIRE  REBAND a recipe the NEW band still excludes on calories is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rb-stilllow') -eq 'rejected-qa') (StRv 'rb-stilllow')
+
+    & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-carbs' -By 'test' -Reason 'same ruling' -CalMin 350 -CalMax 650 -CarbMax 35 | Out-Null
+    T 'MUST FIRE  REBAND calories inside the band do not excuse carbs outside it' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rb-carbs') -eq 'rejected-qa') (StRv 'rb-carbs')
+
+    & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-realqa' -By 'test' -Reason 'same ruling' -CalMin 350 -CalMax 650 -CarbMax 35 | Out-Null
+    T 'MUST FIRE  REBAND a GENUINE fidelity failure shares the rejected-qa state and must not be reopened by a band' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rb-realqa') -eq 'rejected-qa') (StRv 'rb-realqa')
+
+    # The MESSAGE is the subject here, not just the refusal. An unstated band leaves CalMax at -1, so
+    # the arithmetic below would refuse this anyway - as "369 cal is still over the -1 ceiling", which
+    # is gibberish aimed at an operator who simply forgot an argument. Asserting the refusal alone was
+    # vacuous (proved: neutering the check left the case green), so the case asserts the wording that
+    # only the explicit check can produce.
+    $rbNoBand = & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-noband' -By 'test' -Reason 'trust me'
+    T 'MUST FIRE  REBAND with no band stated is refused AS an unstated ruling, not as failed arithmetic' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rb-noband') -eq 'rejected-qa' -and `
+       ((@($rbNoBand | ForEach-Object { [string]$_ }) -join ' ') -match 'An unstated band is not a ruling')) `
+      (@($rbNoBand | ForEach-Object { [string]$_ }) -join ' ')
+
+    SeedRb 'rb-macros' 'rejected-macros' 'macro gate: 369 cal / 2g carbs per serving'
+    & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-macros' -By 'test' -Reason 'Brad lowered the floor to 350 on 2026-08-29' -CalMin 350 -CalMax 650 -CarbMax 35 | Out-Null
+    T 'REBAND rejected-macros - the state the daemon ACTUALLY uses for a band verdict - is rebandable too' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rb-macros') -eq 'written') (StRv 'rb-macros')
+
+    & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-noreason' -By 'test' -CalMin 350 -CalMax 650 -CarbMax 35 | Out-Null
+    T 'MUST FIRE  REBAND with no -Reason is refused - the command that undoes a verdict must say whose ruling it was' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rb-noreason') -eq 'rejected-qa') (StRv 'rb-noreason')
+
+    # Again the wording is the subject. The state machine would refuse rejected-dupe -> written on its
+    # own, so asserting only the refusal tested the machine and not this command's own check (proved:
+    # neutering the state check left the case green). The explicit check is what makes the refusal say
+    # WHICH rule stopped it, which is the difference between an operator fixing the command and an
+    # operator concluding -Reband is broken.
+    $rbWrong = & $PSCommandPath -Reband -RunDir $rv -Slug 'rb-wrongstate' -By 'test' -Reason 'same ruling' -CalMin 350 -CalMax 650 -CarbMax 35
+    T 'MUST FIRE  REBAND a dupe rejection carrying band-shaped prose is refused BY STATE, and says so - text does not decide' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rb-wrongstate') -eq 'rejected-dupe' -and `
+       ((@($rbWrong | ForEach-Object { [string]$_ }) -join ' ') -match 'only applies to a band rejection')) `
+      (@($rbWrong | ForEach-Object { [string]$_ }) -join ' ')
+
+    T 'CLEAN TWIN every OTHER rejected state is still terminal - the doors are two declared exceptions' `
       ((-not (Test-LegalTransition 'rejected-dupe' 'qa-passed')) -and `
        (-not (Test-LegalTransition 'rejected-macros' 'qa-passed')) -and `
+       (-not (Test-LegalTransition 'rejected-qa' 'qa-passed')) -and `
+       (-not (Test-LegalTransition 'rejected-unreadable' 'written')) -and `
+       (Test-LegalTransition 'rejected-qa' 'written') -and `
        (Test-LegalTransition 'rejected-audit' 'qa-passed')) 'the terminal default was repealed too widely'
   } finally { Remove-Item $rv -Recurse -Force -ErrorAction SilentlyContinue }
 
@@ -1712,15 +1867,45 @@ if ($runRevive) {
   }
   # Only OPEN blockers count. A heading that says `Prior BLOCKER` is one an earlier cycle already
   # closed, and holding a recipe terminal for a defect that is on record as fixed is the bug.
+  # THE FORM THIS READS IS THE FORM AUDITORS WRITE, and that is a correction (2026-08-29). The
+  # original pattern demanded `### BLOCKER n (kind)` exactly. NOTHING on disk is written that way:
+  # the twelve audit reports in meal-prep\runs use `### Blocker 1 (recipe-local): ...`,
+  # `### R1. ... (recipe-local, pipeline)`, `### B1. ... (shared, pipeline + shared-data)` and
+  # `### 1. ... (recipe-local)`. Run the old pattern over waves 5, 6, 9 and 10 of
+  # hunt-2026-08-27-highprotein and it matches ZERO headings in every one, so -Revive refused all
+  # eleven rejected-audit recipes with "names no open blockers" - the door was welded shut and the
+  # self-tests could not see it, because they seeded audits in the invented canonical form and so
+  # only ever asserted their own fixture. Kinds are read from ANY parenthesised group in the
+  # heading, since half the reports put the tag at the end rather than after the label.
   $kinds = @()
   foreach ($ln in (Get-Content $auditPath)) {
-    $m = [regex]::Match([string]$ln, '^###\s+BLOCKER\s+\d+\s*\(\s*([a-zA-Z-]+)')
-    if ($m.Success) { $kinds += $m.Groups[1].Value.ToLower() }
+    $s = [string]$ln
+    # The label must LEAD, immediately after the hashes. That is what keeps `### Prior BLOCKER 3`
+    # - a blocker an earlier cycle already closed - out of the count, which is the whole reason
+    # only OPEN blockers are read. `\d*` is optional (`### Blocker (shared-data...)` carries no
+    # number) but the trailing `\s` is not: it is what stops the bare `B` alternative from eating
+    # `### Battery failure re-derived CLEAN`, which is explicitly NOT a blocker.
+    if (-not [regex]::IsMatch($s, '^###\s+(?:BLOCKER|Blocker|B|R)\s*\d*\s*[.:\-]?\s')) {
+      if (-not [regex]::IsMatch($s, '^###\s+\d+\.\s')) { continue }
+    }
+    $found = @()
+    foreach ($grp in [regex]::Matches($s, '\(([^)]*)\)')) {
+      $inner = $grp.Groups[1].Value
+      # 'shared-data' contains 'shared', so both can fire on one tag. Harmless: the only kind that
+      # changes the verdict below is recipe-local, and the rest exist to prove a kind was declared
+      # at all. Note the deliberate imprecision: a heading reading `(shared-data, NOT recipe-local)`
+      # scores recipe-local and therefore REFUSES. That errs toward keeping a rejection standing,
+      # which is the safe direction for the one command that undoes a verdict.
+      foreach ($k in @('recipe-local', 'shared-data', 'shared', 'process', 'orchestration')) {
+        if ($inner -match [regex]::Escape($k)) { $found += $k }
+      }
+    }
+    $kinds += $found
   }
   if (-not $kinds.Count) {
     # Single-quoted on purpose: a backtick is PowerShell's escape character, so quoting the heading
     # shape with backticks inside a double-quoted string silently eats them.
-    Write-Output ('hunt-run: ' + $Slug + "'s audit names no open blockers in the '### BLOCKER n (kind)' form, so nothing here can tell whose defect it was. Refusing."); exit 1
+    Write-Output ('hunt-run: ' + $Slug + "'s audit names no open blocker whose heading declares a (kind), so nothing here can tell whose defect it was. Refusing."); exit 1
   }
   $local = @($kinds | Where-Object { $_ -eq 'recipe-local' })
   if ($local.Count) {
@@ -1742,6 +1927,57 @@ if ($runRevive) {
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  rejected-audit -> qa-passed  ({1})" -f $Slug, $detail)
   Write-GuardComplete -Name 'hunt-run' -Summary ("revive {0}" -f $Slug)
+  exit 0
+}
+
+# ---- -Reband: undoing a rejection that only ever recorded a RULE ------------------------------------
+# A macro-band rejection says nothing about the recipe: it says the recipe missed a window somebody
+# chose. Move the window and the verdict is void, so this door is gated on arithmetic rather than on
+# an auditor's prose - the rejection reason states the numbers that were measured, the command states
+# the band now in force, and the only question is whether those numbers fall inside it. If they do
+# not, the rejection still stands and this refuses.
+if ($runReband) {
+  if (-not $Slug)   { Write-Output 'hunt-run: -Reband needs -Slug'; exit 1 }
+  if (-not $Reason) { Write-Output 'hunt-run: -Reband needs -Reason "<whose ruling moved the band, and when>"'; exit 1 }
+  if ($CalMin -lt 0 -or $CalMax -lt 0 -or $CarbMax -lt 0) {
+    Write-Output 'hunt-run: -Reband needs the band in force: -CalMin, -CalMax and -CarbMax. An unstated band is not a ruling.'; exit 1
+  }
+  if ($CalMin -gt $CalMax) { Write-Output ("hunt-run: -Reband band is inverted: CalMin {0} > CalMax {1}" -f $CalMin, $CalMax); exit 1 }
+  $sp = Get-StatePath $RunDir $Slug
+  if (-not (Test-Path $sp)) { Write-Output ("hunt-run: '{0}' has no state file" -f $Slug); exit 1 }
+  $e = Read-Json $sp
+  $from = [string]$e.state
+  if ($from -ne 'rejected-qa' -and $from -ne 'rejected-macros') {
+    Write-Output ("hunt-run: -Reband only applies to a band rejection (rejected-qa / rejected-macros); {0} is '{1}'" -f $Slug, $from); exit 1
+  }
+  # THE REASON IS THE EVIDENCE. A rejected-qa row can equally be a real fidelity failure - the
+  # tortellini skillet failed source-QA twice on live-page anchors - and nothing about a band ruling
+  # touches that. Only a reason that states measured macros can be reopened by a band.
+  $rr = [string]$e.reject_reason
+  $bm = [regex]::Match($rr, 'macro gate:\s*([0-9]+(?:\.[0-9]+)?)\s*cal\s*/\s*([0-9]+(?:\.[0-9]+)?)\s*g\s*carbs')
+  if (-not $bm.Success) {
+    Write-Output ("hunt-run: REFUSED - {0}'s rejection is not a band verdict, so a band ruling cannot reach it. Its reason reads: {1}" -f $Slug, ($rr -replace '\s+', ' ')); exit 1
+  }
+  $cal = [double]$bm.Groups[1].Value
+  $carb = [double]$bm.Groups[2].Value
+  $why = @()
+  if ($cal -lt $CalMin)  { $why += ("{0} cal is still under the {1} floor" -f $cal, $CalMin) }
+  if ($cal -gt $CalMax)  { $why += ("{0} cal is still over the {1} ceiling" -f $cal, $CalMax) }
+  if ($carb -gt $CarbMax) { $why += ("{0} g carbs is still over the {1} limit" -f $carb, $CarbMax) }
+  if ($why.Count) {
+    Write-Output ("hunt-run: REFUSED - the stated band does not admit {0}: {1}. The rejection stands." -f $Slug, ($why -join '; ')); exit 1
+  }
+  if (-not (Test-LegalTransition $from 'written')) {
+    Write-Output ("hunt-run: REFUSED {0}: {1} -> written" -f $Slug, $from); exit 1
+  }
+  $detail = ("rebanded: " + $Reason + ("  [measured {0} cal / {1} g carbs; band in force {2}-{3} cal, carbs <= {4}; source-QA still owed]" -f $cal, $carb, $CalMin, $CalMax, $CarbMax))
+  $e.state = 'written'
+  $e.updated = (Get-Stamp)
+  $e.reject_reason = $null
+  $e.history = @(@($e.history) + [pscustomobject]@{ state = 'written'; at = (Get-Stamp); by = $By; detail = $detail })
+  Write-JsonAtomic -Path $sp -Obj $e
+  Write-Output ("hunt-run: {0}  {1} -> written  ({2})" -f $Slug, $from, $detail)
+  Write-GuardComplete -Name 'hunt-run' -Summary ("reband {0}" -f $Slug)
   exit 0
 }
 

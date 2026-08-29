@@ -95,9 +95,16 @@ FIND_SIMILAR_PS = os.path.join(HERE, "find-similar.ps1")
 SPECS_DIR = os.path.join(MP, "db", "recipes")
 RUNS_DIR = os.path.join(MP, "runs")
 
-DEFAULT_COND = ("between 400 and 650 calories per serving AND 35 g carbohydrate or less per serving; "
+DEFAULT_COND = ("between 350 and 650 calories per serving AND 35 g carbohydrate or less per serving; "
                 "budget meal-prep dinner; scalable to 14 servings; no seafood")
-DEFAULT_BAND = {"calMin": 400, "calMax": 650, "carbMax": 35}
+# THE FLOOR MOVED 400 -> 350 ON BRAD'S RULING, 2026-08-29. Five finished recipes - specs written,
+# cards built, ingredients all board-priced - were retired by this number alone at 360, 369, 376, 382
+# and 391 calories, none of them for anything wrong with the recipe. A 400 floor also came within one
+# unit-basis bug of retiring two more at 212 and 217 (see the grams_source note below), which is how
+# expensive this single integer is. DEFAULT_COND above states the same numbers in prose and the two
+# are asserted equal in the self-test, because a band that disagrees with its own prose tells the
+# agents one rule and enforces another.
+DEFAULT_BAND = {"calMin": 350, "calMax": 650, "carbMax": 35}
 
 
 def as_text(v, cap=0):

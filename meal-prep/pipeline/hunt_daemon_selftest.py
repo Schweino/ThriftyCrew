@@ -10422,7 +10422,7 @@ def _conditions_come_from_the_run_dir():
                     "%r (%s)" % (got, why)))
         res.append(("  and the built-in default really would have contradicted it, so this is not a "
                     "distinction without a difference",
-                    "400 and 650" in HD.DEFAULT_COND and "35 g" in HD.DEFAULT_COND,
+                    _default_cond_band() in HD.DEFAULT_COND and "35 g" in HD.DEFAULT_COND,
                     HD.DEFAULT_COND[:60]))
 
         got2, why2 = HD.resolve_conditions(tmp, "  FROM-THE-FLAG  ")
@@ -10465,11 +10465,24 @@ def _conditions_come_from_the_run_dir():
                         "prose can never be the only statement of them" % lane,
                         "cal 450-700" in p and "carbs <= 40" in p, p[-160:]))
             res.append(("  and the %s prompt carries NO trace of the built-in default's band" % lane,
-                        "400 and 650" not in p and "35 g carbohydrate" not in p,
+                        _default_cond_band() not in p and "35 g carbohydrate" not in p,
                         "leaked DEFAULT_COND into the %s prompt" % lane))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return res
+
+
+def _default_cond_band():
+    """The default band's calorie range as DEFAULT_COND spells it.
+
+    Derived from DEFAULT_BAND rather than typed as a literal, and that is the point of it: the two
+    cases below used to hardcode "400 and 650", so lowering the floor to 350 on 2026-08-29 turned a
+    check about "does the run dir override the default" into a check about a number it did not care
+    about. Reading the band means the same cases now ALSO catch DEFAULT_COND and DEFAULT_BAND
+    drifting apart - a band that disagrees with its own prose states one rule to the agents and
+    enforces another, which is a live failure mode and was previously covered nowhere.
+    """
+    return "%g and %g" % (HD.DEFAULT_BAND["calMin"], HD.DEFAULT_BAND["calMax"])
 
 
 def _split_lines_are_explained_to_the_mapper():
