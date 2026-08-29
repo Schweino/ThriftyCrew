@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-known-wrong.ps1 - THE BLOCKLIST GATE. "No crown a reasoner has ruled wrong is on the page."
 
   FOUNDING BUG (2026-07-29): audit findings lived as PROSE in .md files. honeydew was written up with the
@@ -269,6 +269,7 @@ $blocked = New-Object System.Collections.Generic.List[object]
 $review  = New-Object System.Collections.Generic.List[object]
 $retire  = New-Object System.Collections.Generic.List[string]
 $unevaluable = New-Object System.Collections.Generic.List[string]
+$unfirable   = New-Object System.Collections.Generic.List[string]
 $reversed = 0; $evaluable = 0; $idResolved = 0
 
 foreach ($e in $entries) {
@@ -320,11 +321,51 @@ foreach ($e in $entries) {
 
   $ck = $cid + '|' + $store
   if (-not $cellsByKey.ContainsKey($ck)) { continue }
+  $matchedSomething = $false
   foreach ($cell in $cellsByKey[$ck]) {
     if ($wanted.ContainsKey($cell.nfull)) {
+      $matchedSomething = $true
       [void]$blocked.Add([pscustomobject]@{ key=$key; cell=$cell; why='exact normalized name' })
     } elseif ($cell.ncore -and $wantedCores.ContainsKey($cell.ncore)) {
+      $matchedSomething = $true
       [void]$review.Add([pscustomobject]@{ key=$key; cell=$cell; why='size-variant of a blocked product (core name matches)' })
+    }
+  }
+
+  # --- UNFIRABLE: the KEY says this entry is about a product that IS on the board, but the stored NAME
+  # cannot match it, so the ruling can never fire and the wrong product stays live and unguarded.
+  #
+  # WHY THIS IS NARROW, AND HAS TO BE (2026-08-29). "This entry matches nothing" is the NORMAL, HEALTHY
+  # steady state of a ruling that worked: the commodity rule got fixed, the wrong product left the board,
+  # and the entry sits dormant guarding against its return. Flagging that would page on every success.
+  # What is NOT healthy is an entry whose key COLLIDES with a live board product while its name does not
+  # match it - because the key is the name slugged and truncated to 48 chars (add-known-wrong.ps1:142),
+  # two names that agree for 48 characters and diverge after produce ONE key and TWO different match
+  # targets. Founding case: bay-leaves|Walmart|soeos-bay-leaves-16-oz-454g-bay-leaves-bulk-bay stored a
+  # 70-char name ending "Bay Leaves Bulk, Bay Leaves Whole Dried" while the board carries the full
+  # 168-char SEO title ending "...Natural Dried Bay Leaf, Dried Bay Leaves, Whole Bay Leaves". The key
+  # collided, the name did not, add-known-wrong refused the re-issue as a duplicate, and the ruling was
+  # permanently inert - Soeos held the Walmart crown at $1.4369/oz, SEVENTEEN TIMES cheap, through a full
+  # rebuild that was supposed to have dropped it. Nothing reported it: the commodity had named cells, so
+  # the UNEVALUABLE check above passed it straight through.
+  if (-not $matchedSomething) {
+    $keySlug = ''
+    $kp = @($key -split '\|')
+    if ($kp.Count -ge 3) { $keySlug = [string]$kp[2] }
+    if ($keySlug) {
+      foreach ($cell in $cellsByKey[$ck]) {
+        $cellSlug = ([string]$cell.nfull) -replace '[^a-z0-9]+', '-'
+        $cellSlug = $cellSlug.Trim('-')
+        if ($cellSlug.Length -gt 48) { $cellSlug = $cellSlug.Substring(0, 48).Trim('-') }
+        if ($cellSlug -eq $keySlug) {
+          [void]$unfirable.Add(($key + " - its key matches the board product '" + $cell.item +
+            "' but none of its stored name(s) do, so this ruling can NEVER fire and that product is priced UNGUARDED at " +
+            $cell.store + ". The key is the name truncated to 48 chars, so a longer board name that agrees for 48 " +
+            "characters collides on the key while missing on the name. Re-issue the ruling with -Key set to something " +
+            "distinct and let add-known-wrong read the name off the board; do NOT reverse the original."))
+          break
+        }
+      }
     }
   }
 }
@@ -337,6 +378,7 @@ foreach ($m in $notes) { Say ('  NOTE          ' + $m) }
 if (-not $commodityRegistryUsable) { Say ('  NOTE          commodities.json loaded ' + $liveCommodities.Count + ' id(s), so the commodity-retired trigger was NOT evaluated this run.') }
 if (-not $storeRegistryUsable)     { Say ('  NOTE          stores.json loaded ' + $liveStores.Count + ' store(s), so the store-retired trigger was NOT evaluated this run.') }
 foreach ($m in $retire) { Say ('  ' + $m) }
+foreach ($m in $unfirable)   { Say ('  UNFIRABLE     ' + $m) }
 foreach ($m in $unevaluable) { Say ('  UNEVALUABLE   ' + $m) }
 foreach ($r in $review) {
   Say ("  REVIEW        [{0}] {1} '{2}' {3} - {4}" -f $r.cell.store, $r.cell.id, $r.cell.item, $r.cell.ad, $r.why)
@@ -354,7 +396,7 @@ if ($Report) {
     boards = $boardNames; cells_named = $cellsNamed; cells_unnamed = $cellsUnnamed
     blocked = @($blocked | ForEach-Object { [ordered]@{ key=$_.key; id=$_.cell.id; store=$_.cell.store; item=$_.cell.item; ad=$_.cell.ad; per_unit=$_.cell.per_unit; crown=$_.cell.crown; board=$_.cell.board } })
     review = @($review | ForEach-Object { [ordered]@{ key=$_.key; id=$_.cell.id; store=$_.cell.store; item=$_.cell.item; ad=$_.cell.ad } })
-    retire_ready = @($retire); unevaluable = @($unevaluable); notes = @($notes)
+    retire_ready = @($retire); unevaluable = @($unevaluable); unfirable = @($unfirable); notes = @($notes)
   }
   if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Force $outDir | Out-Null }
   ($rep | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $outDir 'known-wrong-report.json') -Encoding UTF8

@@ -3141,6 +3141,36 @@
                         "ruled_on":  "2026-08-29",
                         "ruled_by":  "wrong-product-sweep-2026-08-29",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bay-leaves|Walmart|soeos-bay-leaves-full-seo-title-as-the-board-carries-it",
+                        "commodity":  "bay-leaves",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Soeos Bay Leaves 16 oz (454g), Bay Leaves Bulk, Bay Leaves Dry, Bay Leaf, Laurel Leaves, Natural Laurel Leaf, Natural Dried Bay Leaf, Dried Bay Leaves, Whole Bay Leaves"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "SAME RULING as bay-leaves|Walmart|soeos-bay-leaves-16-oz-454g-bay-leaves-bulk-bay, re-issued against the name the BOARD actually carries. That entry stored a 70-char name ending \u0027Bay Leaves Bulk, Bay Leaves Whole Dried\u0027; the board row is the full 168-char SEO title ending \u0027Bay Leaves Dry, Bay Leaf, Laurel Leaves, Natural Laurel Leaf, Natural Dried Bay Leaf, Dried Bay Leaves, Whole Bay Leaves\u0027. The two normalize identically only for the first 47 characters, which is exactly the length the KEY is truncated to - so the key collided while the NAME the matcher compares did not, and the original ruling was permanently unfirable. Soeos still held the Walmart crown at 1.4369/oz after a full rebuild. Underlying finding unchanged and thriftycrew-99\u0027s: third-party bulk seller with zero rows in the 11,256-row store-scoped catalogue, no 16 oz size anywhere in the shelf bay leaf line, Great Value Bay Leaves 0.12 oz at 25.1667/oz is the shelf item, so the board was 17x cheap.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "claude (grocery triage) - re-issue of wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bay-leaves|Walmart|bay-leaves-by-its-delish-medium-jar",
+                        "commodity":  "bay-leaves",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Bay Leaves by Its Delish, Medium Jar"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "TWO defects in one cell, either of which disqualifies it. (1) SIZE IS UNKNOWN: the row\u0027s size field is the bare token \u0027oz\u0027 and the name states no number at all - the product is \u0027Medium Jar\u0027. compare-deals\u0027 documented rule reads a bare unit token as ONE of it, so the board priced a jar of unknown weight at 2.71/oz. Measured across the whole board, only 2 cells are priced off a bare oz with no number in the name, and this is the only one holding a crown. (2) MARKETPLACE BULK SELLER, the class thriftycrew-99 swept twice today: Its Delish has exactly 3 products in the entire 90-day Walmart union (bay leaves, chopped walnuts, minced garlic), all from the single 2026-08-06 capture. Walmart\u0027s shelf bay leaf line is 0.1-0.2 oz jars - Great Value Bay Leaves 0.12 oz at 3.02 = 25.1667/oz - so this cell was about 9x cheap. It took the crown the moment the Soeos ruling started firing, which is the third marketplace seller to walk into this one cell today.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "claude (grocery triage), continuing wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
