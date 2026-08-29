@@ -26,7 +26,7 @@
                  "protein":  55,
                  "carbs":  68,
                  "fat":  26,
-                 "cost_ps":  "4.78"
+                 "cost_ps":  "4.77"
              },
     "intro_html":  "A meatball sub is a wonderful thing that turns into a soggy tragedy about four hours after you build it. So we build it in a pan instead: turkey and smoked sausage meatballs baked in marinara, tucked into split rolls under melted mozzarella, assembled fresh when you eat it. Each serving carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -55,12 +55,12 @@
                        "White Mushrooms, 2.75 oz: ~$0.63. \u003cstrong\u003eBuy 1 8oz pack: $1.89.\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Marinara Sauce, 5.75 cups: ~$2.98. \u003cstrong\u003eBuy 3 24oz jars: $4.25.\u003c/strong\u003e",
-                       "Keto Bun, 26.4 buns: ~$15.90. \u003cstrong\u003eBuy 4 8 bunses: $19.27.\u003c/strong\u003e",
+                       "Keto Bun, 26.4 buns: ~$15.77. \u003cstrong\u003eBuy 4 8-bun packs: $19.12.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 16.75 oz: ~$3.65. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $48.11 across 14 servings, so roughly $3.44 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $62.88 across 14 servings, roughly $4.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.97. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $47.98 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $62.73 across 14 servings, roughly $4.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.82. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost) for a meatball sub with {{protein}} grams of protein in it. The sandwich shop version costs far more than that and gives you half the meat.",
     "shop_smart":  [
@@ -82,14 +82,14 @@
     "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the base in each container. Add an even share of meatballs and sauce, then pack the bun and the mozzarella separately, so you can build and broil the sub fresh when you eat it. Each serving lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.fromvalerieskitchen.com/italian-turkey-meatball-subs/\" target=\"_blank\" rel=\"noopener\"\u003efromvalerieskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A meatball sub for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  48.11,
-    "cost_batch_true":  62.88,
-    "cost_per_serving":  3.44,
-    "cost_per_serving_true":  4.49,
+    "cost_batch":  47.98,
+    "cost_batch_true":  62.73,
+    "cost_per_serving":  3.43,
+    "cost_per_serving_true":  4.48,
     "cost_pantry_add":  4.09,
-    "cost_first_run":  66.97,
+    "cost_first_run":  66.82,
     "scaler":  {
-                   "cost":  "62.88",
+                   "cost":  "62.73",
                    "ing":  [
                                {
                                    "item":  "Eggs",
@@ -183,7 +183,9 @@
                                    "item":  "Keto Bun",
                                    "canon":  "Keto Bun",
                                    "grams":  1320,
-                                   "buy":  "26.4 buns"
+                                   "buy":  "26.4 buns",
+                                   "bid":  "keto-hamburger-buns",
+                                   "gpu":  "50.000"
                                },
                                {
                                    "item":  "Reduced Fat Mozzarella",
@@ -202,7 +204,7 @@
                  "prepTime":  "PT25M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  4.78,
+                 "costPerServing":  4.77,
                  "recipeIngredient":  [
                                           "Eggs, 4 large eggs (210 g)",
                                           "Bread Crumbs, 1.5 cups (170 g)",

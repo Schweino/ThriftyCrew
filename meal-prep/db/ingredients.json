@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "item":  "_r300_note",
         "pantry_pkg_g":  0,
@@ -1464,8 +1464,8 @@
     },
     {
         "item":  "Keto Bun",
-        "bid":  null,
-        "note":  "UNPRICED 2026-08-22, AND THIS IS NOT THE SETTLED END STATE. db/not-price-tracked-ok.json's _rule forbids parking an unwired bid: an entry there claims the item costs the reader NOTHING, and a bun is not that. bid=null unblocks db-build (the daily FK gate) but build-v2-spec.ps1 REFUSES an unbid ingredient and audit-vocab-integrity exits 1, so this recipe cannot be re-spec'd or ride a wave until the bid exists - and it is already LIVE. The end state is a real commodity id plus either a board price or a documented register-estimate label in labels-r300.json. Blocked on Brad's product-class ruling: 'keto bun' is a brand-defined class, not a store search term. Needs Brad's product-class ruling - any low-carb hamburger bun (-> mint low-carb-hamburger-buns, allowlisted vs hamburger-buns) or a specific brand/sub roll. bid stays null until then so db-build can rebuild.",
+        "bid":  "keto-hamburger-buns",
+        "note":  "PRICED 2026-08-29. Brad ruled the product class: any keto/low-carb hamburger bun, so commodity keto-hamburger-buns was minted (grocery/commodities.json, cloned excludes from hamburger-buns) and given a recipe-floor row from adjudicated capture evidence - Walmart bettergoods Keto Friendly Hamburger Buns 14 oz 8 ct at $4.78 (=$0.5975/each, the cheapest of four keto buns in Omaha) and Baker's Nature's Own Life Keto Soft White Burger Buns 8 ct at $6.99 (=$0.8738). hamburger-buns gained \\bketo\\b and low[\\s-]?carb exclusions in the same change: a keto bun matched its include, NO exclusion caught it, and at $0.5975 it sits inside that row's 0.1-1.2 band, so a plain-bun recipe could have been priced and shopped on a keto bun at 3.6x whenever plain buns went out of stock. First-match-wins put hamburger-buns first, so the new id was unreachable without them.",
         "gpu":  50,
         "unit":  "each",
         "board":  "recipe",

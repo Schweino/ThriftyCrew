@@ -238,6 +238,30 @@ if ($SelfTest) {
       ((-not $r2.Ran) -and @($left2).Count -eq 3 -and (-not (Test-Path $sEvents2)) -and $r2.Why -match 'did not move') `
       ("ran=$($r2.Ran) left=$(@($left2).Count) why=$($r2.Why)")
 
+    # ---- ADOPTING A FIRST BID (2026-08-29) -------------------------------------------------------
+    # The row-edit regex is exercised directly, because the failure it pins was SILENT: `"bid": null`
+    # is not a quoted value, so the quoted-bid replace matched nothing, unit/gpu/board moved, the
+    # success banner printed, and the bid stayed null. Keto Bun sat in that state waiting on a ruling.
+    function Edit-RowBid([string]$RowText, [string]$ToBid) {
+      if ($RowText -match '"bid":\s*null') { return [regex]::Replace($RowText, '("bid":\s*)null', ('${1}"' + $ToBid + '"')) }
+      return [regex]::Replace($RowText, '("bid":\s*")[^"]*(")', ('${1}' + $ToBid + '${2}'))
+    }
+    $nullRow = '{"item":"Keto Bun","bid":null,"gpu":50,"unit":"each"}'
+    $gotNull = Edit-RowBid $nullRow 'keto-hamburger-buns'
+    T 'MUST FIRE  a row carrying "bid": null ADOPTS the new bid, quoted' `
+      (([string]($gotNull | ConvertFrom-Json).bid) -eq 'keto-hamburger-buns') ($gotNull)
+    T '  ...and the result is still valid JSON with the other fields intact' `
+      ((($gotNull | ConvertFrom-Json).gpu -eq 50) -and (($gotNull | ConvertFrom-Json).unit -eq 'each')) ($gotNull)
+    # CLEAN TWIN: the ordinary quoted-bid move must be untouched by the null branch.
+    $quotedRow = '{"item":"Apple","bid":"apples","gpu":175,"unit":"each"}'
+    T 'CLEAN TWIN a quoted bid still re-points the ordinary way' `
+      (([string]((Edit-RowBid $quotedRow 'apple-each') | ConvertFrom-Json).bid) -eq 'apple-each') (Edit-RowBid $quotedRow 'apple-each')
+    # MUST FIRE: the literal string "null" as a BID is a real id, not the null shape. Guarding the
+    # branch on the unquoted token rather than on the word keeps those apart.
+    $wordRow = '{"item":"Odd","bid":"null","gpu":1,"unit":"each"}'
+    T 'MUST NOT FIRE  a bid whose VALUE is the string "null" is not mistaken for an absent bid' `
+      (([string]((Edit-RowBid $wordRow 'real-id') | ConvertFrom-Json).bid) -eq 'real-id') (Edit-RowBid $wordRow 'real-id')
+
     # MUST FIRE: a failure is VISIBLE. A rebid is never blocked by the memory layer, but a silent
     # skip is forbidden - a cache nobody was told is stale is worse than no cache.
     $r3 = Invoke-MemoryInvalidation -OldBid 'apples' -NewBid 'apple-each' -Store (Join-Path $sTmp 'no-such-dir\ledger.json') -Events $sEvents
@@ -301,7 +325,18 @@ foreach ($a in [regex]::Matches($row, '"aliases":\s*\[(?<b>[^\]]*)\]') | ForEach
 }
 
 $new = $row
-$new = [regex]::Replace($new, '("bid":\s*")[^"]*(")',  ('${1}' + $ToBid + '${2}'))
+# ADOPTING A FIRST BID IS THE DEGENERATE RE-POINT, and until 2026-08-29 this script could not do it.
+# The replace below only ever matched a QUOTED bid, so a row carrying `"bid": null` - the shape a
+# vocabulary row takes while it waits for a product-class ruling - was left silently untouched: the
+# unit, gpu and board all moved, the script printed its success banner, and the bid stayed null. That
+# is the same class the spec layer had (see repair-missing-scaler-bid.ps1, built the same day): the
+# estate could MOVE a bid and could not GIVE one. Keto Bun was the live case - Brad ruled the product
+# class, keto-hamburger-buns was minted and priced, and nothing could wire the row to it.
+if ($row -match '"bid":\s*null') {
+  $new = [regex]::Replace($new, '("bid":\s*)null', ('${1}"' + $ToBid + '"'))
+} else {
+  $new = [regex]::Replace($new, '("bid":\s*")[^"]*(")',  ('${1}' + $ToBid + '${2}'))
+}
 $new = [regex]::Replace($new, '("unit":\s*")[^"]*(")', ('${1}' + $ToUnit + '${2}'))
 $new = [regex]::Replace($new, '("gpu":\s*)[0-9.]+',    ('${1}' + $ToGpu))
 # board names the NAMESPACE the new id lives in - it is not the DIRECTION of the move. The 2026-08-09
@@ -313,6 +348,16 @@ $new = [regex]::Replace($new, '("gpu":\s*)[0-9.]+',    ('${1}' + $ToGpu))
 $recipeCat = Join-Path $repo 'grocery\recipe-commodities.json'
 $newBoard  = 'weekly'
 if ((Test-Path $recipeCat) -and ((Get-Content $recipeCat -Raw) -match ('"' + [regex]::Escape($ToBid) + '"'))) { $newBoard = 'recipe' }
+# AND THE RECIPE FLOOR BOARD COUNTS TOO (2026-08-29). recipe-commodities.json is not the whole recipe
+# namespace: out\recipe-board-everyday.json carries 184 hand-held rows and only 74 ids are in the
+# catalog, so the check above alone calls a recipe-board commodity `weekly`. Measured on live data -
+# bulgur-wheat is absent from recipe-commodities.json and its row correctly reads `recipe`, and
+# keto-hamburger-buns (minted today onto that board) came out labelled `weekly`, which is precisely
+# the false fact the note above this line exists to prevent. Ask both catalogs, not one.
+if ($newBoard -eq 'weekly') {
+  $floorBoard = Join-Path $repo 'grocery\out\recipe-board-everyday.json'
+  if ((Test-Path $floorBoard) -and ((Get-Content $floorBoard -Raw) -match ('"id":\s*"' + [regex]::Escape($ToBid) + '"'))) { $newBoard = 'recipe' }
+}
 $new = [regex]::Replace($new, '("board":\s*")[^"]*(")', ('${1}' + $newBoard + '${2}'))
 if ($BuyPkgG -ge 0)   { $new = [regex]::Replace($new, '("buy_pkg_g":\s*)[0-9.]+', ('${1}' + $BuyPkgG)) }
 if ($BuyPkgLabel)     { $new = [regex]::Replace($new, '("buy_pkg_label":\s*")[^"]*(")', ('${1}' + $BuyPkgLabel + '${2}')) }

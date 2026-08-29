@@ -9786,6 +9786,31 @@
                                "size":  "1.75 oz"
                            }
                        ]
+        },
+        {
+            "id":  "keto-hamburger-buns",
+            "commodity":  "Keto Hamburger Buns",
+            "category":  "Bread \u0026 Bakery",
+            "unit":  "each",
+            "cheapest_store":  "Walmart",
+            "stores":  [
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.5975,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "bettergoods Keto Friendly Hamburger Buns, 14 oz, 8 Count",
+                               "size":  "8 ct"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.8738,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Nature\u0027s Own Life Keto Soft White Burger Buns, 8 ct",
+                               "size":  "8 ct"
+                           }
+                       ]
         }
     ],
     "built_at":  "2026-08-29T04:31:48",
