@@ -424,6 +424,19 @@ function Build-Row($raw) {
       taxonomy_path = [string]$raw.taxonomy_path
       link_url      = [string]$raw.url
       image_url     = [string]$raw.image_url
+      # THE SHELF SIGNAL (2026-08-29, design\BRIEF-marketplace-shelf-signal-2026-08-29.md).
+      # Three generations of per-product rulings failed to converge on the marketplace-bulk class -
+      # Frontier Co-op 16 oz bags, then 27 Peaks 12-19 oz bottles, then Badia 16 oz / 24 Mantra /
+      # Spice Hut - because a ruling names a PRODUCT and the defect is a LISTING KIND. curry-powder was
+      # blocked at Frontier's $0.7669/oz and came back at 27 Peaks' $0.7775/oz, one cent dearer.
+      # Every proxy tried stands in for one fact: is this listing purchasable at the L St store, or does
+      # it only ship? That fact is on the page and was never in our data. It is carried here so a rule can
+      # eventually read it instead of guessing from brand or size.
+      # EMPTY IS UNKNOWN, NEVER "SHIPPED". Captures written before the SKILL emitted these columns have no
+      # sel/ff at all, and the 90-day union keeps them until they roll off. Anything downstream must treat
+      # '' as no-information and admit the row; refusing on absence would drop most of the union overnight.
+      seller        = [string]$raw.sel
+      fulfillment   = ([string]$raw.ff).ToUpper()
     } }
   }
   return @{ err=("INVARIANT: no shape reproduces Walmart's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
@@ -604,6 +617,37 @@ if ($SelfTest) {
   foreach ($m in $mpKeep) {
     if (-not (BW-IsMultipackReject $m.n $m.s)) { Write-Output "ok    keeps legit unit: $($m.n.Substring(0,[Math]::Min(38,$m.n.Length)))" }
     else { Write-Output "FAIL  wrongly rejected '$($m.n)' - real product would vanish"; $fail++ }
+  }
+
+  # ---- THE SHELF SIGNAL carries through, and ABSENCE IS UNKNOWN (2026-08-29).
+  # The whole safety property of adding sel/ff is that a capture written before the SKILL emitted them
+  # must behave EXACTLY as it did yesterday. The 90-day union is full of those, so if absence read as
+  # "shipped" the board would lose most of its Walmart cells the moment anything gated on it.
+  $csvNew = Join-Path $env:TEMP ('bw-shelf-new-' + [Guid]::NewGuid().ToString('N') + '.csv')
+  $csvOld = Join-Path $env:TEMP ('bw-shelf-old-' + [Guid]::NewGuid().ToString('N') + '.csv')
+  try {
+    # 9-column shape (post-2026-08-29 SKILL) and the 7-column shape that predates it, same product.
+    @('q|n|lp|up|id|was|rb|sel|ff',
+      'oregano|Frontier Co-op Oregano Leaf Organic, 16 oz|$15.12|94.5 c/oz|111|||Walmart.com|SHIP') |
+      Set-Content -LiteralPath $csvNew -Encoding UTF8
+    @('q|n|lp|up|id|was|rb',
+      'oregano|Frontier Co-op Oregano Leaf Organic, 16 oz|$15.12|94.5 c/oz|111||') |
+      Set-Content -LiteralPath $csvOld -Encoding UTF8
+    $rowsNew = @(Import-CaptureCsv -Path $csvNew)
+    $rowsOld = @(Import-CaptureCsv -Path $csvOld)
+    if ([string]$rowsNew[0].sel -eq 'Walmart.com' -and ([string]$rowsNew[0].ff).ToUpper() -eq 'SHIP') {
+      Write-Output 'ok    a 9-column capture carries seller + fulfillment through the reader'
+    } else { Write-Output "FAIL  9-column capture lost sel/ff (sel='$($rowsNew[0].sel)' ff='$($rowsNew[0].ff)')"; $fail++ }
+    if ([string]$rowsOld[0].sel -eq '' -and [string]$rowsOld[0].ff -eq '') {
+      Write-Output 'ok    a 7-column capture reads sel/ff as EMPTY, which downstream must treat as unknown - not as shipped'
+    } else { Write-Output "FAIL  7-column capture invented sel/ff (sel='$($rowsOld[0].sel)' ff='$($rowsOld[0].ff)')"; $fail++ }
+    # And the ROW must carry them, because the reader seeing them is worth nothing if the builder drops them.
+    $src2 = Get-Content $PSCommandPath -Raw
+    if ($src2 -match '(?m)^\s*seller\s*=\s*\[string\]\$raw\.sel' -and $src2 -match '(?m)^\s*fulfillment\s*=') {
+      Write-Output 'ok    the emitted row carries seller + fulfillment'
+    } else { Write-Output 'FAIL  the row object does not carry seller/fulfillment - the signal stops at the reader'; $fail++ }
+  } finally {
+    foreach ($t in @($csvNew, $csvOld)) { if (Test-Path $t) { Remove-Item $t -Force -ErrorAction SilentlyContinue } }
   }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }

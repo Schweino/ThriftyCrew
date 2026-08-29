@@ -1211,6 +1211,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         New-FanoutLane -Name 'pack-basis'          -File (Join-Path $root 'audit-pack-basis.ps1') -Marker 'PACK-BASIS-COMPLETE'
         New-FanoutLane -Name 'walmart-fullpull'    -File (Join-Path $root 'audit-walmart-fullpull.ps1') -Marker 'WALMART-FULLPULL-COMPLETE'
         New-FanoutLane -Name 'capture-eviction'    -File (Join-Path $root 'audit-capture-eviction.ps1') -Marker 'CAPTURE-EVICTION-COMPLETE'
+        # ADVISORY, and it reports COVERAGE before it reports findings (2026-08-29). Until the attended-Chrome
+        # Walmart pull starts writing the sel/ff columns this prints 0% and says so; a 0% run is not a clean
+        # board, and the audit refuses to let it read as one. See
+        # design\BRIEF-marketplace-shelf-signal-2026-08-29.md.
+        New-FanoutLane -Name 'shelf-signal'        -File (Join-Path $root 'audit-shelf-signal.ps1') -Marker 'SHELF-SIGNAL-COMPLETE'
         New-FanoutLane -Name 'store-coverage'      -File (Join-Path $root 'audit-store-coverage.ps1')       -Due (-not $NoPublish) -Marker 'STORE-COVERAGE-COMPLETE'
       )
 
