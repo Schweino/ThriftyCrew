@@ -3,10 +3,10 @@
     "title":  "Blackened Chicken with Mango Salsa",
     "source_url":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  13,
     "created":  "2026-08-27T18:20:33",
-    "updated":  "2026-08-29T10:49:16",
+    "updated":  "2026-08-29T11:04:52",
     "terms":  [
                   {
                       "term":  "blackened seasoning mix",
@@ -114,6 +114,12 @@
                         "state":  "waved",
                         "at":  "2026-08-29T10:49:16",
                         "by":  "wave-close",
+                        "detail":  "wave 13"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-29T11:04:52",
+                        "by":  "wave-publish",
                         "detail":  "wave 13"
                     }
                 ]

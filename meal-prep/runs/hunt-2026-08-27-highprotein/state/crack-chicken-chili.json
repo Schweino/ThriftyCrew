@@ -3,10 +3,10 @@
     "title":  "Crack Chicken Chili",
     "source_url":  "https://wholesomelymorgan.com/crack-chicken-chili/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  13,
     "created":  "2026-08-27T18:14:56",
-    "updated":  "2026-08-29T10:49:16",
+    "updated":  "2026-08-29T11:04:52",
     "terms":  [
                   {
                       "term":  "chicken bone broth",
@@ -126,6 +126,12 @@
                         "state":  "waved",
                         "at":  "2026-08-29T10:49:16",
                         "by":  "wave-close",
+                        "detail":  "wave 13"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-29T11:04:52",
+                        "by":  "wave-publish",
                         "detail":  "wave 13"
                     }
                 ]

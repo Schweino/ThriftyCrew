@@ -1216,10 +1216,10 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w5",
       "opened":  "2026-08-29T10:49:11",
-      "last_activity":  "2026-08-29T11:25:34",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-29T12:37:31",
+      "closed":  true,
+      "closed_at":  "2026-08-29T12:37:31",
+      "close_detail":  "post-publish review NEEDS-BRAD on the fajita pantry packet only; all live pages verified clean",
       "abandoned":  false,
       "abandoned_at":  null,
       "abandon_reason":  null,
@@ -1289,16 +1289,26 @@
                          "stage":  "publish",
                          "at":  "2026-08-29T11:25:34",
                          "detail":  "9/9 wave slug(s) published through engine\\publish (visibility preserved) + 4 collateral spec(s) carried by propagate (total dirty 13)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-08-29T11:25:45",
+                         "detail":  "9/9 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-08-29T12:37:25",
+                         "detail":  "NEEDS-BRAD on one item, 11 live pages otherwise clean. All 11 bodies byte-identical to the built cards, both rewritten descriptions correct on all four social/SEO surfaces, recipes-db 576 rows reconciled, mobile 375px pass, zero em dashes, no buy-string garble. Open: fajita-seasoning pantry packet recorded as 28g/1oz against a board cell of 1.25oz - understates first-run cost by 0.27 on the live fajita page. Queue id 2026-08-29-8399c6."
                      }
                  ]
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w13",
       "opened":  "2026-08-29T10:49:16",
-      "last_activity":  "2026-08-29T11:04:56",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-29T12:37:31",
+      "closed":  true,
+      "closed_at":  "2026-08-29T12:37:31",
+      "close_detail":  "post-publish review NEEDS-BRAD on the fajita pantry packet only; all live pages verified clean",
       "abandoned":  false,
       "abandoned_at":  null,
       "abandon_reason":  null,
@@ -1356,6 +1366,11 @@
                          "stage":  "serveability",
                          "at":  "2026-08-29T11:04:56",
                          "detail":  "2/2 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-08-29T12:37:25",
+                         "detail":  "NEEDS-BRAD on one item, 11 live pages otherwise clean. All 11 bodies byte-identical to the built cards, both rewritten descriptions correct on all four social/SEO surfaces, recipes-db 576 rows reconciled, mobile 375px pass, zero em dashes, no buy-string garble. Open: fajita-seasoning pantry packet recorded as 28g/1oz against a board cell of 1.25oz - understates first-run cost by 0.27 on the live fajita page. Queue id 2026-08-29-8399c6."
                      }
                  ]
   }
