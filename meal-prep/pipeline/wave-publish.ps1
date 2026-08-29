@@ -616,6 +616,21 @@ $gates = @(
   # protein. Verified by its own completion marker rather than a text line, because a detector that
   # dies mid-run is silent and 'no findings' must never read the same as 'never ran'.
   @{ label = 'audit-cost-line-coverage';  path = (Join-Path $here 'audit-cost-line-coverage.ps1');  args = @('-Slugs', ($slugs -join ',')); marker = 'audit-cost-line-coverage'; text = '' },
+  # Ghost's own column limits, wired in 2026-08-29 the day they cost a wave. wave 5 of
+  # hunt-2026-08-15-lowcarb-100 went GO on nine recipes; seven published and two came back HTTP 422 with
+  # no reason anywhere - publish.ps1's catch reports "(422) Unknown Error" without reading the response
+  # body, and propagate echoes only the last two lines of publish output, so the per-slug cause was
+  # discarded before anyone saw it. Diagnosis took a hand call to publish.ps1 and then to the Ghost API.
+  # The cause was 13 characters of prose: custom_excerpt is a 300-character column and two descriptions
+  # expanded to 313 and 309. This gate is scoped to the wave and reads the EXPANDED text, which is the
+  # only length that matters - the raw field is longer, so a raw check judges the wrong string.
+  @{ label = 'audit-ghost-field-limits';  path = (Join-Path $here 'audit-ghost-field-limits.ps1');  args = @('-Slugs', ($slugs -join ',')); marker = 'ghost-field-limits'; text = '' },
+  # And the audit report this wave is publishing on must be READABLE by the two commands that undo a
+  # rejection. A blocker heading with no declared (kind) makes every recipe in its wave permanently
+  # unrevivable: hunt-run -Revive and -Repair read those headings to decide whose defect it was, and a
+  # kindless one refuses in wording that reads like a verdict on the recipe. Eleven recipes sat terminal
+  # on exactly that. Repo-wide rather than wave-scoped, and a no-op on a GO report with no blockers.
+  @{ label = 'audit-wave-blocker-headings'; path = (Join-Path $here 'audit-wave-blocker-headings.ps1'); args = @(); marker = 'wave-blocker-headings'; text = '' },
   @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @();         marker = '';                    text = 'ALL GUARD PREDICATE TESTS PASS' }
 )
 foreach ($g in $gates) {
