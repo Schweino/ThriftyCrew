@@ -1,0 +1,174 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "italian-sausage-peppers-onions-skillet",
+  "generated": "2026-08-29T10:07:35",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/italian-sausage-peppers-onions-skillet.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/italian-sausage-peppers-onions-skillet.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 6,
+        "source_ingredients": 8,
+        "matched": 5,
+        "invented": [
+          "Hot Italian Sausage"
+        ],
+        "dropped": [
+          "Italian sausage links",
+          "salt (from 'salt and pepper')"
+        ],
+        "consolidated": [
+          "pepper (from 'salt and pepper')"
+        ]
+      },
+      "detail": "INVENTED: 'Hot Italian Sausage' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'Italian sausage links' and the built recipe has nothing that denotes it; DROPPED: the source lists \"salt (from 'salt and pepper')\" and the built recipe has nothing that denotes it; CONSOLIDATED: the source states \"pepper (from 'salt and pepper')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Hot Italian Sausage' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'Italian sausage links' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"salt (from 'salt and pepper')\" and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states \"pepper (from 'salt and pepper')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 5,
+        "unrated": 1,
+        "exempt": 0,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Red Bell Pepper",
+            "source": "9 oz",
+            "spec": "2 lb",
+            "ratio": 3.5556,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Onion",
+            "source": "2 oz",
+            "spec": "7 oz",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "1 tbsp",
+            "spec": "3.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic",
+            "source": "1 tsp",
+            "spec": "3.5 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Marinara Sauce",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Hot Italian Sausage",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 5 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Italian Sausage, Peppers and Onions with Sauce",
+        "spec_source_url": "https://www.lowcarbmaven.com/sausage-peppers-onions/",
+        "transcription_source_url": "https://www.lowcarbmaven.com/sausage-peppers-onions/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

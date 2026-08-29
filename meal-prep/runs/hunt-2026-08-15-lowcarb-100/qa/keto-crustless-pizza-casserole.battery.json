@@ -1,0 +1,200 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "keto-crustless-pizza-casserole",
+  "generated": "2026-08-29T10:07:35",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/keto-crustless-pizza-casserole.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/keto-crustless-pizza-casserole.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 9,
+        "source_ingredients": 10,
+        "matched": 7,
+        "invented": [
+          "Mozzarella Cheese",
+          "Marinara Sauce"
+        ],
+        "dropped": [
+          "baby bella mushrooms",
+          "tomato basil sauce",
+          "pizza blend cheese"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Mozzarella Cheese' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Marinara Sauce' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'baby bella mushrooms' and the built recipe has nothing that denotes it; DROPPED: the source lists 'tomato basil sauce' and the built recipe has nothing that denotes it; DROPPED: the source lists 'pizza blend cheese' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Mozzarella Cheese' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Marinara Sauce' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'baby bella mushrooms' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'tomato basil sauce' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'pizza blend cheese' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 7,
+        "unrated": 2,
+        "exempt": 0,
+        "recipe_ratio": 1.125,
+        "lines": [
+          {
+            "item": "Hot Italian Sausage",
+            "source": "2 lb",
+            "spec": "2.25 lb",
+            "ratio": 1.125,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Pepperoni",
+            "source": "5 oz",
+            "spec": "5.75 oz",
+            "ratio": 1.15,
+            "deviation": 0.0222,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Red Bell Pepper",
+            "source": "1 large",
+            "spec": "1.25 large",
+            "ratio": 1.25,
+            "deviation": 0.1111,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Onion",
+            "source": "1 medium",
+            "spec": "1.25 medium",
+            "ratio": 1.25,
+            "deviation": 0.1111,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "2 tbsp",
+            "spec": "2.25 tbsp",
+            "ratio": 1.125,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "0.5 tsp",
+            "spec": "0.5 tsp",
+            "ratio": 1.0,
+            "deviation": 0.1111,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "0.5 tsp",
+            "spec": "0.5 tsp",
+            "ratio": 1.0,
+            "deviation": 0.1111,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Mozzarella Cheese",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Marinara Sauce",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 1.12x (median of 7 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Keto Crustless Pizza Casserole",
+        "spec_source_url": "https://drdavinahseats.com/low-carb-keto-crustless-pizza-casserole-recipe",
+        "transcription_source_url": "https://drdavinahseats.com/low-carb-keto-crustless-pizza-casserole-recipe"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 12,
+        "claimed_ratio": 1.1667,
+        "measured_ratio": 1.125
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

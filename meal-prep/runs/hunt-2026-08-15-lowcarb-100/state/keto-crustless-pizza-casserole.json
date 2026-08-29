@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "written",
+    "state":  "qa-passed",
     "wave":  null,
     "created":  "2026-08-16T01:35:04",
-    "updated":  "2026-08-29T09:54:15",
+    "updated":  "2026-08-29T10:10:00",
     "terms":  [
 
               ],
@@ -68,6 +68,12 @@
                         "at":  "2026-08-29T09:54:15",
                         "by":  "fable",
                         "detail":  "rebanded: Brad ruling 2026-08-29: the calorie floor moves 400 -\u003e 350, so this rejection recorded a rule that no longer exists. Nothing about the recipe changed.  [measured 391 cal / 9 g carbs; band in force 350-650 cal, carbs \u003c= 35; source-QA still owed]"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-29T10:10:00",
+                        "by":  "source-qa",
+                        "detail":  "PASS on both anchors (drdavinahseats.com matches line for line). Battery coverage FAIL fully adjudicated: Mozzarella/Marinara are food-DB booking rows only - every reader-facing surface says Pizza Blend Cheese and tomato basil pasta sauce; baby bella mushrooms are marked optional on the SOURCE and dropped from list and steps together. Note: writer_notes misstate the scale as 1.1667x when every rated line sits at 1.125x."
                     }
                 ]
 }

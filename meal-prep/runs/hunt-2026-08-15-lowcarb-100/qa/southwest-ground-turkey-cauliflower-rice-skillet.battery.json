@@ -1,0 +1,209 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "southwest-ground-turkey-cauliflower-rice-skillet",
+  "generated": "2026-08-29T10:07:35",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/southwest-ground-turkey-cauliflower-rice-skillet.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/southwest-ground-turkey-cauliflower-rice-skillet.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 15,
+        "source_ingredients": 18,
+        "matched": 13,
+        "invented": [
+          "Cauliflower",
+          "Cayenne Pepper"
+        ],
+        "dropped": [
+          "cayenne",
+          "cauliflower rice",
+          "siracha mayo",
+          "shredded lettuce",
+          "pico de gallo"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Cauliflower' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Cayenne Pepper' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'cayenne' and the built recipe has nothing that denotes it; DROPPED: the source lists 'cauliflower rice' and the built recipe has nothing that denotes it; DROPPED: the source lists 'siracha mayo' and the built recipe has nothing that denotes it; DROPPED: the source lists 'shredded lettuce' and the built recipe has nothing that denotes it; DROPPED: the source lists 'pico de gallo' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Cauliflower' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Cayenne Pepper' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'cayenne' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'cauliflower rice' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'siracha mayo' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'shredded lettuce' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'pico de gallo' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 2,
+        "unrated": 13,
+        "exempt": 0,
+        "recipe_ratio": 4.75,
+        "lines": [
+          {
+            "item": "93/7 Ground Turkey",
+            "source": "1 lb",
+            "spec": "4.75 lb",
+            "ratio": 4.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Frozen Chopped Spinach",
+            "source": "1 cup",
+            "spec": "4.75 cup",
+            "ratio": 4.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Cauliflower",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Red Bell Pepper",
+            "why": "the two measures are not the same kind (count:red vs count:each), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Shallots",
+            "why": "the two measures are not the same kind (count:small vs count:each), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Olive Oil",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Dried Parsley",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Garlic Powder",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Onion Powder",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Paprika",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Ground Cumin",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Ground Coriander",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Salt",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Black Pepper",
+            "why": "the two measures are not the same kind (volume vs count:t), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Cayenne Pepper",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 4.75x (median of 2 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Southwest Ground Turkey and Cauliflower Rice Skillet",
+        "spec_source_url": "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/",
+        "transcription_source_url": "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 3,
+        "claimed_ratio": 4.6667,
+        "measured_ratio": 4.75
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

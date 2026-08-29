@@ -104,6 +104,9 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $mp   = Split-Path -Parent $here                      # ...\meal-prep
 $repo = Split-Path -Parent $mp                        # ...\income
 . (Join-Path $repo 'lib\guard-contract.ps1')          # Write-GuardComplete: proves this ran to the end
+# The ONE reader for wave-audit blocker headings, shared with audit-wave-blocker-headings.ps1 so the
+# gate that keeps those headings readable and the command that acts on them cannot drift apart.
+. (Join-Path $here 'audit-blocker-lib.ps1')
 
 # ---------------------------------------------------------------------------------------------------
 # THE STATE GRAPH. Forward skips are the thing this refuses: the reason a recipe cannot go straight from
@@ -1868,40 +1871,15 @@ if ($runRevive) {
   # Only OPEN blockers count. A heading that says `Prior BLOCKER` is one an earlier cycle already
   # closed, and holding a recipe terminal for a defect that is on record as fixed is the bug.
   # THE FORM THIS READS IS THE FORM AUDITORS WRITE, and that is a correction (2026-08-29). The
-  # original pattern demanded `### BLOCKER n (kind)` exactly. NOTHING on disk is written that way:
-  # the twelve audit reports in meal-prep\runs use `### Blocker 1 (recipe-local): ...`,
-  # `### R1. ... (recipe-local, pipeline)`, `### B1. ... (shared, pipeline + shared-data)` and
-  # `### 1. ... (recipe-local)`. Run the old pattern over waves 5, 6, 9 and 10 of
-  # hunt-2026-08-27-highprotein and it matches ZERO headings in every one, so -Revive refused all
-  # eleven rejected-audit recipes with "names no open blockers" - the door was welded shut and the
-  # self-tests could not see it, because they seeded audits in the invented canonical form and so
-  # only ever asserted their own fixture. Kinds are read from ANY parenthesised group in the
-  # heading, since half the reports put the tag at the end rather than after the label.
-  $kinds = @()
-  foreach ($ln in (Get-Content $auditPath)) {
-    $s = [string]$ln
-    # The label must LEAD, immediately after the hashes. That is what keeps `### Prior BLOCKER 3`
-    # - a blocker an earlier cycle already closed - out of the count, which is the whole reason
-    # only OPEN blockers are read. `\d*` is optional (`### Blocker (shared-data...)` carries no
-    # number) but the trailing `\s` is not: it is what stops the bare `B` alternative from eating
-    # `### Battery failure re-derived CLEAN`, which is explicitly NOT a blocker.
-    if (-not [regex]::IsMatch($s, '^###\s+(?:BLOCKER|Blocker|B|R)\s*\d*\s*[.:\-]?\s')) {
-      if (-not [regex]::IsMatch($s, '^###\s+\d+\.\s')) { continue }
-    }
-    $found = @()
-    foreach ($grp in [regex]::Matches($s, '\(([^)]*)\)')) {
-      $inner = $grp.Groups[1].Value
-      # 'shared-data' contains 'shared', so both can fire on one tag. Harmless: the only kind that
-      # changes the verdict below is recipe-local, and the rest exist to prove a kind was declared
-      # at all. Note the deliberate imprecision: a heading reading `(shared-data, NOT recipe-local)`
-      # scores recipe-local and therefore REFUSES. That errs toward keeping a rejection standing,
-      # which is the safe direction for the one command that undoes a verdict.
-      foreach ($k in @('recipe-local', 'shared-data', 'shared', 'process', 'orchestration')) {
-        if ($inner -match [regex]::Escape($k)) { $found += $k }
-      }
-    }
-    $kinds += $found
-  }
+  # original pattern demanded `### BLOCKER n (kind)` exactly and NOTHING on disk is written that way,
+  # so -Revive refused all eleven rejected-audit recipes with "names no open blockers" - wording that
+  # reads as a sound rejection but means an unparseable file.
+  #
+  # The reader lives in audit-blocker-lib.ps1 rather than here, because audit-wave-blocker-headings.ps1
+  # gates the very headings this depends on. Two copies of "what is a blocker heading" is how that gate
+  # goes green while this command still sees nothing - the exact failure being fixed - so there is one
+  # implementation and the gate's guarantee is a guarantee about THIS input.
+  $kinds = @(Get-AuditBlockerKinds $auditPath)
   if (-not $kinds.Count) {
     # Single-quoted on purpose: a backtick is PowerShell's escape character, so quoting the heading
     # shape with backticks inside a double-quoted string silently eats them.
