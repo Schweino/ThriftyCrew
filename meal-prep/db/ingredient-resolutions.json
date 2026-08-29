@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-28T16:41:53",
-    "count":  260,
+    "updated":  "2026-08-29T04:33:02",
+    "count":  256,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -1085,15 +1085,6 @@
                             "at":  "2026-08-26T13:26:55"
                         },
                         {
-                            "key":  "shredded mozzarella cheese",
-                            "term":  "shredded mozzarella cheese",
-                            "item_id":  "shredded-cheese",
-                            "bid_exists":  true,
-                            "evidence":  "A bag of shredded cheese is the purchased product here, and shredded-cheese is the board\u0027s own 7 of 7 match for it; I did not use mozzarella-cheese because a block or ball is a different price class from a shred bag. [slug italian-chicken-tortellini-skillet-recipe-video, run hunt-2026-08-26-smoke5]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T13:26:55"
-                        },
-                        {
                             "key":  "boneless pork chops",
                             "term":  "boneless pork chops",
                             "item_id":  "boneless-pork-chops",
@@ -1333,15 +1324,6 @@
                             "item_id":  "ground-turkey",
                             "bid_exists":  false,
                             "evidence":  "Either-or line; took the first-named turkey, and ground-turkey is a live board id at 7 of 7 (cheapest 2.66 at Aldi) so this is a reuse, not a proposal. Not bridged to ground-beef-8020: different meat, different price class. [slug one-pan-sloppy-joe-casserole, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-27T11:54:19"
-                        },
-                        {
-                            "key":  "shredded cheese",
-                            "term":  "shredded cheese",
-                            "item_id":  "shredded-cheese",
-                            "bid_exists":  true,
-                            "evidence":  "A bag of shredded cheese is the purchased product, and shredded-cheese is the board\u0027s own 7 of 7 match - the same call as the 2026-08-26 \u0027shredded mozzarella cheese\u0027 ruling. Kept as mapped rather than mapped-optional because the source\u0027s own published macros include it. [slug one-pan-sloppy-joe-casserole, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-27T11:54:19"
                         },
@@ -2066,15 +2048,6 @@
                             "at":  "2026-08-27T18:58:29"
                         },
                         {
-                            "key":  "mexican style cheese",
-                            "term":  "Mexican style cheese",
-                            "item_id":  "shredded-cheese",
-                            "bid_exists":  true,
-                            "evidence":  "REUSE of shredded-cheese, live at 7 of 7 and cheapest 0.1521 at Sam\u0027s Club: a Mexican blend is the same bagged shred at the same price class. Refused ricotta/provolone/Boursin, which are different cheeses entirely. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-27T18:58:29"
-                        },
-                        {
                             "key":  "butternut squash",
                             "term":  "butternut squash",
                             "item_id":  "butternut-squash",
@@ -2145,15 +2118,6 @@
                             "evidence":  "REFUSED the near row Diced Tomatoes \u0026 Green Chilies [tomatoes-green-chilies]: that is a Rotel-style tomato product, a different food at a different price. Plain canned green chiles are live at 6 of 7, cheapest 0.2125 at Aldi. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-27T18:58:37"
-                        },
-                        {
-                            "key":  "reduced fat shredded mexican cheese",
-                            "term":  "reduced fat shredded Mexican cheese",
-                            "item_id":  "shredded-cheese",
-                            "bid_exists":  true,
-                            "evidence":  "REUSE of shredded-cheese, live at 7 of 7: reduced fat is a label variant of the same bag at the same shelf price, the \u0027reduced sodium beef broth\u0027 call. The macros differ, so the DB row is the reduced-fat one. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-27T18:58:38"
                         },
                         {
                             "key":  "sriracha sauce",

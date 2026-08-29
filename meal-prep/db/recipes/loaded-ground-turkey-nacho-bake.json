@@ -56,14 +56,14 @@
                        "Seasoned Black Beans, 2.8 cans: ~$4.66. \u003cstrong\u003eBuy 3 cans: $4.99.\u003c/strong\u003e",
                        "Diced Tomatoes, 5.6 cans: ~$4.30. \u003cstrong\u003eBuy 6 cans: $4.60.\u003c/strong\u003e",
                        "Jalapeno, 8.75 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 22.25 oz: ~$4.83. \u003cstrong\u003eBuy 3 8oz bags: $5.19.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 22.25 oz: ~$4.81. \u003cstrong\u003eBuy 3 8 oz bags: $5.18.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Light Sour Cream, 1.25 cups: ~$1.22. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Salsa, 1.5 cups: ~$1.46. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, salt, black pepper): ~$0.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.63 across 14 servings, so roughly $2.47 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $42.99 across 14 servings, roughly $3.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.04. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $34.61 across 14 servings, so roughly $2.47 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.98 across 14 servings, roughly $3.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.03. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Tortilla chips and canned beans are cheap; the cheese and the turkey are where the money goes, and both are doing real work here.",
     "shop_smart":  [
@@ -85,14 +85,14 @@
     "portion_html":  "Weigh the pans, subtract the empty pan weight, and divide by 14. Portion right away while the chips still have structure, then add the cold toppings to each container. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://muybuenoblog.com/ground-turkey-nachos/\" target=\"_blank\" rel=\"noopener\"\u003emuybuenoblog.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Loaded nachos that survive the week, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  34.63,
-    "cost_batch_true":  42.99,
+    "cost_batch":  34.61,
+    "cost_batch_true":  42.98,
     "cost_per_serving":  2.47,
     "cost_per_serving_true":  3.07,
     "cost_pantry_add":  11.05,
-    "cost_first_run":  54.04,
+    "cost_first_run":  54.03,
     "scaler":  {
-                   "cost":  "42.99",
+                   "cost":  "42.98",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",
@@ -179,7 +179,7 @@
                                    "canon":  "Mexican Cheese Blend",
                                    "grams":  633,
                                    "buy":  "22.25 oz",
-                                   "bid":  "shredded-cheese",
+                                   "bid":  "mexican-cheese-blend",
                                    "gpu":  "28.350"
                                },
                                {

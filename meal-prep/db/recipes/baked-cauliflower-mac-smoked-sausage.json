@@ -24,7 +24,7 @@
                  "protein":  25,
                  "carbs":  16,
                  "fat":  51,
-                 "cost_ps":  "2.20"
+                 "cost_ps":  "2.31"
              },
     "intro_html":  "Macaroni and cheese with sausage in it is the dinner a lot of us grew up on, and it never needed to be expensive to feel like a treat. Swap the noodles for cauliflower and the same comfort comes back with almost none of the carbs. Cauliflower boiled just tender, a cream and cheddar sauce with a little cream cheese for body, a whisper of Cajun seasoning, and enough smoked sausage that every bite finds some. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 20 grams of carbs. That is a bake that eats like the childhood version and costs like a Tuesday.",
     "ingredients_display":  [
@@ -42,12 +42,12 @@
                        "Smoked Sausage, 3 lb, sliced into thin rounds (about three 14 oz ropes and part of a fourth): ~$7.01. \u003cstrong\u003eBuy 4 13.5oz ropes: $7.88.\u003c/strong\u003e",
                        "Heavy Cream, 3/4 cup plus 2 tbsp: ~$1.04. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 7 oz, room temperature (an 8 oz brick minus 2 tbsp): ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 5 1/4 cups grated, divided (3 1/2 cups in, 1 3/4 cups on top): ~$3.18. \u003cstrong\u003eBuy 3 8oz bags: $3.65.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 5 1/4 cups grated, divided (3 1/2 cups in, 1 3/4 cups on top): ~$4.55. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
                        "Monterey Jack Cheese, 1 cup plus 3 tbsp grated: ~$1.06. \u003cstrong\u003eBuy 1 8oz block: $1.79.\u003c/strong\u003e",
                        "Pantry seasonings (cajun seasoning): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.69 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.48 across 14 servings, roughly $2.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $1.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $30.80. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $26.06 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.05 across 14 servings, roughly $2.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $1.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.37. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a cheesy, sausage-loaded bake that tastes like the boxed stuff never could. The sausage and the cheddar do the heavy lifting; the cauliflower stretches it into 14 real dinners.",
     "shop_smart":  [
@@ -69,14 +69,14 @@
     "portion_html":  "Set the baking dish on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thatlowcarblife.com/baked-cauliflower-mac-and-cheese-with-smoked-sausage/\" target=\"_blank\" rel=\"noopener\"\u003ethatlowcarblife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  24.69,
-    "cost_batch_true":  29.48,
-    "cost_per_serving":  1.76,
-    "cost_per_serving_true":  2.11,
+    "cost_batch":  26.06,
+    "cost_batch_true":  31.05,
+    "cost_per_serving":  1.86,
+    "cost_per_serving_true":  2.22,
     "cost_pantry_add":  1.32,
-    "cost_first_run":  30.8,
+    "cost_first_run":  32.37,
     "scaler":  {
-                   "cost":  "29.48",
+                   "cost":  "31.05",
                    "ing":  [
                                {
                                    "item":  "Cauliflower",
@@ -143,7 +143,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT40M",
-                 "costPerServing":  2.20,
+                 "costPerServing":  2.31,
                  "recipeIngredient":  [
                                           "Cauliflower, 3 1/2 lb, chopped into macaroni-sized pieces (about 3 medium heads) (1588 g)",
                                           "Smoked Sausage, 3 lb, sliced into thin rounds (about three 14 oz ropes and part of a fourth) (1361 g)",

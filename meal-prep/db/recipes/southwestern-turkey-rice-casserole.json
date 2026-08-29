@@ -53,12 +53,12 @@
                        "Cream of Chicken Soup, 2.3 cans: ~$1.73. \u003cstrong\u003eBuy 3 10.5oz cans: $2.22.\u003c/strong\u003e",
                        "Frozen Chopped Spinach, 1.5 lb: ~$2.46. \u003cstrong\u003eBuy 3 10oz boxes: $3.16.\u003c/strong\u003e",
                        "Turkey Breast, 2.5 lb: ~$12.13. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 18.5 oz: ~$4.02. \u003cstrong\u003eBuy 3 8oz bags: $5.19.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 18.5 oz: ~$4.01. \u003cstrong\u003eBuy 3 8 oz bags: $5.18.\u003c/strong\u003e",
                        "Corn Chips, 2.25 cups: ~$0.49. \u003cstrong\u003eBuy 1 9.25oz bag: $1.97.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, salt, black pepper): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $31.44 across 14 servings, so roughly $2.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $42.38 across 14 servings, roughly $3.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.91. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $31.43 across 14 servings, so roughly $2.24 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.37 across 14 servings, roughly $3.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.90. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Building the Spanish rice yourself from plain rice, tomatoes with green chilies, and cumin costs a fraction of what a boxed rice mix runs and tastes considerably better.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut to that number so the chip crust rides along with every square. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://spicysouthernkitchen.com/southwestern-turkey-rice-casserole/\" target=\"_blank\" rel=\"noopener\"\u003espicysouthernkitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "The casserole that always goes first, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  31.44,
-    "cost_batch_true":  42.38,
-    "cost_per_serving":  2.25,
+    "cost_batch":  31.43,
+    "cost_batch_true":  42.37,
+    "cost_per_serving":  2.24,
     "cost_per_serving_true":  3.03,
     "cost_pantry_add":  5.53,
-    "cost_first_run":  47.91,
+    "cost_first_run":  47.9,
     "scaler":  {
-                   "cost":  "42.38",
+                   "cost":  "42.37",
                    "ing":  [
                                {
                                    "item":  "Butter",
@@ -190,7 +190,7 @@
                                    "canon":  "Mexican Cheese Blend",
                                    "grams":  527,
                                    "buy":  "18.5 oz",
-                                   "bid":  "shredded-cheese",
+                                   "bid":  "mexican-cheese-blend",
                                    "gpu":  "28.350"
                                },
                                {

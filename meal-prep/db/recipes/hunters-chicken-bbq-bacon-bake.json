@@ -24,7 +24,7 @@
                  "protein":  63,
                  "carbs":  50,
                  "fat":  23,
-                 "cost_ps":  "2.48"
+                 "cost_ps":  "2.51"
              },
     "intro_html":  "Hunter\u0027s chicken is a British pub standard: chicken breast wrapped in bacon, painted with barbecue sauce, buried under melted cheese, and baked. Five real ingredients and one dish. It also carries a big protein number, at {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -40,17 +40,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Boneless Skinless Chicken Breast, 6.25 lb: ~$20.19. \u003cstrong\u003eBuy 7 lbs: $22.89.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 6.25 lb: ~$13.77. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
                        "Hickory Smoked Bacon, 0.75 lb: ~$2.93. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
-                       "BBQ Sauce, 3 cups: ~$3.67. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 6.25 oz: ~$1.33. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
-                       "Reduced Fat Mozzarella, 6.25 oz: ~$1.33. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "BBQ Sauce, 3 cups: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 6.25 oz: ~$1.34. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 6.25 oz: ~$1.35. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
                        "Potato, 6.6 potatoes: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
                        "Green Beans, 3 lb: ~$3.01. \u003cstrong\u003eBuy 5 12oz bags: $3.66.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.44 across 14 servings, so roughly $2.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.14 across 14 servings, roughly $2.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.28 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.42. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.56 across 14 servings, so roughly $1.90 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.40 across 14 servings, roughly $2.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.19. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a plate with a big protein number. That protein per serving is the real headline here, and it comes from a five ingredient bake anyone can make on a Tuesday.",
     "shop_smart":  [
@@ -72,14 +72,14 @@
     "portion_html":  "Weigh one piece of chicken into each container, then split the potatoes and green beans by weight across all fourteen. Set the dish on the scale and subtract the empty weight if you want to check yourself. Each portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and the bacon and cheese keep the chicken from drying out on reheat, which is a real advantage over plain baked breast.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kitchensanctuary.com/hunters-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ekitchensanctuary.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A high protein plate for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
-    "cost_batch":  34.44,
-    "cost_batch_true":  40.14,
-    "cost_per_serving":  2.46,
-    "cost_per_serving_true":  2.87,
-    "cost_pantry_add":  6.28,
-    "cost_first_run":  46.42,
+    "cost_batch":  26.56,
+    "cost_batch_true":  31.4,
+    "cost_per_serving":  1.9,
+    "cost_per_serving_true":  2.24,
+    "cost_pantry_add":  3.79,
+    "cost_first_run":  35.19,
     "scaler":  {
-                   "cost":  "40.14",
+                   "cost":  "31.40",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -162,7 +162,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  2.48,
+                 "costPerServing":  2.51,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 6.25 lb (2800 g)",
                                           "Hickory Smoked Bacon, 0.75 lb (336 g)",

@@ -25,7 +25,7 @@
                  "protein":  35,
                  "carbs":  42,
                  "fat":  43,
-                 "cost_ps":  "3.42"
+                 "cost_ps":  "3.50"
              },
     "intro_html":  "Turkey divan is a church potluck legend, and the thing that makes it a legend is the curry powder. Just a little, stirred into a cream sauce, and suddenly the whole casserole tastes like somebody knew what they were doing. Turkey, broccoli, and rice under a buttered crumb crust, baked until the top crackles. Each serving comes to \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -48,21 +48,21 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rice, 1.75 cups dry: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 1.75 cups dry: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Turkey Breast, 2.75 lb: ~$13.00. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
                        "Cream of Chicken Soup, 3.5 cans: ~$2.59. \u003cstrong\u003eBuy 4 10.5oz cans: $2.96.\u003c/strong\u003e",
-                       "Heavy Cream, 2.5 cups: ~$3.69. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
+                       "Heavy Cream, 2.5 cups: ~$2.95. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
                        "Mayonnaise, 1 cup: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Olives, 11.75 tbsp: ~$1.09. \u003cstrong\u003eBuy 1 6oz can: $1.87.\u003c/strong\u003e",
+                       "Olives, 11.75 tbsp: ~$0.98. \u003cstrong\u003eBuy 1 6oz can: $1.68.\u003c/strong\u003e",
                        "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 14 oz: ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
-                       "Broccoli Florets, 2.25 lb: ~$4.91. \u003cstrong\u003eBuy 4 12oz bags: $6.36.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 14 oz: ~$3.04. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
+                       "Broccoli Florets, 2.25 lb: ~$3.59. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
                        "Bread Crumbs, 1.75 cups: ~$0.54. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, curry powder, salt, black pepper): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $31.79 across 14 servings, so roughly $2.27 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $42.00 across 14 servings, roughly $3.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.15. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, onion powder, curry powder, salt, black pepper): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.54 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.83 across 14 servings, roughly $2.77 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.98. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a cream casserole with real turkey in it. Divan has been feeding families cheaply since the 1950s and it has not gotten worse at the job.",
     "shop_smart":  [
@@ -84,14 +84,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Cut down through the crumb topping so each container gets its share of the crunchy part, then finish with the remaining green onions. Each serving lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.melissassouthernstylekitchen.com/turkey-broccoli-rice-divan/\" target=\"_blank\" rel=\"noopener\"\u003emelissassouthernstylekitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A classic cream casserole for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  31.79,
-    "cost_batch_true":  42,
-    "cost_per_serving":  2.27,
-    "cost_per_serving_true":  3,
-    "cost_pantry_add":  13.15,
-    "cost_first_run":  55.15,
+    "cost_batch":  29.54,
+    "cost_batch_true":  38.83,
+    "cost_per_serving":  2.11,
+    "cost_per_serving_true":  2.77,
+    "cost_pantry_add":  10.15,
+    "cost_first_run":  48.98,
     "scaler":  {
-                   "cost":  "42.00",
+                   "cost":  "38.83",
                    "ing":  [
                                {
                                    "item":  "Rice",
@@ -230,7 +230,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  3.42,
+                 "costPerServing":  3.50,
                  "recipeIngredient":  [
                                           "Rice, 1.75 cups dry (299 g)",
                                           "Turkey Breast, 2.75 lb (1225 g)",

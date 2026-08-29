@@ -23,7 +23,7 @@
                  "protein":  29,
                  "carbs":  60,
                  "fat":  49,
-                 "cost_ps":  "2.78"
+                 "cost_ps":  "2.93"
              },
     "intro_html":  "Real macaroni and cheese, made from a butter and flour roux with milk, cream and a mountain of sharp cheddar, with browned smoked sausage folded through it and the whole thing baked until the top goes golden. Dijon and Worcestershire are the two things most people leave out, and they are what keep it from tasting flat. It carries {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost).",
     "ingredients_display":  [
@@ -43,19 +43,19 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pasta Shells, 28 oz dry: ~$1.70. \u003cstrong\u003eBuy 3 12oz boxes: $2.18.\u003c/strong\u003e",
-                       "Smoked Turkey Sausage, 1.75 lb: ~$7.09. \u003cstrong\u003eBuy 3 13oz ropes: $9.86.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 1.75 lb: ~$8.58. \u003cstrong\u003eBuy 3 13oz ropes: $11.93.\u003c/strong\u003e",
                        "Yellow Onion, 2 onions: ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Dijon Mustard, 1.75 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Milk, 3.5 cups: ~$0.68. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
-                       "Heavy Cream, 3.5 cups: ~$5.17. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 28 oz: ~$6.01. \u003cstrong\u003eBuy 4 8oz bags: $6.90.\u003c/strong\u003e",
+                       "Milk, 3.5 cups: ~$0.64. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
+                       "Heavy Cream, 3.5 cups: ~$4.12. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 28 oz: ~$6.07. \u003cstrong\u003eBuy 4 8oz bags: $6.97.\u003c/strong\u003e",
                        "Worcestershire Sauce, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $21.83 across 14 servings, so roughly $1.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.30 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.54. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.27 across 14 servings, so roughly $1.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.03 across 14 servings, roughly $2.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.03. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for scratch made mac and cheese with meat in it. The boxed stuff with a hot dog cut into it does not come close on protein, or on actually being food.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.butterandbaggage.com/smoked-sausage-pasta/\" target=\"_blank\" rel=\"noopener\"\u003ebutterandbaggage.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Scratch made comfort food for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  21.83,
-    "cost_batch_true":  32.3,
-    "cost_per_serving":  1.56,
-    "cost_per_serving_true":  2.31,
-    "cost_pantry_add":  10.24,
-    "cost_first_run":  42.54,
+    "cost_batch":  22.27,
+    "cost_batch_true":  33.03,
+    "cost_per_serving":  1.59,
+    "cost_per_serving_true":  2.36,
+    "cost_pantry_add":  8,
+    "cost_first_run":  41.03,
     "scaler":  {
-                   "cost":  "32.30",
+                   "cost":  "33.03",
                    "ing":  [
                                {
                                    "item":  "Pasta Shells",
@@ -191,7 +191,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  2.78,
+                 "costPerServing":  2.93,
                  "recipeIngredient":  [
                                           "Pasta Shells, 28 oz dry (794 g)",
                                           "Smoked Turkey Sausage, 1.75 lb (794 g)",

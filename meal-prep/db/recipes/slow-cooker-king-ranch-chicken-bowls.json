@@ -18,7 +18,7 @@
                  "protein":  63,
                  "carbs":  76,
                  "fat":  28,
-                 "cost_ps":  "3.06"
+                 "cost_ps":  "3.13"
              },
     "intro_html":  "King Ranch chicken is a Texas classic, all cheesy, saucy comfort in one pot. This meal prep version keeps the flavor, stacks up the protein, and stays cheap per serving. One batch makes 14 servings.",
     "ingredients_display":  [
@@ -42,20 +42,20 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 7 lb: ~$15.24. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.05. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Diced Tomatoes, 3/4 cup: ~$0.41. \u003cstrong\u003eBuy 1 can: $0.84.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 2 1/2 cups: ~$2.13. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.07. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Diced Tomatoes, 3/4 cup: ~$0.37. \u003cstrong\u003eBuy 1 can: $0.77.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 2 1/2 cups: ~$2.15. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
                        "Broccoli Florets, 4 2/3 cups: ~$1.37. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
-                       "Corn Tortillas, 15 corn tortillas, torn: ~$0.84. \u003cstrong\u003eBuy 1 30ct pack: $1.40.\u003c/strong\u003e",
-                       "Butter, 1 cup: ~$1.41. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
+                       "Corn Tortillas, 15 corn tortillas, torn: ~$1.07. \u003cstrong\u003eBuy 1 80ct pack: $4.49.\u003c/strong\u003e",
+                       "Butter, 1 cup: ~$1.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "All-Purpose Flour, 1 cup: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 4 cups: ~$2.19. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
-                       "Garlic, 2 cloves: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
-                       "Jalapeno, 1 medium: ~$0.17. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$0.96. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.19 across 14 servings, so roughly $1.87 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.74 across 14 servings, roughly $2.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.06. Those containers then feed this batch and many more after it."
+                       "Garlic, 2 cloves: ~$0.34. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Jalapeno, 1 medium: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$0.82. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.53 across 14 servings, so roughly $1.90 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.88 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.84. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -74,14 +74,14 @@
     "portion_html":  "Each of the 14 servings comes in around {{protein}}g protein for about {{cal}} calories, at roughly ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://houseofyumm.com/slow-cooker-king-ranch-chicken-soup/\" target=\"_blank\" rel=\"noopener\"\u003eHouse of Yumm\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, comforting, and cheap, this bowl proves meal prep does not have to taste like a diet. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  26.19,
-    "cost_batch_true":  32.74,
-    "cost_per_serving":  1.87,
-    "cost_per_serving_true":  2.34,
-    "cost_pantry_add":  8.32,
-    "cost_first_run":  41.06,
+    "cost_batch":  26.53,
+    "cost_batch_true":  35.88,
+    "cost_per_serving":  1.9,
+    "cost_per_serving_true":  2.56,
+    "cost_pantry_add":  7.96,
+    "cost_first_run":  43.84,
     "scaler":  {
-                   "cost":  "32.74",
+                   "cost":  "35.88",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -200,7 +200,7 @@
     "head":  {
                  "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker king ranch chicken bowls, budget dinner",
-                 "costPerServing":  3.06,
+                 "costPerServing":  3.13,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 7 lb (3100 g)",
                                           "Rice, 1 lb (850 g)",

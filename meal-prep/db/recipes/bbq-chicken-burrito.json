@@ -26,7 +26,7 @@
                  "protein":  39,
                  "carbs":  35,
                  "fat":  12,
-                 "cost_ps":  "2.84"
+                 "cost_ps":  "2.88"
              },
     "intro_html":  "\u003cp\u003eSweet, smoky, and honest about its numbers. This one lands at {{cal}} calories with {{protein}} grams of protein, wrapped in a tortilla that brings 18 grams of fiber for about 5 grams of net carb. The trick is a BBQ crema: blended cottage cheese and a little cream cheese carry the sauce so you get the creamy, saucy feel without a cup of mayo behind it. If you like our Lean BBQ Chicken and Rice Bowls, this is the same flavor you can eat with one hand.\u003c/p\u003e",
     "ingredients_display":  [
@@ -44,19 +44,19 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
                        "Vegetable Oil, 1.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "BBQ Sauce, 0.75 cups: ~$0.62. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "BBQ Sauce, 0.75 cups: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Fat Free Cottage Cheese, 3 cups: ~$2.81. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 5 oz: ~$1.14. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 5 oz: ~$1.06. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
-                       "Green Onions, 2.75 cups: ~$1.23. \u003cstrong\u003eBuy 2 bunches: $1.58.\u003c/strong\u003e",
-                       "Lime Juice, 4.75 tbsp: ~$1.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (smoked paprika, garlic powder): ~$0.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.29 across 14 servings, so roughly $2.02 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $37.03 across 14 servings, roughly $2.64 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.46. Those containers then feed this batch and many more after it."
+                       "Cheddar Cheese, Shredded, 5 oz: ~$1.07. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
+                       "Green Onions, 2.75 cups: ~$1.66. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Lime Juice, 4.75 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (smoked paprika, garlic powder): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.08 across 14 servings, so roughly $1.86 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.63 across 14 servings, roughly $2.47 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.64 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.27. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a BBQ chicken bowl at a fast-casual spot. Catch the breast on sale and it slides lower.\u003c/p\u003e",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://juicymacros.com/high-protein-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003ejuicymacros.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
-    "cost_batch":  28.29,
-    "cost_batch_true":  37.03,
-    "cost_per_serving":  2.02,
-    "cost_per_serving_true":  2.64,
-    "cost_pantry_add":  9.43,
-    "cost_first_run":  46.46,
+    "cost_batch":  26.08,
+    "cost_batch_true":  34.63,
+    "cost_per_serving":  1.86,
+    "cost_per_serving_true":  2.47,
+    "cost_pantry_add":  5.64,
+    "cost_first_run":  40.27,
     "scaler":  {
-                   "cost":  "37.03",
+                   "cost":  "34.63",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",
@@ -181,7 +181,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  2.84,
+                 "costPerServing":  2.88,
                  "recipeIngredient":  [
                                           "High Fiber Tortilla, 14 tortillas (910 g)",
                                           "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",

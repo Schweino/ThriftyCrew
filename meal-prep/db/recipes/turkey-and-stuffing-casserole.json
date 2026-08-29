@@ -27,7 +27,7 @@
                  "protein":  39,
                  "carbs":  65,
                  "fat":  18,
-                 "cost_ps":  "3.64"
+                 "cost_ps":  "3.68"
              },
     "intro_html":  "This is the good part of Thanksgiving without the four days of preparation or the relatives. Turkey and peas in a poultry-seasoned gravy, stuffing baked golden across the top, all of it in one pan on a random Tuesday. Each serving lands at {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Boxed stuffing mix is one of the cheapest carbohydrates in the store, and it never once pretended otherwise.",
     "ingredients_display":  [
@@ -50,20 +50,20 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 5.75 tbsp: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 5.75 tbsp: ~$0.83. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "All-Purpose Flour, 11 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Chicken Broth, 2.75 cups: ~$0.90. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Milk, 1.5 cups: ~$0.27. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
-                       "Greek Yogurt, 1.5 cups: ~$1.00. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 5.5 oz: ~$1.20. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Chicken Broth, 2.75 cups: ~$1.02. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Milk, 1.5 cups: ~$0.26. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
+                       "Greek Yogurt, 1.5 cups: ~$1.39. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 5.5 oz: ~$1.21. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Turkey Breast, 2.5 lb: ~$12.48. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
-                       "Frozen Green Peas, 2.5 lb: ~$2.43. \u003cstrong\u003eBuy 4 12oz bags: $2.94.\u003c/strong\u003e",
+                       "Frozen Green Peas, 2.5 lb: ~$2.17. \u003cstrong\u003eBuy 4 12oz bags: $2.62.\u003c/strong\u003e",
                        "Stuffing Mix, 15 cups: ~$4.73. \u003cstrong\u003eBuy 5 6oz boxes: $4.85.\u003c/strong\u003e",
-                       "Pantry seasonings (onion powder, garlic powder, poultry seasoning, salt, black pepper, hot sauce): ~$1.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.81 across 14 servings, so roughly $1.84 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.79 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.00. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (onion powder, garlic powder, poultry seasoning, salt, black pepper, hot sauce): ~$0.67. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.35 across 14 servings, so roughly $1.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.73 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.51. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a plate that tastes like a holiday. The stuffing mix and the frozen peas are doing the budget work while the turkey does the protein work.",
     "shop_smart":  [
@@ -85,14 +85,14 @@
     "portion_html":  "Set the pan on the scale, subtract the empty pan weight, and divide by 14. Weigh each square into its container instead of guessing, since the stuffing layer makes the portions look bigger than they are. Every serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thefoodiephysician.com/turkey-and-stuffing-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ethefoodiephysician.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Thanksgiving dinner on a weeknight budget, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  25.81,
-    "cost_batch_true":  35.79,
-    "cost_per_serving":  1.84,
-    "cost_per_serving_true":  2.56,
-    "cost_pantry_add":  23.21,
-    "cost_first_run":  59,
+    "cost_batch":  25.35,
+    "cost_batch_true":  35.73,
+    "cost_per_serving":  1.81,
+    "cost_per_serving_true":  2.55,
+    "cost_pantry_add":  15.78,
+    "cost_first_run":  51.51,
     "scaler":  {
-                   "cost":  "35.79",
+                   "cost":  "35.73",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",
@@ -231,7 +231,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  3.64,
+                 "costPerServing":  3.68,
                  "recipeIngredient":  [
                                           "Olive Oil, 5.75 tbsp (76 g)",
                                           "Butter, 5.5 tbsp (78 g)",

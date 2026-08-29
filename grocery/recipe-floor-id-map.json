@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "recipe-floor-id -\u003e board-commodity-id mappings for derive-recipe-floors.ps1. EVERY entry is a ONE-TIME HUMAN VERIFICATION that the two ids are the SAME commodity in the SAME form (fresh vs frozen, block vs shredded, plain vs seasoned all count as DIFFERENT). A verified entry automates that row\u0027s monthly floor refresh forever; a wrong one silently prices the floor off a different product (the board-collision class). Add entries as the monthly agent hand-checks the no-board-match list; include reviewed dates.",
     "map":  {
                 "ginger":  "fresh-ginger",
@@ -26,7 +26,6 @@
                 "green-beans":  "canned-green-beans",
                 "parmesan-cheese":  "parmesan",
                 "pineapple-chunks":  "canned-pineapple",
-                "cheddar-cheese-shredded":  "shredded-cheese",
                 "cheddar-cheese":  "shredded-cheese",
                 "pepperoncini":  "banana-peppers",
                 "diced-green-chiles":  "canned-green-chilies",

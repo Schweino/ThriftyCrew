@@ -24,7 +24,7 @@
                  "protein":  32,
                  "carbs":  59,
                  "fat":  24,
-                 "cost_ps":  "3.25"
+                 "cost_ps":  "3.24"
              },
     "intro_html":  "Florentine on a menu means there is spinach in it, a naming convention we inherited from French kitchens honoring Catherine de Medici. What it means for your kitchen is that frozen chopped spinach, which costs almost nothing, is about to carry a creamy turkey bake. Each serving lands at {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). There is a whisper of curry powder in the sauce that sounds strange and tastes exactly right.",
     "ingredients_display":  [
@@ -165,7 +165,7 @@
                                    "canon":  "Mexican Cheese Blend",
                                    "grams":  264,
                                    "buy":  "9.25 oz",
-                                   "bid":  "shredded-cheese",
+                                   "bid":  "mexican-cheese-blend",
                                    "gpu":  "28.350"
                                },
                                {
@@ -201,7 +201,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  3.25,
+                 "costPerServing":  3.24,
                  "recipeIngredient":  [
                                           "Butter, 1.25 cups (261 g)",
                                           "Yellow Onion, 1 onion (89 g)",

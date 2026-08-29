@@ -26,7 +26,7 @@
                  "protein":  36,
                  "carbs":  17,
                  "fat":  32,
-                 "cost_ps":  "2.06"
+                 "cost_ps":  "2.17"
              },
     "intro_html":  "Pulled pork is one of the best things you can meal prep, and this takes it low carb without losing a thing. A pork shoulder cooked low and slow until it falls apart, tossed with barbecue sauce and sharp cheddar, then piled into a roasted bell pepper and baked until the cheese melts over the top. You get the smoke and the sweet tang and the melted cheese of a barbecue plate, and the pepper does the job the bun used to do. Built at 14 servings it lands around \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 20 grams of carbs. That is a barbecue dinner that works with your macros instead of against them.",
     "ingredients_display":  [
@@ -40,12 +40,12 @@
     "cost_lines":  [
                        "Green Bell Peppers, 7 green bell peppers (about 3 1/2 lb), halved and seeded: ~$10.19. \u003cstrong\u003eBuy 14 each: $10.78.\u003c/strong\u003e",
                        "Pork Shoulder, 4 1/2 lb pork shoulder, cooked and pulled: ~$10.08. \u003cstrong\u003eBuy 5 lbs: $11.20.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 5 1/4 cups shredded cheddar (21 oz), divided: ~$3.19. \u003cstrong\u003eBuy 3 8oz bags: $3.65.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 5 1/4 cups shredded cheddar (21 oz), divided: ~$4.56. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
                        "BBQ Sauce, 1 1/4 cups BBQ sauce: ~$0.96. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Fresh Cilantro, 7 tbsp chopped fresh cilantro (optional garnish): ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.64 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $28.37 across 14 servings, roughly $2.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $28.78. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $26.01 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.94 across 14 servings, roughly $2.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $30.35. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e at everyday prices for a barbecue dinner you can eat all week. One pork shoulder and seven peppers turn into fourteen full plates.",
     "shop_smart":  [
@@ -68,14 +68,14 @@
     "portion_html":  "The honest way to make fourteen even servings is by weight. Weigh the loaded bowl of filling, subtract the empty weight from Step 1, and that is your total. Divide it by 14 and mound that exact amount into each pepper half before the top cheese goes on. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.lowcarbmaven.com/pulled-pork-stuffed-peppers/\" target=\"_blank\" rel=\"noopener\"\u003elowcarbmaven.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low carb, high protein dinner for about ${{cost_ps}} a serving at everyday prices. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  24.64,
-    "cost_batch_true":  28.37,
-    "cost_per_serving":  1.76,
-    "cost_per_serving_true":  2.03,
+    "cost_batch":  26.01,
+    "cost_batch_true":  29.94,
+    "cost_per_serving":  1.86,
+    "cost_per_serving_true":  2.14,
     "cost_pantry_add":  0.41,
-    "cost_first_run":  28.78,
+    "cost_first_run":  30.35,
     "scaler":  {
-                   "cost":  "28.37",
+                   "cost":  "29.94",
                    "ing":  [
                                {
                                    "item":  "Green Bell Peppers",
@@ -126,7 +126,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT4H",
                  "totalTime":  "PT4H20M",
-                 "costPerServing":  2.06,
+                 "costPerServing":  2.17,
                  "recipeIngredient":  [
                                           "Green Bell Peppers, 7 green bell peppers (about 3 1/2 lb), halved and seeded (1588 g)",
                                           "Pork Shoulder, 4 1/2 lb pork shoulder, cooked and pulled (2041 g)",

@@ -24,7 +24,7 @@
                  "protein":  36,
                  "carbs":  27,
                  "fat":  38,
-                 "cost_ps":  "2.70"
+                 "cost_ps":  "2.77"
              },
     "intro_html":  "Five ingredients, one baking dish, and it is arguably the most meal prep native recipe we have. Sausage, hash browns, cheddar and an egg custard baked until it sets into something you can cut into squares. Assemble it the night before if you want. It lands at {{protein}} grams of protein for about ${{cost_ps}} a bowl (at everyday cost).",
     "ingredients_display":  [
@@ -40,15 +40,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Ground Pork, 3.5 lb: ~$11.93. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
-                       "Frozen Hash Browns, 18.25 cups: ~$7.16. \u003cstrong\u003eBuy 3 26oz bags: $10.29.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 14 oz: ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
-                       "Eggs, 14 large eggs: ~$1.66. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
-                       "Milk, 3.5 cups: ~$0.68. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, garlic powder, onion powder): ~$0.13. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.57 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.38 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.93. Those containers then feed this batch and many more after it."
+                       "Ground Pork, 3.5 lb: ~$13.81. \u003cstrong\u003eBuy 4 lbs: $15.79.\u003c/strong\u003e",
+                       "Frozen Hash Browns, 18.25 cups: ~$5.80. \u003cstrong\u003eBuy 3 26oz bags: $8.34.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 14 oz: ~$3.04. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
+                       "Eggs, 14 large eggs: ~$1.89. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
+                       "Milk, 3.5 cups: ~$0.64. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, garlic powder, onion powder): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.27 across 14 servings, so roughly $1.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.77 across 14 servings, roughly $2.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.77. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a five ingredient casserole that reheats better than almost anything else in the library. Cut it into squares and the portioning is nearly done for you.",
     "shop_smart":  [
@@ -70,14 +70,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14, then cut the casserole into squares and adjust each container to hit that weight. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.plainchicken.com/sausage-hash-brown-breakfast-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eplainchicken.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make ahead casseroles for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  24.57,
-    "cost_batch_true":  33.38,
-    "cost_per_serving":  1.76,
-    "cost_per_serving_true":  2.38,
-    "cost_pantry_add":  7.55,
-    "cost_first_run":  40.93,
+    "cost_batch":  25.27,
+    "cost_batch_true":  33.77,
+    "cost_per_serving":  1.8,
+    "cost_per_serving_true":  2.41,
+    "cost_pantry_add":  5,
+    "cost_first_run":  38.77,
     "scaler":  {
-                   "cost":  "33.38",
+                   "cost":  "33.77",
                    "ing":  [
                                {
                                    "item":  "Ground Pork",
@@ -160,7 +160,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT55M",
                  "totalTime":  "PT1H15M",
-                 "costPerServing":  2.70,
+                 "costPerServing":  2.77,
                  "recipeIngredient":  [
                                           "Ground Pork, 3.5 lb (1587 g)",
                                           "Frozen Hash Browns, 18.25 cups (1538 g)",

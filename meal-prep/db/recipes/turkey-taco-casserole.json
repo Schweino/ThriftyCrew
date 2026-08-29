@@ -58,7 +58,7 @@
                        "Seasoned Black Beans, 4.7 cans: ~$7.77. \u003cstrong\u003eBuy 5 cans: $8.32.\u003c/strong\u003e",
                        "Salsa, 1.25 cups: ~$1.22. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
                        "Tortilla, 29.75 oz: ~$2.42. \u003cstrong\u003eBuy 2 20ct packs: $4.24.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 23.25 oz: ~$5.03. \u003cstrong\u003eBuy 3 8oz bags: $5.19.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 23.25 oz: ~$5.01. \u003cstrong\u003eBuy 3 8 oz bags: $5.18.\u003c/strong\u003e",
                        "Diced Tomatoes, 1 can: ~$0.65. \u003cstrong\u003eBuy 1 can: $0.77.\u003c/strong\u003e",
                        "Olives, 1 cup: ~$1.19. \u003cstrong\u003eBuy 1 6oz can: $1.68.\u003c/strong\u003e",
                        "Green Onions, 10 tbsp: ~$0.71. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
@@ -69,9 +69,9 @@
                        "Green Bell Peppers, 2.3 peppers: ~$1.80. \u003cstrong\u003eBuy 3 each: $2.31.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Pantry seasonings (taco seasoning, salt, black pepper): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $45.48 across 14 servings, so roughly $3.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $58.79 across 14 servings, roughly $4.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $69.53. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $45.46 across 14 servings, so roughly $3.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $58.78 across 14 servings, roughly $4.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $69.52. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), and you are getting a genuinely high protein number for it. Cost per serving matters, but cost per gram of protein is the number that actually tells you whether a meal is a good deal.",
     "shop_smart":  [
@@ -93,14 +93,14 @@
     "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut to that number and lift each square flat so the tortilla layers stay stacked. Every serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://getonmyplate.com/turkey-taco-casserole/\" target=\"_blank\" rel=\"noopener\"\u003egetonmyplate.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A protein-packed dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  45.48,
-    "cost_batch_true":  58.79,
+    "cost_batch":  45.46,
+    "cost_batch_true":  58.78,
     "cost_per_serving":  3.25,
     "cost_per_serving_true":  4.2,
     "cost_pantry_add":  10.74,
-    "cost_first_run":  69.53,
+    "cost_first_run":  69.52,
     "scaler":  {
-                   "cost":  "58.79",
+                   "cost":  "58.78",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",
@@ -155,7 +155,7 @@
                                    "canon":  "Mexican Cheese Blend",
                                    "grams":  659,
                                    "buy":  "23.25 oz",
-                                   "bid":  "shredded-cheese",
+                                   "bid":  "mexican-cheese-blend",
                                    "gpu":  "28.350"
                                },
                                {

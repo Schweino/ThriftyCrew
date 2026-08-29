@@ -18,7 +18,7 @@
                  "protein":  54,
                  "carbs":  61,
                  "fat":  22,
-                 "cost_ps":  "6.00"
+                 "cost_ps":  "6.03"
              },
     "intro_html":  "Enchilada night, minus the rolling and the oven time, all in one pan. These bowls hit a serious {{protein}} grams of protein each and come in around ${{cost_ps}} a serving (at everyday cost). Fourteen servings from one skillet means the whole week is covered.",
     "ingredients_display":  [
@@ -38,18 +38,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "93/7 Ground Beef, 5 lb: ~$33.28. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 5 lb: ~$31.01. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
                        "Seasoned Black Beans, 18 cups: ~$20.01. \u003cstrong\u003eBuy 13 cans: $21.63.\u003c/strong\u003e",
                        "Enchilada Sauce, 2 1/2 cups: ~$2.25. \u003cstrong\u003eBuy 3 10oz cans: $3.18.\u003c/strong\u003e",
                        "Sweet Whole Kernel Corn, 3 cups: ~$0.95. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 2 cups: ~$1.70. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
-                       "Olive Oil, 3.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 2 cups: ~$1.72. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
+                       "Olive Oil, 3.25 tbsp: ~$0.49. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 1/2 onion, diced: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Corn Tortillas, 5, cut into triangles: ~$0.82. \u003cstrong\u003eBuy 1 30ct pack: $1.40.\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$0.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $60.46 across 14 servings, so roughly $4.32 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $71.41 across 14 servings, roughly $5.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $83.92. Those containers then feed this batch and many more after it."
+                       "Corn Tortillas, 5, cut into triangles: ~$1.05. \u003cstrong\u003eBuy 1 80ct pack: $4.49.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$0.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $58.43 across 14 servings, so roughly $4.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $71.80 across 14 servings, roughly $5.13 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.46. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -67,14 +67,14 @@
     "portion_html":  "Each of the 14 bowls packs {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://reciperunner.com/beef-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eRecipe Runner\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big Tex-Mex flavor with {{protein}} grams of protein a bowl, and it reheats like a champ. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  60.46,
-    "cost_batch_true":  71.41,
-    "cost_per_serving":  4.32,
-    "cost_per_serving_true":  5.1,
-    "cost_pantry_add":  12.51,
-    "cost_first_run":  83.92,
+    "cost_batch":  58.43,
+    "cost_batch_true":  71.8,
+    "cost_per_serving":  4.17,
+    "cost_per_serving_true":  5.13,
+    "cost_pantry_add":  12.66,
+    "cost_first_run":  84.46,
     "scaler":  {
-                   "cost":  "71.41",
+                   "cost":  "71.80",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -172,7 +172,7 @@
     "head":  {
                  "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, beef enchilada skillet bowls, budget dinner",
-                 "costPerServing":  6.00,
+                 "costPerServing":  6.03,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 5 lb (2280 g)",
                                           "Seasoned Black Beans, 18 cups (3066 g)",

@@ -45,19 +45,19 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
-                       "Rotisserie Chicken, 2.62 lb pulled, skin removed: ~$10.18. \u003cstrong\u003eBuy 2 whole birds: $11.98.\u003c/strong\u003e",
+                       "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
+                       "Rotisserie Chicken, 2.62 lb pulled, skin removed: ~$10.15. \u003cstrong\u003eBuy 2 whole birds: $11.94.\u003c/strong\u003e",
                        "Fat Free Cottage Cheese, 3.5 cups: ~$3.20. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
-                       "Diced Green Chiles, 1.7 cans: ~$1.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
+                       "Diced Green Chiles, 1.7 cans: ~$1.73. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
                        "Seasoned Black Beans, 1.8 cans: ~$2.92. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
                        "Sweet Whole Kernel Corn, 9 oz: ~$0.48. \u003cstrong\u003eBuy 1 can: $0.82.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Red Bell Pepper, 3 peppers: ~$2.86. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 3.5 oz: ~$0.61. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
-                       "Pantry seasonings (taco seasoning): ~$0.60. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $35.21 across 14 servings, so roughly $2.52 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $44.40 across 14 servings, roughly $3.17 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.69. Those containers then feed this batch and many more after it."
+                       "Mexican Cheese Blend, 3.5 oz: ~$0.74. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.32 across 14 servings, so roughly $2.45 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.36 across 14 servings, roughly $3.10 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.26 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.62. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a smothered green-chile burrito out. This one is cheesy, high-protein, and still costs about two bucks.\u003c/p\u003e",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/cheesy-rotisserie-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003emasonfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
-    "cost_batch":  35.21,
-    "cost_batch_true":  44.4,
-    "cost_per_serving":  2.52,
-    "cost_per_serving_true":  3.17,
-    "cost_pantry_add":  0.29,
-    "cost_first_run":  44.69,
+    "cost_batch":  34.32,
+    "cost_batch_true":  43.36,
+    "cost_per_serving":  2.45,
+    "cost_per_serving_true":  3.1,
+    "cost_pantry_add":  0.26,
+    "cost_first_run":  43.62,
     "scaler":  {
-                   "cost":  "44.40",
+                   "cost":  "43.36",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",
@@ -163,7 +163,7 @@
                                    "canon":  "Mexican Cheese Blend",
                                    "grams":  98,
                                    "buy":  "3.5 oz",
-                                   "bid":  "shredded-cheese",
+                                   "bid":  "mexican-cheese-blend",
                                    "gpu":  "28.350"
                                }
                            ]

@@ -50,19 +50,19 @@
     "cost_lines":  [
                        "Pork Shoulder, 4.75 lb: ~$10.45. \u003cstrong\u003eBuy 5 lbs: $11.20.\u003c/strong\u003e",
                        "Yellow Onion, 1 onion: ~$0.34. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 2.75 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Chipotle in Adobo, 2.3 cans: ~$3.45. \u003cstrong\u003ePantry staple; this batch alone uses about 3 7oz cans.\u003c/strong\u003e",
                        "Chicken Broth, 2.25 cups: ~$0.85. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Tortilla, 29.75 oz: ~$2.42. \u003cstrong\u003eBuy 2 20ct packs: $4.24.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 28 oz: ~$4.94. \u003cstrong\u003eBuy 4 8oz bags: $5.67.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 28 oz: ~$6.01. \u003cstrong\u003eBuy 4 8 oz bags: $6.90.\u003c/strong\u003e",
                        "Salsa, 1.25 cups: ~$1.32. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
-                       "Fresh Cilantro, 5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
-                       "Lime Juice, 0.5 cups: ~$3.22. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (bay leaves, salt, garlic powder, onion powder, ground cumin, dried oregano, black pepper): ~$0.60. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.18 across 14 servings, so roughly $2.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.93 across 14 servings, roughly $2.42 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.67. Those containers then feed this batch and many more after it."
+                       "Fresh Cilantro, 5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Lime Juice, 0.5 cups: ~$0.28. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, salt, garlic powder, onion powder, ground cumin, dried oregano, black pepper): ~$0.56. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.39 across 14 servings, so roughly $1.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.19 across 14 servings, roughly $2.37 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.46. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) including the cheese and the tortillas. Compare that to what a birria taco truck charges for three tacos and a small cup of consomme.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Set your mixing pot of shredded pork on the scale, subtract the empty pot weight from Step 1, divide by 14, and portion that exact weight into each container, with consomme, tortillas, cheese and salsa packed separately so you can crisp fresh tacos at reheat. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thecarefreekitchen.com/pork-birria-tacos/\" target=\"_blank\" rel=\"noopener\"\u003ethecarefreekitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eBirria tacos and consomme for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  28.18,
-    "cost_batch_true":  33.93,
-    "cost_per_serving":  2.01,
-    "cost_per_serving_true":  2.42,
-    "cost_pantry_add":  13.74,
-    "cost_first_run":  47.67,
+    "cost_batch":  26.39,
+    "cost_batch_true":  33.19,
+    "cost_per_serving":  1.88,
+    "cost_per_serving_true":  2.37,
+    "cost_pantry_add":  11.27,
+    "cost_first_run":  44.46,
     "scaler":  {
-                   "cost":  "33.93",
+                   "cost":  "33.19",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",
@@ -201,7 +201,7 @@
                                    "canon":  "Mexican Cheese Blend",
                                    "grams":  791,
                                    "buy":  "28 oz",
-                                   "bid":  "shredded-cheese",
+                                   "bid":  "mexican-cheese-blend",
                                    "gpu":  "28.350"
                                },
                                {

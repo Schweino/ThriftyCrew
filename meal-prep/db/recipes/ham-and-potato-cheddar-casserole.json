@@ -27,7 +27,7 @@
                  "protein":  32,
                  "carbs":  71,
                  "fat":  20,
-                 "cost_ps":  "2.82"
+                 "cost_ps":  "2.93"
              },
     "intro_html":  "Ham is the protein everybody forgets about. It is already cooked, already seasoned, and it goes on deep discount around every holiday. Here it goes into a scratch cheddar sauce with potatoes and peas and bakes into the kind of casserole that shows up at church potlucks and disappears first. No condensed soup can involved, which matters more than you would think. A real roux with milk, broth, and shredded cheddar costs less than the canned shortcut and does not taste like a can.",
     "ingredients_display":  [
@@ -48,16 +48,16 @@
                        "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "All-Purpose Flour, 6.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 1 onion: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Milk, 1.5 cups: ~$0.27. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
-                       "Chicken Broth, 1.75 cups: ~$0.59. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 18.25 oz: ~$3.95. \u003cstrong\u003eBuy 3 8oz bags: $5.18.\u003c/strong\u003e",
+                       "Milk, 1.5 cups: ~$0.25. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
+                       "Chicken Broth, 1.75 cups: ~$0.67. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 18.25 oz: ~$3.98. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
                        "Potato, 21 potatoes: ~$5.62. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
                        "Diced Ham, 2.25 lb: ~$11.25. \u003cstrong\u003eBuy 3 16oz packs: $14.89.\u003c/strong\u003e",
-                       "Frozen Green Peas, 1 lb: ~$1.06. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.73 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.11 across 14 servings, roughly $2.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.45. Those containers then feed this batch and many more after it."
+                       "Frozen Green Peas, 1 lb: ~$0.95. \u003cstrong\u003eBuy 2 12oz bags: $1.31.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.67 across 14 servings, so roughly $1.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.83 across 14 servings, roughly $2.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.03. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a scratch cheddar casserole that beats the condensed-soup version on both taste and price.",
     "shop_smart":  [
@@ -79,14 +79,14 @@
     "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut and scoop to that weight rather than guessing at squares, because a casserole is never as even as it looks. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Let it cool fully before you snap the lids on or the potatoes go watery.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/ham-and-potato-casserole/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comfort-food casseroles for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  23.73,
-    "cost_batch_true":  35.11,
-    "cost_per_serving":  1.7,
-    "cost_per_serving_true":  2.51,
-    "cost_pantry_add":  8.34,
-    "cost_first_run":  43.45,
+    "cost_batch":  23.67,
+    "cost_batch_true":  34.83,
+    "cost_per_serving":  1.69,
+    "cost_per_serving_true":  2.49,
+    "cost_pantry_add":  6.2,
+    "cost_first_run":  41.03,
     "scaler":  {
-                   "cost":  "35.11",
+                   "cost":  "34.83",
                    "ing":  [
                                {
                                    "item":  "Butter",
@@ -185,7 +185,7 @@
                  "prepTime":  "PT25M",
                  "cookTime":  "PT60M",
                  "totalTime":  "PT85M",
-                 "costPerServing":  2.82,
+                 "costPerServing":  2.93,
                  "recipeIngredient":  [
                                           "Butter, 5.5 tbsp (77 g)",
                                           "All-Purpose Flour, 6.5 tbsp (51 g)",
