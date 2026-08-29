@@ -24,7 +24,7 @@
                  "protein":  29,
                  "carbs":  92,
                  "fat":  26,
-                 "cost_ps":  "3.37"
+                 "cost_ps":  "3.60"
              },
     "intro_html":  "Rice, browned smoked sausage, broccoli and sweet peppers with cheddar melted through the whole thing. It is the dish that gets kids to eat broccoli without a negotiation, and it costs almost nothing because rice and broccoli are two of the cheapest items on the board. It carries {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost).",
     "ingredients_display":  [
@@ -51,12 +51,12 @@
                        "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Smoked Turkey Sausage, 3 lb: ~$15.13. \u003cstrong\u003eBuy 4 13oz ropes: $15.91.\u003c/strong\u003e",
                        "Broccoli Florets, 1.25 lb: ~$2.04. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
-                       "Red Bell Pepper, 5.4 peppers: ~$5.26. \u003cstrong\u003eBuy 6 each: $5.88.\u003c/strong\u003e",
+                       "Red Bell Pepper, 5.4 peppers: ~$8.16. \u003cstrong\u003eBuy 6 each: $9.12.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 14 oz: ~$3.04. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, garlic powder, onion powder): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.75 across 14 servings, so roughly $2.12 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.77 across 14 servings, roughly $2.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.19. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $32.65 across 14 servings, so roughly $2.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.01 across 14 servings, roughly $2.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.43. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a cheesy skillet dinner with a green vegetable already folded in. Nobody is going to feel like they are eating on a budget.",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, stirring between scoops so the sausage does not settle. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kyleecooks.com/smoked-sausage-cheesy-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003ekyleecooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy skillet dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.75,
-    "cost_batch_true":  34.77,
-    "cost_per_serving":  2.12,
-    "cost_per_serving_true":  2.48,
+    "cost_batch":  32.65,
+    "cost_batch_true":  38.01,
+    "cost_per_serving":  2.33,
+    "cost_per_serving_true":  2.72,
     "cost_pantry_add":  12.42,
-    "cost_first_run":  47.19,
+    "cost_first_run":  50.43,
     "scaler":  {
-                   "cost":  "34.77",
+                   "cost":  "38.01",
                    "ing":  [
                                {
                                    "item":  "Rice",
@@ -200,7 +200,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  3.37,
+                 "costPerServing":  3.60,
                  "recipeIngredient":  [
                                           "Rice, 7.25 cups dry (1295 g)",
                                           "Olive Oil, 3.5 tbsp (47 g)",

@@ -46,20 +46,14 @@
                                                         ]
                                  },
                  "item:Korean Rice Cakes":  {
-                                                "verdict":  "UNKNOWN",
-                                                "as_of":  "2026-08-22",
-                                                "why":  "NEVER ESTABLISHED EITHER WAY - wrong commodity entirely, not merely a wrong term. The rice-cakes commodity searches \u0027rice cakes\u0027 and returns 650 rows of Quaker/Kroger/Drizzilicious SNACK cakes; tteok is a different food and appears nowhere in the corpus. NOTE the live trap: rice-cakes IS priced in the feed (Sam\u0027s Club $0.4216/oz, a Quaker snack), so mapping a tteok recipe onto that bid would pass the carriage gate at a snack price. That is a MAPPING defect for the commodity-registrar, which is why this is keyed by item name and NOT pointed at rice-cakes. dak-galbi-chicken-cabbage-skillet was unpublished to DRAFT on 2026-08-22.",
-                                                "terms_never_tried":  [
-                                                                          "tteok",
-                                                                          "tteokbokki",
-                                                                          "rice cake sticks",
-                                                                          "garaetteok",
-                                                                          "Korean rice cake"
-                                                                      ],
-                                                "recheck":  "Needs its own commodity id through the commodity-registrar (it is NOT a variant of rice-cakes), then a capture with the terms above.",
-                                                "parked_recipes":  [
-                                                                       "dak-galbi-chicken-cabbage-skillet"
-                                                                   ]
+                                                "verdict":  "CARRIED",
+                                                "store":  "Hy-Vee",
+                                                "item":  "O\u0027Food Original Tteokbokki (rice-cake + sauce kit; no plain garaetteok at this store)",
+                                                "size":  "9.1 oz",
+                                                "price":  8.99,
+                                                "as_of":  "2026-08-29",
+                                                "source":  "promoted from ingredient-queue term \u0027korean-rice-cakes\u0027",
+                                                "why":  "carried by Hy-Vee"
                                             },
                  "item:Guacamole":  {
                                         "verdict":  "CARRIED",
@@ -940,7 +934,181 @@
                                                                   "as_of":  "2026-08-29",
                                                                   "source":  "promoted from ingredient-queue term \u0027fat free shredded mozzarella cheese\u0027",
                                                                   "why":  "carried by Baker\u0027s, Hy-Vee, Walmart"
-                                                              }
+                                                              },
+                 "red-bell-pepper":  {
+                                         "verdict":  "CARRIED",
+                                         "store":  "Hy-Vee",
+                                         "item":  "Red Bell Pepper",
+                                         "size":  "1 ct",
+                                         "price":  0.99,
+                                         "as_of":  "2026-08-29",
+                                         "source":  "promoted from ingredient-queue term \u0027red bell pepper\u0027",
+                                         "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
+                                     },
+                 "item:Golden Beets":  {
+                                           "verdict":  "NOT-CARRIED",
+                                           "as_of":  "2026-08-29",
+                                           "stores":  {
+                                                          "Baker\u0027s":  {
+                                                                               "state":  "not-carried",
+                                                                               "terms_tried":  [
+                                                                                                   "golden beets"
+                                                                                               ],
+                                                                               "evidence":  "Full ladder walked headless via probe-ingredient.ps1. rung1 \u0027golden beets\u0027=0; rung3 \u0027goldenbeets\u0027=0; pre-pass rung \u0027golden\u0027=25 tiles, all cereal/beer/pizza-crust (Golden Grahams, Golden Road beer) - wrong rung for a 2-word term. I walked the correct head-noun rung \u0027beets\u0027=25 genuine beet products: Beets Bunch 1 lb, Organic RED Beets .49/lb, Del Monte Sliced, Kroger Whole/Sliced/Shoestring, Aunt Nellie\u0027s pickled - every one red or unspecified, none golden/yellow. Synonym rungs also walked: \u0027gold beets\u0027=1 -\u003e \u0027goldbeets\u0027=8 all Haribo Goldbears gummy candy; \u0027yellow beets\u0027=13 all Yellow Tail wine. Beets category is well populated here, so the absence of the golden variety within it is meaningful, not a search-box artifact. No beet commodity appears in audit-search-terms.ps1."
+                                                                           },
+                                                          "Family Fare":  {
+                                                                              "state":  "not-carried",
+                                                                              "terms_tried":  [
+                                                                                                  "golden beets"
+                                                                                              ],
+                                                                              "evidence":  "Full ladder walked headless via probe-ingredient.ps1 (Freshop store_id 6401 Omaha). rung1 \u0027golden beets\u0027=0; rung3 \u0027goldenbeets\u0027=0; pre-pass rung \u0027golden\u0027=25 tiles all Golden Delicious apples/Twinkies/Coors Banquet/Golden Oreo - wrong rung. Correct head-noun rung \u0027beets\u0027=13 genuine beet products: Baby RED Beets .49, Our Family Diced/Whole/Sliced Beets 15oz .19, Del Monte Sliced 14.5oz, Aunt Nellie\u0027s + Paisley Farm pickled, Mrs Gerrys Beets And Onions - all red or unspecified, none golden/yellow. Synonyms too: \u0027gold beets\u0027=0 and \u0027goldbeets\u0027=0 (fell back to \u0027beets\u0027); \u0027yellow beets\u0027=0, \u0027yellowbeets\u0027=0, \u0027yellow\u0027=25 all bananas/corn/peppers/onions. Populated beets category with no golden variety."
+                                                                          },
+                                                          "Hy-Vee":  {
+                                                                         "state":  "not-carried",
+                                                                         "terms_tried":  [
+                                                                                             "golden beets"
+                                                                                         ],
+                                                                         "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027, searched \u0027golden beets\u0027: \u00271 - 7 of 7 Results\u0027. All seven adjudicated and rejected as not golden: Green Top Beets Bunch 1 ct $3.99 (red beets), Hy-Vee Sliced Beets 15 oz, Hy-Vee Diced Beets 15 oz, Aunt Nellie\u0027s Sweet \u0026 Sour Harvard Beets, Aunt Nellie\u0027s Sliced Pickled Beets, Aunt Nellie\u0027s Whole Pickled Beets, Del Monte Crinkle Cut Pickled Beets. The store clearly stocks fresh beets and canned beets, so the absence of a GOLDEN beet is a meaningful absence rather than a catalogue gap."
+                                                                     },
+                                                          "Aldi":  {
+                                                                       "state":  "not-carried",
+                                                                       "terms_tried":  [
+                                                                                           "golden beets"
+                                                                                       ],
+                                                                       "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Three rungs, all returning the literal no-results banner with suggestion tiles only: \u0027golden beets\u0027 -\u003e \u0027No results for golden beets\u0027, \u0027beets\u0027 -\u003e \u0027No results for beets\u0027, \u0027beet\u0027 -\u003e \u0027No results for beet\u0027. Suggestions were ordinary produce (radishes, ginger, carrots, celery, cucumber, red onions). Control terms \u0027bananas\u0027 and \u0027dill pickles\u0027 returned no banner and real results in the same session. Aldi Omaha stocks no beet of any colour, golden included."
+                                                                   },
+                                                          "Fareway":  {
+                                                                          "state":  "not-carried",
+                                                                          "terms_tried":  [
+                                                                                              "golden beets"
+                                                                                          ],
+                                                                          "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Two rungs, both with the literal banner: \u0027golden beets\u0027 -\u003e \u0027No results for golden beets\u0027 and \u0027gold beet\u0027 -\u003e \u0027No results for gold beet\u0027, each scrolled to a stable 60 tiles. A separate \u0027beets\u0027 query returned 5 genuine hits with NO banner - Fareway Sliced/Whole/Diced Beets 15 oz $1.44, Aunt Nellie\u0027s Sliced Pickled Beets, Love Beets Cooked 8.8 oz $4.99 - proving the store does stock beets and that the golden-specific empty is a real absence. Every stocked beet is red, canned or pre-cooked. (An earlier run of this term produced a stale scrape showing dill rows; it was discarded and the query re-run, which is where these banners come from.)"
+                                                                      },
+                                                          "Sam\u0027s Club":  {
+                                                                                  "state":  "not-carried",
+                                                                                  "terms_tried":  [
+                                                                                                      "golden beets"
+                                                                                                  ],
+                                                                                  "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=golden beets via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid, and not one row was a beet in any form: Neuriva brain supplement, Qunol magnesium, Giorgio mushrooms, Premier Protein, VitaCup coffee, canned peaches, whey isolate. The single near-hit is \u0027Force Factor Total Beets Soft Chews, Acai Berry, 90 ct\u0027 - a supplement chew, the documented brand-name trap, not a vegetable. No golden beet."
+                                                                              },
+                                                          "Walmart":  {
+                                                                          "state":  "not-carried",
+                                                                          "terms_tried":  [
+                                                                                              "golden beets"
+                                                                                          ],
+                                                                          "evidence":  "walmart.com in Brad\u0027s Chrome, store \u0027Omaha L St Supercenter\u0027. Two rungs: \u0027golden beets\u0027 (46 rows) and the widened \u0027beets\u0027, both filtered to fulfillmentType=STORE. The STORE rows are \u0027Fresh Whole Red Beets Bunch\u0027 $2.67, \u0027Fresh Organic Whole Red Beets, 1 lb Bag\u0027 $3.38, and canned red beets (Great Value Sliced $0.78, Libby\u0027s Sliced/Cut $1.47, Del Monte Sliced $1.72, Aunt Nellie\u0027s Pickled $2.47). Every fresh beet stocked at the Omaha store is RED. No golden or yellow beet at any rung."
+                                                                      }
+                                                      },
+                                           "source":  "promoted from ingredient-queue term \u0027golden beets\u0027",
+                                           "why":  "all seven Omaha stores answered and none carry it"
+                                       },
+                 "item:Moroccan Seven Spice Blend":  {
+                                                         "verdict":  "CARRIED",
+                                                         "store":  "Walmart",
+                                                         "item":  "McCormick Moroccan Style Seasoning",
+                                                         "size":  "4.62 oz",
+                                                         "price":  3.84,
+                                                         "as_of":  "2026-08-29",
+                                                         "source":  "promoted from ingredient-queue term \u0027Moroccan seven spice blend\u0027",
+                                                         "why":  "carried by Walmart"
+                                                     },
+                 "item:Moroccan Spice Mix":  {
+                                                 "verdict":  "CARRIED",
+                                                 "store":  "Walmart",
+                                                 "item":  "McCormick Moroccan Style Seasoning",
+                                                 "size":  "4.62 oz",
+                                                 "price":  3.84,
+                                                 "as_of":  "2026-08-29",
+                                                 "source":  "promoted from ingredient-queue term \u0027Moroccan Spice Mix\u0027",
+                                                 "why":  "carried by Walmart"
+                                             },
+                 "item:Juniper Berries":  {
+                                              "verdict":  "CARRIED",
+                                              "store":  "Hy-Vee",
+                                              "item":  "Morton \u0026 Bassett Juniper Berries",
+                                              "size":  "1.3 oz",
+                                              "price":  10.99,
+                                              "as_of":  "2026-08-29",
+                                              "source":  "promoted from ingredient-queue term \u0027juniper berries\u0027",
+                                              "why":  "carried by Hy-Vee"
+                                          },
+                 "item:Broccoli Rabe":  {
+                                            "verdict":  "NOT-CARRIED",
+                                            "as_of":  "2026-08-29",
+                                            "stores":  {
+                                                           "Baker\u0027s":  {
+                                                                                "state":  "not-carried",
+                                                                                "terms_tried":  [
+                                                                                                    "broccoli rabe"
+                                                                                                ],
+                                                                                "evidence":  "server lane full ladder: \u0027broccoli rabe\u0027=0, \u0027broccolirabe\u0027=0, widened rung \u0027broccoli\u0027=25 returning only ordinary broccoli (crowns, bunches, frozen florets). Broccoli rabe/rapini is a different vegetable (bitter Brassica rapa), not substitutable by a broccoli crown; no rabe/rapini tile at any rung."
+                                                                            },
+                                                           "Family Fare":  {
+                                                                               "state":  "not-carried",
+                                                                               "terms_tried":  [
+                                                                                                   "broccoli rabe"
+                                                                                               ],
+                                                                               "evidence":  "server lane full ladder: \u0027broccoli rabe\u0027=0, \u0027broccolirabe\u0027=0, widened rung \u0027broccoli\u0027=25 - all plain broccoli (crowns, fresh, florets, frozen cuts, beef \u0026 broccoli entree). No rabe/rapini. Widening the pool does not widen the ruling."
+                                                                           },
+                                                           "Hy-Vee":  {
+                                                                          "state":  "not-carried",
+                                                                          "terms_tried":  [
+                                                                                              "broccoli rabe"
+                                                                                          ],
+                                                                          "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027. Rung 1 \u0027broccoli rabe\u0027 returned the explicit phrase: broccoli rabe didn\u0027t return any results. Please check your spelling and try again. Rung 2 used the correct synonym \u0027rapini\u0027 and returned a single tile which was a SPONSORED placement (Dole Classic Romaine Salad 9 oz) with no result-count line at all, i.e. no genuine result. Two rungs, one of them the proper botanical synonym, both empty."
+                                                                      },
+                                                           "Aldi":  {
+                                                                        "state":  "not-carried",
+                                                                        "terms_tried":  [
+                                                                                            "broccoli rabe"
+                                                                                        ],
+                                                                        "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Two rungs, both returning the literal banner with suggestion tiles only: \u0027broccoli rabe\u0027 -\u003e No results for broccoli rabe, and the synonym \u0027rapini\u0027 -\u003e No results for rapini. Suggestions were ordinary brassicas - Broccoli Florets 12 oz $2.29, Broccoli Crowns per lb $2.09, Organic Broccoli $3.29, cauliflower crowns, kale, spinach - proving the produce department is stocked and simply has no rabe. Control terms returned real results with no banner in the same session."
+                                                                    },
+                                                           "Fareway":  {
+                                                                           "state":  "not-carried",
+                                                                           "terms_tried":  [
+                                                                                               "broccoli rabe"
+                                                                                           ],
+                                                                           "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Two rungs, both with the literal banner: \u0027broccoli rabe\u0027 -\u003e No results for broccoli rabe (scrolled to a stable 41 tiles, past the 9-at-a-time lazy-load tell), and \u0027rapini\u0027 -\u003e No results for rapini (13 tiles). Suggestions were ordinary broccoli - crowns $2.48/ea est., Birds Eye and Green Giant frozen florets, Taylor Farms and Pero Family Farms florets, Fareway steamable florets. ONE row deserved a hard look: \u0027Pero Family Farms Broccoletti 8 oz\u0027 $2.99 - REJECTED, because broccoletti/broccolini is baby broccoli, a broccoli-gai lan cross, and NOT rapini/broccoli rabe, which is a turnip relative with the distinct bitter flavour the recipe relies on."
+                                                                       },
+                                                           "Sam\u0027s Club":  {
+                                                                                   "state":  "not-carried",
+                                                                                   "terms_tried":  [
+                                                                                                       "broccoli rabe"
+                                                                                                   ],
+                                                                                   "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=broccoli rabe via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid; every row was ordinary bulk produce - Taylor Farms Sweet Kale kit, cherry tomatoes, organic green beans, Earthbound Farm organic broccoli florets 2 lbs, Brussels sprouts, baby carrots, russet potatoes, mixed squash, asparagus. No rabe or rapini in a warehouse assortment where a niche bitter green would not be expected."
+                                                                               },
+                                                           "Walmart":  {
+                                                                           "state":  "not-carried",
+                                                                           "terms_tried":  [
+                                                                                               "broccoli rabe"
+                                                                                           ],
+                                                                           "evidence":  "walmart.com in Brad\u0027s Chrome, store \u0027Omaha L St Supercenter\u0027. Two rungs, \u0027broccoli rabe\u0027 (42 rows) and the synonym \u0027rapini\u0027, both filtered to fulfillmentType=STORE. Real rabe exists on the site - \u0027Rapini - Broccoli Rabe - 19 oz\u0027 $13.90 and a SACLA Friarelli antipasto jar - but both are MARKETPLACE/FC ship-only, not Omaha shelf stock. Every fulfillmentType=STORE row is ordinary broccoli (Fresh Whole Green Broccoli Crowns $1.72, Marketside Fresh Broccoli Florets, Great Value frozen florets/cuts, Fresh Organic Broccoli bunch $3.97) or, on the \u0027rapini\u0027 rung, lettuce and kale. No broccoli rabe stocked at the Omaha store."
+                                                                       }
+                                                       },
+                                            "source":  "promoted from ingredient-queue term \u0027broccoli rabe\u0027",
+                                            "why":  "all seven Omaha stores answered and none carry it"
+                                        },
+                 "item:Lean Ground Bison":  {
+                                                "verdict":  "CARRIED",
+                                                "store":  "Walmart",
+                                                "item":  "90% Lean / 10% Fat, Ground Bison",
+                                                "size":  "1 lb",
+                                                "price":  8.98,
+                                                "as_of":  "2026-08-29",
+                                                "source":  "promoted from ingredient-queue term \u0027lean ground bison\u0027",
+                                                "why":  "carried by Baker\u0027s, Hy-Vee, Walmart"
+                                            },
+                 "fresh-dill":  {
+                                    "verdict":  "CARRIED",
+                                    "store":  "Walmart",
+                                    "item":  "Fresh Dill, 0.5 oz Clamshell",
+                                    "size":  "0.5 oz",
+                                    "price":  1.78,
+                                    "as_of":  "2026-08-29",
+                                    "source":  "promoted from ingredient-queue term \u0027fresh dill\u0027",
+                                    "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Fareway, Walmart"
+                                }
              },
     "_parked_doc":  "parked_recipes lists slugs held out of the catalogue by this ingredient. They were unpublished to DRAFT on Ghost, not deleted, precisely so a CARRIED verdict can bring them back. audit-carriage.ps1 -Revivable reads this field; without it, reviving a recipe means reconstructing from commit messages."
 }

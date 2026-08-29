@@ -28,7 +28,7 @@
                  "protein":  35,
                  "carbs":  66,
                  "fat":  12,
-                 "cost_ps":  "3.36"
+                 "cost_ps":  "3.44"
              },
     "intro_html":  "Country Captain is a dish with a passport. It came ashore in the port of Savannah sometime in the 1800s, carried by the spice trade, and it has been warming Southern tables ever since. Chicken thighs braised down in a curry-spiced tomato sauce, sweetened with plump golden raisins, finished with toasted almonds and crispy bacon. It tastes like it simmered all afternoon. It did not.\u003c/p\u003e\u003cp\u003eHere is the math that matters. Every container lands at {{cal}} calories with {{protein}} grams of protein for ${{cost_ps}}. That is a restaurant plate for less than you would leave as the tip, and it stays under 600 calories the whole way.",
     "ingredients_display":  [
@@ -55,13 +55,13 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Chicken Broth, 2.25 cups: ~$0.82. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Golden Raisins, 1.25 cups: ~$2.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Golden Raisins, 1.25 cups: ~$1.69. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "thick-cut bacon, 9 thick-cut slices, cut into 1/2-inch pieces: ~$0.94. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
                        "boneless skinless chicken thighs, 4 lb (about 18 thighs): ~$12.88. \u003cstrong\u003eBuy 4 lbs: $12.88.\u003c/strong\u003e",
                        "Carrots, 2.25 cups sliced: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Red Bell Pepper, 2.25 cups diced: ~$1.69. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.25 cups diced: ~$2.62. \u003cstrong\u003eBuy 2 each: $3.04.\u003c/strong\u003e",
                        "Yellow Onion, 2.25 cups diced: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Dried Guajillo Chiles, 0.5 oz (about 2 chiles): ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 0.5 oz (about 2 chiles): ~$0.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 5 cloves, minced: ~$0.20. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Tomato Paste, 7 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
                        "fresh ginger, 2.25 tbsp minced: ~$0.11. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
@@ -69,9 +69,9 @@
                        "white rice, 4.25 cups dry: ~$0.97. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "slivered almonds, 0.75 cups slivered, toasted: ~$1.03. \u003cstrong\u003eBuy 1 14oz bag: $5.02.\u003c/strong\u003e",
                        "Pantry seasonings (curry powder, garam masala, salt, black pepper, cayenne pepper): ~$1.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.32 across 14 servings, so roughly $1.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.80 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.51. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $25.85 across 14 servings, so roughly $1.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.48 across 14 servings, roughly $2.53 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.14. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "Add it all up and this comes in at ${{cost_ps}} a serving. A dish that traveled from the spice ports to a Georgia kitchen to your meal-prep stack, and it still costs less than the drive-thru. That is the whole point.",
     "shop_smart":  [
@@ -98,14 +98,14 @@
     "portion_html":  "Here is how you get fourteen honest, equal containers instead of eyeballing your way to a short Friday. Once the chicken and sauce are out of the oven and the rice is done, weigh your empty container and write that number down. Weigh the full pot of chicken and sauce, subtract the pot itself, and divide what is left by 14. That is your target grams of chicken and sauce per container. Do the same with the rice. Then scoop to the number, not to the eye.\u003c/p\u003e\u003cp\u003eThe scale does not play favorites, and neither should your Tuesday self at the expense of your Friday self. Top each one with its share of almonds and bacon and every container carries {{cal}} calories and {{protein}} grams of protein, locked in.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://spicysouthernkitchen.com/country-captain-chicken/\" target=\"_blank\" rel=\"noopener\"\u003espicysouthernkitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Want the board that tells you the week thighs and bacon hit their low, so a batch like this costs even less? That is what the Thrifty Crew membership is, and it runs a dollar a month. One dollar to stop guessing at the meat counter.",
-    "cost_batch":  26.32,
-    "cost_batch_true":  35.8,
-    "cost_per_serving":  1.88,
-    "cost_per_serving_true":  2.56,
-    "cost_pantry_add":  16.71,
-    "cost_first_run":  52.51,
+    "cost_batch":  25.85,
+    "cost_batch_true":  35.48,
+    "cost_per_serving":  1.85,
+    "cost_per_serving_true":  2.53,
+    "cost_pantry_add":  12.66,
+    "cost_first_run":  48.14,
     "scaler":  {
-                   "cost":  "35.80",
+                   "cost":  "35.48",
                    "ing":  [
                                {
                                    "item":  "Chicken Broth",
@@ -268,7 +268,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT57M",
                  "totalTime":  "PT1H12M",
-                 "costPerServing":  3.36,
+                 "costPerServing":  3.44,
                  "recipeIngredient":  [
                                           "Chicken Broth, 2.25 cups (540 g)",
                                           "Golden Raisins, 1.25 cups (181 g)",

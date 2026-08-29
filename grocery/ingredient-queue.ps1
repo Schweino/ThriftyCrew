@@ -636,15 +636,19 @@ if ($Promote) {
                                 source = ("promoted from ingredient-queue term '" + $Term + "'")
                                 why = ("carried by " + ($v.carried_by -join ', ')) }
   } else {
-    $stores = [pscustomobject]@{}
+    # NOTE: this local MUST NOT be named $stores. PowerShell variable names are case-insensitive, so
+    # $stores and the module-level $STORES are the SAME variable: assigning an empty pscustomobject
+    # here silently emptied the list the very next foreach iterates, and this whole NOT-CARRIED branch
+    # died with "NotePropertyName is null or empty" on every call. Fixed 2026-08-29.
+    $storeMap = [pscustomobject]@{}
     foreach ($s in $STORES) {
       $r = $e.stores.$s
-      $stores | Add-Member -NotePropertyName $s -NotePropertyValue ([pscustomobject]@{
+      $storeMap | Add-Member -NotePropertyName $s -NotePropertyValue ([pscustomobject]@{
         state = [string]$r.state
         terms_tried = @($(if ($r.PSObject.Properties.Name -contains 'terms_tried' -and @($r.terms_tried).Count) { $r.terms_tried } else { @($Term) }))
         evidence = [string]$r.evidence })
     }
-    $entry = [pscustomobject]@{ verdict = 'NOT-CARRIED'; as_of = $stamp; stores = $stores
+    $entry = [pscustomobject]@{ verdict = 'NOT-CARRIED'; as_of = $stamp; stores = $storeMap
                                 source = ("promoted from ingredient-queue term '" + $Term + "'")
                                 why = ("all seven Omaha stores answered and none carry it") }
   }

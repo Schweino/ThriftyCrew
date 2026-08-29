@@ -29,7 +29,7 @@
                  "protein":  41,
                  "carbs":  15,
                  "fat":  33,
-                 "cost_ps":  "4.41"
+                 "cost_ps":  "4.49"
              },
     "intro_html":  "Green chile casserole in most kitchens means a can of cream-of-something soup, a bag of tortilla chips, and a prayer. This one earns its name instead. Roasted hatch green chiles get blended into a real cream sauce built from heavy cream, pepper jack, and a brick of cream cheese, then folded over pulled rotisserie chicken and a bed of spiralized zucchini that does the job the tortillas or the rice used to do. No soup can, no chips, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with 15 grams of carbs or less. That is Southwestern comfort food that works for your body and your wallet at the same time.",
     "ingredients_display":  [
@@ -56,15 +56,15 @@
                        "Pepper Jack Cheese, 4 cups shredded pepper jack (about 1 lb), divided: ~$3.73. \u003cstrong\u003eBuy 2 8oz blocks: $3.74.\u003c/strong\u003e",
                        "Heavy Cream, 1 3/4 cups heavy whipping cream: ~$2.06. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
                        "Yellow Bell Pepper, 1 3/4 medium yellow bell peppers, diced: ~$1.65. \u003cstrong\u003eBuy 2 each: $2.92.\u003c/strong\u003e",
-                       "Red Bell Pepper, 1 3/4 medium red bell peppers, diced: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Red Bell Pepper, 1 3/4 medium red bell peppers, diced: ~$2.66. \u003cstrong\u003eBuy 2 each: $3.04.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 7 oz cream cheese, softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Yellow Onion, 1/2 medium onion: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 7 tbsp shredded sharp cheddar: ~$0.38. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Olive Oil, 3 1/2 tsp olive oil, divided: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, salt, black pepper): ~$0.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.12 across 14 servings, so roughly $2.79 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $50.26 across 14 servings, roughly $3.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.78. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $40.06 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.34 across 14 servings, roughly $3.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.86. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a bubbling green chile casserole that eats like the soup-can version and skips the chips, the rice, and the flour. The chicken and the cheese carry it; the zucchini does the job the tortillas used to, for a lot less.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ruled.me/hatch-chile-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eruled.me\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  39.12,
-    "cost_batch_true":  50.26,
-    "cost_per_serving":  2.79,
-    "cost_per_serving_true":  3.59,
+    "cost_batch":  40.06,
+    "cost_batch_true":  51.34,
+    "cost_per_serving":  2.86,
+    "cost_per_serving_true":  3.67,
     "cost_pantry_add":  11.52,
-    "cost_first_run":  61.78,
+    "cost_first_run":  62.86,
     "scaler":  {
-                   "cost":  "50.26",
+                   "cost":  "51.34",
                    "ing":  [
                                {
                                    "item":  "Rotisserie Chicken",
@@ -217,7 +217,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  4.41,
+                 "costPerServing":  4.49,
                  "recipeIngredient":  [
                                           "Rotisserie Chicken, 50 3/4 oz shredded rotisserie chicken meat (about 3.2 lb, roughly 2 birds) (1439 g)",
                                           "Diced Green Chiles, 47 1/4 oz canned whole hatch green chiles (1340 g)",

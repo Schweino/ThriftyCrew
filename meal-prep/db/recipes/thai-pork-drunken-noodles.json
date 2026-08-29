@@ -16,7 +16,7 @@
                  "protein":  31,
                  "carbs":  78,
                  "fat":  34,
-                 "cost_ps":  "4.18"
+                 "cost_ps":  "4.33"
              },
     "intro_html":  "Pad kee mao, drunken noodles, is the spicy, basil-loaded stir fry that ruins mild takeout forever. Each bowl packs \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e from ground pork for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost), with jalapeno heat and wide rice noodles that actually catch the sauce.",
     "ingredients_display":  [
@@ -37,20 +37,22 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Fish Sauce, 1 cup: ~$2.42. \u003cstrong\u003ePantry staple; this batch alone uses about 2 6.76floz bottles.\u003c/strong\u003e",
+                       "Fish Sauce, 1 cup: ~$3.18. \u003cstrong\u003ePantry staple; this batch alone uses about 2 6.76floz bottles.\u003c/strong\u003e",
                        "Soy Sauce, 0.75 cups: ~$0.84. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Rice Vinegar, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Garlic, 12.25 tbsp: ~$1.51. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
-                       "Jalapeno, 7 oz: ~$0.76. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Rice Vinegar, 2.25 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 12.25 tbsp: ~$1.43. \u003cstrong\u003eBuy 3 heads: $1.74.\u003c/strong\u003e",
+                       "Jalapeno, 7 oz: ~$0.62. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
                        "Vegetable Oil, 0.75 cups: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 2.4 onions: ~$0.66. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Ground Pork, 3.5 lb: ~$11.94. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
+                       "Ground Pork, 3.5 lb: ~$13.82. \u003cstrong\u003eBuy 4 lbs: $15.79.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3.5 peppers: ~$5.32. \u003cstrong\u003eBuy 4 each: $6.08.\u003c/strong\u003e",
                        "Rice Noodles, 42 oz dry: ~$14.28. \u003cstrong\u003eBuy 3 14oz boxes: $14.28.\u003c/strong\u003e",
-                       "Lime Juice, 7 tbsp: ~$0.88. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Pantry seasonings (red bell pepper, fresh basil, salt, black pepper): ~$7.61. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $41.55 across 14 servings, so roughly $2.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.25 across 14 servings, roughly $3.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.26. Those containers then feed this batch and many more after it."
+                       "Fresh Basil, 23.25 tbsp: ~$2.99. \u003cstrong\u003eBuy 3 0.5oz packs: $3.59.\u003c/strong\u003e",
+                       "Lime Juice, 7 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.13 across 14 servings, so roughly $3.15 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.06 across 14 servings, roughly $3.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.67. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pad kee mao that would run $14 at a Thai restaurant. Fourteen bowls here costs less than three there, and yours has more pork in it.",
     "shop_smart":  "Ground pork covers the protein at about 3.75 pounds. It is consistently cheaper than the sliced pork most stir fry recipes call for, and it browns faster too.\nRice noodles are the other big line. Buy them from the international aisle or an Asian market and that number can drop by a third.\nFish sauce, soy sauce, and rice vinegar are all buy-once bottles that live in the pantry. This batch uses just a splash of soy and vinegar off bottles that season months of cooking.",
@@ -66,14 +68,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about {{cal}} calories with {{protein}} grams of protein. A proper full-size dinner bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.platingsandpairings.com/pad-kee-mao/\" target=\"_blank\" rel=\"noopener\"\u003ePlatings + Pairings\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  41.55,
-    "cost_batch_true":  46.25,
-    "cost_per_serving":  2.97,
-    "cost_per_serving_true":  3.3,
-    "cost_pantry_add":  19.01,
-    "cost_first_run":  65.26,
+    "cost_batch":  44.13,
+    "cost_batch_true":  49.06,
+    "cost_per_serving":  3.15,
+    "cost_per_serving_true":  3.5,
+    "cost_pantry_add":  11.61,
+    "cost_first_run":  60.67,
     "scaler":  {
-                   "cost":  "46.25",
+                   "cost":  "49.06",
                    "ing":  [
                                {
                                    "item":  "Fish Sauce",
@@ -182,7 +184,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT40M",
-                 "costPerServing":  4.18,
+                 "costPerServing":  4.33,
                  "recipeIngredient":  [
                                           "Fish Sauce, 1 cup (252 g)",
                                           "Soy Sauce, 0.75 cups (223 g)",

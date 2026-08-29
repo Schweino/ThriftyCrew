@@ -1,19 +1,13 @@
 ﻿{
-    "generated":  "2026-08-29 04:17",
-    "entries_scanned":  845,
+    "generated":  "2026-08-29 06:36",
+    "entries_scanned":  847,
     "namespaces":  [
                        "commodities.json",
                        "recipe-commodities.json",
                        "recipe-board-everyday.json"
                    ],
     "suspects":  [
-                     {
-                         "a":  "gruyere",
-                         "a_source":  "commodities.json",
-                         "b":  "gruyere-cheese",
-                         "b_source":  "recipe-board-everyday.json",
-                         "reason":  "labels identical once normalized"
-                     }
+
                  ],
     "category_drift":  [
 

@@ -1918,55 +1918,55 @@
                                   ],
                       "added":  "2026-08-16T07:50:18",
                       "why":  "tier1 MIS-MAPPED: price-ingredient maps to commodity \u0027rice\u0027 via /\\brice\\b/ at \\.4396/lb long-grain white rice; commodity \u0027rice-cakes\u0027 is the puffed Quaker snack. Neither is tteok. Needs a live per-store carriage check for plain ~600g tteok.",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Attended-only, driver PAUSED. Disk check is informative but NOT conclusive: the attended v2-manual-2026-08-11 capture\u0027s \u0027rice cakes\u0027 query (chunk-026) returned 43 rows - Quaker/Lundberg/Drizzilicious snack cakes, Rice Krispies Treats, plus two Korean INSTANT CUPS (Dongwon Spicy and Sweet Topokki Cup 4.23 oz \\.02, Dongwon Cheese Topokki Cup 4.23 oz \\.02) and, in chunk-001, Samyang Buldak Tteokbokki cups 6.31/6.52 oz. Every Korean hit is a single-serve instant cup, not a bag of plain rice cake sticks. Walmart was never queried for \u0027tteok\u0027 or \u0027garaetteok\u0027, so this is UNCHECKED for the actual ingredient, not an absence.",
-                                                     "checked":  "2026-08-24T08:45:46"
+                                                     "evidence":  "walmart.com in Brad\u0027s Chrome, store \u0027Omaha L St Supercenter\u0027. Searched \u0027korean rice cakes\u0027 (58 rows) and \u0027tteok\u0027 (49 rows), then filtered by fulfillmentType. Plenty of garaetteok exists on walmart.com - Fusion Select, UNHA\u0027S, Sekero, Apexy - but EVERY one is fulfillmentType FC or MARKETPLACE, i.e. shipped from a fulfilment centre or a third-party seller, not stocked at the Omaha store. The only fulfillmentType=STORE row in either search is \u0027(2 pack) Dongwon Cheese Topokki Cup, 4.23 Oz\u0027 $7.56, an instant single-serve cup snack, which is not a bag of rice cakes for a skillet dish. Recording not-carried for the STORE; the ship-to-home listings are real but are not Omaha shelf carriage.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "RUNG 1 ONLY - not an absence. Driver searched \u0027korean-rice-cakes\u0027 as given and returned 6 priced nodes, none of them tteok: Drizzilicious Mini Rice Cake Bites x3 (puffed snack), gimMe seaweed, Bibigo Frozen Beef \u0026 Vegetable Japchae Noodles, Bibigo Korean Style Crunchy Chicken. These are keyword-adjacent tiles matching \u0027rice cake\u0027 and \u0027Korean\u0027 separately. Rungs \u0027tteok\u0027, \u0027tteokbokki\u0027, \u0027rice cake sticks\u0027, \u0027garaetteok\u0027 were NOT walkable - no browser surface this session. UNCHECKED.",
-                                                     "checked":  "2026-08-24T08:45:46"
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha 17070 Audrey Street verified via Apollo cache. Searched \u0027tteokbokki\u0027: literal banner \u0027No results for tteokbokki\u0027; scrolled to a stable count of 55 suggestion tiles (well past the 9-at-a-time lazy-load truncation tell), all of them Bibigo Korean frozen items (japchae noodles, dumplings, bulgogi fried rice), Snapdragon pho and Nongshim ramen. No rice cake of any kind.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Family Fare":  {
-                                                         "state":  "blocked",
+                                                         "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Freshop search API returned HTTP 400 Bad Request on every attempt (initial pre-pass plus 2 further probe-ingredient retries spaced across the session). probe-ingredient itself classifies this as Freshop search-budget throttling and labels it BLOCKED, not absence. Zero rows were returned, so nothing was searched. UNCHECKED, not an absence.",
-                                                         "checked":  "2026-08-24T08:44:24"
+                                                         "evidence":  "probe-ingredient.ps1 on Freshop store_id 6401 Omaha, replacing the earlier HTTP 400 block. Rung \u0027tteokbokki\u0027 walked all 4 ladder rungs (\u0027tteokbokki\u0027, \u0027tteo kbokki\u0027, \u0027tteok bokki\u0027, \u0027tteokb okki\u0027) = 0 candidates at every rung. Widened rung \u0027rice cakes\u0027 = 15 hits, ALL Quaker puffed-grain snack cakes (Caramel, Chocolate, Butter Popcorn, White Cheddar, Lightly Salted), which are a different food entirely, not Korean garaetteok. No Korean rice cake in any form.",
+                                                         "checked":  "2026-08-29T06:27:04"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
-                                                    "price":  null,
-                                                    "size":  "",
-                                                    "item":  "",
-                                                    "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Nothing was searched. Hy-Vee is the most likely of the seven to stock refrigerated tteok in an Asian-foods set and it is the one store no pre-pass tier ever reaches, so this gap matters most here.",
-                                                    "checked":  "2026-08-24T08:45:46"
+                                                    "state":  "carried",
+                                                    "price":  8.99,
+                                                    "size":  "9.1 oz",
+                                                    "item":  "O\u0027Food Original Tteokbokki (rice-cake + sauce kit; no plain garaetteok at this store)",
+                                                    "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027. Rung \u0027tteokbokki\u0027 = \u00271 - 1 of 1 Results\u0027, and rung \u0027korean rice cake\u0027 = \u00271 - 1 of 1 Results\u0027, both returning the same item: \u0027O\u0027Food Original Tteokbokki\u0027 9.1 oz $8.99. ADJUDICATION, stated plainly so it can be overruled: this is a tteokbokki KIT - garaetteok rice cakes packed with a gochujang sauce pouch - not a bag of plain rice-cake sticks. It IS Korean rice cakes and a cook could buy it and use the cakes, so I record carried, but Hy-Vee stocks NO plain garaetteok. If the dak-galbi recipe needs unsauced tteok, treat this as a near-miss and re-adjudicate.",
+                                                    "checked":  "2026-08-29T06:27:04"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "RUNG 1 ONLY - not an absence. Driver returned 20 rows, none tteok: Lundberg organic snack rice cakes, Ben\u0027s Original ready rice, Ajinomoto fried rice, Seeds of Change rice pouches, Hot Pockets, chicken cordon bleu. Disk check of sams-capture-07-29 and -08-15 shows the store\u0027s \u0027rice cakes\u0027 query returns only Quaker/Drizzilicious/Lundberg snack cakes and veggie straws. Rung 2+ (\u0027tteok\u0027, \u0027tteokbokki\u0027) never queried and not walkable without a browser. UNCHECKED.",
-                                                             "checked":  "2026-08-24T08:45:46"
+                                                             "evidence":  "samsclub.com, club verified \u0027Omaha Sam\u0027s Club\u0027 68144, in-page /search?q=tteokbokki parsed from __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid, and every row was unrelated: Kinder\u0027s Korean BBQ Seasoning, Member\u0027s Mark Korean BBQ chicken spring rolls, Golden Island Korean BBQ pork jerky, chicken pot pie, tikka masala, tamales. No rice cake, no tteok, in a warehouse-club assortment where a niche Korean staple would not be expected.",
+                                                             "checked":  "2026-08-29T06:27:04"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
+                                                  "state":  "not-carried",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Corroborating disk check: aldi-capture-07-29/08-05 \u0027rice cakes\u0027 query returns only Fit \u0026 Active and Quaker puffed snack cakes. Aldi was never queried for tteok. Not an absence.",
-                                                  "checked":  "2026-08-24T08:45:46"
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Searched \u0027tteokbokki\u0027: literal banner \u0027No results for tteokbokki\u0027 with suggestion tiles only (R1) - the tiles were ramen and Asian convenience foods (Chef\u0027s Cupboard ramen, Fusia Kung Pao ramen, Samyang/Buldak/Nongshim ramen, Park Street Deli stir-fry kit), none a rice cake. Control terms \u0027bananas\u0027 and \u0027dill pickles\u0027 returned no banner and real results in the same session, so the empty is genuine and not a broken search.",
+                                                  "checked":  "2026-08-29T06:27:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -1977,7 +1977,7 @@
                                                           "checked":  "2026-08-24T08:45:46"
                                                       }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -2919,23 +2919,23 @@
                                   ],
                       "added":  "2026-08-24T12:20:52",
                       "why":  "turmeric-braised-chicken-with-golden-beets-and-leeks needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-24T19:14:31"
+                                                     "evidence":  "walmart.com in Brad\u0027s Chrome, store \u0027Omaha L St Supercenter\u0027. Two rungs: \u0027golden beets\u0027 (46 rows) and the widened \u0027beets\u0027, both filtered to fulfillmentType=STORE. The STORE rows are \u0027Fresh Whole Red Beets Bunch\u0027 $2.67, \u0027Fresh Organic Whole Red Beets, 1 lb Bag\u0027 $3.38, and canned red beets (Great Value Sliced $0.78, Libby\u0027s Sliced/Cut $1.47, Del Monte Sliced $1.72, Aunt Nellie\u0027s Pickled $2.47). Every fresh beet stocked at the Omaha store is RED. No golden or yellow beet at any rung.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "Driver rung 1 only: \u0027golden beets\u0027 returned 72 hits but the evidence file captured only 8, and none of those 8 is a golden beet (Fareway Sliced/Whole/Diced Beets 15oz canned red .44, Love Beets pickled/marinated, plus clear suggestion tiles - Grimmway Carrot Chips and Asparagus - showing a fuzzy result set). I cannot see the other 64 rows and have no browser this session to re-query or walk the ladder, so adjudication is incomplete. Not an empty shelf - an unfinished look. PENDING for an attended run.",
-                                                     "checked":  "2026-08-24T19:14:31"
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Two rungs, both with the literal banner: \u0027golden beets\u0027 -\u003e \u0027No results for golden beets\u0027 and \u0027gold beet\u0027 -\u003e \u0027No results for gold beet\u0027, each scrolled to a stable 60 tiles. A separate \u0027beets\u0027 query returned 5 genuine hits with NO banner - Fareway Sliced/Whole/Diced Beets 15 oz $1.44, Aunt Nellie\u0027s Sliced Pickled Beets, Love Beets Cooked 8.8 oz $4.99 - proving the store does stock beets and that the golden-specific empty is a real absence. Every stocked beet is red, canned or pre-cooked. (An earlier run of this term produced a stale scrape showing dill rows; it was discarded and the query re-run, which is where these banners come from.)",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
@@ -2946,28 +2946,28 @@
                                                          "checked":  "2026-08-24T19:14:31"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
+                                                    "state":  "not-carried",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-24T19:14:31"
+                                                    "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027, searched \u0027golden beets\u0027: \u00271 - 7 of 7 Results\u0027. All seven adjudicated and rejected as not golden: Green Top Beets Bunch 1 ct $3.99 (red beets), Hy-Vee Sliced Beets 15 oz, Hy-Vee Diced Beets 15 oz, Aunt Nellie\u0027s Sweet \u0026 Sour Harvard Beets, Aunt Nellie\u0027s Sliced Pickled Beets, Aunt Nellie\u0027s Whole Pickled Beets, Del Monte Crinkle Cut Pickled Beets. The store clearly stocks fresh beets and canned beets, so the absence of a GOLDEN beet is a meaningful absence rather than a catalogue gap.",
+                                                    "checked":  "2026-08-29T06:27:04"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "Driver rung 1 only: \u0027golden beets\u0027=12 hits, none a beet in any form - Force Factor Total Beets soft-chew supplement, Om lion\u0027s mane capsules, Giorgio mushrooms, Premier Protein shakes, VitaCup mushroom coffee. That is fuzzy keyword noise, not a no-results banner, and rung 1 alone cannot support not-carried. No browser this session to walk the ladder (\u0027beets\u0027 head noun never tried at this club). PENDING for an attended run.",
-                                                             "checked":  "2026-08-24T19:14:31"
+                                                             "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=golden beets via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid, and not one row was a beet in any form: Neuriva brain supplement, Qunol magnesium, Giorgio mushrooms, Premier Protein, VitaCup coffee, canned peaches, whey isolate. The single near-hit is \u0027Force Factor Total Beets Soft Chews, Acai Berry, 90 ct\u0027 - a supplement chew, the documented brand-name trap, not a vegetable. No golden beet.",
+                                                             "checked":  "2026-08-29T06:27:04"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
+                                                  "state":  "not-carried",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-24T19:14:31"
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Three rungs, all returning the literal no-results banner with suggestion tiles only: \u0027golden beets\u0027 -\u003e \u0027No results for golden beets\u0027, \u0027beets\u0027 -\u003e \u0027No results for beets\u0027, \u0027beet\u0027 -\u003e \u0027No results for beet\u0027. Suggestions were ordinary produce (radishes, ginger, carrots, celery, cucumber, red onions). Control terms \u0027bananas\u0027 and \u0027dill pickles\u0027 returned no banner and real results in the same session. Aldi Omaha stocks no beet of any colour, golden included.",
+                                                  "checked":  "2026-08-29T06:27:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -2978,7 +2978,7 @@
                                                           "checked":  "2026-08-24T19:14:31"
                                                       }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "NOT-CARRIED",
                       "notes":  null
                   },
                   {
@@ -4095,23 +4095,23 @@
                                   ],
                       "added":  "2026-08-26T04:35:27",
                       "why":  "slow-roasted-pork-shoulder needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
-                                                     "price":  null,
-                                                     "size":  "",
-                                                     "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T09:30:06"
+                                                     "state":  "carried",
+                                                     "price":  3.84,
+                                                     "size":  "4.62 oz",
+                                                     "item":  "McCormick Moroccan Style Seasoning",
+                                                     "evidence":  "walmart.com in Brad\u0027s own Chrome (attended), store verified \u0027Omaha L St Supercenter\u0027. Searched \u0027moroccan seasoning\u0027, 55 rows, filtered to fulfillmentType=STORE. Exactly one STORE row and it qualifies: \u0027McCormick Moroccan Style Seasoning, 4.62 oz Bottle\u0027 linePrice $3.84, unitPrice 83.1c/oz, seller Walmart.com - a mainline McCormick Moroccan spice blend stocked at the Omaha store. Everything else Moroccan in the grid (The Spice Way Ras El Hanout, iSpice, Chef Kenny Gilbert, Schwartz, NY Spice Shop, The Spice Hut) is fulfillmentType FC or MARKETPLACE, i.e. ship-only, and does not count as Omaha carriage. The queued term names a \u0027seven spice\u0027 blend specifically and this jar is not labelled seven-spice; I rule it carried because it is a Moroccan spice blend on an Omaha shelf in the form a cook would buy for this dish, but the naming difference is flagged so it can be overruled.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver tier RUNG 1 ONLY = 6 candidates, none Moroccan and none a seven-spice blend: Badia Italian/Mediterranean Seasoning $7.99, Badia ground coriander, Badia paprika, Spice Islands Beau Monde, McCormick smoked paprika, Cavender\u0027s Greek Seasoning. Those are other cuisines\u0027 blends and single spices. Ladder rungs and the ras el hanout alias are UNWALKED and I have no browser, so this stays unconcluded.",
-                                                     "checked":  "2026-08-26T04:41:16"
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Searched \u0027moroccan seasoning\u0027: literal banner \u0027No results for moroccan seasoning\u0027, scrolled to a stable 60 suggestion tiles. All were ordinary aisle-6 seasonings - Spice Islands Beau Monde, McCormick Grill Mates roasted garlic/mesquite/Montreal chicken, Badia Italian Mediterranean blend, Cavender\u0027s Greek, Morton Nature\u0027s Seasons, Kinder\u0027s - and none is Moroccan or a ras el hanout.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
@@ -4122,28 +4122,28 @@
                                                          "checked":  "2026-08-26T04:41:16"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
+                                                    "state":  "not-carried",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T09:30:06"
+                                                    "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027. Three rungs. \u0027moroccan seasoning\u0027 returned 426 results but Hy-Vee\u0027s search is fuzzy and every visible row was a generic blend (Lawry\u0027s Seasoned Salt, taco seasoning mixes, ranch mix, celery salt, fajita mix) with nothing Moroccan. \u0027ras el hanout\u0027 returned \u00271 - 16 of 16 Results\u0027, none Moroccan - Morton \u0026 Bassett Everything Sprinkle, Italian seasoning, Kinder\u0027s rubs, celery salt. \u0027moroccan\u0027 itself returned just three rows: a sponsored McCormick Madras curry powder plus Herbal Essences Argan Oil shampoo and conditioner - the documented not-a-food trap. No Moroccan spice blend at this store.",
+                                                    "checked":  "2026-08-29T06:27:04"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver tier RUNG 1 ONLY = 8 candidates, none related: Tone\u0027s pickling spice, Lawry\u0027s seasoned salt, Durkee Six Pepper Blend, Himalayan pink salt, pumpkin pie spice, Kinder\u0027s panko coating mix, Hidden Valley ranch dry mix, parsley flakes. Six Pepper Blend is a pepper mix, not a Moroccan seven-spice. Ladder and alias UNWALKED, no browser - unconcluded.",
-                                                             "checked":  "2026-08-26T04:41:16"
+                                                             "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=moroccan seasoning via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid; every row was a bulk generic seasoning - McCormick Grill Mates Montreal Steak 29 oz, Member\u0027s Mark Taco 23 oz, Member\u0027s Mark Italian 6 oz, Weber Chicago Steak, Badia Complete, Tony Chachere\u0027s Creole, Kinder\u0027s Grilled Chicken, Tajin, Member\u0027s Mark sea salt and granulated garlic. Nothing Moroccan; a warehouse club carrying only high-volume blends is consistent with that.",
+                                                             "checked":  "2026-08-29T06:27:04"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
+                                                  "state":  "not-carried",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-26T09:30:06"
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Searched \u0027moroccan seasoning\u0027: literal banner \u0027No results for moroccan seasoning\u0027 with suggestion tiles only (R1). The suggestions show Aldi\u0027s Stonemill spice line is well represented (Chicken Tikka, Korean BBQ, Kicked Up Chicken Grill, Italian, Cajun, paprika, Amazing Burger) - so the line exists and simply contains no Moroccan blend. Control terms returned real results with no banner in the same session.",
+                                                  "checked":  "2026-08-29T06:27:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -4154,7 +4154,7 @@
                                                           "checked":  "2026-08-26T04:41:16"
                                                       }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -5755,17 +5755,66 @@
                                   ],
                       "added":  "2026-08-26T12:06:20",
                       "why":  "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  8.98,
+                                                     "size":  "1 lb",
+                                                     "item":  "90% Lean / 10% Fat, Ground Bison",
+                                                     "evidence":  "walmart.com in Brad\u0027s own Chrome (attended), store verified \u0027Omaha L St Supercenter\u0027. Searched \u0027ground bison\u0027, 29 rows, filtered to fulfillmentType=STORE. Two genuine bison rows, both STORE stock: \u002790% Lean / 10% Fat, Ground Bison, 1 lb\u0027 linePrice $8.98, unitPrice $8.98/lb - an explicit LEAN grind and the cheapest lean ground bison found at any of the seven stores - and \u0027Marketside Ground Bison, 1 lb\u0027 $11.93. All other STORE rows were ground beef, pork or lamb and were rejected.",
+                                                     "checked":  "2026-08-29T06:27:04"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Rung \u0027ground bison\u0027 returned the literal banner No results for ground bison (stable 45 tiles). The stripped rung \u0027bison\u0027 returned 5 genuine hits with NO banner, and this is the important distinction: Fareway DOES carry bison, but only as STEAKS - \u0027High Plains Bison Bison Sirloin\u0027 6 oz $12.99 and \u0027High Plains Bison Bison New York Strip\u0027 8 oz $17.99, both from the Fresh Meat Counter. The only ground items are Thomas Farms Ground Lamb and Our Own Ground Beef. Bison yes, GROUND bison no, so not-carried for this ingredient.",
+                                                     "checked":  "2026-08-29T06:27:04"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probe-ingredient.ps1 on Freshop store_id 6401 Omaha, full ladder: \u0027lean ground bison\u0027 = 0, \u0027lean bison\u0027 = 0, \u0027leangroundbison\u0027 = 0, \u0027leanbison\u0027 = 0, \u0027ground bison\u0027 = 0, \u0027bison\u0027 = 0. The widened rung \u0027ground\u0027 returned 25 rows, all beef and pork - Fresh 80/85/93% Lean Ground Beef, Angus, Ground Pork Our Family. The store plainly stocks a full ground-meat case, so the total absence of the word bison from the catalogue is a meaningful absence rather than a gap.",
+                                                         "checked":  "2026-08-29T06:27:04"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  12.99,
+                                                    "size":  "16 oz",
+                                                    "item":  "High Plains Bison, Ground, 85/15",
+                                                    "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027, searched \u0027ground bison\u0027. Top row is the ingredient: \u0027High Plains Bison, Ground, 85/15\u0027 16 oz $12.99. Rejected from the same grid: Purina ONE wet dog food with Real Beef and Bison (the pet-food trap), Certified Ground Chuck, Fresh Ground Beef 85/15, Hy-Vee True Grass Fed organic ground beef. NOTE on the qualifier: this grind is 85/15, not the 90/10 that \u0027lean\u0027 most strictly implies - bison is intrinsically lean and I count it, but Baker\u0027s and Walmart both carry an explicit 90/10 if a strict reading is wanted.",
+                                                    "checked":  "2026-08-29T06:27:04"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=ground bison via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid; every row was Member\u0027s Mark or Sadler\u0027s BEEF - 90/10 ground beef patties $6.24/lb, flank steak, NY strip, ribeye, top sirloin, bottom round, chuck roast, brisket, Angus fajitas. No bison in any form.",
+                                                             "checked":  "2026-08-29T06:27:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Two rungs, both returning the literal banner with suggestion tiles only: \u0027ground bison\u0027 -\u003e No results for ground bison, and the stripped rung \u0027bison\u0027 -\u003e No results for bison. Suggestions enumerate Aldi\u0027s whole fresh-meat case - Simply Nature organic grass-fed 85/15 and 93/07 ground beef, Never Any! Ground Lamb, USDA extra-lean 96/4 ground beef, 90/10 ground sirloin, Roseland marinated pork tenderloins, black angus sirloin - and not one is bison. Control terms returned real results with no banner in the same session.",
+                                                  "checked":  "2026-08-29T06:27:04"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  10.99,
+                                                          "size":  "1 lb",
+                                                          "item":  "Simple Truth 90/10 Natural Ground Bison Pack",
+                                                          "evidence":  "probe-ingredient.ps1, Kroger public API locationId 61500319 (Baker\u0027s Omaha). Rung 1 \u0027lean ground bison\u0027 = 0 and the built-in ladder degraded to \u0027lean bison\u0027, which returned 7 rows of bean-with-bacon soup - pure noise, correctly not concluded on. Walked the ladder by hand instead: rung \u0027ground bison\u0027 = 3 hits, and the first is the ingredient: \u0027Simple Truth 90/10 Natural Ground Bison Pack 1 LB\u0027 $10.99 per 1 lb. 90/10 is squarely a LEAN grind. Rejected the other two rows, Simple Truth Natural Ground Lamb and Ground Lamb Patties.",
+                                                          "checked":  "2026-08-29T06:27:04"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -5775,17 +5824,66 @@
                                   ],
                       "added":  "2026-08-26T12:06:20",
                       "why":  "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.78,
+                                                     "size":  "0.5 oz",
+                                                     "item":  "Fresh Dill, 0.5 oz Clamshell",
+                                                     "evidence":  "walmart.com in Brad\u0027s own Chrome (attended), store verified \u0027Omaha L St Supercenter\u0027. Searched \u0027fresh dill\u0027, 66 rows, filtered to fulfillmentType=STORE. Adjudicated: \u0027Fresh Dill, 0.5 oz Clamshell\u0027 linePrice $1.78, unitPrice $3.56/oz, seller Walmart.com, STORE - the fresh herb clamshell itself, and the cheapest fresh dill at any of the seven stores. Rejected the other STORE rows as DRIED, not fresh: Litehouse Freeze Dried Dill 0.35 oz $4.97, Great Value Dill Weed 0.75 oz $2.22, McCormick Kosher Dill Weed 0.62 oz $3.22.",
+                                                     "checked":  "2026-08-29T06:27:04"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "0.75 oz",
+                                                     "item":  "Crazy Fresh Baby Dill Herb",
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha 17070 Audrey Street verified via Apollo cache. Searched \u0027fresh dill\u0027: 42 tiles, NO no-results banner, scrolled to a stable count. Two genuine fresh-herb rows, both in the Produce department: \u0027Crazy Fresh Baby Dill Herb\u0027 0.75 oz $2.99 (slug 1169680-crazy-fresh-baby-dill-herb-75-oz) and \u0027Baby Dill\u0027 1 bunch $3.99 (slug 16345991-baby-dill-each). Recording the cheaper clamshell. Rejected: Litehouse Freeze Dried Dill 0.35 oz $4.99 (dried), plus cilantro/lemon/cucumber/mint suggestion noise.",
+                                                     "checked":  "2026-08-29T06:27:04"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.99,
+                                                         "size":  "0.5 oz",
+                                                         "item":  "Local Roots Organic Dill",
+                                                         "evidence":  "probe-ingredient.ps1 on Freshop store_id 6401 Omaha, rung 1 \u0027fresh dill\u0027 = 2 hits. Adjudicated: \u0027Local Roots Organic Dill\u0027 0.5 oz $2.99 - Local Roots is Family Fare\u0027s fresh living-herb line and 0.5 oz is the fresh clamshell size. Rejected: Vlasic Pickles, Kosher Dill, Stackers, Fresh Packed 16 Fl Oz (a pickle whose name contains both fresh and dill). A widened \u0027dill\u0027 rung returned the dried Dill Weed shakers (Our Family 0.56 oz, Tone\u0027s 0.25 oz, McCormick Gourmet Organic 0.5 oz, Sugar N Spice, Full Circle) as separate SKUs, confirming the Local Roots item is the fresh one.",
+                                                         "checked":  "2026-08-29T06:27:04"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "item":  "Johnson Family Farm Fresh Dill",
+                                                    "evidence":  "hy-vee.com aisles-online, store selector verified \u0027Omaha #01, NE\u0027, searched \u0027fresh dill\u0027. Adjudicated: \u0027Johnson Family Farm Fresh Dill\u0027 0.75 oz $2.99 - a named local fresh-herb pack, top of the grid. Rejected everything else as pickles or dips: Claussen Dill Pickles 24 and 20 fl oz, Grillo\u0027s Dill Spears and Chips, Oh Snap! Dilly Bites, Hy-Vee Ranch \u0026 Dill sour cream dip. Cross-checked against the store\u0027s own capture on disk (out/regular/hyvee-regular-2026-08-28.json), which lists the same Johnson Family Farm Fresh Dill 0.75 oz alongside the separate Hy-Vee Dill Weed shakers.",
+                                                    "checked":  "2026-08-29T06:27:04"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=fresh dill via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid; every dill-word row was a PICKLE - Mt. Olive Kosher Dills Fresh Pack 1 gal $6.34, Member\u0027s Mark Petite Dill Pickles 46 oz $4.98 - and the rest was berries, apples, grapes and olives. No fresh dill herb, which is consistent with a warehouse club that does not carry small fresh-herb clamshells.",
+                                                             "checked":  "2026-08-29T06:27:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Two rungs, both returning the literal banner with suggestion tiles only: \u0027fresh dill\u0027 -\u003e No results for fresh dill, and the stripped rung \u0027dill\u0027 -\u003e No results for dill. This matters because the suggestions enumerate Aldi\u0027s fresh-herb line - Rosemary 0.5 oz $1.59, Thyme 0.5 oz $1.59, Assorted Herbs Mint 0.5 oz $1.59, Parsley each $0.95, Cilantro bunch $0.89 - and dill is simply not in it; the only dill products are pickles and dips (Park Street Deli tzatziki, dill pickle chips, Great Gherkins). Control terms \u0027bananas\u0027 and \u0027dill pickles\u0027 returned real results with no banner in the same session, so the search was working.",
+                                                  "checked":  "2026-08-29T06:27:04"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.49,
+                                                          "size":  "0.5 oz",
+                                                          "item":  "Simple Truth Organic Baby Dill",
+                                                          "evidence":  "probe-ingredient.ps1, Kroger public API locationId 61500319 (Baker\u0027s Omaha), rung 1 \u0027fresh dill\u0027 = 9 hits. Adjudicated: \u0027Simple Truth Organic Baby Dill\u0027 0.5 oz $2.49 is the fresh-herb clamshell (0.5 oz is Kroger\u0027s standard fresh-herb pack size). Rejected the rest of the grid as pickles and dried product: Oh Snap! Dilly Bites Fresh Dill Pickle snack packs (the brand-name trap - the words fresh dill appear in the name of a PICKLE), Fresh Gourmet Crispy Dillies, Litehouse Freeze Dried Dill, Taylor Farms Dill Pickle salad kit, Litehouse Dill Ranch dressing. A separate \u0027dill\u0027 rung confirmed the shelf-stable dill weed shakers are separate SKUs.",
+                                                          "checked":  "2026-08-29T06:27:04"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -6832,23 +6930,23 @@
                                   ],
                       "added":  "2026-08-27T12:09:53",
                       "why":  "moroccan-chicken-couscous-bowl needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
-                                                     "price":  null,
-                                                     "size":  "",
-                                                     "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-28T12:39:23"
+                                                     "state":  "carried",
+                                                     "price":  3.84,
+                                                     "size":  "4.62 oz",
+                                                     "item":  "McCormick Moroccan Style Seasoning",
+                                                     "evidence":  "walmart.com in Brad\u0027s own Chrome (attended), store verified \u0027Omaha L St Supercenter\u0027. Searched \u0027moroccan seasoning\u0027, 55 rows, filtered to fulfillmentType=STORE. Exactly one STORE row and it qualifies: \u0027McCormick Moroccan Style Seasoning, 4.62 oz Bottle\u0027 linePrice $3.84, unitPrice 83.1c/oz, seller Walmart.com - a mainline McCormick Moroccan spice blend stocked at the Omaha store. Everything else Moroccan in the grid (The Spice Way Ras El Hanout, iSpice, Chef Kenny Gilbert, Schwartz, NY Spice Shop, The Spice Hut) is fulfillmentType FC or MARKETPLACE, i.e. ship-only, and does not count as Omaha carriage.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 only, 6 tiles, none is a Moroccan blend (McCormick Chili Seasoning, Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Badia Paprika, Fareway Seasoning Mix - all generic or wrong cuisine). Ladder rungs 2-4 and the \u0027ras el hanout\u0027 synonym rung not walked: no browser this session, so not-carried is unsupported.",
-                                                     "checked":  "2026-08-28T12:39:23"
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Searched \u0027moroccan seasoning\u0027: literal banner \u0027No results for moroccan seasoning\u0027, scrolled to a stable 60 suggestion tiles. All were ordinary aisle-6 seasonings - Spice Islands Beau Monde, McCormick Grill Mates roasted garlic/mesquite/Montreal chicken, Badia Italian Mediterranean blend, Cavender\u0027s Greek, Morton Nature\u0027s Seasons, Kinder\u0027s - and none is Moroccan or a ras el hanout.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
@@ -6859,28 +6957,28 @@
                                                          "checked":  "2026-08-28T12:39:23"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
+                                                    "state":  "not-carried",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-28T12:39:23"
+                                                    "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027. Three rungs. \u0027moroccan seasoning\u0027 returned 426 results but Hy-Vee\u0027s search is fuzzy and every visible row was a generic blend (Lawry\u0027s Seasoned Salt, taco seasoning mixes, ranch mix, celery salt, fajita mix) with nothing Moroccan. \u0027ras el hanout\u0027 returned \u00271 - 16 of 16 Results\u0027, none Moroccan - Morton \u0026 Bassett Everything Sprinkle, Italian seasoning, Kinder\u0027s rubs, celery salt. \u0027moroccan\u0027 itself returned just three rows: a sponsored McCormick Madras curry powder plus Herbal Essences Argan Oil shampoo and conditioner - the documented not-a-food trap. No Moroccan spice blend at this store.",
+                                                    "checked":  "2026-08-29T06:27:04"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only, 8 tiles, all generic seasonings (taco, seasoned salt, Salad Supreme, Montreal Steak, ranch, Old Bay, Kinder\u0027s) - none Moroccan. Ladder/synonym rungs not walked headless, so not-carried is unsupported.",
-                                                             "checked":  "2026-08-28T12:39:23"
+                                                             "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=moroccan seasoning via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid; every row was a bulk generic seasoning - McCormick Grill Mates Montreal Steak 29 oz, Member\u0027s Mark Taco 23 oz, Member\u0027s Mark Italian 6 oz, Weber Chicago Steak, Badia Complete, Tony Chachere\u0027s Creole, Kinder\u0027s Grilled Chicken, Tajin, Member\u0027s Mark sea salt and granulated garlic. Nothing Moroccan; a warehouse club carrying only high-volume blends is consistent with that.",
+                                                             "checked":  "2026-08-29T06:27:04"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
+                                                  "state":  "not-carried",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-28T12:39:23"
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Searched \u0027moroccan seasoning\u0027: literal banner \u0027No results for moroccan seasoning\u0027 with suggestion tiles only (R1). The suggestions show Aldi\u0027s Stonemill spice line is well represented (Chicken Tikka, Korean BBQ, Kicked Up Chicken Grill, Italian, Cajun, paprika, Amazing Burger) - so the line exists and simply contains no Moroccan blend. Control terms returned real results with no banner in the same session.",
+                                                  "checked":  "2026-08-29T06:27:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -6891,7 +6989,7 @@
                                                           "checked":  "2026-08-28T12:39:23"
                                                       }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -8005,23 +8103,23 @@
                                   ],
                       "added":  "2026-08-28T09:15:51",
                       "why":  "roasted-stuffed-pork-loin needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-28T12:39:23"
+                                                     "evidence":  "walmart.com in Brad\u0027s Chrome, store \u0027Omaha L St Supercenter\u0027. Searched \u0027juniper berries\u0027, 64 rows, filtered by fulfillmentType. Culinary juniper is abundant on walmart.com - The Spice Way, Morton \u0026 Bassett 0.7 oz, Organic Way, Olive \u0026 Vine, Eastanbul, Sanniti, Birch \u0026 Meadow, Frontier - but EVERY single one is fulfillmentType FC or MARKETPLACE, i.e. shipped from a fulfilment centre or third-party seller. ZERO rows carry fulfillmentType=STORE. Nothing juniper is stocked at the Omaha store; recording not-carried for the store while noting the ship-to-home listings exist.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 only, 6 tiles, all substitute spice-aisle suggestions (McCormick/Badia Bay Leaves, Simply Organic Bay Leaf, Badia Rosemary, McCormick Ground Sage, Ground Allspice) - no juniper. Rung 2+ (\u0027juniper\u0027) not walked: no browser this session, so not-carried is unsupported.",
-                                                     "checked":  "2026-08-28T12:39:23"
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Searched \u0027juniper berries\u0027: literal banner \u0027No results for juniper berries\u0027, scrolled to a stable 60 suggestion tiles. The suggestions are effectively the whole aisle-6 spice shelf - McCormick Bay Leaves, Simply Organic Bay Leaf, Badia rosemary/bay/nutmeg, McCormick ground sage, ground allspice, McCormick dill weed - plus fresh blackberries and a Fareway triple-berry item. Juniper is absent from a spice shelf that is otherwise fully enumerated, so this is a real absence.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
@@ -8032,28 +8130,28 @@
                                                          "checked":  "2026-08-28T12:39:23"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
-                                                    "price":  null,
-                                                    "size":  "",
-                                                    "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-28T12:39:23"
+                                                    "state":  "carried",
+                                                    "price":  10.99,
+                                                    "size":  "1.3 oz",
+                                                    "item":  "Morton \u0026 Bassett Juniper Berries",
+                                                    "evidence":  "hy-vee.com aisles-online, store selector verified \u0027Omaha #01, NE\u0027, searched \u0027juniper berries\u0027. Exactly one result and it is the ingredient itself: \u0027Morton \u0026 Bassett Juniper Berries\u0027 1.3 oz $10.99 - a jar of whole culinary juniper berries in the spice aisle. No adjudication difficulty: single clean hit, no air-freshener or gin false positives in this grid. This is the one carrier that unparks roasted-stuffed-pork-loin on this ingredient.",
+                                                    "checked":  "2026-08-29T06:27:04"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only, 23 hits of unrelated filler (apples, grapes, pears, crape myrtle trees, Drakkar cologne) plus Febreze PLUG White Pine \u0026 Juniper Berry air freshener - a scent name, not the spice. Rung 2+ (\u0027juniper\u0027) not walked headless, so not-carried is unsupported.",
-                                                             "checked":  "2026-08-28T12:39:23"
+                                                             "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=juniper berries via __NEXT_DATA__. Every row was filler and the two juniper-word matches are the documented false-positive shape: \u0027Febreze PLUG Air Freshener, Winter Pine \u0026 Juniper Berry\u0027 and \u0027Guy Laroche Drakkar Intense\u0027 cologne - neither is food. The rest were strawberries, raspberries, apples, grapes, crape myrtle shrubs and frozen mango. No culinary juniper berry.",
+                                                             "checked":  "2026-08-29T06:27:04"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
+                                                  "state":  "not-carried",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-28T12:39:23"
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Searched \u0027juniper berries\u0027: literal banner \u0027No results for juniper berries\u0027 with suggestion tiles only (R1) - fresh rosemary and thyme, Southern Grove dried mixed berries, and Stonemill Cajun/oregano/paprika/parsley jars. Aldi\u0027s spice line is visible in those suggestions and contains no juniper. Control terms \u0027bananas\u0027 and \u0027dill pickles\u0027 returned real results with no banner in the same session.",
+                                                  "checked":  "2026-08-29T06:27:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -8064,7 +8162,7 @@
                                                           "checked":  "2026-08-28T12:39:23"
                                                       }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -8143,23 +8241,23 @@
                                   ],
                       "added":  "2026-08-28T09:15:52",
                       "why":  "roasted-stuffed-pork-loin needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-28T12:39:23"
+                                                     "evidence":  "walmart.com in Brad\u0027s Chrome, store \u0027Omaha L St Supercenter\u0027. Two rungs, \u0027broccoli rabe\u0027 (42 rows) and the synonym \u0027rapini\u0027, both filtered to fulfillmentType=STORE. Real rabe exists on the site - \u0027Rapini - Broccoli Rabe - 19 oz\u0027 $13.90 and a SACLA Friarelli antipasto jar - but both are MARKETPLACE/FC ship-only, not Omaha shelf stock. Every fulfillmentType=STORE row is ordinary broccoli (Fresh Whole Green Broccoli Crowns $1.72, Marketside Fresh Broccoli Florets, Great Value frozen florets/cuts, Fresh Organic Broccoli bunch $3.97) or, on the \u0027rapini\u0027 rung, lettuce and kale. No broccoli rabe stocked at the Omaha store.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 reported 49 hits but the evidence file retains only 8; the other 41 rows are not visible to me and I have no browser to re-open the page. Of the 8 shown, the closest is Pero Family Farms Broccoletti 8 oz \\.99, which is tender-stem broccolini, not rapini. Unresolved, not empty.",
-                                                     "checked":  "2026-08-28T12:39:23"
+                                                     "evidence":  "shop.fareway.com, In-Store, retailerLocation 531573 Omaha verified. Two rungs, both with the literal banner: \u0027broccoli rabe\u0027 -\u003e No results for broccoli rabe (scrolled to a stable 41 tiles, past the 9-at-a-time lazy-load tell), and \u0027rapini\u0027 -\u003e No results for rapini (13 tiles). Suggestions were ordinary broccoli - crowns $2.48/ea est., Birds Eye and Green Giant frozen florets, Taylor Farms and Pero Family Farms florets, Fareway steamable florets. ONE row deserved a hard look: \u0027Pero Family Farms Broccoletti 8 oz\u0027 $2.99 - REJECTED, because broccoletti/broccolini is baby broccoli, a broccoli-gai lan cross, and NOT rapini/broccoli rabe, which is a turnip relative with the distinct bitter flavour the recipe relies on.",
+                                                     "checked":  "2026-08-29T06:27:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
@@ -8170,28 +8268,28 @@
                                                          "checked":  "2026-08-28T12:39:23"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
+                                                    "state":  "not-carried",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-28T12:39:23"
+                                                    "evidence":  "hy-vee.com aisles-online, store \u0027Omaha #01, NE\u0027. Rung 1 \u0027broccoli rabe\u0027 returned the explicit phrase: broccoli rabe didn\u0027t return any results. Please check your spelling and try again. Rung 2 used the correct synonym \u0027rapini\u0027 and returned a single tile which was a SPONSORED placement (Dole Classic Romaine Salad 9 oz) with no result-count line at all, i.e. no genuine result. Two rungs, one of them the proper botanical synonym, both empty.",
+                                                    "checked":  "2026-08-29T06:27:04"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only, 17 hits of unrelated produce (cherry tomatoes, green beans, brussels sprouts, baby carrots, potatoes, squash, asparagus, cauliflower) - no broccoli at all, let alone rabe, which reads as generic produce filler. Ladder not walked headless, so not-carried is unsupported.",
-                                                             "checked":  "2026-08-28T12:39:23"
+                                                             "evidence":  "samsclub.com, club \u0027Omaha Sam\u0027s Club\u0027 68144, /search?q=broccoli rabe via __NEXT_DATA__. Sam\u0027s returns related-item filler rather than an empty grid; every row was ordinary bulk produce - Taylor Farms Sweet Kale kit, cherry tomatoes, organic green beans, Earthbound Farm organic broccoli florets 2 lbs, Brussels sprouts, baby carrots, russet potatoes, mixed squash, asparagus. No rabe or rapini in a warehouse assortment where a niche bitter green would not be expected.",
+                                                             "checked":  "2026-08-29T06:27:04"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "blocked",
+                                                  "state":  "not-carried",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-28T12:39:23"
+                                                  "evidence":  "aldi.us, In-Store, ALDI - OLA 48 - Omaha. Two rungs, both returning the literal banner with suggestion tiles only: \u0027broccoli rabe\u0027 -\u003e No results for broccoli rabe, and the synonym \u0027rapini\u0027 -\u003e No results for rapini. Suggestions were ordinary brassicas - Broccoli Florets 12 oz $2.29, Broccoli Crowns per lb $2.09, Organic Broccoli $3.29, cauliflower crowns, kale, spinach - proving the produce department is stocked and simply has no rabe. Control terms returned real results with no banner in the same session.",
+                                                  "checked":  "2026-08-29T06:27:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -8202,7 +8300,7 @@
                                                           "checked":  "2026-08-28T12:39:23"
                                                       }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "NOT-CARRIED",
                       "notes":  null
                   },
                   {
@@ -8752,6 +8850,75 @@
                                                           "item":  "",
                                                           "evidence":  "Rungs against kroger-public-api locationId 61500319: \u0027reduced fat shredded mozzarella\u0027 EMPTY; \u0027reduced fat mozzarella\u0027 MATCHES 4 rows; \u00272% milk mozzarella\u0027 MATCHES 2 rows; \u0027low fat mozzarella cheese\u0027 MATCHES 4 rows; plus \u0027mozzarella shredded\u0027 (8 rows) and \u0027part skim mozzarella\u0027 (4 rows). EVERY reduced-fat mozzarella at Baker\u0027s is STRING cheese, not shredded: Kroger Reduced Fat Mozzarella String Cheese 12 ct $3, Kroger Low-Moisture Reduced Fat Part-Skim Mozzarella String Cheese 24 ct $6.49, Sargento Light String Reduced Fat 9 oz $5, Kraft String Cheese with 2% Milk 10/12 oz $5.49. No reduced-fat SHRED on any rung. Searched properly; nothing qualified.",
                                                           "checked":  "2026-08-29T05:27:52"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "red bell pepper",
+                      "recipes":  [
+                                      "board-identity-repair-2026-08-29"
+                                  ],
+                      "added":  "2026-08-29T06:04:27",
+                      "why":  "the red-bell-pepper board row prices 54 live recipes and not one of its six cells carries an item name or a size; nothing in any capture corroborates any of them",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.52,
+                                                     "size":  "1 each",
+                                                     "item":  "Fresh Red Bell Pepper, Each",
+                                                     "evidence":  "walmart.com in Brad\u0027s own Chrome (attended), signed in, store verified \u0027Omaha L St Supercenter\u0027. In-page fetch of /search?q=red bell pepper, parsed __NEXT_DATA__ FLAT shape priceInfo.linePrice + priceInfo.unitPrice, 53 rows, then filtered to fulfillmentType=STORE to separate real Omaha shelf stock from FC/MARKETPLACE ship-only listings. Adjudicated: \u0027Fresh Red Bell Pepper, Each\u0027 linePrice $1.52, fulfillmentType STORE, seller Walmart.com - a genuine single fresh red bell pepper sold by each. Only one other STORE row exists, \u0027Great Value Roasted Red Bell Pepper Slices, 12 oz\u0027 $2.13 (jarred, rejected). Everything else in the 53 was dried/dehydrated spice jars and marketplace multipacks. The standing board cell of 0.98 is not corroborated; note Walmart\u0027s own tri-colour \u0027Fresh Bell Peppers, 3 Count\u0027 at $2.97 works out to $0.99/each, which is where a 0.98 could plausibly have come from.",
+                                                     "checked":  "2026-08-29T06:27:04"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.5,
+                                                     "size":  "1 each",
+                                                     "item":  "Red Bell Pepper, each (loose, sold by each)",
+                                                     "evidence":  "shop.fareway.com, identity verified the hard way per R4: Apollo cache GetRetailerLocationAddress initially showed retailerLocation 513473 = \u0027100 Euclid Avenue\u0027, \u0027Des Moines, IA 50313\u0027 (the documented wrong-store trap), so the store was switched to zip 68136 and re-verified as retailerLocation 531573 = Omaha, 17070 Audrey Street, header reading \u0027In-Store - open 8am - 9pm / Omaha\u0027. Searched \u0027red bell pepper\u0027: 4 tiles, no no-results banner, scrolled to a stable count (4, not a truncated 9). Adjudicated: catalogue slug \u00273259137-red-bell-pepper-each\u0027 = \u0027Red Bell Pepper, each\u0027, current price $1.50 with $1.99 struck through (25% off) - a genuine single fresh red bell pepper sold LOOSE BY EACH. Also present but rejected: \u0027Green Red Yellow Peppers\u0027 $4.99 (tri-colour pack) and two Mezzetta jarred roasted-pepper items. Recorded price is the CURRENT $1.50; regular shelf is $1.99.",
+                                                     "checked":  "2026-08-29T06:27:04"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.49,
+                                                         "size":  "1 ea",
+                                                         "item":  "Fresh Sweet Bell Pepper, Red Organic",
+                                                         "evidence":  "probe-ingredient.ps1 on Freshop store_id 6401 Omaha. rung 1 \u0027red bell pepper\u0027 = 2 hits; widened rung \u0027bell pepper\u0027 = 6 hits. The ONLY fresh red bell pepper in the catalogue is \u0027Fresh Sweet Bell Pepper, Red Organic\u0027 1 ea $2.49 - ORGANIC; there is no conventional red single (the conventional single present is Yellow Bell Pepper 1 ea $1.79). Rejected: Mezzetta Red Roasted Mild Bell Peppers 10 oz (jarred), La Preferida Spanish rice with bell peppers, McCormick roasted-garlic-and-bell-pepper seasoning. NOTE for the board: the standing Family Fare cell of 2.50 is within a cent of this ORGANIC item, so that cell is very likely priced off the organic SKU.",
+                                                         "checked":  "2026-08-29T06:27:04"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  0.99,
+                                                    "size":  "1 ct",
+                                                    "item":  "Red Bell Pepper",
+                                                    "evidence":  "hy-vee.com aisles-online, store selector verified \u0027Omaha #01, NE\u0027, searched \u0027red bell pepper\u0027, page reported \u00271 - 35 of 35 Results\u0027. Adjudicated: \u0027Red Bell Pepper\u0027 1 ct at 99c current with $1.99 struck through (regular) - a genuine single fresh red bell pepper sold loose by each. A second genuine row, \u0027Red Pepper\u0027 1 ct, carries the identical 99c/$1.99 pair. Rejected: Organic Red Bell Pepper 1 lb $4.99, Pero Family Farms Organic Red Bell Peppers 1 ct $4.99, SUNSET mini sweet peppers, Hy-Vee Pepper \u0026 Onion Blend, and a long tail of frozen stir-fry and jarred roasted peppers. Price recorded is the CURRENT 99c; regular shelf is $1.99. The standing board cell of 1.69 matches neither.",
+                                                    "checked":  "2026-08-29T06:27:04"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  5.97,
+                                                             "size":  "6 ct ($0.99/ea)",
+                                                             "item":  "Multi Bell Sweet Peppers, 6 ct. (multi-colour; NO red-only pack at this club)",
+                                                             "evidence":  "samsclub.com in Brad\u0027s Chrome, club verified \u0027Omaha Sam\u0027s Club\u0027, Omaha 68144. In-page fetch of /search?q=red bell pepper, parsed __NEXT_DATA__ for __typename Product, 22 rows; confirmed on a second rung \u0027bell peppers\u0027. Adjudicated: the only red-bell-bearing fresh item is \u0027Multi Bell Sweet Peppers, 6 ct.\u0027 linePrice $5.97, unitPrice $0.99/ea - a MULTI-COLOUR 6-pack. There is NO red-only pack at this club. CRITICAL BOARD FINDING: the other pepper row is \u0027Green Bell Peppers, 6 ct.\u0027 $4.97 at unitPrice $0.83/ea - and $0.83/each is EXACTLY the standing Sam\u0027s Club cell on the red-bell-pepper board row. The board\u0027s cheapest red-bell cell is a GREEN pepper\u0027s unit price. Rejected: Member\u0027s Mark Fire Roasted Red Bell Pepper Egg White Bites (a packaged meal), Sweet Mini Peppers 1.5 lbs.",
+                                                             "checked":  "2026-08-29T06:27:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.49,
+                                                  "size":  "3 ct",
+                                                  "item":  "Mixed Bell Peppers (tri-colour 3-pack; NO red-only item at Aldi)",
+                                                  "evidence":  "aldi.us storefront in Brad\u0027s Chrome, header verified \u0027In-Store - open 9am - 8pm\u0027 and store \u0027ALDI - OLA 48 - Omaha\u0027 (NOTE: OLA 48, not the estate\u0027s canonical OLA 42 - flagged in the report). Rung 1 \u0027red bell pepper\u0027 returned the literal banner \u0027No results for red bell pepper\u0027 with suggestion tiles only (R1). Rung \u0027bell pepper\u0027 returned 3 real tiles, no banner; rung \u0027red pepper\u0027 returned 3 real tiles, no banner. Control terms \u0027bananas\u0027 and \u0027dill pickles\u0027 returned no banner and real results, proving the search engine was working. CONCLUSION: Aldi Omaha sells NO single red bell pepper. Red bell pepper is available ONLY inside \u0027Mixed Bell Peppers\u0027 (tile name \u0027Multi-Colored Peppers\u0027) 3 ct $2.49, a tri-colour pack; the only single-colour pack is Green Bell Pepper 3 ct $2.69. A per-each red price CANNOT be derived from the $2.49 tri-pack because only one of the three peppers is red. The standing board cell of 1.00 per each is unsupported by anything on this shelf.",
+                                                  "checked":  "2026-08-29T06:27:04"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.66,
+                                                          "size":  "1 ct",
+                                                          "item":  "Fresh Red Bell Pepper",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027red bell pepper\u0027, Kroger public API locationId 61500319 (Baker\u0027s Omaha), rung 1 = 6 hits. Adjudicated: \u0027Fresh Red Bell Pepper\u0027 1 ct $1.66 is a genuine single fresh red bell pepper sold by each. Rejected from the same grid: Organic Fresh Red Bell Pepper (organic variant), Mezzetta Mild Roasted Red Bell Peppers 16 oz (jarred), Red Cherry Bell Peppers 1 lb (different vegetable), Fresh Red Hothouse Bell Pepper 1 ct $1.67 (also genuine, 1c dearer). Corroborates the existing board cell of 1.66.",
+                                                          "checked":  "2026-08-29T06:27:04"
                                                       }
                                  },
                       "verdict":  "CARRIED",

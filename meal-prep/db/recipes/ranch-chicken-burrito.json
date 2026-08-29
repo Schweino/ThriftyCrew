@@ -26,7 +26,7 @@
                  "protein":  39,
                  "carbs":  39,
                  "fat":  13,
-                 "cost_ps":  "3.77"
+                 "cost_ps":  "3.85"
              },
     "intro_html":  "\u003cp\u003eCool ranch, warm spice, and a number that stays in line. This burrito hits {{cal}} calories with {{protein}} grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The ranch here is a Greek yogurt sauce with real ranch stirred in, so you get the tang and the creaminess with a fraction of the fat a bottle of dressing brings. Fajita peppers, black beans, and a can of tomatoes with green chiles give it the southwestern backbone.\u003c/p\u003e",
     "ingredients_display":  [
@@ -52,7 +52,7 @@
                        "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
                        "Yellow Onion, 1 onion: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Red Bell Pepper, 2 peppers: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2 peppers: ~$2.66. \u003cstrong\u003eBuy 2 each: $3.04.\u003c/strong\u003e",
                        "Seasoned Black Beans, 1.3 cans: ~$2.10. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
                        "Diced Tomatoes \u0026 Green Chilies, 2 cans: ~$1.72. \u003cstrong\u003eBuy 2 10oz cans: $1.74.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 7 oz: ~$1.50. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
@@ -61,9 +61,9 @@
                        "Ranch Seasoning Mix, 3 tbsp: ~$0.39. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Sugar, 4.5 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (olive oil, taco seasoning, smoked paprika, ground cumin, cayenne pepper): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.35 across 14 servings, so roughly $2.10 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.02 across 14 servings, roughly $2.79 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.80. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $30.29 across 14 servings, so roughly $2.16 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.10 across 14 servings, roughly $2.86 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.88. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a ranch chicken burrito at a fast-casual counter. Same flavor, a fifth of the price.\u003c/p\u003e",
     "shop_smart":  [
@@ -82,14 +82,14 @@
     "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14, scoop the same amount into each tortilla, and finish with an even spoon of the ranch sauce. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.staysnatched.com/protein-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003estaysnatched.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
-    "cost_batch":  29.35,
-    "cost_batch_true":  39.02,
-    "cost_per_serving":  2.1,
-    "cost_per_serving_true":  2.79,
+    "cost_batch":  30.29,
+    "cost_batch_true":  40.1,
+    "cost_per_serving":  2.16,
+    "cost_per_serving_true":  2.86,
     "cost_pantry_add":  13.78,
-    "cost_first_run":  52.8,
+    "cost_first_run":  53.88,
     "scaler":  {
-                   "cost":  "39.02",
+                   "cost":  "40.10",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",
@@ -228,7 +228,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  3.77,
+                 "costPerServing":  3.85,
                  "recipeIngredient":  [
                                           "High Fiber Tortilla, 14 tortillas (910 g)",
                                           "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",

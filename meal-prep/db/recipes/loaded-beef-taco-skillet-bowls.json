@@ -18,7 +18,7 @@
                  "protein":  52,
                  "carbs":  67,
                  "fat":  21,
-                 "cost_ps":  "5.21"
+                 "cost_ps":  "5.33"
              },
     "intro_html":  "Everything you love about taco night in one loaded skillet. Lean beef, seasoned black beans, corn, and zucchini simmer together, then get finished with a little melty cheddar. It runs about ${{cost_ps}} a serving (at everyday cost) with a big {{protein}} grams of protein and makes 14 filling bowls.",
     "ingredients_display":  [
@@ -52,11 +52,11 @@
                        "Cheddar Cheese, Shredded, 2 1/2 cups: ~$2.15. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
                        "Vegetable Oil, 2.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 1/2 cup diced: ~$0.70. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Red Bell Pepper, 2 peppers diced: ~$2.12. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2 peppers diced: ~$3.29. \u003cstrong\u003eBuy 3 each: $4.56.\u003c/strong\u003e",
                        "Pantry seasonings (chili powder, ground cumin, garlic powder, dried oregano, paprika, salt, red pepper flakes, black pepper): ~$0.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $55.33 across 14 servings, so roughly $3.95 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $61.30 across 14 servings, roughly $4.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $73.01. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $56.50 across 14 servings, so roughly $4.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $62.92 across 14 servings, roughly $4.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $74.63. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "Each of the 14 servings brings {{protein}} grams of protein and {{cal}} calories, a genuinely loaded bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://wholesomemadeeasy.com/loaded-taco-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eWholesome Made Easy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Taco night flavor with the budget math working in your favor, all from one pan. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  55.33,
-    "cost_batch_true":  61.3,
-    "cost_per_serving":  3.95,
-    "cost_per_serving_true":  4.38,
+    "cost_batch":  56.5,
+    "cost_batch_true":  62.92,
+    "cost_per_serving":  4.04,
+    "cost_per_serving_true":  4.49,
     "cost_pantry_add":  11.71,
-    "cost_first_run":  73.01,
+    "cost_first_run":  74.63,
     "scaler":  {
-                   "cost":  "61.30",
+                   "cost":  "62.92",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -215,7 +215,7 @@
     "head":  {
                  "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, loaded beef taco skillet bowls, budget dinner",
-                 "costPerServing":  5.21,
+                 "costPerServing":  5.33,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 5 lb (2230 g)",
                                           "Seasoned Black Beans, 14 cups (2366 g)",

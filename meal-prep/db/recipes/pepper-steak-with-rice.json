@@ -24,7 +24,7 @@
                  "protein":  44,
                  "carbs":  52,
                  "fat":  20,
-                 "cost_ps":  "6.06"
+                 "cost_ps":  "6.21"
              },
     "intro_html":  "Pepper steak is the takeout order that never disappoints and never quite justifies its price. Sliced steak, green and red peppers, onion, and a glossy soy and ginger sauce over rice. Made at home it takes about half an hour once the slicing is done, and every single ingredient in it is something you can buy at a normal grocery store. Each bowl runs {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -48,24 +48,24 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Beef Flank/Sirloin Steak, 5.25 lb: ~$46.30. \u003cstrong\u003eBuy 6 lbs: $52.92.\u003c/strong\u003e",
+                       "Beef Flank/Sirloin Steak, 5.25 lb: ~$46.29. \u003cstrong\u003eBuy 6 lbs: $52.91.\u003c/strong\u003e",
                        "Soy Sauce, 1 cup: ~$1.06. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Rice Vinegar, 0.75 cups: ~$1.30. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Sesame Oil, 4.75 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Rice Vinegar, 0.75 cups: ~$1.23. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Sesame Oil, 4.75 tbsp: ~$1.12. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Green Bell Peppers, 3.5 peppers: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
-                       "Red Bell Pepper, 3.5 peppers: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
-                       "Jalapeno, 8.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5 peppers: ~$2.70. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3.5 peppers: ~$5.32. \u003cstrong\u003eBuy 4 each: $6.08.\u003c/strong\u003e",
+                       "Jalapeno, 8.25 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
                        "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
-                       "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$0.95. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
+                       "Ginger, 3.5 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
                        "Cornstarch, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Honey, 1.25 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (paprika, black pepper, salt): ~$0.77. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $60.78 across 14 servings, so roughly $4.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $70.74 across 14 servings, roughly $5.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $91.66. Those containers then feed this batch and many more after it."
+                       "Honey, 1.25 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, black pepper, salt): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $61.92 across 14 servings, so roughly $4.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $71.89 across 14 servings, roughly $5.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.08 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $86.97. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), which is roughly what the delivery fee alone costs on the app version. The steak is the entire expense here, so a sale on flank or sirloin swings this number more than anything else you can do.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Weigh the rice into the containers first, then set the skillet on the scale, subtract the empty weight you wrote down, and divide by 14. That gets an even share of steak into every bowl, which matters more here than in almost any other recipe because the peppers are easy to over-scoop. Each portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chilipeppermadness.com/recipes/pepper-steak/\" target=\"_blank\" rel=\"noopener\"\u003echilipeppermadness.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Takeout pepper steak for about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) and no delivery fee. Members get the whole Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.",
-    "cost_batch":  60.78,
-    "cost_batch_true":  70.74,
-    "cost_per_serving":  4.34,
-    "cost_per_serving_true":  5.05,
-    "cost_pantry_add":  20.92,
-    "cost_first_run":  91.66,
+    "cost_batch":  61.92,
+    "cost_batch_true":  71.89,
+    "cost_per_serving":  4.42,
+    "cost_per_serving_true":  5.14,
+    "cost_pantry_add":  15.08,
+    "cost_first_run":  86.97,
     "scaler":  {
-                   "cost":  "70.74",
+                   "cost":  "71.89",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",
@@ -241,7 +241,7 @@
                  "prepTime":  "PT30M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  6.06,
+                 "costPerServing":  6.21,
                  "recipeIngredient":  [
                                           "Beef Flank/Sirloin Steak, 5.25 lb (2381 g)",
                                           "Soy Sauce, 1 cup (279 g)",

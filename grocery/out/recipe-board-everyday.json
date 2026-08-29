@@ -1879,45 +1879,7 @@
                                           }
                                       ]
                        },
-                       {
-                           "id":  "milk",
-                           "commodity":  "Milk",
-                           "category":  "Dairy \u0026 Eggs",
-                           "unit":  "each",
-                           "cheapest_store":  "Walmart",
-                           "stores":  [
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  3,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  3.19,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  3.39,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  3.69,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  4.99,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          }
-                                      ]
-                       },
+                       
                        {
                            "id":  "olives",
                            "commodity":  "Olives",
@@ -2298,43 +2260,47 @@
                            "commodity":  "Red Bell Pepper",
                            "category":  "Vegetables",
                            "unit":  "each",
-                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_store":  "Walmart",
                            "stores":  [
                                           {
-                                              "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.83,
-                                              "type":  "everyday",
-                                              "bulk":  true
-                                          },
-                                          {
                                               "store":  "Walmart",
-                                              "per_unit":  0.98,
+                                              "per_unit":  1.52,
                                               "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  1,
-                                              "type":  "everyday",
-                                              "bulk":  false
+                                              "bulk":  false,
+                                              "item":  "Fresh Red Bell Pepper, Each",
+                                              "size":  "1 each"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  1.66,
                                               "type":  "everyday",
-                                              "bulk":  false
+                                              "bulk":  false,
+                                              "item":  "Fresh Red Bell Pepper",
+                                              "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.99,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Red Bell Pepper, each (loose)",
+                                              "size":  "1 each"
                                           },
                                           {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  1.69,
+                                              "per_unit":  1.99,
                                               "type":  "everyday",
-                                              "bulk":  false
+                                              "bulk":  false,
+                                              "item":  "Red Bell Pepper",
+                                              "size":  "1 ct"
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  2.5,
+                                              "per_unit":  2.49,
                                               "type":  "everyday",
-                                              "bulk":  false
+                                              "bulk":  false,
+                                              "item":  "Fresh Sweet Bell Pepper, Red Organic",
+                                              "size":  "1 ea"
                                           }
                                       ]
                        },
@@ -8971,44 +8937,12 @@
                                               "size":  "8 oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.7129,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Red Apple Cheese Gruyere Cheese",
-                                              "size":  "7 oz"
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.7419,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Alpenhaus French Gruyere Semi-Hard Cheese Wedge",
                                               "size":  "1 lb"
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.9483,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Specially Selected Le Gruyere Cheese",
-                                              "size":  "6 oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  1.0612,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
-                                              "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  1.7488,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Grand Suisse Le Gruyere Cheese",
-                                              "size":  "8 oz"
                                           }
                                       ]
                        },

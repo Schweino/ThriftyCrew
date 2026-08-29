@@ -24,7 +24,7 @@
                  "protein":  29,
                  "carbs":  78,
                  "fat":  14,
-                 "cost_ps":  "3.28"
+                 "cost_ps":  "3.43"
              },
     "intro_html":  "Meatballs on a sheet pan are one of the great meal prep discoveries. No frying, no splatter, no standing at the stove turning them one at a time. They roast alongside pineapple, onion and red pepper, everything gets glazed in barbecue sauce, and it all goes over rice. Each serving lands at {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Canned pineapple caramelizing next to barbecue sauce is a flavor combination that has never lost an argument.",
     "ingredients_display":  [
@@ -45,20 +45,20 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
-                       "Eggs, 4 large eggs: ~$0.42. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.47. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
                        "Bread Crumbs, 13.5 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "BBQ Sauce, 1.25 cups: ~$1.56. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "BBQ Sauce, 1.25 cups: ~$0.96. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Pineapple Chunks, 3.5 cans: ~$5.88. \u003cstrong\u003eBuy 4 20oz cans: $6.72.\u003c/strong\u003e",
                        "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Red Bell Pepper, 3.5 peppers: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3.5 peppers: ~$5.32. \u003cstrong\u003eBuy 4 each: $6.08.\u003c/strong\u003e",
                        "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, smoked paprika, salt, black pepper): ~$0.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.04 across 14 servings, so roughly $2.00 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.29 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.40. Those containers then feed this batch and many more after it."
+                       "Rice, 4 cups dry: ~$0.90. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, smoked paprika, salt, black pepper): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.32 across 14 servings, so roughly $2.31 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.40 across 14 servings, roughly $2.74 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.08. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Rice, canned pineapple, and bottled barbecue sauce are all pantry-cheap, which lets the turkey be the only real expense.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Weigh the rice and the sheet pan contents together, subtract your empty pot weight, and divide by 14. Count the meatballs out evenly first, then let the scale settle the rice. Each serving delivers \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/sheet-pan-bbq-meatballs/\" target=\"_blank\" rel=\"noopener\"\u003ebudgetbytes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sheet-pan meatballs over rice for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  28.04,
-    "cost_batch_true":  33.29,
-    "cost_per_serving":  2,
-    "cost_per_serving_true":  2.38,
-    "cost_pantry_add":  12.11,
-    "cost_first_run":  45.4,
+    "cost_batch":  32.32,
+    "cost_batch_true":  38.4,
+    "cost_per_serving":  2.31,
+    "cost_per_serving_true":  2.74,
+    "cost_pantry_add":  9.68,
+    "cost_first_run":  48.08,
     "scaler":  {
-                   "cost":  "33.29",
+                   "cost":  "38.40",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -210,7 +210,7 @@
                  "prepTime":  "PT25M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  3.28,
+                 "costPerServing":  3.43,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 3.5 lb (1588 g)",
                                           "Eggs, 4 large eggs (175 g)",

@@ -26,7 +26,7 @@
                  "protein":  27,
                  "carbs":  57,
                  "fat":  28,
-                 "cost_ps":  "3.62"
+                 "cost_ps":  "3.70"
              },
     "intro_html":  "Breakfast for dinner is not a compromise, it is a strategy. Eggs are the cheapest complete protein in the store, hash browns are the cheapest potato you can buy already shredded, and smoked turkey sausage brings the flavor without the price of bacon. This bakes into one pan and reheats beautifully, which most egg dishes cannot claim. Each serving runs {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -49,14 +49,14 @@
                        "Olive Oil, 3.75 tbsp: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Frozen Hash Browns, 34 cups: ~$10.75. \u003cstrong\u003eBuy 4 26oz bags: $11.12.\u003c/strong\u003e",
                        "Yellow Onion, 2 onions: ~$0.52. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Red Bell Pepper, 2 peppers: ~$1.83. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2 peppers: ~$2.84. \u003cstrong\u003eBuy 2 each: $3.04.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 15 oz: ~$3.24. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
                        "Eggs, 11 large eggs: ~$1.52. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
                        "Milk, 2.75 cups: ~$0.51. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
                        "Pantry seasonings (onion powder, black pepper, garlic powder, salt): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $32.92 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.88 across 14 servings, roughly $2.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.65. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $33.93 across 14 servings, so roughly $2.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.96 across 14 servings, roughly $2.85 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.73. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a pan that works as breakfast, lunch, or a Tuesday dinner nobody complains about. The frozen hash browns and the eggs are carrying most of the weight.",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "Weigh the whole pan, subtract the empty pan weight, and divide by 14. Cut to the scale, since egg bakes puff unevenly and the middle squares are always heavier than they look. Every serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://noshingwiththenolands.com/turkey-sausage-hash-brown-breakfast-casserole/\" target=\"_blank\" rel=\"noopener\"\u003enoshingwiththenolands.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Breakfast, lunch, or dinner for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  32.92,
-    "cost_batch_true":  38.88,
-    "cost_per_serving":  2.35,
-    "cost_per_serving_true":  2.78,
+    "cost_batch":  33.93,
+    "cost_batch_true":  39.96,
+    "cost_per_serving":  2.42,
+    "cost_per_serving_true":  2.85,
     "cost_pantry_add":  11.77,
-    "cost_first_run":  50.65,
+    "cost_first_run":  51.73,
     "scaler":  {
-                   "cost":  "38.88",
+                   "cost":  "39.96",
                    "ing":  [
                                {
                                    "item":  "Smoked Turkey Sausage",
@@ -192,7 +192,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT55M",
                  "totalTime":  "PT1H15M",
-                 "costPerServing":  3.62,
+                 "costPerServing":  3.70,
                  "recipeIngredient":  [
                                           "Smoked Turkey Sausage, 2.75 lb (1270 g)",
                                           "Olive Oil, 3.75 tbsp (50 g)",
