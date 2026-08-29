@@ -4112,7 +4112,15 @@ else {
   # feed-covers-published.ps1 and did not move this pin, so the child passed 19/19 while the wrapper
   # failed it. The pin is still pinned ON PURPOSE - a case that silently stops running never errors,
   # so the tally is the only thing that notices - it just has to be MOVED when cases are added.
-  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 19/19 pass') {
+  # 19 -> 28 (2026-08-29): AND IT HAPPENED AGAIN, same file, same pin, same cause. 120a26c1 ("the guard
+  # said the price was $0.00 and the price was fine; the scaler was the thing that was dark") added nine
+  # UNBID_LINE cases and left the pin at 19, so test-auditors reported "a watcher has gone blind" about a
+  # child that was passing 28/28 with rc=0. Twice in six days is the pin telling us something: the failure
+  # message says "failed or lost its founding-bug fixtures", which reads as the guard being broken rather
+  # than as the wrapper being out of date, and it sends the next reader to debug the wrong file. Verified
+  # before moving it: feed-covers-published.ps1 -SelfTest exits 0 and reports 28/28, and all nine new cases
+  # are real UNBID_LINE assertions, not the old ones renamed.
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 28/28 pass') {
     Ok 'feed-covers-published -SelfTest passes with its founding-bug fixtures armed (a published slug the feed does not carry, a bid in ingredients but not pricing_inputs, a present-but-zero-priced entry, and the allowlist pardoning only its own bid)'
   } else { Bad ('feed-covers-published -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 
