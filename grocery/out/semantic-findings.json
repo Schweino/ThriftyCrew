@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-27 21:32",
+    "generated":  "2026-08-28 21:32",
     "board":  "comparison-2026-08-26.json",
-    "sidecar_generated":  "2026-08-27 21:32:17",
+    "sidecar_generated":  "2026-08-28 21:31:59",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3085,
-                     "corpus":  37957,
-                     "rule_invisible":  6846
+                     "board_pairs":  3083,
+                     "corpus":  38025,
+                     "rule_invisible":  6864
                  },
     "identity_count":  0,
-    "coverage_count":  55,
+    "coverage_count":  57,
     "identity":  [
 
                  ],
@@ -141,6 +141,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "93% Lean / 7% Fat Lean Ground Beef Patties, 4 Count, 1 lb Tray, Fresh, All Natural*",
+                         "cos":  0.7483,
+                         "score":  0.965165,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Walmart",
@@ -153,10 +163,10 @@
                          "kind":  "coverage",
                          "id":  "ground-beef-93-7",
                          "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "93% Lean / 7% Fat Lean Ground Beef Patties, 4 Count, 1 lb Tray, Fresh, All Natural*",
-                         "cos":  0.7613,
-                         "score":  0.965099,
+                         "store":  "Aldi",
+                         "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
+                         "cos":  0.7516,
+                         "score":  0.96302,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -167,16 +177,6 @@
                          "product":  "Friendly Farms Almond Original Milk",
                          "cos":  0.6879,
                          "score":  0.962393,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
-                         "cos":  0.7576,
-                         "score":  0.961451,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -251,22 +251,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
-                         "cos":  0.7362,
-                         "score":  0.94368,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "ranch-seasoning-mix",
                          "commodity":  "Ranch Seasoning Mix (packet)",
                          "store":  "Walmart",
                          "product":  "Great Value Classic Ranch Salad Dressing \u0026 Dip, 16 fl oz",
                          "cos":  0.7126,
                          "score":  0.940791,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
+                         "cos":  0.7285,
+                         "score":  0.93887,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -301,22 +301,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
-                         "cos":  0.6563,
-                         "score":  0.932323,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "white-wine",
                          "commodity":  "White Wine",
                          "store":  "Family Fare",
                          "product":  "Vendange Chardonnay White Wine 1.5 L",
                          "cos":  0.5637,
                          "score":  0.931691,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
+                         "cos":  0.6464,
+                         "score":  0.929781,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -337,6 +337,26 @@
                          "product":  "ARTICHOKES QUARTERED TRAY PACK 6/14 OZ/CASE-KROGER (EACH)",
                          "cos":  0.6993,
                          "score":  0.928036,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-pork",
+                         "commodity":  "Ground Pork",
+                         "store":  "Walmart",
+                         "product":  "Marketside Organic Grass-Fed Ground Beef, 85% Lean/15% Fat, 1 lb, 3 Count",
+                         "cos":  0.6733,
+                         "score":  0.927688,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-pork",
+                         "commodity":  "Ground Pork",
+                         "store":  "Walmart",
+                         "product":  "Marketside Organic Grass-Fed Ground Beef, 85% Lean/15% Fat, 1 lb",
+                         "cos":  0.6733,
+                         "score":  0.927688,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -371,6 +391,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "All Natural* 73% Lean/27% Fat Ground Beef, 1 lb Tray",
+                         "cos":  0.7485,
+                         "score":  0.924845,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "coconut-oil",
                          "commodity":  "Coconut Oil",
                          "store":  "Walmart",
@@ -387,16 +417,6 @@
                          "product":  "Frigo Cheese Heads Light String Mozzarella Cheese, 20 oz, 24 Count",
                          "cos":  0.7402,
                          "score":  0.924552,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "All Natural* 73% Lean/27% Fat Ground Beef, 1 lb Tray",
-                         "cos":  0.76,
-                         "score":  0.924208,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

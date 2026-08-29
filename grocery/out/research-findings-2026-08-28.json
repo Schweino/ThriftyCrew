@@ -1,0 +1,90 @@
+{
+  "generated": "2026-08-28 09:36",
+  "by": "09:00 grocery-browser-stores-refresh agent",
+  "answers": "out/research-worklist.json (4 items, generated 2026-08-28 08:15)",
+  "status": "RESEARCH ONLY - NOT WRITTEN TO ANY out/regular FILE. See not_applied_because.",
+  "not_applied_because": [
+    "There is no committed mechanism for injecting a researched everyday row into a store's out/regular file. audit-sale-fallback.ps1's header points at research-familyfare-everyday.ps1 as the model, and that script no longer exists in grocery/ - so the only way to apply these today would be a hand-edit of an 8 MB pipeline artifact produced by the 07:00/08:00 headless pull. That is improvisation on a file the chain rewrites, so the findings are banked here instead.",
+    "The Fareway rows below were read in a tab where retailerLocation 531573 could NOT be asserted (the shop.fareway.com Apollo cache read back empty and the session is signed out). The page reported In-Store and Omaha, but SKILL hard rule 4 says prove the store before trusting a price - so treat the Fareway prices as a research lead to be re-read by the sanctioned lane, not as board input."
+  ],
+  "items": [
+    {
+      "commodity": "bacon-bits",
+      "store": "Hy-Vee",
+      "gap": "0 rows in hyvee-regular-2026-08-28.json match the commodity's include patterns at all - the only bacon-bits cell on the board is the SALE row, so the store leaves the commodity when the sale ends.",
+      "root_cause": "bacon-bits has NO entry in commodity-search.json terms (597 terms; 'pork-chops', 'red-wine' and 'white-wine' all have one, 'bacon-bits' does not). Hy-Vee's rotation can therefore never search for it. ADDING THE TERM IS THE REAL FIX; it is the same class as the commented-out 'NO SEARCH TERM' entries at the foot of the rescue lists.",
+      "suggested_term": "bacon bits",
+      "store_does_carry_it": true,
+      "source": "https://www.hy-vee.com/aisles-online/search?search=bacon%20bits (19 results, read 2026-08-28 09:21)",
+      "cheapest_everyday_per_oz": {
+        "name": "Oscar Mayer Real Bacon Bits Mega Pack, 9 oz Bag",
+        "price": "$9.79",
+        "size": "9 oz",
+        "per_oz": 1.088
+      },
+      "runners_up": [
+        { "name": "HORMEL Real Bacon Bits Pouch, 6 OZ", "price": "$6.99", "size": "6 oz", "per_oz": 1.165 },
+        { "name": "Hy-Vee Crumbled Bacon Bits", "price": "$3.49", "size": "2.8 oz", "per_oz": 1.246 },
+        { "name": "HORMEL Real Bacon Bits, 3 OZ", "price": "$3.99", "size": "3 oz", "per_oz": 1.33 }
+      ],
+      "excluded_and_why": [
+        "Hy-Vee Imitation Bacon Bits 3.25 oz ($2.29 on sale, was $3.49) - the commodity excludes \\bimitation\\b. NOTE its name says 3.25 oz while the size field says 4.1 oz; the two disagree.",
+        "Hy-Vee Crumbled Bacon Pieces ($3.49 / 2.5 oz and $7.99 / 9 oz) - 'Pieces' does not match either include pattern (bacon\\s*bits / real\\s+bacon\\s+bits), so these cannot serve as the fallback even though they are the same food."
+      ]
+    },
+    {
+      "commodity": "red-wine",
+      "store": "Hy-Vee",
+      "gap": "The only include-matching rows in hyvee-regular-2026-08-28.json are five RED WINE VINEGARS, every one of them knocked out by the commodity's own vinegar exclude. No bottled red wine is in the everyday file.",
+      "store_does_carry_it": true,
+      "source": "https://www.hy-vee.com/aisles-online/search?search=red%20wine (334 results; PAGE 1 OF 6 ONLY - a cheaper everyday bottle may sit on a later page)",
+      "cheapest_everyday": {
+        "name": "Yellow Tail Pinot Noir Australia Red Wine 750 ml",
+        "price": "$7.99",
+        "size": "750 ml"
+      },
+      "runners_up": [
+        { "name": "Bogle Vineyards Essential Red Wine", "price": "$9.99", "size": "750 ml" },
+        { "name": "Apothic Red Wine Red Blend 750ml", "price": "$10.99", "size": "750 ml" },
+        { "name": "Menage a Trois Silk Red Wine", "price": "$10.99", "size": "750 ml" }
+      ],
+      "excluded_and_why": [
+        "Sutter Home Sweet Red Wine $6.99 - cheaper, but excluded by \\bsweet\\s+red\\b.",
+        "Barefoot Cellars Rich/Sweet Red Blend $6.99 and Dark Horse Red Blend $7.99 - both are SALE prices (was $7.99 / $8.99), so neither is an everyday fallback.",
+        "All 3L/4L/5L boxes (Bota Box, Franzia, Black Box, Carlo Rossi) - excluded by the box/jug/cask/litre rules."
+      ]
+    },
+    {
+      "commodity": "white-wine",
+      "store": "Hy-Vee",
+      "gap": "The only include-matching rows in hyvee-regular-2026-08-28.json are a white wine VINEGAR and two DIJON MUSTARDS WITH WHITE WINE - all three excluded by the commodity's vinegar/mustard rules. No bottled white wine is in the everyday file.",
+      "store_does_carry_it": true,
+      "source": "https://www.hy-vee.com/aisles-online/search?search=white%20wine (PAGE 1 ONLY - same caveat as red-wine)",
+      "cheapest_everyday": {
+        "name": "Clos du Bois Chardonnay White Wine 750ml",
+        "price": "$10.99",
+        "size": "750 ml",
+        "note": "Tied on price with 'New Age White Wine' $10.99/750ml, but New Age is a semi-sparkling Argentine wine whose NAME does not say sparkling - it would pass the commodity's sparkling exclude on a technicality. Clos du Bois is the honest pick."
+      },
+      "runners_up": [
+        { "name": "Apothic White Wine Blend 750ml", "price": "$11.99", "size": "750 ml" },
+        { "name": "Ruffino Orvieto Classico DOC, Italian White Wine, 750ml Bottle", "price": "$14.99", "size": "750 ml" }
+      ]
+    },
+    {
+      "commodity": "pork-chops",
+      "store": "Fareway",
+      "gap": "fareway-regular-2026-08-28.json holds exactly two include-matching rows - 'Boneless Pork Chop' and 'Boneless Pork Ribeye Chops' - and the commodity excludes \\bboneless\\b. So the everyday shelf as captured contains no eligible chop, even though the store sells several.",
+      "root_cause": "This is a CAPTURE COVERAGE gap, not a store gap: searching 'pork chops' on the storefront returns bone-in chops the 08:00 shop capture did not carry through. fareway-shop-2026-08-28.jsonl contains no pork-chop rows at all.",
+      "store_does_carry_it": true,
+      "source": "https://shop.fareway.com/store/fareway-meat-grocery/s?k=pork%20chops (read 2026-08-28 09:35, mode reported In-Store, store NOT asserted - see not_applied_because)",
+      "cheapest_everyday": [
+        { "name": "Center Cut Pork Chops", "unit_price": "$3.99 / lb", "shelf": "about 0.63 lb each, $2.49 each estimated", "counter": "Fresh Meat Counter" },
+        { "name": "Iowa Pork Chops", "unit_price": "$3.99 / lb", "shelf": "about 0.88 lb each, $3.49 each estimated", "counter": "Fresh Meat Counter" }
+      ],
+      "excluded_and_why": [
+        "Bone-In Smoked Pork Chops $4.99/lb - currently 17% off (was $5.24 each est.), so it is a SALE row and cannot be the everyday fallback."
+      ]
+    }
+  ]
+}
