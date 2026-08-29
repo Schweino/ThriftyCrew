@@ -60,10 +60,10 @@
                        "Ranch Dressing, 5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 16floz bottle: $1.76.\u003c/strong\u003e",
                        "Ranch Seasoning Mix, 3 tbsp: ~$0.39. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Sugar, 4.5 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (olive oil, taco seasoning, smoked paprika, ground cumin, cayenne pepper): ~$1.03. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.39 across 14 servings, so roughly $2.17 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.20 across 14 servings, roughly $2.87 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.64. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (olive oil, taco seasoning, smoked paprika, ground cumin, cayenne pepper): ~$1.06. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.42 across 14 servings, so roughly $2.17 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.23 across 14 servings, roughly $2.87 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.93. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a ranch chicken burrito at a fast-casual counter. Same flavor, a fifth of the price.\u003c/p\u003e",
     "shop_smart":  [
@@ -82,14 +82,14 @@
     "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14, scoop the same amount into each tortilla, and finish with an even spoon of the ranch sauce. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.staysnatched.com/protein-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003estaysnatched.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
-    "cost_batch":  30.39,
-    "cost_batch_true":  40.2,
+    "cost_batch":  30.42,
+    "cost_batch_true":  40.23,
     "cost_per_serving":  2.17,
     "cost_per_serving_true":  2.87,
-    "cost_pantry_add":  14.44,
-    "cost_first_run":  54.64,
+    "cost_pantry_add":  14.7,
+    "cost_first_run":  54.93,
     "scaler":  {
-                   "cost":  "40.20",
+                   "cost":  "40.23",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

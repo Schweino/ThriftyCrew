@@ -55,10 +55,10 @@
                        "Fresh Basil, 12.75 tbsp: ~$1.62. \u003cstrong\u003eBuy 2 0.5oz packs: $2.39.\u003c/strong\u003e",
                        "Lime Juice, 0.5 cups: ~$0.28. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (curry powder, dried basil, ground ginger, garlic powder, salt, black pepper): ~$0.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $36.16 across 14 servings, so roughly $2.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $43.48 across 14 servings, roughly $3.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.53. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (curry powder, dried basil, ground ginger, garlic powder, salt, black pepper): ~$0.61. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.30 across 14 servings, so roughly $2.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.62 across 14 servings, roughly $3.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.22 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.84. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for coconut curry turkey meatballs over rice. A Thai-inspired bowl spot charges $14 for one serving, and theirs has fewer meatballs. We counted.",
     "shop_smart":  "Ground turkey is the anchor here, the 93/7. It routinely dips on sale below ground beef, and in a curry sauce nobody can tell the difference.\nRed curry paste and coconut milk are the flavor engine. One jar of paste covers this batch with room to spare and keeps for months in the fridge, and store-brand coconut milk works just as well as the import for less.\nBread crumbs and eggs are the binder for pocket change combined. That is what keeps lean turkey meatballs from turning into hockey pucks, cheapest insurance in the recipe.",
@@ -75,14 +75,14 @@
     "portion_html":  "Weigh the full pot with rice and meatballs, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wholesomelicious.com/thai-coconut-curry-turkey-meatballs/\" target=\"_blank\" rel=\"noopener\"\u003eWholesomelicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  36.16,
-    "cost_batch_true":  43.48,
-    "cost_per_serving":  2.58,
-    "cost_per_serving_true":  3.11,
-    "cost_pantry_add":  11.05,
-    "cost_first_run":  54.53,
+    "cost_batch":  36.3,
+    "cost_batch_true":  43.62,
+    "cost_per_serving":  2.59,
+    "cost_per_serving_true":  3.12,
+    "cost_pantry_add":  12.22,
+    "cost_first_run":  55.84,
     "scaler":  {
-                   "cost":  "43.48",
+                   "cost":  "43.62",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

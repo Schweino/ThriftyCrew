@@ -70,10 +70,10 @@
                        "Light Sour Cream, 1.5 cups: ~$1.34. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 3/4 cups: ~$0.87. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Tortilla, 29.25 oz: ~$2.39. \u003cstrong\u003eBuy 2 20ct packs: $4.24.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, fish sauce, chili powder, smoked paprika, ground cumin, ground allspice): ~$0.77. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.84 across 14 servings, so roughly $1.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $36.74 across 14 servings, roughly $2.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.90. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, fish sauce, chili powder, smoked paprika, ground cumin, ground allspice): ~$0.84. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.91 across 14 servings, so roughly $1.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.81 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.95. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Beans and sweet potatoes are cheap ballast, which is what lets a pot with this much pork shoulder in it land where it does.",
     "shop_smart":  [
@@ -94,14 +94,14 @@
     "portion_html":  "Set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight into each container with the tortillas packed alongside. Every serving lands near {{cal}} calories with {{protein}} grams of protein once the sour cream and cilantro go on top.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/chipotle-sweet-potato-pork-chili/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eSmoky pork and sweet potato chili for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  26.84,
-    "cost_batch_true":  36.74,
+    "cost_batch":  26.91,
+    "cost_batch_true":  36.81,
     "cost_per_serving":  1.92,
-    "cost_per_serving_true":  2.62,
-    "cost_pantry_add":  21.16,
-    "cost_first_run":  57.9,
+    "cost_per_serving_true":  2.63,
+    "cost_pantry_add":  22.14,
+    "cost_first_run":  58.95,
     "scaler":  {
-                   "cost":  "36.74",
+                   "cost":  "36.81",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

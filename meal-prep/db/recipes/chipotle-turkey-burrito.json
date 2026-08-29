@@ -62,10 +62,10 @@
                        "Mexican Cheese Blend, 4 oz: ~$0.85. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
                        "Greek Yogurt, 1.25 cups: ~$1.31. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 3/4 cups: ~$0.87. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, chili powder, garlic powder): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.04 across 14 servings, so roughly $2.79 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $52.35 across 14 servings, roughly $3.74 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.46. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (ground cumin, chili powder, garlic powder): ~$0.49. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.10 across 14 servings, so roughly $2.79 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.41 across 14 servings, roughly $3.74 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.75. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a build-your-own turkey burrito. The vegetables stretch the turkey, which is how the cost stays down.\u003c/p\u003e",
     "shop_smart":  [
@@ -85,14 +85,14 @@
     "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.fivesilverspoons.com/chipotle-burritos-with-ground-turkey-and-veggies/\" target=\"_blank\" rel=\"noopener\"\u003efivesilverspoons.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
-    "cost_batch":  39.04,
-    "cost_batch_true":  52.35,
+    "cost_batch":  39.1,
+    "cost_batch_true":  52.41,
     "cost_per_serving":  2.79,
     "cost_per_serving_true":  3.74,
-    "cost_pantry_add":  7.11,
-    "cost_first_run":  59.46,
+    "cost_pantry_add":  7.34,
+    "cost_first_run":  59.75,
     "scaler":  {
-                   "cost":  "52.35",
+                   "cost":  "52.41",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

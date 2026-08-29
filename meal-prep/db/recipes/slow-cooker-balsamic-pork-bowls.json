@@ -45,11 +45,11 @@
                        "Brown Sugar, 1/2 cup: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Soy Sauce, 3 3/4 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1 cup: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Olive Oil, 2 1/4 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, garlic powder, chili powder, salt, black pepper): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $38.23 across 14 servings, so roughly $2.73 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.77 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.89. Those containers then feed this batch and many more after it."
+                       "Olive Oil, 2 1/4 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, garlic powder, chili powder, salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.25 across 14 servings, so roughly $2.73 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.79 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.32. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -68,14 +68,14 @@
     "portion_html":  "Each serving comes in around {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-balsamic-brown-sugar-pork-tenderloin\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A little tang, a little sweet, and a whole lot of easy. That is a keeper. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  38.23,
-    "cost_batch_true":  40.77,
+    "cost_batch":  38.25,
+    "cost_batch_true":  40.79,
     "cost_per_serving":  2.73,
     "cost_per_serving_true":  2.91,
-    "cost_pantry_add":  20.12,
-    "cost_first_run":  60.89,
+    "cost_pantry_add":  20.53,
+    "cost_first_run":  61.32,
     "scaler":  {
-                   "cost":  "40.77",
+                   "cost":  "40.79",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",

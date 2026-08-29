@@ -53,10 +53,10 @@
                        "Light Sour Cream, 1.25 cups: ~$1.22. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, bay leaves, smoked paprika): ~$0.77. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.53 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.84 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.74. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, bay leaves, smoked paprika): ~$0.90. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.66 across 14 servings, so roughly $2.12 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.97 across 14 servings, roughly $2.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.13. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The pork shoulder is nearly all of it. The sweet potato that holds the whole thing together is the cheapest item on the list.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Set one roasted sweet potato in each of your 14 containers, then set your mixing pot of barbecue pork on the scale, subtract the empty pot weight from Step 1, divide by 14, and pile that exact weight into each potato. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-pulled-pork-stuffed-sweet-potatoes/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eBarbecue in a sweet potato for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  29.53,
-    "cost_batch_true":  32.84,
-    "cost_per_serving":  2.11,
-    "cost_per_serving_true":  2.35,
-    "cost_pantry_add":  7.9,
-    "cost_first_run":  40.74,
+    "cost_batch":  29.66,
+    "cost_batch_true":  32.97,
+    "cost_per_serving":  2.12,
+    "cost_per_serving_true":  2.36,
+    "cost_pantry_add":  8.16,
+    "cost_first_run":  41.13,
     "scaler":  {
-                   "cost":  "32.84",
+                   "cost":  "32.97",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

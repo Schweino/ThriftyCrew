@@ -43,17 +43,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.09. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.11. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Broccoli Florets, 12 cups: ~$3.42. \u003cstrong\u003eBuy 3 12oz bags: $3.49.\u003c/strong\u003e",
-                       "Greek Yogurt, 1 tub: ~$0.87. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$0.97. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
                        "Tahini, 1/4 cup: ~$0.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lime Juice, 4 tbsp: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 4 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 1 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1/4 cup: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Garlic, 4 cloves: ~$0.21. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
-                       "Pantry seasonings (olive oil, ground cumin, paprika, dried parsley, curry powder, ground cinnamon, ground coriander, salt, black pepper): ~$0.89. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.61 across 14 servings, so roughly $1.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.22 across 14 servings, roughly $2.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $26.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.24. Those containers then feed this batch and many more after it."
+                       "Garlic, 4 cloves: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, paprika, dried parsley, curry powder, ground cinnamon, ground coriander, salt, black pepper): ~$0.99. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.76 across 14 servings, so roughly $1.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.75 across 14 servings, roughly $2.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.77. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -71,14 +72,14 @@
     "portion_html":  "You get {{protein}} grams of protein and {{cal}} calories per serving, a big, satisfying bowl for the price.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/crockpot-chicken-shawarma/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That sauce alone is worth making a double batch. Trust me on this one. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  25.61,
-    "cost_batch_true":  29.22,
-    "cost_per_serving":  1.83,
-    "cost_per_serving_true":  2.09,
-    "cost_pantry_add":  26.02,
-    "cost_first_run":  55.24,
+    "cost_batch":  24.76,
+    "cost_batch_true":  28.75,
+    "cost_per_serving":  1.77,
+    "cost_per_serving_true":  2.05,
+    "cost_pantry_add":  23.02,
+    "cost_first_run":  51.77,
     "scaler":  {
-                   "cost":  "29.22",
+                   "cost":  "28.75",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

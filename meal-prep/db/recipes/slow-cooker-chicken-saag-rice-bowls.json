@@ -38,16 +38,16 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$15.73. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Rice, 5.25 cups dry: ~$1.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Frozen Chopped Spinach, 11 cups: ~$3.65. \u003cstrong\u003eBuy 4 10oz boxes: $4.61.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.20. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 11 cups: ~$3.33. \u003cstrong\u003eBuy 4 10oz boxes: $4.21.\u003c/strong\u003e",
                        "Tomato Sauce, 1 can: ~$0.84. \u003cstrong\u003eBuy 1 15oz can: $0.84.\u003c/strong\u003e",
                        "Coconut Milk, 1 cup: ~$1.10. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
-                       "Garlic, 4 cloves: ~$0.21. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
-                       "Ginger, 3 inches: ~$0.23. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
-                       "Pantry seasonings (garam masala, ground coriander, ground cumin, cayenne pepper, salt): ~$1.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.36 across 14 servings, so roughly $1.74 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $28.50 across 14 servings, roughly $2.04 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.22. Those containers then feed this batch and many more after it."
+                       "Garlic, 4 cloves: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 3 inches: ~$0.60. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
+                       "Pantry seasonings (garam masala, ground coriander, ground cumin, cayenne pepper, salt): ~$1.63. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.68 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.94 across 14 servings, roughly $2.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.22 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.16. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -66,14 +66,14 @@
     "portion_html":  "Each of the 14 servings lands around {{protein}}g protein for about {{cal}} calories, at roughly ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.everydaymaven.com/slow-cooker-chicken-saag/\" target=\"_blank\" rel=\"noopener\"\u003eEveryDay Maven\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Deep, savory, and simple, this saag makes healthy eating feel effortless all week long. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  24.36,
-    "cost_batch_true":  28.5,
-    "cost_per_serving":  1.74,
-    "cost_per_serving_true":  2.04,
-    "cost_pantry_add":  6.72,
-    "cost_first_run":  35.22,
+    "cost_batch":  24.68,
+    "cost_batch_true":  28.94,
+    "cost_per_serving":  1.76,
+    "cost_per_serving_true":  2.07,
+    "cost_pantry_add":  7.22,
+    "cost_first_run":  36.16,
     "scaler":  {
-                   "cost":  "28.50",
+                   "cost":  "28.94",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

@@ -43,15 +43,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Boneless Skinless Chicken Thigh, 4.75 lb: ~$8.26. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
-                       "Olive Oil, 4.75 tbsp: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Garlic, 3.5 cups: ~$6.72. \u003cstrong\u003eBuy 12 heads: $6.91.\u003c/strong\u003e",
-                       "Chicken Broth, 2.25 cups: ~$0.75. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Rice, 6.25 cups dry: ~$1.41. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, ground cumin, dried dill, dried thyme): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $18.31 across 14 servings, so roughly $1.31 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $19.09 across 14 servings, roughly $1.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.75. Those containers then feed this batch and many more after it."
+                       "Boneless Skinless Chicken Thigh, 4.75 lb: ~$15.03. \u003cstrong\u003eBuy 5 lbs: $16.10.\u003c/strong\u003e",
+                       "Olive Oil, 4.75 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3.5 cups: ~$6.36. \u003cstrong\u003eBuy 11 heads: $6.38.\u003c/strong\u003e",
+                       "Chicken Broth, 2.25 cups: ~$0.85. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Rice, 6.25 cups dry: ~$1.44. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground cumin, dried dill, dried thyme): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.73 across 14 servings, so roughly $1.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.82 across 14 servings, roughly $1.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.93. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), and the shortest ingredient list in the entire batch. Chicken, garlic, olive oil, broth, and rice. That is the whole recipe, and it tastes like far more than the sum of it.",
     "shop_smart":  [
@@ -73,14 +73,14 @@
     "portion_html":  "Weigh the rice into each container, then set the pan on the scale, subtract the empty weight you wrote down, and divide by 14. Make sure the soft garlic cloves get spread around, since they are the best part and it would be a shame for one container to get all of them. Every portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jocooks.com/recipes/chicken-with-40-cloves-of-garlic/\" target=\"_blank\" rel=\"noopener\"\u003ejocooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Five ingredients, French technique, about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Members get the entire Meal Prep library plus every money lesson and calculator on the site for $1 a month.",
-    "cost_batch":  18.31,
-    "cost_batch_true":  19.09,
-    "cost_per_serving":  1.31,
-    "cost_per_serving_true":  1.36,
-    "cost_pantry_add":  18.66,
-    "cost_first_run":  37.75,
+    "cost_batch":  24.73,
+    "cost_batch_true":  25.82,
+    "cost_per_serving":  1.77,
+    "cost_per_serving_true":  1.84,
+    "cost_pantry_add":  15.11,
+    "cost_first_run":  40.93,
     "scaler":  {
-                   "cost":  "19.09",
+                   "cost":  "25.82",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Thigh",

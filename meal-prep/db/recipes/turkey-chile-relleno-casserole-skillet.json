@@ -52,10 +52,10 @@
                        "Chicken Broth, 1 carton: ~$1.28. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Mexican Cheese Blend, 34.5 oz: ~$7.45. \u003cstrong\u003eBuy 5 8 oz bags: $8.63.\u003c/strong\u003e",
                        "Rice, 4.25 cups dry: ~$0.97. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, salt, ground cumin, black pepper): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $40.04 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $45.64 across 14 servings, roughly $3.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.13. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (chili powder, salt, ground cumin, black pepper): ~$0.34. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.06 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.66 across 14 servings, roughly $3.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.76 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.42. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), and three pounds of cheese is most of that. This is not a lean dish and it was never trying to be. It is a chile relleno, and the cheese is the point.",
     "shop_smart":  [
@@ -79,14 +79,14 @@
     "portion_html":  "Set the skillet on the scale, subtract the empty pan weight, and divide by 14. Cut wedges to that weight and lift them with the cheese layer intact. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://mytherapistcooks.com/turkey-chile-relleno-casserole-skillet/\" target=\"_blank\" rel=\"noopener\"\u003emytherapistcooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Chile relleno flavor without the frying, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  40.04,
-    "cost_batch_true":  45.64,
+    "cost_batch":  40.06,
+    "cost_batch_true":  45.66,
     "cost_per_serving":  2.86,
     "cost_per_serving_true":  3.26,
-    "cost_pantry_add":  7.49,
-    "cost_first_run":  53.13,
+    "cost_pantry_add":  7.76,
+    "cost_first_run":  53.42,
     "scaler":  {
-                   "cost":  "45.64",
+                   "cost":  "45.66",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

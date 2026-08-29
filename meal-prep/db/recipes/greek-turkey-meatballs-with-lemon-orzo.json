@@ -54,10 +54,10 @@
                        "Feta Cheese, 7 oz: ~$3.89. \u003cstrong\u003eBuy 2 6oz tubs: $6.76.\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Olives, 1.75 cups: ~$2.33. \u003cstrong\u003eBuy 2 6oz cans: $3.36.\u003c/strong\u003e",
-                       "Pantry seasonings (dried oregano, salt, black pepper): ~$0.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $42.98 across 14 servings, so roughly $3.07 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $58.05 across 14 servings, roughly $4.15 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.67. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried oregano, salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.00 across 14 servings, so roughly $3.07 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $58.07 across 14 servings, roughly $4.15 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.89. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a meatball plate a sit-down Greek place prices at $16. The mint and feta make it taste expensive; the orzo makes sure it is not.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Weigh the pot of orzo, subtract the empty pot number, and divide by 14 for the base, then split the meatballs evenly, about 3 per box. Each finished bowl comes out to about {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ambitiouskitchen.com/greek-turkey-meatballs/\" target=\"_blank\" rel=\"noopener\"\u003eAmbitious Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  42.98,
-    "cost_batch_true":  58.05,
+    "cost_batch":  43,
+    "cost_batch_true":  58.07,
     "cost_per_serving":  3.07,
     "cost_per_serving_true":  4.15,
-    "cost_pantry_add":  13.62,
-    "cost_first_run":  71.67,
+    "cost_pantry_add":  13.82,
+    "cost_first_run":  71.89,
     "scaler":  {
-                   "cost":  "58.05",
+                   "cost":  "58.07",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

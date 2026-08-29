@@ -59,10 +59,10 @@
                        "Salsa, 1.25 cups: ~$1.32. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
                        "Fresh Cilantro, 5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Lime Juice, 0.5 cups: ~$0.28. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (bay leaves, salt, garlic powder, onion powder, ground cumin, dried oregano, black pepper): ~$0.56. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.39 across 14 servings, so roughly $1.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.19 across 14 servings, roughly $2.37 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.46. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (bay leaves, salt, garlic powder, onion powder, ground cumin, dried oregano, black pepper): ~$0.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.62 across 14 servings, so roughly $1.90 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.42 across 14 servings, roughly $2.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.36. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) including the cheese and the tortillas. Compare that to what a birria taco truck charges for three tacos and a small cup of consomme.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Set your mixing pot of shredded pork on the scale, subtract the empty pot weight from Step 1, divide by 14, and portion that exact weight into each container, with consomme, tortillas, cheese and salsa packed separately so you can crisp fresh tacos at reheat. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thecarefreekitchen.com/pork-birria-tacos/\" target=\"_blank\" rel=\"noopener\"\u003ethecarefreekitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eBirria tacos and consomme for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  26.39,
-    "cost_batch_true":  33.19,
-    "cost_per_serving":  1.88,
-    "cost_per_serving_true":  2.37,
-    "cost_pantry_add":  11.27,
-    "cost_first_run":  44.46,
+    "cost_batch":  26.62,
+    "cost_batch_true":  33.42,
+    "cost_per_serving":  1.9,
+    "cost_per_serving_true":  2.39,
+    "cost_pantry_add":  11.94,
+    "cost_first_run":  45.36,
     "scaler":  {
-                   "cost":  "33.19",
+                   "cost":  "33.42",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

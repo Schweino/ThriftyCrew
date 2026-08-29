@@ -44,16 +44,16 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 3 tbsp: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pork Loin, 3.75 lb: ~$7.86. \u003cstrong\u003eBuy 4 lbs: $8.56.\u003c/strong\u003e",
-                       "Garlic, 2.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Enchilada Sauce, 5 cans: ~$5.08. \u003cstrong\u003eBuy 6 10oz cans: $5.99.\u003c/strong\u003e",
-                       "Tomato Sauce, 1 can: ~$1.02. \u003cstrong\u003eBuy 2 15oz cans: $1.92.\u003c/strong\u003e",
-                       "Rice, 7.25 cups dry: ~$1.63. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, ground cumin, black pepper): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "Garlic, 2.5 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Enchilada Sauce, 5 cans: ~$5.39. \u003cstrong\u003eBuy 6 10oz cans: $6.35.\u003c/strong\u003e",
+                       "Tomato Sauce, 1 can: ~$0.89. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
+                       "Rice, 7.25 cups dry: ~$1.67. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, ground cumin, black pepper): ~$0.16. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $16.71 across 14 servings, so roughly $1.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $19.48 across 14 servings, roughly $1.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.09. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eTrue shopping cost: about $19.44 across 14 servings, roughly $1.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.80. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), and it does not eat like a budget plate. Six ingredients, one pot, and pork loin doing the work.",
     "shop_smart":  [
@@ -75,13 +75,13 @@
     "credit_html":  "Recipe adapted from \u003ca href=\"https://muybuenoblog.com/asado-de-chile-colorado/\" target=\"_blank\" rel=\"noopener\"\u003emuybuenoblog.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eNorthern Mexican red chile pork for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  16.71,
-    "cost_batch_true":  19.48,
+    "cost_batch_true":  19.44,
     "cost_per_serving":  1.19,
     "cost_per_serving_true":  1.39,
-    "cost_pantry_add":  16.61,
-    "cost_first_run":  36.09,
+    "cost_pantry_add":  12.36,
+    "cost_first_run":  31.8,
     "scaler":  {
-                   "cost":  "19.48",
+                   "cost":  "19.44",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

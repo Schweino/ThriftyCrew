@@ -27,10 +27,10 @@
                        "1/3 Fat Cream Cheese, 18.75 oz: ~$4.29. \u003cstrong\u003eBuy 3 8oz bricks: $5.52.\u003c/strong\u003e",
                        "Marinara Sauce, 6.25 cups: ~$3.31. \u003cstrong\u003eBuy 3 24oz jars: $4.25.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 28 oz: ~$6.07. \u003cstrong\u003eBuy 4 8oz bags: $6.97.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, garlic powder, onion powder, dried oregano): ~$0.46. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $36.30 across 14 servings, so roughly $2.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.44 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.77. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, garlic powder, onion powder, dried oregano): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.35 across 14 servings, so roughly $2.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.49 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.99. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for cheesy beef tortellini that an Italian chain would put on the menu at five times the price with a breadstick as an apology.",
     "shop_smart":  "Tortellini is the splurge in this batch, so compare the dry, refrigerated, and frozen versions per ounce; dry store-brand is usually the winner by a wide margin.\nOne-third fat cream cheese makes the sauce creamy for less money and fewer calories than heavy cream, and the bricks are cheaper per ounce than the tubs.\nStore-brand marinara plus cream cheese beats any jarred rosa or vodka sauce on price, and it tastes like you made it on purpose.",
@@ -46,14 +46,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Scoop carefully so each container gets its share of tortellini and sauce. Every bowl comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://plowingthroughlife.com/ground-beef-tortellini/\" target=\"_blank\" rel=\"noopener\"\u003ePlowing Through Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  36.3,
-    "cost_batch_true":  46.44,
-    "cost_per_serving":  2.59,
+    "cost_batch":  36.35,
+    "cost_batch_true":  46.49,
+    "cost_per_serving":  2.6,
     "cost_per_serving_true":  3.32,
-    "cost_pantry_add":  5.33,
-    "cost_first_run":  51.77,
+    "cost_pantry_add":  5.5,
+    "cost_first_run":  51.99,
     "scaler":  {
-                   "cost":  "46.44",
+                   "cost":  "46.49",
                    "ing":  [
                                {
                                    "item":  "Cheese Tortellini",

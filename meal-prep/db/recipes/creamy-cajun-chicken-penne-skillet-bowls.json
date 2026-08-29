@@ -31,10 +31,10 @@
                        "Chicken Broth, 3.75 lb: ~$2.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 7 oz: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Green Onions, 3.25 cups: ~$1.88. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
-                       "Pantry seasonings (smoked paprika, dried oregano, dried thyme, garlic powder, onion powder, cayenne pepper, black pepper, salt): ~$1.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $22.13 across 14 servings, so roughly $1.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $27.11 across 14 servings, roughly $1.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.22 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.33. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (smoked paprika, dried oregano, dried thyme, garlic powder, onion powder, cayenne pepper, black pepper, salt): ~$1.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.18 across 14 servings, so roughly $1.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.16 across 14 servings, roughly $1.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.55. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for creamy Cajun chicken pasta. The chain-restaurant version of this dish runs $15 to $17 a plate, which puts this batch of dinners in real perspective.",
     "shop_smart":  "The Cajun seasoning is mixed from jars you already own: paprika, oregano, thyme, garlic powder, onion powder, and cayenne. The pre-mixed blends charge a premium for the same spoonfuls.\nOne brick of 1/3 fat cream cheese makes the whole batch creamy. Heavy cream would cost more and add more fat for the same silkiness.\nCooking the penne in the sauce means the starch thickens everything for free, and you skip wasting broth down the drain.",
@@ -51,14 +51,14 @@
     "portion_html":  "Set the whole pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that amount into each container. Every bowl comes out to about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/one-pot-creamy-cajun-chicken-pasta/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  22.13,
-    "cost_batch_true":  27.11,
+    "cost_batch":  22.18,
+    "cost_batch_true":  27.16,
     "cost_per_serving":  1.58,
     "cost_per_serving_true":  1.94,
-    "cost_pantry_add":  16.22,
-    "cost_first_run":  43.33,
+    "cost_pantry_add":  16.39,
+    "cost_first_run":  43.55,
     "scaler":  {
-                   "cost":  "27.11",
+                   "cost":  "27.16",
                    "ing":  [
                                {
                                    "item":  "Smoked Paprika",

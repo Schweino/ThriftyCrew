@@ -18,7 +18,7 @@
                  "protein":  48,
                  "carbs":  72,
                  "fat":  12,
-                 "cost_ps":  "2.79"
+                 "cost_ps":  "2.78"
              },
     "intro_html":  "A high-protein, low-fat Tex-Mex chicken, rice, black bean, and pepper meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
     "ingredients_display":  [
@@ -34,14 +34,14 @@
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 5.5 lb raw: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
                        "Seasoned Black Beans, 5 1/4 cups: ~$5.94. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
-                       "Rice, 4 cups dry jasmine: ~$0.99. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Green Bell Peppers, 6 medium: ~$5.12. \u003cstrong\u003eBuy 6 each: $5.16.\u003c/strong\u003e",
+                       "Rice, 4 cups dry jasmine: ~$1.01. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Green Bell Peppers, 6 medium: ~$4.59. \u003cstrong\u003eBuy 6 each: $4.62.\u003c/strong\u003e",
                        "Yellow Onion, 1 small onion, sliced: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Olive Oil, 2 tablespoons: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 2 tablespoons: ~$1.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (fajita seasoning): ~$4.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.36 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.62 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.87. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $29.95 across 14 servings, so roughly $2.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.20 across 14 servings, roughly $2.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.94. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "That\u0027s about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a single fast-casual fajita bowl.",
     "shop_smart":  [
@@ -62,14 +62,14 @@
     "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you noted in Step 1. That\u0027s your total food weight. Divide it by 14, then scoop that amount into each glass container. Every bowl lands right at about {{cal}} cal and {{protein}}g protein.",
     "credit_html":  "",
     "upsell_html":  "Two weeks of high-protein dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money, work, and life lessons, all for $1 a month.",
-    "cost_batch":  30.36,
-    "cost_batch_true":  32.62,
-    "cost_per_serving":  2.17,
-    "cost_per_serving_true":  2.33,
-    "cost_pantry_add":  6.25,
-    "cost_first_run":  38.87,
+    "cost_batch":  29.95,
+    "cost_batch_true":  32.2,
+    "cost_per_serving":  2.14,
+    "cost_per_serving_true":  2.3,
+    "cost_pantry_add":  6.74,
+    "cost_first_run":  38.94,
     "scaler":  {
-                   "cost":  "32.62",
+                   "cost":  "32.20",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -125,7 +125,7 @@
     "head":  {
                  "description":  "A high-protein, low-fat Tex-Mex chicken, rice, black bean, and pepper meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, fajita chicken, budget dinner, tex-mex meal prep",
-                 "costPerServing":  2.79,
+                 "costPerServing":  2.78,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 5.5 lb raw (2495 g)",
                                           "Seasoned Black Beans, 5 1/4 cups (910 g)",

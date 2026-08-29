@@ -35,10 +35,11 @@
                        "Soy Sauce, 6.5 tbsp: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sriracha, 2.75 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Hoisin Sauce, 2 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (ground ginger, salt, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $44.00 across 14 servings, so roughly $3.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $49.74 across 14 servings, roughly $3.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.17 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $70.91. Those containers then feed this batch and many more after it."
+                       "Ground Ginger, 0.25 oz: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.08 across 14 servings, so roughly $3.15 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.82 across 14 servings, roughly $3.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.61. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for lo mein a takeout counter sells for $12 a container, with maybe half the meat and none of the leftovers.",
     "shop_smart":  ["The lo mein noodles are the shocker in this batch, easily the priciest noodle option on the shelf. Plain spaghetti pulls the same duty in a stir fry for a fraction of the price, and it would knock a real chunk off every bowl.","Cabbage is the cheapest vegetable in the cart: a slice of one head fills nearly 5 cups of this batch.","This uses 5.5 lb of turkey, so buy the big 6 lb pack. The per-pound savings over small trays covers the mushrooms."],
@@ -54,14 +55,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide by 14. Scoop that weight into each container and every bowl comes out to about {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://mealprepmanual.com/lo-mein/\" target=\"_blank\" rel=\"noopener\"\u003eThe Meal Prep Manual\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  44,
-    "cost_batch_true":  49.74,
-    "cost_per_serving":  3.14,
-    "cost_per_serving_true":  3.55,
-    "cost_pantry_add":  21.17,
-    "cost_first_run":  70.91,
+    "cost_batch":  44.08,
+    "cost_batch_true":  49.82,
+    "cost_per_serving":  3.15,
+    "cost_per_serving_true":  3.56,
+    "cost_pantry_add":  21.79,
+    "cost_first_run":  71.61,
     "scaler":  {
-                   "cost":  "49.74",
+                   "cost":  "49.82",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

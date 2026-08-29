@@ -60,7 +60,7 @@
                        "Pantry seasonings (fajita seasoning, salt): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $29.31 across 14 servings, so roughly $2.09 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $37.60 across 14 servings, roughly $2.69 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.58. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.71. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for creamy chicken fajitas you can eat with one hand. Peppers and beans keep it cheap, the yogurt keeps it light.",
     "shop_smart":  [
@@ -86,8 +86,8 @@
     "cost_batch_true":  37.6,
     "cost_per_serving":  2.09,
     "cost_per_serving_true":  2.69,
-    "cost_pantry_add":  7.98,
-    "cost_first_run":  45.58,
+    "cost_pantry_add":  8.11,
+    "cost_first_run":  45.71,
     "scaler":  {
                    "cost":  "37.60",
                    "ing":  [

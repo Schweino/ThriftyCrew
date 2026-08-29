@@ -66,10 +66,10 @@
                        "Light Sour Cream, 1.25 cups: ~$1.22. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Rice, 5 cups dry: ~$1.13. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, cocoa powder, ground cinnamon, ground cumin, salt, black pepper, cayenne pepper): ~$1.67. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.90 across 14 servings, so roughly $2.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.19 across 14 servings, roughly $3.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.70. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (chili powder, cocoa powder, ground cinnamon, ground cumin, salt, black pepper, cayenne pepper): ~$1.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.95 across 14 servings, so roughly $2.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.24 across 14 servings, roughly $3.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.99. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a chili that tastes like it took a lot more effort than it did. Canned pumpkin is one of the cheapest thickeners on the shelf and it brings fiber along with it.",
     "shop_smart":  [
@@ -90,14 +90,14 @@
     "portion_html":  "Spread the cooked rice into your 14 containers, then set the chili pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near {{cal}} calories with {{protein}} grams of protein once the sour cream and cilantro go on top.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/turkey-pumpkin-chili/\" target=\"_blank\" rel=\"noopener\"\u003eskinnytaste.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eA chili with real depth for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  34.9,
-    "cost_batch_true":  46.19,
-    "cost_per_serving":  2.49,
+    "cost_batch":  34.95,
+    "cost_batch_true":  46.24,
+    "cost_per_serving":  2.5,
     "cost_per_serving_true":  3.3,
-    "cost_pantry_add":  11.51,
-    "cost_first_run":  57.7,
+    "cost_pantry_add":  11.75,
+    "cost_first_run":  57.99,
     "scaler":  {
-                   "cost":  "46.19",
+                   "cost":  "46.24",
                    "ing":  [
                                {
                                    "item":  "Yellow Onion",

@@ -66,10 +66,10 @@
                        "Sugar, 2.75 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Coconut Milk, 1 can: ~$1.82. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
                        "Rice, 5.25 cups dry: ~$1.18. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, salt, curry powder, garam masala, black pepper): ~$1.75. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $20.24 across 14 servings, so roughly $1.45 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $27.42 across 14 servings, roughly $1.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.94. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (chili powder, salt, curry powder, garam masala, black pepper): ~$2.13. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $20.62 across 14 servings, so roughly $1.47 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.80 across 14 servings, roughly $1.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.54. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Chicken breast is the dominant line here, which means the entire spice cabinet, the coconut milk and every vegetable in the pot together cost less than the meat does.",
     "shop_smart":  [
@@ -91,14 +91,14 @@
     "portion_html":  "Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Fourteen containers, one number. Each one lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and this curry gets hotter as it sits, so day five bites harder than day one.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.indianhealthyrecipes.com/chicken-madras-curry/\" target=\"_blank\" rel=\"noopener\"\u003eindianhealthyrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Chicken madras with real heat and real acid for about ${{cost_ps}} a bowl (at everyday cost). This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool on the site for $1 a month.",
-    "cost_batch":  20.24,
-    "cost_batch_true":  27.42,
-    "cost_per_serving":  1.45,
-    "cost_per_serving_true":  1.96,
-    "cost_pantry_add":  12.52,
-    "cost_first_run":  39.94,
+    "cost_batch":  20.62,
+    "cost_batch_true":  27.8,
+    "cost_per_serving":  1.47,
+    "cost_per_serving_true":  1.99,
+    "cost_pantry_add":  13.74,
+    "cost_first_run":  41.54,
     "scaler":  {
-                   "cost":  "27.42",
+                   "cost":  "27.80",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

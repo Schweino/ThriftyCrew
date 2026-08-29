@@ -47,18 +47,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
                        "93/7 Ground Turkey, 3.5 lb: ~$15.87. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
                        "Yellow Onion, 1.5 onions: ~$0.42. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Green Bell Peppers, 1 pepper: ~$1.00. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
-                       "Diced Green Chiles, 2 cans: ~$2.15. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1 pepper: ~$0.90. \u003cstrong\u003eBuy 2 each: $1.54.\u003c/strong\u003e",
+                       "Diced Green Chiles, 2 cans: ~$1.98. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
                        "Potato, 1.25 lb russet: ~$0.72. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
                        "Salsa, 1 cup: ~$0.91. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 7 oz: ~$1.22. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
-                       "Pantry seasonings (olive oil, ground cumin, garlic powder, dried oregano): ~$0.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.55 across 14 servings, so roughly $2.47 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $43.23 across 14 servings, roughly $3.09 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.55. Those containers then feed this batch and many more after it."
+                       "Mexican Cheese Blend, 7 oz: ~$1.49. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
+                       "Pantry seasonings (olive oil, ground cumin, garlic powder, dried oregano): ~$0.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.44 across 14 servings, so roughly $2.39 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.76 across 14 servings, roughly $2.98 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.55. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$9 or more\u003c/strong\u003e for a green-chile burrito out. The potato is what keeps this one cheap and filling at the same time.\u003c/p\u003e",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ambitiouskitchen.com/green-chile-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eambitiouskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
-    "cost_batch":  34.55,
-    "cost_batch_true":  43.23,
-    "cost_per_serving":  2.47,
-    "cost_per_serving_true":  3.09,
-    "cost_pantry_add":  9.32,
-    "cost_first_run":  52.55,
+    "cost_batch":  33.44,
+    "cost_batch_true":  41.76,
+    "cost_per_serving":  2.39,
+    "cost_per_serving_true":  2.98,
+    "cost_pantry_add":  9.79,
+    "cost_first_run":  51.55,
     "scaler":  {
-                   "cost":  "43.23",
+                   "cost":  "41.76",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

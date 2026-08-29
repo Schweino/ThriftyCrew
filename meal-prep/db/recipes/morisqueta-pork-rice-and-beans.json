@@ -56,10 +56,10 @@
                        "Kidney Beans, 3 cans: ~$2.80. \u003cstrong\u003eBuy 4 cans: $3.56.\u003c/strong\u003e",
                        "Mexican Cheese Blend, 8.75 oz: ~$1.90. \u003cstrong\u003eBuy 2 8 oz bags: $3.45.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, bay leaves, dried arbol chiles, olive oil, black pepper): ~$0.45. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.07 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.66 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.85. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, bay leaves, dried arbol chiles, olive oil, black pepper): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.13 across 14 servings, so roughly $1.87 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.72 across 14 servings, roughly $2.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.24. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a layered plate with real pork shoulder, beans, rice and cheese. Rice and beans are the cheapest foundation in cooking, and this dish knows it.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Divide the rice across your 14 containers, then the beans, then set your pot of saucy pork on the scale, subtract the empty pot weight from Step 1, divide by 14, and lay that exact weight on top of each. Every plate lands near {{cal}} calories with {{protein}} grams of protein, so this is one of the biggest servings in the section.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/morisqueta/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eA Michoacan layered plate for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  26.07,
-    "cost_batch_true":  32.66,
-    "cost_per_serving":  1.86,
-    "cost_per_serving_true":  2.33,
-    "cost_pantry_add":  14.19,
-    "cost_first_run":  46.85,
+    "cost_batch":  26.13,
+    "cost_batch_true":  32.72,
+    "cost_per_serving":  1.87,
+    "cost_per_serving_true":  2.34,
+    "cost_pantry_add":  14.52,
+    "cost_first_run":  47.24,
     "scaler":  {
-                   "cost":  "32.66",
+                   "cost":  "32.72",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

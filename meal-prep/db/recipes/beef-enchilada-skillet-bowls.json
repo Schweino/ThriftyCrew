@@ -46,10 +46,10 @@
                        "Olive Oil, 3.25 tbsp: ~$0.49. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 1/2 onion, diced: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Corn Tortillas, 5, cut into triangles: ~$1.05. \u003cstrong\u003eBuy 1 80ct pack: $4.49.\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$0.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $58.43 across 14 servings, so roughly $4.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $71.80 across 14 servings, roughly $5.13 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.46. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$0.50. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $58.46 across 14 servings, so roughly $4.18 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $71.83 across 14 servings, roughly $5.13 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.75. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -67,14 +67,14 @@
     "portion_html":  "Each of the 14 bowls packs {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://reciperunner.com/beef-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eRecipe Runner\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big Tex-Mex flavor with {{protein}} grams of protein a bowl, and it reheats like a champ. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  58.43,
-    "cost_batch_true":  71.8,
-    "cost_per_serving":  4.17,
+    "cost_batch":  58.46,
+    "cost_batch_true":  71.83,
+    "cost_per_serving":  4.18,
     "cost_per_serving_true":  5.13,
-    "cost_pantry_add":  12.66,
-    "cost_first_run":  84.46,
+    "cost_pantry_add":  12.92,
+    "cost_first_run":  84.75,
     "scaler":  {
-                   "cost":  "71.80",
+                   "cost":  "71.83",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

@@ -63,10 +63,10 @@
                        "Reduced Fat Mozzarella, 4.75 oz: ~$1.01. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Mexican Cheese Blend, 4.75 oz: ~$1.00. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
                        "Pasta Shells, 24.75 oz dry: ~$1.50. \u003cstrong\u003eBuy 3 12oz boxes: $2.18.\u003c/strong\u003e",
-                       "Pantry seasonings (dried oregano, ground cumin, salt, black pepper, dried thyme, dijon mustard): ~$0.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $21.02 across 14 servings, so roughly $1.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.20 across 14 servings, roughly $2.37 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.76 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.96. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried oregano, ground cumin, salt, black pepper, dried thyme, dijon mustard): ~$0.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.09 across 14 servings, so roughly $1.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.27 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.47. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pulled pork and a three cheese sauce baked together. Very few dishes deliver this much comfort for that number.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Weigh the finished dish, subtract the pan weight, divide by 14, and cut to that exact weight so every container gets the same ratio of pork to pasta. Every serving lands near {{cal}} calories with {{protein}} grams of protein. Reheat covered with a splash of milk so the sauce loosens back up.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.butterandbaggage.com/mac-and-cheese-with-pulled-pork/\" target=\"_blank\" rel=\"noopener\"\u003ebutterandbaggage.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eBarbecue joint mac and cheese for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  21.02,
-    "cost_batch_true":  33.2,
-    "cost_per_serving":  1.5,
-    "cost_per_serving_true":  2.37,
-    "cost_pantry_add":  16.76,
-    "cost_first_run":  49.96,
+    "cost_batch":  21.09,
+    "cost_batch_true":  33.27,
+    "cost_per_serving":  1.51,
+    "cost_per_serving_true":  2.38,
+    "cost_pantry_add":  17.2,
+    "cost_first_run":  50.47,
     "scaler":  {
-                   "cost":  "33.20",
+                   "cost":  "33.27",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

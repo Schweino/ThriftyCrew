@@ -35,17 +35,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "93/7 Ground Beef, 6 lb: ~$35.76. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
-                       "Rice, 6.25 cups dry: ~$1.38. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 6 lb: ~$33.33. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
+                       "Rice, 6.25 cups dry: ~$1.41. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Greek Yogurt, 1 tub: ~$1.81. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
-                       "Diced Tomatoes, 1 can: ~$0.82. \u003cstrong\u003eBuy 1 can: $0.84.\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$2.03. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1 can: ~$0.75. \u003cstrong\u003eBuy 1 can: $0.77.\u003c/strong\u003e",
                        "Beef Broth, 1 1/4 cups: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Garlic, 5 cloves: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, paprika, garlic powder): ~$0.34. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $41.61 across 14 servings, so roughly $2.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $47.62 across 14 servings, roughly $3.40 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.54. Those containers then feed this batch and many more after it."
+                       "Garlic, 5 cloves: ~$0.34. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, paprika, garlic powder): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.39 across 14 servings, so roughly $2.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.38 across 14 servings, roughly $3.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.63 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.01. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -63,14 +63,14 @@
     "portion_html":  "Every one of the 14 bowls carries {{protein}} grams of protein at {{cal}} calories, so this spiced favorite fuels you as well as it tastes.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.closetcooking.com/20-minute-skillet-beef-shawarma/\" target=\"_blank\" rel=\"noopener\"\u003eCloset Cooking\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Street-cart flavor from your own kitchen, portioned and ready. Adventure eating on a budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  41.61,
-    "cost_batch_true":  47.62,
-    "cost_per_serving":  2.97,
-    "cost_per_serving_true":  3.4,
-    "cost_pantry_add":  4.92,
-    "cost_first_run":  52.54,
+    "cost_batch":  39.39,
+    "cost_batch_true":  45.38,
+    "cost_per_serving":  2.81,
+    "cost_per_serving_true":  3.24,
+    "cost_pantry_add":  4.63,
+    "cost_first_run":  50.01,
     "scaler":  {
-                   "cost":  "47.62",
+                   "cost":  "45.38",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

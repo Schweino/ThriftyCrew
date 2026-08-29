@@ -48,17 +48,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "93/7 Ground Turkey, 5.5 lb: ~$20.64. \u003cstrong\u003eBuy 6 lbs: $22.93.\u003c/strong\u003e",
-                       "Rice, 2.25 cups dry: ~$0.50. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 5.5 lb: ~$24.58. \u003cstrong\u003eBuy 6 lbs: $27.30.\u003c/strong\u003e",
+                       "Rice, 2.25 cups dry: ~$0.51. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Yellow Onion, 5 onions: ~$1.36. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
-                       "Eggs, 15 large eggs: ~$1.75. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
-                       "Olive Oil, 0.75 cups: ~$1.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 15 large eggs: ~$1.99. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
+                       "Olive Oil, 0.75 cups: ~$1.49. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Carrots, 2.4 carrots: ~$0.31. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Lemon Juice, 10 lemons worth: ~$1.74. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Pantry seasonings (dried dill, salt, black pepper): ~$2.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.70 across 14 servings, so roughly $2.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.65 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.37. Those containers then feed this batch and many more after it."
+                       "Lemon Juice, 10 lemons worth: ~$1.09. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried dill, salt, black pepper): ~$3.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.99 across 14 servings, so roughly $2.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.53 across 14 servings, roughly $2.90 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.53. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). The sauce that makes this dish special is eggs and lemon juice, which together cost almost nothing for the entire batch.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Divide the meatballs by count first, then pour the lemon sauce over them so every container gets the same amount of both. Each one lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mygreekdish.com/recipe/creamy-meatball-soup-egg-lemon-sauce-youvarlakia-avgolemono/\" target=\"_blank\" rel=\"noopener\"\u003emygreekdish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Greek egg-lemon meatballs for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  30.7,
-    "cost_batch_true":  35.65,
-    "cost_per_serving":  2.19,
-    "cost_per_serving_true":  2.55,
-    "cost_pantry_add":  15.72,
-    "cost_first_run":  51.37,
+    "cost_batch":  34.99,
+    "cost_batch_true":  40.53,
+    "cost_per_serving":  2.5,
+    "cost_per_serving_true":  2.9,
+    "cost_pantry_add":  12,
+    "cost_first_run":  52.53,
     "scaler":  {
-                   "cost":  "35.65",
+                   "cost":  "40.53",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

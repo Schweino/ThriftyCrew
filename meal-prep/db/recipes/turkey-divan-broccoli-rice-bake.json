@@ -59,10 +59,10 @@
                        "Broccoli Florets, 2.25 lb: ~$3.59. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
                        "Bread Crumbs, 1.75 cups: ~$0.54. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, curry powder, salt, black pepper): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.54 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.83 across 14 servings, roughly $2.77 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.98. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, onion powder, curry powder, salt, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.55 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.84 across 14 servings, roughly $2.77 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.28. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a cream casserole with real turkey in it. Divan has been feeding families cheaply since the 1950s and it has not gotten worse at the job.",
     "shop_smart":  [
@@ -84,14 +84,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Cut down through the crumb topping so each container gets its share of the crunchy part, then finish with the remaining green onions. Each serving lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.melissassouthernstylekitchen.com/turkey-broccoli-rice-divan/\" target=\"_blank\" rel=\"noopener\"\u003emelissassouthernstylekitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A classic cream casserole for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.54,
-    "cost_batch_true":  38.83,
+    "cost_batch":  29.55,
+    "cost_batch_true":  38.84,
     "cost_per_serving":  2.11,
     "cost_per_serving_true":  2.77,
-    "cost_pantry_add":  10.15,
-    "cost_first_run":  48.98,
+    "cost_pantry_add":  10.44,
+    "cost_first_run":  49.28,
     "scaler":  {
-                   "cost":  "38.83",
+                   "cost":  "38.84",
                    "ing":  [
                                {
                                    "item":  "Rice",

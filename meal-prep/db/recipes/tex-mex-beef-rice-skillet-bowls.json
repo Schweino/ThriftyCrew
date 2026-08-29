@@ -43,10 +43,10 @@
                        "Sweet Whole Kernel Corn, 2 1/4 cups: ~$0.71. \u003cstrong\u003eBuy 1 can: $0.82.\u003c/strong\u003e",
                        "Diced Tomatoes, 2 cups: ~$0.90. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 1 1/2 cups: ~$1.29. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
-                       "Pantry seasonings (paprika, ground cumin, chili powder, garlic powder, salt, black pepper): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $46.59 across 14 servings, so roughly $3.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $49.35 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.22. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (paprika, ground cumin, chili powder, garlic powder, salt, black pepper): ~$0.76. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $46.62 across 14 servings, so roughly $3.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.38 across 14 servings, roughly $3.53 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.51. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -64,14 +64,14 @@
     "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/tex-mex-ground-beef-and-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One skillet, a stack of containers, and your lunches practically make themselves. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  46.59,
-    "cost_batch_true":  49.35,
+    "cost_batch":  46.62,
+    "cost_batch_true":  49.38,
     "cost_per_serving":  3.33,
-    "cost_per_serving_true":  3.52,
-    "cost_pantry_add":  6.87,
-    "cost_first_run":  56.22,
+    "cost_per_serving_true":  3.53,
+    "cost_pantry_add":  7.13,
+    "cost_first_run":  56.51,
     "scaler":  {
-                   "cost":  "49.35",
+                   "cost":  "49.38",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

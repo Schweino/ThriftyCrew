@@ -45,17 +45,17 @@
     "cost_lines":  [
                        "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pork Chops, 7 lb: ~$22.89. \u003cstrong\u003eBuy 7 lbs: $22.89.\u003c/strong\u003e",
-                       "Diced Tomatoes, 3.5 cans: ~$3.36. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3.5 cans: ~$2.68. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
                        "Yellow Onion, 1 onion: ~$0.34. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Green Onions, 8.75 tbsp: ~$0.62. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
                        "Carrots, 7 carrots: ~$0.90. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
                        "Potato, 21.5 potatoes: ~$5.72. \u003cstrong\u003eBuy 11 lbs: $6.25.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Pantry seasonings (sazon seasoning, ground cumin, black pepper, salt): ~$1.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $36.10 across 14 servings, so roughly $2.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.73 across 14 servings, roughly $2.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.45. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (sazon seasoning, ground cumin, black pepper, salt): ~$0.74. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.04 across 14 servings, so roughly $2.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.59 across 14 servings, roughly $2.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.68. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), and the pork chops are nearly the entire bill. The potatoes, carrots and tomatoes that make up the rest of the pot barely register.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Spread the cooked rice across your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight of pork, potatoes and sauce over the rice. Every plate lands near {{cal}} calories with {{protein}} grams of protein, a genuinely high number for a pork and potato stew.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mycolombianrecipes.com/sudado-de-cerdo-colombian-pork-stew/\" target=\"_blank\" rel=\"noopener\"\u003emycolombianrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eColombian Tuesday dinner for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  36.1,
-    "cost_batch_true":  39.73,
-    "cost_per_serving":  2.58,
-    "cost_per_serving_true":  2.84,
-    "cost_pantry_add":  10.72,
-    "cost_first_run":  50.45,
+    "cost_batch":  35.04,
+    "cost_batch_true":  38.59,
+    "cost_per_serving":  2.5,
+    "cost_per_serving_true":  2.76,
+    "cost_pantry_add":  8.09,
+    "cost_first_run":  46.68,
     "scaler":  {
-                   "cost":  "39.73",
+                   "cost":  "38.59",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",

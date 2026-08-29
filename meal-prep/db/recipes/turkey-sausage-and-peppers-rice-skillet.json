@@ -56,10 +56,10 @@
                        "Chicken Broth, 1.8 cartons: ~$2.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Fresh Basil, 9.25 tbsp: ~$1.20. \u003cstrong\u003eBuy 1 0.5oz pack: $1.20.\u003c/strong\u003e",
                        "Basil Pesto, 1.25 cups: ~$4.25. \u003cstrong\u003eBuy 1 22oz jar: $9.46.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, garlic powder, onion powder, dried oregano, black pepper): ~$0.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $40.06 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $48.43 across 14 servings, roughly $3.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.25. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, garlic powder, onion powder, dried oregano, black pepper): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.08 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.45 across 14 servings, roughly $3.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.47. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). The turkey sausage and the red peppers are the cost here, and building it on rice rather than pasta keeps it from climbing higher.",
     "shop_smart":  [
@@ -81,14 +81,14 @@
     "portion_html":  "Weigh the skillet, subtract the empty pan weight you noted, and divide by 14. Stir from the bottom before each scoop so the sausage coins get spread across all the containers. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jennieo.com/recipes/italian-one-pot-sausage-and-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003ejennieo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Street fair sausage and peppers for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  40.06,
-    "cost_batch_true":  48.43,
+    "cost_batch":  40.08,
+    "cost_batch_true":  48.45,
     "cost_per_serving":  2.86,
     "cost_per_serving_true":  3.46,
-    "cost_pantry_add":  12.82,
-    "cost_first_run":  61.25,
+    "cost_pantry_add":  13.02,
+    "cost_first_run":  61.47,
     "scaler":  {
-                   "cost":  "48.43",
+                   "cost":  "48.45",
                    "ing":  [
                                {
                                    "item":  "Smoked Turkey Sausage",

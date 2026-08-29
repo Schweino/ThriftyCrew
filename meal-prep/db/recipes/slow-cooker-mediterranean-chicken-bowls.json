@@ -50,10 +50,10 @@
                        "Garlic, 2 cloves: ~$0.12. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Lime Juice, 2 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Dried Rosemary, 1 tsp: ~$0.78. \u003cstrong\u003eBuy 1 0.7oz jar: $2.22.\u003c/strong\u003e",
-                       "Pantry seasonings (dried oregano, dried thyme, bay leaves, salt, black pepper): ~$0.91. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.73 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $28.08 across 14 servings, roughly $2.01 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.69. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried oregano, dried thyme, bay leaves, salt, black pepper): ~$1.05. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.87 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.22 across 14 servings, roughly $2.02 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.08 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.30. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -71,14 +71,14 @@
     "portion_html":  "Each bowl delivers {{protein}} grams of protein and {{cal}} calories, a light but substantial plate.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-mediterranean-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A few smart pantry jars turn plain chicken into something worth looking forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  23.73,
-    "cost_batch_true":  28.08,
+    "cost_batch":  23.87,
+    "cost_batch_true":  28.22,
     "cost_per_serving":  1.7,
-    "cost_per_serving_true":  2.01,
-    "cost_pantry_add":  14.61,
-    "cost_first_run":  42.69,
+    "cost_per_serving_true":  2.02,
+    "cost_pantry_add":  15.08,
+    "cost_first_run":  43.3,
     "scaler":  {
-                   "cost":  "28.08",
+                   "cost":  "28.22",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

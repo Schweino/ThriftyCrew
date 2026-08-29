@@ -40,18 +40,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 8 lb: ~$16.51. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
-                       "Hominy, 22 cups: ~$3.94. \u003cstrong\u003eBuy 11 cans: $4.09.\u003c/strong\u003e",
-                       "Tomatillos, 2 lb: ~$7.30. \u003cstrong\u003eBuy 2 lbs: $7.36.\u003c/strong\u003e",
+                       "Hominy, 22 cups: ~$6.38. \u003cstrong\u003eBuy 11 cans: $6.63.\u003c/strong\u003e",
+                       "Tomatillos, 2 lb: ~$5.67. \u003cstrong\u003eBuy 2 lbs: $5.72.\u003c/strong\u003e",
                        "Poblano Peppers, 4 peppers: ~$2.87. \u003cstrong\u003eBuy 1 lb: $3.26.\u003c/strong\u003e",
                        "Yellow Onion, 2 onions: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 3 cloves: ~$0.17. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Garlic, 3 cloves: ~$0.20. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Orange Juice, 1/2 cup: ~$0.26. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
-                       "Lime Juice, 2 limes, juiced: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 2 limes, juiced: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 2 cups: ~$0.73. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, dried oregano, ground cumin, chili powder): ~$0.53. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.09 across 14 servings, so roughly $2.44 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.43 across 14 servings, roughly $2.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.91. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, dried oregano, ground cumin, chili powder): ~$0.58. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.72 across 14 servings, so roughly $2.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.24 across 14 servings, roughly $2.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.29. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -70,14 +70,14 @@
     "portion_html":  "Each serving runs about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.peanutbutterandfitness.com/slow-cooker-posole-verde/\" target=\"_blank\" rel=\"noopener\"\u003ePeanut Butter and Fitness\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A warm bowl of this on a cold day is worth every minute the slow cooker spent on it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  34.09,
-    "cost_batch_true":  39.43,
-    "cost_per_serving":  2.44,
-    "cost_per_serving_true":  2.82,
-    "cost_pantry_add":  10.48,
-    "cost_first_run":  49.91,
+    "cost_batch":  33.72,
+    "cost_batch_true":  39.24,
+    "cost_per_serving":  2.41,
+    "cost_per_serving_true":  2.8,
+    "cost_pantry_add":  7.05,
+    "cost_first_run":  46.29,
     "scaler":  {
-                   "cost":  "39.43",
+                   "cost":  "39.24",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",

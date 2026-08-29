@@ -43,17 +43,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Beef Chuck Roast, 5.25 lb: ~$41.84. \u003cstrong\u003eBuy 6 lbs: $47.82.\u003c/strong\u003e",
+                       "Beef Chuck Roast, 5.25 lb: ~$34.85. \u003cstrong\u003eBuy 6 lbs: $39.84.\u003c/strong\u003e",
                        "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Yellow Onion, 1 onion: ~$0.31. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Olive Oil, 0.75 cups: ~$2.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Balsamic Vinegar, 0.75 cups: ~$1.81. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, dried oregano, dried basil): ~$0.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $47.98 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $55.00 across 14 servings, roughly $3.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $74.72. Those containers then feed this batch and many more after it."
+                       "Olive Oil, 0.75 cups: ~$1.91. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Balsamic Vinegar, 0.75 cups: ~$1.73. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, dried oregano, dried basil): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.38 across 14 servings, so roughly $2.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.43 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.33. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, most of them already in your kitchen, and the only one you might not own keeps for years once you buy it.",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-balsamic-beef-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Balsamic pot roast for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  47.98,
-    "cost_batch_true":  55,
-    "cost_per_serving":  3.43,
-    "cost_per_serving_true":  3.93,
-    "cost_pantry_add":  19.72,
-    "cost_first_run":  74.72,
+    "cost_batch":  40.38,
+    "cost_batch_true":  46.43,
+    "cost_per_serving":  2.88,
+    "cost_per_serving_true":  3.32,
+    "cost_pantry_add":  15.9,
+    "cost_first_run":  62.33,
     "scaler":  {
-                   "cost":  "55.00",
+                   "cost":  "46.43",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",

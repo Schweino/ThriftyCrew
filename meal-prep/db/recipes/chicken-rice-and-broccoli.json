@@ -62,10 +62,10 @@
                        "Broccoli Florets, 10 1/2 cups florets (about 2 lb 3 oz): ~$3.05. \u003cstrong\u003eBuy 3 12oz bags: $3.49.\u003c/strong\u003e",
                        "Chicken Broth, 10 1/2 cups: ~$3.83. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
                        "Parmesan Cheese, 7/8 cup grated: ~$1.18. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
-                       "Pantry seasonings (dried basil, dried parsley, garlic powder, onion powder, salt, black pepper): ~$0.88. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.31 across 14 servings, so roughly $1.66 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $27.95 across 14 servings, roughly $2.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.87. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried basil, dried parsley, garlic powder, onion powder, salt, black pepper): ~$1.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.58 across 14 servings, so roughly $1.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.22 across 14 servings, roughly $2.02 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.37 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.59. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eFourteen complete dinners out of one pot, and the math is the part I love. This whole batch comes in at ${{cost_ps}} a serving, and for that you get {{protein}} grams of protein and a real vegetable in every container. Go try to find a drive-through dinner that does that.\u003c/p\u003e\u003cp\u003eChicken, rice, broccoli and a handful of pantry spices is about as lean as a grocery list gets, and it still feeds you like a champion. This is what eating well on a budget actually looks like.\u003c/p\u003e",
     "shop_smart":  "\u003cp\u003eThe chicken breast is the whole ballgame here, so buy it the way that saves the most. Reach for the family packs, not the little foam trays, and when boneless skinless breast goes on sale that is your green light to run this recipe.\u003c/p\u003e\u003cp\u003eLong grain white rice is one of the cheapest sources of calories in the entire store. Buy the big bag rather than the small box; you will put plenty of it to work across fourteen servings.\u003c/p\u003e\u003cp\u003eFresh broccoli crowns are fine, but frozen broccoli florets are the smart-money play for meal prep. They come already trimmed, they cook down the same, and there is no stalk waste headed for the trash. Buy whichever is cheaper the week you cook.\u003c/p\u003e\u003cp\u003eThe dried basil, parsley, garlic powder and onion powder are pantry staples, so check your shelf before you buy anything. If you need them, reach for the basic jars in the spice aisle rather than anything fancy. The parmesan is the one spot worth a small splurge for real flavor at the finish.\u003c/p\u003e",
@@ -75,14 +75,14 @@
     "portion_html":  "\u003cp\u003eThis batch makes fourteen servings, so pull out your containers and a kitchen scale. The honest way to portion is to weigh the full pot, subtract the weight of the empty pot, and divide the food weight by fourteen. Scoop to that number and every container lands at the same {{cal}} calories and {{protein}} grams of protein, instead of one lucky lunch and one sad one.\u003c/p\u003e\u003cp\u003eA one-pot rice dish like this packs and reheats beautifully. It keeps several days in the fridge, and each container is already a complete dinner with the protein, the carb and the vegetable together, no assembly at the microwave.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thecleaneatingcouple.com/chicken-broccoli-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethecleaneatingcouple.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eIf this is the kind of cooking you want more of, that is exactly what Thrifty Crew is built for. For a dollar a month you get every recipe, every macro, and the whole system for eating like this without wrecking your budget. Come cook with the crew.\u003c/p\u003e",
-    "cost_batch":  23.31,
-    "cost_batch_true":  27.95,
-    "cost_per_serving":  1.66,
-    "cost_per_serving_true":  2,
-    "cost_pantry_add":  12.92,
-    "cost_first_run":  40.87,
+    "cost_batch":  23.58,
+    "cost_batch_true":  28.22,
+    "cost_per_serving":  1.68,
+    "cost_per_serving_true":  2.02,
+    "cost_pantry_add":  13.37,
+    "cost_first_run":  41.59,
     "scaler":  {
-                   "cost":  "27.95",
+                   "cost":  "28.22",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

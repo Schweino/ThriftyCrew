@@ -63,10 +63,10 @@
                        "Fries, 59.25 oz: ~$3.97. \u003cstrong\u003eBuy 2 32oz bags: $4.29.\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, dried oregano, black pepper, salt): ~$0.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.37 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.66 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.72. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (ground cumin, dried oregano, black pepper, salt): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.38 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.67 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.56 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.23. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Chicken breast is the biggest line by a wide margin, and the fries that make it saltado are one of the cheapest things in the cart.",
     "shop_smart":  [
@@ -88,14 +88,14 @@
     "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same number in every container. Each one lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and the fries will soften in the fridge, so if that bothers you, bag them separately and crisp them in a toaster oven at reheat time.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://gypsyplate.com/pollo-saltado/\" target=\"_blank\" rel=\"noopener\"\u003egypsyplate.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Peruvian pollo saltado, fries and rice in the same bowl, for about ${{cost_ps}} (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
-    "cost_batch":  29.37,
-    "cost_batch_true":  35.66,
+    "cost_batch":  29.38,
+    "cost_batch_true":  35.67,
     "cost_per_serving":  2.1,
     "cost_per_serving_true":  2.55,
-    "cost_pantry_add":  21.06,
-    "cost_first_run":  56.72,
+    "cost_pantry_add":  21.56,
+    "cost_first_run":  57.23,
     "scaler":  {
-                   "cost":  "35.66",
+                   "cost":  "35.67",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

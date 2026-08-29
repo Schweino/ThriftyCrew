@@ -63,10 +63,10 @@
                        "Sugar, 6.5 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 6.5 oz: ~$1.42. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Light Sour Cream, 1.25 cups: ~$1.28. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, chili powder, garlic powder, black pepper, dried oregano, ground cumin, paprika, baking powder): ~$0.49. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $14.18 across 14 servings, so roughly $1.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $20.42 across 14 servings, roughly $1.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.46 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.88. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, chili powder, garlic powder, black pepper, dried oregano, ground cumin, paprika, baking powder): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $14.20 across 14 servings, so roughly $1.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $20.44 across 14 servings, roughly $1.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.39. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Corn and flour are inexpensive carbs, and they are what make up the entire topping.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Weigh the finished pie in its dish, subtract the dish weight, divide by 14, and cut squares to that exact weight so nobody gets all crust and no filling. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryenoughtoeatsix.com/savory-shredded-pork-cornbread-pie/\" target=\"_blank\" rel=\"noopener\"\u003ehungryenoughtoeatsix.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eTamale flavor without the tamale labor, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  14.18,
-    "cost_batch_true":  20.42,
+    "cost_batch":  14.2,
+    "cost_batch_true":  20.44,
     "cost_per_serving":  1.01,
     "cost_per_serving_true":  1.46,
-    "cost_pantry_add":  17.46,
-    "cost_first_run":  37.88,
+    "cost_pantry_add":  17.95,
+    "cost_first_run":  38.39,
     "scaler":  {
-                   "cost":  "20.42",
+                   "cost":  "20.44",
                    "ing":  [
                                {
                                    "item":  "Salt",

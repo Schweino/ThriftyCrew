@@ -35,10 +35,10 @@
                        "Lime Juice, 7 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 14 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, ground cumin, paprika, dried oregano, salt, black pepper): ~$1.02. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $45.93 across 14 servings, so roughly $3.28 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $54.19 across 14 servings, roughly $3.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.40. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (chili powder, ground cumin, paprika, dried oregano, salt, black pepper): ~$1.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $46.05 across 14 servings, so roughly $3.29 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.31 across 14 servings, roughly $3.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.91. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for what a burrito bowl chain charges $13 once you add the cheese and the queso they know you want.",
     "shop_smart":  ["Cheese is the second biggest line at 21 oz. The store brand 8 oz bags are the play; the shredded blend melts the same as the name brand.","Salsa verde and canned green chiles do all the flavor work between them. That replaces the roasting, peeling, and blending a restaurant bills you for.","The 4 lb turkey pack keeps the per-pound price down, and canned corn and seasoned black beans are shelf-stable, so stock up whenever they go on sale."],
@@ -54,14 +54,14 @@
     "portion_html":  "Weigh the rice pot and the skillet, subtract the empty pot number, and divide each by 14 so every box gets its share of both. Each bowl comes out to about {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chelseasmessyapron.com/green-chile-ground-turkey/\" target=\"_blank\" rel=\"noopener\"\u003eChelsea\u0027s Messy Apron\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  45.93,
-    "cost_batch_true":  54.19,
-    "cost_per_serving":  3.28,
-    "cost_per_serving_true":  3.87,
-    "cost_pantry_add":  14.21,
-    "cost_first_run":  68.4,
+    "cost_batch":  46.05,
+    "cost_batch_true":  54.31,
+    "cost_per_serving":  3.29,
+    "cost_per_serving_true":  3.88,
+    "cost_pantry_add":  14.6,
+    "cost_first_run":  68.91,
     "scaler":  {
-                   "cost":  "54.19",
+                   "cost":  "54.31",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

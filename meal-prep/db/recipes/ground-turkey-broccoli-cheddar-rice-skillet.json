@@ -34,10 +34,10 @@
                        "Bread Crumbs, 10.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Parmesan Cheese, 2.25 oz: ~$0.76. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 16.75 oz: ~$3.64. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
-                       "Pantry seasonings (dried oregano, dried basil, paprika, dijon mustard, salt, black pepper): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.93 across 14 servings, so roughly $1.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $36.68 across 14 servings, roughly $2.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.58. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried oregano, dried basil, paprika, dijon mustard, salt, black pepper): ~$0.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.00 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.75 across 14 servings, roughly $2.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.11. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for what a soup-and-bread chain charges $8, and theirs comes with maybe a third of the protein and no second helping in your fridge.",
     "shop_smart":  "Frozen broccoli florets at three bags beat fresh crowns on price, prep time, and waste. They go straight from freezer to pot.\nThe cheddar is the second biggest line. Buy the 8 oz bags on sale and check the block cheese price; shredding your own usually wins per ounce.\nThe milk barely registers here because the rest of the gallon goes to breakfast. Whole ingredients you already buy weekly are the cheapest ingredients there are.",
@@ -53,14 +53,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide by 14. Scoop that weight into each container, add the crumb topping, and every bowl lands at about {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.evolvingtable.com/ground-turkey-broccoli-cheese-rice/\" target=\"_blank\" rel=\"noopener\"\u003eEvolving Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  25.93,
-    "cost_batch_true":  36.68,
-    "cost_per_serving":  1.85,
+    "cost_batch":  26,
+    "cost_batch_true":  36.75,
+    "cost_per_serving":  1.86,
     "cost_per_serving_true":  2.62,
-    "cost_pantry_add":  15.9,
-    "cost_first_run":  52.58,
+    "cost_pantry_add":  16.36,
+    "cost_first_run":  53.11,
     "scaler":  {
-                   "cost":  "36.68",
+                   "cost":  "36.75",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

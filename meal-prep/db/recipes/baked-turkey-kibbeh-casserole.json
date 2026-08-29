@@ -49,10 +49,10 @@
                        "Yellow Onion, 7 onions: ~$1.91. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
                        "Bulgur Wheat, 6.75 cups: ~$6.74. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz bags.\u003c/strong\u003e",
                        "Fresh Mint, 18.75 tbsp: ~$3.77. \u003cstrong\u003eBuy 3 0.5oz packs: $5.27.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, ground allspice, ground cumin, black pepper): ~$3.06. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.32 across 14 servings, so roughly $2.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $45.40 across 14 servings, roughly $3.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.18. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, ground allspice, ground cumin, black pepper): ~$3.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.57 across 14 servings, so roughly $2.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.65 across 14 servings, roughly $3.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.47. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Five pounds of turkey is the cost of this dish; the bulgur, onions, and spices together come to very little. Bulgur is one of the most underused cheap grains in an American grocery store.",
     "shop_smart":  [
@@ -74,14 +74,14 @@
     "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. The scored diamonds give you a natural cutting guide, but weigh them anyway since the corner pieces always run small. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://feelgoodfoodie.net/recipe/baked-kibbeh/\" target=\"_blank\" rel=\"noopener\"\u003efeelgoodfoodie.net\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A Lebanese classic built for a crowd, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  39.32,
-    "cost_batch_true":  45.4,
-    "cost_per_serving":  2.81,
-    "cost_per_serving_true":  3.24,
-    "cost_pantry_add":  17.78,
-    "cost_first_run":  63.18,
+    "cost_batch":  39.57,
+    "cost_batch_true":  45.65,
+    "cost_per_serving":  2.83,
+    "cost_per_serving_true":  3.26,
+    "cost_pantry_add":  17.82,
+    "cost_first_run":  63.47,
     "scaler":  {
-                   "cost":  "45.40",
+                   "cost":  "45.65",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

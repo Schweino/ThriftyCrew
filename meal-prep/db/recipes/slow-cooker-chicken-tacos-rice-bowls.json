@@ -47,10 +47,10 @@
                        "Cheddar Cheese, Shredded, 1 cup: ~$0.86. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Lime Juice, 3 limes, juiced: ~$0.18. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Garlic, 2.25 tbsp minced: ~$0.27. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, paprika, chili powder, ground coriander, salt, black pepper): ~$0.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.02 across 14 servings, so roughly $1.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $26.96 across 14 servings, roughly $1.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.62. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (ground cumin, paprika, chili powder, ground coriander, salt, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.01 across 14 servings, so roughly $1.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.95 across 14 servings, roughly $1.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.29. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -69,14 +69,14 @@
     "portion_html":  "Each of the 14 servings lands around {{protein}}g protein for about {{cal}} calories, at roughly ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://joyfoodsunshine.com/crockpot-chicken-tacos/\" target=\"_blank\" rel=\"noopener\"\u003eJoyFoodSunshine\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cook it once on Sunday and you have taco bowls waiting every day you are too tired to think. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  24.02,
-    "cost_batch_true":  26.96,
+    "cost_batch":  24.01,
+    "cost_batch_true":  26.95,
     "cost_per_serving":  1.72,
-    "cost_per_serving_true":  1.93,
-    "cost_pantry_add":  7.66,
-    "cost_first_run":  34.62,
+    "cost_per_serving_true":  1.92,
+    "cost_pantry_add":  7.34,
+    "cost_first_run":  34.29,
     "scaler":  {
-                   "cost":  "26.96",
+                   "cost":  "26.95",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

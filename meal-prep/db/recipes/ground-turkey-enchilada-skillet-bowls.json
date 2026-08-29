@@ -46,10 +46,10 @@
                        "Cheddar Cheese, Shredded, 1 1/2 cups: ~$1.29. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Yellow Onion, 1/2 cup diced: ~$0.69. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 1 clove, crushed: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, salt, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $43.98 across 14 servings, so roughly $3.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $49.32 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.02. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (ground cumin, salt, black pepper): ~$0.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.99 across 14 servings, so roughly $3.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.33 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.31. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -67,14 +67,14 @@
     "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://healthyfoodiegirl.com/ground-turkey-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eHealthy Foodie Girl\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, saucy, and cheap, this one disappears fast, so make the full batch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  43.98,
-    "cost_batch_true":  49.32,
+    "cost_batch":  43.99,
+    "cost_batch_true":  49.33,
     "cost_per_serving":  3.14,
     "cost_per_serving_true":  3.52,
-    "cost_pantry_add":  5.7,
-    "cost_first_run":  55.02,
+    "cost_pantry_add":  5.98,
+    "cost_first_run":  55.31,
     "scaler":  {
-                   "cost":  "49.32",
+                   "cost":  "49.33",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

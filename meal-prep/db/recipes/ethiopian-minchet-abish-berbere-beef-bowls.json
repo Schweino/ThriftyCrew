@@ -44,14 +44,14 @@
     "cost_lines":  [
                        "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "93/7 Ground Beef, 3.5 lb: ~$23.22. \u003cstrong\u003eBuy 4 lbs: $26.53.\u003c/strong\u003e",
-                       "Diced Tomatoes, 1 can: ~$0.98. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
-                       "Rice, 7 cups dry: ~$1.55. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (berbere seasoning, salt, black pepper): ~$2.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.96 across 14 servings, so roughly $2.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $36.80 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.99. Those containers then feed this batch and many more after it."
+                       "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$21.60. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1 can: ~$0.78. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
+                       "Rice, 7 cups dry: ~$1.59. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (berbere seasoning, salt, black pepper): ~$5.44. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.50 across 14 servings, so roughly $2.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.94 across 14 servings, roughly $2.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.81. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for an Ethiopian stew made from a short list of ingredients and one very good spice blend.",
     "shop_smart":  [
@@ -73,14 +73,14 @@
     "portion_html":  "Weigh the rice pot and the stew pot separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice base, even ladle of stew. Every bowl lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Berbere gets stronger overnight, so day three will have more heat than day one.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://twosleevers.com/ethiopian-beef-stew/\" target=\"_blank\" rel=\"noopener\"\u003etwosleevers.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Boldly spiced dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.96,
-    "cost_batch_true":  36.8,
-    "cost_per_serving":  2.14,
-    "cost_per_serving_true":  2.63,
-    "cost_pantry_add":  7.19,
-    "cost_first_run":  43.99,
+    "cost_batch":  31.5,
+    "cost_batch_true":  37.94,
+    "cost_per_serving":  2.25,
+    "cost_per_serving_true":  2.71,
+    "cost_pantry_add":  6.87,
+    "cost_first_run":  44.81,
     "scaler":  {
-                   "cost":  "36.80",
+                   "cost":  "37.94",
                    "ing":  [
                                {
                                    "item":  "Butter",
