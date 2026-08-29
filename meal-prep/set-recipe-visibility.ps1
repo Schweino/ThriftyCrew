@@ -1,4 +1,4 @@
-<#
+﻿<#
   set-recipe-visibility.ps1 - make ONE live recipe's Ghost visibility agree with recipes-db.json.
 
   WHY THIS EXISTS. The estate could free a recipe and could put a freed one back, but ONLY through the
@@ -39,6 +39,9 @@ param(
   [string]$Slug = '',
   [switch]$Apply,
   [switch]$Audit,
+  # -Alert raises a queued ops alert when the sweep finds a disagreement. Off by default so an
+  # interactive run is silent; the scheduled caller (capture-watchdog) passes it.
+  [switch]$Alert,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -96,6 +99,7 @@ if ($Audit) {
   $slugs = @($db.recipes | Where-Object { $_.slug -and $_.visibility } )
   Say ("visibility audit: checking $($slugs.Count) recipe(s) against Ghost")
   $bad = 0; $checked = 0
+  $lines = New-Object System.Collections.Generic.List[string]
   foreach ($r in $slugs) {
     $s = [string]$r.slug
     try { $p = Get-Live $s } catch { Say ("  SKIP  $s - $($_.Exception.Message)"); continue }
@@ -103,11 +107,25 @@ if ($Audit) {
     $checked++
     if ([string]$p.visibility -ne [string]$r.visibility) {
       $bad++
-      Say ("  DISAGREE  {0}  live={1}  recipes-db={2}{3}" -f $s, $p.visibility, $r.visibility,
+      $line = ("  DISAGREE  {0}  live={1}  recipes-db={2}{3}" -f $s, $p.visibility, $r.visibility,
            $(if ([string]$r.visibility -eq 'paid' -and [string]$p.visibility -ne 'paid') { '   <-- PAID RECIPE SERVED FREE' } else { '' }))
+      [void]$lines.Add($line); Say $line
     }
   }
   Say ("VISIBILITY-AUDIT-COMPLETE checked=$checked disagreements=$bad")
+  # THE DIRECTION NOBODY WAS WATCHING (2026-08-29). build-hub-grid.ps1:125-133 already verifies
+  # visibility per slug - but only for slugs LISTED in free-rotation.json, warning when a listed-free
+  # post is not public. That is the safe direction: it protects the BADGE. Nothing anywhere asked the
+  # dangerous one - is any post NOT listed free being served free? - which is why 22 paid recipes served
+  # their full content to anonymous visitors and it took an unrelated wave's post-publish review to
+  # notice. This alert is that question, on a clock.
+  if ($bad -gt 0 -and $Alert) {
+    try {
+      . (Join-Path (Split-Path $root -Parent) 'grocery\alert-lib.ps1')
+      $body = @("$bad live recipe(s) disagree with recipes-db about who may read them.", '') + $lines
+      Send-Alert -Subject "NEEDS-BRAD: $bad recipe(s) serve PAID content free (live vs recipes-db)" -Body ($body -join [Environment]::NewLine) -What 'VISIBILITY' | Out-Null
+    } catch { Say ('  alert failed: ' + $_.Exception.Message) }
+  }
   if ($bad -gt 0) { exit 2 }
   exit 0
 }

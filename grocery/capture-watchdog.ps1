@@ -561,6 +561,41 @@ if ($staleFlags.Count) {
     [void]$ok.Add(("browser work: {0} capture flag(s) on disk, and every store each one names has fresh rows dated {1} - the work behind them is done" -f $staleFlags.Count, $todayS))
   }
 }
+# ---- PAID CONTENT SERVED FREE (2026-08-29) -----------------------------------
+# THE DIRECTION NOBODY WATCHED. build-hub-grid already verifies visibility per slug, but only for slugs
+# LISTED in free-rotation.json - it warns when a listed-free post is NOT public, which protects the badge.
+# Nothing anywhere asked the dangerous question: is any post NOT listed free being served free? On
+# 2026-08-29 the answer was 22 - full paid recipes, ingredients, every step, cost and scaler, readable by
+# anonymous visitors - and it took an unrelated wave's post-publish review to notice one of them.
+# It lives HERE rather than on the ship path because it is a health question, not a publish gate, and the
+# watchdog already raises exactly one email a day. It costs one Ghost read per recipe, so it is deliberately
+# NOT in the 0800 chain's fan-out where it would sit on the critical path to the board.
+# The sweep alerts on its own (-Alert) AND contributes a line here, because the two have different readers:
+# the alert names every slug for whoever fixes it, this line tells the daily health reader it happened.
+try {
+  $visPs1 = Join-Path (Split-Path $PSScriptRoot -Parent) 'meal-prep\set-recipe-visibility.ps1'
+  if (-not (Test-Path $visPs1)) {
+    # A MISSING CHECKER IS A FINDING, NOT A SKIP. The first version of this block wrapped everything
+    # in `if (Test-Path)`, so deleting the sweep would have made the watchdog quietly stop asking the
+    # question and report a clean day - the same shape as every other blind guard in this estate.
+    [void]$findings.Add('VISIBILITY SWEEP MISSING: meal-prep\set-recipe-visibility.ps1 is gone, so nothing checks whether a paid recipe is being served free. That check found 22 on 2026-08-29.')
+  } else {
+    $visOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $visPs1 -Audit -Alert)
+    $visLine = [string](@($visOut) -match '^VISIBILITY-AUDIT-COMPLETE' | Select-Object -First 1)
+    if ($visLine -match 'disagreements=(\d+)') {
+      $nBad = [int]$Matches[1]
+      if ($nBad -gt 0) {
+        [void]$findings.Add("PAID CONTENT SERVED FREE: $nBad live recipe(s) disagree with recipes-db about who may read them - see the VISIBILITY alert for the slugs. Nothing self-heals this: the rotation refuses to re-paywall a post it does not own, and publish.ps1 preserves live visibility on update. Fix with meal-prep\set-recipe-visibility.ps1 -Slug <slug> -Apply.")
+      } else {
+        [void]$ok.Add(("visibility: every live recipe agrees with recipes-db on who may read it ({0})" -f ($visLine -replace '^VISIBILITY-AUDIT-COMPLETE\s*','')))
+      }
+    } else {
+      # A sweep that could not finish must not read as a clean one - that is the whole lesson of the class.
+      [void]$findings.Add('VISIBILITY SWEEP DID NOT COMPLETE: set-recipe-visibility -Audit produced no verdict line, so whether a paid recipe is being served free is UNKNOWN this run, not clean.')
+    }
+  }
+} catch { [void]$findings.Add('VISIBILITY SWEEP THREW: ' + $_.Exception.Message + ' - whether a paid recipe is being served free is unknown this run.') }
+
 # ---- report ------------------------------------------------------------------
 Write-Output "CAPTURE WATCHDOG - $todayS"
 foreach ($o in $ok) { Write-Output "  ok    $o" }
