@@ -3368,21 +3368,6 @@
                         "retire_when":  "ruling-reversed"
                     },
                     {
-                        "key":  "vegetable-soup|Walmart|progresso-minestrone-soup-vegetable-classics-can",
-                        "commodity":  "vegetable-soup",
-                        "store":  "Walmart",
-                        "names":  [
-                                      "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz"
-                                  ],
-                        "product_id":  "",
-                        "verdict":  "wrong-product",
-                        "evidence":  "IDENTITY CALL, ruled known-wrong PENDING BRAD (open question in plan-2026-08-30). Minestrone is a pasta-and-bean soup that Progresso files under Vegetable Classics; whether it counts as vegetable soup is a definition call, not a rule bug. Ruled so nothing ships on a guess; reverse in one line if Brad says it counts.",
-                        "seen_on_board":  "yes - on the newest board when this ruling was made",
-                        "ruled_on":  "2026-08-30",
-                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
-                        "retire_when":  "ruling-reversed"
-                    },
-                    {
                         "key":  "ranch-seasoning-mix|Walmart|great-value-classic-ranch-dressing-dip-36-fl-oz",
                         "commodity":  "ranch-seasoning-mix",
                         "store":  "Walmart",
@@ -3698,21 +3683,6 @@
                         "retire_when":  "ruling-reversed"
                     },
                     {
-                        "key":  "enchilada-sauce|Walmart|las-palmas-medium-red-chile-sauce-28-oz",
-                        "commodity":  "enchilada-sauce",
-                        "store":  "Walmart",
-                        "names":  [
-                                      "Las Palmas Medium Red Chile Sauce, 28 oz"
-                                  ],
-                        "product_id":  "",
-                        "verdict":  "wrong-product",
-                        "evidence":  "IDENTITY CALL, ruled known-wrong PENDING BRAD (open question in plan-2026-08-30). Las Palmas red chile sauce is widely used AS enchilada sauce but is not labelled that; whether it counts is a definition call. Ruled so nothing ships on a guess; reverse in one line if Brad says it counts.",
-                        "seen_on_board":  "yes - on the newest board when this ruling was made",
-                        "ruled_on":  "2026-08-30",
-                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
-                        "retire_when":  "ruling-reversed"
-                    },
-                    {
                         "key":  "ground-beef-8020|Walmart|80-lean-20-fat-ground-beef-patties-12-count-2-25",
                         "commodity":  "ground-beef-8020",
                         "store":  "Walmart",
@@ -3770,6 +3740,36 @@
                         "seen_on_board":  "not on the newest board when this ruling was made",
                         "ruled_on":  "2026-08-30",
                         "ruled_by":  "claude (unit-vocabulary round, 2026-08-30)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pistachios|FamilyFare|blue-bunny-premium-pistachio-almond-48-oz",
+                        "commodity":  "pistachios",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Blue Bunny Premium Pistachio Almond 48 Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT, LIVE ON THE BOARD: Family Fare pistachios crowned at $0.1248/oz on \"Blue Bunny Premium Pistachio Almond 48 Oz\" ($5.99), which is a 48 oz tub of ICE CREAM - Family Fare shelves it freezer/sweet_stuff (aisle-test BLOCK, 2026-08-30). Real pistachios run 0.35-1.00/oz on the same board; $0.12/oz pistachios do not exist. The commodity already excluded ice cream, gelato, dessert, pudding, cake, cookies, truffles and chocolate BY TYPE WORD, and this name carries only BRAND + FLAVOR, so every type-word fence missed it. Fixed at the rule level too (pistachios excludes blue bunny / frosting / muffins; the blue-bunny brand token is in the frozen_dessert_brand class of category-excludes.json so audit-food-category hard-fails the class estate-wide). Measured by full engine rebuild: exactly ONE cell moves, Family Fare 0.1248 -> 0.4698 (Planters Dry Roasted Pistachios 12.75 Oz $5.99), crown moves to Sam's Club 0.3538.",
+                        "seen_on_board":  "yes - it held the Family Fare cell AND the estate crown when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30-2, queue 2026-08-30-2611d3)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "artichokes|Bakers|artichokes-hrts-8-10-ct-6-14-oz-case-kroger",
+                        "commodity":  "artichokes",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "WRONG BASIS from a pack misparse, holding the artichokes CROWN on the live board. Baker's row \"ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)\" is a Kroger FOODSERVICE CASE listing - 8-10 hearts per jar, six 14 oz jars to the case - and $3.59 is not a per-each price for any of those things. The engine read the size string as '10 pk 1.4 oz', took the 8-10 CT count as a pack of 10 and 6/14 OZ as 1.4 oz apiece, and divided: 3.59 / 10 = $0.359 each, basis 'per-10-pack (pack count beats the per-each marker)'. That is 11x under the peer price for one artichoke - Fareway 'Artichoke' $3.99 each - and it takes the crown from it. audit-pack-basis has been reporting this cell since before today's triage (finding_count 2 at 08:25); it is advisory, so nothing blocked on it. The PRICE is real and the NAME is real; only the derived per-each is fabricated, so the row is blocked rather than repriced - no number here can be proven without a capture that states a per-jar size. Crown falls to Fareway $3.99. Measured and ruled 2026-08-30 during plan-2026-08-30-2. REVERSE THIS the day a Baker's capture records a stated per-jar size for this product instead of a foodservice case string - retire_when is a closed vocabulary (ruling-reversed / commodity-retired / store-retired), so the condition has to live here where someone can read it.",
+                        "seen_on_board":  "yes - it held the Baker\u0027s cell AND the estate crown when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30-2, found by audit-pack-basis during the batch-1 gate run)",
                         "retire_when":  "ruling-reversed"
                     }
                 ]

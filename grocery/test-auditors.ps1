@@ -885,6 +885,32 @@ if ($r.rc -eq 0) { Ok 'food-category clean twin: fresh lemon/lime rows stay sile
 else { Bad ('food-category flagged REAL produce (rc=' + $r.rc + ') - a new token is too broad: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSnk -Recurse -Force -ErrorAction SilentlyContinue
 
+# (d3) MUST-FIRE for the frozen_dessert_brand class (2026-08-30, queue 2026-08-30-2611d3). THE FOUNDING ROW,
+# frozen verbatim off the live board it was crowning: Family Fare pistachios read $0.1248/oz because the
+# cheapest thing matching "pistachio" at that store was a 48 oz tub of Blue Bunny ICE CREAM at $5.99. The
+# commodity ALREADY excluded ice cream, gelato, dessert, pudding, cake, cookies, truffles and chocolate by
+# type word; this product's retail name carries only BRAND + FLAVOR, so every one of those fences saw
+# nothing. That is why the class token is a BRAND: all 40 Blue Bunny strings in the capture corpus are
+# frozen desserts. Never regenerate this row from the board - the fix removed it, so a regenerated fixture
+# would encode the fix and pass by finding nothing ([[guard-fixture-rule]]).
+$fxBb = NewFxDir 'afc-bluebunny'
+$bbRow = '{"week_of":"2026-08-30","comparison":[{"commodity":"Pistachios","id":"pistachios","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.1248,"item":"Blue Bunny Premium Pistachio Almond 48 Oz"}]}]}'
+Set-Content (Join-Path $fxBb 'comparison-2026-08-30.json') $bbRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxBb)
+if ($r.rc -eq 2 -and $r.text -match 'frozen_dessert_brand') {
+  Ok 'food-category MUST-FIRE: Blue Bunny ice cream on pistachios hard-fails as frozen_dessert_brand (exit 2)'
+} else {
+  Bad ('food-category did NOT catch the Blue Bunny row on pistachios (rc=' + $r.rc + ') - the frozen_dessert_brand class is gone from category-excludes.json, or it is no longer applied to the Snacks scope, so a flavour-named dessert can crown a nut commodity again')
+}
+# CLEAN TWIN: the same brand on the commodity it legitimately IS must stay silent. If this ever fires, the
+# exempt regex has been lost and the class is eating the ice-cream board.
+$bbTwin = '{"week_of":"2026-08-30","comparison":[{"commodity":"Ice Cream","id":"ice-cream","unit":"floz","stores":[{"store":"Family Fare","per_unit":0.1248,"item":"Blue Bunny Premium Vanilla Bean Ice Cream, 48 fl oz"}]},{"commodity":"Popsicles","id":"popsicles","unit":"each","stores":[{"store":"Walmart","per_unit":0.25,"item":"Blue Bunny Mini Swirls Vanilla Cones, Frozen Dessert, 8 Pack"}]}]}'
+Set-Content (Join-Path $fxBb 'comparison-2026-08-30.json') $bbTwin -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxBb)
+if ($r.rc -eq 0) { Ok 'food-category clean twin: Blue Bunny on ice-cream and popsicles stays silent - the brand class is exempt where the brand IS the commodity' }
+else { Bad ('food-category flagged Blue Bunny on its OWN commodities (rc=' + $r.rc + ') - the frozen_dessert_brand exempt regex is missing ice-cream/popsicles: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxBb -Recurse -Force -ErrorAction SilentlyContinue
+
 # (e) audit-tile-integrity: ACCURACY BLIND + exit 3 when zero links were graded (an empty product-urls used
 # to certify "ACCURACY OK - every link that ships..." having examined nothing; prune-bad-links can empty the
 # set on a live daily path, which is exactly when the certificate would lie).
@@ -4633,7 +4659,7 @@ if ($null -eq $dcGexLive) {
 $uvVocabFx = @('lb', 'oz', 'floz', 'gallon', 'each', 'dozen')
 foreach ($uvFx in @(
     @{ id = 'coconut-aminos';    unit = 'fl_oz' },   # 5 commodities spelled it this way, 0 cells between them
-    @{ id = 'aluminum-foil';     unit = 'sq_ft' },
+    @{ id = 'aluminum-foil';     unit = 'sq_ft' },   # STILL sq_ft today, deliberately - see the exception cases below
     @{ id = 'saffron';           unit = 'gram'  })) {
   $uvV = Test-CommodityUnitIsPriceable ([pscustomobject]@{ id = $uvFx.id; unit = $uvFx.unit }) $uvVocabFx
   if ($uvV -eq $uvFx.unit) { Ok ("unit-vocabulary: the pre-fix " + $uvFx.id + " unit '" + $uvFx.unit + "' is named unpriceable - Convert-ToUnit has no arm for it, so every row it matches yields a null per-unit") }
@@ -4651,6 +4677,45 @@ foreach ($uvOk in @('lb', 'oz', 'floz', 'gallon', 'each', 'dozen')) {
   else { Bad ("unit-vocabulary: '" + $uvOk + "' was called unpriceable, but Convert-ToUnit converts it - the check is too eager") }
 }
 
+# ---- THE DOCUMENTED-EXCEPTION VALVE (2026-08-30, plan-2026-08-30-2 item 2026-08-22-51a5b6) ----------
+# aluminum-foil declares sq_ft ON PURPOSE. Pricing it per 'each' was tried on the live board this morning
+# and published a wrong crown: Family Fare's 25 sq ft roll at $1.79 ($0.0716/sqft) beat Walmart's 223 sq ft
+# roll at $12.20 ($0.0547/sqft), which is a per-PURCHASE verdict across a 9x size spread. So the commodity
+# is deliberately unpriceable pending Brad's basis call, and this valve says so in writing.
+# The cases below exist because the DANGER of an allowlist is that it stops being narrow. Each one asks
+# whether the valve can be made to excuse something it was never given: the same unit somewhere else, a
+# different unit here, or an entry nobody finished writing. If any of them ever passes, the valve has
+# become a blanket and the check is decorative.
+$uvExcFx = @(
+  [pscustomobject]@{ id = 'aluminum-foil'; unit = 'sq_ft'; reason = 'measured: per-roll crowns the worst value per sq ft'; review_by = '2026-10-01' }
+)
+$uvE = Test-UnitVocabularyException -Id 'aluminum-foil' -Unit 'sq_ft' -Exceptions $uvExcFx
+if ($uvE.Excused) { Ok 'unit-vocabulary exception: the reviewed aluminum-foil sq_ft entry excuses exactly its own (id, unit) pair' }
+else { Bad ("unit-vocabulary exception: the reviewed aluminum-foil sq_ft entry did NOT excuse itself (" + $uvE.Why + ") - the valve does not work, so the live arm is about to hard-fail on a deliberate state") }
+
+$uvE = Test-UnitVocabularyException -Id 'parchment-paper' -Unit 'sq_ft' -Exceptions $uvExcFx
+if (-not $uvE.Excused) { Ok 'unit-vocabulary exception: sq_ft on a DIFFERENT commodity still fires - the entry excuses one pair, not a unit' }
+else { Bad 'unit-vocabulary exception: sq_ft was excused on parchment-paper, which was never reviewed - the valve leaks by unit and every future sq_ft typo now ships silently' }
+
+$uvE = Test-UnitVocabularyException -Id 'aluminum-foil' -Unit 'gram' -Exceptions $uvExcFx
+if (-not $uvE.Excused) { Ok 'unit-vocabulary exception: a DIFFERENT unit on the excepted commodity still fires - the entry excuses one pair, not a commodity' }
+else { Bad 'unit-vocabulary exception: gram was excused on aluminum-foil, which was never reviewed - the valve leaks by commodity' }
+
+foreach ($uvHalf in @(
+    @{ what = 'no reason';    e = [pscustomobject]@{ id = 'aluminum-foil'; unit = 'sq_ft'; review_by = '2026-10-01' } },
+    @{ what = 'no review_by'; e = [pscustomobject]@{ id = 'aluminum-foil'; unit = 'sq_ft'; reason = 'because' } })) {
+  $uvE = Test-UnitVocabularyException -Id 'aluminum-foil' -Unit 'sq_ft' -Exceptions @($uvHalf.e)
+  if (-not $uvE.Excused) { Ok ("unit-vocabulary exception: an entry with " + $uvHalf.what + " excuses nothing - a half-written allowlist row cannot silence the check it annotates") }
+  else { Bad ("unit-vocabulary exception: an entry with " + $uvHalf.what + " was allowed to excuse a commodity - the valve accepts undocumented entries") }
+}
+
+# THE LIVE EXCEPTION FILE, read the way the production arm reads it. Anything in here that is NOT a real
+# deliberate state is a hole, so the file is asserted to be small, complete, and about a commodity that
+# really does still declare that unit (a stale entry is caught by the live arm below).
+$uvExcLive = Get-UnitVocabularyExceptions $PSScriptRoot
+if (@($uvExcLive).Count -le 3) { Ok ("unit-vocabulary exception: the live exception file carries " + @($uvExcLive).Count + " entr(y/ies) - " + ((@($uvExcLive) | ForEach-Object { [string]$_.id + " unit='" + [string]$_.unit + "'" }) -join ', ')) }
+else { Bad ("unit-vocabulary exception: the live exception file has grown to " + @($uvExcLive).Count + " entries - an exception list this long is a second vocabulary, not a set of reviewed calls; fix the units or add the engine arm") }
+
 # THE VOCABULARY READER ITSELF. Reading it out of compare-deals is the whole point of the check, so a
 # silent parse failure would take the live arm down with it - and a wrong-big parse would pass everything.
 $uvVocab = Get-EngineUnitVocabulary $PSScriptRoot
@@ -4660,19 +4725,43 @@ if ($null -eq $uvVocab) {
   Ok ("unit-vocabulary: read " + @($uvVocab).Count + " unit(s) straight out of Convert-ToUnit's switch (" + (($uvVocab | Sort-Object) -join ', ') + ") - no second copy of the list lives in this estate")
   # THE PRODUCTION ARM. Every rule file the engine is ever pointed at - commodities.json AND the recipe
   # set recipe-overlay.ps1 runs through the same Convert-ToUnit. Runs daily from check-ad-cycles.
-  $uvBad = @(); $uvSeen = 0
+  $uvBad = @(); $uvSeen = 0; $uvExcUsed = @(); $uvExcAll = Get-UnitVocabularyExceptions $PSScriptRoot
   foreach ($uvF in (Get-EngineRuleFiles $PSScriptRoot)) {
     $uvName = [IO.Path]::GetFileName($uvF)
     foreach ($uvC in (Read-RuleFileCommodities $uvF)) {
       $uvSeen++
       $uvH = Test-CommodityUnitIsPriceable $uvC $uvVocab
-      if ($uvH) { $uvBad += ("{0} [{1}] unit='{2}'" -f [string]$uvC.id, $uvName, $uvH) }
+      if ($uvH) {
+        # A DELIBERATE unpriceable unit is excused only by a complete, reviewed (id, unit) entry, and the
+        # excusing is printed rather than swallowed - a valve nobody sees is a valve nobody prunes.
+        $uvV2 = Test-UnitVocabularyException -Id ([string]$uvC.id) -Unit $uvH -Exceptions $uvExcAll
+        if ($uvV2.Excused) { $uvExcUsed += ("{0} [{1}] unit='{2}'" -f [string]$uvC.id, $uvName, $uvH) }
+        else { $uvBad += ("{0} [{1}] unit='{2}' ({3})" -f [string]$uvC.id, $uvName, $uvH, $uvV2.Why) }
+      }
+    }
+  }
+  # STALE EXCEPTIONS. An entry whose commodity no longer declares that unit is excusing nothing, and an
+  # allowlist row nobody deletes is how a narrow exception becomes a permanent hole with a good story
+  # attached. Fail on it: the day the unit is fixed or the engine grows the arm is exactly the day to
+  # notice the row is spent.
+  $uvExcStale = @()
+  foreach ($uvX in @($uvExcAll)) {
+    $uvKey = ("{0}|{1}" -f [string]$uvX.id, [string]$uvX.unit)
+    if (-not (@($uvExcUsed) | Where-Object { $_ -like ([string]$uvX.id + ' *') -and $_ -like ("*unit='" + [string]$uvX.unit + "'*") })) { $uvExcStale += $uvKey }
+  }
+  if (@($uvExcUsed).Count) { Ok ("unit-vocabulary: " + @($uvExcUsed).Count + " commodit(y/ies) hold a DELIBERATE unpriceable unit under a reviewed exception and are off the board on purpose: " + (@($uvExcUsed) -join '; ')) }
+  if (@($uvExcStale).Count) { Bad ("unit-vocabulary: " + @($uvExcStale).Count + " exception entr(y/ies) in unit-vocabulary-exceptions.json no longer match any commodity's declared unit and are excusing nothing: " + (@($uvExcStale) -join '; ') + ". Delete them - a spent allowlist row is a hole with a good story attached.") }
+  foreach ($uvF in (Get-EngineRuleFiles $PSScriptRoot)) {
+    $uvName = [IO.Path]::GetFileName($uvF)
+    foreach ($uvC in (Read-RuleFileCommodities $uvF)) {
+      $uvSeen++
+      $uvH = Test-CommodityUnitIsPriceable $uvC $uvVocab
     }
   }
   if ($uvSeen -lt 100) {
     Bad ("unit-vocabulary: only $uvSeen commodit(y/ies) were examined - the live arm read almost nothing, so a clean result would mean nothing")
   } elseif ($uvBad.Count -eq 0) {
-    Ok ("unit-vocabulary: all $uvSeen commodities across every engine rule file declare a unit Convert-ToUnit can convert")
+    Ok ("unit-vocabulary: all $uvSeen commodities across every engine rule file declare a unit Convert-ToUnit can convert, or a reviewed exception says why they deliberately do not")
   } else {
     Bad ("unit-vocabulary: " + $uvBad.Count + " commodit(y/ies) declare a unit Convert-ToUnit cannot convert, so they can NEVER hold a board cell however well their rules match: " + ($uvBad -join '; ') + ". Correct the unit to one the engine converts (" + (($uvVocab | Sort-Object) -join ', ') + "), or add an arm to Convert-ToUnit - never leave the two disagreeing.")
   }

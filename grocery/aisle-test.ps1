@@ -199,12 +199,57 @@ $COMMODITY_DEPT = @{
   'minced-garlic'      = @('pantry', 'deli', 'fresh_fruits_vegetables')
   'prunes'             = @('fresh_fruits_vegetables', 'pantry')                          # dried fruit is pantry, not produce
   'sun-dried-tomatoes' = @('pantry', 'fresh_fruits_vegetables')                          # FF shelves the California Sun Dry jar in produce
+  # --- reviewed 2026-08-30 (plan-2026-08-30-2, queue 2026-08-30-2611d3), each read against its board row ---
+  # The standing BLOCK set had regrown to 11 and re-paged every 3 days. Ten were RIGHT products failing a
+  # wrong map; the eleventh was Blue Bunny ICE CREAM holding the pistachios crown, which is the catch this
+  # gate exists for and which was buried under the ten. Draining the ten re-arms the signature dedup so the
+  # alert only speaks on a NEW block. Every entry below is the commodity's current category allowlist PLUS
+  # the observed Family Fare department - never a bare replacement, because this table REPLACES the category
+  # map in Judge, so a short list would silently BLOCK a department that is allowed today.
+  'dried-basil'        = @('pantry', 'fresh_fruits_vegetables')   # Litehouse freeze-dried herbs hang on the produce spice rack
+  'black-peppercorns'  = @('pantry', 'fresh_fruits_vegetables')   # Sugar 'N Spice packets, same rack as bay-leaves above
+  'cinnamon-stick'     = @('pantry', 'fresh_fruits_vegetables')   # Canela Entera, the Hispanic spice rack in produce
+  'whole-cloves'       = @('pantry', 'fresh_fruits_vegetables')   # Sugar 'N Spice packets
+  'dried-ancho-chiles' = @('pantry', 'fresh_fruits_vegetables')   # bagged dried chiles ARE a produce item at FF, like dried-arbol-chiles
+  # The three alcohol rows are right products in the right aisle: the estate files them under the 'snacks'
+  # CATEGORY (pantry, beverages), so beer_wine_spirits is disallowed for a bottle of wine. Fixed here rather
+  # than by recategorising, because a commodity's category is also its section on the public board and that
+  # is a bigger change than this gate should make on its own (see the coffee note above).
+  'brandy'             = @('pantry', 'beverages', 'beer_wine_spirits')
+  'red-wine'           = @('pantry', 'beverages', 'beer_wine_spirits')
+  'white-wine'         = @('pantry', 'beverages', 'beer_wine_spirits')
+  'vienna-sausage'     = @('pantry', 'meat')                      # FF files Libby's tins under meat/sausage; category 'canned' allows only pantry
+  'parmesan'           = @('dairy', 'deli', 'pantry')             # Our Family GRATED 16 oz is shelf-stable and sits in pantry
 }
 
 function Get-CategoryMap {
   $cats = ConvertFrom-Json (Get-Content (Join-Path $root 'categories.json') -Raw)
   $m = @{}
-  foreach ($c in @($cats.categories)) { foreach ($id in @($c.commodities)) { $m[[string]$id] = [string]$c.key } }
+  $keyByLabel = @{}
+  foreach ($c in @($cats.categories)) {
+    $keyByLabel[[string]$c.label] = [string]$c.key
+    foreach ($id in @($c.commodities)) { $m[[string]$id] = [string]$c.key }
+  }
+  # THE RECIPE BOARD IS A SECOND ID NAMESPACE (2026-08-30, queue 2026-08-30-2611d3). categories.json lists
+  # only the STAPLE ids, so every recipe-board id reached Judge with no category and came back BLIND -
+  # 21 of them on 2026-08-30 (greek-yogurt, mozzarella-cheese, salsa-verde, smoked-paprika and 17 more),
+  # while -LiveBoard has been reading recipe-board.json since it was written. Unjudged is exactly how the
+  # Blue Bunny ice cream held the pistachios crown, so a whole namespace nobody judges is the same hole
+  # one commodity wide. The recipe rows carry their category as a LABEL on the row itself; build-deals-page
+  # already THROWS if that label is not one of categories.json's sections, so the label is canonical and
+  # this is a lookup, not a guess. categories.json membership always wins - a staple id can never be
+  # re-keyed by a recipe row - and a label with no section is left BLIND rather than mapped to something.
+  foreach ($rbn in @('out\recipe-board-everyday.json', 'out\recipe-board.json')) {
+    $rbp = Join-Path $root $rbn
+    if (-not (Test-Path $rbp)) { continue }
+    try { $rbd = ConvertFrom-Json (Get-Content $rbp -Raw) } catch { continue }
+    foreach ($r in @($rbd.comparison)) {
+      $rid = [string]$r.id; $rlab = [string]$r.category
+      if (-not $rid -or -not $rlab) { continue }
+      if ($m.ContainsKey($rid)) { continue }
+      if ($keyByLabel.ContainsKey($rlab)) { $m[$rid] = $keyByLabel[$rlab] }
+    }
+  }
   return $m
 }
 

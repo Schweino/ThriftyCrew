@@ -92,3 +92,42 @@ function Read-RuleFileCommodities([string]$Path) {
   if ($doc.PSObject.Properties['commodities']) { return ,@($doc.commodities) }
   return ,@($doc)
 }
+
+# ---- DOCUMENTED EXCEPTIONS (2026-08-30, plan-2026-08-30-2 item 2026-08-22-51a5b6) -------------------
+# Not every out-of-vocabulary unit is a mistake. aluminum-foil is measurably better OFF the board than on
+# it: the engine has no square-feet arm, and pricing it per 'each' crowned a 25 sq ft roll at $0.0716/sqft
+# over a 223 sq ft roll at $0.0547/sqft - a per-PURCHASE verdict across a 9x size spread, which is this
+# estate's cheapest-is-per-unit-not-per-purchase rule inverted. So the commodity declares sq_ft on purpose
+# and holds no cell until Brad rules on the basis.
+#
+# THE EXCEPTION IS DELIBERATELY NARROW, because the failure mode of an allowlist is that it grows into a
+# blanket. An entry excuses exactly ONE (id, unit) pair: the same unit on any other commodity still fires,
+# any other unit on the same commodity still fires, and an entry with no reason or no review_by does not
+# excuse anything. Test-CommodityUnitIsPriceable is NOT changed - it still names every offending unit -
+# so the raw rule and its fixtures keep working on the pre-fix values; the excusing happens one level up,
+# where the caller can print what it excused instead of swallowing it.
+function Get-UnitVocabularyExceptions([string]$Root) {
+  $p = Join-Path $Root 'unit-vocabulary-exceptions.json'
+  if (-not (Test-Path $p)) { return ,@() }
+  $doc = Get-Content $p -Raw | ConvertFrom-Json
+  if ($null -eq $doc) { return ,@() }
+  if ($doc.PSObject.Properties['exceptions']) { return ,@($doc.exceptions) }
+  return ,@($doc)
+}
+
+# Returns a verdict object: Excused (bool) + Why (string, always populated so the caller can print either
+# the reason it excused or the reason it refused to). A malformed entry is a REFUSAL, never a pass -
+# a half-written allowlist row must not be able to silence the check it is annotating.
+function Test-UnitVocabularyException([string]$Id, [string]$Unit, $Exceptions) {
+  foreach ($e in @($Exceptions)) {
+    if ([string]$e.id -ne $Id) { continue }
+    if ([string]$e.unit -ne $Unit) { continue }
+    $reason = ''; $review = ''
+    if ($e.PSObject.Properties['reason'])    { $reason = ([string]$e.reason).Trim() }
+    if ($e.PSObject.Properties['review_by']) { $review = ([string]$e.review_by).Trim() }
+    if (-not $reason) { return [pscustomobject]@{ Excused = $false; Why = "an exception entry exists for $Id unit='$Unit' but carries NO reason - an undocumented exception is not an exception" } }
+    if (-not $review) { return [pscustomobject]@{ Excused = $false; Why = "an exception entry exists for $Id unit='$Unit' but carries NO review_by date - an exception nobody has to revisit is a permanent hole" } }
+    return [pscustomobject]@{ Excused = $true; Why = ("reviewed exception, review_by " + $review + ": " + $reason) }
+  }
+  return [pscustomobject]@{ Excused = $false; Why = "no reviewed exception covers $Id unit='$Unit'" }
+}

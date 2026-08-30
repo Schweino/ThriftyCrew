@@ -1,0 +1,14 @@
+{
+  "readme": "DOCUMENTED EXCEPTIONS to the unit-vocabulary check (unit-vocabulary-lib.ps1 / test-auditors.ps1). An entry here says: this commodity DELIBERATELY declares a unit Convert-ToUnit cannot convert, so it holds no board cell on purpose, and here is why. It is not a way to make the check quiet. The check still fires for the SAME unit on any other commodity, for any OTHER unit on this commodity, and for an entry missing a reason or a review_by date. An entry whose commodity now declares a convertible unit is reported STALE and must be deleted - an allowlist nobody prunes is how a guard rots into a formality.",
+  "schema": "id (exact commodity id), unit (the exact out-of-vocabulary value), reason (why the wrong answer is worse than no answer), ruled_on, review_by, open_question (where the decision lives)",
+  "exceptions": [
+    {
+      "id": "aluminum-foil",
+      "unit": "sq_ft",
+      "reason": "The engine has no square-feet arm, and every unit it DOES have publishes a wrong verdict for foil. Measured on the 2026-08-30 board while aluminum-foil was briefly priced per 'each': the crown was Family Fare 'Our Family Aluminum Foil, 25 Square Feet 1 Ea' at $1.79 = $0.0716 per sq ft, while the cell the board ranked LAST, Walmart 'GARITIN Aluminum Foil Paper 223 Sq Ft' at $12.20, is $0.0547 per sq ft - 24 percent cheaper by value. Per-roll is a per-PURCHASE comparison across a 9x size spread (25 to 223 sq ft), which is the estate's cheapest-is-per-unit-not-per-purchase rule inverted. A sq-ft engine arm would price only 2 of the 6 captured rows today, because only the Family Fare size field and the Walmart name carry a footage number at all. So the commodity stays deliberately unpriceable: no cell is honest, a per-roll crown is not.",
+      "ruled_on": "2026-08-30",
+      "review_by": "2026-10-01",
+      "open_question": "plan-2026-08-30-2.json open_questions_for_brad - ALUMINUM FOIL BASIS: (a) per-roll pricing publishes a wrong verdict, rejected; (b) a sq-ft engine arm prices only 2 of 6 rows; (c) retire the commodity. Brad picks."
+    }
+  ]
+}

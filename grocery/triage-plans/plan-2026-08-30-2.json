@@ -1,0 +1,674 @@
+{
+  "generated": "2026-08-30T11:05:00",
+  "round": 2,
+  "board_week": "2026-08-30",
+  "board_note": "comparison-2026-08-30.json BUILT 09:01:30 is the generation every queue alert fired against and the generation all measurements in plan-2026-08-30-2.routing.json are pinned to (the hermetic baseline reproduced it exactly: 564 rows, 3097 cells, 0 diffs). WARNING: the board moved mid-review. A concurrent session (not this reviewer; no TC Windows task fired) ran a LIVE default-OutName rebuild at 10:29:59 consuming walmart-regular-2026-08-30.json + fareway-deals-2026-08-30.json, left zzbase/zzcand/zzcand2 probe boards in out (10:16-10:23), and its chain re-ran product-urls (10:33:24) and audit-name-drift (10:33:38). Guards re-verified GREEN by this reviewer at 10:12 (hard=0 warn=24 rc=0, scratchpad guards-run2.txt) against the 09:01 generation; between 10:29:59 and 10:33:38 a live guards run would have hard-failed on the tile-integrity mtime hold, which is ordering, not data. Developer pre-flight below handles both.",
+  "provenance_note": "Items ca099c, c41c27, brad-b2, brad-b3, brad-b5 act on Brads answers RELAYED by teammate session thriftycrew-d7, not typed by Brad to this session. They are ordinary content decisions; every measurable claim inside them was independently re-measured here and two round-1 factual premises were corrected (see ca099c). Round 1 also reported zero uncommitted .ps1 while grocery/test-guards.ps1 carried its own uncommitted patch; see item tree-c.",
+  "queue_ids_seen": [
+    "2026-08-30-7adf1c",
+    "2026-08-30-2611d3",
+    "2026-08-30-fec3dc",
+    "2026-08-30-40c75d",
+    "2026-08-22-51a5b6",
+    "2026-08-22-ca099c",
+    "2026-08-22-c41c27"
+  ],
+  "routing_artifact": "plan-2026-08-30-2.routing.json",
+  "items": [
+    {
+      "queue_id": "2026-08-22-51a5b6",
+      "subject": "ROUND-2 BOUNCE: a commodity whose declared unit is outside the engine vocabulary can never hold a cell",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "BOUNCE MEASUREMENT REPRODUCED (README rule 5) against comparison-2026-08-30 built 09:01: unit floz 74/74 commodities hold board rows; fl_oz 0/5 (garlic-infused-olive-oil, coconut-aminos, avocado-oil, peanut-oil, creamy-cilantro-lime-dressing); sq_ft 0/1 (aluminum-foil); gram 0/1 (saffron). Perfect separation on a one-character data field. 592 commodities total (311 oz + 100 each + 98 lb + 74 floz + 5 fl_oz + 1 each of gram/sq_ft/dozen/gallon).",
+        "SWITCH CONFIRMED FROM SOURCE: compare-deals.ps1 Convert-ToUnit (line 141) is a switch over exactly lb/oz/floz/gallon/each/dozen; the function body ends in a bare return null with NO default arm, so an unknown unit yields null canonical amount, null per-unit, no cell - silently, on every row, forever. No throw anywhere on the path.",
+        "THE SILENCE HAD AN ALIBI: audit-coverage-gaps classifies these drops as BASIS-NULL, which round 1 counted among the 41 ENGINE-EXPLAINED gaps nobody actions. The failure class was being filed as a designed condition by the very audit that should have surfaced it.",
+        "CELL EFFECTS MEASURED, not predicted: hermetic rebuild with only the unit fields edited produced 19 NEW cells across the 7 commodities and ZERO changed/lost cells anywhere else (3097 to 3116). Both harness positive controls held (baseline reproduced the live board 0-diff; coconut-aminos landed at Bakers 0.799 exactly as round 1 predicted). Full per-cell list frozen in plan-2026-08-30-2.routing.json cell_effects_shipping.",
+        "TWO MEASURED CELLS MUST NOT SHIP AS-IS: (1) peanut-oil at Sams would crown at $0.07/floz from Members Mark Peanut Oil 35 lbs whose size 799.429 fl oz is BACK-COMPUTED from Sams rounded $0.07/foz unit price (qty_basis: package; qty derived lp/up) and disagrees with its own printed 35 lb weight by about 36% - withhold via known-wrong, crown becomes Walmart 0.1223 (LouAna 3 Gallon $46.97). (2) aluminum-foil under unit each would crown a 25 sq ft roll ($1.79, 7.2 c/sqft) over a 223 sq ft roll ($12.20, 5.5 c/sqft) - a per-purchase verdict the estate bans; stays off the board pending Brad."
+      ],
+      "surface_fix": {
+        "what": "make the six expressible commodities priceable; withhold the two rows that would ship a wrong number",
+        "files": [
+          "grocery/commodities.json",
+          "grocery/known-wrong.json"
+        ],
+        "exact_change": "commodities.json unit fields: fl_oz to floz on garlic-infused-olive-oil, coconut-aminos, avocado-oil, peanut-oil, creamy-cilantro-lime-dressing; gram to oz on saffron (0.03 oz sizes convert today; per-gram display needs an engine arm nobody has asked for). aluminum-foil unit stays sq_ft, deliberately unpriceable pending Brad. known-wrong add: peanut-oil | Sams Club | Members Mark Peanut Oil 35 lbs, reason = size derived from a rounded unit price contradicts the printed weight by about 36 percent, retire_when = a capture arrives whose size is a shelf fact"
+      },
+      "root_cause": "Convert-ToUnit has no default arm and no caller checks for null, so a unit typo degrades to silent per-row drops that audit-coverage-gaps then files as BASIS-NULL engine-explained. Nothing anywhere asserts that a commodity declares a unit the engine can convert, so the class was unreachable by every existing guard and sat since the commodities were created.",
+      "root_fix": {
+        "what": "fail LOUD at build time and make the invariant a daily-tested static check",
+        "files": [
+          "grocery/compare-deals.ps1",
+          "grocery/test-auditors.ps1",
+          "grocery/dead-commodity-lib.ps1 (or a sibling unit-vocabulary-lib)"
+        ],
+        "exact_change": "(1) compare-deals load-time validation right after the commodities parse: any commodity whose unit is outside lb/oz/floz/gallon/each/dozen AND not in a frozen documented-exception list (aluminum-foil: sq_ft, reason + review date, pending Brad) prints one loud UNPRICEABLE UNIT line naming commodity and unit. (2) The same rule as a hard static check in test-auditors (runs daily in production via check-ad-cycles) beside the dead-commodity cases: must-fire fixture = a frozen PRE-FIX ruleset fragment with coconut-aminos unit fl_oz; clean twins = floz commodity silent, allowlisted aluminum-foil silent. (3) Convert-ToUnit default arm returns null unchanged (per-row behavior stays) - the LOUDNESS lives at load time and in the daily check, so a red day one is impossible: the fix and the guard ship together with the data already clean."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "full hermetic engine rebuild over the ONE corpus in plan-2026-08-30-2.routing.json (all captures + ads pinned to the 09:01 generation); routing delta ZERO (unit fields do not touch matching; verified by 0 changed/lost cells outside the 7 commodities), cell delta 19 NEW measured by exact board diff",
+        "affected_now": 19,
+        "names": [
+          "see cell_effects_shipping and cell_effects_withheld in the artifact; 12 cells ship, 7 are withheld (6 aluminum-foil + 1 Sams peanut-oil)"
+        ],
+        "risk": "all shipping cells are CREATED (before=0 means the store had no cell, round-1 artifact convention), so no existing price moves and no capture-selection eviction can fire on an incumbent; audit-capture-eviction re-checks the class on the rebuild anyway. Saffron 966.33/oz WILL trip a sanity flag: rule it real-economics, never touch a band.",
+        "cell_effects": [
+          {
+            "commodity": "coconut-aminos",
+            "store": "Bakers",
+            "before": 0,
+            "after": 0.799
+          },
+          {
+            "commodity": "avocado-oil",
+            "store": "Sams Club",
+            "before": 0,
+            "after": 0.3965
+          },
+          {
+            "commodity": "avocado-oil",
+            "store": "Walmart",
+            "before": 0,
+            "after": 0.4112
+          },
+          {
+            "commodity": "avocado-oil",
+            "store": "Bakers",
+            "before": 0,
+            "after": 0.4436
+          },
+          {
+            "commodity": "avocado-oil",
+            "store": "Aldi",
+            "before": 0,
+            "after": 0.4582
+          },
+          {
+            "commodity": "avocado-oil",
+            "store": "Family Fare",
+            "before": 0,
+            "after": 0.6675
+          },
+          {
+            "commodity": "avocado-oil",
+            "store": "Fareway",
+            "before": 0,
+            "after": 0.7033
+          },
+          {
+            "commodity": "peanut-oil",
+            "store": "Walmart",
+            "before": 0,
+            "after": 0.1223
+          },
+          {
+            "commodity": "peanut-oil",
+            "store": "Family Fare",
+            "before": 0,
+            "after": 0.1523
+          },
+          {
+            "commodity": "garlic-infused-olive-oil",
+            "store": "Bakers",
+            "before": 0,
+            "after": 1.0994
+          },
+          {
+            "commodity": "creamy-cilantro-lime-dressing",
+            "store": "Bakers",
+            "before": 0,
+            "after": 0.3575
+          },
+          {
+            "commodity": "saffron",
+            "store": "Bakers",
+            "before": 0,
+            "after": 966.3333
+          }
+        ]
+      },
+      "claimed_by_earlier": [
+        {
+          "name": "ALL 12 shipping cells",
+          "claimed_by": "(none) - every row already routes to its commodity at baseline; the matcher keeps them and the pricer drops them, verified via -Explain in the hermetic copy",
+          "index": -1,
+          "release_needed": "none"
+        }
+      ],
+      "proof": {
+        "guard_or_fixture": "test-auditors.ps1 new unit-vocabulary static check + compare-deals.ps1 -SelfTest",
+        "must_fire_case": "frozen pre-fix fragment with unit fl_oz makes the static check exit 2 naming the commodity and the unit",
+        "clean_twin": "a floz commodity and the allowlisted sq_ft aluminum-foil both stay silent; post-rebuild the 12 predicted cells exist at the predicted per-units",
+        "commands": [
+          "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+          "powershell -File grocery\\test-auditors.ps1",
+          "powershell -File grocery\\guards.ps1",
+          "powershell -File grocery\\audit-capture-eviction.ps1"
+        ]
+      },
+      "rollback": "revert the seven unit-field hunks, the known-wrong entry and the validation block; the exception list is one frozen json fragment",
+      "do_not_touch": [
+        "any sanity band (saffron will flag; rule it, do not widen)",
+        "aluminum-foil unit (needs-brad)",
+        "the BASIS-NULL classification in audit-coverage-gaps (correct for genuinely unparseable sizes; the fix is upstream)"
+      ],
+      "freshness": "measured against the 09:01:30 generation on the pinned corpus (artifact); a 10:29:59 live rebuild consuming walmart-regular-2026-08-30 (525 deals) + fareway-deals-2026-08-30 landed mid-review, so re-verify the 12 predicted cells on the rebuilt board before publish - avocado-oil and peanut-oil Walmart cells are the two most likely to move on the newer walmart file",
+      "resolution_note": "Bounce verified to the digit (74/74, 0/5, 0/1, 0/1; no default arm; silent null path filed as BASIS-NULL by coverage-gaps). Six units corrected with all 12 created cells measured by full engine rebuild (zero collateral); coconut-aminos finally lands its round-1 cell at Bakers 0.799. Sams 35-lb peanut oil withheld (size back-derived from a rounded unit price, off its own printed weight by about 36 percent); aluminum-foil stays off pending Brads basis call. Load-time loud-fail + daily static check close the class.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "TRUE on the mechanism, and the work was ALREADY SHIPPED by a concurrent session before this developer started. HEAD at handoff was said to be 037ef56b; it was actually 04f9ec78 (\"Seven commodities declared a unit the engine cannot convert...\", committed 10:54:31 and pushed), which made all six unit corrections, fenced avocado-oil, added the Sam's 35-lb peanut oil wrong-basis ruling, and shipped grocery/unit-vocabulary-lib.ps1 plus 13 test-auditors cases. Re-confirmed on my own rebuild: all 12 predicted cells exist at the predicted per-units (coconut-aminos Baker's 0.799, avocado-oil Sam's 0.3965 / Walmart 0.4112 / Baker's 0.4436 / Aldi 0.4582 / Family Fare 0.6675 / Fareway 0.7033, peanut-oil Walmart 0.1223 crown + Family Fare 0.1523 with NO Sam's cell, garlic-infused-olive-oil Baker's 1.0994, creamy-cilantro-lime-dressing Baker's 0.3575, saffron Baker's 966.3333) and no sanity band was touched.",
+      "deviation": "ALUMINUM-FOIL WAS ADMITTED, NOT WITHHELD, AND I REVERSED THAT. The concurrent session changed its unit from sq_ft to 'each' (its argument: all 14 sibling wraps are 'each'), which put six foil cells on the LIVE board with the crown at Family Fare 'Our Family Aluminum Foil, 25 Square Feet 1 Ea' $1.79. Measured from the board's own two rows that carry a footage: $1.79 / 25 sq ft = $0.0716 per sq ft, while the cell the board ranked LAST, Walmart 'GARITIN Aluminum Foil Paper 223 Sq Ft' $12.20, is $0.0547 per sq ft - 24 percent cheaper by value. That is a per-PURCHASE crown across a 9x size spread, the estate's cheapest-is-per-unit-not-per-purchase rule inverted, and exactly the outcome this plan and the dispatch said must stay withheld. Reverted unit to sq_ft; the row and all 6 cells left the board (571 rows -> 570). The shipped unit-vocabulary guard would then have hard-failed on a deliberate state, so I built the documented-exception valve the plan specified instead of weakening the check: new grocery/unit-vocabulary-exceptions.json (one entry, with the measurement, a review_by date and a pointer to the open question), Get-UnitVocabularyExceptions + Test-UnitVocabularyException in unit-vocabulary-lib.ps1, and the live arm in test-auditors now PRINTS what it excused. Test-CommodityUnitIsPriceable is unchanged, so the three frozen pre-fix fixtures still fire. Six new fixtures prove the valve cannot widen: sq_ft on a different commodity still fires, another unit on aluminum-foil still fires, an entry with no reason or no review_by excuses nothing, and a spent entry is reported STALE and fails. Also NOT done, deliberately: the plan's compare-deals load-time UNPRICEABLE UNIT print. The concurrent session shipped the same invariant as a daily static check in test-auditors (which runs in production via check-ad-cycles), so a second copy of the rule in the engine would be the two-copies-of-a-rule class this estate keeps paying for.",
+      "shipped_commit": "04f9ec78 (concurrent session) + this commit for the aluminum-foil reversal and the exception valve"
+    },
+    {
+      "queue_id": "2026-08-30-2611d3",
+      "subject": "11 board cells sit in the wrong store department",
+      "classification": "wrong-product",
+      "evidence": [
+        "CROWNS CHECKED FIRST, and one is LIVE-WRONG: pistachios crown = Family Fare 0.1248/oz on Blue Bunny Premium Pistachio Almond 48 Oz at $5.99 - a 48 oz tub of ICE CREAM (FF shelves it freezer/sweet_stuff; real pistachios run 0.35-1.00/oz on this same board; $0.12/oz pistachios do not exist). Standing since at least the 08-29 committed aisle-test.",
+        "WHY THE EXISTING FENCES MISSED IT: pistachios already excludes ice cream, gelato, dessert, pudding, cake, cookies, truffles, chocolate BY TYPE WORD - and this products name carries only BRAND + FLAVOR (Blue Bunny + Pistachio Almond). Its sibling rows fenced fine (Talenti Gelato, Haagen Dazs Pistachio Ice Cream, Blue Bunny Frozen Dairy DESSERT). The exclude list is type-word based and the stores naming omits the type.",
+        "NEXT-IN-LINE ALSO DESSERTS, measured from the FF candidate pool: after Blue Bunny leaves, Pillsbury Whipped Pistachio Frosting ($2.29/12oz = 0.1908) then 4 Ct Pistachio Muffins (0.3744) would win before the first real nut (Planters Dry Roasted 12.75 oz $5.99 = 0.4698). So the fix needs three tokens, not one.",
+        "MEASURED (artifact run mod2): the three exclusions change exactly ONE cell estate-wide: pistachios|Family Fare 0.1248 to 0.4698 (Planters); crown moves to Sams 0.3538 (Members Mark 48 oz $16.98), nomem crown Aldi 0.4056. Zero other diffs across 3116 cells.",
+        "THE OTHER 10 OF 11 ARE THE STANDING FALSE-POSITIVE SET, byte-identical to the previous committed aisle-test (HEAD~1): 5 spice-rack products FF shelves in produce (dried-basil, black-peppercorns, cinnamon-stick, whole-cloves, dried-ancho-chiles - all RIGHT products), 3 alcohol rows whose COMMODITY category is mapped to snacks so beer_wine_spirits is disallowed (brandy E and J, red-wine Mogen David, white-wine Vendange - all right products in the right aisle; the category MAP is wrong), vienna-sausage (right product, FF files it meat/sausage while category canned allows only pantry), parmesan (Our Family GRATED 16 oz, shelf-stable, FF files it pantry while category dairy allows dairy/deli).",
+        "Also standing: 21 BLIND commodities the aisle test refuses to judge because they are in no estate category (greek-yogurt, mozzarella-cheese, salsa-verde, hot-honey, smoked-paprika, and 16 more) - unchecked is how the pistachios crown survived; bounded one-line mapping work."
+      ],
+      "surface_fix": {
+        "what": "fence the dessert-brand class off pistachios and rule the row; stop the 10 known-FPs re-paging by fixing the maps they test against",
+        "files": [
+          "grocery/commodities.json",
+          "grocery/known-wrong.json",
+          "grocery/category-excludes.json",
+          "grocery/categories.json (or wherever commodity-to-category and category-to-allowed-departments live; the aisle-test reasons name both maps)"
+        ],
+        "exact_change": "pistachios exclusions += blue-bunny token (\\bblue\\s+bunny\\b), frosting token (\\bfrosting\\b), muffins token (\\bmuffins?\\b) - measured, artifact. known-wrong add: pistachios | Family Fare | Blue Bunny Premium Pistachio Almond 48 Oz (verdict wrong-product, evidence: ice cream, aisle freezer/sweet_stuff). Map corrections so the standing 10 stop firing: alcohol commodities (brandy, red-wine, white-wine) get a category whose allowed departments cover beer_wine_spirits (they are mapped to snacks today); category baking/canned/dairy gain the specific FF aisles the products genuinely live in (fresh_fruits_vegetables/fresh_spices_herbs for the dried-spice rack, meat/sausage for canned vienna, pantry for shelf-stable grated parmesan) - allow the AISLE, not the whole department, so cat-litter-as-baking-soda still fires. Batch 2: add the 21 missing commodity-to-category mappings so the BLIND set becomes judged."
+      },
+      "root_cause": "Two mechanisms. (1) A dessert whose retail name carries only a brand defeats every type-word exclusion, so any nut/produce commodity can be crowned by a flavor-named dessert; the aisle test caught it precisely because it reads the STORES shelf, not the name. (2) The aisle tests reference maps have gaps (wine filed as snacks; spice-rack aisles unlisted; 21 commodities in no category), so the same 11 findings re-page every 3 days and train readers to skip the list the one real catch is buried in.",
+      "root_fix": {
+        "what": "brand-level frozen-dessert tokens in the class library so audit-food-category hard-fails the class estate-wide",
+        "files": [
+          "grocery/category-excludes.json"
+        ],
+        "exact_change": "add the blue-bunny brand token (and only measured-safe dessert BRAND tokens) to the frozen-dessert class scoped per that files own rule (wrong for EVERY commodity in the scoped categories), with ice-cream/frozen-dessert commodity categories exempt. Corpus check before shipping: 16 Blue Bunny names exist across captures, all frozen desserts; verify the ice-cream commoditys own cells are unmoved after apply (clean twin)."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "full hermetic rebuild (artifact run mod2) over the ONE pinned corpus: before/after routing of every capture row; 4 names released from pistachios (listed in routing_changes), 0 unintended moves, exactly 1 cell changed",
+        "affected_now": 4,
+        "names": [
+          "Blue Bunny Premium Pistachio Almond 48 Oz (FF)",
+          "Pillsbury Whipped Pistachio Frosting 12 Oz (FF)",
+          "Pillsbury Whipped Pistachio Frosting, 12 oz Tub (Walmart)",
+          "4 Ct Pistachio Muffins (FF)"
+        ],
+        "risk": "the muffins token could in principle eat a legitimate pistachio product named muffin; corpus scan found only the FF bakery muffins. Tokens are commodity-scoped (pistachios only) except the brand token, whose class-level application the developer re-verifies against the ice-cream exempt list.",
+        "cell_effects": [
+          {
+            "commodity": "pistachios",
+            "store": "Family Fare",
+            "before": 0.1248,
+            "after": 0.4698,
+            "note": "crown moves FF 0.1248 to Sams 0.3538; nomem crown Aldi 0.4056"
+          }
+        ]
+      },
+      "claimed_by_earlier": [
+        {
+          "name": "n/a - this item only RELEASES names from pistachios; no name is admitted anywhere",
+          "claimed_by": "n/a",
+          "index": -1,
+          "release_needed": "none"
+        }
+      ],
+      "proof": {
+        "guard_or_fixture": "audit-food-category + test-auditors frozen fixture pair",
+        "must_fire_case": "the REAL frozen row (Blue Bunny Premium Pistachio Almond 48 Oz on pistachios) makes audit-food-category exit 2 naming the frozen-dessert class",
+        "clean_twin": "a frozen Blue Bunny Vanilla Bean Ice Cream row on the ice-cream commodity stays exit 0; post-rebuild pistachios FF cell = Planters 0.4698 and aisle-test BLOCK count drops 11 to 0 once the map corrections land",
+        "commands": [
+          "powershell -File grocery\\audit-food-category.ps1",
+          "powershell -File grocery\\test-auditors.ps1",
+          "powershell -File grocery\\guards.ps1"
+        ]
+      },
+      "rollback": "revert the commodities.json + category-excludes.json + map hunks and the known-wrong entry; rebuild",
+      "do_not_touch": [
+        "the aisle tests BLOCK semantics or thresholds (it just caught a live wrong crown; the fix is the maps and the rules, never the guard)",
+        "dried-ancho-chiles (its produce placement is correct for dried chiles at FF; crown is the right product)"
+      ],
+      "freshness": "measured against the 09:01:30 generation (pinned corpus); aisle-test.json regenerates every 3 days; re-verify the pistachios cell on the rebuilt board",
+      "resolution_note": "One live wrong crown found and fixed: FF pistachios was Blue Bunny ICE CREAM at 0.1248/oz (type-word exclusions cannot see a brand+flavor name; the store shelf could). Three measured exclusions move exactly one cell; crown goes to Sams 0.3538. Brand token added to the food-class library with ice-cream exempt. The other 10 findings are right products failing wrong maps (wine mapped as snacks, spice-rack aisle unlisted) - maps corrected so the 3-day re-page stops; 21 unmapped commodities queued for categories so nothing else sits unjudged.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "MOSTLY TRUE, with one sub-premise FALSIFIED. TRUE: the live board carried pistachios crowned at Family Fare $0.1248/oz on 'Blue Bunny Premium Pistachio Almond 48 Oz', a 48 oz tub of ice cream, and the aisle-test BLOCK list confirmed freezer/sweet_stuff. The three exclusions moved exactly ONE cell, Family Fare 0.1248 -> 0.4698 (Planters Dry Roasted Pistachios 12.75 Oz), crown to Sam's Club 0.3538 and nomem crown Aldi 0.4056 - the routing artifact's positive control, observed to the digit. Corpus check for the brand token: all 40 Blue Bunny strings in out\\ are frozen desserts, and exactly one held a board cell. FALSE: 'the next-in-line rows were FROSTING and MUFFINS, which is why one token was never enough.' They were never in the pistachios pool. First-match-wins routing over the real corpus puts 'Pillsbury Whipped Pistachio Frosting' on the frosting commodity at array index 187 and '4 Ct Pistachio Muffins' on muffins at index 172, both far ahead of pistachios at 564, so neither could ever have reached it. Only the blue-bunny token was load-bearing; the frosting and muffins tokens are harmless belt-and-braces and I kept them (they cost nothing and the artifact's measured one-cell outcome is unchanged either way). ALSO FALSE: 'add the 21 missing commodity-to-category mappings.' The 21 BLIND ids are not missing from categories.json - they are RECIPE-board ids, a different namespace. They live in out\\recipe-board-everyday.json carrying their category as a LABEL on the row, while aisle-test.ps1 built its map from categories.json only, which lists staple ids. Adding them to categories.json would have put 21 recipe rows into the public board's category sections.",
+      "deviation": "Three departures, all recorded with their measurement. (1) The BLIND 21 are fixed by pointing the gate at the second namespace instead of editing categories.json: Get-CategoryMap now also reads out\\recipe-board-everyday.json / recipe-board.json and maps each recipe row's category LABEL back to the categories.json KEY (build-deals-page already throws if that label is not a section, so the label is canonical - a lookup, not a guess). categories.json membership still wins, so no staple id can be re-keyed, and no public page changed. (2) The 10 standing false positives are drained through the aisle test's OWN reviewed-exception table ($COMMODITY_DEPT), not by loosening $CAT_DEPT and not by recategorising: five spice-rack commodities get ('pantry','fresh_fruits_vegetables') exactly like the six already-reviewed entries beside them, vienna-sausage gets ('pantry','meat') like corned-beef-hash, parmesan gets ('dairy','deli','pantry'), and brandy/red-wine/white-wine get their category list plus beer_wine_spirits. Recategorising the wine commodities was rejected because a commodity's category is also its section on the public board, which that file's own coffee note warns is a bigger change than this gate should make. The plan's aisle-level scoping was not implemented: Judge only ever reads a DEPARTMENT, so aisle scoping would be a new mechanism the reviewer never measured. aisle-test -SelfTest still 14/14. (3) A SECOND wrong crown found while reviewing the re-derived links, same class, fixed and noted: ground-coriander was crowned at Walmart $0.3412/oz by 'GOYA Adobo All Purpose Seasoning with Coriander & Annatto, 8 oz' - a seasoning blend on a single-spice commodity whose include is the bare word 'coriander'. Added the estate's standard \\bseasoning\\b fence. Measured over the whole capture corpus: 36 names contain 'coriander', exactly ONE moves, and it moves to the RIGHT commodity (adobo-seasoning, index 544). Cell 0.3412 -> 0.8662 ('(2 pack) 24 Mantra Organic Coriander Powder'), which is real ground coriander in line with the Fareway peer at 0.96.",
+      "shipped_commit": "this commit"
+    },
+    {
+      "queue_id": "2026-08-30-fec3dc",
+      "subject": "Board prices aging inside a fresh file (UNDATED GREW x5)",
+      "classification": "infra",
+      "evidence": [
+        "THE UNDATED COUNTS ARE THE AD FILES, exactly: ads-2026-08-30.json holds Hy-Vee 682/682 rows undated, Aldi 86/86, Family Fare 1400/1400 - the alerts numbers to the row. Bakers 108 = bakers-deals-2026-08-26.json (108 rows, ad window 08-26..09-01, in-window). Fareway 218 = fareway-deals-2026-08-25.json row count.",
+        "AD ROWS CARRY NO as_of BY DESIGN, per audit-row-age.ps1s OWN header (lines 66-72): stamping one would launder a date the row did not earn; their honest expiry is the ad window, which the same audit already checks via Test-AdWindowExpired. Yet Get-AgeProfile counts them as undated.",
+        "EVERY REGULAR FILE IS FULLY DATED: hyvee-regular-2026-08-30 1551 rows 0 undated, aldi-regular-2026-08-29 2846/0, family-fare-regular-2026-08-30 5258/0, bakers-regular-2026-08-30 7292/0, fareway-regular-2026-08-30 758/0. NO writer stopped stamping. The five-stores-at-once shape is ONE cause: one ads file carries three stores and two ad captures carry the rest, all bigger than they were on baseline day.",
+        "NOT NEW AND NOT ROUND 1s DOING: the identical UNDATED GREW block has fired daily since 2026-08-15 (ad-cycle-log lines 13503 through 29369), long before todays commits d2225791/037ef56b. The baseline (row-age-baseline.json, recorded 2026-08-07 15:58) froze that days FLYER SIZES (Aldi 60, FF 1100, Hy-Vee 641, Bakers 39, Fareway 11), so every week with bigger flyers reads as a stopped writer.",
+        "THE FAREWAY HALF IS CORRECT BEHAVIOR THAT ALREADY SELF-HEALED: fareway-deals-2026-08-25 closed 08-29, compare-deals rightly refuses expired ads (218 sale rows excluded, cells fall back to everyday). The browser agent vision-read the NEW flyer at 09:14 (fareway-deals-2026-08-30, printed window 08-31..09-05) - Fareway genuinely has no ad valid ON 08-30, so nothing displayable is missing; the new window enters the board from tomorrows build."
+      ],
+      "surface_fix": {
+        "what": "count window-dated rows as dated-by-window, then re-arm the ratchet",
+        "files": [
+          "grocery/audit-row-age.ps1",
+          "grocery/out/row-age-baseline.json"
+        ],
+        "exact_change": "in the per-store collection loop, rows loaded from a file whose header carries ad_from/ad_to are classed dated-by-window: excluded from the undated count and from the age percentiles (their staleness is already owned by Test-AdWindowExpired wholesale). Keep them in the row population so a store whose ONLY source is an ad file still trips the zero-dated hard check via an explicit branch (window-dated does not satisfy per-row dating there). Then re-run -Baseline ONCE (the audits documented step after a deliberate change) so the ratchet re-arms on regular-row counts only."
+      },
+      "root_cause": "Get-AgeProfile treats absence of as_of as undated regardless of source, while the same audits design doc says ad rows must never carry as_of. The UNDATED GREW tier therefore measures flyer size against a frozen 08-07 flyer, fires on five stores every day a flyer grows, and has cried daily since 08-15 - which is exactly the guard-people-learn-to-scroll-past failure its own comments warn about, and it buries the real signal (a regular-file writer actually stopping) it exists to catch.",
+      "root_fix": null,
+      "root_fix_note": "surface_fix IS the root fix: the misclassification is the mechanism. The RATCHET and zero-dated arms stay untouched.",
+      "blast_radius": {
+        "measured_as": "findings",
+        "measured_by": "todays five hard findings re-derived from the raw files (all five reduce to ad-file row counts; regular files all 0 undated); ad-cycle-log grep proving daily identical firings since 08-15",
+        "affected_now": 5,
+        "risk": "the change must NOT let a store whose only board source is an ad file escape the zero-dated hard check - the explicit branch plus must-fire fixture covers it. No pricing path is touched."
+      },
+      "proof": {
+        "guard_or_fixture": "audit-row-age.ps1 -SelfTest new frozen cases",
+        "must_fire_case": "the Walmart all-undated fixture STILL fires; a NEW fixture with a regular-file store whose undated count grew still fires UNDATED GREW",
+        "clean_twin": "a frozen bakers-deals-shaped fixture (108 rows, no as_of, ad_from/ad_to in-window) produces 0 undated and no finding; a bigger flyer than baseline produces no finding",
+        "commands": [
+          "powershell -File grocery\\audit-row-age.ps1 -SelfTest",
+          "powershell -File grocery\\audit-row-age.ps1",
+          "powershell -File grocery\\audit-row-age.ps1 -Baseline"
+        ]
+      },
+      "rollback": "revert the audit-row-age.ps1 hunk and restore the previous row-age-baseline.json from git",
+      "do_not_touch": [
+        "the RATCHET tolerance",
+        "the zero-dated hard check",
+        "compare-deals expired-ad refusal (correct behavior, verified)",
+        "as_of stamping in any builder (audit-asof-evidence owns why ad rows stay unstamped)"
+      ],
+      "freshness": "measured against ads-2026-08-30.json (07:01), the newest per-store regular files (08-29/08-30), row-age-baseline.json (08-07), ad-cycle-log through 08:28 today",
+      "resolution_note": "False alarm with a real design defect behind it: all five UNDATED GREW findings are ad-file rows that must never carry as_of (the audits own doc says so); every regular file is 0-undated and no writer stopped. Fires daily since 08-15 because the 08-07 baseline froze that weeks flyer sizes. Window-dated rows now classed as dated-by-window, ratchet re-baselined, zero-dated hard check preserved with fixtures. Fareways 218 excluded sale rows were an expired ad correctly refused; the new flyer (08-31..09-05) was vision-read at 09:14 and enters tomorrow.",
+      "publish_batch": 2,
+      "status": "done",
+      "premise_verified": "TRUE, verified against the raw files. ads-2026-08-30.json carries ad_from/ad_to on 2,168 of 2,168 rows and no as_of on any of them; bakers-deals-2026-08-26 (108 rows) and fareway-deals-2026-08-25 (218 rows) carry the window in the FILE HEADER and nothing on the row. Those two shapes are the whole of the five UNDATED GREW counts. audit-row-age.ps1's own header (the block above Test-AdWindowExpired) says ad rows must never carry as_of. The fix had to cover BOTH shapes or it would have covered none of the alert - the plan named only the header form.",
+      "deviation": "Extended beyond the plan's wording to the per-ROW window as well as the header window, because ads-*.json (the file behind the Hy-Vee 682, Aldi 86 and Family Fare 1400 counts) has no header window at all. New Test-RowIsWindowDated; Get-AgeProfile takes a WindowDated count and reports it as its own field. 'dated' is untouched, so the zero-dated hard check still fires for a store whose only source is an ad file - fixtured. Seven new frozen self-test cases (Baker's 108-row header shape, the 1400-row Family Fare row shape, a bigger-than-baseline flyer, a row carrying BOTH as_of and a window, and the two must-fires). Self-test PASS, live run 0 hard findings across 7 stores, ratchet re-armed once with -Baseline as the audit documents. The RATCHET tolerance and the zero-dated arm were not touched. Note the new baseline is STRICTER, not looser: every store now records 0 undated, so any regular-file writer that stops stamping fires immediately.",
+      "shipped_commit": "this commit"
+    },
+    {
+      "queue_id": "2026-08-30-40c75d",
+      "subject": "Capture watchdog: 3 issues",
+      "classification": "infra",
+      "evidence": [
+        "AD TASK EXIT 1 IS A DESIGNED WORK ORDER, ALREADY WORKED: capture-run-ad-2026-08-30.log shows Family Fare rc=0 (ads-2026-08-30.json saved) and Fareway rc=3 = pull-fareway-ads installed the NEW weekly flyer pages (25 pages, manifest 08-30..09-05) but no fareway-deals reaches 09-05 - the browser agents SKILL names this exact red as its work order (it exits 3 until the vision read happens). The agent read it at 09:14 (fareway-deals-2026-08-30.json, window from the printed footer 08-31..09-05). Everything else in the lane committed and pushed (5abe529d).",
+        "BROWSER WORK STALE is two standards fighting: watchdog check 6b counts a flag unworked when ANY store it names lacks rows dated TODAY, while the per-store check 20 lines up accepts the 90-day rotation (its own line today: Aldi 0 fresh rows today, newest 2026-08-29, 1d of 90d carry - an OK band). 10 daily flags sit on disk since 08-21 (nothing deletes one before the 45-day prune), so ONE store not captured by 09:32 relights every flag: 8 unworked, oldest 9 days, still cold Aldi.",
+        "THE 09:30 WATCHDOG ALSO RACES THE 09:00 AGENT: today the agent spent its budget on the Fareway 25-page vision read (order-of-work item 1) plus the Walmart rotation (built 09:09) and had not reached Aldi when the watchdog looked at 09:32. Aldi at 1 day old is inside every cadence band.",
+        "The healthy checks corroborate round 1s fixes exactly as the dispatch noted: newest board rebuilt 0.5h ago, public board current, reached main, rollback checks redesigned - all green."
+      ],
+      "surface_fix": {
+        "what": "make the flag check judge by the same cadence bands as the per-store check, and let a finished todo die",
+        "files": [
+          "grocery/capture-watchdog.ps1"
+        ],
+        "exact_change": "in check 6b: a flags store counts COLD only when its newest capture is OLDER than the flag itself AND its age exceeds the same ROTATION_DEBT/CARRY bands the per-store scan uses (not rows-dated-today). A flag every one of whose stores has a capture NEWER than the flag is a completed todo: report ok once and DELETE the flag file (extends the existing 45-day prune, same housekeeping-not-signal doctrine already written at lines 403-405)."
+      },
+      "root_cause": "A flag is a TODO with no completion mechanism: capture-run writes one daily, nothing deletes one for 45 days, and the unworked test uses a daily-freshness bar that contradicts the watchdogs own 90-day rotation bands, so the finding re-fires on healthy days and desensitizes the reader - the alarm-that-accuses-healthy-things class this same check was rewritten for on 2026-08-25, one standard short.",
+      "root_fix": null,
+      "root_fix_note": "surface_fix IS the root fix. The Fareway rc=3 mechanism is correct as designed (the red IS the work order) and is left alone.",
+      "blast_radius": {
+        "measured_as": "findings",
+        "measured_by": "the 10 flag files on disk vs each named stores newest capture (Walmart 08-30, Aldi 08-29, Fareway 08-30, Sams 08-30) - after the fix todays finding count for this check is 0; a genuinely frozen store still fires (fixture)",
+        "affected_now": 1,
+        "risk": "must not blind the real freeze: the 2026-08-22..25 period (browser stores uncaptured 3 days) is the must-fire fixture. Deletion only touches browser-capture-due-*.flag files."
+      },
+      "proof": {
+        "guard_or_fixture": "capture-watchdog frozen fixture pair (same style as the round-1 board-freshness fixtures)",
+        "must_fire_case": "a flag naming a store with NO capture since the flag and age past the rotation-debt band fires BROWSER WORK STALE",
+        "clean_twin": "todays real shape (flags 08-21..08-30, every store with a capture 08-29/08-30) reports ok and prunes the completed flags",
+        "commands": [
+          "powershell -File grocery\\capture-watchdog.ps1"
+        ]
+      },
+      "rollback": "revert the capture-watchdog.ps1 hunk; deleted flags are re-derivable noise (capture-run writes a new one daily)",
+      "do_not_touch": [
+        "pull-fareway-ads rc=3 semantics (the red is the work order, and it worked today)",
+        "the per-store cadence bands",
+        "the 45-day prune cap"
+      ],
+      "freshness": "measured against the 09:32:41 watchdog log, the flag files listed at about 10:35, and capture mtimes as of 10:35; the browser agent session may still add an Aldi capture today",
+      "resolution_note": "All three findings explained: the ad-lane exit 1 is the designed Fareway vision-read work order and the browser agent worked it at 09:14 (new flyer 08-31..09-05 captured); BROWSER WORK STALE is a flag with no completion mechanism judged by a daily bar the watchdogs own rotation bands contradict - now judged by the same bands with completed flags pruned, frozen must-fire kept for a real freeze. Aldi at 1 day old was never cold.",
+      "publish_batch": 2,
+      "status": "done",
+      "premise_verified": "TRUE. The two standards really are fighting: check 6b called a store COLD on 'no rows dated TODAY' while the per-store scan twenty lines up printed, on the same run, 'Aldi: 0 fresh row(s) today, newest 2026-08-29 (1d of 90d carry)' as OK. Eight flag files were on disk from 08-21 onward with nothing able to delete one before the 45-day prune.",
+      "deviation": "None on the fix. Two pure functions so the change is reachable from -SelfTest: Test-FlagStoreCold (cold only when nothing was captured since the flag AND the newest capture is past the same ROTATION_DEBT band the per-store scan uses; no readable capture date is COLD, never excused) and Test-FlagWorked (deletion needs EVERY named store captured at or after the flag - deliberately stricter than the cold test). Seven new frozen fixtures including the 2026-08-22..25 real freeze as the must-fire. Self-test PASSED; the live run now reports 'browser work: 8 capture flag(s) on disk and every store each one names is inside its rotation band' and pruned all 8 completed flags. BROWSER WORK STALE is gone. The watchdog still exits 1 on 'TC Grocery Ad Pulls 0700 exited 1' - left alone on purpose per this item's do_not_touch: the Fareway rc=3 IS the work order and the browser agent worked it at 09:14 (fareway-deals-2026-08-30, window 08-31..09-05).",
+      "shipped_commit": "this commit"
+    },
+    {
+      "queue_id": "2026-08-30-7adf1c",
+      "subject": "Family Fare catalog is degrading - 1 signal",
+      "classification": "capture-gap",
+      "evidence": [
+        "THE TRIGGER THAT FIRED IS SOUND, tested before anything else per the dispatch: the firing arm is recentVerified below 500 (pull-regular-familyfare.ps1:144), not the shrink arm - the catalog GREW (5258 vs best-of-recent 5250, 0 expired, 0 starved). The self-test marks this arm a REAL freeze detector - do not soften, with its healthy clean twin at 1259 re-verified/48h. Today: 393. That is a 3x drop in actual store-verified throughput, the LEADING indicator; catalog shrinkage is the lagging one (rows only leave after 90 days of this).",
+        "THE THROTTLE IS EATING THE SWEEP: family-fare-2026-08-30.throttled.json records throttled=true, 324 rows priced, 544 empty term-responses today - Freshops empty-on-throttle answers (the fail-open-reads-as-empty class, which is why the catalog does not shrink: the merge treats empty as no-news and carries forward). fresh_count today 322 of 5258.",
+        "THE REMEDY DOCTRINE IS ALREADY WRITTEN IN THE ALERT ITSELF: fewer requests per window, NOT slower pacing - the 2026-07-28 probe measured 20 terms at 200ms ALL succeed while a second burst came back all-empty, so Freshops budget is per-window request COUNT. The cursor machinery to run smaller shards already exists (Get-FfNextCursor wraps and resumes)."
+      ],
+      "surface_fix": {
+        "what": "cap the per-run term attempts at the proven burst size",
+        "files": [
+          "grocery/pull-regular-familyfare.ps1"
+        ],
+        "exact_change": "cap each 3-hourly runs ATTEMPTED terms at 20 (the 2026-07-28 measured-good burst), cursor-advancing as today so the full 526-term list still rotates (20 terms x 8 runs = 160 terms/day = full rotation about every 3.3 days, comfortably inside the 90-day carry). Expected outcome, checkable by the audits own metric: about 20 terms x 25 rows x 8 runs = well over 500 re-verified/48h within two days. The developer locates the attempt-loop bound; if the run currently attempts far more than it buys, this is a reduction, not a slowdown - request COUNT per window is the budget."
+      },
+      "root_cause": "The sweeps per-run attempt count exceeds Freshops per-window request budget, so most responses come back empty-throttled and only about 320 rows/day get store-verified; the catalog is living on 90-day carry-forward. The alert re-keyed on 2026-08-02 to fire only on outcomes did its job: this is the leading-indicator outcome, caught 87 days before the carry cliff.",
+      "root_fix": null,
+      "root_fix_note": "surface_fix IS the root fix under the alerts own doctrine. If 20/run proves insufficient coverage-wise the fallback is MORE runs (smaller windows), never more terms per window.",
+      "blast_radius": {
+        "measured_as": "schedule",
+        "measured_by": "todays throttled diagnostics (324 priced / 544 empty), fresh_count series in the merged headers, the frozen clean-twin (1259/48h) and todays 393/48h; rotation arithmetic against the 90-day carry",
+        "affected_now": 1,
+        "risk": "slower full-rotation (3.3 days vs the design about 1 day when unthrottled) lengthens the everyday-price refresh interval for FF, which the 90-day carry absorbs; the alternative (status quo) verifies 6x less."
+      },
+      "proof": {
+        "guard_or_fixture": "pull-regular-familyfare.ps1 -SelfTest frozen alert cases (unchanged) + the audits own re-verified metric",
+        "must_fire_case": "the frozen d2 case (12 re-verified) still fires; the below-500 threshold is untouched",
+        "clean_twin": "within 2 days of shipping, the daily alert body reports re-verified/48h back above 500 (healthy twin was 1259); if it does not, the cap is wrong and rolls back",
+        "commands": [
+          "powershell -File grocery\\pull-regular-familyfare.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the cap; the cursor keeps its position either way",
+      "do_not_touch": [
+        "the recentVerified below-500 trigger (marked do-not-soften in its own self-test)",
+        "pacing delays (the probe proved pacing is not the budget)",
+        "the 90-day carry"
+      ],
+      "freshness": "measured against family-fare-regular-2026-08-30.json (08:09) and family-fare-2026-08-30.throttled.json; the FF sweep lands every 3 hours so counts move within the day",
+      "resolution_note": "The alert is RIGHT and its trigger is sound: catalog growth is the lagging indicator, and the firing arm measured store-verified throughput at 393/48h against a healthy 1259 - the throttle is eating the sweep (324 priced vs 544 empty-throttled today). Per-run attempts capped at the probe-proven 20-term burst; full rotation still completes every 3.3 days inside the 90-day carry. Threshold untouched.",
+      "publish_batch": 2,
+      "status": "done",
+      "premise_verified": "TRUE, and the mechanism is sharper than 'the run attempts too many terms'. Today's capture plan gives Family Fare a TermBudget of 7 (RotationTerms 7, 598 terms, CallCap 40). The main pass honours it - and then dumps every remaining term into $empty tagged 'term budget reached before request'. The two recovery passes iterate $empty and ask ALL of them. So a 7-term budget spends roughly 590 requests a window re-asking terms it deliberately chose not to ask, which is exactly the 324-priced / 544-empty split in the throttled diagnostics and the 393-per-48h store-verified throughput behind the below-500 alarm.",
+      "deviation": "Implemented as the plan's 20-term cap PLUS the root cause it exposes. Recovery now skips any term carrying a $termDeferred reason: a term that was never asked is not a rate-limit victim, it is next window's work. And a per-window request cap of 20 (the 2026-07-28 measured-good burst) now bounds the main pass and both recovery passes together. Both are REDUCTIONS in requests; pacing is untouched, the below-500 trigger is untouched, and the cursor arithmetic is untouched. Test-FfMayAttempt is declared at the top of the file beside Get-FfNextCursor precisely so the -SelfTest block, which runs long before the buy loop, can exercise it - a fix whose self-test cannot reach the changed code is the 2026-07-29 regression. Five new frozen cases (the 21st request refused, today's 590-request shape refused, the 1st and 20th allowed, and the cap proven to leave room for the full 7-term rotation budget). Self-test rc=0. The clean twin is a FUTURE measurement by design: within two days the daily alert should report re-verified/48h back above 500 (healthy twin 1259). If it does not, the cap is wrong and rolls back - that check has not happened yet and nobody should read this item as proving it.",
+      "shipped_commit": "this commit"
+    },
+    {
+      "queue_id": "2026-08-22-ca099c",
+      "subject": "Walmart full capture aging (B1: round-1 ownership premise corrected; scope fix on the live browser agent)",
+      "classification": "infra",
+      "evidence": [
+        "ROUND 1s PREMISE IS FALSIFIED FROM THE DATA, independently of the relay: the grocery-browser-stores-refresh scheduled agent EXISTS (SKILL.md under C:/Users/Owner/.claude/scheduled-tasks/, repo backup under ops/prompt-backup), is ACTIVE, and RAN TODAY: walmart-regular-2026-08-30.json built 09:09:53 (pull_terms=24, 525 deals, with seller+fulfillment on 499 rows - the 9-column shelf signal is flowing), fareway-deals-2026-08-30.json vision-read at 09:14:29, walmart-capture CSVs on 08-25/26/29. Its SKILL consumes research-worklist.json as item D, priority 4, exactly as the relay said. Round 1 stated every Claude agent is disabled three times; the 08-22 inventory it inherited was stale (the agent was re-registered 2026-08-25, per its own SKILL history section).",
+        "THE REAL GAP IS SCOPE, verified: the SKILLs work sources A-E and order-of-work 1-5 contain NO comprehensive full-worklist pull, so nothing resets the 90-day fullpull clock. audit-walmart-fullpull re-run now: rc=1, Walmart newest comprehensive 08-11 (525 terms) 19 days old, Sams newest 08-15 (594 terms) 15 days old; cells still fine (0 of 508/372 expiring within 5 days).",
+        "BUDGET EVIDENCE FOR ITS OWN DAY: today the agents 45-minute budget went to the Fareway 25-page vision read plus the Walmart rotation, and Aldi (an ALWAYS store) was not reached by 09:32. A 45-minute 525-term pull cannot share a session with an ad rollover."
+      ],
+      "surface_fix": {
+        "what": "add the comprehensive pull to the agent that already has the browser, triggered from the data",
+        "files": [
+          "C:/Users/Owner/.claude/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md",
+          "ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md (keep byte-identical)"
+        ],
+        "exact_change": "New work source F after item E: COMPREHENSIVE FULL-WORKLIST PULL (Walmart or Sams). DUE when audit-walmart-fullpull.ps1 exits 1 naming the store (run it; that is the FROM THE DATA test, same doctrine as the rest of the list). New order-of-work entry 3 (below weekly ads at 1 and rescue terms at 2, above rotation): when F is due AND no weekly ad is due today, do ONE stores full pull (about 45 minutes, the whole term worklist through the committed sweep lane, same emit format as the rotation) INSTEAD of items 4-6 that day; one store per day, Walmart before Sams while both warn. Never attempt it on an ad-rollover day - measured today, an ad day already crowds out the Aldi rotation.",
+        "note": "this also delivers the 9-column comprehensive capture that audit-shelf-signal waits on, which arms the marketplace-case rule behind the three clamped recipe inversions (round 1 item 5a178d) - one edit, three clocks"
+      },
+      "root_cause": "Round 1 diagnosed a missing OWNER from a stale automation inventory; the true mechanism is a missing WORK ITEM in an agent that exists, runs daily at 09:00, and is structurally the only thing that can do the work (PowerShell cannot reach Brads Chrome; the drivers empty profile gets price-less payloads). The 90-day clock has no consumer because the rotation was scoped to 6-8 terms/day by design and nobody scoped the quarterly reset anywhere when the 08-22 cleanup removed the old browser routine.",
+      "root_fix": null,
+      "root_fix_note": "surface_fix IS the root fix; audit-walmart-fullpull already warns daily inside guards, so the loop is closed by giving its warning a consumer.",
+      "blast_radius": {
+        "measured_as": "schedule",
+        "measured_by": "audit-walmart-fullpull rc=1 output (Walmart 19d, Sams 15d, thresholds warn 10d hold 90d); the agents measured daily output (24-term rotation) vs the 525/594-term worklists; todays session timeline (09:02 start, 09:09 Walmart, 09:14 Fareway ad, Aldi unreached at 09:32)",
+        "affected_now": 2,
+        "risk": "a full pull on the wrong day starves the rotation (mitigated by the ad-day exclusion and one-store-per-day rule); prompt edits cannot be unit-tested, so proof is the audit going green after the first due-day run"
+      },
+      "proof": {
+        "guard_or_fixture": "audit-walmart-fullpull.ps1 (already runs daily inside guards.ps1)",
+        "must_fire_case": "it warns TODAY (rc=1, both stores named) - the pre-fix state is the must-fire and it is live",
+        "clean_twin": "after the agents first due-day comprehensive pull lands, audit-walmart-fullpull reports that store ok and the warning drops; capture-evictions stays 0",
+        "commands": [
+          "powershell -File grocery\\audit-walmart-fullpull.ps1"
+        ]
+      },
+      "rollback": "revert both SKILL.md copies; the agent falls back to rotation-only",
+      "do_not_touch": [
+        "the ONE REQUEST THEN STOP wall rule (a wall verdict ends the store for the day; Walmart answered Brads Chrome normally 08-29 and 08-30)",
+        "the 0800-owns-publish split (the agent must still never compare or publish)",
+        "capture-policy QuarterDays/MaxCarryDays"
+      ],
+      "freshness": "audit re-run 2026-08-30 about 10:20 (Walmart 19d, Sams 15d); agent evidence from todays files at 09:09/09:14; the agent session may still be running as this plan is written",
+      "resolution_note": "Round 1s no-owner premise corrected with data (the browser agent is live and produced todays Walmart and Fareway captures; research-worklist IS consumed as its item D), and the narrower true gap fixed - the agents scope never included the comprehensive pull, so nothing reset the 90-day clock. Work item F + order-of-work 3 added, data-triggered by audit-walmart-fullpull, one store per non-ad day. Retires the 57b569 needs-brad parking; folds d004bf (worklist consumer exists; rolling set confirmed). Also un-blocks audit-shelf-signal and the three clamped recipes (5a178d) once the first 9-column full pull lands.",
+      "publish_batch": 2,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-08-22-c41c27",
+      "subject": "Recipe batch stalled (B4: un-park per Brads relayed answer)",
+      "classification": "no-code-change",
+      "evidence": [
+        "Brads answer, relayed via thriftycrew-d7: do NOT park the flow. The post-publish review of hunt-2026-08-27-ten-w1 (the one live-without-review batch) was dispatched by the orchestrator as a separate concurrent session and is NOT this triages work. The 14 unpublished batches stay as editorial backlog exactly as round 1s risk split described (nothing of theirs is live)."
+      ],
+      "root_cause": "The parking was a decision gap, now closed by Brads answer; no grocery-side mechanism involved.",
+      "resolution_note": "Un-parked per Brads relayed answer (provenance in plan provenance_note): the flow is not parked, the w1 post-publish review is dispatched separately and concurrently, and the 14 unpublished batches remain editorial backlog for the hunter flow. Queue c41c27 and its needs-brad notification fb0ab4 close with this note; no recipe work was done in this triage.",
+      "publish_batch": 0,
+      "status": "done",
+      "premise_verified": "TRUE as a provenance statement, and nothing was measurable here. No recipe work was done in this triage; the hunt-2026-08-27-ten-w1 post-publish review is a separate concurrent session and I did not touch it.",
+      "deviation": null,
+      "shipped_commit": "this commit (queue + plan only)"
+    },
+    {
+      "queue_id": "brad-b2-thin-sliced-chicken",
+      "subject": "B2: thin-sliced chicken breast identity call",
+      "classification": "no-code-change",
+      "evidence": [
+        "Brads answer, relayed: NO, not the same commodity. Verified the ruling implementation stands exactly as it was: chicken-breast carries the thin-sliced exclusion pattern and no round-1 edit touched it. The Kirkwood / Heritage Farm / Freshness Guaranteed thin-sliced breasts stay out. Recording per-row rulings would NOT stop the semantic sweep re-paging them - round 1 proved the sweep reads neither the exclusion rules nor known-wrong.json (two of its rulings bounced as already-exists), so that no-memory defect is the sweeps to fix, not this items."
+      ],
+      "root_cause": "Identity question, answered: thin-sliced is a different commodity by Brads ruling; the deliberate exclusion is the implementation and it is already in place.",
+      "resolution_note": "Confirm-and-close per Brads relayed answer: exclusion kept verbatim, nothing admitted, nothing recorded beyond this note. If the semantic sweep re-pages the trio, the answer is in this plan, not a new rule.",
+      "publish_batch": 0,
+      "status": "done",
+      "premise_verified": "TRUE, checked in the file: chicken-breast (array index 0) still carries the exclusion pattern 'thin[\\\\s-]*sliced' verbatim, and nothing in round 1, in the concurrent session's commit 04f9ec78, or in this round touched it. Nothing admitted, nothing recorded.",
+      "deviation": null,
+      "shipped_commit": "n/a - confirm-and-close, no change"
+    },
+    {
+      "queue_id": "brad-b3-wine-liter-formats",
+      "subject": "B3: wine liter exclusion - Brad ruled on 1.5L; the regex reaches further",
+      "classification": "needs-brad",
+      "evidence": [
+        "Brads relayed answer covered the 1.5L magnum size only: keep it excluded. Measured what the exclusion actually kills today on red-wine/white-wine (full rows in the artifact b3_wine_measurement): beyond 1.5L it also blinds 1L bottles (Austin $26.47, Caymus $59.98 at Sams), 3L boxes (Black Box, Sams $13.47 = 0.1328/floz and FF $23.99), 4L (Carlo Rossi $20.99) and 5L (Franzia Chardonnay $15.97 = 0.0945/floz and Chillable Red $13.47 = 0.0797/floz; Peter Vella $18.49). The Franzia boxes would TAKE both wine crowns (white 0.1571 to 0.0945, red 0.2358 to 0.0797) if admitted. 750ml formats do not match the regex and price normally; brandy does not carry the exclusion and its 1.75L formats price normally."
+      ],
+      "root_cause": "The exclusion was written as any-liter-quantity while the ruling it now implements is specifically about 1.5L; whether 1L bottles and 3L-plus boxes count as the same commodity is a what-should-this-commodity-MEAN call, which is Brads, and it decides both wine crowns.",
+      "resolution_note": "Reported, not changed, per the dispatch: no rule edit on this items authority. Parked to Brad with the measured rows and both crown consequences; a one-line narrowing (exclude 1.5 specifically) or the status quo are both one-hunk changes once he rules.",
+      "publish_batch": 0,
+      "status": "needs-brad",
+      "premise_verified": "TRUE, and WIDER than the plan states. Verified in commodities.json: red-wine (index 563) and white-wine (index 539) both carry '\\\\b\\\\d+(?:\\\\.\\\\d+)?\\\\s*l\\\\b', which is the any-liter token the plan measured. But the same exclude lists ALSO carry '\\\\bfranzia\\\\b', '\\\\bbox(?:ed)?\\\\b', '\\\\bjug\\\\b', '\\\\bcask\\\\b', 'carlo\\\\s+rossi' and '\\\\bbag\\\\s*in\\\\s*box\\\\b'. So box wine is excluded FIVE separate ways and narrowing the liter token alone would not admit Franzia or Carlo Rossi - Brad's answer has to be about box formats, not about a regex. brandy carries none of these and its 1.75 L formats price normally, as the plan says. NOT CHANGED, as instructed. One email sent.",
+      "deviation": null,
+      "shipped_commit": "n/a - reported, no rule change"
+    },
+    {
+      "queue_id": "brad-b5-identity-reversals",
+      "subject": "B5: reverse two identity rulings (Las Palmas Red = enchilada-sauce; Progresso Minestrone = vegetable-soup)",
+      "classification": "wrong-product",
+      "evidence": [
+        "Brads answer, relayed: YES to both. The two round-1 holding rulings to reverse, located in known-wrong.json: enchilada-sauce|Walmart|las-palmas-medium-red-chile-sauce (Las Palmas Medium Red Chile Sauce, 28 oz) and vegetable-soup|Walmart|progresso-minestrone-soup-vegetable-classics-can (Progresso Minestrone Soup, Vegetable Classics, 19 oz), both ruled_on 2026-08-30 with retire_when ruling-reversed - this IS that reversal.",
+        "CELL EFFECTS MEASURED BY FULL REBUILD (artifact run mod3): ZERO cells change. Las Palmas Red 28oz $2.97 = 0.1061/oz exactly ties the incumbent Walmart cell (Las Palmas Medium GREEN Chile Enchilada Sauce, 28oz $2.97 = 0.1061; crown stays Bakers 0.0925). Progresso Minestrone 19oz $2.48 = 0.1305/oz exactly ties the incumbent (Progresso Garden Vegetable 19oz $2.48 = 0.1305, which IS the Walmart crown and keeps it). Both source rows sit in walmart-regular-2026-08-11 alongside the incumbents, so no capture-selection eviction is possible (verified: 249 to 247 entries, rebuild rc=0, 0 diffs across 3116 cells).",
+        "The reversal still matters: the rulings own text says reverse in one line if Brad says it counts, the ledger must reflect the ruling that actually stands, and if either price diverges later the right product is now in the pool."
+      ],
+      "surface_fix": {
+        "what": "retire the two rulings per their own retire_when",
+        "files": [
+          "grocery/known-wrong.json"
+        ],
+        "exact_change": "remove (or retire per the ledgers documented procedure) the two entries named above, recording reversed 2026-08-30 per Brads answer relayed by thriftycrew-d7 in whatever provenance field the ledger uses"
+      },
+      "root_cause": "Round 1 correctly refused to ship an identity guess and parked both as known-wrong pending Brad; Brad has now ruled the opposite way, so the holding rulings are the only thing wrong.",
+      "root_fix": null,
+      "root_fix_note": "surface_fix is complete; the ledgers retire_when field anticipated exactly this path.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "full hermetic rebuild (artifact run mod3) over the ONE pinned corpus: 0 routing changes (rulings do not touch first-match-wins) and 0 cell diffs across 3116 cells",
+        "affected_now": 0,
+        "names": [],
+        "risk": "zero measured; the tie means the board is identical either way today. A later Walmart price change on either product can move the cell, which is the intended effect of admitting the right product.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [
+        {
+          "name": "Las Palmas Medium Red Chile Sauce, 28 oz",
+          "claimed_by": "enchilada-sauce incumbent row (Las Palmas GREEN, identical 0.1061/oz)",
+          "index": -1,
+          "release_needed": "none - the tie is measured and acceptable"
+        },
+        {
+          "name": "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
+          "claimed_by": "vegetable-soup incumbent row (Progresso Garden Vegetable, identical 0.1305/oz)",
+          "index": -1,
+          "release_needed": "none"
+        }
+      ],
+      "proof": {
+        "guard_or_fixture": "audit-match-soundness (the re-admissions appear in its review, explained by this item) + guards.ps1",
+        "must_fire_case": "n/a for a zero-diff reversal; the artifacts mod3 run is the evidence and the developer re-verifies 0 diffs on the rebuilt board",
+        "clean_twin": "enchilada-sauce and vegetable-soup cells unchanged post-rebuild (crowns Bakers 0.0925 and Walmart 0.1305)",
+        "commands": [
+          "powershell -File grocery\\audit-match-soundness.ps1",
+          "powershell -File grocery\\guards.ps1"
+        ]
+      },
+      "rollback": "restore the two entries from git",
+      "do_not_touch": [
+        "every other known-wrong entry",
+        "the incumbents rows"
+      ],
+      "freshness": "measured against the 09:01:30 generation on the pinned corpus; both products are Walmart everyday rows from the 08-11 comprehensive capture, stable across generations",
+      "resolution_note": "Both rulings reversed per Brads relayed answers (provenance in plan provenance_note). Measured by full rebuild: zero cells move today because each admitted product exactly ties its siblings price; the ledger now says what Brad ruled and the right products compete for the cells from here on.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "FALSE, and this is the one the plan warned about: 'a zero-change result is the answer that ends an investigation, so confirm the reversal actually took effect rather than reading a no-op as success.' It was a no-op. Retiring the two known-wrong rulings changed nothing because NEITHER PRODUCT CAN MATCH ITS COMMODITY AT ALL. enchilada-sauce's only include is 'enchilada\\\\s+sauce' and 'Las Palmas Medium Red Chile Sauce, 28 oz' contains no such phrase; vegetable-soup's includes are 'vegetable\\\\s+(?:beef\\\\s+)?soup' and 'vegetable\\\\s+canned\\\\s+soup', and 'Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz' matches neither. Confirmed with compare-deals -Explain on both commodities: the Las Palmas RED row and every Minestrone row are absent from the candidate list, while the source file walmart-regular-2026-08-11.json is in the union (last_used 2026-08-30). The rulings were defensive over a pool the rows were never in, so the artifact's mod3 'zero cell diffs, each admitted row exactly ties its incumbent' measured the absence of an effect, not a tie.",
+      "deviation": "Retiring the rulings was necessary but not sufficient, so I also widened the two includes and measured it the way the README requires. enchilada-sauce gains '\\\\bred\\\\s+chile\\\\s+sauce\\\\b', vegetable-soup gains '\\\\bminestrone\\\\b'. Routing measured over the whole capture corpus: exactly 6 names match either token, ALL SIX route to <unmatched> today, so no commodity claims any of them at any array index and no claimed_by_earlier release is needed. Five are admitted (the Las Palmas red sauce, three Progresso minestrone renderings and Rao's Made For Home Vegetable Minestrone); the sixth, 'Bear Creek Country Kitchens Minestrone Soup MIX, 8.4 oz Pouch', is a dry mix and is already fenced by vegetable-soup's existing '\\\\bmix\\\\b' exclude. Outcome on the rebuilt board: three cells change their NAMED PRODUCT at an unchanged per-unit (enchilada-sauce Walmart 0.1061 Green -> Red, vegetable-soup Baker's 0.1574 -> the Minestrone rendering, vegetable-soup Walmart 0.1305 -> the 2-pack Progresso row, whose $4.96 / 38 oz basis I checked and is correct). Zero crowns moved, which is what the reviewer predicted - it just could not have happened without this change. Ledger now has 249 entries plus one unrelated new ruling.",
+      "shipped_commit": "this commit"
+    },
+    {
+      "queue_id": "tree-c-testguards-freezemtime",
+      "subject": "Uncommitted test-guards.ps1 patch (FreezeMtime, case 8c) - VERIFIED 31/0, commit it",
+      "classification": "infra",
+      "evidence": [
+        "The 23-line diff read in full: a FreezeMtime helper (restores a Backup()-registered files ORIGINAL mtime while keeping mutated bytes) plus one call in case 8c after the price mutation, plus comments. It is round 1s named remainder verbatim: the tile-integrity fixture mutates a PRICE inside product-urls.json, the write bumps the mtime, audit-tile-integrity HOLDS on name-drift-older-than-product-urls, and the case had never once armed (it exited 2 for the hold, not the planted disagreement). The scoping is correct: a price-only mutation leaves link identity untouched so name-drifts verdicts stay valid; a fixture that repoints a link at a DIFFERENT product must still hold. Backup() already registers mtime (line 43) and RestoreNow already restores it (line 115), so the helper composes with the shipped mechanism. Teammate d7 confirmed it did not write this file today; round 1s zero-uncommitted-ps1 claim was wrong and is corrected here.",
+        "VERIFIED EMPIRICALLY FROM THIS SEAT: run-test-guards-weekly.ps1 completed rc=0 at about 11:05 with 31 passed, 0 failed. Case 8c now PASSES asserting its OWN signature (PASS tile-integrity: a shipped link whose price disagrees with the tile, exit 2) - armed for the first time in its life - and the residue tripwire reports every mutated file restored byte-for-byte. Full output: reviewer scratchpad test-guards-verify3.txt.",
+        "TWO EARLIER ATTEMPTS ABORTED ON ENVIRONMENT, NOT THE PATCH, and the mechanism is worth recording: a concurrent session rebuilt the LIVE board at 10:29:59, leaving name-drift.json (09:05) older than the new comparison; the runners MIR copy inherited that ordering and guards inside the copy hard-failed on the tile-integrity HOLD (exactly the mtime-ordering condition round 1 documented on the live chain). Once the concurrent chain re-ran audit-name-drift at 10:33:38, the third run went clean. Lesson: the hermetic runner is only as quiet as the tree it copies."
+      ],
+      "surface_fix": {
+        "what": "commit the already-verified patch verbatim",
+        "files": [
+          "grocery/test-guards.ps1"
+        ],
+        "exact_change": "commit the working-tree hunks as they stand (FreezeMtime helper + case 8c call + comments). No edits. If the developer re-runs the suite first, the preconditions are: chain-idle prints FREE and out name-drift.json is newer than the newest comparison - both aborts came from violating those."
+      },
+      "root_cause": "The fixtures mutation defeats a staleness hold that was never meant for price-only edits; the patch is the minimal composition with the existing Backup/RestoreNow mtime machinery. It sat uncommitted because round 1 hit its ceiling before the 12-minute verification, and the verification then kept colliding with concurrent live rebuilds.",
+      "root_fix": null,
+      "root_fix_note": "surface_fix is the fix. The runner-vs-live-tree race is recorded above for a future item if it keeps biting; not worth code today.",
+      "blast_radius": {
+        "measured_as": "cases",
+        "measured_by": "the full hermetic suite run at 11:05: 31 passed 0 failed, case 8c arming with its own signature, residue tripwire clean",
+        "affected_now": 1,
+        "risk": "test-harness only; the one behavioral risk (masking a REAL staleness hold) is fenced by the helpers contract comment and the scoping to price-only mutations"
+      },
+      "proof": {
+        "guard_or_fixture": "run-test-guards-weekly.ps1 hermetic - ALREADY RUN, 31/0",
+        "must_fire_case": "case 8c exits 2 WITH signature LINKED tile(s) disagree - observed in the 11:05 run",
+        "clean_twin": "the suite ends 31/0 and the residue tripwire reports byte-for-byte restores - observed",
+        "commands": [
+          "powershell -File grocery\\chain-idle.ps1",
+          "powershell -File grocery\\run-test-guards-weekly.ps1"
+        ]
+      },
+      "rollback": "git checkout grocery/test-guards.ps1",
+      "do_not_touch": [
+        "audit-tile-integrity hold semantics",
+        "RestoreNow/Backup",
+        "any case expectation"
+      ],
+      "freshness": "verified at 11:05 against HEAD 037ef56b working tree; output frozen in the reviewer scratchpad (test-guards-verify3.txt)",
+      "resolution_note": "The uncommitted patch is round 1s own named remainder and it is now VERIFIED: hermetic suite 31 passed 0 failed, case 8c asserting its own tile-disagreement signature for the first time ever, residue tripwire clean. Commit it verbatim. Two earlier verification aborts were a concurrent sessions live rebuild arming the tile-integrity mtime hold inside the runners copy, not the patch.",
+      "publish_batch": 2,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "loose-end-e-frozen-fruit-chips",
+      "subject": "Three frozen-fruit chips link to a different product than they name, and the assigned owner cannot see two of them",
+      "classification": "infra",
+      "evidence": [
+        "THE THREE ARE LIVE RIGHT NOW, verified against product-urls.json vs the 09:01 board: Walmart cell = GV Whole Strawberries 64 oz (0.1472/oz) but chip = GV Cherry Berry Blend 48 oz $7.62 (0.1588, 7.9 percent off); Sams cell = MM Natural Sliced Strawberries 4 lbs (0.1247) but chip = MM Triple Berry Blend 64 oz $10.46 (0.1634, 31 percent off); Family Fare cell = OF Blueberries 40 Oz (0.2748) but chip = OF Cherry Berry Blend 16 Oz $5.49 (0.3431, 24.9 percent off).",
+        "THE ASSIGNED OWNER EXISTS AND RUNS DAILY - round 1s claim is half right: check-ad-cycles.ps1:983-1074 runs audit-board-consistency every publish and on breach chains resolve-ff-boardmatch, resolve-hyvee-links, merge, prune, sync-browser-links, relink-drifted-cells -Apply, audit-name-drift, overrides, guards, republish. BUT the breach trigger is priced at Tol 0.30, so the Walmart (7.9 percent) and FF (24.9 percent) chips can NEVER trip it; only Sams (31 percent) is borderline. Two of three are structurally invisible to the daily repair they were assigned to.",
+        "THE IDENTITY GUARD IS ALSO BLIND TO THEM, measured: audit-name-drift examined all 7 frozen-fruit cells today (examined_cells confirms) and flagged none of the three. Cause read from its source: the distinctive-token stop list (line 31) contains the fruit nouns themselves (strawberries, blueberries, chunks and more) plus whole/fresh/frozen, so GV Whole Strawberries reduces to brand and packaging tokens that the Cherry Berry link also carries; both sides are the same brand so brand-mismatch stays silent; both frozen so form-flip stays silent. A variety swap INSIDE a same-brand frozen-fruit commodity is invisible to every clause.",
+        "WHAT ELSE THAT MECHANISM PASSES: any same-brand wrong-variety link in a commodity whose product nouns are stopped (the stop list also carries apples, bananas, grapes, watermelon, corn, carrots, spinach, peas)."
+      ],
+      "surface_fix": {
+        "what": "re-point the three chips board-anchored and headless, in batch 1s link stage",
+        "files": [
+          "grocery/product-urls.json (via the committed resolvers, never by hand)"
+        ],
+        "exact_change": "during batch 1s rebuild, at the link stage: run relink-drifted-cells.ps1 -Apply and confirm from its output that it re-derives the Walmart, Sams AND Family Fare frozen-fruit pins to the products the board priced (Walmart/Sams carry item_id in their capture rows; FF re-points via resolve-ff-boardmatch). If its own drift gate skips the two inside-tolerance stores, use the same tools per-store invocation for those cells per its grouped-by-store design; verify all three chips name the cell product afterwards, then audit-name-drift, overrides, guards, publish as usual"
+      },
+      "root_cause": "Ownership was assigned on the price dimension (consistency repair, 30 percent tolerance) for a defect on the IDENTITY dimension, and the identity guard that should catch it (name-drift) stops the exact nouns that distinguish fruit varieties, so a same-brand variety swap has no watcher at all: not price-visible, not name-visible, only human-visible.",
+      "root_fix": {
+        "what": "give name-drift eyes inside stopped-noun commodities",
+        "files": [
+          "grocery/audit-name-drift.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "when the boards distinctive-token set for a cell is EMPTY after stop-word subtraction (the exact condition its 2026-07-30 fix already detects for the skip bug), fall back to comparing the RAW noun sets of both names with only LEXNOISE removed (not the food-noun stop list): disjoint noun sets = a name-drift flag. Must-fire fixture: the frozen real pair (GV Whole Strawberries board item vs GV Cherry Berry Blend link). Clean twin: an identical-name pair and a same-product reworded pair (GV Whole Strawberries Frozen vs Great Value Strawberries, Whole, Frozen) stay silent. Measure the flag-count delta over the full corpus before shipping and review every new flag by hand - this widens a REVIEW signal, not a hard gate."
+      },
+      "blast_radius": {
+        "measured_as": "links",
+        "measured_by": "product-urls.json vs comparison-2026-08-30 for all 7 frozen-fruit cells (3 mismatched, 4 correct); name-drift examined_cells and flags read directly; the consistency Tol arithmetic per chip",
+        "affected_now": 3,
+        "risk": "the re-point itself is the same board-anchored mechanism the chain already trusts; the name-drift widening can add review flags (bounded by hand-review before ship). Board prices do not move; only where See item opens."
+      },
+      "proof": {
+        "guard_or_fixture": "audit-name-drift must-fire fixture (frozen GV pair) in test-auditors + audit-board-consistency",
+        "must_fire_case": "the frozen strawberries-vs-cherry-berry pair flags name-drift",
+        "clean_twin": "the reworded same-product pair stays silent; post-repair all three live chips name the cells product and tile-integrity stays green",
+        "commands": [
+          "powershell -File grocery\\audit-name-drift.ps1",
+          "powershell -File grocery\\audit-board-consistency.ps1",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "product-urls.json is versioned; revert the pin changes and the name-drift hunk independently",
+      "do_not_touch": [
+        "the 0.30 consistency tolerance (correct for its price purpose; the gap was assigning identity work to it)",
+        "the stop list for its original cross-brand-equivalence purpose"
+      ],
+      "freshness": "chips read at about 10:30 against the 09:01 board and product-urls.json mtime 10:33 (the concurrent chains own link pass did NOT fix them, confirming the invisibility); re-read all three before repairing in case a later pass moved them",
+      "resolution_note": "Round 1s assignment was unsafe: the daily consistency repair exists and runs, but its 30 percent price tolerance can never see two of the three wrong-product chips, and name-drift stops the very nouns (strawberries, blueberries) that distinguish them - so the three were live and unowned. Re-pointed board-anchored via the committed resolvers in batch 1, and name-drift gains a raw-noun fallback for empty-token cells with the real pair frozen as its must-fire.",
+      "publish_batch": 1,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "PRE-FLIGHT 1: chain-idle.ps1 must print FREE and no zz*-file in out may be younger than 30 minutes (a concurrent session was A/B-probing the live tree at 10:16-10:29 and ran a LIVE rebuild at 10:29:59). If its work is done, delete the leftover zzbase-*/zzcand-*/zzcand2-* files (stray-board class; verified today they do not match the guards comparison-*/price-table-*/flagged-* globs, so hygiene, not emergency).",
+    "PRE-FLIGHT 2: guards.ps1 must be green before any edit (it was hard=0 warn=24 at 10:12; if tile-integrity holds on the name-drift mtime ordering, run audit-name-drift AFTER prune-bad-links per the standard chain order and re-check). Pin the CURRENT board generation; if it is not the 09:01:30 build, re-verify the artifacts predicted cells against it before shipping (walmart-regular-2026-08-30 and fareway-deals-2026-08-30 will be in the union; avocado-oil and peanut-oil Walmart are the likeliest to move).",
+    "BATCH 1 EDITS (one rebuild, one publish): commodities.json (five fl_oz to floz unit fields, saffron gram to oz, pistachios three exclusions) + known-wrong.json (ADD Sams MM Peanut Oil 35 lbs with the derived-size reason; ADD FF Blue Bunny Premium Pistachio Almond; RETIRE the Las Palmas red and Progresso Minestrone entries per Brads reversal) + category-excludes.json (blue bunny brand token, ice-cream categories exempt, per that files own scoping rule) + the aisle maps (alcohol category allows beer_wine_spirits; spice-rack/vienna/parmesan aisle allows) + compare-deals load-time unit validation with the frozen exception list (aluminum-foil) + the test-auditors unit-vocabulary static check and food-category fixtures.",
+    "compare-deals.ps1 -SelfTest (0) and test-auditors.ps1 (0, including the new must-fire fixtures against frozen pre-fix fragments).",
+    "Rebuild via the standard chain (compare-deals -MinStores 1 -IdentityNamespace staple -BakersFile newest -FarewayFile newest). audit-food-category (0). audit-match-soundness: review EVERY line - expected and explained: 4 pistachio-pool releases, 2 ruling re-admissions changing nothing, 6 commodities gaining first rows; then -Accept. NO blanket accept; a saffron sanity flag at 966.33/oz is real-economics and gets ruled, never banded away.",
+    "LINK STAGE inside the same chain: relink-drifted-cells -Apply covering the three frozen-fruit chips (item loose-end-e; verify all three name the cell product), then prune-bad-links -Tol 0.32, sync-browser-links, audit-name-drift (AFTER link work, so tile-integrity cannot hold), generate-board-overrides.",
+    "guards.ps1 MUST exit 0. audit-basis-reconcile + audit-pack-basis + audit-capture-eviction (expect 0 findings; the 12 new cells are all created, not evictions).",
+    "VERIFY PREDICTED CELLS on the rebuilt board BEFORE publish: coconut-aminos Bakers about 0.799 crown, avocado-oil Sams about 0.3965 (nomem Walmart about 0.4112), peanut-oil crown Walmart about 0.1223 with NO Sams cell, saffron Bakers about 966.33, pistachios FF about 0.4698 with crown Sams about 0.3538, enchilada-sauce and vegetable-soup unchanged, aluminum-foil still absent.",
+    "publish-deals-page.ps1, test-auditors.ps1 (0), verify the coconut-aminos Bakers cell on the LIVE board with a cache-busting query parameter (30-minute edge cache).",
+    "Commit batch 1 + this plan + plan-2026-08-30-2.routing.json, push (the push is the deploy).",
+    "BATCH 2 (no board rebuild): audit-row-age window-dated fix + fixtures + ONE -Baseline re-record (item fec3dc); capture-watchdog 6b cadence-band fix + completed-flag pruning + fixtures (item 40c75d); Family Fare per-run term cap at 20 (item 7adf1c); SKILL.md work item F + order-of-work 3 in BOTH copies, byte-identical (item ca099c); the name-drift raw-noun fallback + frozen GV fixture pair (item loose-end-e root fix); commit the VERIFIED test-guards FreezeMtime patch verbatim (item tree-c, already proven 31/0 at 11:05).",
+    "Run the batch-2 verifiers: audit-row-age (0 hard), capture-watchdog (ok lines only for todays shape), pull-regular-familyfare -SelfTest (0), test-auditors (0). Commit batch 2, push.",
+    "Close the queue: 2026-08-30-7adf1c, 2611d3, fec3dc, 40c75d with their resolution_notes; close 2026-08-22-51a5b6 (bounce resolved), ca099c (and its 57b569 needs-brad notification, superseded by the scope fix), c41c27 (and fb0ab4, un-parked per Brads answer). Leave brad-b3 (wine formats) and the aluminum-foil basis question parked in open_questions - two rounds are up, so they are needs-brad by rule."
+  ],
+  "open_questions_for_brad": [
+    "WINE FORMATS BEYOND 1.5L (item brad-b3): your 1.5L answer is implemented, but the exclusion also blinds 1L bottles and 3L/4L/5L boxes (rows and prices in the plan artifact). Boxed wine is the cheapest per fl oz in the data: Franzia 5L would take BOTH wine crowns (white 0.1571 to 0.0945, red 0.2358 to 0.0797). Should box formats count as the same commodity, count as a separate box-wine commodity, or stay invisible? One-hunk change whichever way.",
+    "ALUMINUM FOIL BASIS (item 51a5b6): the engine cannot express sq ft, so the commodity has never held a cell. Measured options: (a) per-roll pricing publishes a WRONG verdict (a $1.79 / 25 sq ft roll beats a $12.20 / 223 sq ft roll that is actually cheaper per sq ft) - rejected; (b) a sq-ft engine arm prices only 2 of 6 captured rows today (most stores omit the footage from the size field); (c) retire the commodity. It stays off the board and in the unit-checks documented-exception list until you pick.",
+    "SAFFRON DISPLAY (FYI, shipping unless you object): saffron now prices at Bakers $966.33 per OUNCE (Spice Islands 0.03 oz jar at $28.99, real arithmetic, saffron really costs that). Per-gram ($34.08/g) would read more naturally but needs a small engine addition; say the word and it becomes a follow-up."
+  ]
+}

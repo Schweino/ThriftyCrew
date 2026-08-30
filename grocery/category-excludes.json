@@ -1,5 +1,5 @@
 {
-  "note": "THE category-exclude LIBRARY - single source of truth for wrong-class product tokens. Three consumers: (1) audit-food-category.ps1 (blocking guard: a food commodity matched to one of these classes hard-fails the publish), (2) apply-category-excludes.ps1 (bakes these patterns into every commodity's exclude list by category, so NEW commodities are born with the guardrails), (3) build-vet-sheet.ps1 (flags them for batch review). Born from the 2026-07-14 blueberries-as-Bai-beverage live mispricing. RULE FOR ADDING PATTERNS: a token belongs here ONLY if it is wrong for EVERY commodity in the scoped categories (after exempt); anything item-specific stays in that commodity's own exclude list.",
+  "note": "THE category-exclude LIBRARY - single source of truth for wrong-class product tokens. Three consumers: (1) audit-food-category.ps1 (blocking guard: a food commodity matched to one of these classes hard-fails the publish), (2) apply-category-excludes.ps1 (bakes these patterns into every commodity's exclude list by category, so NEW commodities are born with the guardrails), (3) build-vet-sheet.ps1 (flags them for batch review). Born from the 2026-07-14 blueberries-as-Bai-beverage live mispricing. RULE FOR ADDING PATTERNS: a token belongs here ONLY if it is wrong for EVERY commodity in the scoped categories (after exempt); anything item-specific stays in that commodity's own exclude list. frozen_dessert_brand (2026-08-30, queue 2026-08-30-2611d3) is the first BRAND class: Blue Bunny crowned Family Fare pistachios at $0.1248/oz with a 48 oz tub of ice cream, and every type-word fence missed it because the retail name carries only BRAND + FLAVOR (no ice cream, no dessert, no frozen). A brand token only belongs here when every product the brand sells is the wrong class: all 40 Blue Bunny strings in out/ are frozen desserts, and the exempt regex carries the commodities a Blue Bunny product legitimately IS.",
   "classes": {
     "beverage": [
       "beverage",
@@ -223,6 +223,9 @@
     "imitation_carrier": [
       "\\bimitation\\b",
       "\\bartificially\\s+flavou?red\\b"
+    ],
+    "frozen_dessert_brand": [
+      "\\bblue\\s+bunny\\b"
     ]
   },
   "apply": [
@@ -239,7 +242,8 @@
         "snack_carrier",
         "supplement",
         "preserve_carrier",
-        "alcohol"
+        "alcohol",
+        "frozen_dessert_brand"
       ]
     },
     {
@@ -252,7 +256,8 @@
         "supplement",
         "snack_carrier",
         "prepared_meal_carrier",
-        "alcohol"
+        "alcohol",
+        "frozen_dessert_brand"
       ]
     },
     {
@@ -263,7 +268,8 @@
         "household",
         "supplement",
         "alcohol",
-        "imitation_carrier"
+        "imitation_carrier",
+        "frozen_dessert_brand"
       ]
     },
     {
@@ -288,7 +294,8 @@
     "dried_carrier": "sun[\\s-]?dried",
     "prepared_meal_carrier": "",
     "alcohol": "wine|beer|brandy|liquor|liqueur|cooking\\s+wine|mirin|vodka|whiskey|rum",
-    "imitation_carrier": ""
+    "imitation_carrier": "",
+    "frozen_dessert_brand": "^(?:ice-cream|popsicles|frozen-yogurt|sherbet|sorbet|gelato|ice-cream-bars|frozen-dessert)$"
   },
   "universal_for_unknown": [
     "babyfood",

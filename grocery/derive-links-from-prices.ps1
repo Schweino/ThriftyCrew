@@ -95,6 +95,25 @@ function Get-StoreFiles([string]$store) {
       $f = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Desc | Select-Object -First 1
       if ($f) { $files += $f.FullName }
     }
+    'Walmart' {
+      # THE SAME TWO-PIPELINE BUG AS SAM'S, one store later (2026-08-30, queue loose-end-e). Walmart's
+      # board is a UNION too: compare-deals ingests every walmart-regular-*.json inside the union window
+      # because the daily rotation only re-prices a couple of dozen terms, so most Walmart cells are
+      # priced from an older comprehensive capture. Indexing only the newest file left 485 of Walmart's
+      # priced cells reading as "board cell has no matching row" - their identity was on disk the whole
+      # time and thrown away, so relink-drifted-cells could REPORT their drift forever and never repair
+      # it. That is how the frozen-fruit Walmart chip sat pointing at Great Value Cherry Berry Blend
+      # while the cell priced Great Value Whole Strawberries: reported daily, repairable never.
+      # Newest first, because first writer wins per name|size key - a fresher capture's row beats an
+      # older one, and the write-time re-pricing check still refuses any row whose per-unit disagrees
+      # with the board by more than the pruner's tolerance.
+      foreach ($f in (Get-ChildItem (Join-Path $OutDir 'regular\walmart-regular-*.json') -EA SilentlyContinue |
+          Where-Object { $_.BaseName -match '-(\d{4}-\d{2}-\d{2})$' } | Sort-Object Name -Descending)) {
+        if ($f.BaseName -notmatch '(\d{4}-\d{2}-\d{2})$') { continue }
+        if ([math]::Abs(([datetime]$Matches[1] - (Get-Date)).TotalDays) -gt $UNION_DAYS) { continue }
+        $files += $f.FullName
+      }
+    }
     default { if ($reg) { $files += $reg.FullName } }
   }
   return $files

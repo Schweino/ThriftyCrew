@@ -138,7 +138,14 @@
                                                          }
                                          },
                   "achiote-paste":  {
-                                        "commodity":  "Achiote Paste"
+                                        "commodity":  "Achiote Paste",
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/44014301",
+                                                        "name":  "Chef Merito Achiote Condimentado Spiced Annatto Seed Paste, 3.5 oz, (Pack of 12)",
+                                                        "price":  "$16.24",
+                                                        "size":  "42 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "acorn-squash":  {
                                        "commodity":  "Acorn Squash",
@@ -240,19 +247,19 @@
                                                                 "size":  "32.4 oz",
                                                                 "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
                                                             },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/18108374438",
-                                                        "name":  "Glade® Soft Mist Odor Fighting Aerosol Air Freshener, Citrus Sunrise, 7.3oz, 1 Count",
-                                                        "price":  "$1.48",
-                                                        "size":  "7.3 oz",
-                                                        "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
-                                                    },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91493120-lavender-air-fresheners-73-oz",
                                                         "name":  "Glade Lavender Air Freshener",
                                                         "price":  "$1.48",
                                                         "size":  "7.3 oz",
                                                         "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/18155070209",
+                                                        "name":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Clean Linen, 7.3oz, 1 Count",
+                                                        "price":  "$1.48",
+                                                        "size":  "7.3 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "alfredo-sauce":  {
@@ -414,7 +421,14 @@
                                                            "name":  "Blue Diamond Finely Sifted Almond Flour 16 Oz",
                                                            "price":  "$9.99",
                                                            "size":  "16 oz"
-                                                       }
+                                                       },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/500037307",
+                                                       "name":  "Nature’s Eats Premium Blanched Almond Flour for Baking, Keto \u0026 Paleo Friendly, Gluten-Free, Non-GMO, Kosher Certified, 4 lb Bag",
+                                                       "price":  "$21.97",
+                                                       "size":  "64 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "almond-milk":  {
                                       "commodity":  "almond-milk",
@@ -462,11 +476,11 @@
                                                               "board_pu":  0.0582
                                                           },
                                       "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/5326649789",
-                                                      "name":  "bettergoods Plant-Based Unsweetened Original Almond Milk, Half Gallon",
+                                                      "url":  "https://www.walmart.com/ip/5448372432",
+                                                      "name":  "bettergoods Unsweetened Vanilla Almond Milk, Half Gallon",
                                                       "price":  "$2.54",
                                                       "size":  "63.5 fl oz",
-                                                      "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "almonds":  {
@@ -964,19 +978,19 @@
                                        },
                   "artichokes":  {
                                      "commodity":  "Artichokes (fresh, whole)",
-                                     "Baker\u0027s":  {
-                                                          "url":  "https://www.bakersplus.com/p/artichokes-hrts-8-10-ct-6-14-oz-case-kroger-each-/0001111090678",
-                                                          "name":  "ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)",
-                                                          "price":  3.59,
-                                                          "size":  "10 pk 1.4 oz",
-                                                          "verified":  "2026-08-23"
-                                                      },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3258106-artichoke-each",
                                                      "price":  3.99,
                                                      "size":  "each",
                                                      "name":  "Artichoke"
-                                                 }
+                                                 },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/artichoke/0000000004762",
+                                                          "name":  "Artichoke",
+                                                          "price":  "$3.49",
+                                                          "size":  "1 ct",
+                                                          "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                      }
                                  },
                   "arugula":  {
                                   "commodity":  "Arugula",
@@ -1098,7 +1112,35 @@
                                                       "price":  18.99,
                                                       "size":  "27 fl oz",
                                                       "name":  "Chosen Foods 100% Pure Avocado Oil, Squeeze Bottle"
-                                                  }
+                                                  },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/17173660883",
+                                                              "name":  "Member\u0027s Mark Avocado Oil in Plastic Bottle, 34 fl. oz.",
+                                                              "price":  "$13.98",
+                                                              "size":  "34 fl oz",
+                                                              "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                          },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/our_family_100_pure_avocado_oil_20_96_fl_oz/p/1764405684715844652",
+                                                          "name":  "Our Family 100% Pure Avocado Oil 20.96 Fl Oz",
+                                                          "price":  "$13.99",
+                                                          "size":  "20.96 fl oz",
+                                                          "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                      },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/55504313",
+                                                      "name":  "Tropical Plantation Avocado Oil, 51 Fl oz",
+                                                      "price":  "$20.97",
+                                                      "size":  "51 fl oz",
+                                                      "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                  },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/private-selection-avocado-oil/0001111012325",
+                                                           "price":  "29.99",
+                                                           "size":  "67.6 fl oz",
+                                                           "name":  "Private Selection Avocado Oil",
+                                                           "verified":  "2026-08-30 price-pull self-capture"
+                                                       }
                                   },
                   "avocados":  {
                                    "commodity":  "Avocados",
@@ -1314,6 +1356,13 @@
                                                         "price":  "$2.99",
                                                         "size":  "3 lb",
                                                         "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Tasteful-Selections-Honey-Gold-2-Bite-Baby-Potatoes-24oz/44391123",
+                                                        "name":  "Fresh Yellow Petite Potatoes, 1.5 lb Bag",
+                                                        "price":  "$3.78",
+                                                        "size":  "24 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "baby-wipes":  {
@@ -1414,7 +1463,14 @@
                                                   "price":  "$1.95",
                                                   "size":  "2.5 oz",
                                                   "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/10292741",
+                                                     "name":  "Oscar Mayer Real Bacon Bits, 3 oz Bag, 0.5-1 cup",
+                                                     "price":  "$3.48",
+                                                     "size":  "3 oz",
+                                                     "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "bagels":  {
                                  "commodity":  "bagels",
@@ -1867,7 +1923,14 @@
                                                              "size":  "2 oz",
                                                              "name":  "Member\u0027s Mark Whole Bay Leaves, 2 oz.",
                                                              "board_pu":  4.27
-                                                         }
+                                                         },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/30919180",
+                                                     "name":  "El Guapo Mexican Bay Leaves, 0.5 oz Bag",
+                                                     "price":  "$1.63",
+                                                     "size":  "0.5 oz",
+                                                     "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "bbq-sauce":  {
                                     "commodity":  "bbq-sauce",
@@ -2187,7 +2250,14 @@
                                                    }
                                    },
                   "berbere-seasoning":  {
-                                            "commodity":  "Berbere Seasoning"
+                                            "commodity":  "Berbere Seasoning",
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/501586036",
+                                                            "name":  "Spice Hut - Ethiopian BerBere, Organic, with Salt, - Vegan, Gluten-Free - 4oz Glass Jar",
+                                                            "price":  "$12.49",
+                                                            "size":  "4 oz",
+                                                            "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                        }
                                         },
                   "blackberries":  {
                                        "commodity":  "blackberries",
@@ -2679,11 +2749,11 @@
                                                           "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                       },
                                            "Walmart":  {
-                                                           "url":  "https://www.walmart.com/ip/Great-Value-Lemon-Pepper-Marinade-12-25-fl-oz/16940528",
-                                                           "name":  "Great Value Lemon Pepper Marinade, 12.25 fl oz",
+                                                           "url":  "https://www.walmart.com/ip/Great-Value-Caribbean-Style-Jerk-Marinade-12-25-fl-oz/16940529",
+                                                           "name":  "Great Value Caribbean-Style Jerk Marinade, 12.25 fl oz",
                                                            "price":  "$2.12",
                                                            "size":  "12.25 fl oz",
-                                                           "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                           "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                        }
                                        },
                   "bottled-water":  {
@@ -2789,11 +2859,11 @@
                                                  "name":  "Christian Brothers VS Brandy"
                                              },
                                  "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/119925337",
-                                                 "name":  "Korbel California Brandy, 1.75 L Bottle, 80 Proof",
-                                                 "price":  "$19.48",
+                                                 "url":  "https://www.walmart.com/ip/116999744",
+                                                 "name":  "Christian Brothers Vs Grape Brandy, 1.75 L Bottle, 40% ABV",
+                                                 "price":  "$20.88",
                                                  "size":  "59.175 fl oz",
-                                                 "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
+                                                 "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                              }
                              },
                   "bratwurst":  {
@@ -3172,6 +3242,13 @@
                                                         "name":  "Brown\u0027s Best Lentils",
                                                         "price":  "$1.99",
                                                         "size":  "16 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/1805883310",
+                                                        "name":  "(6 pack) Hurst\u0027s Brand Dried Lentils, 16 oz",
+                                                        "price":  "$6.00",
+                                                        "size":  "96 oz",
                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
@@ -5869,7 +5946,14 @@
                                                                  "price":  "$0.98",
                                                                  "size":  "lb",
                                                                  "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
-                                                             }
+                                                             },
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/Chicken-Drumsticks-10-lb/14806857519",
+                                                         "name":  "Tyson Fresh Chicken Drumstick, 10 lb Bag",
+                                                         "price":  "$9.84",
+                                                         "size":  "10 lb",
+                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                     }
                                      },
                   "chicken-wings":  {
                                         "commodity":  "chicken-wings",
@@ -6705,7 +6789,14 @@
                                                       "price":  "$13.63",
                                                       "size":  "56 fl oz",
                                                       "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/17239000531",
+                                                              "name":  "Carrington Farms Refined Coconut Oil, 128 fl. oz.",
+                                                              "price":  "$24.98",
+                                                              "size":  "128 fl oz",
+                                                              "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                          }
                                   },
                   "cod":  {
                               "commodity":  "cod",
@@ -7191,17 +7282,17 @@
                                                                 "name":  "PAM Original Cooking Spray, 12 oz., 2 pk.",
                                                                 "board_pu":  0.3117
                                                             },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Great-Value-Original-Cooking-Spray-8-ounces/10315267",
-                                                        "name":  "Great Value Original Cooking Spray, 8 oz",
-                                                        "price":  "$2.52",
-                                                        "size":  "8 oz",
-                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71771-parkay-buttery-spray-8-oz",
                                                         "name":  "Parkay Vegetable Oil Spray",
                                                         "price":  "$3.49",
+                                                        "size":  "8 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Butter-Cooking-Spray-8-ounces/10315268",
+                                                        "name":  "Great Value Butter Cooking Spray, 8 oz",
+                                                        "price":  "$2.52",
                                                         "size":  "8 oz",
                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                     }
@@ -8193,7 +8284,14 @@
                                                                "size":  "18 oz",
                                                                "name":  "Member\u0027s Mark Salt-Free Curry Powder, 18 oz.",
                                                                "board_pu":  0.4989
-                                                           }
+                                                           },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/43442623",
+                                                       "name":  "Badia Curry Powder, 16 Oz",
+                                                       "price":  "$14.63",
+                                                       "size":  "16 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "deli-ham":  {
                                    "commodity":  "deli-ham",
@@ -8967,7 +9065,14 @@
                                                               "size":  "6.25 oz",
                                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
                                                               "board_pu":  1.0624
-                                                          }
+                                                          },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/Great-Value-Kosher-Basil-Leaves-0-8-oz/330313658",
+                                                      "name":  "Great Value Basil Leaves, 0.8 oz",
+                                                      "price":  "$1.08",
+                                                      "size":  "0.8 oz",
+                                                      "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "dried-cranberries":  {
                                             "commodity":  "Dried Cranberries",
@@ -9044,7 +9149,14 @@
                                                     "size":  "0.75 oz",
                                                     "name":  "Hy-Vee Dill Weed",
                                                     "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                }
+                                                },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/Great-Value-Dill-Weed-0-75-oz/929950821",
+                                                     "name":  "Great Value Dill Weed, 0.75 oz",
+                                                     "price":  "$2.22",
+                                                     "size":  "0.75 oz",
+                                                     "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "dried-guajillo-chiles":  {
                                                 "commodity":  "Dried Guajillo Chiles",
@@ -9109,7 +9221,14 @@
                                                                 "size":  "5.5 oz",
                                                                 "name":  "Member\u0027s Mark Oregano, 5.5 oz.",
                                                                 "board_pu":  1.0873
-                                                            }
+                                                            },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Oregano-Leaves-0-87-oz/631368530",
+                                                        "name":  "Great Value Oregano Leaves, 0.87 oz",
+                                                        "price":  "$1.08",
+                                                        "size":  "0.87 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "dried-parsley":  {
                                         "commodity":  "Dried Parsley",
@@ -9157,7 +9276,14 @@
                                                                 "size":  "3.2 oz",
                                                                 "name":  "Member\u0027s Mark Parsley Flakes, 3.2 oz",
                                                                 "board_pu":  2.0125
-                                                            }
+                                                            },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Parsley-Flakes-2-7-oz/46536677",
+                                                        "name":  "Great Value Parsley Flakes, 2.7 oz",
+                                                        "price":  "$6.12",
+                                                        "size":  "2.7 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "dried-rosemary":  {
                                          "commodity":  "Dried Rosemary",
@@ -9459,11 +9585,11 @@
                                                          "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                      },
                                           "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Las-Palmas-Medium-Green-Chile-Enchilada-Sauce-Kosher-28-oz-Can/10535233",
-                                                          "name":  "Las Palmas Medium Green Chile Enchilada Sauce, 28 oz",
+                                                          "url":  "https://www.walmart.com/ip/Las-Palmas-Medium-Red-Chile-Sauce-28-oz-Can/10535232",
+                                                          "name":  "Las Palmas Medium Red Chile Sauce, 28 oz",
                                                           "price":  "$2.97",
                                                           "size":  "28 oz",
-                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "energy-drinks":  {
@@ -9509,6 +9635,13 @@
                                                         "price":  "$18.88",
                                                         "size":  "144 fl oz",
                                                         "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/15229201541",
+                                                        "name":  "(2 pack) V8 Energy Orange Pineapple Energy Drink, 8 fl oz Can (24 Pack)",
+                                                        "price":  "$17.95",
+                                                        "size":  "192 fl oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "english-muffins":  {
@@ -10016,7 +10149,14 @@
                                                            "size":  "1.75 oz",
                                                            "name":  "McCormick Gourmet Chinese Five Spice Blend, 1.75 oz",
                                                            "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                       }
+                                                       },
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/39340086",
+                                                            "name":  "McCormick Gourmet Kosher Chinese Five Spice Blend, 1.75 oz Bottle",
+                                                            "price":  "$8.32",
+                                                            "size":  "1.75 oz",
+                                                            "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                        }
                                         },
                   "floor-cleaner":  {
                                         "commodity":  "Floor Cleaner",
@@ -10966,14 +11106,6 @@
                                                             "verified":  "2026-08-23",
                                                             "board_pu":  0.1561
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_fruit/our_family_cherry_berry_blend_fresh_frozen_16_oz/p/1564405684704732715",
-                                                           "name":  "Our Family Cherry Berry Blend, Fresh Frozen 16 Oz",
-                                                           "price":  "$5.49",
-                                                           "size":  "16 oz",
-                                                           "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
-                                                           "board_pu":  0.3306
-                                                       },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24271686-fareway-strawberries-whole-unsweetened-16-oz",
                                                        "price":  4.49,
@@ -10988,18 +11120,25 @@
                                                       "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                   },
                                        "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/13592517231",
-                                                               "price":  10.46,
-                                                               "size":  "64 oz",
-                                                               "name":  "Member\u0027s Mark Triple Berry Blend, Frozen, 64 oz.",
-                                                               "board_pu":  0.1634
+                                                               "url":  "https://www.samsclub.com/ip/13585700210",
+                                                               "name":  "Member\u0027s Mark Natural Sliced Strawberries, Frozen, 4 lbs.",
+                                                               "price":  "$7.98",
+                                                               "size":  "4 lb",
+                                                               "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                            },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_fruit/our_family_blueberries_fresh_frozen_40_oz/p/1564405684702407372",
+                                                           "name":  "Our Family Blueberries, Fresh Frozen 40 Oz",
+                                                           "price":  "$10.99",
+                                                           "size":  "40 oz",
+                                                           "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                       },
                                        "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/Great-Value-Cherry-Berry-Blend-Frozen-48-oz-in-Resealable-Bag/46491742",
-                                                       "name":  "Great Value Cherry Berry Blend, 48 oz (Frozen) in Resealable Bag",
-                                                       "price":  "$7.62",
-                                                       "size":  "48 oz",
-                                                       "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                       "url":  "https://www.walmart.com/ip/Great-Value-Whole-Strawberries-64-oz-Frozen/44389039",
+                                                       "name":  "Great Value Whole Strawberries, 64 oz (Frozen)",
+                                                       "price":  "$9.42",
+                                                       "size":  "64 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "frozen-green-beans":  {
@@ -11565,7 +11704,14 @@
                                                       "size":  "1.7 oz",
                                                       "name":  "McCormick Gourmet Garam Masala Blend",
                                                       "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/758855533",
+                                                       "name":  "24 Mantra Organic Garam Masala",
+                                                       "price":  "$16.43",
+                                                       "size":  "10.018 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "garden-salad":  {
                                        "commodity":  "Garden Salad Blend (bagged)",
@@ -11592,11 +11738,11 @@
                                                                "board_pu":  0.0831
                                                            },
                                        "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/13893730",
-                                                       "name":  "Marketside Classic Iceberg Salad, 24 oz Bag (Fresh)",
-                                                       "price":  "$3.78",
-                                                       "size":  "24 oz",
-                                                       "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
+                                                       "url":  "https://www.walmart.com/ip/13893729",
+                                                       "name":  "Marketside Classic Iceberg Salad, 12 oz Bag (Fresh)",
+                                                       "price":  "$2.32",
+                                                       "size":  "12 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "garlic":  {
@@ -12697,11 +12843,11 @@
                                                                    "board_pu":  4.77
                                                                },
                                            "Walmart":  {
-                                                           "url":  "https://www.walmart.com/ip/80-Lean-20-Fat-Ground-Beef-Chuck-10-lb-Roll-Fresh-All-Natural/529026908",
+                                                           "url":  "https://www.walmart.com/ip/529026908",
                                                            "name":  "80% Lean / 20% Fat Ground Beef Chuck, 10 lb Roll, Fresh, All Natural",
                                                            "price":  "$49.43",
                                                            "size":  "10 lb",
-                                                           "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                           "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                        }
                                        },
                   "ground-beef-9010":  {
@@ -12882,7 +13028,14 @@
                                                           "size":  "0.5 oz",
                                                           "name":  "Hy-Vee Coriander Seed",
                                                           "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                      }
+                                                      },
+                                           "Walmart":  {
+                                                           "url":  "https://www.walmart.com/ip/15648372044",
+                                                           "name":  "(2 pack) 24 Mantra Organic Coriander Powder, 8 Oz",
+                                                           "price":  "$13.86",
+                                                           "size":  "16 oz",
+                                                           "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                       }
                                        },
                   "ground-cumin":  {
                                        "commodity":  "Ground Cumin",
@@ -12931,7 +13084,14 @@
                                                                "size":  "16 oz",
                                                                "name":  "Member\u0027s Mark Ground Cumin, 16 oz.",
                                                                "board_pu":  0.5612
-                                                           }
+                                                           },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Great-Value-Ground-Cumin-2-5-oz/985501095",
+                                                       "name":  "Great Value Ground Cumin, 2.5 oz",
+                                                       "price":  "$1.37",
+                                                       "size":  "2.5 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "ground-fennel":  {
                                         "commodity":  "Fennel Seed / Ground Fennel",
@@ -13009,7 +13169,14 @@
                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
                                                                 "board_pu":  0.7971,
                                                                 "recipe_pu":  0.7971
-                                                            }
+                                                            },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/40166857",
+                                                        "name":  "Badia Spices Ground Ginger 12 OZ",
+                                                        "price":  "$14.99",
+                                                        "size":  "12 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "ground-nutmeg":  {
                                         "commodity":  "Nutmeg (ground)",
@@ -13204,7 +13371,14 @@
                                                                   "size":  "20 oz",
                                                                   "name":  "Member\u0027s Mark Ground Turmeric, 20 oz.",
                                                                   "board_pu":  0.399
-                                                              }
+                                                              },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/340917831",
+                                                          "name":  "Badia Ground Turmeric, 16 oz",
+                                                          "price":  "$11.34",
+                                                          "size":  "16 oz",
+                                                          "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "habanero-peppers":  {
                                            "commodity":  "Habanero Peppers",
@@ -13431,7 +13605,14 @@
                                                        "size":  "1.9 oz",
                                                        "name":  "Morton \u0026 Bassett Harissa",
                                                        "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                   }
+                                                   },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/629041945",
+                                                        "name":  "(12 pack) Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz",
+                                                        "price":  "$59.76",
+                                                        "size":  "120 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "hash-browns":  {
                                       "commodity":  "hash-browns",
@@ -14267,7 +14448,14 @@
                                                 "size":  "8 oz",
                                                 "name":  "Hy-Vee Roasted Red Pepper Hummus",
                                                 "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                            }
+                                            },
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Marketside-Sweet-Chili-Garlic-Hummus-10-oz-Ready-to-Eat-Resealable-Cup-2Tbsp-28g-Servings/13404213113",
+                                                 "name":  "Marketside Sweet Chili Garlic Hummus 10 oz, Ready to Eat, Resealable Cup, 2Tbsp. (28g) Servings",
+                                                 "price":  "$2.87",
+                                                 "size":  "10 oz",
+                                                 "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                             }
                              },
                   "ice-cream":  {
                                     "commodity":  "ice-cream",
@@ -17272,20 +17460,20 @@
                                                                "name":  "Sprayway Industrial Strength Oven Cleaner 20 oz., 6 pk.",
                                                                "board_pu":  0.2498
                                                            },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/3611795857",
-                                                       "name":  "Great Value Oven Cleaner Heavy Duty, 16 oz",
-                                                       "price":  "$4.47",
-                                                       "size":  "16 oz",
-                                                       "verified":  "2026-08-11 DERIVED from the price row (same record the board priced)"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/338640/easy-off-fume-free-lemon-scent-oven-cleaner-spray-14-5-oz",
                                                       "name":  "Easy-Off Fume Free Lemon Scent Oven Cleaner Spray 14.5 oz",
                                                       "price":  "$5.99",
                                                       "size":  "14.5 oz",
                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/2254443387",
+                                                       "name":  "Great Value Fume-Free Oven Cleaner Foam, Lemon Scent, Grease Remover, 16 oz",
+                                                       "price":  "$4.47",
+                                                       "size":  "16 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "oyster-sauce":  {
                                        "commodity":  "Oyster Sauce",
@@ -17786,19 +17974,19 @@
                                                         "name":  "Member\u0027s Mark Spaghetti Pasta Pantry Pack, 1 lb., 6 pk.",
                                                         "board_pu":  0.0571
                                                     },
-                                "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/Great-Value-Penne-32-oz/5144705712",
-                                                "name":  "Great Value Penne, 32 oz (Shelf Stable)",
-                                                "price":  "$1.94",
-                                                "size":  "32 oz",
-                                                "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                            },
                                 "Fareway":  {
                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25096494-fareway-whole-wheat-macaroni-product-thin-spaghetti-16-oz",
                                                 "name":  "Fareway Whole Wheat Thin Spaghetti",
                                                 "price":  "$0.99",
                                                 "size":  "16 oz",
                                                 "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                            },
+                                "Walmart":  {
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Spaghetti-32-oz/10534105",
+                                                "name":  "Great Value Spaghetti, 32 oz",
+                                                "price":  "$1.94",
+                                                "size":  "32 oz",
+                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                             }
                             },
                   "pasta-sauce":  {
@@ -18477,10 +18665,10 @@
                                                      "verified":  "2026-08-14 DERIVED from the price row (same record the board priced)"
                                                  },
                                      "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/freezer/sweet_stuff/premium_ice_cream/blue_bunny_premium_pistachio_almond_48_oz/p/6982707",
-                                                         "name":  "Blue Bunny Premium Pistachio Almond 48 Oz",
+                                                         "url":  "https://www.shopfamilyfare.com/shop/dairy/ready_to_eat/heat_serve/planters_dry_roasted_pistachios_12_75_oz/p/2399948",
+                                                         "name":  "Planters Dry Roasted Pistachios 12.75 Oz",
                                                          "price":  "$5.99",
-                                                         "size":  "48 oz",
+                                                         "size":  "12.75 oz",
                                                          "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                      }
                                  },
@@ -18972,11 +19160,11 @@
                                                                 "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                             },
                                         "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Prairie-Fresh-Natural-Fresh-Pork-Shoulder-Butt-Roast-Bone-in-6-4-10-5-lb-21g-of-Protein-per-4oz-Serving/865961246",
-                                                        "name":  "Prairie Fresh Natural Fresh Pork Shoulder Butt Roast, Bone-in, 6.4- 10.8 lb, 21g of protein per 4oz serving",
-                                                        "price":  "$19.49",
-                                                        "size":  "8.701 lb",
-                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                        "url":  "https://www.walmart.com/ip/Prairie-Fresh-Natural-Fresh-Pork-Picnic-Roast-Bone-in-6-0-11-0-lb-21g-of-Protein-per-4oz-Serving/368819290",
+                                                        "name":  "Prairie Fresh Natural Fresh Pork Picnic Roast, Bone-in, 6.0- 12.0 lb, 21g of Protein per 4oz Serving",
+                                                        "price":  "$23.30",
+                                                        "size":  "10.402 lb",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "pork-tenderloin":  {
@@ -19640,7 +19828,14 @@
                                                   "size":  "16 oz",
                                                   "name":  "Red Radishes",
                                                   "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                              }
+                                              },
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/Fresh-Bagged-Radish-Each/42353640",
+                                                   "name":  "Fresh Produce, Bagged Whole Red Radish, 1 Bag  Each",
+                                                   "price":  "$2.17",
+                                                   "size":  "5.994 oz",
+                                                   "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                               }
                                },
                   "raisins":  {
                                   "commodity":  "raisins",
@@ -21773,13 +21968,6 @@
                                                        "size":  "16 oz",
                                                        "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
                                                    },
-                                          "Baker\u0027s":  {
-                                                               "url":  "https://www.bakersplus.com/p/kroger-colby-jack-shredded-cheese-family-size/0001111015117",
-                                                               "name":  "Kroger Colby Jack Shredded Cheese Family Size",
-                                                               "price":  "$7.29",
-                                                               "size":  "32 oz",
-                                                               "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
-                                                           },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24712403-fareway-cheese-colby-jack-fancy-shredded-32-oz",
                                                           "price":  7.48,
@@ -21806,7 +21994,14 @@
                                                               "price":  "$3.99",
                                                               "size":  "16 oz",
                                                               "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                          },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/kroger-mexican-style-blend-shredded-cheese-family-size/0001111015121",
+                                                               "name":  "Kroger Mexican Style Blend Shredded Cheese Family Size",
+                                                               "price":  "$7.29",
+                                                               "size":  "32 oz",
+                                                               "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                           }
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
@@ -22104,18 +22299,17 @@
                                                    "size":  "6 oz",
                                                    "name":  "Mann\u0027s Snow Peas 6 oz",
                                                    "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                               }
+                                               },
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/13399615",
+                                                    "name":  "Marketside Fresh Snow Peas, 8 oz",
+                                                    "price":  "$2.53",
+                                                    "size":  "8 oz",
+                                                    "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                }
                                 },
                   "soda":  {
                                "commodity":  "soda",
-                               "Aldi":  {
-                                            "url":  "https://www.aldi.us/store/aldi/products/84316153-summit-zero-sugar-cola-12pk-12-fl-oz",
-                                            "name":  "Summit Zero Sugar Cola 12pk 12 FL OZ",
-                                            "price":  "$3.79",
-                                            "size":  "12 pk 12 fl oz",
-                                            "verified":  "2026-08-05 DERIVED from the price row (same record the board priced)",
-                                            "board_pu":  0.0263
-                                        },
                                "Baker\u0027s":  {
                                                     "url":  "https://www.bakersplus.com/p/big-k-lemon-lime-caffeine-free-soda-cans/0001111049682",
                                                     "name":  "Big K Lemon Lime Caffeine Free Soda Cans",
@@ -22130,13 +22324,6 @@
                                                        "size":  "288 fl oz",
                                                        "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
                                                    },
-                               "Walmart":  {
-                                               "url":  "https://www.walmart.com/ip/Squirt-Zero-Sugar-Grapefruit-Soda-Pop-2-L-Bottle/23623476",
-                                               "name":  "Squirt Zero Sugar Grapefruit Soda Pop, 2 L, Bottle",
-                                               "price":  "$1.42",
-                                               "size":  "67.628 fl oz",
-                                               "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                           },
                                "Fareway":  {
                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16706881-coke-classic-soda-soft-drink-20-oza",
                                                "name":  "Coca-Cola Soda Bottle",
@@ -22150,7 +22337,14 @@
                                                    "price":  "$3.49",
                                                    "size":  "2 ltr",
                                                    "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                               "Walmart":  {
+                                               "url":  "https://www.walmart.com/ip/7-Up-Soda-2-l/16777395",
+                                               "name":  "7UP Caffeine Free Lemon Lime Soda Pop, 2 L, Bottle",
+                                               "price":  "$1.42",
+                                               "size":  "67.628 fl oz",
+                                               "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                           }
                            },
                   "sour-cream":  {
                                      "commodity":  "Sour Cream",
@@ -23893,7 +24087,14 @@
                                                              "size":  "16 oz",
                                                              "name":  "Southern Valley Farm Fresh Peeled Tomatillos, 16 oz.",
                                                              "board_pu":  2.96
-                                                         }
+                                                         },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/5442917305",
+                                                     "name":  "Fresh Peeled Tomatillos, 16 oz",
+                                                     "price":  "$2.86",
+                                                     "size":  "lb",
+                                                     "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "tomatoes":  {
                                    "commodity":  "tomatoes",
@@ -24394,14 +24595,6 @@
                                                      "size":  "68 ct",
                                                      "name":  "Glad Tall Kitchen Quick-Tie Trash Bags, 13 Gallon, White"
                                                  },
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2913522/tall-kitchen-bags-with-twist-ties",
-                                                    "name":  "Tall Kitchen Bags With Twist Ties",
-                                                    "board_pu":  0.0569,
-                                                    "price":  4.99,
-                                                    "size":  "box",
-                                                    "verified":  "2026-07-19 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                                },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/13912815919",
                                                              "name":  "Glad® ForceFlex Tall Kitchen Drawstring Trash Bags, Gain Original scent with Febreze Freshness, 13 Gallon, 160 ct.",
@@ -24795,13 +24988,6 @@
                                     },
                   "vegetable-soup":  {
                                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/progresso-vegetable-classics-vegetable-canned-soup/0004119691113",
-                                                              "name":  "Progresso Vegetable Classics Vegetable Canned Soup",
-                                                              "price":  "$2.99",
-                                                              "size":  "19 oz",
-                                                              "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
-                                                          },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2758400/hy-vee-hearty-vegetable-soup",
                                                         "price":  2.48,
@@ -24809,20 +24995,27 @@
                                                         "name":  "Hy-Vee Hearty Vegetable Soup",
                                                         "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                     },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/Progresso-Vegetable-Classics-Garden-Vegetable-Canned-Soup-19-oz/10320699",
-                                                         "name":  "Progresso Vegetable Classics, Garden Vegetable Canned Soup, 19 oz.",
-                                                         "price":  "$2.48",
-                                                         "size":  "19 oz",
-                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/37442-campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz",
                                                          "name":  "Campbell\u0027s Old Fashioned Vegetable Beef Soup",
                                                          "price":  "$2.48",
                                                          "size":  "18.8 oz",
                                                          "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/2-pack-Progresso-Vegetable-Soup-Vegetable-Classics-Canned-Soup-19-oz/14782053948",
+                                                         "name":  "(2 pack) Progresso Vegetable Soup, Vegetable Classics Canned Soup, 19 oz",
+                                                         "price":  "$4.96",
+                                                         "size":  "38 oz",
+                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                     },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/progresso-vegetable-classics-canned-minestrone-soup/0004119601012",
+                                                              "name":  "Progresso Vegetable Classics Canned Minestrone Soup",
+                                                              "price":  "$2.99",
+                                                              "size":  "19 oz",
+                                                              "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                          }
                                      },
                   "veggie-sausages":  {
                                           "commodity":  "Veggie Sausages",
@@ -24832,7 +25025,14 @@
                                                                "price":  8.99,
                                                                "size":  "12 pk 1.33 oz",
                                                                "verified":  "2026-08-23"
-                                                           }
+                                                           },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/662118398",
+                                                          "name":  "Beyond Meat Beyond Sausage Plant-Based Dinner Sausage Links, Hot Italian 14 oz",
+                                                          "price":  "$6.97",
+                                                          "size":  "0.88 lb",
+                                                          "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "vienna-sausage":  {
                                          "commodity":  "Vienna sausage",
@@ -25583,7 +25783,14 @@
                                                   "name":  "Zucchini Squash",
                                                   "board_pu":  1.99,
                                                   "recipe_pu":  1.99
-                                              }
+                                              },
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/44391040",
+                                                   "name":  "Fresh Yellow Squash, Each",
+                                                   "price":  "$0.76",
+                                                   "size":  "0.5 lb",
+                                                   "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                               }
                                },
                   "keto-hamburger-buns":  {
                                               "Baker\u0027s":  {
@@ -25593,6 +25800,149 @@
                                                                    "size":  "8 ct",
                                                                    "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                                }
-                                          }
+                                          },
+                  "chili-garlic-sauce":  {
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/lee_kum_kee_chili_garlic_sauce_8_oz/p/9173",
+                                                                 "name":  "Lee Kum Kee Chili Garlic Sauce 8 Oz",
+                                                                 "price":  "$5.99",
+                                                                 "size":  "8 oz",
+                                                                 "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                             },
+                                             "Walmart":  {
+                                                             "url":  "https://www.walmart.com/ip/Lee-Kum-Kee-Chili-Garlic-Sauce-8-Oz/16004723",
+                                                             "name":  "Lee Kum Kee Chili Garlic Sauce, 8 oz",
+                                                             "price":  "$3.84",
+                                                             "size":  "8 oz",
+                                                             "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                         },
+                                             "Baker\u0027s":  {
+                                                                  "url":  "https://www.bakersplus.com/p/huy-fong-chili-garlic-sauce/0002446306104",
+                                                                  "price":  "2.49",
+                                                                  "size":  "8 oz",
+                                                                  "name":  "Huy Fong Chili Garlic Sauce",
+                                                                  "verified":  "2026-08-30 price-pull self-capture"
+                                                              }
+                                         },
+                  "frozen-cauliflower-florets":  {
+                                                     "Family Fare":  {
+                                                                         "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/cauliflower/frozen_cauliflower_florets_our_family_steamable/p/1564405684703626599",
+                                                                         "name":  "Frozen Cauliflower Florets Our Family Steamable",
+                                                                         "price":  "$2.99",
+                                                                         "size":  "12 oz",
+                                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                                     },
+                                                     "Walmart":  {
+                                                                     "url":  "https://www.walmart.com/ip/Great-Value-Cauliflower-12-oz-Bag-Frozen/242699420",
+                                                                     "name":  "Great Value Frozen Cauliflower, 12 oz Bag, No Added Preservatives",
+                                                                     "price":  "$1.16",
+                                                                     "size":  "12 oz",
+                                                                     "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                                 },
+                                                     "Baker\u0027s":  {
+                                                                          "url":  "https://www.bakersplus.com/p/birds-eye-steamfresh-cauliflower-florets-frozen-vegetables/0001450001955",
+                                                                          "price":  "2",
+                                                                          "size":  "10.8 oz",
+                                                                          "name":  "Birds Eye Steamfresh Cauliflower Florets, Frozen Vegetables",
+                                                                          "verified":  "2026-08-30 price-pull self-capture"
+                                                                      }
+                                                 },
+                  "peanut-oil":  {
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/our_family_peanut_oil_100_pure_1_gal/p/6787101",
+                                                         "name":  "Our Family Peanut Oil, 100% Pure 1 Gal",
+                                                         "price":  "$19.49",
+                                                         "size":  "1 gal",
+                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                     },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/Lou-Ana-Pure-Peanut-Oil-3gal/10294990",
+                                                     "name":  "LouAna Peanut Oil, 3 Gallon",
+                                                     "price":  "$46.97",
+                                                     "size":  "384 fl oz",
+                                                     "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                 }
+                                 },
+                  "cardamom":  {
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/38446938",
+                                                   "name":  "Morton \u0026 Bassett Ground Cardamom, 1.9 oz – Single Spice",
+                                                   "price":  "$19.99",
+                                                   "size":  "1.9 oz",
+                                                   "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                               }
+                               },
+                  "fresh-oregano":  {
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/5255725669",
+                                                        "name":  "Fresh Oregano, .50 oz Clamshell",
+                                                        "price":  "$1.78",
+                                                        "size":  "0.5 oz",
+                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    }
+                                    },
+                  "frozen-cauliflower-rice":  {
+                                                  "Walmart":  {
+                                                                  "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Riced-Cauliflower-12-oz-Frozen/279573553",
+                                                                  "name":  "Great Value Riced Cauliflower, 12 oz (Frozen)",
+                                                                  "price":  "$2.24",
+                                                                  "size":  "12 oz",
+                                                                  "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                              }
+                                              },
+                  "whole-wheat-flour":  {
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/High-Altitude-Hungarian-Whole-Wheat-Flour/417395937",
+                                                            "name":  "High Altitude Hungarian Whole Wheat Flour",
+                                                            "price":  "$3.43",
+                                                            "size":  "79.767 oz",
+                                                            "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                        }
+                                        },
+                  "coconut-aminos":  {
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/bragg-organic-coconut-liquid-aminos-soy-free-seasoning/0007430500610",
+                                                              "name":  "Bragg Organic Coconut Liquid Aminos Soy-Free Seasoning",
+                                                              "price":  "$7.99",
+                                                              "size":  "10 fl oz",
+                                                              "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                          }
+                                     },
+                  "creamy-cilantro-lime-dressing":  {
+                                                        "Baker\u0027s":  {
+                                                                             "url":  "https://www.bakersplus.com/p/briannas-home-style-creamy-cilantro-lime-salad-dressing/0002727112136",
+                                                                             "name":  "Briannas Home Style Creamy Cilantro Lime Salad Dressing",
+                                                                             "price":  "$4.29",
+                                                                             "size":  "12 fl oz",
+                                                                             "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                                         }
+                                                    },
+                  "daiya-mozzarella-style-shreds":  {
+                                                        "Baker\u0027s":  {
+                                                                             "url":  "https://www.bakersplus.com/p/daiya-tm-dairy-free-mozzarella-cheese-shreds/0087145900320",
+                                                                             "name":  "Daiya TM Dairy Free Mozzarella Cheese Shreds",
+                                                                             "price":  "$4.49",
+                                                                             "size":  "7.1 oz",
+                                                                             "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                                         }
+                                                    },
+                  "garlic-infused-olive-oil":  {
+                                                   "Baker\u0027s":  {
+                                                                        "url":  "https://www.bakersplus.com/p/private-selection-garlic-infused-olive-oil/0001111003333",
+                                                                        "name":  "Private Selection Garlic Infused Olive Oil",
+                                                                        "price":  "$9.29",
+                                                                        "size":  "8.45 fl oz",
+                                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                                    }
+                                               },
+                  "saffron":  {
+                                  "Baker\u0027s":  {
+                                                       "url":  "https://www.bakersplus.com/p/spice-islands-spanish-threads-saffron-kosher/0001732400354",
+                                                       "name":  "Spice Islands Spanish Threads Saffron, Kosher",
+                                                       "price":  "$28.99",
+                                                       "size":  "0.03 oz",
+                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                   }
+                              }
               }
 }
