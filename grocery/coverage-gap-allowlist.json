@@ -1321,6 +1321,62 @@
                       "why":  "LOOSENED-PROBE ARTIFACT on packaging words inside a MEAT name: the single candidate is \"Hormel, Natural Choice Original Uncured Bacon, Gluten Free, Refrigerated 12 oz Plastic Wrapper\", engine saw price_text=[$5.97] size_text=[0.75 lb], and the engine already routes it CORRECTLY to bacon. Only the audit's loosened include reaches it. Walmart's own cling-wrap rows are not in this bot-walled partial capture. Nothing to fix; widening plastic-wrap would put a pack of bacon in a household cell. DELETE-TRIGGER: delete when a walmart-regular-*.json row matches \"cling\\s+wrap\" or \"plastic\\s+wrap\" as its own product. ADDED BY THE DEVELOPER 2026-08-06: this gap appeared after the plan was measured; same class as canned-pineapple|Family Fare above.",
                       "reviewed":  "2026-08-06",
                       "reviewed_source":  "REVIEWED 2026-08-06 against out\\coverage-gaps.json (06:50) + walmart-regular-2026-08-06.json (plan-2026-08-06.json item 2026-08-03-f4fb91, developer deviation)"
+                  },
+                  {
+                      "commodity":  "dried-thyme",
+                      "store":  "Aldi",
+                      "why":  "TRUE ABSENCE (reviewed 2026-08-30, triage 2026-08-22-14416d): the only candidate Aldi offered was 'Little Salad Bar Apple Thyme Vinaigrette 11 OZ' $3.19/11 fl oz, which first-match-wins had given to apples. The hijack is now released on both sides (apples and dried-thyme both exclude \\bvinaigrette\\b) and the honest result is that Aldi's capture holds no dried thyme at all. A salad dressing is not the dried herb. Delete this entry if a real Aldi dried-thyme row appears.",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
+                  },
+                  {
+                      "commodity":  "poblano-peppers",
+                      "store":  "Aldi",
+                      "why":  "TRUE ABSENCE (reviewed 2026-08-30, triage 2026-08-22-14416d): the only candidate was 'Park Street Deli Pineapple Poblano 10 OZ' $2.99/10 oz, a deli dip that first-match-wins had given to pineapple. Released from both commodities; Aldi's capture holds no fresh poblanos. The pineapple crown is unchanged (Fareway sliced pineapple $1.68 each).",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
+                  },
+                  {
+                      "commodity":  "beets",
+                      "store":  "Family Fare",
+                      "why":  "TRUE ABSENCE (reviewed 2026-08-30, triage 2026-08-22-14416d): the only candidate was 'Fresh Beet & Onion Salad' $5.99/lb, a prepared deli salad that first-match-wins had given to onions via \\bonion. Released from both; Family Fare's capture holds no raw beets. The onions crown is unchanged (Aldi Vidalia $0.7967/lb).",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
+                  },
+                  {
+                      "commodity":  "cornmeal",
+                      "store":  "Baker's",
+                      "why":  "TRUE ABSENCE (reviewed 2026-08-30, triage 2026-08-22-14416d): the only candidate was \"Dave's Killer Bread Organic Oats & Blues Bread, Organic Oats & Blue Cornmeal Topped, 25 oz Loaf\", which routes to bread - and that routing is CORRECT. A loaf topped with cornmeal is bread. Deliberately NOT released: unlike the four hijacks worked alongside it there is no thief here, only a gap. Baker's capture holds no cornmeal.",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
+                  },
+                  {
+                      "commodity":  "canned-butter-beans",
+                      "store":  "Hy-Vee",
+                      "why":  "TRUE ABSENCE (reviewed 2026-08-30, triage 2026-08-22-14416d): the only candidate was \"That's Smart! Mixed Vegetables With Carrots, Potatoes, Peas, Corn, Green Beans, Celery & Lima Beans\" $0.96/15 oz, a 7-vegetable can that merely NAMES lima beans in its ingredient list. It is not a can of butter beans. It now routes to canned-mixed-vegetables where it belongs - Hy-Vee's own taxonomy for productId 2970337 reads CATEGORY = Canned Mixed Vegetables, SECTION = Pantry (read from the store 2026-08-30). Hy-Vee's capture holds no canned butter beans.",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
+                  },
+                  {
+                      "commodity":  "garden-salad",
+                      "store":  "Aldi",
+                      "why":  "KNOWN-WRONG CANDIDATE (reviewed 2026-08-30, triage 2026-08-22-14416d): the only candidate was 'Tuscan Garden Mild Muffuletta Olive Salad 16 OZ'. Tuscan Garden is Aldi's condiment BRAND and this is an OLIVE salad, a jarred antipasto, not a bag of salad greens. Deliberately NOT widened into: the word garden here is a brand, and a rule that reads brand words as ingredients would misroute the whole Tuscan Garden line.",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
+                  },
+                  {
+                      "commodity":  "teriyaki-sauce",
+                      "store":  "Aldi",
+                      "why":  "ALREADY RULED, not a gap (reviewed 2026-08-30, triage 2026-08-22-14416d). audit-coverage-gaps reports this as reason=PRICED, actionable=true, because the engine CAN price 'Fusia Teriyaki Sauce 14.5 OZ' ($2.29, basis size 14.5 floz) - and then the cell is withheld downstream by a deliberate known-wrong ruling made 2026-08-14, key teriyaki-sauce|Aldi|fusia-teriyaki-sauce-14-5-oz. That ruling stands: the row is labelled by WEIGHT in a commodity priced per FL OZ, Aldi's own page says only '14.5 oz', and the crown turns on which reading is right (0.1579/floz as fluid ounces, about 0.180/floz as weight, against Walmart's explicitly-labelled 15 fl oz at 0.1653). The gap audit does not consult known-wrong.json, so it re-pages a decision a human already made. Allowlisted so it stops. Delete this entry if the ruling is ever reversed by an in-store label read.",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
+                  },
+                  {
+                      "commodity":  "pie-pumpkins",
+                      "store":  "Aldi",
+                      "why":  "KNOWN-WRONG CANDIDATE (reviewed 2026-08-30, triage 2026-08-22-14416d): the only candidate was 'Kirkton House Led Pierced Ceramic Pumpkin Cream Swirl 1 Each', an LED ceramic decoration. Not food. Deliberately NOT widened into. Aldi's capture holds no pie pumpkins; this is seasonal and should resolve itself in October.",
+                      "reviewed":  "2026-08-30",
+                      "reviewed_source":  "audit-coverage-gaps 2026-08-29 18:57 (classified against candidates-2026-08-26) + routing measured over 29,155 names in plan-2026-08-30.routing.json"
                   }
               ]
 }

@@ -3171,6 +3171,591 @@
                         "ruled_on":  "2026-08-29",
                         "ruled_by":  "claude (grocery triage), continuing wrong-product-sweep-2026-08-29",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chili-beans|Walmart|6-pack-bushs-chili-magic-beans-slow-simmered-whi",
+                        "commodity":  "chili-beans",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(6 pack) Bush\u0027s Chili Magic Beans, Slow Simmered White Beans in Mild Chili Sauce, 15.5 oz Can"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "MARKETPLACE CASE, not a shelf can. A 6-pack case listing prices the whole case; this is the case class behind the three clamped recipe inversions (queue 2026-08-22-5a178d), which is blocked on the Walmart 9-column shelf-signal pull. Deliberately NOT admitted by rule.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut-aminos|Walmart|nutiva-coconut-aminos-organic-soy-free-seasoning",
+                        "commodity":  "coconut-aminos",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Nutiva, Coconut Aminos Organic Soy Free Seasoning Sauce \u0026 Marinade, 8 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "BLOCKED BY DESIGN, recorded so the sweep stops re-paging it. The commodity\u0027s own marinade exclude and the global sauce token both hit this listing\u0027s usage copy. No exclude was narrowed and no relax was added: the marinade exclude earns its keep elsewhere, and the same commodity gains a real Baker\u0027s cell this round via the coconut LIQUID aminos include.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-liquid-laundry-detergent-clean-burst",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Liquid Laundry Detergent Clean Burst Scent"
+                                  ],
+                        "product_id":  "0003320000427",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG VARIANT. The commodity is the Arm \u0026 Hammer plus OxiClean detergent; Clean Burst is a different product line. Real detergent, wrong SKU for this commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chili-garlic-sauce|Walmart|kinders-gold-label-sweet-chili-garlic-dipping-sa",
+                        "commodity":  "chili-garlic-sauce",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Kinder\u0027s Gold Label Sweet Chili Garlic Dipping Sauce for Chicken and Wings, 16.1 oz Bottle"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. A sweet DIPPING sauce for wings, not the chili-garlic condiment (Huy Fong / Lee Kum Kee class). The commodity already excludes sweet chili sauce for this reason.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "adobo-seasoning|Walmart|goya-all-purpose-seasoning-with-pepper-8-oz",
+                        "commodity":  "adobo-seasoning",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Goya All Purpose Seasoning with Pepper, 8 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "IDENTITY UNPROVABLE FROM THE CAPTURED NAME. Goya sells both an adobo and a separate all-purpose seasoning; the captured name says all purpose, not adobo, and pricing adobo off it would be a guess.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "batteries|Aldi|activenergy-aaa-alkaline-batteries-8-ct",
+                        "commodity":  "batteries",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Activenergy Aaa Alkaline Batteries 8 CT"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG SIZE. The commodity is AA; this is AAA. Not interchangeable and not comparable per unit.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Walmart|marketside-grass-fed-ground-beef-80-lean-20-fat",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Grass-Fed Ground Beef, 80% Lean/20% Fat, 1 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "DELIBERATE EXCLUDE, confirmed rather than widened. The ground-beef commodities exclude grass-fed on purpose: grass-fed carries a premium and comparing it against conventional 80/20 would misstate the cheapest. Ruled so the semantic sweep stops re-paging an identity decision that has already been made. Reverse this ruling if Brad decides grass-fed counts.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-9010|Walmart|marketside-grass-fed-ground-beef-90-lean-10-fat",
+                        "commodity":  "ground-beef-9010",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Grass-Fed Ground Beef, 90% Lean/10% Fat, 1 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "DELIBERATE EXCLUDE, confirmed rather than widened - same grass-fed reasoning as ground-beef-8020. Reverse if Brad decides grass-fed counts.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|smithfield-all-natural-fresh-pork-chops-boneless",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smithfield All Natural Fresh Pork Chops, Boneless, 0.6 - 1.5 lb, 23 Grams of Protein per Serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG CUT. Boneless chops are not tenderloin.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|93-lean-7-fat-lean-ground-beef-patties-4-count-1",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "93% Lean / 7% Fat Lean Ground Beef Patties, 4 Count, 1 lb Tray, Fresh, All Natural*"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG FORM. Pre-formed PATTIES carry a fabrication premium over bulk ground beef; the commodity prices bulk.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Walmart|arm-hammer-odor-blasters-in-wash-scent-booster-l",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Odor Blasters In-Wash Scent Booster, Laundry Scent Booster Fresh Burst Scent, 24 Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "NOT A DETERGENT. An in-wash scent booster is an additive; it washes nothing.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Aldi|usda-73-lean-27-fat-ground-beef-per-lb",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "USDA 73% Lean 27% Fat Ground Beef, Per LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG LEAN RATIO. 73/27 is not 93/7, and the fat ratio is the whole basis of comparison for this commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ribeye-steak|Walmart|beef-choice-angus-cubed-steak-tray-family-pack-f",
+                        "commodity":  "ribeye-steak",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Beef Choice Angus Cubed Steak, Tray, Family Pack, Fresh, 0.9 - 1.5 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG CUT. Cubed steak is mechanically tenderised round, not ribeye.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "vegetable-soup|Walmart|progresso-minestrone-soup-vegetable-classics-can",
+                        "commodity":  "vegetable-soup",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "IDENTITY CALL, ruled known-wrong PENDING BRAD (open question in plan-2026-08-30). Minestrone is a pasta-and-bean soup that Progresso files under Vegetable Classics; whether it counts as vegetable soup is a definition call, not a rule bug. Ruled so nothing ships on a guess; reverse in one line if Brad says it counts.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ranch-seasoning-mix|Walmart|great-value-classic-ranch-dressing-dip-36-fl-oz",
+                        "commodity":  "ranch-seasoning-mix",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Classic Ranch Dressing \u0026 Dip, 36 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. The commodity is the dry seasoning PACKET; this is bottled dressing. Different form, different price basis.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ranch-seasoning-mix|Walmart|great-value-classic-ranch-dressing-dip-8-oz",
+                        "commodity":  "ranch-seasoning-mix",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Classic Ranch Dressing \u0026 Dip, 8 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT - bottled dressing, not the dry seasoning packet.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ranch-seasoning-mix|Walmart|great-value-classic-ranch-salad-dressing-dip-16",
+                        "commodity":  "ranch-seasoning-mix",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Classic Ranch Salad Dressing \u0026 Dip, 16 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT - bottled dressing, not the dry seasoning packet.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Aldi|73-lean-27-fat-ground-beef-3-lb",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "73% Lean 27% Fat Ground Beef, 3 LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG LEAN RATIO - 73/27 is not 93/7.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chili-garlic-sauce|Bakers|kinders-gold-label-sweet-chili-garlic-chicken-wi",
+                        "commodity":  "chili-garlic-sauce",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kinder\u0027s Gold Label Sweet Chili Garlic Chicken \u0026 Wing Dipping Sauce"
+                                  ],
+                        "product_id":  "0075579570045",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. A sweet wing DIPPING sauce, not the chili-garlic condiment.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "aluminum-foil|Walmart|mainstays-2-lb-aluminum-foil-loaf-pans-3-count-d",
+                        "commodity":  "aluminum-foil",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Mainstays 2 lb. Aluminum Foil Loaf Pans, 3 Count, Disposable, Easy Cleaning"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "NOT FOIL. Disposable foil PANS, priced per pan, not a roll of foil priced per square foot.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Aldi|simply-nature-organic-grass-fed-93-07-ground-bee",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Simply Nature Organic Grass Fed 93/07 Ground Beef"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "DELIBERATE EXCLUDE, confirmed rather than widened. Organic AND grass-fed, both excluded on purpose so a premium product cannot set the cheapest-conventional price. Reverse if Brad decides they count.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "artichokes|Bakers|artichokes-quartered-tray-pack-6-14-oz-case-krog",
+                        "commodity":  "artichokes",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARTICHOKES QUARTERED TRAY PACK 6/14 OZ/CASE-KROGER (EACH)"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "CASE ROW, and not fresh whole artichokes. A 6x14oz quartered case priced as EACH - wrong form and wrong basis for a fresh-whole-artichoke commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-pork|Walmart|marketside-organic-grass-fed-ground-beef-85-lean",
+                        "commodity":  "ground-pork",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Organic Grass-Fed Ground Beef, 85% Lean/15% Fat, 1 lb, 3 Count"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG ANIMAL. Ground BEEF, mis-filed by the semantic sweep under ground pork.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "deli-ham|Walmart|marketside-natural-juice-bone-in-spiral-cut-brow",
+                        "commodity":  "deli-ham",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG FORM. A bone-in glazed whole ham, not deli-sliced ham. Bone-in weight is not comparable per pound with sliced.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "creamy-cilantro-lime-dressing|FamilyFare|taylor-farms-southwest-chopped-kit-with-creamy-c",
+                        "commodity":  "creamy-cilantro-lime-dressing",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Taylor Farms Southwest Chopped Kit With Creamy Cilantro Dressing 12.6 Oz"
+                                  ],
+                        "product_id":  "2580884",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. A salad KIT that contains a dressing packet; the price is for the whole kit, not the dressing.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|all-natural-73-lean-27-fat-ground-beef-1-lb-tray",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "All Natural* 73% Lean/27% Fat Ground Beef, 1 lb Tray"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG LEAN RATIO - 73/27 is not 93/7.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "hulled-pumpkin-seeds|Aldi|southern-grove-pumpkin-seeds-6-oz",
+                        "commodity":  "hulled-pumpkin-seeds",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Southern Grove Pumpkin Seeds 6 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "IDENTITY UNPROVABLE FROM THE CAPTURED NAME. Hulled pepitas and in-shell pumpkin seeds are different products at different prices, and the captured name does not say which this is.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cranberry-juice|FamilyFare|ocean-spray-juice-drink-cranberry-flavored-diet",
+                        "commodity":  "cranberry-juice",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Ocean Spray Juice Drink, Cranberry Flavored, Diet 6 Ea"
+                                  ],
+                        "product_id":  "559823",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. A diet juice DRINK (flavored, sweetener-based), not cranberry juice. Different product and not comparable per fl oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-parsley|Walmart|soeos-parsley-flakes-2-1-oz-60g-dried-parsley-le",
+                        "commodity":  "dried-parsley",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Soeos Parsley Flakes, 2.1 oz (60g), Dried Parsley Leaves, Fresh Flavor and Aroma, Perfect for Cooking"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "BLOCKED BY DESIGN, recorded so the sweep stops re-paging it. The commodity\u0027s fresh exclude hits this listing\u0027s marketing copy (Fresh Flavor), and it is a marketplace row besides. The fresh exclude was deliberately NOT narrowed: it is what keeps fresh parsley bunches out of the dried commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "quart-storage-bags|Walmart|foodsaver-quart-vacuum-seal-bags-19-count-pre-cu",
+                        "commodity":  "quart-storage-bags",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal Design"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. Vacuum-sealer bags requiring a machine, not zip-top quart storage bags.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "iced-tea|Bakers|kroger-gallon-iced-tea-bags",
+                        "commodity":  "iced-tea",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Gallon Iced Tea Bags"
+                                  ],
+                        "product_id":  "0001111016576",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. Tea BAGS that brew a gallon, not ready-to-drink iced tea. The commodity is the bottled/gallon RTD product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ready-to-serve-long-grain-wild-rice-pouch|Walmart|great-value-ready-to-heat-90-second-long-grain-w",
+                        "commodity":  "ready-to-serve-long-grain-wild-rice-pouch",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Ready-to-Heat 90-Second Long Grain White Rice Pouch, 8.8 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. Plain long grain WHITE rice; the commodity is the long grain AND WILD rice blend.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pie-pumpkins|Walmart|freshness-guaranteed-8-pumpkin-pie-24-oz",
+                        "commodity":  "pie-pumpkins",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Freshness Guaranteed 8\" Pumpkin Pie, 24 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "NOT A PUMPKIN. A baked pumpkin PIE.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "storage-bags|Aldi|boulder-storage-twin-lock-bags-40-ct",
+                        "commodity":  "storage-bags",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Boulder Storage Twin Lock Bags 40 CT"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "SIZE UNSTATED. The commodity is the GALLON storage bag; the captured name gives a count but no bag size, and guessing gallon from a 40 ct pack would be inventing the size.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "apple-juice|FamilyFare|motts-juice-beverage-apple-8-pack-8-ea",
+                        "commodity":  "apple-juice",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Mott\u0027s Juice Beverage, Apple, 8 Pack 8 Ea"
+                                  ],
+                        "product_id":  "15760",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. A juice BEVERAGE multipack (diluted, sweetened), not 100 percent apple juice.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "enchilada-sauce|Walmart|las-palmas-medium-red-chile-sauce-28-oz",
+                        "commodity":  "enchilada-sauce",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Las Palmas Medium Red Chile Sauce, 28 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "IDENTITY CALL, ruled known-wrong PENDING BRAD (open question in plan-2026-08-30). Las Palmas red chile sauce is widely used AS enchilada sauce but is not labelled that; whether it counts is a definition call. Ruled so nothing ships on a guess; reverse in one line if Brad says it counts.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Walmart|80-lean-20-fat-ground-beef-patties-12-count-2-25",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "80% Lean / 20% Fat Ground Beef Patties, 12 Count, 2.25 lb Tray, Fresh, All Natural*"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG FORM. Pre-formed PATTIES carry a fabrication premium over bulk ground beef.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "almond-flour|Walmart|nature-s-eats-ultimate-almond-flour-blend-gluten",
+                        "commodity":  "almond-flour",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Nature’s Eats Ultimate Almond+ Flour Blend, Gluten-Free, 16 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG PRODUCT. A flour BLEND, not almond flour; the blend\u0027s price per ounce is not the almond flour price.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sandwich-bags|Walmart|ziploc-brand-snack-bags-with-easyguide-texture-g",
+                        "commodity":  "sandwich-bags",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Ziploc® Brand Snack Bags with EasyGuide™ Texture, Grip \u0027n Seal Technology™, Food Storage, Zipper, 100 Count"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "WRONG SIZE. SNACK bags, not sandwich bags - a smaller bag at a different per-bag price. Name taken verbatim from the Walmart capture (it contains a replacement character the store feed itself supplied); retyping it would write a ruling that can never match the row.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

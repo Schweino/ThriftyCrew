@@ -2063,7 +2063,9 @@
                         "2%\\s+(?:milk\\s+)?(?:\\w+\\s+){0,2}cheddar",
                         "cheddar[^,]{0,25}\\b2%\\s+milk",
                         "cheese\\s+sticks?\\b",
-                        "\\bsalami\\b"
+                        "\\bsalami\\b",
+                        "\\bdaiya\\b",
+                        "dairy[\\s-]*free"
                     ]
     },
     {
@@ -3812,7 +3814,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bbeets?\\b"
                     ]
     },
     {
@@ -4021,7 +4024,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bvinaigrette\\b"
                     ]
     },
     {
@@ -5394,7 +5398,8 @@
                         "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)",
                         "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer",
                         "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}odor\\s*bl(?:asters?|st)\\b",
-                        "\\blndry\\s+dtrgnt\\b.*\\bpls\\s+o\\b"
+                        "\\blndry\\s+dtrgnt\\b.*\\bpls\\s+o\\b",
+                        "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}\\bplus\\s+oxi\\b"
                     ],
         "exclude":  [
                         "\\bpods?\\b",
@@ -9032,7 +9037,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bmixed\\s+vegetables\\b"
                     ]
     },
     {
@@ -14772,7 +14778,8 @@
                         "\\brum\\b",
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "celery\\s*\u0026\\s*lima"
                     ]
     },
     {
@@ -16614,7 +16621,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "pineapple\\s+poblano"
                     ]
     },
     {
@@ -24025,7 +24033,8 @@
         "include":  [
                         "string\\s+cheese",
                         "cheese\\s+sticks?\\b.{0,20}mozzarella",
-                        "mozzarella\\s+sticks?\\b(?!.{0,20}breaded)"
+                        "mozzarella\\s+sticks?\\b(?!.{0,20}breaded)",
+                        "\\bstring\\s+mozzarella\\b"
                     ],
         "exclude":  [
                         "breaded",
@@ -36666,7 +36675,8 @@
                         "berry\\s+(?:medley|blend)",
                         "unsweetened\\s+(?:whole\\s+|sliced\\s+)?(?:strawberries|berries|fruit)",
                         "cherry\\s+berry\\s+blend",
-                        "\\b(?:fruit\\s+salad|tropical\\s+fruit|mixed\\s+fruit)\\s+blend\\b"
+                        "\\b(?:fruit\\s+salad|tropical\\s+fruit|mixed\\s+fruit)\\s+blend\\b",
+                        "\\b(?:blueberries|strawberries|raspberries|blackberries|mango|peaches|cherries)\\b.{0,25}\\bfrozen\\b(?!\\s*pop)"
                     ],
         "exclude":  [
                         "\\bbars?\\b",
@@ -36764,7 +36774,8 @@
                         "\\brum\\b",
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bwith\\s+sugar\\b"
                     ]
     },
     {
@@ -37324,7 +37335,8 @@
                         "bath\\s+bars?",
                         "beauty\\s+bars?",
                         "puck\\s+of\\s+soap",
-                        "(?\u003c!liquid )castile\\s+soap"
+                        "(?\u003c!liquid )castile\\s+soap",
+                        "cleansing\\s+bar"
                     ],
         "exclude":  [
                         "\\bdish\\b",
@@ -37770,7 +37782,8 @@
                         "dusting\\s+spray",
                         "\\bpledge\\b",
                         "wood\\s+polish",
-                        "wood\\s+cleaner"
+                        "wood\\s+cleaner",
+                        "\\bfurniture\\s+oil\\b"
                     ],
         "exclude":  [
                         "\\bwipes?\\b",
@@ -48946,7 +48959,8 @@
                         "\\brum\\b",
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bvinaigrette\\b"
                     ]
     },
     {
@@ -51437,7 +51451,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "pineapple\\s+poblano"
                     ]
     },
     {
@@ -59638,7 +59653,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bsalad\\b"
                     ]
     },
     {
@@ -63105,7 +63121,8 @@
                         "\\bslaw\\s+mix\\b",
                         "shredded\\s+(?:coleslaw|slaw)",
                         "angel\\s+hair\\s+coleslaw",
-                        "tri[\\s-]?colou?r\\s+(?:coleslaw|slaw)"
+                        "tri[\\s-]?colou?r\\s+(?:coleslaw|slaw)",
+                        "\\blettuce\\s+or\\s+coleslaw\\b"
                     ],
         "exclude":  [
                         "concord\\s+foods",
@@ -66483,7 +66500,8 @@
         "unit":  "oz",
         "include":  [
                         "\\b(?:extra\\s+|super\\s+)?firm\\s+tofu\\b",
-                        "\\btofu\\b.*\\b(?:extra\\s+|super\\s+)?firm\\b"
+                        "\\btofu\\b.*\\b(?:extra\\s+|super\\s+)?firm\\b",
+                        "\\bfirm\\s+(?!silken)(?:\\w+\\s+)?tofu\\b"
                     ],
         "exclude":  [
                         "\\b(?:silken|soft)\\b",
@@ -71358,8 +71376,12 @@
         "id":  "frozen-cauliflower-florets",
         "label":  "Frozen Cauliflower Florets",
         "unit":  "oz",
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ],
         "include":  [
-                        "^(?=.*\\bfrozen\\b)(?=.*\\bcauliflower\\s+florets?\\b).*$"
+                        "^(?=.*\\bfrozen\\b)(?=.*\\bcauliflower\\s+florets?\\b).*$",
+                        "\\bfrozen\\s+cauliflower\\b"
                     ],
         "exclude":  [
                         "\\b(?:fresh|riced|mashed)\\s+cauliflower\\b",
@@ -71894,7 +71916,8 @@
         "label":  "Coconut Aminos",
         "unit":  "fl_oz",
         "include":  [
-                        "\\bcoconut\\s+aminos?\\b"
+                        "\\bcoconut\\s+aminos?\\b",
+                        "\\bcoconut\\s+liquid\\s+aminos?\\b"
                     ],
         "exclude":  [
                         "\\b(?:tamari|soy\\s+sauce|teriyaki|marinade|seasoning\\s+mix|powder|capsules?|supplement)\\b",
@@ -73663,9 +73686,13 @@
         "id":  "chili-garlic-sauce",
         "label":  "Chili Garlic Sauce",
         "unit":  "oz",
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ],
         "include":  [
                         "\\b(?:chili|chilli|chile)\\s+garlic\\s+sauce\\b",
-                        "\\bgarlic\\s+(?:chili|chilli|chile)\\s+sauce\\b"
+                        "\\bgarlic\\s+(?:chili|chilli|chile)\\s+sauce\\b",
+                        "\\b(?:chili|chilli|chile)\\s+with\\s+garlic\\s+sauce\\b"
                     ],
         "exclude":  [
                         "\\bsweet\\s+(?:chili|chilli|chile)\\s+sauce\\b",

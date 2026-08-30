@@ -4548,6 +4548,74 @@ $r = RunPS 'test-commodity-rules.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'test-commodity-rules: PASS') { Ok 'commodity rules: every frozen case still resolves the way its label says - the drumsticks-under-thighs class stays closed' }
 else { Bad ('commodity-rule fixtures FAILED (rc=' + $r.rc + ') - a commodity include/exclude rule no longer does what its label claims, which is how the board served THIGHS for drumsticks: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
 
+# ---------------------------------------------------------------- dead commodities (2026-08-30, queue 2026-08-22-51a5b6)
+# A commodity whose every include requires a word GLOBAL_EXCLUDE blocks, with no relax_global to release
+# it, can never match anything. chili-garlic-sauce and frozen-cauliflower-florets had been in that state
+# since they were created, and it is invisible from any output: a rule that is switched off looks exactly
+# like a commodity Omaha does not carry. The rule lives in dead-commodity-lib.ps1 so the fixtures below
+# and the live arm run the SAME code.
+. (Join-Path $PSScriptRoot 'dead-commodity-lib.ps1')
+
+# MUST FIRE - the frozen PRE-FIX rulesets, verbatim as they stood before this triage round. Never
+# regenerated from the live commodities.json: both commodities were REPAIRED today, so a fixture read
+# from the tree would encode the fix and the case would pass by finding nothing.
+$dcGexFx = @('\bsauce\b', '\bfrozen\b', '\bcanned\b', '\bmeal\b', '\bcake\b', '\bwater\b')
+$dcCgs = [pscustomobject]@{ id = 'chili-garlic-sauce'
+  include = @('\b(?:chili|chilli|chile)\s+garlic\s+sauce\b', '\bgarlic\s+(?:chili|chilli|chile)\s+sauce\b') }
+$dcFcf = [pscustomobject]@{ id = 'frozen-cauliflower-florets'
+  include = @('^(?=.*\bfrozen\b)(?=.*\bcauliflower\s+florets?\b).*$') }
+$dcR = Test-CommodityIsDead $dcCgs $dcGexFx
+if ($dcR -eq '\bsauce\b') { Ok 'dead-commodity: the pre-fix chili-garlic-sauce ruleset is named unmatchable - every include requires "sauce", GLOBAL_EXCLUDE blocks it, no relax_global released it' }
+else { Bad ('dead-commodity: the pre-fix chili-garlic-sauce ruleset was NOT caught (verdict [' + $dcR + ']) - the check cannot see its own founding bug, so a quiet run proves nothing') }
+$dcR = Test-CommodityIsDead $dcFcf $dcGexFx
+if ($dcR -eq '\bfrozen\b') { Ok 'dead-commodity: the pre-fix frozen-cauliflower-florets ruleset is named unmatchable - its only include requires "frozen"' }
+else { Bad ('dead-commodity: the pre-fix frozen-cauliflower-florets ruleset was NOT caught (verdict [' + $dcR + '])') }
+
+# CLEAN TWIN - teriyaki-sauce, which has carried relax_global \bsauce\b since long before this round and
+# prices six stores. If this ever fires, the check has become an argument for weakening a global exclude.
+$dcTwin = [pscustomobject]@{ id = 'teriyaki-sauce'; include = @('teriyaki'); relax_global = @('\bsauce\b') }
+if ((Test-CommodityIsDead $dcTwin $dcGexFx) -eq '') { Ok 'dead-commodity: teriyaki-sauce stays silent - a commodity that relaxes the token blocking it is alive' }
+else { Bad 'dead-commodity: teriyaki-sauce was called dead, but it relaxes \bsauce\b and prices 6 stores - the check is too eager' }
+
+# CLEAN TWINS FOR THE FALSE POSITIVES THE FIRST CUT ACTUALLY PRODUCED. These are not hypothetical: a
+# substring version of this check reported all four as dead while they priced 4 to 7 stores each.
+foreach ($dcFp in @(
+    @{ id = 'pancake-mix';  inc = @('\bpancake\s+mix\b') },                       # 'cake' inside 'pancake'
+    @{ id = 'watermelon';   inc = @('\bseedless\s+watermelon\b','\bwatermelon\b') }, # 'water' inside 'watermelon'
+    @{ id = 'kale';         inc = @('\bkale\b') },                                # 'ale' inside 'kale'
+    @{ id = 'rice-vinegar'; inc = @('\brice\s+(?:wine\s+)?vinegar\b') },          # OPTIONAL 'wine'
+    @{ id = 'cooked-quinoa';inc = @('\b(?:cooked|microwave(?:able)?|frozen)\s+quinoa\b') })) {  # nested alternation
+  $dcObj = [pscustomobject]@{ id = $dcFp.id; include = $dcFp.inc }
+  $dcV = Test-CommodityIsDead $dcObj $dcGexFx
+  if ($dcV -eq '') { Ok ('dead-commodity: ' + $dcFp.id + ' stays silent (the word is inside a longer word, an optional group or an alternation)') }
+  else { Bad ('dead-commodity: ' + $dcFp.id + ' was called dead by [' + $dcV + '] - this is the over-eager shape that would argue for weakening a global exclude') }
+}
+
+# THE PRODUCTION ARM. Runs against the real ruleset every time this suite runs, and this suite runs daily
+# from check-ad-cycles. A check that only ever sees its own fixtures runs never.
+$dcGexLive = Get-EngineGlobalExclude $PSScriptRoot
+if ($null -eq $dcGexLive) {
+  Bad 'dead-commodity: could not read $GLOBAL_EXCLUDE out of compare-deals.ps1 - the live arm did not run, which is not the same as a clean result'
+} else {
+  # NOT @( ... | ConvertFrom-Json ): a top-level JSON array arrives as ONE pipeline object and @() around
+  # it counts 1, so the sweep would examine a single commodity and report all clear. Measured here today.
+  $dcRaw = Get-Content (Join-Path $PSScriptRoot 'commodities.json') -Raw | ConvertFrom-Json
+  $dcComs = @($dcRaw)
+  $dcDead = @(); $dcUndec = 0
+  foreach ($dcC in $dcComs) {
+    $dcH = Test-CommodityIsDead $dcC $dcGexLive
+    if ($dcH -eq '?') { $dcUndec++ }
+    elseif ($dcH) { $dcDead += ("{0} (blocked by {1})" -f $dcC.id, $dcH) }
+  }
+  if ($dcComs.Count -lt 100) {
+    Bad ("dead-commodity: only $($dcComs.Count) commodit(y/ies) were examined - the live arm read almost nothing, so a clean result would mean nothing")
+  } elseif ($dcDead.Count -eq 0) {
+    Ok ("dead-commodity: all $($dcComs.Count) commodities can still match something past the $($dcGexLive.Count) global excludes ($dcUndec include set(s) too complex to reduce, reported rather than assumed clean)")
+  } else {
+    Bad ("dead-commodity: " + $dcDead.Count + " commodit(y/ies) can NEVER match - every include requires a word GLOBAL_EXCLUDE blocks and relax_global does not release: " + ($dcDead -join '; ') + ". Add that token to the commodity's relax_global, or narrow its includes. Do NOT remove the global exclude.")
+  }
+}
+
 # ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
 # WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
 # at least three auditors - one of them, audit-household-in-food, a HARD guard. test-matcher-parity.ps1 was
