@@ -1299,6 +1299,32 @@ if ($SelfTest) {
     _Route 'R17 twin: real spinach is untouched'           'Fresh Baby Spinach, 10 oz Clamshell' 'spinach'
     _Route 'R17 twin: real sweet potatoes are untouched'   'Sweet Potatoes, 3 lb Bag' 'sweet-potatoes'
     _Route 'R17 twin: real yogurt is untouched'            'Great Value Plain Greek Yogurt, 32 oz' 'yogurt'
+
+    # --- R18, 2026-08-30: APPLESAUCE IS ONE WORD, SO '\bsauce\b' NEVER SAW IT ----------------------------
+    # THE FOUNDING BUG: "(6 Pack) Mott's Mango Peach Applesauce Cups, 4 oz" held the WALMART CHEAPEST
+    # mangoes cell at $0.4467/each, beating the real $0.75 Fresh Red Mango. Nothing in the rules changed -
+    # the row simply arrived in walmart-regular-2026-08-30.json, and every rule that should have stopped it
+    # was already looking at the wrong spelling. '\bsauce\b' has been global since the beginning and
+    # mangoes carries its own '\bsauces?\b'; BOTH need a word boundary before "sauce", and "applesauce" has
+    # none. So the identical product reads as excluded when a store spells it "Apple Sauce" (Tree Top) and
+    # as fresh fruit when a store spells it "Applesauce" (Mott's).
+    # THE SHAPE: applesauce sits at 225 and every flavour word it names sits earlier, so first-match-wins
+    # gives the row to the flavour, not the food. Measured on the 2026-08-30 inputs, FOUR commodities were
+    # holding applesauce rows: bananas (17), watermelon (27), peaches (28), mangoes (113). A mangoes-only
+    # exclude fixes one cell of four and re-opens on the next flavour Mott's ships. Hence the global token.
+    # Measured before shipping: exactly ONE board cell moved (mangoes/Walmart 0.4467 -> 0.75), applesauce
+    # went 353 -> 362 rows, and audit-match-soundness reported one MOVED, which is this.
+    _Route 'R18 the founding applesauce cup leaves mangoes' "(6 Pack) Mott's Mango Peach Applesauce Cups, 4 oz" 'applesauce'
+    _Route 'R18 flavoured applesauce leaves watermelon'    "Musselman's Watermelon Applesauce, 3.17oz, 10 Count" 'applesauce'
+    _Route 'R18 flavoured applesauce leaves peaches'       'GoGo squeeZ FruitZ & VeggieZ Dino Pear Peach Carrot Applesauce Pouches, 3.2 oz (16 Pack)' 'applesauce'
+    _Route 'R18 flavoured applesauce leaves bananas'       'GoGo squeeZ Toy Story 5 No Sugar Added Banana Strawberry Applesauce Variety Pouches, 3.2 oz' 'applesauce'
+    # CLEAN TWINS. The first is the cell the bug took, and the one number a reader would check. The next two
+    # are the eviction this token could have caused - applesauce relaxes it, in BOTH spellings. The last is
+    # the \b: unanchored, this token would swallow "PineAPPLE SAUCE" and hand it to applesauce.
+    _Route 'R18 twin: the real mango keeps its cell'       'Fresh Red Mango' 'mangoes'
+    _Route 'R18 twin: plain applesauce keeps its commodity' 'Great Value Unsweetened Applesauce, 46 oz Jar' 'applesauce'
+    _Route 'R18 twin: the SPACED spelling still routes'    'Tree Top Apple Sauce Pouches, No Sugar Added, 3.2 Oz, 12 Count' 'applesauce'
+    _Route 'R18 twin: pineapple sauce is not applesauce'   '12 ct 3.17 oz Golden Farms Organic Pineapple Sauce, Unsweetened, 3.17 oz., 12 pk.' '<unmatched>'
   }
 
   # ---- 29. EITHER/OR ADS (2026-08-29). One price, two different packages, size field "each". Reading a
@@ -1813,7 +1839,28 @@ $GLOBAL_EXCLUDE = @(
   # names: 13 naan products, 11 already <unmatched>), so no relax_global is needed anywhere. The other
   # mapped one, "Stonefire Original Mini Naan Bread ... for Dipping & Pizza" -> frozen-pizza, is ALSO a
   # wrong match (shelf-stable flatbread, not frozen pizza) and dropping it is intended.
-  '\bnaan\b'
+  '\bnaan\b',
+  # 'apple sauce' added 2026-08-30 (mangoes Walmart cell): "(6 Pack) Mott's Mango Peach Applesauce Cups,
+  # 4 oz" took the WALMART CHEAPEST mangoes cell at $0.4467/each - applesauce cups priced as fresh mangoes,
+  # beating the real $0.75 Fresh Red Mango. It arrived with walmart-regular-2026-08-30.json; no rule changed.
+  # WHY THE EXISTING '\bsauce\b' GLOBAL DID NOT CATCH IT: "applesauce" is one word, so there is no word
+  # boundary before "sauce" and the token cannot match. Only the SPACED spelling "Apple Sauce" was ever
+  # globally excluded - which is why the same product name reads as excluded at Tree Top ("Apple Sauce
+  # Variety Pack") and as fresh fruit at Mott's ("Mango Peach Applesauce"). One product, two spellings,
+  # opposite outcomes.
+  # WHY GLOBAL AND NOT A mangoes EXCLUDE: mangoes is not the only thief. -Explain applesauce over the
+  # 2026-08-30 inputs shows FOUR commodities holding applesauce rows by array order alone - bananas (17),
+  # watermelon (27), peaches (28), mangoes (113) - because applesauce sits at 225 and first-match-wins
+  # hands the row to whichever flavour word is listed earlier. Excluding it on mangoes fixes one cell and
+  # leaves three, and the next flavour Mott's ships (strawberry, caramel apple, pumpkin spice, honeycrisp
+  # are all already in the estate) re-opens it somewhere else. Same shape as the baby-food class above:
+  # widening applesauce's include CANNOT fix an earlier commodity's theft - only a global exclude can.
+  # THE \b IS LOAD-BEARING: unanchored, 'apple\s*sauce' also matches inside "PineAPPLE SAUCE" (Golden Farms
+  # Organic Pineapple Sauce is live at Sam's). That row is already blocked by '\bsauce\b' and must stay
+  # the sauce commodities' problem, not applesauce's.
+  # applesauce declares this exact token in relax_global so its own 353 rows keep routing to it - without
+  # that this token would empty the commodity, the same eviction the serenity\s*kids note warns about.
+  '\bapple\s*sauce'
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }
