@@ -32,10 +32,17 @@ function Backup([string]$path) {
   # Set-Content restore that may have ADDED a BOM. RestoreAll writes in list order, so a second snapshot
   # would overwrite the true pre-run bytes with that BOM'd intermediate (measured: it re-creates the exact
   # +3-byte residue this function exists to kill). Register a path once, at its first touch.
+  # THE TIMESTAMP IS PART OF THE FILE (2026-08-30). audit-tile-integrity refuses to run when
+  # out\name-drift.json is older than product-urls.json, on the sound ground that its wrong-product flags
+  # would then describe links that have since changed. Restoring product-urls.json rewrites its mtime, so
+  # a case that merely touched it left that audit HELD - and therefore guards exiting 2 - for every case
+  # after it. Two of the five undiagnosed failures were that, and nothing about the file's CONTENT was
+  # wrong. A restore that leaves the file newer than it found it has not restored the file.
   $bytes = [IO.File]::ReadAllBytes($path)
   $content = Get-Content $path -Raw
+  $mtime = (Get-Item $path).LastWriteTimeUtc
   foreach ($r in $script:Restores) { if ($r.path -eq $path) { return $content } }
-  $script:Restores.Add([pscustomobject]@{ path = $path; content = $content; bytes = $bytes })
+  $script:Restores.Add([pscustomobject]@{ path = $path; content = $content; bytes = $bytes; mtime = $mtime })
   JournalSnapshot $path $bytes
   return $content
 }
@@ -84,10 +91,40 @@ function JournalRecover {
 }
 $script:Created = New-Object System.Collections.Generic.List[string]
 function MarkCreated([string]$path) { $script:Created.Add($path) }
+
+# THE INLINE RESTORE, BYTE-ACCURATE (2026-08-30, queue 2026-08-27-a0aeb1).
+# Every case used to undo its own mutation with `Set-Content $f $bak -Encoding UTF8 -NoNewline`, where
+# $bak came from `Get-Content -Raw`. On a BOM-LESS file that pair does not restore anything - it
+# CORRUPTS. Measured today on the real commodities.json: Get-Content -Raw reads a BOM-less file in the
+# ANSI codepage (Windows-1252), Set-Content -Encoding UTF8 writes it back as UTF-8 with a BOM, and every
+# one of its 66,170 bytes >= 0x80 is double-encoded. Original 3,213,023 bytes; after the "restore"
+# 3,294,142 - LARGER than the mutated version it was undoing, mojibake throughout, plus a BOM the file
+# never had. Re-encoding the original through Windows-1252 -> UTF-8 reproduces 3,294,142 to the byte.
+#
+# That is the whole reason five cases had been failing since 2026-08-29 with nobody able to say why:
+# case 2 mutates commodities.json, its restore silently corrupted it, and every guard from case 16
+# onward was reading the corrupted file instead of its own fixture. RestoreAll never showed it, because
+# RestoreAll writes BYTES and puts the file back correctly at the very end - after the damage.
+#
+# Backup() already keeps the exact pre-run bytes. Use them.
+function RestoreNow([string]$path) {
+  foreach ($r in $script:Restores) {
+    if ($r.path -eq $path) {
+      [IO.File]::WriteAllBytes($r.path, $r.bytes)
+      # and the mtime with it - see the note in Backup() on audit-tile-integrity's staleness hold
+      try { (Get-Item $r.path).LastWriteTimeUtc = $r.mtime } catch { }
+      return
+    }
+  }
+  throw "RestoreNow: $path was never registered with Backup() - nothing to restore it from"
+}
 function RestoreAll {
   foreach ($c in $script:Created) { try { Remove-Item $c -Force -ErrorAction SilentlyContinue } catch {} }
   foreach ($r in $script:Restores) {
-    try { [IO.File]::WriteAllBytes($r.path, $r.bytes) } catch { Write-Warning ("RESTORE FAILED for " + $r.path + " - fix this by hand before committing: " + $_.Exception.Message) }
+    try {
+      [IO.File]::WriteAllBytes($r.path, $r.bytes)
+      try { (Get-Item $r.path).LastWriteTimeUtc = $r.mtime } catch { }
+    } catch { Write-Warning ("RESTORE FAILED for " + $r.path + " - fix this by hand before committing: " + $_.Exception.Message) }
   }
   JournalClear   # the on-disk net is only needed while mutations are outstanding
 }
@@ -171,6 +208,52 @@ function RunGuardsOut {
   return [pscustomobject]@{ rc = $LASTEXITCODE; text = $o }
 }
 function RunGuards { return (RunGuardsOut).rc }
+
+# ---- EVIDENCE ON FAIL + THE RESIDUE TRIPWIRE (2026-08-30, queue 2026-08-27-a0aeb1) -------------------
+# Check/CheckLoud/CheckScript/CheckWarn used to DISCARD the captured child output the moment a case
+# failed, so a failing case could only ever say "expected exit 0, got 2". It could NOT name the guard that
+# actually fired. Five order-dependent failures (cases 16, 17, 26, 28, 29) sat undiagnosed from 2026-08-29
+# for exactly that reason: the instrument was blind to its own failure cause, and every isolation probe of
+# the individual cases came back green. So print the verdict lines the child produced.
+#
+# And print what is STILL MUTATED, because that is the other half of the same blindness. A leaked
+# restore from an EARLIER case is indistinguishable, by exit code alone, from a genuine failure of THIS
+# one - both are "expected 0, got 2". Every mutation in this suite goes through Backup(), which keeps the
+# pre-run BYTES, so "is a production file still mutated right now" is a hash comparison over that same
+# list. A case that restored correctly leaves this empty.
+function ResidueList {
+  $out = New-Object System.Collections.Generic.List[string]
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try {
+    foreach ($r in $script:Restores) {
+      try {
+        if (-not (Test-Path $r.path)) { [void]$out.Add('DELETED  ' + $r.path); continue }
+        $now = [IO.File]::ReadAllBytes($r.path)
+        $hNow = [BitConverter]::ToString($sha.ComputeHash($now))
+        $hWas = [BitConverter]::ToString($sha.ComputeHash($r.bytes))
+        if ($hNow -ne $hWas) {
+          [void]$out.Add(('MUTATED  {0}  ({1} bytes now vs {2} pre-run)' -f $r.path, $now.Length, $r.bytes.Length))
+        }
+      } catch { [void]$out.Add('UNREADABLE  ' + $r.path + '  ' + $_.Exception.Message) }
+    }
+  } finally { $sha.Dispose() }
+  return $out
+}
+function FailEvidence($text) {
+  $t = [string]$text
+  if ($t) {
+    $lines = @($t -split "`r?`n" | Where-Object { $_ -match 'HARD FAIL|GUARDS FAILED|ACCURACY|FAIL' })
+    if ($lines.Count -eq 0) { $lines = @($t -split "`r?`n" | Where-Object { $_ -match 'WARN' }) }
+    if ($lines.Count -eq 0) { Write-Output '        | (the child produced no FAIL or WARN line at all)' }
+    else { foreach ($l in ($lines | Select-Object -First 12)) { Write-Output ('        | ' + $l.Trim()) } }
+  }
+  $res = @(ResidueList)
+  if ($res.Count -gt 0) {
+    Write-Output '        RESIDUE - production file(s) still mutated at this point. A leaked restore from an'
+    Write-Output '        EARLIER case fails every case after it, and it is not this case that is broken:'
+    foreach ($r in $res) { Write-Output ('          ' + $r) }
+  }
+}
 function Skip($m) {
   # THE ZERO-ROWS RULE, applied to this suite. A case that examined nothing must not let the run end
   # green: 'baker rounding' SKIPped silently from 2026-07-24 to 2026-07-30 while the summary said
@@ -188,8 +271,8 @@ function Check($name, $expect, $sig) {
   $r = RunGuardsOut
   $sigOk = if ($sig) { $r.text -match $sig } else { $true }
   if ($r.rc -eq $expect -and $sigOk) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $r.rc); $script:pass++ }
-  elseif ($r.rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $r.rc); $script:failed++ }
-  else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own failure text /{2}/ is absent - a DIFFERENT guard failed, this one proved nothing" -f $name, $r.rc, $sig); $script:failed++ }
+  elseif ($r.rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $r.rc); FailEvidence $r.text; $script:failed++ }
+  else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own failure text /{2}/ is absent - a DIFFERENT guard failed, this one proved nothing" -f $name, $r.rc, $sig); FailEvidence $r.text; $script:failed++ }
 }
 function CheckLoud($name, $expect, $sig) {
   # LIKE Check, BUT WITHOUT -Quiet. An ADVISORY finding is emitted through guards' Say(), which -Quiet
@@ -200,8 +283,8 @@ function CheckLoud($name, $expect, $sig) {
   $rc = $LASTEXITCODE
   $sigOk = if ($sig) { $o -match $sig } else { $true }
   if ($rc -eq $expect -and $sigOk) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $rc); $script:pass++ }
-  elseif ($rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); $script:failed++ }
-  else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own text /{2}/ is absent - this case proved nothing" -f $name, $rc, $sig); $script:failed++ }
+  elseif ($rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); FailEvidence $o; $script:failed++ }
+  else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own text /{2}/ is absent - this case proved nothing" -f $name, $rc, $sig); FailEvidence $o; $script:failed++ }
 }
 # Some invariants live in their own gate rather than guards.ps1 (tile-integrity's ACCURACY check). Assert those
 # against the script that actually owns them - Check() always runs guards.ps1, so passing a script name to it
@@ -213,8 +296,8 @@ function CheckScript($name, $expect, $script, $sig) {
   $rc = $LASTEXITCODE
   $sigOk = if ($sig) { $o -match $sig } else { $true }
   if ($rc -eq $expect -and $sigOk) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $rc); $script:pass++ }
-  elseif ($rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); $script:failed++ }
-  else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own failure text /{2}/ is absent - a DIFFERENT check failed, this one proved nothing" -f $name, $rc, $sig); $script:failed++ }
+  elseif ($rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); FailEvidence $o; $script:failed++ }
+  else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own failure text /{2}/ is absent - a DIFFERENT check failed, this one proved nothing" -f $name, $rc, $sig); FailEvidence $o; $script:failed++ }
 }
 
 # ---- 0. THE EMPTY-STAMP-FILE THROW (2026-07-30) ------------------------------------------------------
@@ -301,7 +384,7 @@ $bak = Backup $f
 $d = $bak | ConvertFrom-Json; $d.price_mode = 'delivery'
 ($d | ConvertTo-Json -Depth 6) | Set-Content $f -Encoding UTF8
 Check 'price-mode: Aldi flipped to the marked-up DELIVERY catalogue' 2 'HARD FAIL: price-mode \(in-store pricing\)'
-Set-Content $f $bak -Encoding UTF8 -NoNewline
+RestoreNow $f
 
 # ---- 2. household-in-food ----------------------------------------------------------
 # INJECT the offending row rather than relying on one existing in a store file: the Family Fare file is
@@ -329,8 +412,8 @@ $w.deals = $rows.ToArray()
 
 Check 'household-in-food: a Lysol MANGO cleaner priced as fruit' 2 'HARD FAIL: household-in-food'
 
-Set-Content $wf $wbak -Encoding UTF8 -NoNewline
-Set-Content $cf $cbak -Encoding UTF8 -NoNewline
+RestoreNow $wf
+RestoreNow $cf
 
 # ---- 3. rogue pin ------------------------------------------------------------------
 $of = Join-Path $root 'board-price-overrides.json'
@@ -342,7 +425,7 @@ foreach ($x in $o.cells) { [void]$cells.Add($x) }
 $o.cells = $cells.ToArray()
 ($o | ConvertTo-Json -Depth 6) | Set-Content $of -Encoding UTF8
 Check 'rogue pin: a pin that overrides the engine ($99/dozen eggs)' 2 'HARD FAIL: pin.*eggs / Walmart'
-Set-Content $of $obak -Encoding UTF8 -NoNewline
+RestoreNow $of
 
 # ---- 4. factor mismatch ------------------------------------------------------------
 $pf = Join-Path $root 'product-urls.json'
@@ -353,7 +436,7 @@ $target = $p.items.'white-vinegar'.'Sam''s Club'
 if ($target) { $target.size = '1 gal' }   # the truth is "2 pk 1 gal"
 ($p | ConvertTo-Json -Depth 8) | Set-Content $pf -Encoding UTF8
 Check 'factor mismatch: Sam''s 2-pack vinegar recorded as ONE gallon (2x)' 2 'x factor\s+white-vinegar'
-Set-Content $pf $pbak -Encoding UTF8 -NoNewline
+RestoreNow $pf
 
 # ---- 5. multipack size -------------------------------------------------------------
 $sf = (Get-ChildItem (Join-Path $root 'out\regular\sams-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
@@ -362,7 +445,7 @@ $s = $sbak | ConvertFrom-Json
 foreach ($r in $s.deals) { if ($r.item -match 'ReaLemon') { $r.size = '48 fl oz' } }   # truth: "2 pk 48 fl oz"
 ($s | ConvertTo-Json -Depth 6) | Set-Content $sf -Encoding UTF8
 Check 'multipack size: Sam''s 2-pack ReaLemon recorded as ONE bottle' 2 'multipack size.*ReaLemon'
-Set-Content $sf $sbak -Encoding UTF8 -NoNewline
+RestoreNow $sf
 
 # ---- 6. stray file in out\regular --------------------------------------------------
 # The one that actually bit us: a throttled 0-row diagnostic named "family-fare-regular-<date>.PARTIAL.json"
@@ -424,10 +507,10 @@ if ($hv) {
   $hv.item     = $stale
   ($cmpD | ConvertTo-Json -Depth 8) | Set-Content $cmpF -Encoding UTF8
   Check 'stale sale: a 2-day-old undated markdown republished as a live sale' 2 'stale undated discount published as a live sale\s+sirloin-steak / Hy-Vee'
-  Set-Content $cmpF $cbak2 -Encoding UTF8 -NoNewline
+  RestoreNow $cmpF
   if ($exCreated) { Remove-Item $exF -Force -ErrorAction SilentlyContinue }
-  else { Set-Content $exF $exBak -Encoding UTF8 -NoNewline }
-  if ($null -ne $exTodayBak) { Set-Content $exTodayF $exTodayBak -Encoding UTF8 -NoNewline }
+  else { RestoreNow $exF }
+  if ($null -ne $exTodayBak) { RestoreNow $exTodayF }
 } else {
   Skip 'stale sale: no Hy-Vee sirloin cell to mutate - inject a synthetic sirloin row into the board copy'
 }
@@ -448,7 +531,7 @@ if ($md) {
   $md.ad_price = ('$' + [string]$md.base_price)
   ($hd | ConvertTo-Json -Depth 6) | Set-Content $hf -Encoding UTF8
   Check 'basePrice bug: a marked-down item republished at its REGULAR price' 2 'publishing a price the store is NOT charging'
-  Set-Content $hf $hbak -Encoding UTF8 -NoNewline
+  RestoreNow $hf
 } else {
   Skip 'basePrice bug: no marked-down Hy-Vee row - the puller contract (record both prices) has broken'
 }
@@ -469,7 +552,7 @@ if ($mb) {
   $mb.price_multiple = ([double]$mb.price_multiple) + 1     # a divisor the store never quoted
   ($hd | ConvertTo-Json -Depth 6) | Set-Content $hf -Encoding UTF8
   Check 'multibuy: a price_multiple that does not reconcile ad_price to current_price' 2 'multibuy'
-  Set-Content $hf $hbak -Encoding UTF8 -NoNewline
+  RestoreNow $hf
 } else {
   Skip 'multibuy: no price_multiple row - inject one (store=Hy-Vee, ad_price=1.3333, price_multiple=3, current_price=4)'
 }
@@ -488,7 +571,7 @@ if ($victim) {
   $victim.price = 99.99          # a real link, a price the store does not charge
   ($pud | ConvertTo-Json -Depth 8) | Set-Content $puF2 -Encoding UTF8
   CheckScript 'tile-integrity: a shipped link whose price disagrees with the tile' 2 'audit-tile-integrity.ps1' 'LINKED tile\(s\) disagree'
-  Set-Content $puF2 $pubak -Encoding UTF8 -NoNewline
+  RestoreNow $puF2
 } else {
   Skip 'tile-integrity: no Hy-Vee link on bananas/milk/eggs/butter - widen the victim search to any linked id'
 }
@@ -508,7 +591,7 @@ function CheckWarn($name, $pattern) {
   # so the suite would CRASH mid-run instead of printing FAIL. The warn line arrives on stdout via Say.
   $o = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { [string]$_ }) -join "`n"
   if ($LASTEXITCODE -eq 0 -and $o -match $pattern) { Write-Output ("  PASS  {0}  (exit 0 + warn fired)" -f $name); $script:pass++ }
-  else { Write-Output ("  FAIL  {0}  expected exit 0 with warn /{1}/, got exit {2} (warn present: {3})" -f $name, $pattern, $LASTEXITCODE, ($o -match $pattern)); $script:failed++ }
+  else { Write-Output ("  FAIL  {0}  expected exit 0 with warn /{1}/, got exit {2} (warn present: {3})" -f $name, $pattern, $LASTEXITCODE, ($o -match $pattern)); FailEvidence $o; $script:failed++ }
 }
 $bkf = (Get-ChildItem (Join-Path $root 'out\regular\bakers-regular-*.json') |
   Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
@@ -519,7 +602,7 @@ if ($flip.Count -gt 0) {
   foreach ($r in $flip) { $r.source_ad = 'bakersplus-scrape' }   # the pre-API provenance guard 11 must notice
   ($bkd | ConvertTo-Json -Depth 6) | Set-Content $bkf -Encoding UTF8
   CheckWarn 'bakers provenance: rows no longer verbatim from the sanctioned API must WARN' 'price provenance CHANGED'
-  Set-Content $bkf $bkbak -Encoding UTF8 -NoNewline
+  RestoreNow $bkf
 } else {
   Write-Output '  FAIL  bakers provenance: newest bakers-regular parsed to ZERO rows - nothing to flip'; $script:failed++
 }
@@ -539,7 +622,7 @@ if ($bbCell) {
   $bbCell.item = 'Bai Brasilia Blueberry Antioxidant Beverage 18 Fl Oz'
   ($cmpD2 | ConvertTo-Json -Depth 8) | Set-Content $cmpF2 -Encoding UTF8
   Check 'food-class: blueberries priced as a Bai antioxidant BEVERAGE' 2 'HARD FAIL: no food commodity matched a wrong-class product'
-  Set-Content $cmpF2 $cbak3 -Encoding UTF8 -NoNewline
+  RestoreNow $cmpF2
 } else {
   Skip 'food-class: no priced blueberries cell - inject one into the board copy'
 }
@@ -558,7 +641,7 @@ if (Test-Path $of) {
     $o.cells[0].per_unit = [math]::Round([double]$o.cells[0].per_unit * 2, 4)
     ($o | ConvertTo-Json -Depth 6) | Set-Content $of -Encoding UTF8
     Check 'pin: hand-edited per_unit no longer matches its own verified link' 2 'pin does NOT match its own link'
-    Set-Content $of $obak -Encoding UTF8 -NoNewline
+    RestoreNow $of
 
     # 13. an UNSOURCED pin: a pin beats the engine, so one with no link is a number nothing can correct
     $o2 = $obak | ConvertFrom-Json
@@ -567,7 +650,7 @@ if (Test-Path $of) {
     $o2.cells = @(@($o2.cells) + $fake)
     ($o2 | ConvertTo-Json -Depth 6) | Set-Content $of -Encoding UTF8
     Check 'pin: unsourced pin (no product-urls link to derive from)' 2 'pin has NO LINK to derive from'
-    Set-Content $of $obak -Encoding UTF8 -NoNewline
+    RestoreNow $of
   } else {
     Skip 'pin: overrides file has no cells - inject a synthetic derivable pin, then hand-edit it'
   }
@@ -613,7 +696,7 @@ if (Test-Path $of) {
           Check ('pin: ' + $ndFxKey + ' pinned to a link that is now a DIFFERENT product') 2 'pin derived from a WRONG-PRODUCT link'
           $ndFxFired = $true
         }
-        Set-Content $pfx $pfxBak -Encoding UTF8 -NoNewline
+        RestoreNow $pfx
         if ($ndFxFired) { break }
       }
       & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
@@ -653,7 +736,7 @@ if ($g6Pick) {
   $g6Doc.deals = @(@($g6Doc.deals) | Select-Object -First 10)   # 10 is under half of any >100-row history
   ($g6Doc | ConvertTo-Json -Depth 8) | Set-Content $g6Pick.FullName -Encoding UTF8
   Check ('store collapse: ' + $g6Prefix + "'s newest capture holds 10 rows against its own recent history") 2 ('store data collapsed\s+\[' + [regex]::Escape($g6Prefix) + '\]')
-  Set-Content $g6Pick.FullName $g6Bak -Encoding UTF8 -NoNewline
+  RestoreNow $g6Pick.FullName
 } else {
   Skip 'store collapse: no out\regular prefix has 2+ captures with a >100-row recent best, so guard 6 cannot be armed against this tree at all - which IS the finding'
 }
@@ -739,7 +822,7 @@ if ($g18Pick.Count) {
   }
   ($g18Doc | ConvertTo-Json -Depth 10) | Set-Content $g18F -Encoding UTF8
   Check ('coverage regression: ' + $g18Store + ' loses half its priced cells between boards') 2 'HARD FAIL: no store lost coverage vs the previous board'
-  Set-Content $g18F $g18Bak -Encoding UTF8 -NoNewline
+  RestoreNow $g18F
 } else {
   Skip 'coverage regression: no un-acked store on the board carries 40+ priced cells to halve - inject a synthetic store into the board copy'
 }
@@ -763,7 +846,10 @@ $g19Anchor = "`$ErrorActionPreference = 'Stop'"
 if ($g19Src.Contains($g19Anchor)) {
   $g19At = $g19Src.IndexOf($g19Anchor) + $g19Anchor.Length
   $g19Mut = $g19Src.Substring(0, $g19At) + "`r`n[Console]::Error.WriteLine('test-guards stderr probe - a delegated audit is allowed to write to stderr')" + $g19Src.Substring($g19At)
-  Set-Content $g19A $g19Mut -Encoding UTF8 -NoNewline
+  # MUTATION, not a restore. Written BOM-less on purpose: this is a live .ps1 that guards.ps1 is about
+  # to dot-source, and the old Set-Content -Encoding UTF8 here prepended a BOM the file never had - the
+  # +3 bytes the residue tripwire reported against audit-price-mode.ps1.
+  [IO.File]::WriteAllText($g19A, $g19Mut, (New-Object System.Text.UTF8Encoding($false)))
   Check 'delegate stderr: a benign diagnostic line from a delegated audit must not crash the gate' 0 $null
   $g19Aldi = (Get-ChildItem (Join-Path $root 'out\regular\aldi-regular-*.json') |
     Where-Object { $_.BaseName -match '^aldi-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
@@ -771,8 +857,8 @@ if ($g19Src.Contains($g19Anchor)) {
   $g19Doc = $g19Bak | ConvertFrom-Json; $g19Doc.price_mode = 'delivery'
   ($g19Doc | ConvertTo-Json -Depth 8) | Set-Content $g19Aldi -Encoding UTF8
   Check 'delegate stderr: the delegated HARD FAIL still arms while that audit writes to stderr' 2 'HARD FAIL: price-mode \(in-store pricing\)'
-  Set-Content $g19Aldi $g19Bak -Encoding UTF8 -NoNewline
-  Set-Content $g19A $g19Src -Encoding UTF8 -NoNewline
+  RestoreNow $g19Aldi
+  RestoreNow $g19A
 } else {
   Skip 'delegate stderr: audit-price-mode.ps1 no longer sets $ErrorActionPreference - re-anchor the stderr probe'
 }
@@ -823,9 +909,24 @@ if (-not $g20F) {
     CheckLoud 'board-vs-identity: a table row pointed at the wrong commodity is NAMED by the gate' $g20Expect ([regex]::Escape($g20Name))
     # CLEAN TWIN: restore and prove the gate goes quiet again, so the case above cannot be passing on
     # some unrelated permanent disagreement.
-    [IO.File]::WriteAllText($g20F.FullName, $g20Src, (New-Object System.Text.UTF8Encoding($false)))
+    RestoreNow $g20F.FullName
     CheckLoud 'board-vs-identity: with the row restored, the gate reports agreement again' 0 'board-vs-identity \[staple\]: all \d+ cell'
   }
+}
+
+# ---- THE RESIDUE TRIPWIRE, ARMED (2026-08-30, queue 2026-08-27-a0aeb1) ------------------------------
+# Read BEFORE the finally block, on purpose. RestoreAll below puts every registered file back from its
+# pre-run BYTES, so by the time the trailing 'restored:' case runs, any leak is already gone - which is
+# exactly why five order-dependent failures could sit here for a day looking like five unrelated bugs.
+# This is the one moment where a case that did NOT restore itself is still visible.
+$tripwire = @(ResidueList)
+if ($tripwire.Count -gt 0) {
+  Write-Output ('  FAIL  residue tripwire: {0} production file(s) were left mutated by the cases above. Every case that ran after the leak was measuring THAT file, not its own mutation:' -f $tripwire.Count)
+  foreach ($t in $tripwire) { Write-Output ('          ' + $t) }
+  $script:failed++
+} else {
+  Write-Output '  PASS  residue tripwire: every case restored the files it mutated (checked byte-for-byte against the pre-run snapshot, before RestoreAll)'
+  $script:pass++
 }
 
 } finally {

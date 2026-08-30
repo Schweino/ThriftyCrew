@@ -305,7 +305,77 @@
       "contains": "$butterJson",
       "reason": "frozen must-fire fixture for the cheapest-to-BUY defect (bangers-and-mash butter, measured 2026-08-15): Sam's Club wins per-unit on a 4 lb box while Aldi's 1 lb box is cheaper to actually buy. The 4 stores are the fixture's own frozen shape, not a live store list. SELF-REFERENTIAL like $asrFive and $cgQuiet above - a must-fire fixture for a code-scanning guard gets flagged by that guard unless it is registered here.",
       "reviewed": "2026-08-16"
+    },
+    {
+      "file": "audit-ad-status.ps1",
+      "contains": "$store -in @('Hy-Vee', 'Aldi', 'Family Fare')",
+      "reason": "FORMAT branch, not a store list: these three stores' rows all live inside the one combined ads-<date>.json and must be filtered per store, while every other store has its own per-store file and needs no filter. Confirmed at audit-ad-status.ps1:81-90 on 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "capture-policy-lib.ps1",
+      "contains": "$script:TermRotationStores",
+      "reason": "deliberately excludes Hy-Vee, which rotates a PRODUCT cursor rather than a term list; the comment above the line says a store that is not term-rotation must not be handed a term cursor. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "capture-run.ps1",
+      "contains": "$BROWSER_DRIVER_KEYS",
+      "reason": "the three lanes pull-browser-stores.py drives over CDP (Walmart, Sam's Club, Fareway). The headless stores have no driver key by design. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "capture-watchdog.ps1",
+      "contains": "$HEADLESS_LANES",
+      "reason": "the three server-pull lanes, deliberately the complement of the bot-walled browser lanes, which are judged on row AGE instead because zero rows on a given day is normal for them. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "probe-price-fields.ps1",
+      "contains": "NOT PROBED HERE (need a logged-in Chrome)",
+      "reason": "operator note heading section 4, naming the four bot-walled stores this script cannot probe from PowerShell; Hy-Vee, Family Fare and Baker's are probed directly in sections 1-3 above. Confirmed at probe-price-fields.ps1:218 on 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "rollback-ttl-lib.ps1",
+      "contains": "$script:RollbackTtlStores",
+      "reason": "the only three stores that may be GIVEN a TTL. Baker's and Family Fare publish their own end dates and must never be handed a guess instead; Hy-Vee and Aldi have no ruling yet, and a TTL nobody chose is an invention. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "test-capture-builders.ps1",
+      "contains": "$BROWSER_DRIVER_KEYS",
+      "reason": "fixture mirroring capture-run's browser-lane map plus Aldi, so the builder-dispatch test can exercise a drivable store that has NO capture on disk. Frozen fixture shape, not a live store list. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "test-capture-builders.ps1",
+      "contains": "$drivable = @(",
+      "reason": "same frozen fixture: the four browser-drivable lanes the test asserts against. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "test-rollback-ttl.ps1",
+      "contains": "$allowed = @(",
+      "reason": "must-fire half of the TTL ruling fixture - the three stores that MUST get a TTL. Its complement is $refused on the next line; together they name all seven, but they are two statements and each is deliberately partial. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
+    },
+    {
+      "file": "test-rollback-ttl.ps1",
+      "contains": "$refused = @(",
+      "reason": "clean-twin half of the same fixture - the four stores that must be REFUSED a TTL because they publish their own dates or have no ruling. Confirmed 2026-08-30.",
+      "reviewed": "2026-08-30"
     }
+  ],
+  "promoted_prefixes_readme": "out\\regular files whose prefix is NOT a store's regular_prefix because they are not a store PULL. They are one-shot promoted captures written by another lane, and check 3 of audit-store-registry.ps1 accepts them. Registered rather than deleted (2026-08-30, queue 2026-08-22-2c3e88): input-usage.json shows hunter-walmart-regular-2026-08-16.json first_used 08-21, last_used the 2026-08-26 build, uses=5, so deleting them would silently drop adjudicated cells from live builds. NOTE what registering here does NOT do: guard 6 in guards.ps1 enumerates prefixes from the FILES it finds, not from this registry, so its 'could NOT evaluate' warn for these seven stands - correctly. Each prefix holds exactly one capture, so there genuinely is no history to compare a thin file against, and silencing that warn from here would be dressing up an unwatched store as a watched one.",
+  "promoted_prefixes": [
+    { "prefix": "hunter-hyvee",     "store": "Hy-Vee",      "producer": "promote-ingredient-queue.ps1", "source": "ingredient-queue.json", "price_mode": "in-store", "mode_verified": "2026-08-16", "registered": "2026-08-30", "reason": "Recipe Hunter promotion lane: commodity ids come from ingredient-queue-map.json as RULINGS, one-shot, no collapse history expected" },
+    { "prefix": "hunter-aldi",      "store": "Aldi",        "producer": "promote-ingredient-queue.ps1", "source": "ingredient-queue.json", "price_mode": "in-store", "mode_verified": "2026-08-16", "registered": "2026-08-30", "reason": "Recipe Hunter promotion lane: commodity ids come from ingredient-queue-map.json as RULINGS, one-shot, no collapse history expected" },
+    { "prefix": "hunter-familyfare","store": "Family Fare",  "producer": "promote-ingredient-queue.ps1", "source": "ingredient-queue.json", "price_mode": "in-store", "mode_verified": "2026-08-16", "registered": "2026-08-30", "reason": "Recipe Hunter promotion lane: commodity ids come from ingredient-queue-map.json as RULINGS, one-shot, no collapse history expected" },
+    { "prefix": "hunter-fareway",   "store": "Fareway",     "producer": "promote-ingredient-queue.ps1", "source": "ingredient-queue.json", "price_mode": "in-store", "mode_verified": "2026-08-16", "registered": "2026-08-30", "reason": "Recipe Hunter promotion lane: commodity ids come from ingredient-queue-map.json as RULINGS, one-shot, no collapse history expected" },
+    { "prefix": "hunter-bakers",    "store": "Baker's",     "producer": "promote-ingredient-queue.ps1", "source": "ingredient-queue.json", "price_mode": "in-store", "mode_verified": "2026-08-16", "registered": "2026-08-30", "reason": "Recipe Hunter promotion lane: commodity ids come from ingredient-queue-map.json as RULINGS, one-shot, no collapse history expected" },
+    { "prefix": "hunter-samsclub",  "store": "Sam's Club",  "producer": "promote-ingredient-queue.ps1", "source": "ingredient-queue.json", "price_mode": "in-store", "mode_verified": "2026-08-16", "registered": "2026-08-30", "reason": "Recipe Hunter promotion lane: commodity ids come from ingredient-queue-map.json as RULINGS, one-shot, no collapse history expected" },
+    { "prefix": "hunter-walmart",   "store": "Walmart",     "producer": "promote-ingredient-queue.ps1", "source": "ingredient-queue.json", "price_mode": "in-store", "mode_verified": "2026-08-16", "registered": "2026-08-30", "reason": "Recipe Hunter promotion lane: commodity ids come from ingredient-queue-map.json as RULINGS, one-shot, no collapse history expected" }
   ],
   "pull_profile_readme": "Per-store pull mechanics, read by that store's agent module so pacing is versioned data instead of a number retyped into a console snippet. RULES: (1) every value is MEASURED or marked proposed/unmeasured - never guess a safe rate, an unpaced Sams sweep walled at 207 of 595 terms on 2026-08-15; (2) this block records HOW to pull, never WHAT a store carries. Do not add learned empty/absent terms here. A term recorded as empty during a wall would silently stop being checked forever, which is the contested-flag-baselined-away class: unchecked is never not-carried."
 }

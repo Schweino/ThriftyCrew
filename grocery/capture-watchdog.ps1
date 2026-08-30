@@ -55,6 +55,30 @@ function Test-NeverRanTooLong {
   return ((($Now - $TriggerStart).TotalHours) -gt $GraceHours)
 }
 
+# How stale the NEWEST board may be before this is a finding (2026-08-30, queue 2026-08-22-fe7b43).
+# Section 3 used to ask Test-Path comparison-<today>.json, which is structurally wrong on this estate:
+# the board is NAMED after the newest ads file, never after today - guards.ps1 says so in its own line,
+# "the board is built from the newest ads file (ads-2026-08-26 -> comparison-2026-08-26)". So on every
+# day the ad window had not rolled over, NO BOARD FOR TODAY fired while the heartbeat two sections up
+# reported that same board 1.3 h fresh, and the watchdog task sat at LastResult=1 for over a week. A
+# watchdog that is red on quiet days teaches its reader to ignore it, which is worse than not running.
+# FRESHNESS was always the question; the filename never was.
+# 26h = one 24h cadence plus 2h slack. Deliberately NARROWER than two cadences, so a genuinely dead day
+# cannot be alibied by yesterday's output (the tolerance-wider-than-period trap).
+$script:BoardStaleHours = 26
+
+function Test-BoardStale {
+  <#
+    .SYNOPSIS Is the newest board older than one capture cadence?
+    .DESCRIPTION Pure, so the -SelfTest fixtures below can drive it with frozen timestamps
+                 instead of whatever out\ happens to hold on the day the test runs.
+  #>
+  param([datetime]$BoardWritten, [datetime]$Now, [int]$MaxHours = 0)
+  if ($MaxHours -le 0) { $MaxHours = $script:BoardStaleHours }
+  if (-not $BoardWritten -or $BoardWritten.Year -lt 2000) { return $false }
+  return ((($Now - $BoardWritten).TotalHours) -gt $MaxHours)
+}
+
 if ($SelfTest) {
   # Frozen fixtures: the founding bug (a task that never runs, reported green forever) and
   # its clean twin (a task legitimately still waiting for its first slot).
@@ -75,6 +99,29 @@ if ($SelfTest) {
   if (Test-NeverRanTooLong -TriggerStart ([datetime]'1999-11-30') -Now $now) {
     Write-Output 'FAIL  an unknown trigger start produced a finding out of nothing'; $fail++
   } else { Write-Output 'ok    unknown trigger start -> no invented finding' }
+
+  # ---- board freshness (2026-08-30, queue 2026-08-22-fe7b43) ----------------------------------------
+  # FROZEN, not read from out\. The whole defect was a check that consulted a rotating filename, so a
+  # fixture rebuilt from the live board on the day of the run would encode whatever the ad cycle happened
+  # to be doing and could pass by finding nothing.
+  $bNow = [datetime]'2026-08-30 09:30'
+
+  # MUST FIRE: the real failing shape. A board that has not been rebuilt since the morning before.
+  if (-not (Test-BoardStale -BoardWritten ([datetime]'2026-08-29 06:10') -Now $bNow)) {
+    Write-Output 'FAIL  a board last written 27.3 h ago read as fresh - the staleness gate cannot arm'; $fail++
+  } else { Write-Output 'ok    a board 27.3 h old is a finding' }
+
+  # CLEAN TWIN: the exact 08-27..08-30 shape that made the OLD check fire every day. comparison-2026-08-26
+  # is named four days back because the board takes the newest ADS file's name, and it was rebuilt at
+  # 14:45 the previous afternoon. Filename old, board fresh, watchdog must stay silent.
+  if (Test-BoardStale -BoardWritten ([datetime]'2026-08-29 14:45') -Now $bNow) {
+    Write-Output 'FAIL  comparison-2026-08-26 rebuilt 18.8 h ago was called stale - the ad-cycle false positive is back'; $fail++
+  } else { Write-Output 'ok    a 4-day-old FILENAME with an 18.8 h-old rebuild stays silent' }
+
+  # The bar sits under two cadences, so a dead day cannot hide behind yesterday's output.
+  if ($script:BoardStaleHours -ge 48) {
+    Write-Output 'FAIL  the staleness window is at least two capture cadences wide - a skipped day would be alibied by the previous one'; $fail++
+  } else { Write-Output 'ok    staleness window is narrower than two cadences' }
 
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
@@ -175,14 +222,23 @@ if (Test-Path $statusF) {
   [void]$findings.Add("RUN RECORD: $statusF does not exist - capture-run has not written its own record; only Task Scheduler's word says it ran.")
 }
 
-# ---- 3. is there a board for today? -----------------------------------------
-$cmp = Join-Path $OutDir "comparison-$todayS.json"
-if (-not (Test-Path $cmp)) {
-  $newest = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue |
-            Sort-Object Name -Descending | Select-Object -First 1
-  [void]$findings.Add("NO BOARD FOR TODAY: comparison-$todayS.json missing (newest is $(if($newest){$newest.Name}else{'none'})). Capture ran but the board was not recomputed.")
+# ---- 3. was the board REBUILT recently? -------------------------------------
+# Freshness, not a filename. See Test-BoardStale above for why comparison-<today>.json was the wrong
+# question: the board is named after the newest ads file, so on every non-rollover day this section
+# reported NO BOARD FOR TODAY about a board that had been rebuilt hours earlier.
+$cmp = $null
+$newest = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue |
+          Sort-Object Name -Descending | Select-Object -First 1
+if (-not $newest) {
+  [void]$findings.Add("NO BOARD AT ALL: no comparison-*.json under $OutDir. Nothing has been built here, so there is nothing to publish.")
 } else {
-  [void]$ok.Add("board comparison-$todayS.json present")
+  $cmp = $newest.FullName
+  $ageH = [math]::Round(((Get-Date) - $newest.LastWriteTime).TotalHours, 1)
+  if (Test-BoardStale -BoardWritten $newest.LastWriteTime -Now (Get-Date)) {
+    [void]$findings.Add("BOARD IS STALE: the newest board $($newest.Name) was last written $($newest.LastWriteTime.ToString('yyyy-MM-dd HH:mm')), $ageH h ago - past the $($script:BoardStaleHours)h bar. Capture may have run, but the board was not recomputed.")
+  } else {
+    [void]$ok.Add("newest board $($newest.Name) rebuilt $ageH h ago")
+  }
 }
 
 # ---- 4. did it reach the live site? -----------------------------------------
@@ -190,7 +246,11 @@ if (-not (Test-Path $cmp)) {
 # the recompute happened but the publish did not, and the site is serving a board
 # that no longer matches the data behind it.
 $pub = Join-Path (Split-Path $root -Parent) 'public\board.json'
-if ((Test-Path $cmp) -and (Test-Path $pub)) {
+# $cmp is now the NEWEST board rather than comparison-<today>.json. That matters here too, and it is the
+# same defect wearing a different hat: while $cmp was a today-named path that mostly did not exist, this
+# whole check was skipped on every non-rollover day - a gate that could only arm when the ad window
+# happened to roll. It arms daily now.
+if ($cmp -and (Test-Path $cmp) -and (Test-Path $pub)) {
   $cT = (Get-Item $cmp).LastWriteTime; $pT = (Get-Item $pub).LastWriteTime
   if ($pT -lt $cT.AddMinutes(-30)) {
     [void]$findings.Add("NOT PUBLISHED: public\board.json is $([int]($cT - $pT).TotalMinutes) min older than today's comparison. The board was rebuilt but never shipped.")
