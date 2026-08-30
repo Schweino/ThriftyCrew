@@ -75,12 +75,36 @@ function Test-AdWindowExpired { param($Header,[datetime]$Today)
   try { return ([datetime]$Header.ad_to -lt $Today) } catch { return $false }
 }
 
-function Get-AgeProfile { param($Rows,[datetime]$Today,[int]$MaxDays)
+# A row is WINDOW-DATED when its own ad_to, or its file header's ad_to, says when it expires. That is a real
+# date the row earned, just not a per-row capture stamp, and it is the ONLY honest one an ad row can carry
+# (see the block above and audit-asof-evidence).
+function Test-RowIsWindowDated { param($Row,$Header)
+  if($Row -and $Row.PSObject.Properties['ad_to'] -and [string]$Row.ad_to){ return $true }
+  if($Header -and $Header.PSObject.Properties['ad_to'] -and [string]$Header.ad_to){ return $true }
+  return $false
+}
+
+# WINDOW-DATED ROWS ARE NOT UNDATED (2026-08-30, queue 2026-08-30-fec3dc). Ad rows must never carry as_of -
+# the block above is a whole essay on why - yet this function counted every one of them as undated, so the
+# UNDATED GREW arm was measuring FLYER SIZE against the flyer sizes frozen into the baseline on 2026-08-07
+# (Aldi 60, Family Fare 1100, Hy-Vee 641, Baker's 39, Fareway 11). Every week with a bigger flyer read as
+# "a writer that was stamping as_of has stopped". It fired on five stores every day from 2026-08-15 to
+# 2026-08-30 while all five regular files were 0-undated and no writer had stopped anything: 682/682 Hy-Vee,
+# 86/86 Aldi, 1400/1400 Family Fare ad rows, plus Baker's 108 and Fareway 218 whole ad captures. That is
+# exactly the guard-people-learn-to-scroll-past failure this file's own comments warn about, and it buries
+# the signal the tier exists to catch - a REGULAR-file writer actually stopping.
+#
+# WHAT DOES NOT CHANGE: `dated` still counts only rows with a per-row as_of, so the zero-dated hard check
+# above ("the whole store opts out of every staleness check") still fires for a store whose only source is
+# an ad file. A window is an expiry, not a capture stamp, and Test-AdWindowExpired owns it wholesale.
+function Get-AgeProfile { param($Rows,[datetime]$Today,[int]$MaxDays,[int]$WindowDated=0)
   $all = @($Rows); $dated = @($all | Where-Object { $_.as_of })
   $ages = @($dated | ForEach-Object { ($Today - [datetime]$_.as_of).Days })
   $over = @($ages | Where-Object { $_ -gt $MaxDays }).Count
+  $und = $all.Count - $dated.Count - $WindowDated
+  if($und -lt 0){ $und = 0 }
   return [pscustomobject]@{
-    rows=$all.Count; dated=$dated.Count; undated=($all.Count-$dated.Count)
+    rows=$all.Count; dated=$dated.Count; undated=$und; windowDated=$WindowDated
     over=$over; pct=$(if($ages.Count){ [math]::Round(100*$over/$ages.Count,1) } else { 0 })
     oldest=$(if($ages.Count){ ($ages|Measure-Object -Maximum).Maximum } else { 0 }) }
 }
@@ -116,6 +140,42 @@ if($SelfTest){
   T 'CLEAN TWIN an ad still inside its window (Baker''s 2026-08-05..08-11)' `
     (-not (Test-AdWindowExpired ([pscustomobject]@{ ad_from='2026-08-05'; ad_to='2026-08-11' }) $today)) 'spurious finding'
   T 'CLEAN TWIN a non-ad file with no window is never called expired'             (-not (Test-AdWindowExpired ([pscustomobject]@{ store='Walmart' }) $today)) 'spurious finding'
+  # ---- WINDOW-DATED ROWS (2026-08-30, queue 2026-08-30-fec3dc) --------------------------------------
+  # MUST FIRE, unchanged: the founding Walmart shape above still reports 5 undated. Re-asserted here
+  # explicitly because it is the case the new WindowDated parameter could most easily break.
+  T 'MUST FIRE  an undated NON-ad row is still undated when no window is in play' ((Get-AgeProfile $walmart $today 14 0).undated -eq 5) "undated=$((Get-AgeProfile $walmart $today 14 0).undated)"
+  # MUST FIRE: a regular-file store whose undated backlog GREW is still the defect this tier exists for.
+  $grew = @(1..9 | ForEach-Object { [pscustomobject]@{ item="r$_" } })
+  $pg = Get-AgeProfile $grew $today 14 0
+  T 'MUST FIRE  a regular-file store whose undated count grew is still counted (9 > baseline)' ($pg.undated -eq 9) "undated=$($pg.undated)"
+  # CLEAN TWIN: bakers-deals-2026-08-26 as it really shipped - 108 rows, not one as_of, window 08-26..09-01
+  # in the FILE HEADER. Before this change those 108 rows read as 108 undated and fired UNDATED GREW against
+  # a baseline frozen when Baker's flyer had 39 rows.
+  $bakersAd = @(1..108 | ForEach-Object { [pscustomobject]@{ item="b$_"; ad_price='$1.99' } })
+  $bakersHdr = [pscustomobject]@{ store="Baker's"; ad_from='2026-08-26'; ad_to='2026-09-01' }
+  $winCount = @($bakersAd | Where-Object { -not $_.as_of -and (Test-RowIsWindowDated $_ $bakersHdr) }).Count
+  $pb = Get-AgeProfile $bakersAd $today 14 $winCount
+  T 'CLEAN TWIN a header-windowed ad capture (Baker''s 108 rows) reports 0 undated' ($pb.undated -eq 0 -and $pb.windowDated -eq 108) "undated=$($pb.undated) windowDated=$($pb.windowDated)"
+  # CLEAN TWIN: ads-2026-08-30 as it really shipped - NO header window, ad_from/ad_to on every ROW. This is
+  # the shape behind the Hy-Vee 682 / Aldi 86 / Family Fare 1400 counts in the alert.
+  $ffAd = @(1..1400 | ForEach-Object { [pscustomobject]@{ item="f$_"; store='Family Fare'; ad_from='2026-08-03'; ad_to='2026-08-30' } })
+  $ffHdr = [pscustomobject]@{ pulled_at='2026-08-30'; deal_count=2168 }
+  $winFF = @($ffAd | Where-Object { -not $_.as_of -and (Test-RowIsWindowDated $_ $ffHdr) }).Count
+  $pf = Get-AgeProfile $ffAd $today 14 $winFF
+  T 'CLEAN TWIN a row-windowed ads file (Family Fare 1400 rows) reports 0 undated' ($pf.undated -eq 0 -and $pf.windowDated -eq 1400) "undated=$($pf.undated) windowDated=$($pf.windowDated)"
+  # CLEAN TWIN: a BIGGER flyer than the baseline is not a stopped writer. 1400 window-dated rows against a
+  # baseline of 1100 must produce no growth in the undated count at all - that comparison is what fired
+  # every day from 2026-08-15.
+  T 'CLEAN TWIN a flyer bigger than the baseline does not read as a stopped writer' ($pf.undated -le 1100) "undated=$($pf.undated)"
+  # MUST FIRE: a window-dated row does NOT count as dated, so a store whose only source is an ad file still
+  # trips the zero-dated hard check. If this ever passes, the fix has laundered a window into a capture stamp.
+  T 'MUST FIRE  window-dated rows do not satisfy per-row dating (dated stays 0)' ($pb.dated -eq 0) "dated=$($pb.dated)"
+  # A HALF-STAMPED row keeps its own date: as_of wins over the window, so a real capture stamp is never
+  # reclassified away.
+  $mixed = @([pscustomobject]@{ as_of='2026-08-07'; ad_to='2026-09-01' })
+  $winMix = @($mixed | Where-Object { -not $_.as_of -and (Test-RowIsWindowDated $_ $null) }).Count
+  $pm = Get-AgeProfile $mixed $today 14 $winMix
+  T 'CLEAN TWIN a row carrying BOTH as_of and a window is counted dated, not window-dated' ($pm.dated -eq 1 -and $pm.windowDated -eq 0) "dated=$($pm.dated) windowDated=$($pm.windowDated)"
   # DRIFT CHECK, not a frozen copy. $STORE_FILES is duplicated from build-deals-page.ps1's $storeFiles, and a
   # duplicated rule that nothing compares is the two-copies-of-a-rule class: the board starts pricing from a
   # file this guard never opens, and the guard keeps reporting confidently about the wrong rows. That is not
@@ -158,6 +218,7 @@ $expired  = @()
 foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
   $rows = New-Object System.Collections.Generic.List[object]
   $used = @()
+  $winDated = 0
   foreach($g in $script:STORE_FILES[$store]){
     # newest DATED file matching this glob - an undated filename is a scratch one-off, never a board source
     $fl = @(Get-ChildItem (Join-Path $OutDir $g) -ErrorAction SilentlyContinue |
@@ -166,11 +227,16 @@ foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
     $j = Get-Content $fl[0].FullName -Raw -Encoding UTF8 | ConvertFrom-Json
     # ads-*.json carries EVERY store's ad rows, so filter to this store; the per-store files carry only their
     # own and their rows may omit a store field entirely.
+    # TWO SHAPES OF AD FILE, and the fix must cover both or it covers none of the alert: ads-*.json carries
+    # no header window at all but stamps ad_from/ad_to on EVERY row (2,168 of 2,168 on 2026-08-30, which is
+    # where the Hy-Vee 682 / Aldi 86 / Family Fare 1400 counts come from), while bakers-deals and
+    # fareway-deals carry the window in the HEADER and nothing on the row.
     foreach($r in @($j.deals)){
       $rs = [string]$r.store
       if($rs -and $rs -ne $store){ continue }
       if(-not $rs -and [string]$j.store -and [string]$j.store -ne $store){ continue }
       $rows.Add($r)
+      if(-not $r.as_of -and (Test-RowIsWindowDated $r $j)){ $winDated++ }
     }
     # an ad file past its window is stale WHOLESALE - every row in it, regardless of as_of
     if(Test-AdWindowExpired $j $today){
@@ -182,7 +248,7 @@ foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
   if(-not $rows.Count){ continue }
   # .ToArray(), not the List itself: @() does not unroll a generic List in PS 5.1, so Get-AgeProfile's own
   # @($Rows) threw "Argument types do not match" on the first live run. Documented estate trap.
-  $profiles[$store] = Get-AgeProfile $rows.ToArray() $today $MaxDays
+  $profiles[$store] = Get-AgeProfile $rows.ToArray() $today $MaxDays $winDated
   $sources[$store]  = ($used -join ' + ')
 }
 

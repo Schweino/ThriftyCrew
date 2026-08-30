@@ -79,6 +79,55 @@ function Test-BoardStale {
   return ((($Now - $BoardWritten).TotalHours) -gt $MaxHours)
 }
 
+function Test-FlagStoreCold {
+  <#
+    .SYNOPSIS Is a store named on a capture flag actually still uncaptured?
+    .DESCRIPTION
+      Pure, so the -SelfTest fixtures below can drive it with frozen dates.
+
+      TWO STANDARDS WERE FIGHTING (2026-08-30, queue 2026-08-30-40c75d). Check 6b called a store COLD when
+      it had no rows dated TODAY, while the per-store scan twenty lines up grades the SAME store against
+      the 90-day rotation - and prints lines like "Aldi: 0 fresh rows today, newest 2026-08-29 (1d of 90d
+      carry)" as OK on the same run. A flag is a TODO, capture-run writes a new one every day, nothing
+      deletes one before the 45-day prune, so ONE store not yet reached by 09:32 relit all ten flags on
+      disk: 8 unworked, oldest 9 days, "still cold: Aldi" - on a day Aldi was one day old and inside every
+      band. That is the alarm-that-accuses-healthy-things class this very check was rewritten for on
+      2026-08-25, one standard short.
+
+      A store is COLD only when BOTH are true: nothing has been captured since the flag was written (so
+      the todo really is outstanding), AND its newest capture is past the same ROTATION_DEBT band the
+      per-store scan uses. A store with no readable capture date at all is COLD - unprovable is not done,
+      and this check must never excuse itself on data it failed to read.
+  #>
+  param([string]$NewestCapture, [datetime]$FlagWritten, [datetime]$Now, [int]$RotationDebtDays)
+  if (-not $NewestCapture) { return $true }
+  $n = [datetime]'1900-01-01'
+  if (-not [datetime]::TryParse($NewestCapture, [ref]$n)) { return $true }
+  if ($n.Date -ge $FlagWritten.Date) { return $false }
+  return ((($Now.Date - $n.Date).TotalDays) -gt $RotationDebtDays)
+}
+
+function Test-FlagWorked {
+  <#
+    .SYNOPSIS Has every store this flag names been captured since the flag was written?
+    .DESCRIPTION
+      Pure. A flag is a todo with no completion mechanism - that is the whole defect. This is the
+      completion test, and it is STRICTER than the cold test on purpose: a store merely inside its
+      rotation band has not had this todo worked, it is just not late yet, so the flag stays on disk.
+      Only a flag whose every store carries a capture at or after the flag date is finished and deleted.
+  #>
+  param([string[]]$Stores, $NewestByStore, [datetime]$FlagWritten)
+  if (-not @($Stores).Count) { return $false }
+  foreach ($s in @($Stores)) {
+    $v = [string]$NewestByStore[[string]$s]
+    if (-not $v) { return $false }
+    $n = [datetime]'1900-01-01'
+    if (-not [datetime]::TryParse($v, [ref]$n)) { return $false }
+    if ($n.Date -lt $FlagWritten.Date) { return $false }
+  }
+  return $true
+}
+
 if ($SelfTest) {
   # Frozen fixtures: the founding bug (a task that never runs, reported green forever) and
   # its clean twin (a task legitimately still waiting for its first slot).
@@ -122,6 +171,48 @@ if ($SelfTest) {
   if ($script:BoardStaleHours -ge 48) {
     Write-Output 'FAIL  the staleness window is at least two capture cadences wide - a skipped day would be alibied by the previous one'; $fail++
   } else { Write-Output 'ok    staleness window is narrower than two cadences' }
+
+  # ---- browser-work flags (2026-08-30, queue 2026-08-30-40c75d) --------------------------------------
+  # FROZEN, not read from out\browser-capture-due-*.flag. The flags on disk are rewritten daily and the
+  # captures behind them move every few hours, so a fixture built from the live tree would encode whatever
+  # the browser agent happened to have finished that morning and could pass by finding nothing.
+  $fNow = [datetime]'2026-08-30 09:32'
+  $fFlag = [datetime]'2026-08-21 09:00'   # the oldest flag actually on disk that morning
+  $rot = 30                               # ROTATION_DEBT_DAYS = QUARTER_DAYS / 3
+
+  # MUST FIRE: the real freeze. 2026-08-22..25, when the browser stores went uncaptured for days and the
+  # old routine had been retired - nothing since the flag AND past the rotation band.
+  if (-not (Test-FlagStoreCold -NewestCapture '2026-07-14' -FlagWritten $fFlag -Now $fNow -RotationDebtDays $rot)) {
+    Write-Output 'FAIL  a store with no capture since the flag and 47 days old read as worked - a real freeze is now invisible'; $fail++
+  } else { Write-Output 'ok    a store 47 days stale with nothing since the flag is still COLD' }
+
+  # MUST FIRE: a store the flag names that has no capture date at all. Unprovable is not done.
+  if (-not (Test-FlagStoreCold -NewestCapture '' -FlagWritten $fFlag -Now $fNow -RotationDebtDays $rot)) {
+    Write-Output 'FAIL  a store with NO readable capture date read as worked - the check excused itself on data it could not read'; $fail++
+  } else { Write-Output 'ok    a store with no readable capture date is COLD, not excused' }
+
+  # CLEAN TWIN: today's real shape. Aldi, newest 2026-08-29, one day old, not captured since a 08-21 flag
+  # but nowhere near the rotation band. This is the exact row that lit BROWSER WORK STALE on a healthy day.
+  if (Test-FlagStoreCold -NewestCapture '2026-08-29' -FlagWritten $fFlag -Now $fNow -RotationDebtDays $rot) {
+    Write-Output 'FAIL  Aldi at 1 day old was called cold - the daily-freshness bar is back and it contradicts the rotation bands'; $fail++
+  } else { Write-Output 'ok    a store 1 day old is not cold, the same verdict the per-store scan prints' }
+
+  # CLEAN TWIN: captured AFTER the flag - the todo was worked, whatever its age band says.
+  if (Test-FlagStoreCold -NewestCapture '2026-08-30' -FlagWritten $fFlag -Now $fNow -RotationDebtDays $rot) {
+    Write-Output 'FAIL  a store captured after the flag was still called cold - the watchdog cannot see the work it asked for'; $fail++
+  } else { Write-Output 'ok    a store captured after the flag is worked' }
+
+  # COMPLETION: every store newer than the flag = a finished todo, and only then is the flag deleted.
+  $nbs = @{ 'Walmart' = '2026-08-30'; 'Aldi' = '2026-08-29'; 'Fareway' = '2026-08-30' }
+  if (-not (Test-FlagWorked -Stores @('Walmart', 'Fareway') -NewestByStore $nbs -FlagWritten ([datetime]'2026-08-29 09:00'))) {
+    Write-Output 'FAIL  a flag whose every store was captured after it was written did not read as finished - flags never die'; $fail++
+  } else { Write-Output 'ok    a flag whose every store has a newer capture is a finished todo' }
+  if (Test-FlagWorked -Stores @('Walmart', 'Aldi') -NewestByStore $nbs -FlagWritten ([datetime]'2026-08-30 09:00')) {
+    Write-Output 'FAIL  a flag with one store still uncaptured was deleted as finished - the todo would vanish unworked'; $fail++
+  } else { Write-Output 'ok    a flag with one store still uncaptured is NOT deleted' }
+  if (Test-FlagWorked -Stores @() -NewestByStore $nbs -FlagWritten $fFlag) {
+    Write-Output 'FAIL  an unparseable flag naming no store read as finished - a file it could not read would be deleted'; $fail++
+  } else { Write-Output 'ok    a flag naming no store is never treated as finished' }
 
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
@@ -602,23 +693,34 @@ if (-not $newestByStore.Count) {
 # is a real finding, and so is one whose store list cannot be read - unprovable is not the same as done,
 # and this check must never excuse itself on a file it failed to parse.
 if ($staleFlags.Count) {
-  $unworked = @()
+  # JUDGED BY THE SAME BANDS THE PER-STORE SCAN USES, and a finished todo is deleted rather than kept
+  # forever (2026-08-30, queue 2026-08-30-40c75d - see Test-FlagStoreCold for the measurement). The old
+  # bar was "no rows dated TODAY", which contradicted the OK line this same run prints for the same store.
+  $unworked = @(); $finished = @(); $coldNames = @{}
+  $nowFlags = Get-Date
   foreach ($ff in $staleFlags) {
     $fstores = @()
     try { $fstores = @((Get-Content $ff.FullName -Raw -Encoding UTF8 | ConvertFrom-Json).stores) } catch { $fstores = @() }
-    if (-not $fstores.Count) { $unworked += $ff; continue }
-    $coldOnes = @($fstores | Where-Object { [int]$freshByStore[[string]$_] -le 0 })
-    if ($coldOnes.Count) { $unworked += $ff }
+    if (-not $fstores.Count) { $unworked += $ff; continue }   # unreadable is not done
+    $coldOnes = @($fstores | Where-Object {
+        Test-FlagStoreCold -NewestCapture ([string]$newestByStore[[string]$_]) -FlagWritten $ff.LastWriteTime -Now $nowFlags -RotationDebtDays $ROTATION_DEBT_DAYS })
+    if ($coldOnes.Count) { $unworked += $ff; $coldNames[$ff.Name] = $coldOnes }
+    elseif (Test-FlagWorked -Stores @($fstores | ForEach-Object { [string]$_ }) -NewestByStore $newestByStore -FlagWritten $ff.LastWriteTime) { $finished += $ff }
   }
   if ($unworked.Count) {
     $oldest = ($unworked | Sort-Object LastWriteTime | Select-Object -First 1)
     $oldestAge = [int]((Get-Date) - $oldest.LastWriteTime).TotalDays
-    $still = @()
-    try { $still = @((Get-Content $oldest.FullName -Raw -Encoding UTF8 | ConvertFrom-Json).stores | Where-Object { [int]$freshByStore[[string]$_] -le 0 }) } catch { }
+    $still = @($coldNames[$oldest.Name])
     $who = if ($still.Count) { ' still cold: ' + ($still -join ', ') } else { '' }
     [void]$findings.Add(("BROWSER WORK STALE: {0} unworked capture flag(s), oldest {1} at {2} day(s).{3} The walled stores are not being captured by anything - open a Chrome tab per store and work out\worklists\." -f $unworked.Count, $oldest.Name, $oldestAge, $who))
   } else {
-    [void]$ok.Add(("browser work: {0} capture flag(s) on disk, and every store each one names has fresh rows dated {1} - the work behind them is done" -f $staleFlags.Count, $todayS))
+    [void]$ok.Add(("browser work: {0} capture flag(s) on disk and every store each one names is inside its rotation band - nothing behind them is outstanding" -f $staleFlags.Count))
+  }
+  # A FINISHED TODO IS DELETED. Same housekeeping-not-signal doctrine as the 45-day prune above: a flag
+  # that nothing can ever close is what made ONE unreached store relight ten days of them at once.
+  if ($finished.Count) {
+    [void]$ok.Add(("browser work: pruned {0} completed capture flag(s) - every store each one named has a capture dated at or after the flag" -f $finished.Count))
+    foreach ($ff in $finished) { try { Remove-Item $ff.FullName -Force -ErrorAction SilentlyContinue } catch { } }
   }
 }
 # ---- PAID CONTENT SERVED FREE (2026-08-29) -----------------------------------

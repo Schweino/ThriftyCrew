@@ -143,6 +143,17 @@ out\browser-capture-due-<date>.flag is a hint and it has been INCOMPLETE before 
      (446 outstanding on 2026-08-22). Search the chip's exact `term`, confirm the price matches, and
      write {id,url,price,size,name} to out\url-inputs\store-<store>N-urls.json.
 
+  F. COMPREHENSIVE FULL-WORKLIST PULL (Walmart or Sam's) - THE 90-DAY CLOCK NOBODY WAS WINDING.
+     The rotation in A re-prices about 7 terms per store per day. It never resets the quarterly
+     full-catalogue capture, and nothing else in the estate can: PowerShell cannot reach Brad's
+     Chrome, and the driver's own empty profile gets price-less payloads back. So the clock had a
+     warning and no consumer. Measured 2026-08-30: audit-walmart-fullpull.ps1 exits 1 with Walmart's
+     newest comprehensive capture (walmart-regular-2026-08-11.json, 525 terms) 19 days old and Sam's
+     (sams-deals-2026-08-15.json, 594 terms) 15 days old. At day 90 a capture leaves the union window
+     and that store's coverage collapses - the guard holds the board rather than publish it thin.
+     DUE, FROM THE DATA, the same way everything else on this list is:
+         powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\audit-walmart-fullpull.ps1
+     Exit 1 names the store. Do not take this from a flag, from this file, or from memory.
 ORDER OF WORK, because you will not finish everything and the order decides what is lost:
   1. ANY WEEKLY AD THAT IS DUE TODAY - Baker's on its rollover, and Fareway whenever its last read
      was missing OR partial (pages_read < pages_total). An ad is the only item on this list with a
@@ -156,13 +167,22 @@ ORDER OF WORK, because you will not finish everything and the order decides what
      if this agent does not read it, nothing does. If you do nothing else today, do this.
   2. Rescue terms (cells leave the board if you skip them - a slower bleed than a lapsed ad, but
      a real one)
-  3. Everyday rotation for stores genuinely outstanding
-  4. Sale-fallback research
-  5. Product-URL chips - a BOUNDED batch, say 40, newest-flagged first. This list is long by design
+  3. ONE STORE'S COMPREHENSIVE FULL PULL, when F says it is due AND no weekly ad is due today.
+     It is about 45 minutes - the whole term worklist through the committed sweep lane for that
+     store, same emit format as the rotation - so it REPLACES items 4-6 for the day rather than
+     sharing a session with them. One store per day; Walmart before Sam's while both warn.
+     NEVER on an ad-rollover day. Measured 2026-08-30: an ad day already crowds this session out -
+     the 45-minute budget went to the Fareway 25-page vision read plus the Walmart rotation and had
+     not reached Aldi, an ALWAYS store, by 09:32.
+     This is also the only thing that delivers the 9-column comprehensive capture audit-shelf-signal
+     is waiting on, which arms the marketplace-case rule behind three clamped recipe cost inversions.
+  4. Everyday rotation for stores genuinely outstanding
+  5. Sale-fallback research
+  6. Product-URL chips - a BOUNDED batch, say 40, newest-flagged first. This list is long by design
      and will never be empty; do not let it eat the session.
 On most days item 1 is EMPTY - no ad is due - and rescue terms lead. That is the normal shape of a
 day; item 1 only jumps the queue on a rollover.
-Spend at most ~45 minutes. Stopping with items 1-3 done beats timing out inside item 5.
+Spend at most ~45 minutes. Stopping with items 1-4 done beats timing out inside item 6.
 
 PER-STORE METHOD. All of it lives in memory grocery-method-<store>.md - read ONLY the stores you are
 actually touching. The parts that cost a whole day to rediscover on 2026-08-22:

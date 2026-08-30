@@ -38,6 +38,18 @@ function Get-FfNextCursor([int]$startIdx, [int]$lastSuccessRot, [int]$termCount)
   return (($startIdx + $lastSuccessRot + 1) % $termCount)
 }
 
+# MAY THIS WINDOW MAKE ANOTHER REQUEST? (2026-08-30, queue 2026-08-30-7adf1c)
+# Freshop's budget is per-window REQUEST COUNT, not pacing - the 2026-07-28 probe measured 20 terms at
+# 200ms all succeeding while a second burst came back all-empty. Declared here, at the top with the other
+# pure decisions, because the -SelfTest block runs long before the buy loop and a fix whose self-test
+# cannot reach the changed code is how two same-day fixes regressed on 2026-07-29. The buy loop and both
+# recovery passes are the only callers; $ATTEMPT_CAP lives beside them.
+function Test-FfMayAttempt {
+  <# .DESCRIPTION Pure, so -SelfTest can drive the cap without a network call. #>
+  param([int]$Attempted, [int]$Cap)
+  return ($Attempted -lt $Cap)
+}
+
 # WRITE THE CATALOG WITHOUT BEING ABLE TO LOSE IT (2026-08-02, plan item 2026-08-02-91d877).
 # Measured, not theorised, in this pipeline's own ff-sweep-log.txt: the 2026-08-02T07:00 window bought terms
 # #458..#34 (686 rows), wrote its throttled diagnostic, ADVANCED THE CURSOR #458 -> #35 at 07:06:40, and then
@@ -193,6 +205,17 @@ if ($SelfTest) {
   _T 'a cold shutout (no successes) leaves the cursor untouched' ($null -eq (Get-FfNextCursor 154 -1 526))
   # the wrap is real - the 2026-07-30T22:00 run started at #508 and wrapped to #70
   _T 'cursor wraps around the end of the term list (#508 + 87 of 526 -> #70)' ((Get-FfNextCursor 508 87 526) -eq 70)
+
+  # ---- PER-WINDOW REQUEST CAP (2026-08-30, queue 2026-08-30-7adf1c) ---------------------------------
+  # The cap is the 2026-07-28 measured-good burst: 20 terms at 200ms all succeeded, a second burst came
+  # back all-empty. These are frozen numbers from that probe and from today's throttled run (about 590
+  # requests, 324 rows priced, 544 empty), not values read back off the live cap.
+  _T 'MUST-FIRE the 21st request of a window is refused (20-term measured-good burst)' (-not (Test-FfMayAttempt 20 20))
+  _T 'MUST-FIRE the 590-request shape today is refused long before it happens'         (-not (Test-FfMayAttempt 590 20))
+  _T 'CLEAN-TWIN the first request of a window is allowed'                             (Test-FfMayAttempt 0 20)
+  _T 'CLEAN-TWIN the 20th request of a window is allowed (the cap is a ceiling, not a floor)' (Test-FfMayAttempt 19 20)
+  # The cap must sit ABOVE the rotation budget, or the budget could never be spent and the catalog starves.
+  _T 'the request cap leaves room for a full 7-term rotation budget plus expiries'     (Test-FfMayAttempt 7 20)
 
   # ---- ALERT CONDITION. MUST-FIRE and its clean twin are both frozen from real runs and NEVER regenerated
   # from live data: today's numbers are copied in as literals precisely so that tomorrow's healthy catalog
@@ -655,6 +678,24 @@ $empty = New-Object System.Collections.Generic.List[string]
 # because a cooldown that does not help is itself the evidence. Any successful term resets it.
 $ABORT_EMPTY_RUN = 60      # sustained refusal after we had been getting data
 $ABORT_COLD_START = 30     # refused from the very first term - nothing has EVER come back this run
+# ---- THE PER-WINDOW REQUEST CAP (2026-08-30, queue 2026-08-30-7adf1c) -------------------------------
+# Freshop's budget is per-window REQUEST COUNT, not pacing: the 2026-07-28 probe measured 20 terms at
+# 200ms all succeeding while a second burst came back all-empty. Today this lane made about 590 requests
+# in one window - 324 rows priced against 544 empty term-responses - and store-verified throughput fell to
+# 393 rows/48h against a healthy 1259, which is the below-500 alarm firing on an outcome.
+# WHERE THE 590 CAME FROM, and it is not the main pass: the main pass stops at TermBudget (7 today) and
+# then dumps EVERY remaining term into $empty marked 'term budget reached before request'. The recovery
+# passes below then iterate $empty and ask all of them - twice. So the run re-asks about 590 terms it
+# deliberately chose not to ask, spends the whole window budget proving the API is throttled, and comes
+# back with empties that the merge correctly reads as no-news (fail-open-reads-as-empty). Recovery exists
+# to re-ask RATE-LIMIT VICTIMS: a term that was asked and answered with zero items. A term that was never
+# asked is not a victim, it is next window's work.
+# So: recovery skips anything carrying a $termDeferred reason, and the run stops attempting at the
+# measured-good burst size. This is a REDUCTION in requests, not a slowdown - pacing is untouched.
+# $ATTEMPT_CAP is the measured-good burst; Test-FfMayAttempt is declared at the top of this file so the
+# -SelfTest block (which runs long before this line) can exercise it.
+$ATTEMPT_CAP = 20
+$script:ffAttempts = 0
 $streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
 # TERM BUDGET (capture policy, 2026-08-20). The wall-clock cap alone let one run buy
 # 60-90 terms and the estate ran TWO passes a day, which is what put us over Freshop's
@@ -715,9 +756,15 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
     Write-Output ("Family Fare: term budget reached (" + $bought + " bought) - stopping the main pass. This is the policy working, not a failure.")
     break
   }
+  if (-not (Test-FfMayAttempt $script:ffAttempts $ATTEMPT_CAP)) {
+    for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]); $termDeferred[$termList[$j]] = 'per-window request cap reached before request' }
+    Write-Output ("Family Fare: per-window request cap reached (" + $script:ffAttempts + " of " + $ATTEMPT_CAP + " attempted) - stopping the main pass. Freshop's budget is request COUNT per window; this is the policy working, not a failure.")
+    break
+  }
   if (Over-Cap) { for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]); $termDeferred[$termList[$j]] = 'wall-clock cap before request' }; Write-Output 'Family Fare: wall-clock cap hit in main pass; remaining terms deferred to recovery'; break }
   $term = $termList[$i]
   $termAttempted[$term] = $true
+  $script:ffAttempts++
   $queries = @($term); if ($supplemental.ContainsKey($term)) { $queries += $supplemental[$term] }
   $items = @(); foreach ($q in $queries) { $items += (Get-FreshopItems $q) }
   Start-Sleep -Milliseconds 200
@@ -764,8 +811,14 @@ while (-not $aborted -and $empty.Count -gt 0 -and $pass -lt 2 -and -not (Over-Ca
   Start-Sleep -Seconds 20
   $still = New-Object System.Collections.Generic.List[string]
   foreach ($term in $empty) {
+    # NEVER-ASKED IS NOT A RATE-LIMIT VICTIM. A term carrying a $termDeferred reason was deliberately not
+    # requested this window (budget, wall-clock or request cap); re-asking it here is what turned a 7-term
+    # budget into ~590 requests and burned the window that the 20 real terms needed.
+    if ($termDeferred.ContainsKey($term)) { $still.Add($term); continue }
+    if (-not (Test-FfMayAttempt $script:ffAttempts $ATTEMPT_CAP)) { $still.Add($term); $termDeferred[$term] = 'per-window request cap reached before recovery request'; continue }
     if (Over-Cap) { $still.Add($term); $termDeferred[$term] = 'wall-clock cap before recovery request'; continue }
     $termAttempted[$term] = $true
+    $script:ffAttempts++
     $items = Get-FreshopItems $term; Start-Sleep -Milliseconds 250
     if (@($items).Count -eq 0) { $still.Add($term) } else { $termSuccess[$term] = $todayS; Ingest-Items $items $term }
   }

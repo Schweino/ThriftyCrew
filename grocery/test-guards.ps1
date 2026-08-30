@@ -118,6 +118,23 @@ function RestoreNow([string]$path) {
   }
   throw "RestoreNow: $path was never registered with Backup() - nothing to restore it from"
 }
+
+# KEEP THE MUTATION, PUT BACK THE CLOCK (2026-08-30).
+# audit-tile-integrity HOLDS - refuses to grade anything - when out\name-drift.json is older than
+# product-urls.json, because its wrong-product flags would then describe links that have since changed.
+# That reasoning is about WHICH PRODUCT a link points at. A fixture that edits a link's PRICE and nothing
+# else does not invalidate a single one of those verdicts, but writing the file still bumps its mtime, so
+# the audit HELD and exited 2 for the hold instead of for the tile disagreement the case planted. Case 8c
+# had therefore never once armed: its own signature was absent and the child emitted no FAIL line at all.
+# So a same-product mutation puts the timestamp back immediately, keeping the mutated BYTES. Use this ONLY
+# where the mutation leaves link identity untouched; a fixture that repoints a link at a DIFFERENT product
+# genuinely does stale name-drift, and holding is then the correct answer.
+function FreezeMtime([string]$path) {
+  foreach ($r in $script:Restores) {
+    if ($r.path -eq $path) { try { (Get-Item $r.path).LastWriteTimeUtc = $r.mtime } catch { }; return }
+  }
+  throw "FreezeMtime: $path was never registered with Backup() - there is no recorded mtime to freeze it to"
+}
 function RestoreAll {
   foreach ($c in $script:Created) { try { Remove-Item $c -Force -ErrorAction SilentlyContinue } catch {} }
   foreach ($r in $script:Restores) {
@@ -570,6 +587,10 @@ foreach ($n in @('bananas', 'milk', 'eggs', 'butter')) { if ($pud.items.$n.'Hy-V
 if ($victim) {
   $victim.price = 99.99          # a real link, a price the store does not charge
   ($pud | ConvertTo-Json -Depth 8) | Set-Content $puF2 -Encoding UTF8
+  # That write just made product-urls.json NEWER than out\name-drift.json, which HOLDS the very audit this
+  # case exists to arm. Only the PRICE moved - the link still opens the same product - so name-drift's
+  # verdicts remain true of this file and the staleness reasoning does not apply here. See FreezeMtime.
+  FreezeMtime $puF2
   CheckScript 'tile-integrity: a shipped link whose price disagrees with the tile' 2 'audit-tile-integrity.ps1' 'LINKED tile\(s\) disagree'
   RestoreNow $puF2
 } else {
