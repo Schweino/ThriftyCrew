@@ -641,7 +641,7 @@
     {
         "id":  "cantaloupe",
         "store":  "Family Fare",
-        "product":  "Cantaloupe/Rockmelon Melon, Small",
+        "product":  "Organic Melon, Cantaloupe, Small",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/melons",
         "verdict":  "ALLOW",
@@ -900,15 +900,6 @@
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027coffee-creamer\u0027"
     },
     {
-        "id":  "cookies",
-        "store":  "Family Fare",
-        "product":  "Crav\u0027n Flavor Cookies, Chocolate Chip, Candy Gems 12.4 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/cookies",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
-    },
-    {
         "id":  "corn-chips",
         "store":  "Family Fare",
         "product":  "Corn Chips, Scoops Our Family",
@@ -965,7 +956,7 @@
     {
         "id":  "cottage-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
+        "product":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/cheese",
         "verdict":  "ALLOW",
@@ -983,7 +974,7 @@
     {
         "id":  "crackers",
         "store":  "Family Fare",
-        "product":  "Our Family Unsalted Tops Saltine Crackers 16 Oz",
+        "product":  "Our Family Saltine Original Crackers 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/crackers",
         "verdict":  "ALLOW",
@@ -1109,7 +1100,7 @@
     {
         "id":  "dinner-rolls",
         "store":  "Family Fare",
-        "product":  "Fresh \u0026 Finest 12 Ct Golden Dinner Rolls",
+        "product":  "Fresh \u0026 Finest 12 Ct Wheat Dinner Rolls",
         "dept":  "bakery",
         "aisle":  "bakery/rolls",
         "verdict":  "ALLOW",
@@ -1433,7 +1424,7 @@
     {
         "id":  "frozen-corn",
         "store":  "Family Fare",
-        "product":  "Our Family Sweet Corn, Super, Steamable 10 Oz",
+        "product":  "Birds Eye Super Sweet Corn 10 Oz",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_vegetables",
         "verdict":  "ALLOW",
@@ -1609,6 +1600,15 @@
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "grape-juice",
+        "store":  "Family Fare",
+        "product":  "Our Family White Grape Juice 64 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "grapefruit",
@@ -1834,6 +1834,15 @@
         "aisle":  "freezer/sweet_stuff",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "italian-sausage",
+        "store":  "Family Fare",
+        "product":  "Ground Italian Sausage, Mild Our Family",
+        "dept":  "meat",
+        "aisle":  "meat/sausage",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "italian-seasoning",
@@ -2135,9 +2144,9 @@
     {
         "id":  "nectarines",
         "store":  "Family Fare",
-        "product":  "Yellow Nectarines",
+        "product":  "White Nectarine",
         "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/tropical_fruits",
+        "aisle":  "fresh_fruits_vegetables/other_fruits",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
@@ -2288,11 +2297,11 @@
     {
         "id":  "parmesan",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Finely Cut Parmesan Shredded Cheese 6 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
+        "product":  "Our Family Grated Cheese, Parmesan 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/crackers",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027pantry\u0027; category \u0027dairy\u0027 allows only: dairy, deli"
     },
     {
         "id":  "dried-parsley",
@@ -2387,11 +2396,11 @@
     {
         "id":  "pistachios",
         "store":  "Family Fare",
-        "product":  "Planters Dry Roasted Pistachios 12.75 Oz",
-        "dept":  "dairy",
-        "aisle":  "dairy/ready_to_eat",
+        "product":  "Blue Bunny Premium Pistachio Almond 48 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/sweet_stuff",
         "verdict":  "BLOCK",
-        "reason":  "candidate sits in \u0027dairy\u0027; category \u0027snacks\u0027 allows only: pantry, beverages"
+        "reason":  "candidate sits in \u0027freezer\u0027; category \u0027snacks\u0027 allows only: pantry, beverages"
     },
     {
         "id":  "pita-bread",
@@ -2477,7 +2486,7 @@
     {
         "id":  "potato-chips",
         "store":  "Family Fare",
-        "product":  "Our Family Potato Chips, Sour Cream \u0026 Onion Flavored 7.75 Oz",
+        "product":  "Our Family Sweet Heat Barbecue Potato Chips 7.75 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/chips_other_salty_snacks",
         "verdict":  "ALLOW",
@@ -2864,7 +2873,7 @@
     {
         "id":  "shredded-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
+        "product":  "Our Family Finely Cut Mexican Shredded Cheese 16 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
@@ -2918,7 +2927,7 @@
     {
         "id":  "soda",
         "store":  "Family Fare",
-        "product":  "Jarritos Soda, Natural Flavor, Grapefruit 1.58 Qt",
+        "product":  "Coca Cola Zero Sugar Soda Bottle 2 L",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -2968,6 +2977,15 @@
         "aisle":  "fresh_fruits_vegetables/lettuce_cabbage_greens",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "sports-drinks",
+        "store":  "Family Fare",
+        "product":  "Gatorade Lemon Lime Thirst Quencher 28 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/sport_energy",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "steak-sauce",
@@ -3350,7 +3368,7 @@
     {
         "id":  "onions",
         "store":  "Family Fare",
-        "product":  "Our Family Medium Yellow Onion",
+        "product":  "Our Family Onion Yellow",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/onions",
         "verdict":  "ALLOW",
@@ -3368,7 +3386,7 @@
     {
         "id":  "yogurt",
         "store":  "Family Fare",
-        "product":  "Yoplait Low Fat Cherry Orchard Yogurt 6 Oz",
+        "product":  "Yoplait Low Fat Strawberry Yogurt 6 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/yogurt",
         "verdict":  "ALLOW",
@@ -3413,7 +3431,7 @@
     {
         "id":  "honey-dijon-mustard",
         "store":  "Family Fare",
-        "product":  "Inglehoffer The Original Sweet Honey Mustard 10.25 Oz",
+        "product":  "Our Family Mustard, Honey 12 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "BLIND",
@@ -3499,6 +3517,15 @@
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "BLIND",
         "reason":  "\u0027zero-sugar-soda-2l\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
+        "id":  "smoked-paprika",
+        "store":  "Family Fare",
+        "product":  "Sugar N Spice Paprika Smoked Pp",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "BLIND",
+        "reason":  "\u0027smoked-paprika\u0027 is in no estate category - refused rather than guessed"
     },
     {
         "id":  "mozzarella-cheese",

@@ -95,6 +95,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "pizza-sauce",
+                         "commodity":  "Pizza Sauce",
+                         "unit":  "oz",
+                         "store":  "Sam\u0027s Club",
+                         "per_unit":  0.3995,
+                         "median":  0.0893,
+                         "mult":  4.47,
+                         "size":  "37.5 oz",
+                         "item":  "Yo Mama\u0027s Foods Low-Carb Pizza Sauce 12.5 oz., 3 pk.",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "soda",
                          "commodity":  "Soda (12-pack)",
                          "unit":  "floz",
@@ -119,23 +132,10 @@
                          "item":  "Dove Nutritive Solutions Intensive Repair Shampoo",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "pizza-sauce",
-                         "commodity":  "Pizza Sauce",
-                         "unit":  "oz",
-                         "store":  "Sam\u0027s Club",
-                         "per_unit":  0.3995,
-                         "median":  0.0993,
-                         "mult":  4.02,
-                         "size":  "37.5 oz",
-                         "item":  "Yo Mama\u0027s Foods Low-Carb Pizza Sauce 12.5 oz., 3 pk.",
-                         "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-30T06:41:12",
+    "generated":  "2026-08-30T08:18:38",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -167,7 +167,7 @@
                               "commodity":  "All-Purpose Cleaner",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.1872,
+                              "per_unit":  0.1559,
                               "size":  "32 oz",
                               "item":  "Lysol Lemon Breeze All Purpose Cleaner",
                               "kind":  "weight",
@@ -218,18 +218,6 @@
                               "per_unit":  0.0416,
                               "size":  "96 oz",
                               "item":  "Our Family Apple Juice",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "apple-juice",
-                              "commodity":  "Apple Juice",
-                              "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.0466,
-                              "size":  "64 oz",
-                              "item":  "Fareway Apple 100% Juice",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -347,7 +335,7 @@
                               "commodity":  "Blueberries",
                               "unit":  "oz",
                               "store":  "Family Fare",
-                              "per_unit":  0.267,
+                              "per_unit":  0.3563,
                               "size":  "1 pt",
                               "item":  "Fresh Blueberries",
                               "kind":  "volume",
@@ -371,7 +359,7 @@
                               "commodity":  "Cherry / Grape Tomatoes",
                               "unit":  "oz",
                               "store":  "Family Fare",
-                              "per_unit":  0.299,
+                              "per_unit":  0.399,
                               "size":  "1 pt",
                               "item":  "Grape Tomatoes Our Family",
                               "kind":  "volume",
@@ -484,18 +472,6 @@
                               "item":  "PAM Original Cooking Spray, 12 oz., 2 pk.",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "cranberry-juice",
-                              "commodity":  "Cranberry Juice",
-                              "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.0466,
-                              "size":  "64 oz",
-                              "item":  "Fareway Cranberry Juice Cocktail",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -806,6 +782,18 @@
                               "per_unit":  0.1432,
                               "size":  "60 oz",
                               "item":  "Shout Laundry Stain Remover, Triple Acting, Value Refill 60 Fl Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "lemonade",
+                              "commodity":  "Lemonade",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0422,
+                              "size":  "59 oz",
+                              "item":  "Minute Maid Lemonade 59 Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1243,5 +1231,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-26.json"
+    "compare_file":  "comparison-2026-08-30.json"
 }

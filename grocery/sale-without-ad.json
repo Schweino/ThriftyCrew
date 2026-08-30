@@ -1,13 +1,13 @@
 {
-    "updated":  "2026-08-29T08:15:01",
-    "board":  "comparison-2026-08-26.json",
-    "week_of":  "2026-08-26",
+    "updated":  "2026-08-30T08:24:53",
+    "board":  "comparison-2026-08-30.json",
+    "week_of":  "2026-08-30",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  444,
-    "dated_by_the_store":  215,
-    "traced_to_an_ad":  34,
-    "untraceable":  195,
-    "ad_rows_available":  "Aldi=86 Baker\u0027s=400 Family Fare=1400 Fareway=485 Hy-Vee=578",
+    "sale_cells":  447,
+    "dated_by_the_store":  155,
+    "traced_to_an_ad":  100,
+    "untraceable":  192,
+    "ad_rows_available":  "Aldi=86 Baker\u0027s=400 Family Fare=1400 Fareway=485 Hy-Vee=682",
     "items":  [
                   {
                       "key":  "Fareway|air-freshener",
@@ -19,8 +19,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91493120-lavender-air-fresheners-73-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|all-purpose-cleaner",
@@ -32,21 +32,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/314508-fabuloso-multi-purpose-cleaner-lavender-128-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
-                  },
-                  {
-                      "key":  "Fareway|almonds",
-                      "id":  "almonds",
-                      "store":  "Fareway",
-                      "item":  "Fareway Whole Almonds, Low Sodium, Roasted and Salted",
-                      "price":  "$8.98",
-                      "per_unit":  0.5612,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21344009-fareway-whole-almonds-low-sodium-roasted-and-salted-16-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|applesauce",
@@ -58,8 +45,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24303014-fareway-applesauce-cinnamon-48-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|avocados",
@@ -71,8 +58,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3251376-hass-avocado-each",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|baby-food",
@@ -84,8 +71,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3318406-gerber-peaches-2nd-foods-4-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|baby-formula",
@@ -97,8 +84,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/68773-similac-advance-infant-formula-with-iron-powder-canister-12-4-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|baby-wipes",
@@ -110,8 +97,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19747465-huggies-sensitive-baby-wipes-unscented-10-ea",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|baked-beans",
@@ -123,8 +110,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/110589020-fareway-pork-and-beans-15-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|baking-powder",
@@ -136,8 +123,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16951403-hearth-club-baking-powder-8-1-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|baking-soda",
@@ -149,8 +136,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24227952-fareway-baking-soda-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|balsamic-vinegar",
@@ -162,8 +149,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24462017-fareway-vinegar-balsamic-of-modena-169-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|banana-peppers",
@@ -175,8 +162,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20639609-fareway-banana-pepper-rings-16-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|batteries",
@@ -188,8 +175,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24775115-fareway-batteries-alkaline-aa-15v-24-pack-24-each",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|bay-leaves",
@@ -201,8 +188,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1458678-badia-spices-bay-leaves-0-17-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|beef-broth",
@@ -214,8 +201,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389354-fareway-beef-broth-32-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|beef-jerky",
@@ -227,8 +214,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3302949-old-trapper-beef-jerky-teriyaki-naturally-smoked-10-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|blackberries",
@@ -240,8 +227,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17327025-blackberries-6-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|black-pepper",
@@ -253,8 +240,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1469136-badia-spices-black-pepper-ground-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|bleach",
@@ -266,8 +253,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21286519-sun-brite-ultra-bleach-128-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|bottled-marinade",
@@ -279,8 +266,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71465-a1-chicago-steakhouse-marinade-16-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|bread-crumbs",
@@ -292,8 +279,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389064-bread-crumbs-plain",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|breakfast-sausage",
@@ -305,8 +292,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2663295-farmland-sausage-roll-12-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|broccoli",
@@ -318,8 +305,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20635158-fareway-broccoli-florets-14-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|brown-gravy-mix",
@@ -331,8 +318,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/206606-southeastern-mills-gravy-mix-classic-brown-1-76-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|brownie-mix",
@@ -344,8 +331,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068330-fareway-fudge-brownie-mix-ultra-moist-183-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|brown-sugar",
@@ -357,8 +344,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24215500-corner-store-sugar-brown-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|brussels-sprouts",
@@ -370,8 +357,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388147-brussels-sprouts",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cajun-seasoning",
@@ -383,34 +370,34 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41184-louisiana-fish-fry-products-seasoning-cajun-8-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-beets",
                       "id":  "canned-beets",
                       "store":  "Fareway",
-                      "item":  "Fareway Whole Beets",
+                      "item":  "Fareway Diced Beets",
                       "price":  "$1.44",
                       "per_unit":  0.096,
                       "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24302991-fareway-beets-whole-15-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24226630-fareway-beets-diced-15-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-chili",
                       "id":  "canned-chili",
                       "store":  "Fareway",
-                      "item":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
-                      "price":  "$3.98",
-                      "per_unit":  0.1592,
+                      "item":  "Hormel Chili with Beans, No Artificial Ingredients, 15 Oz",
+                      "price":  "$2.64",
+                      "per_unit":  0.176,
                       "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36513-hormel-chili-with-beans-25-0-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16409704-hormel-chili-with-beans-15-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-green-chilies",
@@ -422,8 +409,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/189310-chi-chi-s-foods-diced-fiesta-green-chilies-4-25-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-mushrooms",
@@ -435,8 +422,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20543846-fareway-mushrooms-pieces-stems-1325-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-pears",
@@ -448,8 +435,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24076005-fareway-pears-irregular-29-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-peas",
@@ -461,8 +448,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388013-peas",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-salmon",
@@ -474,21 +461,21 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/514611-deming-s-pink-wild-caught-alaskan-salmon-14-75-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|canned-tuna",
                       "id":  "canned-tuna",
                       "store":  "Fareway",
-                      "item":  "Fareway Chunk Light Tuna in Oil",
-                      "price":  "$0.97",
-                      "per_unit":  0.194,
+                      "item":  "Fareway 8 Pack Value Pack Chunk Light Tuna in Water",
+                      "price":  "$6.99",
+                      "per_unit":  0.1748,
                       "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072245-fareway-tuna-in-water-chunk-light-5-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25543435-fareway-tuna-in-water-chunk-white-value-pack-8-pack-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cantaloupe",
@@ -500,8 +487,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389253-cut-cantaloupe-pint",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cat-food",
@@ -513,8 +500,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/86814344-9lives-chicken-beef-salmon-cat-food",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cauliflower",
@@ -524,10 +511,10 @@
                       "price":  "$1.98",
                       "per_unit":  1.98,
                       "unit":  "each",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20562021-fareway-grade-a-fancy-cauliflower-14-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3255628-cauliflower-each",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cayenne-pepper",
@@ -539,8 +526,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/314328-badia-spices-cayenne-pepper-1-75-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|charcoal",
@@ -552,8 +539,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2008227-royal-oak-charcoal-briquets-premium-ridge-15-4-lb",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cheese-crackers",
@@ -565,8 +552,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/220757-stauffer-s-baked-snack-crackers-whales-7-00-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cheese-tortellini",
@@ -578,8 +565,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3153709-louisa-tortellini-four-cheese-19-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|chicken-broth",
@@ -591,8 +578,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387716-chicken-broth",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|chili-powder",
@@ -604,8 +591,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/253183-badia-spices-chili-powder-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|chocolate-chips",
@@ -617,8 +604,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25799385-fareway-chocolate-chips-real-semisweet-family-size-24-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|clementines",
@@ -630,8 +617,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16527122-mandarin-clementine-3-lbs",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cocoa-powder",
@@ -643,8 +630,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16409339-toll-house-baking-cocoa-8-onz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|coconut-oil",
@@ -656,8 +643,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24189509-fareway-coconut-oil-organic-15-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cod",
@@ -669,21 +656,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/207326-supreme-choice-cod-fillets-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
-                  },
-                  {
-                      "key":  "Fareway|coffee",
-                      "id":  "coffee",
-                      "store":  "Fareway",
-                      "item":  "Fareway Coffee, Ground, Medium Roast Style, Classic Roast",
-                      "price":  "$17.78",
-                      "per_unit":  0.4184,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20609419-fareway-coffee-ground-classic-roast-medium-roast-style-305-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|coffee-creamer",
@@ -695,8 +669,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408135-coffee-mate-french-vanilla-liquid-coffee-creamer-64-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|coffee-pods",
@@ -708,8 +682,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43979690-green-mountain-coffee-roasters-k-cup-pods-10-pack",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|condensed-milk",
@@ -721,8 +695,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/64484535-fareway-sweetened-condensed-milk-14-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|conditioner",
@@ -734,8 +708,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91212795-suave-ess-refrsh-cond-ocean-br",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cookies",
@@ -747,8 +721,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22152890-fareway-cookies-chocolate-chip-12-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cornstarch",
@@ -760,8 +734,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20642488-fareway-corn-starch-100-pure-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cotton-swabs",
@@ -773,21 +747,21 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39363-q-tips-cotton-swabs-170-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|crackers",
                       "id":  "crackers",
                       "store":  "Fareway",
-                      "item":  "Fareway Saltines Crackers",
+                      "item":  "Fareway Unsalted Crackers",
                       "price":  "$1.99",
                       "per_unit":  0.1244,
                       "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20673277-fareway-crackers-saltines-16-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17636895-fareway-crackers-unsalted-top-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cream-of-chicken-soup",
@@ -799,8 +773,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072206-fareway-soup-cream-of-chicken-condensed-105-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|cream-of-mushroom-soup",
@@ -812,8 +786,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068308-fareway-soup-cream-of-mushroom-condensed-105-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|crushed-tomatoes",
@@ -825,8 +799,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20633319-fareway-tomatoes-in-puree-crushed-28-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|deodorant",
@@ -838,8 +812,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/63124305-suave-powder-inv-solid-deodorant",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|diced-tomatoes",
@@ -851,8 +825,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20630122-fareway-tomatoes-in-tomato-juice-diced-145-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|dinner-rolls",
@@ -864,8 +838,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/68872-king-s-hawaiian-original-hawaiian-sweet-rolls-12pk-12-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|disinfectant-spray",
@@ -877,8 +851,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2880716-lysol-disinfectant-spray-crisp-linen-scent-12-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|disinfecting-wipes",
@@ -890,8 +864,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34166-clorox-disinfecting-wipes-bleach-free-cleaning-wipes-fresh-scent-35-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|dog-treats",
@@ -903,8 +877,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25022567-canine-carry-outs-beef-flavor-steak-bites-dog-snacks-4-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|drain-cleaner",
@@ -916,8 +890,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/81898-drano-drain-cleaner-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|dried-basil",
@@ -929,8 +903,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258007-badia-spices-basil-0-75-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|dried-cranberries",
@@ -942,8 +916,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2483231-ocean-spray-dried-cranberries-24-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|dried-oregano",
@@ -955,8 +929,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2722903-badia-spices-oregano-5-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|dried-parsley",
@@ -968,21 +942,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/74379214-badia-parsley-flakes",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
-                  },
-                  {
-                      "key":  "Fareway|egg-noodles",
-                      "id":  "egg-noodles",
-                      "store":  "Fareway",
-                      "item":  "Fareway Wide Egg Noodles",
-                      "price":  "$2.79",
-                      "per_unit":  0.2325,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25446742-fareway-enriched-egg-noodle-product-wide-12-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|egg-whites",
@@ -994,8 +955,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20846854-bob-evans-farms-100-liquid-egg-whites-32-0-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|enchilada-sauce",
@@ -1007,8 +968,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20547451-fareway-enchilada-sauce-red-mild-10-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|energy-drinks",
@@ -1020,8 +981,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/96188951-celsius-fizz-free-energy-drink-variety-pack",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|evaporated-milk",
@@ -1033,8 +994,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23984-santini-evaporated-milk-12-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|facial-tissues",
@@ -1046,8 +1007,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26184494-kleenex-medium-count-flat-facial-tissue-160-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|fish-sticks",
@@ -1059,8 +1020,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3284135-van-de-kamp-s-crunchy-fish-sticks-24-6-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|flour",
@@ -1072,8 +1033,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24215312-fareway-flour-unbleached-5-lb",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|frozen-broccoli",
@@ -1085,8 +1046,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20585402-fareway-broccoli-cuts-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|frozen-burritos",
@@ -1098,8 +1059,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2133850-tina-s-burrito-beef-bean-green-chili-big-10-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|frozen-fries",
@@ -1111,8 +1072,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389279-crinkle-fries",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|frozen-fruit",
@@ -1124,8 +1085,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24271686-fareway-strawberries-whole-unsweetened-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|frozen-lasagna",
@@ -1137,8 +1098,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42112-on-cor-lasagna-with-meat-sauce-28-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|fruit-cocktail",
@@ -1150,8 +1111,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24084456-fareway-fruit-cocktail-in-heavy-syrup-30-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|fruit-punch",
@@ -1163,8 +1124,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20964096-minute-maid-sugar-fruit-punch-bottle-52-oza",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|furniture-polish",
@@ -1176,8 +1137,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/94702-endust-furniture-polish-lemon-12-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|graham-crackers",
@@ -1189,8 +1150,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26834389-fareway-honey-graham-crackers-14-4-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|granola",
@@ -1202,8 +1163,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/66830121-fareway-classic-granola-sweetened-cereal-clusters-with-whole-grain-rolled-oats-14-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|grape-juice",
@@ -1215,8 +1176,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69573-old-orchard-grape-100-juice-64-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|green-olives",
@@ -1228,8 +1189,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387226-fareway-manzanilla-olives-stuffed-with-pimiento-21-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|ground-coriander",
@@ -1241,8 +1202,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/257999-badia-spices-coriander-ground-1-75-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|ground-nutmeg",
@@ -1254,8 +1215,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258047-badia-spices-nutmeg-ground-2-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|hand-sanitizer",
@@ -1267,8 +1228,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16696721-purell-advanced-hand-sanitizer-refreshing-gel-8-0-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|hand-soap",
@@ -1280,8 +1241,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/13601-dial-complete-antibacterial-foaming-hand-wash-power-berries-7-5-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|hash-browns",
@@ -1293,8 +1254,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24454427-fareway-hash-browns-diced-southern-style-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|hoisin-sauce",
@@ -1306,8 +1267,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17445773-house-of-tsang-hoisin-stir-fry-sauce-12-7-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|hominy",
@@ -1319,8 +1280,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70208-bush-s-best-white-hominy-15-5-onz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|honey",
@@ -1330,10 +1291,10 @@
                       "price":  "$9.99",
                       "per_unit":  0.3122,
                       "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387975-honey",
+                      "url":  "",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|horseradish-sauce",
@@ -1345,8 +1306,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71192-woeber-s-horseradish-sauce-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|hot-dogs",
@@ -1358,8 +1319,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3304127-bar-s-classic-jumbo-franks-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|hummus",
@@ -1371,8 +1332,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/95781358-sabra-garlic-hummus-8-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|ice-cream",
@@ -1382,10 +1343,10 @@
                       "price":  "$3.94",
                       "per_unit":  0.0821,
                       "unit":  "floz",
-                      "url":  "",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388009-fareway-vintage-vanilla-premium-ice-cream-48-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|iced-tea",
@@ -1397,8 +1358,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3153977-milo-zero-calorie-sweet-tea-128-0-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|insect-spray",
@@ -1410,8 +1371,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39164-raid-ant-killer-26-pine-forest-fresh-17-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|italian-dressing",
@@ -1423,8 +1384,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24070074-fareway-dressing-italian-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|italian-sausage",
@@ -1436,8 +1397,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2605626-purnells-italian-sausage-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|jelly",
@@ -1449,8 +1410,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24229193-fareway-jelly-concord-grape-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|ketchup",
@@ -1462,8 +1423,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20548311-fareway-tomato-ketchup-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|kidney-beans",
@@ -1475,8 +1436,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068311-fareway-kidney-beans-dark-red-155-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|laundry-detergent",
@@ -1488,8 +1449,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/29399587-arm-hammer-fresh-scent-oxiclean-liquid-detergent-138-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|lemon-juice",
@@ -1501,8 +1462,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69608-realemon-100-lemon-juice-32-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|lime-juice",
@@ -1514,8 +1475,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2722879-realime-100-lime-juice-15-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|lotion",
@@ -1527,8 +1488,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16853220-jergens-ultra-healing-hand-and-body-lotion-dry-skin-moisturizer-with-vitamins-c-e-and-b5-26-5-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|mandarin-oranges",
@@ -1540,8 +1501,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25858077-fareway-mandarin-oranges-15-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|maple-syrup",
@@ -1553,8 +1514,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068566-fareway-pancake-syrup-24-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|mayonnaise",
@@ -1566,8 +1527,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24453283-fareway-mayonnaise-light-30-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|mixed-nuts",
@@ -1579,8 +1540,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22152068-fareway-select-mixed-nuts-roasted-and-salted-28-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|mouthwash",
@@ -1592,8 +1553,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19256326-goodsense-mouth-rinse-antiseptic-spring-mint-33-8-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|mushrooms",
@@ -1605,8 +1566,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18737949-produce-mushroom-broiler-8-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|oatmeal",
@@ -1618,8 +1579,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21871106-ralston-quick-oats-42-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|oat-milk",
@@ -1631,8 +1592,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19502658-planet-oat-vanilla-oatmilk-52-fl",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|oven-cleaner",
@@ -1644,8 +1605,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16754757-easy-off-oven-cleaner-lemon-scent-fume-free-14-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|oyster-sauce",
@@ -1657,8 +1618,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82690-kikkoman-oyster-flavored-sauce-12-6-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|pancake-mix",
@@ -1670,8 +1631,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20594930-fareway-pancake-waffle-mix-complete-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|paprika",
@@ -1683,8 +1644,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2720763-badia-spices-paprika-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|parmesan",
@@ -1696,8 +1657,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25577817-fareway-grated-cheese-parmesan-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|pasta",
@@ -1709,8 +1670,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25096494-fareway-whole-wheat-macaroni-product-thin-spaghetti-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|peanuts",
@@ -1722,8 +1683,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22183576-fareway-peanuts-salted-dry-roasted-35-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|pickles",
@@ -1733,10 +1694,10 @@
                       "price":  "$2.77",
                       "per_unit":  0.0866,
                       "unit":  "oz",
-                      "url":  "",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25807192-fareway-pickle-spears-zesty-24-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|pineapple",
@@ -1748,8 +1709,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23958875-fareway-pineapple-sliced-20-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|pizza-sauce",
@@ -1761,8 +1722,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068209-fareway-pizza-sauce-15-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|potato-gnocchi",
@@ -1774,21 +1735,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/136826-delallo-potato-gnocchi-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
-                  },
-                  {
-                      "key":  "Fareway|pretzels",
-                      "id":  "pretzels",
-                      "store":  "Fareway",
-                      "item":  "Shultz Mini Pretzel Twists",
-                      "price":  "$2.49",
-                      "per_unit":  0.1556,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20207086-shultz-mini-pretzel-twists-16-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|protein-bars",
@@ -1800,8 +1748,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/78296-pure-protein-protein-bar-chocolate-peanut-caramel-6-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|prunes",
@@ -1813,8 +1761,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24121102-sunsweet-prunes-pitted-value-pack-24-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|quart-storage-bags",
@@ -1826,8 +1774,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16756902-hefty-quart-storage-slider-bags-20-0-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|raisins",
@@ -1839,8 +1787,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/102971-sun-maid-raisins-natural-california-20-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|ranch-dressing",
@@ -1852,8 +1800,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068057-fareway-dressing-ranch-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|ranch-seasoning-mix",
@@ -1865,8 +1813,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24083373-fareway-dip-mix-ranch-1-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|raspberries",
@@ -1878,8 +1826,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/58863-raspberries-6-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|razors",
@@ -1891,8 +1839,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/94980-gillette-gillette-tropical-women-s-disposable-razor-3-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|red-wine-vinegar",
@@ -1904,8 +1852,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24244042-fareway-vinegar-red-wine-169-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|relish",
@@ -1917,8 +1865,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2770882-vlasic-sweet-relish-16-oza",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|ricotta",
@@ -1930,8 +1878,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3235856-frigo-whole-milk-ricotta-cheese-32-0-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|salsa",
@@ -1943,8 +1891,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/104557563-chunky-salsa-mild",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|salt",
@@ -1956,8 +1904,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2691028-morton-iodized-salt-26-ounce-26-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|sandwich-cookies",
@@ -1969,8 +1917,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22160452-fareway-sandwich-cookies-lemon-cremes-25-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|shampoo",
@@ -1982,8 +1930,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82401404-ocean-breeze-shampoo",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|shaving-cream",
@@ -1995,8 +1943,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16410324-gillette-foamy-regular-shave-cream-11-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|shredded-cheese",
@@ -2008,8 +1956,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24712403-fareway-cheese-colby-jack-fancy-shredded-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|sloppy-joe-sauce",
@@ -2021,8 +1969,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72692-manwich-thick-n-chunky-sloppy-joe-sauce-15-5-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|sponges",
@@ -2034,8 +1982,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70627-scotch-brite-scotch-brite-ocelo-handy-sponge-assorted-colors-4-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|stain-remover",
@@ -2047,8 +1995,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/88883-spray-n-wash-laundry-stain-remover-60-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|steak-sauce",
@@ -2060,8 +2008,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20591484-fareway-steak-sauce-classic-10-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|strawberries",
@@ -2073,8 +2021,8 @@
                       "unit":  "oz",
                       "url":  "",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|sun-dried-tomatoes",
@@ -2086,8 +2034,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24845-mezzetta-tomatoes-8-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|tampons",
@@ -2099,8 +2047,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91935-playtex-tampons-plastic-super-absorbency-unscented-18-ea",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|tartar-sauce",
@@ -2112,8 +2060,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387904-tartar-sauce",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|tater-tots",
@@ -2125,8 +2073,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2609243-ore-ida-golden-tater-tots-seasoned-shredded-frozen-potatoes-32-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|tea-bags",
@@ -2138,8 +2086,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69166387-lipton-tea-bags-cup-size",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|toasted-sesame-seeds",
@@ -2151,21 +2099,21 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19867574-badia-spices-sesame-seed-toasted-16-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|toaster-pastries",
                       "id":  "toaster-pastries",
                       "store":  "Fareway",
-                      "item":  "Toast\u0027em Pop-ups Toaster Pastries, Cherry",
+                      "item":  "Toast\u0027em Pop-ups Toaster Pastries, S\u0027mores",
                       "price":  "$1.5",
                       "per_unit":  0.25,
                       "unit":  "each",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2626014-toast-em-pop-ups-real-fruit-pastries-frosted-cherry-11-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16951406-toast-em-frosted-smores-pastry-tart-6-ct",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|toilet-bowl-cleaner",
@@ -2177,8 +2125,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/88434867-lysol-tbc-bamboo-twin-pack-gel",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|toilet-paper",
@@ -2190,8 +2138,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18481761-scott-comfortplus-toilet-paper-12-ea",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|tomatoes-green-chilies",
@@ -2203,8 +2151,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20582500-fareway-tomatoes-diced-mexican-style-145-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|tomato-sauce",
@@ -2216,8 +2164,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20546770-fareway-tomato-sauce-15-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|tomato-soup",
@@ -2229,8 +2177,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072624-fareway-soup-tomato-condensed-1075-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|vanilla-extract",
@@ -2242,8 +2190,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/79518-mccormick-all-natural-pure-vanilla-extract-4-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|vegetable-broth",
@@ -2255,8 +2203,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69757-swanson-vegetable-broth-32-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|vegetable-oil",
@@ -2266,10 +2214,10 @@
                       "price":  "$9.48",
                       "per_unit":  0.0741,
                       "unit":  "floz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23958874-fareway-canola-oil-128-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23966592-fareway-vegetable-oil-128-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|vegetable-soup",
@@ -2281,8 +2229,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/37442-campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|white-vinegar",
@@ -2294,8 +2242,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/48388856-fareway-white-distilled-vinegar-128-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|worcestershire",
@@ -2307,8 +2255,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16482899-heinz-worcestershire-sauce-18-fl-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|yeast",
@@ -2320,8 +2268,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/53782-red-star-active-dry-yeast-4-0-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|yogurt",
@@ -2333,8 +2281,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/75563-yoplait-original-yogurt-vanilla-low-fat-yogurt-32-000-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Hy-Vee|batteries",
@@ -2346,8 +2294,8 @@
                       "unit":  "each",
                       "url":  "https://www.hy-vee.com/aisles-online/p/2398471/simply-done-aa-batteries-4-pk",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Hy-Vee|cabbage",
@@ -2359,8 +2307,8 @@
                       "unit":  "lb",
                       "url":  "https://www.hy-vee.com/aisles-online/p/37257/green-cabbage",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Hy-Vee|pickles",
@@ -2372,21 +2320,8 @@
                       "unit":  "oz",
                       "url":  "https://www.hy-vee.com/aisles-online/p/22350/hy-vee-kosher-dill-pickle-spears",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
-                  },
-                  {
-                      "key":  "Hy-Vee|sloppy-joe-sauce",
-                      "id":  "sloppy-joe-sauce",
-                      "store":  "Hy-Vee",
-                      "item":  "Hy-Vee Sloppy Joe Sauce",
-                      "price":  "$0.99",
-                      "per_unit":  0.066,
-                      "unit":  "oz",
-                      "url":  "https://www.hy-vee.com/aisles-online/p/444508/hy-vee-sloppy-joe-sauce",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  5
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  9
                   },
                   {
                       "key":  "Fareway|beef-stew",
@@ -2398,8 +2333,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35226-dinty-moore-beef-stew-20-oz",
                       "first_seen":  "2026-08-23",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  3
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  7
                   },
                   {
                       "key":  "Fareway|blue-cheese-dressing",
@@ -2411,8 +2346,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16752065-wish-bone-chunky-blue-cheese-dressing-15-oza",
                       "first_seen":  "2026-08-23",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  3
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  7
                   },
                   {
                       "key":  "Fareway|canned-pumpkin",
@@ -2424,21 +2359,21 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/38030-libby-s-pumpkin-100-pure-pumpkin-29-oz",
                       "first_seen":  "2026-08-23",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  3
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  7
                   },
                   {
                       "key":  "Fareway|carrots",
                       "id":  "carrots",
                       "store":  "Fareway",
-                      "item":  "Dole Carrots, Mini Cut",
-                      "price":  "$2.77",
-                      "per_unit":  1.385,
+                      "item":  "Carrot",
+                      "price":  "$4.49",
+                      "per_unit":  0.898,
                       "unit":  "lb",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1880274-dole-carrots-mini-cut-32-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16553288-carrot-5-lbs",
                       "first_seen":  "2026-08-23",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  3
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  7
                   },
                   {
                       "key":  "Fareway|miracle-whip",
@@ -2450,21 +2385,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408651-miracle-whip-dressing-30-fl-oz",
                       "first_seen":  "2026-08-23",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  3
-                  },
-                  {
-                      "key":  "Fareway|stuffing-mix",
-                      "id":  "stuffing-mix",
-                      "store":  "Fareway",
-                      "item":  "Kraft Stove Top Everyday Stuffing Mix for Chicken",
-                      "price":  "$4.99",
-                      "per_unit":  0.4158,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72709-kraft-stove-top-everyday-stuffing-mix-for-chicken-12-oz",
-                      "first_seen":  "2026-08-23",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  3
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  7
                   },
                   {
                       "key":  "Fareway|butter",
@@ -2476,47 +2398,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24451441-fareway-butter-salted-16-oz",
                       "first_seen":  "2026-08-24",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  2
-                  },
-                  {
-                      "key":  "Fareway|cereal",
-                      "id":  "cereal",
-                      "store":  "Fareway",
-                      "item":  "Fareway Bran Flakes Cereal",
-                      "price":  "$1.99",
-                      "per_unit":  0.1106,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89314391-bran-flakes",
-                      "first_seen":  "2026-08-24",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  2
-                  },
-                  {
-                      "key":  "Hy-Vee|pasta",
-                      "id":  "pasta",
-                      "store":  "Hy-Vee",
-                      "item":  "Hy-Vee Rotini Pasta",
-                      "price":  "$1.19",
-                      "per_unit":  0.0744,
-                      "unit":  "oz",
-                      "url":  "https://www.hy-vee.com/aisles-online/p/55914/hy-vee-rotini-pasta",
-                      "first_seen":  "2026-08-24",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  2
-                  },
-                  {
-                      "key":  "Hy-Vee|tomatoes-green-chilies",
-                      "id":  "tomatoes-green-chilies",
-                      "store":  "Hy-Vee",
-                      "item":  "Hy-Vee Diced Tomatoes with Green Chilies",
-                      "price":  "$0.99",
-                      "per_unit":  0.0683,
-                      "unit":  "oz",
-                      "url":  "https://www.hy-vee.com/aisles-online/p/58149/hy-vee-diced-tomatoes-with-green-chilies",
-                      "first_seen":  "2026-08-24",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  2
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  6
                   },
                   {
                       "key":  "Fareway|black-olives",
@@ -2528,8 +2411,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24314636-fareway-ripe-olives-pitted-large-6-oz",
                       "first_seen":  "2026-08-26",
-                      "last_seen":  "2026-08-26",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  4
                   },
                   {
                       "key":  "Fareway|black-peppercorns",
@@ -2541,7 +2424,85 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1458588-badia-spices-black-pepper-whole-16-oz",
                       "first_seen":  "2026-08-26",
-                      "last_seen":  "2026-08-26",
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  4
+                  },
+                  {
+                      "key":  "Fareway|brown-lentils",
+                      "id":  "brown-lentils",
+                      "store":  "Fareway",
+                      "item":  "Brown\u0027s Best Lentils",
+                      "price":  "$1.99",
+                      "per_unit":  1.99,
+                      "unit":  "lb",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/334663-brown-s-best-lentils-16-oz",
+                      "first_seen":  "2026-08-30",
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|bulgur-wheat",
+                      "id":  "bulgur-wheat",
+                      "store":  "Fareway",
+                      "item":  "Bob\u0027s Red Mill Red Bulgur, Whole Grain",
+                      "price":  "$4.99",
+                      "per_unit":  0.2079,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20563997-bob-s-red-mill-red-bulgur-whole-grain-24-0-oz",
+                      "first_seen":  "2026-08-30",
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|canned-pineapple",
+                      "id":  "canned-pineapple",
+                      "store":  "Fareway",
+                      "item":  "Fareway Crushed Pineapple",
+                      "price":  "$1.68",
+                      "per_unit":  0.084,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23976254-fareway-pineapple-crushed-20-oz",
+                      "first_seen":  "2026-08-30",
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|cooking-spray",
+                      "id":  "cooking-spray",
+                      "store":  "Fareway",
+                      "item":  "Parkay Vegetable Oil Spray",
+                      "price":  "$3.49",
+                      "per_unit":  0.4362,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71771-parkay-buttery-spray-8-oz",
+                      "first_seen":  "2026-08-30",
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|fruit-cups",
+                      "id":  "fruit-cups",
+                      "store":  "Fareway",
+                      "item":  "Fareway Mandarin Oranges in 100% Juice",
+                      "price":  "$2.78",
+                      "per_unit":  0.695,
+                      "unit":  "each",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23422855-fareway-mandarin-oranges-in-100-juice-4-each",
+                      "first_seen":  "2026-08-30",
+                      "last_seen":  "2026-08-30",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|oranges",
+                      "id":  "oranges",
+                      "store":  "Fareway",
+                      "item":  "Navel Orange",
+                      "price":  "$0.67",
+                      "per_unit":  1.4889,
+                      "unit":  "lb",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18809441-navel-orange-1-lb",
+                      "first_seen":  "2026-08-30",
+                      "last_seen":  "2026-08-30",
                       "days_unexplained":  0
                   }
               ]

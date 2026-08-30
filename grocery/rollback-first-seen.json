@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-29T09:16:14",
+    "updated":  "2026-08-30T08:15:56",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -9,7 +9,7 @@
                         "item_id":  "102767808",
                         "price":  10.88,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -18,7 +18,7 @@
                         "item_id":  "102886",
                         "price":  5.69,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -27,7 +27,7 @@
                         "item_id":  "102971",
                         "price":  4.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -36,7 +36,7 @@
                         "item_id":  "103011698",
                         "price":  9.98,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -45,7 +45,7 @@
                         "item_id":  "103832577",
                         "price":  1.99,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -54,7 +54,7 @@
                         "item_id":  "104557563",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -63,7 +63,7 @@
                         "item_id":  "110589020",
                         "price":  0.89,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -72,7 +72,7 @@
                         "item_id":  "111646051",
                         "price":  2.5,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -81,7 +81,7 @@
                         "item_id":  "11601",
                         "price":  3.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -90,7 +90,7 @@
                         "item_id":  "121682",
                         "price":  3.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -99,7 +99,7 @@
                         "item_id":  "130147",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -108,7 +108,7 @@
                         "item_id":  "130877",
                         "price":  2.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -117,7 +117,7 @@
                         "item_id":  "132051",
                         "price":  2.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -126,7 +126,7 @@
                         "item_id":  "13601",
                         "price":  3.49,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -135,7 +135,7 @@
                         "item_id":  "136826",
                         "price":  3.79,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -144,7 +144,16 @@
                         "item_id":  "1377250",
                         "price":  4.88,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|1418472",
+                        "store":  "Fareway",
+                        "item_id":  "1418472",
+                        "price":  8.77,
+                        "first_seen":  "2026-08-11",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -153,7 +162,7 @@
                         "item_id":  "142397",
                         "price":  2.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -162,7 +171,7 @@
                         "item_id":  "1449395",
                         "price":  5.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -171,7 +180,7 @@
                         "item_id":  "1458588",
                         "price":  7.99,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -180,7 +189,7 @@
                         "item_id":  "1458678",
                         "price":  1.68,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -189,7 +198,7 @@
                         "item_id":  "1469136",
                         "price":  7.99,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -198,7 +207,16 @@
                         "item_id":  "1502258",
                         "price":  6.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|1532535",
+                        "store":  "Fareway",
+                        "item_id":  "1532535",
+                        "price":  2.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -207,7 +225,7 @@
                         "item_id":  "16236872",
                         "price":  6.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -216,7 +234,7 @@
                         "item_id":  "16308201",
                         "price":  2,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -225,7 +243,7 @@
                         "item_id":  "16383355",
                         "price":  1.58,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -234,7 +252,7 @@
                         "item_id":  "16408114",
                         "price":  9.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -243,7 +261,7 @@
                         "item_id":  "16408135",
                         "price":  6.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -252,7 +270,7 @@
                         "item_id":  "16408143",
                         "price":  14.48,
                         "first_seen":  "2026-08-21",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -261,7 +279,7 @@
                         "item_id":  "16408651",
                         "price":  5.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -270,7 +288,7 @@
                         "item_id":  "16409168",
                         "price":  2.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -279,7 +297,7 @@
                         "item_id":  "16409221",
                         "price":  2.97,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -288,7 +306,7 @@
                         "item_id":  "16409339",
                         "price":  5.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -297,7 +315,7 @@
                         "item_id":  "16409600",
                         "price":  1.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -306,7 +324,7 @@
                         "item_id":  "16409704",
                         "price":  2.64,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -315,7 +333,7 @@
                         "item_id":  "16409969",
                         "price":  1.44,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -324,7 +342,7 @@
                         "item_id":  "16410324",
                         "price":  2.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -333,7 +351,7 @@
                         "item_id":  "16411081",
                         "price":  1.92,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -342,7 +360,7 @@
                         "item_id":  "16417856",
                         "price":  2.99,
                         "first_seen":  "2026-08-20",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -351,7 +369,7 @@
                         "item_id":  "16469141",
                         "price":  3.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -360,7 +378,7 @@
                         "item_id":  "16482899",
                         "price":  2.78,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -369,7 +387,7 @@
                         "item_id":  "16514907",
                         "price":  6.99,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -378,7 +396,25 @@
                         "item_id":  "16527122",
                         "price":  5.77,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|16553288",
+                        "store":  "Fareway",
+                        "item_id":  "16553288",
+                        "price":  4.49,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|1658850",
+                        "store":  "Fareway",
+                        "item_id":  "1658850",
+                        "price":  2.98,
+                        "first_seen":  "2026-08-09",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -387,7 +423,7 @@
                         "item_id":  "16606119",
                         "price":  0.88,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -396,7 +432,16 @@
                         "item_id":  "1663547",
                         "price":  2.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|16658606",
+                        "store":  "Fareway",
+                        "item_id":  "16658606",
+                        "price":  1.94,
+                        "first_seen":  "2026-07-31",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -405,7 +450,7 @@
                         "item_id":  "16696721",
                         "price":  3.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -414,7 +459,7 @@
                         "item_id":  "16703600",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -423,7 +468,7 @@
                         "item_id":  "16752065",
                         "price":  2.74,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -432,7 +477,7 @@
                         "item_id":  "16754757",
                         "price":  5.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -441,7 +486,7 @@
                         "item_id":  "16756902",
                         "price":  3.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -450,7 +495,7 @@
                         "item_id":  "16758378",
                         "price":  1.88,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -459,7 +504,7 @@
                         "item_id":  "16759678",
                         "price":  2.74,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -468,7 +513,7 @@
                         "item_id":  "16853220",
                         "price":  7.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -477,7 +522,7 @@
                         "item_id":  "16865351",
                         "price":  3.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -486,7 +531,7 @@
                         "item_id":  "16951403",
                         "price":  2.49,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -495,7 +540,7 @@
                         "item_id":  "16951406",
                         "price":  1.5,
                         "first_seen":  "2026-08-03",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -504,7 +549,7 @@
                         "item_id":  "16997631",
                         "price":  6.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -513,7 +558,7 @@
                         "item_id":  "17004459",
                         "price":  29.97,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -522,7 +567,7 @@
                         "item_id":  "17105464",
                         "price":  1.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -531,7 +576,7 @@
                         "item_id":  "17314053",
                         "price":  6.88,
                         "first_seen":  "2026-08-20",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -540,7 +585,7 @@
                         "item_id":  "17327025",
                         "price":  2.99,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  1
                     },
                     {
@@ -549,7 +594,7 @@
                         "item_id":  "17358177",
                         "price":  1,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -558,7 +603,7 @@
                         "item_id":  "17358183",
                         "price":  1,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -567,7 +612,7 @@
                         "item_id":  "17415315",
                         "price":  4.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -576,7 +621,7 @@
                         "item_id":  "17445613",
                         "price":  3.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -585,7 +630,7 @@
                         "item_id":  "17445773",
                         "price":  4.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -598,12 +643,21 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Fareway|17636895",
+                        "store":  "Fareway",
+                        "item_id":  "17636895",
+                        "price":  1.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Fareway|17668522",
                         "store":  "Fareway",
                         "item_id":  "17668522",
                         "price":  0.88,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -612,7 +666,7 @@
                         "item_id":  "18083759",
                         "price":  3.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -621,7 +675,7 @@
                         "item_id":  "18311864",
                         "price":  2.29,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -630,7 +684,7 @@
                         "item_id":  "18483941",
                         "price":  5.98,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -639,7 +693,7 @@
                         "item_id":  "18527479",
                         "price":  2.98,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -648,7 +702,7 @@
                         "item_id":  "18529104",
                         "price":  2.5,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -657,7 +711,7 @@
                         "item_id":  "18581926",
                         "price":  4.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -666,7 +720,7 @@
                         "item_id":  "18583597",
                         "price":  3.48,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -675,7 +729,7 @@
                         "item_id":  "187189",
                         "price":  3,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -684,7 +738,7 @@
                         "item_id":  "189310",
                         "price":  1.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -693,7 +747,7 @@
                         "item_id":  "191981",
                         "price":  3.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -702,7 +756,7 @@
                         "item_id":  "19208397",
                         "price":  7.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -711,7 +765,7 @@
                         "item_id":  "19256326",
                         "price":  3.97,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -720,7 +774,7 @@
                         "item_id":  "19256333",
                         "price":  3.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -729,7 +783,7 @@
                         "item_id":  "19267864",
                         "price":  2.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -738,7 +792,7 @@
                         "item_id":  "192813",
                         "price":  4.88,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -747,7 +801,7 @@
                         "item_id":  "19376323",
                         "price":  4.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -756,7 +810,7 @@
                         "item_id":  "1939858",
                         "price":  4.97,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -765,7 +819,7 @@
                         "item_id":  "19502658",
                         "price":  3.48,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -774,7 +828,7 @@
                         "item_id":  "19541770",
                         "price":  7.94,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -783,7 +837,7 @@
                         "item_id":  "1957199",
                         "price":  0.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -792,7 +846,7 @@
                         "item_id":  "196536",
                         "price":  1.98,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -801,7 +855,7 @@
                         "item_id":  "19747465",
                         "price":  18.98,
                         "first_seen":  "2026-08-21",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -810,7 +864,7 @@
                         "item_id":  "19867574",
                         "price":  7.99,
                         "first_seen":  "2026-08-03",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -819,7 +873,7 @@
                         "item_id":  "20030029",
                         "price":  7.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -828,7 +882,7 @@
                         "item_id":  "2007891",
                         "price":  2.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -837,7 +891,7 @@
                         "item_id":  "2008227",
                         "price":  7.98,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -846,7 +900,7 @@
                         "item_id":  "20139351",
                         "price":  2.47,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -855,7 +909,7 @@
                         "item_id":  "20142067",
                         "price":  2.47,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -864,7 +918,7 @@
                         "item_id":  "20207086",
                         "price":  2.49,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -873,7 +927,7 @@
                         "item_id":  "20312106",
                         "price":  6.97,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -882,7 +936,7 @@
                         "item_id":  "20539657",
                         "price":  1.28,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -891,7 +945,7 @@
                         "item_id":  "20543846",
                         "price":  2.58,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -909,7 +963,7 @@
                         "item_id":  "205454",
                         "price":  3.33,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -918,7 +972,7 @@
                         "item_id":  "20547451",
                         "price":  1.58,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -927,7 +981,7 @@
                         "item_id":  "20548311",
                         "price":  1.97,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -936,7 +990,16 @@
                         "item_id":  "20555547",
                         "price":  14.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|20563997",
+                        "store":  "Fareway",
+                        "item_id":  "20563997",
+                        "price":  4.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -945,7 +1008,7 @@
                         "item_id":  "20582500",
                         "price":  0.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -954,7 +1017,7 @@
                         "item_id":  "20585402",
                         "price":  1.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -963,7 +1026,7 @@
                         "item_id":  "20591484",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -972,7 +1035,7 @@
                         "item_id":  "20594930",
                         "price":  2.69,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -981,7 +1044,7 @@
                         "item_id":  "20601338",
                         "price":  2.69,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1003,12 +1066,30 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Fareway|20629096",
+                        "store":  "Fareway",
+                        "item_id":  "20629096",
+                        "price":  3.48,
+                        "first_seen":  "2026-08-09",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Fareway|20630122",
                         "store":  "Fareway",
                         "item_id":  "20630122",
                         "price":  0.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|20633319",
+                        "store":  "Fareway",
+                        "item_id":  "20633319",
+                        "price":  1.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1017,7 +1098,7 @@
                         "item_id":  "20635158",
                         "price":  1.98,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1026,7 +1107,7 @@
                         "item_id":  "20639609",
                         "price":  2.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1035,7 +1116,7 @@
                         "item_id":  "20642488",
                         "price":  1.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1044,7 +1125,7 @@
                         "item_id":  "20646111",
                         "price":  1.44,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1053,7 +1134,7 @@
                         "item_id":  "20647701",
                         "price":  2.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1062,7 +1143,7 @@
                         "item_id":  "206606",
                         "price":  1.28,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1071,7 +1152,7 @@
                         "item_id":  "20671242",
                         "price":  0.98,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1080,7 +1161,7 @@
                         "item_id":  "20671650",
                         "price":  1.24,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1089,7 +1170,7 @@
                         "item_id":  "20677434",
                         "price":  5.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1098,7 +1179,7 @@
                         "item_id":  "207326",
                         "price":  11.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1107,7 +1188,7 @@
                         "item_id":  "20846854",
                         "price":  6.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1116,7 +1197,7 @@
                         "item_id":  "20964096",
                         "price":  2.88,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1125,7 +1206,7 @@
                         "item_id":  "21286519",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1134,7 +1215,7 @@
                         "item_id":  "2133850",
                         "price":  1.67,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1143,7 +1224,16 @@
                         "item_id":  "21344009",
                         "price":  8.98,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|21848727",
+                        "store":  "Fareway",
+                        "item_id":  "21848727",
+                        "price":  1.88,
+                        "first_seen":  "2026-08-05",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1152,7 +1242,7 @@
                         "item_id":  "21855740",
                         "price":  1.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1161,7 +1251,7 @@
                         "item_id":  "21855744",
                         "price":  1.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1170,7 +1260,7 @@
                         "item_id":  "21871106",
                         "price":  5.59,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1179,7 +1269,7 @@
                         "item_id":  "220757",
                         "price":  1.78,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1188,7 +1278,16 @@
                         "item_id":  "22152068",
                         "price":  12.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|22152890",
+                        "store":  "Fareway",
+                        "item_id":  "22152890",
+                        "price":  1.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1197,7 +1296,7 @@
                         "item_id":  "22158769",
                         "price":  3.34,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1206,7 +1305,7 @@
                         "item_id":  "22159772",
                         "price":  0.54,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1215,7 +1314,7 @@
                         "item_id":  "22160452",
                         "price":  2.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1224,7 +1323,7 @@
                         "item_id":  "22183576",
                         "price":  6.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1233,7 +1332,16 @@
                         "item_id":  "22243430",
                         "price":  2.49,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|22244060",
+                        "store":  "Fareway",
+                        "item_id":  "22244060",
+                        "price":  5.29,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1242,7 +1350,7 @@
                         "item_id":  "224714",
                         "price":  8.48,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1251,7 +1359,7 @@
                         "item_id":  "22979046",
                         "price":  4.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1260,7 +1368,16 @@
                         "item_id":  "22999163",
                         "price":  1.88,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|23412177",
+                        "store":  "Fareway",
+                        "item_id":  "23412177",
+                        "price":  7.48,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1269,7 +1386,16 @@
                         "item_id":  "23422855",
                         "price":  2.78,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|23422857",
+                        "store":  "Fareway",
+                        "item_id":  "23422857",
+                        "price":  8.98,
+                        "first_seen":  "2026-08-27",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1278,7 +1404,7 @@
                         "item_id":  "23584081",
                         "price":  29.44,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1287,7 +1413,7 @@
                         "item_id":  "23820964",
                         "price":  1.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1296,7 +1422,7 @@
                         "item_id":  "23884100",
                         "price":  1.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1305,7 +1431,7 @@
                         "item_id":  "23958874",
                         "price":  9.48,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1314,7 +1440,16 @@
                         "item_id":  "23966595",
                         "price":  2.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|23976254",
+                        "store":  "Fareway",
+                        "item_id":  "23976254",
+                        "price":  1.68,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1323,7 +1458,7 @@
                         "item_id":  "23984",
                         "price":  1.68,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1332,7 +1467,7 @@
                         "item_id":  "24068081",
                         "price":  0.98,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1341,7 +1476,7 @@
                         "item_id":  "24068209",
                         "price":  1.34,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1350,7 +1485,7 @@
                         "item_id":  "24068308",
                         "price":  0.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1359,7 +1494,7 @@
                         "item_id":  "24068330",
                         "price":  1.68,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1368,7 +1503,7 @@
                         "item_id":  "24068566",
                         "price":  2.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1377,7 +1512,7 @@
                         "item_id":  "24068568",
                         "price":  1.68,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1386,7 +1521,7 @@
                         "item_id":  "24068984",
                         "price":  0.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1395,7 +1530,7 @@
                         "item_id":  "24070065",
                         "price":  2.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1404,7 +1539,7 @@
                         "item_id":  "24070074",
                         "price":  2.48,
                         "first_seen":  "2026-08-20",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1413,7 +1548,7 @@
                         "item_id":  "24072206",
                         "price":  0.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1431,7 +1566,7 @@
                         "item_id":  "24076005",
                         "price":  2.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1440,7 +1575,7 @@
                         "item_id":  "24083026",
                         "price":  1.84,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1449,7 +1584,7 @@
                         "item_id":  "24083182",
                         "price":  0.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1458,7 +1593,7 @@
                         "item_id":  "24083373",
                         "price":  0.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1467,7 +1602,7 @@
                         "item_id":  "24084456",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1476,7 +1611,7 @@
                         "item_id":  "24121102",
                         "price":  9.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1485,7 +1620,7 @@
                         "item_id":  "24123649",
                         "price":  0.97,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1494,7 +1629,7 @@
                         "item_id":  "24189509",
                         "price":  7.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1503,7 +1638,7 @@
                         "item_id":  "24215500",
                         "price":  2.39,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1512,7 +1647,7 @@
                         "item_id":  "24221467",
                         "price":  7.98,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1521,7 +1656,7 @@
                         "item_id":  "24222138",
                         "price":  1.99,
                         "first_seen":  "2026-08-20",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1539,7 +1674,7 @@
                         "item_id":  "24226312",
                         "price":  1.77,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1548,7 +1683,7 @@
                         "item_id":  "24226630",
                         "price":  1.44,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1566,7 +1701,7 @@
                         "item_id":  "24227952",
                         "price":  0.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1575,7 +1710,7 @@
                         "item_id":  "24244042",
                         "price":  2.88,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1584,7 +1719,7 @@
                         "item_id":  "24266513",
                         "price":  4.49,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1593,7 +1728,7 @@
                         "item_id":  "24269937",
                         "price":  0.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1602,7 +1737,7 @@
                         "item_id":  "24271686",
                         "price":  4.49,
                         "first_seen":  "2026-08-03",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1611,7 +1746,7 @@
                         "item_id":  "24278215",
                         "price":  4.49,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1620,7 +1755,7 @@
                         "item_id":  "24281070",
                         "price":  2.77,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1629,7 +1764,7 @@
                         "item_id":  "24300825",
                         "price":  3.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1638,7 +1773,7 @@
                         "item_id":  "24302991",
                         "price":  1.44,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1647,7 +1782,7 @@
                         "item_id":  "24303014",
                         "price":  3.88,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1656,7 +1791,7 @@
                         "item_id":  "24303544",
                         "price":  3.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1665,7 +1800,16 @@
                         "item_id":  "24314636",
                         "price":  2,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|24443550",
+                        "store":  "Fareway",
+                        "item_id":  "24443550",
+                        "price":  1.44,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1674,7 +1818,7 @@
                         "item_id":  "24451441",
                         "price":  3.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1683,7 +1827,7 @@
                         "item_id":  "24454427",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1701,7 +1845,7 @@
                         "item_id":  "24461263",
                         "price":  0.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1710,7 +1854,7 @@
                         "item_id":  "24462017",
                         "price":  2.88,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1719,7 +1863,7 @@
                         "item_id":  "24479815",
                         "price":  1.44,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1728,7 +1872,7 @@
                         "item_id":  "24481367",
                         "price":  0.97,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1737,7 +1881,7 @@
                         "item_id":  "24637002",
                         "price":  1.44,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1755,7 +1899,7 @@
                         "item_id":  "24721072",
                         "price":  4.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1764,7 +1908,7 @@
                         "item_id":  "24750",
                         "price":  2.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1773,7 +1917,7 @@
                         "item_id":  "24775115",
                         "price":  9.97,
                         "first_seen":  "2026-08-25",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1782,7 +1926,7 @@
                         "item_id":  "2483231",
                         "price":  6.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1791,7 +1935,7 @@
                         "item_id":  "24845",
                         "price":  4.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1800,7 +1944,7 @@
                         "item_id":  "25022567",
                         "price":  1.25,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1809,7 +1953,7 @@
                         "item_id":  "250947",
                         "price":  4.98,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1818,7 +1962,7 @@
                         "item_id":  "25096494",
                         "price":  0.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1827,7 +1971,7 @@
                         "item_id":  "25096769",
                         "price":  0.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1836,7 +1980,16 @@
                         "item_id":  "253183",
                         "price":  7.99,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|25543435",
+                        "store":  "Fareway",
+                        "item_id":  "25543435",
+                        "price":  6.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1845,7 +1998,7 @@
                         "item_id":  "25707",
                         "price":  1.49,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1854,7 +2007,7 @@
                         "item_id":  "25799385",
                         "price":  6.68,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1863,7 +2016,7 @@
                         "item_id":  "257999",
                         "price":  1.68,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1872,7 +2025,7 @@
                         "item_id":  "258007",
                         "price":  1.68,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1881,7 +2034,7 @@
                         "item_id":  "258047",
                         "price":  1.68,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1890,7 +2043,7 @@
                         "item_id":  "25806497",
                         "price":  1.84,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1899,7 +2052,7 @@
                         "item_id":  "25806503",
                         "price":  1.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1908,7 +2061,7 @@
                         "item_id":  "25806571",
                         "price":  0.99,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1917,7 +2070,7 @@
                         "item_id":  "25806653",
                         "price":  0.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1926,7 +2079,7 @@
                         "item_id":  "25807192",
                         "price":  2.77,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1935,7 +2088,7 @@
                         "item_id":  "25841971",
                         "price":  4.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1944,7 +2097,7 @@
                         "item_id":  "25858077",
                         "price":  1.94,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1953,7 +2106,16 @@
                         "item_id":  "25913229",
                         "price":  1.49,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|26037160",
+                        "store":  "Fareway",
+                        "item_id":  "26037160",
+                        "price":  9.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1962,7 +2124,7 @@
                         "item_id":  "2605626",
                         "price":  4.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1971,7 +2133,7 @@
                         "item_id":  "2607426",
                         "price":  3.49,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1980,7 +2142,7 @@
                         "item_id":  "2609243",
                         "price":  4.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -1989,7 +2151,7 @@
                         "item_id":  "26184494",
                         "price":  2.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2007,7 +2169,7 @@
                         "item_id":  "2622922",
                         "price":  5.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2016,7 +2178,7 @@
                         "item_id":  "2626014",
                         "price":  1.5,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2025,7 +2187,7 @@
                         "item_id":  "2626152",
                         "price":  3.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2034,7 +2196,16 @@
                         "item_id":  "2627444",
                         "price":  2.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|2647647",
+                        "store":  "Fareway",
+                        "item_id":  "2647647",
+                        "price":  3,
+                        "first_seen":  "2026-08-09",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2052,7 +2223,7 @@
                         "item_id":  "265976",
                         "price":  4.68,
                         "first_seen":  "2026-08-21",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2061,7 +2232,7 @@
                         "item_id":  "2663295",
                         "price":  2.5,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2070,7 +2241,7 @@
                         "item_id":  "2672308",
                         "price":  3.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2079,7 +2250,7 @@
                         "item_id":  "2682248",
                         "price":  3.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2088,7 +2259,7 @@
                         "item_id":  "26824204",
                         "price":  4.97,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2097,7 +2268,7 @@
                         "item_id":  "26834389",
                         "price":  3.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2106,7 +2277,7 @@
                         "item_id":  "2691028",
                         "price":  1.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2115,7 +2286,7 @@
                         "item_id":  "26952710",
                         "price":  3.94,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2124,7 +2295,7 @@
                         "item_id":  "2703598",
                         "price":  3.79,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2133,7 +2304,7 @@
                         "item_id":  "27081908",
                         "price":  2.94,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2142,7 +2313,7 @@
                         "item_id":  "27081909",
                         "price":  2.94,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2151,7 +2322,7 @@
                         "item_id":  "27083529",
                         "price":  2.94,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2160,7 +2331,7 @@
                         "item_id":  "2721623",
                         "price":  4.48,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2169,7 +2340,7 @@
                         "item_id":  "2722879",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2178,7 +2349,7 @@
                         "item_id":  "2722903",
                         "price":  7.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2187,7 +2358,7 @@
                         "item_id":  "27518926",
                         "price":  1.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2196,7 +2367,7 @@
                         "item_id":  "2759335",
                         "price":  5.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2205,7 +2376,7 @@
                         "item_id":  "2763236",
                         "price":  3.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2214,7 +2385,7 @@
                         "item_id":  "2770882",
                         "price":  2.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2223,7 +2394,7 @@
                         "item_id":  "2800650",
                         "price":  3.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2232,7 +2403,16 @@
                         "item_id":  "28263754",
                         "price":  3.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|285601",
+                        "store":  "Fareway",
+                        "item_id":  "285601",
+                        "price":  1.94,
+                        "first_seen":  "2026-08-05",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2241,7 +2421,7 @@
                         "item_id":  "2880716",
                         "price":  6.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2250,7 +2430,7 @@
                         "item_id":  "28976947",
                         "price":  9.98,
                         "first_seen":  "2026-08-20",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2259,7 +2439,7 @@
                         "item_id":  "29254072",
                         "price":  5.47,
                         "first_seen":  "2026-08-24",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2268,7 +2448,7 @@
                         "item_id":  "29529506",
                         "price":  1.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2277,7 +2457,7 @@
                         "item_id":  "2997745",
                         "price":  7.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2286,7 +2466,7 @@
                         "item_id":  "312210",
                         "price":  5.49,
                         "first_seen":  "2026-08-20",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2295,7 +2475,7 @@
                         "item_id":  "314328",
                         "price":  1.68,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2304,7 +2484,7 @@
                         "item_id":  "314508",
                         "price":  8.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2313,7 +2493,7 @@
                         "item_id":  "3153709",
                         "price":  4.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2322,7 +2502,7 @@
                         "item_id":  "3153977",
                         "price":  3.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2331,7 +2511,16 @@
                         "item_id":  "31545498",
                         "price":  9.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|316686",
+                        "store":  "Fareway",
+                        "item_id":  "316686",
+                        "price":  4.29,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2340,7 +2529,7 @@
                         "item_id":  "318862",
                         "price":  2.99,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2349,7 +2538,7 @@
                         "item_id":  "3235856",
                         "price":  5.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2358,7 +2547,7 @@
                         "item_id":  "3250558",
                         "price":  9.97,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2367,7 +2556,7 @@
                         "item_id":  "3251376",
                         "price":  0.99,
                         "first_seen":  "2026-08-21",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2376,7 +2565,7 @@
                         "item_id":  "3255628",
                         "price":  2.99,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2385,7 +2574,7 @@
                         "item_id":  "3284135",
                         "price":  5.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2394,7 +2583,7 @@
                         "item_id":  "3302949",
                         "price":  14.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2403,7 +2592,7 @@
                         "item_id":  "3304127",
                         "price":  1.79,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2412,7 +2601,16 @@
                         "item_id":  "3318406",
                         "price":  1.88,
                         "first_seen":  "2026-08-21",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|334663",
+                        "store":  "Fareway",
+                        "item_id":  "334663",
+                        "price":  1.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2421,7 +2619,7 @@
                         "item_id":  "3347251",
                         "price":  9.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2430,7 +2628,7 @@
                         "item_id":  "34114022",
                         "price":  9.99,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2439,7 +2637,7 @@
                         "item_id":  "34114045",
                         "price":  9.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2448,7 +2646,7 @@
                         "item_id":  "34166",
                         "price":  2.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2457,7 +2655,7 @@
                         "item_id":  "34288284",
                         "price":  2.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2466,7 +2664,7 @@
                         "item_id":  "34307177",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2475,7 +2673,16 @@
                         "item_id":  "34359829",
                         "price":  2,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|34451",
+                        "store":  "Fareway",
+                        "item_id":  "34451",
+                        "price":  3.88,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2484,7 +2691,7 @@
                         "item_id":  "34483",
                         "price":  3.48,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2493,7 +2700,7 @@
                         "item_id":  "34650",
                         "price":  4.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2502,7 +2709,7 @@
                         "item_id":  "34669",
                         "price":  6.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2511,7 +2718,7 @@
                         "item_id":  "34719",
                         "price":  2.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2520,7 +2727,7 @@
                         "item_id":  "347235",
                         "price":  4.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2529,7 +2736,7 @@
                         "item_id":  "34852",
                         "price":  8.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2538,7 +2745,7 @@
                         "item_id":  "35024",
                         "price":  3.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2547,7 +2754,7 @@
                         "item_id":  "35226",
                         "price":  3.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2556,7 +2763,7 @@
                         "item_id":  "35278",
                         "price":  3.76,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2565,7 +2772,7 @@
                         "item_id":  "35309",
                         "price":  3.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2574,7 +2781,7 @@
                         "item_id":  "35605",
                         "price":  2.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2583,7 +2790,7 @@
                         "item_id":  "35613907",
                         "price":  5,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2592,7 +2799,7 @@
                         "item_id":  "35622673",
                         "price":  3.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2610,7 +2817,7 @@
                         "item_id":  "35899",
                         "price":  3.76,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2619,7 +2826,7 @@
                         "item_id":  "36100",
                         "price":  16.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2628,7 +2835,7 @@
                         "item_id":  "36513",
                         "price":  3.98,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2637,7 +2844,7 @@
                         "item_id":  "36533",
                         "price":  2.48,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2646,7 +2853,7 @@
                         "item_id":  "36791",
                         "price":  1.48,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2655,7 +2862,25 @@
                         "item_id":  "36902",
                         "price":  1.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|37168",
+                        "store":  "Fareway",
+                        "item_id":  "37168",
+                        "price":  5.88,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|37364",
+                        "store":  "Fareway",
+                        "item_id":  "37364",
+                        "price":  2.48,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2664,7 +2889,7 @@
                         "item_id":  "37442",
                         "price":  2.48,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2673,7 +2898,7 @@
                         "item_id":  "37452",
                         "price":  2.48,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2682,7 +2907,7 @@
                         "item_id":  "38030",
                         "price":  3.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2691,7 +2916,7 @@
                         "item_id":  "38604",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2700,7 +2925,7 @@
                         "item_id":  "38638",
                         "price":  0.72,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2709,7 +2934,7 @@
                         "item_id":  "39077",
                         "price":  1.79,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2718,7 +2943,16 @@
                         "item_id":  "39164",
                         "price":  6.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|39349",
+                        "store":  "Fareway",
+                        "item_id":  "39349",
+                        "price":  2.58,
+                        "first_seen":  "2026-08-01",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2727,7 +2961,7 @@
                         "item_id":  "39363",
                         "price":  2.49,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2736,7 +2970,7 @@
                         "item_id":  "39402",
                         "price":  5.98,
                         "first_seen":  "2026-08-21",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2745,7 +2979,7 @@
                         "item_id":  "39624870",
                         "price":  7.49,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2754,7 +2988,7 @@
                         "item_id":  "39625112",
                         "price":  6.98,
                         "first_seen":  "2026-08-03",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2763,7 +2997,7 @@
                         "item_id":  "39674",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2772,7 +3006,7 @@
                         "item_id":  "39736208",
                         "price":  2.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2781,7 +3015,16 @@
                         "item_id":  "40413",
                         "price":  4.69,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|41053",
+                        "store":  "Fareway",
+                        "item_id":  "41053",
+                        "price":  3.98,
+                        "first_seen":  "2026-08-01",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2790,7 +3033,7 @@
                         "item_id":  "41184",
                         "price":  2.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2808,7 +3051,7 @@
                         "item_id":  "41454",
                         "price":  5.97,
                         "first_seen":  "2026-08-25",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2817,7 +3060,7 @@
                         "item_id":  "41458026",
                         "price":  2.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2826,7 +3069,7 @@
                         "item_id":  "41470",
                         "price":  2.49,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2835,7 +3078,7 @@
                         "item_id":  "41740",
                         "price":  2.77,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2844,7 +3087,7 @@
                         "item_id":  "42112",
                         "price":  4.59,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2853,7 +3096,7 @@
                         "item_id":  "42274",
                         "price":  6.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2862,7 +3105,16 @@
                         "item_id":  "42571",
                         "price":  3.76,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|42631747",
+                        "store":  "Fareway",
+                        "item_id":  "42631747",
+                        "price":  2.78,
+                        "first_seen":  "2026-08-09",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2871,7 +3123,7 @@
                         "item_id":  "42661",
                         "price":  3.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2880,7 +3132,7 @@
                         "item_id":  "42744",
                         "price":  6.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2889,7 +3141,7 @@
                         "item_id":  "42950",
                         "price":  4.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2898,7 +3150,7 @@
                         "item_id":  "43008",
                         "price":  3.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2907,7 +3159,16 @@
                         "item_id":  "43124",
                         "price":  2.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|43202",
+                        "store":  "Fareway",
+                        "item_id":  "43202",
+                        "price":  2.47,
+                        "first_seen":  "2026-08-20",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2916,7 +3177,7 @@
                         "item_id":  "43571",
                         "price":  1.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2925,7 +3186,7 @@
                         "item_id":  "43979690",
                         "price":  9.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2934,7 +3195,7 @@
                         "item_id":  "45789282",
                         "price":  8.98,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2943,7 +3204,7 @@
                         "item_id":  "46568408",
                         "price":  4.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2952,7 +3213,7 @@
                         "item_id":  "48699356",
                         "price":  2.28,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2961,7 +3222,7 @@
                         "item_id":  "49863420",
                         "price":  7.47,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2970,7 +3231,7 @@
                         "item_id":  "49863426",
                         "price":  7.47,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2979,7 +3240,7 @@
                         "item_id":  "51144857",
                         "price":  5.48,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2988,7 +3249,16 @@
                         "item_id":  "514611",
                         "price":  4.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|52608065",
+                        "store":  "Fareway",
+                        "item_id":  "52608065",
+                        "price":  23.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -2997,7 +3267,7 @@
                         "item_id":  "53782",
                         "price":  5.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3006,7 +3276,7 @@
                         "item_id":  "56813142",
                         "price":  13.94,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3015,7 +3285,7 @@
                         "item_id":  "57039742",
                         "price":  7.49,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3024,7 +3294,16 @@
                         "item_id":  "57594055",
                         "price":  12.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|58014753",
+                        "store":  "Fareway",
+                        "item_id":  "58014753",
+                        "price":  3.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3033,7 +3312,7 @@
                         "item_id":  "58863",
                         "price":  2.88,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3042,7 +3321,7 @@
                         "item_id":  "63124305",
                         "price":  3.49,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3051,7 +3330,7 @@
                         "item_id":  "63362548",
                         "price":  9.96,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3060,7 +3339,7 @@
                         "item_id":  "64484535",
                         "price":  2.69,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3069,7 +3348,7 @@
                         "item_id":  "66830121",
                         "price":  2.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3078,7 +3357,7 @@
                         "item_id":  "68773",
                         "price":  21.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3087,7 +3366,7 @@
                         "item_id":  "68781",
                         "price":  23.99,
                         "first_seen":  "2026-08-21",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3096,7 +3375,7 @@
                         "item_id":  "68872",
                         "price":  4.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3105,7 +3384,7 @@
                         "item_id":  "69166387",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3114,7 +3393,7 @@
                         "item_id":  "69573",
                         "price":  3.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3123,7 +3402,7 @@
                         "item_id":  "69576",
                         "price":  2.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3132,7 +3411,7 @@
                         "item_id":  "69757",
                         "price":  2.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3141,7 +3420,7 @@
                         "item_id":  "69847878",
                         "price":  1.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3150,7 +3429,7 @@
                         "item_id":  "69917",
                         "price":  2.67,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3159,7 +3438,7 @@
                         "item_id":  "69966184",
                         "price":  0.68,
                         "first_seen":  "2026-08-03",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3168,7 +3447,7 @@
                         "item_id":  "70037",
                         "price":  2.22,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3177,7 +3456,7 @@
                         "item_id":  "70208",
                         "price":  1.5,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3186,7 +3465,7 @@
                         "item_id":  "70609",
                         "price":  2.97,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3195,7 +3474,7 @@
                         "item_id":  "70627",
                         "price":  2.68,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3204,7 +3483,7 @@
                         "item_id":  "70660",
                         "price":  6.98,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3213,7 +3492,7 @@
                         "item_id":  "70757",
                         "price":  6.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3222,7 +3501,7 @@
                         "item_id":  "71192",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3231,7 +3510,7 @@
                         "item_id":  "71329922",
                         "price":  2.48,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3240,7 +3519,7 @@
                         "item_id":  "71465",
                         "price":  2.77,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3249,17 +3528,17 @@
                         "item_id":  "71519",
                         "price":  3.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
                         "key":  "Fareway|71522",
                         "store":  "Fareway",
                         "item_id":  "71522",
-                        "price":  3.99,
-                        "first_seen":  "2026-08-25",
-                        "last_seen":  "2026-08-25",
-                        "price_changed":  0
+                        "price":  4.48,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  1
                     },
                     {
                         "key":  "Fareway|71549",
@@ -3267,7 +3546,16 @@
                         "item_id":  "71549",
                         "price":  2.78,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|71771",
+                        "store":  "Fareway",
+                        "item_id":  "71771",
+                        "price":  3.49,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3276,7 +3564,7 @@
                         "item_id":  "71979",
                         "price":  1.44,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3285,7 +3573,7 @@
                         "item_id":  "72540",
                         "price":  2.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3294,7 +3582,7 @@
                         "item_id":  "72573",
                         "price":  2.68,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3303,7 +3591,7 @@
                         "item_id":  "72692",
                         "price":  1.58,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3312,7 +3600,7 @@
                         "item_id":  "72709",
                         "price":  4.99,
                         "first_seen":  "2026-07-27",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3321,7 +3609,7 @@
                         "item_id":  "73010",
                         "price":  4.28,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3339,7 +3627,7 @@
                         "item_id":  "73371",
                         "price":  4.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3348,7 +3636,16 @@
                         "item_id":  "73433",
                         "price":  3.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|73891",
+                        "store":  "Fareway",
+                        "item_id":  "73891",
+                        "price":  2.68,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3357,7 +3654,7 @@
                         "item_id":  "74379214",
                         "price":  7.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3366,7 +3663,7 @@
                         "item_id":  "74505",
                         "price":  3.48,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3375,7 +3672,7 @@
                         "item_id":  "74510",
                         "price":  5.44,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3384,7 +3681,7 @@
                         "item_id":  "74760",
                         "price":  3.49,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3393,7 +3690,7 @@
                         "item_id":  "74842",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3411,7 +3708,7 @@
                         "item_id":  "75232",
                         "price":  6.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3420,7 +3717,7 @@
                         "item_id":  "75563",
                         "price":  3.27,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3429,7 +3726,7 @@
                         "item_id":  "76294",
                         "price":  4.98,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3438,7 +3735,7 @@
                         "item_id":  "76592",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3447,7 +3744,16 @@
                         "item_id":  "77006",
                         "price":  13.48,
                         "first_seen":  "2026-08-03",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|77385",
+                        "store":  "Fareway",
+                        "item_id":  "77385",
+                        "price":  6.69,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3465,7 +3771,16 @@
                         "item_id":  "78296",
                         "price":  2.29,
                         "first_seen":  "2026-08-20",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|78380",
+                        "store":  "Fareway",
+                        "item_id":  "78380",
+                        "price":  2.99,
+                        "first_seen":  "2026-08-03",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3474,7 +3789,7 @@
                         "item_id":  "79518",
                         "price":  12.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3483,7 +3798,7 @@
                         "item_id":  "81898",
                         "price":  3.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3492,7 +3807,7 @@
                         "item_id":  "82401404",
                         "price":  1.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3501,7 +3816,7 @@
                         "item_id":  "82690",
                         "price":  2.48,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3510,7 +3825,7 @@
                         "item_id":  "84386214",
                         "price":  8.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3519,7 +3834,7 @@
                         "item_id":  "84386666",
                         "price":  5,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3528,7 +3843,7 @@
                         "item_id":  "84386881",
                         "price":  2.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3537,7 +3852,7 @@
                         "item_id":  "84386957",
                         "price":  2.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3546,7 +3861,7 @@
                         "item_id":  "84387017",
                         "price":  1.25,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3555,7 +3870,7 @@
                         "item_id":  "84387103",
                         "price":  3.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3564,7 +3879,7 @@
                         "item_id":  "84387226",
                         "price":  6.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3573,7 +3888,7 @@
                         "item_id":  "84387419",
                         "price":  1.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3582,7 +3897,7 @@
                         "item_id":  "84387445",
                         "price":  2.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3600,7 +3915,16 @@
                         "item_id":  "84387716",
                         "price":  1.84,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|84387746",
+                        "store":  "Fareway",
+                        "item_id":  "84387746",
+                        "price":  5.94,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3618,7 +3942,7 @@
                         "item_id":  "84387904",
                         "price":  2.48,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3627,7 +3951,7 @@
                         "item_id":  "84387953",
                         "price":  2.98,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3636,7 +3960,7 @@
                         "item_id":  "84388013",
                         "price":  0.78,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3645,7 +3969,7 @@
                         "item_id":  "84388147",
                         "price":  1.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3654,7 +3978,7 @@
                         "item_id":  "84388382",
                         "price":  2.49,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3663,7 +3987,7 @@
                         "item_id":  "84388413",
                         "price":  8.88,
                         "first_seen":  "2026-08-01",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3681,7 +4005,7 @@
                         "item_id":  "84389064",
                         "price":  2.29,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3690,7 +4014,7 @@
                         "item_id":  "84389222",
                         "price":  1.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3699,7 +4023,7 @@
                         "item_id":  "84389354",
                         "price":  1.84,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3708,7 +4032,16 @@
                         "item_id":  "86814344",
                         "price":  12.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|88113",
+                        "store":  "Fareway",
+                        "item_id":  "88113",
+                        "price":  2.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3717,7 +4050,7 @@
                         "item_id":  "88434867",
                         "price":  4.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3726,7 +4059,7 @@
                         "item_id":  "88883",
                         "price":  5.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3735,7 +4068,7 @@
                         "item_id":  "89322267",
                         "price":  1.49,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3744,7 +4077,7 @@
                         "item_id":  "89324456",
                         "price":  4.98,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3753,7 +4086,34 @@
                         "item_id":  "89763",
                         "price":  2.62,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|89855",
+                        "store":  "Fareway",
+                        "item_id":  "89855",
+                        "price":  4.99,
+                        "first_seen":  "2026-08-09",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|89865",
+                        "store":  "Fareway",
+                        "item_id":  "89865",
+                        "price":  2.88,
+                        "first_seen":  "2026-07-31",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|89887",
+                        "store":  "Fareway",
+                        "item_id":  "89887",
+                        "price":  9.98,
+                        "first_seen":  "2026-08-11",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3762,7 +4122,7 @@
                         "item_id":  "90978016",
                         "price":  1.97,
                         "first_seen":  "2026-08-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3771,7 +4131,7 @@
                         "item_id":  "91212795",
                         "price":  1.97,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3780,7 +4140,7 @@
                         "item_id":  "91493120",
                         "price":  1.48,
                         "first_seen":  "2026-08-03",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3789,7 +4149,7 @@
                         "item_id":  "91707062",
                         "price":  5.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3798,7 +4158,7 @@
                         "item_id":  "91726334",
                         "price":  2.97,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-25",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3807,7 +4167,7 @@
                         "item_id":  "91935",
                         "price":  5.49,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3816,7 +4176,7 @@
                         "item_id":  "92934906",
                         "price":  14.99,
                         "first_seen":  "2026-07-31",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3825,7 +4185,7 @@
                         "item_id":  "94702",
                         "price":  2.99,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3834,7 +4194,7 @@
                         "item_id":  "94980",
                         "price":  6.97,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3843,7 +4203,7 @@
                         "item_id":  "95781358",
                         "price":  2.99,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3852,7 +4212,7 @@
                         "item_id":  "96188951",
                         "price":  18.88,
                         "first_seen":  "2026-08-05",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3861,7 +4221,7 @@
                         "item_id":  "96642554",
                         "price":  19.99,
                         "first_seen":  "2026-07-23",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3870,7 +4230,7 @@
                         "item_id":  "97404",
                         "price":  4.79,
                         "first_seen":  "2026-08-11",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3879,7 +4239,16 @@
                         "item_id":  "97755105",
                         "price":  10.99,
                         "first_seen":  "2026-08-09",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|98586097",
+                        "store":  "Fareway",
+                        "item_id":  "98586097",
+                        "price":  19.99,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -3979,6 +4348,15 @@
                         "price":  14.98,
                         "first_seen":  "2026-08-24",
                         "last_seen":  "2026-08-24",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|16IVHV5FVSXT",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "16IVHV5FVSXT",
+                        "price":  5.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4104,7 +4482,7 @@
                         "item_id":  "1NQP7N1KXPUM",
                         "price":  7.57,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4176,7 +4554,7 @@
                         "item_id":  "275FRN340YP4",
                         "price":  8.98,
                         "first_seen":  "2026-08-28",
-                        "last_seen":  "2026-08-28",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4212,7 +4590,7 @@
                         "item_id":  "2F5HWL3HLPC9",
                         "price":  6.98,
                         "first_seen":  "2026-08-27",
-                        "last_seen":  "2026-08-27",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4231,6 +4609,15 @@
                         "price":  10.48,
                         "first_seen":  "2026-08-24",
                         "last_seen":  "2026-08-24",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|2GL5T9PICEJT",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "2GL5T9PICEJT",
+                        "price":  14.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4320,7 +4707,7 @@
                         "item_id":  "372WKMJX4E21",
                         "price":  9.87,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4330,6 +4717,15 @@
                         "price":  12.98,
                         "first_seen":  "2026-08-27",
                         "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|3894C0A8BC1C",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "3894C0A8BC1C",
+                        "price":  14.78,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4420,6 +4816,15 @@
                         "price":  6.98,
                         "first_seen":  "2026-08-22",
                         "last_seen":  "2026-08-23",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|3XW815FHXY20",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "3XW815FHXY20",
+                        "price":  6.48,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4527,7 +4932,7 @@
                         "item_id":  "4NC1O4LLPTI8",
                         "price":  5.97,
                         "first_seen":  "2026-08-22",
-                        "last_seen":  "2026-08-28",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4558,6 +4963,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|4P0AL8KH8MXL",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "4P0AL8KH8MXL",
+                        "price":  7.76,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|4Q5UK7RTTW51",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "4Q5UK7RTTW51",
@@ -4573,6 +4987,15 @@
                         "price":  5.48,
                         "first_seen":  "2026-08-24",
                         "last_seen":  "2026-08-24",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|4TPXDZ1AV4DJ",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "4TPXDZ1AV4DJ",
+                        "price":  8.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4666,6 +5089,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|53KIZ9TJGQVC",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "53KIZ9TJGQVC",
+                        "price":  14.78,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|562OMPYESEIE",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "562OMPYESEIE",
@@ -4702,12 +5134,39 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|5KICREB88KRQ",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "5KICREB88KRQ",
+                        "price":  5.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|5KN8PVD1QYFA",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "5KN8PVD1QYFA",
+                        "price":  34.48,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|5NTACROT521X",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "5NTACROT521X",
                         "price":  12.98,
                         "first_seen":  "2026-08-29",
                         "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|5P7IDTLGKV28",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "5P7IDTLGKV28",
+                        "price":  23.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4882,6 +5341,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|6IPY3RL1U007",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "6IPY3RL1U007",
+                        "price":  9.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|6ITTWVJ4F4H0",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "6ITTWVJ4F4H0",
@@ -4909,6 +5377,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|6PAZUT3MSISG",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "6PAZUT3MSISG",
+                        "price":  18.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|6PXPTF7FC4X1",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "6PXPTF7FC4X1",
@@ -4933,6 +5410,15 @@
                         "price":  7.99,
                         "first_seen":  "2026-08-29",
                         "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|6TFEPLABDPI8",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "6TFEPLABDPI8",
+                        "price":  14.98,
+                        "first_seen":  "2026-08-30",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -4977,7 +5463,7 @@
                         "item_id":  "6Y6XJBESHQP2",
                         "price":  6.97,
                         "first_seen":  "2026-08-25",
-                        "last_seen":  "2026-08-28",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5049,7 +5535,7 @@
                         "item_id":  "10292699",
                         "price":  3.97,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5058,7 +5544,7 @@
                         "item_id":  "10534165",
                         "price":  1.97,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5067,7 +5553,7 @@
                         "item_id":  "10536157",
                         "price":  4.73,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5076,7 +5562,7 @@
                         "item_id":  "105413616",
                         "price":  2.97,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5103,7 +5589,7 @@
                         "item_id":  "12329735",
                         "price":  2.5,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5130,7 +5616,7 @@
                         "item_id":  "13908160",
                         "price":  2.28,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5238,7 +5724,7 @@
                         "item_id":  "161115457",
                         "price":  4.64,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5265,7 +5751,7 @@
                         "item_id":  "17619759",
                         "price":  1.97,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5283,7 +5769,7 @@
                         "item_id":  "17989615462",
                         "price":  12.53,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5328,7 +5814,7 @@
                         "item_id":  "19400230",
                         "price":  2.64,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5337,7 +5823,7 @@
                         "item_id":  "198361163",
                         "price":  2.97,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5346,7 +5832,7 @@
                         "item_id":  "20647992",
                         "price":  2.98,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5355,7 +5841,7 @@
                         "item_id":  "209292288",
                         "price":  22.22,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5382,7 +5868,7 @@
                         "item_id":  "27935840",
                         "price":  2.23,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5436,7 +5922,7 @@
                         "item_id":  "34632371",
                         "price":  2.83,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5508,7 +5994,7 @@
                         "item_id":  "44030496",
                         "price":  2.56,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5517,7 +6003,7 @@
                         "item_id":  "44390944",
                         "price":  0.97,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5544,7 +6030,7 @@
                         "item_id":  "44390958",
                         "price":  1.54,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  2
                     },
                     {
@@ -5589,7 +6075,7 @@
                         "item_id":  "46491694",
                         "price":  2.5,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5598,7 +6084,7 @@
                         "item_id":  "465183919",
                         "price":  3.38,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  2
                     },
                     {
@@ -5661,7 +6147,7 @@
                         "item_id":  "629539844",
                         "price":  5.93,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5670,7 +6156,7 @@
                         "item_id":  "686470097",
                         "price":  2.5,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {
@@ -5733,7 +6219,7 @@
                         "item_id":  "865961246",
                         "price":  2.24,
                         "first_seen":  "2026-07-14",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-30",
                         "price_changed":  0
                     },
                     {

@@ -1,0 +1,169 @@
+﻿{
+    "no_taxonomy_rows":  0,
+    "judged":  4696,
+    "unknown_departments":  [
+
+                            ],
+    "sources":  [
+                    "Family Fare: canonical_url from 31 file(s) within 30d -\u003e 5406 product(s) with a department (newest family-fare-regular-2026-08-30.json)",
+                    "Hy-Vee: row field store_department in hyvee-regular-2026-08-30.json -\u003e 483 product(s) with a department",
+                    "Baker\u0027s: row field store_category in bakers-regular-2026-08-30.json -\u003e 6712 product(s) with a department"
+                ],
+    "note":  "The store said one thing about this product and our include regex said another. A LIVE CELL entry is on the board right now. A candidate entry has not won a cell but proves the rule matches the wrong product. This is a REVIEW QUEUE, not a gate - see the header.",
+    "date":  "2026-08-30",
+    "live_cell_disagreements":  [
+
+                                ],
+    "candidate_disagreements":  [
+                                    {
+                                        "subcategory":  "baby_child",
+                                        "item":  "Tippy Toes Yogurt Bites, Banana 1 Oz",
+                                        "id":  "yogurt",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "adult_nutrition",
+                                        "item":  "Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz",
+                                        "id":  "ice-cream",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Phillips\u0027 Phillips\u0027 Genuine Sugar Free Fresh Mint Milk Of Magnesia 12 Fl Oz",
+                                        "id":  "milk",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Top Care Milk Of Magnesia, Fresh Mint Flavor 12 Fl Oz",
+                                        "id":  "milk",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "dog",
+                                        "item":  "Iams Puppy\u003c1 Healthy Puppy Chicken \u0026 Whole Grain Recipe Puppy Food 5 Lb",
+                                        "id":  "whole-chicken",
+                                        "unit_price":  3.198,
+                                        "rankable":  true,
+                                        "store":  "Family Fare",
+                                        "department":  "pets_wildlife",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "dog",
+                                        "item":  "Iams Puppy \u003c1 Healthy Puppy Chicken \u0026 Whole Grain Recipe Puppy Food 5 Lb",
+                                        "id":  "whole-chicken",
+                                        "unit_price":  3.198,
+                                        "rankable":  true,
+                                        "store":  "Family Fare",
+                                        "department":  "pets_wildlife",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "baby_child",
+                                        "item":  "Pumpkin Tree Fruit \u0026 Vegetable Puree, Apple, Sweet Potato \u0026 Corn, Organic 4.4 Oz",
+                                        "id":  "apples",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz",
+                                        "id":  "oranges",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber\u003e, 114 Tsp 23.3 Oz",
+                                        "id":  "oranges",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Top Care Fiber Powder, Sugar Free, 4 In 1, Orange Flavor 36.8 Oz",
+                                        "id":  "oranges",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber\u003e, 72 Tsp 15 Oz",
+                                        "id":  "oranges",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "grooming_hygiene",
+                                        "item":  "Nair Shower Cream Moroccan Argan Oil \u0026 Orange Blossom Hair Remover 12 Oz",
+                                        "id":  "oranges",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz",
+                                        "id":  "oranges",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    },
+                                    {
+                                        "subcategory":  "facial_tissue",
+                                        "item":  "Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea",
+                                        "id":  "coconut-oil",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "household",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-22.json"
+                                    },
+                                    {
+                                        "subcategory":  "skin_care",
+                                        "item":  "Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz",
+                                        "id":  "grapefruit",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-30.json"
+                                    }
+                                ]
+}

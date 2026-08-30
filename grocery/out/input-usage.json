@@ -1,8 +1,8 @@
 {
-    "updated":  "2026-08-29T14:45:38",
-    "last_live_build":  "2026-08-26",
+    "updated":  "2026-08-30T08:16:07",
+    "last_live_build":  "2026-08-30",
     "note":  "Which files the LIVE board actually opened, and when. The engine reads a UNION of dated captures (up to the 90-day capture-policy carry for every store (14 for Walmart until 2026-08-22)) because the rotation only re-prices ~7 items per store per day, so a weeks-old file can be the only place a store\u0027s price for a commodity exists - and a dated input is named exactly like a disposable output. last_used is what tells them apart. Recorded ONLY on live builds; a pinned regression run would stamp files the board has not touched. This is a ledger, not a delete list: judge last_used against the carry window before acting.",
-    "tracked_files":  99,
+    "tracked_files":  105,
     "files":  {
                   "ads-2026-08-21.json":  {
                                               "role":  "ads",
@@ -25,68 +25,68 @@
                   "sams/sams-deals-2026-08-15.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-08-05.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-08-01.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-29.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-23.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-18.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-17.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-15.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-08.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-06.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "sams/sams-deals-2026-07-05.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "regular/aldi-regular-2026-08-15.json":  {
                                                                "role":  "everyday",
@@ -121,146 +121,146 @@
                   "regular/sams-regular-2026-08-01.json":  {
                                                                "role":  "everyday",
                                                                "first_used":  "2026-08-21",
-                                                               "last_used":  "2026-08-26",
-                                                               "uses":  5
+                                                               "last_used":  "2026-08-30",
+                                                               "uses":  6
                                                            },
                   "regular/walmart-regular-2026-08-11.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-08-06.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-08-05.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-08-01.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-31.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-30.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-29.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-25.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-23.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-18.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-15.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-14.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-12.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-08.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-06.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/walmart-regular-2026-07-05.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "regular/hunter-aldi-regular-2026-08-16.json":  {
                                                                       "role":  "everyday",
                                                                       "first_used":  "2026-08-21",
-                                                                      "last_used":  "2026-08-26",
-                                                                      "uses":  5
+                                                                      "last_used":  "2026-08-30",
+                                                                      "uses":  6
                                                                   },
                   "regular/hunter-bakers-regular-2026-08-16.json":  {
                                                                         "role":  "everyday",
                                                                         "first_used":  "2026-08-21",
-                                                                        "last_used":  "2026-08-26",
-                                                                        "uses":  5
+                                                                        "last_used":  "2026-08-30",
+                                                                        "uses":  6
                                                                     },
                   "regular/hunter-familyfare-regular-2026-08-16.json":  {
                                                                             "role":  "everyday",
                                                                             "first_used":  "2026-08-21",
-                                                                            "last_used":  "2026-08-26",
-                                                                            "uses":  5
+                                                                            "last_used":  "2026-08-30",
+                                                                            "uses":  6
                                                                         },
                   "regular/hunter-fareway-regular-2026-08-16.json":  {
                                                                          "role":  "everyday",
                                                                          "first_used":  "2026-08-21",
-                                                                         "last_used":  "2026-08-26",
-                                                                         "uses":  5
+                                                                         "last_used":  "2026-08-30",
+                                                                         "uses":  6
                                                                      },
                   "regular/hunter-hyvee-regular-2026-08-16.json":  {
                                                                        "role":  "everyday",
                                                                        "first_used":  "2026-08-21",
-                                                                       "last_used":  "2026-08-26",
-                                                                       "uses":  5
+                                                                       "last_used":  "2026-08-30",
+                                                                       "uses":  6
                                                                    },
                   "regular/hunter-samsclub-regular-2026-08-16.json":  {
                                                                           "role":  "everyday",
                                                                           "first_used":  "2026-08-21",
-                                                                          "last_used":  "2026-08-26",
-                                                                          "uses":  5
+                                                                          "last_used":  "2026-08-30",
+                                                                          "uses":  6
                                                                       },
                   "regular/hunter-walmart-regular-2026-08-16.json":  {
                                                                          "role":  "everyday",
                                                                          "first_used":  "2026-08-21",
-                                                                         "last_used":  "2026-08-26",
-                                                                         "uses":  5
+                                                                         "last_used":  "2026-08-30",
+                                                                         "uses":  6
                                                                      },
                   "regular/bakers-regular-2026-08-22.json":  {
                                                                  "role":  "everyday",
@@ -283,8 +283,8 @@
                   "sams/sams-deals-2026-08-22.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-21",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  5
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  6
                                                       },
                   "regular/hyvee-regular-2026-08-22.json":  {
                                                                 "role":  "everyday",
@@ -301,8 +301,8 @@
                   "regular/walmart-regular-2026-08-22.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-21",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  5
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  6
                                                               },
                   "ads-2026-08-23.json":  {
                                               "role":  "ads",
@@ -331,8 +331,8 @@
                   "sams/sams-deals-2026-08-23.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-23",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  4
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  5
                                                       },
                   "regular/fareway-regular-2026-08-23.json":  {
                                                                   "role":  "everyday",
@@ -349,8 +349,8 @@
                   "sams/sams-deals-2026-08-24.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-24",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  3
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  4
                                                       },
                   "regular/bakers-regular-2026-08-24.json":  {
                                                                  "role":  "everyday",
@@ -385,8 +385,8 @@
                   "sams/sams-deals-2026-08-25.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-25",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  2
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  3
                                                       },
                   "regular/bakers-regular-2026-08-25.json":  {
                                                                  "role":  "everyday",
@@ -421,14 +421,14 @@
                   "fareway/fareway-deals-2026-08-25.json":  {
                                                                 "role":  "fareway-ad",
                                                                 "first_used":  "2026-08-26",
-                                                                "last_used":  "2026-08-26",
-                                                                "uses":  1
+                                                                "last_used":  "2026-08-30",
+                                                                "uses":  2
                                                             },
                   "sams/sams-deals-2026-08-26.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-26",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  1
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  2
                                                       },
                   "regular/aldi-regular-2026-08-25.json":  {
                                                                "role":  "everyday",
@@ -463,20 +463,20 @@
                   "regular/walmart-regular-2026-08-25.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-26",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  1
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  2
                                                               },
                   "bakers/bakers-deals-2026-08-26.json":  {
                                                               "role":  "bakers-ad",
                                                               "first_used":  "2026-08-26",
-                                                              "last_used":  "2026-08-26",
-                                                              "uses":  1
+                                                              "last_used":  "2026-08-30",
+                                                              "uses":  2
                                                           },
                   "sams/sams-deals-2026-08-27.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-26",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  1
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  2
                                                       },
                   "regular/aldi-regular-2026-08-26.json":  {
                                                                "role":  "everyday",
@@ -511,8 +511,8 @@
                   "regular/walmart-regular-2026-08-26.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-26",
-                                                                  "last_used":  "2026-08-26",
-                                                                  "uses":  1
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  2
                                                               },
                   "regular/aldi-regular-2026-08-27.json":  {
                                                                "role":  "everyday",
@@ -523,8 +523,8 @@
                   "sams/sams-deals-2026-08-28.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-26",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  1
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  2
                                                       },
                   "regular/bakers-regular-2026-08-28.json":  {
                                                                  "role":  "everyday",
@@ -553,8 +553,8 @@
                   "sams/sams-deals-2026-08-29.json":  {
                                                           "role":  "sams-deals",
                                                           "first_used":  "2026-08-26",
-                                                          "last_used":  "2026-08-26",
-                                                          "uses":  1
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  2
                                                       },
                   "regular/aldi-regular-2026-08-28.json":  {
                                                                "role":  "everyday",
@@ -589,14 +589,50 @@
                   "regular/aldi-regular-2026-08-29.json":  {
                                                                "role":  "everyday",
                                                                "first_used":  "2026-08-26",
-                                                               "last_used":  "2026-08-26",
-                                                               "uses":  1
+                                                               "last_used":  "2026-08-30",
+                                                               "uses":  2
                                                            },
                   "regular/walmart-regular-2026-08-29.json":  {
                                                                   "role":  "everyday",
                                                                   "first_used":  "2026-08-26",
-                                                                  "last_used":  "2026-08-26",
+                                                                  "last_used":  "2026-08-30",
+                                                                  "uses":  2
+                                                              },
+                  "ads-2026-08-30.json":  {
+                                              "role":  "ads",
+                                              "first_used":  "2026-08-30",
+                                              "last_used":  "2026-08-30",
+                                              "uses":  1
+                                          },
+                  "sams/sams-deals-2026-08-30.json":  {
+                                                          "role":  "sams-deals",
+                                                          "first_used":  "2026-08-30",
+                                                          "last_used":  "2026-08-30",
+                                                          "uses":  1
+                                                      },
+                  "regular/bakers-regular-2026-08-30.json":  {
+                                                                 "role":  "everyday",
+                                                                 "first_used":  "2026-08-30",
+                                                                 "last_used":  "2026-08-30",
+                                                                 "uses":  1
+                                                             },
+                  "regular/family-fare-regular-2026-08-30.json":  {
+                                                                      "role":  "everyday",
+                                                                      "first_used":  "2026-08-30",
+                                                                      "last_used":  "2026-08-30",
+                                                                      "uses":  1
+                                                                  },
+                  "regular/fareway-regular-2026-08-30.json":  {
+                                                                  "role":  "everyday",
+                                                                  "first_used":  "2026-08-30",
+                                                                  "last_used":  "2026-08-30",
                                                                   "uses":  1
-                                                              }
+                                                              },
+                  "regular/hyvee-regular-2026-08-30.json":  {
+                                                                "role":  "everyday",
+                                                                "first_used":  "2026-08-30",
+                                                                "last_used":  "2026-08-30",
+                                                                "uses":  1
+                                                            }
               }
 }

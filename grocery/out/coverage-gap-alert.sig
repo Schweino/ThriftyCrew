@@ -1,1 +1,1 @@
-﻿beets|Family Fare;canned-butter-beans|Hy-Vee;coleslaw-mix|Fareway;cornmeal|Baker's;daiya-mozzarella-style-shreds|Baker's;dried-thyme|Aldi;garden-salad|Aldi;pie-pumpkins|Aldi;poblano-peppers|Aldi;teriyaki-sauce|Aldi
+﻿aluminum-foil|Fareway;beets|Family Fare;canned-butter-beans|Hy-Vee;coffee|Fareway;coleslaw-mix|Fareway;cornmeal|Baker's;daiya-mozzarella-style-shreds|Baker's;dried-thyme|Aldi;firm-tofu|Aldi;fruit-snacks|Fareway;garden-salad|Aldi;pesto|Fareway;pie-pumpkins|Aldi;poblano-peppers|Aldi;pork-chops|Fareway;teriyaki-sauce|Aldi
