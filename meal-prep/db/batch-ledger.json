@@ -547,10 +547,10 @@
   {
       "batch":  "hunt-2026-08-27-ten-w1",
       "opened":  "2026-08-27T06:09:46",
-      "last_activity":  "2026-08-29T12:39:34",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-30T12:52:41",
+      "closed":  true,
+      "closed_at":  "2026-08-30T12:52:41",
+      "close_detail":  "post-publish review CLEAN 2026-08-30; advisories carried from wave-1 audit (two shopping stories on the card, artichoke drained-vs-gross display, w/ in title) remain non-blocking",
       "slugs":  [
                     "mediterranean-chicken-w-marinade"
                 ],
@@ -604,6 +604,11 @@
                          "stage":  "serveability",
                          "at":  "2026-08-29T12:39:34",
                          "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-08-30T12:52:41",
+                         "detail":  "independent review 2026-08-30: live page verified (paywall correct, member card hydrates from live feed, all 13 bids priced, scaler+print+3-part cost present), macros reproduce 561/52/16/34 from food-macros-db exactly, cost chain reconciles to the cent on per-unit basis, source fidelity 13/13 at 2.75x, no banned ingredients, 375px clean, commit 1526527a on origin/main complete"
                      }
                  ]
   },
