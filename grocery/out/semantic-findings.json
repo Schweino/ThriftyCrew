@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-29 08:17",
+    "generated":  "2026-08-29 21:32",
     "board":  "comparison-2026-08-26.json",
-    "sidecar_generated":  "2026-08-29 08:17:33",
+    "sidecar_generated":  "2026-08-29 21:32:13",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3089,
-                     "corpus":  38032,
-                     "rule_invisible":  6870
+                     "board_pairs":  3090,
+                     "corpus":  38139,
+                     "rule_invisible":  6895
                  },
     "identity_count":  0,
-    "coverage_count":  58,
+    "coverage_count":  57,
     "identity":  [
 
                  ],
@@ -61,16 +61,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "baby-back-ribs",
-                         "commodity":  "Baby Back Ribs",
-                         "store":  "Walmart",
-                         "product":  "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving",
-                         "cos":  0.7185,
-                         "score":  0.975572,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chili-garlic-sauce",
                          "commodity":  "Chili Garlic Sauce",
                          "store":  "Walmart",
@@ -87,6 +77,16 @@
                          "product":  "Goya All Purpose Seasoning with Pepper, 8 OZ",
                          "cos":  0.7326,
                          "score":  0.971244,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "batteries",
+                         "commodity":  "Batteries (AA)",
+                         "store":  "Aldi",
+                         "product":  "Activenergy Aaa Alkaline Batteries 8 CT",
+                         "cos":  0.6805,
+                         "score":  0.971033,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -217,16 +217,6 @@
                          "product":  "Bragg Organic Coconut Liquid Aminos Soy-Free Seasoning",
                          "cos":  0.5762,
                          "score":  0.957425,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "baby-back-ribs",
-                         "commodity":  "Baby Back Ribs",
-                         "store":  "Walmart",
-                         "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
-                         "cos":  0.7059,
-                         "score":  0.957228,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -471,6 +461,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "dried-parsley",
+                         "commodity":  "Parsley (dried)",
+                         "store":  "Walmart",
+                         "product":  "Soeos Parsley Flakes, 2.1 oz (60g), Dried Parsley Leaves, Fresh Flavor and Aroma, Perfect for Seasoning, Garnishing, and Cooking",
+                         "cos":  0.6634,
+                         "score":  0.920791,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
@@ -537,16 +537,6 @@
                          "product":  "Mott\u0027s Juice Beverage, Apple, 8 Pack 8 Ea",
                          "cos":  0.6298,
                          "score":  0.907637,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sports-drinks",
-                         "commodity":  "Sports Drinks",
-                         "store":  "Family Fare",
-                         "product":  "Body Armor Electrolyte Drink Mix, Lemon Lime, Zero Sugar 6 Ea",
-                         "cos":  0.5868,
-                         "score":  0.903912,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

@@ -44,3 +44,5 @@
 {"at":"2026-08-29T08:00:12","store":"Baker\u0027s","from":42,"to":49,"day":"2026-08-29","caller":"pull-regular-bakers-api.ps1","pid":34908}
 {"at":"2026-08-29T08:10:29","store":"Sam\u0027s Club","from":49,"to":56,"day":"2026-08-29","caller":"build-sams-deals.ps1","pid":30848}
 {"at":"2026-08-29T08:10:32","store":"Fareway","from":63,"to":70,"day":"2026-08-29","caller":"build-fareway-regular.ps1","pid":19732}
+{"at":"2026-08-29T09:07:29","store":"Walmart","from":21,"to":28,"day":"2026-08-29","caller":"build-walmart-deals.ps1","pid":14080}
+{"at":"2026-08-29T09:10:20","store":"Aldi","from":35,"to":42,"day":"2026-08-29","caller":"build-aldi-regular.ps1","pid":13928}

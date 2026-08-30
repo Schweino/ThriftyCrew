@@ -1,100 +1,23 @@
 ﻿[
     {
-        "id":  "frozen-vegetables",
-        "store":  "Walmart",
-        "product":  "Great Value Mixed Vegetables, 12 oz Steamable Bag (Frozen)",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027mixed\\s+vegetables\u0027 matched, exclude \u0027great\\s+value\\s+mixed\\s+vegetables,\u0027 killed it"
-    },
-    {
-        "id":  "pickled-jalapenos",
-        "store":  "Walmart",
-        "product":  "Clemente Jacques Sliced JalapeÃ±o Peppers, Pickled JalapeÃ±os, 28 oz Can",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "chicken-thighs",
+        "id":  "chicken-breast",
         "store":  "Aldi",
-        "product":  "Fresh Fresh Chicken Drumsticks Family Pack Per LB",
+        "product":  "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB",
         "verdict":  "EXCLUDED",
-        "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
+        "detail":  "include \u0027boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast\u0027 matched, exclude \u0027thin[\\s-]*sliced\u0027 killed it"
     },
     {
-        "id":  "ground-beef-93-7",
+        "id":  "chicken-breast",
+        "store":  "Baker\u0027s",
+        "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast\u0027 matched, exclude \u0027thin[\\s-]*sliced\u0027 killed it"
+    },
+    {
+        "id":  "chicken-breast",
         "store":  "Walmart",
-        "product":  "73% Lean / 27% Fat Ground Beef, 3 lb Roll, Fresh, All Natural*",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "canned-chicken",
-        "store":  "Baker\u0027s",
-        "product":  "Kroger Premium Chicken Breast Chunk in Water",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "breakfast-sandwiches",
-        "store":  "Baker\u0027s",
-        "product":  "Kroger Sausage, Egg \u0026 Cheese Croissant 8 Sandwiches",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "quart-storage-bags",
-        "store":  "Aldi",
-        "product":  "Boulder Storage Twin Lock Bags 40 CT",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "soy-sauce",
-        "store":  "Aldi",
-        "product":  "Fusia Asian Inspirations Traditional 81 OZ",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "pork-tenderloin",
-        "store":  "Walmart",
-        "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
+        "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
         "verdict":  "EXCLUDED",
-        "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
-    },
-    {
-        "id":  "chicken-thighs",
-        "store":  "Baker\u0027s",
-        "product":  "Tyson All Natural Fresh Chicken Drumsticks",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
-    },
-    {
-        "id":  "chicken-thighs",
-        "store":  "Baker\u0027s",
-        "product":  "Heritage Farm Bone In Skin On Chicken Drumsticks",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
-    },
-    {
-        "id":  "canned-chicken",
-        "store":  "Walmart",
-        "product":  "Great Value Chunk Chicken in Water, 12.5 oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "fruit-cups",
-        "store":  "Baker\u0027s",
-        "product":  "Dole Diced Mango In Juice",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "ground-beef-8020",
-        "store":  "Walmart",
-        "product":  "80% Lean / 20% Fat Ground Beef Chuck Patties, 12 Count, 1/3 lb patties, 4 lb Tray, Fresh, All Natural*",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u002780%?\\s*lean[^.]*20%?\\s*fat\u0027 matched, exclude \u0027patties\u0027 killed it"
+        "detail":  "include \u0027boneless,?\\s*skinless\\s+chicken\\s+breast\u0027 matched, exclude \u0027thin[\\s-]*sliced\u0027 killed it"
     }
 ]

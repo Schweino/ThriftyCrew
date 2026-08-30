@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-29T08:11:15",
+    "updated":  "2026-08-29T09:16:14",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -5152,6 +5152,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Walmart|150111133",
+                        "store":  "Walmart",
+                        "item_id":  "150111133",
+                        "price":  12.17,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Walmart|15028899",
                         "store":  "Walmart",
                         "item_id":  "15028899",
@@ -5233,12 +5242,21 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Walmart|17300067665",
+                        "store":  "Walmart",
+                        "item_id":  "17300067665",
+                        "price":  2.47,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Walmart|17548416138",
                         "store":  "Walmart",
                         "item_id":  "17548416138",
                         "price":  21.58,
                         "first_seen":  "2026-08-22",
-                        "last_seen":  "2026-08-26",
+                        "last_seen":  "2026-08-29",
                         "price_changed":  0
                     },
                     {
@@ -5248,6 +5266,15 @@
                         "price":  1.97,
                         "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-26",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|176850785",
+                        "store":  "Walmart",
+                        "item_id":  "176850785",
+                        "price":  9.87,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
                         "price_changed":  0
                     },
                     {
@@ -5329,6 +5356,24 @@
                         "price":  22.22,
                         "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-26",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|231387123",
+                        "store":  "Walmart",
+                        "item_id":  "231387123",
+                        "price":  3.12,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|244376667",
+                        "store":  "Walmart",
+                        "item_id":  "244376667",
+                        "price":  9.53,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
                         "price_changed":  0
                     },
                     {
@@ -5422,12 +5467,39 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Walmart|41172968",
+                        "store":  "Walmart",
+                        "item_id":  "41172968",
+                        "price":  13.34,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|428786640",
+                        "store":  "Walmart",
+                        "item_id":  "428786640",
+                        "price":  12.14,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Walmart|431610884",
                         "store":  "Walmart",
                         "item_id":  "431610884",
                         "price":  2.97,
                         "first_seen":  "2026-08-26",
                         "last_seen":  "2026-08-26",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|435456316",
+                        "store":  "Walmart",
+                        "item_id":  "435456316",
+                        "price":  14.82,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
                         "price_changed":  0
                     },
                     {
@@ -5503,6 +5575,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Walmart|46491653",
+                        "store":  "Walmart",
+                        "item_id":  "46491653",
+                        "price":  10.22,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Walmart|46491694",
                         "store":  "Walmart",
                         "item_id":  "46491694",
@@ -5518,7 +5599,7 @@
                         "price":  3.38,
                         "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-26",
-                        "price_changed":  0
+                        "price_changed":  2
                     },
                     {
                         "key":  "Walmart|5113225251",
@@ -5527,6 +5608,24 @@
                         "price":  7.17,
                         "first_seen":  "2026-08-25",
                         "last_seen":  "2026-08-25",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|51259077",
+                        "store":  "Walmart",
+                        "item_id":  "51259077",
+                        "price":  18.23,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|51259140",
+                        "store":  "Walmart",
+                        "item_id":  "51259140",
+                        "price":  6.58,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
                         "price_changed":  0
                     },
                     {
@@ -5575,6 +5674,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Walmart|693716896",
+                        "store":  "Walmart",
+                        "item_id":  "693716896",
+                        "price":  9.87,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Walmart|725027581",
                         "store":  "Walmart",
                         "item_id":  "725027581",
@@ -5584,12 +5692,39 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Walmart|730513245",
+                        "store":  "Walmart",
+                        "item_id":  "730513245",
+                        "price":  9.36,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Walmart|746830493",
                         "store":  "Walmart",
                         "item_id":  "746830493",
                         "price":  2.97,
                         "first_seen":  "2026-08-26",
                         "last_seen":  "2026-08-26",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|776840591",
+                        "store":  "Walmart",
+                        "item_id":  "776840591",
+                        "price":  9.87,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Walmart|833225687",
+                        "store":  "Walmart",
+                        "item_id":  "833225687",
+                        "price":  9.87,
+                        "first_seen":  "2026-08-29",
+                        "last_seen":  "2026-08-29",
                         "price_changed":  0
                     },
                     {
