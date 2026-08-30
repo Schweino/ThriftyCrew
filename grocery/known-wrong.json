@@ -3756,6 +3756,21 @@
                         "ruled_on":  "2026-08-30",
                         "ruled_by":  "triage-developer (plan-2026-08-30, queue 2026-08-22-51a5b6)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "peanut-oil|SamsClub|members-mark-peanut-oil-35-lbs",
+                        "commodity":  "peanut-oil",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Peanut Oil, 35 lbs."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Sam\u0027s stores this jug\u0027s quantity as DERIVED, not stated - the row carries qty_basis \"package; qty derived lp/up\" and sams_unit_price \"$0.07/foz\", and 55.96 / 0.07 = 799.429, which is the size the capture holds. That volume is impossible for the product the same row names. 35 lbs of peanut oil is 15,875.7 g; at 0.914 g/mL that is 17,369 mL = 587.3 US fl oz, so the true rate is 55.96 / 587.3 = $0.0953 per fl oz. The stored 799.429 fl oz implies a density of 0.67 g/mL, below any edible oil. Priced off the derived size the cell publishes $0.07 per fl oz - 26.5 percent under its own true rate - and takes the peanut-oil crown from Walmart LouAna 3 Gallon at $0.1223. Measured 2026-08-30 while giving peanut-oil its first board row ever; its unit had been fl_oz, outside Convert-ToUnit. Reverse this the day the Sam\u0027s capture records a stated size rather than a derived one.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-30",
+                        "ruled_by":  "claude (unit-vocabulary round, 2026-08-30)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

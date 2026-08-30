@@ -4616,6 +4616,68 @@ if ($null -eq $dcGexLive) {
   }
 }
 
+# ---------------------------------------------------------------- unit vocabulary (2026-08-30, queue 2026-08-22-51a5b6)
+# The SIBLING of the dead-commodity class above, and the reason that round bounced. There the matcher can
+# never keep a row; here the matcher keeps the row and Convert-ToUnit - a switch over six unit values with
+# no default arm - returns $null for the commodity's declared unit, so no per-unit price is ever computed
+# and the commodity holds no cell at any store, forever. Seven commodities were in that state: five spelled
+# their unit 'fl_oz' against the engine's 'floz' (74 of 74 'floz' commodities had cells; 0 of 5 'fl_oz'
+# did), aluminum-foil said 'sq_ft' and saffron said 'gram'. The rule lives in unit-vocabulary-lib.ps1 so
+# the fixtures below and the live arm run the SAME code, and the vocabulary is read out of the engine's
+# own switch rather than retyped here.
+. (Join-Path $PSScriptRoot 'unit-vocabulary-lib.ps1')
+
+# MUST FIRE - the frozen PRE-FIX unit values, verbatim as they stood before this round. Never regenerated
+# from the live commodities.json: all seven were repaired today, so a fixture read from the tree would
+# encode the fix and the case would pass by finding nothing.
+$uvVocabFx = @('lb', 'oz', 'floz', 'gallon', 'each', 'dozen')
+foreach ($uvFx in @(
+    @{ id = 'coconut-aminos';    unit = 'fl_oz' },   # 5 commodities spelled it this way, 0 cells between them
+    @{ id = 'aluminum-foil';     unit = 'sq_ft' },
+    @{ id = 'saffron';           unit = 'gram'  })) {
+  $uvV = Test-CommodityUnitIsPriceable ([pscustomobject]@{ id = $uvFx.id; unit = $uvFx.unit }) $uvVocabFx
+  if ($uvV -eq $uvFx.unit) { Ok ("unit-vocabulary: the pre-fix " + $uvFx.id + " unit '" + $uvFx.unit + "' is named unpriceable - Convert-ToUnit has no arm for it, so every row it matches yields a null per-unit") }
+  else { Bad ("unit-vocabulary: the pre-fix " + $uvFx.id + " unit '" + $uvFx.unit + "' was NOT caught (verdict [" + $uvV + "]) - the check cannot see its own founding bug, so a quiet run proves nothing") }
+}
+# and the same defect wearing a different spelling: no unit field at all
+$uvV = Test-CommodityUnitIsPriceable ([pscustomobject]@{ id = 'no-unit-at-all' }) $uvVocabFx
+if ($uvV -eq '(none)') { Ok 'unit-vocabulary: a commodity with no unit field at all is caught - Convert-ToUnit falls through on it identically' }
+else { Bad ("unit-vocabulary: a commodity with no unit field was NOT caught (verdict [" + $uvV + "])") }
+
+# CLEAN TWINS - every value the engine really does convert, including the corrected spellings of the
+# seven. If any of these ever fires, the check has become an argument for editing the engine to suit it.
+foreach ($uvOk in @('lb', 'oz', 'floz', 'gallon', 'each', 'dozen')) {
+  if ((Test-CommodityUnitIsPriceable ([pscustomobject]@{ id = 'twin-' + $uvOk; unit = $uvOk }) $uvVocabFx) -eq '') { Ok ("unit-vocabulary: '" + $uvOk + "' stays silent - it is an arm of Convert-ToUnit's switch") }
+  else { Bad ("unit-vocabulary: '" + $uvOk + "' was called unpriceable, but Convert-ToUnit converts it - the check is too eager") }
+}
+
+# THE VOCABULARY READER ITSELF. Reading it out of compare-deals is the whole point of the check, so a
+# silent parse failure would take the live arm down with it - and a wrong-big parse would pass everything.
+$uvVocab = Get-EngineUnitVocabulary $PSScriptRoot
+if ($null -eq $uvVocab) {
+  Bad 'unit-vocabulary: could not read Convert-ToUnit''s switch out of compare-deals.ps1 - the live arm did not run, which is not the same as a clean result'
+} else {
+  Ok ("unit-vocabulary: read " + @($uvVocab).Count + " unit(s) straight out of Convert-ToUnit's switch (" + (($uvVocab | Sort-Object) -join ', ') + ") - no second copy of the list lives in this estate")
+  # THE PRODUCTION ARM. Every rule file the engine is ever pointed at - commodities.json AND the recipe
+  # set recipe-overlay.ps1 runs through the same Convert-ToUnit. Runs daily from check-ad-cycles.
+  $uvBad = @(); $uvSeen = 0
+  foreach ($uvF in (Get-EngineRuleFiles $PSScriptRoot)) {
+    $uvName = [IO.Path]::GetFileName($uvF)
+    foreach ($uvC in (Read-RuleFileCommodities $uvF)) {
+      $uvSeen++
+      $uvH = Test-CommodityUnitIsPriceable $uvC $uvVocab
+      if ($uvH) { $uvBad += ("{0} [{1}] unit='{2}'" -f [string]$uvC.id, $uvName, $uvH) }
+    }
+  }
+  if ($uvSeen -lt 100) {
+    Bad ("unit-vocabulary: only $uvSeen commodit(y/ies) were examined - the live arm read almost nothing, so a clean result would mean nothing")
+  } elseif ($uvBad.Count -eq 0) {
+    Ok ("unit-vocabulary: all $uvSeen commodities across every engine rule file declare a unit Convert-ToUnit can convert")
+  } else {
+    Bad ("unit-vocabulary: " + $uvBad.Count + " commodit(y/ies) declare a unit Convert-ToUnit cannot convert, so they can NEVER hold a board cell however well their rules match: " + ($uvBad -join '; ') + ". Correct the unit to one the engine converts (" + (($uvVocab | Sort-Object) -join ', ') + "), or add an arm to Convert-ToUnit - never leave the two disagreeing.")
+  }
+}
+
 # ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
 # WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
 # at least three auditors - one of them, audit-household-in-food, a HARD guard. test-matcher-parity.ps1 was

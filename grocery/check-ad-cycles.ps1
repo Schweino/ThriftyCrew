@@ -2468,8 +2468,16 @@ if ($script:DownstreamRan) {
 #
 # BOTH DIRECTIONS ARE NOW CLOSED. A gate that cannot decide must not skip - and must not be able to end
 # the chain either. Any throw resolves to DUE and says so out loud.
+#
+# THE RULE FILES ARE INPUTS TOO (2026-08-30). The globs were code-only, but two of this suite's LIVE arms
+# read data: dead-commodity and unit-vocabulary both sweep commodities.json (and unit-vocabulary also
+# sweeps recipe-commodities.json). Both exist to catch a bad EDIT to those files - a commodity whose
+# includes can never match, a unit Convert-ToUnit cannot convert - and with code-only globs such an edit
+# left the suite not due, so the arm that would have caught it could sit skipped for up to seven days
+# while the broken commodity quietly held no cell. The roster entry for matcher-parity already lists
+# grocery/commodities.json for exactly this reason; this gate had not caught up.
 $taSkip = $false
-try { $taSkip = -not (Test-CadenceDue -Name 'test-auditors' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1')) }
+try { $taSkip = -not (Test-CadenceDue -Name 'test-auditors' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1','grocery/commodities.json','grocery/recipe-commodities.json')) }
 catch { Log ('test-auditors cadence gate threw (' + $_.Exception.Message + ') - running the suite anyway; a gate that cannot decide must not skip, and must never take the rest of the chain with it') }
 if ($taSkip) {
   Log ('test-auditors: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'test-auditors') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")

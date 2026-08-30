@@ -546,12 +546,6 @@
                                                             "size":  "1 ea",
                                                             "board_pu":  1.99
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408143-reynolds-wrap-every-day-aluminum-foil-200-sq-ft",
-                                                        "price":  14.48,
-                                                        "size":  "",
-                                                        "name":  "reynolds wrap every day aluminum foil 200 sq ft"
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2924912/thats-smart-aluminum-foil",
                                                        "price":  1.82,
@@ -4133,13 +4127,6 @@
                                                                   "size":  "15 oz",
                                                                   "name":  "Fareway Diced Mixed Vegetables"
                                                               },
-                                                  "Hy-Vee":  {
-                                                                 "url":  "https://www.hy-vee.com/aisles-online/p/9523/veg-all-original-mixed-vegetables",
-                                                                 "price":  2.49,
-                                                                 "size":  "15 oz",
-                                                                 "name":  "Veg-All Original Mixed Vegetables",
-                                                                 "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                             },
                                                   "Walmart":  {
                                                                   "url":  "https://www.walmart.com/ip/6-pack-Great-Value-Mixed-Vegetables-Gluten-Free-15-oz-Can/13312523715",
                                                                   "name":  "(6 pack) Great Value Mixed Vegetables, 15 oz",
@@ -6712,13 +6699,6 @@
                                                      "name":  "Hy-Vee Virgin Coconut Oil",
                                                      "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                  },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/17239000531",
-                                                              "price":  24.98,
-                                                              "size":  "128 fl oz",
-                                                              "name":  "Carrington Farms Refined Coconut Oil, 128 fl. oz.",
-                                                              "board_pu":  0.1952
-                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Organic-Naturally-Refined-Coconut-Oil-56-fl-oz/55504318",
                                                       "name":  "Great Value Organic Naturally Refined Coconut Oil, 56 fl oz",
@@ -25603,14 +25583,7 @@
                                                   "name":  "Zucchini Squash",
                                                   "board_pu":  1.99,
                                                   "recipe_pu":  1.99
-                                              },
-                                   "Walmart":  {
-                                                   "url":  "https://www.walmart.com/ip/44390947",
-                                                   "name":  "Fresh Zucchini, Each",
-                                                   "price":  "$0.76",
-                                                   "size":  "0.5 lb",
-                                                   "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
-                                               }
+                                              }
                                },
                   "keto-hamburger-buns":  {
                                               "Baker\u0027s":  {

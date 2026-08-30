@@ -15223,7 +15223,7 @@
     {
         "id":  "aluminum-foil",
         "label":  "Aluminum Foil",
-        "unit":  "sq_ft",
+        "unit":  "each",
         "band_min":  1,
         "band_max":  15,
         "include":  [
@@ -70130,7 +70130,7 @@
     {
         "id":  "garlic-infused-olive-oil",
         "label":  "Garlic-Infused Olive Oil",
-        "unit":  "fl_oz",
+        "unit":  "floz",
         "include":  [
                         "\\bgarlic[- ]infused\\s+(?:extra\\s+virgin\\s+)?olive\\s+oil\\b",
                         "\\b(?:extra\\s+virgin\\s+)?olive\\s+oil\\b[^\\n]{0,40}\\bgarlic[- ]infused\\b"
@@ -71914,7 +71914,7 @@
     {
         "id":  "coconut-aminos",
         "label":  "Coconut Aminos",
-        "unit":  "fl_oz",
+        "unit":  "floz",
         "include":  [
                         "\\bcoconut\\s+aminos?\\b",
                         "\\bcoconut\\s+liquid\\s+aminos?\\b"
@@ -72018,12 +72018,12 @@
     {
         "id":  "avocado-oil",
         "label":  "Avocado Oil",
-        "unit":  "fl_oz",
+        "unit":  "floz",
         "include":  [
                         "\\bavocado\\s+oil\\b"
                     ],
         "exclude":  [
-                        "\\b(?:spray|mayonnaise|mayo|dressing|ranch|chips?|crackers?|capsules?|softgels?|skin|hair|cosmetic|conditioner|shampoo)\\b",
+                        "\\b(?:spray|mayonnaise|mayo|dressing|ranch|chips?|crackers?|capsules?|softgels?|skin|hair|cosmetic|conditioner|shampoo|veggie\\s+straws?|popcorn|cashews?|plant\\s+butter|shortening|mousse|body\\s+oil|makeup)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -73003,7 +73003,7 @@
     {
         "id":  "peanut-oil",
         "label":  "Peanut oil",
-        "unit":  "fl_oz",
+        "unit":  "floz",
         "include":  [
                         "\\bpeanut oil\\b"
                     ],
@@ -73467,7 +73467,7 @@
     {
         "id":  "saffron",
         "label":  "Saffron",
-        "unit":  "gram",
+        "unit":  "oz",
         "include":  [
                         "\\bsaffron(?: threads?)?\\b"
                     ],
@@ -73795,7 +73795,7 @@
     {
         "id":  "creamy-cilantro-lime-dressing",
         "label":  "Creamy Cilantro Lime Dressing",
-        "unit":  "fl_oz",
+        "unit":  "floz",
         "include":  [
                         "\\bcreamy\\s+cilantro[\\s-]+lime\\s+(?:salad\\s+)?dressing\\b",
                         "\\bcilantro[\\s-]+lime\\s+creamy\\s+(?:salad\\s+)?dressing\\b"
