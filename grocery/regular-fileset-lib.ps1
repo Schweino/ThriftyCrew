@@ -141,3 +141,34 @@ function Select-RegularFileSet($fileObjs, [datetime]$asof, [int]$unionMaxAgeDays
       }
     }
 }
+
+function Select-EngineSamsFiles([string]$outDir, [datetime]$wallClock) {
+  <#
+    SAM'S HAS NO out\regular FILE AT ALL, and every guard that assumes one is reading a board that does not
+    exist. The club catalogue is CAPTCHA-walled, so Sam's is captured in partial slices into
+    out\sams\sams-deals-*.json, and compare-deals unions every slice inside the carry window (its
+    -SamsMaxAgeDays, the same 90 days as Get-RegularUnionDays) because any one slice covers only the
+    categories that run got through before the wall. compare-deals.ps1 states this outright: "Sam's has no
+    out\regular\ file at all: its prices come only from out\sams\sams-deals-*.json".
+
+    MEASURED 2026-08-30. generate-board-overrides' board-confirmed-fresh gate kept its own private map that
+    sent Sam's to out\regular\sams-regular-*.json. Two orphan files from July/August still sit there, so the
+    gate loaded 60 rows, found nothing, raised no alarm (its zero-rows warning is estate-wide, and the other
+    six stores had rows), and FAILED OPEN for every Sam's cell. That is how frozen-fruit got pinned to
+    "Member's Mark Triple Berry Blend, 64 oz." at 16.34c/oz over the board's own
+    "Member's Mark Natural Sliced Strawberries, 4 lbs." at 12.47c/oz - two different products sitting side by
+    side in the SAME capture (sams-deals-2026-08-15), the cheaper of which the board had correctly chosen.
+    Pointed here, the gate finds the board's exact item at its exact price and refuses the pin.
+
+    Newest-first, like the out\regular sets, so a caller that wants the freshest row for a name gets it first.
+  #>
+  $boards = Get-ChildItem (Join-Path $outDir 'comparison-*.json') -ErrorAction SilentlyContinue
+  $asof = Resolve-BoardAsOf $boards $wallClock
+  $win  = Get-RegularUnionDays
+  @(Get-ChildItem (Join-Path $outDir 'sams\sams-deals-*.json') -ErrorAction SilentlyContinue |
+    Where-Object { $_.BaseName -match '^sams-deals-\d{4}-\d{2}-\d{2}$' } |
+    Where-Object {
+      $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
+      $m.Success -and [math]::Abs(([datetime]$m.Groups[1].Value - $asof).TotalDays) -le $win
+    } | Sort-Object Name -Descending)
+}

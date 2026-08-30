@@ -1,0 +1,50 @@
+{
+  "readme": "ADJUDICATED CAPTURE ROWS whose BACK-COMPUTED size is not a size the product could physically have. audit-derived-size-density (the block in test-auditors.ps1, run daily from check-ad-cycles) flags a row when its qty_basis says the quantity was derived from linePrice/unitPrice, the derived size is a VOLUME, the product name states a WEIGHT, and the implied density falls outside 0.75-1.65 g/mL - a range no grocery liquid is outside of. A flagged row is WRONG DATA, not a deliberate state, and it cannot be repaired where it sits: a capture is a record of what the store said, and editing one launders evidence. So each entry here is a reasoner writing down the arithmetic and taking the row off the guard's failure list until the store's own number changes. NOT an exceptions list - nothing here is correct.",
+  "matching_key": "(store, normalized name, derived size). The size is part of the key ON PURPOSE: the day the store's derivation changes - whether it gets fixed or gets a NEW wrong value - the ruling stops covering the row and the guard fires again. A ruling keyed on the product alone would silence that product forever, which is how a narrow exception becomes a permanent hole. The name is normalized the way known-wrong.json normalizes one: lower-cased, apostrophes deleted, every other non-alphanumeric byte becomes a space.",
+  "not_known_wrong_json": "known-wrong.json is the instrument one level DOWN: it blocks a (commodity, store, product) from taking a BOARD CELL, and its commodity-retired predicate retires any entry whose commodity id is not in commodities.json. Member's Mark Pure Soybean Oil matches no commodity at all today, so a known-wrong entry for it would be reported retired and would enforce nothing. The defect is in the CAPTURE and has to be ruled where it lives. Where a flagged row ALSO reaches a board cell, both instruments are used - see the peanut oil entry.",
+  "rulings": [
+    {
+      "store": "Sam's Club",
+      "name": "Member's Mark Peanut Oil, 35 lbs.",
+      "size": "799.429 fl oz",
+      "ad_price": "$55.96",
+      "displayed_unit_price": "$0.07/foz",
+      "implied_density": 0.672,
+      "reason": "Sam's stores this jug's quantity as DERIVED: 55.96 / 0.07 = 799.429, which is the size the capture holds. 35 lb of peanut oil is 15,875.7 g; at 0.914 g/mL that is 17,369 mL = 587.3 US fl oz. The stored size implies 0.672 g/mL, below any edible oil, and would publish $0.07/fl oz - 26.5% under the true $0.0953 - taking the peanut-oil crown from Walmart LouAna 3 Gallon at $0.1223. THE CONTROL IS IN THE SAME STORE ON THE SAME DAY: Member's Mark Clear Frying Oil 35 lbs. derives 571.143 fl oz from the same kind of quotient, which is 0.940 g/mL and correct. Sam's has the right size for one 35 lb oil jug and a ~800 fl oz (6.25 gallon) size for this one.",
+      "also_blocked_by": "known-wrong.json entry peanut-oil|SamsClub|members-mark-peanut-oil-35-lbs, verdict wrong-basis, ruled 2026-08-30 - that entry keeps the cell off the board; this one records that the capture-side rule has adjudicated the row.",
+      "board_impact": "BLOCKED. peanut-oil's crown on the 2026-08-30 board is Walmart LouAna 3 Gallon at $0.1223 and Sam's holds no cell.",
+      "ruled_on": "2026-08-30",
+      "ruled_by": "claude (derived-size-density round, 2026-08-30)",
+      "review_by": "2026-10-01",
+      "retire_when": "the Sam's capture records a stated size for this jug rather than a derived one, or the derived size changes"
+    },
+    {
+      "store": "Sam's Club",
+      "name": "Member's Mark Pure Soybean Oil, 35 lbs.",
+      "size": "799.6 fl oz",
+      "ad_price": "$39.98",
+      "displayed_unit_price": "$0.05/foz",
+      "implied_density": 0.671,
+      "reason": "The same defect as the peanut oil above, on the same shelf, found by the rule rather than by hand: 39.98 / 0.05 = 799.6. 35 lb of soybean oil is 15,875.7 g; at 0.917 g/mL that is 17,313 mL = 585.4 US fl oz. The stored size implies 0.671 g/mL. Both jugs land within 0.03% of 799.5 fl oz from different prices and different unit prices, which is not a coincidence - it is Sam's carrying ~6.25 gallons as the size of a 35 lb jug, and 6.25 gallons of soybean oil weighs 47.7 lb, not 35.",
+      "board_impact": "INERT TODAY, LOADED FOR TOMORROW. No commodity matches this row: vegetable-oil includes only 'vegetable oil' and 'canola oil', and there is no soybean-oil id. If one is ever minted - or vegetable-oil's includes are widened to soybean, which is what soybean oil is sold as - the derived size publishes $39.98/799.6 = $0.0500/fl oz and CROWNS vegetable-oil over Hy-Vee That's Smart! at $0.0666. The true rate, $39.98/585.4 = $0.0683, does not crown. The wrong size is the entire difference between Sam's winning that crown and not.",
+      "ruled_on": "2026-08-30",
+      "ruled_by": "claude (derived-size-density round, 2026-08-30)",
+      "review_by": "2026-10-01",
+      "retire_when": "the Sam's capture records a stated size for this jug rather than a derived one, or the derived size changes"
+    },
+    {
+      "store": "Walmart",
+      "name": "Melinda's Jalapeo Ketchup, Spicy and Tangy, All Natural, 12 Ounce",
+      "size": "4 fl oz",
+      "ad_price": "$1.08",
+      "displayed_unit_price": "27.0 cents/fl oz",
+      "implied_density": 2.876,
+      "reason": "The opposite direction: the derived size is three times too SMALL. Walmart displayed 27.0 c/fl oz against $1.08, which derives 4 fl oz, while the name says 12 Ounce - an implied 2.876 g/mL, denser than glycerine. One of Walmart's own two numbers is wrong and the row does not say which: at $1.08 for 12 oz the true rate is $0.09/fl oz, and at 27.0 c/fl oz for 12 oz the true price is $3.24. The rest of the Melinda's line in the same capture runs 41-84 c/fl oz, which makes $1.08 for 12 oz the number more likely to be wrong. Recorded rather than repaired, because the capture is the record of what Walmart said.",
+      "board_impact": "NONE, and in the harmless direction. A derived size that is too small makes the per-unit price too HIGH, so the row can only lose a crown, never steal one: ketchup's Walmart cell on the 2026-08-30 board is Great Value Tomato Ketchup 64 oz at $0.0506/oz, and this row's $0.27/fl oz is nowhere near it. It is not added to known-wrong.json for that reason - Melinda's Jalapeno Ketchup really is ketchup, and blocking a correct product for a size defect would delete a right answer if the size is ever fixed.",
+      "ruled_on": "2026-08-30",
+      "ruled_by": "claude (derived-size-density round, 2026-08-30)",
+      "review_by": "2026-10-01",
+      "retire_when": "the Walmart capture records a stated size for this bottle rather than a derived one, or the derived size changes"
+    }
+  ]
+}

@@ -115,6 +115,18 @@ running; if you must run the merge yourself, check `git status`/mtimes first and
 changes under you means another writer is active - stand down and check its result instead of overwriting).
 The archive of consumed inputs lives in `out\url-inputs-archive\`.
 
+**ORDER RULE, and it is not cosmetic: every writer of `product-urls.json` must be followed by
+`audit-name-drift.ps1` before `guards.ps1` runs.** `audit-tile-integrity.ps1` does not compute its
+WRONG-PRODUCT half - it READS `out\name-drift.json` - so it refuses to grade at all (HELD, exit 2) whenever
+that file is older than `product-urls.json`, on the sound ground that flags written before a link changed
+cannot describe the link now. Run the audits in the other order and the whole board hard-fails on a hold,
+with nothing actually wrong in the data. `prune-bad-links` is the writer that trips this most (it READS
+name-drift and then WRITES product-urls, so it stales its own input by construction - measured 2026-08-22,
+three blocked publishes with the two files 2 seconds apart). Every live chain now runs prune/merge/sync/
+relink FIRST and `audit-name-drift` LAST: `check-ad-cycles` ship path and its consistency auto-repair,
+`weekly-post-capture -Phase publish` and `-Phase links`, `relink-drifted-cells`. Keep it that way when
+adding a writer.
+
 ### Per-store resolver methods (all proven)
 
 | Store | Data source | eval? | Notes |

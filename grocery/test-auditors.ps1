@@ -1031,6 +1031,105 @@ if ($r.rc -eq 0 -and $ndU -and [int]$ndU.count -eq 0 -and (@($ndU.examined_cells
 }
 Remove-Item $fxNdU -Recurse -Force -ErrorAction SilentlyContinue
 
+# (g3) audit-name-drift MUST catch SAME BRAND, DIFFERENT PRODUCT. Founding bug (2026-08-30): the Sam's
+# frozen-fruit cell. The board priced "Member's Mark Natural Sliced Strawberries, Frozen, 4 lbs." at
+# 12.47c/oz; the link named "Member's Mark Triple Berry Blend, Frozen, 64 oz." at 16.34c/oz - a different
+# product, sitting in the same capture. Every clause here was satisfied: the token test matched on the house
+# brand once $stop had removed strawberries/frozen/natural/lbs, form-flip could not fire (both say frozen),
+# count mismatch could not fire (neither states a count), and brand mismatch correctly stayed silent because
+# it IS the same brand. name-drift reported the cell clean and generate-board-overrides pinned the published
+# price to the wrong product's per-unit.
+# TWO defects, and the fixture holds both. The lexicon: a bare possessive "s" used to occupy a token slot, so
+# "Membrix's Marque X" tokenised membrix(0)/s(1)/marque(2) and `marque` was NEVER counted as leading anywhere
+# in the corpus - it never became a brand, so it survived into the identity comparison as though it were a
+# food word and the two names SHARED it. The rule: strip the brand off both names and require they still
+# share something. Hence the possessive brand below - a fixture spelled "Membrix Marque" would pass with the
+# lexicon fix reverted.
+# CLEAN TWIN: the same cell with a link naming the same product stays silent, because a false flag here is not
+# free - generate-board-overrides refuses to pin any cell name-drift flags, so noise silently blocks good
+# corrections. Frozen synthetic data - never regenerated from the live board.
+$fxNdP = NewFxDir 'nd-product'
+Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNdP 'audit-name-drift.ps1')
+New-Item -ItemType Directory -Force (Join-Path $fxNdP 'out\regular') | Out-Null
+Set-Content (Join-Path $fxNdP 'commodities.json') '[{"id":"frozen-fruit","label":"Frozen Fruit"}]' -Encoding UTF8
+# A SYNTHETIC CORPUS BIG ENOUGH TO ARM THE CLAUSE. Both brand-aware rules gate on $brandActive
+# ($BRAND.Count -ge 100), so a two-name fixture would test nothing but the disabled path - the shape of a
+# guard that "passes" because it never ran. 119 filler brands + the one under test = 121 learned brands.
+# Each brand gets 6 names carrying all 6 filler words in rotated order, so every filler lands in a lead slot
+# exactly once in six (ratio 0.17, nowhere near the 0.80 bar) while each brand leads 6 of 6. That keeps the
+# lexicon honest: the fillers must NOT be learned as brands or the identity sets below would be emptied.
+$ndPFill  = @('alpha','bravo','charlie','delta','echo','foxtrot')
+$ndPNames = New-Object System.Collections.Generic.List[string]
+foreach ($ndPBrand in (@(1..119 | ForEach-Object { 'zebrand' + $_.ToString('000') }) + @("Membrix's Marque"))) {
+  for ($k = 0; $k -lt 6; $k++) {
+    $rot = @(); for ($j = 0; $j -lt 6; $j++) { $rot += $ndPFill[($j + $k) % 6] }
+    $ndPNames.Add($ndPBrand + ' ' + ($rot -join ' '))
+  }
+}
+Set-Content (Join-Path $fxNdP 'out\regular\lex-regular-2026-01-01.json') (@{ store = 'Lex'; deals = @($ndPNames | ForEach-Object { @{ item = $_ } }) } | ConvertTo-Json -Depth 4) -Encoding UTF8
+Set-Content (Join-Path $fxNdP 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"frozen-fruit","unit":"oz","stores":[{"store":"Sam''s Club","per_unit":0.1247,"type":"everyday","item":"Membrix''s Marque Natural Sliced Strawberries, Frozen, 4 lbs."}]}]}' -Encoding UTF8
+$ndPPu = '{"items":{"frozen-fruit":{"Sam''s Club":{"url":"https://example.test/ff","price":"$10.46","size":"64 oz","name":"{LINK}"}}}}'
+Set-Content (Join-Path $fxNdP 'product-urls.json') ($ndPPu -replace '\{LINK\}',"Membrix's Marque Triple Berry Blend, Frozen, 64 oz.") -Encoding UTF8
+$r = RunPSAt $fxNdP 'audit-name-drift.ps1' @()
+$ndP = try { Get-Content (Join-Path $fxNdP 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($r.rc -eq 0 -and $ndP -and [int]$ndP.count -eq 1 -and @($ndP.flags)[0].reason -eq 'product-mismatch' -and @($ndP.flags)[0].id -eq 'frozen-fruit') {
+  Ok 'name-drift MUST-FIRE: same brand, different product is flagged product-mismatch (the pin that published Triple Berry over Sliced Strawberries cannot be minted)'
+} else {
+  Bad ('name-drift did NOT flag same-brand-different-product (rc=' + $r.rc + ', count=' + [int]$ndP.count + ', reason=' + @($ndP.flags)[0].reason + ') - either the identity rule is gone or a possessive is eating the second brand word again, and a wrong-product link can pin a price over the board')
+}
+Set-Content (Join-Path $fxNdP 'product-urls.json') ($ndPPu -replace '\{LINK\}',"Membrix's Marque Natural Sliced Strawberries, Frozen, 4 lbs.") -Encoding UTF8
+$r = RunPSAt $fxNdP 'audit-name-drift.ps1' @()
+$ndP = try { Get-Content (Join-Path $fxNdP 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($r.rc -eq 0 -and $ndP -and [int]$ndP.count -eq 0 -and [int]$ndP.examined -eq 1) {
+  Ok 'name-drift CLEAN TWIN: a link naming the SAME product stays unflagged (the identity rule adds coverage, not noise that would block good pins)'
+} else {
+  Bad ('name-drift product-identity clean twin failed (rc=' + $r.rc + ', count=' + [int]$ndP.count + ', examined=' + [int]$ndP.examined + ') - the identity rule is manufacturing flags, which silently blocks legitimate price corrections')
+}
+Remove-Item $fxNdP -Recurse -Force -ErrorAction SilentlyContinue
+
+# (g4) generate-board-overrides' BOARD-CONFIRMED-FRESH gate must read the files the ENGINE priced from.
+# Founding bug (2026-08-30): the gate kept a private store -> filename map sending Sam's to
+# out\regular\sams-regular-*.json. Sam's has NO out\regular file - the club catalogue is CAPTCHA-walled and
+# its everyday prices come only from out\sams\sams-deals-*.json - but two orphan sams-regular files from
+# July/August were still lying there, so the gate opened them, matched nothing, raised no alarm (its zero-rows
+# warning was estate-wide and six other stores kept the total non-zero) and FAILED OPEN for every Sam's cell.
+# The pin it then wrote moved frozen-fruit from the board's own 12.47c/oz to a different product's 16.34c/oz.
+# MUST-FIRE: the board's exact item at its exact price sits in out\sams, so the gate refuses the pin - and the
+# decoy sams-regular file below is the founding condition, because with the old map that decoy is ALL the gate
+# would open and the pin would be written. CLEAN TWIN: the same board cell with the item ABSENT from the Sam's
+# feed is a genuinely stale number, and the pin must still be written - a gate that refuses everything is as
+# broken as one that refuses nothing, it just fails in the quiet direction. Frozen synthetic data.
+$fxGbo = NewFxDir 'gbo-samsfeed'
+foreach ($gboDep in @('generate-board-overrides.ps1','pu-lib.ps1','regular-fileset-lib.ps1')) { Copy-Item (Join-Path $root $gboDep) (Join-Path $fxGbo $gboDep) }
+New-Item -ItemType Directory -Force (Join-Path $fxGbo 'out\sams') | Out-Null
+New-Item -ItemType Directory -Force (Join-Path $fxGbo 'out\regular') | Out-Null
+Set-Content (Join-Path $fxGbo 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"frozen-fruit","unit":"oz","stores":[{"store":"Sam''s Club","per_unit":0.1247,"type":"everyday","item":"Members Mark Sliced Strawberries, Frozen, 4 lbs.","ad":"$7.98","size":"4 lb"}]}]}' -Encoding UTF8
+Set-Content (Join-Path $fxGbo 'product-urls.json') '{"items":{"frozen-fruit":{"Sam''s Club":{"url":"https://example.test/tb","price":"$10.46","size":"64 oz","name":"Members Mark Triple Berry Blend, Frozen, 64 oz."}}}}' -Encoding UTF8
+Set-Content (Join-Path $fxGbo 'out\name-drift.json') '{"generated":"2026-01-01","count":0,"examined":1,"examined_cells":["frozen-fruit|Sam''s Club"],"flags":[]}' -Encoding UTF8
+# THE DECOY. An orphan out\regular file for a store whose prices do not live there - exactly the two files
+# still sitting in the live tree on the morning this broke. It must not be what the gate believes.
+Set-Content (Join-Path $fxGbo 'out\regular\sams-regular-2026-01-01.json') '{"store":"Sam''s Club","captured":"2026-01-01","deals":[{"store":"Sam''s Club","item":"Members Mark Paper Towels, 12 ct.","ad_price":"$19.98","size":"12 ct","as_of":"2026-01-01"}]}' -Encoding UTF8
+$gboSams = '{"store":"Sam''s Club","captured":"2026-01-01","deals":[{{ROWS}}]}'
+$gboBoardRow = '{"store":"Sam''s Club","item":"Members Mark Sliced Strawberries, Frozen, 4 lbs.","ad_price":"$7.98","size":"4 lb","as_of":"2026-01-01"}'
+$gboLinkRow  = '{"store":"Sam''s Club","item":"Members Mark Triple Berry Blend, Frozen, 64 oz.","ad_price":"$10.46","size":"64 oz","as_of":"2026-01-01"}'
+Set-Content (Join-Path $fxGbo 'out\sams\sams-deals-2026-01-01.json') ($gboSams -replace '\{\{ROWS\}\}',($gboBoardRow + ',' + $gboLinkRow)) -Encoding UTF8
+$r = RunPSAt $fxGbo 'generate-board-overrides.ps1' @()
+$gbo = try { Get-Content (Join-Path $fxGbo 'board-price-overrides.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($gbo -and [int]$gbo.count -eq 0 -and $r.text -match 'board-CONFIRMED-FRESH, pin REFUSED' -and $r.text -match 'frozen-fruit') {
+  Ok 'board-confirmed-fresh MUST-FIRE: the gate reads out\sams (the engine''s Sam''s input) and refuses to pin a different product over a price the store''s own pull confirms'
+} else {
+  Bad ('board-confirmed-fresh did NOT refuse the Sam''s pin (count=' + [int]$gbo.count + ') - the gate is reading a fileset the board never priced from and is failing OPEN for that store')
+}
+Set-Content (Join-Path $fxGbo 'out\sams\sams-deals-2026-01-01.json') ($gboSams -replace '\{\{ROWS\}\}',$gboLinkRow) -Encoding UTF8
+$r = RunPSAt $fxGbo 'generate-board-overrides.ps1' @()
+$gbo = try { Get-Content (Join-Path $fxGbo 'board-price-overrides.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($gbo -and [int]$gbo.count -eq 1 -and [math]::Abs([double](@($gbo.cells)[0].per_unit) - 0.1634) -lt 0.0005) {
+  Ok 'board-confirmed-fresh CLEAN TWIN: a board number the store''s own pull does NOT carry is still corrected (the gate refuses, it does not veto)'
+} else {
+  Bad ('board-confirmed-fresh clean twin failed (count=' + [int]$gbo.count + ') - the gate has stopped letting legitimate stale-board corrections through')
+}
+Remove-Item $fxGbo -Recurse -Force -ErrorAction SilentlyContinue
+
 # (h) audit-links: BLIND when zero of the stored links matched a board id/store (a schema break in either
 # input used to print "audited N links: 0 price-match, 0 MISMATCH, 0 uncomputable" - flag-free JSON included).
 $fxAl = NewFxDir 'al-blind'
@@ -4751,19 +4850,210 @@ if ($null -eq $uvVocab) {
   }
   if (@($uvExcUsed).Count) { Ok ("unit-vocabulary: " + @($uvExcUsed).Count + " commodit(y/ies) hold a DELIBERATE unpriceable unit under a reviewed exception and are off the board on purpose: " + (@($uvExcUsed) -join '; ')) }
   if (@($uvExcStale).Count) { Bad ("unit-vocabulary: " + @($uvExcStale).Count + " exception entr(y/ies) in unit-vocabulary-exceptions.json no longer match any commodity's declared unit and are excusing nothing: " + (@($uvExcStale) -join '; ') + ". Delete them - a spent allowlist row is a hole with a good story attached.") }
-  foreach ($uvF in (Get-EngineRuleFiles $PSScriptRoot)) {
-    $uvName = [IO.Path]::GetFileName($uvF)
-    foreach ($uvC in (Read-RuleFileCommodities $uvF)) {
-      $uvSeen++
-      $uvH = Test-CommodityUnitIsPriceable $uvC $uvVocab
-    }
-  }
   if ($uvSeen -lt 100) {
     Bad ("unit-vocabulary: only $uvSeen commodit(y/ies) were examined - the live arm read almost nothing, so a clean result would mean nothing")
   } elseif ($uvBad.Count -eq 0) {
     Ok ("unit-vocabulary: all $uvSeen commodities across every engine rule file declare a unit Convert-ToUnit can convert, or a reviewed exception says why they deliberately do not")
   } else {
     Bad ("unit-vocabulary: " + $uvBad.Count + " commodit(y/ies) declare a unit Convert-ToUnit cannot convert, so they can NEVER hold a board cell however well their rules match: " + ($uvBad -join '; ') + ". Correct the unit to one the engine converts (" + (($uvVocab | Sort-Object) -join ', ') + "), or add an arm to Convert-ToUnit - never leave the two disagreeing.")
+  }
+}
+
+# ---------------------------------------------------------------- derived size density (2026-08-30)
+# THE CROSS-MEASURE HALF OF THE SAZON RULE. build-sams-deals' Build-Row back-computes a package size as
+# linePrice / the store's displayed unitPrice whenever the name is silent in the priced unit, and stamps
+# the row qty_basis "...; qty derived lp/up" - 8,511 of 57,323 capture rows today. The Sazon rule already
+# refuses a row whose name states a quantity IN THE PRICED UNIT that does not reproduce the store's own
+# arithmetic; it compares unit TOKENS, so a name in pounds against a price per fluid ounce sails through.
+# Weight and volume are bound by density, and that binding is the whole check:
+#     "Member's Mark Peanut Oil, 35 lbs."  $55.96  "$0.07/foz"  ->  size 799.429 fl oz  ->  0.672 g/mL
+# which is below any edible oil, and would have crowned peanut-oil at $0.07 against a true $0.0953.
+# Found by hand, not by a guard. The rule lives in derived-size-density-lib.ps1 so the frozen fixtures
+# below and the live arm run the SAME code, and the qty_basis marker is read out of build-sams-deals
+# rather than retyped here.
+. (Join-Path $PSScriptRoot 'derived-size-density-lib.ps1')
+
+# The marker every fixture is judged against, frozen. The live arm reads the real one out of the builder.
+$dsMk = 'derived lp/up'
+function New-DsRow($item, $size, $ad, $up, $store) {
+  [pscustomobject]@{ store = $store; item = $item; size = $size; ad_price = $ad; sams_unit_price = $up; qty_basis = ('package; qty ' + $dsMk) }
+}
+
+# MUST FIRE - the founding row, frozen verbatim as it stands in sams-deals-2026-08-15.json and
+# 2026-08-25.json. Never regenerated from the capture tree: the row is RULED today, and a fixture read
+# through the ruling valve would encode the ruling and the case would pass by finding nothing.
+$dsFx = New-DsRow "Member's Mark Peanut Oil, 35 lbs." '799.429 fl oz' '$55.96' '$0.07/foz' "Sam's Club"
+$dsV = Test-DerivedSizeDensity $dsFx $dsMk
+if ($dsV.Status -eq 'flag' -and [math]::Abs([double]$dsV.Density - 0.672) -lt 0.002) {
+  Ok ("derived-size-density: the founding peanut oil row is flagged at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - 35 lb cannot fit in 799.429 fl oz")
+} else {
+  Bad ("derived-size-density: the founding peanut oil row was NOT caught (status [" + $dsV.Status + "], density [" + $dsV.Density + "]) - the check cannot see its own founding bug, so a quiet run proves nothing")
+}
+
+# MUST FIRE - the SECOND row of the same class, which the hand did not find and the rule did. Same store,
+# same 35 lb name, a different price and a different displayed unit price, and it lands within 0.03% of
+# the same ~799.5 fl oz. Frozen for the same reason.
+$dsV = Test-DerivedSizeDensity (New-DsRow "Member's Mark Pure Soybean Oil, 35 lbs." '799.6 fl oz' '$39.98' '$0.05/foz' "Sam's Club") $dsMk
+if ($dsV.Status -eq 'flag') { Ok ("derived-size-density: the soybean oil twin is flagged at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - the row the rule found and the hand did not") }
+else { Bad ("derived-size-density: the soybean oil twin was NOT caught (status [" + $dsV.Status + "]) - the rule only reproduces the one case it was written from") }
+
+# MUST FIRE - the OTHER direction, a derived size three times too SMALL. It cannot steal a crown (a small
+# size makes the per-unit price too high), but a check that only looks down would call it clean.
+$dsV = Test-DerivedSizeDensity (New-DsRow "Melinda's Jalapeo Ketchup, Spicy and Tangy, All Natural, 12 Ounce" '4 fl oz' '$1.08' '$0.27/foz' 'Walmart') $dsMk
+if ($dsV.Status -eq 'flag' -and [double]$dsV.Density -gt 2) { Ok ("derived-size-density: a derived size 3x too SMALL is flagged too, at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - the band has two edges") }
+else { Bad ("derived-size-density: the too-small Melinda's ketchup size was NOT caught (status [" + $dsV.Status + "]) - only the crown-stealing direction is watched") }
+
+# THE BAND'S OWN REASON FOR EXISTING. The obvious band - "0.6 to 1.6 g/mL, water is 1.0" - does not fire
+# on either founding row: 0.672 and 0.671 sit inside it. This case pins that the shipped floor is the one
+# taken from real liquid densities, so nobody can "simplify" it back to round numbers without the suite
+# saying what that costs.
+$dsBand = Get-DensityBand
+if ([double]$dsBand.Floor -gt 0.672) { Ok ("derived-size-density: the floor is " + $dsBand.Floor + " g/mL, above the 0.672 the founding row reads - a 0.6 floor would have let it through") }
+else { Bad ("derived-size-density: the floor has been widened to " + $dsBand.Floor + " g/mL, which is at or below the founding row's 0.672 - the check can no longer see the bug it was written for") }
+
+# CLEAN TWIN - a correctly-sized Sam's volume row, and the strongest one available: the SAME store, the
+# SAME 35 lb oil-jug name, on the same capture days. Its quotient derives 571.143 fl oz, which is
+# 0.940 g/mL and right. If this ever fires, the check has become an argument that Sam's is wrong about
+# every jug it sells.
+$dsV = Test-DerivedSizeDensity (New-DsRow "Member's Mark Clear Frying Oil 35 lbs." '571.143 fl oz' '$39.98' '$0.07/foz' "Sam's Club") $dsMk
+if ($dsV.Status -eq 'ok') { Ok ("derived-size-density: the correctly-sized 35 lb frying oil jug stays silent at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - the control for the two flagged jugs is in the same store on the same day") }
+else { Bad ("derived-size-density: the CORRECT 35 lb frying oil row was called " + $dsV.Status + " (" + $dsV.Why + ") - the check is too eager and would condemn real rows") }
+
+# ---- THE ABSTENTIONS, which are what stop this check from being a false-positive machine -------------
+# A multipack whose name states ONE unit's size looks exactly like a bad derivation. The discriminator is
+# arithmetic, not vocabulary: a multipack's derived size is a whole-number multiple of the named size.
+foreach ($dsP in @(
+    @{ n = 'Capri Sun 100% Juice Blend from Concentrate Juice Boxes, 10 Pouches, for School Lunches and On-the-Go Hydration, Berry with Added Ingredients and Other Natural Flavor, All Natural Ingredients, 6 oz'; z = '60.303 fl oz'; a = '$3.98'; u = '$0.066/foz'; k = 10 },
+    @{ n = 'Knorr Professional Ultimate Liquid Concentrated Chicken Base, Shelf Stable, 32oz';                                  z = '127.853 fl oz'; a = '$24.42'; u = '$0.191/foz'; k = 4 },
+    @{ n = 'Zevo Multi Insect Killer Spray for Ants, Roaches & More - Two 12 oz Sprays';                                        z = '23.99 fl oz';   a = '$14.97'; u = '$0.624/foz'; k = 2 })) {
+  $dsV = Test-DerivedSizeDensity (New-DsRow $dsP.n $dsP.z $dsP.a $dsP.u 'Walmart') $dsMk
+  if ($dsV.Status -eq 'abstain' -and $dsV.Why -match ("is " + $dsP.k + "x the ")) { Ok ("derived-size-density: the " + $dsP.k + "-pack is abstained on, not flagged - its derived size is exactly " + $dsP.k + "x the size its name states") }
+  else { Bad ("derived-size-density: a " + $dsP.k + "-pack came back [" + $dsV.Status + "] (" + $dsV.Why + ") - a pack-shaped row is not evidence of a bad quotient, and flagging it is how a guard earns its reputation for noise") }
+}
+# THE KNORR CASE IS THE POINT OF DOING IT WITH ARITHMETIC: its name says nothing about being a case of
+# four. A keyword list would have flagged it and a human would have had to rule a correct row.
+if (-not (Test-NamePackAmbiguous 'Knorr Professional Ultimate Liquid Concentrated Chicken Base, Shelf Stable, 32oz')) { Ok 'derived-size-density: the Knorr 4-pack carries NO pack word in its name - the keyword list could never have excused it, and the ratio did' }
+else { Bad 'derived-size-density: the keyword list now matches the Knorr name, so the multipack ratio case above no longer proves the arithmetic is doing the work' }
+
+# AND THE ABSTENTION MUST NOT REACH THE FOUNDING ROW. 799.429 / 560 nominal oz is 1.43 - not a whole
+# number, so no reading of the peanut oil jug as an N-pack excuses it. If the tolerance is ever widened
+# far enough to round that to 2, the whole check goes quiet on the case it exists for.
+if ($null -eq (Get-PackMultiple (799.429) (35 * 16) 0.05)) { Ok 'derived-size-density: the peanut oil jug is NOT pack-shaped (799.429 fl oz is 1.43x its 35 lb, not a whole multiple) - the multipack valve cannot excuse it' }
+else { Bad 'derived-size-density: the multipack valve now reads the founding peanut oil row as an N-pack and would abstain on it - the tolerance has been widened past the point of usefulness' }
+# ...and a NON-integer ratio in the pack-shaped range must not be excused either.
+if ($null -eq (Get-PackMultiple (25.0) (10.0) 0.05)) { Ok 'derived-size-density: a 2.5x ratio is not read as a pack - only whole multiples abstain' }
+else { Bad 'derived-size-density: a 2.5x ratio was read as a multipack - the valve rounds to whatever is nearest and excuses everything' }
+
+# A COARSE UNIT PRICE MAKES THE QUOTIENT MEANINGLESS, and the check must say so rather than judge it. At
+# $0.01/foz the cent rounding alone moves the derived size by 50% - Build-Row's own Q-tips comment is
+# about this same quotient.
+$dsV = Test-DerivedSizeDensity (New-DsRow 'Some Concentrate, 12 oz' '108 fl oz' '$1.08' '$0.01/foz' 'Walmart') $dsMk
+if ($dsV.Status -eq 'abstain' -and $dsV.Why -match 'rounded') { Ok 'derived-size-density: a $0.01 unit price is abstained on - at that precision the derived size is +/-50% before anything is wrong' }
+else { Bad ("derived-size-density: a $0.01 unit price was judged [" + $dsV.Status + "] - the check is reading pure rounding noise as a density") }
+
+# OUT OF SCOPE is not the same as CLEAN, and the verdict object has to keep them apart.
+foreach ($dsS in @(
+    @{ w = 'a row whose quantity was NOT derived'; r = [pscustomobject]@{ store = "Sam's Club"; item = "Member's Mark Peanut Oil, 35 lbs."; size = '799.429 fl oz'; ad_price = '$55.96'; sams_unit_price = '$0.07/foz'; qty_basis = "package; qty name (reproduces Sam's unit price)" } },
+    @{ w = 'a derived size that is a WEIGHT, not a volume'; r = (New-DsRow 'Something, 35 lbs.' '560 oz' '$55.96' '$0.10/oz' "Sam's Club") },
+    @{ w = 'a name that states no weight at all';          r = (New-DsRow 'Member''s Mark Vanilla Ice Cream Pail 5 qts.' '162.4 fl oz' '$8.12' '$0.05/foz' "Sam's Club") })) {
+  $dsV = Test-DerivedSizeDensity $dsS.r $dsMk
+  if ($dsV.Status -eq 'skip') { Ok ("derived-size-density: " + $dsS.w + " is reported OUT OF SCOPE, not clean") }
+  else { Bad ("derived-size-density: " + $dsS.w + " came back [" + $dsV.Status + "] - the check is judging rows it has no evidence about") }
+}
+
+# WEIGHT-OZ vs FLUID-OZ. A name that says "16.9 fl. oz." states no WEIGHT, and the number in front of a
+# fluid measure must never be read as one - that alone would manufacture a density for every beverage.
+# NOT @(Get-NameStatedWeights ...) - the function comma-wraps its return, and @() around a call that
+# already did that wraps it a SECOND time, so an EMPTY result counts 1 and this case passes on the wrong
+# grounds. It did, the first time it was written. Assign, then count.
+$dsW = Get-NameStatedWeights 'Gold Peak Unsweetened Tea 16.9 fl. oz., 18 pk.'
+if (@($dsW).Count -eq 0) { Ok 'derived-size-density: "16.9 fl. oz." contributes no weight - a fluid measure is not a mass' }
+else { Bad ('derived-size-density: a fluid-ounce measure was read as a weight (' + ((@($dsW) | ForEach-Object { $_.Text }) -join ', ') + '), which manufactures a density for every beverage in the estate') }
+# ...and the same call on a name that really does state a weight must come back with exactly one, or the
+# case above is only passing because the parser is broken in the other direction.
+$dsW = Get-NameStatedWeights "Member's Mark Peanut Oil, 35 lbs."
+if (@($dsW).Count -eq 1 -and [math]::Abs([double]$dsW[0].NominalOz - 560) -lt 0.001) { Ok 'derived-size-density: "35 lbs." reads as exactly one weight of 560 nominal oz - the fluid-ounce case above is a real discrimination, not a dead parser' }
+else { Bad ('derived-size-density: "35 lbs." did not read as one 560-oz weight (' + @($dsW).Count + ' found) - the weight parser is broken, so every clean verdict above is vacuous') }
+
+# ---- THE RULING VALVE -------------------------------------------------------------------------------
+# A flagged row is wrong DATA and cannot be repaired where it sits (a capture records what the store
+# said). So the valve is a ledger of adjudicated rows, and it pins the SIZE. These cases exist because
+# the danger of any allowlist is that it stops being narrow: each asks whether the valve can be made to
+# excuse something it was never given.
+$dsRuleFx = @([pscustomobject]@{ store = "Sam's Club"; name = "Member's Mark Peanut Oil, 35 lbs."; size = '799.429 fl oz'; reason = 'measured: 35 lb of peanut oil is 587.3 fl oz, not 799.429'; ruled_by = 'claude'; review_by = '2026-10-01' })
+$dsR = Test-DerivedSizeRuling "Sam's Club" "Member's Mark Peanut Oil, 35 lbs." '799.429 fl oz' $dsRuleFx
+if ($dsR.Ruled) { Ok 'derived-size-density ruling: the complete peanut oil entry covers exactly its own (store, name, size)' }
+else { Bad ("derived-size-density ruling: the complete entry did NOT cover its own row (" + $dsR.Why + ") - the valve does not work, so the live arm is about to hard-fail on a ruled state") }
+
+$dsR = Test-DerivedSizeRuling "Sam's Club" "Member's Mark Peanut Oil, 35 lbs." '812.5 fl oz' $dsRuleFx
+if (-not $dsR.Ruled) { Ok 'derived-size-density ruling: a DIFFERENT derived size on the same product still fires - the ruling covers one number, not a product forever' }
+else { Bad 'derived-size-density ruling: a new wrong size was excused by the old ruling - the day the store publishes a second bad quotient for this jug, nothing will say so' }
+
+$dsR = Test-DerivedSizeRuling 'Walmart' "Member's Mark Peanut Oil, 35 lbs." '799.429 fl oz' $dsRuleFx
+if (-not $dsR.Ruled) { Ok 'derived-size-density ruling: the same name and size at a DIFFERENT store still fires - the ruling is scoped to the capture it was written about' }
+else { Bad 'derived-size-density ruling: a ruling written about Sam''s excused a Walmart row - the valve leaks by store' }
+
+foreach ($dsH in @(
+    @{ what = 'no reason';    e = [pscustomobject]@{ store = "Sam's Club"; name = "Member's Mark Peanut Oil, 35 lbs."; size = '799.429 fl oz'; ruled_by = 'claude'; review_by = '2026-10-01' } },
+    @{ what = 'no ruled_by';  e = [pscustomobject]@{ store = "Sam's Club"; name = "Member's Mark Peanut Oil, 35 lbs."; size = '799.429 fl oz'; reason = 'because'; review_by = '2026-10-01' } },
+    @{ what = 'no review_by'; e = [pscustomobject]@{ store = "Sam's Club"; name = "Member's Mark Peanut Oil, 35 lbs."; size = '799.429 fl oz'; reason = 'because'; ruled_by = 'claude' } })) {
+  $dsR = Test-DerivedSizeRuling "Sam's Club" "Member's Mark Peanut Oil, 35 lbs." '799.429 fl oz' @($dsH.e)
+  if (-not $dsR.Ruled) { Ok ("derived-size-density ruling: an entry with " + $dsH.what + " covers nothing - a half-written ledger row cannot silence the check it annotates") }
+  else { Bad ("derived-size-density ruling: an entry with " + $dsH.what + " was allowed to cover a row - the valve accepts undocumented rulings") }
+}
+
+# ---- THE PRODUCTION ARM, run daily from check-ad-cycles' test-auditors call -------------------------
+# THE MARKER READER FIRST. Reading it out of build-sams-deals is the point; a silent parse failure would
+# take the sweep down with it and every row would read as not-derived, which is indistinguishable from
+# clean. (Measured while writing this: the pattern was first written in a double-quoted string, where
+# "\$basis" is a backslash plus an EMPTY variable expansion, and it matched nothing.)
+$dsMkLive = Get-DerivedQtyMarker $PSScriptRoot
+if (-not $dsMkLive) {
+  Bad 'derived-size-density: could not read the derived-quantity marker out of build-sams-deals.ps1 - the live arm did not run, which is not the same as a clean result'
+} else {
+  Ok ("derived-size-density: read the marker '" + $dsMkLive + "' straight out of build-sams-deals' own `$basis assignment - no second copy of it lives in this estate")
+  $dsFiles = Get-DerivedCaptureFiles $PSScriptRoot
+  $dsRulings = Get-DerivedSizeRulings $PSScriptRoot
+  $dsSeen = 0; $dsDerived = 0; $dsAbstain = 0; $dsOk = 0
+  $dsBad = @(); $dsRuled = @(); $dsKeys = @{}
+  foreach ($dsF in $dsFiles) {
+    $dsName = [IO.Path]::GetFileName($dsF)
+    foreach ($dsRow in (Read-CaptureRows $dsF)) {
+      if (-not $dsRow) { continue }
+      $dsSeen++
+      if (-not (Test-RowIsDerived $dsRow $dsMkLive)) { continue }
+      $dsDerived++
+      $dsV2 = Test-DerivedSizeDensity $dsRow $dsMkLive
+      if ($dsV2.Status -eq 'abstain') { $dsAbstain++; continue }
+      if ($dsV2.Status -eq 'ok') { $dsOk++; continue }
+      if ($dsV2.Status -ne 'flag') { continue }
+      $dsStore = [string]$dsRow.store; $dsItem = [string]$dsRow.item; $dsSize = [string]$dsRow.size
+      $dsKey = ("{0}|{1}|{2}" -f $dsStore, $dsItem, $dsSize)
+      # one line per DISTINCT row, however many dated files carry it - the same wrong quotient repeated
+      # across a fortnight of captures is one defect, and printing it eight times buries the others
+      if ($dsKeys.ContainsKey($dsKey)) { continue }
+      $dsKeys[$dsKey] = $true
+      $dsRV = Test-DerivedSizeRuling $dsStore $dsItem $dsSize $dsRulings
+      if ($dsRV.Ruled) { $dsRuled += ("{0} [{1}] {2} g/mL" -f $dsItem, $dsStore, [math]::Round([double]$dsV2.Density, 3)) }
+      else { $dsBad += ("{0} [{1}, {2}] {3} ({4})" -f $dsItem, $dsStore, $dsName, $dsV2.Why, $dsRV.Why) }
+    }
+  }
+  # SPENT RULINGS. An entry whose row no longer appears at that size is covering nothing, and a ledger row
+  # nobody deletes is how a narrow ruling becomes a permanent hole with a good story attached. The day the
+  # store fixes its quotient is exactly the day to notice the row is spent.
+  $dsStale = @()
+  foreach ($dsX in @($dsRulings)) {
+    $dsXKey = ("{0}|{1}|{2}" -f [string]$dsX.store, [string]$dsX.name, [string]$dsX.size)
+    if (-not $dsKeys.ContainsKey($dsXKey)) { $dsStale += $dsXKey }
+  }
+  if (@($dsRuled).Count) { Ok ("derived-size-density: " + @($dsRuled).Count + " flagged row(s) are covered by a written ruling in derived-size-density-rulings.json: " + (@($dsRuled) -join '; ')) }
+  if (@($dsStale).Count) { Bad ("derived-size-density: " + @($dsStale).Count + " ruling(s) no longer match any capture row at that size and are covering nothing: " + (@($dsStale) -join '; ') + ". Delete them - the store's number has moved, so the ruling written about it is spent.") }
+  if ($dsSeen -lt 1000 -or $dsDerived -lt 100) {
+    Bad ("derived-size-density: only $dsSeen capture row(s) across " + @($dsFiles).Count + " file(s) were read and only $dsDerived carried a derived quantity - the live arm read almost nothing, so a clean result would mean nothing")
+  } elseif ($dsBad.Count -eq 0) {
+    Ok ("derived-size-density: $dsDerived derived-quantity row(s) across " + @($dsFiles).Count + " capture file(s); $dsOk judged against the name's stated weight and all inside " + $dsBand.Floor + "-" + $dsBand.Ceil + " g/mL, $dsAbstain not judgeable and reported rather than assumed clean")
+  } else {
+    Bad ("derived-size-density: " + $dsBad.Count + " capture row(s) hold a back-computed size the product cannot physically have, so any per-unit price built from them is wrong by that factor: " + ($dsBad -join '; ') + ". Verify the real package size at the store, then either rule the row in derived-size-density-rulings.json with the arithmetic, or block its cell in known-wrong.json if it reaches the board. Do NOT edit the capture - it is the record of what the store said.")
   }
 }
 

@@ -77,7 +77,15 @@ function Sig-Tokens([string]$s) {
   $t = ($s.ToLower() -replace $SIZERE, ' ') -replace '[^a-z0-9 ]', ' '
   $out = New-Object System.Collections.Generic.List[string]
   foreach ($w in ($t -split '\s+')) {
-    if (-not $w -or $w -match '^\d+$' -or $w -match ('^(' + $LEXNOISE + ')$')) { continue }
+    # A BARE POSSESSIVE "s" IS NOT A TOKEN, and letting it be one cost a lead slot. "Member's Mark Natural
+    # Sliced Strawberries" tokenised to member(0), s(1), mark(2) - so `mark` was never once counted as leading
+    # anywhere in this 26k-name corpus, never made the lexicon, and Brands-Of (first 3 tokens) matched on
+    # `member` alone. The consequence was not cosmetic: `mark` then survived into the product-identity test
+    # below as if it were a food word, and "Member's Mark Sliced Strawberries" vs "Member's Mark Triple Berry
+    # Blend" SHARED it, so two different products read as the same one and a pin was written across them.
+    # Dropping single characters restores the second word of every possessive brand (Member's Mark, Smucker's,
+    # Hy-Vee's) to a lead slot. Measured: BRAND 755 -> 778, and no name loses a token that says anything.
+    if (-not $w -or $w.Length -lt 2 -or $w -match '^\d+$' -or $w -match ('^(' + $LEXNOISE + ')$')) { continue }
     if ($w.Length -gt 3 -and $w.EndsWith('s') -and -not $w.EndsWith('ss')) { $w = $w.Substring(0, $w.Length - 1) }
     $out.Add($w)
   }
@@ -126,6 +134,43 @@ function Brands-Of([string]$s) {
   return $b
 }
 $brandActive = ($BRAND.Count -ge 100)   # too few names to have learned anything -> the clause has NO opinion, and says so
+
+# ---------------------------------------------------------------- PRODUCT IDENTITY (2026-08-30)
+# SAME BRAND, DIFFERENT PRODUCT - the hole every other clause here leaves open, and the one that let a pin be
+# written over a price the board had got right.
+#
+# The token test asks only "does ANY distinctive board word appear in the link name", and a shared house brand
+# answers it. Board "Member's Mark Natural Sliced Strawberries, Frozen, 4 lbs." reduces to member/mark/sliced
+# once $stop has removed natural, strawberries, frozen and lbs - so `member` matched "Member's Mark Triple
+# Berry Blend, Frozen, 64 oz." and the cell read clean. form-flip could not fire (both say frozen). count
+# mismatch could not fire (neither states a pack count). brand mismatch could not fire either, and MUST not -
+# it is the same brand. The two names disagree about nothing except WHICH PRODUCT, which is the only thing
+# that mattered: generate-board-overrides then pinned frozen-fruit / Sam's to the Triple Berry link's
+# 16.34c/oz over the board's own strawberries at 12.47c/oz, both of them real rows in the same capture.
+#
+# So ask the question the token test cannot: strip the brand off BOTH names and see whether anything is left
+# that they still share. Deliberately narrow, because a false flag here silently blocks a legitimate pin:
+#   - BRAND words are removed. Two products by one maker must be separable by what they ARE.
+#   - FORM words are removed (fresh/frozen/canned/dried). $formFlip owns that axis; leaving them in let
+#     "Blueberries, Fresh Frozen" and "Cherry Berry Blend, Fresh Frozen" share `frozen` and pass.
+#   - Sizes, counts and $LEXNOISE are already gone via Sig-Tokens.
+#   - Fires ONLY when BOTH sides still have an identity word. A name that is nothing but brand and size
+#     states no product and cannot disagree about one - the same silence rule brand mismatch keeps.
+# MEASURED over the live board (3,003 cells): 4 flags, every one a genuinely different product - Member's Mark
+# strawberries vs triple berry blend, Our Family blueberries vs cherry berry blend, Summit lemon-lime vs
+# Summit zero sugar cola, Hy-Vee trash bags vs tall kitchen bags. No false positives, and no existing pin
+# other than the frozen-fruit one is touched.
+$IDENTFORM = 'frozen|canned|dried|fresh|refrigerated'
+function Ident-Tokens([string]$s) {
+  $r = New-Object System.Collections.Generic.HashSet[string]
+  foreach ($w in @(Sig-Tokens $s)) {
+    if ($w.Length -le 3) { continue }
+    if ($BRAND.Contains($w)) { continue }
+    if ($w -match ('^(' + $IDENTFORM + ')$')) { continue }
+    [void]$r.Add($w)
+  }
+  return $r
+}
 
 $flags = @(); $examined = 0; $exByStore = @{}; $exCells = New-Object System.Collections.Generic.List[string]
 foreach ($it in $c) {
@@ -192,8 +237,21 @@ foreach ($it in $c) {
         $brandMismatch = -not $shared
       }
     }
-    if ((-not $hit) -or $formFlip -or $countMismatch -or $brandMismatch) {
-      $reason = if ($formFlip) { 'form-flip' } elseif ($countMismatch) { 'count-mismatch' } elseif ($brandMismatch) { 'brand-mismatch' } else { 'name-drift' }
+    # PRODUCT MISMATCH: both names name a product, and after the shared brand is stripped they share none of it.
+    # Gated on $brandActive for the same reason brand mismatch is - with no learned lexicon the brand words
+    # stay in the identity set, every same-brand pair looks like a match, and the clause has no opinion worth
+    # having. It must say nothing rather than guess.
+    $prodMismatch = $false
+    if ($brandActive) {
+      $bi = Ident-Tokens $item; $li = Ident-Tokens ([string]$lnk.name)
+      if ($bi.Count -gt 0 -and $li.Count -gt 0) {
+        $sharedProd = $false
+        foreach ($x in $bi) { if ($li.Contains($x)) { $sharedProd = $true; break } }
+        $prodMismatch = -not $sharedProd
+      }
+    }
+    if ((-not $hit) -or $formFlip -or $countMismatch -or $brandMismatch -or $prodMismatch) {
+      $reason = if ($formFlip) { 'form-flip' } elseif ($countMismatch) { 'count-mismatch' } elseif ($brandMismatch) { 'brand-mismatch' } elseif ($prodMismatch) { 'product-mismatch' } else { 'name-drift' }
       $flags += [pscustomobject]@{ id=$id; store=$store; reason=$reason; board_item=$item; link_name=[string]$lnk.name; link_price=$lnk.price }
     }
   }
