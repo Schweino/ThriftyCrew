@@ -360,11 +360,32 @@ $recipe = [ordered]@{
   totalTime= $spec.head.totalTime
 }
 $recipeJson = $recipe | ConvertTo-Json -Depth 8
-$paywall = [ordered]@{ '@context'='https://schema.org'; '@type'='Article'; isAccessibleForFree=$false;
-  hasPart=[ordered]@{ '@type'='WebPageElement'; isAccessibleForFree=$false; cssSelector='.gh-content' };
-  mainEntityOfPage=$slugUrl; headline=$spec.name }
-$paywallJson = $paywall | ConvertTo-Json -Depth 6 -Compress
-$head = "<script type=`"application/ld+json`">`n" + $recipeJson + "`n</script>`n<script type=`"application/ld+json`">`n" + $paywallJson + "`n</script>`n"
+# ---- THE PAYWALL CLAIM FOLLOWS THE RECIPE'S VISIBILITY (2026-08-31) --------------------------------
+# This node was emitted UNCONDITIONALLY, so all 20 recipes in the free rotation told Google their
+# content was behind a paywall while serving it to everyone. Those 20 are the entire top of the funnel:
+# the pages whose only job is to be found and read by a non-member.
+#
+# Google's guidance is to mark paywalled content so it is not read as cloaking. Content that is free
+# needs no such marking, and claiming it anyway asks Google to treat an open page as a closed one.
+#
+# THE CLAIM IS BAKED, AND THE ROTATION DOES NOT REBUILD CARDS. rotate-free-dinners flips Ghost
+# visibility only ("visibility only - content, tags" are deliberately preserved), so a card built as
+# paid stays marked paid after it is freed. sync-paywall-schema.ps1 is what keeps this true between
+# builds, and the rotation calls it on every flip - exactly as it already republishes the hub for the
+# same reason. This build-time conditional is the other half: a freshly built card starts out correct.
+$isFreeNow = $false
+try {
+  $dbVis = Get-AuxJson $RecipesDb
+  if ($dbVis) { foreach ($rv in $dbVis.recipes) { if ([string]$rv.slug -eq [string]$spec.slug) { $isFreeNow = ([string]$rv.visibility -eq 'public') } } }
+} catch { $isFreeNow = $false }   # unknown visibility -> keep the paywall claim; understating access is the safe direction
+$head = "<script type=`"application/ld+json`">`n" + $recipeJson + "`n</script>`n"
+if (-not $isFreeNow) {
+  $paywall = [ordered]@{ '@context'='https://schema.org'; '@type'='Article'; isAccessibleForFree=$false;
+    hasPart=[ordered]@{ '@type'='WebPageElement'; isAccessibleForFree=$false; cssSelector='.gh-content' };
+    mainEntityOfPage=$slugUrl; headline=$spec.name }
+  $paywallJson = $paywall | ConvertTo-Json -Depth 6 -Compress
+  $head += "<script type=`"application/ld+json`">`n" + $paywallJson + "`n</script>`n"
+}
 if($staticRecipeCost -and ($body -match $staticRecipeCostPattern -or $head -match $staticRecipeCostPattern)){
   throw ("static recipe price escaped promoted-release hydration for " + $spec.slug)
 }

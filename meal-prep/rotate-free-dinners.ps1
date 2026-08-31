@@ -67,6 +67,21 @@ if ($SelfTest) {
   # the throw silently becomes a crash instead of a retry.
   T ($src -match '(?s)REVERT FAILED.*stillOwned\.Add') 'a failed REVERT still keeps ownership so a later run retries it'
   T ($src -match 'Only slugs listed here are ever reverted to paid') "the state file still declares the ownership rule the throw protects"
+  # A FLIP CHANGES TWO BAKED THINGS, NOT ONE. The hub's FREE badges (wired 2026-08-01) and the posts'
+  # paywall structured data (wired 2026-08-31) are both stamped at build time and both go stale the
+  # moment visibility moves. Each is one line away from being dropped in a refactor and neither failure
+  # is visible on the page, so assert both call sites rather than trusting them.
+  #
+  # THE NEEDLES ARE BUILT BY CONCATENATION ON PURPOSE. Written whole, each pattern appears in this very
+  # line and in the comments above, so `$src -match` finds ITSELF and the test passes no matter what the
+  # script does. That was the first draft, and deleting the entire resync call left it green - a test
+  # that cannot fail is worse than no test, because it is counted. Split needles cannot self-match.
+  $nSync = "-File (Join-Path `$root 'pipeline\sync-paywall" + "-schema.ps1')"
+  $nHub  = "-File (Join-Path `$root 'build-hub" + "-grid.ps1') -Publish"
+  $nExit = 'throw "sync-paywall' + '-schema exited'
+  T ($src.Contains($nSync)) 'a flip resyncs the posts paywall structured data'
+  T ($src.Contains($nHub))  'a flip republishes the hub so its baked FREE badges match'
+  T ($src.Contains($nExit)) 'and it checks that resync exit code rather than assuming it worked'
   if ($f -gt 0) { Write-Output ("rotate-free-dinners SELFTEST: $f FAILED"); exit 2 }
   Write-Output ("rotate-free-dinners SELFTEST: all $p passed"); exit 0
 }
@@ -219,6 +234,24 @@ Write-Output ("rotation: $flips flip(s), $errors error(s); state + recipes-db + 
 # the client-side remove-only refresh hid it from JS visitors, but no-JS visitors and search caches saw
 # a FREE badge on a paid post). The build verifies visibility per slug against Ghost, so this republish
 # is also the badge truth check. Only on a real change, so quiet days stay quiet.
+# AND RESYNC THE PAYWALL STRUCTURED DATA (2026-08-31). Same bug class as the hub badges above, one
+# layer down: build-card2 bakes an isAccessibleForFree claim into each post's codeinjection_head, and
+# this script flips visibility ONLY - so a card built as paid kept telling Google its content was
+# gated after it was freed. Found live: all 20 recipes in the rotation were marked paywalled while
+# serving their content to everyone, which is the whole top of the funnel asking not to be read.
+# The sync trusts Ghost's visibility, is idempotent, and leaves the claim in place whenever it cannot
+# be sure - understating access is the safe direction, overstating it is the shape of cloaking.
+if ($flips -gt 0 -and $errors -eq 0) {
+  Write-Output 'set changed - resyncing the paywall structured data to the new visibilities'
+  try {
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'pipeline\sync-paywall-schema.ps1') *>&1 |
+      Select-Object -Last 3 | ForEach-Object { Write-Output ("  paywall-schema: " + $_) }
+    if ($LASTEXITCODE -ne 0) { throw "sync-paywall-schema exited $LASTEXITCODE" }
+  } catch {
+    Write-Output ("rotation WARNING: the paywall schema resync failed (" + $_.Exception.Message + ") - the freed recipes still tell Google they are gated until it runs. Re-run pipeline\sync-paywall-schema.ps1.")
+  }
+}
+
 if ($flips -gt 0 -and $errors -eq 0) {
   Write-Output 'set changed - republishing the hub so its baked badges match the new rotation'
   try {
