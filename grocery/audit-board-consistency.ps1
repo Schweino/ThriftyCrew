@@ -21,7 +21,7 @@
 # per distinct set (sig-deduped) for browser stores until their next re-pull fixes the stored price. The
 # temporary 45 headroom for the Fareway launch is obsolete (all Fareway links resolved same-day).
 param([double]$Tol = 0.30, [int]$MaxNoLink = 0, [string]$OutDir = "", [string]$Embed = "", [switch]$SelfTest)
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -43,6 +43,14 @@ function Get-ChipLinkKind([string]$Body) {
   return 'bare'
 }
 
+# THE CHIP EXTRACTION, as ONE definition, for the same reason Get-ChipLinkKind is one: the self-test has to
+# exercise the regex the audit actually runs. Before 2026-08-31 the fixtures tested only chip BODIES, so
+# every one of them passed while the extraction that produces those bodies matched nothing at all - the
+# guard reported a clean board having looked at zero chips. Classifying a body you never extracted is not a
+# test of this audit.
+$script:CHIP_RX = "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'[^>]*>(.*?)</div>"
+function Get-ChipMatches([string]$Html) { return [regex]::Matches([string]$Html, $script:CHIP_RX, 'Singleline') }
+
 if ($SelfTest) {
   # FROZEN FIXTURES (guard-fixture rule): the founding case of the 2026-08-01 change plus the bug it must
   # never hide. Hand-written, never regenerated from a live board.
@@ -58,7 +66,24 @@ if ($SelfTest) {
     $got = Get-ChipLinkKind $c.body
     if ($got -ne $c.want) { Write-Output ("  X " + $c.why + "  got '" + $got + "' want '" + $c.want + "'"); $bad++ }
   }
-  if ($bad -eq 0) { Write-Output ('audit-board-consistency SELF-TEST PASS (' + $cases.Count + ' frozen chip shapes)'); exit 0 }
+  # AND THE EXTRACTION ITSELF (2026-08-31). The body fixtures above cannot fail when the chip regex matches
+  # nothing - they are handed bodies directly. On 2026-08-31 build-deals-page added a bar width to the chip
+  # tag, the regex required '>' straight after data-pu, and this audit examined 0 of 3407 real chips while
+  # every fixture above still passed. These tags are frozen copies of REAL board.json markup.
+  $tags = @(
+    @{ html = "<div class='pg-chip is-best' data-store=`"Fareway`" data-pu='1.9800' style='--bar:50%'><span class='pg-price'>`$1.98</span><a class='pg-see' href='/x'>See item</a></div>"; want=1; why='MUST-FIRE: a chip carrying a style attribute after data-pu is still a chip' },
+    @{ html = "<div class='pg-chip' data-store=`"Aldi`" data-pu='2.8900'><span class='pg-price'>`$2.89</span></div>"; want=1; why='CLEAN TWIN: the older attribute-free tag still matches' },
+    @{ html = "<div class='pg-chip is-best' data-store=`"Sam&#39;s Club`" data-pu='3.1400' style='--bar:66%'><span class='pg-price'>`$3.14</span></div>"; want=1; why='an escaped apostrophe in the store name does not break extraction' },
+    @{ html = "<div class='pg-row' data-store=`"Aldi`" data-pu='1.0000'>not a chip</div>"; want=0; why='CLEAN TWIN: a non-chip div is not counted' }
+  )
+  foreach ($t in $tags) {
+    $got = (Get-ChipMatches $t.html).Count
+    if ($got -ne $t.want) { Write-Output ("  X " + $t.why + "  matched $got want $($t.want)"); $bad++ }
+  }
+  # and the store name must survive extraction, or every chip is attributed to the wrong store
+  $one = Get-ChipMatches $tags[2].html
+  if ($one.Count -eq 1 -and ($one[0].Groups[1].Value -replace '&#39;',"'") -ne "Sam's Club") { Write-Output '  X the store name did not survive extraction'; $bad++ }
+  if ($bad -eq 0) { Write-Output ('audit-board-consistency SELF-TEST PASS (' + $cases.Count + ' chip shapes + ' + $tags.Count + ' extraction tags)'); exit 0 }
   Write-Output ("audit-board-consistency SELF-TEST FAIL ($bad)"); exit 2
 }
 . (Join-Path $PSScriptRoot 'pu-lib.ps1')
@@ -122,7 +147,14 @@ if (Test-Path $boardFeed) {
   $bf = Get-Content $boardFeed -Raw | ConvertFrom-Json
   foreach ($p in $bf.PSObject.Properties) {
     $rid = $p.Name -replace '::r$',''    # '<id>::r' is the recipe row of a shared id; report the plain id
-    $chips = [regex]::Matches([string]$p.Value, "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>", 'Singleline')
+    # TOLERATE ATTRIBUTES AFTER data-pu (2026-08-31). This regex required '>' immediately after data-pu, so
+    # the day build-deals-page started emitting a bar width on the chip -
+    #     <div class='pg-chip is-best' data-store="Fareway" data-pu='1.9800' style='--bar:50%'>
+    # - it matched NOTHING and this audit examined 0 of 3407 chips. Caught the same day by $chipsSeen, which
+    # the note above added for exactly this, having worried about it and then not tested it. See
+    # Test-ChipTagMatches in the self-test: the fixtures used to check only chip BODIES, so they passed in
+    # full while the extraction that feeds them found nothing.
+    $chips = Get-ChipMatches ([string]$p.Value)
     $chipsSeen += $chips.Count
     foreach ($ch in $chips) {
       $cstore = $ch.Groups[1].Value -replace '&#39;',"'"
