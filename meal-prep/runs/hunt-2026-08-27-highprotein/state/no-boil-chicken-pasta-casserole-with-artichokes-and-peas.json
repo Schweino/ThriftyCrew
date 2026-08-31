@@ -3,10 +3,10 @@
     "title":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
     "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "rejected-audit",
     "wave":  15,
     "created":  "2026-08-27T11:48:53",
-    "updated":  "2026-08-31T15:50:22",
+    "updated":  "2026-08-31T16:18:17",
     "terms":  [
                   {
                       "term":  "Boursin cheese",
@@ -21,7 +21,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "wave-15 NO-GO R2 (pipeline): costed.json prices 560 g of DRAINED artichoke against ingredients.json buy_pkg_g 391, which is the GROSS 13.8oz can weight. So \"Buy 2 cans\" drains ~480 g and cannot make the batch, the card contradicts itself two clauses apart, and both cost tiers under-price. Correct answer is 3 cans on either basis. NOT FIXED because it is a two-basis problem, not a typo: macros need drained grams and cost needs gross package weight, no capture row in the corpus states a drained weight, and inventing one is the guess this estate keeps paying for. Needs a can-label drained figure plus a ruling on which basis buy_pkg_g carries.",
     "parked_on":  [
 
                   ],
@@ -121,6 +121,12 @@
                         "at":  "2026-08-31T15:50:22",
                         "by":  "wave-close",
                         "detail":  "wave 15"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-31T16:18:17",
+                        "by":  "wave-15-auditor",
+                        "detail":  "wave-15 NO-GO R2 (pipeline): costed.json prices 560 g of DRAINED artichoke against ingredients.json buy_pkg_g 391, which is the GROSS 13.8oz can weight. So \"Buy 2 cans\" drains ~480 g and cannot make the batch, the card contradicts itself two clauses apart, and both cost tiers under-price. Correct answer is 3 cans on either basis. NOT FIXED because it is a two-basis problem, not a typo: macros need drained grams and cost needs gross package weight, no capture row in the corpus states a drained weight, and inventing one is the guess this estate keeps paying for. Needs a can-label drained figure plus a ruling on which basis buy_pkg_g carries."
                     }
                 ]
 }

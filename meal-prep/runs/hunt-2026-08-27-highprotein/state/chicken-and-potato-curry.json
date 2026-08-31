@@ -3,10 +3,10 @@
     "title":  "Chicken and Potato Curry",
     "source_url":  "https://skinnyspatula.com/chicken-potato-curry/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "rejected-audit",
     "wave":  15,
     "created":  "2026-08-27T18:14:55",
-    "updated":  "2026-08-31T15:50:22",
+    "updated":  "2026-08-31T16:18:17",
     "terms":  [
                   {
                       "term":  "fresh red chili",
@@ -17,7 +17,7 @@
                       "optional":  false
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "Trimmed with its wave-mates only. The wave-15 auditor found it CLEAN on every check it ran and it carries NO blocker of its own - all three wave-15 blockers belong to the casserole and the lasagna. That makes it a -Revive candidate (no open blocker is its own), not a -Repair, once the wave is re-formed.",
     "parked_on":  [
 
                   ],
@@ -117,6 +117,12 @@
                         "at":  "2026-08-31T15:50:22",
                         "by":  "wave-close",
                         "detail":  "wave 15"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-31T16:18:17",
+                        "by":  "wave-15-auditor",
+                        "detail":  "Trimmed with its wave-mates only. The wave-15 auditor found it CLEAN on every check it ran and it carries NO blocker of its own - all three wave-15 blockers belong to the casserole and the lasagna. That makes it a -Revive candidate (no open blocker is its own), not a -Repair, once the wave is re-formed."
                     }
                 ]
 }

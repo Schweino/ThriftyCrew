@@ -46,6 +46,14 @@ param(
   [string]$Slug = '',
   [string]$Reason = '',
   [switch]$Apply,
+  # -NeverPublished: the EXACT COMPLEMENT of the ordinary path. This script refuses any slug with 0
+  # recipes-db rows, which is right for a takedown but leaves the built-but-unpublished with no gated
+  # disposal at all - and that is a real state, not a hypothetical: a recipe can be sourced, mapped,
+  # priced, written, QA'd and CARDED, then ruled a duplicate before it ever publishes. Its spec, its
+  # two cards and its propagate stamp all sit on disk claiming a recipe the catalogue will never sell,
+  # and the only way to remove them was by hand across four places - which is exactly the "five of six
+  # files" failure this script's own header was written to end.
+  [switch]$NeverPublished,
   [switch]$SkipGhost,          # the drill, and a re-run after Ghost is already gone
   [string]$Root = '',
   [switch]$SelfTest
@@ -160,6 +168,50 @@ if ($SelfTest) {
     # MUST FIRE: retiring the same slug twice is refused, not silently "already done"
     $r = Run @{ Slug = 'drop-me'; Reason = 'drill'; Root = $t; SkipGhost = $true; Apply = $true }
     T 'MUST FIRE  retiring an already-retired slug is refused' ($r.rc -ne 0) $r.out
+
+    # ---- -NeverPublished: the built-but-unpublished, which the ordinary path refuses ----------------
+    # `built-only` exists on disk exactly as a real abandoned recipe does: a spec and cards and a
+    # propagate stamp, and NO recipes-db row, NO published-hashes entry, no page.
+    [IO.File]::WriteAllText((Join-Path $t 'db\recipes\built-only.json'), '{"slug":"built-only"}', $UTF8)
+    [IO.File]::WriteAllText((Join-Path $t 'db\built\built-only.body.html'), '<p>card</p>', $UTF8)
+    [IO.File]::WriteAllText((Join-Path $t 'db\built\built-only.head.html'), '<meta>', $UTF8)
+    $st = (Get-Content (Join-Path $t 'pipeline\propagate-stamps.json') -Raw | ConvertFrom-Json)
+    $st | Add-Member -NotePropertyName 'built-only' -NotePropertyValue 'ddd' -Force
+    [IO.File]::WriteAllText((Join-Path $t 'pipeline\propagate-stamps.json'), (ConvertTo-Json $st -Depth 4), $UTF8)
+
+    $r = Run @{ Slug = 'built-only'; Reason = 'ruled a dupe'; Root = $t; SkipGhost = $true; NeverPublished = $true }
+    T 'MUST FIRE  -NeverPublished dry run writes nothing' `
+      ($r.rc -eq 0 -and (Test-Path (Join-Path $t 'db\recipes\built-only.json'))) $r.out
+
+    $r = Run @{ Slug = 'built-only'; Reason = 'ruled a dupe'; Root = $t; SkipGhost = $true; NeverPublished = $true; Apply = $true }
+    T '-NeverPublished removes the spec' ($r.rc -eq 0 -and -not (Test-Path (Join-Path $t 'db\recipes\built-only.json'))) $r.out
+    T '  ...and BOTH built cards' (-not (Test-Path (Join-Path $t 'db\built\built-only.body.html')) -and -not (Test-Path (Join-Path $t 'db\built\built-only.head.html'))) $r.out
+    T '  ...and the propagate stamp' `
+      (-not ((Get-Content (Join-Path $t 'pipeline\propagate-stamps.json') -Raw | ConvertFrom-Json).PSObject.Properties.Name -contains 'built-only')) $r.out
+    T '  ...and it does NOT touch recipes-db, which never mentioned it' ((Rdb).Count -eq 2) ([string](Rdb).Count)
+    T '  ...and the OTHER specs and cards are untouched' `
+      ((Test-Path (Join-Path $t 'db\recipes\keep-me.json')) -and (Test-Path (Join-Path $t 'db\built\keep-two.body.html'))) $r.out
+
+    # THE TWO REFUSALS THAT MAKE IT SAFE.
+    $r = Run @{ Slug = 'keep-me'; Reason = 'wrong tool'; Root = $t; SkipGhost = $true; NeverPublished = $true; Apply = $true }
+    T 'MUST FIRE  -NeverPublished on a slug that IS in recipes-db is refused (that is a takedown)' `
+      ($r.rc -ne 0 -and $r.out -match 'recipes-db holds') $r.out
+    T '  ...and it left that recipe entirely alone' ((Rdb).Count -eq 2 -and (Test-Path (Join-Path $t 'db\recipes\keep-me.json'))) ([string](Rdb).Count)
+
+    [IO.File]::WriteAllText((Join-Path $t 'db\recipes\once-live.json'), '{"slug":"once-live"}', $UTF8)
+    $ph = (Get-Content (Join-Path $t 'db\published-hashes.json') -Raw | ConvertFrom-Json)
+    $ph | Add-Member -NotePropertyName 'once-live' -NotePropertyValue 'h9' -Force
+    [IO.File]::WriteAllText((Join-Path $t 'db\published-hashes.json'), (ConvertTo-Json $ph -Depth 4), $UTF8)
+    $r = Run @{ Slug = 'once-live'; Reason = 'wrong tool'; Root = $t; SkipGhost = $true; NeverPublished = $true; Apply = $true }
+    T 'MUST FIRE  a slug with a published-hashes entry is refused - it HAS been published' `
+      ($r.rc -ne 0 -and $r.out -match 'published-hashes') $r.out
+    T '  ...and its spec survives the refusal' (Test-Path (Join-Path $t 'db\recipes\once-live.json')) $r.out
+
+    $r = Run @{ Slug = 'never-existed'; Reason = 'nothing here'; Root = $t; SkipGhost = $true; NeverPublished = $true; Apply = $true }
+    T 'MUST FIRE  a slug with no spec, card or stamp is refused rather than reported done' `
+      ($r.rc -ne 0 -and $r.out -match 'nothing to abandon') $r.out
+    $r = Run @{ Slug = 'built-only'; Root = $t; SkipGhost = $true; NeverPublished = $true; Apply = $true }
+    T 'MUST FIRE  -NeverPublished still demands a -Reason' ($r.rc -ne 0) $r.out
   } finally { Remove-Item -Recurse -Force $t -ErrorAction SilentlyContinue }
   if ($bad) { Write-Output ("retire-recipe SELF-TEST FAIL ({0})" -f $bad); exit 1 }
   Write-Output 'retire-recipe SELF-TEST PASS'; exit 0
@@ -175,6 +227,109 @@ $specPath  = Join-Path $mp ('db\recipes\' + $Slug + '.json')
 $stampPath = Join-Path $here 'propagate-stamps.json'
 if ($Root) { $stampPath = Join-Path $Root 'pipeline\propagate-stamps.json' }
 $builtDir  = Join-Path $mp 'db\built'
+
+# ---- THE BUILT-BUT-NEVER-PUBLISHED PATH ----------------------------------------------------------
+# The ordinary path's order (Ghost first, local second) exists so a half-done takedown is always the
+# LOUD half. Here the argument inverts, because there is supposed to be nothing outward at all: Ghost
+# is READ first and must answer "no such post". A page found here is not something to delete quietly -
+# it is a live page the data has forgotten, the precise failure the header calls the one this estate
+# already paid for, and it must be surfaced rather than cleaned up.
+if ($NeverPublished) {
+  $phPath0 = Join-Path $mp 'db\published-hashes.json'
+  if (-not (Test-Path $rdbPath)) { Die ('no recipes-db at ' + $rdbPath) }
+  $rdbRaw0 = [IO.File]::ReadAllText($rdbPath, [Text.Encoding]::UTF8) -replace '^\xEF\xBB\xBF', ''
+  $p0 = $rdbRaw0 | ConvertFrom-Json
+  $rows0 = @($(if ($null -ne $p0 -and $p0.PSObject.Properties.Name -contains 'recipes') { $p0.recipes } else { $p0 }))
+  $mine = @($rows0 | Where-Object { [string]$_.slug -eq $Slug })
+  if ($mine.Count -ne 0) {
+    Die ("recipes-db holds {0} row(s) for '{1}' - this recipe IS in the catalogue, so it is a takedown, not an abandonment. Run without -NeverPublished." -f $mine.Count, $Slug)
+  }
+  # published-hashes is the record that a page EXISTS. A slug listed there has been published at least
+  # once, whatever recipes-db currently says, so -NeverPublished is the wrong instrument for it.
+  if (Test-Path $phPath0) {
+    $ph0 = ([IO.File]::ReadAllText($phPath0, [Text.Encoding]::UTF8) -replace '^\xEF\xBB\xBF', '') | ConvertFrom-Json
+    if ($ph0.PSObject.Properties.Name -contains $Slug) {
+      Die ("db\published-hashes.json records a published page for '{0}' - it has been published before. Run without -NeverPublished." -f $Slug)
+    }
+  }
+  $spec0  = Test-Path $specPath
+  $cards0 = @(Get-ChildItem $builtDir -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like ($Slug + '.*') })
+  $stamp0 = $false
+  if (Test-Path $stampPath) {
+    $st0 = ([IO.File]::ReadAllText($stampPath, [Text.Encoding]::UTF8) -replace '^\xEF\xBB\xBF', '') | ConvertFrom-Json
+    $stamp0 = ($st0.PSObject.Properties.Name -contains $Slug)
+  }
+  if (-not $spec0 -and -not $cards0.Count -and -not $stamp0) {
+    Die ("nothing to abandon for '{0}' - no spec, no built card, no propagate stamp. Already done, or the slug is wrong." -f $Slug)
+  }
+
+  Say ("retire-recipe: " + $Slug + "  [NEVER PUBLISHED]")
+  Say ("  reason: " + $Reason)
+  Say ("  recipes-db row   : absent (correct for this path)")
+  Say ("  published-hashes : absent (correct for this path)")
+  Say ("  spec file        : " + $(if ($spec0) { 'present' } else { 'ABSENT' }))
+  Say ("  built card(s)    : " + $cards0.Count)
+  Say ("  propagate stamp  : " + $(if ($stamp0) { 'present' } else { 'absent' }))
+
+  if ($SkipGhost) { Say '  ghost: SKIPPED (-SkipGhost)' }
+  else {
+    . (Join-Path $repo 'lib\ghost-lib.ps1')
+    $apiUrl0 = 'https://map-to-success.ghost.io'
+    $key0 = Get-GhostKey -Root $repo
+    if (-not $key0) { Die 'no Ghost admin key - refusing to abandon a recipe without first proving it has no live page' }
+    $hdr0 = @{ Authorization = ('Ghost ' + (Get-GhostJWT $key0)); 'Accept-Version' = 'v5.0' }
+    $post0 = $null
+    try { $post0 = (Invoke-GhostApi -Uri "$apiUrl0/ghost/api/admin/posts/slug/$Slug/?fields=id,status" -Headers $hdr0).posts[0] }
+    catch {
+      $code0 = 0; $resp0 = $_.Exception.Response
+      if ($resp0 -and $resp0.PSObject.Properties['StatusCode']) { try { $code0 = [int]$resp0.StatusCode } catch { $code0 = 0 } }
+      if ($code0 -ne 404) { Die ('ghost lookup failed (' + $code0 + ') - unknown is not "never published", so nothing is removed') }
+    }
+    if ($post0) {
+      Die ("ghost HAS a post for '{0}' (id {1}, status {2}) while recipes-db has no row for it. That is a live page the data has forgotten - the failure this script exists to prevent - and it is NOT something to clean up quietly. Investigate it, then use the ordinary takedown path." -f $Slug, $post0.id, [string]$post0.status)
+    }
+    Say '  ghost: no post with that slug - confirmed never published'
+  }
+
+  if (-not $Apply) { Say '  DRY RUN - nothing written. Re-run with -Apply.'; exit 0 }
+
+  if ($spec0) { Remove-Item $specPath -Force; Say '  spec: removed' }
+  foreach ($c in $cards0) { Remove-Item $c.FullName -Force }
+  if ($cards0.Count) { Say ('  built: removed ' + $cards0.Count + ' card file(s)') }
+  if ($stamp0) {
+    $stDoc0 = ([IO.File]::ReadAllText($stampPath, [Text.Encoding]::UTF8) -replace '^\xEF\xBB\xBF', '') | ConvertFrom-Json
+    $stDoc0.PSObject.Properties.Remove($Slug)
+    [IO.File]::WriteAllText($stampPath, ($stDoc0 | ConvertTo-Json -Depth 6), $UTF8)
+    Say '  propagate stamp: removed'
+  }
+  # Same inbound-link report as the ordinary path: a card that links here would 404, and rebuilding
+  # somebody else's live page is not this script's call to make.
+  $inb0 = @()
+  if (Test-Path $builtDir) {
+    $needle0 = 'thriftycrew.com/' + $Slug + '/'
+    foreach ($f in (Get-ChildItem (Join-Path $builtDir '*.body.html') -ErrorAction SilentlyContinue)) {
+      if (([IO.File]::ReadAllText($f.FullName)).Contains($needle0)) { $inb0 += $f.BaseName }
+    }
+  }
+  if ($inb0.Count) {
+    Say ("  INBOUND LINKS: {0} built card(s) still link to this slug - {1}" -f $inb0.Count, ($inb0 -join ', '))
+    Say '    rebuild and republish those cards, or they render a 404 in their related-recipes grid.'
+  }
+  Say ''
+  Say ('retire-recipe: ' + $Slug + ' ABANDONED (built, never published) - ' + $Reason)
+  # THE CHAIN IS SHORTER THAN A TAKEDOWN'S, BUT IT IS NOT EMPTY - and the first cut of this path said
+  # it was. "Nothing in recipes-db, the feed or Ghost ever knew about it" is true and beside the point:
+  # cost-recipes builds costed.json from the SPECS, not from recipes-db, so an abandoned recipe keeps
+  # its costed row and its v2-perserving row until those are rebuilt. MEASURED immediately after the
+  # first real use: both files still carried the slug. Same mistake the ordinary path's own note
+  # records making - the chain has to be walked from the SPEC outward.
+  Say '  NEXT (recipes-db, the feed and Ghost never knew about this recipe - but the SPEC-driven files did):'
+  Say '    meal-prep\engine\cost-recipes.ps1              (costed.json still has its row)'
+  Say '    meal-prep\pipeline\compute-v2-perserving.ps1   (v2-perserving.json still has its row)'
+  Say '    meal-prep\pipeline\db-build.ps1                 (the sqlite spec table still counts it)'
+  Say '  Record the ruling in meal-prep\db\considered-dishes.json if it was a dedup verdict.'
+  exit 0
+}
 
 if (-not (Test-Path $rdbPath)) { Die ('no recipes-db at ' + $rdbPath) }
 $rdbRaw = [IO.File]::ReadAllText($rdbPath, [Text.Encoding]::UTF8) -replace '^\xEF\xBB\xBF', ''
