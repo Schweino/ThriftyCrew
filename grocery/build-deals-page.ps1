@@ -583,6 +583,8 @@ $flagTotal = 0
 #   dot     -> .pg-sum-s::before, hue passed as a custom property            (saves 1 node/row)
 #   leader  -> a repeating background on .pg-rh-top, masked by the name and
 #              price backgrounds, instead of a spacer span                   (saves 1 node/row)
+#              (DESKTOP ONLY since 2026-08-31: the phone row head is two lines so the name can wrap, and a
+#               single-baseline background cannot follow it. See .pg-name and @media(min-width:700px).)
 # That is 6 nodes x 572 rows = 3,432 nodes, which is the difference between missing and clearing the
 # under-8,000 target. The look is identical; only the animation on the check is simpler.
 function PickBox {
@@ -592,7 +594,10 @@ function SummaryHtml($best, [string]$unit) {
   if (-not $best) { return '' }
   $tag = if ([string]$best.type -eq 'sale') { " <span class='pg-tag pg-tag-sale'>sale</span>" } else { '' }
   $hue = if ($storeAccent.Contains([string]$best.store)) { [string]$storeAccent[[string]$best.store] } else { '#5a6862' }
-  return "<span class='pg-sum'><span class='pg-sum-s' style='--sd:" + $hue + "'>" + (HtmlEnc $shortName[[string]$best.store]) + "</span><span class='pg-sum-p'>" + (Fmt-Price ([double]$best.per_unit) $unit) + "</span>" + $tag + "</span>"
+  # .pg-sum-s is a SIBLING of .pg-sum, not a child: flex order only reorders items inside the same flex
+  # container, and the store has to become its own line of .pg-rh-top so the name gets the row's full width.
+  # Node count is unchanged - the same two spans, one level up. pgSummaries() below writes them separately.
+  return "<span class='pg-sum'><span class='pg-sum-p'>" + (Fmt-Price ([double]$best.per_unit) $unit) + "</span>" + $tag + "</span><span class='pg-sum-s' style='--sd:" + $hue + "'>" + (HtmlEnc $shortName[[string]$best.store]) + "</span>"
 }
 
 # (The "Deals right now" strip was removed 2026-07-13 per Brad. Record-low / sale badges still ride inline on
@@ -917,7 +922,15 @@ html.tc-member .pg-bar,html.tc-member .pg-capture{display:none !important}
 .pg-rowhead:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:4px}
 .pg-rh-top{display:flex;align-items:center;gap:8px}
 .pg-rh-bot{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding-left:28px}
-.pg-name{font-size:1.09em;font-weight:700;color:var(--ink);flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* THE NAME WRAPS, IT DOES NOT CLIP. This was white-space:nowrap + text-overflow:ellipsis, which truncated
+   410 of 637 names at 375px - 64% of the board. "Ground B... $5.86/lb" over "93/7 Lea... $6.17/lb" is two
+   prices and no products, and the name is the one field a shopper cannot shop without.
+   flex-basis 0 (not auto) is the load-bearing part: with basis auto the name's intrinsic width pushes the
+   price onto its own line, so a wrapping name costs a THIRD row instead of a second. With basis 0 the name
+   takes what is left after the price and wraps inside it. The store moved to its own line (see .pg-sum-s
+   below) because on a 294px row it was claiming 145px beside the name, leaving 91px - wrapping into 91px is
+   worse than clipping. Measured after: 0 of 637 clipped, page 51,898px -> 53,617px (+3.3%), no new nodes. */
+.pg-name{font-size:1.09em;font-weight:700;color:var(--ink);flex:1 1 0;min-width:0;overflow-wrap:break-word}
 .pg-unit{font-size:.72em;color:var(--mut);opacity:.8;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 /* collapsed rows stay one clean line: name + cheapest + chevron. The unit, record/verdict badges, and the
    history/alerts pills (JS-injected) reveal only when the row is opened, so 300 items scan fast. */
@@ -1033,17 +1046,35 @@ $eliteCss = '<style>' + (Compress-TcCss ((Get-TcTokenCss -Scope '.pg-wrap' -Part
 .pg-wrap .pg-cath::before{content:'';position:absolute;left:0;top:14px;width:5px;height:20px;border-radius:0 3px 3px 0;background:#E2A43C}
 .pg-wrap .pg-cath-n{background:#16263F;color:#F6F1E7;border-radius:999px;padding:2px 10px;margin-left:10px;font-size:.62em;font-weight:700;letter-spacing:.04em}
 .pg-wrap .pg-row{padding:13px 0 14px;border-bottom:1px solid #eee9dc}
-/* THE DOTTED LEADER, at zero extra nodes: a repeating dot background on the row, with the name and the
-   price sitting on opaque backgrounds that mask it. Same ledger look as a spacer span, 572 fewer nodes. */
-.pg-wrap .pg-rh-top{gap:9px;position:relative;background-image:linear-gradient(to right,#cfc7b0 34%,rgba(0,0,0,0) 0);background-size:6px 1px;background-repeat:repeat-x;background-position:0 .95em}
+/* THE ROW HEAD IS TWO LINES: name + price, then the store beneath the name.
+   The dotted leader that used to live here is gone. It was a repeating dot background pinned to one
+   baseline (background-position:0 .95em), so it could not follow a name onto a second line - and the name
+   has to wrap (see .pg-name). The opaque backgrounds below were only ever there to mask that leader; they
+   stay because they also keep the name and price legible if a row ever gains a tint, and cost nothing.
+   margin-left:auto is dropped from THIS rule on purpose: in a wrapping flex row an auto margin eats all the
+   free space on the line, which shoved the price onto a third row. The base .pg-sum rule still carries it,
+   but it resolves to zero here because .pg-name{flex:1 1 0} has already absorbed the free space - and that
+   same grow is what right-aligns the price, so the auto margin is not needed at phone widths. */
+.pg-wrap .pg-rh-top{gap:1px 9px;flex-wrap:wrap;position:relative}
 .pg-wrap .pg-name,.pg-wrap .pg-sum,.pg-wrap .pg-pickl,.pg-wrap .pg-flag{background:#fff}
-.pg-wrap .pg-sum{margin-left:auto;gap:8px;padding-left:6px}
+.pg-wrap .pg-sum{gap:8px;padding-left:6px;order:2;flex:0 0 auto}
 .pg-wrap .pg-name{padding-right:6px}
-.pg-wrap .pg-sum-s{display:inline-flex;align-items:center;gap:5px;order:1}
+/* flex:0 0 100% is what puts the store on its own line; the left pad lines it up under the name rather
+   than under the checkbox. order:3 keeps it after the price in the flex ordering, i.e. on the second line. */
+.pg-wrap .pg-sum-s{display:inline-flex;align-items:center;gap:5px;order:3;flex:0 0 100%;padding-left:27px}
 .pg-wrap .pg-sum-s::before{content:'';width:8px;height:8px;border-radius:999px;background:var(--sd,#5a6862);display:inline-block;flex:none}
 .pg-wrap .pg-sum-p{order:2;font-variant-numeric:tabular-nums;font-weight:750}
 .pg-wrap .pg-flag{flex:none;color:#8a6d1f;border:1px solid #E2A43C;border-radius:4px;padding:1px 7px;font-size:.6em;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
 .pg-wrap .pg-rh-bot{padding-left:33px}
+/* DESKTOP KEEPS THE ONE-LINE LEDGER. The second line exists to buy the name width on a 294px phone row; a
+   700px+ row has width to spare, so there the store returns beside the price and the dotted leader comes
+   back with it. This block has to sit AFTER the .pg-wrap rules above - the @media(min-width:700px) block
+   further up uses bare .pg-name/.pg-chip selectors and would lose to .pg-wrap on specificity. */
+@media(min-width:700px){
+.pg-wrap .pg-rh-top{flex-wrap:nowrap;background-image:linear-gradient(to right,#cfc7b0 34%,rgba(0,0,0,0) 0);background-size:6px 1px;background-repeat:repeat-x;background-position:0 .95em}
+.pg-wrap .pg-sum{margin-left:auto}
+.pg-wrap .pg-sum-s{order:1;flex:0 0 auto;padding-left:0}
+}
 /* THE CHEVRON, at zero extra nodes */
 .pg-wrap .pg-rh-top::after{content:'';flex:none;width:7px;height:7px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg) translate(-2px,-2px);transition:transform .15s}
 .pg-wrap .pg-row.pg-open .pg-rh-top::after{transform:rotate(-135deg) translate(-2px,-2px)}
@@ -1243,7 +1274,14 @@ $js = @'
       var c=pgFirstChip(row); if(!c){ return; }
       var p=c.querySelector('.pg-price'), s=c.querySelector('.pg-store');
       var sale=c.querySelector('.pg-tag-sale')?" <span class='pg-tag pg-tag-sale'>sale</span>":"";
-      sum.innerHTML="<span class='pg-sum-p'>"+(p?p.textContent:'')+"</span><span class='pg-sum-s'>"+(s?s.textContent:'')+"</span>"+sale;
+      // .pg-sum now holds the PRICE only; the store is a sibling on the row head's second line. Rebuilding
+      // both from one innerHTML would nest the store back inside .pg-sum and collapse the row to one line
+      // again on every load and every Hide-Sam's toggle. Writing the store's textContent also keeps its
+      // style='--sd:<hue>' - the old innerHTML rewrite dropped it, so the store dot silently lost its colour
+      // after a recompute and every row's dot fell back to the default grey.
+      sum.innerHTML="<span class='pg-sum-p'>"+(p?p.textContent:'')+"</span>"+sale;
+      var st=row.querySelector('.pg-rh-top > .pg-sum-s');
+      if(st&&s){ st.textContent=s.textContent; }
     });
   }
   document.querySelectorAll('.pg-rowhead').forEach(function(h){ h.setAttribute('tabindex','0'); });
