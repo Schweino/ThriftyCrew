@@ -1211,7 +1211,15 @@ if ($stale -eq 0) {
 # The non-circular version: the puller records what the store CHARGES (`current_price`) independently of what
 # we choose to PUBLISH (`ad_price`), and this asserts they are the same number. A puller that reaches for the
 # regular-price field now produces two different numbers on the row, and that is visible from the outside.
-$mismatch = 0; $checked = 0; $noContract = @{}
+# $hasContract ALONGSIDE $noContract (2026-08-31). $noContract was set by ANY file in the engine set whose
+# rows carried no current_price, and it was never cleared - so ONE legacy capture from before the field
+# existed marked the whole store unchecked FOREVER, and the warn then blamed that store's PULLER.
+# MEASURED: Walmart has 18 captures carrying current_price against 4 that predate it, 57,041 rows in all,
+# and every one of those rows IS compared by this guard. The warn said the opposite - "these stores do NOT
+# record the store's current price ... guard 10 CANNOT check them: Walmart" - so it read as a whole store
+# outside the only check that compares what we publish to what the store charges, and it named a puller
+# defect that had already been fixed. A false alarm is how a real one stops being read.
+$mismatch = 0; $checked = 0; $noContract = @{}; $hasContract = @{}; $legacyFiles = @{}
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
   # ITERATE THE FILE SET THE ENGINE PRICED FROM, not just the newest file per store. compare-deals unions
@@ -1247,7 +1255,12 @@ foreach ($f in (RegFiles)) {
       [void]$fail.Add(("HARD FAIL: publishing a price the store is NOT charging  [{0}] {1}  we publish `${2}{3}, the store charges `${4} - the puller took the wrong price field (this is the basePrice bug)" -f $store, [string]$d.item, $ap, $mtxt, $cp))
     }
   }
-  if (-not $any) { $noContract[$store] = $true }
+  if ($any) { $hasContract[$store] = $true }
+  else {
+    $noContract[$store] = $true
+    if (-not $legacyFiles.ContainsKey($store)) { $legacyFiles[$store] = @() }
+    $legacyFiles[$store] += $f.Name
+  }
 }
 if ($mismatch -eq 0) {
   # ZERO-ROWS RULE. $noContract only catches a store whose rows carry NO current_price at all: $any is set
@@ -1260,8 +1273,16 @@ if ($mismatch -eq 0) {
     "every price we publish is the price the store charges ($checked rows verified against their own current_price)" `
     'guard 10 verified ZERO rows against a store''s own current_price - no capture in the engine file set carried both a current_price and a parseable ad_price, so the basePrice bug (publishing the REGULAR price over a live discount) was asserted against without examining anything. This is the ONLY check that compares what we publish to what the store charges.'
 }
-if ($noContract.Count) {
-  [void]$warn.Add(("these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: " + (($noContract.Keys | Sort-Object) -join ', ') + " - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug"))
+# A store is UNCHECKABLE only if NOT ONE file in the engine set carried current_price. A store with some
+# is checked - partially - and that is a different and much smaller finding: the rows inside the legacy
+# files are unguarded, but the puller is fine, and sending someone to fix it wastes the reading.
+$trulyNone = @($noContract.Keys | Where-Object { -not $hasContract.ContainsKey($_) } | Sort-Object)
+if ($trulyNone.Count) {
+  [void]$warn.Add(("these stores do NOT record the store's current price on ANY row in the engine set, so guard 10 CANNOT check them at all: " + ($trulyNone -join ', ') + " - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug"))
+}
+$partial = @($noContract.Keys | Where-Object { $hasContract.ContainsKey($_) } | Sort-Object)
+foreach ($st in $partial) {
+  [void]$warn.Add(("guard 10 checks {0} but not all of it: {1} capture(s) in its engine set PREDATE the current_price field, so those rows are compared against nothing. The puller is fine - these are legacy files aging out of the window, and the finding closes itself when they do. Unguarded until then: {2}" -f $st, @($legacyFiles[$st]).Count, ((@($legacyFiles[$st]) | Sort-Object) -join ', ')))
 }
 
 # ---------------------------------------------------------------- 11: Baker's price PROVENANCE

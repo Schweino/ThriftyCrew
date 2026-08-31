@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-31T10:52:56",
+    "updated":  "2026-08-31T16:29:21",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -8854,10 +8854,10 @@
                         "key":  "Walmart|17989615462",
                         "store":  "Walmart",
                         "item_id":  "17989615462",
-                        "price":  12.48,
-                        "first_seen":  "2026-08-31",
+                        "price":  12.53,
+                        "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-31",
-                        "price_changed":  1
+                        "price_changed":  2
                     },
                     {
                         "key":  "Walmart|17989622057",
@@ -9331,10 +9331,10 @@
                         "key":  "Walmart|19400230",
                         "store":  "Walmart",
                         "item_id":  "19400230",
-                        "price":  11.96,
-                        "first_seen":  "2026-08-31",
+                        "price":  2.64,
+                        "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-31",
-                        "price_changed":  1
+                        "price_changed":  2
                     },
                     {
                         "key":  "Walmart|19400236",
@@ -10537,10 +10537,10 @@
                         "key":  "Walmart|27935840",
                         "store":  "Walmart",
                         "item_id":  "27935840",
-                        "price":  10.35,
-                        "first_seen":  "2026-08-31",
+                        "price":  2.23,
+                        "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-31",
-                        "price_changed":  1
+                        "price_changed":  2
                     },
                     {
                         "key":  "Walmart|280501185",
@@ -12247,10 +12247,10 @@
                         "key":  "Walmart|44390944",
                         "store":  "Walmart",
                         "item_id":  "44390944",
-                        "price":  0.06,
-                        "first_seen":  "2026-08-31",
+                        "price":  0.97,
+                        "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-31",
-                        "price_changed":  1
+                        "price_changed":  2
                     },
                     {
                         "key":  "Walmart|44390948",
@@ -12283,10 +12283,10 @@
                         "key":  "Walmart|44390958",
                         "store":  "Walmart",
                         "item_id":  "44390958",
-                        "price":  3.24,
-                        "first_seen":  "2026-08-31",
+                        "price":  1.54,
+                        "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-31",
-                        "price_changed":  3
+                        "price_changed":  4
                     },
                     {
                         "key":  "Walmart|44391018",
@@ -12508,10 +12508,10 @@
                         "key":  "Walmart|465183919",
                         "store":  "Walmart",
                         "item_id":  "465183919",
-                        "price":  11.15,
-                        "first_seen":  "2026-08-31",
+                        "price":  3.38,
+                        "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-31",
-                        "price_changed":  3
+                        "price_changed":  4
                     },
                     {
                         "key":  "Walmart|466160466",

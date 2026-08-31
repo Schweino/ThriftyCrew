@@ -135,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-31T14:48:55",
+    "generated":  "2026-08-31T16:43:06",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -351,6 +351,18 @@
                               "size":  "pint",
                               "item":  "Grape Tomatoes",
                               "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "cherry-tomatoes",
+                              "commodity":  "Cherry / Grape Tomatoes",
+                              "unit":  "oz",
+                              "store":  "Walmart",
+                              "per_unit":  0.327,
+                              "size":  "16 ct",
+                              "item":  "Fresh Organic Grape Tomatoes, 10 oz Package",
+                              "kind":  "count",
                               "row_kind":  "weight",
                               "holds_crown":  false
                           },
@@ -583,6 +595,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "furniture-polish",
+                              "commodity":  "Furniture Polish / Dusting Spray",
+                              "unit":  "oz",
+                              "store":  "Walmart",
+                              "per_unit":  0.3738,
+                              "size":  "16 fl oz",
+                              "item":  "Pledge Wood Oil, Expert Care, Trigger Spray – Moisturizes \u0026 Revives with Orange Scent, 16 oz",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "glass-cleaner",
                               "commodity":  "Glass Cleaner",
                               "unit":  "floz",
@@ -775,6 +799,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "insect-spray",
+                              "commodity":  "Insect / Bug Spray (home)",
+                              "unit":  "oz",
+                              "store":  "Walmart",
+                              "per_unit":  0.1249,
+                              "size":  "128 fl oz",
+                              "item":  "Ortho Home Defense Insect Killer for Indoor and Perimeter2, Kills Ants and Roaches, 1 gal.",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  true
+                          },
+                          {
                               "id":  "italian-dressing",
                               "commodity":  "Italian Dressing",
                               "unit":  "floz",
@@ -785,6 +821,18 @@
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
+                          },
+                          {
+                              "id":  "laundry-detergent",
+                              "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+                              "unit":  "floz",
+                              "store":  "Walmart",
+                              "per_unit":  0.072,
+                              "size":  "199.583 oz",
+                              "item":  "ARM \u0026 HAMMER Plus OxiClean with Odor Blasters Liquid Laundry Detergent, Fresh Burst, 200.2 Fl Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  true
                           },
                           {
                               "id":  "laundry-detergent",
@@ -1000,7 +1048,7 @@
                               "item":  "Our Family Vinegar Red Wine",
                               "kind":  "weight",
                               "row_kind":  "volume",
-                              "holds_crown":  false
+                              "holds_crown":  true
                           },
                           {
                               "id":  "shampoo",
