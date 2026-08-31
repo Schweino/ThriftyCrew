@@ -1,6 +1,6 @@
 {
     "week_of":  "2026-08-31",
-    "built_at":  "2026-08-31T18:10:31",
+    "built_at":  "2026-08-31T18:43:23",
     "note":  "WIDE price table, one row per item. Per store: everyday price, ad price, and the ad window. ad is NULL when the item is not on ad - Brad\u0027s founding rule - and an ad whose ad_to has passed is nulled at build time rather than cleaned up later. `shown` is the cheaper of the two, which is what a page must display. Derived from the same candidate rows and the same eligibility rule the board ranks with; price-table-parity proves they agree per cell.",
     "stores":  [
                    "Hy-Vee",
@@ -33204,6 +33204,25 @@
                                                      "shown":  0.99,
                                                      "shown_kind":  "everyday"
                                                  },
+                                     "Hy-Vee":  {
+                                                    "everyday":  1.49,
+                                                    "everyday_product":  "Organic Green Onions Scallions",
+                                                    "everyday_size":  "bunch",
+                                                    "everyday_price_text":  "$1.49",
+                                                    "everyday_asof":  "",
+                                                    "everyday_source":  "everyday shelf price",
+                                                    "ad":  null,
+                                                    "ad_product":  "",
+                                                    "ad_size":  "",
+                                                    "ad_price_text":  "",
+                                                    "ad_from":  "",
+                                                    "ad_to":  "",
+                                                    "ad_basis":  "",
+                                                    "ad_source":  "",
+                                                    "membership":  false,
+                                                    "shown":  1.49,
+                                                    "shown_kind":  "everyday"
+                                                },
                                      "Walmart":  {
                                                      "everyday":  1.07,
                                                      "everyday_product":  "Fresh Whole Green Onion Bunch",

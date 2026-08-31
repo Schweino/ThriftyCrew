@@ -694,7 +694,17 @@ function Get-UnitPrice($deal, $cat) {
     if ($plain -and $pk)  { return @{ unit_price=($pr.per_item/$pk); basis="per-$pk-pack"; note=$pr.note } }
     # A Hy-Vee PERKS ad price is a single retail unit; with no pack count it prices per-each (a pack count above
     # still divides). Scoped to the Perks pattern so the general "bare package, unknown count -> drop" guard holds.
-    if ((-not $plain) -or ($deal.size_text -match '(?i)^\s*(1\s*)?(ct|count|ea|each)\.?\s*$') -or ([string]$deal.price_text -match '(?i)perks\s*price')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note } }
+    # 'BUNCH' IS A WHOLE PURCHASE (2026-08-31), and its absence here cost a live cell. Hy-Vee prices green
+    # onions "$1.49 / bunch"; green-onions is an `each` commodity, `bunch` matched none of the tokens below,
+    # so the row fell through to the drop on the next line and Hy-Vee LEFT the green-onions row entirely -
+    # reported as an unexplained cell-drop against a capture that plainly contained the product.
+    #
+    # THIS IS THE LINE THAT DECIDES IT, and the first cut of this fix patched the wrong one. Get-SizeAmount
+    # also learned `bunch` that day - and never runs for this case, because the branch that calls it is
+    # scoped to lb/oz/floz/gallon/dozen. That edit was reverted rather than left in looking useful.
+    # Scoped to the size being ONLY the word, so "3 bunches" still falls through to the count logic above,
+    # and it says nothing about weight - a weight commodity never reaches this branch at all.
+    if ((-not $plain) -or ($deal.size_text -match '(?i)^\s*(1\s*)?(ct|count|ea|each|bunch(es)?)\.?\s*$') -or ([string]$deal.price_text -match '(?i)perks\s*price')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note } }
     return $null   # bare package price with unknown count -> not confident, drop
   }
   return $null
@@ -826,6 +836,22 @@ if ($SelfTest) {
 
   # 1. soda-style Buy 2 Get 3 Free, regular $11.99/pack, 12-pack x 12 fl oz = 144 fl oz -> (2*11.99/5)/144
   _Near 'B2G3 soda /floz'        (Get-UnitPrice (_D 'Buy 2 Get 3 Free' 'Coca-Cola 12 pk' 11.99 '12 pk 12 fl oz') (_C 'floz')).unit_price 0.0333 0.0005
+  # 1b. A BUNCH IS ONE PURCHASE on a count commodity, and nothing at all on a weight one (2026-08-31).
+  # Asserted on Get-SizeAmount directly, which is the function that reads the size word. The cases
+  # around it drive Get-UnitPrice, the MULTIBUY engine, and routing a plain shelf price through that
+  # would be testing the wrong thing - the first cut did exactly that and reported a null the size
+  # parser was never asked for.
+  # Driven through Get-UnitPrice, which is the path the BOARD takes. The first cut asserted on
+  # Get-SizeAmount and passed while the board still dropped the cell, because the branch that calls
+  # Get-SizeAmount is scoped to weight/volume units and never sees an `each` commodity at all.
+  _Near 'bunch on an each commodity is ONE purchase'  (Get-UnitPrice (_D '$3.00' 'Green Onions Scallions' $null 'bunch') (_C 'each')).unit_price 3.00 0.001
+  _Near '...and the plural spells the same'           (Get-UnitPrice (_D '$3.00' 'Green Onions Scallions' $null 'bunches') (_C 'each')).unit_price 3.00 0.001
+  # CLEAN TWIN: the tokens that already worked still do, so this added a word and moved nothing.
+  _Near 'CLEAN TWIN  bare each still per-each'        (Get-UnitPrice (_D '$1.25' 'yogurt cup' $null 'each') (_C 'each')).unit_price 1.25 0.001
+  _Near 'CLEAN TWIN  1 ct still per-each'             (Get-UnitPrice (_D '$1.25' 'yogurt cup' $null '1 ct') (_C 'each')).unit_price 1.25 0.001
+  # MUST STILL DROP: a package whose count nobody stated is not a per-each price, and `bunch` must not
+  # have widened that hole - this is the "bare package price with unknown count -> drop" guard.
+  _Null 'MUST STILL DROP  a bare package with no count' (Get-UnitPrice (_D '$4.99' 'mystery tray' $null 'pkg') (_C 'each'))
   # 2. chicken thighs Buy 1 Get 2 Free, regular $5.98/lb, per-lb basis -> 5.98/3
   _Near 'B1G2 chicken /lb'       (Get-UnitPrice (_D 'Buy 1 Get 2 Free' 'Tyson chicken thighs' 5.98 'lb') (_C 'lb')).unit_price 1.9933 0.001
   # 3. same deal, per-lb regular but NO size -> must be UNPRICED so the safety net flags it (not a silent wrong price)

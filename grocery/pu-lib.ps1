@@ -111,11 +111,23 @@ function Get-LinkPerUnit {
       $n = [double]$q.Groups[1].Value
       $un = (($q.Groups[2].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
     } else {
-      # 3. a BARE unit with no number ("lb", "per lb", "each", "dozen", "gal") means one of it
-      $bu = [regex]::Match($s, '\b(lbs?|pound|gal|gallon|dozen|doz|each|ea)\b')
+      # 3. a BARE unit with no number ("lb", "per lb", "each", "dozen", "gal") means one of it.
+      #
+      # `bunch` ADDED 2026-08-31, and it is a real dropped cell rather than tidiness. Hy-Vee sells
+      # green onions by the bunch and priced them "$1.49 / bunch"; green-onions is an `each` commodity,
+      # this token was unknown, so the row had NO per-unit and the cell left the board entirely -
+      # reported as a cell-drop with nothing to explain it. The row was there and matched its
+      # commodity fine; only the size word was unreadable.
+      #
+      # SAFE ON A WEIGHT COMMODITY, which is why it normalises to `ea` rather than to 1 of whatever
+      # the row is: a bunch tells you the purchase COUNT and says nothing about weight, so on an oz or
+      # lb commodity `ea` matches no branch below and the row stays uncomputable - which is the honest
+      # answer, not a guessed ounce count. Only 6 rows in the current captures use it; it is rare, not
+      # absent, and a rare unreadable size is exactly the kind that goes unnoticed.
+      $bu = [regex]::Match($s, '\b(lbs?|pound|gal|gallon|dozen|doz|each|ea|bunch)\b')
       if ($bu.Success) {
         $n = 1
-        $un = $bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' -replace '^pound$','lb'
+        $un = $bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' -replace '^pound$','lb' -replace '^bunch$','ea'
       }
     }
   }

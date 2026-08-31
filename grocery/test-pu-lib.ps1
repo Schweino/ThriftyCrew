@@ -32,6 +32,15 @@ $cases = @(
   @{ size='3 oz';          unit='oz';     price=2.18; name='';                  want=0.726667 }  # plain single, unchanged
   @{ size='each';          unit='each';   price=6.00; name='Water 24 Pack';     want=0.25     }  # multipack-in-name (bare-each size + count in name)
   @{ size='lb';            unit='lb';     price=4.99; name='';                  want=4.99     }  # bare unit
+  # A BUNCH IS A PURCHASE, NOT A WEIGHT (2026-08-31). Hy-Vee prices green onions "$1.49 / bunch" and
+  # green-onions is an `each` commodity; the token was unknown, the row got no per-unit, and the cell
+  # dropped off the board with nothing saying why.
+  @{ size='bunch';         unit='each';   price=1.49; name='';                  want=1.49     }  # bunch = one purchase on a count commodity
+  @{ size='1 bunch';       unit='each';   price=1.49; name='';                  want=1.49     }  # ...and the numbered spelling agrees
+  # MUST STAY NULL: a bunch says nothing about WEIGHT, so guessing an ounce count is the one thing
+  # that would be worse than dropping the cell.
+  @{ size='bunch';         unit='oz';     price=1.49; name='';                  want=$null    }  # bunch on a weight commodity is uncomputable
+  @{ size='bunch';         unit='lb';     price=1.49; name='';                  want=$null    }  # ...same for lb
   @{ size='$0.07/oz';      unit='oz';     price=5.00; name='';                  want=0.07     }  # explicit unit price
   @{ size='16 oz';         unit='each';   price=2.49; name='';                  want=$null    }  # genuine unit mismatch stays null
   # THE TWO CORRECT ANSWERS THE OLD BASELINE CALLED REGRESSIONS (the reason this file was red for weeks):

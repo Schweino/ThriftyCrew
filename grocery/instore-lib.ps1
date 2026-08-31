@@ -28,6 +28,23 @@
 # every older capture in the carry window has none, and a missing field must never read as "not in store" -
 # that would empty most of the Walmart column on the day this shipped. So no signal passes, and the gate arms
 # itself store by store as captures refresh. See the could-not-run-is-not-a-failure class.
+# MEASURED 2026-08-31, so nobody has to re-derive it. The signal is WALMART-ONLY today - no other
+# store's capture carries a fulfillment field on any row - and it arrived with the 08-30 pull:
+#     walmart-regular-2026-08-29   234 rows,      0 carry the signal
+#     walmart-regular-2026-08-30   525 rows,    499 carry it  (95%)
+#     walmart-regular-2026-08-31 11694 rows,  11603 carry it  (99%)
+#
+# THE UNKNOWNS ARE FILLING IN, WHICH IS THE THING TO CHECK RATHER THAN ASSUME. Walmart is priced from
+# a 90-day UNION, so a board cell held by a row captured before 08-30 has no signal and is ADMITTED by
+# the rule above. Counting Walmart board cells whose winning product appears in NO signal-carrying
+# capture, as each one landed:
+#     signal up to 2026-08-29 -> 529 of 529 unknown (100%)
+#     signal up to 2026-08-30 -> 508 of 529         ( 96%)
+#     signal up to 2026-08-31 ->  71 of 529         ( 13%)
+# So they resolve as captures refresh, exactly as designed, and the remaining 71 clear when a later
+# pull returns those products or their rows age out of the window. DO NOT GATE ON THEM: an absent
+# signal is not evidence a product is off the shelf, and hard-failing the unknowns would empty most of
+# the Walmart column for a fact nobody measured. That is the could-not-run-is-not-a-failure class.
 $SHELF_FULFILLMENT = @('STORE')
 function Test-InStore($ful) {
   $f = ('' + $ful).Trim().ToUpper()
