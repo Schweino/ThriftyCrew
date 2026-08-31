@@ -375,6 +375,34 @@
    "why": "held"
   },
   {
+   "detail": "held with reason: decision mapped-null",
+   "event": {
+    "at": "2026-08-28T09:15:49",
+    "bid": "",
+    "by": "mapper",
+    "decision": "mapped-null",
+    "event_id": "ie:0c0862dcb1b840121697",
+    "evidence": "Whole dried juniper for the brine. The board has no commodity and no capture match and no near id covers it, so null (pantry-static) rather than a stretch onto another spice; the term is reported absent so the pricing road can rule. 12 berries at 0.2 g each.",
+    "held_reason": "decision mapped-null",
+    "key": "juniper berries",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "12 juniper berries",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "roasted-stuffed-pork-loin",
+    "surprise": false,
+    "term": "juniper berries"
+   },
+   "ids_seen": [],
+   "key": "juniper berries",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
    "detail": "held with reason: the map result did not validate",
    "event": {
     "at": "2026-08-26T12:06:19",
@@ -485,6 +513,34 @@
    },
    "ids_seen": [],
    "key": "mustard powder",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision mapped-null",
+   "event": {
+    "at": "2026-08-28T09:15:50",
+    "bid": "",
+    "by": "mapper",
+    "decision": "mapped-null",
+    "event_id": "ie:85e1c480c0aecd925fa6",
+    "evidence": "REFUSED both the board's oranges match and the Orange Juice near-row: a small alcohol-based flavouring bottle is neither fresh fruit nor juice, in price class or in gram weight. Null is pantry-static and safe; the term is reported absent.",
+    "held_reason": "decision mapped-null",
+    "key": "orange extract",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "2 tsp orange extract",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "roasted-stuffed-pork-loin",
+    "surprise": false,
+    "term": "orange extract"
+   },
+   "ids_seen": [],
+   "key": "orange extract",
    "ledger_row": null,
    "why": "held"
   },
@@ -605,6 +661,34 @@
   {
    "detail": "held with reason: decision mapped-null",
    "event": {
+    "at": "2026-08-28T07:50:48",
+    "bid": "",
+    "by": "mapper",
+    "decision": "mapped-null",
+    "event_id": "ie:ccf5fe24a378889a3b39",
+    "evidence": "REFUSED both near matches: the board's `butter` is dairy butter (wrong food) and `peanut-butter` is the jarred spread at roughly a fifth the price per ounce with 590 vs 400 cal/100 g. Pantry-static rather than a new specialty id for a 13 g flavour line; term reported absent so the pricing road can rule.",
+    "held_reason": "decision mapped-null",
+    "key": "powdered peanut butter",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "1 Tbsp. powdered peanut butter, PB2 (13g (see notes))",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "bang-bang-chicken-bowls",
+    "surprise": false,
+    "term": "powdered peanut butter"
+   },
+   "ids_seen": [],
+   "key": "powdered peanut butter",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision mapped-null",
+   "event": {
     "at": "2026-08-26T04:52:59",
     "bid": "",
     "by": "mapper",
@@ -655,6 +739,34 @@
    },
    "ids_seen": [],
    "key": "roasted corn kernels",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision not-purchased",
+   "event": {
+    "at": "2026-08-28T07:50:49",
+    "bid": "",
+    "by": "mapper",
+    "decision": "not-purchased",
+    "event_id": "ie:8e6271fc58794e1ba9e6",
+    "evidence": "Brand-specific jarred candied jalapeno with no stated quantity, named in the ingredient list but in no instruction step; dropped on the 'avocado lime dipping sauce' precedent. REFUSED the board's `jalapenos` match: that is fresh peppers, a form flip and a different price class.",
+    "held_reason": "decision not-purchased",
+    "key": "sweet heat jalape os",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "sweet heat jalapeños",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "bang-bang-chicken-bowls",
+    "surprise": false,
+    "term": "sweet heat jalapeños"
+   },
+   "ids_seen": [],
+   "key": "sweet heat jalape os",
    "ledger_row": null,
    "why": "held"
   },
@@ -717,12 +829,12 @@
   {
    "detail": "held with reason: decision not-purchased",
    "event": {
-    "at": "2026-08-27T12:04:28",
+    "at": "2026-08-28T09:15:50",
     "bid": "",
     "by": "mapper",
     "decision": "not-purchased",
-    "event_id": "ie:7ad2625894aa35ecc1cf",
-    "evidence": "Tap water for cooking the rice: no commodity and no cost, following the 2026-08-27 'water' ruling. Still weighed at 236.6 g/cup and still printed, because it goes in the pot.",
+    "event_id": "ie:52968a5506f58d5f8ba6",
+    "evidence": "Tap water for the brine: no shopper buys it and no commodity claims it, so no id and no cost. It is kept in the lines array with its weight so the brine still reads correctly, and its DB row is all zeroes.",
     "held_reason": "decision not-purchased",
     "key": "water",
     "kind": "ruling",
@@ -731,9 +843,9 @@
      "source": "none"
     },
     "projected": false,
-    "raw": "2 cups water",
+    "raw": "1 cup water",
     "run": "hunt-2026-08-27-highprotein",
-    "slug": "street-corn-chicken-rice-bowls",
+    "slug": "roasted-stuffed-pork-loin",
     "surprise": false,
     "term": "water"
    },
@@ -827,6 +939,6 @@
    "why": "held"
   }
  ],
- "generated_at": "2026-08-27T21:30:06",
+ "generated_at": "2026-08-30T21:30:05",
  "instructions": "Each case is an identity the nightly ingest could not settle mechanically. Rule each one and write a verdicts file: {\"verdicts\": [{event_id, verdict: record|supersede|leave, item_id (required for record and supersede), evidence, by: \"adjudication\"}]}. Apply it with meal-prep\\pipeline\\learn_apply.py --apply-reviews <that file>. Nothing here has been applied: this stage promotes nothing, by design."
 }

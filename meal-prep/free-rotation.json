@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-08-30",
-    "rotated_at":  "2026-08-30T08:22:44",
+    "week_of":  "2026-08-31",
+    "rotated_at":  "2026-08-31T08:11:16",
     "free":  [
                  {
                      "slug":  "chicken-bulgogi-rice-bowls",
@@ -15,42 +15,42 @@
                      "protein":  "chicken",
                      "rank":  2,
                      "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  1.93
-                 },
-                 {
-                     "slug":  "chicken-pot-pie-biscuit-casserole",
-                     "protein":  "chicken",
-                     "rank":  3,
-                     "name":  "Chicken Pot Pie Casserole with Biscuits",
                      "per_serving":  1.96
                  },
                  {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Chicken Fried Rice",
                      "per_serving":  1.97
                  },
                  {
-                     "slug":  "slow-cooker-salsa-chicken-bowl",
+                     "slug":  "chicken-pot-pie-biscuit-casserole",
                      "protein":  "chicken",
-                     "rank":  5,
-                     "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
-                     "per_serving":  1.97
+                     "rank":  4,
+                     "name":  "Chicken Pot Pie Casserole with Biscuits",
+                     "per_serving":  1.98
                  },
                  {
-                     "slug":  "turkey-biscuit-pot-pie-casserole",
-                     "protein":  "turkey",
-                     "rank":  1,
-                     "name":  "Turkey Biscuit Pot Pie Casserole",
-                     "per_serving":  1.88
+                     "slug":  "buffalo-chicken-pasta-bake",
+                     "protein":  "chicken",
+                     "rank":  5,
+                     "name":  "Buffalo Chicken Pasta Bake",
+                     "per_serving":  2.01
                  },
                  {
                      "slug":  "turkey-huevos-rancheros-rice-bowls",
                      "protein":  "turkey",
-                     "rank":  2,
+                     "rank":  1,
                      "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  1.93
+                     "per_serving":  1.87
+                 },
+                 {
+                     "slug":  "turkey-biscuit-pot-pie-casserole",
+                     "protein":  "turkey",
+                     "rank":  2,
+                     "name":  "Turkey Biscuit Pot Pie Casserole",
+                     "per_serving":  1.88
                  },
                  {
                      "slug":  "haluski-and-kielbasa-cabbage-noodles",
@@ -137,10 +137,10 @@
                      "per_serving":  1.8
                  },
                  {
-                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
+                     "slug":  "cowboy-pork-and-beans-biscuit-bake",
                      "protein":  "pork",
                      "rank":  5,
-                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "name":  "Cowboy Pork and Beans Biscuit Bake",
                      "per_serving":  1.88
                  }
              ]

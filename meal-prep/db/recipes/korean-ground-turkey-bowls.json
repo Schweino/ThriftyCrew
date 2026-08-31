@@ -18,7 +18,7 @@
                  "protein":  51,
                  "carbs":  60,
                  "fat":  20,
-                 "cost_ps":  "4.18"
+                 "cost_ps":  "4.23"
              },
     "intro_html":  "Sweet, savory, and a little garlicky, these bowls taste like a treat but cost like a bargain. Each one packs {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost). Fourteen servings means your week of lunches is sorted.",
     "ingredients_display":  [
@@ -148,7 +148,7 @@
     "head":  {
                  "description":  "A high-protein Korean meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, korean ground turkey bowls, budget dinner",
-                 "costPerServing":  4.18,
+                 "costPerServing":  4.23,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 8 lb (3300 g)",
                                           "Rice, 1 lb (900 g)",

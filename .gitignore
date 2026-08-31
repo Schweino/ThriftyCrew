@@ -426,3 +426,8 @@ meal-prep/db/fdc-api-key.txt
 # abandoned `tail -F` held the primary for 67 hours, three sidecars accumulated, and 3,560 lines of run
 # history sat outside the log. capture-watchdog check 6b now PAGES when a prior-day sidecar survives.
 /grocery/ad-cycle-log.LOCKED-*.txt
+
+# Design-canvas PUBLISH BUNDLE. The .dc.html artboards and canvas.json beside it are the
+# SOURCES and are tracked; this is the ~2.5 MB single-file render Claude Code publishes from
+# them, regenerated on every publish and never edited by hand.
+design/canvas-*/thrifty-crew-redesign.html

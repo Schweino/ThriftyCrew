@@ -39660,6 +39660,185 @@
      "portions": []
     }
    ]
+  },
+  "large shallot": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 170499,
+     "description": "Shallots, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "carbs_g": 16.8,
+      "calories": 72.0,
+      "fat_g": 0.1,
+      "protein_g": 2.5,
+      "fiber_g": 3.2
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 170082,
+     "description": "Shallots, freeze-dried",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.5,
+      "carbs_g": 80.7,
+      "calories": 348.0,
+      "protein_g": 12.3,
+      "fiber_g": 15.7
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 747997,
+     "description": "Eggs, Grade A, Large, egg white",
+     "data_type": "Foundation",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 10.7,
+      "fat_g": 0.0,
+      "calories": 55.0,
+      "carbs_g": 2.36
+     },
+     "portions": []
+    }
+   ]
+  },
+  "unsmoked bacon lardons or pancetta": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 172439,
+     "description": "Bacon, meatless",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 11.7,
+      "carbs_g": 5.31,
+      "calories": 309.0,
+      "fat_g": 29.5,
+      "fiber_g": 2.6
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 174602,
+     "description": "Bacon and beef sticks",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 29.1,
+      "fiber_g": 0.0,
+      "fat_g": 44.2,
+      "carbs_g": 0.8,
+      "calories": 517.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169893,
+     "description": "Bacon bits, meatless",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 32.0,
+      "fiber_g": 10.2,
+      "fat_g": 25.9,
+      "carbs_g": 28.6,
+      "calories": 476.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171639,
+     "description": "Bacon, turkey, microwaved",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 25.9,
+      "carbs_g": 4.24,
+      "calories": 368.0,
+      "protein_g": 29.5,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "carnaroli rice": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 173161,
+     "description": "Rice crackers",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 10.0,
+      "carbs_g": 82.6,
+      "calories": 416.0,
+      "fiber_g": 0.0,
+      "fat_g": 5.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 167967,
+     "description": "Snacks, rice cakes, brown rice, buckwheat",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 9.0,
+      "fiber_g": 3.8,
+      "fat_g": 3.5,
+      "carbs_g": 80.1,
+      "calories": 380.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169679,
+     "description": "Snacks, rice cakes, brown rice, corn",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 3.2,
+      "carbs_g": 81.2,
+      "calories": 385.0,
+      "fiber_g": 2.9,
+      "protein_g": 8.4
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169680,
+     "description": "Snacks, rice cakes, brown rice, multigrain",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 3.0,
+      "protein_g": 8.5,
+      "fat_g": 3.5,
+      "carbs_g": 80.1,
+      "calories": 387.0
+     },
+     "portions": []
+    }
+   ]
   }
  }
 }
