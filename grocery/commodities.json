@@ -27432,6 +27432,8 @@
                     ],
         "exclude":  [
                         "cleaner",
+                        "\\bfurniture\\b",
+                        "wood\\s+(polish|oil|care)",
                         "\\bhair\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
