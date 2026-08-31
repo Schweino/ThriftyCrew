@@ -127,7 +127,7 @@ if ($Recipes) {
     if (-not $p.lexical) { $rBlind += ("{0}: live post has no lexical body" -f $slug); continue }
     try { $lex = $p.lexical | ConvertFrom-Json } catch { $rBlind += ("{0}: lexical did not parse" -f $slug); continue }
     $liveBody = ''
-    foreach ($c in $lex.root.children) { if ($c.type -eq 'html' -and $c.html) { $liveBody += [string]$c.html } }
+    $liveBody = Join-GhostLexicalBody -Root $lex.root
     if (-not $liveBody) { $rBlind += ("{0}: no html card on the live post" -f $slug); continue }
     # same four fields, same order, same separator as publish.ps1
     $liveHash = Get-PublishedContentHash -Body $liveBody -Head ([string]$p.codeinjection_head) -Name ([string]$p.title) -Desc ([string]$p.custom_excerpt)
@@ -184,7 +184,7 @@ if ($Discover) {
       if (-not $p.lexical) { continue }
       try { $lex = $p.lexical | ConvertFrom-Json } catch { continue }
       $h = ''
-      foreach ($c in $lex.root.children) { if ($c.type -eq 'html' -and $c.html) { $h += [string]$c.html } }
+      $h = Join-GhostLexicalBody -Root $lex.root
       if ($h) { $bodies[$p.slug] = $h }
     }
     $page++

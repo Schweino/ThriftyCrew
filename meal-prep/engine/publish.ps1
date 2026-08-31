@@ -154,7 +154,7 @@ foreach($slug in $Slugs){
         if($liveP -and $liveP.lexical){
           $liveLex = $liveP.lexical | ConvertFrom-Json
           $liveBody = ''
-          foreach($c in $liveLex.root.children){ if($c.type -eq 'html' -and $c.html){ $liveBody += [string]$c.html } }
+          $liveBody = Join-GhostLexicalBody -Root $liveLex.root
           if($liveBody){
             $liveHash = Get-PublishedContentHash -Body $liveBody -Head ([string]$liveP.codeinjection_head) -Name ([string]$liveP.title) -Desc ([string]$liveP.custom_excerpt)
             if($liveHash -ne $pubHashes[$slug]){

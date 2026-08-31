@@ -99,6 +99,39 @@ function Get-PublishedContentHash { param([string]$Body, [string]$Head, [string]
   return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($s))) -replace '-', '')
 }
 
+# ---- OUR OWN transformation, the second one (2026-08-31) ----------------------------------------
+# Get-CanonicalBody above undoes what the PLATFORM does to a body. This undoes what WE do to it.
+#
+# publish.ps1 splits a built body at <!--TC-PAYWALL--> into html|paywall|html so Ghost has somewhere
+# to cut a paid post. The sentinel is a SPLIT POINT, not content, so it is not stored in either half -
+# and every reader that reassembled the halves by concatenation got the body back 17 bytes short.
+#
+# MEASURED 2026-08-31, and it had gone unnoticed because it fails the safe-looking way. On that day
+# audit-ghost-drift reported 577 of 577 recipes drifted, 0 matching - and publish.ps1's pre-flight,
+# which reads the same reassembly, was REFUSING every recipe update as a hand-edit it must not
+# overwrite. Neither was drift. Both were this. A guard that indicts everything indicts nothing, and
+# the only way past it was -Force, which is the guard turned off.
+#
+# The inverse is exact, not approximate: publish.ps1 writes preview + SENTINEL + rest, so replaying
+# the sentinel at the paywall child rebuilds the byte-identical body. Proved on six live posts - five
+# unchanged ones came back byte-identical, and the sixth was the one card genuinely rebuilt that hour,
+# which is the control: this fold must still SEE a real change.
+$script:GD_PAYWALL_SENTINEL = '<!--TC-PAYWALL-->'
+
+function Join-GhostLexicalBody { param($Root)
+  <# Reassemble a live lexical root into the body we published, in document order.
+     The exact inverse of publish.ps1's paywall split. An unsplit post has one html child and no
+     paywall child, so it rejoins to itself and this is a no-op for the 16 tool posts. #>
+  $out = ''
+  if ($null -eq $Root) { return $out }
+  foreach ($c in $Root.children) {
+    $t = [string]$c.type
+    if ($t -eq 'html') { if ($c.html) { $out += [string]$c.html } }
+    elseif ($t -eq 'paywall') { $out += $script:GD_PAYWALL_SENTINEL }
+  }
+  return $out
+}
+
 function Get-GhostCardBody { param([string]$Api, [string]$Key, [string]$Slug)
   <# The live html card body, concatenated in document order. A tool post is one card, but do not assume it -
      returns $null when there is no card at all, which callers must treat as BLIND, never as clean. #>
@@ -107,8 +140,7 @@ function Get-GhostCardBody { param([string]$Api, [string]$Key, [string]$Slug)
         -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45).posts[0]
   if (-not $p -or -not $p.lexical) { return $null }
   $lex = $p.lexical | ConvertFrom-Json
-  $html = ''
-  foreach ($c in $lex.root.children) { if ($c.type -eq 'html' -and $c.html) { $html += [string]$c.html } }
+  $html = Join-GhostLexicalBody -Root $lex.root
   if (-not $html) { return $null }
   return $html
 }
@@ -176,6 +208,60 @@ if ($__gdSelfTest) {
         ($mine -ne (Get-PublishedContentHash -Body $b -Head $h -Name $n -Desc ($d + ' '))) 'digest ignored a field change'
     }
   } else { Write-Output 'FAIL  publish.ps1 not found - cannot prove the card hash still matches the publisher'; $f++ }
+
+  # ---- THE PAYWALL SPLIT MUST SURVIVE THE ROUND TRIP (2026-08-31) ----
+  # Everything above compares two bodies. These prove we can still RECOVER the body we published from
+  # what Ghost stores, now that publish.ps1 cuts it in two. Without them the reassembly can go back to
+  # plain concatenation and every case here stays green while the audit reports 100% drift - which is
+  # exactly the state this replaced: 577 of 577 recipes "drifted", 0 matching, and the publisher
+  # refusing every update as a hand-edit.
+  $PWS   = $script:GD_PAYWALL_SENTINEL
+  $pvw   = '<p>' + ('preview text ' * 20) + '</p>'
+  $rest  = '<h2>What This Batch Costs</h2><p>' + ('the costed half ' * 20) + '</p>'
+  $full  = $pvw + $PWS + $rest
+  function MkRoot($kids) { return [pscustomobject]@{ children = $kids } }
+  $rootSplit = MkRoot @(
+    [pscustomobject]@{ type = 'html'; html = $pvw },
+    [pscustomobject]@{ type = 'paywall' },
+    [pscustomobject]@{ type = 'html'; html = $rest })
+  $rootFlat  = MkRoot @([pscustomobject]@{ type = 'html'; html = $pvw })
+
+  T 'a split body rejoins BYTE-IDENTICAL to what was published' `
+    ((Join-GhostLexicalBody -Root $rootSplit) -eq $full) (Join-GhostLexicalBody -Root $rootSplit)
+  T 'an UNSPLIT post rejoins to itself (the 16 tool posts are unaffected)' `
+    ((Join-GhostLexicalBody -Root $rootFlat) -eq $pvw) (Join-GhostLexicalBody -Root $rootFlat)
+  T 'MUST FIRE  no sentinel is FABRICATED when there is no paywall child' `
+    (-not (Join-GhostLexicalBody -Root $rootFlat).Contains($PWS)) 'invented a split point that was never published'
+  T 'MUST FIRE  plain concatenation is NOT the body (the defect this replaced)' `
+    (($pvw + $rest) -ne $full) 'the sentinel costs nothing, so nothing would have been wrong'
+  T 'MUST FIRE  an edit BEHIND the paywall is still seen' `
+    ((Join-GhostLexicalBody -Root (MkRoot @(
+        [pscustomobject]@{ type = 'html'; html = $pvw },
+        [pscustomobject]@{ type = 'paywall' },
+        [pscustomobject]@{ type = 'html'; html = ($rest + '<p>hand edit</p>') }))) -ne $full) `
+    'folded a real change away - the guard would overwrite a hand edit'
+  T 'MUST FIRE  an edit IN FRONT of the paywall is still seen' `
+    ((Join-GhostLexicalBody -Root (MkRoot @(
+        [pscustomobject]@{ type = 'html'; html = ($pvw + '!') },
+        [pscustomobject]@{ type = 'paywall' },
+        [pscustomobject]@{ type = 'html'; html = $rest }))) -ne $full) 'folded a real change away'
+  T 'MUST FIRE  a null root is empty, never a false match' `
+    ((Join-GhostLexicalBody -Root $null) -eq '') 'a body that could not be read must not compare equal'
+
+  # ---- and the sentinel is ONE rule in TWO files, so pin them together ----
+  # Same argument as the card-hash fixture above: publish.ps1 declares its own $PW literal. If either
+  # side is edited alone the fold stops being an inverse, and the failure mode is silent 100% drift.
+  $pubPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'meal-prep\engine\publish.ps1'
+  if (Test-Path $pubPath) {
+    $psrc = [IO.File]::ReadAllText($pubPath)
+    $pat  = '(?m)^\s*\$' + 'PW = ' + "'" + '([^' + "'" + ']+)' + "'"
+    $mp   = [regex]::Match($psrc, $pat)
+    if (-not $mp.Success) {
+      Write-Output 'FAIL  could not find publish.ps1''s own paywall sentinel - the inverse is now unpinned'; $f++
+    } else {
+      T 'the sentinel matches publish.ps1''s own $PW literal' ($mp.Groups[1].Value -eq $PWS) "$($mp.Groups[1].Value) vs $PWS"
+    }
+  } else { Write-Output 'FAIL  publish.ps1 not found - cannot pin the paywall sentinel'; $f++ }
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
