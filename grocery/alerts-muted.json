@@ -1,5 +1,5 @@
 {
-  "muted": true,
+  "muted": false,
   "since": "2026-08-14",
   "until": null,
   "reason": "Brad asked to stop all email alerts (2026-08-14). This silences the inbox only - send-alert.ps1 still writes every alert to triage-queue.json, and the daily grocery-alert-triage agent still drains, diagnoses and fixes them.",
@@ -8,5 +8,7 @@
     "GitHub's own workflow-failure emails for daily.yml / heartbeat.yml (a GitHub account notification setting, not repo code)",
     "The Cloudflare Worker /ops-alert relay (runs in the cloud, cannot see this file)",
     "Member-facing mail: the /submit item-request form and the Friday email draft task - those are not alerts"
-  ]
+  ],
+  "unmuted": "2026-08-31",
+  "unmuted_reason": "Brad asked for email alerts back on 2026-08-31, after the mute had run 17 days with no expiry and two items sat in the queue unseen. Kept as muted:false rather than deleting the file so the mute period stays on the record; send-alert.ps1 reads muted:false as the documented in-place off switch."
 }

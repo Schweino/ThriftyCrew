@@ -296,6 +296,18 @@ else { Bad ("coverage-gaps paged on gaps the engine itself explains (rc=$($r.rc)
 $tmp = Register-Fx (Join-Path $env:TEMP ('triage-fixture-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
 New-Item -ItemType Directory -Force $tmp | Out-Null
 Copy-Item (Join-Path $root 'triage-due.ps1') (Join-Path $tmp 'triage-due.ps1')
+# ...AND EVERY LIB IT DOT-SOURCES. The fixture is a bare temp directory, so a guard that dot-sources a
+# sibling dies on launch here while working perfectly in place - and a guard that cannot start FAILS OPEN
+# through the checks below: all four then report "triage-due FAILED OPEN", which reads as the guard being
+# broken rather than the fixture being incomplete. That is exactly what happened on 2026-08-31, the day
+# triage-due.ps1 was changed to share mute-lib.ps1 instead of keeping its own copy of the mute rule.
+# Derived from the script's own source rather than hard-coded, so the NEXT lib it takes on comes along by
+# itself instead of blinding these four tests again and waiting for someone to read the error text.
+foreach ($m in [regex]::Matches((Get-Content (Join-Path $root 'triage-due.ps1') -Raw), "\.\s+\(Join-Path\s+\`$root\s+'(?<f>[^']+)'\)")) {
+  $dep = Join-Path $root $m.Groups['f'].Value
+  if (Test-Path $dep) { Copy-Item $dep (Join-Path $tmp $m.Groups['f'].Value) -Force }
+  else { Bad ('triage-due dot-sources ' + $m.Groups['f'].Value + ' which is not in grocery\ - the fixture cannot carry it and the guard cannot start') }
+}
 function RunTriage($content) {
   $qf = Join-Path $tmp 'triage-queue.json'
   if ($null -eq $content) { Remove-Item $qf -ErrorAction SilentlyContinue }

@@ -130,6 +130,8 @@ try {
   $mg = [regex]::Match($cdtxt, '\$GLOBAL_EXCLUDE = @\((?<b>[\s\S]*?)\r?\n\)')
   if ($mg.Success) { $ENGINE_GLOBAL = @(Invoke-Expression ('@(' + $mg.Groups['b'].Value + ')')) }
 } catch { Write-Output ('WARN could not read the engine GLOBAL_EXCLUDE (' + $_.Exception.Message + ') - gaps may include engine-excluded products') }
+# ...and the engine's IN-STORE gate, for the same reason (see instore-lib.ps1).
+. (Join-Path $root 'instore-lib.ps1')
 
 # ---- gather each store's RAW pulled product names (same inputs compare-deals uses) ----
 $prod = @{}
@@ -161,7 +163,15 @@ foreach ($k in $regNewest.Keys) {
   $entry = $regNewest[$k]
   if ($entry.stamp -lt $freshFloor) { continue }        # past the cliff: the engine would not price it either
   try { $doc = Get-Content $entry.file.FullName -Raw | ConvertFrom-Json } catch { continue }
-  foreach ($d in $doc.deals) { $s = if ($doc.store) { [string]$doc.store } else { [string]$d.store }; AddP $s ([string]$d.item); if ($d.name) { AddP $s ([string]$d.name) } }
+  # ...and skip the rows the ENGINE's in-store gate refuses (2026-08-31). Same reasoning as the
+  # $GLOBAL_EXCLUDE lift above: a ship-only or third-party listing can never win a cell, so reporting it as
+  # "the store carries this but the board is missing it" is a gap nobody can ever close. Shared rule, not a
+  # second opinion - see instore-lib.ps1. Rows with no fulfillment field are unaffected (absent is not a
+  # verdict), which is every capture written before 2026-08-30.
+  foreach ($d in $doc.deals) {
+    if (-not (Test-InStore $d.fulfillment)) { continue }
+    $s = if ($doc.store) { [string]$doc.store } else { [string]$d.store }; AddP $s ([string]$d.item); if ($d.name) { AddP $s ([string]$d.name) }
+  }
 }
 # browser-store deal files
 foreach ($glob in @('bakers\bakers-deals-*.json','sams\sams-deals-*.json','fareway\fareway-deals-*.json')) {

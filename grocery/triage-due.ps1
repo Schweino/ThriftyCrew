@@ -10,11 +10,17 @@ $qFile = Join-Path $root 'triage-queue.json'
 # EMAIL MUTED? (2026-08-14) Say so up front. With the inbox silenced, this guard and the agent behind it are
 # the ONLY thing that notices an alert, so the mute has to be visible exactly where the response happens -
 # an indefinite mute nobody is reminded of is how a rule silently outlives its reason.
+#
+# ASK THE MAILER'S OWN RULE, do not re-decide it here (2026-08-31). This used to be a bare
+# `if (Test-Path $muteFile)`, which is not the same question send-alert.ps1 answers: the documented
+# in-place off switch is `muted:false`, which KEEPS the file so the mute period stays on the record.
+# So the day the mail came back this banner went on announcing "email alerts are OFF" above a queue
+# that was being emailed normally. One copy now, in mute-lib.ps1.
 $muteFile = Join-Path $root 'alerts-muted.json'
-if (Test-Path $muteFile) {
-  $since = ''
-  try { $mc = (Get-Content $muteFile -Raw) | ConvertFrom-Json; if ($mc.PSObject.Properties['since']) { $since = ' since ' + [string]$mc.since } } catch {}
-  Write-Output ('MUTED  email alerts are OFF' + $since + ' (grocery\alerts-muted.json) - alerts still queue here and still get worked; only the mail stopped.')
+. (Join-Path $root 'mute-lib.ps1')
+$mute = Get-MuteState -Path $muteFile -Today (Get-Date -Format 'yyyy-MM-dd')
+if ($mute.muted) {
+  Write-Output ('MUTED  email alerts are OFF (' + $mute.why + ', grocery\alerts-muted.json) - alerts still queue here and still get worked; only the mail stopped.')
 }
 if (-not (Test-Path $qFile)) { Write-Output 'IDLE  no triage queue file - no alert has ever fired'; exit 0 }
 # FAIL CLOSED. 2026-07-28: send-alert.ps1 rewrote this file in place, and a read landing inside that window

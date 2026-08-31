@@ -51,6 +51,14 @@
       "reason": "The product name states '200.2 Fl Oz' and the size field states '200.303 oz'. The row is priced per fl oz; the two numbers agree to within 0.05%, so the label is the only thing that differs."
     },
     {
+      "id": "orange-juice",
+      "store": "Fareway",
+      "size": "128 oz",
+      "reviewed": "2026-08-31",
+      "reviewed_by": "claude (grocery triage)",
+      "reason": "The size names a WEIGHT token on a row priced by volume, but 128 is the true fluid-ounce content: this is the gallon jug, and Fareway's own product page says so - the captured link ends /fareway-orange-juice-from-concentrate-128-oz. $5.98 / 128 fl oz = 0.046719, which is the published 0.0467, so the conversion was done correctly and only the label is weight-shaped. The price is a real markdown the row carries itself (base_price 9.99, current_price 5.98, marked_down true), not a parse artifact. Cross-checked against the gallon peers on the same board, all of which price the identical 128 fl oz volume: Aldi $7.49 = 0.0585, Baker's 1 gal $8.79 = 0.0687, Hy-Vee 1 gal $8.99 = 0.0702. Fareway is cheapest because it is the only one on ad this week. Had 128 been misread for a 64 fl oz bottle the cell would read 0.0934 and OVERSTATE orange juice by double, so the failure direction was checked, not assumed. Allowlisted because the NUMBER is right; the bare 'oz' token on a liquid is ordinary retail shorthand and appears the same way on this store's other juice rows."
+    },
+    {
       "id": "pickles",
       "store": "Sam's Club",
       "size": "126.8 oz",

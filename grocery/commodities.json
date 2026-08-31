@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "id":  "chicken-breast",
         "label":  "Boneless Skinless Chicken Breast",
@@ -68970,7 +68970,8 @@
         "band_max":  1.0,
         "relax_global":  [
                              "\\bwine\\b"
-                         ]
+                         ],
+        "ruling":  "Brad ruled 2026-08-31: 750 ml bottles ONLY. Box, jug and other large formats stay excluded ON PURPOSE, and this is a definition of the commodity, not an oversight in the regex. His words: when you are cooking you do not need a box of wine, you need a small bottle. So the any-liter token plus the franzia / box / jug / cask / carlo rossi / bag-in-box excludes are all load-bearing and must NOT be narrowed to 'just 1.5 L' to admit the formats they currently blind. Measured before the ruling, so the cost of the decision is on the record: admitting boxes would hand BOTH crowns to Franzia 5 L, white 0.1571 to 0.0945 per fl oz and red 0.2358 to 0.0797. That is a real per-unit saving and it is declined deliberately, because a 5 L box is not the purchase this commodity is meant to price. Reopen only on a new ruling from Brad; see triage queue item 2026-08-30-855daa for the full measurement."
     },
     {
         "id":  "brandy",
@@ -71758,7 +71759,8 @@
         "band_max":  1.0,
         "relax_global":  [
                              "\\bwine\\b"
-                         ]
+                         ],
+        "ruling":  "Brad ruled 2026-08-31: 750 ml bottles ONLY. Box, jug and other large formats stay excluded ON PURPOSE, and this is a definition of the commodity, not an oversight in the regex. His words: when you are cooking you do not need a box of wine, you need a small bottle. So the any-liter token plus the franzia / box / jug / cask / carlo rossi / bag-in-box excludes are all load-bearing and must NOT be narrowed to 'just 1.5 L' to admit the formats they currently blind. Measured before the ruling, so the cost of the decision is on the record: admitting boxes would hand BOTH crowns to Franzia 5 L, white 0.1571 to 0.0945 per fl oz and red 0.2358 to 0.0797. That is a real per-unit saving and it is declined deliberately, because a 5 L box is not the purchase this commodity is meant to price. Reopen only on a new ruling from Brad; see triage queue item 2026-08-30-855daa for the full measurement."
     },
     {
         "id":  "pistachios",

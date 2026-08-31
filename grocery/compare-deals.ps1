@@ -124,6 +124,33 @@ function Test-PackSize($id, $size, $name) {
   if ($null -eq $oz -or $oz -le 0) { return $true }
   return ($oz -le $MAXPACK[[string]$id])
 }
+# IN-STORE PRICE MODE, ENFORCED PER ROW (2026-08-31). See instore-lib.ps1 for the rule and the founding
+# achiote bug. It is shared with audit-coverage-gaps.ps1, which would otherwise report every row this gate
+# refuses as "the store carries it but the board is missing it".
+. (Join-Path $PSScriptRoot 'instore-lib.ps1')
+# WHICH ROW REPRESENTS A STORE for one commodity. Lives here as ONE function rather than inline at the
+# ranker so -SelfTest exercises the rule the board actually runs; an inline sort can only be tested by
+# transcribing it, and a transcribed test passes while the original regresses. Keys, in order:
+#   1. per-unit price     - the whole point of the board; nothing below can make a cell dearer
+#   2. can we link it     - 2026-08-22, an unlinkable row cannot be verified or re-found
+#   3. smaller package    - 2026-08-31, a case pack ties its own single unit and must not beat it
+#   4. product name       - a TOTAL order, so the winner is reproducible
+#
+# KEY 4 IS NOT DECORATION. The 2026-08-22 note above this rule reasoned "sorting is stable, so rows equal
+# on both keys keep their previous relative order" - that is not true on this runtime. Windows PowerShell
+# 5.1's Sort-Object is NOT a stable sort and has no -Stable parameter (that arrived in PowerShell 6), so
+# rows equal on every key came out in an arbitrary order that could differ run to run on the same input.
+# Caught while proving the key-3 fixture must-fire: with key 3 removed the case-pack test still PASSED,
+# because the winner was being decided by luck rather than by any rule. A board cell has to be
+# reproducible, so the comparison ends on something total.
+function Select-StoreWinner($rows) {
+  $rows |
+    Sort-Object @{Expression = { $_.unit_price }},
+                @{Expression = { if ($_.has_identity) { 0 } else { 1 } }},
+                @{Expression = { $s = Get-PackOz $_.size_text $_.name; if ($null -eq $s -or $s -le 0) { [double]::MaxValue } else { [double]$s } }},
+                @{Expression = { [string]$_.name }} |
+    Select-Object -First 1
+}
 # bulk / non-single-unit heuristic on a size string (so the winner line can flag "10 lb pack" etc.)
 function Test-Bulk([string]$size, [string]$name) {
   $t = (("" + $size + " " + $name)).ToLower()
@@ -892,6 +919,51 @@ if ($SelfTest) {
   if (Test-PackSize 'undeclared-commodity' '8.5 oz' 'Mc Cormick Mild Taco Seasoning Mix 8.5 Oz') { Write-Output 'ok    max_pack_oz: undeclared commodity untouched' } else { Write-Output 'FAIL  max_pack_oz fired on a commodity that never declared it'; $script:fail++ }
   $MAXPACK.Remove('_selftest-packet')
 
+  # --- 11g: Test-InStore - the IN-STORE PRICE MODE gate (2026-08-31 achiote ruling) ------------------------
+  # The live rows, both from walmart-regular-2026-08-30, both the same 3.5 oz Chef Merito jar:
+  #   STORE $2.27 (on the Omaha shelf)  vs  FC $16.24 for a (Pack of 12) shipped case, which took the crown
+  # at $0.3867/oz and billed cochinita-pibil the whole 42 oz case. MUST-FIRE: the FC case and a MARKETPLACE
+  # third-party row are both refused. CLEAN TWINS: the STORE jar passes, and a row with NO signal passes -
+  # every capture before 2026-08-30 predates the field, and treating absence as "not in store" would empty
+  # the Walmart column on the day this shipped.
+  if (-not (Test-InStore 'FC'))          { Write-Output 'ok    in-store gate refuses the FC shipped case (the achiote bug)' } else { Write-Output 'FAIL  in-store gate admitted a ship-only FC row'; $script:fail++ }
+  if (-not (Test-InStore 'MARKETPLACE')) { Write-Output 'ok    in-store gate refuses a third-party MARKETPLACE row' }        else { Write-Output 'FAIL  in-store gate admitted a marketplace row'; $script:fail++ }
+  if (Test-InStore 'STORE')              { Write-Output 'ok    in-store gate keeps the STORE shelf row' }                    else { Write-Output 'FAIL  in-store gate dropped a real shelf row'; $script:fail++ }
+  if (Test-InStore '')                   { Write-Output 'ok    in-store gate: absent signal is NOT a verdict' }              else { Write-Output 'FAIL  in-store gate treated a missing signal as not-in-store'; $script:fail++ }
+  if (Test-InStore $null)                { Write-Output 'ok    in-store gate: null signal is NOT a verdict' }                else { Write-Output 'FAIL  in-store gate treated a null signal as not-in-store'; $script:fail++ }
+  if (Test-InStore ' store ')            { Write-Output 'ok    in-store gate is case/whitespace tolerant' }                  else { Write-Output 'FAIL  in-store gate rejected a padded STORE value'; $script:fail++ }
+
+  # --- 11h: Select-StoreWinner - the case-pack tie-break (2026-08-31 harissa ruling) -----------------------
+  # The live rows: Walmart listed Mina Harissa as a single 10 oz jar at $4.98 AND as a (12 pack) at $59.76.
+  # Both are exactly $0.498/oz, so the two existing keys were silent and the CASE won on group order - the
+  # board published "$59.76" as the cheapest harissa in Omaha and two recipes were billed the whole case.
+  # MUST-FIRE: the single jar wins that tie. CLEAN TWINS: a genuinely cheaper case still wins on price (this
+  # tie-break must never make the board dearer); the linkability key still outranks size; and equal sizes
+  # fall through to the previous behaviour.
+  # PARENTHESISE EVERY CALL. Without them PowerShell binds the comma to _W's LAST argument, so the whole
+  # fixture collapses to ONE row and the assertions pass against a list they never built - a test that
+  # cannot fail is worth less than no test (see the fix-needs-a-reachable-self-test class). Caught here.
+  function _W($n,$up,$sz,$id) { [pscustomobject]@{ name=$n; unit_price=$up; size_text=$sz; has_identity=$id } }
+  $tie = @((_W '(12 pack) Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz' 0.498 '120 oz' $true),
+           (_W 'Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz'           0.498 '10 oz'  $true))
+  if ((Select-StoreWinner $tie).size_text -eq '10 oz') { Write-Output 'ok    tie-break: the single 10 oz jar beats the 12-pack case (the harissa bug)' } else { Write-Output 'FAIL  tie-break: the case pack still won a per-unit tie'; $script:fail++ }
+  # reversed input order - the rule must decide this, not the order it happened to receive
+  if ((Select-StoreWinner @($tie[1],$tie[0])).size_text -eq '10 oz') { Write-Output 'ok    tie-break is order-independent' } else { Write-Output 'FAIL  tie-break depended on input order'; $script:fail++ }
+  $cheaperCase = @((_W 'Single jar, 10 oz' 0.60 '10 oz' $true), (_W '(12 pack) case, 120 oz' 0.40 '120 oz' $true))
+  if ((Select-StoreWinner $cheaperCase).size_text -eq '120 oz') { Write-Output 'ok    tie-break never overrides a genuinely cheaper per-unit price' } else { Write-Output 'FAIL  tie-break made the board dearer'; $script:fail++ }
+  $linkWins = @((_W 'small but unlinkable, 10 oz' 0.50 '10 oz' $false), (_W 'larger but linkable, 120 oz' 0.50 '120 oz' $true))
+  if ((Select-StoreWinner $linkWins).has_identity) { Write-Output 'ok    linkability still outranks package size' } else { Write-Output 'FAIL  size tie-break outranked the linkability key'; $script:fail++ }
+  $sameSize = @((_W 'Millville Complete Buttermilk Pancake & Waffle Mix' 1.95 '32 oz' $false), (_W "Aunt Maple's Buttermilk Pancake Mix 32 OZ" 1.95 '32 oz' $true))
+  if ((Select-StoreWinner $sameSize).has_identity) { Write-Output 'ok    equal sizes fall through to the linkable row (the 2026-08-22 pancake fixture)' } else { Write-Output 'FAIL  size key disturbed the pancake-mix tie-break'; $script:fail++ }
+  $unreadable = @((_W 'no size stated' 0.50 '' $true), (_W 'stated 10 oz' 0.50 '10 oz' $true))
+  if ((Select-StoreWinner $unreadable).size_text -eq '10 oz') { Write-Output 'ok    an unreadable size sorts last rather than winning by default' } else { Write-Output 'FAIL  a row with no readable size beat one with a real size'; $script:fail++ }
+  # TOTAL ORDER (key 4). PS 5.1's Sort-Object is not stable, so rows equal on keys 1-3 must still resolve to
+  # the SAME winner every run or a board cell is not reproducible. Same input, both orders, one answer.
+  $twinA = @((_W 'Zeta brand, 10 oz' 0.50 '10 oz' $true), (_W 'Alpha brand, 10 oz' 0.50 '10 oz' $true))
+  $wA = (Select-StoreWinner $twinA).name
+  $wB = (Select-StoreWinner @($twinA[1],$twinA[0])).name
+  if ($wA -eq $wB -and $wA -eq 'Alpha brand, 10 oz') { Write-Output 'ok    rows equal on every real key resolve to ONE reproducible winner' } else { Write-Output ("FAIL  equal rows are order-dependent ('$wA' vs '$wB') - the board cell is not reproducible"); $script:fail++ }
+
   # the 'snax' GLOBAL_EXCLUDE token (blocks snack TRAYS from winning real-commodity cells). $GLOBAL_EXCLUDE
   # is defined AFTER this block exits, so read the token from this script's own source (the extraction regex
   # audit-match-soundness.ps1 already uses) - a hard-coded 'snax' literal here would pass whether or not the
@@ -1437,7 +1509,7 @@ function Get-RowProductId($row) {
   if ($v) { return $v }
   return ''
 }
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='') {
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='') {
   if (-not $name) { return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
@@ -1463,7 +1535,9 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   if ($ptype -eq 'sale' -and $adTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
     if ([string]$adTo -lt [string]$script:BoardToday) { $script:ExpiredSaleRows++; return }
   }
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId })
+  # fulfillment: the store's own word on whether this row is sold on the shelf. Carried raw ('' when the
+  # capture predates the field) so Test-InStore can tell "not in store" from "not stated".
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
@@ -1760,16 +1834,16 @@ if (Test-Path $regDir) {
         # A CUT PRICE IS A SALE, AND IT CARRIES ITS OWN WINDOW. Typed 'sale' so build-sale-windows
         # dates it, the page badges it, and it can expire. Its everyday half is emitted separately
         # below so the cell the shopper reverts to is never lost.
-        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d)
+        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d) ([string]$d.fulfillment)
         # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
         # store discounts an item, which is the other half of Brad's rule - everyday must not be
         # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
         # with no was-price would otherwise publish the sale price twice under two labels.
         if ($spl.everyday_price -and $spl.everyday_price -gt $spl.sale_price) {
-          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' '' '' (Get-RowProductId $d)
+          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment)
         }
       } else {
-        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d)
+        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment)
       }
     }
   }
@@ -2022,6 +2096,13 @@ foreach ($d in $deals) {
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("max_pack_oz<=$($MAXPACK[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'WRONG-PACK-FORM'   # drop from ranking; board still ships via runner-up
     }
+    elseif (-not (Test-InStore $d.fulfillment)) {
+      # RIGHT PRODUCT, NOT ON THE SHELF (see Test-InStore). A ship-only or third-party listing is not an
+      # in-store price and must not be published as one. Flagged rather than silently dropped, so the day
+      # this gate starts refusing a store's whole column it shows up as findings and not as a quiet gap.
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("fulfillment=$([string]$d.fulfillment) not in-store"); price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'NOT-IN-STORE'   # drop from ranking; board still ships via runner-up
+    }
   }
   # SAFETY NET: a recognized multibuy that came back UNPRICED means the capture is incomplete
   # (this is exactly how the Baker's chicken-thighs Buy-1-Get-2 was lost). Surface it loudly.
@@ -2117,10 +2198,19 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     # nowhere to click. Between two prices that are equal in every way we can measure, the one we can
     # stand behind should win. Sorting is stable, so rows that are equal on both keys keep their
     # previous relative order.
-    $rows |
-      Sort-Object @{Expression = { $_.unit_price }},
-                  @{Expression = { if ($_.has_identity) { 0 } else { 1 } }} |
-      Select-Object -First 1
+    # AND A TIE ON BOTH OF THOSE GOES TO THE SMALLER PACKAGE (2026-08-31). A case pack ties its own single
+    # unit on per-unit price by construction - twelve jars at one price each cost the same per ounce as one
+    # jar - so whenever a store lists both, the contest between them was decided by group order alone.
+    # Measured the day it shipped: harissa-paste at Walmart had
+    #     (12 pack) Mina, Harissa Spicy Moroccan Red Pepper Sauce, 10 Fl oz   $59.76 / 120 oz
+    #     Mina, Harissa Spicy Moroccan Red Pepper Sauce, 10 Fl oz              $4.98 /  10 oz
+    # - both exactly $0.498/oz, and the CASE won, so the board told a reader the cheapest harissa in Omaha
+    # was a $59.76 purchase and two recipes were billed the whole case (see the cheapest-is-per-unit-not-
+    # per-purchase class). Between two prices equal in every way we can measure, the one that costs the
+    # shopper less to walk out with should win. Third key on purpose: it cannot move a price, cannot
+    # outrank the linkability tie-break above, and only speaks where both were already silent.
+    # An unreadable size sorts last - we cannot claim a package is smaller when we cannot read it.
+    Select-StoreWinner $rows
   }
   $ranked = @($byStore | Sort-Object unit_price)
   if ($ranked.Count -lt $MinStores) { continue }
