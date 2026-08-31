@@ -900,6 +900,23 @@ function Get-CollapseVerdict([int]$fileCount, [int]$curr, [int]$best) {
 $thin = 0
 $g6Checked = 0
 $g6NoHistory = New-Object System.Collections.ArrayList
+# THE hunter-* PREFIXES ARE NOT STORE LANES (2026-08-31), and reporting them as unevaluable stores was
+# both untrue and expensive. promote-ingredient-queue.ps1 writes one file per store per Recipe Hunter
+# pricing round - hunter-hyvee-regular-2026-08-16.json and six siblings - carrying prices an agent
+# captured in store and adjudicated per product. RegFiles keys a "store" off the filename prefix, so
+# each of those reads as a SEPARATE STORE with exactly one capture, and guard 6 reported seven stores
+# it "could NOT evaluate" every single run.
+#
+# It is right that it cannot: guard 6 watches for a THROTTLED PULL REPLACING A FULL ONE, and nothing
+# ever writes these files again, so the class it defends against cannot occur here. But "cannot
+# evaluate" is the wrong verdict for a lane that is frozen by design - it reads as a hole.
+#
+# WHAT IS ACTUALLY AT RISK, and now checked: these 83 rows across 35 terms are long-tail specialty
+# ingredients (gruyere, brandy, dried guajillo, cardamom pods, thai chiles) that the rotating pulls do
+# not reach. If out\regular is ever pruned, or one of these files is emptied, that coverage vanishes
+# with nothing to say so. So a frozen snapshot is asserted PRESENT AND NON-EMPTY instead.
+$g6Frozen = New-Object System.Collections.ArrayList
+$g6FrozenRows = 0
 $prefixes = @{}
 foreach ($f in (RegFiles)) {
   $p = ($f.BaseName -replace '-regular-.*$','')
@@ -908,6 +925,15 @@ foreach ($f in (RegFiles)) {
 foreach ($p in $prefixes.Keys) {
   $files = @(RegFiles ($p + '-regular-*.json') | Sort-Object Name -Descending)
   # THE SKIP IS NOW A REPORTED VERDICT, NOT A SILENT `continue`. Same threshold, same file reads.
+  if ($p -like 'hunter-*') {
+    $fr = 0
+    foreach ($hf in $files) { try { $fr += @((Get-Content $hf.FullName -Raw | ConvertFrom-Json).deals).Count } catch {} }
+    if ($fr -le 0) {
+      [void]$fail.Add(("HARD FAIL: a frozen Recipe Hunter snapshot is EMPTY  [{0}] - these files are the only source for long-tail ingredients the rotating pulls never search, and nothing rewrites them, so an empty one is lost coverage that no other check can see" -f $p))
+    }
+    [void]$g6Frozen.Add($p); $g6FrozenRows += $fr
+    continue
+  }
   if ((Get-CollapseVerdict $files.Count 0 0) -eq 'no-history') { [void]$g6NoHistory.Add($p); continue }
   $newest = $files[0]
   $curr = 0
@@ -964,6 +990,9 @@ if ($thin -eq 0) {
 }
 if ($g6NoHistory.Count) {
   [void]$warn.Add("guard 6 could NOT evaluate these store(s) - fewer than 2 captures in out\regular, so there is no history to compare a thin or throttled file against and a collapse there would look normal: " + (($g6NoHistory | Sort-Object) -join ', '))
+}
+if ($g6Frozen.Count) {
+  Say ("  ok    {0} frozen Recipe Hunter snapshot(s) present and non-empty ({1} adjudicated row(s)) - one-off in-store prices for long-tail ingredients, not a rotating lane, so the throttled-collapse class does not apply: {2}" -f $g6Frozen.Count, $g6FrozenRows, (($g6Frozen | Sort-Object) -join ', '))
 }
 
 # ---------------------------------------------------------------- 7: no stray files in out\regular

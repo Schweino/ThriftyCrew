@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-08-31",
     "tol":  0.3,
-    "count":  11,
+    "count":  9,
     "cells":  [
                   {
                       "id":  "bagels",
@@ -29,24 +29,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.97,
                       "link_name":  "Roma Tomatoes",
-                      "set":  "2026-08-31"
-                  },
-                  {
-                      "id":  "boneless-skinless-chicken-thigh",
-                      "store":  "Family Fare",
-                      "per_unit":  4.99,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  7.19,
-                      "link_name":  "Chicken Thighs, Boneless Gold N Plump",
-                      "set":  "2026-08-31"
-                  },
-                  {
-                      "id":  "light-sour-cream",
-                      "store":  "Sam\u0027s Club",
-                      "per_unit":  0.1156,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.18,
-                      "link_name":  "Daisy Sour Cream, 48 oz",
                       "set":  "2026-08-31"
                   },
                   {

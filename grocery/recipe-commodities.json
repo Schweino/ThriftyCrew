@@ -113,8 +113,9 @@
         "boneless,?\\s*skinless\\s+chicken\\s+thigh",
         "chicken\\s+thigh[^,]*boneless",
         "boneless\\s+chicken\\s+thigh",
-        "b\\.?s\\.?\\s*chicken\\s+thigh"
-      ],
+        "b\\.?s\\.?\\s*chicken\\s+thigh",
+        "chicken\\s+thighs?,\\s*boneless"
+    ],
       "exclude": [
         "bone[\\s-]?in",
         "drumstick",
@@ -1284,8 +1285,9 @@
       "unit": "oz",
       "include": [
         "light\\s+sour\\s+cream",
-        "(reduced|low)[\\s-]?fat\\s+sour\\s+cream"
-      ],
+        "(reduced|low)[\\s-]?fat\\s+sour\\s+cream",
+        "sour\\s+cream,?\\s+light"
+    ],
       "exclude": [
         "\\bdip\\b",
         "french\\s+onion",
