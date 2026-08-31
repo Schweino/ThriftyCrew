@@ -154,7 +154,14 @@ if($Validate){
   foreach($kv in $live.GetEnumerator()){
     $rec=$recipes | Where-Object { $_.slug -eq $kv.Key }
     if(-not $rec){ $mm+="NO-DB $($kv.Key)"; continue }
-    $d=Get-ProteinCat $rec
+    # SAME PRECEDENCE AS THE BUILD, or this compares the page against a rule the page does not use.
+    # The card takes recipes-db.protein (stamped by normalize-recipe-ids, and what the rotation and top5
+    # read) and falls back to the local name regex; the validator used the fallback ALONE. That regex has
+    # no word for bratwurst, bangers or curried sausages - the r300 sausage lesson - so five correct pork
+    # cards were reported as "live=pork derived=" every run.
+    $d=$null
+    if($rec.PSObject.Properties.Name -contains 'protein' -and $rec.protein -in @('chicken','beef','pork','turkey')){ $d=[string]$rec.protein }
+    if(-not $d){ $d=Get-ProteinCat $rec }
     if($d -eq $kv.Value){ $ok++ } else { $mm+="$($kv.Key): live=$($kv.Value) derived=$d" }
   }
   "live parsed:$($live.Count)  MATCH:$ok"; $mm | ForEach-Object { "  $_" }
