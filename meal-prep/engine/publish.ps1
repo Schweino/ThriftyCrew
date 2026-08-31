@@ -48,6 +48,20 @@ if(-not $Slugs){ throw 'no slugs' }
 $hashFile = Join-Path $root 'db\published-hashes.json'
 $pubHashes = @{}
 if(Test-Path $hashFile){ try { $o=(Get-Content $hashFile -Raw | ConvertFrom-Json); foreach($p in $o.PSObject.Properties){ $pubHashes[$p.Name]=[string]$p.Value } } catch {} }
+# THE JOURNAL IS WRITTEN AFTER EVERY SUCCESS, NOT ONCE AT THE END (2026-08-31).
+# It used to be a single Set-Content after the loop. On 2026-08-31 a run threw at slug 243 of 576 - one
+# stale card for a retired recipe - and never reached that line, so the record of 235 posts it HAD
+# published and verified was lost. The next run then read every one of them as live-does-not-match-ledger
+# drift and refused 256 slugs whose live content was already correct.
+#
+# That made this file's own header untrue: "an interrupted 1000-post run just re-runs (done slugs skip)"
+# only holds if the journal survives the interruption. A crash, a Ctrl-C or a machine sleeping mid-wave
+# all lost it. The file is a few tens of KB, so writing it per slug costs nothing worth measuring, and
+# the write is guarded - a failed journal write must never abort a run that is publishing correctly.
+function Save-PubHashes {
+  try { ($pubHashes | ConvertTo-Json) | Set-Content $hashFile -Encoding UTF8 }
+  catch { Write-Output ("  WARNING: could not write the publish journal ($($_.Exception.Message)) - a re-run will re-publish slugs that already succeeded") }
+}
 
 # CARRIAGE, read from db\costed.json where cost-recipes.ps1 recorded it (lib\carriage-lib.ps1 derives it).
 # Publishing is the act this estate cannot take back cheaply, so it reads the fact rather than trusting
@@ -240,12 +254,12 @@ foreach($slug in $Slugs){
     $liveVis = if($existing -and $existing.visibility){ [string]$existing.visibility } else { [string]$spec.visibility }
     $paywalled = if($liveVis -eq 'public'){ $true } else { ($html -notmatch 'What This Batch Costs') }
     $schemaOk = ($html -match 'application/ld\+json')
-    if($titleOk -and $paywalled -and $schemaOk){ $ok++; $pubHashes[$slug]=$contentHash; Write-Output ("OK  $slug") }
+    if($titleOk -and $paywalled -and $schemaOk){ $ok++; $pubHashes[$slug]=$contentHash; Save-PubHashes; Write-Output ("OK  $slug") }
     else { $failed += $slug; Write-Output ("VERIFY FAIL  $slug  (title=$titleOk paywalled=$paywalled schema=$schemaOk)") }
   } catch { $failed += $slug; Write-Output ("FETCH FAIL  $slug :: " + $_.Exception.Message) }
 }
 # persist the change-gate/resume journal (only verified-good slugs advanced their hash above)
-if(-not $VerifyOnly){ ($pubHashes | ConvertTo-Json) | Set-Content $hashFile -Encoding UTF8 }
+if(-not $VerifyOnly){ Save-PubHashes }
 Write-Output ("published+verified OK: $ok / $($Slugs.Count)   (skipped-unchanged: $skipped)")
 # Orphans are named in the summary, not just logged per-slug: a stale card is a cleanup job somebody has
 # to see, and 333 unpublished recipes is what it cost the one time it was only a thrown exception.
