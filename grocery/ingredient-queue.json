@@ -9613,6 +9613,75 @@
                                  },
                       "verdict":  "CARRIED",
                       "notes":  null
+                  },
+                  {
+                      "term":  "aji amarillo paste",
+                      "recipes":  [
+                                      "peruvian-pollo-saltado"
+                                  ],
+                      "added":  "2026-08-31T13:46:49",
+                      "why":  "cost-recipes hard-down: no-board-price-ok lists aji-amarillo-paste with no carriage evidence; feed price lost when Walmart ship-only rows were ruled out",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "The 595-term Walmart pull of 2026-08-31 through Brad\u0027s own Chrome searched the exact term \u0027aji amarillo paste\u0027. 52 rows are in grocery/out/captures/walmart-capture-2026-08-31.csv under that query: 13 FC, 25 MARKETPLACE, 14 STORE. Every one of the ~38 genuine aji amarillo products is ship-only - Inca\u0027s Food 7.5 oz $10.00 (FC, seller Molly \u0026 Taylor), Dona Isabel 7.5 oz $6.80 (FC, Abit Products), Goya 7.5 oz 12-case $57.81 (MARKETPLACE), Belmont 8 oz $9.99 (FC), Sibarita 8.82 oz $12.99 (FC), Pasta de Aji amarillo 8 oz $11.85 (MARKETPLACE). NOT ONE is fulfillment STORE. All 14 STORE-fulfilled rows are unrelated fallback junk: Mae Ploy Yellow Curry Paste 14 oz $3.88, Tramontina and Beautiful cookware sets, Oreo Mint Creme, Monster Energy, Dr Pepper, Great Value cut green beans, Maruchan ramen. Under grocery/instore-lib.ps1 (ruled 2026-08-31) STORE = on the shelf, FC = shipped from a fulfilment centre, MARKETPLACE = third-party, so a ship-only listing is not shelf carriage. Walmart L St 68137 ships it; it does not shelve it.",
+                                                     "checked":  "2026-08-31T13:48:04"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Brad\u0027s Chrome 2026-08-31, shop.fareway.com. Identity verified in the Apollo cache: GetRetailerLocationAddress retailerLocation 531573, lineOneString \u002717070 Audrey Street\u0027, lineTwoString \u0027Omaha\u0027 - the Omaha store, not Des Moines. Header reads In-Store. Three terms, all returning the EXPLICIT no-results banner (R1: the product links on the page are the Related items suggestion rail, not results). \u0027aji amarillo\u0027 -\u003e No results for aji amarillo / Browse related items or try another search, 8 suggestion links (cilantro, green onions, La Costena chipotles, Cento tomato paste). \u0027aji amarillo paste\u0027 -\u003e No results for aji amarillo paste, 8 suggestions (cilantro, tomato pastes, Goya adobo). \u0027amarillo\u0027 -\u003e No results for amarillo, 8 suggestions (bananas, oranges, avocado).",
+                                                     "checked":  "2026-08-31T13:48:04"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probe-ingredient.ps1 2026-08-31, Freshop catalog store_id 6401 (Omaha); pickup = the store\u0027s own shelf price, not Instacart. Full retry ladder on 4 terms, all EMPTY with zero rows returned: \u0027aji amarillo paste\u0027 -\u003e \u0027ajiamarillopaste\u0027; \u0027aji amarillo\u0027 -\u003e \u0027ajiamarillo\u0027 -\u003e \u0027amarillo\u0027; \u0027yellow chili paste\u0027 -\u003e \u0027yellowchilipaste\u0027; \u0027peruvian pepper paste\u0027 -\u003e \u0027peruvianpepperpaste\u0027. No candidates on any rung.",
+                                                         "checked":  "2026-08-31T13:48:04"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "not-carried",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "Brad\u0027s Chrome 2026-08-31, hy-vee.com/aisles-online; store selector button reads \u0027Shopping Omaha #01, NE\u0027. Four terms. \u0027aji amarillo\u0027 -\u003e \u00271 - 14 of 14 Results\u0027, every one a hot sauce (Cholula, Frank\u0027s RedHot, Tabasco, Louisiana, Tapatio) - fuzzy fallback, no aji amarillo product. \u0027amarillo\u0027 -\u003e the identical 14 hot-sauce rows. \u0027peruvian\u0027 -\u003e 17 real results including A Dozen Cousins Peruvian Pollo A La Brasa Seasoning 3 oz $3.99, which proves the search box works and does reach Peruvian products, yet no aji amarillo paste. \u0027aji\u0027 -\u003e explicit no-results banner: aji didn\u0027t return any results, please check your spelling and try again. Second-rung discipline satisfied: brand/synonym/category rungs all tried.",
+                                                    "checked":  "2026-08-31T13:48:04"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Brad\u0027s Chrome 2026-08-31, samsclub.com; club reads \u0027Omaha Sam\u0027s Club\u0027, Omaha 68144. In-page fetch of /s/\u003cterm\u003e, parsed the __NEXT_DATA__ payload. CONTROL: \u0027milk\u0027 returned 58 distinct product names (Member\u0027s Mark Grade A Whole Milk 1 gal etc), so the lane and the parse both work. Five terms: \u0027aji amarillo\u0027 -\u003e 34 names, all generic seasonings (McCormick Montreal Steak, Dan-O\u0027s, Member\u0027s Mark Parsley Flakes, Goya Adobo 28 oz), zero aji amarillo. \u0027aji amarillo paste\u0027 -\u003e 34 names, the only string matching aji/amarillo was the echoed query itself. \u0027yellow chili paste\u0027 -\u003e 27 names, all chili powder / tomato paste / chili seasoning mix. \u0027aji\u0027 -\u003e 55 names, closest was Ajinomoto Teppanyaki Fried Rice, a brand containing the letters rather than the food. \u0027peruvian\u0027 -\u003e 43 names, all Peruvian whole-bean COFFEE plus Verde Valle mayocoba beans. No aji amarillo product in the Omaha club catalogue.",
+                                                             "checked":  "2026-08-31T13:48:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Brad\u0027s Chrome 2026-08-31, aldi.us. Header reads \u0027In-Store - open 9am - 8pm\u0027, store \u0027ALDI - OLA 48 - Omaha\u0027 (price_mode proof: In-Store, not the marked-up Delivery/Pickup). Three terms, every one an EXPLICIT no-results banner - R1 applied, the tiles are the suggestion rail. \u0027aji amarillo\u0027 -\u003e No results for aji amarillo / Browse related items or try another search, with 39 suggestion tiles (cilantro, Stonemill minced garlic, green onions, jalapeno, bell pepper, ginger root): tile count 39, truth 0, the exact trap the contract warns about. \u0027aji amarillo paste\u0027 -\u003e No results for aji amarillo paste, 9 suggestion tiles. \u0027amarillo\u0027 -\u003e No results for amarillo, 38 suggestion tiles.",
+                                                  "checked":  "2026-08-31T13:48:04"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "probe-ingredient.ps1 2026-08-31, kroger-public-api locationId 61500319. Full retry ladder on 4 terms, all EMPTY with zero rows returned: \u0027aji amarillo paste\u0027 -\u003e \u0027ajiamarillopaste\u0027 (0/0); \u0027aji amarillo\u0027 -\u003e \u0027ajiamarillo\u0027 -\u003e \u0027amarillo\u0027 (0/0/0); \u0027yellow chili paste\u0027 -\u003e \u0027yellowchilipaste\u0027 (0/0); \u0027peruvian pepper paste\u0027 -\u003e \u0027peruvianpepperpaste\u0027 (0/0). No candidates on any rung. TERM VALIDATED: audit-search-terms.ps1 run 2026-08-31 does NOT list aji-amarillo-paste as a suspect term (only jicama and doubanjiang), and this same term returned 38 genuine aji amarillo products in today\u0027s Walmart pull - so the silence here is the shelf, not the term.",
+                                                          "checked":  "2026-08-31T13:48:04"
+                                                      }
+                                 },
+                      "verdict":  "NOT-CARRIED",
+                      "notes":  null
                   }
               ]
 }
