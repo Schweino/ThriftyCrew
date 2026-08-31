@@ -363,6 +363,9 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
 
 # canonical store order - drives the per-row grid, the store-status strip and the masthead counts
 $storeOrder = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
+# store -> its index in $storeOrder. The structured feed twin (see RowStruct) ships an INDEX, not a name:
+# "Family Fare" is 11 bytes on every one of ~4,400 priced cells and the order is already canonical here.
+$storeIx = @{}; for ($sx = 0; $sx -lt $storeOrder.Count; $sx++) { $storeIx[$storeOrder[$sx]] = $sx }
 
 # short store display names + stable column color accents
 $shortName = @{ 'Hy-Vee'='Hy-Vee'; 'Aldi'='Aldi'; 'Family Fare'='Family Fare'; 'Fareway'='Fareway'; "Baker's"="Baker's"; "Sam's Club"="Sam's Club"; 'Walmart'='Walmart' }
@@ -450,16 +453,22 @@ $sb = New-Object System.Text.StringBuilder
 [void]$sb.Append("<header class='pg-head'>")
 if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h1>") }   # Embed: Ghost post title is the H1
 [void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Seven stores, checked every morning, ranked cheapest first.</p>")
+# ---- THE PREAMBLE IS ONE BLOCK NOW (2026-08-31) ------------------------------------------------------
+# Measured before this change: ~2,500px, about three phone screens, passed before the first price at 375px.
+# Every claim below is unchanged word for word; what changed is that the refresh-cycle line, the teaching
+# line and the methodology all fold into the ONE <details> that was already here, and the suggest-an-item
+# link moves to the footer beside the other fine print. Nothing is deleted, so nothing leaves the HTML for
+# search; the shopper just reaches a price without scrolling past it.
 # The masthead band was injected here (a <!--PG-MASTHEAD--> placeholder filled at the end of the build).
 # Removed 2026-08-09; see the note where it used to be built.
 # Retailers do not share one ad boundary. The promotion coordinator refreshes each store at its own
 # start/end boundary, while the daily pass remains the independent freshness backstop.
-[void]$sb.Append("<p class='pg-cycle'>Sale prices update as each retailer's ad starts or ends. This board is also re-checked every morning.</p>")
 # THE TRUST COPY, collapsed. It matters and it stays word for word, but as three stacked paragraphs it
 # pushed the first actual price below two viewports on a phone. One <details> keeps every claim on the page
 # and in the HTML for search, and gives the board back a screen and a half.
 # (The trust line is Brad's voice, approved 2026-07-17. Do not edit the wording without Brad.)
 [void]$sb.Append("<details class='pg-how'><summary>How this board works</summary>")
+[void]$sb.Append("<p class='pg-note'>Sale prices update as each retailer's ad starts or ends. This board is also re-checked every morning.</p>")
 [void]$sb.Append("<p class='pg-note'>Lowest verified price at each store, sale or everyday, checked against the store's own ad or site. Sam's Club prices need a membership.</p>")
 [void]$sb.Append("<p class='pg-trust'>I'm Brad. I live here in Omaha, and I check these prices every morning before most people are awake. No store pays to be on this board, there are no affiliate links, and no one can buy the word 'cheapest.' If a store wins, it's because their shelf price won.</p>")
 # The recipe-ingredient honesty note lived above their own (now-removed) sections; merged rows carry a
@@ -469,11 +478,16 @@ if ($riDoc) {
   try { $riBase = Join-Path $OutDir 'recipe-board-everyday.json'; $riStamp = if (Test-Path $riBase) { $riBase } else { $riFile }; $riDate = ([datetime](Get-Item $riStamp).LastWriteTime).ToString('MMM d, yyyy') } catch {}
   [void]$sb.Append("<p class='pg-note'>Rows marked <strong>shelf price</strong> are recipe ingredients at their regular shelf price (checked " + (HtmlEnc $riDate) + ", re-checked monthly). When one goes on sale in a weekly ad, the sale price shows automatically with its end date.</p>")
 }
+# Both per-row features (the price-history chart and the price alert) are hidden until a row is opened, so
+# nothing on a first read reveals they exist. The sentence stays; it just no longer costs a banner above the
+# first price, because the row itself now says "tap for history" in its own chevron affordance.
+[void]$sb.Append("<p class='pg-note'>Tap any item for its full price history, or to get an email the week it hits a record low.</p>")
 [void]$sb.Append("</details>")
-# Both per-row features (the price-history chart and the price alert) are hidden until a row is opened,
-# so nothing on a first read reveals they exist. One sentence, above the first price.
-[void]$sb.Append("<p class='pg-teach'>Tap any item for its full price history, or to get an email the week it hits a record low.</p>")
-[void]$sb.Append("<p class='pg-suggest'><a href='/suggest-an-item/'>Suggest an item for us to start tracking! &rarr;</a></p></header>")
+# The planner's box is gone (see the note where it used to be built), so this ONE line is what tells a cold
+# reader the feature exists at all. It is the only preamble element that survived besides the H1, the dek
+# and the collapsed methodology, and it earns the space: without it the planner is discoverable only by
+# ticking a box first, which nobody does for a feature they have not been told about.
+[void]$sb.Append("<p class='pg-teaser'>Tick items as you scroll and this board will split them into the cheapest trip. <button type='button' class='pg-demo' id='pg-demo'>Try it: the family staples basket</button></p></header>")
 # THE ASK moves out of the header to between the first and second category sections. 1,182 visitors in 30
 # days reached this page and converted once; ask-after-value beats ask-before-value, and the header was
 # asking before the shopper had seen a single price. Emitted as a token and placed during the section loop.
@@ -512,14 +526,11 @@ function RiCatKey([string]$label) { if ($weeklyLabelKey.ContainsKey($label)) { r
 # The cheapest-store scoreboard and the price-records band both used to render here (2026-08-09: removed at
 # Brad's request). The per-row gold record flags still mark every record low/tie/dip in the list itself, and
 # the masthead chip still headlines one of them, so nothing the badge pass computes is orphaned.
-# ---- trip planner home: ALWAYS visible up top so shoppers know it exists ----
-[void]$sb.Append("<div class='pg-tripbox' id='pg-tripbox'><h3>Plan your shopping trip</h3>")
-[void]$sb.Append("<p class='pg-tripbox-sub' id='pg-tripbox-sub'>Tick the box next to each item you want to buy, then come back here. Tell us how many stores you are willing to visit and we will split your list for the cheapest trip. <button type='button' class='pg-demo' id='pg-demo'>Try it: the family staples basket</button></p>")
-[void]$sb.Append("<div id='pg-tripbox-body' hidden><p class='pg-tripbox-n'><b id='pg-tripbox-count'>0 items</b> selected. How many stores are you willing to visit?</p><div class='pg-plan-kbtns' id='pg-plan-kbtns'></div><div class='pg-plan-out' id='pg-plan-out'></div><p class='pg-plan-note'>Based on this week's verified per-unit prices. Register totals vary by package size.</p></div></div>")
-# hide-Sam's toggle: recomputes the cheapest flags for shoppers without a membership
-[void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-hidesams'><span>Hide Sam's Club</span><span class='pg-toggle-note'>membership required: toggle to see the best price without one</span></label>")
-# show-all toggle: opens every row's full 7-store grid at once (default is the compact one-line view)
-[void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-expandall'><span>Show all prices</span><span class='pg-toggle-note'>expand every item to compare all stores at once</span></label>")
+# ---- THE PLANNER IS A DESTINATION NOW, NOT A CARD IN THE PREAMBLE (2026-08-31) -----------------------
+# It used to be a box at the top that said "come back here", which is a card asking the reader to remember
+# it. The entry point is the sticky picked-items bar that already follows the selection, and tapping it
+# opens a full-screen trip screen (built by JS on first open, so it costs zero static nodes here). The
+# demo-basket button moves onto that bar so "Try it" is still one tap from a cold page.
 
 # ---- sticky control bar: search + consolidated filter pills ----
 # The two boards' category taxonomies overlap ("Fruit"/"Vegetables" vs "Produce", "Dairy & Eggs" vs
@@ -549,11 +560,32 @@ foreach ($rc in $riCats) { if (-not $weeklyLabelKey.ContainsKey($rc)) { $allCatP
 foreach ($p in $allCatPairs) {
   foreach ($gd in $groupDefs) { if ($p.label -match $gd.rx) { $groupKeys[[string]$gd.label].Add([string]$p.key); break } }
 }
+# ---- FOUR IDIOMS DOWN TO THREE (2026-08-31) ----------------------------------------------------------
+# The controls were a search field, a chip rail, and two loose checkbox toggles sitting above it in a third
+# visual language. Now: search (with the set-once toggles folded into an Options popover on its own line),
+# a VIEW segment that answers "what am I looking at", and the category rail. The two toggles are set-once
+# controls, not per-scroll controls, which is exactly what a popover is for.
+#
+# THE BOARD OPENS ON THE SALES. 637 rows is a reference work; 37 of them are the reason to come back this
+# week. The view segment defaults to On sale, and search still reaches all 637 (typing overrides the view,
+# which is what it already did to the pills). Counts are stamped at BUILD time - the old On-sale count was
+# filled by JS that queried .pg-tag-sale inside chips, and chips are lazy, so it read 0 on a cold load.
 [void]$sb.Append("<nav class='pg-filters' aria-label='Search and filter'>")
-[void]$sb.Append("<input class='pg-search' id='pg-search' type='search' placeholder='Search items: eggs, chicken, coffee...' aria-label='Search items'>")
+[void]$sb.Append("<div class='pg-fbar'><input class='pg-search' id='pg-search' type='search' placeholder='Search all 637 items: eggs, chicken, coffee...' aria-label='Search items'>")
+[void]$sb.Append("<button type='button' class='pg-optb' id='pg-optb' aria-expanded='false' aria-controls='pg-opts'>Options</button></div>")
+[void]$sb.Append("<div class='pg-opts' id='pg-opts' hidden>")
+# hide-Sam's toggle: recomputes the cheapest flags for shoppers without a membership
+[void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-hidesams'><span>Hide Sam's Club</span><span class='pg-toggle-note'>membership required: toggle to see the best price without one</span></label>")
+# show-all toggle: opens every row's full 7-store grid at once (default is the compact one-line view)
+[void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-expandall'><span>Show all prices</span><span class='pg-toggle-note'>expand every item to compare all stores at once</span></label>")
+[void]$sb.Append("</div>")
+[void]$sb.Append("<div class='pg-views' role='group' aria-label='View'>")
+[void]$sb.Append("<button type='button' class='pg-vbtn is-active' data-view='sale'>On sale <b>__SALE_N__</b></button>")
+[void]$sb.Append("<button type='button' class='pg-vbtn' data-view='rec'>Record lows <b>__REC_N__</b></button>")
+[void]$sb.Append("<button type='button' class='pg-vbtn' data-view='all'>All <b>__ALL_N__</b></button>")
+[void]$sb.Append("</div>")
 [void]$sb.Append("<div class='pg-pills'>")
-[void]$sb.Append("<button class='pg-fbtn is-active' data-cat='all'>All</button>")
-[void]$sb.Append("<button class='pg-fbtn pg-fbtn-sale' data-cat='sale' id='pg-sale-pill'>On sale</button>")
+[void]$sb.Append("<button class='pg-fbtn is-active' data-cat='all'>All aisles</button>")
 foreach ($gd in $groupDefs) {
   $keys = ($groupKeys[[string]$gd.label] -join '|')
   if ($keys) { [void]$sb.Append("<button class='pg-fbtn' data-cat='group' data-cats='" + (HtmlEnc $keys) + "'>" + $gd.label + "</button>") }
@@ -611,6 +643,8 @@ $stapleIdSet = @{}
 try { foreach ($sc in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $stapleIdSet[[string]$sc.id] = $true } } catch {}
 $stapleRendered = @{}
 $totalCommodities = 0; $totalPrices = 0
+# view counts, stamped into the segment above at the end of the build (see __SALE_N__)
+$saleRowN = 0; $recRowN = 0
 # id -> rendered store-chip html. Written to public/board.json and injected client-side instead of shipped in
 # the post. The chips are .pg-stores{display:none} until a row is opened, so they were ~1.1 MB of HIDDEN markup
 # inside the post - and that pushed the Ghost upsert past its processing timeout (503 = the board could not
@@ -618,6 +652,66 @@ $totalCommodities = 0; $totalPrices = 0
 # server-rendered answer (SummaryHtml = cheapest store + price), so first paint and SEO are unchanged, and the
 # feed carries the SAME rendered html so there is no client re-render to drift and the audits reuse their regexes.
 $boardChips = [ordered]@{}
+# ---- STRUCTURED TWIN OF THE CHIP FEED (2026-08-31, Brad's go-ahead) ---------------------------------
+# board.json used to carry ONLY rendered html, so every consumer that needed a NUMBER - the trip planner,
+# the hide-Sam's recompute, the On-sale filter, the store-count stepper - had to read prices back out of
+# chip DOM. That is why the page eagerly hydrated all 637 rows at idle, taking the runtime DOM from 9,270
+# to 36,370 nodes, and why the On-sale pill counted 0 until that pass finished.
+#
+# The feed now carries a compact structured twin ALONGSIDE the html, under a reserved '__rows' key.
+# ALONGSIDE, not instead of: the expanded panel still renders from the html, so the all-3 link rule and
+# every audit regex that reads the feed are untouched, and an OLD cached page fetching the new feed still
+# finds its chips at the top level exactly where it left them. (Commodity ids are kebab-case slugs, so no
+# real key can collide with a leading double underscore; the build asserts that below rather than trusting it.)
+#
+#   __rows[key] = { u: unit,
+#                   p: [[storeIx, perUnit, flags, "$1.99/lb"], ...] cheapest first,
+#                   x: [[storeIx, 1 = doesn't carry | 0 = no price yet], ...] }
+#   flags bits: 1 = sale, 2 = membership, 4 = bulk
+$boardRows = [ordered]@{}
+# $mode: 'all'  = every store without a price owes a cell (the staple guarantee)
+#        'none' = only the confirmed not-carried stores get a cell (a recipe-only row)
+# PLAIN ARRAYS, NOT List[object]. `@($aList)` where $aList came from `New-Object
+# System.Collections.Generic.List[object]` throws "Argument types do not match" on PS 5.1 - even when the
+# list is EMPTY - and the same list built with ::new() wraps fine. The rows are 7 entries long, so the
+# `+= ,@(...)` form costs nothing and cannot hit it. The leading comma is load-bearing: without it PS
+# flattens the inner array into the outer one and every row becomes a flat list of numbers.
+function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
+  $p = @()
+  $have = @{}
+  foreach ($s in @($ranked)) {
+    $st = [string]$s.store
+    $have[$st] = $true
+    $fl = 0
+    if ([string]$s.type -eq 'sale') { $fl = $fl -bor 1 }
+    if ($s.membership) { $fl = $fl -bor 2 }
+    if ($s.bulk)       { $fl = $fl -bor 4 }
+    # the DISPLAY string rides along deliberately. These per-unit numbers are $/lb, $/dozen, cents/oz and
+    # each; a receipt that reformats them client-side is one rounding rule away from printing a different
+    # price than the row above it, so the one formatter's output is what ships.
+    $p += , @($storeIx[$st], [math]::Round([double]$s.per_unit, 4), $fl, (Fmt-Price ([double]$s.per_unit) $unit))
+  }
+  $x = @()
+  if ($mode -eq 'all') {
+    foreach ($st in $storeOrder) { if (-not $have.ContainsKey($st)) { $x += , @($storeIx[$st], $(if (IsNoneCarry $id $st) { 1 } else { 0 })) } }
+  } else {
+    if ($notCarry.ContainsKey($id)) { foreach ($st in ($notCarry[$id].Keys | Sort-Object)) { if (-not $have.ContainsKey($st)) { $x += , @($storeIx[$st], 1) } } }
+  }
+  # [ordered] is not a real type accelerator: PS 5.1 only honours it on the right of an ASSIGNMENT, and
+  # `return [ordered]@{...}` throws "Argument types do not match". Assign first, then return.
+  $out = [ordered]@{ u = $unit; p = @($p); x = @($x) }
+  return $out
+}
+# Bar length for the ranked-bar panel, computed HERE and stamped as a css custom property on the chip.
+# Doing it at build time costs zero nodes and zero client work; doing it client-side would need the chips
+# hydrated before a bar could be drawn, which is the exact dependency this redesign is removing.
+function BarPct([double]$v, [double]$max) {
+  if ($max -le 0) { return 100 }
+  $pct = [math]::Round(($v / $max) * 100)
+  if ($pct -lt 8) { $pct = 8 }      # a bar you cannot see is not a bar
+  if ($pct -gt 100) { $pct = 100 }
+  return $pct
+}
 # ---- WHY IS THIS THE CROWN? (2026-08-22, PLAN-product-identity step 1) ----------------------------
 # Until now the board could not answer it anywhere. compare-deals records, per product, the include
 # pattern that claimed it, how many excludes were tested, and which other commodities also wanted it;
@@ -669,7 +763,7 @@ foreach ($c in $cats) {
     $totalCommodities++
     $stapleRendered[[string]$r.id] = $true
     $unit = [string]$r.unit
-    [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'>")
+    $maxPu = [double](@($ranked | ForEach-Object { [double]$_.per_unit } | Measure-Object -Maximum).Maximum)
     $rb = $recBadge[[string]$r.id]
     $rbHtml = if ($rb) { "<span class='pg-rec " + $rb.cls + "' title=`"" + (HtmlEnc $rb.title) + "`">" + $rb.label + "</span>" } else { "" }
     # stock-up tag rides a record/tie/dip badge on a commodity that keeps (freezer/pantry)
@@ -677,6 +771,21 @@ foreach ($c in $cats) {
     # Buy-or-Wait verdict shows only when no record badge is on the row
     $vd = $verdict[[string]$r.id]
     if (-not $rb -and $vd) { $rbHtml += "<span class='pg-rec " + $vd.cls + "' title=`"" + (HtmlEnc $vd.title) + "`">" + $vd.label + "</span>" }
+    # SALE AND RECORD ARE ROW ATTRIBUTES NOW, not something the filter digs out of chip markup. The On-sale
+    # pill used to count rows by querying .pg-tag-sale, which lives inside a chip - and chips are lazy, so the
+    # count ran before hydration and the filter could not answer at all until the eager idle pass finished.
+    # Two attributes on an element that already exists cost zero nodes and make the default view honest at
+    # first paint. (Any priced store on sale, matching what the pill has always meant.)
+    # ON SALE = THE CHEAPEST PRICE IS A SALE PRICE, not "some store somewhere has it on sale". The old
+    # pill tested any chip on the row, which is 345 of 570 commodities: a filter that keeps 61% of the
+    # board is not a filter. The cheapest-is-a-sale test is 37, and it is also the honest reading, because
+    # it is the only one that changes what the shopper pays. (Hide Sam's can move which store is cheapest,
+    # so pgSummaries re-stamps this attribute whenever it recomputes a row head.)
+    $onSale = ([string]$ranked[0].type -eq 'sale')
+    $isRec  = [bool]($rb -and $rb.cls -eq 'pg-rec-low')
+    if ($onSale) { $saleRowN++ }
+    if ($isRec)  { $recRowN++ }
+    [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'" + $(if ($onSale) { " data-sale='1'" } else { '' }) + $(if ($isRec) { " data-rec='1'" } else { '' }) + ">")
     $sumHtml = SummaryHtml $ranked[0] $unit
     # RECORD FLAG in the collapsed row. The full badge already lives in the opened row; this is the small
     # gold marker that makes a record findable while scrolling. Capped per category so a week where
@@ -697,7 +806,7 @@ foreach ($c in $cats) {
       if ($s.membership) { $notes += $(if ([string]$s.member_label) { [string]$s.member_label } else { 'membership' }) }
       if ($s.bulk) { $notes += 'bulk' }
       $typeTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
-      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'" + (MatchToken 'staple' ([string]$s.store) ([string]$s.item)) + ">")
+      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "' style='--bar:" + (BarPct ([double]$s.per_unit) $maxPu) + "%'" + (MatchToken 'staple' ([string]$s.store) ([string]$s.item)) + ">")
       if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
       [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
       [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
@@ -713,6 +822,7 @@ foreach ($c in $cats) {
     # the recipe board). Keying the chip feed by id alone let the recipe row overwrite the staple's chips, which
     # would have silently shown recipe-unit prices on the staple row. The staple row owns the bare id.
     $boardChips[[string]$r.id] = $cb.ToString()
+    $boardRows[[string]$r.id] = RowStruct ([string]$r.id) $unit $ranked 'all'
     [void]$sb.Append("<div class='pg-stores' data-lazy='1' data-ck='" + (HtmlEnc ([string]$r.id)) + "'></div></article>")
   }
   # ---- recipe-ingredient rows for THIS category, merged into the same section (2026-08-15) ----
@@ -725,7 +835,10 @@ foreach ($c in $cats) {
     $totalCommodities++
     $riRendered[[string]$r.id] = $true
     $unit = [string]$r.unit
-    [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'>")
+    $maxPu = [double](@($ranked | ForEach-Object { [double]$_.per_unit } | Measure-Object -Maximum).Maximum)
+    $onSale = ([string]$ranked[0].type -eq 'sale')
+    if ($onSale) { $saleRowN++ }
+    [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'" + $(if ($onSale) { " data-sale='1'" } else { '' }) + ">")
     $sumHtml = SummaryHtml $ranked[0] $unit
     $riMark = "<span class='pg-rec pg-ri' title='Regular shelf price for a recipe ingredient, re-checked monthly; a weekly-ad sale overrides it automatically.'>shelf price</span>"
     [void]$sb.Append("<div class='pg-rowhead'><div class='pg-rh-top'>" + (PickBox) + "<span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span>" + $sumHtml + "</div><div class='pg-rh-bot'><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $riMark + "</div></div>")
@@ -738,7 +851,7 @@ foreach ($c in $cats) {
       $notes = @()
       if ([string]$s.store -eq "Sam's Club") { $notes += 'membership' }
       if ($s.bulk) { $notes += 'bulk' }
-      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'" + (MatchToken 'recipe' ([string]$s.store) ([string]$s.item)) + ">")
+      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "' style='--bar:" + (BarPct ([double]$s.per_unit) $maxPu) + "%'" + (MatchToken 'recipe' ([string]$s.store) ([string]$s.item)) + ">")
       if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
       [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
       [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
@@ -751,10 +864,13 @@ foreach ($c in $cats) {
     }
     if ($stapleIdSet.ContainsKey([string]$r.id) -and -not $stapleRendered.ContainsKey([string]$r.id)) {
       [void]$cb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
+      $riMode = 'all'
     } else {
       [void]$cb.Append((NoneCells ([string]$r.id)))
+      $riMode = 'none'
     }
     $boardChips[([string]$r.id + '::r')] = $cb.ToString()
+    $boardRows[([string]$r.id + '::r')] = RowStruct ([string]$r.id) $unit $ranked $riMode
     [void]$sb.Append("<div class='pg-stores' data-lazy='1' data-ck='" + (HtmlEnc ([string]$r.id)) + "::r'></div></article>")
   }
   [void]$sb.Append("</section>")
@@ -775,6 +891,9 @@ if ($riDoc) {
 # above), and the honesty note about everyday floors lives in "How this board works".
 
 # membership CTA: this page is the site's best proof asset - close the loop from free prices to the $1 offer.
+# With a filtering default view, a search or an aisle can legitimately match nothing. Silence reads as a
+# broken page; one line reads as an answer. Hidden until applyFilters finds no visible section.
+[void]$sb.Append("<p class='pg-empty' id='pg-empty' hidden>Nothing matches that yet. Try another aisle, or switch the view to All.</p>")
 [void]$sb.Append("<div class='pg-cta'><h3>The prices are free. The dinners are about a dollar a month.</h3>")
 [void]$sb.Append("<p>This board tells you where the cheap groceries are. The membership turns them into dinners: <span class='tc-rc'>500+</span> meal-prep recipes costed to the plate, plus the 52-week money program. It pays for itself in one grocery run.</p>")
 [void]$sb.Append("<p class='pg-cta-row'><a class='pg-cta-btn' href='#/portal/signup'>Join for $1 a month &rarr;</a> <a class='pg-cta-alt' href='/meal-prep-recipes/'>or browse a few recipes free</a></p>")
@@ -785,7 +904,7 @@ if ($riDoc) {
 [void]$sb.Append("<p class='pg-disc'>Prices change often and can vary by store; we verify against each store's own ad or site, never a delivery app. This is a free weekly guide, not a guarantee of in-store price.</p></footer>")
 # ---- trip planner: floating selection bar + store-split panel (fixed position; populated by JS) ----
 # bottom floating bar stays for redundancy; its button scrolls back up to the always-visible planner box
-[void]$sb.Append("<div class='pg-tripbar tc-bar' id='pg-tripbar' hidden><span class='pg-trip-txt'><span class='pg-trip-n' id='pg-trip-n'>0 items</span><span class='pg-trip-sub' id='pg-trip-sub'></span></span><button class='pg-trip-plan' id='pg-trip-plan'>Plan my trip &uarr;</button><button class='pg-trip-clear' id='pg-trip-clear'>Clear</button></div>")
+[void]$sb.Append("<div class='pg-tripbar tc-bar' id='pg-tripbar' hidden><span class='pg-trip-txt'><span class='pg-trip-n' id='pg-trip-n'>0 items on your list</span><span class='pg-trip-sub' id='pg-trip-sub'></span></span><button class='pg-trip-plan' id='pg-trip-plan'>Split my trip</button><button class='pg-trip-clear' id='pg-trip-clear' aria-label='Clear your list'>Clear</button></div>")
 [void]$sb.Append("</div>")
 
 # =====================================================================================================
@@ -804,6 +923,15 @@ $body = $sb.ToString()
 # a category-2 page (or a board with one section) never reached the capture insert point; place it before
 # the membership CTA rather than dropping it, so the ask can never silently disappear from the page
 if ($captureHtml) { $body = $body.Replace("<div class='pg-cta'>", $captureHtml + "<div class='pg-cta'>") }
+# view-segment counts. Stamped, not computed client-side: the segment is the first thing a shopper reads and
+# a count that arrives after hydration is a count that flickers (and the sale count read 0 before it did).
+$body = $body.Replace('__SALE_N__', [string]$saleRowN).Replace('__REC_N__', [string]$recRowN).Replace('__ALL_N__', [string]$totalCommodities)
+# THE DEFAULT VIEW MUST HAVE SOMETHING IN IT. A week with no sales would open the board on an empty list,
+# which reads as a broken page rather than a quiet week - so in that case the segment opens on All instead.
+if ($saleRowN -eq 0) {
+  $body = $body.Replace("class='pg-vbtn is-active' data-view='sale'", "class='pg-vbtn' data-view='sale'").Replace("class='pg-vbtn' data-view='all'", "class='pg-vbtn is-active' data-view='all'")
+  Write-Output "VIEW DEFAULT: no rows are on sale this week - the board opens on All rather than an empty On-sale view."
+}
 
 $css = @'
 <style>
@@ -1006,14 +1134,8 @@ a.pg-adonly:hover,a.pg-adonly:focus{opacity:1;border-color:var(--mut)}
 .pg-trip-plan{background:#E2A43C;color:#16263F;font-weight:700;border:none;border-radius:999px;padding:8px 16px;cursor:pointer;font-family:inherit;font-size:.9em;white-space:nowrap}
 .pg-trip-plan:hover{background:#d29632}
 .pg-trip-clear{background:transparent;color:#c8d2df;border:none;cursor:pointer;font-family:inherit;font-size:.85em;text-decoration:underline;white-space:nowrap;flex-shrink:0}
-.pg-tripbox{margin:14px 0 6px;padding:16px 18px 14px;border:1.5px solid var(--ink);border-radius:14px;background:#fff}
-.pg-tripbox h3{font-family:Georgia,'Times New Roman',serif;font-size:1.18em;color:var(--ink);margin:0 0 5px}
-.pg-tripbox-sub{font-size:.92em;color:var(--mut);margin:0;line-height:1.5;max-width:64ch}
-.pg-tripbox-sub[hidden]{display:none}
-.pg-tripbox-n{font-size:.95em;color:var(--ink);margin:2px 0 10px}
-#pg-tripbox-body[hidden]{display:none}
-.pg-plan-kbtns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.pg-plan-k.is-active{background:var(--ink) !important;color:#fff !important;border-color:var(--ink) !important}
+/* the preamble planner box and its k-button row were removed 2026-08-31: the planner is a
+   full-screen destination now (see .pg-trip-ov in the elite sheet below). */
 .pg-plan-sum{font-size:.95em;color:var(--ink);margin:4px 0 8px}
 .pg-plan-store{margin:10px 0;padding:10px 12px;background:var(--green-t);border-radius:9px}
 .pg-plan-store p{margin:4px 0 0;font-size:.88em;color:var(--ink);line-height:1.45}
@@ -1162,7 +1284,141 @@ $eliteCss = '<style>' + (Compress-TcCss ((Get-TcTokenCss -Scope '.pg-wrap' -Part
   .pg-sheet-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
   .pg-sheet-h b{font-size:17px;color:#16263F}
   .pg-sheet-x{min-width:44px;min-height:44px;border:none;background:#f2ede1;color:#16263F;border-radius:10px;font-size:18px;cursor:pointer;font-family:inherit}
-  .pg-sheet .pg-stores{display:flex !important;flex-wrap:wrap;gap:8px}
+  /* the panel is a bar COLUMN now; the ranked-bar block below owns its layout in the sheet too */
+}
+
+/* ==== THE EXPANDED PANEL IS A RANKED BAR LIST (2026-08-31) ==========================================
+   Seven cards in a wrapping grid made the reader compare seven separate objects and do the ranking
+   themselves. As bars in one column, sorted cheapest first, the spread IS the picture: you can see that
+   Fareway is 2.5x Hy-Vee without reading either number.
+
+   ZERO NEW NODES. The bar track is the chip's own ::before, and its fill length is a --bar custom
+   property stamped at build time (see BarPct). Adding a real element per store would be 3,400 nodes on
+   a page whose stated budget is 8,000.
+
+   SCOPED ON .pg-stores, NOT .pg-wrap. At phone widths the opened panel is MOVED into .pg-sheet on
+   document.body, so it leaves .pg-wrap entirely; rules scoped to the wrapper silently stop applying
+   inside the sheet, which is where a shopper on a phone actually reads this. .pg-stores travels with
+   the panel, and it exists nowhere else on the site, so it cannot leak into the theme either. */
+.pg-stores{flex-direction:column;gap:0}
+.pg-row.pg-open .pg-stores,.pg-wrap.pg-allopen .pg-stores,.pg-sheet .pg-stores{display:flex !important;flex-direction:column;flex-wrap:nowrap;gap:0}
+.pg-stores .pg-chip{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:10px;row-gap:1px;position:relative;
+  width:100%;min-width:0;max-width:none;padding:9px 0 8px;border:0;border-radius:0;background:transparent;
+  border-bottom:1px solid #f1ebdc;box-shadow:none}
+.pg-stores .pg-chip:last-child{border-bottom:0}
+.pg-stores .pg-chip .pg-store{order:1;flex:0 0 84px;min-width:0;font-size:.82em;font-weight:600;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg-stores .pg-chip::before{content:'';order:2;flex:1 1 auto;min-width:20px;height:8px;border-radius:5px;
+  background:linear-gradient(to right,var(--bc,#c9c1ab) 0 var(--bar,0%),#efe9d9 var(--bar,0%) 100%)}
+.pg-stores .pg-chip .pg-price{order:3;flex:0 0 auto;min-width:76px;text-align:right;font-size:.98em;font-weight:750;
+  color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.2}
+/* CHEAPEST IS THE GREEN BAR. In a ranked column the cheapest row is the longest green bar at the top;
+   a word saying so is redundant to anyone who can see it. The span stays in the DOM and stays readable to
+   a screen reader, where the bar means nothing - it is just not painted twice for sighted readers. */
+.pg-stores .pg-chip.is-best{--bc:#0c5c3b}
+.pg-stores .pg-chip.is-best .pg-store,.pg-stores .pg-chip.is-best .pg-price{color:#0c5c3b}
+.pg-stores .pg-chip .pg-best{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* second line: the tags, the product name and the link, indented under the bar so the column stays clean.
+   flex-basis 100% is load-bearing. With basis auto the tags fitted beside the price on the first line of
+   SOME rows and not others, which let the bar track shrink to make room - so seven bars drawn to compare
+   seven prices ended up at seven different scales, which is the one thing a bar chart may not do. */
+.pg-stores .pg-chip .pg-meta,.pg-stores .pg-chip .pg-itemname,.pg-stores .pg-chip .pg-sale,
+.pg-stores .pg-chip .pg-see,.pg-stores .pg-chip .pg-adonly{order:5;margin-top:2px}
+.pg-stores .pg-chip .pg-meta{flex:0 0 100%;padding-left:94px;min-height:0}
+.pg-stores .pg-chip .pg-itemname{flex:1 1 100%;padding-left:94px;border-top:0;padding-top:0;margin-top:1px;-webkit-line-clamp:1}
+.pg-stores .pg-chip .pg-see{flex:0 0 auto;border-top:0;padding-top:0;margin-left:auto}
+/* NOT CARRIED IS A ROW, NOT A QUESTION MARK. It keeps its place in the column, its bar is an empty
+   dashed rule, and the words sit in the price slot where a price would have been. */
+.pg-stores .pg-chip-none{background:transparent;border-style:none;border-bottom:1px solid #f1ebdc}
+.pg-stores .pg-chip-none::before{height:0;border-top:1px dashed #ddd6c2;border-radius:0;background:none;align-self:center}
+.pg-stores .pg-chip-none .pg-store{color:#a49e8d;opacity:1}
+.pg-stores .pg-chip-none .pg-none{order:3;flex:0 0 auto;min-width:76px;text-align:right;font-size:.8em;font-weight:600;color:#a49e8d}
+.pg-stores .pg-chip-none .pg-see-none{order:5;flex:0 0 auto;margin-left:auto;margin-top:2px;font-size:.68em}
+@media(min-width:700px){
+  .pg-stores .pg-chip{padding:10px 0 9px}
+  .pg-stores .pg-chip .pg-store{flex-basis:110px;font-size:.9em}
+  .pg-stores .pg-chip .pg-price{min-width:92px;font-size:1.08em}
+  .pg-stores .pg-chip .pg-meta,.pg-stores .pg-chip .pg-itemname{padding-left:120px}
+  .pg-stores .pg-chip::before{min-width:60px}
+  .pg-stores .pg-chip-none .pg-none{min-width:92px}
+}
+/* ==== CONTROLS: search + options popover, a view segment, an aisle rail ============================ */
+.pg-wrap .pg-fbar{display:flex;align-items:center;gap:8px;width:100%}
+.pg-wrap .pg-optb{flex:0 0 auto;min-height:40px;padding:0 14px;border:1px solid #ddd6c2;border-radius:10px;
+  background:#fff;color:#5a6862;font-family:inherit;font-size:.86em;font-weight:600;cursor:pointer;white-space:nowrap}
+.pg-wrap .pg-optb.is-on{border-color:#E2A43C;color:#8a6d1f;background:#fdf1d9}
+.pg-wrap .pg-opts{display:flex;flex-direction:column;gap:6px;padding:11px 13px;margin:0;
+  border:1px solid #ddd6c2;border-radius:11px;background:#fffdf6}
+.pg-wrap .pg-opts[hidden]{display:none}
+.pg-wrap .pg-opts .pg-toggle{margin:0;font-size:.9em}
+.pg-wrap .pg-views{display:flex;gap:7px;width:100%}
+.pg-wrap .pg-vbtn{flex:1 1 0;min-width:0;min-height:38px;padding:0 6px;border:1px solid #ddd6c2;border-radius:9px;
+  background:transparent;color:#16263F;font-family:inherit;font-size:.82em;font-weight:600;cursor:pointer;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg-wrap .pg-vbtn b{font-variant-numeric:tabular-nums;font-weight:800;opacity:.75}
+.pg-wrap .pg-vbtn.is-active{background:#16263F;border-color:#16263F;color:#fffdf6}
+.pg-wrap .pg-vbtn.is-active b{opacity:.85}
+.pg-wrap .pg-vbtn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.pg-wrap .pg-teaser{margin:.7em 0 0;font-size:.9em;line-height:1.5;color:var(--ink)}
+.pg-wrap .pg-empty{margin:34px 0;padding:26px 18px;text-align:center;font-size:.95em;color:var(--mut);
+  border:1px dashed #ddd6c2;border-radius:12px}
+.pg-wrap .pg-empty[hidden]{display:none}
+.pg-wrap .pg-sum-na{color:var(--mut) !important;font-weight:600;font-size:.85em}
+@media(min-width:700px){.pg-wrap .pg-vbtn{font-size:.95em}.pg-wrap .pg-teaser{font-size:1em}}
+/* ==== THE TRIP SCREEN: a destination, not a card in the preamble ================================== */
+body.pg-trip-on{overflow:hidden}
+.pg-trip-ov{position:fixed;inset:0;z-index:2147482000;display:flex;flex-direction:column;background:#fffdf6;
+  overscroll-behavior:contain;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#16263F}
+.pg-trip-hd{display:flex;align-items:center;gap:10px;flex:none;
+  padding:calc(12px + env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid #e7e2d4;background:#fffdf6}
+.pg-trip-hd b{flex:1;font-family:Georgia,'Times New Roman',serif;font-size:21px;font-weight:600;letter-spacing:-.01em}
+.pg-trip-back,.pg-trip-edit{min-height:40px;padding:0 12px;border:none;background:transparent;color:#1E3A5F;
+  font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pg-trip-back{margin-left:-12px}
+.pg-trip-bd{flex:1;overflow-y:auto;padding:16px 16px calc(28px + env(safe-area-inset-bottom))}
+.pg-trip-empty{font-size:14px;color:#5a6862;padding:40px 8px;text-align:center}
+.pg-step-l{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#5a6862;padding-bottom:10px}
+.pg-step{display:flex;gap:8px}
+.pg-stepb{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;
+  border:1px solid #ddd6c2;border-radius:12px;background:#fff;color:#16263F;font-family:inherit;cursor:pointer}
+.pg-stepb.is-on{background:#16263F;border-color:#16263F;color:#fffdf6}
+.pg-stepn{font-size:19px;font-weight:700;line-height:1}
+.pg-stept{font-size:11px;font-weight:500;opacity:.78;font-variant-numeric:tabular-nums}
+.pg-verd{margin:16px 0 4px;padding:15px 16px;border:1px solid #e7e2d4;border-radius:14px;background:#fdf8ec}
+/* the "one more store buys you nothing" case is the one a shopper is least expecting, so it is the one
+   that gets the gold edge - the planner is being useful precisely by talking you out of a stop */
+.pg-verd.is-flat{background:#fdf1d9;border-color:#E2A43C}
+.pg-verd-h{display:flex;align-items:baseline;gap:8px;padding-bottom:5px;flex-wrap:wrap}
+.pg-verd-t{font-family:Georgia,'Times New Roman',serif;font-size:30px;font-weight:700;color:#0c5c3b;
+  letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.pg-verd-u{font-size:12.5px;color:#5a6862}
+.pg-verd-p{margin:0;font-size:13px;line-height:1.45;color:#16263F;text-wrap:pretty}
+.pg-leg{padding:18px 0 0}
+.pg-leg-h{display:flex;align-items:center;gap:9px;padding-bottom:10px}
+.pg-leg-d{width:10px;height:10px;border-radius:50%;flex:none;background:var(--st,#5a6862)}
+.pg-leg-s{flex:1;font-size:15px;font-weight:700;letter-spacing:-.01em;min-width:0}
+.pg-leg-sub{font-size:14px;font-weight:700;color:#0c5c3b;font-variant-numeric:tabular-nums}
+.pg-leg-l{list-style:none;margin:0;padding:0;border:1px solid #e7e2d4;border-radius:12px;overflow:hidden;background:#fff}
+.pg-leg-l li{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid #f0ebdd}
+.pg-leg-l li:last-child{border-bottom:0}
+.pg-leg-n{flex:1;min-width:0;font-size:14px;font-weight:500;line-height:1.3;text-wrap:pretty}
+.pg-leg-p{flex:none;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pg-leg-f{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:9px;font-size:12px;color:#5a6862}
+.pg-trip-ov .pg-aisle{background:#E2A43C;color:#16263F;border:none;border-radius:999px;padding:9px 15px;min-height:40px;
+  font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
+.pg-trip-ov .pg-plan-send{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px;padding-top:14px;border-top:1px dotted #ddd6c2}
+.pg-trip-ov .pg-plan-mailto,.pg-trip-ov .pg-plan-copy{display:inline-block;padding:9px 14px;border-radius:9px;font-weight:700;
+  font-size:13px;text-decoration:none;border:1.5px solid #16263F;color:#16263F;background:#fff;cursor:pointer;font-family:inherit}
+.pg-trip-ov .pg-plan-share{background:#16263F;color:#fff}
+.pg-trip-ov .pg-plan-weekly{font-size:12px;color:#5a6862}
+.pg-trip-ov .pg-plan-un{margin:14px 0 0;font-size:12.5px;line-height:1.45;color:#8a6d1f}
+.pg-trip-fine{margin:18px 0 0;font-size:11.5px;line-height:1.5;color:#5a6862;text-wrap:pretty}
+@media(min-width:700px){
+  .pg-trip-bd{max-width:720px;margin:0 auto;width:100%;padding:22px 24px 40px}
+  .pg-trip-hd{max-width:720px;margin:0 auto;width:100%}
+  .pg-verd-t{font-size:36px}
+  .pg-leg-l li{padding:13px 16px}
 }
 '@ + (Get-TcPrintCss))) + '</style>'
 
@@ -1213,75 +1469,122 @@ $js = @'
     }
   } catch(e){}
 
-  // ---- unified filtering: one state (active pill + search query), one apply pass ----
-  var state={pill:'all',cats:null,q:''};
+  // ---- unified filtering: VIEW (what am I looking at) x CATEGORY (which aisle) x SEARCH ----
+  // Two dimensions that compose - "on sale" AND "meat" is a real question - plus search, which overrides
+  // both because a shopper typing "eggs" wants eggs from all 637 rows, not eggs within the current view.
+  //
+  // NOTHING HERE READS A CHIP. The sale and record tests were `row.querySelector('.pg-tag-sale')`, which
+  // lives inside a lazily-fetched chip: on a cold load the answer was "no" for every row, so the On-sale
+  // filter silently returned nothing and its count read 0 until the eager idle hydration finished. Both
+  // facts are now attributes stamped on the row itself at build time.
+  var vsel=document.querySelector('.pg-vbtn.is-active');
+  var state={view:(vsel?vsel.getAttribute('data-view'):'all'),pill:'all',cats:null,q:''};
   function applyFilters(){
     var q=state.q.toLowerCase().trim();
     document.querySelectorAll('.pg-cat').forEach(function(sec){
       var secCat=sec.getAttribute('data-cat')||'';
+      var inCat=(state.pill==='all')||(state.cats&&state.cats.indexOf(secCat)>-1);
       var vis=0;
       sec.querySelectorAll('.pg-row').forEach(function(row){
         var show;
         if(q){ var nm=row.querySelector('.pg-name'); show=nm && nm.textContent.toLowerCase().indexOf(q)>-1; }
-        else if(state.pill==='sale'){ show=!!row.querySelector('.pg-tag-sale'); }
-        else if(state.pill==='all'){ show=true; }
-        else { show=state.cats && state.cats.indexOf(secCat)>-1; }
+        else if(!inCat){ show=false; }
+        else if(state.view==='sale'){ show=row.hasAttribute('data-sale'); }
+        else if(state.view==='rec'){ show=row.hasAttribute('data-rec'); }
+        else { show=true; }
         row.classList.toggle('pg-hide',!show); if(show){vis++;}
       });
       sec.classList.toggle('pg-hide',vis===0);
     });
-    var rn=document.querySelector('.pg-refnote'); if(rn){ rn.classList.toggle('pg-hide', !!q || state.pill==='sale'); }
+    var rn=document.querySelector('.pg-refnote'); if(rn){ rn.classList.toggle('pg-hide', !!q || state.view!=='all'); }
+    var em=document.getElementById('pg-empty');
+    if(em){ em.hidden=!!document.querySelector('.pg-cat:not(.pg-hide)'); }
   }
+  var vbtns=document.querySelectorAll('.pg-vbtn');
+  vbtns.forEach(function(b){
+    b.addEventListener('click',function(){
+      vbtns.forEach(function(x){x.classList.remove('is-active')});
+      b.classList.add('is-active');
+      state.view=b.getAttribute('data-view');
+      var s=document.getElementById('pg-search'); if(s && s.value){ s.value=''; state.q=''; }
+      applyFilters();
+    });
+  });
   var btns=document.querySelectorAll('.pg-fbtn');
   btns.forEach(function(b){
     b.addEventListener('click',function(){
       btns.forEach(function(x){x.classList.remove('is-active')});
       b.classList.add('is-active');
       var cat=b.getAttribute('data-cat');
-      state.pill=cat;
+      state.pill=(cat==='group')?'group':cat;
       state.cats=(cat==='group')?(b.getAttribute('data-cats')||'').split('|'):null;
-      if(cat==='group'){state.pill='group';}
       var s=document.getElementById('pg-search'); if(s && s.value){ s.value=''; state.q=''; }
       applyFilters();
     });
   });
-  // search-as-you-type across all 89 items; typing overrides the pill filter
+  // search-as-you-type across every row on the board; typing overrides the view and the aisle
   var search=document.getElementById('pg-search');
   if(search){
     search.addEventListener('input',function(){
       state.q=search.value;
-      if(state.q){ btns.forEach(function(x){x.classList.remove('is-active')}); }
-      else { var all=document.querySelector(".pg-fbtn[data-cat='all']"); btns.forEach(function(x){x.classList.remove('is-active')}); if(all){all.classList.add('is-active');} state.pill='all'; state.cats=null; }
       applyFilters();
     });
   }
-  // fill the On-sale pill with the live count + stamp item counts into section headers
-  var saleRows=0;
-  document.querySelectorAll('.pg-row').forEach(function(r){ if(r.querySelector('.pg-tag-sale')){saleRows++;} });
-  var sp=document.getElementById('pg-sale-pill'); if(sp){ sp.textContent='On sale ('+saleRows+')'; }
+  // ---- OPTIONS POPOVER: the two set-once toggles, off the rail until asked for ----
+  var optb=document.getElementById('pg-optb'), opts=document.getElementById('pg-opts');
+  if(optb&&opts){
+    optb.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=opts.hidden;
+      opts.hidden=!open; optb.setAttribute('aria-expanded',String(open));
+      optb.classList.toggle('is-on',open);
+    });
+    document.addEventListener('click',function(e){
+      if(opts.hidden) return;
+      if(e.target.closest('#pg-opts')||e.target.closest('#pg-optb')) return;
+      opts.hidden=true; optb.setAttribute('aria-expanded','false'); optb.classList.remove('is-on');
+    });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!opts.hidden){ opts.hidden=true; optb.setAttribute('aria-expanded','false'); optb.classList.remove('is-on'); optb.focus(); } });
+  }
   document.querySelectorAll('.pg-cat').forEach(function(sec){
     var n=sec.querySelectorAll('.pg-row').length, h=sec.querySelector('.pg-cath');
     if(h && n){ var sp2=document.createElement('span'); sp2.className='pg-cath-n'; sp2.textContent='\u00B7 '+n+(n===1?' item':' items'); h.appendChild(sp2); }
   });
   // ---- progressive disclosure: rows collapse to a one-line cheapest summary; click/tap to open all stores ----
-  function pgFirstChip(row){ var cs=row.querySelectorAll('.pg-chip'); for(var i=0;i<cs.length;i++){ if(cs[i].style.display!=='none') return cs[i]; } return null; }
+  // pgSummaries reads STRUCTURED PRICES (BOARD.__rows), not chip DOM. It used to re-derive the row head from
+  // the first visible .pg-chip, which meant Hide-Sam's could not recompute a row until that row's chips had
+  // been fetched and injected - the reason the page hydrated all 637 rows at idle and took the runtime DOM
+  // from 9,270 to 36,370 nodes. With numbers in the feed the recompute needs no markup at all.
+  function pgRow(row){
+    if(!BOARD||!BOARD.__rows) return null;
+    var box=row.querySelector('.pg-stores');
+    var ck=(box&&box.getAttribute('data-ck'))||row.getAttribute('data-id');
+    return BOARD.__rows[ck]||null;
+  }
+  // cheapest priced store on a row, honouring Hide Sam's. Returns null when the row has no usable price.
+  function pgBest(row){
+    var d=pgRow(row); if(!d||!d.p||!d.p.length) return null;
+    var hide=tgOn();
+    for(var i=0;i<d.p.length;i++){ var e=d.p[i]; if(hide&&STORES[e[0]]===SAMS) continue; return {store:STORES[e[0]],pu:e[1],flags:e[2],disp:e[3]}; }
+    return null;
+  }
   function pgSummaries(){
+    if(!BOARD||!BOARD.__rows) return;   // server-rendered summary stands until the feed lands
     document.querySelectorAll('.pg-row').forEach(function(row){
       var sum=row.querySelector('.pg-sum'); if(!sum) return;
-      // Chips are lazy now (fetched from board.json). When they are not in the DOM yet there is nothing to
-      // re-derive from, so LEAVE the server-rendered summary alone. This used to blank it (sum.innerHTML=''),
-      // which with lazy chips would wipe the cheapest price off EVERY row on load. Only rebuild from real chips.
-      var c=pgFirstChip(row); if(!c){ return; }
-      var p=c.querySelector('.pg-price'), s=c.querySelector('.pg-store');
-      var sale=c.querySelector('.pg-tag-sale')?" <span class='pg-tag pg-tag-sale'>sale</span>":"";
-      // .pg-sum now holds the PRICE only; the store is a sibling on the row head's second line. Rebuilding
-      // both from one innerHTML would nest the store back inside .pg-sum and collapse the row to one line
-      // again on every load and every Hide-Sam's toggle. Writing the store's textContent also keeps its
-      // style='--sd:<hue>' - the old innerHTML rewrite dropped it, so the store dot silently lost its colour
-      // after a recompute and every row's dot fell back to the default grey.
-      sum.innerHTML="<span class='pg-sum-p'>"+(p?p.textContent:'')+"</span>"+sale;
+      var b=pgBest(row);
+      // A row whose ONLY price is Sam's still has to say something honest when Sam's is hidden.
+      if(!b){ row.removeAttribute('data-sale'); sum.innerHTML="<span class='pg-sum-p pg-sum-na'>membership only</span>"; return; }
+      // .pg-sum holds the PRICE only; the store is a sibling on the row head's second line. Rebuilding both
+      // from one innerHTML would nest the store back inside .pg-sum and collapse the row to one line again on
+      // every load and every Hide-Sam's toggle. Writing the store's textContent also keeps its
+      // style='--sd:<hue>' - an innerHTML rewrite drops it and every row's dot falls back to grey.
+      // the sale flag follows the CHEAPEST price, so hiding Sam's can add or remove it on a row. Re-stamp
+      // it here or the On-sale view keeps answering with the pre-toggle winner.
+      if(b.flags&1){ row.setAttribute('data-sale','1'); } else { row.removeAttribute('data-sale'); }
+      sum.innerHTML="<span class='pg-sum-p'>"+b.disp+"</span>"+((b.flags&1)?" <span class='pg-tag pg-tag-sale'>sale</span>":"");
       var st=row.querySelector('.pg-rh-top > .pg-sum-s');
-      if(st&&s){ st.textContent=s.textContent; }
+      if(st){ st.textContent=b.store; st.style.setProperty('--sd', PG_HUE[b.store]||'#5a6862'); }
     });
   }
   document.querySelectorAll('.pg-rowhead').forEach(function(h){ h.setAttribute('tabindex','0'); });
@@ -1291,19 +1594,34 @@ $js = @'
   // upsert past its processing timeout (503 = the board could not publish). A row fills the instant it is
   // opened; a background pass fills the rest after first paint so everything that reads chips (the hide-Sam's
   // recompute, the trip planner, expand-all) keeps working exactly as before, just a moment later.
-  var BOARD=null,_bp=null;
+  var BOARD=null,_bp=null,STORES=[];
+  var SAMS="Sam's Club";
+  // declared here, used by pgBest/pgSummaries below: the toggle is read, never assumed
+  var tg=document.getElementById('pg-hidesams');
+  function tgOn(){ return !!(tg&&tg.checked); }
   var BOARD_URL='__BOARD_URL__';
   function loadBoard(){
     if(BOARD) return Promise.resolve(BOARD);
-    if(!_bp){ _bp=fetch(BOARD_URL).then(function(r){ return r.ok?r.json():null; }).then(function(j){ BOARD=j||{}; return BOARD; }).catch(function(){ _bp=null; return null; }); }
+    if(!_bp){ _bp=fetch(BOARD_URL).then(function(r){ return r.ok?r.json():null; }).then(function(j){
+      BOARD=j||{};
+      if(BOARD.__meta&&BOARD.__meta.stores){ STORES=BOARD.__meta.stores; }
+      // pgSummaries can re-stamp data-sale, so the view and its count are re-applied behind it
+      if(BOARD.__rows){ pgSummaries(); viewCounts(); applyFilters(); tripReady(); }
+      return BOARD;
+    }).catch(function(){ _bp=null; return null; }); }
     return _bp;
   }
+  // THE FEED IS FETCHED ONCE, EARLY, AND NOTHING IS INJECTED. It is ~2.8 MB of json but only the __rows half
+  // is needed before a row is opened, and parsing it costs no DOM. What used to happen here - injecting every
+  // row's seven chips at idle so the planner and the recompute had markup to read - is gone: those consumers
+  // read numbers now. Rows still fill their chips on FIRST OPEN, which is the only time the markup is seen.
+  if(window.requestIdleCallback){ requestIdleCallback(function(){ loadBoard(); },{timeout:2000}); } else { setTimeout(loadBoard,600); }
   function pgFillRow(row){
     var box=row.querySelector('.pg-stores[data-lazy]'); if(!box) return false;
     // data-ck, not data-id: 54 ids render on BOTH a weekly-staple row and a recipe row with different units,
     // so each row carries its own feed key ('<id>' for the staple, '<id>::r' for the recipe row).
     var ck=box.getAttribute('data-ck')||row.getAttribute('data-id');
-    if(BOARD&&BOARD[ck]){ box.innerHTML=BOARD[ck]; box.removeAttribute('data-lazy'); return true; }
+    if(BOARD&&BOARD[ck]){ box.innerHTML=BOARD[ck]; box.removeAttribute('data-lazy'); if(tgOn()){ applySams(); } return true; }
     return false;
   }
   var _filledAll=false;
@@ -1313,6 +1631,7 @@ $js = @'
       if(!b) return false;
       document.querySelectorAll('.pg-row').forEach(function(r){ pgFillRow(r); });
       _filledAll=true;
+      applySams();
       return true;
     });
   }
@@ -1372,23 +1691,19 @@ $js = @'
   });
   var pgWrap=document.querySelector('.pg-wrap'), pgEA=document.getElementById('pg-expandall');
   if(pgEA&&pgWrap){ pgEA.addEventListener('change',function(){ if(pgEA.checked){ pgFillAll(); } pgWrap.classList.toggle('pg-allopen',pgEA.checked); }); }
-  // fill everything once the page is idle, so chip-dependent features are ready before a human can reach them
-  if(window.requestIdleCallback){ requestIdleCallback(function(){ pgFillAll(); },{timeout:3000}); } else { setTimeout(function(){ pgFillAll(); },1200); }
-  pgSummaries();
-  // hide Sam's Club: drop its chips, then re-flag the cheapest per row. (It used to recount the scoreboard
-  // too; that band was removed 2026-08-09, so the per-row re-flag plus pgSummaries is the whole job.)
-  var SAMS="Sam's Club";
-  var tg=document.getElementById('pg-hidesams');
-  function recompute(){
-    var hide=tg.checked;
-    document.querySelectorAll('.pg-row').forEach(function(row){
-      var chips=[].slice.call(row.querySelectorAll('.pg-chip')), first=null;
+  // hide Sam's Club: re-flag the cheapest on every row, and drop its chip on any row already opened.
+  // The row-head half of this no longer waits on chips (pgSummaries reads BOARD.__rows), so the toggle is
+  // instant on a cold page instead of doing nothing until 637 rows had been hydrated.
+  function applySams(){
+    var hide=tgOn();
+    document.querySelectorAll('.pg-stores:not([data-lazy])').forEach(function(box){
+      var chips=[].slice.call(box.querySelectorAll('.pg-chip')), first=null;
       chips.forEach(function(c){
         var h=hide && c.getAttribute('data-store')===SAMS;
         c.style.display=h?'none':'';
         c.classList.remove('is-best');
         var f=c.querySelector('.pg-best'); if(f){f.remove();}
-        if(!h && !first){first=c;}
+        if(!h && !first && c.querySelector('.pg-price')){first=c;}
       });
       if(first){
         first.classList.add('is-best');
@@ -1396,34 +1711,39 @@ $js = @'
         first.insertBefore(b, first.firstChild);
       }
     });
-    pgSummaries();
+  }
+  function recompute(){ applySams(); pgSummaries(); viewCounts(); applyFilters(); tripBar(); }
+  // the segment's counts are stamped at build time and stay right until Hide Sam's moves a winner
+  function viewCounts(){
+    var b=document.querySelector(".pg-vbtn[data-view='sale'] b");
+    if(b){ b.textContent=String(document.querySelectorAll('.pg-row[data-sale]').length); }
   }
   if(tg){ tg.addEventListener('change',recompute); }
-  // ---- trip planner: pick items, choose store count, get the optimal split ----
-  // Objective is UNIT-SAFE: sum over items of (best price within combo / global best price) - a
-  // dimensionless ratio - because per-lb and per-dozen prices cannot be summed as dollars honestly.
+  applyFilters();   // the board opens on its default view, so the first filter pass runs at load
+  // ---- TRIP PLANNER: pick items on the board, then a full-screen trip screen ------------------------
+  // THE PLANNER IS A DESTINATION NOW. It used to be a box in the preamble that said "come back here",
+  // which is a feature asking the reader to remember where it lives. The sticky bar follows the selection
+  // and opens this screen; the screen is built on first open, so it costs nothing until it is wanted.
+  //
+  // NOTHING HERE READS A CHIP. Picking an item used to scrape .pg-chip[data-pu] out of the row, so a pick
+  // did nothing at all until that row had been hydrated - which is why the page injected all 637 rows'
+  // markup at idle. Prices come from BOARD.__rows now, so a pick works the moment the feed lands.
   function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
-  var tripSel={}, ridSeq=0;
+  function money(v){ return '$'+v.toFixed(2); }
+  function gap(v){ return v<1 ? (Math.round(v*100)+' cents') : money(v); }
+  var tripSel={}, ridSeq=0, lastK=0;
   document.querySelectorAll('.pg-row').forEach(function(row){
     var rid='r'+(ridSeq++);
     var cb=row.querySelector('.pg-pick');
     if(!cb) return;
+    // data-ck, not data-id: 54 ids render on BOTH a weekly-staple row and a recipe row with different
+    // units, and each row owns its own feed key. Reading data-id here would price the recipe row's
+    // ounces against the staple row's pounds.
+    var box=row.querySelector('.pg-stores');
+    var ck=(box&&box.getAttribute('data-ck'))||row.getAttribute('data-id')||rid;
     cb.addEventListener('change',function(){
-      if(cb.checked){
-        var prices={}, disp={};
-        row.querySelectorAll('.pg-chip').forEach(function(c){
-          var pu=parseFloat(c.getAttribute('data-pu')), st=c.getAttribute('data-store');
-          if(st && pu>0 && (!(st in prices) || pu<prices[st])){
-            prices[st]=pu;
-            // Keep the FORMATTED price too. A trip receipt that prints a bare "4.98" next to an item is a
-            // basis lie waiting to happen: these per-unit numbers are $/lb, $/dozen, cents/oz and each,
-            // and they are only comparable down a column, never across one. The chip already carries the
-            // number with its unit attached, so the receipt reuses that string rather than reformatting.
-            var pEl=c.querySelector('.pg-price'); disp[st]=pEl?pEl.textContent:'';
-          }
-        });
-        tripSel[rid]={name:row.querySelector('.pg-name').textContent,prices:prices,disp:disp,id:row.getAttribute('data-id')||rid};
-      } else { delete tripSel[rid]; }
+      if(cb.checked){ tripSel[rid]={ck:ck, id:row.getAttribute('data-id')||rid, name:row.querySelector('.pg-name').textContent}; }
+      else { delete tripSel[rid]; }
       tripBar(); tripSave();
     });
   });
@@ -1462,113 +1782,166 @@ $js = @'
     setTimeout(function(){ if(pill.parentNode) pill.parentNode.removeChild(pill); }, 12000);
   }
   function tripN(){ var n=0; for(var k in tripSel){n++;} return n; }
-  var lastK=0;
-  function tripBar(){
-    var n=tripN(), bar=document.getElementById('pg-tripbar');
-    if(bar){ document.getElementById('pg-trip-n').textContent=n+(n===1?' item':' items'); bar.hidden=(n===0); }
-    var body=document.getElementById('pg-tripbox-body'), sub=document.getElementById('pg-tripbox-sub'), cnt=document.getElementById('pg-tripbox-count');
-    if(!body) return;
-    body.hidden=(n===0);
-    if(sub){ sub.hidden=(n>0); }
-    if(cnt){ cnt.textContent=n+(n===1?' item':' items'); }
-    if(n===0){ lastK=0; document.getElementById('pg-plan-out').innerHTML=''; var kb0=document.getElementById('pg-plan-kbtns'); kb0.innerHTML=''; kb0.removeAttribute('data-n'); return; }
-    tripKBtns();
-    // keep the plan LIVE: if a store count was already chosen, re-solve for the new selection
-    if(lastK>0){ var ss=tripStores(); var kk=Math.min(lastK,ss.length); tripSolve(kk); tripMarkK(kk); }
+  // ---- THE BASKET IS "ONE UNIT OF EACH", AND THE PAGE SAYS SO ----------------------------------------
+  // The board holds per-unit prices and no quantities, so there is no such thing as "your total" here. The
+  // planner used to refuse a dollar figure for exactly that reason and print coverage instead. What makes
+  // a total honest is DEFINING THE BASKET: one pound of chicken, one dozen eggs, one pound of turkey. That
+  // is a real quantity, its total is exact, and comparing it across one, two and three stores is exact too.
+  // The label under every total states it, and the fine print keeps the package-size caveat.
+  function tripItems(){
+    var out=[];
+    if(!BOARD||!BOARD.__rows) return out;
+    for(var k in tripSel){
+      var d=BOARD.__rows[tripSel[k].ck]; if(!d||!d.p||!d.p.length) continue;
+      var prices={}, disp={};
+      d.p.forEach(function(e){ var st=STORES[e[0]]; prices[st]=e[1]; disp[st]=e[3]; });
+      out.push({name:tripSel[k].name, unit:d.u, prices:prices, disp:disp});
+    }
+    return out;
   }
-  function tripMarkK(k){ document.querySelectorAll('.pg-plan-k').forEach(function(x){ x.classList.toggle('is-active', x.getAttribute('data-k')===String(k)); }); }
-  var tc=document.getElementById('pg-trip-clear');
-  if(tc){ tc.addEventListener('click',function(){ document.querySelectorAll('.pg-pick').forEach(function(c){c.checked=false;}); tripSel={}; tripBar(); }); }
-  var tp=document.getElementById('pg-trip-plan');
-  if(tp){ tp.addEventListener('click',function(){ var b=document.getElementById('pg-tripbox'); if(b){ b.scrollIntoView({behavior:'smooth',block:'start'}); } }); }
-  if(tg){ tg.addEventListener('change',function(){ if(tripN()>0){ tripKBtns(); if(lastK>0){ var ss=tripStores(); var kk=Math.min(lastK,ss.length); tripSolve(kk); tripMarkK(kk); } } }); }
   function tripStores(){
-    var hide=tg&&tg.checked, set={};
-    for(var k in tripSel){ for(var st in tripSel[k].prices){ if(!(hide&&st===SAMS)) set[st]=1; } }
+    var hide=tgOn(), set={};
+    tripItems().forEach(function(it){ for(var st in it.prices){ if(!(hide&&st===SAMS)) set[st]=1; } });
     return Object.keys(set);
   }
-  function tripKBtns(){
-    var stores=tripStores(), kb=document.getElementById('pg-plan-kbtns');
-    if(String(kb.getAttribute('data-n'))===String(stores.length)) return;   // store set unchanged: keep buttons + active state
-    kb.setAttribute('data-n', String(stores.length));
-    kb.innerHTML=''; document.getElementById('pg-plan-out').innerHTML='';
-    for(var k=1;k<=stores.length;k++){
-      (function(kk){
-        var b=document.createElement('button'); b.className='pg-fbtn pg-plan-k'; b.type='button'; b.setAttribute('data-k',String(kk));
-        b.textContent=kk+(kk===1?' store':' stores');
-        b.addEventListener('click',function(){ tripSolve(kk); tripMarkK(kk); });
-        kb.appendChild(b);
-      })(k);
-    }
-  }
   function combosOf(arr,k){ var out=[]; (function rec(st,cur){ if(cur.length===k){out.push(cur.slice());return;} for(var i=st;i<arr.length;i++){cur.push(arr[i]);rec(i+1,cur);cur.pop();} })(0,[]); return out; }
-  function tripSolve(k){
-    var items=[]; for(var kk in tripSel){ items.push(tripSel[kk]); }
-    var stores=tripStores();
-    var gmin=[];
-    items.forEach(function(it,i){ var m=null; stores.forEach(function(st){ var p=it.prices[st]; if(p>0&&(m===null||p<m)) m=p; }); gmin[i]=m; });
+  // THE OBJECTIVE IS THE STATED BASKET'S TOTAL. The old solver minimised a dimensionless ratio because it
+  // was deliberately refusing to name a dollar figure; now that the basket is defined and the total is on
+  // screen, minimising anything else would put a number in front of the shopper that a different split
+  // beats. An item no store in the combo carries is penalised far above any price difference, so coverage
+  // still wins ties - a cheap two-store split that drops an item is not the cheaper trip.
+  function tripPlan(k){
+    var items=tripItems(), stores=tripStores();
+    if(!items.length||!stores.length) return null;
     var best=null;
     combosOf(stores,Math.min(k,stores.length)).forEach(function(cmb){
-      var score=0;
-      items.forEach(function(it,i){
+      var total=0, miss=0;
+      items.forEach(function(it){
         var m=null; cmb.forEach(function(st){ var p=it.prices[st]; if(p>0&&(m===null||p<m)) m=p; });
-        if(m===null){ score+=10; } else if(gmin[i]>0){ score+=m/gmin[i]; }
+        if(m===null){ miss++; } else { total+=m; }
       });
-      if(best===null||score<best.score){ best={combo:cmb,score:score}; }
+      var score=miss*10000+total;
+      if(best===null||score<best.score){ best={combo:cmb,total:total,score:score}; }
     });
-    var byStore={}, uncovered=[], atBest=0;
+    if(!best) return null;
+    var byStore={}, uncovered=[];
     best.combo.forEach(function(st){ byStore[st]=[]; });
-    items.forEach(function(it,i){
-      var m=null,ms=null;
+    items.forEach(function(it){
+      var m=null, ms=null;
       best.combo.forEach(function(st){ var p=it.prices[st]; if(p>0&&(m===null||p<m)){m=p;ms=st;} });
       if(ms===null){ uncovered.push(it.name); return; }
-      byStore[ms].push({n:it.name, d:(it.disp&&it.disp[ms])?it.disp[ms]:''});
-      if(m===gmin[i]){ atBest++; }
+      byStore[ms].push({n:it.name, d:it.disp[ms]||'', p:m});
     });
-    var html='<p class="pg-plan-sum">Your best '+best.combo.length+'-store trip gets the cheapest available price on <b>'+atBest+' of '+items.length+'</b> selected items.</p>';
-    // THE ONE-STORE COMPARISON, honestly. These per-unit prices are $/lb, $/dozen, cents/oz and each, so
-    // there is no dollar total to subtract and no "you keep $5.20" to print: a sum across mixed units is
-    // not a number. What IS comparable is COVERAGE, so that is what the comparison says. The line is
-    // dropped entirely when no single store prices the whole basket, rather than inventing a denominator.
-    var soloBest=null, soloStore=null, soloFull=false;
-    stores.forEach(function(st){
-      var cover=0, hit=0;
-      items.forEach(function(it,i){ var p=it.prices[st]; if(p>0){ cover++; if(p===gmin[i]) hit++; } });
-      if(cover===items.length && (soloBest===null||hit>soloBest)){ soloBest=hit; soloStore=st; soloFull=true; }
-    });
-    if(soloFull && best.combo.length>1 && atBest>soloBest){
-      html+='<p class="pg-plan-cmp">One store can cover this whole list: <b>'+esc(soloStore)+'</b>, at the cheapest price on <b>'+soloBest+' of '+items.length+'</b>. This '+best.combo.length+'-store split gets you <b>'+atBest+'</b>. That difference is the whole point of the board.</p>';
+    var legs=best.combo.filter(function(st){ return byStore[st].length; }).map(function(st){
+      var sub=0; byStore[st].forEach(function(o){ sub+=o.p; });
+      return {store:st, items:byStore[st], sub:sub};
+    }).sort(function(a,b){ return b.items.length-a.items.length; });
+    return {combo:best.combo, legs:legs, byStore:byStore, total:best.total,
+            n:items.length, covered:items.length-uncovered.length, uncovered:uncovered};
+  }
+  var ORD=['','One','Two','Three','Four','Five','Six','Seven'];
+  var ORDN=['','first','second','third','fourth','fifth','sixth','seventh'];
+  // THE VERDICT, INCLUDING THE CASE WHERE THE ANSWER IS "DO NOT BOTHER". A planner that always finds a
+  // reason for one more stop is a planner nobody trusts the second week. When another store buys nothing,
+  // this says so in the same voice it uses to recommend one.
+  function tripVerdict(k, plans){
+    var p=plans[k]; if(!p) return '';
+    var where=p.legs.map(function(l){ return l.store; });
+    var whereTxt=where.length>1 ? (where.slice(0,-1).join(', ')+' and '+where[where.length-1]) : (where[0]||'');
+    var pv=plans[k-1], nx=plans[k+1];
+    if(pv && (pv.total-p.total)<0.005){
+      return 'A '+(ORDN[k]||(k+'th'))+' store saves nothing this week. '+
+        (k-1===1 ? 'One stop' : ORD[k-1]+' stops')+' already reach'+(k-1===1?'es':'')+' the cheapest price your list can get.';
     }
-    // RECEIPT PER STORE. Tear edges, the store's own colour as the top band, dotted leaders, a subtotal
-    // rule. On a phone the receipts become a horizontal snap rail so a 4-store trip is four swipes, not
-    // four screens of scrolling.
-    html+='<div class="pg-rcs">';
-    best.combo.slice().sort(function(a,b){return byStore[b].length-byStore[a].length;}).forEach(function(st){
-      if(byStore[st].length===0) return;
-      html+='<div class="pg-rc" style="--st:'+ (PG_HUE[st]||'#5a6862') +'"><div class="pg-rc-band"></div><div class="pg-rc-h"><b>'+esc(st)+'</b><span>'+byStore[st].length+(byStore[st].length===1?' item':' items')+'</span></div><ul class="pg-rc-l">';
-      byStore[st].forEach(function(o){ html+='<li><span class="pg-rc-n">'+esc(o.n)+'</span><span class="pg-rc-ld"></span><span class="pg-rc-p">'+esc(o.d)+'</span></li>'; });
-      html+='</ul><div class="pg-rc-f"><span>'+byStore[st].length+' to pick up</span><button type="button" class="pg-aisle" data-store="'+esc(st)+'">Shop this store</button></div></div>';
+    var lead=(k===1) ? ('One stop at '+whereTxt+'.') : (ORD[k]+' stops: '+whereTxt+'.');
+    if(nx && (p.total-nx.total)>0.005){
+      return lead+' '+(k+1===2?'Two stops':ORD[k+1]+' stops')+' would cut it to '+money(nx.total)+
+        ', which is '+gap(p.total-nx.total)+' less, if the extra trip is worth it to you.';
+    }
+    return lead+' This is the cheapest your list gets.';
+  }
+  // ---- THE TRIP SCREEN --------------------------------------------------------------------------------
+  var _trip=null;
+  function tripClose(){
+    if(!_trip) return;
+    try{ document.body.removeChild(_trip.el); }catch(e){}
+    document.body.classList.remove('pg-trip-on');
+    if(window.TC&&window.TC.mode) window.TC.mode(false);
+    if(_trip.untrap) _trip.untrap();
+    _trip=null;
+  }
+  function tripOpen(){
+    if(_trip){ tripDraw(); return; }
+    if(!BOARD||!BOARD.__rows){ loadBoard().then(function(){ if(BOARD&&BOARD.__rows) tripOpen(); }); return; }
+    var ov=document.createElement('div');
+    ov.className='pg-trip-ov'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label','Your trip');
+    ov.innerHTML='<div class="pg-trip-hd"><button type="button" class="pg-trip-back" aria-label="Back to the board">&larr; Board</button>'+
+      '<b>Your trip</b><button type="button" class="pg-trip-edit">Edit list</button></div><div class="pg-trip-bd"></div>';
+    document.body.appendChild(ov);
+    document.body.classList.add('pg-trip-on');
+    if(window.TC&&window.TC.mode) window.TC.mode(true);
+    _trip={el:ov, untrap:(window.TC&&window.TC.trap)?window.TC.trap(ov,tripClose):null};
+    ov.querySelector('.pg-trip-back').addEventListener('click',function(){ try{history.back();}catch(e){ tripClose(); } });
+    ov.querySelector('.pg-trip-edit').addEventListener('click',function(){ try{history.back();}catch(e){ tripClose(); } });
+    try{ history.pushState({tcTrip:1},'',location.pathname+location.search+'#trip'); }catch(e){}
+    window.addEventListener('popstate',function h(){ window.removeEventListener('popstate',h); if(_trip) tripClose(); });
+    tripDraw();
+  }
+  function tripDraw(){
+    if(!_trip) return;
+    var bd=_trip.el.querySelector('.pg-trip-bd');
+    var stores=tripStores(), items=tripItems();
+    if(!items.length){ bd.innerHTML='<p class="pg-trip-empty">Nothing on your list yet. Tick an item on the board and it lands here.</p>'; return; }
+    // Never offer more stops than there are stores that price something on this list, and never more than
+    // three: past three the walk costs more than the split saves, and the artboard's stepper is 1/2/3.
+    var kmax=Math.min(3, stores.length);
+    var plans=[null];
+    for(var i=1;i<=kmax;i++){ plans.push(tripPlan(i)); }
+    var k=lastK>0?Math.min(lastK,kmax):Math.min(2,kmax);
+    lastK=k;
+    var p=plans[k]; if(!p){ bd.innerHTML='<p class="pg-trip-empty">No store on the board prices these items yet.</p>'; return; }
+    var h='<div class="pg-step-l">How many stores will you visit?</div><div class="pg-step">';
+    for(var j=1;j<=kmax;j++){
+      var pj=plans[j];
+      h+='<button type="button" class="pg-stepb'+(j===k?' is-on':'')+'" data-k="'+j+'"><span class="pg-stepn">'+j+'</span><span class="pg-stept">'+(pj?money(pj.total):'-')+'</span></button>';
+    }
+    h+='</div>';
+    var flat=(plans[k-1]&&(plans[k-1].total-p.total)<0.005);
+    h+='<div class="pg-verd'+(flat?' is-flat':'')+'"><div class="pg-verd-h"><span class="pg-verd-t">'+money(p.total)+'</span>'+
+      '<span class="pg-verd-u">one unit of each, '+p.n+(p.n===1?' item':' items')+'</span></div>'+
+      '<p class="pg-verd-p">'+esc(tripVerdict(k,plans))+'</p></div>';
+    p.legs.forEach(function(l){
+      h+='<div class="pg-leg"><div class="pg-leg-h"><span class="pg-leg-d" style="--st:'+(PG_HUE[l.store]||'#5a6862')+'"></span>'+
+        '<span class="pg-leg-s">'+esc(l.store)+'</span><span class="pg-leg-sub">'+money(l.sub)+'</span></div><ul class="pg-leg-l">';
+      l.items.forEach(function(o){
+        h+='<li><span class="pg-leg-n">'+esc(o.n)+'</span><span class="pg-leg-p">'+esc(o.d)+'</span></li>';
+      });
+      h+='</ul><div class="pg-leg-f"><span>'+l.items.length+(l.items.length===1?' item':' items')+' to pick up</span>'+
+        '<button type="button" class="pg-aisle" data-store="'+esc(l.store)+'">Shop this store</button></div></div>';
     });
-    html+='</div>';
-    if(uncovered.length){ html+='<p class="pg-plan-un">Not sold at these stores: '+uncovered.map(function(u){return esc(u);}).join(', ')+'</p>'; }
+    if(p.uncovered.length){ h+='<p class="pg-plan-un">Not sold at these stores: '+p.uncovered.map(function(u){return esc(u);}).join(', ')+'</p>'; }
     // END-OF-JOB CAPTURE. The list lives in this tab and dies with it - "send it to my phone" is a receipt
     // the shopper WANTS, not a marketing ask. mailto/copy need no backend and cannot be abused as a mail
     // relay; the weekly line beside them is the habit hook.
     var listTxt='My Thrifty Crew shopping trip ('+new Date().toLocaleDateString()+')\n';
-    best.combo.slice().sort(function(a,b){return byStore[b].length-byStore[a].length;}).forEach(function(st){
-      if(byStore[st].length===0) return;
-      listTxt+='\n'+st.toUpperCase()+'\n'; byStore[st].forEach(function(o){ listTxt+='  - '+o.n+(o.d?('  '+o.d):'')+'\n'; });
+    p.legs.forEach(function(l){
+      listTxt+='\n'+l.store.toUpperCase()+'\n';
+      l.items.forEach(function(o){ listTxt+='  - '+o.n+(o.d?('  '+o.d):'')+'\n'; });
     });
     listTxt+='\nPrices checked this morning: https://www.thriftycrew.com/omaha-grocery-prices/';
-    // the share sheet is capped: past ~1,500 characters iOS silently truncates a share payload, and a
-    // half a shopping list is worse than a link to the whole one
+    // the share sheet is capped: past ~1,500 characters iOS silently truncates a share payload, and half a
+    // shopping list is worse than a link to the whole one
     if(listTxt.length>1500){ listTxt=listTxt.slice(0,1400).replace(/\n[^\n]*$/,'')+'\n...and more at https://www.thriftycrew.com/omaha-grocery-prices/'; }
-    html+='<div class="pg-plan-send">'+
+    h+='<div class="pg-plan-send">'+
       (navigator.share?'<button class="pg-plan-copy pg-plan-share" id="pg-plan-share">Share this list</button>':'')+
       '<a class="pg-plan-mailto" href="mailto:?subject='+encodeURIComponent('My shopping trip - Thrifty Crew')+'&body='+encodeURIComponent(listTxt)+'">Email me this list</a>'+
       '<button class="pg-plan-copy" id="pg-plan-copy">Copy list</button>'+
       '<span class="pg-plan-weekly">Want the whole board every Friday? <a href="#/portal/signup/free" data-portal="signup/free">Free email &rarr;</a></span></div>';
-    document.getElementById('pg-plan-out').innerHTML=html;
+    h+='<p class="pg-trip-fine">Totals are one unit of each item you picked, at this morning\'s verified per-unit shelf prices. Register totals vary with package size.</p>';
+    bd.innerHTML=h;
+    bd.querySelectorAll('.pg-stepb').forEach(function(b){
+      b.addEventListener('click',function(){ lastK=parseInt(b.getAttribute('data-k'),10); tripDraw(); bd.scrollTop=0; });
+    });
     var cpBtn=document.getElementById('pg-plan-copy');
     if(cpBtn){ cpBtn.addEventListener('click',function(){
       try { navigator.clipboard.writeText(listTxt).then(function(){ cpBtn.textContent='Copied!'; setTimeout(function(){cpBtn.textContent='Copy list';},2000); }); }
@@ -1576,13 +1949,37 @@ $js = @'
     }); }
     var shBtn=document.getElementById('pg-plan-share');
     if(shBtn){ shBtn.addEventListener('click',function(){ try{ navigator.share({title:'My shopping trip',text:listTxt}); }catch(e){} }); }
-    // AISLE MODE. Built at tap time from the split we just solved: zero nodes until someone is standing
-    // in a store, and zero network once it is open.
-    document.querySelectorAll('.pg-aisle').forEach(function(b){
-      b.addEventListener('click',function(){ aisle(b.getAttribute('data-store'), byStore[b.getAttribute('data-store')]); });
+    // AISLE MODE. Built at tap time from the split we just solved: zero nodes until someone is standing in
+    // a store, and zero network once it is open.
+    bd.querySelectorAll('.pg-aisle').forEach(function(b){
+      b.addEventListener('click',function(){ aisle(b.getAttribute('data-store'), p.byStore[b.getAttribute('data-store')]); });
     });
-    lastK=k;
   }
+  // ---- THE STICKY PICKED-ITEMS BAR: a readout and one way in --------------------------------------
+  function tripBar(){
+    var n=tripN(), bar=document.getElementById('pg-tripbar');
+    if(bar){
+      document.getElementById('pg-trip-n').textContent=n+(n===1?' item on your list':' items on your list');
+      bar.hidden=(n===0);
+      var sub=document.getElementById('pg-trip-sub');
+      if(sub){
+        var pl=(n&&BOARD&&BOARD.__rows)?tripPlan(Math.min(lastK||2,Math.max(1,tripStores().length))):null;
+        sub.textContent=pl?('cheapest across '+pl.legs.length+(pl.legs.length===1?' store, ':' stores, ')+money(pl.total)):'';
+      }
+    }
+    if(_trip) tripDraw();
+  }
+  // the feed can land after a pick or a restore, so re-run everything that needed prices
+  function tripReady(){ tripBar(); }
+  var tc=document.getElementById('pg-trip-clear');
+  if(tc){ tc.addEventListener('click',function(){
+    document.querySelectorAll('.pg-pick').forEach(function(c){ if(c.checked){ c.checked=false; } });
+    tripSel={}; lastK=0; tripSave();
+    if(_trip) tripClose();
+    tripBar();
+  }); }
+  var tp=document.getElementById('pg-trip-plan');
+  if(tp){ tp.addEventListener('click',tripOpen); }
   // ---- AISLE MODE ------------------------------------------------------------------------------------
   // Giant tap rows, a progress footer, a wake lock so the screen does not sleep in the aisle, and check
   // state saved per store per board week so a reload mid-shop resumes exactly where you were. Everything
@@ -1642,7 +2039,10 @@ $js = @'
   if(demoBtn && DEMO_IDS.length){
     demoBtn.addEventListener('click',function(){
       var want={}; DEMO_IDS.forEach(function(i){ want[i]=1; });
-      pgFillAll().then(function(){
+      // loadBoard, not pgFillAll: the demo needs PRICES, and it no longer needs 637 rows of markup to get
+      // them. It does have to wait for the feed, because a basket ticked before the feed lands would open
+      // the trip screen on an empty plan.
+      loadBoard().then(function(){
         var n=0;
         document.querySelectorAll('.pg-row[data-id]').forEach(function(row){
           if(!want[row.getAttribute('data-id')]) return;
@@ -1650,26 +2050,14 @@ $js = @'
           cb.checked=true; cb.dispatchEvent(new Event('change')); n++;
         });
         if(!n) return;
-        var stores=tripStores(); var kk=Math.min(2,stores.length);
-        if(kk>0){ tripSolve(kk); tripMarkK(kk); }
-        var box=document.getElementById('pg-tripbox'); if(box){ box.scrollIntoView({behavior:'smooth',block:'start'}); }
+        tripOpen();
       });
     });
   }
 
-  // ---- THE LIVE TICKER in the floating bar -----------------------------------------------------------
-  // It calls tripSolve's OWN store split, not a parallel sum. There is deliberately no dollar total here:
-  // see the basis note in tripSolve. What it reports is what the solver actually knows.
-  var tickT=null;
-  function tick(){
-    var n=tripN(), el=document.getElementById('pg-trip-sub');
-    if(!el) return;
-    if(n===0){ el.textContent=''; return; }
-    var stores=tripStores();
-    el.textContent=stores.length?('cheapest across '+Math.min(2,stores.length)+' stores'):'';
-  }
-  var _tripBarOrig=tripBar;
-  tripBar=function(){ _tripBarOrig.apply(null,arguments); clearTimeout(tickT); tickT=setTimeout(tick,300); };
+  // (The live ticker that used to wrap tripBar is gone: tripBar itself now prints the real split and its
+  // total, because it finally has the numbers. It used to say "cheapest across 2 stores" as a guess,
+  // before any solve had run.)
 
   // ---- SPARKLINES in the expanded panel ---------------------------------------------------------------
   // 23 weeks of tracked lows as a ~110x28 polyline, drawn from the SAME lazy price-history fetch the
@@ -2053,9 +2441,20 @@ if ($histDoc) {
 $boardOut = Join-Path (Split-Path $root -Parent) 'public\board.json'
 $boardDir = Split-Path $boardOut -Parent
 if (-not (Test-Path $boardDir)) { New-Item -ItemType Directory -Force -Path $boardDir | Out-Null }
+# RESERVED KEYS. The structured twin rides in the SAME object as the chip html so an old cached page, which
+# fetches its content-hashed URL and gets whatever the Worker currently serves, still finds every chip at the
+# top level. Commodity ids are kebab-case slugs and can never begin with an underscore, but a guarantee that
+# is only true by convention is one data change away from silently overwriting a row's chips - so assert it.
+foreach ($rk in @('__rows','__meta')) {
+  if ($boardChips.Contains($rk)) { Write-Output ("FEED KEY COLLISION: a commodity is keyed '$rk', which the structured feed reserves. NOT writing the page."); exit 2 }
+}
+$boardChips['__meta'] = [ordered]@{ stores = @($storeOrder); hues = $storeAccent }
+$boardChips['__rows'] = $boardRows
 # ConvertTo-Json (not hand-rolled escaping): the chip html is full of quotes/apostrophes/entities and one
 # mis-escaped row would break the whole feed parse and silently empty every store breakdown.
-$boardJson = ($boardChips | ConvertTo-Json -Depth 3 -Compress)
+# Depth 8, not 3: __rows nests object -> key -> {u,p,x} -> array of arrays, and PS 5.1 silently renders
+# anything past -Depth as the TYPE NAME string, which would ship "System.Object[]" as a price.
+$boardJson = ($boardChips | ConvertTo-Json -Depth 8 -Compress)
   # BOM-LESS - see the note on price-history.json above.
   [IO.File]::WriteAllText($boardOut, $boardJson, (New-Object Text.UTF8Encoding($false)))
 # CACHE-BUST WITH A CONTENT HASH. The feed is served with max-age=1800, so a freshly published post can fetch a
@@ -2085,7 +2484,7 @@ if (@($demoIds).Count -lt 15) {
 # nothing at all, either of which would emit JS that does not parse (the ps51-json-array-traps class).
 $js = $js.Replace('__DEMO_IDS__', ('[' + ((@($demoIds) | ForEach-Object { '"' + $_ + '"' }) -join ',') + ']'))
 if (-not @($demoIds).Count) { $body = $body -replace "<button type='button' class='pg-demo' id='pg-demo'>[^<]*</button>", '' }
-Write-Output ("chips: {0} rows -> public\board.json ({1} KB, lazily injected); post keeps the per-row answer" -f $boardChips.Count, [math]::Round($boardJson.Length/1KB,0))
+Write-Output ("chips: {0} rows -> public\board.json ({1} KB, lazily injected; {2} rows also carry structured prices); post keeps the per-row answer" -f $boardRows.Count, [math]::Round($boardJson.Length/1KB,0), $boardRows.Count)
 
 # ---- THE ALL-3 ASSERTION (Brad's rule, 2026-07-23): a tile that shows a price MUST carry a link. ----
 # SeeLink now guarantees this by construction (exact link -> weekly-ad pill -> store-search fallback), but a
@@ -2107,13 +2506,14 @@ if (@($dsBad).Count) {
 }
 # every placeholder the JS carries must have been substituted; an unreplaced __TOKEN__ ships a page whose
 # script does not parse, and the board would look fine in the HTML right up until nothing worked
-foreach ($tok in @('__BOARD_URL__','__WEEK__','__STORE_HUES__','__DEMO_IDS__','__TCH_IDS__','__TCH_URL__')) {
+foreach ($tok in @('__BOARD_URL__','__WEEK__','__STORE_HUES__','__DEMO_IDS__','__TCH_IDS__','__TCH_URL__','__SALE_N__','__REC_N__','__ALL_N__')) {
   if ($finalHtml -match [regex]::Escape($tok)) { Write-Output ("UNSUBSTITUTED PLACEHOLDER $tok reached the final page - the script would not parse. NOT writing."); exit 2 }
 }
 # scan BOTH artifacts: the page shell AND every chip row in the board.json feed (that is where the priced
 # chips actually live - they are injected client-side; asserting only the page shell guards almost nothing)
 $bare = 0; $searchN = 0; $pricedN = 0
-$scanTargets = @($finalHtml) + @($boardChips.Values)
+# the chip html only - NOT the reserved __meta/__rows entries added above, which are objects, not markup
+$scanTargets = @($finalHtml) + @($boardChips.Keys | Where-Object { $_ -notlike '__*' } | ForEach-Object { [string]$boardChips[$_] })
 foreach ($target in $scanTargets) {
   $parts = [regex]::Split([string]$target, "<div class='pg-chip")
   for ($i = 1; $i -lt $parts.Count; $i++) {   # parts[0] precedes the first chip

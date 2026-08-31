@@ -71,6 +71,53 @@ function TitleCuisine([string]$s){
   }
   return $out
 }
+# ---- CUISINE MARKS: a real mapping, not a first letter ------------------------------------------------
+# 124 distinct cuisines share 26 first letters, so a monogram taken from letter one collides constantly:
+# Italian, Italian-American, Indian, Indonesian, Irish, Indian / Pakistani are all "I", and a tile that
+# says the same thing for six different cuisines is decoration, not information.
+#
+# The mark is DERIVED, not hand-listed, so a cuisine that arrives next month gets a correct tile without
+# anyone remembering to add it. Candidates, in order of preference:
+#   1. the initials of the first two words   Italian-American -> IA, Tex-Mex -> TM, Middle Eastern -> ME
+#   2. the first letter alone                Italian -> I
+#   3. the first letter plus a later letter of the same word   Indian -> In, Indonesian -> Id, Irish -> Ir
+# The first candidate nobody has taken wins, and cuisines are processed MOST COMMON FIRST so the shortest
+# marks land on the cuisines a reader meets most often.
+$cuMark=@{}; $markTaken=@{}
+function New-CuisineMark([string]$cu){
+  $words=@([regex]::Split($cu,'[\s/&\-]+') | ForEach-Object { $_ -replace '[^A-Za-z]','' } | Where-Object { $_ })
+  if(-not @($words).Count){ return '?' }
+  $w0=[string]$words[0]
+  $a=$w0.Substring(0,1).ToUpper()
+  $cands=@()
+  if(@($words).Count -ge 2){ $cands += ($a + ([string]$words[1]).Substring(0,1)).ToUpper() }
+  $cands += $a
+  # every later letter of the first word, then of the remaining words: still recognisably the cuisine
+  for($i=1; $i -lt $w0.Length; $i++){ $cands += ($a + $w0.Substring($i,1).ToLower()) }
+  for($wi=1; $wi -lt @($words).Count; $wi++){
+    $wn=[string]$words[$wi]
+    for($i=0; $i -lt $wn.Length; $i++){ $cands += ($a + $wn.Substring($i,1).ToLower()) }
+  }
+  # LAST RESORT, and it has to exist. Without it three cuisines fell through to a duplicate mark, which
+  # is the one thing this function exists to prevent: two different cuisines wearing the same tile is
+  # worse than the first-letter monogram it replaced, because it looks deliberate.
+  foreach($ch in 'abcdefghijklmnopqrstuvwxyz'.ToCharArray()){ $cands += ($a + [string]$ch) }
+  foreach($c in $cands){ if(-not $markTaken.ContainsKey($c)){ return $c } }
+  return $a   # 27 cuisines share an initial: unreachable in practice, and a duplicate beats a blank tile
+}
+# Tints are keyed by a hash of the cuisine NAME, not by its position in the list, so a cuisine keeps the
+# same colour from build to build even as recipe counts move it around the ranking. The four biggest are
+# pinned by hand so the page's most frequent tiles are the ones the design was drawn against.
+$cuPalette=@(
+  @('#fdf1d9','#8a6d1f'), @('#e4f0e9','#0c5c3b'), @('#e6eef8','#1b64b0'), @('#fbe8e3','#b5432c'),
+  @('#f0e8f7','#6f3a92'), @('#e7f2ea','#2e7d43'), @('#fdeedd','#b8621a'), @('#e9edf0','#41586b')
+)
+$cuPinned=@{ 'American'=0; 'Italian'=1; 'Mexican'=3; 'Chinese'=3; 'Tex-Mex'=6; 'Italian-American'=1 }
+function Get-CuisineTint([string]$cu){
+  if($cuPinned.ContainsKey($cu)){ return $cuPalette[$cuPinned[$cu]] }
+  $h=0; foreach($ch in $cu.ToCharArray()){ $h=(($h*31)+[int]$ch) % 100003 }
+  return $cuPalette[$h % $cuPalette.Count]
+}
 
 if($Validate){
   # Fetch the live page if the cached copy is missing. -Validate used to require someone to have already
@@ -87,8 +134,21 @@ if($Validate){
   # and the h3). BOTH shapes are parsed on purpose: this validator runs against the LIVE page, which is
   # the old markup right up until the redesign publishes, and a validator that only understands the new
   # shape would silently parse zero cards for exactly one cycle and report a clean run.
-  foreach($m in [regex]::Matches($html,'data-protein="([a-z]+)"[^>]*>(?:\s*<span[^>]*>[^<]*</span>)?\s*<h3>[^<]*</h3>.*?href="https://www\.thriftycrew\.com/([a-z0-9-]+)/"')){ $live[$m.Groups[2].Value]=$m.Groups[1].Value }
-  foreach($m in [regex]::Matches($html,'href="https://www\.thriftycrew\.com/([a-z0-9-]+)/"[^>]*\sdata-protein="([a-z]+)"')){ $live[$m.Groups[1].Value]=$m.Groups[2].Value }
+  # ONE TAG, BOTH FIELDS. The two regexes here used to read data-protein and the slug from DIFFERENT
+  # places: the first walked past the card's <h3> and then took the NEXT href on the page, which is the
+  # FOLLOWING card's link, so it paired every card's protein with its neighbour's slug. On 2026-08-31 that
+  # parsed 290 of 576 cards and reported 202 "mismatches" that were all the off-by-one - a validator whose
+  # output is noise is a validator nobody reads. (The second regex required href BEFORE data-protein and
+  # has matched nothing since the 2026-07-31 redesign put them the other way round.)
+  #
+  # Both fields now come out of the SAME opening tag, in either order, which is also what makes this
+  # immune to the card's INNER markup - the thing the redesign keeps changing.
+  foreach($m in [regex]::Matches($html,'<a class="mpr-card"([^>]*)>')){
+    $tag=$m.Groups[1].Value
+    $pm=[regex]::Match($tag,'data-protein="([a-z]+)"')
+    $hm=[regex]::Match($tag,'href="https://www\.thriftycrew\.com/([a-z0-9-]+)/"')
+    if($pm.Success -and $hm.Success){ $live[$hm.Groups[1].Value]=$pm.Groups[1].Value }
+  }
   if($live.Count -eq 0){ throw 'VALIDATE PARSED ZERO CARDS - the card regex no longer matches the live markup (rules-that-silently-disarm class). Fix the regex before trusting this run.' }
   $ok=0; $mm=@()
   foreach($kv in $live.GetEnumerator()){
@@ -158,17 +218,44 @@ foreach($r in $recipes){
 $rows=$rows | Sort-Object cost, name
 $counts=@{chicken=0;pork=0;beef=0;turkey=0}
 $cuisines=@{}
+# Marks are assigned MOST COMMON CUISINE FIRST (see New-CuisineMark), so "American" gets A and the long
+# tail takes the two-letter forms. Ties break on the name so a rebuild with unchanged data is byte-stable.
+foreach($grp in ($rows | Where-Object { $_.cuisine } | Group-Object cuisine | Sort-Object @{e={$_.Count};d=$true}, Name)){
+  $cn=[string]$grp.Name
+  $mk=New-CuisineMark $cn
+  $markTaken[$mk]=$true
+  $cuMark[$cn]=$mk
+}
+$dupMarks=@($cuMark.Values | Group-Object | Where-Object { $_.Count -gt 1 })
+if(@($dupMarks).Count){ throw ("CUISINE MARK COLLISION: " + (@($dupMarks | ForEach-Object { $_.Name }) -join ', ') + " - two cuisines share a tile, so the tiles stop identifying anything. New-CuisineMark ran out of candidates; widen it.") }
+# the bar on every row is scaled against the best value on the whole board, so the bars mean the same
+# thing on every row and in every filtered subset
+$ppdMax=[double](($rows | Measure-Object -Property ppd -Maximum).Maximum)
+if($ppdMax -le 0){ $ppdMax=1 }
 $sb=New-Object System.Text.StringBuilder
 foreach($c in $rows){
   $counts[$c.cat]++
   if($c.cuisine){ $cuisines[$c.cuisine]=$true }
   $cost='{0:0.00}' -f $c.cost
   $freeAttr = if($c.free){ ' data-free="1"' } else { '' }
-  $ribbon   = if($c.free){ '<span class="mpr-free">Free this week</span>' } else { '' }
-  # WHOLE CARD IS THE TAP TARGET, and it is a real anchor: the 513 recipe links stay in the HTML for SEO
-  # exactly as before, they just stop being a 13px word in the corner of a 200px card.
-  # "14 servings" is gone from every card (all 513 are 14 servings; the library intro says it once).
-  [void]$sb.Append("<a class=""mpr-card"" data-protein=""$($c.cat)"" data-cal=""$($c.cal)"" data-cost=""$cost"" data-ppd=""$($c.ppd)"" data-cuisine=""$(Attr $c.cuisine)""$freeAttr href=""https://www.thriftycrew.com/$($c.slug)/"">$ribbon<h3>$($c.name)</h3><div class=""mpr-meta"">$($c.cuisine)</div><div class=""mpr-macros""><div class=""mpr-b mpr-cal""><div class=""n"">$($c.cal)</div><div class=""l"">cal</div></div><div class=""mpr-b mpr-pro""><div class=""n"">$($c.pro)g</div><div class=""l"">protein</div></div><div class=""mpr-b mpr-carb""><div class=""n"">$($c.carb)g</div><div class=""l"">carbs</div></div><div class=""mpr-b mpr-fat""><div class=""n"">$($c.fat)g</div><div class=""l"">fat</div></div></div><div class=""mpr-cost""><span class=""c"">`$$cost <span>/ serving</span></span><span class=""mpr-ppd"">$($c.ppd)g protein per `$1</span></div></a>")
+  # 'Free' not 'Free this week' on a row: the shelf above says which week, and the long label crowded
+  # the price on a 375px row. The rail card, which stands alone, keeps its own wording.
+  $ribbon   = if($c.free){ '<span class="mpr-free">Free</span>' } else { '' }
+  # THE CARD IS A ROW NOW (2026-08-31). A ~300px card times 576 recipes made the page 185,744px tall at
+  # 375px - about 229 phone screens - and four macro tiles per card said carbs and fat to a reader who is
+  # choosing between dinners, not eating one. Calories and protein stay on the row because they are what
+  # the choice turns on; carbs and fat move to the recipe page, where the cooking happens.
+  #
+  # Every data- attribute the filter script reads is unchanged, so search, protein, cuisine, calories and
+  # sort keep working against the same values. The <h3> stays: 576 recipe titles are the page's SEO.
+  # WHOLE ROW IS THE TAP TARGET, and it is still a real anchor.
+  $tint = Get-CuisineTint $c.cuisine
+  $mark = if($cuMark.ContainsKey([string]$c.cuisine)){ $cuMark[[string]$c.cuisine] } else { '?' }
+  $barPct = [math]::Round(($c.ppd / $ppdMax) * 100)
+  if($barPct -lt 3){ $barPct = 3 }
+  # gold above 25g/$1, muted below: the bar carries the ranking, the colour carries "this one is good"
+  $barCol = if($c.ppd -ge 25){ '#E2A43C' } else { '#c9c1ab' }
+  [void]$sb.Append("<a class=""mpr-card"" data-protein=""$($c.cat)"" data-cal=""$($c.cal)"" data-cost=""$cost"" data-ppd=""$($c.ppd)"" data-cuisine=""$(Attr $c.cuisine)""$freeAttr href=""https://www.thriftycrew.com/$($c.slug)/"">$ribbon<span class=""mpr-tile"" aria-hidden=""true"" style=""--tb:$($tint[0]);--tf:$($tint[1])"">$mark</span><div class=""mpr-body""><h3>$($c.name)</h3><div class=""mpr-meta"">$($c.cuisine) &middot; $($c.cal) cal &middot; $($c.pro)g protein</div><div class=""mpr-val""><span class=""mpr-bar"" style=""--v:$barPct%;--vc:$barCol""></span><span class=""mpr-ppd"">$($c.ppd)g / `$1</span></div></div><div class=""mpr-cost""><span class=""c"">`$$cost</span><span class=""u"">/ serving</span></div></a>")
 }
 $cardsHtml=$sb.ToString()
 $total=$rows.Count
@@ -178,10 +265,71 @@ $total=$rows.Count
 # MANAGED BLOCK 1: styles
 # ---------------------------------------------------------------------------------------------------
 $hubCss = Compress-TcCss ((Get-TcTokenCss -Parts @('type','depth','navy','money','focus','touch','motion','skel')) + @'
-/* ---- card polish: protein-colored spine, pressable, whole-card anchor ---- */
-.mpr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.3rem}
+/* ==== THE LIBRARY IS A LIST OF ROWS, NOT A WALL OF CARDS (2026-08-31) ==============================
+   576 cards at ~300px made this page 185,744px tall at 375px, which is about 229 phone screens of
+   scrolling to reach the end of a library people are meant to browse. As ~76px rows it is roughly a
+   quarter of that, and a reader can compare four dinners without scrolling instead of one.
+
+   What each row carries is the choice, not the recipe: name, cuisine, calories, protein, value, price.
+   Carbs and fat came off - they are cooking numbers, and they are on the recipe page where the cooking
+   is. Every data- attribute the filter script reads is untouched, so search, protein, cuisine, calorie
+   range and sort all still work off the same values.
+
+   The rail and the picks shelf keep card shapes on purpose: they are shelves, and a shelf that looks
+   like the list behind it stops being a shelf. ==================================================== */
+.mpr-grid{display:block;border-top:1px solid #e7e2d4}
 .mpr-card{position:relative;background:#fff;border:1px solid #e7e2d4;border-bottom:3px solid #ddd6c2;border-left:3px solid #cbd5e1;border-radius:14px;padding:1.3rem 1.4rem;display:flex;flex-direction:column;text-decoration:none!important;color:inherit;
   content-visibility:auto;contain-intrinsic-size:auto 268px;transition:transform 100ms cubic-bezier(0.2,0,0,1),box-shadow 200ms cubic-bezier(0.2,0,0,1),border-color 200ms cubic-bezier(0.2,0,0,1)}
+.mpr-grid>.mpr-card{flex-direction:row;align-items:center;gap:1.1rem;border:0;border-bottom:1px solid #e7e2d4;border-left:3px solid #cbd5e1;border-radius:0;background:transparent;
+  padding:1rem .4rem 1rem .9rem;contain-intrinsic-size:auto 88px}   /* 88, measured: a 76px guess under-counts
+  every two-line title by 25% and the page height keeps moving as the browser discovers the truth */
+@media (hover:hover){.mpr-grid>.mpr-card:hover{box-shadow:none;background:#fffdf6;border-bottom-color:#e7e2d4}}
+/* ---- cuisine tile: colour plus a serif mark, which is the whole identity system on a page with no
+   photographs. See New-CuisineMark for why the mark is not the first letter. ---- */
+.mpr-tile{flex:0 0 auto;order:1;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;
+  font-family:Georgia,'Times New Roman',serif;font-size:1.45rem;font-weight:600;letter-spacing:-.01em;background:var(--tb,#e9edf0);color:var(--tf,#41586b)}
+.mpr-body{order:2;flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.25rem}
+.mpr-grid>.mpr-card h3{font-size:1.42rem;margin:0;line-height:1.28;text-wrap:pretty}
+.mpr-grid>.mpr-card .mpr-meta{font-size:1.08rem;color:#64748b;margin:0}
+/* ---- the value bar: the ranking, visible without reading a number (design item 11) ---- */
+.mpr-val{display:flex;align-items:center;gap:.6rem;padding-top:.2rem}
+.mpr-bar{flex:1 1 auto;min-width:24px;height:4px;border-radius:2px;background:#efe9d9;overflow:hidden}
+.mpr-bar::before{content:'';display:block;height:100%;width:var(--v,0%);border-radius:2px;background:var(--vc,#c9c1ab)}
+.mpr-grid>.mpr-card .mpr-ppd{flex:0 0 auto;font-size:1.02rem}
+.mpr-grid>.mpr-card .mpr-cost{order:4;flex:0 0 auto;margin:0;border:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;gap:0;text-align:right}
+.mpr-grid>.mpr-card .mpr-cost .c{font-size:1.5rem}
+.mpr-cost .u{font-size:1rem;color:#94a3b8}
+/* FREE reads inline on a row: an absolutely-positioned ribbon would sit on top of the price. */
+.mpr-grid>.mpr-card .mpr-free{position:static;order:3;flex:0 0 auto;border-radius:999px;padding:.2rem .6rem;font-size:.92rem}
+.mpr-grid>.mpr-card[data-free] h3{padding-right:0}
+@media(min-width:700px){
+  .mpr-grid>.mpr-card{gap:1.3rem;padding:1.15rem .6rem 1.15rem 1.1rem}
+  .mpr-tile{width:42px;height:42px;font-size:1.7rem}
+  .mpr-grid>.mpr-card h3{font-size:1.6rem}
+  .mpr-grid>.mpr-card .mpr-meta{font-size:1.18rem}
+  .mpr-grid>.mpr-card .mpr-cost .c{font-size:1.75rem}
+}
+/* ==== BEST VALUE THIS WEEK: the picks shelf that replaced the navy leaderboard ==================== */
+.mpr-picks{margin:0 0 2rem}
+.mpr-picks-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 .4rem}
+.mpr-picks-h h2{font-family:Georgia,serif;font-size:2rem;letter-spacing:-.015em;color:#16263F;margin:0}
+.mpr-picks-h span{font-size:1.15rem;color:#94a3b8;white-space:nowrap}
+.mpr-picks-n{font-size:1.18rem;line-height:1.5;color:#64748b;margin:0 0 1rem;text-wrap:pretty}
+.mpr-pick{display:flex;align-items:center;gap:1.1rem;margin:0 0 .8rem;padding:1.1rem 1.2rem;background:#fff;border:1px solid #e7e2d4;
+  border-bottom:3px solid #ddd6c2;border-radius:14px;text-decoration:none!important;color:inherit;
+  transition:transform 100ms cubic-bezier(0.2,0,0,1),border-color 200ms cubic-bezier(0.2,0,0,1)}
+.mpr-pick,.mpr-pick *{text-decoration:none!important}
+.mpr-pick:active{transform:scale(.985)}
+@media (hover:hover){.mpr-pick:hover{border-bottom-color:#E2A43C}}
+.mpr-pick .mpr-t{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;font-size:1.5rem;font-weight:700;color:#16263F;line-height:1.27;letter-spacing:-.01em;text-wrap:pretty}
+.mpr-pick .fr{background:#E2A43C;color:#16263F;font-size:.95rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:.15rem .5rem;border-radius:999px;white-space:nowrap}
+.mpr-pick .mpr-meta{font-size:1.12rem;color:#64748b;margin:0}
+.mpr-pick .mpr-ppd{flex:0 0 auto;font-size:1.05rem}
+/* order:4 is not decoration. .mpr-tile and .mpr-body carry order 1 and 2 for the grid rows, and an
+   element with no order at all is order 0 - so the price rendered BEFORE the tile on every pick. */
+.mpr-pick .mpr-cost{order:4;margin:0;border:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;gap:0;text-align:right;flex:0 0 auto}
+.mpr-pick .mpr-cost .c{font-size:1.7rem}
+@media(min-width:700px){.mpr-pick .mpr-t{font-size:1.65rem}.mpr-pick .mpr-cost .c{font-size:2rem}}
 .mpr-card,.mpr-card *{text-decoration:none!important}
 .mpr-card:active{transform:scale(.985)}
 @media (hover:hover){.mpr-card:hover{box-shadow:0 6px 16px rgba(22,38,63,.08);border-bottom-color:#E2A43C}}
@@ -213,23 +361,18 @@ $hubCss = Compress-TcCss ((Get-TcTokenCss -Parts @('type','depth','navy','money'
 .mpr-dots{display:flex;gap:6px;justify-content:center;margin:.2rem 0 0}
 .mpr-dots i{width:6px;height:6px;border-radius:999px;background:#cbd5e1;display:block}
 .mpr-dots i.is-on{background:#E2A43C;width:18px}
-@media(min-width:760px){.mpr-rail{grid-auto-columns:1fr;grid-auto-flow:row;grid-template-columns:repeat(5,1fr);overflow:visible}.mpr-dots{display:none}}
+/* minmax(0,1fr), not 1fr. A plain 1fr track is minmax(AUTO,1fr) and auto floors at min-content, so five
+   rail cards whose macro tiles are 56px each could not shrink below ~1,540px inside a 720px column: the
+   page scrolled sideways at every desktop width, on the live Google Ads landing page, at 1,675px against
+   a 985px viewport. Verified pre-existing on the live page 2026-08-31, not introduced by this redesign.
+   Four columns with a zero floor fits eight cards as two rows and lets the card contents wrap. */
+@media(min-width:760px){.mpr-rail{grid-auto-columns:minmax(0,1fr);grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible}.mpr-rail>a{min-width:0}.mpr-dots{display:none}}
 /* ---- kitchen ticker: one static stat line, build-time date, upgraded client side only when true ---- */
 .mpr-ticker{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 2rem;padding:.85rem 1.1rem;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;font-size:1.28rem;color:#3a4658;min-height:46px}
 .mpr-ticker b{color:#16263F;font-variant-numeric:tabular-nums;font-weight:750}
 .mpr-ticker .d{color:#8a94a6;font-size:1.14rem}
-/* ---- protein-per-dollar leaderboard: navy band, static height, no JS ---- */
-.mpr-lead{background:#16263F;border-radius:14px;padding:1.5rem 1.6rem;margin:0 0 2rem}
-.mpr-lead .tc-eyebrow{color:#E2A43C}
-.mpr-lead h2{font-family:Georgia,serif;font-size:1.9rem;letter-spacing:-.015em;color:#F6F1E7;margin:0 0 1rem}
-.mpr-lead ol{list-style:none;margin:0;padding:0;counter-reset:mprl}
-.mpr-lead li{counter-increment:mprl;display:flex;align-items:baseline;gap:12px;padding:.55rem 0;border-bottom:1px solid rgba(255,255,255,.10)}
-.mpr-lead li:last-child{border-bottom:none}
-.mpr-lead li::before{content:counter(mprl);color:#E2A43C;font-family:Georgia,serif;font-size:1.7rem;font-weight:700;min-width:20px;font-variant-numeric:tabular-nums}
-.mpr-lead a{color:#F6F1E7!important;font-size:1.36rem;font-weight:700;text-decoration:none!important;flex:1;line-height:1.3}
-.mpr-lead .v{color:#E2A43C;font-size:1.3rem;font-weight:750;white-space:nowrap;font-variant-numeric:tabular-nums}
-.mpr-lead .fr{background:#E2A43C;color:#16263F;font-size:.95rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:.15rem .5rem;border-radius:999px;white-space:nowrap}
-.mpr-lead .fn{color:#8fa0b8;font-size:1.12rem;margin:.9rem 0 0;line-height:1.5}
+/* the navy protein-per-dollar leaderboard became the picks shelf above (.mpr-picks) on 2026-08-31:
+   two modules ranking the same number, one above the other, was the redundancy the redesign removed. */
 /* ---- filters: one panel, and a one-line sticky version once you are past it ---- */
 .mpr-filters{margin:0 0 1.7rem;padding:1.2rem 1.35rem;background:#f8fafc;border:1px solid #e7e2d4;border-bottom:3px solid #ddd6c2;border-radius:14px}
 .mpr-frow{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
@@ -302,25 +445,47 @@ if(@($freeRows).Count){
 }
 
 # ---------------------------------------------------------------------------------------------------
-# MANAGED BLOCK 3: protein-per-dollar leaderboard (ONE module, static height, no JS)
+# MANAGED BLOCK 3: "Best value this week" picks (ONE module, static height, no JS)
 # ---------------------------------------------------------------------------------------------------
-# Max two per protein so it reads like a menu rather than "chicken, chicken, chicken, chicken, chicken".
-$leadPicks = @(); $perProtein = @{}
+# This was a navy leaderboard of five links. It is now the picks shelf from the redesign canvas: the same
+# ranking, read as dinners rather than as a chart, sitting directly above the full library.
+#
+# TWO CAPS, AND BOTH ARE LOAD-BEARING.
+#   Max two per protein  - so it reads like a menu, not "chicken, chicken, chicken, chicken, chicken".
+#   Max three slow cooker - because the raw ranking is 11 slow-cooker recipes in its top 14. That is a
+#     true fact about which dinners are cheapest per gram, and it is also a shelf that looks like one
+#     recipe published five times. Brad's call, 2026-08-31: cap the method at three. The uncapped ranking
+#     is not hidden - it is the default sort of the full list immediately below, so a reader who wants
+#     the literal top ten scrolls one section.
+$leadPicks = @(); $perProtein = @{}; $slowN = 0
 foreach($r in ($rows | Sort-Object -Property ppd -Descending)){
   $n = if($perProtein.ContainsKey($r.cat)){ [int]$perProtein[$r.cat] } else { 0 }
   if($n -ge 2){ continue }
+  $isSlow = ([string]$r.name -match '(?i)slow[ -]?cook|crock[ -]?pot')
+  if($isSlow -and $slowN -ge 3){ continue }
+  if($isSlow){ $slowN++ }
   $perProtein[$r.cat] = $n + 1
   $leadPicks += $r
   if(@($leadPicks).Count -ge 5){ break }
 }
 $leadItems = ''
-foreach($p in $leadPicks){
-  $fr = if($p.free){ '<span class="fr">Free</span>' } else { '' }
-  $leadItems += '<li><a href="https://www.thriftycrew.com/' + $p.slug + '/">' + $p.name + '</a>' + $fr + '<span class="v">' + ('{0:N1}' -f $p.ppd) + 'g / $1</span></li>'
+foreach($pk in $leadPicks){
+  $tint = Get-CuisineTint $pk.cuisine
+  $mark = if($cuMark.ContainsKey([string]$pk.cuisine)){ $cuMark[[string]$pk.cuisine] } else { '?' }
+  $barPct = [math]::Round(($pk.ppd / $ppdMax) * 100); if($barPct -lt 3){ $barPct = 3 }
+  $fr = if($pk.free){ '<span class="fr">Free</span>' } else { '' }
+  $leadItems += '<a class="mpr-pick" href="https://www.thriftycrew.com/' + $pk.slug + '/">' `
+    + '<span class="mpr-tile" aria-hidden="true" style="--tb:' + $tint[0] + ';--tf:' + $tint[1] + '">' + $mark + '</span>' `
+    + '<div class="mpr-body"><div class="mpr-t">' + $pk.name + $fr + '</div>' `
+    + '<div class="mpr-meta">' + $pk.cuisine + ' &middot; ' + $pk.cal + ' cal &middot; ' + $pk.pro + 'g protein</div>' `
+    + '<div class="mpr-val"><span class="mpr-bar" style="--v:' + $barPct + '%;--vc:#E2A43C"></span><span class="mpr-ppd">' + ('{0:N1}' -f $pk.ppd) + 'g / $1</span></div></div>' `
+    + '<div class="mpr-cost"><span class="c">$' + ('{0:0.00}' -f $pk.cost) + '</span><span class="u">/ serving</span></div></a>'
 }
 $leadBlock = ''
 if(@($leadPicks).Count -ge 3){
-  $leadBlock = '<!--TC-HUB-LEAD-START--><div class="mpr-lead"><span class="tc-eyebrow">The value board</span><h2>The best protein deals this week</h2><ol>' + $leadItems + '</ol><p class="fn">Grams of protein per dollar, using this week&rsquo;s cheapest verified Omaha prices and whole packages. Two per protein, so it reads like a menu.</p></div><!--TC-HUB-LEAD-END-->'
+  $leadBlock = '<!--TC-HUB-LEAD-START--><div class="mpr-picks"><div class="mpr-picks-h"><h2>Best value this week</h2><span>top 5</span></div>' `
+    + '<p class="mpr-picks-n">Grams of protein per dollar, using this week&rsquo;s cheapest verified Omaha prices and whole packages. Ranked by value, capped at two per protein and three slow cooker dinners, so it reads like a week of meals.</p>' `
+    + $leadItems + '</div><!--TC-HUB-LEAD-END-->'
 }
 
 # ---------------------------------------------------------------------------------------------------
