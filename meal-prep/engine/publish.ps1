@@ -65,7 +65,7 @@ if(Test-Path $costedFile){
 }
 if(-not $carriageKnown){ Write-Output 'PUBLISH: WARNING - db\costed.json unreadable, so carriage could not be checked. Recost before publishing.' }
 
-$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@()
+$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $orphaned=@()
 foreach($slug in $Slugs){
   # THE CARRIAGE GUARD, before any work is spent on this slug. Brad's standing rule: if even ONE
   # ingredient is not carried in any Omaha store, we cannot use the recipe. This refuses BOTH create and
@@ -77,7 +77,19 @@ foreach($slug in $Slugs){
     Write-Output ("REFUSED CARRIAGE  $slug  - no Omaha store is proven to carry: " + ((@($uncarriedMap[$slug]) | Select-Object -First 6) -join ', '))
     continue
   }
-  $spec = Get-Content (Join-Path $root "db\recipes\$slug.json") -Raw | ConvertFrom-Json
+  # A BUILT CARD WITH NO SPEC IS AN ORPHAN, NOT A FATAL ERROR (2026-08-31). -All takes its slug list from
+  # db\built\*.body.html, so a card left behind by a retired recipe is still in the list, and reading its
+  # missing spec threw under $EAP=Stop and killed the whole run. It killed one at slug 243 of 576: the
+  # header promises "PER-SLUG failure isolation: one bad post no longer aborts the remaining N-1", but that
+  # isolation wraps the HTTP calls, not this read - so 333 recipes went unpublished because of a stale file
+  # for a recipe that no longer exists. Report it and move on; the orphan is a cleanup job, not a publish.
+  $specPath = Join-Path $root "db\recipes\$slug.json"
+  if (-not (Test-Path $specPath)) {
+    $orphaned += $slug
+    Write-Output ("ORPHAN CARD  $slug  - db\built has a card but db\recipes has no spec (retired recipe?); skipped, nothing published")
+    continue
+  }
+  $spec = Get-Content $specPath -Raw | ConvertFrom-Json
   # expand {{stat}} tokens BEFORE any field leaves this script: $desc feeds custom_excerpt, meta_description
   # AND the og/twitter pair, so an unexpanded token would ship to social verbatim. Expansion resolves from
   # this spec's own stat, and the change-gate hash is computed over the EXPANDED text - identical numbers
@@ -235,6 +247,11 @@ foreach($slug in $Slugs){
 # persist the change-gate/resume journal (only verified-good slugs advanced their hash above)
 if(-not $VerifyOnly){ ($pubHashes | ConvertTo-Json) | Set-Content $hashFile -Encoding UTF8 }
 Write-Output ("published+verified OK: $ok / $($Slugs.Count)   (skipped-unchanged: $skipped)")
+# Orphans are named in the summary, not just logged per-slug: a stale card is a cleanup job somebody has
+# to see, and 333 unpublished recipes is what it cost the one time it was only a thrown exception.
+if($orphaned){
+  Write-Output ("ORPHAN CARDS (" + $orphaned.Count + " built card(s) with no spec in db\recipes - delete them or restore the spec): " + ($orphaned -join ', '))
+}
 if($failed){ Write-Output ("FAILED (" + $failed.Count + "): " + ($failed -join ', ')) }
 if($refusedCarriage){
   Write-Output ("REFUSED CARRIAGE (" + $refusedCarriage.Count + " slug(s) have an ingredient no Omaha store is proven to stock): " + ($refusedCarriage -join ', '))
