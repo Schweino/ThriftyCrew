@@ -43,17 +43,11 @@ $StoreWord  = if ($StoreNames.Count -lt $numWords.Count) { $numWords[$StoreNames
 . (Join-Path $PSScriptRoot '..\lib\trend-keep.ps1')  # 2026-08-04: single source for which commodities get a page
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
-function Format-Price { param([double]$p)
-  $r = [math]::Round($p, 4)
-  if ($r -ge 1) { return ('${0:N2}' -f $r) }
-  $s = $r.ToString('0.0000', [System.Globalization.CultureInfo]::InvariantCulture)
-  $s = $s.TrimEnd('0')
-  $parts = $s.Split('.')
-  $dec = ''
-  if ($parts.Length -gt 1) { $dec = $parts[1] }
-  while ($dec.Length -lt 2) { $dec = $dec + '0' }
-  return ('$' + $parts[0] + '.' + $dec)
-}
+# THE FOURTH COPY (2026-08-31). Same four-decimal renderer as build-trend-pages had, and this one writes
+# the META DESCRIPTION - "This week: $0.9967 per lb at Aldi" was the line Google was showing for apples.
+# Delegates to fmt-lib's Fmt-PriceBare, where the frozen fixtures are; the unit stays this file's job.
+. (Join-Path $here 'fmt-lib.ps1')
+function Format-Price { param([double]$p) return (Fmt-PriceBare $p) }
 
 function Get-UnitPhrase { param([string]$u)
   switch ($u) {
