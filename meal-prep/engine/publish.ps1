@@ -148,7 +148,37 @@ foreach($slug in $Slugs){
       } catch { Write-Output ("  pre-flight check could not read $slug live ($($_.Exception.Message)) - publishing anyway") }
     }
 
-    $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$body }); direction=$null; format=''; indent=0; type='root'; version=1 } }
+    # ---- THE PAYWALL SPLIT (2026-08-31) -------------------------------------------------------------
+    # Until now every recipe published as ONE html card with no paywall card, so Ghost had nowhere to cut
+    # and served a paid post NOTHING: gh-content was 457 bytes of upgrade CTA. 556 recipes offered Google
+    # about 49 words each. build-card2 now marks the boundary with <!--TC-PAYWALL--> just before "What
+    # This Batch Costs", and the card becomes three children: preview, Ghost's paywall card, the rest.
+    #
+    # FALLS BACK CLEANLY. A body with no sentinel publishes exactly as before - one html card - so an old
+    # spec, a hand-built card or any other caller is unaffected, and the split can only ever ADD a cut
+    # that build-card2 asked for. A sentinel that somehow appears twice is a build bug, not something to
+    # guess at, so it throws rather than picking one.
+    $PW = '<!--TC-PAYWALL-->'
+    $bodyStr = [string]$body
+    $pwCount = ([regex]::Matches($bodyStr, [regex]::Escape($PW))).Count
+    if ($pwCount -gt 1) { throw ("$slug`: the paywall sentinel appears $pwCount times in the built body - build-card2 emits exactly one.") }
+    if ($pwCount -eq 1) {
+      $ix = $bodyStr.IndexOf($PW)
+      $preview = $bodyStr.Substring(0, $ix)
+      $rest    = $bodyStr.Substring($ix + $PW.Length)
+      # Neither half may be empty: an empty preview is the bug we are fixing, and an empty remainder would
+      # publish the whole recipe free.
+      if ($preview.Trim().Length -lt 200) { throw ("$slug`: paywall preview is only $($preview.Trim().Length) chars - refusing to publish a card that gives Google nothing.") }
+      if ($rest.Trim().Length -lt 200)    { throw ("$slug`: everything after the paywall is only $($rest.Trim().Length) chars - refusing to publish a recipe with nothing behind the gate.") }
+      $children = @(
+        [ordered]@{ type='html'; version=1; html=$preview },
+        [ordered]@{ type='paywall'; version=1 },
+        [ordered]@{ type='html'; version=1; html=$rest }
+      )
+    } else {
+      $children = @([ordered]@{ type='html'; version=1; html=$bodyStr })
+    }
+    $lexObj = @{ root = [ordered]@{ children=$children; direction=$null; format=''; indent=0; type='root'; version=1 } }
     $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
     $jwt = New-GhostJWT
     $hdr = @{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0'; 'Content-Type'='application/json' }

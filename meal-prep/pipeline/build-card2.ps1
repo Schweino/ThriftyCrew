@@ -267,6 +267,22 @@ $L.Add('<ul class="smp-ing">')
 foreach($li in $spec.ingredients_display){ $L.Add('<li>' + $li + '</li>') }
 $L.Add('</ul>')
 $L.Add('')
+# ---- WHERE THE PAYWALL GOES (2026-08-31, Brad's call) ----------------------------------------------
+# Everything ABOVE this line is the free preview; everything below is members-only. engine\publish.ps1
+# splits the card here into  html | paywall | html  when it builds the lexical.
+#
+# WHY HERE. Ghost serves NO card content at all on a paid post - gh-content is 457 bytes of upgrade CTA -
+# so 556 recipes offered Google ~49 words each and could not rank on anything. Cutting at the costing
+# gives a median 212 crawlable words: the intro, the stat band, the scaler and the full ingredient list.
+#
+# AND IT GIVES AWAY NOTHING NEW. The Recipe JSON-LD on a PAID post already publishes recipeIngredient -
+# 5 to 9 items, measured on six paid recipes 2026-08-31 - so the ingredients were public to Google while
+# hidden from readers. This just stops the page contradicting its own structured data.
+#
+# What stays behind the gate is the part worth paying for: which store, the whole-package cost, the
+# checklist, Shop Smart, the method and the portioning. The ingredient list is table stakes on any
+# recipe site; the costing is the product.
+$L.Add('<!--TC-PAYWALL-->')
 # ---- combined cost section (the widget script in the scaler block fills it) ----
 $L.Add('<div class="smp-ct"><h2 id="smp-cost">What This Batch Costs</h2>')
 $L.Add('<p class="smp-ct-why"><em>Every price below hydrates from one promoted grocery release. Ghost stores the recipe narrative only.</em></p>')
