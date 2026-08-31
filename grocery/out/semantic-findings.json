@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-30 21:32",
-    "board":  "comparison-2026-08-30.json",
-    "sidecar_generated":  "2026-08-30 21:32:28",
+    "generated":  "2026-08-31 08:16",
+    "board":  "comparison-2026-08-31.json",
+    "sidecar_generated":  "2026-08-31 08:16:24",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,56 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3110,
-                     "corpus":  38233,
+                     "board_pairs":  3113,
+                     "corpus":  38249,
                      "rule_invisible":  6892
                  },
     "identity_count":  0,
-    "coverage_count":  14,
+    "coverage_count":  19,
     "identity":  [
 
                  ],
     "coverage":  [
+                     {
+                         "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
+                         "cos":  0.7818,
+                         "score":  0.976813,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "almond-milk",
+                         "commodity":  "Almond Milk",
+                         "store":  "Aldi",
+                         "product":  "Friendly Farms Almond Original Milk",
+                         "cos":  0.6879,
+                         "score":  0.962393,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Aldi",
+                         "product":  "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB",
+                         "cos":  0.7651,
+                         "score":  0.958761,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "pudding-cups",
+                         "commodity":  "Pudding Cups",
+                         "store":  "Walmart",
+                         "product":  "Snack Pack Banana Cream Pie Flavored Pudding, 3.25 oz Pudding Cups, 4 Count",
+                         "cos":  0.7657,
+                         "score":  0.957026,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
                      {
                          "kind":  "coverage",
                          "id":  "pork-tenderloin",
@@ -31,32 +71,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "almond-milk",
-                         "commodity":  "Almond Milk",
-                         "store":  "Aldi",
-                         "product":  "Friendly Farms Almond Original Milk",
-                         "cos":  0.6848,
-                         "score":  0.952405,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Aldi",
-                         "product":  "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB",
-                         "cos":  0.7521,
-                         "score":  0.952026,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "white-wine",
-                         "commodity":  "White Wine",
-                         "store":  "Family Fare",
-                         "product":  "Vendange Chardonnay White Wine 1.5 L",
-                         "cos":  0.5637,
-                         "score":  0.931691,
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Vegetable Classics, French Onion Canned Soup, Gluten Free, 18.5 oz.",
+                         "cos":  0.7262,
+                         "score":  0.94925,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -81,22 +101,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Baker\u0027s",
-                         "product":  "Ground Beef And Pork Blend Patties 80% Lean 20% Fat",
-                         "cos":  0.6902,
-                         "score":  0.924316,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Baker\u0027s",
-                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
-                         "cos":  0.7193,
-                         "score":  0.922547,
+                         "id":  "white-wine",
+                         "commodity":  "White Wine",
+                         "store":  "Family Fare",
+                         "product":  "Vendange Chardonnay White Wine 1.5 L",
+                         "cos":  0.5602,
+                         "score":  0.921828,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -131,6 +141,46 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Vegetable Classics, Lentil With Roasted Vegetables Canned Soup, Gluten Free, 19 oz.",
+                         "cos":  0.7683,
+                         "score":  0.912944,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "sandwich-cookies",
+                         "commodity":  "Sandwich Cookies",
+                         "store":  "Walmart",
+                         "product":  "Great Value Duplex Sandwich Crème Cookies, 25 oz",
+                         "cos":  0.6686,
+                         "score":  0.912201,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "canned-potatoes",
+                         "commodity":  "Canned Potatoes",
+                         "store":  "Walmart",
+                         "product":  "Del Monte® Cajun Style Diced Potatoes, 14.5 oz. Can",
+                         "cos":  0.6754,
+                         "score":  0.911906,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Baker\u0027s",
+                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
+                         "cos":  0.706,
+                         "score":  0.910863,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "coconut-oil",
                          "commodity":  "Coconut Oil",
                          "store":  "Walmart",
@@ -141,22 +191,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Family Fare",
-                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-                         "cos":  0.7175,
-                         "score":  0.903522,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-breast",
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
-                         "cos":  0.7433,
-                         "score":  0.902771,
+                         "cos":  0.7432,
+                         "score":  0.910219,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "queso",
+                         "commodity":  "Queso / Cheese Dip",
+                         "store":  "Baker\u0027s",
+                         "product":  "Ricos Products Co. Gourmet Nacho Cheddar Cheese Sauce",
+                         "cos":  0.7438,
+                         "score":  0.908941,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

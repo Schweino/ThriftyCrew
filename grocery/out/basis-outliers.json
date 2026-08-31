@@ -76,8 +76,8 @@
                          "per_unit":  0.4775,
                          "median":  0.0993,
                          "mult":  4.81,
-                         "size":  "12 oz",
-                         "item":  "Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
+                         "size":  "12 fl oz",
+                         "item":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
                      },
@@ -91,19 +91,6 @@
                          "mult":  4.66,
                          "size":  "7.5 fl oz",
                          "item":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
-                         "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "pizza-sauce",
-                         "commodity":  "Pizza Sauce",
-                         "unit":  "oz",
-                         "store":  "Sam\u0027s Club",
-                         "per_unit":  0.3995,
-                         "median":  0.0893,
-                         "mult":  4.47,
-                         "size":  "37.5 oz",
-                         "item":  "Yo Mama\u0027s Foods Low-Carb Pizza Sauce 12.5 oz., 3 pk.",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
                      },
@@ -132,10 +119,23 @@
                          "item":  "Dove Nutritive Solutions Intensive Repair Shampoo",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "pizza-sauce",
+                         "commodity":  "Pizza Sauce",
+                         "unit":  "oz",
+                         "store":  "Sam\u0027s Club",
+                         "per_unit":  0.3995,
+                         "median":  0.0993,
+                         "mult":  4.02,
+                         "size":  "37.5 oz",
+                         "item":  "Yo Mama\u0027s Foods Low-Carb Pizza Sauce 12.5 oz., 3 pk.",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-30T12:07:12",
+    "generated":  "2026-08-31T08:23:08",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -227,9 +227,9 @@
                               "commodity":  "Apple Juice",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.0467,
+                              "per_unit":  0.07,
                               "size":  "64 oz",
-                              "item":  "Hy Vee 100 Apple Juice No Sugar Added",
+                              "item":  "Motts 100 Apple Juice",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -266,18 +266,6 @@
                               "per_unit":  21.3929,
                               "size":  "200 ml",
                               "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "bbq-sauce",
-                              "commodity":  "BBQ Sauce",
-                              "unit":  "oz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1106,
-                              "size":  "18 fl oz",
-                              "item":  "Kraft Sweet Honey Slow-Simmered BBQ Sauce",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false
@@ -349,7 +337,19 @@
                               "store":  "Hy-Vee",
                               "per_unit":  0.4455,
                               "size":  "1 pt",
-                              "item":  "Fresh Blueberries, 1 Pint",
+                              "item":  "Driscolls Blueberries",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "cherry-tomatoes",
+                              "commodity":  "Cherry / Grape Tomatoes",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.248,
+                              "size":  "pint",
+                              "item":  "Grape Tomatoes",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false
@@ -475,6 +475,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "cranberry-juice",
+                              "commodity":  "Cranberry Juice",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0466,
+                              "size":  "64 oz",
+                              "item":  "Fareway Cranberry Juice Cocktail",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "deodorant",
                               "commodity":  "Deodorant",
                               "unit":  "oz",
@@ -518,6 +530,18 @@
                               "per_unit":  0.1075,
                               "size":  "12 oz",
                               "item":  "KROGER Milk Substitutes Evaporated Milk 12floz Can",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "fabric-softener",
+                              "commodity":  "Fabric Softener (liquid)",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0978,
+                              "size":  "51 oz",
+                              "item":  "Free \u0026 Clear Fabric Softener Our Family",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -586,6 +610,18 @@
                               "id":  "conditioner",
                               "commodity":  "Hair Conditioner",
                               "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0876,
+                              "size":  "22.5 oz",
+                              "item":  "Suave Daily Clarifying Conditioner, Hydrate \u0026 Shine For All Hair Types, 22.5 FL OZ",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "conditioner",
+                              "commodity":  "Hair Conditioner",
+                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.3167,
                               "size":  "12.6 oz",
@@ -635,7 +671,7 @@
                               "commodity":  "Heavy Whipping Cream",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.1559,
+                              "per_unit":  0.2184,
                               "size":  "32 oz",
                               "item":  "Hy Vee Heavy Whipping Cream",
                               "kind":  "weight",
@@ -661,7 +697,7 @@
                               "store":  "Walmart",
                               "per_unit":  0.1433,
                               "size":  "12 oz",
-                              "item":  "Great Value Honey Mustard, 12 oz",
+                              "item":  "Great Value Honey Dijon Mustard, 12 oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -712,18 +748,6 @@
                               "item":  "Kroger Horseradish Sauce",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "commodity":  "Hot Sauce",
-                              "unit":  "floz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1085,
-                              "size":  "34 oz",
-                              "item":  "Valentina Mexican Hot Sauce",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -887,12 +911,12 @@
                               "commodity":  "Orange Juice",
                               "unit":  "floz",
                               "store":  "Fareway",
-                              "per_unit":  0.0623,
+                              "per_unit":  0.0467,
                               "size":  "128 oz",
                               "item":  "Fareway Orange Juice, from Concentrate",
                               "kind":  "weight",
                               "row_kind":  "volume",
-                              "holds_crown":  false
+                              "holds_crown":  true
                           },
                           {
                               "id":  "oven-cleaner",
@@ -997,19 +1021,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "shampoo",
-                              "commodity":  "Shampoo",
-                              "unit":  "floz",
-                              "store":  "Aldi",
-                              "per_unit":  0.4775,
-                              "size":  "12 oz",
-                              "item":  "Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
+                              "item":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1058,6 +1070,30 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "commodity":  "Sparkling Water",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0818,
+                              "size":  "17 oz",
+                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sports-drinks",
+                              "commodity":  "Sports Drinks",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0368,
+                              "size":  "8 pk 20 oz btls",
+                              "item":  "Powerade",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1199,9 +1235,9 @@
                               "commodity":  "Vegetable / Canola Oil",
                               "unit":  "floz",
                               "store":  "Fareway",
-                              "per_unit":  0.0741,
+                              "per_unit":  0.0859,
                               "size":  "128 oz",
-                              "item":  "Fareway Vegetable Oil",
+                              "item":  "Fareway Canola Oil",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1243,5 +1279,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-30.json"
+    "compare_file":  "comparison-2026-08-31.json"
 }

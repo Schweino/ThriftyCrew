@@ -1,1 +1,1 @@
-﻿aluminum-foil|Fareway;beets|Family Fare;canned-butter-beans|Hy-Vee;coffee|Fareway;coleslaw-mix|Fareway;cornmeal|Baker's;daiya-mozzarella-style-shreds|Baker's;dried-thyme|Aldi;firm-tofu|Aldi;fruit-snacks|Fareway;garden-salad|Aldi;pesto|Fareway;pie-pumpkins|Aldi;poblano-peppers|Aldi;pork-chops|Fareway;teriyaki-sauce|Aldi
+﻿aji-amarillo-paste|Walmart;coleslaw-mix|Hy-Vee;garlic-bread|Hy-Vee;yukon-gold-potatoes|Fareway

@@ -26,6 +26,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "alfredo-sauce",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.1544,
+        "link":  0.1106,
+        "ratio":  0.72,
+        "price":  1.77,
+        "size":  "16 oz",
+        "boardItem":  "Ragu Cheese Creations Classic Alfredo Cheese Sauce",
+        "linkItem":  "Ragu Cheese Creations Classic Alfredo Cheese Sauce",
+        "board_src":  "main"
+    },
+    {
         "id":  "all-purpose-cleaner",
         "store":  "Hy-Vee",
         "unit":  "floz",
@@ -47,7 +60,7 @@
         "ratio":  1.04,
         "price":  6.19,
         "size":  "14 oz",
-        "boardItem":  "Southern Grove Unsalted Whole Almonds",
+        "boardItem":  "Southern Grove Almonds Snickerdoodle Spiced 14 OZ",
         "linkItem":  "Southern Grove Oil Roasted Salted Almonds 14 OZ",
         "board_src":  "main"
     },
@@ -73,8 +86,34 @@
         "ratio":  0.91,
         "price":  2.69,
         "size":  "1 lb",
-        "boardItem":  "Freshire Farms Asparagus",
+        "boardItem":  "Asparagus 1 LB",
         "linkItem":  "Asparagus, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "asparagus",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  4.61,
+        "link":  4.43,
+        "ratio":  0.96,
+        "price":  8.86,
+        "size":  "2 lb",
+        "boardItem":  "Asparagus, 2 lbs.",
+        "linkItem":  "Asparagus, 2 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "avocado-oil",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.3965,
+        "link":  0.4112,
+        "ratio":  1.04,
+        "price":  13.98,
+        "size":  "34 fl oz",
+        "boardItem":  "Member\u0027s Mark Avocado Oil Glass Bottle, 34 fl. oz.",
+        "linkItem":  "Member\u0027s Mark Avocado Oil in Plastic Bottle, 34 fl. oz.",
         "board_src":  "main"
     },
     {
@@ -88,6 +127,19 @@
         "size":  "5 ct",
         "boardItem":  "Avocados, 5 ct.",
         "linkItem":  "Avocados, 5 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bacon",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  3.986,
+        "link":  3.784,
+        "ratio":  0.95,
+        "price":  37.84,
+        "size":  "10 lb",
+        "boardItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
+        "linkItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
         "board_src":  "main"
     },
     {
@@ -117,6 +169,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "bbq-sauce",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.1267,
+        "link":  0.1106,
+        "ratio":  0.87,
+        "price":  1.99,
+        "size":  "18 oz",
+        "boardItem":  "Hy-Vee Honey BBQ Sauce",
+        "linkItem":  "Hy-Vee Honey BBQ Sauce",
+        "board_src":  "main"
+    },
+    {
         "id":  "beef-jerky",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -125,7 +190,7 @@
         "ratio":  1.12,
         "price":  18.88,
         "size":  "16 oz",
-        "boardItem":  "Jack Link\u0027s Teriyaki Beef Jerky, 16 oz.",
+        "boardItem":  "Jack Link\u0027s Original Beef Jerky, 16 oz.",
         "linkItem":  "Jack Link\u0027s Teriyaki Beef Jerky, 16 oz.",
         "board_src":  "main"
     },
@@ -221,6 +286,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "bread-crumbs",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.166,
+        "link":  0.1527,
+        "ratio":  0.92,
+        "price":  2.29,
+        "size":  "15 oz",
+        "boardItem":  "Fareway Plain Bread Crumbs",
+        "linkItem":  "Fareway Plain Bread Crumbs",
+        "board_src":  "main"
+    },
+    {
         "id":  "broccoli",
         "store":  "Aldi",
         "unit":  "lb",
@@ -247,6 +325,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "brown-rice",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  1.745,
+        "link":  1.895,
+        "ratio":  1.09,
+        "price":  3.79,
+        "size":  "32 oz",
+        "boardItem":  "Hy Vee Long Grain Brown Rice",
+        "linkItem":  "Hy Vee Long Grain Brown Rice",
+        "board_src":  "main"
+    },
+    {
+        "id":  "brownie-mix",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  2.37,
+        "link":  2.745,
+        "ratio":  1.16,
+        "price":  10.98,
+        "size":  "4 ct 20 oz",
+        "boardItem":  "Betty Crocker HERSHEY\u0027S Triple Chocolate Fudge Brownie Mix, 20 oz., 4 pk.",
+        "linkItem":  "Betty Crocker HERSHEY\u0027S Triple Chocolate Fudge Brownie Mix, 20 oz., 4 pk.",
+        "board_src":  "main"
+    },
+    {
         "id":  "caesar-salad-kit",
         "store":  "Aldi",
         "unit":  "oz",
@@ -270,6 +374,32 @@
         "size":  "12.5 oz",
         "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
         "linkItem":  "Brookdale Chunk Chicken Breast",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-pinto-beans",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.066,
+        "link":  0.0587,
+        "ratio":  0.89,
+        "price":  0.88,
+        "size":  "15 oz",
+        "boardItem":  "Hy-Vee Pinto Beans",
+        "linkItem":  "Hy-Vee Pinto Beans",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cantaloupe",
+        "store":  "Hy-Vee",
+        "unit":  "each",
+        "board":  3.99,
+        "link":  2.99,
+        "ratio":  0.75,
+        "price":  2.99,
+        "size":  "1 ct",
+        "boardItem":  "Cantaloupe",
+        "linkItem":  "Cantaloupe",
         "board_src":  "main"
     },
     {
@@ -390,19 +520,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "cocoa-powder",
-        "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.499,
-        "link":  0.5209,
-        "ratio":  1.04,
-        "price":  11.98,
-        "size":  "23 oz",
-        "boardItem":  "Rising Star Baking Supply Cocoa Powder, 20 oz Bag",
-        "linkItem":  "Hershey\u0027s Cocoa 100% Cacao Natural Unsweetened, 23 oz.",
-        "board_src":  "main"
-    },
-    {
         "id":  "cod",
         "store":  "Aldi",
         "unit":  "lb",
@@ -437,7 +554,7 @@
         "ratio":  0.97,
         "price":  13.99,
         "size":  "29 oz",
-        "boardItem":  "Kroger Original Medium Roast Ground Coffee",
+        "boardItem":  "Kroger Classic Blend Medium Roast Ground Coffee",
         "linkItem":  "Kroger Original Medium Roast Ground Coffee",
         "board_src":  "main"
     },
@@ -450,7 +567,7 @@
         "ratio":  0.89,
         "price":  3.99,
         "size":  "14 oz",
-        "boardItem":  "MARY KITCHEN Mary Kitchen Homestyle Corned Beef Hash",
+        "boardItem":  "MARY KITCHEN Homestyle Corned Beef Hash",
         "linkItem":  "MARY KITCHEN Homestyle Corned Beef Hash",
         "board_src":  "main"
     },
@@ -478,6 +595,19 @@
         "size":  "3 lb",
         "boardItem":  "Darigold Cottage Cheese, 3 lbs.",
         "linkItem":  "Darigold Cottage Cheese, 3 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cranberry-juice",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.0389,
+        "link":  0.0311,
+        "ratio":  0.8,
+        "price":  1.99,
+        "size":  "64 floz",
+        "boardItem":  "Hy-Vee Cranberry Juice Drink Zero Sugar",
+        "linkItem":  "Old Orchard Healthy Balance Diet Cranberry Juice Cocktail",
         "board_src":  "main"
     },
     {
@@ -528,8 +658,34 @@
         "ratio":  1.03,
         "price":  4.06,
         "size":  "3 oz",
-        "boardItem":  "Old Spice Pure Sport Anti-Perspirant \u0026 Deodorant",
+        "boardItem":  "Old Spice Anti Perspirant Deodorant For Men Pure Sport Scent 3 OZ",
         "linkItem":  "Old Spice Pure Sport Deodorant",
+        "board_src":  "main"
+    },
+    {
+        "id":  "dijon-mustard",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.2075,
+        "link":  0.1658,
+        "ratio":  0.8,
+        "price":  1.99,
+        "size":  "12 oz",
+        "boardItem":  "Hy-Vee Stone Ground Dijon Mustard",
+        "linkItem":  "Hy-Vee Stone Ground Dijon Mustard",
+        "board_src":  "main"
+    },
+    {
+        "id":  "disinfectant-spray",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.7192,
+        "link":  0.5592,
+        "ratio":  0.78,
+        "price":  6.99,
+        "size":  "12.5 oz",
+        "boardItem":  "Lysol Disinfectant, Sanitizing and Antibacterial Spray, Crisp Linen",
+        "linkItem":  "Lysol Disinfectant, Sanitizing and Antibacterial Spray, Crisp Linen",
         "board_src":  "main"
     },
     {
@@ -572,6 +728,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "energy-drinks",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.1744,
+        "link":  0.1406,
+        "ratio":  0.81,
+        "price":  2.25,
+        "size":  "16 fl oz",
+        "boardItem":  "Ghost Zero Sugar Energy Drink, Welch\u0027s Grape, 16 fl oz can",
+        "linkItem":  "Ghost Zero Sugar Energy Drink, Welch\u0027s Grape, 16 fl oz can",
+        "board_src":  "main"
+    },
+    {
         "id":  "english-muffins",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -598,6 +767,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "breakfast-sandwiches",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.9775,
+        "link":  1.165,
+        "ratio":  1.19,
+        "price":  13.98,
+        "size":  "12 ct",
+        "boardItem":  "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches, Frozen, 12ct.",
+        "linkItem":  "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches, Frozen, 12ct.",
+        "board_src":  "main"
+    },
+    {
         "id":  "chicken-nuggets",
         "store":  "Aldi",
         "unit":  "oz",
@@ -608,6 +790,19 @@
         "size":  "48 oz",
         "boardItem":  "Kirkwood Family Size Chicken Nuggets 48 OZ",
         "linkItem":  "Kirkwood Family Pack Chicken Nuggets",
+        "board_src":  "main"
+    },
+    {
+        "id":  "frozen-waffles",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.1524,
+        "link":  0.1371,
+        "ratio":  0.9,
+        "price":  9.87,
+        "size":  "72 ct",
+        "boardItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
+        "linkItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
         "board_src":  "main"
     },
     {
@@ -645,7 +840,7 @@
         "ratio":  1.21,
         "price":  5.87,
         "size":  "3 lb",
-        "boardItem":  "Red Seedless Grapes, 3 lbs.",
+        "boardItem":  "Green Seedless Grapes, 3 lbs.",
         "linkItem":  "Red Seedless Grapes, 3 lbs.",
         "board_src":  "main"
     },
@@ -690,6 +885,19 @@
     },
     {
         "id":  "kielbasa",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  2.2781,
+        "link":  2.659,
+        "ratio":  1.17,
+        "price":  6.98,
+        "size":  "2.625 lb",
+        "boardItem":  "Eckrich Hardwood Smoked Sausage Family Pack 42 oz.",
+        "linkItem":  "Eckrich Hardwood Smoked Sausage Family Pack 42 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "kielbasa",
         "store":  "Hy-Vee",
         "unit":  "lb",
         "board":  4.7289,
@@ -710,7 +918,7 @@
         "ratio":  0.88,
         "price":  1.46,
         "size":  "12 ct",
-        "boardItem":  "Goldhen Grade A Large White Eggs, 1 Dozen",
+        "boardItem":  "Goldhen Grade A Large Eggs 12 CT",
         "linkItem":  "Goldhen Grade A Large Eggs",
         "board_src":  "main"
     },
@@ -762,7 +970,7 @@
         "ratio":  0.87,
         "price":  1.29,
         "size":  "8 oz",
-        "boardItem":  "White Mushrooms",
+        "boardItem":  "White Mushroom 8 OZ",
         "linkItem":  "Monterey White Mushrooms Sliced 8 OZ",
         "board_src":  "main"
     },
@@ -777,6 +985,19 @@
         "size":  "2 lb",
         "boardItem":  "Nectarines Bagged 2 LB",
         "linkItem":  "Nectarines Bagged 2 LB",
+        "board_src":  "main"
+    },
+    {
+        "id":  "oat-milk",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.0863,
+        "link":  0.0669,
+        "ratio":  0.78,
+        "price":  3.48,
+        "size":  "52 fl oz",
+        "boardItem":  "Planet Oat Vanilla Oatmilk",
+        "linkItem":  "Planet Oat Vanilla Oatmilk",
         "board_src":  "main"
     },
     {
@@ -845,6 +1066,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "pepperoni",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.4983,
+        "link":  0.5817,
+        "ratio":  1.17,
+        "price":  3.49,
+        "size":  "6 oz",
+        "boardItem":  "Hy Vee Pepperoni Original",
+        "linkItem":  "Hy Vee Pepperoni Original",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pickles",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.1162,
+        "link":  0.1079,
+        "ratio":  0.93,
+        "price":  2.59,
+        "size":  "24 fl oz",
+        "boardItem":  "Hy-Vee Kosher Dill Pickle Spears",
+        "linkItem":  "Hy-Vee Kosher Dill Pickle Spears",
+        "board_src":  "main"
+    },
+    {
         "id":  "pita-bread",
         "store":  "Baker\u0027s",
         "unit":  "each",
@@ -855,19 +1102,6 @@
         "size":  "6 ct",
         "boardItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
         "linkItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
-        "board_src":  "main"
-    },
-    {
-        "id":  "popsicles",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  0.4067,
-        "link":  0.3325,
-        "ratio":  0.82,
-        "price":  3.99,
-        "size":  "12 ct",
-        "boardItem":  "Bomb Pop Original Ice Pops",
-        "linkItem":  "Bomb Pop Original Ice Pops",
         "board_src":  "main"
     },
     {
@@ -894,6 +1128,19 @@
         "size":  "9.5 oz",
         "boardItem":  "Clancy S Hot Chili Lime Ridged Potato Chips 12.5 OZ",
         "linkItem":  "Clancy S Spicy Dill Pickle Potato Chips 9.5 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "potato-chips",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.3362,
+        "link":  0.25,
+        "ratio":  0.74,
+        "price":  2,
+        "size":  "8 oz",
+        "boardItem":  "Hy-Vee Wavy Potato Chips",
+        "linkItem":  "Hy-Vee Wavy Potato Chips",
         "board_src":  "main"
     },
     {
@@ -1048,7 +1295,7 @@
         "ratio":  1.23,
         "price":  15.98,
         "size":  "480 fl oz",
-        "boardItem":  "POWERADE ZERO Variety Pack Sports Drink, 20 fl. oz., 24 pk.",
+        "boardItem":  "POWERADE Variety Pack Bottles, 20 fl. oz., 24 pk.",
         "linkItem":  "POWERADE ZERO Variety Pack Sports Drink, 20 fl. oz., 24 pk.",
         "board_src":  "main"
     },
@@ -1191,21 +1438,8 @@
         "ratio":  1.11,
         "price":  2.26,
         "size":  "12 ct",
-        "boardItem":  "Great Value Frosted Chocolate Fudge Toasted Pastries, 20.3 oz, 12 Count",
+        "boardItem":  "Great Value Frosted Brown Sugar Cinnamon Toaster Pastries, 20.3 oz, 12 Count",
         "linkItem":  "Great Value Frosted Cherry Toaster Pastries",
-        "board_src":  "main"
-    },
-    {
-        "id":  "toaster-pastries",
-        "store":  "Hy-Vee",
-        "unit":  "each",
-        "board":  0.3738,
-        "link":  0.3488,
-        "ratio":  0.93,
-        "price":  2.79,
-        "size":  "8 ct",
-        "boardItem":  "Pop-Tarts Toaster Pastries Frosted Cherry 8 Count",
-        "linkItem":  "Pop-Tarts Toaster Pastries Frosted Cherry 8 Count",
         "board_src":  "main"
     },
     {
@@ -1248,6 +1482,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "vegetable-oil",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.0859,
+        "link":  0.0741,
+        "ratio":  0.86,
+        "price":  9.48,
+        "size":  "128 oz",
+        "boardItem":  "Fareway Canola Oil",
+        "linkItem":  "Fareway Canola Oil",
+        "board_src":  "main"
+    },
+    {
         "id":  "yogurt",
         "store":  "Aldi",
         "unit":  "oz",
@@ -1256,7 +1503,7 @@
         "ratio":  1.07,
         "price":  0.52,
         "size":  "6 oz",
-        "boardItem":  "Friendly Farms Nonfat Vanilla Yogurt 32 OZ",
+        "boardItem":  "Friendly Farms Nonfat Plain Yogurt 32 OZ",
         "linkItem":  "Friendly Farms Peach Original Lowfat Yogurt 6 OZ",
         "board_src":  "main"
     },

@@ -1,70 +1,112 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "baby-potatoes",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family Potatoes Red Baby Dutch",
+                         "board_pu":  3.3267,
+                         "name":  "Our Family Potatoes Red Baby Dutch",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_red_baby_dutch/p/1564405684714779215",
+                         "price":  "$4.99",
+                         "size":  "24 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "canned-chicken",
+                         "fault":  "NO-LINK",
+                         "board":  "Swanson® White Premium Chunk Canned Chicken Breast In Water 12.500 Oz",
+                         "board_pu":  0.3192,
+                         "name":  "Swanson® 25% Less Sodium White Premium Chunk Canned Chicken Breast In Water 12.500 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/canned_chicken/swanson_25_less_sodium_white_premium_chunk_canned_chicken_breast_in_water_12_500_oz/p/1564405684710443097",
+                         "price":  "$3.99",
+                         "size":  "12.500 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "canned-green-beans",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
+                         "board_pu":  0.0683,
+                         "name":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_no_salt_added_cut_green_beans_14_5_oz/p/7081231",
+                         "price":  "$0.99",
+                         "size":  "14.5 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "cookies",
+                         "fault":  "NO-LINK",
+                         "board":  "Chips Ahoy! Original Cookies 18.2 Oz",
+                         "board_pu":  0.2747,
+                         "name":  "Chips Ahoy! Original Cookies 18.2 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/cookies/chips_ahoy_original_cookies_18_2_oz/p/3022",
+                         "price":  "$4.99",
+                         "size":  "18.2 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "eggs",
+                         "fault":  "NO-LINK",
+                         "board":  "Large Grade A Eggs Our Family (30 Ct)",
+                         "board_pu":  2.356,
+                         "name":  "Large Eggs, Grade A Our Family",
+                         "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
+                         "price":  "$2.39",
+                         "size":  "12 ct",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
-                        "id":  "baby-potatoes",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
                         "id":  "dried-basil",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
                     },
                     {
-                        "id":  "canned-chicken",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "id":  "cherry-tomatoes",
+                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
                     },
                     {
-                        "id":  "canned-green-beans",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "canned-pasta",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "id":  "clementines",
+                        "why":  "match found but per-unit disagrees: board $1.995 vs link $2.895 (31.1%)"
                     },
                     {
                         "id":  "croissants",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "dinner-rolls",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "donuts",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "dried-guajillo-chiles",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "eggs",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.83 vs link $0.4994 (66.2%)"
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
                     },
                     {
                         "id":  "queso",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "sports-drinks",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"23\" gives no per-unit in oz"
                     },
                     {
                         "id":  "strawberries",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.3119 vs link $0.4369 (28.6%)"
+                    },
+                    {
+                        "id":  "yukon-gold-potatoes",
+                        "why":  "match found but per-unit disagrees: board $0.598 vs link $1.398 (57.2%)"
                     }
                 ],
-    "worked":  15,
-    "generated":  "2026-08-30 08:18",
-    "board":  "comparison-2026-08-30.json"
+    "worked":  17,
+    "generated":  "2026-08-31 08:09",
+    "board":  "comparison-2026-08-31.json"
 }

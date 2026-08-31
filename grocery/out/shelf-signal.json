@@ -1,15 +1,32 @@
 ﻿{
-    "generated":  "2026-08-30T08:25:51",
-    "board":  "comparison-2026-08-30",
-    "cells":  507,
-    "coverage_pct":  0,
+    "generated":  "2026-08-31T08:14:30",
+    "board":  "comparison-2026-08-31",
+    "cells":  511,
+    "coverage_pct":  4.3,
     "counts":  {
-                   "SHELF":  0,
-                   "SHIP_ONLY":  0,
-                   "THIRD_PARTY":  0,
-                   "UNKNOWN":  507
+                   "SHELF":  20,
+                   "SHIP_ONLY":  1,
+                   "THIRD_PARTY":  1,
+                   "UNKNOWN":  489
                },
     "flagged":  [
-
+                    {
+                        "id":  "adobo-seasoning",
+                        "crown":  false,
+                        "verdict":  "THIRD-PARTY",
+                        "per_unit":  0.3166,
+                        "item":  "Goya Adobo All-Purpose Seasoning with Pepper, 7.5 Lb",
+                        "seller":  "ElimsWell",
+                        "fulfillment":  "MARKETPLACE"
+                    },
+                    {
+                        "id":  "apple-cider-vinegar",
+                        "crown":  true,
+                        "verdict":  "SHIP-ONLY",
+                        "per_unit":  0.0521,
+                        "item":  "Great Value Apple Cider Vinegar, 128 fl oz",
+                        "seller":  "Walmart.com",
+                        "fulfillment":  "FC"
+                    }
                 ]
 }

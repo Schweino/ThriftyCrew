@@ -308,11 +308,11 @@
                                                        "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                                    },
                                         "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73891-prego-homestyle-alfredo-sauce-14-5-oz",
-                                                        "name":  "Prego Homestyle Alfredo Pasta Sauce",
-                                                        "price":  "$2.68",
-                                                        "size":  "14.5 oz",
-                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39340-ragu-classic-alfredo-sauce-16-oz",
+                                                        "name":  "Ragu Classic Alfredo Sauce, 16 oz, White Pasta Sauce",
+                                                        "price":  "$2.47",
+                                                        "size":  "16 oz",
+                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "all-purpose-cleaner":  {
@@ -1140,7 +1140,14 @@
                                                            "size":  "67.6 fl oz",
                                                            "name":  "Private Selection Avocado Oil",
                                                            "verified":  "2026-08-30 price-pull self-capture"
-                                                       }
+                                                       },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/19830259-simply-nature-avocado-oil-16-9-fl-oz",
+                                                   "name":  "Simply Nature Avocado Oil 16 9 FL OZ",
+                                                   "price":  "$7.79",
+                                                   "size":  "17 fl oz",
+                                                   "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                               }
                                   },
                   "avocados":  {
                                    "commodity":  "Avocados",
@@ -1363,7 +1370,13 @@
                                                         "price":  "$3.78",
                                                         "size":  "24 oz",
                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Family Fare":  {
+                                                            "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_red_baby_dutch/p/1564405684714779215",
+                                                            "name":  "Our Family Potatoes Red Baby Dutch",
+                                                            "price":  "$4.99",
+                                                            "size":  "24 oz"
+                                                        }
                                     },
                   "baby-wipes":  {
                                      "commodity":  "baby-wipes",
@@ -2983,7 +2996,14 @@
                                                        "price":  "$2.29",
                                                        "size":  "15 oz",
                                                        "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs",
+                                                      "name":  "Gustare Vita Italian Bread Crumbs",
+                                                      "price":  "$3.99",
+                                                      "size":  "13.4 oz",
+                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                  }
                                    },
                   "breakfast-sandwiches":  {
                                                "commodity":  "breakfast-sandwiches",
@@ -3074,11 +3094,11 @@
                                                             "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                         },
                                             "Sam\u0027s Club":  {
-                                                                    "url":  "https://www.samsclub.com/ip/13620410188",
-                                                                    "name":  "Jimmy Dean Premium Pork Sausage Roll, 2 lbs.",
+                                                                    "url":  "https://www.samsclub.com/ip/15915051570",
+                                                                    "name":  "Jimmy Dean® Hot Pork Regular Breakfast Sausage Roll, 32 oz",
                                                                     "price":  "$7.34",
-                                                                    "size":  "2 lb",
-                                                                    "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                                    "size":  "32 oz",
+                                                                    "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                                 }
                                         },
                   "broccoli":  {
@@ -3215,11 +3235,11 @@
                                                               "board_pu":  2.745
                                                           },
                                       "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068330-fareway-fudge-brownie-mix-ultra-moist-183-oz",
-                                                      "name":  "Fareway Ultra Moist Fudge Brownie Mix",
-                                                      "price":  "$1.68",
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39077-duncan-hines-chewy-fudge-brownie-mix-18-3-oz",
+                                                      "name":  "Duncan Hines Family Size Chewy Fudge Brownie Mix",
+                                                      "price":  "$1.79",
                                                       "size":  "each",
-                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "brown-lentils":  {
@@ -3544,12 +3564,6 @@
                                                          "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  0.0872
                                                      },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2798593-kemps-buttermilk-16-fl-oz",
-                                                     "price":  1.49,
-                                                     "size":  "16 fl oz",
-                                                     "name":  "Kemps Buttermilk"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/203401/hiland-cultured-lowfat-buttermilk",
                                                     "price":  2.99,
@@ -3563,6 +3577,13 @@
                                                      "price":  "$3.54",
                                                      "size":  "64.364 fl oz",
                                                      "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                 },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25424507-kemps-plastic-quart-32-oz",
+                                                     "name":  "Kemps Cultured Lowfat Buttermilk",
+                                                     "price":  "$2.39",
+                                                     "size":  "1 qt",
+                                                     "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                  }
                                  },
                   "butternut-squash":  {
@@ -3685,12 +3706,6 @@
                                                               "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                               "board_pu":  0.1744
                                                           },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16759678-wish-bone-creamy-caesar-dressing-15-oza",
-                                                          "price":  2.74,
-                                                          "size":  "15 fl oz",
-                                                          "name":  "Wish-Bone Creamy Caesar Salad Dressing"
-                                                      },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/3136149/hy-vee-creamy-caesar-salad-dressing",
                                                          "price":  2.58,
@@ -3704,6 +3719,13 @@
                                                           "price":  "$2.74",
                                                           "size":  "15 fl oz",
                                                           "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                      },
+                                          "Fareway":  {
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41465-kraft-classic-caesar-salad-dressing-16-fl-oz",
+                                                          "name":  "Kraft Classic Caesar Dressing",
+                                                          "price":  "$3.14",
+                                                          "size":  "16 fl oz",
+                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "caesar-salad-kit":  {
@@ -3986,12 +4008,18 @@
                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                      },
                                          "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22158769-fareway-chicken-breast-125-oz",
-                                                         "name":  "Fareway Premium Chunk Chicken Breast in Water",
-                                                         "price":  "$3.34",
-                                                         "size":  "12.5 oz",
-                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24720213-fareway-chicken-breast-premium-chunk-2-pack-2-each",
+                                                         "name":  "Fareway 2 Pack Premium Chunk Chicken Breast",
+                                                         "price":  "$5.99",
+                                                         "size":  "2 x 12.5 oz",
+                                                         "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                     },
+                                         "Family Fare":  {
+                                                             "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/canned_chicken/swanson_25_less_sodium_white_premium_chunk_canned_chicken_breast_in_water_12_500_oz/p/1564405684710443097",
+                                                             "name":  "Swanson® 25% Less Sodium White Premium Chunk Canned Chicken Breast In Water 12.500 Oz",
+                                                             "price":  "$3.99",
+                                                             "size":  "12.500 oz"
+                                                         }
                                      },
                   "canned-chili":  {
                                        "commodity":  "canned-chili",
@@ -4032,11 +4060,11 @@
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                    },
                                        "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16409704-hormel-chili-with-beans-15-oz",
-                                                       "name":  "Hormel Chili with Beans, No Artificial Ingredients, 15 Oz",
-                                                       "price":  "$2.64",
-                                                       "size":  "15 oz",
-                                                       "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36513-hormel-chili-with-beans-25-0-oz",
+                                                       "name":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
+                                                       "price":  "$3.98",
+                                                       "size":  "25 oz",
+                                                       "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "canned-corn":  {
@@ -4133,7 +4161,13 @@
                                                              "price":  "$8.88",
                                                              "size":  "168 oz",
                                                              "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_no_salt_added_cut_green_beans_14_5_oz/p/7081231",
+                                                                 "name":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
+                                                                 "price":  "$0.99",
+                                                                 "size":  "14.5 oz"
+                                                             }
                                          },
                   "canned-green-chilies":  {
                                                "commodity":  "Canned Diced Green Chilies",
@@ -4280,7 +4314,14 @@
                                                        "price":  "$4.97",
                                                        "size":  "62.911 oz",
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/861407/spaghettios-canned-pasta-with-meatballs-22-2-oz-can",
+                                                      "name":  "SpaghettiOs Canned Pasta with Meatballs, 22.2 oz Can",
+                                                      "price":  "$1.97",
+                                                      "size":  "22.2 oz",
+                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                  }
                                    },
                   "canned-peaches":  {
                                          "commodity":  "canned-peaches",
@@ -5743,7 +5784,14 @@
                                                          "price":  "$10.35",
                                                          "size":  "4.641 lb",
                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/65791/boneless-skinless-chicken-breast",
+                                                        "name":  "Boneless Skinless Chicken Breast",
+                                                        "price":  "$3.99",
+                                                        "size":  "lb",
+                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                    }
                                      },
                   "chicken-broth":  {
                                         "commodity":  "Chicken Broth",
@@ -7242,7 +7290,13 @@
                                                   "price":  "$2.47",
                                                   "size":  "18 oz",
                                                   "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                  "Family Fare":  {
+                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/cookies/chips_ahoy_original_cookies_18_2_oz/p/3022",
+                                                      "name":  "Chips Ahoy! Original Cookies 18.2 Oz",
+                                                      "price":  "$4.99",
+                                                      "size":  "18.2 oz"
+                                                  }
                               },
                   "cooking-spray":  {
                                         "commodity":  "cooking-spray",
@@ -7282,19 +7336,19 @@
                                                                 "name":  "PAM Original Cooking Spray, 12 oz., 2 pk.",
                                                                 "board_pu":  0.3117
                                                             },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71771-parkay-buttery-spray-8-oz",
-                                                        "name":  "Parkay Vegetable Oil Spray",
-                                                        "price":  "$3.49",
-                                                        "size":  "8 oz",
-                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                    },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Great-Value-Butter-Cooking-Spray-8-ounces/10315268",
                                                         "name":  "Great Value Butter Cooking Spray, 8 oz",
                                                         "price":  "$2.52",
                                                         "size":  "8 oz",
                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24455829-fareway-cooking-spray-canola-oil-nonstick-8-oz",
+                                                        "name":  "Fareway Non-Stick Canola Oil Cooking Spray",
+                                                        "price":  "$3.49",
+                                                        "size":  "8 oz",
+                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "corn-chips":  {
@@ -7849,11 +7903,11 @@
                                                           "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                       },
                                           "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/88113-old-orchard-apple-cranberry-juice-cocktail-64-fl-oz",
-                                                          "name":  "Old Orchard Apple Cranberry Juice Cocktail",
-                                                          "price":  "$2.99",
-                                                          "size":  "64 fl oz",
-                                                          "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24225600-fareway-juice-cocktail-cranberry-64-oz",
+                                                          "name":  "Fareway Cranberry Juice Cocktail",
+                                                          "price":  "$2.98",
+                                                          "size":  "64 oz",
+                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "cranberry-sauce":  {
@@ -9513,7 +9567,13 @@
                                                "price":  "$1.65",
                                                "size":  "dozen",
                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                           }
+                                           },
+                               "Family Fare":  {
+                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
+                                                   "name":  "Large Eggs, Grade A Our Family",
+                                                   "price":  "$2.39",
+                                                   "size":  "12 ct"
+                                               }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -11308,7 +11368,14 @@
                                                            "price":  "$18.72",
                                                            "size":  "80 oz",
                                                            "verified":  "2026-08-17 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/61428/hy-vee-beef-meatballs",
+                                                          "name":  "Hy-Vee Beef Meatballs",
+                                                          "price":  "$5.49",
+                                                          "size":  "12 oz",
+                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                      }
                                        },
                   "frozen-peas":  {
                                       "commodity":  "Frozen Peas",
@@ -11344,20 +11411,20 @@
                                                       "size":  "15 oz",
                                                       "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                   },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24123649-fareway-green-peas-steamables-12-oz",
-                                                      "name":  "Fareway Steamables Green Peas",
-                                                      "price":  "$0.97",
-                                                      "size":  "12 oz",
-                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2969855/that-s-smart-sweet-peas-frozen",
                                                      "name":  "That\u0027s Smart! Sweet Peas (Frozen)",
                                                      "price":  "$0.94",
                                                      "size":  "12 oz",
                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20675778-corner-store-green-peas-sweet-15-oz",
+                                                      "name":  "Corner Store Green Peas, Sweet",
+                                                      "price":  "$0.77",
+                                                      "size":  "15 oz",
+                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "frozen-pizza":  {
                                        "commodity":  "frozen-pizza",
@@ -12918,7 +12985,14 @@
                                                            "price":  "$22.47",
                                                            "size":  "3 lb",
                                                            "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/42647/lean-ground-beef-93-lean-7-fat",
+                                                          "name":  "Lean Ground Beef 93% Lean 7% Fat",
+                                                          "price":  "$8.99",
+                                                          "size":  "1 lb",
+                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                      }
                                        },
                   "ground-cinnamon":  {
                                           "commodity":  "Ground Cinnamon",
@@ -14222,13 +14296,6 @@
                                                    "size":  "16 oz",
                                                    "name":  "Bar-S Classic Jumbo Franks"
                                                },
-                                   "Hy-Vee":  {
-                                                  "url":  "https://www.hy-vee.com/aisles-online/p/39291/bar-s-classic-franks-12oz",
-                                                  "price":  1.28,
-                                                  "size":  "12 oz",
-                                                  "name":  "Bar-S Classic Franks 12oz",
-                                                  "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                              },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/13857369106",
                                                            "price":  6.68,
@@ -14242,7 +14309,14 @@
                                                    "price":  "$1.00",
                                                    "size":  "0.75 lb",
                                                    "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/39291/bar-s-classic-franks",
+                                                  "name":  "Bar S Classic Franks",
+                                                  "price":  "$1.28",
+                                                  "size":  "12 oz",
+                                                  "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                              }
                                },
                   "hot-honey":  {
                                     "commodity":  "Hot Honey",
@@ -15261,11 +15335,11 @@
                                                   "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                               },
                                   "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20548311-fareway-tomato-ketchup-32-oz",
-                                                  "name":  "Fareway Tomato Ketchup",
-                                                  "price":  "$1.97",
-                                                  "size":  "32 oz",
-                                                  "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20577231-fareway-tomato-ketchup-thick-flavorful-38-oz",
+                                                  "name":  "Fareway Thick \u0026 Flavorful Tomato Ketchup",
+                                                  "price":  "$2.48",
+                                                  "size":  "38 oz",
+                                                  "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                               }
                               },
                   "kidney-beans":  {
@@ -15361,11 +15435,11 @@
                                                         "verified":  "2026-08-29 price-pull self-capture"
                                                     },
                                    "Sam\u0027s Club":  {
-                                                           "url":  "https://www.samsclub.com/ip/13838472838",
-                                                           "name":  "Hillshire Farm Lit\u0027l Smokies Smoked Sausage, 3 lbs.",
-                                                           "price":  "$9.97",
-                                                           "size":  "3 lb",
-                                                           "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                           "url":  "https://www.samsclub.com/ip/13608957620",
+                                                           "name":  "Eckrich Hardwood Smoked Sausage Family Pack 42 oz.",
+                                                           "price":  "$6.98",
+                                                           "size":  "2.625 lb",
+                                                           "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                        }
                                },
                   "kiwi":  {
@@ -16115,7 +16189,14 @@
                                                            "price":  "$14.28",
                                                            "size":  "116 oz",
                                                            "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/4153107/libby-s-premium-mandarin-oranges-in-light-syrup",
+                                                          "name":  "Libby\u0027s Premium Mandarin Oranges in Light Syrup",
+                                                          "price":  "$1.99",
+                                                          "size":  "15 oz",
+                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                      }
                                        },
                   "mangoes":  {
                                   "commodity":  "mangoes",
@@ -17537,11 +17618,11 @@
                                                       "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                   },
                                       "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20594930-fareway-pancake-waffle-mix-complete-32-oz",
-                                                      "name":  "Fareway Complete Pancake \u0026 Waffle Mix",
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20601338-fareway-pancake-waffle-mix-buttermilk-complete-32-oz",
+                                                      "name":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix",
                                                       "price":  "$2.69",
                                                       "size":  "32 oz",
-                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "paper-napkins":  {
@@ -18033,7 +18114,14 @@
                                                      "price":  "$1.84",
                                                      "size":  "24 oz",
                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39387-hunt-s-meat-spaghetti-sauce-24-oz",
+                                                      "name":  "Hunt\u0027s Meat Pasta Sauce",
+                                                      "price":  "$1.84",
+                                                      "size":  "24 oz",
+                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "peaches":  {
                                   "commodity":  "Peaches",
@@ -18058,6 +18146,13 @@
                                                   "price":  "$3.67",
                                                   "size":  "2 lb",
                                                   "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                              },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35657-dole-parfait-peaches-creme-fruit-bowls-4-3-oz",
+                                                  "name":  "Dole Parfait, Peaches \u0026 Creme",
+                                                  "price":  "$2.99",
+                                                  "size":  "4 x 4.3 oz",
+                                                  "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                               }
                               },
                   "peanut-butter":  {
@@ -19047,12 +19142,6 @@
                                                          "size":  "lb",
                                                          "verified":  "2026-08-17 DERIVED from the price row (same record the board priced)"
                                                      },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389055-boneless-pork-chop",
-                                                     "price":  2.5,
-                                                     "size":  "8 oz",
-                                                     "name":  "Boneless Pork Chop"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/32133/midwest-pork-mini-assorted-chops",
                                                     "name":  "Midwest Pork Mini Assorted Chops",
@@ -19074,6 +19163,13 @@
                                                      "price":  "$15.50",
                                                      "size":  "4.74 lb",
                                                      "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                 },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386428-iowa-pork-chops-1-each",
+                                                     "name":  "Iowa Pork Chops",
+                                                     "price":  "$3.99",
+                                                     "size":  "lb",
+                                                     "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                  }
                                  },
                   "pork-loin":  {
@@ -19324,20 +19420,20 @@
                                                        "size":  "13.5 oz",
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                    },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16758378-lay-s-classic-potato-chips-8-oz",
-                                                       "name":  "Lay\u0027s Potato Chips, Classic",
-                                                       "price":  "$1.88",
-                                                       "size":  "8 oz",
-                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                   },
                                        "Family Fare":  {
                                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_sweet_heat_barbecue_potato_chips_7_75_oz/p/1564405684716827871",
                                                            "name":  "Our Family Sweet Heat Barbecue Potato Chips 7.75 Oz",
                                                            "price":  "$1.99",
                                                            "size":  "7.75 oz",
                                                            "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25570908-fareway-potato-chips-wavy-16-oz",
+                                                       "name":  "Fareway Wavy Potato Chips",
+                                                       "price":  "$3.98",
+                                                       "size":  "16 oz",
+                                                       "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "potato-gnocchi":  {
                                          "commodity":  "Potato Gnocchi",
@@ -20544,7 +20640,14 @@
                                                         "price":  "$1.08",
                                                         "size":  "16 oz",
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2930461/that-s-smart-traditional-refried-beans-16-oz",
+                                                       "name":  "That\u0027s Smart! Traditional Refried Beans 16 oz",
+                                                       "price":  "$1",
+                                                       "size":  "16 oz",
+                                                       "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                   }
                                     },
                   "refrigerated-biscuits":  {
                                                 "commodity":  "Refrigerated Biscuit Dough",
@@ -21299,7 +21402,14 @@
                                                 "price":  "$1.97",
                                                 "size":  "16 oz",
                                                 "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                            }
+                                            },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/58174/hy-vee-mild-thick-chunky-salsa",
+                                               "name":  "Hy-Vee Mild Thick \u0026 Chunky Salsa",
+                                               "price":  "$2.69",
+                                               "size":  "16 oz",
+                                               "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                           }
                             },
                   "salsa-verde":  {
                                       "commodity":  "Salsa Verde",
@@ -21498,7 +21608,14 @@
                                                            "price":  "$2.78",
                                                            "size":  "25 oz",
                                                            "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/3494581/keebler-vienna-fingers-vanilla-fudge-creme-sandwich-cookies",
+                                                          "name":  "Keebler Vienna Fingers Vanilla Fudge Creme Sandwich Cookies",
+                                                          "price":  "$3.99",
+                                                          "size":  "12 oz",
+                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                      }
                                        },
                   "sauerkraut":  {
                                      "commodity":  "Sauerkraut (canned/jarred)",
@@ -21968,12 +22085,6 @@
                                                        "size":  "16 oz",
                                                        "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
                                                    },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24712403-fareway-cheese-colby-jack-fancy-shredded-32-oz",
-                                                          "price":  7.48,
-                                                          "size":  "32 oz",
-                                                          "name":  "Fareway Colby Jack Fancy Shredded Cheese"
-                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/13857173387",
                                                                   "name":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
@@ -22001,7 +22112,14 @@
                                                                "price":  "$7.29",
                                                                "size":  "32 oz",
                                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                          "Fareway":  {
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24712164-fareway-cheese-mozzarella-shredded-32-oz",
+                                                          "name":  "Fareway Mozzarella Shredded Cheese",
+                                                          "price":  "$5.94",
+                                                          "size":  "32 oz",
+                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
@@ -22372,13 +22490,6 @@
                                                          "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  0.1371
                                                      },
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/23920/hy-vee-all-natural-sour-cream",
-                                                    "price":  1.84,
-                                                    "size":  "16 oz",
-                                                    "name":  "Hy-Vee All Natural Sour Cream",
-                                                    "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/13581873793",
                                                              "price":  5.54,
@@ -22399,7 +22510,14 @@
                                                      "price":  "$0.99",
                                                      "size":  "8 oz",
                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/23920/hy-vee-sour-cream",
+                                                    "name":  "Hy-Vee Sour Cream",
+                                                    "price":  "$1.99",
+                                                    "size":  "16 oz",
+                                                    "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                }
                                  },
                   "soy-sauce":  {
                                     "commodity":  "Soy Sauce",
@@ -22942,6 +23060,13 @@
                                                        "price":  "$9.42",
                                                        "size":  "64.082 oz",
                                                        "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/249767-reser-s-strawberry-parfait-20-oz",
+                                                       "name":  "Reser\u0027s Fine Foods Strawberry Parfait",
+                                                       "price":  "$2.99",
+                                                       "size":  "20 oz",
+                                                       "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "string-cheese":  {
@@ -23373,7 +23498,14 @@
                                                          "price":  "$4.44",
                                                          "size":  "3 lb",
                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/37466/golden-sweet-potato",
+                                                        "name":  "Golden Sweet Potato",
+                                                        "price":  "$1.49",
+                                                        "size":  "lb",
+                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                    }
                                      },
                   "sweet-soy-sauce":  {
                                           "commodity":  "Sweet Soy Sauce (Kecap Manis)",
@@ -23633,11 +23765,11 @@
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                    },
                                        "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387904-tartar-sauce",
-                                                       "name":  "Fareway Tartar Sauce",
-                                                       "price":  "$2.48",
-                                                       "size":  "11.5 fl oz",
-                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71549-kraft-tartar-sauce-12-oz",
+                                                       "name":  "Kraft Tartar Sauce",
+                                                       "price":  "$2.78",
+                                                       "size":  "12 fl oz",
+                                                       "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "tater-tots":  {
@@ -23933,11 +24065,11 @@
                                                            "board_pu":  0.1883
                                                        },
                                            "Fareway":  {
-                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16951406-toast-em-frosted-smores-pastry-tart-6-ct",
-                                                           "name":  "Toast\u0027em Pop-ups Toaster Pastries, S\u0027mores",
+                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2626014-toast-em-pop-ups-real-fruit-pastries-frosted-cherry-11-oz",
+                                                           "name":  "Toast\u0027em Pop-ups Toaster Pastries, Cherry",
                                                            "price":  "$1.50",
                                                            "size":  "6 ct",
-                                                           "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                           "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                        }
                                        },
                   "toilet-bowl-cleaner":  {
@@ -24870,20 +25002,20 @@
                                                          "name":  "Hy Vee Pure Vanilla Extract",
                                                          "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                      },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/19278167549",
-                                                                  "name":  "Rising Star Baking Supply Pure Vanilla Extract, 8 fl. oz.",
-                                                                  "price":  "$8.98",
-                                                                  "size":  "8 fl oz",
-                                                                  "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                              },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/Great-Value-Pure-Vanilla-Extract-4-fl-oz-Liquid-Ambient-Plastic-Container/585133649",
                                                           "name":  "Great Value Pure Vanilla Extract, 4 fl oz (Liquid, Ambient, Plastic Container)",
                                                           "price":  "$9.76",
                                                           "size":  "4 fl oz",
                                                           "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/5210003021",
+                                                                  "name":  "McCormick Pure Vanilla Extract, 8 fl. oz.",
+                                                                  "price":  "$10.48",
+                                                                  "size":  "8 fl oz",
+                                                                  "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                              }
                                       },
                   "vegetable-broth":  {
                                           "commodity":  "Vegetable Broth / Stock",
@@ -24958,12 +25090,6 @@
                                                             "size":  "1 gal",
                                                             "board_pu":  0.0937
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23966592-fareway-vegetable-oil-128-oz",
-                                                        "price":  9.48,
-                                                        "size":  "128 oz",
-                                                        "name":  "Fareway Vegetable Oil"
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2916136/that-s-smart-pure-vegetable-oil",
                                                        "price":  8.52,
@@ -24984,6 +25110,13 @@
                                                         "price":  "$8.74",
                                                         "size":  "128 fl oz",
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23958874-fareway-canola-oil-128-oz",
+                                                        "name":  "Fareway Canola Oil",
+                                                        "price":  "$9.48",
+                                                        "size":  "128 oz",
+                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "vegetable-soup":  {
@@ -25439,7 +25572,14 @@
                                                         "price":  "$15.72",
                                                         "size":  "11.909 lb",
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/31777/hy-vee-fresh-young-whole-chicken",
+                                                       "name":  "Hy-Vee Fresh Young Whole Chicken",
+                                                       "price":  "$1.99",
+                                                       "size":  "lb",
+                                                       "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
+                                                   }
                                     },
                   "whole-cloves":  {
                                        "commodity":  "Whole cloves",

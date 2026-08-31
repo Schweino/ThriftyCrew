@@ -1,1 +1,1 @@
-﻿apples|Walmart;cheddar-cheese-curds|Hy-Vee;red-wine|Hy-Vee;white-wine|Hy-Vee;yukon-gold-potatoes|Family Fare
+﻿baby-back-ribs|Walmart;canned-pumpkin|Hy-Vee;cheddar-cheese-curds|Fareway;pecorino-romano|Fareway;yukon-gold-potatoes|Family Fare
