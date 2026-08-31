@@ -3,10 +3,10 @@
     "title":  "Chicken Alfredo Lasagna",
     "source_url":  "https://masonfit.com/chicken-alfredo-lasagna/",
     "protein":  "chicken",
-    "state":  "rejected-audit",
-    "wave":  9,
+    "state":  "written",
+    "wave":  null,
     "created":  "2026-08-27T11:44:57",
-    "updated":  "2026-08-28T07:53:20",
+    "updated":  "2026-08-31T15:13:24",
     "terms":  [
                   {
                       "term":  "frozen lightly breaded chicken breast bites",
@@ -17,7 +17,7 @@
                       "optional":  false
                   }
               ],
-    "reject_reason":  "NO-GO on the scoped re-audit. The dispatch premise is false: three of the four \u0027repaired\u0027 specs (casserole 07:22:11, street-corn 07:27:24, curry 07:28:44) predate the prior battery run (07:31:20) and ",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -99,6 +99,12 @@
                         "at":  "2026-08-28T07:53:20",
                         "by":  "auditor",
                         "detail":  "NO-GO on the scoped re-audit. The dispatch premise is false: three of the four \u0027repaired\u0027 specs (casserole 07:22:11, street-corn 07:27:24, curry 07:28:44) predate the prior battery run (07:31:20) and "
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-31T15:13:24",
+                        "by":  "opus5-backlog-2026-08-31",
+                        "detail":  "repaired: R1 repaired: costed.json now carries the 9-line row including Black Pepper. R2 RULED BY BRAD 2026-08-31 (recorded in the spec writer_notes): the breaded-bites line was repurposed to board Boneless Skinless Chicken Breast and macros rebuilt from the plain-breast row. R5 gate green.  [audit blockers: recipe-local, shared, shared-data; 4 recipe-local; source-QA still owed]"
                     }
                 ]
 }

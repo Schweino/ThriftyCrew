@@ -147,6 +147,33 @@ if ($runSelfTest) {
     T 'MUST FIRE  and not one of the 400 rows already in the ledger was dropped on the way' `
       ($seedKept -eq 400) ("kept $seedKept of 400")
   } finally { if (Test-Path $tmp) { Remove-Item $tmp -Force } }
+  # ---- AN UNWRITABLE STORE MUST NOT REPORT SUCCESS (2026-08-31) ----
+  # Save-Rows used to let a failed Set-Content fall through, so -Invalidate printed "invalidated N
+  # row(s)" and exited 0 while the ledger on disk was untouched, and the only trace was a raw error on
+  # stderr. Driven as a real child process because the exit code IS the finding, and because the
+  # leaked stderr is what killed run-gates.
+  $missing = Join-Path $tmp 'no-such-dir\ledger.json'
+  $errF = [IO.Path]::GetTempFileName(); $outF = [IO.Path]::GetTempFileName()
+  $pi = Start-Process -FilePath 'powershell' -Wait -PassThru -NoNewWindow `
+        -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',$PSCommandPath,
+                        '-Invalidate','-ItemId','apples','-Store',$missing) `
+        -RedirectStandardError $errF -RedirectStandardOutput $outF
+  # COALESCED TO '' BEFORE ANY .Trim(), and the neuter is why. Get-Content -Raw on an EMPTY file
+  # returns $null, and an empty stdout is exactly what the DEFECT produces - so the diagnostic
+  # argument threw "You cannot call a method on a null-valued expression" on the one run where these
+  # cases were supposed to go red. The suite died at this line and printed no failures at all: a test
+  # whose FAILURE path crashes reports nothing, which is indistinguishable from a test that passed.
+  $sOut = [string](Get-Content $outF -Raw); if ($null -eq $sOut) { $sOut = '' }
+  $sErr = [string](Get-Content $errF -Raw); if ($null -eq $sErr) { $sErr = '' }
+  Remove-Item $errF, $outF -Force -ErrorAction SilentlyContinue
+  # NAMED HONESTLY: the first two held BEFORE this fix too (the throw was already terminating), so they
+  # are the standing contract, not the proof. The two below them are the ones that discriminate.
+  T '-Invalidate on an unwritable store exits non-zero' ($pi.ExitCode -ne 0) ("exit " + $pi.ExitCode)
+  T '...and does NOT claim it invalidated anything' (-not ($sOut -match 'invalidated \d+ row')) $sOut
+  T '...and says it could not write, on STDOUT where a caller reads it' ($sOut -match 'COULD NOT WRITE') $sOut
+  T 'MUST FIRE  ...and leaks NOTHING to stderr (one noisy child kills ops\run-gates.ps1)' `
+    ([string]::IsNullOrWhiteSpace($sErr)) $sErr
+
   if ($bad -gt 0) { Write-Output ("ingredient-resolutions SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'ingredient-resolutions SELF-TEST PASS'
   Write-GuardComplete -Name 'ingredient-resolutions' -Summary 'selftest pass'; exit 0
@@ -160,6 +187,13 @@ function Save-Rows { param($R)
     _rule='Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.'
     updated=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'); count=@($R).Count; resolutions=@($R) }
   $t = $Store + '.tmp'
+  # NO -ErrorAction HERE, DELIBERATELY, and it was measured rather than assumed. $ErrorActionPreference
+  # is 'Stop' at the top of this file, so a failed Set-Content is ALREADY terminating: an unwritable
+  # store has always exited non-zero and has never written a half-file or claimed success. The first
+  # cut of the 2026-08-31 fix added -ErrorAction Stop to both lines and a comment saying it stopped a
+  # silent fall-through; running all four combinations against an unwritable store proved the flags
+  # change nothing at all. Dead code that reads like a second safeguard teaches the next reader that
+  # two things defend this when only one does, so it is gone. What was actually wrong is below.
   ($doc | ConvertTo-Json -Depth 6) | Set-Content -Path $t -Encoding utf8
   Move-Item -Path $t -Destination $Store -Force }
 
@@ -169,11 +203,24 @@ if ($runRecord) {
   # RE-READ INSIDE THE LOCK. $rows above was read before the mutex was taken, and using it here would
   # keep the exact race the mutex exists to close - a writer that merges into a snapshot older than
   # its own turn drops whatever landed in between.
-  Invoke-Locked -Path $Store -Body {
-    $fresh = @(Read-Store $Store)
-    $keep = @($fresh | Where-Object { [string]$_.key -ne $k })
-    $row = [pscustomobject]@{ key=$k; term=$Term; item_id=$ItemId; bid_exists=$runBid; evidence=$Evidence; by=$By; at=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss') }
-    Save-Rows @($keep + $row)
+  try {
+    Invoke-Locked -Path $Store -Body {
+      $fresh = @(Read-Store $Store)
+      $keep = @($fresh | Where-Object { [string]$_.key -ne $k })
+      $row = [pscustomobject]@{ key=$k; term=$Term; item_id=$ItemId; bid_exists=$runBid; evidence=$Evidence; by=$By; at=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss') }
+      Save-Rows @($keep + $row)
+    }
+  } catch {
+    # THE REAL DEFECT (2026-08-31): the failure was always LOUD, but it was loud in the wrong channel.
+    # An unwritable store threw an unhandled .NET error straight onto STDERR, so the exit code was
+    # right and the message was unreadable to every caller that reads stdout - and rebid-ingredient's
+    # Invoke-MemoryInvalidation deliberately does NOT redirect a child's stderr, because doing so
+    # under EAP=Stop is itself a terminating throw. Worse, ops\run-gates.ps1 runs each self-test as a
+    # native child under EAP=Stop, so that one leaked line was a TERMINATING error for the gate: the
+    # whole suite died on it and reported nothing about the other 152 self-tests, all of which passed.
+    # One noisy negative fixture blinded the change-time gate completely.
+    Write-Output ("ingredient-resolutions: COULD NOT WRITE the store at {0} - {1}" -f $Store, $_.Exception.Message)
+    exit 1
   }
   Write-Output ("ingredient-resolutions: {0} -> {1}{2}" -f $k, $(if($ItemId){$ItemId}else{'(null)'}), $(if($runBid){' [bid wired]'}else{' [NO BID - recipe must hold at mapped]'}))
   exit 0
@@ -181,11 +228,17 @@ if ($runRecord) {
 if ($runInv) {
   if (-not $ItemId) { Write-Output 'ingredient-resolutions: -Invalidate needs -ItemId'; exit 1 }
   $script:invalidated = 0
-  Invoke-Locked -Path $Store -Body {
-    $fresh = @(Read-Store $Store)
-    $keep = @($fresh | Where-Object { [string]$_.item_id -ne $ItemId })
-    $script:invalidated = @($fresh).Count - @($keep).Count
-    Save-Rows $keep
+  try {
+    Invoke-Locked -Path $Store -Body {
+      $fresh = @(Read-Store $Store)
+      $keep = @($fresh | Where-Object { [string]$_.item_id -ne $ItemId })
+      $script:invalidated = @($fresh).Count - @($keep).Count
+      Save-Rows $keep
+    }
+  } catch {
+    # Same as the -Record path above: a clean line on stdout instead of a raw error on stderr.
+    Write-Output ("ingredient-resolutions: COULD NOT WRITE the store at {0} - {1}" -f $Store, $_.Exception.Message)
+    exit 1
   }
   Write-Output ("ingredient-resolutions: invalidated {0} row(s) for item_id '{1}'" -f $script:invalidated, $ItemId)
   exit 0

@@ -3,10 +3,10 @@
     "title":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
     "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
     "protein":  "chicken",
-    "state":  "rejected-audit",
-    "wave":  9,
+    "state":  "written",
+    "wave":  null,
     "created":  "2026-08-27T11:48:53",
-    "updated":  "2026-08-28T07:53:20",
+    "updated":  "2026-08-31T15:13:24",
     "terms":  [
                   {
                       "term":  "Boursin cheese",
@@ -21,7 +21,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  "NO-GO on the scoped re-audit. The dispatch premise is false: three of the four \u0027repaired\u0027 specs (casserole 07:22:11, street-corn 07:27:24, curry 07:28:44) predate the prior battery run (07:31:20) and ",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -103,6 +103,12 @@
                         "at":  "2026-08-28T07:53:20",
                         "by":  "auditor",
                         "detail":  "NO-GO on the scoped re-audit. The dispatch premise is false: three of the four \u0027repaired\u0027 specs (casserole 07:22:11, street-corn 07:27:24, curry 07:28:44) predate the prior battery run (07:31:20) and "
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-31T15:13:24",
+                        "by":  "opus5-backlog-2026-08-31",
+                        "detail":  "repaired: R3 repaired: the lemon zest line now reads Buy 1 lemon $0.50, not the per-pound rate stamped as a per-each buy. R5 gate green. Verified on disk 2026-08-31.  [audit blockers: recipe-local, shared, shared-data; 4 recipe-local; source-QA still owed]"
                     }
                 ]
 }

@@ -66,7 +66,7 @@ $comFile = Join-Path $root 'commodities.json'
 # otherwise silently match nothing and the batch would read as "bought nothing" - a rule that was never a
 # rule, reported as a rule that did not pay. A typo'd commodity id is the same class as the permanently
 # unfirable known-wrong entry: it can never fire, and nothing downstream would say so.
-$comsCheck = Get-Content $comFile -Raw | ConvertFrom-Json
+$comsCheck = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $idsKnown = @{}; foreach ($c in $comsCheck) { if ($c -and $c.id) { $idsKnown[[string]$c.id] = $true } }
 foreach ($id in $TouchedIds) {
   if (-not $idsKnown.ContainsKey([string]$id)) {
@@ -112,7 +112,7 @@ $before = Snapshot
 Write-Output ("before: {0} commodities on the board" -f $before.Count)
 
 # ---- edit
-$coms = Get-Content $comFile -Raw | ConvertFrom-Json
+$coms = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $added = 0; $addedEx = 0
 foreach ($id in $Patterns.Keys) {
   $c = @($coms | Where-Object { $_.id -eq $id })[0]
@@ -200,7 +200,7 @@ $corpusFile = Join-Path (Split-Path $root -Parent) 'sidecar\data\corpus-current.
 $revealed = @{}; $blind = $false
 if (Test-Path $corpusFile) {
   $corp = Get-Content $corpusFile -Raw | ConvertFrom-Json
-  $comsNow = Get-Content $comFile -Raw | ConvertFrom-Json
+  $comsNow = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
   foreach ($id in $Patterns.Keys) {
     $cdef = @($comsNow | Where-Object { $_.id -eq $id })[0]
     $exRx = @(); foreach ($xp in @($cdef.exclude)) { if ($xp) { $exRx += [regex]::new([string]$xp, 'IgnoreCase,Compiled') } }

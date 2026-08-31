@@ -2,10 +2,10 @@
   "battery": "qa-battery",
   "version": 1,
   "slug": "chicken-and-potato-curry",
-  "generated": "2026-08-28T07:22:31",
+  "generated": "2026-08-31T15:13:52",
   "inputs": {
     "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\chicken-and-potato-curry.json",
-    "source": "meal-prep/runs/hunt-2026-08-27-highprotein\\extracted\\chicken-and-potato-curry.json"
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\chicken-and-potato-curry.json"
   },
   "checks": [
     {
@@ -128,7 +128,7 @@
             "severity": "pass"
           },
           {
-            "item": "Potatoes",
+            "item": "Potato",
             "source": "0.5 pound",
             "spec": "1.75 lb",
             "ratio": 3.5,
@@ -177,7 +177,7 @@
           },
           {
             "item": "Fresh Cilantro",
-            "why": "could not read a leading amount from '1 1/4 cups chopped (35 g)' / 'A handful'"
+            "why": "could not read a leading amount from '1 1/4 cups chopped' / 'A handful'"
           }
         ],
         "exempt_lines": []

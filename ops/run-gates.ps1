@@ -97,6 +97,7 @@ $static = @(
   @{ f = 'grocery\audit-guard-contract.ps1';   n = 'every chain detector can prove it ran, none are dead or half-covered' }
   @{ f = 'grocery\audit-cloud-readiness.ps1';  n = 'every credential consumer in the chain can run on a runner' }
   @{ f = 'grocery\audit-script-census.ps1';    n = 'no script is unreachable and unrecorded' }
+  @{ f = 'grocery\audit-json-encoding.ps1';    n = 'the matching rules are still in the encoding they were written in' }
 )
 foreach ($g in $static) {
   $p = Join-Path $repo $g.f
