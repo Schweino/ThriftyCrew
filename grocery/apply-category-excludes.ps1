@@ -24,7 +24,7 @@ $cat = @{}
 foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories) {
   foreach ($id in @($c.commodities)) { $cat[[string]$id] = [string]$c.label }
 }
-$commods = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commods = Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 
 $added = 0; $touched = 0
 foreach ($cm in $commods) {
@@ -45,5 +45,5 @@ foreach ($cm in $commods) {
 Write-Output ("category-exclude library: +$added patterns across $touched commodities")
 if ($WhatIf) { Write-Output 'WhatIf: commodities.json not written'; return }
 ($commods | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $root 'commodities.json') -Encoding UTF8
-$null = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json   # validate round-trip
+$null = Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding UTF8 | ConvertFrom-Json   # validate round-trip
 Write-Output 'commodities.json updated (JSON validated)'

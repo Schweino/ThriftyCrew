@@ -25,9 +25,11 @@ foreach ($x in (Get-Content (Join-Path $root $CandidatesFile) -Raw | ConvertFrom
 # merge-candidates too). Add each item via foreach so the ArrayList holds the 328 commodities individually - a
 # nested single element made the write keep only the new rows and WIPE the 328 existing (caught by the restore).
 $commods = New-Object System.Collections.ArrayList
-foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { [void]$commods.Add($c) }
+# -Encoding UTF8 is load-bearing here: PS 5.1's Get-Content defaults to the ANSI codepage, so a UTF-8 label
+# read here and written back at line ~75 round-trips to mojibake and grows every time (see promote-verdicts).
+foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding UTF8 | ConvertFrom-Json)) { [void]$commods.Add($c) }
 $existingIds = @{}; foreach ($c in $commods) { $existingIds[[string]$c.id] = $true }
-$catDoc = Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json
+$catDoc = Get-Content (Join-Path $root 'categories.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $catByLabel = @{}; foreach ($c in $catDoc.categories) { $catByLabel[[string]$c.label] = $c }
 $searchDoc = Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json
 

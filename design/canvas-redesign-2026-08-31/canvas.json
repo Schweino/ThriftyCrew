@@ -1,0 +1,47 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "Redesign" },
+    { "id": "page-2", "name": "Why — before / after" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 390, "h": 844, "page": "page-1", "title": "Grocery board", "is_interactive": true },
+    { "file": "GroceryTrip.dc.html", "x": 500, "y": 0, "w": 390, "h": 844, "page": "page-1", "title": "Grocery — split my trip", "is_interactive": true },
+    { "file": "MealPrep.dc.html", "x": 1000, "y": 0, "w": 390, "h": 844, "page": "page-1", "title": "Meal prep browse", "is_interactive": true },
+    { "file": "Density.dc.html", "x": 0, "y": 0, "w": 860, "h": 1280, "page": "page-2", "title": "Before / after, at 1:1" }
+  ],
+  "annotations": [
+    {
+      "id": "note-grocery",
+      "x": 0,
+      "y": -196,
+      "w": 390,
+      "page": "page-1",
+      "text": "GROCERY BOARD\nOpens on the 37 items actually on sale, not all 637. Search reaches the rest.\nNames are never truncated. The store moves to a second line so it stops competing with the name.\nTap a row to see all seven stores; tick rows to build a list."
+    },
+    {
+      "id": "note-trip",
+      "x": 500,
+      "y": -196,
+      "w": 390,
+      "page": "page-1",
+      "text": "SPLIT MY TRIP\nThe planner is a destination, not a card buried in the preamble.\nReal numbers: this 3-item list is $6.51 at one store, $5.65 across two.\nTry the 3-store option — it tells you a third stop saves nothing."
+    },
+    {
+      "id": "note-mealprep",
+      "x": 1000,
+      "y": -196,
+      "w": 390,
+      "page": "page-1",
+      "text": "MEAL PREP\nNo photos needed: cuisine tile + one macro line + a protein-per-dollar bar.\nDefault sort is value, not price — switch to Cheapest and watch the list stop moving.\nFive picks up top; the other 571 sit behind search."
+    },
+    {
+      "id": "note-why",
+      "x": 0,
+      "y": -150,
+      "w": 620,
+      "page": "page-2",
+      "text": "Everything on the left is measured from the live site on 31 August 2026, rendered at 1:1 against the proposal. Grocery prices and recipe macros throughout the canvas are real values pulled from board.json and the live meal prep page — nothing here is invented."
+    }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

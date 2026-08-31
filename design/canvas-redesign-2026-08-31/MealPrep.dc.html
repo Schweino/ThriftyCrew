@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, "Segoe UI", system-ui, sans-serif; background: #fffdf6; color: #16263F; -webkit-font-smoothing: antialiased; }
+    a { color: #1E3A5F; text-decoration: none; } a:hover { color: #101B2E; }
+    input, button { font: inherit; color: inherit; }
+    .noscroll::-webkit-scrollbar { width: 0; height: 0; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #fffdf6; overflow: hidden;">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 11px; border-bottom: 1px solid #e7e2d4;">
+
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;">Meal prep</div>
+      <div style="font-size: 11px; color: #5a6862; white-space: nowrap;">576 · re-costed today</div>
+    </div>
+
+    <div class="noscroll" style="display: flex; gap: 7px; overflow-x: auto; margin: 0 -16px; padding: 1px 16px 2px;">
+      <sc-for list="{{ proteins }}" as="p" hint-placeholder-count="5">
+        <button onClick="{{ p.pick }}" style="{{ p.style }}">{{ p.label }}</button>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; gap: 7px;">
+      <sc-for list="{{ sorts }}" as="s" hint-placeholder-count="2">
+        <button onClick="{{ s.pick }}" style="{{ s.style }}">{{ s.label }}</button>
+      </sc-for>
+    </div>
+
+  </div>
+
+  <div class="noscroll" style="flex-grow: 1; overflow-y: auto;">
+
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 15px 16px 4px;">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; font-weight: 600;">{{ sectionTitle }}</div>
+      <div style="font-size: 11px; color: #5a6862; white-space: nowrap;">top 5</div>
+    </div>
+    <div style="padding: 0 16px 6px; font-size: 12px; line-height: 1.45; color: #5a6862; text-wrap: pretty;">{{ sectionNote }}</div>
+
+    <sc-for list="{{ picks }}" as="r" hint-placeholder-count="5">
+      <a href="#" style="display: block; margin: 8px 16px 0; padding: 13px 14px; background: #ffffff; border: 1px solid #e7e2d4; border-radius: 14px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <span style="{{ r.tileStyle }}">{{ r.mono }}</span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 15px; font-weight: 700; line-height: 1.27; letter-spacing: -0.01em; text-wrap: pretty;">{{ r.name }}</div>
+            <div style="font-size: 11.5px; color: #5a6862;">{{ r.meta }}</div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right;">
+            <div style="font-size: 17px; font-weight: 700; color: #10794e; letter-spacing: -0.01em;">{{ r.price }}</div>
+            <div style="font-size: 10.5px; color: #5a6862;">/ serving</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 9px; padding-top: 11px;">
+          <div style="flex-grow: 1; height: 5px; background: #efe9d9; border-radius: 3px; overflow: hidden;">
+            <div style="width: {{ r.bar }}; height: 100%; background: {{ r.barColor }}; border-radius: 3px;"></div>
+          </div>
+          <div style="flex-shrink: 0; font-size: 11px; font-weight: 700; color: #8a6d1f; white-space: nowrap;">{{ r.value }}</div>
+        </div>
+      </a>
+    </sc-for>
+
+    <div style="display: flex; align-items: center; gap: 11px; padding: 24px 16px 11px;">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; font-weight: 600; white-space: nowrap;">All {{ count }}</div>
+      <div style="flex-grow: 1; height: 1px; background: #e7e2d4;"></div>
+    </div>
+
+    <div style="padding: 0 16px 12px;">
+      <div style="display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 13px; background: #ffffff; border: 1px solid #ddd6c2; border-radius: 10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5a6862" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input value="{{ q }}" onInput="{{ onQuery }}" placeholder="Search by name, cuisine, protein" style="flex-grow: 1; min-width: 0; border: 0; outline: none; background: transparent; font-size: 14px;">
+      </div>
+    </div>
+
+    <sc-for list="{{ rest }}" as="r" hint-placeholder-count="6">
+      <a href="#" style="display: block; padding: 11px 16px; border-bottom: 1px solid #e7e2d4;">
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <span style="{{ r.tileStyle }}">{{ r.mono }}</span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 14px; font-weight: 600; line-height: 1.28; text-wrap: pretty;">{{ r.name }}</div>
+            <div style="font-size: 11px; color: #5a6862;">{{ r.meta }}</div>
+            <div style="display: flex; align-items: center; gap: 7px; padding-top: 2px;">
+              <div style="flex-grow: 1; height: 4px; background: #efe9d9; border-radius: 2px; overflow: hidden;">
+                <div style="width: {{ r.bar }}; height: 100%; background: {{ r.barColor }}; border-radius: 2px;"></div>
+              </div>
+              <div style="flex-shrink: 0; font-size: 10.5px; font-weight: 600; color: #8a6d1f; white-space: nowrap;">{{ r.value }}</div>
+            </div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right; align-self: flex-start;">
+            <div style="font-size: 15px; font-weight: 700; color: #10794e;">{{ r.price }}</div>
+            <div style="font-size: 10px; color: #5a6862;">/ serving</div>
+          </div>
+        </div>
+      </a>
+    </sc-for>
+
+    <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 40px 24px; text-align: center; color: #5a6862; font-size: 14px;">No recipes match that.</div>
+    </sc-if>
+
+    <div style="height: 28px;"></div>
+
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{
+  "sort": {"editor": "enum", "options": ["value", "price"], "default": "value", "section": "Browse"}
+}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { q: '', protein: 'All', sort: null };
+  }
+
+  data() {
+    return [
+      { n: 'Slow Cooker Kalua Pork Bowls', cu: 'Hawaiian', cal: 567, p: 56, pr: 1.70, v: 32.9, k: 'Pork' },
+      { n: 'Slow Cooker Crack Chicken Bowls', cu: 'American', cal: 588, p: 65, pr: 1.99, v: 32.7, k: 'Chicken' },
+      { n: 'Slow Cooker BBQ Pulled Chicken Bowls', cu: 'American', cal: 574, p: 60, pr: 2.02, v: 29.7, k: 'Chicken' },
+      { n: "Hunter's Chicken (BBQ Bacon Cheese Bake)", cu: 'British', cal: 668, p: 63, pr: 2.20, v: 28.6, k: 'Chicken' },
+      { n: 'Slow Cooker French Onion Chicken Bowls', cu: 'American', cal: 657, p: 70, pr: 2.47, v: 28.3, k: 'Chicken' },
+      { n: 'Slow Cooker Dr Pepper Pulled Pork Bowls', cu: 'American', cal: 557, p: 56, pr: 2.01, v: 27.9, k: 'Pork' },
+      { n: 'Chicken Parmesan Pasta', cu: 'Italian-American', cal: 534, p: 44, pr: 2.32, v: 19.0, k: 'Chicken' },
+      { n: 'Senegalese Chicken Yassa (Lemon Onion Chicken)', cu: 'West African / Senegalese', cal: 567, p: 47, pr: 2.84, v: 16.5, k: 'Chicken' },
+      { n: 'Baked Sweet and Sour Chicken Rice Bowls', cu: 'Chinese', cal: 678, p: 37, pr: 2.25, v: 16.4, k: 'Chicken' },
+      { n: 'Brazilian Galinhada (Chicken and Saffron Rice)', cu: 'Brazilian', cal: 662, p: 50, pr: 3.05, v: 16.4, k: 'Chicken' },
+      { n: 'Pasta alla Norcina Creamy Sausage Pasta', cu: 'Italian (Umbrian)', cal: 879, p: 33, pr: 2.30, v: 14.3, k: 'Pork' },
+      { n: 'Turkey Cordon Bleu Casserole', cu: 'American', cal: 647, p: 40, pr: 2.86, v: 14.0, k: 'Turkey' },
+      { n: 'Escondidinho de Carne (Brazilian Beef and Potato Bake)', cu: 'Brazilian', cal: 578, p: 37, pr: 3.54, v: 10.5, k: 'Beef' },
+      { n: 'Turkey Sausage and Potato Hash Skillet', cu: 'American', cal: 567, p: 28, pr: 2.87, v: 9.8, k: 'Turkey' }
+    ];
+  }
+
+  tint(cu) {
+    const map = {
+      'American': ['#fdf1d9', '#8a6d1f'], 'British': ['#f0e8f7', '#6f3a92'],
+      'Hawaiian': ['#e6eef8', '#1b64b0'], 'Chinese': ['#fbe8e3', '#b5432c'],
+      'Brazilian': ['#e7f2ea', '#2e7d43'], 'West African / Senegalese': ['#fdeedd', '#b8621a'],
+      'Italian-American': ['#e4f0e9', '#0c5c3b'], 'Italian (Umbrian)': ['#e4f0e9', '#0c5c3b']
+    };
+    return map[cu] || ['#edefee', '#5a6862'];
+  }
+
+  row(r, big) {
+    const t = this.tint(r.cu);
+    const size = big ? 40 : 34;
+    return {
+      name: r.n,
+      meta: r.cu + ' · ' + r.cal + ' cal · ' + r.p + 'g protein',
+      price: '$' + r.pr.toFixed(2),
+      value: r.v.toFixed(1) + 'g / $1',
+      bar: Math.round((r.v / 33) * 100) + '%',
+      barColor: r.v >= 25 ? '#E2A43C' : '#c9c1ab',
+      mono: r.cu.charAt(0),
+      tileStyle: 'flex-shrink: 0; width: ' + size + 'px; height: ' + size + 'px; border-radius: 10px; display: flex; align-items: center; justify-content: center; '
+        + "font-family: 'EB Garamond', Georgia, serif; font-size: " + (big ? 19 : 16) + 'px; font-weight: 600; '
+        + 'background: ' + t[0] + '; color: ' + t[1] + ';'
+    };
+  }
+
+  renderVals() {
+    const st = this.state;
+    const sort = st.sort !== null ? st.sort : (this.props.sort ?? 'value');
+    const q = st.q.trim().toLowerCase();
+
+    const proteins = ['All', 'Chicken', 'Pork', 'Turkey', 'Beef'].map((k) => ({
+      label: k,
+      pick: () => this.setState({ protein: k }),
+      style: 'flex-shrink: 0; height: 32px; padding: 0 13px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; '
+        + (st.protein === k ? 'background: #fdf1d9; color: #8a6d1f; border: 1px solid #E2A43C;'
+                            : 'background: transparent; color: #5a6862; border: 1px solid #e7e2d4;')
+    }));
+
+    const sorts = [
+      { key: 'value', label: 'Most protein per $' },
+      { key: 'price', label: 'Cheapest' }
+    ].map((s) => ({
+      label: s.label,
+      pick: () => this.setState({ sort: s.key }),
+      style: 'flex-grow: 1; height: 34px; border-radius: 9px; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; '
+        + (sort === s.key ? 'background: #16263F; color: #fffdf6; border: 1px solid #16263F;'
+                          : 'background: transparent; color: #16263F; border: 1px solid #ddd6c2;')
+    }));
+
+    let list = this.data();
+    if (st.protein !== 'All') list = list.filter((r) => r.k === st.protein);
+    if (q) list = list.filter((r) => (r.n + ' ' + r.cu + ' ' + r.k).toLowerCase().includes(q));
+    list = list.slice().sort((a, b) => sort === 'value' ? b.v - a.v : a.pr - b.pr);
+
+    const picks = q ? [] : list.slice(0, 5).map((r) => this.row(r, true));
+    const rest = (q ? list : list.slice(5)).map((r) => this.row(r, false));
+
+    return {
+      proteins: proteins,
+      sorts: sorts,
+      picks: picks,
+      rest: rest,
+      empty: picks.length === 0 && rest.length === 0,
+      q: st.q,
+      onQuery: (e) => this.setState({ q: e.target.value }),
+      count: st.protein === 'All' ? '576' : String(list.length),
+      sectionTitle: sort === 'value' ? 'Best value this week' : 'Cheapest this week',
+      sectionNote: sort === 'value'
+        ? 'Ranked by protein per dollar, so the list actually moves. Sorting 576 dinners by price alone stalls at $2.14 for pages at a time.'
+        : 'Cheapest per serving. Note how little separates them — this is why price alone makes a poor default sort.'
+    };
+  }
+}
+</script>
+</body>
+</html>

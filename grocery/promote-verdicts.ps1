@@ -215,7 +215,10 @@ foreach ($vf in $vFiles) {
 Write-Output ("verdict files read : {0}   DROP verdicts resolved to an item name : {1}" -f $vFiles.Count, $drops.Count)
 
 $cPath = Join-Path $root 'commodities.json'
-$commodities = Get-Content $cPath -Raw | ConvertFrom-Json
+# -Encoding UTF8 is load-bearing on any read that gets written back: PS 5.1's Get-Content defaults to the
+# ANSI codepage, so a UTF-8 label round-trips to mojibake and the file grows every time. That is how
+# creme-fraiche's label reached 4,639 characters (proved 2026-08-31: a 38-byte file came back 67 bytes).
+$commodities = Get-Content $cPath -Raw -Encoding UTF8 | ConvertFrom-Json
 
 # ---------------- derive one rule per commodity, covering as many of its drops as possible ----------------
 $proposals = New-Object System.Collections.ArrayList

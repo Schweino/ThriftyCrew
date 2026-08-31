@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, "Segoe UI", system-ui, sans-serif; background: #fffdf6; color: #16263F; -webkit-font-smoothing: antialiased; }
+    a { color: #1E3A5F; } a:hover { color: #101B2E; }
+  </style>
+</helmet>
+
+<div style="width: 860px; padding: 34px 36px 40px; background: #fffdf6;">
+
+  <div style="display: flex; flex-direction: column; gap: 7px; padding-bottom: 26px;">
+    <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 30px; font-weight: 700; letter-spacing: -0.015em;">Same phone, same data, same scale</div>
+    <div style="font-size: 14px; line-height: 1.5; color: #5a6862; max-width: 620px; text-wrap: pretty;">Both columns are 375&nbsp;px wide and rendered at 1:1, so the rows are directly comparable. Everything on the left is measured from the live site on 31 August 2026.</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding-bottom: 30px;">
+    <div style="background: #ffffff; border: 1px solid #e7e2d4; border-radius: 12px; padding: 15px 16px; display: flex; flex-direction: column; gap: 5px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #5a6862;">Names clipped</div>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 27px; font-weight: 700; color: #c4342c; line-height: 1;">410 of 637</div>
+      <div style="font-size: 12px; color: #5a6862;">64% of the board, on mobile</div>
+    </div>
+    <div style="background: #ffffff; border: 1px solid #e7e2d4; border-radius: 12px; padding: 15px 16px; display: flex; flex-direction: column; gap: 5px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #5a6862;">Grocery page</div>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 27px; font-weight: 700; color: #c4342c; line-height: 1;">51,898 px</div>
+      <div style="font-size: 12px; color: #5a6862;">≈ 64 phone screens</div>
+    </div>
+    <div style="background: #ffffff; border: 1px solid #e7e2d4; border-radius: 12px; padding: 15px 16px; display: flex; flex-direction: column; gap: 5px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #5a6862;">Meal prep page</div>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 27px; font-weight: 700; color: #c4342c; line-height: 1;">185,744 px</div>
+      <div style="font-size: 12px; color: #5a6862;">≈ 229 phone screens</div>
+    </div>
+    <div style="background: #ffffff; border: 1px solid #e7e2d4; border-radius: 12px; padding: 15px 16px; display: flex; flex-direction: column; gap: 5px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #5a6862;">Recipe photos</div>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 27px; font-weight: 700; color: #c4342c; line-height: 1;">0 of 576</div>
+      <div style="font-size: 12px; color: #5a6862;">the case for a data-led card</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px;">
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <span style="width: 9px; height: 9px; border-radius: 50%; background: #c4342c;"></span>
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;">Today</div>
+      </div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #5a6862; min-height: 56px; text-wrap: pretty;">Four of these five names are cut off. The leader dots and the store label keep their width; the product name is what gives way.</div>
+
+      <div style="width: 375px; background: #ffffff; border: 1px solid #e7e2d4; border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 15px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; border: 2px solid #16263F;"></span>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">Chicken&nbsp;…</div>
+          <div style="flex-grow: 1; border-bottom: 1.5px dotted #ccc4ae; margin: 0 2px 4px;"></div>
+          <span style="flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: #0b6d9e;"></span>
+          <div style="flex-shrink: 0; font-size: 14px; color: #5a6862;">Sam's Club</div>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; color: #10794e;">$0.98/lb</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 15px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; border: 2px solid #16263F;"></span>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">Chuck&nbsp;Ro…</div>
+          <div style="flex-grow: 1; border-bottom: 1.5px dotted #ccc4ae; margin: 0 2px 4px;"></div>
+          <span style="flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: #0b6d9e;"></span>
+          <div style="flex-shrink: 0; font-size: 14px; color: #5a6862;">Sam's Club</div>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; color: #10794e;">$6.64/lb</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 15px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; border: 2px solid #16263F;"></span>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">80/20&nbsp;Gr…</div>
+          <div style="flex-grow: 1; border-bottom: 1.5px dotted #ccc4ae; margin: 0 2px 4px;"></div>
+          <span style="flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: #0b6d9e;"></span>
+          <div style="flex-shrink: 0; font-size: 14px; color: #5a6862;">Sam's Club</div>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; color: #10794e;">$4.77/lb</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 15px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; border: 2px solid #16263F;"></span>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">Ground&nbsp;B…</div>
+          <div style="flex-grow: 1; border-bottom: 1.5px dotted #ccc4ae; margin: 0 2px 4px;"></div>
+          <span style="flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: #0b6d9e;"></span>
+          <div style="flex-shrink: 0; font-size: 14px; color: #5a6862;">Sam's Club</div>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; color: #10794e;">$5.86/lb</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 15px 16px;">
+          <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; border: 2px solid #16263F;"></span>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">93/7&nbsp;Lea…</div>
+          <div style="flex-grow: 1; border-bottom: 1.5px dotted #ccc4ae; margin: 0 2px 4px;"></div>
+          <span style="flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: #0b6d9e;"></span>
+          <div style="flex-shrink: 0; font-size: 14px; color: #5a6862;">Sam's Club</div>
+          <div style="flex-shrink: 0; font-size: 17px; font-weight: 700; color: #10794e;">$6.17/lb</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <span style="width: 9px; height: 9px; border-radius: 50%; background: #10794e;"></span>
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;">Proposed</div>
+      </div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #5a6862; min-height: 56px; text-wrap: pretty;">The name takes the full width and wraps when it needs to. The store drops to a second line, where it stops competing for the same space.</div>
+
+      <div style="width: 375px; background: #ffffff; border: 1px solid #e7e2d4; border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 11px; padding: 13px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #ccc4ae; background: #fffdf6;"></span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 15px; font-weight: 600; line-height: 1.28;">Chicken Thighs / Drumsticks</div>
+            <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #5a6862;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0b6d9e;"></span>Sam's Club</div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right;">
+            <div style="font-size: 17px; font-weight: 700; color: #10794e;">$0.98</div>
+            <div style="font-size: 11px; color: #5a6862;">/lb</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px; padding: 13px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #ccc4ae; background: #fffdf6;"></span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 15px; font-weight: 600; line-height: 1.28;">Chuck Roast</div>
+            <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #5a6862;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0b6d9e;"></span>Sam's Club</div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right;">
+            <div style="font-size: 17px; font-weight: 700; color: #10794e;">$6.64</div>
+            <div style="font-size: 11px; color: #5a6862;">/lb</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px; padding: 13px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #ccc4ae; background: #fffdf6;"></span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 15px; font-weight: 600; line-height: 1.28;">80/20 Ground Beef</div>
+            <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #5a6862;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0b6d9e;"></span>Sam's Club</div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right;">
+            <div style="font-size: 17px; font-weight: 700; color: #10794e;">$4.77</div>
+            <div style="font-size: 11px; color: #5a6862;">/lb</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px; padding: 13px 16px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #ccc4ae; background: #fffdf6;"></span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 15px; font-weight: 600; line-height: 1.28;">90/10 Ground Beef</div>
+            <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #5a6862;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0b6d9e;"></span>Sam's Club</div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right;">
+            <div style="font-size: 17px; font-weight: 700; color: #10794e;">$5.86</div>
+            <div style="font-size: 11px; color: #5a6862;">/lb</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px; padding: 13px 16px;">
+          <span style="flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #ccc4ae; background: #fffdf6;"></span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 15px; font-weight: 600; line-height: 1.28;">93/7 Lean Ground Beef</div>
+            <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #5a6862;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0b6d9e;"></span>Sam's Club</div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right;">
+            <div style="font-size: 17px; font-weight: 700; color: #10794e;">$6.17</div>
+            <div style="font-size: 11px; color: #5a6862;">/lb</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="height: 1px; background: #e7e2d4; margin: 34px 0 30px;"></div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px;">
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <span style="width: 9px; height: 9px; border-radius: 50%; background: #c4342c;"></span>
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;">Today · one recipe card</div>
+      </div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #5a6862; min-height: 56px; text-wrap: pretty;">298&nbsp;px tall. Four macro pills carry equal weight, so nothing leads. At this height a phone screen holds two and a half of 576 recipes.</div>
+
+      <div style="width: 375px;">
+        <div style="border: 1px solid #e7e2d4; border-left: 4px solid #c56a1a; border-radius: 12px; background: #ffffff; padding: 18px 20px;">
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 20px; font-weight: 700; line-height: 1.24; letter-spacing: -0.01em;">Sausage Hash Brown and Egg Casserole</div>
+          <div style="font-size: 14px; color: #8e9691; padding-top: 6px;">American</div>
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding-top: 16px;">
+            <div style="background: #eef1f5; border-radius: 9px; padding: 11px 4px; text-align: center;">
+              <div style="font-size: 19px; font-weight: 700; color: #16263F;">586</div>
+              <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: #5a6862;">CAL</div>
+            </div>
+            <div style="background: #e6f2ea; border-radius: 9px; padding: 11px 4px; text-align: center;">
+              <div style="font-size: 19px; font-weight: 700; color: #10794e;">36g</div>
+              <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: #5a6862;">PROTEIN</div>
+            </div>
+            <div style="background: #fbeed6; border-radius: 9px; padding: 11px 4px; text-align: center;">
+              <div style="font-size: 19px; font-weight: 700; color: #a5761d;">27g</div>
+              <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: #5a6862;">CARBS</div>
+            </div>
+            <div style="background: #fbe7e7; border-radius: 9px; padding: 11px 4px; text-align: center;">
+              <div style="font-size: 19px; font-weight: 700; color: #a33b3b;">38g</div>
+              <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: #5a6862;">FAT</div>
+            </div>
+          </div>
+          <div style="border-top: 1.5px dashed #e0dac9; margin-top: 17px; padding-top: 15px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+            <div style="display: flex; align-items: baseline; gap: 5px;">
+              <span style="font-size: 26px; font-weight: 700; color: #10794e; letter-spacing: -0.01em;">$2.14</span>
+              <span style="font-size: 14px; color: #8e9691;">/ serving</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 700; color: #8a6d1f; white-space: nowrap;">16.8g protein per $1</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <span style="width: 9px; height: 9px; border-radius: 50%; background: #10794e;"></span>
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;">Proposed · four in the same space</div>
+      </div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #5a6862; min-height: 56px; text-wrap: pretty;">Calories and protein stay on one line; carbs and fat move to the recipe itself. The bar shows protein per dollar, so the ranking is visible without reading a number.</div>
+
+      <div style="width: 375px; background: #ffffff; border: 1px solid #e7e2d4; border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 11px; padding: 11px 15px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'EB Garamond', Georgia, serif; font-size: 16px; font-weight: 600; background: #e6eef8; color: #1b64b0;">H</span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 14px; font-weight: 600; line-height: 1.28;">Slow Cooker Kalua Pork Bowls</div>
+            <div style="font-size: 11px; color: #5a6862;">Hawaiian · 567 cal · 56g protein</div>
+            <div style="display: flex; align-items: center; gap: 7px; padding-top: 2px;">
+              <div style="flex-grow: 1; height: 4px; background: #efe9d9; border-radius: 2px; overflow: hidden;"><div style="width: 100%; height: 100%; background: #E2A43C; border-radius: 2px;"></div></div>
+              <div style="flex-shrink: 0; font-size: 10.5px; font-weight: 600; color: #8a6d1f;">32.9g / $1</div>
+            </div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right; align-self: flex-start;">
+            <div style="font-size: 15px; font-weight: 700; color: #10794e;">$1.70</div>
+            <div style="font-size: 10px; color: #5a6862;">/ serving</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px; padding: 11px 15px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'EB Garamond', Georgia, serif; font-size: 16px; font-weight: 600; background: #fdf1d9; color: #8a6d1f;">A</span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 14px; font-weight: 600; line-height: 1.28;">Slow Cooker Crack Chicken Bowls</div>
+            <div style="font-size: 11px; color: #5a6862;">American · 588 cal · 65g protein</div>
+            <div style="display: flex; align-items: center; gap: 7px; padding-top: 2px;">
+              <div style="flex-grow: 1; height: 4px; background: #efe9d9; border-radius: 2px; overflow: hidden;"><div style="width: 99%; height: 100%; background: #E2A43C; border-radius: 2px;"></div></div>
+              <div style="flex-shrink: 0; font-size: 10.5px; font-weight: 600; color: #8a6d1f;">32.7g / $1</div>
+            </div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right; align-self: flex-start;">
+            <div style="font-size: 15px; font-weight: 700; color: #10794e;">$1.99</div>
+            <div style="font-size: 10px; color: #5a6862;">/ serving</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px; padding: 11px 15px; border-bottom: 1px solid #f0ebdd;">
+          <span style="flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'EB Garamond', Georgia, serif; font-size: 16px; font-weight: 600; background: #f0e8f7; color: #6f3a92;">B</span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 14px; font-weight: 600; line-height: 1.28;">Hunter's Chicken (BBQ Bacon Cheese Bake)</div>
+            <div style="font-size: 11px; color: #5a6862;">British · 668 cal · 63g protein</div>
+            <div style="display: flex; align-items: center; gap: 7px; padding-top: 2px;">
+              <div style="flex-grow: 1; height: 4px; background: #efe9d9; border-radius: 2px; overflow: hidden;"><div style="width: 87%; height: 100%; background: #E2A43C; border-radius: 2px;"></div></div>
+              <div style="flex-shrink: 0; font-size: 10.5px; font-weight: 600; color: #8a6d1f;">28.6g / $1</div>
+            </div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right; align-self: flex-start;">
+            <div style="font-size: 15px; font-weight: 700; color: #10794e;">$2.20</div>
+            <div style="font-size: 10px; color: #5a6862;">/ serving</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px; padding: 11px 15px;">
+          <span style="flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'EB Garamond', Georgia, serif; font-size: 16px; font-weight: 600; background: #e4f0e9; color: #0c5c3b;">I</span>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 14px; font-weight: 600; line-height: 1.28;">Chicken Parmesan Pasta</div>
+            <div style="font-size: 11px; color: #5a6862;">Italian-American · 534 cal · 44g protein</div>
+            <div style="display: flex; align-items: center; gap: 7px; padding-top: 2px;">
+              <div style="flex-grow: 1; height: 4px; background: #efe9d9; border-radius: 2px; overflow: hidden;"><div style="width: 58%; height: 100%; background: #c9c1ab; border-radius: 2px;"></div></div>
+              <div style="flex-shrink: 0; font-size: 10.5px; font-weight: 600; color: #8a6d1f;">19.0g / $1</div>
+            </div>
+          </div>
+          <div style="flex-shrink: 0; text-align: right; align-self: flex-start;">
+            <div style="font-size: 15px; font-weight: 700; color: #10794e;">$2.32</div>
+            <div style="font-size: 10px; color: #5a6862;">/ serving</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -336,7 +336,7 @@ $filtersBlock = '<!--TC-HUB-FILTERS-START-->' `
   + '<div class="mpr-frow"><span class="mpr-flabel">Search</span><input class="mpr-search" id="mpr-q" type="search" inputmode="search" enterkeyhint="search" placeholder="Search ' + $total + ' dinners: bulgogi, chili, casserole..." aria-label="Search recipes"></div>' `
   + '<div class="mpr-frow"><span class="mpr-flabel">Protein</span><div class="mpr-fbtns"><button class="mpr-fb is-on" data-p="all">All</button><button class="mpr-fb" data-p="chicken">Chicken <span class="mpr-fn">' + $counts.chicken + '</span></button><button class="mpr-fb" data-p="pork">Pork <span class="mpr-fn">' + $counts.pork + '</span></button><button class="mpr-fb" data-p="beef">Beef <span class="mpr-fn">' + $counts.beef + '</span></button><button class="mpr-fb" data-p="turkey">Turkey <span class="mpr-fn">' + $counts.turkey + '</span></button></div></div>' `
   + '<div class="mpr-frow"><span class="mpr-flabel">Cuisine</span><select class="mpr-sel" id="mpr-cuisine" aria-label="Cuisine"><option value="">All cuisines</option>' + $cuisOpts + '</select>' `
-  + '<span class="mpr-flabel">Sort</span><select class="mpr-sel" id="mpr-sort" aria-label="Sort recipes"><option value="cost">Cheapest first</option><option value="ppd">Most protein per dollar</option><option value="cal">Lowest calories</option></select></div>' `
+  + '<span class="mpr-flabel">Sort</span><select class="mpr-sel" id="mpr-sort" aria-label="Sort recipes"><option value="cost">Cheapest first</option><option value="ppd" selected>Most protein per dollar</option><option value="cal">Lowest calories</option></select></div>' `
   + '<div class="mpr-frow"><span class="mpr-flabel">Calories</span><div class="mpr-cal-ctl"><input type="number" id="mpr-cmin" placeholder="min" min="0" step="10" inputmode="numeric" aria-label="Minimum calories"><span class="sep">to</span><input type="number" id="mpr-cmax" placeholder="max" min="0" step="10" inputmode="numeric" aria-label="Maximum calories"><span class="unit">cal / serving</span><button class="mpr-clear" id="mpr-clear" type="button">Reset</button></div></div>' `
   + '</div><p class="mpr-count" id="mpr-count" aria-live="polite"></p><!--TC-HUB-FILTERS-END-->'
 
@@ -475,7 +475,7 @@ $hubJs = Compress-TcAsset ((Get-TcMotionJs) + @'
   if(cuisine) cuisine.addEventListener("change",function(){ apply(true); });
   if(sortSel) sortSel.addEventListener("change",function(){ apply(true); });
   cmin.addEventListener("input",function(){ apply(false); }); cmax.addEventListener("input",function(){ apply(false); });
-  clear.addEventListener("click",function(){ cmin.value=""; cmax.value=""; if(q)q.value=""; if(cuisine)cuisine.value=""; if(sortSel)sortSel.value="cost"; setProtein("all"); apply(true); });
+  clear.addEventListener("click",function(){ cmin.value=""; cmax.value=""; if(q)q.value=""; if(cuisine)cuisine.value=""; if(sortSel)sortSel.value="ppd"; setProtein("all"); apply(true); });
 
   // TONIGHT MODE: the presets VISIBLY drive the real controls, so a first-timer learns the filter panel
   // by watching it move rather than by reading a label.

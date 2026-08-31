@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, "Segoe UI", system-ui, sans-serif; background: #fffdf6; color: #16263F; -webkit-font-smoothing: antialiased; }
+    a { color: #1E3A5F; text-decoration: none; } a:hover { color: #101B2E; }
+    button { font: inherit; color: inherit; }
+    .noscroll::-webkit-scrollbar { width: 0; height: 0; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #fffdf6; overflow: hidden;">
+
+  <div style="display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; border-bottom: 1px solid #e7e2d4;">
+    <a href="#" style="display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-left: -6px; border-radius: 9px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#16263F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5L8 12l6.5 6.5"></path></svg>
+    </a>
+    <div style="flex-grow: 1; min-width: 0;">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 21px; font-weight: 600; letter-spacing: -0.01em;">Your trip</div>
+    </div>
+    <a href="#" style="font-size: 12.5px; font-weight: 600; color: #1E3A5F;">Edit list</a>
+  </div>
+
+  <div class="noscroll" style="flex-grow: 1; overflow-y: auto;">
+
+    <div style="padding: 16px 16px 4px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #5a6862; padding-bottom: 10px;">How many stores will you visit?</div>
+      <div style="display: flex; gap: 8px;">
+        <sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+          <button onClick="{{ o.pick }}" style="{{ o.style }}">
+            <span style="font-size: 19px; font-weight: 700; line-height: 1;">{{ o.n }}</span>
+            <span style="font-size: 11px; font-weight: 500; opacity: 0.78;">{{ o.total }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="margin: 16px 16px 4px; background: {{ verdictBg }}; border: 1px solid {{ verdictBorder }}; border-radius: 14px; padding: 15px 16px;">
+      <div style="display: flex; align-items: baseline; gap: 8px; padding-bottom: 5px;">
+        <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 30px; font-weight: 700; color: #10794e; letter-spacing: -0.02em; line-height: 1;">{{ total }}</div>
+        <div style="font-size: 12.5px; color: #5a6862;">for 3 items</div>
+      </div>
+      <div style="font-size: 13px; line-height: 1.45; color: #16263F; text-wrap: pretty;">{{ verdict }}</div>
+    </div>
+
+    <sc-for list="{{ legs }}" as="leg" hint-placeholder-count="2">
+      <div style="padding: 18px 16px 0;">
+
+        <div style="display: flex; align-items: center; gap: 9px; padding-bottom: 10px;">
+          <span style="{{ leg.dotStyle }}"></span>
+          <div style="flex-grow: 1; font-size: 15px; font-weight: 700; letter-spacing: -0.01em;">{{ leg.store }}</div>
+          <div style="font-size: 14px; font-weight: 700; color: #10794e;">{{ leg.subtotal }}</div>
+        </div>
+
+        <div style="border: 1px solid #e7e2d4; border-radius: 12px; overflow: hidden; background: #ffffff;">
+          <sc-for list="{{ leg.items }}" as="it" hint-placeholder-count="2">
+            <div style="display: flex; align-items: center; gap: 11px; padding: 12px 14px; border-bottom: 1px solid {{ it.rule }};">
+              <span style="flex-shrink: 0; width: 19px; height: 19px; border-radius: 5px; border: 1.5px solid #ccc4ae; background: #fffdf6;"></span>
+              <div style="flex-grow: 1; min-width: 0; font-size: 14px; font-weight: 500; line-height: 1.3; text-wrap: pretty;">{{ it.name }}</div>
+              <div style="flex-shrink: 0; text-align: right;">
+                <div style="font-size: 14px; font-weight: 700; color: #16263F;">{{ it.price }}</div>
+                <div style="font-size: 10.5px; color: #5a6862;">{{ it.unit }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+      </div>
+    </sc-for>
+
+    <div style="padding: 20px 16px 8px;">
+      <div style="font-size: 11.5px; line-height: 1.5; color: #5a6862; text-wrap: pretty;">Per-unit shelf prices from this morning's check. Register totals vary with package size.</div>
+    </div>
+
+    <div style="height: 20px;"></div>
+
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{
+  "stores": {"editor": "range", "min": 1, "max": 3, "step": 1, "default": 2, "section": "Trip"}
+}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { n: null };
+  }
+
+  color(s) {
+    return { 'Hy-Vee': '#c4342c', 'Aldi': '#1b64b0', 'Family Fare': '#2e7d43', 'Fareway': '#7b3fa0',
+             "Baker's": '#c56a1a', "Sam's Club": '#0b6d9e', 'Walmart': '#0f7a8c' }[s] || '#5a6862';
+  }
+
+  plan(n) {
+    if (n === 1) {
+      return { total: 6.51, legs: [
+        { store: 'Aldi', subtotal: 6.51, items: [
+          { name: 'Boneless Skinless Chicken Breast', price: '$2.19', unit: '/lb' },
+          { name: 'Large Eggs', price: '$1.66', unit: '/dozen' },
+          { name: 'Ground Turkey', price: '$2.66', unit: '/lb' }
+        ] }
+      ] };
+    }
+    return { total: 5.65, legs: [
+      { store: 'Hy-Vee', subtotal: 2.99, items: [
+        { name: 'Boneless Skinless Chicken Breast', price: '$1.99', unit: '/lb' },
+        { name: 'Large Eggs', price: '$1.00', unit: '/dozen' }
+      ] },
+      { store: 'Aldi', subtotal: 2.66, items: [
+        { name: 'Ground Turkey', price: '$2.66', unit: '/lb' }
+      ] }
+    ] };
+  }
+
+  renderVals() {
+    const chosen = this.state.n !== null ? this.state.n : (this.props.stores ?? 2);
+    const p = this.plan(chosen);
+
+    const options = [1, 2, 3].map((n) => {
+      const t = this.plan(n).total;
+      const on = chosen === n;
+      return {
+        n: String(n),
+        total: '$' + t.toFixed(2),
+        pick: () => this.setState({ n: n }),
+        style: 'flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 4px; border-radius: 12px; cursor: pointer; '
+          + (on ? 'background: #16263F; color: #fffdf6; border: 1px solid #16263F;'
+                : 'background: #ffffff; color: #16263F; border: 1px solid #ddd6c2;')
+      };
+    });
+
+    const verdict = chosen === 1
+      ? 'One stop at Aldi. Two stops would cut it to $5.65 — 86¢ less, if the second trip is worth it to you.'
+      : chosen === 2
+        ? 'Hy-Vee has the chicken and the eggs on sale; Aldi has the turkey. This is the cheapest your list gets.'
+        : 'A third store saves nothing this week. Two stops already reach the cheapest price on every item.';
+
+    return {
+      options: options,
+      total: '$' + p.total.toFixed(2),
+      verdict: verdict,
+      verdictBg: chosen === 3 ? '#fdf1d9' : '#fdf8ec',
+      verdictBorder: chosen === 3 ? '#E2A43C' : '#e7e2d4',
+      legs: p.legs.map((l) => ({
+        store: l.store,
+        subtotal: '$' + l.subtotal.toFixed(2),
+        dotStyle: 'width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; background: ' + this.color(l.store) + ';',
+        items: l.items.map((it, i) => Object.assign({}, it, { rule: i === l.items.length - 1 ? 'transparent' : '#f0ebdd' }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

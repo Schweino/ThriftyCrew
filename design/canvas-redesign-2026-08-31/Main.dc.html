@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, "Segoe UI", system-ui, sans-serif; background: #fffdf6; color: #16263F; -webkit-font-smoothing: antialiased; }
+    a { color: #1E3A5F; text-decoration: none; } a:hover { color: #101B2E; }
+    input, button { font: inherit; color: inherit; }
+    .noscroll::-webkit-scrollbar { width: 0; height: 0; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #fffdf6; overflow: hidden;">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 10px; background: #fffdf6; border-bottom: 1px solid #e7e2d4;">
+
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;">Omaha grocery board</div>
+      <div style="font-size: 11px; color: #5a6862; white-space: nowrap;">6:12am</div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 13px; background: #ffffff; border: 1px solid #ddd6c2; border-radius: 10px;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#5a6862" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input value="{{ q }}" onInput="{{ onQuery }}" placeholder="Search 637 items" style="flex-grow: 1; min-width: 0; border: 0; outline: none; background: transparent; font-size: 15px;">
+    </div>
+
+    <div style="display: flex; gap: 7px;">
+      <sc-for list="{{ views }}" as="v" hint-placeholder-count="3">
+        <button onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</button>
+      </sc-for>
+    </div>
+
+    <div class="noscroll" style="display: flex; gap: 7px; overflow-x: auto; margin: 0 -16px; padding: 1px 16px 2px;">
+      <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+        <button onClick="{{ c.pick }}" style="{{ c.style }}">{{ c.label }}</button>
+      </sc-for>
+    </div>
+
+  </div>
+
+  <div class="noscroll" style="flex-grow: 1; overflow-y: auto; background: #fffdf6;">
+
+    <div style="padding: 11px 16px 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #5a6862;">{{ resultLabel }}</div>
+
+    <sc-for list="{{ rows }}" as="item" hint-placeholder-count="6">
+      <div style="border-bottom: 1px solid #e7e2d4; background: {{ item.bg }};">
+
+        <div style="display: flex; align-items: center; gap: 11px; padding: {{ padY }} 16px;">
+
+          <button onClick="{{ item.togglePick }}" style="flex-shrink: 0; width: 44px; height: 44px; margin: -10px 0 -10px -11px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <span style="{{ item.boxStyle }}">
+              <sc-if value="{{ item.picked }}" hint-placeholder-val="{{ true }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fffdf6" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.5 5.5L20 6.5"></path></svg>
+              </sc-if>
+            </span>
+          </button>
+
+          <button onClick="{{ item.toggleOpen }}" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 11px; border: 0; background: transparent; padding: 0; text-align: left; cursor: pointer;">
+
+            <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-size: {{ nameSize }}; font-weight: 600; line-height: 1.28; color: #16263F; text-wrap: pretty;">{{ item.name }}</div>
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #5a6862;">
+                  <span style="{{ item.dotStyle }}"></span>{{ item.store }}
+                </span>
+                <sc-if value="{{ item.sale }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; color: #0c5c3b; background: #e4f0e9; border-radius: 4px; padding: 2px 5px;">SALE</span>
+                </sc-if>
+                <sc-if value="{{ item.record }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; color: #8a6d1f; background: #fdf1d9; border-radius: 4px; padding: 2px 5px;">RECORD LOW</span>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 1px;">
+              <div style="font-size: 17px; font-weight: 700; color: #10794e; letter-spacing: -0.01em; white-space: nowrap;">{{ item.price }}</div>
+              <div style="font-size: 11px; color: #5a6862;">{{ item.unit }}</div>
+            </div>
+
+            <span style="{{ item.chevStyle }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5a6862" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"></path></svg>
+            </span>
+
+          </button>
+
+        </div>
+
+        <sc-if value="{{ item.open }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 4px 16px 15px 55px; background: #fdf8ec;">
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #5a6862; padding-bottom: 9px;">Every store, today</div>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <sc-for list="{{ item.stores }}" as="st" hint-placeholder-count="4">
+                <div style="display: flex; align-items: center; gap: 9px;">
+                  <div style="flex-shrink: 0; width: 74px; font-size: 12px; color: {{ st.nameColor }}; font-weight: {{ st.weight }}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ st.store }}</div>
+                  <div style="flex-grow: 1; height: 7px; background: #efe9d9; border-radius: 4px; overflow: hidden;">
+                    <div style="width: {{ st.bar }}; height: 100%; background: {{ st.barColor }}; border-radius: 4px;"></div>
+                  </div>
+                  <div style="flex-shrink: 0; width: 62px; text-align: right; font-size: 12px; font-weight: {{ st.weight }}; color: {{ st.priceColor }}; white-space: nowrap;">{{ st.price }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; gap: 8px; padding-top: 13px;">
+              <a href="#" style="font-size: 12px; font-weight: 600; color: #1E3A5F; border-bottom: 1px solid #ddd6c2; padding-bottom: 1px;">Price history</a>
+              <span style="font-size: 12px; color: #5a6862;">·</span>
+              <a href="#" style="font-size: 12px; font-weight: 600; color: #1E3A5F; border-bottom: 1px solid #ddd6c2; padding-bottom: 1px;">Alert me at a record low</a>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </sc-for>
+
+    <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 44px 24px; text-align: center; color: #5a6862; font-size: 14px;">Nothing matches that yet.</div>
+    </sc-if>
+
+    <div style="height: 96px;"></div>
+
+  </div>
+
+  <sc-if value="{{ hasPicks }}" hint-placeholder-val="{{ true }}">
+    <div style="flex-shrink: 0; margin: -88px 12px 12px; background: #16263F; border-radius: 14px; padding: 13px 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 6px 22px rgba(16,38,63,0.26);">
+      <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+        <div style="font-size: 14px; font-weight: 600; color: #fffdf6;">{{ pickLabel }}</div>
+        <div style="font-size: 11.5px; color: #b9c4d3;">{{ pickSub }}</div>
+      </div>
+      <a href="#" style="flex-shrink: 0; background: #E2A43C; color: #16263F; font-size: 13.5px; font-weight: 700; padding: 11px 15px; border-radius: 10px;">Split my trip</a>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{
+  "density": {"editor": "enum", "options": ["comfortable", "compact"], "default": "comfortable", "section": "Layout"},
+  "openFirst": {"editor": "boolean", "default": true, "section": "Layout"}
+}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { q: '', view: 'sale', cat: 'all', open: null, picked: { 'chicken-breast': 1, 'eggs': 1, 'ground-turkey': 1 } };
+  }
+
+  data() {
+    return [
+      { id: 'chicken-breast', name: 'Boneless Skinless Chicken Breast', cat: 'Meat', unit: '/lb', sale: true, record: false,
+        stores: [['Hy-Vee', 1.99], ['Aldi', 2.19], ['Walmart', 2.23], ["Sam's Club", 2.48], ["Baker's", 2.59], ['Family Fare', 2.99], ['Fareway', 4.99]] },
+      { id: 'whole-chicken', name: 'Whole Chicken', cat: 'Meat', unit: '/lb', sale: true, record: true,
+        stores: [['Hy-Vee', 0.99], ['Walmart', 1.32], ["Baker's", 1.49], ['Family Fare', 1.79], ['Aldi', 1.81], ["Sam's Club", 2.38], ['Fareway', 2.49]] },
+      { id: 'ground-beef-8020', name: '80/20 Ground Beef', cat: 'Meat', unit: '/lb', sale: false, record: false,
+        stores: [["Sam's Club", 4.77], ['Walmart', 4.94], ["Baker's", 4.99], ['Family Fare', 5.99], ['Fareway', 5.99], ['Aldi', 6.19], ['Hy-Vee', 6.83]] },
+      { id: 'ground-turkey', name: 'Ground Turkey', cat: 'Meat', unit: '/lb', sale: false, record: false,
+        stores: [['Aldi', 2.66], ["Baker's", 3.33], ['Walmart', 3.82], ["Sam's Club", 4.33], ['Hy-Vee', 4.69], ['Fareway', 5.49], ['Family Fare', 5.99]] },
+      { id: 'pork-shoulder', name: 'Pork Shoulder / Butt', cat: 'Meat', unit: '/lb', sale: false, record: false,
+        stores: [["Sam's Club", 1.94], ['Fareway', 1.99], ['Walmart', 2.24], ['Hy-Vee', 2.69], ['Aldi', 2.99], ["Baker's", 2.99], ['Family Fare', 4.49]] },
+      { id: 'firm-tofu', name: 'Firm Tofu', cat: 'Meat', unit: '/oz', sale: false, record: true, cents: true,
+        stores: [['Aldi', 0.11], ["Baker's", 0.14], ['Hy-Vee', null], ['Family Fare', null], ['Fareway', null], ["Sam's Club", null], ['Walmart', null]] },
+      { id: 'eggs', name: 'Large Eggs', cat: 'Dairy', unit: '/dozen', sale: true, record: false,
+        stores: [['Hy-Vee', 1.00], ['Walmart', 1.62], ['Fareway', 1.65], ['Aldi', 1.66], ["Baker's", 1.75], ["Sam's Club", 1.96], ['Family Fare', 2.36]] },
+      { id: 'butter', name: 'Butter', cat: 'Dairy', unit: '/lb', sale: false, record: false,
+        stores: [["Sam's Club", 2.56], ['Aldi', 2.89], ['Walmart', 2.98], ['Fareway', 3.48], ["Baker's", 3.49], ['Hy-Vee', 3.99], ['Family Fare', 5.39]] },
+      { id: 'cottage-cheese', name: 'Cottage Cheese', cat: 'Dairy', unit: '/oz', sale: false, record: false, cents: true,
+        stores: [['Walmart', 0.11], ['Aldi', 0.12], ["Baker's", 0.12], ['Hy-Vee', 0.13], ["Sam's Club", 0.15], ['Family Fare', 0.15], ['Fareway', 0.16]] },
+      { id: 'block-cheese', name: 'Block Cheese', cat: 'Dairy', unit: '/oz', sale: false, record: false, cents: true,
+        stores: [["Sam's Club", 0.18], ['Walmart', 0.22], ['Aldi', 0.22], ["Baker's", 0.23], ['Hy-Vee', 0.28], ['Family Fare', null], ['Fareway', null]] }
+    ];
+  }
+
+  storeColor(s) {
+    return { 'Hy-Vee': '#c4342c', 'Aldi': '#1b64b0', 'Family Fare': '#2e7d43', 'Fareway': '#7b3fa0',
+             "Baker's": '#c56a1a', "Sam's Club": '#0b6d9e', 'Walmart': '#0f7a8c' }[s] || '#5a6862';
+  }
+
+  money(v, cents) {
+    if (v === null) return 'not carried';
+    if (cents) return Math.round(v * 100) + '¢';
+    return '$' + v.toFixed(2);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const density = this.props.density ?? 'comfortable';
+    const compact = density === 'compact';
+    const all = this.data();
+    const q = st.q.trim().toLowerCase();
+
+    const views = [
+      { key: 'sale', label: 'On sale · 37' },
+      { key: 'record', label: 'Record lows · 2' },
+      { key: 'all', label: 'All · 637' }
+    ].map((v) => ({
+      label: v.label,
+      pick: () => this.setState({ view: v.key, cat: 'all' }),
+      style: 'flex-grow: 1; height: 34px; padding: 0 6px; border-radius: 9px; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; '
+        + (st.view === v.key
+          ? 'background: #16263F; color: #fffdf6; border: 1px solid #16263F;'
+          : 'background: transparent; color: #16263F; border: 1px solid #ddd6c2;')
+    }));
+
+    const cats = ['All', 'Meat', 'Dairy', 'Produce', 'Bakery', 'Pantry', 'Frozen', 'Household'].map((c) => ({
+      label: c,
+      pick: () => this.setState({ cat: c === 'All' ? 'all' : c }),
+      style: 'flex-shrink: 0; height: 30px; padding: 0 12px; border-radius: 8px; font-size: 12.5px; font-weight: 500; cursor: pointer; white-space: nowrap; '
+        + ((st.cat === c || (c === 'All' && st.cat === 'all'))
+          ? 'background: #fdf1d9; color: #8a6d1f; border: 1px solid #E2A43C;'
+          : 'background: transparent; color: #5a6862; border: 1px solid #e7e2d4;')
+    }));
+
+    let list = all;
+    if (q) list = list.filter((i) => i.name.toLowerCase().includes(q));
+    else {
+      if (st.view === 'sale') list = list.filter((i) => i.sale);
+      if (st.view === 'record') list = list.filter((i) => i.record);
+      if (st.cat !== 'all') list = list.filter((i) => i.cat === st.cat);
+    }
+
+    const openId = st.open !== null ? st.open : (this.props.openFirst !== false && !q ? (list[0] && list[0].id) : null);
+
+    const rows = list.map((i) => {
+      const best = i.stores[0];
+      const priced = i.stores.filter((s) => s[1] !== null);
+      const max = priced.length ? priced[priced.length - 1][1] : 1;
+      const picked = !!st.picked[i.id];
+      const open = openId === i.id;
+      return {
+        name: i.name,
+        store: best[0],
+        price: this.money(best[1], i.cents),
+        unit: i.unit,
+        sale: i.sale,
+        record: i.record,
+        picked: picked,
+        open: open,
+        bg: picked ? '#fdf8ec' : 'transparent',
+        dotStyle: 'width: 7px; height: 7px; border-radius: 50%; background: ' + this.storeColor(best[0]) + '; flex-shrink: 0;',
+        boxStyle: 'width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; '
+          + (picked ? 'background: #10794e; border: 1px solid #10794e;' : 'background: #ffffff; border: 1.5px solid #ccc4ae;'),
+        chevStyle: 'flex-shrink: 0; display: flex; transition: transform 200ms cubic-bezier(0.2,0,0,1); transform: rotate(' + (open ? '180deg' : '0deg') + ');',
+        togglePick: () => {
+          const p = Object.assign({}, this.state.picked);
+          if (p[i.id]) delete p[i.id]; else p[i.id] = 1;
+          this.setState({ picked: p });
+        },
+        toggleOpen: () => this.setState({ open: open ? '' : i.id }),
+        stores: i.stores.map((s, n) => ({
+          store: s[0],
+          price: this.money(s[1], i.cents),
+          bar: s[1] === null ? '0%' : Math.max(6, Math.round((s[1] / max) * 100)) + '%',
+          barColor: n === 0 ? '#10794e' : (s[1] === null ? 'transparent' : '#c9c1ab'),
+          nameColor: s[1] === null ? '#a49e8d' : '#16263F',
+          priceColor: n === 0 ? '#10794e' : (s[1] === null ? '#a49e8d' : '#5a6862'),
+          weight: n === 0 ? '700' : '500'
+        }))
+      };
+    });
+
+    const nPicked = Object.keys(st.picked).length;
+    const label = q ? ('Matching “' + st.q.trim() + '” · ' + list.length)
+      : (st.view === 'sale' ? 'On sale this week' : st.view === 'record' ? 'At a record low' : 'All items, cheapest store first');
+
+    return {
+      q: st.q,
+      onQuery: (e) => this.setState({ q: e.target.value, open: '' }),
+      views: views,
+      cats: cats,
+      rows: rows,
+      empty: rows.length === 0,
+      resultLabel: label,
+      padY: compact ? '9px' : '13px',
+      nameSize: compact ? '14px' : '15px',
+      hasPicks: nPicked > 0,
+      pickLabel: nPicked + (nPicked === 1 ? ' item on your list' : ' items on your list'),
+      pickSub: 'Cheapest across 2 stores · save $4.18'
+    };
+  }
+}
+</script>
+</body>
+</html>
