@@ -27,7 +27,17 @@
   exist precisely so that cannot happen. Duplicated tracing is an accepted drift risk here; a broken
   freshness watcher is not.
 #>
-param([int]$WindowDays = 0, [int]$WarnAgeDays = 10, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
+# WHY WarnAgeDays IS 70 AND NOT 10 (recalibrated 2026-08-31). It was set to 10 on 2026-07-23 when the
+# carry window was FOURTEEN days: warning at 10 of 14 gave four days to act, which is what an early
+# warning is for. The window became 90 days on 2026-08-20 and this number came through unchanged - the
+# 08-22 commit that rewrote the header prose to say "no 14-day board window survives" re-added the param
+# line byte-identical. At 10 of 90 it fires at 11% of the window instead of 71%, so it is on almost
+# permanently and says nothing: Sam's Club sat WARNING at 16 days old with ~74 days of headroom and 0 of
+# 373 attributed cells expiring, and a session read that as a full pull being due.
+# 70 restores the intent on the 90-day window: 20 days of notice, which comfortably fits a ~75-minute
+# full pull that runs one store per day and must dodge ad-rollover days. The CELL check below is the
+# real measure of collapse risk and is unchanged; this clock is the coarse backstop behind it.
+param([int]$WindowDays = 0, [int]$WarnAgeDays = 70, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
 $ErrorActionPreference = 'Stop'
 
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
