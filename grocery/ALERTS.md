@@ -26,7 +26,14 @@ system can still raise, what it means under the three `TC Grocery *` tasks, and 
 ## Raised by today's schedule
 
 ### `TC Grocery Capture Watchdog 0930` (`capture-watchdog.ps1`) - ONE email per day, all findings in it
-- **Grocery capture watchdog: N issue(s)** - any of: a TC task missing/disabled/never fired/failed; the
+Runs at **10:30** since 2026-08-31 (the task NAME still says 0930 and is deliberately not renamed - it is
+the key `expected-automations.json` and `audit-script-census.ps1` match on). It was moved behind the 09:45
+alert-triage pass so it asks its question AFTER the day's blockers have had a chance to be cleared: a
+non-zero exit from the 08:00 job is usually the guards refusing to publish, and reporting that as FAILED
+about a board triage has since rebuilt and shipped is how a real alert gets trained into noise. Such a run
+is now reported as SUPERSEDED with both facts on the record (see `Test-RunSuperseded`), never suppressed.
+- **Grocery capture watchdog: N issue(s)** - any of: a TC task missing/disabled/never fired/failed AND no
+  board rebuilt+published since; the
   run record (`out\logs\capture-run-status.json`) shows a run stuck short of `complete`; no
   `comparison-<today>.json`; `public\board.json` older than the board; an ad window closed with no
   pull; a `browser-capture-due` flag older than 1.5 days (walled stores aging).

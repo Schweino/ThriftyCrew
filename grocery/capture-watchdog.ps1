@@ -1,4 +1,4 @@
-﻿<#
+<#
   capture-watchdog.ps1 - did today's capture actually happen, and did it publish?
 
   WHY THIS EXISTS. The old SMP Grocery Failure Watchdog watched the old jobs; those
@@ -77,6 +77,37 @@ function Test-BoardStale {
   if ($MaxHours -le 0) { $MaxHours = $script:BoardStaleHours }
   if (-not $BoardWritten -or $BoardWritten.Year -lt 2000) { return $false }
   return ((($Now - $BoardWritten).TotalHours) -gt $MaxHours)
+}
+
+function Test-RunSuperseded {
+  <#
+    .SYNOPSIS Did the board get rebuilt AND shipped after a task exited non-zero?
+    .DESCRIPTION
+      Pure, so the -SelfTest fixtures can drive it with frozen timestamps.
+
+      WHY (2026-08-31). The 08:00 task exits 1 whenever guards refuse to publish - which is the guard
+      doing its job, not the capture failing. This watchdog runs at 09:30 and reported that exit code
+      as "FAILED", so on a day the blocker was found and cleared in between, the email announced a
+      failure about a board that was live, current and correct. Measured that morning: the run exited 1
+      at 08:00, the board was rebuilt at 09:26 and published, and this watchdog's OWN healthy lines
+      said so three rows below the FAILED it had just written. An alert that contradicts itself in the
+      same message is how a real signal gets trained into noise.
+
+      SUPERSEDED IS NOT THE SAME AS FINE, and this deliberately does not suppress. The caller reports
+      it as a resolved run with both facts on the record - what exited, and what fixed it - so a day
+      that needed a human still reads differently from a day that just worked.
+
+      BOTH halves are required. A board rebuilt but NOT shipped is the "rebuilt but never published"
+      defect section 4 exists to catch, so it must not count as superseding anything; that is why the
+      publish time is checked against the board rather than against the run.
+  #>
+  param($RunAt, $BoardWritten, $PublishedWritten, [int]$PublishSlackMinutes = 30)
+  if ($null -eq $RunAt -or $null -eq $BoardWritten -or $null -eq $PublishedWritten) { return $false }
+  $r = [datetime]$RunAt; $b = [datetime]$BoardWritten; $p = [datetime]$PublishedWritten
+  if ($r.Year -lt 2000 -or $b.Year -lt 2000 -or $p.Year -lt 2000) { return $false }
+  if ($b -le $r) { return $false }                                  # board is no newer than the failed run
+  if ($p -lt $b.AddMinutes(-$PublishSlackMinutes)) { return $false } # rebuilt but never shipped
+  return $true
 }
 
 function Test-FlagStoreCold {
@@ -214,6 +245,31 @@ if ($SelfTest) {
     Write-Output 'FAIL  an unparseable flag naming no store read as finished - a file it could not read would be deleted'; $fail++
   } else { Write-Output 'ok    a flag naming no store is never treated as finished' }
 
+  # ---- Test-RunSuperseded: a non-zero exit judged on OUTCOME, not on the exit code ---------------------
+  # THE FOUNDING DAY, to the minute. 2026-08-31: the 08:00 task exited 1 because guards refused to publish
+  # (the same log says "lanes run=3 failed=0"), the blocker was cleared, and the board was rebuilt 09:26 and
+  # published. At 09:32 this watchdog emailed "FAILED" about a board that was live and correct.
+  $r0800 = [datetime]'2026-08-31 08:00'
+  if (Test-RunSuperseded -RunAt $r0800 -BoardWritten ([datetime]'2026-08-31 09:26') -PublishedWritten ([datetime]'2026-08-31 09:28')) {
+    Write-Output 'ok    a run whose board was rebuilt and shipped after it reads as SUPERSEDED'
+  } else { Write-Output 'FAIL  the founding case still reads as a live failure - the 09:30 email contradicts its own healthy lines'; $fail++ }
+  # MUST-FIRE TWINS: the states that are genuinely still broken and must keep paging.
+  if (Test-RunSuperseded -RunAt $r0800 -BoardWritten ([datetime]'2026-08-31 07:10') -PublishedWritten ([datetime]'2026-08-31 07:12')) {
+    Write-Output 'FAIL  a board OLDER than the failed run was accepted as superseding it'; $fail++
+  } else { Write-Output 'ok    a board older than the failed run supersedes nothing' }
+  if (Test-RunSuperseded -RunAt $r0800 -BoardWritten ([datetime]'2026-08-31 09:26') -PublishedWritten ([datetime]'2026-08-30 09:28')) {
+    Write-Output 'FAIL  rebuilt-but-never-published counted as superseded - that is the exact defect section 4 exists for'; $fail++
+  } else { Write-Output 'ok    a board rebuilt but NOT shipped does not supersede a failure' }
+  if (Test-RunSuperseded -RunAt $r0800 -BoardWritten $null -PublishedWritten ([datetime]'2026-08-31 09:28')) {
+    Write-Output 'FAIL  a missing board read as superseding'; $fail++
+  } else { Write-Output 'ok    a missing board supersedes nothing (unprovable is not resolved)' }
+  # CLEAN TWIN: publish a few minutes BEFORE the board write still counts - the ship path writes
+  # public\board.json and the comparison seconds apart and their order is not guaranteed, which is the same
+  # 30-minute slack section 4 already allows. Without it every healthy day would read as a live failure.
+  if (Test-RunSuperseded -RunAt $r0800 -BoardWritten ([datetime]'2026-08-31 09:26') -PublishedWritten ([datetime]'2026-08-31 09:25')) {
+    Write-Output 'ok    a publish minutes either side of the board write still counts as shipped'
+  } else { Write-Output 'FAIL  the publish/board write-order slack is gone - healthy days will page'; $fail++ }
+
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
 }
@@ -229,6 +285,9 @@ try { $hbOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path 
 $TASKS = @('TC Grocery Ad Pulls 0700', 'TC Grocery Daily Capture 0800')
 $findings = New-Object System.Collections.Generic.List[string]
 $ok = New-Object System.Collections.Generic.List[string]
+# Tasks that exited non-zero, held until sections 3 and 4 can say whether the board was rebuilt and
+# shipped after them. See the note at the deferral below.
+$failedTasks = New-Object System.Collections.Generic.List[object]
 
 # ---- 1 + 2. the schedule, and whether it fired ------------------------------
 foreach ($name in $TASKS) {
@@ -277,7 +336,13 @@ foreach ($name in $TASKS) {
   } elseif ($isDaily -and -not $ranToday) {
     [void]$findings.Add("DID NOT RUN: '$name' last ran $last - nothing captured today.")
   } elseif ($rc -ne 0) {
-    [void]$findings.Add("FAILED: '$name' last run $last exited $rc.")
+    # DEFERRED ON PURPOSE (2026-08-31). A non-zero exit here is usually the guards refusing to publish,
+    # which is the guard WORKING - and by the time this runs at 09:30 the blocker may already have been
+    # cleared and the board shipped. Reporting the stale exit code as FAILED then emails a failure about a
+    # board that is live and correct, which is how a real alert gets trained into noise. The facts that
+    # settle it (was the board rebuilt after this run, and did it ship) are computed in sections 3 and 4
+    # below, so the verdict waits for them rather than looking them up a second time here.
+    [void]$failedTasks.Add([pscustomobject]@{ name = $name; last = $last; rc = $rc; at = $last })
   } else {
     [void]$ok.Add("$name ran $last rc=$rc")
   }
@@ -347,6 +412,22 @@ if ($cmp -and (Test-Path $cmp) -and (Test-Path $pub)) {
     [void]$findings.Add("NOT PUBLISHED: public\board.json is $([int]($cT - $pT).TotalMinutes) min older than today's comparison. The board was rebuilt but never shipped.")
   } else {
     [void]$ok.Add('public\board.json is current with the comparison')
+  }
+}
+
+# ---- 4b. the deferred verdict on tasks that exited non-zero (2026-08-31) -----
+# Sections 3 and 4 have now established when the newest board was written and whether it shipped, so a
+# non-zero exit can finally be judged on OUTCOME rather than on its exit code alone - which is what the
+# header of this file says it is for ("IT CHECKS OUTCOMES, NOT JUST EXIT CODES"). A run whose board was
+# subsequently rebuilt AND published was superseded: still worth saying, because it needed something to
+# happen, but it is not a live failure and must not read as one.
+$boardW = if ($newest) { $newest.LastWriteTime } else { $null }
+$pubW   = if ($pub -and (Test-Path $pub)) { (Get-Item $pub).LastWriteTime } else { $null }
+foreach ($ft in $failedTasks) {
+  if (Test-RunSuperseded -RunAt $ft.at -BoardWritten $boardW -PublishedWritten $pubW) {
+    [void]$ok.Add("$($ft.name) exited $($ft.rc) at $($ft.last) - SUPERSEDED: the board was rebuilt $($boardW.ToString('HH:mm')) and published after it, so the live page is current. Usually the guards refusing to ship, then the blocker cleared.")
+  } else {
+    [void]$findings.Add("FAILED: '$($ft.name)' last run $($ft.last) exited $($ft.rc), and no board has been rebuilt and published since. The live page is NOT carrying that run's work.")
   }
 }
 

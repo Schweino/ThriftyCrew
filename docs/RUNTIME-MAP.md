@@ -55,7 +55,7 @@ so any schedule appearing anywhere on the account trips `UNDECLARED CRON` on the
 | TC Grocery Ad Pulls 0700 | 7:00am | `capture-run.ps1 -Kind ad` — pulls the weekly ad for every store whose ad rolled over TODAY (capture-policy decides; a store not due is skipped, not pulled "just in case"). All stores run CONCURRENTLY, then the downstream chain: compare-deals -> guards -> publish -> recipes -> commit. |
 | TC Grocery Daily Capture 0800 | 8:00am | `capture-run.ps1 -Kind daily` — the quarterly rotation slice (total terms / 90 days, per store) plus any sale reverting today, then the same downstream chain. Ads land on different days per store, but everyday prices move daily, so this publishes too. |
 | TC Graph Nightly Matching | 9:30pm (when installed) | `graph/pipeline/nightly.ps1` — the local matching chain. Owns the GPU window end to end and hands the card back before 06:30, so the 07:00 and 08:00 jobs never find it held. BLIND-not-block at every stage; publishes nothing. |
-| TC Grocery Capture Watchdog 0930 | 9:30am | `capture-watchdog.ps1 -Alert` — asks whether the 07:00/08:00 jobs actually CAPTURED and PUBLISHED, not merely exited 0. One email, never six. |
+| TC Grocery Capture Watchdog 0930 | 10:30am (name still says 0930; it is the registry key) | `capture-watchdog.ps1 -Alert` — asks whether the 07:00/08:00 jobs actually CAPTURED and PUBLISHED, not merely exited 0. One email, never six. |
 
 **The four `SMP *` tasks that used to sit here are gone** (deleted 2026-08-20, not renamed): `SMP Bakers
 Daily Scan`, `SMP Grocery Daily Pipeline (local)` (the 8:30am run), `SMP Grocery Failure Watchdog`,
