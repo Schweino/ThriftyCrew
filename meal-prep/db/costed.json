@@ -79156,17 +79156,17 @@
     {
         "proposed_name":  "Peruvian Pollo Saltado",
         "slug":  "peruvian-pollo-saltado",
-        "cost_batch":  29.38,
-        "cost_per_serving":  2.1,
-        "cost_batch_true":  35.67,
-        "cost_per_serving_true":  2.55,
-        "cost_pantry_add":  21.56,
-        "cost_first_run":  57.23,
-        "lines_priced":  18,
-        "lines_unpriced":  0,
-        "lines_uncarried":  0,
+        "cost_batch":  26.23,
+        "cost_per_serving":  1.87,
+        "cost_batch_true":  32.52,
+        "cost_per_serving_true":  2.32,
+        "cost_pantry_add":  10.69,
+        "cost_first_run":  43.21,
+        "lines_priced":  17,
+        "lines_unpriced":  1,
+        "lines_uncarried":  1,
         "uncarried":  [
-
+                          "Aji Amarillo Paste [NOT-CARRIED]"
                       ],
         "lines":  [
                       {
@@ -79248,22 +79248,6 @@
                           "starter_cost":  2.52,
                           "starter_pkg":  "3oz shaker",
                           "starter_pkg_g":  85
-                      },
-                      {
-                          "item":  "Aji Amarillo Paste",
-                          "grams":  67,
-                          "util_cost":  3.15,
-                          "basis":  "feed:aji-amarillo-paste",
-                          "carriage":  "CARRIED",
-                          "bulk":  true,
-                          "buy_n":  null,
-                          "buy_cost":  null,
-                          "pkg":  null,
-                          "pkg_g":  null,
-                          "starter_n":  1,
-                          "starter_cost":  14.02,
-                          "starter_pkg":  "10.5oz jar",
-                          "starter_pkg_g":  298
                       },
                       {
                           "item":  "White Vinegar",
