@@ -481,7 +481,19 @@ function Test-NameOffersTwoSizes([string]$name) {
   if ($t -notmatch '\bor\b') { return $false }
   $parts = @([regex]::Split($t, '\bor\b'))
   if ($parts.Count -lt 2) { return $false }
-  $sizeRx = '(\d+(?:\.\d+)?)\s*(fl\s?oz|floz|oz|ounces?|lbs?|pounds?|gal|gallons?|qt|quarts?|pt|pints?|liters?|litres?|ml|ct|count|pk|packs?)\b'
+  $sizeRx = '(\d+(?:\.\d+)?)\s*(fl\s?oz|floz|oz|ounces?|lbs?|pounds?|gal|gallons?|qt|quarts?|pt|pints?|liters?|litres?|ml|ct|count|pk|packs?|ea|each)\b'
+  # "EACH" IS A SIZE, AND IT IS THE ONE THIS FUNCTION KEPT MISSING (2026-08-31, queue 2026-08-31-8018b5).
+  # Every unit above needs a NUMBER in front of it, so a side that says plainly "cauliflower each" stated no
+  # size at all and the either/or could never be seen. The live row:
+  #     Hy-Vee  "Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48"
+  # $3.48 buys EITHER a 3-count romaine pack OR one cauliflower. The name fallback read "3 ct", divided,
+  # and published the cheapest cauliflower in Omaha at $1.16 against a real $3.48 - and it took the CROWN,
+  # which is exactly the biased direction the note above predicts, because dividing by the other side's
+  # pack count is always the reading that looks cheapest.
+  # A bare 'each'/'ea' means a quantity of ONE, so it is recorded as 1 in BOTH counting families (a single
+  # unit is 1 ct and 1 pk) - otherwise "3 pk or ... each" would still slip through on a family mismatch.
+  # It only ever speaks when the OTHER side states a count too, so a lone "sold each" stays priceable.
+  $eachRx = '(?<![\d.])\b(?:ea|each)\b'
   # per side: unit family -> the set of numbers stated in it
   $sides = @()
   foreach ($p in $parts) {
@@ -490,9 +502,19 @@ function Test-NameOffersTwoSizes([string]$name) {
       $u = $m.Groups[2].Value -replace '\s+', ''
       $u = $u -replace '^(ounces?)$', 'oz' -replace '^(fl\s?oz)$', 'floz' -replace '^(lbs?|pounds?)$', 'lb' `
               -replace '^(gallons?|gal)$', 'gal' -replace '^(quarts?|qt)$', 'qt' -replace '^(pints?|pt)$', 'pt' `
-              -replace '^(liters?|litres?)$', 'l' -replace '^(count|ct)$', 'ct' -replace '^(packs?|pk)$', 'pk'
+              -replace '^(liters?|litres?)$', 'l' -replace '^(count|ct)$', 'ct' -replace '^(packs?|pk)$', 'pk' `
+              -replace '^(ea|each)$', 'ct'
       if (-not $byUnit.ContainsKey($u)) { $byUnit[$u] = New-Object 'System.Collections.Generic.List[string]' }
       [void]$byUnit[$u].Add($m.Groups[1].Value)
+    }
+    # a BARE 'each' (no number in front) is a count of one - see the note above. Recorded in both counting
+    # families so it can meet a 'ct' or a 'pk' on the other side; a numbered "12 ea" was already taken by
+    # $sizeRx above and normalises to ct, so this only fires for the plain word.
+    if ($p -match $eachRx) {
+      foreach ($cf in @('ct', 'pk')) {
+        if (-not $byUnit.ContainsKey($cf)) { $byUnit[$cf] = New-Object 'System.Collections.Generic.List[string]' }
+        if (-not ($byUnit[$cf] -contains '1')) { [void]$byUnit[$cf].Add('1') }
+      }
     }
     $sides += ,$byUnit
   }
@@ -582,7 +604,18 @@ function Get-UnitPrice($deal, $cat) {
   # and never for a pack_is_package commodity, exactly as the plain path below decides it.
   if ($unit -eq 'each' -and $pr.kind.pereach) {
     if ($pr.note -eq '' -and -not ($cat.PSObject.Properties['pack_is_package'] -and $cat.pack_is_package)) {
-      $pkm = Get-PackCount $deal.price_text; if (-not $pkm) { $pkm = Get-PackCount $deal.size_text }; if (-not $pkm) { $pkm = Get-PackCount $deal.name }
+      # SAME EITHER/OR REFUSAL AS THE BRANCH BELOW (2026-08-31, queue 2026-08-31-8018b5). This was the THIRD
+      # place in this function that reads a pack count and the only one with no guard at all, so the whole
+      # refusal was reachable only by rows that missed the per-each marker. The founding row carries the
+      # marker in the very word that makes it ambiguous:
+      #     "Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48"
+      # 'each' fires pereach, this line then took "3 ct" out of the name, and cauliflower published at $1.16
+      # against a real $3.48 - and it took the crown. Refusing here lets the per-each marker below answer
+      # $3.48, which is the price the ad actually states for one cauliflower.
+      $pkm = $null
+      if (-not (Test-NameOffersTwoSizes $deal.price_text)) { $pkm = Get-PackCount $deal.price_text }
+      if (-not $pkm) { $pkm = Get-PackCount $deal.size_text }
+      if ((-not $pkm) -and -not (Test-NameOffersTwoSizes $deal.name)) { $pkm = Get-PackCount $deal.name }
       if ($pkm) { return @{ unit_price=($pr.per_item/$pkm); basis="per-$pkm-pack (pack count beats the per-each marker)"; note=$pr.note } }
     }
     return @{ unit_price=$pr.per_item; basis='per-each marker'; note=$pr.note }
@@ -633,7 +666,17 @@ function Get-UnitPrice($deal, $cat) {
     # Twin Ice Pops 12-18 ct" at $2.99 read a 36-pack out of the name and published popsicles at $0.0831
     # each. The price and the size field are the store's own statements about the priced unit and are still
     # trusted; only reading a COUNT out of a name that offers two of them is refused.
-    $pk = Get-PackCount $deal.price_text; if (-not $pk) { $pk = Get-PackCount $deal.size_text }
+    # THE REFUSAL HAS TO COVER price_text TOO (2026-08-31, queue 2026-08-31-8018b5). It used to guard only
+    # the NAME fallback, on the reasoning that "the price and the size field are the store's own statements
+    # about the priced unit". That reasoning does not hold for Hy-Vee: its loader passes the WHOLE ad line as
+    # price_text (`Add-Norm $d.store $d.item $d.item ...`), so price_text IS the ambiguous prose, and the
+    # count was read out of it before the name guard was ever consulted. Live consequence:
+    #     "Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48"
+    # took "3 ct" from price_text, divided, and crowned cauliflower at $1.16 against a real $3.48.
+    # size_text stays trusted - that one really is a statement about the unit being priced, not prose.
+    $pk = $null
+    if (-not (Test-NameOffersTwoSizes $deal.price_text)) { $pk = Get-PackCount $deal.price_text }
+    if (-not $pk) { $pk = Get-PackCount $deal.size_text }
     if ((-not $pk) -and -not (Test-NameOffersTwoSizes $deal.name)) { $pk = Get-PackCount $deal.name }
     # PORTION COUNT INSIDE ONE PACKAGE IS NOT A PACK COUNT (2026-07-30, garlic bread).
     # For most 'each' commodities the count IS the unit a shopper buys - a bagel, a bun, a popsicle, an ear of
@@ -1422,6 +1465,29 @@ if ($SelfTest) {
   _Amb 'an "or" joining descriptions, sizes after it'  'Lucky Leaf Premium Strawberry Rhubarb Pie Filling Or Topping, 21 oz Can (2 Pack)' $false
   _Amb 'same row, pack count moved to the FRONT'       '( 2 Pack ) Lucky Leaf Premium Strawberry Rhubarb Pie Filling Or Topping, 21 oz Can' $false
   _Amb 'a pack count against a weight is not a choice' 'Something 2 pk or Other Thing 21 oz' $false
+  # --- 'each' is a size too (2026-08-31, queue 2026-08-31-8018b5) ------------------------------------------
+  # THE FOUNDING ROW, verbatim off the live board: $3.48 buys a 3-count romaine pack OR one cauliflower, and
+  # the name fallback took "3 ct" and published cauliflower at $1.16 - the crown, and a real $3.48.
+  _Amb 'either/or: a pack count against a bare "each"' 'Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48' $true
+  _Amb 'either/or: "each" reaches the pk family too'   'Something 3 pk or Other Thing each' $true
+  # MUST NOT FIRE. 'each' only speaks when the OTHER side states a count, so these stay priceable.
+  _Amb 'a lone "sold each" is not an alternative'      'Fresh Cauliflower or Broccoli Crown, sold each' $false
+  _Amb '"each" on BOTH sides agrees, so not ambiguous' 'Romaine Hearts each or Cauliflower each' $false
+  _Amb '"each" against a WEIGHT is not a choice'       'Something 21 oz or Other Thing each' $false
+  _Amb '"each" with no "or" is not ambiguous'          'Fresh Whole Cauliflower, each' $false
+  # 'each' must not be read out of the middle of a word ("peaches", "teach", "reach") - that would refuse
+  # half the produce aisle.
+  _Amb 'the word "peaches" does not contain an "each"' 'Peaches 3 ct or Nectarines 3 ct' $false
+  # AND THE REFUSAL MUST REACH THE PRICE, which took three tries to get right and is the point of the test.
+  # Refusing the COUNT does not make this row unpriceable: the ad states $3.48 for one cauliflower, and the
+  # per-each marker says exactly that. So the right answer is 3.48, NOT null and emphatically not 3.48/3.
+  # Both shapes are pinned, because Hy-Vee passes the whole ad line as price_text AND as name, and the
+  # count used to be read from either.
+  _Near 'cauliflower either/or prices per-each, not /3' (Get-UnitPrice (_D 'Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48' 'Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48' $null '') (_C 'each')).unit_price 3.48 0.005
+  _Near 'same row, clean price_text, still per-each'   (Get-UnitPrice (_D '$3.48' 'Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48' $null '') (_C 'each')).unit_price 3.48 0.005
+  # CLEAN TWIN: the pack count still beats the per-each marker when the name is NOT ambiguous. This is the
+  # 2026-08-22 bottled-water lesson and it must survive the refusal above.
+  _Near 'unambiguous pack count still beats per-each'  (Get-UnitPrice (_D '$3.87 each' 'Bottled Water 24 Pack' $null '') (_C 'each')).unit_price 0.1613 0.0005
   # AND THE REFUSAL MUST REACH THE PRICE, or it is decoration. Both branches of Get-UnitPrice, with the
   # size field unusable ("each") exactly as the real rows have it.
   _Null 'either/or ice cream is UNPRICED (volume)'  (Get-UnitPrice (_D '$1.99' 'Kroger Ice Cream 48 fl oz or Private Selection Ice Cream 16 fl oz' $null 'each') (_C 'floz'))

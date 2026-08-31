@@ -243,7 +243,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w2",
       "opened":  "2026-08-16T11:40:51",
-      "last_activity":  "2026-08-16T11:40:52",
+      "last_activity":  "2026-08-31T09:16:32",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -279,8 +279,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-16T11:40:52",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-31T09:16:32",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - superseded: every recipe in this wave is live in recipes-db under a later wave, so nothing is owed - the publishing wave stamped its own review. Verified 2026-08-31 against recipes-db (576 rows) slug by slug, queue 2026-08-31-cafc3e."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-31T09:16:32",
+      "abandon_reason":  "superseded: every recipe in this wave is live in recipes-db under a later wave, so nothing is owed - the publishing wave stamped its own review. Verified 2026-08-31 against recipes-db (576 rows) slug by slug, queue 2026-08-31-cafc3e."
   },
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w3",
@@ -1103,7 +1111,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w10",
       "opened":  "2026-08-28T07:53:22",
-      "last_activity":  "2026-08-28T07:53:23",
+      "last_activity":  "2026-08-31T09:16:33",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1131,8 +1139,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-28T07:53:23",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-31T09:16:33",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - superseded: every recipe in this wave is live in recipes-db under a later wave, so nothing is owed - the publishing wave stamped its own review. Verified 2026-08-31 against recipes-db (576 rows) slug by slug, queue 2026-08-31-cafc3e."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-31T09:16:33",
+      "abandon_reason":  "superseded: every recipe in this wave is live in recipes-db under a later wave, so nothing is owed - the publishing wave stamped its own review. Verified 2026-08-31 against recipes-db (576 rows) slug by slug, queue 2026-08-31-cafc3e."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w11",

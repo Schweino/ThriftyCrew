@@ -220,6 +220,22 @@ $COMMODITY_DEPT = @{
   'white-wine'         = @('pantry', 'beverages', 'beer_wine_spirits')
   'vienna-sausage'     = @('pantry', 'meat')                      # FF files Libby's tins under meat/sausage; category 'canned' allows only pantry
   'parmesan'           = @('dairy', 'deli', 'pantry')             # Our Family GRATED 16 oz is shelf-stable and sits in pantry
+  # --- reviewed 2026-08-31 (queue 2026-08-31-e6a93d), each read against its Family Fare row ---
+  # Three blocks, all RIGHT product on a shelf the map does not allow, so the standing set was about to
+  # start regrowing again - which is the state the 08-06 and 08-30 notes above both drained precisely so a
+  # genuinely new hijack cannot arrive buried in a list. Nothing here loses a department it allows today.
+  #   celery-salt    'Dan's Pantry Celery Salt' $4.99 / 12 oz, in fresh_fruits_vegetables/fresh_spices_herbs
+  #   smoked-paprika 'Sugar N Spice Paprika Smoked Pp' $2.49 / 1 oz, the SAME produce spice rack and the
+  #                  SAME brand already reviewed for bay-leaves, black-peppercorns and whole-cloves
+  # Neither of those two is even on the board (both under MinStores), so the block was costing a candidate
+  # rather than publishing a wrong cell - still worth draining, for the buried-in-a-list reason above.
+  #   pistachios     'Planters Dry Roasted Pistachios 12.75 Oz' $5.99, filed in dairy/ready_to_eat. Read the
+  #                  whole row before allowing it, because THIS is the commodity Blue Bunny ice cream
+  #                  crowned on 08-30: all five cells are real pistachios today and the crown is Sam's
+  #                  48 oz at 0.3538/oz, with the Planters row a non-crown runner-up at 0.4698.
+  'celery-salt'        = @('pantry', 'fresh_fruits_vegetables')
+  'smoked-paprika'     = @('pantry', 'fresh_fruits_vegetables')
+  'pistachios'         = @('pantry', 'beverages', 'dairy')
 }
 
 function Get-CategoryMap {

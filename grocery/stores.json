@@ -216,6 +216,11 @@
   ],
   "allowed_subsets": [
     {
+      "file": "capture-watchdog.ps1",
+      "contains": "$nbs = @{",
+      "reason": "SELF-TEST FIXTURE, not a policy list. Line 206 sits inside `if ($SelfTest)` (opens at line 131) and is the frozen newest-capture-by-store table that drives Test-FlagWorked: it proves a flag naming Walmart+Fareway reads as finished when both have a newer capture, and that a flag naming Walmart+Aldi does NOT when one is still uncaptured. That arithmetic needs a handful of sample stores and one of them deliberately stale; it does not need all seven, and adding Hy-Vee, Family Fare, Baker's and Sam's Club to it would test nothing new while making the fixture read as a store roster it is not. Reviewed 2026-08-31 (queue 2026-08-31-6e6335)."
+    },
+    {
       "file": "audit-sale-fallback.ps1",
       "contains": "$browser = @(",
       "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless"
