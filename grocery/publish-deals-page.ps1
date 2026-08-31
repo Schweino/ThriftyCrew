@@ -164,10 +164,17 @@ try {
   $nl = 0; $tot = 0
   $nlCells = New-Object System.Collections.Generic.List[string]
   $bfeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
-  $chipRx = "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>"
+  # [^>]* BEFORE the closing bracket, not a bare '>'. The chip gained a style='--bar:NN%' attribute for the
+  # ranked-bar panel on 2026-08-31 and this regex, which demanded data-pu be the LAST attribute, stopped
+  # matching every chip on the board. The gate said so out loud rather than printing a clean zero, which is
+  # the whole reason the BLIND branch below exists - but a pattern that pins the attribute ORDER will keep
+  # doing this, so it now only pins the two attributes it actually reads.
+  $chipRx = "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'[^>]*>(.*?)</div>"
   if (Test-Path $bfeed) {
     $bj = Get-Content $bfeed -Raw | ConvertFrom-Json
     foreach ($bp in $bj.PSObject.Properties) {
+      # __meta and __rows are the structured twin, not chip markup (see build-deals-page's RowStruct)
+      if (([string]$bp.Name).StartsWith('__')) { continue }
       $cid = ([string]$bp.Name) -replace '::r$',''
       foreach ($cp in [regex]::Matches([string]$bp.Value, $chipRx, 'Singleline')) { $tot++; if ($cp.Groups[2].Value -notmatch 'pg-see') { $nl++; [void]$nlCells.Add($cid + '|' + ($cp.Groups[1].Value -replace '&#39;', "'")) } }
     }

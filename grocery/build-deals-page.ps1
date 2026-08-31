@@ -689,7 +689,12 @@ function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
     # the DISPLAY string rides along deliberately. These per-unit numbers are $/lb, $/dozen, cents/oz and
     # each; a receipt that reformats them client-side is one rounding rule away from printing a different
     # price than the row above it, so the one formatter's output is what ships.
-    $p += , @($storeIx[$st], [math]::Round([double]$s.per_unit, 4), $fl, (Fmt-Price ([double]$s.per_unit) $unit))
+    #
+    # Fmt-PriceTEXT, not Fmt-Price. The html twin emits "&cent;" entities, and the trip screen puts every
+    # leg price through esc() before writing it - which is correct for a store name and fatal for an
+    # entity: "6&cent;/oz" rendered literally on the live board. The same string is also the mailto and
+    # share payload, where an entity is just as wrong. The plain-text twin exists for exactly this.
+    $p += , @($storeIx[$st], [math]::Round([double]$s.per_unit, 4), $fl, (Fmt-PriceText ([double]$s.per_unit) $unit))
   }
   $x = @()
   if ($mode -eq 'all') {
