@@ -293,6 +293,11 @@ $null = Register-Kid 'coverage-regression'  'audit-coverage-regression.ps1'  @()
 $null = Register-Kid 'pack-basis'           'audit-pack-basis.ps1'           @()
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
 $null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
+# The BROWSER-PULL JS LANE (2026-08-31). pull-agent-lib.js and the four store agents are the whole
+# capture path for the walled stores, and they decide EMPTY vs UNUSABLE - the distinction that lib's
+# own header calls the reason it exists. Until today not one line of it was tested, because every
+# -SelfTest in this tree is PowerShell and run-gates could not see the JS at all.
+$null = Register-Kid 'st-pull-agent-lib'    'test-pull-agent-lib.ps1'        @('-SelfTest')
 Pump-Kids
 
 # ---------------------------------------------------------------- 0b: the 2026-07-23 incident self-tests
@@ -308,7 +313,8 @@ foreach ($st in @(
   @{ label='multipack reject + pricing (walmart-deals)'; file='build-walmart-deals.ps1'; kid='st-walmart-deals' },
   # 2026-07-27: Walmart's own unit price backed out a 10 fl oz size for a bottle its page calls 6.8 fl oz,
   # so we published fish sauce 32% under the real shelf price. The name now wins when the two disagree.
-  @{ label='name-size vs Walmart unit price (walmart-batch)'; file='import-walmart-batch.ps1'; kid='st-walmart-batch' }
+  @{ label='name-size vs Walmart unit price (walmart-batch)'; file='import-walmart-batch.ps1'; kid='st-walmart-batch' },
+  @{ label='browser-pull JS lane (wall evidence + parse)';    file='test-pull-agent-lib.ps1';  kid='st-pull-agent-lib' }
 )) {
   try {
     $stPath = Join-Path $root $st.file

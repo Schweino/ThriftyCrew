@@ -75,7 +75,7 @@ async function samsProbe(term) {
   if (r.status === 403 || r.status === 429) return { state: 'UNUSABLE', rows: [], why: 'http ' + r.status };
   const html = await r.text();
   const low = html.slice(0, 200000).toLowerCase();
-  if (SAMS_WALL_PHRASES.some(p => low.includes(p))) return { state: 'UNUSABLE', rows: [], why: 'bot-wall' };
+  if (SAMS_WALL_PHRASES.some(p => low.includes(p))) return { state: 'UNUSABLE', rows: [], why: wallWhy(html, SAMS_WALL_PHRASES) };
 
   const m = html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
   if (!m) return { state: 'UNUSABLE', rows: [], why: 'no-nextdata' };

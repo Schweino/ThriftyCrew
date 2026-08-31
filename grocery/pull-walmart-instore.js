@@ -53,7 +53,7 @@ async function walmartProbe(term) {
   const html = await r.text();
   const low = html.slice(0, 200000).toLowerCase();
   if (WALMART_WALL_PHRASES.some(p => low.includes(p))) {
-    return { state: 'UNUSABLE', rows: [], why: 'bot-wall' };
+    return { state: 'UNUSABLE', rows: [], why: wallWhy(html, WALMART_WALL_PHRASES) };
   }
 
   const m = html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);

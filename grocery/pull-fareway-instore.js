@@ -68,8 +68,12 @@ async function farewayProbe(term) {
   const r = await fetch(url, { credentials: 'include' });
   if (r.status === 429 || r.status === 403) return { state: 'UNUSABLE', rows: [], why: 'http ' + r.status };
   const html = await r.text();
-  if (/unusual traffic|are you a robot|px-captcha/i.test(html.slice(0, 200000))) {
-    return { state: 'UNUSABLE', rows: [], why: 'bot-wall' };
+  // Named phrases rather than an inline regex, so wallWhy() can say WHICH one matched and show its
+  // surrounding text. A verdict of bare 'bot-wall' threw its own evidence away.
+  const FAREWAY_WALL_PHRASES = ['unusual traffic', 'are you a robot', 'px-captcha'];
+  const farewayHead = html.slice(0, 200000);
+  if (FAREWAY_WALL_PHRASES.some(p => farewayHead.toLowerCase().includes(p))) {
+    return { state: 'UNUSABLE', rows: [], why: wallWhy(farewayHead, FAREWAY_WALL_PHRASES) };
   }
 
   const rows = [];

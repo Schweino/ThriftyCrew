@@ -73,6 +73,37 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
  * Publish the wall state, show the in-tab overlay, and block until the driver (or a click)
  * answers. Resolves 'done' (cleared, resume) or 'stop' (end the run cleanly).
  */
+/*
+  wallWhy(html, phrases) -- a bot-wall verdict that keeps its own evidence.
+
+  WHY (2026-08-31). Every agent recorded a wall as the bare string 'bot-wall'. That is a verdict with
+  the evidence thrown away: afterwards nothing can say WHICH phrase matched or what surrounded it, so
+  a one-term blip and a store-wide block read identically. It cost a false "Walmart is walled" report
+  on 2026-08-31 - the capture had in fact completed 592 terms.
+
+  It matters because these phrases are matched against 200,000 characters of raw HTML, where they can
+  appear for reasons that are not a wall at all: 'access denied' inside an error-handling script, or a
+  product literally called something unfortunate. The phrase alone is not enough either - the phrase
+  IN ITS CONTEXT is what a human needs to tell an interstitial from a false positive, and it is two
+  lines of code to keep.
+
+  Returns 'bot-wall' unchanged when nothing matched, so a caller that guards on its own test is safe.
+  Nothing downstream parses this string: pull-agent-lib decides `walled` from the STATE, never from
+  `why` (see the settled/consecutiveWalls counter), so enriching it cannot change any verdict.
+*/
+function wallWhy(html, phrases) {
+  var text = String(html || '');
+  var low = text.toLowerCase();
+  for (var i = 0; i < phrases.length; i++) {
+    var at = low.indexOf(String(phrases[i]).toLowerCase());
+    if (at < 0) continue;
+    var start = Math.max(0, at - 30);
+    var ctx = text.slice(start, start + 90).replace(/\s+/g, ' ').trim();
+    return 'bot-wall [' + phrases[i] + '] @' + at + ' :: ' + ctx;
+  }
+  return 'bot-wall';
+}
+
 function waitForOperator(storeName, term, why) {
   return new Promise(resolve => {
     // The signal the driver polls for. Set BEFORE any UI work so a wall is never invisible to it.
