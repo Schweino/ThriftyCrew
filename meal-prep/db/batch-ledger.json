@@ -1423,13 +1423,13 @@
   {
       "batch":  "hunt-2026-08-31-backlog-w1",
       "opened":  "2026-08-31T12:23:27",
-      "last_activity":  "2026-08-31T12:42:09",
+      "last_activity":  "2026-08-31T13:07:34",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
-      "abandoned":  false,
-      "abandoned_at":  null,
-      "abandon_reason":  null,
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-31T13:07:34",
+      "abandon_reason":  "superseded by hunt-2026-08-27-highprotein-w14, which published this slug on 2026-08-31; this row was a scratch batch opened during the backlog sweep before the wave was formed the sanctioned way",
       "slugs":  [
                     "healthy-hamburger-helper"
                 ],
@@ -1463,19 +1463,24 @@
                          "stage":  "audit",
                          "at":  "2026-08-31T12:42:09",
                          "detail":  "1/1 GO - wave-14.audit.md; source-QA PASS both anchors"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-31T13:07:34",
+                         "detail":  "abandoned owing 4: recipes-db, build-cards, publish, post-publish-review - superseded by hunt-2026-08-27-highprotein-w14, which published this slug on 2026-08-31; this row was a scratch batch opened during the backlog sweep before the wave was formed the sanctioned way"
                      }
                  ]
   },
   {
       "batch":  "hunt-2026-08-31-backlog-w2",
       "opened":  "2026-08-31T12:28:13",
-      "last_activity":  "2026-08-31T12:42:09",
+      "last_activity":  "2026-08-31T13:07:34",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
-      "abandoned":  false,
-      "abandoned_at":  null,
-      "abandon_reason":  null,
+      "abandoned":  true,
+      "abandoned_at":  "2026-08-31T13:07:34",
+      "abandon_reason":  "superseded by hunt-2026-08-27-highprotein-w14, which published this slug on 2026-08-31; this row was a scratch batch opened during the backlog sweep before the wave was formed the sanctioned way",
       "slugs":  [
                     "classic-beef-and-bean-chili"
                 ],
@@ -1504,16 +1509,21 @@
                          "stage":  "audit",
                          "at":  "2026-08-31T12:42:09",
                          "detail":  "1/1 GO - wave-15.audit.md; source-QA PASS both anchors"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-08-31T13:07:34",
+                         "detail":  "abandoned owing 4: recipes-db, build-cards, publish, post-publish-review - superseded by hunt-2026-08-27-highprotein-w14, which published this slug on 2026-08-31; this row was a scratch batch opened during the backlog sweep before the wave was formed the sanctioned way"
                      }
                  ]
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w14",
       "opened":  "2026-08-31T12:43:21",
-      "last_activity":  "2026-08-31T12:47:21",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-31T13:07:16",
+      "closed":  true,
+      "closed_at":  "2026-08-31T13:07:16",
+      "close_detail":  "post-publish review CLEAN; 2 recipes live and serveable (healthy-hamburger-helper, classic-beef-and-bean-chili); propagate carried 272 collateral specs, stamps correctly withheld from 12 that did not publish",
       "abandoned":  false,
       "abandoned_at":  null,
       "abandon_reason":  null,
@@ -1571,6 +1581,11 @@
                          "stage":  "serveability",
                          "at":  "2026-08-31T12:47:21",
                          "detail":  "2/2 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-08-31T13:07:15",
+                         "detail":  "CLEAN - paywall verified both directions across 578 recipes (0 leaks/0 skew); live grams+macros match db and an independent recompute; scaler functional; rename clean on rendered surfaces; 12 withheld specs proven not shipped; guards 0 hard, run-gates 154/0; feed edge serving 12:47 with both slugs"
                      }
                  ]
   }
