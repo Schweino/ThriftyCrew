@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-28T07:21:35",
-    "count":  336,
+    "updated":  "2026-08-31T13:10:26",
+    "count":  339,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -3663,21 +3663,6 @@
                        "at":  "2026-08-27T11:42:37"
                    },
                    {
-                       "key":  "chicken|skillet|soy",
-                       "slug":  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
-                       "name":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
-                       "protein":  "chicken",
-                       "method":  "skillet",
-                       "verdict":  "accepted",
-                       "reason":  "Teriyaki grilled chicken veggie rice bowl; distinct teriyaki sauce vs live orange/sweet-sour/adobo chicken bowls, verified 40g protein 465 cal band.",
-                       "dupe_of":  [
-
-                                   ],
-                       "run":  "hunt-2026-08-27-highprotein",
-                       "by":  "decider",
-                       "at":  "2026-08-27T11:42:38"
-                   },
-                   {
                        "key":  "beef|casserole|spice",
                        "slug":  "taco-casserole",
                        "name":  "Taco Casserole",
@@ -5065,6 +5050,66 @@
                        "run":  "hunt-2026-08-27-highprotein",
                        "by":  "decider",
                        "at":  "2026-08-28T07:21:35"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "bacon-and-chicken-risotto",
+                       "name":  "Bacon and Chicken Risotto",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Carnaroli risotto with chicken breast, bacon/pancetta, shallot, white wine and Parmesan; no risotto in catalog, distinct Italian hot main (cold-plate flag spurious), verified 649cal/38c/52p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T09:05:40"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "chicken-caesar-salad",
+                       "name":  "Chicken Caesar Salad",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold composed Caesar salad with baked chicken breast, romaine, cucumber, yogurt-parmesan dressing and baguette croutons; wilts and doesn\u0027t batch as a hot dinner, matching prior cold chicken-salad/wrap rejections.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T09:05:41"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "healthy-million-dollar-chicken-bake",
+                       "name":  "Healthy Million Dollar Chicken Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken breast topped with cottage cheese, cream cheese, cheddar, turkey bacon and green onion baked low-carb; same creamy cheese-and-bacon chicken bake identity as chicken-bacon-ranch-cauliflower-bake (3-4 of 4 axes), only the cheese-mix vs ranch accent differs, saturated region.",
+                       "dupe_of":  [
+                                       "chicken-bacon-ranch-cauliflower-bake"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T09:05:42"
+                   },
+                   {
+                       "key":  "chicken|any|soy",
+                       "slug":  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                       "name":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Duplicates live teriyaki-chicken-bowl on protein + teriyaki sauce family + rice starch; grilled chicken, homemade teriyaki and added zucchini do not make a distinct dinner. Reverses the 2026-08-27 11:42:38 acceptance, which compared only against orange/sweet-sour/adobo chicken bowls and never weighed the live teriyaki bowl - the identity gap the wave-6 NO-GO flagged over the superseded wave-4 GO. Consistent with the same-run rejected-dupe rulings on crock-pot-teriyaki-chicken and grilled-teriyaki-chicken-kebabs against that same live bowl, the kebab ruling naming this dish as its twin. Built but never published; retire the spec.",
+                       "dupe_of":  [
+                                       "teriyaki-chicken-bowl"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "recipe-dedup-selector",
+                       "at":  "2026-08-31T13:10:26"
                    }
                ]
 }

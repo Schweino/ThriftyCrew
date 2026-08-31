@@ -14,7 +14,7 @@
     "writer_notes":  [
                          "All 20 locked ingredients are used by a step; no step uses an unbought item. Water is referenced in the rice method and now stated as 7 cups, but it is uncosted and not in the locked list, so it is not treated as a shopped ingredient.",
                          "Sea Salt carries two amounts in the locked view (1 3/4 tsp and 3 1/2 tsp): the first is the chicken spice blend, the second is the rice water. Plain Salt (1 scant tsp) is the corn salad. Both prose and steps keep them distinct.",
-                         "Cotija appears in two uses (2/3 cup in the salad, 1/2 cup as topping); cilantro appears in three (1/2 cup rice, 2/3 cup salad, 1 1/2 cups topping). Lime shows as Lime Juice (juice+zest of 3 1/2 limes for the salad; 7 tbsp for the rice) plus a separate Lime Zest line (3 1/2 tsp for the rice). Prose and steps reference each use without inventing or double-counting an amount.",
+                         "Cotija appears in two uses (2/3 cup in the salad, 1/2 cup as topping); cilantro appears in three (1/2 cup rice, 2/3 cup salad, 1 1/2 cups topping). Lime shows as Lime Juice (juice+zest of 3 1/2 limes for the salad; 7 tbsp for the rice) plus a separate Lime Zest line (3 1/2 tsp for the rice). Prose and steps reference each use without inventing or double-counting an amount.  BASIS RULING 2026-08-31 (w9 R3 repair pass, mapper): the Lime Zest line\u0027s buy package was corrected - db\\ingredients.json \u0027Lime Zest\u0027 carried buy_pkg_g 67 (a whole lime) against gpu 4 (the zest yield of one lime), so the engine charged 16.75 limes for one and the card printed \u0027Buy 1 each: $4.19\u0027 for 7 g of zest. buy_pkg_g now equals gpu (4, label \u0027lime\u0027) and the line reads \u0027Buy 2 limes: $0.50\u0027, off the same board:limes cell that prices classic-beef-and-bean-chili\u0027s whole limes at 4 for $1.00. SEPARATE, NOT YET EXECUTED: the Lime Juice line is RULED WRONG and left in place. Its source lines are \u0027Juice + zest of 1 lime\u0027 and \u00272 Tablespoons fresh lime juice\u0027 - fresh in both uses - and Brad\u0027s 2026-08-28 naming rule reserves the plain name \u0027Lime Juice\u0027 for the BOTTLE (bid lime-juice, floz) and \u0027Fresh Lime Juice\u0027 for the squeezed fruit (bid limes, gpu 30). So this line should be canon \u0027Fresh Lime Juice\u0027, which prices 213 g as 8 limes at $2.00 rather than one $0.48 bottle - and the card currently contradicts itself, telling the reader to buy the juice of 3 1/2 limes and then to buy one bottle. The rename is BLOCKED: meal-prep\\food-macros-db.json has no \u0027Fresh Lime Juice\u0027 row (the 2026-08-28 vocabulary mint added the ingredients row and not the macro row), and macro lookup is a strict item-name key with no alias fallback, so renaming would silently drop the line from the macro recompute. The food-DB row has been returned to the orchestrator; execute the rename once it lands.",
                          "No cost_lines were supplied in this dispatch, so shop_smart makes no per-package or per-ounce savings claims. The only money in prose is the ${{cost_ps}} token and the $1/month membership line.",
                          "Macros used only from the locked view. Per-serving stat is 45g protein (44.6 pre-rounding) and 597 cal; prose and head.description now carry the stat figure 45g rather than the pre-round 44. Band satisfied (450-800 cal, protein \u003e= 40). No number was computed in prose."
                      ],
@@ -34,7 +34,7 @@
                  "protein":  45,
                  "carbs":  54,
                  "fat":  22,
-                 "cost_ps":  "3.86"
+                 "cost_ps":  "3.62"
              },
     "intro_html":  "\u003cp\u003eMexican street corn, the kind you get on a stick from a cart with lime running down your wrist, is one of the best things a few cheap pantry spices can do. The problem is you cannot pack a paper tray of elote into a work bag and expect it to survive Tuesday. So we did the sensible thing and built it into a bowl.\u003c/p\u003e\u003cp\u003eThis is seared chili-lime chicken over cilantro lime rice, with a cold, creamy street corn salad spooned right on top and a scatter of avocado, red onion, cilantro and cotija to finish. It hits like takeout and costs like a pantry. Fourteen containers out of one skillet and one pot of rice, and every one of them carries 45 grams of protein and stays under 600 calories. That is a full week and change of dinner handled, no drive-through required.\u003c/p\u003e",
     "ingredients_display":  [
@@ -71,13 +71,13 @@
                        "Jalapeno, 3 1/2 jalapenos, finely diced (optional): ~$0.15. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
                        "Fresh Cilantro, 1/2 cup chopped; 2/3 cup chopped; 1 1/2 cups leaves, for topping: ~$1.37. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Rice, 3 1/2 cups uncooked: ~$0.82. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Lime Zest, 3 1/2 teaspoons: ~$0.44. \u003cstrong\u003eBuy 1 each: $4.19.\u003c/strong\u003e",
+                       "Lime Zest, 3 1/2 teaspoons: ~$0.44. \u003cstrong\u003eBuy 2 limes: $0.50.\u003c/strong\u003e",
                        "Avocado, 3 1/2 avocados, cubed: ~$2.03. \u003cstrong\u003eBuy 4 each: $2.32.\u003c/strong\u003e",
                        "Red Onion, 1 cup sliced, for topping: ~$0.31. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
                        "Pantry seasonings (chili powder, sea salt, ground cumin, smoked paprika, garlic powder, onion powder, salt): ~$0.53. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $23.68 across 14 servings, so roughly $1.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.77 across 14 servings, roughly $2.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.56 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.33. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eTrue shopping cost: about $31.08 across 14 servings, roughly $2.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.56 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.64. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eRun the numbers and this bowl comes in at ${{cost_ps}} a serving. That is a street-cart dinner, seasoned chicken and a creamy corn salad and avocado on top, for less than the drink you would order to go with the real thing. Fourteen of them out of one shop.\u003c/p\u003e\u003cp\u003eThe membership that gets you every recipe like this one, priced against the actual Omaha shelf, runs a dollar a month. One bowl of takeout costs more than a year of knowing exactly what your dinner costs before you cook it.\u003c/p\u003e",
     "shop_smart":  "\u003cp\u003eLean on the shelf-stable stuff, because this recipe was built for it. Canned whole kernel corn is the move for the salad. You are draining it and folding it into yogurt and lime, so you gain nothing from fresh and you skip the shucking. Grab enough cans to reach seven cups drained and you are set.\u003c/p\u003e\u003cp\u003eBuy the chicken breast as a family pack rather than the small tray. You need four and three quarter pounds of it, and the big pack is how a bulk cook is supposed to shop. Cut it into one-inch chunks yourself at home.\u003c/p\u003e\u003cp\u003eThe spice drawer carries this dish, so check what you already own before you add to cart: chili powder, cumin, smoked paprika, garlic powder and onion powder are the whole lineup, and most kitchens already have every one of them. That leaves the cotija, the Greek yogurt and a couple of limes as the only fresh things you are really shopping for.\u003c/p\u003e",
@@ -88,13 +88,13 @@
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eeatingbirdfood.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eMake it once and you will see why it earns a rotation spot: it reheats without turning sad, the cold corn salad wakes it right back up, and it never tastes like leftovers. If this is the kind of eating you want on repeat, the whole library is built the same way, real macros, real prices, no mystery. Come cook the rest of it with us.\u003c/p\u003e",
     "cost_batch":  23.68,
-    "cost_batch_true":  34.77,
+    "cost_batch_true":  31.08,
     "cost_per_serving":  1.69,
-    "cost_per_serving_true":  2.48,
+    "cost_per_serving_true":  2.22,
     "cost_pantry_add":  19.56,
-    "cost_first_run":  54.33,
+    "cost_first_run":  50.64,
     "scaler":  {
-                   "cost":  "34.77",
+                   "cost":  "31.08",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -265,7 +265,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  3.86,
+                 "costPerServing":  3.62,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 4 3/4 lb, cut into 1-inch chunks (2183 g)",
                                           "Olive Oil, 3 1/2 tablespoons (47 g)",

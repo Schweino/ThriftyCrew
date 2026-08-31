@@ -3025,20 +3025,20 @@
         "bid":  "lemons",
         "gpu":  47,
         "unit":  "each",
-        "board":  "recipe",
-        "buy_pkg_g":  58,
-        "buy_pkg_label":  "each",
-        "note":  "Registrar ruling 2026-08-28: REUSE the fruit, not lemon-juice. That id is priced $0.0675/floz but its entire board row set is bottled/reconstituted - ReaLemon, GV 32 fl oz, Hy-Vee Reconstituted 100% Juice - and bottled reconstituted juice is a different purchase from fresh-squeezed, which is what the recipe asks for. gpu 47 = the juice yield of one medium lemon (~3 Tbsp), following the estate's existing fresh-juice convention, which the Lime row's own 2026-08-27 note describes as \"pricing a juice line as the fruit it is squeezed from\". Board receipt: Fresh Lemon $0.50 each (Walmart)."
+        "board":  "weekly",
+        "buy_pkg_g":  47,
+        "buy_pkg_label":  "lemon",
+        "note":  "Registrar ruling 2026-08-28: REUSE the fruit, not lemon-juice. That id is priced $0.0675/floz but its entire board row set is bottled/reconstituted - ReaLemon, GV 32 fl oz, Hy-Vee Reconstituted 100% Juice - and bottled reconstituted juice is a different purchase from fresh-squeezed, which is what the recipe asks for. gpu 47 = the juice yield of one medium lemon (~3 Tbsp), following the estate's existing fresh-juice convention, which the Lime row's own 2026-08-27 note describes as \"pricing a juice line as the fruit it is squeezed from\". Board receipt: Fresh Lemon $0.50 each (Walmart). BUY-PACKAGE BASIS CORRECTED 2026-08-31 (w9 R3, same defect as the Lemon Zest row). buy_pkg_g was 58 - a whole lemon - while gpu is 47, the JUICE yield of one lemon, so every buy line overstated by 58/47 = 1.23x ($0.62 a lemon instead of the board's $0.50). Now 47 with the label 'lemon'."
     },
     {
         "item":  "Lemon Zest",
         "bid":  "lemons",
         "gpu":  6,
         "unit":  "each",
-        "board":  "recipe",
-        "buy_pkg_g":  58,
-        "buy_pkg_label":  "each",
-        "note":  "Registrar ruling 2026-08-28: REUSE the fruit. Zest exists only on the whole fresh lemon - the bottled lemon-juice purchase cannot yield it - so pricing zest per floz of juice is a category error. The Orange Zest -> orange-juice row does NOT transfer as precedent: it was a workaround from when no whole-orange id existed, and an `oranges` id exists now (flagged separately). gpu 6 = about 1 Tbsp of zest per medium lemon. A recipe using both the zest and the juice of one lemon double-counts one fruit slightly; that is the accepted yield-row convention."
+        "board":  "weekly",
+        "buy_pkg_g":  6,
+        "buy_pkg_label":  "lemon",
+        "note":  "Registrar ruling 2026-08-28: REUSE the fruit. Zest exists only on the whole fresh lemon - the bottled lemon-juice purchase cannot yield it - so pricing zest per floz of juice is a category error. The Orange Zest -> orange-juice row does NOT transfer as precedent: it was a workaround from when no whole-orange id existed, and an `oranges` id exists now (flagged separately). gpu 6 = about 1 Tbsp of zest per medium lemon. A recipe using both the zest and the juice of one lemon double-counts one fruit slightly; that is the accepted yield-row convention. BUY-PACKAGE BASIS CORRECTED 2026-08-31 (w9 R3). buy_pkg_g was 58 - the weight of a WHOLE lemon - while gpu is 6, the ZEST yield of one lemon. cost-recipes derives pkgPrice as buy_pkg_g x ppg and ppg is already per gram of zest, so the engine was charging 58/6 = 9.7 lemons for one: the casserole card printed 'Buy 1 each: $4.83' for 5 g of zest, on the same board:lemons basis that priced the juice line two lines above it at $0.62. On an each-priced fruit row buy_pkg_g must equal gpu, so that one package IS one fruit; it is now 6 with the label 'lemon', and the line reads 'Buy 1 lemon: $0.50'. Wrong BASIS, not stale price - it would have stayed wrong at any lemon price."
     },
     {
         "item":  "Lime Zest",
@@ -3046,9 +3046,9 @@
         "gpu":  4,
         "unit":  "each",
         "board":  "recipe",
-        "buy_pkg_g":  67,
-        "buy_pkg_label":  "each",
-        "note":  "Registrar ruling 2026-08-28: REUSE the fruit, same reasoning as Lemon Zest - zest exists only on the whole fruit. gpu 4 = about 2 tsp of zest per lime. Board receipt: Fresh Lime $0.25 each (Walmart), a cell that only became correct after the 2026-08-27 board fix that removed a box of Tastykake snack-cake sticks from the lemons row."
+        "buy_pkg_g":  4,
+        "buy_pkg_label":  "lime",
+        "note":  "Registrar ruling 2026-08-28: REUSE the fruit, same reasoning as Lemon Zest - zest exists only on the whole fruit. gpu 4 = about 2 tsp of zest per lime. Board receipt: Fresh Lime $0.25 each (Walmart), a cell that only became correct after the 2026-08-27 board fix that removed a box of Tastykake snack-cake sticks from the lemons row. BUY-PACKAGE BASIS CORRECTED 2026-08-31 (w9 R3, same defect as the Lemon Zest row). buy_pkg_g was 67 - a whole lime - while gpu is 4, the ZEST yield of one lime, so the engine charged 67/4 = 16.75 limes for one and street-corn printed 'Buy 1 each: $4.19' for 7 g of zest while classic-beef-and-bean-chili bought whole limes off the same commodity at 4 for $1.00. Now 4 with the label 'lime', so the line reads 'Buy 2 limes: $0.50'."
     },
     {
         "item":  "Coconut Oil",
@@ -3084,13 +3084,13 @@
     },
     {
         "item":  "Fresh Red Chili",
-        "bid":  "serrano-peppers",
+        "bid":  "jalapenos",
         "gpu":  453.592,
         "unit":  "lb",
         "board":  "weekly",
         "buy_pkg_g":  453.592,
         "buy_pkg_label":  "lb",
-        "note":  "Registrar ruling 2026-08-28: REUSE serrano-peppers. No fresh-red-chile id exists (crushed-thai-chili is a DRIED spice; jalapenos are the green counterpart). grocery\\carriage.json:754 already resolved this exact term on 2026-08-27: CARRIED as \"Serrano Peppers (Capsicums)\" at Family Fare, and serrano-peppers is live at exactly that price ($2.99/lb, same store) - the same-crown-same-store tell, here pointing toward reuse. At garnish grams the green-vs-red ripeness gap moves neither the price basis nor the macros. If literal red fresnos are ever wanted, the carriage sweep says no Omaha store carries them, so there is nothing to price."
+        "note":  "Bid moved to jalapenos on 2026-08-31 on Brad's ruling, executing the commodity registrar's 2026-08-27 alias adjudication (db/ingredient-events.jsonl:348, event ie:2423516be8fb51080f1a): a recipe's fresh red chilli is a ripe red jalapeno/fresno-class chile, the same fresh-loose-by-the-pound purchase and price class as the green jalapeno the stores actually stock; jalapenos is live at $1.4277/lb (Walmart) and the units match (lb). THE SUPERSEDED RULING IS RECORDED HERE BECAUSE IT WAS WRONG IN A WAY WORTH KEEPING: a second registrar consultation on 2026-08-28 (commit f3911bff) ruled REUSE serrano-peppers on the same-crown-same-store tell - carriage.json had resolved this exact term CARRIED as Serrano Peppers at Family Fare, and serrano-peppers is live at that store at $2.99/lb. That tell does not survive contact with the cost engine, which resolves Walmart FIRST and only falls back to nomem: serrano-peppers on Walmart is $6.40/lb, so the reuse shipped this card at 4.5x the adjudicated price. A crown at a non-Walmart store is not the price this estate costs with. Two auditor findings on 2026-08-28 (07:41 and 07:53) both named jalapenos as the standing ruling, and the identity cache has held 'fresh red chilli' -> jalapenos since 2026-08-27. Macros are unchanged - the food-DB row is still Fresh Red Chili; only the price basis moved."
     },
     {
         "item":  "Blackened Seasoning",
@@ -3133,9 +3133,9 @@
         "gpu":  30,
         "unit":  "each",
         "board":  "recipe",
-        "buy_pkg_g":  67,
-        "buy_pkg_label":  "each",
-        "note":  "Brad ruled 2026-08-28: bottled lime juice is what stores sell, so the PLAIN name 'Lime Juice' now prices as the bottle (bid lime-juice, floz), mirroring Lemon Juice. This row is the explicit fresh-squeezed option, mirroring Fresh Lemon Juice, so the convention is a rule stated in the names rather than a difference nobody chose. gpu 30 = juice yield of one medium lime."
+        "buy_pkg_g":  30,
+        "buy_pkg_label":  "lime",
+        "note":  "Brad ruled 2026-08-28: bottled lime juice is what stores sell, so the PLAIN name 'Lime Juice' now prices as the bottle (bid lime-juice, floz), mirroring Lemon Juice. This row is the explicit fresh-squeezed option, mirroring Fresh Lemon Juice, so the convention is a rule stated in the names rather than a difference nobody chose. gpu 30 = juice yield of one medium lime. BUY-PACKAGE BASIS CORRECTED 2026-08-31 (w9 R3, same defect as the Lemon Zest row), pre-emptively: no live recipe uses this row yet. buy_pkg_g was 67 - a whole lime - while gpu is 30, the JUICE yield of one lime, which would have overstated every buy line by 67/30 = 2.23x. Now 30 with the label 'lime'."
     },
     {
         "item":  "Apricot Jam",

@@ -18,7 +18,7 @@
                          "Method figures (425F, 30 min covered, 10-15 min uncovered, 5 min rest, 425 preheat) are from the transcription, not macro/cost data.",
                          "Prose uses tokens {{cal}}, {{protein}}, ${{cost_ps}} rather than literals per catalog templating rules; no per-line costs anywhere.",
                          "No cost_lines were provided in this dispatch, so shop_smart deliberately avoids per-ounce and per-batch package claims and only references the buy quantities shown in the locked view.",
-                         "FLAG for repair pass: main protein is \u0027Frozen Lightly Breaded Chicken Breast Bites\u0027 - breaded/processed, not plain boneless skinless chicken breast; confirm this satisfies the run\u0027s protein gate."
+                         "FLAG for repair pass: main protein is \u0027Frozen Lightly Breaded Chicken Breast Bites\u0027 - breaded/processed, not plain boneless skinless chicken breast; confirm this satisfies the run\u0027s protein gate.  RESOLVED 2026-08-31 (Brad\u0027s ruling): the line was repurposed to the board\u0027s standard Boneless Skinless Chicken Breast (bid chicken-breast, board:chicken-breast:walmart, gpu 453.592). Macros were rebuilt from the plain-breast food-DB row rather than carried over, so the stat moved 496/41/34/21 to 440/43/26/18 per serving; grams stayed at the source-scaled 1058 g and are now RAW purchased weight, which is the catalog basis for every other chicken-breast recipe. Prose, buy string, steps and head.description were rewritten to describe roasted plain breast, because the card must describe what it now costs."
                      ],
     "forbidden_prose_terms":  [
                                   "—",
@@ -33,15 +33,15 @@
                               ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  496,
-                 "protein":  41,
-                 "carbs":  34,
-                 "fat":  21,
-                 "cost_ps":  "3.65"
+                 "cal":  440,
+                 "protein":  43,
+                 "carbs":  26,
+                 "fat":  18,
+                 "cost_ps":  "2.56"
              },
-    "intro_html":  "\u003cp\u003eLasagna usually shows up on the ledger as a splurge night, all that ricotta and heavy cream doing a number on both your macros and your wallet. This one flips the math. We blend cottage cheese straight into the alfredo so you get that same creamy, layered comfort without the ricotta bill, and we lean on breaded chicken breast bites for the muscle. The result lands at {{protein}} grams of protein and {{cal}} calories a serving, which is the kind of number that lets you eat lasagna on a Tuesday and still call it meal prep.\u003c/p\u003e\u003cp\u003eHere is the honest part. This is not a from-scratch, all-afternoon lasagna. It is a smart-shortcut lasagna built to feed you across a whole work week for pocket change. You lean on a jar of alfredo and no-boil noodles to skip the fussy steps, and you put the savings and the effort where they actually show up, which is the protein and the price per serving.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eLasagna usually shows up on the ledger as a splurge night, all that ricotta and heavy cream doing a number on both your macros and your wallet. This one flips the math. We blend cottage cheese straight into the alfredo so you get that same creamy, layered comfort without the ricotta bill, and we lean on plain boneless skinless chicken breast for the muscle. The result lands at {{protein}} grams of protein and {{cal}} calories a serving, which is the kind of number that lets you eat lasagna on a Tuesday and still call it meal prep.\u003c/p\u003e\u003cp\u003eHere is the honest part. This is not a from-scratch, all-afternoon lasagna. It is a smart-shortcut lasagna built to feed you across a whole work week for pocket change. You lean on a jar of alfredo and no-boil noodles to skip the fussy steps, and you put the savings and the effort where they actually show up, which is the protein and the price per serving.\u003c/p\u003e",
     "ingredients_display":  [
-                                "\u003cstrong\u003eFrozen Lightly Breaded Chicken Breast Bites (Just Bare):\u003c/strong\u003e 2 lb 5 oz, baked from frozen and roughly chopped (1058 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member's Mark):\u003c/strong\u003e 2 lb 5 oz, cooked and roughly chopped (1058 g)",
                                 "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 4 2/3 cups (2 lb 5 oz) (1058 g)",
                                 "\u003cstrong\u003eAlfredo Sauce (Great Value):\u003c/strong\u003e 1 3/4 cups (420 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e about 1 1/2 tsp (9 g)",
@@ -53,7 +53,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Frozen Lightly Breaded Chicken Breast Bites, 2 lb 5 oz, baked from frozen and roughly chopped: ~$17.07. \u003cstrong\u003eBuy 2 24oz bags: $21.95.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 2 lb 5 oz, cooked and roughly chopped: ~$5.20. \u003cstrong\u003eBuy 3 lbs: $6.69.\u003c/strong\u003e",
                        "Cottage Cheese, 4 2/3 cups (2 lb 5 oz): ~$4.25. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
                        "Alfredo Sauce, 1 3/4 cups: ~$1.67. \u003cstrong\u003eBuy 1 15oz jar: $1.69.\u003c/strong\u003e",
                        "Fresh Mozzarella, 1 lb 2 1/2 oz, roughly shredded: ~$4.83. \u003cstrong\u003eBuy 3 8oz balls: $6.22.\u003c/strong\u003e",
@@ -61,34 +61,34 @@
                        "No-Boil Lasagna Noodles, 21 sheets (about 12 3/4 oz): ~$2.65. \u003cstrong\u003eBuy 2 12oz boxes: $4.96.\u003c/strong\u003e",
                        "Fresh Parsley, 6 tbsp chopped: ~$0.74. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.48 across 14 servings, so roughly $2.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $47.76 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.15. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $22.61 across 14 servings, so roughly $1.62 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.50 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.89. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eHere is where it pays off. This whole tray of high-protein alfredo lasagna comes out to ${{cost_ps}} a serving. Fourteen dinners that each clear {{protein}} grams of protein for that price is the kind of deal the takeout menu cannot touch, and you already know exactly what went into it.\u003c/p\u003e",
-    "shop_smart":  "\u003cp\u003eThe cottage cheese is the star buy here, and it is doing the job ricotta usually charges double for. You need 4 2/3 cups, so grab the big tub rather than the little cups and you will use it up. Full fat or low fat both work; low fat trims the fat number without hurting the creaminess once it is blended smooth.\u003c/p\u003e\u003cp\u003eFor the alfredo you only need 1 3/4 cups, so a single standard jar covers the batch with room to spare. Buy a jar you would actually eat by the spoonful, because it carries a lot of the flavor. The fresh mozzarella runs 1 lb 2 1/2 oz and the parmesan 2 1/3 cups grated. If your store sells parmesan by the wedge and you own a grater, that is the move for freshness, but a tub of the pre-grated works fine and saves you the arm workout.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eThe chicken breast is the biggest line on this list, so buy it the way it is cheapest in your store: the family pack by the pound almost always beats the small tray, and what you do not use freezes flat. The cottage cheese is the star buy here, and it is doing the job ricotta usually charges double for. You need 4 2/3 cups, so grab the big tub rather than the little cups and you will use it up. Full fat or low fat both work; low fat trims the fat number without hurting the creaminess once it is blended smooth.\u003c/p\u003e\u003cp\u003eFor the alfredo you only need 1 3/4 cups, so a single standard jar covers the batch with room to spare. Buy a jar you would actually eat by the spoonful, because it carries a lot of the flavor. The fresh mozzarella runs 1 lb 2 1/2 oz and the parmesan 2 1/3 cups grated. If your store sells parmesan by the wedge and you own a grater, that is the move for freshness, but a tub of the pre-grated works fine and saves you the arm workout.\u003c/p\u003e",
     "make_it":  [
-                    "\u003cp\u003eHeat the oven to 425 degrees. Bake or air fry the frozen chicken bites according to their package, then roughly chop them into bite-size pieces once they are cooked through. Set the chicken aside.\u003c/p\u003e\u003cp\u003eMake the sauce in one pass: blend the cottage cheese, the alfredo, and a generous pinch of salt and black pepper together until it is completely smooth. That blend is what replaces the fussy ricotta layer, so do not skip the smooth part.\u003c/p\u003e\u003cp\u003eNow build it. Coat the bottom of your baking dish with a thin layer of the blended sauce so nothing sticks. Lay down noodles, then another layer of sauce, then chopped chicken, a scatter of parsley, mozzarella, and parmesan. Repeat the layers until everything is used, keeping parsley on the first couple of layers only and finishing the top with mozzarella and parmesan. Cover and bake 30 minutes, then uncover and bake another 10 to 15 minutes until the cheese is bubbly and browning at the edges. Garnish with fresh parsley and a little grated parmesan, then let it rest at least 5 minutes before you slice.\u003c/p\u003e"
+                    "\u003cp\u003eHeat the oven to 425 degrees. Roast the chicken breast on a sheet pan until it reaches 165 degrees in the thickest part, about 20 to 25 minutes, then let it rest and roughly chop it into bite-size pieces. Set the chicken aside.\u003c/p\u003e\u003cp\u003eMake the sauce in one pass: blend the cottage cheese, the alfredo, and a generous pinch of salt and black pepper together until it is completely smooth. That blend is what replaces the fussy ricotta layer, so do not skip the smooth part.\u003c/p\u003e\u003cp\u003eNow build it. Coat the bottom of your baking dish with a thin layer of the blended sauce so nothing sticks. Lay down noodles, then another layer of sauce, then chopped chicken, a scatter of parsley, mozzarella, and parmesan. Repeat the layers until everything is used, keeping parsley on the first couple of layers only and finishing the top with mozzarella and parmesan. Cover and bake 30 minutes, then uncover and bake another 10 to 15 minutes until the cheese is bubbly and browning at the edges. Garnish with fresh parsley and a little grated parmesan, then let it rest at least 5 minutes before you slice.\u003c/p\u003e"
                 ],
     "portion_html":  "\u003cp\u003eFourteen servings out of one bake, and the fair way to split lasagna is by weight, not by eyeballing squares. Weigh your empty baking dish before you build, then weigh it again full and hot out of the oven. Subtract the dish, divide what is left by 14, and that is your target grams per container. Scoop to the scale, not to the spoon.\u003c/p\u003e\u003cp\u003eLasagna slices firm up as they cool, so if you let it rest and chill fully before portioning you will get cleaner blocks that stack neatly in your containers. Reheat covered so the noodles stay tender and the cheese comes back to life instead of drying out.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/chicken-alfredo-lasagna/\" target=\"_blank\" rel=\"noopener\"\u003emasonfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eIf a week of protein-packed lasagna for pocket change sounds like your kind of math, that is the entire idea behind Thrifty Crew. Membership runs a dollar a month and gets you the full library of budget meal-prep dinners built the same honest way. Cook once, eat all week, and keep the money where it belongs, which is in your account.\u003c/p\u003e",
-    "cost_batch":  34.48,
-    "cost_batch_true":  47.76,
-    "cost_per_serving":  2.46,
-    "cost_per_serving_true":  3.41,
+    "cost_batch":  22.61,
+    "cost_batch_true":  32.5,
+    "cost_per_serving":  1.62,
+    "cost_per_serving_true":  2.32,
     "cost_pantry_add":  3.39,
-    "cost_first_run":  51.15,
+    "cost_first_run":  35.89,
     "scaler":  {
-                   "cost":  "47.76",
+                   "cost":  "32.50",
                    "ing":  [
                                {
-                                   "item":  "Frozen Lightly Breaded Chicken Breast Bites",
-                                   "canon":  "Frozen Lightly Breaded Chicken Breast Bites",
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
                                    "grams":  1058,
-                                   "buy":  "2 lb 5 oz, baked from frozen and roughly chopped",
-                                   "bid":  "breaded-chicken-breast-bites",
-                                   "gpu":  "28.350"
+                                   "buy":  "2 lb 5 oz, cooked and roughly chopped",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Cottage Cheese",
@@ -157,15 +157,15 @@
                            ]
                },
     "head":  {
-                 "description":  "High-protein chicken alfredo lasagna meal prep with 41 grams of protein per serving. Cottage cheese blended into alfredo, breaded chicken, and no-boil noodles feed 14 for a budget price.",
+                 "description":  "High-protein chicken alfredo lasagna meal prep with 43 grams of protein per serving. Cottage cheese blended into alfredo, roasted chicken breast, and no-boil noodles feed 14 for a budget price.",
                  "keywords":  "chicken alfredo lasagna, high protein lasagna, cottage cheese lasagna, meal prep lasagna, budget meal prep dinner, high protein meal prep, no boil lasagna, chicken lasagna",
                  "image":  "",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT1H",
                  "totalTime":  "PT1H15M",
-                 "costPerServing":  3.65,
+                 "costPerServing":  2.56,
                  "recipeIngredient":  [
-                                          "Frozen Lightly Breaded Chicken Breast Bites, 2 lb 5 oz, baked from frozen and roughly chopped (1058 g)",
+                                          "Boneless Skinless Chicken Breast, 2 lb 5 oz, cooked and roughly chopped (1058 g)",
                                           "Cottage Cheese, 4 2/3 cups (2 lb 5 oz) (1058 g)",
                                           "Alfredo Sauce, 1 3/4 cups (420 g)",
                                           "Salt, about 1 1/2 tsp (9 g)",
@@ -176,7 +176,7 @@
                                           "Fresh Parsley, 6 tbsp chopped (23 g)"
                                       ],
                  "steps":  [
-                               "Heat the oven to 425 degrees. Bake or air fry the frozen breaded chicken bites according to the package, then roughly chop the cooked chicken into bite-size pieces.",
+                               "Heat the oven to 425 degrees. Roast the chicken breast on a sheet pan until it reaches 165 degrees inside, about 20 to 25 minutes, then roughly chop the cooked chicken into bite-size pieces.",
                                "Blend the cottage cheese, alfredo sauce, and a generous pinch of salt and black pepper together until completely smooth.",
                                "Coat the bottom of a baking dish with a thin layer of the blended sauce, then layer noodles, sauce, chopped chicken, parsley, mozzarella, and parmesan. Use parsley only on the first couple of layers, and finish the top with mozzarella and parmesan only.",
                                "Cover and bake 30 minutes, then uncover and bake another 10 to 15 minutes until the cheese is bubbly and browning at the edges.",
@@ -184,7 +184,7 @@
                                "Portion by weight across 14 containers, weighing the full dish and dividing by 14."
                            ],
                  "step_names":  [
-                                    "Bake and chop the chicken",
+                                    "Roast and chop the chicken",
                                     "Blend the sauce",
                                     "Layer the lasagna",
                                     "Bake covered then uncovered",
@@ -194,7 +194,7 @@
              },
     "ingredients_grams":  [
                               {
-                                  "item":  "Frozen Lightly Breaded Chicken Breast Bites",
+                                  "item":  "Boneless Skinless Chicken Breast",
                                   "grams":  1058
                               },
                               {
