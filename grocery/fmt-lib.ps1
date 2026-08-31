@@ -50,6 +50,29 @@ function Fmt-Price([double]$v, [string]$unit) {
 function Fmt-PriceText([double]$v, [string]$unit) {
   return ((Fmt-Price $v $unit) -replace '&cent;', ([char]0x00A2))
 }
+# THE PER-UNIT DIFFERENCE ("this much more here"). Lived as a private copy inside build-store-guide.ps1
+# until 2026-08-31, alongside a second private copy of Fmt-Price that never got the sub-cent fix - which
+# is why "Corn Tortillas $0.06 each  +$0.00 each  6% over" was live on /shop-smart-at-your-store/.
+#
+# The old copy's own comment said it: "many oz gaps are under a cent and would round to a dishonest +0".
+# It then fixed that for oz and fl oz ONLY, and left lb, dozen, gallon and each rendering +$0.00 for any
+# gap under half a cent. A gap the page simultaneously calls "6% over" cannot also be zero.
+#
+# One rule for every unit: under a cent renders as cents with one decimal, and a TRUE zero renders as a
+# true zero, because "these two stores are the same price" is a real and useful answer.
+function Fmt-Diff([double]$d, [string]$unit) {
+  $centUnits = @('oz','floz')
+  $suffix = switch ($unit) { 'oz'{'/oz'} 'floz'{'/fl oz'} 'lb'{'/lb'} 'gallon'{'/gal'} 'dozen'{'/dozen'} 'each'{' each'} default{''} }
+  if ($d -gt 0 -and $d -lt 0.01) {
+    return ('+' + ('{0:N1}' -f ($d * 100)) + '&cent;' + $suffix)
+  }
+  if ($centUnits -contains $unit -and $d -lt 1) {
+    $c = [math]::Round($d * 100, 1)
+    if ($c -eq [math]::Floor($c)) { return ('+' + ('{0:N0}' -f $c) + '&cent;' + $suffix) }
+    return ('+' + ('{0:N1}' -f $c) + '&cent;' + $suffix)
+  }
+  return ('+$' + ('{0:N2}' -f $d) + $suffix)
+}
 function UnitLabel([string]$unit) {
   switch ($unit) { 'oz'{'per ounce'} 'floz'{'per fl ounce'} 'lb'{'per pound'} 'gallon'{'per gallon'} 'dozen'{'per dozen'} 'each'{'each'} default{$unit} }
 }
@@ -98,6 +121,30 @@ if ($SelfTest) {
     $gotT = Fmt-PriceText ([double]$c.v) ([string]$c.u)
     if ($gotT -ne $wantT) { Write-Output ("  X plain-text twin disagrees: " + $c.why + "  got '" + $gotT + "' want '" + $wantT + "'"); $bad++ }
   }
-  if ($bad -eq 0) { Write-Output ("fmt-lib SELF-TEST PASS (" + ($cases.Count * 2) + " frozen cases)"); exit 0 }
-  Write-Output ("fmt-lib SELF-TEST FAIL (" + $bad + " of " + $cases.Count + " cases)"); exit 2
+  # ---- Fmt-Diff. Same rule: the founding bug plus its clean twins. ----------------------------------
+  $dcases = @(
+    # MUST-FIRE: the live store-guide cells. "Corn Tortillas $0.06 each  +$0.00 each  6% over" was on
+    # /shop-smart-at-your-store/ on 2026-08-31; 6% of 6 cents is 0.36 of a cent, which is not zero.
+    @{ d=0.0036; u='each';  want='+0.4&cent; each';   why='MUST-FIRE: a sub-cent per-each gap must not print +$0.00' },
+    @{ d=0.0012; u='lb';    want='+0.1&cent;/lb';     why='MUST-FIRE: sub-cent per-pound gap must not print +$0.00' },
+    @{ d=0.004;  u='dozen'; want='+0.4&cent;/dozen';  why='MUST-FIRE: sub-cent per-dozen gap must not print +$0.00' },
+    @{ d=0.0025; u='gallon';want='+0.3&cent;/gal';    why='MUST-FIRE: sub-cent per-gallon gap must not print +$0.00' },
+    # CLEAN TWINS: everything the old private copy already got right must stay exactly as it was.
+    @{ d=0.013;  u='oz';    want='+1.3&cent;/oz';     why='CLEAN TWIN: the one-decimal oz gap is unchanged' },
+    @{ d=0.019;  u='floz';  want='+1.9&cent;/fl oz';  why='CLEAN TWIN: the one-decimal fl oz gap is unchanged' },
+    @{ d=0.02;   u='oz';    want='+2&cent;/oz';       why='CLEAN TWIN: a whole-cent oz gap drops the decimal' },
+    @{ d=1.25;   u='oz';    want='+$1.25/oz';         why='CLEAN TWIN: an oz gap of a dollar or more is dollars' },
+    @{ d=0.47;   u='lb';    want='+$0.47/lb';         why='CLEAN TWIN: an ordinary per-pound gap is dollars' },
+    @{ d=0.06;   u='each';  want='+$0.06 each';       why='CLEAN TWIN: a six-cent each gap is dollars, not 6 cents' },
+    # A TRUE ZERO IS NOT A ROUNDING ARTEFACT. Two stores at the same price is a real answer and must not
+    # be dressed up as "+0.0 cents".
+    @{ d=0;      u='each';  want='+$0.00 each';       why='CLEAN TWIN: a genuine zero gap still reads as zero' }
+  )
+  foreach ($c in $dcases) {
+    $got = Fmt-Diff ([double]$c.d) ([string]$c.u)
+    if ($got -ne $c.want) { Write-Output ("  X " + $c.why + "  got '" + $got + "' want '" + $c.want + "'"); $bad++ }
+  }
+  $total = ($cases.Count * 2) + $dcases.Count
+  if ($bad -eq 0) { Write-Output ("fmt-lib SELF-TEST PASS (" + $total + " frozen cases)"); exit 0 }
+  Write-Output ("fmt-lib SELF-TEST FAIL (" + $bad + " of " + $total + " cases)"); exit 2
 }

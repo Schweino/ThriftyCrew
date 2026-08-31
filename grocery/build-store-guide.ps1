@@ -41,33 +41,16 @@ foreach($s in $storeOrder){ $shortName[$s] = $s }
 # names routinely contain apostrophes (Baker's, Sam's Club, Member's Mark).
 function HtmlEnc([string]$s) { if ($null -eq $s) { return '' }; return ($s -replace '&','&amp;' -replace '<','&lt;' -replace '>','&gt;' -replace '"','&quot;' -replace "'",'&#39;') }
 
-# format a per-unit price for display: cents for oz/fl oz, dollars otherwise (same as the price board).
-# One divergence from the board: at $1/oz and up (spices), cents read badly ("5550&cent;/oz"), so we
-# switch to dollars there.
-function Fmt-Price([double]$v, [string]$unit) {
-  switch ($unit) {
-    'oz'    { if ($v -ge 1) { return ('$' + ('{0:N2}' -f $v) + '/oz') }; return ('' + [math]::Round($v*100) + '&cent;/oz') }
-    'floz'  { if ($v -ge 1) { return ('$' + ('{0:N2}' -f $v) + '/fl oz') }; return ('' + [math]::Round($v*100) + '&cent;/fl oz') }
-    'lb'    { return ('$' + ('{0:N2}' -f $v) + '/lb') }
-    'gallon'{ return ('$' + ('{0:N2}' -f $v) + '/gal') }
-    'dozen' { return ('$' + ('{0:N2}' -f $v) + '/dozen') }
-    'each'  { return ('$' + ('{0:N2}' -f $v) + ' each') }
-    default { return ('$' + ('{0:N2}' -f $v)) }
-  }
-}
-# format a per-unit DIFFERENCE ("this much more here"): cents with one decimal for oz units
-# (many oz gaps are under a cent and would round to a dishonest +0), dollars otherwise
-function Fmt-Diff([double]$d, [string]$unit) {
-  switch ($unit) {
-    'oz'    { if ($d -ge 1) { return ('+$' + ('{0:N2}' -f $d) + '/oz') }; $c = [math]::Round($d*100, 1); if ($c -eq [math]::Floor($c)) { return ('+' + ('{0:N0}' -f $c) + '&cent;/oz') } else { return ('+' + ('{0:N1}' -f $c) + '&cent;/oz') } }
-    'floz'  { if ($d -ge 1) { return ('+$' + ('{0:N2}' -f $d) + '/fl oz') }; $c = [math]::Round($d*100, 1); if ($c -eq [math]::Floor($c)) { return ('+' + ('{0:N0}' -f $c) + '&cent;/fl oz') } else { return ('+' + ('{0:N1}' -f $c) + '&cent;/fl oz') } }
-    'lb'    { return ('+$' + ('{0:N2}' -f $d) + '/lb') }
-    'gallon'{ return ('+$' + ('{0:N2}' -f $d) + '/gal') }
-    'dozen' { return ('+$' + ('{0:N2}' -f $d) + '/dozen') }
-    'each'  { return ('+$' + ('{0:N2}' -f $d) + ' each') }
-    default { return ('+$' + ('{0:N2}' -f $d)) }
-  }
-}
+# ONE FORMATTER, NOT A SECOND COPY (2026-08-31). Fmt-Price and Fmt-Diff both lived here as private
+# duplicates of the board's. The Fmt-Price copy never received the sub-cent fix that fmt-lib shipped on
+# 2026-07-31, so "$0.00 each" - the exact founding bug, cotton swabs at $0.0043 - was still live on this
+# page a month later, and Fmt-Diff printed "+$0.00 each" beside a "6% over" label on the same row.
+# A formatter halfway down a builder has no reachable fixture, which is why nobody saw either.
+#
+# The one deliberate divergence this file used to document (dollars at $1/oz and up, because
+# "5550&cent;/oz" reads badly) is no longer a divergence: fmt-lib's rollover does exactly that, and its
+# frozen fixtures prove it. So there is nothing left to keep, and both copies are gone.
+. (Join-Path $PSScriptRoot 'fmt-lib.ps1')
 
 # ---- category lookup for the weekly board (categories.json maps commodity ids to sections) ----
 $idCat = @{}

@@ -295,8 +295,8 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
           # flyer-fluff rescue: word-overlap failed, but the link IS the same commodity (its own include/exclude)
           # AND its per-unit is computable and inside the sale band AND the link name is a GENERIC SUBSET of the
           # board's (every distinctive link word appears in the board item). The subset test is what stops a
-          # brand swap: "Fresh Peaches" Ã¢Å â€š "Tree Ripened Yellow Flesh Peaches, Small" -> show (same commodity,
-          # less flowery), but "Kroger Thick Cut Bacon" Ã¢Å â€ž "Oscar Mayer Bacon" -> still hidden (different brand,
+          # brand swap: "Fresh Peaches" IS A SUBSET OF "Tree Ripened Yellow Flesh Peaches, Small" -> show (same commodity,
+          # less flowery), but "Kroger Thick Cut Bacon" IS NOT A SUBSET OF "Oscar Mayer Bacon" -> still hidden (different brand,
           # even at a plausible price). Band is REQUIRED here.
           if (-not $ident -and ($null -ne $lpu) -and ($lpu -ge $boardPU * 0.85) -and ($lpu -le $boardPU * 3.0) -and (CommodityIdent $id ([string]$lnk.name)) -and (NameMatch ([string]$lnk.name) $boardItem)) { $ident = $true }
           if (-not $ident) { $ok = $false }
@@ -2093,7 +2093,7 @@ $js = @'
       var wrap=document.createElement('span');
       wrap.className='pg-spark';
       wrap.innerHTML='<svg width="'+W+'" height="'+Hh+'" viewBox="0 0 '+W+' '+Hh+'" aria-hidden="true"><polyline points="'+pathPts.join(' ')+'" fill="none" stroke="#1E3A5F" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+lx+'" cy="'+ly+'" r="2.6" fill="#E2A43C"/></svg>'
-        +'<span class="pg-spark-l">Record: '+(mn<1?(Math.round(mn*1000)/10+'Â¢'):('$'+mn.toFixed(2)))+(labs[lowI]?(', '+labs[lowI]):'')+'</span>'
+        +'<span class="pg-spark-l">Record: '+(mn<1?(Math.round(mn*1000)/10+'\u00A2'):('$'+mn.toFixed(2)))+(labs[lowI]?(', '+labs[lowI]):'')+'</span>'
         +'<span class="pg-spark-c">best price in Omaha, weekly</span>';
       slot.appendChild(wrap);
     });
