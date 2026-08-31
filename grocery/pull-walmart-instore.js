@@ -141,6 +141,27 @@ async function walmartProbe(term) {
     const wasRaw = node.priceInfo?.wasPrice?.price ?? node.priceInfo?.wasPrice;
     const was = typeof wasRaw === 'object' ? (wasRaw?.amount ?? null) : (wasRaw ?? null);
     const rb = !!(node.badges?.flags || []).find(f => f && f.key === 'ROLLBACK');
+    /*
+      THE SHELF SIGNAL (2026-08-31). sellerName and fulfillmentType sit on the SAME item node we
+      already read for name and price - walmart-capture-reducer.js has read them since July for
+      import-walmart-batch's 3P filter, so this is not new extraction; it is the DAILY path finally
+      carrying what the manual path already had.
+
+      WHY IT IS WORTH TWO COLUMNS. Three generations of per-product known-wrong rulings failed to
+      converge on the marketplace-bulk class (Frontier Co-op 16 oz -> 27 Peaks 12-19 oz -> Badia /
+      24 Mantra), because a ruling names a PRODUCT and the defect is a LISTING KIND: curry-powder was
+      blocked at Frontier's $0.7669/oz and came straight back at 27 Peaks' $0.7775/oz. Every proxy
+      tried - brand absence, exact-item absence, size shape - stood in for one fact that was on the
+      page and not in our data: is this listing purchasable at the L St store, or does it only ship?
+      Spec: design\BRIEF-marketplace-shelf-signal-2026-08-29.md.
+
+      EMIT EMPTY RATHER THAN GUESSING. A node with no sellerName or no fulfillmentType writes the
+      field EMPTY. Empty means UNKNOWN and every consumer admits the row; it must never be filled
+      with a default, because "" and "SHIP" are about to mean opposite things. build-walmart-deals
+      already reads a 7-column capture's sel/ff as empty for exactly this reason.
+    */
+    const sel = node.sellerName ?? '';
+    const ff  = (node.fulfillmentType ?? '');
     if (name && id && lp != null && !seen.has(String(id))) {
       seen.add(String(id));
       rows.push({
@@ -150,6 +171,8 @@ async function walmartProbe(term) {
         id: String(id),
         was: was,
         rb: rb ? 1 : 0,
+        sel: String(sel).replace(/[|\r\n]+/g, ' ').trim(),
+        ff: String(ff).replace(/[|\r\n]+/g, ' ').trim().toUpperCase(),
       });
     }
     for (const k of Object.keys(node)) walk(node[k], depth + 1);
@@ -196,8 +219,9 @@ const walmartAgent = {
 };
 
 const pullWalmartInStore    = (worklist, opts) => runPacedSweep(walmartAgent, worklist, opts);
-// q|n|lp|up|id|was|rb - the first five are the contract build-walmart-deals has always read
-// positionally; was/rb are appended so an older builder ignores them rather than mis-parsing.
-const walmartSweepToCsv     = () => sweepToCsv(WALMART_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.rb ?? 0]);
+// q|n|lp|up|id|was|rb|sel|ff - the first five are the contract build-walmart-deals has always read
+// positionally; was/rb/sel/ff are appended so an older builder ignores them rather than mis-parsing.
+// sel/ff use `?? ''` and NOT a default: empty is the honest encoding of "the node did not say".
+const walmartSweepToCsv     = () => sweepToCsv(WALMART_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.rb ?? 0, p.sel ?? '', p.ff ?? '']);
 const walmartSweepVerdicts  = () => sweepVerdicts(WALMART_STORAGE_KEY);
 const walmartSweepRemaining = wl => sweepRemaining(WALMART_STORAGE_KEY, wl);
