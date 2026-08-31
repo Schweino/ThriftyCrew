@@ -43,9 +43,28 @@ function Test-IsBlockerHeading {
   #>
   param([string]$Line)
   $s = [string]$Line
-  if ($s -notmatch '^###\s') { return $false }
-  if ([regex]::IsMatch($s, '^###\s+(?:BLOCKER|Blocker|B|R)\s*\d*\s*[.:\-]?\s')) { return $true }
-  return [regex]::IsMatch($s, '^###\s+\d+\.\s')
+  # ## AS WELL AS ### (2026-08-31). The matcher required exactly three hashes, and THREE real NO-GO
+  # reports on disk write their blockers at ## - hunt-2026-08-27-ten waves 2 and 3 use
+  # `## BLOCKER 1 - <slug> (recipe-local)`. Not one of their blockers was visible, so those reports
+  # parsed to ZERO blockers, which -Revive and -Repair both read as "this rejection names no open
+  # blocker" and refused. Four finished recipes sat terminal on a hash count. It is the same failure
+  # this file's own header describes - a matcher that reads a form no auditor has ever written - just
+  # one level up, and the gate that is supposed to police these headings was equally blind to whole
+  # reports, so nothing said the reports were unreadable either.
+  # AND THE TWO LEVELS TAKE DIFFERENT LABELS, which is not tidiness. At ### the abbreviated forms are
+  # safe because ### is only ever used for a blocker in these reports. At ## they are NOT: a GO report
+  # in hunt-2026-08-15-shakedown carries `## B5 VERIFICATION - FIXED, both parts`, a note recording a
+  # blocker that was CLOSED, and the first cut of this widening read it as an open one - inventing a
+  # kindless blocker in a report that had none and taking the headings gate red over it. So ## demands
+  # the word BLOCKER spelled out, which is what every real ##-level blocker on disk actually writes.
+  if ($s -match '^###\s') {
+    if ([regex]::IsMatch($s, '^###\s+(?:BLOCKER|Blocker|B|R)\s*\d*\s*[.:\-]?\s')) { return $true }
+    return [regex]::IsMatch($s, '^###\s+\d+\.\s')
+  }
+  if ($s -match '^##\s') {
+    return [regex]::IsMatch($s, '^##\s+(?:BLOCKER|Blocker)\s*\d*\s*[.:\-]?\s')
+  }
+  return $false
 }
 
 function Get-BlockerKindsFromLine {
@@ -93,6 +112,33 @@ function Get-LeadingKindDeclaration {
   return @()
 }
 
+function Test-IsBlockingSectionHeader {
+  <#
+    `## BLOCKING issues (both recipe-local, both in writer-authored spec strings)`
+
+    THE OLDEST FORM ON DISK (hunt-2026-08-24-v3-phase6b wave 2). Its blockers are bare `B1.` / `B2.`
+    label lines with no hashes at all, and the kind is declared ONCE for the section rather than on
+    each blocker. The auditor did classify them - in the clearest possible terms, in its own words -
+    and a reader that demanded a per-blocker tag called that "no kind declared" and left
+    creamy-roasted-garlic-chicken with no way back, both of its defects having been repaired.
+
+    DELIBERATELY NARROW. The header must BEGIN with the word BLOCKING, which is what keeps
+    `## Non-blocking findings (recorded)` out - that section's parenthesis would otherwise hand a
+    kind to findings the auditor explicitly said do not block, and inheriting a kind into the
+    non-blocking section is the one direction that could revive a recipe nobody cleared.
+  #>
+  param([string]$Line)
+  return [regex]::IsMatch(([string]$Line), '^#{1,4}\s+BLOCKING\b', 'IgnoreCase')
+}
+
+function Test-IsBareBlockerLabel {
+  <# `B1. MILK BULLET CONTRADICTS...` - a blocker label with no hashes, only legal INSIDE a
+     BLOCKING-issues section. Requiring the number and the punctuation is what stops an ordinary
+     sentence starting with "B" or "R" from being read as a blocker. #>
+  param([string]$Line)
+  return [regex]::IsMatch(([string]$Line), '^(?:BLOCKER|Blocker|B|R)\s*\d+\s*[.:\-]\s')
+}
+
 function Get-BlockerKinds {
   <#
     Every OPEN blocker in one report, as the kinds it declares - in its heading's parentheses, or as
@@ -104,9 +150,24 @@ function Get-BlockerKinds {
   param([string]$Path)
   $lines = @(Get-Content $Path)
   $out = @()
+  $sectionKinds = @()      # kinds declared by the enclosing `## BLOCKING issues (...)` header
+  $inBlocking = $false
   for ($i = 0; $i -lt $lines.Count; $i++) {
-    if (-not (Test-IsBlockerHeading $lines[$i])) { continue }
+    if ([string]$lines[$i] -match '^#{1,4}\s') {
+      if (Test-IsBlockingSectionHeader $lines[$i]) {
+        $inBlocking = $true
+        $sectionKinds = @(Get-BlockerKindsFromLine $lines[$i])
+      } elseif (-not (Test-IsBlockerHeading $lines[$i])) {
+        # any OTHER heading closes the section, so `## Non-blocking findings` cannot inherit
+        $inBlocking = $false
+        $sectionKinds = @()
+      }
+    }
+    $isHeading = Test-IsBlockerHeading $lines[$i]
+    $isBare = $inBlocking -and (Test-IsBareBlockerLabel $lines[$i])
+    if (-not $isHeading -and -not $isBare) { continue }
     $kinds = @(Get-BlockerKindsFromLine $lines[$i])
+    if (-not $kinds.Count -and $isBare) { $kinds = @($sectionKinds) }
     if (-not $kinds.Count) {
       # Look only at the body of THIS blocker, and only until it says something that is not a
       # classification - two lines is the whole convention in every report on disk.

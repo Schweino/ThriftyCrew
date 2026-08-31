@@ -10,5 +10,11 @@
     "heading": "### BLOCKER 2 - teriyaki-grilled-chicken-and-veggie-rice-bowls: dish identity never ruled against the live teriyaki-chicken-bowl",
     "why": "Predates the rule (2026-08-27), body opens with '- The live catalog carries...' and never classifies. The same dish-identity question was restated WITH its kind as wave 6 Blocker 1 (recipe-local), and wave 6 is the audit -Revive and -Repair actually read for this slug.",
     "recorded": "2026-08-29"
+  },
+  {
+    "report": "hunt-2026-08-27-ten/wave-3.audit.md",
+    "heading": "## BLOCKER 1 - baked-stuffed-pork-chops: main protein priced on the bone-in id the",
+    "why": "Predates the rule (report 2026-08-27, rule 2026-08-29) and was INVISIBLE to this gate until 2026-08-31, because the reader required ### and this report writes its blockers at ##. It genuinely declares no kind: the heading wraps onto a second ## line and the body opens 'The chain, each link verified in the files:' rather than a classification. NOT baselined to make anything green - it is recorded so the gate ships honest while the omission stands. Its CONSEQUENCE is real and is NOT resolved by this entry: baked-stuffed-pork-chops has no door back, because -Revive needs every open blocker to be someone else's and -Repair needs one to be its own, and a kindless blocker answers neither. The text reads shared/pipeline (a registrar ruling that was never executed), so a human ruling could reopen it; nothing here may infer that kind on the auditor's behalf.",
+    "recorded": "2026-08-31"
   }
 ]

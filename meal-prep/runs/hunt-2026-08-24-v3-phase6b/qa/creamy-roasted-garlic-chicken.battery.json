@@ -2,7 +2,7 @@
   "battery": "qa-battery",
   "version": 1,
   "slug": "creamy-roasted-garlic-chicken",
-  "generated": "2026-08-24T19:29:46",
+  "generated": "2026-08-31T16:13:23",
   "inputs": {
     "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\creamy-roasted-garlic-chicken.json",
     "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-24-v3-phase6b\\extracted\\creamy-roasted-garlic-chicken.json"
@@ -146,9 +146,9 @@
     },
     {
       "check": "prose-numbers",
-      "verdict": "fail",
+      "verdict": "pass",
       "numbers": {
-        "stat_claims_read": 4,
+        "stat_claims_read": 2,
         "fields": [
           "intro_html",
           "portion_html",
@@ -157,17 +157,8 @@
           "head.description"
         ]
       },
-      "detail": "intro_html says 15g carbs, the stat says 15; head.description says 15g carbs, the stat says 15",
-      "findings": [
-        {
-          "severity": "fail",
-          "detail": "intro_html says 15g carbs, the stat says 15"
-        },
-        {
-          "severity": "fail",
-          "detail": "head.description says 15g carbs, the stat says 15"
-        }
-      ]
+      "detail": "every stat claim in the prose equals the stat it claims (2 read)",
+      "findings": []
     },
     {
       "check": "title-credit-url",
@@ -204,7 +195,7 @@
   ],
   "summary": {
     "checks": 6,
-    "failed": 2
+    "failed": 1
   },
   "not_checked": [
     "whether a substitution was deliberate and defensible",

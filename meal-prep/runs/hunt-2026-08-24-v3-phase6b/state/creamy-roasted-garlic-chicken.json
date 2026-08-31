@@ -3,14 +3,14 @@
     "title":  "Creamy Roasted Garlic Chicken",
     "source_url":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
     "protein":  "chicken",
-    "state":  "rejected-audit",
-    "wave":  2,
+    "state":  "qa-passed",
+    "wave":  null,
     "created":  "2026-08-24T18:57:43",
-    "updated":  "2026-08-24T19:48:27",
+    "updated":  "2026-08-31T16:13:42",
     "terms":  [
 
               ],
-    "reject_reason":  "NO-GO on two recipe-local, writer-owned prose defects in meal-prep\\db\\recipes\\creamy-roasted-garlic-chicken.json; no shared data implicated. B1: shop_smart milk bullet says \u0027a half gallon covers it wi",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -80,6 +80,18 @@
                         "at":  "2026-08-24T19:48:27",
                         "by":  "auditor",
                         "detail":  "NO-GO on two recipe-local, writer-owned prose defects in meal-prep\\db\\recipes\\creamy-roasted-garlic-chicken.json; no shared data implicated. B1: shop_smart milk bullet says \u0027a half gallon covers it wi"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-31T16:08:09",
+                        "by":  "opus5-backlog-2026-08-31",
+                        "detail":  "repaired: Both wave-2 blockers verified repaired on disk 2026-08-31. B1: shop_smart[1] now reads \"the gallon is still the play even though a half gallon would just about cover it\", consistent with cost_lines \"Buy 1 gallon: $2.82\" - the self-contradiction is gone. B2: ingredients_display[3]/[4] and head.recipeIngredient[3]/[4] now read \"to taste\" with NO parenthetical grams, so the 140 g salt / 28 g pepper fallback weights are off the reader-facing card and out of the JSON-LD. Reopened under Brad ruling 2026-08-31 that audit-blocker-lib should read the older report format; wave-2s two blockers are declared recipe-local by its own \"## BLOCKING issues (both recipe-local...)\" section header and are now machine-readable.  [audit blockers: recipe-local; 2 recipe-local; source-QA still owed]"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-31T16:13:42",
+                        "by":  "source-qa",
+                        "detail":  "post -Repair re-QA 2026-08-31: both anchors read, live page matches line for line; the one blocking finding (stale carbs literal 15 vs stat 17) repaired at root by adding the missing {{carbs}} render token, card rebuilt, battery prose-numbers now clean"
                     }
                 ]
 }

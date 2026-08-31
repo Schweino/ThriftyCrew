@@ -38,7 +38,7 @@
                  "fat":  30,
                  "cost_ps":  "2.92"
              },
-    "intro_html":  "Creamy garlic chicken sounds like something you order out and pay restaurant money for, but look down the list and there is not a drop of heavy cream in it. The sauce gets its body from milk, a spoon of flour, and a fistful of garlic that turns sweet and mellow when you roast it in a dry pan. You sear seasoned cutlets, build a simple white sauce right behind them, and stir in parmesan until it clings to every piece. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with about 15 grams of carbs, for roughly \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). That is a rich, garlicky dinner that eats like a splurge and shops like a Tuesday.",
+    "intro_html":  "Creamy garlic chicken sounds like something you order out and pay restaurant money for, but look down the list and there is not a drop of heavy cream in it. The sauce gets its body from milk, a spoon of flour, and a fistful of garlic that turns sweet and mellow when you roast it in a dry pan. You sear seasoned cutlets, build a simple white sauce right behind them, and stir in parmesan until it clings to every piece. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with about {{carbs}} grams of carbs, for roughly \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). That is a rich, garlicky dinner that eats like a splurge and shops like a Tuesday.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb, sliced horizontally into cutlets (3174 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp; 10 1/2 tbsp (245 g)",
@@ -179,7 +179,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Creamy roasted garlic chicken for meal prep: seared chicken cutlets under a milk-based roasted garlic and parmesan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with about 15 grams of carbs, for around ${{cost_ps}} each (at everyday cost).",
+                 "description":  "Creamy roasted garlic chicken for meal prep: seared chicken cutlets under a milk-based roasted garlic and parmesan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with about {{carbs}} grams of carbs, for around ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "creamy roasted garlic chicken, garlic parmesan chicken, high protein meal prep, budget chicken dinner, creamy chicken meal prep, roasted garlic sauce, cheap high protein dinner",
                  "image":  "",
                  "prepTime":  "PT15M",

@@ -15,6 +15,17 @@
 #   {{cost_ps}}   stat.cost_ps   (string, 2dp - the everyday per-serving cost)
 #   {{cal}}       stat.cal       (int)
 #   {{protein}}   stat.protein   (int)
+#   {{carbs}}     stat.carbs     (int)
+#   {{fat}}       stat.fat       (int)
+#
+# CARBS AND FAT ADDED 2026-08-31, and the reason is a wave blocker. This map had cal, protein and
+# cost_ps but NOT carbs or fat, so a writer who wanted to state either had no choice but a literal -
+# and a literal is exactly what the token mechanism exists to prevent. creamy-roasted-garlic-chicken
+# said "about 15 grams of carbs" in intro_html and head.description while its stat said 17: its macros
+# were recomputed off the Fairlife-vs-ordinary-milk basis (563/64/15/27 -> 583/61/17/30 on unchanged
+# grams) and the two tokenised numbers in the same sentence moved with it while the untokenised one did
+# not. Measured across all 585 specs: 5 state carbs or fat as a literal and 1 of them had gone stale.
+# Small, but it is the same class the 2026-08-07 prose disaster came from, and the fix is five lines.
 #
 # BOUNDS ARE NOT TOKENS, deliberately. "under 400 calories" is a CLAIM whose truth the bounded-claim gate
 # already checks against stat; tokenizing it would rewrite the promise whenever the stat moved, which is
@@ -29,10 +40,15 @@ $script:TOKEN_FIELDS = @('intro_html','portion_html','cost_closing_html','upsell
 function Expand-SpecTokens { param([string]$Text, $Spec)
   if ([string]::IsNullOrEmpty($Text)) { return $Text }
   if ($Text.IndexOf('{{') -lt 0) { return $Text }
-  $map = @{
-    'cost_ps' = [string]$Spec.stat.cost_ps
-    'cal'     = [string][int]$Spec.stat.cal
-    'protein' = [string][int]$Spec.stat.protein
+  # BUILT CONDITIONALLY, because [int]$null IS 0. Casting a missing stat straight to [int] produced
+  # the string "0", which is not empty, so the empty-stat guard below could never fire and the reader
+  # got "0 grams of carbs" - a confident wrong number, which is worse than the unexpanded token the
+  # guard exists to prevent. Found 2026-08-31 while adding carbs/fat; the same hole was already open
+  # for cal and protein and had simply never been reached, because every spec happens to carry both.
+  $map = @{ 'cost_ps' = [string]$Spec.stat.cost_ps }
+  foreach ($k in @('cal', 'protein', 'carbs', 'fat')) {
+    $v = $Spec.stat.$k
+    $map[$k] = if ($null -eq $v -or [string]::IsNullOrEmpty([string]$v)) { '' } else { [string][int]$v }
   }
   $out = [regex]::Replace($Text, '\{\{(\w+)\}\}', {
     param($m)
@@ -97,12 +113,18 @@ function Remove-GhostStaticCurrencyClaims { param([string]$Text)
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
-  $spec = '{"stat":{"cal":460,"protein":38,"cost_ps":"5.76"}}' | ConvertFrom-Json
+  $spec = '{"stat":{"cal":460,"protein":38,"carbs":17,"fat":30,"cost_ps":"5.76"}}' | ConvertFrom-Json
 
   T 'money token expands to the spec''s own stat' `
     ((Expand-SpecTokens 'about ${{cost_ps}} a bowl' $spec) -eq 'about $5.76 a bowl') (Expand-SpecTokens 'about ${{cost_ps}} a bowl' $spec)
   T 'cal + protein expand together' `
     ((Expand-SpecTokens 'near {{cal}} calories with {{protein}} grams of protein' $spec) -eq 'near 460 calories with 38 grams of protein') 'mismatch'
+  T 'carbs and fat expand from the stat too (added 2026-08-31 - their absence is why one spec went stale)' `
+    ((Expand-SpecTokens '{{carbs}}g carbs and {{fat}}g fat' $spec) -eq '17g carbs and 30g fat') (Expand-SpecTokens '{{carbs}}g carbs and {{fat}}g fat' $spec)
+  T 'MUST FIRE  a carbs token over a spec with NO carbs stat throws, and does NOT render "0"' `
+    (& { $t = $false; try { Expand-SpecTokens '{{carbs}}g' ('{"stat":{"cal":1,"protein":1,"cost_ps":"1.00"}}' | ConvertFrom-Json) | Out-Null } catch { $t = $true }; $t }) 'rendered a hole'
+  T 'MUST FIRE  ...and the same holds for cal, whose [int]$null-is-0 hole was open all along' `
+    (& { $t = $false; try { Expand-SpecTokens '{{cal}} cal' ('{"stat":{"protein":1,"cost_ps":"1.00"}}' | ConvertFrom-Json) | Out-Null } catch { $t = $true }; $t }) 'rendered 0 calories to a reader'
   T 'CLEAN TWIN text with no tokens is returned untouched (fast path)' `
     ((Expand-SpecTokens 'no tokens here, just $1 a month' $spec) -eq 'no tokens here, just $1 a month') 'rewritten'
 

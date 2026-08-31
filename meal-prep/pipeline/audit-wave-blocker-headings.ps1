@@ -148,6 +148,48 @@ if ($runSelfTest) {
     T 'CLEAN TWIN   ...and the baselined one really is silenced, so this is not a distinction without a difference' `
       (@(Get-HeadingFindings @($two) @{}).Count -eq 2) (@(Get-HeadingFindings @($two) @{}).Count.ToString())
 
+    # ---- THE TWO OLDER FORMS, READABLE SINCE 2026-08-31 ----
+    # Three real NO-GO reports were invisible to this gate AND to hunt-run, because the reader demanded
+    # exactly three hashes. They parsed to ZERO blockers, which -Revive and -Repair both read as "names
+    # no open blocker" and refused - the same wording that already cost eleven recipes once, one level up.
+    $h2 = Seed 'wave-9.audit.md' "NO-GO`n## BLOCKER 1 - slug (recipe-local)`nThe chain, each link verified.`n"
+    T 'a ##-level `## BLOCKER 1 - slug (recipe-local)` is READ and correctly tagged' `
+      (@(Get-HeadingFindings @($h2) @{}).Count -eq 0) (@(Get-HeadingFindings @($h2) @{}).Count.ToString())
+    T '...and it really is being read, not merely not-found' `
+      (@(Get-BlockerKinds $h2).Count -eq 1) ([string](@(Get-BlockerKinds $h2).Count))
+
+    $h2n = Seed 'wave-10.audit.md' "NO-GO`n## BLOCKER 1 - slug: something broke`nThe chain, each link verified.`n"
+    T 'MUST FIRE  a ##-level blocker with no kind anywhere is now a finding (it used to be invisible)' `
+      (@(Get-HeadingFindings @($h2n) @{}).Count -eq 1) (@(Get-HeadingFindings @($h2n) @{}).Count.ToString())
+
+    # A GO report carries `## B5 VERIFICATION - FIXED, both parts` - a CLOSED blocker being recorded.
+    # The first cut of the ## widening read that as an OPEN blocker, invented a kindless finding in a
+    # report that had none, and took this gate red. ## therefore demands the word BLOCKER spelled out.
+    $ver = Seed 'wave-11.audit.md' "GO`n## B5 VERIFICATION - FIXED, both parts`n## R2 CHECK - also closed`n"
+    T 'MUST NOT FIRE  a ##-level `B5 VERIFICATION - FIXED` note is not an open blocker' `
+      (@(Get-HeadingFindings @($ver) @{}).Count -eq 0) (@(Get-HeadingFindings @($ver) @{}).Count.ToString())
+
+    # THE OLDEST FORM: bare `B1.` labels under a section header that declares the kind ONCE.
+    $sect = Seed 'wave-12.audit.md' ("NO-GO`n## BLOCKING issues (both recipe-local, both in writer-authored spec strings)`n" +
+      "B1. MILK BULLET CONTRADICTS THE CARD`nB2. 140 g SALT IS READER-FACING`n## Non-blocking findings (recorded)`n")
+    T 'bare `B1.` labels inherit the kind their BLOCKING section declares' `
+      (@(Get-HeadingFindings @($sect) @{}).Count -eq 0) (@(Get-HeadingFindings @($sect) @{}).Count.ToString())
+    T '...and BOTH of them are seen, not just the first' `
+      (@(Get-BlockerKinds $sect).Count -eq 2) ([string](@(Get-BlockerKinds $sect).Count))
+
+    # ...and the inheritance must STOP at the next section. `## Non-blocking findings (recorded)` has a
+    # parenthesis of its own, and handing its findings a kind is the one direction that could revive a
+    # recipe nobody cleared.
+    $spill = Seed 'wave-13.audit.md' ("NO-GO`n## BLOCKING issues (both recipe-local)`nB1. real blocker`n" +
+      "## Non-blocking findings (recorded)`nB2. carried, does not block`n")
+    T 'MUST NOT FIRE  a bare label AFTER the blocking section ends is not a blocker at all' `
+      (@(Get-BlockerKinds $spill).Count -eq 1) ([string](@(Get-BlockerKinds $spill).Count))
+
+    # A bare label outside any BLOCKING section is ordinary prose and must stay invisible.
+    $loose = Seed 'wave-14.audit.md' "NO-GO`n## Verdict per category`nB1. this is prose, not a blocker`n"
+    T 'MUST NOT FIRE  a bare `B1.` line outside a BLOCKING section is not a blocker' `
+      (@(Get-BlockerKinds $loose).Count -eq 0) ([string](@(Get-BlockerKinds $loose).Count))
+
     # THE LIVE TREE. The fixtures above prove the rule; this proves the rule is TRUE of the estate
     # right now, which is the thing a baseline can silently stop being.
     $live = @(Get-ChildItem (Join-Path $mp 'runs') -Recurse -Filter '*.audit.md' -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
