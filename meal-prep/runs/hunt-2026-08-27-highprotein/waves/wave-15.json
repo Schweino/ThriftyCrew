@@ -1,0 +1,31 @@
+{
+    "wave":  15,
+    "run":  "hunt-2026-08-27-highprotein",
+    "batch":  "hunt-2026-08-27-highprotein-w15",
+    "created":  "2026-08-31T15:50:22",
+    "slugs":  [
+                  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+                  "high-protein-chicken-alfredo-lasagna",
+                  "chicken-and-potato-curry"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+                        "title":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+                        "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "high-protein-chicken-alfredo-lasagna",
+                        "title":  "Chicken Alfredo Lasagna",
+                        "source_url":  "https://masonfit.com/chicken-alfredo-lasagna/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "chicken-and-potato-curry",
+                        "title":  "Chicken and Potato Curry",
+                        "source_url":  "https://skinnyspatula.com/chicken-potato-curry/",
+                        "protein":  "chicken"
+                    }
+                ]
+}

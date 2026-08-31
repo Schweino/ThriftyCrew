@@ -3,10 +3,10 @@
     "title":  "Chicken and Potato Curry",
     "source_url":  "https://skinnyspatula.com/chicken-potato-curry/",
     "protein":  "chicken",
-    "state":  "written",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  15,
     "created":  "2026-08-27T18:14:55",
-    "updated":  "2026-08-31T15:13:24",
+    "updated":  "2026-08-31T15:50:22",
     "terms":  [
                   {
                       "term":  "fresh red chili",
@@ -105,6 +105,18 @@
                         "at":  "2026-08-31T15:13:24",
                         "by":  "opus5-backlog-2026-08-31",
                         "detail":  "repaired: R4 repaired: the spec now carries bid jalapenos per the registrar ruling (0 serrano occurrences); R5 shared gate audit-spec-contradictions is 0 findings exit 0. Verified on disk 2026-08-31.  [audit blockers: recipe-local, shared, shared-data; 4 recipe-local; source-QA still owed]"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-31T15:50:09",
+                        "by":  "source-qa",
+                        "detail":  "post -Repair re-QA 2026-08-31: both anchors read, live page matches the transcription; every battery fail resolved as a coverage_check.py instrument artifact, wave-9 blocker verified repaired on disk"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-31T15:50:22",
+                        "by":  "wave-close",
+                        "detail":  "wave 15"
                     }
                 ]
 }

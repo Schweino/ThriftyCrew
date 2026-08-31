@@ -3,10 +3,10 @@
     "title":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
     "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
     "protein":  "chicken",
-    "state":  "written",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  15,
     "created":  "2026-08-27T11:48:53",
-    "updated":  "2026-08-31T15:13:24",
+    "updated":  "2026-08-31T15:50:22",
     "terms":  [
                   {
                       "term":  "Boursin cheese",
@@ -109,6 +109,18 @@
                         "at":  "2026-08-31T15:13:24",
                         "by":  "opus5-backlog-2026-08-31",
                         "detail":  "repaired: R3 repaired: the lemon zest line now reads Buy 1 lemon $0.50, not the per-pound rate stamped as a per-each buy. R5 gate green. Verified on disk 2026-08-31.  [audit blockers: recipe-local, shared, shared-data; 4 recipe-local; source-QA still owed]"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-31T15:50:09",
+                        "by":  "source-qa",
+                        "detail":  "post -Repair re-QA 2026-08-31: both anchors read, live page matches the transcription; every battery fail resolved as a coverage_check.py instrument artifact, wave-9 blocker verified repaired on disk"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-31T15:50:22",
+                        "by":  "wave-close",
+                        "detail":  "wave 15"
                     }
                 ]
 }

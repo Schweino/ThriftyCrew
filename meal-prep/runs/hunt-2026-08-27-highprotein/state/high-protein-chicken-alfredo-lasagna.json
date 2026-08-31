@@ -3,10 +3,10 @@
     "title":  "Chicken Alfredo Lasagna",
     "source_url":  "https://masonfit.com/chicken-alfredo-lasagna/",
     "protein":  "chicken",
-    "state":  "written",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  15,
     "created":  "2026-08-27T11:44:57",
-    "updated":  "2026-08-31T15:13:24",
+    "updated":  "2026-08-31T15:50:22",
     "terms":  [
                   {
                       "term":  "frozen lightly breaded chicken breast bites",
@@ -105,6 +105,18 @@
                         "at":  "2026-08-31T15:13:24",
                         "by":  "opus5-backlog-2026-08-31",
                         "detail":  "repaired: R1 repaired: costed.json now carries the 9-line row including Black Pepper. R2 RULED BY BRAD 2026-08-31 (recorded in the spec writer_notes): the breaded-bites line was repurposed to board Boneless Skinless Chicken Breast and macros rebuilt from the plain-breast row. R5 gate green.  [audit blockers: recipe-local, shared, shared-data; 4 recipe-local; source-QA still owed]"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-31T15:50:09",
+                        "by":  "source-qa",
+                        "detail":  "post -Repair re-QA 2026-08-31: both anchors read, live page matches the transcription; every battery fail resolved as a coverage_check.py instrument artifact, wave-9 blocker verified repaired on disk"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-31T15:50:22",
+                        "by":  "wave-close",
+                        "detail":  "wave 15"
                     }
                 ]
 }

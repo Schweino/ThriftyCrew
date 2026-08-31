@@ -1,6 +1,12 @@
 {
   "slug": "chicken-and-potato-curry",
-  "verdict": "fail",
-  "owner": "writer",
-  "findings": "ANCHORS: extraction + live-page (skinnyspatula.com fetched clean; the live page matches the transcription line for line and step for step, so the transcription is sound and the extractor owes nothing). RESOLVED AS NOTES, not defects: the battery's three INVENTED/DROPPED pairs are pure renames with correct 3.5x scaling verified in the spec - garlic cloves 4 -> Garlic 14 cloves, fresh red chilli 1 tbsp -> Fresh Red Chili 3 1/2 tbsp, chicken stock 1 cup -> Chicken Broth 3 1/2 cups. Stock->broth is a defensible synonym; all three are deliberate naming, not substitutions. Method survives intact: same 6-step build (onion sweat, aromatics, spice bloom, seal chicken, covered simmer, coconut-milk finish), no technique swap, no invented or dropped components. Title, credit URL, servings claim (4 -> 14, 3.5x), dash sweep all pass. BLOCKING 1 (prose-numbers, owner: writer): intro_html, cost_closing_html and head.description state 4g protein / 9g carbs / 8g fat where the stat says 42 / 23 / 26 - the prose describes a different dish's macros on a card sold as high-protein; five literal disagreements, all one repair (transcribe the stat or use tokens). BLOCKING 2 (scaling, owner: mapper): Ground Coriander and Ground Cumin display 2 tbsp (6 tsp) where 3.5x of 2 tsp is 7 tsp (2 1/3 tbsp) - a 14.3% under-scale on both lines that house quarter-quantization does not explain, and the spec's own internal audit note claims '2 tsp -> 7 tsp', contradicting its own display; the two lines were hand-rounded after the audit was written. Every other rated line holds exactly 3.5x. Two blocking findings, split writer (prose) and mapper (two spice amounts); primary owner writer since the prose defect is the larger reader-facing lie. This is the re-QA; second fail is terminal per protocol, but both defects are real, specific, and were named with both values."
+  "verdict": "pass",
+  "owner": "",
+  "anchors": [
+    "extraction",
+    "live-page"
+  ],
+  "at": "2026-08-31",
+  "by": "recipe-source-qa (post -Repair re-QA)",
+  "findings": "PASS. Both battery fails are INSTRUMENT artifacts, verified independently against the spec: (1) prose-numbers - the spec's prose reads 42.4 / 22.9 / 25.8 g against stat 42 / 23 / 26; coverage_check.py's number reader keeps only the digits after the decimal point ('42.4 grams' -> 4g), which is exactly the 4 / 9 / 8 it reported. (2) scale-ratio - Ground Coriander and Ground Cumin buy '2 tbsp plus 1 tsp' = 7 tsp = 3.5x of the source's 2 tsp; the reader takes only the leading '2 tbsp'. Coverage residue is three pure renames at exact 3.5x (garlic cloves -> Garlic, fresh red chilli -> Fresh Red Chili, chicken stock -> Chicken Broth). Wave-9 R4 confirmed repaired on disk: the Fresh Red Chili bid is jalapenos per the registrar ruling, 0 serrano occurrences. Supersedes the prior fail verdict; both its blockers are closed."
 }

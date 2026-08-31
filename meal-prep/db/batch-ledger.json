@@ -1588,5 +1588,43 @@
                          "detail":  "CLEAN - paywall verified both directions across 578 recipes (0 leaks/0 skew); live grams+macros match db and an independent recompute; scaler functional; rename clean on rendered surfaces; 12 withheld specs proven not shipped; guards 0 hard, run-gates 154/0; feed edge serving 12:47 with both slugs"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w15",
+      "opened":  "2026-08-31T15:50:22",
+      "last_activity":  "2026-08-31T15:50:24",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "abandoned":  false,
+      "abandoned_at":  null,
+      "abandon_reason":  null,
+      "slugs":  [
+                    "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+                    "high-protein-chicken-alfredo-lasagna",
+                    "chicken-and-potato-curry"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-31T15:50:23",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-31T15:50:23",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-31T15:50:23",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-31T15:50:24",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]
