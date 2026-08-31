@@ -8,11 +8,16 @@
   This is what the weekly automation runs so it only re-resolves what changed (incremental refresh).
   Output: out\url-worklist.json  { generated, tolerance, stores{ <store>: [ {id,commodity,term,unit,price_per_unit,reason} ] } }
 #>
-param([double]$Tolerance = 0.15, [string]$OutDir = "")
+param([double]$Tolerance = 0.15, [string]$OutDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
+# -SelfTest exercises the per-unit parsers against frozen fixtures and never touches the boards, the
+# durable link file, or out\url-worklist.json. The board reads below are skipped for it: this script
+# had NO self-test until 2026-08-31, so run-gates could not see it at all and a silent arithmetic
+# error in LinkPerUnit sat behind 6 "mismatch" rows that looked like ordinary re-resolve work.
+if (-not $SelfTest) {
 $cmpFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
 $cmp = (Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison
 $ri  = @()
@@ -31,6 +36,7 @@ if (Test-Path $pf) {
     $purls[[string]$p.Name] = $sm
   }
 }
+}   # end: if (-not $SelfTest)
 
 # size -> per-unit parser (mirror of the collectors) so we can compare stored product to current board per_unit
 function ParsePU([string]$size, [string]$basis, [double]$price) {
@@ -45,42 +51,88 @@ function ParsePU([string]$size, [string]$basis, [double]$price) {
   return $null
 }
 
-# Compute the LINKED product's per-unit in $unit from its stored {price,size}. Handles unit-price-string
-# sizes ("$2.74/lb","$0.28/oz") as well as quantities ("16 oz","3 lb","12 ct","dozen"). Used for the
-# 'mismatch' check: does the linked product's price actually equal the board price shown next to it?
-function LinkPerUnit([string]$size, [string]$unit, [double]$price) {
-  $s = ([string]$size).ToLower().Trim()
-  $up = [regex]::Match($s, '\$?\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(fl\s*oz|floz|oz|lb|ea|each|ct|count)')
-  if ($up.Success) {
-    $v = [double]$up.Groups[1].Value; $un = ($up.Groups[2].Value -replace '\s','') -replace 'fl',''
-    switch ($unit) {
-      'lb'    { if ($un -eq 'lb') { return $v }; if ($un -eq 'oz') { return $v*16 } }
-      'oz'    { if ($un -eq 'oz') { return $v }; if ($un -eq 'lb') { return $v/16 } }
-      'floz'  { if ($un -match 'oz') { return $v }; if ($un -eq 'lb') { return $v/16 } }
-      'each'  { return $price }
-      'dozen' { return $price }
+<#
+  Compute the LINKED product's per-unit in $unit from its stored {price,size,name}. Used for the
+  'mismatch' check: does the linked product's price actually equal the board price shown next to it?
+
+  2026-08-31: this DELEGATES to pu-lib's Get-LinkPerUnit, the single per-unit parser. It used to carry
+  a private copy of that arithmetic, and the 2026-07-26 consolidation that pointed every other caller
+  at pu-lib (see audit-board-consistency.ps1 LinkPU) missed this one - so the estate had two
+  implementations of one calculation and they drifted, which is the duplicated-constant trap the lib
+  exists to prevent. The private copy was the older, weaker one; measured across all 3,342 stored
+  links, the two agreed on 3,029, pu-lib parsed 55 shapes the copy returned null for, the copy was
+  better on NONE, and they disagreed on 13 - pu-lib correct in all 13:
+
+    "12 x 4 oz"   the pack count precedes the qty with an x and carries no pk token, so the private
+                  copy kept only the 4: canned-peaches $7.48 -> $1.87/oz against a true $0.1558/oz.
+                  That is where mismatch(1100%) came from, and the percentages were clean multiples of
+                  the pack count (tuna 8x = 700%, chicken 2x = 100%) because the divisor was the bug.
+    "each" + name the count lives only in the product NAME ("...10 Count", "6 ct"): tortillas $1.99
+                  each -> $0.199. pu-lib takes $name for exactly this and reads it under its own
+                  two-counts-in-a-name guard, which is why the count is not guessed at here.
+    "1/2 gal"     the copy's regex matched the "2 gal" and divided by 256 fl oz instead of 64, so
+                  three Baker's dairy links (almond-milk, buttermilk, half-and-half) read 4x LOW.
+
+  None of these ever cleared by re-resolving the chip - a hand-resolved link re-derives the same wrong
+  number and re-flags the next day - so they were arithmetic, not capture work.
+#>
+. (Join-Path $PSScriptRoot 'pu-lib.ps1')
+function LinkPerUnit([string]$size, [string]$unit, [double]$price, [string]$name = '') {
+  Get-LinkPerUnit -size $size -unit $unit -price $price -name $name
+}
+
+if ($SelfTest) {
+  <#
+    Frozen fixtures for the two per-unit parsers. Every expected value below is arithmetic done by
+    hand from the stored {price,size} of a REAL link in product-urls.json, not a value copied out of
+    a previous run - a fixture built from the code's own output cannot fail when the code is wrong.
+  #>
+  $fail = 0
+  function T($label, $got, $want) {
+    if ($null -eq $want) {
+      if ($null -eq $got) { Write-Output "ok    $label -> null" } else { Write-Output "FAIL  $label -> expected null, got $got"; $script:fail++ }
+      return
     }
+    if ($null -ne $got -and [math]::Abs([double]$got - [double]$want) -lt 0.0005) { Write-Output ("ok    $label -> {0:N4}" -f $got) }
+    else { Write-Output "FAIL  $label -> expected $want, got $got"; $script:fail++ }
   }
-  if ($price -le 0) { return $null }
-  $q = [regex]::Match($s, '([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|ct|count|ea|pk|gal|dozen|doz)')
-  $n = if ($q.Success) { [double]$q.Groups[1].Value } else { $null }
-  $un = if ($q.Success) { ($q.Groups[2].Value -replace '\s','') -replace 'fl','' } else { '' }
-  # bare-unit size ("lb","per lb","gallon","dozen","each") = one of that unit, so per-unit = the price itself.
-  # Without this, no digit -> $n stays null -> the price-match check is silently SKIPPED for by-weight/each links.
-  if (-not $q.Success) { $bu = [regex]::Match($s, '\b(lbs?|gal|gallon|dozen|doz|each|ea)\b'); if ($bu.Success) { $n = 1; $un = $bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' } }   # anchored: unanchored 'doz'->'dozen' corrupts 'dozen' into 'dozenen'
-  # multipack: "40 oz 2 pk" = 80 oz total. Multiply the weight/volume qty by the pack count.
-  $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b')
-  if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
-  switch ($unit) {
-    'lb'    { if ($un -match '^lbs?$' -and $n) { return $price/$n }; if ($un -eq 'oz' -and $n) { return $price/($n/16) }; return $null }
-    'oz'    { if ($un -eq 'oz' -and $n) { return $price/$n }; if ($un -match '^lbs?$' -and $n) { return $price/(16*$n) }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'floz'  { if ($un -match 'oz' -and $n) { return $price/$n }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'each'  { if ($un -match '^(ct|count|ea|pk)$' -and $n) { return $price/$n }; if ($un -match '^(dozen|doz)$') { return $price/12 }; if ($s -match 'each' -or $s -eq '' -or $s -eq '1 ct') { return $price }; return $null }
-    'dozen' { if ($un -match '^(dozen|doz)$') { return $price }; if ($un -match '^(ct|count|ea)$' -and $n) { return $price/($n/12) }; return $null }
-    'gallon'{ if ($un -eq 'gal' -and $n) { return $price/$n }; return $null }
-    default { return $null }
-  }
-  return $null
+
+  # --- the 2026-08-31 bug: "N x M unit" multipacks, all six of them Fareway links ---
+  # 12 x 4 oz = 48 oz total; 7.48/48. Before the fix this returned 7.48/4 = 1.8700 (= 1100% high).
+  T 'canned-peaches "12 x 4 oz" $7.48 per oz'   (LinkPerUnit '12 x 4 oz'    'oz'   7.48) (7.48/48)
+  T 'canned-tuna    "8 x 5 oz"  $6.99 per oz'   (LinkPerUnit '8 x 5 oz'     'oz'   6.99) (6.99/40)
+  T 'canned-chicken "2 x 12.5 oz" $5.99 per oz' (LinkPerUnit '2 x 12.5 oz'  'oz'   5.99) (5.99/25)
+  T 'sports-drinks  "8 x 20 fl oz" $6.99 /floz' (LinkPerUnit '8 x 20 fl oz' 'floz' 6.99) (6.99/160)
+  T 'peaches        "4 x 4.3 oz" $2.99 per oz'  (LinkPerUnit '4 x 4.3 oz'   'oz'   2.99) (2.99/17.2)
+  # The literal U+00D7 MULTIPLICATION SIGN, not an ASCII x - the regex accepts [x×] and a store that
+  # renders the real sign must not fall back to the un-multiplied qty.
+  T 'unicode multiply sign "6 × 12 oz" $9.00'   (LinkPerUnit ('6 ' + [char]0x00D7 + ' 12 oz') 'oz' 9.00) (9.00/72)
+
+  # --- the shape that already worked: must not regress ---
+  T 'existing "40 oz 2 pk" $8.00 per oz'        (LinkPerUnit '40 oz 2 pk'   'oz'   8.00) (8.00/80)
+
+  # --- the count lives ONLY in the product name; inert unless the call site passes $name ---
+  # These are the rows that read as mismatch(900%)/(500%)/(300%) and could never clear by re-resolving.
+  T 'tortillas "each" + "10 Count" name'        (LinkPerUnit 'each' 'each' 1.99 'Mission Super Soft Flour Tortillas, Fajita Size, 10 Count') (1.99/10)
+  T 'english-muffins "each" + "6 ct" name'      (LinkPerUnit 'each' 'each' 3.99 'Bays 6 ct, Original, English Muffins, Kosher, 12 oz')      (3.99/6)
+  T 'sweet-corn "1 pk" + "(4 Ct)" name'         (LinkPerUnit '1 pk' 'each' 5.99 'Fresh Sweet Corn (4 Ct)')                                  (5.99/4)
+  # ...and a name with NO count must fall back to the price, not invent a divisor.
+  T 'name without a count -> price itself'      (LinkPerUnit 'each' 'each' 1.99 'Inglehoffer Sweet Honey Mustard')                          1.99
+
+  # --- fractional gallon: the private copy matched the "2 gal" and divided by 256 instead of 64 ---
+  T '"1/2 gal" $6.99 per floz = 64 fl oz'       (LinkPerUnit '1/2 gal'      'floz' 6.99) (6.99/64)
+
+  # --- negatives: a decimal or a bare qty must never be treated as a pack count ---
+  T 'plain "4.3 oz" $2.99 is NOT a multipack'   (LinkPerUnit '4.3 oz'       'oz'   2.99) (2.99/4.3)
+  T 'plain "16 oz" $3.00'                       (LinkPerUnit '16 oz'        'oz'   3.00) (3.00/16)
+  T 'bare "lb" $6.99 = one pound'               (LinkPerUnit 'lb'           'lb'   6.99) 6.99
+  T 'bare "each" $1.99'                         (LinkPerUnit 'each'         'each' 1.99) 1.99
+  T 'unit-price string "$0.28/oz"'              (LinkPerUnit '$0.28/oz'     'oz'   9.99) 0.28
+  T '"dozen" $2.40 per each'                    (LinkPerUnit 'dozen'        'each' 2.40) (2.40/12)
+
+  if ($fail) { Write-Output "SELF-TEST FAIL ($fail)"; exit 1 }
+  Write-Output 'SELF-TEST PASS'
+  exit 0
 }
 
 $work = [ordered]@{}
@@ -117,7 +169,10 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard) 
       # sanitize: some resolver snapshots stored display text ("$6.17"); a bare [double] cast errored
       # and silently SKIPPED the mismatch check for those rows (surfaced 2026-07-26)
       $stPrice = 0.0; [void][double]::TryParse((([string]$st.price) -replace '[^0-9.]',''), [ref]$stPrice)
-      $lpu = LinkPerUnit ([string]$st.size) $unit $stPrice
+      # $st.name is passed because for a "each"/"1 pk" size the pack count exists ONLY in the product
+      # name ("...10 Count", "6 ct"). Without it pu-lib's name fallback is inert and the link reads as
+      # a single item - tortillas $1.99/each against a true $0.199/each, i.e. mismatch(900%) forever.
+      $lpu = LinkPerUnit ([string]$st.size) $unit $stPrice ([string]$st.name)
       if ($lpu -ne $null) {
         $md = [math]::Abs($lpu - $curPU) / $curPU
         if ($md -gt $Tolerance) { $reason = 'mismatch(' + [math]::Round($md*100) + '%)' }
