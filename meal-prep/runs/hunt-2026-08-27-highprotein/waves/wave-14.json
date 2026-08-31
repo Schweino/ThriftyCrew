@@ -1,0 +1,24 @@
+{
+    "wave":  14,
+    "run":  "hunt-2026-08-27-highprotein",
+    "batch":  "hunt-2026-08-27-highprotein-w14",
+    "created":  "2026-08-31T12:43:21",
+    "slugs":  [
+                  "healthy-hamburger-helper",
+                  "classic-beef-and-bean-chili"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "healthy-hamburger-helper",
+                        "title":  "Healthy Hamburger Helper",
+                        "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
+                        "protein":  "beef"
+                    },
+                    {
+                        "slug":  "classic-beef-and-bean-chili",
+                        "title":  "The Pioneer Woman Chili",
+                        "source_url":  "https://thecozycook.com/pioneer-woman-chili/",
+                        "protein":  "beef"
+                    }
+                ]
+}

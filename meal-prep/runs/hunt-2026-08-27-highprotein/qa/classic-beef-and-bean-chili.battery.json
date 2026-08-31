@@ -1,0 +1,254 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "classic-beef-and-bean-chili",
+  "generated": "2026-08-31T12:38:48",
+  "inputs": {
+    "spec": "meal-prep\\db\\recipes\\classic-beef-and-bean-chili.json",
+    "source": "meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\pioneer-woman-chili.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 16,
+        "source_ingredients": 17,
+        "matched": 14,
+        "invented": [
+          "Cheddar Cheese, Shredded",
+          "Lime"
+        ],
+        "dropped": [
+          "Shredded Cheddar",
+          "Lime Wedges",
+          "Tortilla Chips or Fritos"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Cheddar Cheese, Shredded' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Lime' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'Shredded Cheddar' and the built recipe has nothing that denotes it; DROPPED: the source lists 'Lime Wedges' and the built recipe has nothing that denotes it; DROPPED: the source lists 'Tortilla Chips or Fritos' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Cheddar Cheese, Shredded' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Lime' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'Shredded Cheddar' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'Lime Wedges' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'Tortilla Chips or Fritos' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 11,
+        "unrated": 3,
+        "exempt": 2,
+        "recipe_ratio": 2.3333,
+        "lines": [
+          {
+            "item": "80/20 Ground Beef",
+            "source": "2 lb",
+            "spec": "4.66667 lb",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic",
+            "source": "2 clove",
+            "spec": "5 clove",
+            "ratio": 2.5,
+            "deviation": 0.0714,
+            "quantization_explained": false,
+            "severity": "note"
+          },
+          {
+            "item": "Chili Powder",
+            "source": "2 tablespoon",
+            "spec": "0.25 cup",
+            "ratio": 2.0,
+            "deviation": 0.1428,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ground Cumin",
+            "source": "1 teaspoon",
+            "spec": "2.33333 teaspoon",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Dried Oregano",
+            "source": "1 teaspoon",
+            "spec": "2.33333 teaspoon",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "1 teaspoon",
+            "spec": "2.33333 teaspoon",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cayenne Pepper",
+            "source": "0.25 teaspoon",
+            "spec": "0.5 teaspoon",
+            "ratio": 2.0,
+            "deviation": 0.1428,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Masa Harina",
+            "source": "0.25 cup",
+            "spec": "0.5 cup",
+            "ratio": 2.0,
+            "deviation": 0.1428,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Kidney Beans",
+            "source": "15 oz",
+            "spec": "35 oz",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Canned Pinto Beans",
+            "source": "15 oz",
+            "spec": "35 oz",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Diced Tomatoes",
+            "source": "14.5 oz",
+            "spec": "34 oz",
+            "ratio": 2.3448,
+            "deviation": 0.0049,
+            "quantization_explained": false,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Tomato Sauce",
+            "why": "the two measures are not the same kind (volume vs weight), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Cheddar Cheese, Shredded",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Lime",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Light Sour Cream",
+            "why": "the source states no quantity for it"
+          },
+          {
+            "item": "Green Onions",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "Garlic scaled 2.5x while the recipe scaled 2.33x (7.1% off): the source says 2 clove and the spec buys 5 clove, where the exact scale is 4.67 clove. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "note",
+          "detail": "Garlic scaled 2.5x while the recipe scaled 2.33x (7.1% off): the source says 2 clove and the spec buys 5 clove, where the exact scale is 4.67 clove. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 2,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (2 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Classic Beef and Bean Chili",
+        "spec_source_url": "https://thecozycook.com/pioneer-woman-chili/",
+        "transcription_source_url": "https://thecozycook.com/pioneer-woman-chili/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 6,
+        "claimed_ratio": 2.3333,
+        "measured_ratio": 2.3333
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

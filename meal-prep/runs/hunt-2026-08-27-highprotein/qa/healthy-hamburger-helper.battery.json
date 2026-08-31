@@ -2,10 +2,10 @@
   "battery": "qa-battery",
   "version": 1,
   "slug": "healthy-hamburger-helper",
-  "generated": "2026-08-27T12:10:40",
+  "generated": "2026-08-31T12:38:35",
   "inputs": {
-    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\healthy-hamburger-helper.json",
-    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\healthy-hamburger-helper.json"
+    "spec": "C:/Codex/ThriftyCrew/meal-prep/db/recipes/healthy-hamburger-helper.json",
+    "source": "C:/Codex/ThriftyCrew/meal-prep/runs/hunt-2026-08-27-highprotein/extracted/healthy-hamburger-helper.json"
   },
   "checks": [
     {
@@ -166,7 +166,7 @@
       "check": "prose-numbers",
       "verdict": "pass",
       "numbers": {
-        "stat_claims_read": 11,
+        "stat_claims_read": 4,
         "fields": [
           "intro_html",
           "portion_html",
@@ -175,7 +175,7 @@
           "head.description"
         ]
       },
-      "detail": "every stat claim in the prose equals the stat it claims (11 read)",
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
       "findings": []
     },
     {

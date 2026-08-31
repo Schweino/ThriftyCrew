@@ -1419,5 +1419,154 @@
                          "detail":  "NEEDS-BRAD on one item, 11 live pages otherwise clean. All 11 bodies byte-identical to the built cards, both rewritten descriptions correct on all four social/SEO surfaces, recipes-db 576 rows reconciled, mobile 375px pass, zero em dashes, no buy-string garble. Open: fajita-seasoning pantry packet recorded as 28g/1oz against a board cell of 1.25oz - understates first-run cost by 0.27 on the live fajita page. Queue id 2026-08-29-8399c6."
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-31-backlog-w1",
+      "opened":  "2026-08-31T12:23:27",
+      "last_activity":  "2026-08-31T12:42:09",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "abandoned":  false,
+      "abandoned_at":  null,
+      "abandon_reason":  null,
+      "slugs":  [
+                    "healthy-hamburger-helper"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "reconcile",
+                         "at":  "2026-08-31T12:40:05",
+                         "detail":  "dropped 6: chicken-and-potato-curry, creamy-roasted-garlic-chicken, high-protein-chicken-alfredo-lasagna, no-boil-chicken-pasta-casserole-with-artichokes-and-peas, street-corn-chicken-rice-bowls, teriyaki-grilled-chicken-and-veggie-rice-bowls"
+                     },
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-31T12:41:04",
+                         "detail":  "carried from hunt-2026-08-27-highprotein; dedup-selector accepted, see db\\considered-dishes.json"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-31T12:41:05",
+                         "detail":  "carried from hunt-2026-08-27-highprotein\\mapped\\"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-31T12:41:05",
+                         "detail":  "carried from hunt-2026-08-27-highprotein; state=written"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-31T12:41:05",
+                         "detail":  "spec on disk at meal-prep\\db\\recipes\\healthy-hamburger-helper.json"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-31T12:42:09",
+                         "detail":  "1/1 GO - wave-14.audit.md; source-QA PASS both anchors"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-31-backlog-w2",
+      "opened":  "2026-08-31T12:28:13",
+      "last_activity":  "2026-08-31T12:42:09",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "abandoned":  false,
+      "abandoned_at":  null,
+      "abandon_reason":  null,
+      "slugs":  [
+                    "classic-beef-and-bean-chili"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-31T12:41:05",
+                         "detail":  "carried from hunt-2026-08-27-highprotein; dedup-selector accepted, see db\\considered-dishes.json"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-31T12:41:05",
+                         "detail":  "carried from hunt-2026-08-27-highprotein\\mapped\\"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-31T12:41:05",
+                         "detail":  "carried from hunt-2026-08-27-highprotein; state=written"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-31T12:41:05",
+                         "detail":  "spec on disk at meal-prep\\db\\recipes\\classic-beef-and-bean-chili.json"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-31T12:42:09",
+                         "detail":  "1/1 GO - wave-15.audit.md; source-QA PASS both anchors"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w14",
+      "opened":  "2026-08-31T12:43:21",
+      "last_activity":  "2026-08-31T12:47:13",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "abandoned":  false,
+      "abandoned_at":  null,
+      "abandon_reason":  null,
+      "slugs":  [
+                    "healthy-hamburger-helper",
+                    "classic-beef-and-bean-chili"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-31T12:43:21",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-31T12:43:21",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-31T12:43:22",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-31T12:43:22",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-31T12:44:09",
+                         "detail":  "2/2 GO - wave-14.audit.md; both source-QA PASS on both anchors"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-31T12:45:35",
+                         "detail":  "compute-v2-perserving + reanchor on 2 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-31T12:45:36",
+                         "detail":  "2 row(s) via hunt-2026-08-27-highprotein-w14"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-31T12:47:13",
+                         "detail":  "2 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-31T12:47:13",
+                         "detail":  "2/2 wave slug(s) published through engine\\publish (visibility preserved) + 272 collateral spec(s) carried by propagate (total dirty 274)"
+                     }
+                 ]
   }
 ]
