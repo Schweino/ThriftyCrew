@@ -46163,9 +46163,9 @@
                         "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
                         "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?",
                         "jalape[n\u00f1]o\\s+peppers,?\\s+pickled",
+                        "jalape[n\u00f1\u00c3\u00b1]{1,2}o\\s+peppers,?\\s+pickled",
                         "jalape[n\u00f1]o\\s+peppers,?\\s+pickled",
-                        "jalape[n\u00f1]o\\s+peppers,?\\s+pickled",
-                        "jalape[n\u00f1]o\\s+peppers,?\\s+pickled",
+                        "jalape[n\u00f1\u00c3\u00b1]{1,2}o\\s+peppers,?\\s+pickled",
                         "jalape[n\\u00f1]o\\s+peppers,\\s*[^,]*pickled"
                     ],
         "exclude":  [

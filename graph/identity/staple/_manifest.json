@@ -1,9 +1,9 @@
 {
     "readme":  "Product identity table, one current row per (store, product key) in this namespace. Truth is the .jsonl files beside this manifest; graph.db is a rebuildable index of them (graph/schema.md commitment 3). History is git: the files are tracked and sorted, so an assignment change is a commit diff. Written by compare-deals.ps1 -IdentityNamespace; never hand-edit.",
     "namespace":  "staple",
-    "rules_hash":  "17cf8bfa376300250cca724bbe178d449756472c7651e5a875a3e5098c5274a9",
+    "rules_hash":  "86325f8eb6d410c789d563a41f4e243e56404f274fd363d1427b4df36fb7823a",
     "board_date":  "2026-08-31",
-    "built_at":  "2026-08-31T16:40:50",
+    "built_at":  "2026-08-31T17:12:35",
     "rows_total":  42279,
     "rows_reused_from_previous":  0,
     "rows_rematched":  42279,

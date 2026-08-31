@@ -23,6 +23,19 @@
   was 8-10 layers deep rather than 1. Its sibling apply-category-excludes.ps1 had already been fixed
   to pass -Encoding UTF8 on the same file; this one never was. Fixed at all three of its reads.
 
+  A MOJIBAKE TOLERANCE IN A RULE IS NOT ITSELF CORRUPTION - AND THIS PASS NEARLY DELETED ONE.
+  pickled-jalapenos carries two rules whose class reads [n, n-tilde, and the TWO-CHAR mojibake of
+  n-tilde]{1,2}, so it matches "jalapeno", "jalape<n-tilde>o" AND "Jalape(A-tilde)(plus-minus)o". The
+  first cut of the repair collapsed them to the clean two-character class, on the strength of a scan
+  that found ZERO mojibake in the capture corpus. That scan was WRONG - it covered out\captures\ and
+  never looked in out\regular\, which holds 1,286 mojibake sequences, 59 of them in the SAME DAY'S
+  Hy-Vee file. Store feeds ship mojibake; a rule that tolerates it is doing its job.
+  test-auditors caught it, by name, with a fixture built for exactly this product. The lesson is not
+  "be careful" - it is that this guard pins the FILE's encoding and must never be read as licence to
+  strip a mojibake ALTERNATIVE out of a matching rule. The two are opposite things: corruption is
+  mojibake in the pattern where a real character belongs; a tolerance is mojibake in a character CLASS
+  beside the real character, deliberately, because the shelf data is dirty.
+
   WHY A PIN AND NOT A CLEVERNESS. The repaired file expresses every non-ASCII character as a JSON
   \uXXXX escape, which is the convention its own clean sibling rules already used (lines 46162-46164
   were never corrupted precisely because they were written that way). That makes the rule-bearing

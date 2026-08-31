@@ -1,98 +1,119 @@
 {
-  "schema": 1,
-  "set": "2026-08-01 18:06",
-  "checks": {
-    "audit-everyday-mismatch": {
-      "examined": 2968,
-      "tolerance": 0.1,
-      "max_age_days": 3,
-      "phase": "cycle",
-      "why": "everyday board cells compared against their own linked product's per-unit - the only check that asks whether the number we PUBLISHED agrees with the page we LINKED to. Measured 2026-07-31: 2,582 checked, 0 uncomputable, 0 without a board per-unit, 5 findings. Board-derived like guards/4-factor (2,582 on the same board), so the same measured 0.10 band applies. THIS CHECK WAS AN ORPHAN until 2026-07-31 - it ran nowhere, so its own history starts here. Eligible counts only everyday cells we hold a link for, so the number does not swing when the board gains sale cells or linkless ones."
-    },
-    "audit-ff-carry": {
-      "examined": 464,
-      "tolerance": 1,
-      "max_age_days": 3,
-      "phase": "cycle",
-      "why": "RATCHET DELIBERATELY OFF - this denominator is INVERSE. It counts EMPTY Family Fare search terms re-probed against Freshop, so the number FALLS when the FF pull gets BETTER (fewer empty terms to re-probe). A ratchet here would fire at whoever fixed the thing it watches, which is worse than no watcher. Pinned by its own clean twin in test-auditors. BLIND still covers the case that matters for this check - it examining nothing at all - which is exactly where it sat on 2026-08-01."
-    },
-    "audit-food-category": {
-      "examined": 2813,
-      "tolerance": 0.1,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "priced cells scanned for a wrong-CLASS product (the blueberries-as-Bai-beverage guard). Measured 2026-07-30: 2663 scanned of 3196 priced cells, 372 skipped because their commodity's category maps to no class list and 161 because the cell carries no product name. Board-derived, so the measured 0.10 band applies. A later same-day board rebuild read 2661 of 3194, well inside the band."
-    },
-    "build-rescue-worklist": {
-      "examined": 1517,
-      "tolerance": 0.1,
-      "max_age_days": 3,
-      "phase": "cycle",
-      "why": "everyday walled-store board cells traced to a dated capture file. Measured on the first real run, 2026-07-31: 1,517 everyday cells across the four walled stores (Walmart 436, Sam's Club 347, Aldi 332, Fareway 402) and all 1,517 traced. Board-derived like guards/4-factor and audit-everyday-mismatch, so the same measured 0.10 band applies. Eligible is everyday cells of the four `walled: true` stores only - sale cells and the three headless stores stay out of the denominator, so the number does not swing on an ad cycle. Examined falls to 0 (BLIND, exit 3) if the capture files vanish from out\\, which is the fresh-clone / cloud-runner state: every cell would read UNTRACEABLE and the emitted lists would be a full re-pull rather than a rescue. max_age_days 3 because it runs on the ad cycle, not on every publish."
-    },
-    "guards/10-store-charges": {
-      "examined": 29542,
-      "tolerance": 0.35,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "Wide on purpose: the denominator is every priced row across all store feeds, so it steps whenever a walled store lands a big capture (24,018 -> 29,542 in three days). Narrowing it would cry wolf on a normal Walmart or Sams import. Revisit once coverage-ledger-history.jsonl holds a few weeks of per-check movement."
-    },
-    "guards/11-bakers-provenance": {
-      "examined": 6947,
-      "tolerance": 0.25,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "Bakers is a full API pull, so this is normally flat (6,936 -> 6,947). The width covers a partial Kroger API run rather than day-to-day noise. A candidate for narrowing once history exists."
-    },
-    "guards/3-pin-derivable": {
-      "examined": 19,
-      "tolerance": 0.5,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "SMALL-N, where a percentage is the wrong instrument: the denominator is override pins (19 today, 1 pin = 5%), and pins collapsed 19 -> 1 in July when generate-board-overrides stopped minting one per same-day pull. A tight percentage here fires on ordinary pin churn, not on lost coverage."
-    },
-    "guards/3-pin-identity": {
-      "examined": 13,
-      "tolerance": 0.5,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "SMALL-N, same denominator as guards/3-pin-derivable. This is the row that sat at 0 of 16 while the ok line said 16, so BLIND is the verdict that matters for it, not REGRESSED."
-    },
-    "guards/4-factor": {
-      "examined": 2652,
-      "tolerance": 0.1,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "board cells compared against their own linked product's per-unit. The single largest coverage number on the publish path and the one most directly tied to the board, so the measured 0.10 band applies."
-    },
-    "guards/5-multipack": {
-      "examined": 594,
-      "tolerance": 0.5,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "DEAD RATCHET until 2026-08-01: this was 1.0, which put the regression floor at 0 and made REGRESSED structurally unfirable. 0.5 is deliberately wide and the reason is measured, not guessed - this denominator is driven by how VERBOSE the Walmart capture is (guard 5 counts rows whose NAME states a pack count), and guards.ps1 records that it sat at 0 for every newest-Walmart file from 2026-07-05 to 07-14. A terser capture legitimately halves it; anything past half is the silent no-op guard 5 warns about."
-    },
-    "guards/6-collapse": {
-      "examined": 6,
-      "tolerance": 0.15,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "SMALL-N: 7 stores, so one store dropping out is -14%. 15% is the tightest band that does not fire when a single store has no capture history (sams today)."
-    },
-    "guards/9-freshness": {
-      "examined": 7,
-      "tolerance": 0.15,
-      "max_age_days": 2,
-      "phase": "publish",
-      "why": "SMALL-N: 7 stores, same arithmetic as guards/6-collapse."
-    },
-    "pull-regular-hyvee": {
-      "examined": 3,
-      "tolerance": 1.0,
-      "min_ratio": 0.9,
-      "max_age_days": 3,
-      "phase": "cycle",
-      "why": "DENOMINATOR CHANGED 2026-08-22 - the numbers here are NOT comparable to the 1,010 that stood before, and nothing regressed. Until the capture-policy budget landed (2026-08-20, repaired 2026-08-22) this lane re-verified every product it holds a productId for, every day, and 1,010 was the measured high-water mark of that regime (1,006-1,065 on every file since 2026-07-19). The lane now deliberately asks about ceil(1554/90) = 18 products a day, rotated by a cursor against the 90-day carry, so products-refreshed-today fell to roughly 2-18 BY DESIGN. Left as it was - eligible = all ~535 products holding an id, examined = refreshed today - this row reported a ~98% REGRESSION every single morning: a permanent finding nobody could act on, which is the ledger's own founding failure (a confident answer about nothing) running in reverse, because a watcher that cries daily is one people learn to scroll past. THE PAIR IS NOW TODAY'S SLICE: eligible = the products the run was ALLOWED to ask about today and holds an id to ask with, examined = the ones Aisles Online actually answered with a usable offer for. A healthy day is 3 of 3, not 3 of 535. Examined is `answered`, not `refreshed`: a row whose answer was refused (size mismatch, a price below the store's own shelf tag) WAS examined - counting a refusal as unexamined would report a collapse on a day the accuracy checks did their job. THE ABSOLUTE RATCHET IS DELIBERATELY OFF AND min_ratio REPLACES IT. Measured over a full 90-day rotation of the 2026-08-21 file (1,554 rows, 490 carrying a product id, and the ids CLUSTER): an 18-wide slice offers 0-18 askable products, median 3, mean 5.7. No fixed floor can separate a throttled day from an ordinary one across that range - the fixed floor is what produced the permanent finding above - so the rail is the RATIO of what we got to what we were allowed to ask for. min_ratio 0.90 fires the moment the wall-clock cap starts biting or GraphQL stops answering, which is the truncation this puller was put on the ledger to catch, and it stays quiet on a small slice fully covered. ONE unanswered row is never a shortfall, only a note: on a median 3-product slice a single dead product id would read as a 33% collapse and fire about one morning in seventeen (measured no-offer rate ~2% of asked products - 08-21 landed 490 of 490, 08-18 landed 356 fresh plus 171 capped of 539), while every failure this rail is for misses dozens at once. `examined: 3` is the measured median kept as documentation; -Accept leaves it alone (it prints PINNED), because raising it on a dense 18-product day would re-arm the very floor this row exists to avoid. tolerance 1.0 records that the absolute REGRESSED test is off on purpose, the same way audit-ff-carry does; audit-coverage-ledger skips both REGRESSED and DEAD-RATCHET for a row that declares min_ratio. EXPECT AN INERT DAY ABOUT 5 TIMES A QUARTER. 6% of 18-wide windows in the rotation contain no product holding a link at all (5 of 87 simulated slices), so eligible is legitimately 0 and the lane verifies no price that day. INERT is the true verdict there and it should stay visible: it is the no-discovery-path problem - 1,064 of the 1,554 rows carry no link - in the only form anyone can act on. WHY THIS PULLER IS ON THE LEDGER AT ALL: its own numbers were being thrown away. check-ad-cycles piped it to Out-Null and logged an unconditional success line, so a truncated pull, a collapsed pull and a clean one were identical in the log. max_age_days 3 because it runs on the ad cycle, not on every publish. WHAT THIS METRIC CANNOT ANSWER is whether the rotation KEEPS UP - that is a row-age question, and measured 2026-08-21 the answer is yes: oldest Hy-Vee row 38 days, median 11, zero rows past 60, against a 90-day carry."
-    }
-  }
+    "schema":  1,
+    "set":  "2026-08-31 16:57",
+    "checks":  {
+                   "audit-everyday-mismatch":  {
+                                                   "examined":  2968,
+                                                   "tolerance":  0.1,
+                                                   "max_age_days":  3,
+                                                   "phase":  "cycle",
+                                                   "why":  "everyday board cells compared against their own linked product\u0027s per-unit - the only check that asks whether the number we PUBLISHED agrees with the page we LINKED to. Measured 2026-07-31: 2,582 checked, 0 uncomputable, 0 without a board per-unit, 5 findings. Board-derived like guards/4-factor (2,582 on the same board), so the same measured 0.10 band applies. THIS CHECK WAS AN ORPHAN until 2026-07-31 - it ran nowhere, so its own history starts here. Eligible counts only everyday cells we hold a link for, so the number does not swing when the board gains sale cells or linkless ones. || WHY IT FELL TO ~2,594, PROVED 2026-08-31 and recorded so nobody re-derives it. The population shrank; the coverage did not. Commit 61d148b0 (2026-08-22) stopped carry-forward resurrecting products a store had stopped selling - it had been carrying any item absent from a pull, which is right for the ~590 terms a rotation never touches and WRONG for a term the pull DID search and that did not come back. 344 Aldi rows plus 186 pre-contract rows were retired that day. The ledger shows exactly that shape: a step from ~2,900 to ~2,500 on 2026-08-22 and flat since, not a slide. Today: examined 2,594 of 2,614 eligible, 99.2%. The 20 unexamined are NOT rows it stopped looking at - eligible = checked + uncomputable-size + no-board-per-unit, so they are cells this check structurally cannot compare. THE FLOOR IS DELIBERATELY LEFT AT 2,968 rather than accepted down: -AcceptLower is all-or-nothing across every dropped row, and of the six it would lower this is the ONLY one in breach - audit-ff-carry is RATCHET DELIBERATELY OFF by its own note, and pin-derivable, pin-identity and 4-factor are all inside their tolerances. Lowering five rows that are not in breach to settle one is a net loss of protection. Accept it the day the tool can lower ONE check by name."
+                                               },
+                   "audit-ff-carry":  {
+                                          "examined":  464,
+                                          "tolerance":  1,
+                                          "max_age_days":  3,
+                                          "phase":  "cycle",
+                                          "why":  "RATCHET DELIBERATELY OFF - this denominator is INVERSE. It counts EMPTY Family Fare search terms re-probed against Freshop, so the number FALLS when the FF pull gets BETTER (fewer empty terms to re-probe). A ratchet here would fire at whoever fixed the thing it watches, which is worse than no watcher. Pinned by its own clean twin in test-auditors. BLIND still covers the case that matters for this check - it examining nothing at all - which is exactly where it sat on 2026-08-01."
+                                      },
+                   "audit-food-category":  {
+                                               "examined":  3027,
+                                               "tolerance":  0.1,
+                                               "max_age_days":  2,
+                                               "phase":  "publish",
+                                               "why":  "priced cells scanned for a wrong-CLASS product (the blueberries-as-Bai-beverage guard). Measured 2026-07-30: 2663 scanned of 3196 priced cells, 372 skipped because their commodity\u0027s category maps to no class list and 161 because the cell carries no product name. Board-derived, so the measured 0.10 band applies. A later same-day board rebuild read 2661 of 3194, well inside the band."
+                                           },
+                   "build-rescue-worklist":  {
+                                                 "examined":  1517,
+                                                 "tolerance":  0.1,
+                                                 "max_age_days":  3,
+                                                 "phase":  "cycle",
+                                                 "why":  "everyday walled-store board cells traced to a dated capture file. Measured on the first real run, 2026-07-31: 1,517 everyday cells across the four walled stores (Walmart 436, Sam\u0027s Club 347, Aldi 332, Fareway 402) and all 1,517 traced. Board-derived like guards/4-factor and audit-everyday-mismatch, so the same measured 0.10 band applies. Eligible is everyday cells of the four `walled: true` stores only - sale cells and the three headless stores stay out of the denominator, so the number does not swing on an ad cycle. Examined falls to 0 (BLIND, exit 3) if the capture files vanish from out\\, which is the fresh-clone / cloud-runner state: every cell would read UNTRACEABLE and the emitted lists would be a full re-pull rather than a rescue. max_age_days 3 because it runs on the ad cycle, not on every publish."
+                                             },
+                   "guards/10-store-charges":  {
+                                                   "examined":  68809,
+                                                   "tolerance":  0.35,
+                                                   "max_age_days":  2,
+                                                   "phase":  "publish",
+                                                   "why":  "Wide on purpose: the denominator is every priced row across all store feeds, so it steps whenever a walled store lands a big capture (24,018 -\u003e 29,542 in three days). Narrowing it would cry wolf on a normal Walmart or Sams import. Revisit once coverage-ledger-history.jsonl holds a few weeks of per-check movement."
+                                               },
+                   "guards/11-bakers-provenance":  {
+                                                       "examined":  7292,
+                                                       "tolerance":  0.25,
+                                                       "max_age_days":  2,
+                                                       "phase":  "publish",
+                                                       "why":  "Bakers is a full API pull, so this is normally flat (6,936 -\u003e 6,947). The width covers a partial Kroger API run rather than day-to-day noise. A candidate for narrowing once history exists."
+                                                   },
+                   "guards/3-pin-derivable":  {
+                                                  "examined":  19,
+                                                  "tolerance":  0.5,
+                                                  "max_age_days":  2,
+                                                  "phase":  "publish",
+                                                  "why":  "SMALL-N, where a percentage is the wrong instrument: the denominator is override pins (19 today, 1 pin = 5%), and pins collapsed 19 -\u003e 1 in July when generate-board-overrides stopped minting one per same-day pull. A tight percentage here fires on ordinary pin churn, not on lost coverage."
+                                              },
+                   "guards/3-pin-identity":  {
+                                                 "examined":  13,
+                                                 "tolerance":  0.5,
+                                                 "max_age_days":  2,
+                                                 "phase":  "publish",
+                                                 "why":  "SMALL-N, same denominator as guards/3-pin-derivable. This is the row that sat at 0 of 16 while the ok line said 16, so BLIND is the verdict that matters for it, not REGRESSED."
+                                             },
+                   "guards/4-factor":  {
+                                           "examined":  2652,
+                                           "tolerance":  0.1,
+                                           "max_age_days":  2,
+                                           "phase":  "publish",
+                                           "why":  "board cells compared against their own linked product\u0027s per-unit. The single largest coverage number on the publish path and the one most directly tied to the board, so the measured 0.10 band applies."
+                                       },
+                   "guards/5-multipack":  {
+                                              "examined":  3148,
+                                              "tolerance":  0.5,
+                                              "max_age_days":  2,
+                                              "phase":  "publish",
+                                              "why":  "DEAD RATCHET until 2026-08-01: this was 1.0, which put the regression floor at 0 and made REGRESSED structurally unfirable. 0.5 is deliberately wide and the reason is measured, not guessed - this denominator is driven by how VERBOSE the Walmart capture is (guard 5 counts rows whose NAME states a pack count), and guards.ps1 records that it sat at 0 for every newest-Walmart file from 2026-07-05 to 07-14. A terser capture legitimately halves it; anything past half is the silent no-op guard 5 warns about."
+                                          },
+                   "guards/6-collapse":  {
+                                             "examined":  7,
+                                             "tolerance":  0.15,
+                                             "max_age_days":  2,
+                                             "phase":  "publish",
+                                             "why":  "SMALL-N: 7 stores, so one store dropping out is -14%. 15% is the tightest band that does not fire when a single store has no capture history (sams today)."
+                                         },
+                   "guards/9-freshness":  {
+                                              "examined":  14,
+                                              "tolerance":  0.15,
+                                              "max_age_days":  2,
+                                              "phase":  "publish",
+                                              "why":  "SMALL-N: 7 stores, same arithmetic as guards/6-collapse."
+                                          },
+                   "pull-regular-hyvee":  {
+                                              "examined":  3,
+                                              "tolerance":  1,
+                                              "min_ratio":  0.9,
+                                              "max_age_days":  3,
+                                              "phase":  "cycle",
+                                              "why":  "DENOMINATOR CHANGED 2026-08-22 - the numbers here are NOT comparable to the 1,010 that stood before, and nothing regressed. Until the capture-policy budget landed (2026-08-20, repaired 2026-08-22) this lane re-verified every product it holds a productId for, every day, and 1,010 was the measured high-water mark of that regime (1,006-1,065 on every file since 2026-07-19). The lane now deliberately asks about ceil(1554/90) = 18 products a day, rotated by a cursor against the 90-day carry, so products-refreshed-today fell to roughly 2-18 BY DESIGN. Left as it was - eligible = all ~535 products holding an id, examined = refreshed today - this row reported a ~98% REGRESSION every single morning: a permanent finding nobody could act on, which is the ledger\u0027s own founding failure (a confident answer about nothing) running in reverse, because a watcher that cries daily is one people learn to scroll past. THE PAIR IS NOW TODAY\u0027S SLICE: eligible = the products the run was ALLOWED to ask about today and holds an id to ask with, examined = the ones Aisles Online actually answered with a usable offer for. A healthy day is 3 of 3, not 3 of 535. Examined is `answered`, not `refreshed`: a row whose answer was refused (size mismatch, a price below the store\u0027s own shelf tag) WAS examined - counting a refusal as unexamined would report a collapse on a day the accuracy checks did their job. THE ABSOLUTE RATCHET IS DELIBERATELY OFF AND min_ratio REPLACES IT. Measured over a full 90-day rotation of the 2026-08-21 file (1,554 rows, 490 carrying a product id, and the ids CLUSTER): an 18-wide slice offers 0-18 askable products, median 3, mean 5.7. No fixed floor can separate a throttled day from an ordinary one across that range - the fixed floor is what produced the permanent finding above - so the rail is the RATIO of what we got to what we were allowed to ask for. min_ratio 0.90 fires the moment the wall-clock cap starts biting or GraphQL stops answering, which is the truncation this puller was put on the ledger to catch, and it stays quiet on a small slice fully covered. ONE unanswered row is never a shortfall, only a note: on a median 3-product slice a single dead product id would read as a 33% collapse and fire about one morning in seventeen (measured no-offer rate ~2% of asked products - 08-21 landed 490 of 490, 08-18 landed 356 fresh plus 171 capped of 539), while every failure this rail is for misses dozens at once. `examined: 3` is the measured median kept as documentation; -Accept leaves it alone (it prints PINNED), because raising it on a dense 18-product day would re-arm the very floor this row exists to avoid. tolerance 1.0 records that the absolute REGRESSED test is off on purpose, the same way audit-ff-carry does; audit-coverage-ledger skips both REGRESSED and DEAD-RATCHET for a row that declares min_ratio. EXPECT AN INERT DAY ABOUT 5 TIMES A QUARTER. 6% of 18-wide windows in the rotation contain no product holding a link at all (5 of 87 simulated slices), so eligible is legitimately 0 and the lane verifies no price that day. INERT is the true verdict there and it should stay visible: it is the no-discovery-path problem - 1,064 of the 1,554 rows carry no link - in the only form anyone can act on. WHY THIS PULLER IS ON THE LEDGER AT ALL: its own numbers were being thrown away. check-ad-cycles piped it to Out-Null and logged an unconditional success line, so a truncated pull, a collapsed pull and a clean one were identical in the log. max_age_days 3 because it runs on the ad cycle, not on every publish. WHAT THIS METRIC CANNOT ANSWER is whether the rotation KEEPS UP - that is a row-age question, and measured 2026-08-21 the answer is yes: oldest Hy-Vee row 38 days, median 11, zero rows past 60, against a 90-day carry."
+                                          },
+                   "audit-board-reconciliation":  {
+                                                      "examined":  67,
+                                                      "tolerance":  0.1,
+                                                      "max_age_days":  2,
+                                                      "phase":  "publish",
+                                                      "why":  "added by -Accept"
+                                                  },
+                   "guards/13-board-vs-identity-recipe":  {
+                                                              "examined":  333,
+                                                              "tolerance":  0.1,
+                                                              "max_age_days":  2,
+                                                              "phase":  "publish",
+                                                              "why":  "added by -Accept"
+                                                          },
+                   "guards/13-board-vs-identity-staple":  {
+                                                              "examined":  3131,
+                                                              "tolerance":  0.1,
+                                                              "max_age_days":  2,
+                                                              "phase":  "publish",
+                                                              "why":  "added by -Accept"
+                                                          }
+               }
 }
