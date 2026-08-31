@@ -1,25 +1,9 @@
 ﻿{
-    "generated":  "2026-08-30 08:25",
+    "generated":  "2026-08-30 12:07",
     "compare_file":  "comparison-2026-08-30.json",
-    "finding_count":  2,
+    "finding_count":  1,
     "confirmed_count":  0,
     "findings":  [
-                     {
-                         "id":  "artichokes",
-                         "commodity":  "Artichokes (fresh, whole)",
-                         "store":  "Baker\u0027s",
-                         "unit":  "each",
-                         "published":  0.359,
-                         "as_pack_total":  3.59,
-                         "peer_cheapest":  3.99,
-                         "count":  10,
-                         "size":  "10 pk 1.4 oz",
-                         "ad":  "$3.59",
-                         "item":  "ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)",
-                         "fingerprint":  "undecidable",
-                         "each_derived":  null,
-                         "peer_single_unit":  null
-                     },
                      {
                          "id":  "hummus",
                          "commodity":  "Hummus",

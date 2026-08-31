@@ -135,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-30T08:18:38",
+    "generated":  "2026-08-30T12:07:12",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -758,6 +758,18 @@
                               "per_unit":  0.155,
                               "size":  "16 oz",
                               "item":  "Fareway Italian Dressing",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "laundry-detergent",
+                              "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+                              "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.0884,
+                              "size":  "130 oz",
+                              "item":  "Arm \u0026 Hammer A\u0026H Plus Oxi Deterg 130oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

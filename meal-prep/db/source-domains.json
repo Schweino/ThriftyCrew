@@ -1,7 +1,7 @@
 ﻿{
     "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
     "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
-    "updated":  "2026-08-29T18:11:32",
+    "updated":  "2026-08-30T18:10:51",
     "count":  45,
     "domains":  [
                     {
@@ -61,14 +61,14 @@
                     },
                     {
                         "domain":  "recipetineats.com",
-                        "ok":  168,
+                        "ok":  170,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-27T11:32:53"
+                        "updated":  "2026-08-30T18:10:43"
                     },
                     {
                         "domain":  "skinnytaste.com",
@@ -105,25 +105,25 @@
                     },
                     {
                         "domain":  "keviniscooking.com",
-                        "ok":  196,
+                        "ok":  241,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:25"
+                        "updated":  "2026-08-30T18:10:45"
                     },
                     {
                         "domain":  "thereciperebel.com",
-                        "ok":  176,
+                        "ok":  190,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:25"
+                        "updated":  "2026-08-30T18:10:45"
                     },
                     {
                         "domain":  "orgasmicchef.com",
@@ -138,14 +138,14 @@
                     },
                     {
                         "domain":  "nospoonnecessary.com",
-                        "ok":  206,
+                        "ok":  260,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:24"
+                        "updated":  "2026-08-30T18:10:45"
                     },
                     {
                         "domain":  "hapanom.com",
@@ -171,58 +171,58 @@
                     },
                     {
                         "domain":  "feelgoodfoodie.net",
-                        "ok":  168,
+                        "ok":  218,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:25"
+                        "updated":  "2026-08-30T18:10:45"
                     },
                     {
                         "domain":  "lecremedelacrumb.com",
-                        "ok":  160,
+                        "ok":  199,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:25"
+                        "updated":  "2026-08-30T18:10:45"
                     },
                     {
                         "domain":  "thecleaneatingcouple.com",
-                        "ok":  170,
+                        "ok":  211,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:25"
+                        "updated":  "2026-08-30T18:10:45"
                     },
                     {
                         "domain":  "fitfoodiefinds.com",
-                        "ok":  148,
+                        "ok":  178,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:25"
+                        "updated":  "2026-08-30T18:10:45"
                     },
                     {
                         "domain":  "lemonsandzest.com",
-                        "ok":  176,
+                        "ok":  233,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:25"
+                        "updated":  "2026-08-30T18:10:46"
                     },
                     {
                         "domain":  "chelseajoyeats.com",
@@ -237,91 +237,91 @@
                     },
                     {
                         "domain":  "masonfit.com",
-                        "ok":  177,
+                        "ok":  228,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:26"
+                        "updated":  "2026-08-30T18:10:47"
                     },
                     {
                         "domain":  "eatingbirdfood.com",
-                        "ok":  171,
+                        "ok":  218,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
+                        "updated":  "2026-08-30T18:10:47"
                     },
                     {
                         "domain":  "xoxobella.com",
-                        "ok":  176,
+                        "ok":  233,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
+                        "updated":  "2026-08-30T18:10:47"
                     },
                     {
                         "domain":  "everydaydishes.com",
-                        "ok":  181,
+                        "ok":  241,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
+                        "updated":  "2026-08-30T18:10:47"
                     },
                     {
                         "domain":  "wholesomelicious.com",
-                        "ok":  176,
+                        "ok":  229,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
+                        "updated":  "2026-08-30T18:10:47"
                     },
                     {
                         "domain":  "laurafuentes.com",
-                        "ok":  176,
+                        "ok":  232,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
+                        "updated":  "2026-08-30T18:10:47"
                     },
                     {
                         "domain":  "lynnskitchenadventures.com",
-                        "ok":  181,
+                        "ok":  241,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
+                        "updated":  "2026-08-30T18:10:47"
                     },
                     {
                         "domain":  "healthyfitnessmeals.com",
-                        "ok":  164,
+                        "ok":  201,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
+                        "updated":  "2026-08-30T18:10:49"
                     },
                     {
                         "domain":  "theproteinplayground.com",
@@ -336,6 +336,94 @@
                     },
                     {
                         "domain":  "thymeandjoy.com",
+                        "ok":  204,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:48"
+                    },
+                    {
+                        "domain":  "skinnyspatula.com",
+                        "ok":  209,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:51"
+                    },
+                    {
+                        "domain":  "joytothefood.com",
+                        "ok":  236,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:49"
+                    },
+                    {
+                        "domain":  "iowagirleats.com",
+                        "ok":  224,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:49"
+                    },
+                    {
+                        "domain":  "ohsnapmacros.com",
+                        "ok":  193,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:49"
+                    },
+                    {
+                        "domain":  "eatthis.com",
+                        "ok":  241,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  false,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:49"
+                    },
+                    {
+                        "domain":  "eatthegains.com",
+                        "ok":  182,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:49"
+                    },
+                    {
+                        "domain":  "whatsgabycooking.com",
+                        "ok":  230,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-30T18:10:50"
+                    },
+                    {
+                        "domain":  "cookingclassy.com",
                         "ok":  163,
                         "fail":  0,
                         "last_404":  null,
@@ -343,161 +431,73 @@
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:28"
-                    },
-                    {
-                        "domain":  "skinnyspatula.com",
-                        "ok":  164,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  true,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:32"
-                    },
-                    {
-                        "domain":  "joytothefood.com",
-                        "ok":  178,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  true,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:29"
-                    },
-                    {
-                        "domain":  "iowagirleats.com",
-                        "ok":  173,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  true,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:29"
-                    },
-                    {
-                        "domain":  "ohsnapmacros.com",
-                        "ok":  155,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  true,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:31"
-                    },
-                    {
-                        "domain":  "eatthis.com",
-                        "ok":  181,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:29"
-                    },
-                    {
-                        "domain":  "eatthegains.com",
-                        "ok":  148,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  true,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:30"
-                    },
-                    {
-                        "domain":  "whatsgabycooking.com",
-                        "ok":  176,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  true,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:30"
-                    },
-                    {
-                        "domain":  "cookingclassy.com",
-                        "ok":  144,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  true,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "",
-                        "updated":  "2026-08-29T18:11:30"
+                        "updated":  "2026-08-30T18:10:51"
                     },
                     {
                         "domain":  "easyeatsdietitian.com",
-                        "ok":  179,
+                        "ok":  233,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:31"
+                        "updated":  "2026-08-30T18:10:11"
                     },
                     {
                         "domain":  "nomastehungry.com",
-                        "ok":  180,
+                        "ok":  239,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:31"
+                        "updated":  "2026-08-30T18:10:51"
                     },
                     {
                         "domain":  "wholesomelymorgan.com",
-                        "ok":  171,
+                        "ok":  225,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:31"
+                        "updated":  "2026-08-30T18:10:51"
                     },
                     {
                         "domain":  "iwashyoudry.com",
-                        "ok":  170,
+                        "ok":  216,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:32"
+                        "updated":  "2026-08-30T18:10:51"
                     },
                     {
                         "domain":  "amandascookin.com",
-                        "ok":  125,
+                        "ok":  138,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:32"
+                        "updated":  "2026-08-30T18:10:51"
                     },
                     {
                         "domain":  "thebalancednutritionist.com",
-                        "ok":  171,
+                        "ok":  222,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-29T18:11:32"
+                        "updated":  "2026-08-30T18:10:51"
                     }
                 ]
 }
