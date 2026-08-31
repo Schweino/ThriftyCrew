@@ -18,19 +18,99 @@
   see that file's header for why there is one copy. This script only reads the spec back into the shapes
   that function wants ($gramsArr / $scalerIng) and splices the result in key-scoped.
 
-  Usage: .\recost-spec-cost-block.ps1 -Slugs a,b [-Apply]        (default is a dry run)
+  -Slugs IS IN-PROCESS ONLY. -SlugFile IS THE `powershell -File` FORM, ON PURPOSE. Measured 2026-08-23:
+  invoked as `powershell -File ...\recost-spec-cost-block.ps1 -Slugs $tenSlugArray -Apply`, this script
+  recost ONE slug and printed "APPLIED <slug>" plus "1 spec(s) would change" - a line indistinguishable
+  from a correct one-slug run. Nothing said nine names had been dropped. TWO different shapes do that:
+  the -File parser binds the first bare word to -Slugs and leaves the rest unplaced (the measured one -
+  note it contains no comma anywhere), while `-Slugs a,b` arrives instead as ONE element holding commas,
+  the trap propagate-recipes.ps1's -AllowCreateFile header already documents. Neither is visible in the
+  applied slug, and this script is the estate's ONLY sanctioned repair for a stale cost block - "a recost
+  that silently skips rows" is precisely what the wave-preaudit cost-reconcile check exists to catch
+  after the fact. So both shapes now THROW, naming the two working call forms (audit-unbid-ingredients
+  SPLITS a comma-joined -Slugs because it only reads; hunt-run's -Terms refuses, because a joined string
+  is a caller bug worth surfacing - a writer of reader-facing dollar figures belongs in the second camp),
+  and every run ends with a requested/processed/changed tally so a short run is legible on its face.
+
+  Usage: & .\recost-spec-cost-block.ps1 -Slugs a,b [-Apply]     in-process; default is a dry run
+         powershell -NoProfile -ExecutionPolicy Bypass -File .\recost-spec-cost-block.ps1 -SlugFile <path> [-Apply]
+                                                               <path> is newline-delimited, one slug per line
          .\recost-spec-cost-block.ps1 -SelfTest
 #>
+# PositionalBinding=$false + an explicit remaining-arguments sink, both load-bearing. Only -Slugs is
+# positional, so a bare word after the first can NEVER bind to -SlugFile by position (it did while
+# -SlugFile was declared plainly: `-File ... -Slugs a b` bound 'b' as the slug FILE). Everything the
+# parser could not place lands in $Residue instead of vanishing, which is what makes the dropped names
+# nameable in the refusal below rather than merely countable.
+[CmdletBinding(PositionalBinding=$false)]
 param(
-  [string[]]$Slugs,
+  [Parameter(Position=0)][string[]]$Slugs,
+  [string]$SlugFile = "",
   [switch]$Apply,
-  [switch]$SelfTest
+  [switch]$SelfTest,
+  [Parameter(ValueFromRemainingArguments=$true)][string[]]$Residue
 )
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 . (Join-Path $mp 'lib\json-db-io.ps1')
 . (Join-Path $here 'cost-render-lib.ps1')
+
+# ---- INTERFACE GUARD: a slug list that lost members must never look like a smaller run ---------------
+$script:SLUG_CALL_FORMS = @'
+      in-process:  & meal-prep\pipeline\recost-spec-cost-block.ps1 -Slugs $slugArray -Apply
+      via -File:   powershell -NoProfile -ExecutionPolicy Bypass -File meal-prep\pipeline\recost-spec-cost-block.ps1 -SlugFile <path> -Apply
+                   (<path> holds one slug per line - the shape propagate-recipes.ps1 takes for
+                    -AllowCreateFile, and the only one that crosses a process boundary intact)
+'@
+
+function Resolve-SlugRequest {
+  <#
+    Turn whatever the caller handed us into THE slug list, or refuse out loud. Returns @{ slugs; source }.
+    Every refusal below is a caller-side marshalling bug whose only other symptom is a correct-LOOKING
+    run over fewer specs than the operator asked for - see the header for the 2026-08-23 measurement.
+  #>
+  param([string[]]$Slugs, [string]$SlugFile, $Residue)
+
+  # (a) THE MEASURED SHAPE. `-File ... -Slugs a b c` binds 'a' and parks 'b','c' in $Residue. -Slugs is
+  #     this script's only positional parameter, so a remaining argument can only ever be a dropped slug.
+  #     COMPACT FIRST, and never test @($Residue).Count on the raw value: an UNBOUND $Residue is $null,
+  #     and @($null).Count is 1 in PS 5.1 - which made the guard refuse every clean run with "dropped 1
+  #     name(s): " and no name. A guard that fires on correct calls is uninstalled within the week.
+  $dropped = @(); foreach($rv in @($Residue)){ if($null -ne $rv -and ([string]$rv).Trim()){ $dropped += ([string]$rv).Trim() } }
+  if(@($dropped).Count -gt 0){
+    throw ("-Slugs dropped " + @($dropped).Count + " name(s) on the command line: " + (@($dropped) -join ', ') +
+      "`n  A [string[]] does not survive ``powershell -File``: the parser binds the FIRST word to -Slugs" +
+      " and discards the rest. Use one of:`n" + $script:SLUG_CALL_FORMS)
+  }
+  if($SlugFile -and @($Slugs).Count -gt 0){
+    throw ("both -Slugs and -SlugFile were given - two lists cannot both be the run's authority.`n" + $script:SLUG_CALL_FORMS)
+  }
+
+  $out = @(); $src = ''
+  if($SlugFile){
+    if(-not (Test-Path $SlugFile)){ throw ("-SlugFile named $SlugFile but it does not exist - refusing to recost an empty list") }
+    foreach($ln in @(Get-Content $SlugFile)){ $t = ([string]$ln).Trim(); if($t){ $out += $t } }
+    $src = "-SlugFile $SlugFile"
+  } else {
+    foreach($sv in @($Slugs)){ if($null -ne $sv -and ([string]$sv).Trim()){ $out += ([string]$sv).Trim() } }
+    $src = '-Slugs (in-process array)'
+  }
+
+  # (b) THE COMMA SHAPE, the one propagate's header documents. Refuse rather than split: splitting is
+  #     safe in a read-only sweep, but here it would let a caller whose list ALREADY collapsed go on
+  #     rewriting reader-facing dollars on the strength of a guess about what they meant.
+  foreach($sv in $out){
+    if($sv -match ','){
+      throw ("slug '" + $sv + "' contains a comma, so a list of " + @(([string]$sv).Split(',')).Count +
+        " names collapsed into one.`n" + $script:SLUG_CALL_FORMS)
+    }
+  }
+  if(@($out).Count -eq 0){
+    throw '-Slugs or -SlugFile is required, and must resolve to at least one slug (see the header: this is never a catalog-wide sweep)'
+  }
+  return @{ slugs=@($out); source=$src }
+}
 
 function Get-SpecCostShapes($spec){
   <#
@@ -204,22 +284,75 @@ if($SelfTest){
   Chk 'number format 2.30 -> 2.3'  ((Format-JsonNumber 2.30) -eq '2.3')  (Format-JsonNumber 2.30)
   Chk 'number format 32 -> 32'     ((Format-JsonNumber 32.0) -eq '32')   (Format-JsonNumber 32.0)
 
+  # --- THE INTERFACE. A slug list that lost members must refuse, never run smaller and say so calmly.
+  # Measured 2026-08-23: `powershell -File ... -Slugs $tenSlugArray -Apply` recost ONE slug. Two distinct
+  # shapes produce that, and BOTH are pinned, because the comma case alone would not have caught the
+  # measured run - argv-splitting had already separated the ten names before the script saw any of them.
+  function TryResolve($sl,$sf,$res){
+    try   { $rr = Resolve-SlugRequest -Slugs $sl -SlugFile $sf -Residue $res
+            return @{ threw=$false; slugs=@($rr.slugs); msg='' } }
+    catch { return @{ threw=$true;  slugs=@();          msg=[string]$_ } }
+  }
+  # $null, not @(), is what an unbound remaining-arguments parameter actually holds, and @($null).Count
+  # is 1 - so this MUST-NOT-FIRE twin is the one that keeps the guard from refusing every clean call.
+  $nullRes = TryResolve @('a','b') '' $null
+  Chk 'CLEAN TWIN an UNBOUND residue ($null, not @()) is not a dropped slug' (-not $nullRes.threw -and @($nullRes.slugs).Count -eq 2) $nullRes.msg
+  Chk 'CLEAN TWIN nor is a residue of empty strings'                   (-not (TryResolve @('a') '' @('','  ')).threw) 'refused a blank residue'
+  $resid = TryResolve @('a') '' @('b','c')
+  Chk 'MUST FIRE  argv residue (the 2026-08-23 -File shape) throws'    $resid.threw ('resolved ' + @($resid.slugs).Count)
+  Chk '   and the refusal names the slugs that were dropped'           ($resid.msg -match 'b, c')            $resid.msg
+  Chk '   and it names the & call-operator form'                       ($resid.msg -match '&\s+meal-prep')   $resid.msg
+  Chk '   and the -SlugFile form'                                      ($resid.msg -match '-SlugFile')       $resid.msg
+  $comma = TryResolve @('a,b,c') '' @()
+  Chk 'MUST FIRE  a comma-collapsed -Slugs element throws, not splits' $comma.threw ('resolved ' + @($comma.slugs).Count)
+  Chk '   and it says how many names collapsed'                        ($comma.msg -match 'list of 3 names') $comma.msg
+  Chk 'MUST FIRE  an empty request throws rather than sweeping all'    (TryResolve @() '' @()).threw         'resolved something'
+  $ten = TryResolve @('s1','s2','s3','s4','s5','s6','s7','s8','s9','s10') '' @()
+  Chk 'CLEAN TWIN a real in-process array of ten resolves to TEN'      (@($ten.slugs).Count -eq 10)          ([string]@($ten.slugs).Count)
+  $one = TryResolve @('only-slug') '' @()
+  Chk 'CLEAN TWIN one slug through -File (no residue, no comma) runs'  (@($one.slugs).Count -eq 1 -and $one.slugs[0] -eq 'only-slug') (@($one.slugs) -join '|')
+
+  # -SlugFile is the shape that survives `powershell -File`, mirroring propagate's -AllowCreateFile
+  $tmpSlugs = Join-Path $env:TEMP ('recost-selftest-slugs-' + $PID + '.txt')
+  Set-Content -Path $tmpSlugs -Value "alpha`r`n`r`n  beta  `r`ngamma" -Encoding utf8
+  $ff = TryResolve @() $tmpSlugs @()
+  Chk 'CLEAN TWIN -SlugFile reads one per line, blanks dropped'        (@($ff.slugs).Count -eq 3)            (@($ff.slugs) -join '|')
+  Chk '   and trims, so "  beta  " is not a different slug'            (@($ff.slugs)[1] -eq 'beta')          (@($ff.slugs) -join '|')
+  Chk 'MUST FIRE  -Slugs and -SlugFile together throws'                (TryResolve @('a') $tmpSlugs @()).threw 'accepted both'
+  Remove-Item $tmpSlugs -Force -ErrorAction SilentlyContinue
+  Chk 'MUST FIRE  a -SlugFile that does not exist throws'              (TryResolve @() $tmpSlugs @()).threw  'accepted a missing file'
+
+  # and the header must not go on advertising a call form the guard now refuses
+  $selfSrc = Get-Content (Join-Path $here 'recost-spec-cost-block.ps1') -Raw -Encoding utf8
+  Chk 'MUST FIRE  the usage header names -SlugFile as the -File form'  ($selfSrc -match ([regex]::Escape('-File .' + [char]92 + 'recost-spec-cost-block.ps1 -SlugFile'))) 'header does not document it'
+  Chk 'MUST FIRE  the run prints a requested-vs-recost tally'          ($selfSrc -match 'recost tally: requested') 'no tally line'
+
   Write-Output ("self-test: " + $(if($fails){ "$fails FAILED" } else { 'all green' }))
   exit $(if($fails){ 1 } else { 0 })
 }
 
-if(-not $Slugs -or $Slugs.Count -eq 0){ throw '-Slugs is required (see the header: this is never a catalog-wide sweep)' }
+# $Residue is the dropped-slug channel: with `powershell -File`, every name past the first lands there.
+$req = Resolve-SlugRequest -Slugs $Slugs -SlugFile $SlugFile -Residue $Residue
+$slugList = @($req.slugs)
+Write-Output ("recost: {0} slug(s) requested via {1}" -f $slugList.Count, $req.source)
 $costed = Get-Content (Join-Path $mp 'db\costed.json') -Raw -Encoding utf8 | ConvertFrom-Json
 $bySlug = @{}; foreach($r in $costed){ $bySlug[[string]$r.slug] = $r }
-$changed = 0
-foreach($slug in $Slugs){
+$changed = 0; $recost = 0; $noSpec = 0
+foreach($slug in $slugList){
   $sp = Join-Path $mp ('db\recipes\' + $slug + '.json')
-  if(-not (Test-Path $sp)){ Write-Output ("FAIL  $slug - no spec file"); continue }
+  if(-not (Test-Path $sp)){ Write-Output ("FAIL  $slug - no spec file"); $noSpec++; continue }
   $row = $bySlug[$slug]
   if(-not $row){ throw ("no costed row for $slug - run engine\cost-recipes.ps1 -Slugs $slug first") }
   $r = Invoke-RecostSpec $sp $row ([bool]$Apply)
+  $recost++
   if($r.changed){ $changed++ }
   Write-Output ("{0}  {1}  batch=`${2} true=`${3} ({4} cost lines)" -f $(if($Apply){'APPLIED'}else{'DRY    '}), $slug, $r.batch, $r.trueC, $r.lines)
 }
 Write-Output ("{0} spec(s) would change" -f $changed)
+# THE TALLY. "1 spec(s) would change" reads identically whether one slug was asked for or ten were and
+# nine were lost; requested-vs-processed is the number that cannot. Printed on every run, loud when short.
+Write-Output ("recost tally: requested {0} | recost {1} | changed {2} | no spec {3}" -f $slugList.Count, $recost, $changed, $noSpec)
+if($recost -ne $slugList.Count){
+  Write-Output ("UNDER-APPLY: {0} of {1} requested slug(s) were NOT recost - this run did less than it was asked for." -f ($slugList.Count - $recost), $slugList.Count)
+}
 if(-not $Apply){ Write-Output 'dry run - pass -Apply to write' }
