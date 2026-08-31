@@ -73,6 +73,24 @@ function Fmt-Diff([double]$d, [string]$unit) {
   }
   return ('+$' + ('{0:N2}' -f $d) + $suffix)
 }
+# THE BARE PRICE, for surfaces that print the unit THEMSELVES. The trend pages compose
+# "<div class=tp-price>$1.00<span class=tp-unit>/lb</span></div>", so they cannot use Fmt-Price - its
+# output already carries the unit - and they grew a third private copy instead.
+#
+# That copy rounded to FOUR decimals below a dollar and trimmed trailing zeros, so apples at 0.9967
+# printed "$0.9967/lb" in the headline stat, the dek AND the search description, while the board printed
+# "$1.00/lb" for the same number. Two surfaces disagreeing about one price is worse than either being
+# slightly wrong.
+#
+# Two decimals, like money. The ONE exception is the sub-cent case fmt-lib already exists to protect -
+# cotton swabs at $0.0043 - where two decimals would print $0.00 and lose the number entirely.
+function Fmt-PriceBare([double]$v) {
+  if ($v -gt 0 -and $v -lt 0.01) {
+    $s = $v.ToString('0.0000', [System.Globalization.CultureInfo]::InvariantCulture).TrimEnd('0')
+    return ('$' + $s)
+  }
+  return ('$' + ('{0:N2}' -f [math]::Round($v, 2)))
+}
 function UnitLabel([string]$unit) {
   switch ($unit) { 'oz'{'per ounce'} 'floz'{'per fl ounce'} 'lb'{'per pound'} 'gallon'{'per gallon'} 'dozen'{'per dozen'} 'each'{'each'} default{$unit} }
 }
@@ -144,7 +162,29 @@ if ($SelfTest) {
     $got = Fmt-Diff ([double]$c.d) ([string]$c.u)
     if ($got -ne $c.want) { Write-Output ("  X " + $c.why + "  got '" + $got + "' want '" + $c.want + "'"); $bad++ }
   }
-  $total = ($cases.Count * 2) + $dcases.Count
+  # ---- Fmt-PriceBare. Founding bug: the trend pages' four-decimal prices. -----------------------------
+  $bcases = @(
+    # MUST-FIRE: live on /apples-price-omaha/ 2026-08-31, in the stat, the dek and the meta description.
+    @{ v=0.9967; want='$1.00';   why='MUST-FIRE: 0.9967 is $1.00, not $0.9967 - the board says $1.00/lb for it' },
+    @{ v=0.797;  want='$0.80';   why='MUST-FIRE: a chart axis label is money, not four decimals' },
+    @{ v=0.127;  want='$0.13';   why='MUST-FIRE: three decimals round to two like every other price' },
+    # SAME FROZEN BANKER'''S ROUNDING as Fmt-Price above, and for the same reason: an exact half cent
+    # lands on the even digit. Written as a fixture so the behaviour is a decision on the record rather
+    # than a surprise. (This fixture was WRONG on its first draft - it expected $0.13 - and the self-test
+    # caught it, which is the whole argument for keeping formatters where fixtures can reach them.)
+    @{ v=0.125;  want='$0.12';   why='FROZEN BEHAVIOR: exact half cent uses banker''s rounding' },
+    # CLEAN TWINS
+    @{ v=0.0043; want='$0.0043'; why='CLEAN TWIN: a real sub-cent price keeps its digits rather than becoming $0.00' },
+    @{ v=0.01;   want='$0.01';   why='CLEAN TWIN: exactly one cent is not sub-cent' },
+    @{ v=4.98;   want='$4.98';   why='CLEAN TWIN: an ordinary price is unchanged' },
+    @{ v=12.5;   want='$12.50';  why='CLEAN TWIN: a whole half-dollar keeps two decimals' },
+    @{ v=0;      want='$0.00';   why='CLEAN TWIN: a genuine zero is not sub-cent and is not hidden' }
+  )
+  foreach ($c in $bcases) {
+    $got = Fmt-PriceBare ([double]$c.v)
+    if ($got -ne $c.want) { Write-Output ("  X " + $c.why + "  got '" + $got + "' want '" + $c.want + "'"); $bad++ }
+  }
+  $total = ($cases.Count * 2) + $dcases.Count + $bcases.Count
   if ($bad -eq 0) { Write-Output ("fmt-lib SELF-TEST PASS (" + $total + " frozen cases)"); exit 0 }
   Write-Output ("fmt-lib SELF-TEST FAIL (" + $bad + " of " + $total + " cases)"); exit 2
 }

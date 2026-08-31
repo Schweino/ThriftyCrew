@@ -37,17 +37,12 @@ function Esc { param([string]$t)
   return $t.Replace('&','&amp;').Replace('<','&lt;').Replace('>','&gt;').Replace('"','&quot;').Replace("'",'&#39;')
 }
 
-function Format-Price { param([double]$p)
-  $r = [math]::Round($p, 4)
-  if ($r -ge 1) { return ('${0:N2}' -f $r) }
-  $s = $r.ToString('0.0000', [System.Globalization.CultureInfo]::InvariantCulture)
-  $s = $s.TrimEnd('0')
-  $parts = $s.Split('.')
-  $dec = ''
-  if ($parts.Length -gt 1) { $dec = $parts[1] }
-  while ($dec.Length -lt 2) { $dec = $dec + '0' }
-  return ('$' + $parts[0] + '.' + $dec)
-}
+# ONE FORMATTER (2026-08-31). This was a private third copy that printed up to FOUR decimals below a
+# dollar, so apples at 0.9967 read "$0.9967/lb" here and "$1.00/lb" on the board - including in this
+# page's own search description. It now delegates to fmt-lib's Fmt-PriceBare, which has the frozen
+# fixtures; the unit stays the template's job, exactly as before.
+. (Join-Path $here 'fmt-lib.ps1')
+function Format-Price { param([double]$p) return (Fmt-PriceBare $p) }
 
 function Format-Week { param([string]$w)
   $d = [datetime]::ParseExact($w, 'yyyy-MM-dd', [System.Globalization.CultureInfo]::InvariantCulture)
