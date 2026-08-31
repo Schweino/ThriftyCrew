@@ -2435,8 +2435,8 @@
         "product":  "Planters Dry Roasted Pistachios 12.75 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/ready_to_eat",
-        "verdict":  "BLOCK",
-        "reason":  "candidate sits in \u0027dairy\u0027; category \u0027snacks\u0027 allows only: pantry, beverages"
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is a reviewed exception department for \u0027pistachios\u0027"
     },
     {
         "id":  "pita-bread",
@@ -3551,8 +3551,8 @@
         "product":  "Sugar N Spice Paprika Smoked Pp",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
-        "verdict":  "BLOCK",
-        "reason":  "candidate sits in \u0027fresh_fruits_vegetables\u0027; category \u0027baking\u0027 allows only: pantry"
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027smoked-paprika\u0027"
     },
     {
         "id":  "mozzarella-cheese",
@@ -3578,8 +3578,8 @@
         "product":  "Dan\u0027s Pantry Celery Salt",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
-        "verdict":  "BLOCK",
-        "reason":  "candidate sits in \u0027fresh_fruits_vegetables\u0027; category \u0027baking\u0027 allows only: pantry"
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027celery-salt\u0027"
     },
     {
         "id":  "white-wine-vinegar",
