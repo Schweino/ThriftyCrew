@@ -566,10 +566,13 @@ foreach ($p in $allCatPairs) {
 # a VIEW segment that answers "what am I looking at", and the category rail. The two toggles are set-once
 # controls, not per-scroll controls, which is exactly what a popover is for.
 #
-# THE BOARD OPENS ON THE SALES. 637 rows is a reference work; 37 of them are the reason to come back this
-# week. The view segment defaults to On sale, and search still reaches all 637 (typing overrides the view,
-# which is what it already did to the pills). Counts are stamped at BUILD time - the old On-sale count was
-# filled by JS that queried .pg-tag-sale inside chips, and chips are lazy, so it read 0 on a cold load.
+# ORDER AND DEFAULT: All, then On sale, then Record lows (Brad, 2026-08-31). All is the widest answer and
+# the one a first-time visitor is looking for, so it leads and it is what the board opens on; the two
+# narrower cuts sit beside it in decreasing breadth. Search still reaches all 637 and overrides the view,
+# which is what it already did to the pills.
+#
+# Counts are stamped at BUILD time. The old On-sale count was filled by JS that queried .pg-tag-sale
+# inside a chip, and chips are lazy, so it read 0 on a cold load.
 [void]$sb.Append("<nav class='pg-filters' aria-label='Search and filter'>")
 [void]$sb.Append("<div class='pg-fbar'><input class='pg-search' id='pg-search' type='search' placeholder='Search all 637 items: eggs, chicken, coffee...' aria-label='Search items'>")
 [void]$sb.Append("<button type='button' class='pg-optb' id='pg-optb' aria-expanded='false' aria-controls='pg-opts'>Options</button></div>")
@@ -580,9 +583,9 @@ foreach ($p in $allCatPairs) {
 [void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-expandall'><span>Show all prices</span><span class='pg-toggle-note'>expand every item to compare all stores at once</span></label>")
 [void]$sb.Append("</div>")
 [void]$sb.Append("<div class='pg-views' role='group' aria-label='View'>")
-[void]$sb.Append("<button type='button' class='pg-vbtn is-active' data-view='sale'>On sale <b>__SALE_N__</b></button>")
+[void]$sb.Append("<button type='button' class='pg-vbtn is-active' data-view='all'>All <b>__ALL_N__</b></button>")
+[void]$sb.Append("<button type='button' class='pg-vbtn' data-view='sale'>On sale <b>__SALE_N__</b></button>")
 [void]$sb.Append("<button type='button' class='pg-vbtn' data-view='rec'>Record lows <b>__REC_N__</b></button>")
-[void]$sb.Append("<button type='button' class='pg-vbtn' data-view='all'>All <b>__ALL_N__</b></button>")
 [void]$sb.Append("</div>")
 [void]$sb.Append("<div class='pg-pills'>")
 [void]$sb.Append("<button class='pg-fbtn is-active' data-cat='all'>All aisles</button>")
@@ -931,12 +934,10 @@ if ($captureHtml) { $body = $body.Replace("<div class='pg-cta'>", $captureHtml +
 # view-segment counts. Stamped, not computed client-side: the segment is the first thing a shopper reads and
 # a count that arrives after hydration is a count that flickers (and the sale count read 0 before it did).
 $body = $body.Replace('__SALE_N__', [string]$saleRowN).Replace('__REC_N__', [string]$recRowN).Replace('__ALL_N__', [string]$totalCommodities)
-# THE DEFAULT VIEW MUST HAVE SOMETHING IN IT. A week with no sales would open the board on an empty list,
-# which reads as a broken page rather than a quiet week - so in that case the segment opens on All instead.
-if ($saleRowN -eq 0) {
-  $body = $body.Replace("class='pg-vbtn is-active' data-view='sale'", "class='pg-vbtn' data-view='sale'").Replace("class='pg-vbtn' data-view='all'", "class='pg-vbtn is-active' data-view='all'")
-  Write-Output "VIEW DEFAULT: no rows are on sale this week - the board opens on All rather than an empty On-sale view."
-}
+# (The empty-default guard that used to live here is gone with the default. It swapped the active view to
+# All when a week had no sales, so the board could never open on an empty list. All IS the default now, and
+# it cannot be empty while the board has rows, so there is nothing left to guard.)
+if ($saleRowN -eq 0) { Write-Output "NOTE: no rows are on sale this week - the On-sale view will be empty until an ad starts." }
 
 $css = @'
 <style>

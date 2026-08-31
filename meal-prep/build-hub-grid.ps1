@@ -368,12 +368,21 @@ $hubCss = Compress-TcCss ((Get-TcTokenCss -Parts @('type','depth','navy','money'
 .mpr-dots{display:flex;gap:6px;justify-content:center;margin:.2rem 0 0}
 .mpr-dots i{width:6px;height:6px;border-radius:999px;background:#cbd5e1;display:block}
 .mpr-dots i.is-on{background:#E2A43C;width:18px}
-/* minmax(0,1fr), not 1fr. A plain 1fr track is minmax(AUTO,1fr) and auto floors at min-content, so five
-   rail cards whose macro tiles are 56px each could not shrink below ~1,540px inside a 720px column: the
-   page scrolled sideways at every desktop width, on the live Google Ads landing page, at 1,675px against
-   a 985px viewport. Verified pre-existing on the live page 2026-08-31, not introduced by this redesign.
-   Four columns with a zero floor fits eight cards as two rows and lets the card contents wrap. */
-@media(min-width:760px){.mpr-rail{grid-auto-columns:minmax(0,1fr);grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible}.mpr-rail>a{min-width:0}.mpr-dots{display:none}}
+/* THE RAIL AT DESKTOP: auto-fill with a REAL floor, not a fixed column count.
+   The original rule was repeat(5,1fr). A plain 1fr is minmax(AUTO,1fr) and auto floors at min-content,
+   so five cards whose macro tiles are 56px each could not shrink below ~1,540px inside a 720px column:
+   the page scrolled sideways at every desktop width, on the live Google Ads landing page, 1,675px
+   against a 985px viewport. (Verified pre-existing on the live page 2026-08-31.)
+
+   The first fix was repeat(4,minmax(0,1fr)) with min-width:0 on the card, and it was WORSE. A zero floor
+   does stop the overflow - by letting the track shrink under its content - so recipe titles broke one
+   CHARACTER per line: "Brat / wurs / t and". A number said the overflow was gone and the page was
+   unreadable. Do not verify a layout change by measuring scrollWidth; look at it.
+
+   auto-fill decides the column COUNT from the space available, and the 190px floor is what stops a track
+   from ever going narrower than a title needs. Eight cards land as three columns in a 720px article
+   column and never overflow it, because auto-fill fits tracks to the container by construction. */
+@media(min-width:760px){.mpr-rail{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));overflow:visible}.mpr-dots{display:none}}
 /* ---- kitchen ticker: one static stat line, build-time date, upgraded client side only when true ---- */
 .mpr-ticker{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 2rem;padding:.85rem 1.1rem;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;font-size:1.28rem;color:#3a4658;min-height:46px}
 .mpr-ticker b{color:#16263F;font-variant-numeric:tabular-nums;font-weight:750}
