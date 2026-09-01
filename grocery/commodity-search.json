@@ -1,6 +1,10 @@
 {
   "note": "Per-commodity search terms used by the everyday/regular-price pulls (Family Fare Freshop, Baker's/Kroger, Hy-Vee, Sam's). Keyed by commodity id in commodities.json.",
   "terms": {
+    "block-cheese": "block cheese",
+    "gruyere": "gruyere cheese",
+    "shaved-beef-steak": "shaved beef steak",
+    "yellow-bell-pepper": "yellow bell pepper",
     "chicken-breast": "boneless skinless chicken breast",
     "chicken-thighs": "chicken thighs",
     "ground-beef-8020": "80/20 ground beef",
