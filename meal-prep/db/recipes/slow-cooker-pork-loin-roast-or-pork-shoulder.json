@@ -51,15 +51,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 8 1/4 lb boneless pork loin roast, trimmed: ~$17.55. \u003cstrong\u003eBuy 9 lbs: $19.26.\u003c/strong\u003e",
-                       "Olive Oil, 2 1/2 tablespoons olive oil, divided: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 2 1/2 tablespoons olive oil, divided: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Honey, 1 1/3 cups honey: ~$3.53. \u003cstrong\u003ePantry staple; this batch alone uses about 2 12oz bottles.\u003c/strong\u003e",
                        "Butter, scant 1 cup (2 sticks) unsalted butter: ~$1.44. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Garlic, 9 cloves garlic, minced: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Apple Cider Vinegar, scant 1/2 cup apple cider vinegar: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (paprika, garlic powder, cayenne pepper, black pepper, salt, cornstarch): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, garlic powder, cayenne pepper, black pepper, salt, cornstarch): ~$0.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $23.79 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $27.27 across 14 servings, roughly $1.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.16. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.28. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a honey butter pork roast that eats like a holiday dinner. The pork loin carries the plate; the honey, butter, and spice rub just make it taste like you fussed.",
     "shop_smart":  [
@@ -84,8 +84,8 @@
     "cost_batch_true":  27.27,
     "cost_per_serving":  1.7,
     "cost_per_serving_true":  1.95,
-    "cost_pantry_add":  18.89,
-    "cost_first_run":  46.16,
+    "cost_pantry_add":  19.01,
+    "cost_first_run":  46.28,
     "scaler":  {
                    "cost":  "27.27",
                    "ing":  [

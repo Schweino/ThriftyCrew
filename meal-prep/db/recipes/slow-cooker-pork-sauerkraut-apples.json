@@ -45,16 +45,16 @@
     "cost_lines":  [
                        "Pork Loin, 5.25 lb: ~$11.23. \u003cstrong\u003eBuy 6 lbs: $12.84.\u003c/strong\u003e",
                        "Vegetable Oil, 1.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Apple Juice, 1.75 cups: ~$0.51. \u003cstrong\u003eBuy 1 64floz bottle: $2.24.\u003c/strong\u003e",
-                       "Yellow Onion, 2.4 onions: ~$0.66. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Apple, 2 apples: ~$0.70. \u003cstrong\u003eBuy 2 each: $0.78.\u003c/strong\u003e",
+                       "Apple Juice, 1.75 cups: ~$0.50. \u003cstrong\u003eBuy 1 64floz bottle: $2.16.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4 onions: ~$0.57. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Apple, 2 apples: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.08.\u003c/strong\u003e",
                        "Garlic, 0.5 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Sauerkraut, 5.5 cups: ~$2.55. \u003cstrong\u003eBuy 2 14.5oz cans: $2.64.\u003c/strong\u003e",
+                       "Sauerkraut, 5.5 cups: ~$2.15. \u003cstrong\u003eBuy 2 14.5oz cans: $2.22.\u003c/strong\u003e",
                        "Rice, 5.75 cups dry: ~$1.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, salt): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $17.41 across 14 servings, so roughly $1.24 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $21.91 across 14 servings, roughly $1.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.35. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (black pepper, salt): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $16.88 across 14 servings, so roughly $1.21 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $21.48 across 14 servings, roughly $1.53 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $29.20. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Sauerkraut, apples and apple juice are all inexpensive, and pork loin on sale finishes the job.",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "Spread the cooked rice across your 14 containers, then set your mixing pot of pork and kraut on the scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near {{cal}} calories with {{protein}} grams of protein, which is a strong protein number for a dollar and change.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://amindfullmom.com/pork-and-sauerkraut/\" target=\"_blank\" rel=\"noopener\"\u003eamindfullmom.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eNew Year\u0027s Day pork and kraut for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  17.41,
-    "cost_batch_true":  21.91,
-    "cost_per_serving":  1.24,
-    "cost_per_serving_true":  1.56,
-    "cost_pantry_add":  9.44,
-    "cost_first_run":  31.35,
+    "cost_batch":  16.88,
+    "cost_batch_true":  21.48,
+    "cost_per_serving":  1.21,
+    "cost_per_serving_true":  1.53,
+    "cost_pantry_add":  7.72,
+    "cost_first_run":  29.2,
     "scaler":  {
-                   "cost":  "21.91",
+                   "cost":  "21.48",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",

@@ -50,18 +50,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 4.25 lb: ~$19.90. \u003cstrong\u003eBuy 5 lbs: $22.75.\u003c/strong\u003e",
-                       "Rice, 2.75 cups dry: ~$0.65. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Rice, 2.75 cups dry: ~$0.63. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Garlic, 7.75 tbsp: ~$0.90. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Eggs, 4 large eggs: ~$0.59. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
-                       "Olive Oil, 4.25 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 4.25 tbsp: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Tomato Sauce, 6.3 cans: ~$5.28. \u003cstrong\u003eBuy 7 15oz cans: $5.87.\u003c/strong\u003e",
                        "Chicken Broth, 1 carton: ~$1.60. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Heavy Cream, 1.5 cups: ~$1.72. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
-                       "Red Wine Vinegar, 4.5 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, smoked paprika, ground cumin, cayenne pepper, dried oregano, paprika): ~$1.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $33.07 across 14 servings, so roughly $2.36 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.42 across 14 servings, roughly $2.74 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.46 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.88. Those containers then feed this batch and many more after it."
+                       "Red Wine Vinegar, 4.5 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, smoked paprika, ground cumin, cayenne pepper, dried oregano, paprika): ~$1.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.25 across 14 servings, so roughly $2.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.60 across 14 servings, roughly $2.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.37. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost) for tapas-bar meatballs. The bar charges more than that for three of them and calls it a small plate.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Then count the meatballs, divide them evenly across all 14, and ladle the sauce over the top. Each bowl lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://foodwishes.blogspot.com/2015/11/turkey-rice-meatballs-albondigas.html\" target=\"_blank\" rel=\"noopener\"\u003efoodwishes.blogspot.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Spanish albondigas for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  33.07,
-    "cost_batch_true":  38.42,
-    "cost_per_serving":  2.36,
-    "cost_per_serving_true":  2.74,
-    "cost_pantry_add":  18.46,
-    "cost_first_run":  56.88,
+    "cost_batch":  33.25,
+    "cost_batch_true":  38.6,
+    "cost_per_serving":  2.38,
+    "cost_per_serving_true":  2.76,
+    "cost_pantry_add":  18.77,
+    "cost_first_run":  57.37,
     "scaler":  {
-                   "cost":  "38.42",
+                   "cost":  "38.60",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

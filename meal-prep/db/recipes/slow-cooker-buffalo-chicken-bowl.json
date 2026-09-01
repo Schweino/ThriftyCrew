@@ -35,17 +35,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 6 lb: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
-                       "Ranch Seasoning Mix, 6 3/4 tbsp: ~$0.75. \u003cstrong\u003ePantry staple; this batch alone uses about 2 1oz packets.\u003c/strong\u003e",
+                       "Ranch Seasoning Mix, 6 3/4 tbsp: ~$0.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 1oz packets.\u003c/strong\u003e",
                        "Buffalo Wing Sauce, 1 cup: ~$1.65. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Rice, 5.5 cups dry: ~$1.23. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Broccoli Florets, 7 cups: ~$2.04. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
                        "Fat Free Cheddar, 1 3/4 cups: ~$1.94. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
-                       "Butter, 1/4 cup melted: ~$1.02. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
+                       "Butter, 1/4 cup melted: ~$1.18. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Olive Oil, ~2 tsp (broccoli): ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt): ~$0.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $21.31 across 14 servings, so roughly $1.52 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $24.56 across 14 servings, roughly $1.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.22 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.78. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $21.60 across 14 servings, so roughly $1.54 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.11 across 14 servings, roughly $1.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.36. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -65,14 +65,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot weight you wrote down, and divide that number by 14. Scoop that exact weight into each of your 14 containers so every dinner carries the same hearty serving of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatingbirdfood.com/slow-cooker-buffalo-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eEating Bird Food\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen buffalo chicken dinners for two, at a per-bowl cost that beats one order of wings. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  21.31,
-    "cost_batch_true":  24.56,
-    "cost_per_serving":  1.52,
-    "cost_per_serving_true":  1.75,
-    "cost_pantry_add":  9.22,
-    "cost_first_run":  33.78,
+    "cost_batch":  21.6,
+    "cost_batch_true":  25.11,
+    "cost_per_serving":  1.54,
+    "cost_per_serving_true":  1.79,
+    "cost_pantry_add":  9.25,
+    "cost_first_run":  34.36,
     "scaler":  {
-                   "cost":  "24.56",
+                   "cost":  "25.11",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

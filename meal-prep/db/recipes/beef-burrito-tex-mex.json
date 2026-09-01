@@ -41,17 +41,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
-                       "93/7 Ground Beef, 3.5 lb: ~$23.18. \u003cstrong\u003eBuy 4 lbs: $26.48.\u003c/strong\u003e",
+                       "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$21.60. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
                        "Black Beans, 1.25 cups: ~$0.71. \u003cstrong\u003eBuy 1 15oz can: $0.92.\u003c/strong\u003e",
                        "Salsa, 1.75 cups: ~$1.70. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
                        "BBQ Sauce, 3.25 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 7 oz: ~$1.22. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 7 oz: ~$1.49. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
                        "Rice, 0.75 cups dry: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (taco seasoning): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $38.90 across 14 servings, so roughly $2.78 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.11 across 14 servings, roughly $3.29 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.38. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (taco seasoning): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.50 across 14 servings, so roughly $2.61 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.21 across 14 servings, roughly $3.09 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.56. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "The beef is the whole cost here, so catch it on sale and the per serving number in the cost tab drops even lower. Everything else in this one is pantry cheap.",
     "shop_smart":  [
@@ -71,14 +71,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that exact amount down the center of each warm tortilla, and roll it up. Every burrito lands right at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookedandloved.com/recipes/beef-burritos/\" target=\"_blank\" rel=\"noopener\"\u003ecookedandloved.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  38.9,
-    "cost_batch_true":  46.11,
-    "cost_per_serving":  2.78,
-    "cost_per_serving_true":  3.29,
-    "cost_pantry_add":  2.27,
-    "cost_first_run":  48.38,
+    "cost_batch":  36.5,
+    "cost_batch_true":  43.21,
+    "cost_per_serving":  2.61,
+    "cost_per_serving_true":  3.09,
+    "cost_pantry_add":  2.35,
+    "cost_first_run":  45.56,
     "scaler":  {
-                   "cost":  "46.11",
+                   "cost":  "43.21",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

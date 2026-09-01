@@ -44,13 +44,13 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Green Beans, 3.75 lb: ~$3.55. \u003cstrong\u003eBuy 5 12oz bags: $3.66.\u003c/strong\u003e",
-                       "Olive Oil, 7.25 tbsp: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 21 potatoes: ~$5.57. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Olive Oil, 7.25 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 21 potatoes: ~$5.82. \u003cstrong\u003eBuy 10 lbs: $5.94.\u003c/strong\u003e",
                        "Pork Tenderloin, 5.5 lb: ~$21.68. \u003cstrong\u003eBuy 6 lbs: $23.82.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, chili powder, ground cumin, garlic powder, paprika): ~$0.59. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $32.46 across 14 servings, so roughly $2.32 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.82 across 14 servings, roughly $2.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.15. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, chili powder, ground cumin, garlic powder, paprika): ~$0.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.66 across 14 servings, so roughly $2.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.03 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.56. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a lean protein, a starch and a vegetable that all came off the same pan. The tenderloin is the entire cost and the rest is rounding.",
     "shop_smart":  [
@@ -71,14 +71,14 @@
     "portion_html":  "Divide the potatoes and green beans across your 14 containers, then set your mixing pot of sliced tenderloin on the scale, subtract the empty pot weight from Step 1, divide by 14, and add that exact weight to each. Every plate lands near {{cal}} calories with {{protein}} grams of protein for very little work.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thisfarmgirlcooks.com/pork-tenderloin-sheet-pan-dinner/\" target=\"_blank\" rel=\"noopener\"\u003ethisfarmgirlcooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eA whole sheet pan dinner for about ${{cost_ps}} a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  32.46,
-    "cost_batch_true":  34.82,
-    "cost_per_serving":  2.32,
-    "cost_per_serving_true":  2.49,
-    "cost_pantry_add":  13.33,
-    "cost_first_run":  48.15,
+    "cost_batch":  32.66,
+    "cost_batch_true":  35.03,
+    "cost_per_serving":  2.33,
+    "cost_per_serving_true":  2.5,
+    "cost_pantry_add":  13.53,
+    "cost_first_run":  48.56,
     "scaler":  {
-                   "cost":  "34.82",
+                   "cost":  "35.03",
                    "ing":  [
                                {
                                    "item":  "Green Beans",

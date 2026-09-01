@@ -36,15 +36,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Potato, 10 lb: ~$5.51. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
-                       "Olive Oil, 3 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lime Juice, 2 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Red Wine Vinegar, 1 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 10 lb: ~$5.76. \u003cstrong\u003eBuy 10 lbs: $5.94.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 2 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 1 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 2 cloves: ~$0.12. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Pantry seasonings (dried oregano, salt, onion powder, black pepper): ~$0.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.54 across 14 servings, so roughly $1.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $25.05 across 14 servings, roughly $1.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.83. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried oregano, salt, onion powder, black pepper): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.82 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.34 across 14 servings, roughly $1.81 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.86. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -62,14 +62,14 @@
     "portion_html":  "Each bowl lands at {{protein}} grams of protein and {{cal}} calories, one of the leaner plates in the bunch.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.rachelcooks.com/slow-cooker-greek-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eRachel Cooks\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, filling, and easy on the wallet. Weeknight dinner doesn\u0027t get much friendlier. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  23.54,
-    "cost_batch_true":  25.05,
-    "cost_per_serving":  1.68,
-    "cost_per_serving_true":  1.79,
-    "cost_pantry_add":  13.78,
-    "cost_first_run":  38.83,
+    "cost_batch":  23.82,
+    "cost_batch_true":  25.34,
+    "cost_per_serving":  1.7,
+    "cost_per_serving_true":  1.81,
+    "cost_pantry_add":  14.52,
+    "cost_first_run":  39.86,
     "scaler":  {
-                   "cost":  "25.05",
+                   "cost":  "25.34",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

@@ -33,15 +33,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 6 lb: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
-                       "Diced Green Chiles, 1 can: ~$1.09. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Diced Green Chiles, 1 can: ~$1.00. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Salsa, 5 1/4 cups: ~$5.91. \u003cstrong\u003eBuy 3 16oz jars: $5.91.\u003c/strong\u003e",
                        "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Seasoned Black Beans, 4 cans: ~$5.94. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
                        "Fat Free Cheddar, 1 3/4 cups: ~$1.94. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
-                       "Pantry seasonings (taco seasoning): ~$0.89. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.03 across 14 servings, so roughly $2.07 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.17 across 14 servings, roughly $2.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.30. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (taco seasoning): ~$1.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.44 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.58 across 14 servings, roughly $2.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.71. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -61,14 +61,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That is your grams per container. Scoop each bowl to that exact weight so the servings stay honest, and you will hit roughly {{protein}} grams of protein per bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://theproteinchef.co/slow-cooker-salsa-chicken-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eThe Protein Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen burrito bowls that beat the drive-thru on price, protein, and how good you feel eating them. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  29.03,
-    "cost_batch_true":  31.17,
-    "cost_per_serving":  2.07,
-    "cost_per_serving_true":  2.23,
+    "cost_batch":  29.44,
+    "cost_batch_true":  31.58,
+    "cost_per_serving":  2.1,
+    "cost_per_serving_true":  2.26,
     "cost_pantry_add":  0.13,
-    "cost_first_run":  31.3,
+    "cost_first_run":  31.71,
     "scaler":  {
-                   "cost":  "31.17",
+                   "cost":  "31.58",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

@@ -48,8 +48,8 @@
     "cost_lines":  [
                        "Beef Chuck Roast, 5 lb: ~$32.79. \u003cstrong\u003eBuy 5 lbs: $33.20.\u003c/strong\u003e",
                        "Carrots, 6.6 carrots: ~$0.85. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Yellow Onion, 5.7 onions: ~$1.58. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
-                       "Beef Broth, 17.25 cups: ~$6.26. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
+                       "Yellow Onion, 5.7 onions: ~$1.36. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
+                       "Beef Broth, 17.25 cups: ~$6.53. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
                        "Vegetable Oil, 8.5 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "White Mushrooms, 1.25 lb: ~$4.65. \u003cstrong\u003eBuy 3 8oz packs: $5.66.\u003c/strong\u003e",
                        "Hickory Smoked Bacon, 1 lb: ~$3.67. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
@@ -57,10 +57,10 @@
                        "Garlic, 5 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Tomato Paste, 5.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
                        "All-Purpose Flour, 1 cup: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (bay leaves, dried thyme, salt, black pepper): ~$0.90. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $52.93 across 14 servings, so roughly $3.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $57.80 across 14 servings, roughly $4.13 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.59. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (bay leaves, dried thyme, salt, black pepper): ~$0.91. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $52.99 across 14 servings, so roughly $3.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $57.77 across 14 servings, roughly $4.13 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.01. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for the dish that gets described as special occasion cooking. Bacon, mushrooms, and onions are doing the work that most people assume the wine does.",
     "shop_smart":  [
@@ -82,14 +82,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight into each of 14 containers, stirring between scoops so the mushrooms and bacon get spread around. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/beef-bourguignon-beef-burgundy/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Beef bourguignon for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  52.93,
-    "cost_batch_true":  57.8,
+    "cost_batch":  52.99,
+    "cost_batch_true":  57.77,
     "cost_per_serving":  3.78,
     "cost_per_serving_true":  4.13,
-    "cost_pantry_add":  9.79,
-    "cost_first_run":  67.59,
+    "cost_pantry_add":  10.24,
+    "cost_first_run":  68.01,
     "scaler":  {
-                   "cost":  "57.80",
+                   "cost":  "57.77",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",

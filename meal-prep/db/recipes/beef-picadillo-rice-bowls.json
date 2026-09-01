@@ -40,18 +40,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 6 lb: ~$31.69. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
-                       "Rice, 5.25 cups dry: ~$1.20. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Green Bell Peppers, 3 peppers: ~$2.18. \u003cstrong\u003eBuy 3 each: $2.31.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.80. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.70. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Tomato Sauce, 2 cans: ~$1.58. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
                        "Olives, 1 cup: ~$1.19. \u003cstrong\u003eBuy 1 6oz can: $1.68.\u003c/strong\u003e",
                        "Golden Raisins, 3/4 cup: ~$1.12. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Garlic, 2 cloves: ~$0.16. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Capers, 2 tablespoons, drained: ~$1.25. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, dried oregano, bay leaves, salt, black pepper): ~$0.56. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $41.73 across 14 servings, so roughly $2.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $48.54 across 14 servings, roughly $3.47 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.93. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (ground cumin, dried oregano, bay leaves, salt, black pepper): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $41.61 across 14 servings, so roughly $2.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.37 across 14 servings, roughly $3.45 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.17. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -70,14 +70,14 @@
     "portion_html":  "Each of the 14 servings gives you {{protein}} grams of protein at {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/picadillo/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, salty, savory, and cheap all at once, this bowl earns a permanent spot in the rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  41.73,
-    "cost_batch_true":  48.54,
-    "cost_per_serving":  2.98,
-    "cost_per_serving_true":  3.47,
-    "cost_pantry_add":  11.39,
-    "cost_first_run":  59.93,
+    "cost_batch":  41.61,
+    "cost_batch_true":  48.37,
+    "cost_per_serving":  2.97,
+    "cost_per_serving_true":  3.45,
+    "cost_pantry_add":  11.8,
+    "cost_first_run":  60.17,
     "scaler":  {
-                   "cost":  "48.54",
+                   "cost":  "48.37",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

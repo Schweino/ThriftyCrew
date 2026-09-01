@@ -40,14 +40,14 @@
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 6 lb: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
                        "Chicken Broth, 1 2/3 cups: ~$0.61. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Coconut Milk, 1 cup: ~$1.10. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
+                       "Coconut Milk, 1 cup: ~$1.19. \u003cstrong\u003eBuy 1 13.5oz can: $1.98.\u003c/strong\u003e",
                        "Sun-Dried Tomatoes, 1 1/2 cups: ~$1.56. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Penne Pasta, 9 cups: ~$1.92. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Penne Pasta, 9 cups: ~$1.81. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 cup: ~$1.18. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, italian seasoning, salt, black pepper, red pepper flakes, paprika): ~$0.54. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.18 across 14 servings, so roughly $1.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $22.61 across 14 servings, roughly $1.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.00. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, onion powder, italian seasoning, salt, black pepper, red pepper flakes, paprika): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.19 across 14 servings, so roughly $1.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.67 across 14 servings, roughly $1.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.61. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -67,14 +67,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That gives you the grams per container. Scoop each one to that number so every meal comes out even, and you land right around {{protein}} grams of protein per serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/slow-cooker-italian-pulled-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen creamy Italian dinners cooked while you were busy, for a fraction of what one restaurant plate would cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  19.18,
-    "cost_batch_true":  22.61,
+    "cost_batch":  19.19,
+    "cost_batch_true":  22.67,
     "cost_per_serving":  1.37,
     "cost_per_serving_true":  1.62,
-    "cost_pantry_add":  10.39,
-    "cost_first_run":  33,
+    "cost_pantry_add":  10.94,
+    "cost_first_run":  33.61,
     "scaler":  {
-                   "cost":  "22.61",
+                   "cost":  "22.67",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

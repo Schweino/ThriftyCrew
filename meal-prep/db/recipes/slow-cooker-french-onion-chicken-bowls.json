@@ -38,18 +38,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.04. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Yellow Onion, 9 onions: ~$2.26. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
-                       "Beef Broth, 2 cups: ~$0.73. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Yellow Onion, 9 onions: ~$1.96. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
+                       "Beef Broth, 2 cups: ~$0.76. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Greek Yogurt, 1 tub: ~$1.38. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 1/2 cups: ~$1.69. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Condensed French Onion Soup, 2 cans (10.5 oz each): ~$2.05. \u003cstrong\u003eBuy 2 10.5oz cans: $2.05.\u003c/strong\u003e",
                        "Swiss Cheese, 6.25 oz + topping: ~$1.33. \u003cstrong\u003eBuy 1 8oz package: $1.67.\u003c/strong\u003e",
                        "Worcestershire Sauce, 2.25 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $27.78 across 14 servings, so roughly $1.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.37 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.95. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, salt, black pepper): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.53 across 14 servings, so roughly $1.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.11 across 14 servings, roughly $2.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.44. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -67,14 +67,14 @@
     "portion_html":  "You get a strong {{protein}} grams of protein and {{cal}} calories per serving, one of the highest-protein bowls here.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ohsnapmacros.com/crockpot-french-onion-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eOh Snap Macros\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap onions, patient cooking, and a big protein payoff. That\u0027s a win any way you slice it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  27.78,
-    "cost_batch_true":  32.37,
-    "cost_per_serving":  1.98,
-    "cost_per_serving_true":  2.31,
-    "cost_pantry_add":  5.58,
-    "cost_first_run":  37.95,
+    "cost_batch":  27.53,
+    "cost_batch_true":  32.11,
+    "cost_per_serving":  1.97,
+    "cost_per_serving_true":  2.29,
+    "cost_pantry_add":  6.33,
+    "cost_first_run":  38.44,
     "scaler":  {
-                   "cost":  "32.37",
+                   "cost":  "32.11",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

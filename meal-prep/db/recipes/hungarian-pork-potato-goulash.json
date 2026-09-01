@@ -48,15 +48,15 @@
     "cost_lines":  [
                        "Pork Shoulder, 4 lb: ~$9.02. \u003cstrong\u003eBuy 5 lbs: $11.20.\u003c/strong\u003e",
                        "Vegetable Oil, 6 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 16.6 onions: ~$4.59. \u003cstrong\u003eBuy 5 lbs: $5.70.\u003c/strong\u003e",
+                       "Yellow Onion, 16.6 onions: ~$3.97. \u003cstrong\u003eBuy 5 lbs: $4.93.\u003c/strong\u003e",
                        "Carrots, 13 carrots: ~$1.68. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
                        "Chicken Broth, 1 carton: ~$1.47. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
-                       "Potato, 15.4 potatoes: ~$4.11. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "Potato, 15.4 potatoes: ~$4.30. \u003cstrong\u003eBuy 8 lbs: $4.75.\u003c/strong\u003e",
                        "Red Bell Pepper, 8 peppers: ~$12.24. \u003cstrong\u003eBuy 9 each: $13.68.\u003c/strong\u003e",
-                       "Pantry seasonings (bay leaves, paprika, italian seasoning, dried oregano, black pepper, salt): ~$1.99. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $35.31 across 14 servings, so roughly $2.52 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.70 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.53. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (bay leaves, paprika, italian seasoning, dried oregano, black pepper, salt): ~$2.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.98 across 14 servings, so roughly $2.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.24 across 14 servings, roughly $2.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.49. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) with the starch already in the pot. One pot, one cleanup, and dinner is handled for two weeks.",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount into each container, stirring as you go so the meat and potatoes land even. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://whereismyspoon.co/easy-pork-stew-recipe-hungarian-goulash-with-pork-and-potatoes/\" target=\"_blank\" rel=\"noopener\"\u003ewhereismyspoon.co\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot dinners with the sides built in for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  35.31,
-    "cost_batch_true":  40.7,
-    "cost_per_serving":  2.52,
-    "cost_per_serving_true":  2.91,
-    "cost_pantry_add":  9.83,
-    "cost_first_run":  50.53,
+    "cost_batch":  34.98,
+    "cost_batch_true":  40.24,
+    "cost_per_serving":  2.5,
+    "cost_per_serving_true":  2.87,
+    "cost_pantry_add":  10.25,
+    "cost_first_run":  50.49,
     "scaler":  {
-                   "cost":  "40.70",
+                   "cost":  "40.24",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

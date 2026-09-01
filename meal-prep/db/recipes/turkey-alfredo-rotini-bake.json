@@ -43,10 +43,10 @@
                        "Alfredo Sauce, 4 cups: ~$3.94. \u003cstrong\u003eBuy 3 15oz jars: $5.07.\u003c/strong\u003e",
                        "White Mushrooms, 1.25 lb: ~$4.94. \u003cstrong\u003eBuy 3 8oz packs: $5.66.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 18.5 oz: ~$4.04. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.11 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.44 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.80. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.12 across 14 servings, so roughly $1.87 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.45 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.24. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a creamy baked pasta with {{protein}} grams of protein in it. That combination is rare enough to be worth writing down.",
     "shop_smart":  [
@@ -68,14 +68,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop from different spots in the pan so the browned edge pieces get spread around, because those are worth fighting over. Each serving lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://dizzybusyandhungry.com/turkey-rotini-bake/\" target=\"_blank\" rel=\"noopener\"\u003edizzybusyandhungry.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A creamy pasta bake for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  26.11,
-    "cost_batch_true":  32.44,
-    "cost_per_serving":  1.86,
+    "cost_batch":  26.12,
+    "cost_batch_true":  32.45,
+    "cost_per_serving":  1.87,
     "cost_per_serving_true":  2.32,
-    "cost_pantry_add":  3.36,
-    "cost_first_run":  35.8,
+    "cost_pantry_add":  3.79,
+    "cost_first_run":  36.24,
     "scaler":  {
-                   "cost":  "32.44",
+                   "cost":  "32.45",
                    "ing":  [
                                {
                                    "item":  "Rotini Pasta",

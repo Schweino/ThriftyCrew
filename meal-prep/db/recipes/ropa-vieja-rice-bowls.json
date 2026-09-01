@@ -49,19 +49,19 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Flank/Sirloin Steak, 5.25 lb: ~$46.29. \u003cstrong\u003eBuy 6 lbs: $52.91.\u003c/strong\u003e",
-                       "Beef Broth, 1.75 cups: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Beef Broth, 1.75 cups: ~$0.67. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Tomato Paste, 1.8 cans: ~$1.07. \u003cstrong\u003eBuy 2 6oz cans: $1.22.\u003c/strong\u003e",
-                       "Diced Tomatoes, 1.7 cans: ~$1.30. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.7 cans: ~$1.42. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
                        "Apple Cider Vinegar, 1.75 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 1 onion: ~$0.31. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.27. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Green Bell Peppers, 3.5 peppers: ~$2.70. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
                        "Olives, 1.75 cups: ~$2.33. \u003cstrong\u003eBuy 2 6oz cans: $3.36.\u003c/strong\u003e",
                        "Garlic, 3 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Rice, 5 cups dry: ~$1.13. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, dried oregano, ground cumin, ground turmeric): ~$0.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $56.47 across 14 servings, so roughly $4.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $65.94 across 14 servings, roughly $4.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.26 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.20. Those containers then feed this batch and many more after it."
+                       "Rice, 5 cups dry: ~$1.10. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, dried oregano, ground cumin, ground turmeric): ~$0.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $56.56 across 14 servings, so roughly $4.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $65.95 across 14 servings, roughly $4.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.97 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.92. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Flank is traditional and expensive, so this build leans on the cheaper steak the board prices well and gets to the same shredded place.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef, peppers, and sauce into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-ropa-vieja/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Ropa vieja for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  56.47,
-    "cost_batch_true":  65.94,
-    "cost_per_serving":  4.03,
+    "cost_batch":  56.56,
+    "cost_batch_true":  65.95,
+    "cost_per_serving":  4.04,
     "cost_per_serving_true":  4.71,
-    "cost_pantry_add":  9.26,
-    "cost_first_run":  75.2,
+    "cost_pantry_add":  9.97,
+    "cost_first_run":  75.92,
     "scaler":  {
-                   "cost":  "65.94",
+                   "cost":  "65.95",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",

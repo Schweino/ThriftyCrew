@@ -38,10 +38,10 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Pasta Shells, 19.5 oz dry: ~$1.19. \u003cstrong\u003eBuy 2 12oz boxes: $1.45.\u003c/strong\u003e",
+                       "Pasta Shells, 19.5 oz dry: ~$1.13. \u003cstrong\u003eBuy 2 12oz boxes: $1.38.\u003c/strong\u003e",
                        "Vegetable Oil, 1.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "93/7 Ground Beef, 1.25 lb: ~$7.20. \u003cstrong\u003eBuy 2 lbs: $12.34.\u003c/strong\u003e",
-                       "Yellow Onion, 1 onion: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.28. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Marinara Sauce, 6.25 cups: ~$3.31. \u003cstrong\u003eBuy 3 24oz jars: $4.25.\u003c/strong\u003e",
                        "Tomato Paste, 4.75 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
@@ -49,10 +49,10 @@
                        "Ricotta Cheese, 35 oz: ~$5.73. \u003cstrong\u003eBuy 3 15oz tubs: $7.37.\u003c/strong\u003e",
                        "Parmesan Cheese, 3.75 oz: ~$1.27. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Eggs, 2 large eggs: ~$0.32. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
-                       "Pantry seasonings (italian seasoning, salt, garlic powder, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.36 across 14 servings, so roughly $1.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $37.53 across 14 servings, roughly $2.68 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.85 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.38. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (italian seasoning, salt, garlic powder, black pepper): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.28 across 14 servings, so roughly $1.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.33 across 14 servings, roughly $2.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.01. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for stuffed shells that a sit-down Italian place would happily price at seven or eight times that.",
     "shop_smart":  "This recipe stretches 1.25 lb of ground beef across 14 servings by leaning on the cheese filling for protein. That is the cheapest way to eat beef, using it as a flavor, not a slab.\nRicotta is the big-ticket item, so compare tub sizes; the 15 oz store-brand tubs almost always beat the small ones on price per ounce.\nStore-brand marinara bakes up the same as the premium jars once it is under cheese. Three jars here, so the savings are real.",
@@ -68,14 +68,14 @@
     "portion_html":  "Transfer everything to your weighed pot, set it on the scale, subtract the empty-pot number, and divide by 14. That works out to a few stuffed shells plus sauce per container. Each bowl brings \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/stuffed-shells-with-ground-beef/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  25.36,
-    "cost_batch_true":  37.53,
+    "cost_batch":  25.28,
+    "cost_batch_true":  37.33,
     "cost_per_serving":  1.81,
-    "cost_per_serving_true":  2.68,
-    "cost_pantry_add":  7.85,
-    "cost_first_run":  45.38,
+    "cost_per_serving_true":  2.67,
+    "cost_pantry_add":  8.68,
+    "cost_first_run":  46.01,
     "scaler":  {
-                   "cost":  "37.53",
+                   "cost":  "37.33",
                    "ing":  [
                                {
                                    "item":  "Pasta Shells",

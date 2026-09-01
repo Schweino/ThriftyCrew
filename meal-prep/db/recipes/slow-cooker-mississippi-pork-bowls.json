@@ -34,16 +34,16 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Tenderloin, 7 lb: ~$27.31. \u003cstrong\u003eBuy 7 lbs: $27.79.\u003c/strong\u003e",
-                       "Potato, 8 lb: ~$4.52. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "Potato, 8 lb: ~$4.72. \u003cstrong\u003eBuy 8 lbs: $4.75.\u003c/strong\u003e",
                        "Shredded Carrots, 8 1/4 cups: ~$6.13. \u003cstrong\u003eBuy 4 10oz bags: $7.71.\u003c/strong\u003e",
-                       "Pepperoncini, 1 1/2 cups: ~$0.77. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Butter, 1/3 cup: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
-                       "Ranch Seasoning Mix, 1 packet: ~$0.57. \u003cstrong\u003ePantry staple; this batch alone uses about 2 1oz packets.\u003c/strong\u003e",
+                       "Pepperoncini, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Butter, 1/3 cup: ~$0.59. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Ranch Seasoning Mix, 1 packet: ~$0.67. \u003cstrong\u003ePantry staple; this batch alone uses about 2 1oz packets.\u003c/strong\u003e",
                        "Au Jus Gravy Mix, 1 (1 oz) packet: ~$2.25. \u003cstrong\u003eBuy 3 1oz packets: $2.90.\u003c/strong\u003e",
                        "Cornstarch, 4.5 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $42.21 across 14 servings, so roughly $3.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.99 across 14 servings, roughly $3.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.13. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $42.60 across 14 servings, so roughly $3.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.73 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.22 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.95. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -63,14 +63,14 @@
     "portion_html":  "Every serving comes in around {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.saltandlavender.com/mississippi-slow-cooker-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eSalt \u0026amp; Lavender\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Tangy, hearty, and dead simple. Set it in the morning and dinner takes care of itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  42.21,
-    "cost_batch_true":  46.99,
-    "cost_per_serving":  3.02,
-    "cost_per_serving_true":  3.36,
-    "cost_pantry_add":  3.14,
-    "cost_first_run":  50.13,
+    "cost_batch":  42.6,
+    "cost_batch_true":  47.73,
+    "cost_per_serving":  3.04,
+    "cost_per_serving_true":  3.41,
+    "cost_pantry_add":  3.22,
+    "cost_first_run":  50.95,
     "scaler":  {
-                   "cost":  "46.99",
+                   "cost":  "47.73",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",

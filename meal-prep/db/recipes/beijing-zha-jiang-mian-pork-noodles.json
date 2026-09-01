@@ -57,15 +57,15 @@
                        "Ginger, 6.25 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
                        "Chicken Broth, 0.75 cups: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Soy Sauce, 3.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Hoisin Sauce, 1 cup: ~$2.51. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Hoisin Sauce, 1 cup: ~$2.30. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Lo Mein Noodles, 35.25 oz dry: ~$3.83. \u003cstrong\u003eBuy 3 14oz packs: $4.57.\u003c/strong\u003e",
                        "Carrots, 4.4 carrots: ~$0.57. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
                        "Cucumber, 1 cucumber: ~$0.65. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
                        "Garlic, 5.75 tbsp: ~$0.67. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
-                       "Pantry seasonings (bay leaves, ground cinnamon, black pepper, sugar, salt): ~$1.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.86 across 14 servings, so roughly $1.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $23.04 across 14 servings, roughly $1.65 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.02. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (bay leaves, ground cinnamon, black pepper, sugar, salt): ~$1.55. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.73 across 14 servings, so roughly $1.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.91 across 14 servings, roughly $1.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.51. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a noodle dinner with real pork shoulder in it, which is roughly what a single side order costs at the place down the street.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Put the full sauce pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Weigh the same amount of cooked noodles into each container, spoon the sauce over, and tuck the cucumber and carrot in last so they stay crisp. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/beijing-fried-sauce-noodles-zha-jiang-mian/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Deep, savory dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  19.86,
-    "cost_batch_true":  23.04,
-    "cost_per_serving":  1.42,
-    "cost_per_serving_true":  1.65,
-    "cost_pantry_add":  13.98,
-    "cost_first_run":  37.02,
+    "cost_batch":  19.73,
+    "cost_batch_true":  22.91,
+    "cost_per_serving":  1.41,
+    "cost_per_serving_true":  1.64,
+    "cost_pantry_add":  14.6,
+    "cost_first_run":  37.51,
     "scaler":  {
-                   "cost":  "23.04",
+                   "cost":  "22.91",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

@@ -49,19 +49,19 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Chuck Roast, 4.75 lb: ~$30.74. \u003cstrong\u003eBuy 5 lbs: $33.20.\u003c/strong\u003e",
-                       "Beef Broth, 1.5 cups: ~$0.51. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
-                       "Olive Oil, 4.25 tbsp: ~$0.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 1.5 cups: ~$0.53. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
+                       "Olive Oil, 4.25 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Brown Sugar, 1.5 cups: ~$0.68. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Dijon Mustard, 2.75 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Apple Cider Vinegar, 1.5 cups: ~$0.59. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Ketchup, 4.25 cups: ~$2.05. \u003cstrong\u003ePantry staple; this batch alone uses about 3 20oz bottles.\u003c/strong\u003e",
                        "Worcestershire Sauce, 2 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Green Onions, 2.75 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (paprika, garlic powder, onion powder, ground cumin, salt, black pepper, hot sauce): ~$0.88. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $37.47 across 14 servings, so roughly $2.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.80 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.69 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.49. Those containers then feed this batch and many more after it."
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, garlic powder, onion powder, ground cumin, salt, black pepper, hot sauce): ~$1.03. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.57 across 14 servings, so roughly $2.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.90 across 14 servings, roughly $2.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.07 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.97. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Homemade barbecue sauce out of pantry staples costs a fraction of a bottle and tastes like you meant it.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of saucy beef into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/easy-slow-cooker-bbq-shredded-beef/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "BBQ beef bowls for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  37.47,
-    "cost_batch_true":  40.8,
+    "cost_batch":  37.57,
+    "cost_batch_true":  40.9,
     "cost_per_serving":  2.68,
-    "cost_per_serving_true":  2.91,
-    "cost_pantry_add":  21.69,
-    "cost_first_run":  62.49,
+    "cost_per_serving_true":  2.92,
+    "cost_pantry_add":  22.07,
+    "cost_first_run":  62.97,
     "scaler":  {
-                   "cost":  "40.80",
+                   "cost":  "40.90",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",

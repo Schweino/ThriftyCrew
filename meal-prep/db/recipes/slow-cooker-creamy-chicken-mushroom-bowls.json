@@ -41,12 +41,12 @@
                        "White Mushrooms, 13 cups: ~$7.48. \u003cstrong\u003eBuy 4 8oz packs: $7.55.\u003c/strong\u003e",
                        "Chicken Broth, 3 cups: ~$1.10. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 3/4 cup: ~$1.36. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
-                       "Greek Yogurt, 1 tub: ~$1.23. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$1.38. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
                        "Worcestershire Sauce, 1.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, salt, black pepper, dried thyme): ~$0.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.89 across 14 servings, so roughly $2.06 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.11 across 14 servings, roughly $2.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.94. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, salt, black pepper, dried thyme): ~$0.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.12 across 14 servings, so roughly $2.08 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.59 across 14 servings, roughly $2.40 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.73 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.32. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -64,14 +64,14 @@
     "portion_html":  "Each serving delivers {{protein}} grams of protein and {{cal}} calories, creamy comfort without the calorie blowout.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyms.com/slow-cooker-creamy-chicken-and-mushrooms/\" target=\"_blank\" rel=\"noopener\"\u003eSkinnyMs\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Made from scratch, easy on salt, and heavy on protein. Your future self will thank you. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  28.89,
-    "cost_batch_true":  33.11,
-    "cost_per_serving":  2.06,
-    "cost_per_serving_true":  2.36,
-    "cost_pantry_add":  5.83,
-    "cost_first_run":  38.94,
+    "cost_batch":  29.12,
+    "cost_batch_true":  33.59,
+    "cost_per_serving":  2.08,
+    "cost_per_serving_true":  2.4,
+    "cost_pantry_add":  6.73,
+    "cost_first_run":  40.32,
     "scaler":  {
-                   "cost":  "33.11",
+                   "cost":  "33.59",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

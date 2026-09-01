@@ -46,9 +46,9 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Spaghetti, 21 oz dry: ~$1.27. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Spaghetti, 21 oz dry: ~$1.21. \u003cstrong\u003eBuy 2 16oz boxes: $1.84.\u003c/strong\u003e",
                        "Butter, 5.25 tbsp: ~$0.49. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Yellow Onion, 1.7 onions: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 3 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "White Mushrooms, 1.25 lb: ~$4.94. \u003cstrong\u003eBuy 3 8oz packs: $5.66.\u003c/strong\u003e",
                        "All-Purpose Flour, 5.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -58,10 +58,10 @@
                        "Turkey Breast, 3 lb: ~$14.86. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 14 oz: ~$3.04. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
                        "Parmesan Cheese, 1.5 oz: ~$0.47. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, italian seasoning, salt): ~$0.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $33.66 across 14 servings, so roughly $2.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $57.55 across 14 servings, roughly $4.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.84. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (black pepper, italian seasoning, salt): ~$0.34. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.57 across 14 servings, so roughly $2.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $57.33 across 14 servings, roughly $4.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.11. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). This is a rich bake because cream cheese, heavy cream, and two cheeses all showed up to the same party, and every one of them earns its place.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Weigh the finished pan, subtract the empty pan weight, and divide by 14. Pasta bakes settle and slice cleanly once they have rested, so cut to the scale rather than by eye. Each serving delivers \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/turkey-tetrazzini/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Creamy turkey pasta for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  33.66,
-    "cost_batch_true":  57.55,
+    "cost_batch":  33.57,
+    "cost_batch_true":  57.33,
     "cost_per_serving":  2.4,
-    "cost_per_serving_true":  4.11,
-    "cost_pantry_add":  7.29,
-    "cost_first_run":  64.84,
+    "cost_per_serving_true":  4.1,
+    "cost_pantry_add":  7.78,
+    "cost_first_run":  65.11,
     "scaler":  {
-                   "cost":  "57.55",
+                   "cost":  "57.33",
                    "ing":  [
                                {
                                    "item":  "Spaghetti",

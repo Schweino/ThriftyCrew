@@ -41,14 +41,14 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Cream of Mushroom Soup, 3.5 cans: ~$2.59. \u003cstrong\u003eBuy 4 10.5oz cans: $2.96.\u003c/strong\u003e",
-                       "Beef Broth, 7 cups: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Beef Broth, 7 cups: ~$2.66. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Rice, 4.75 cups dry: ~$1.07. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Pork Chops, 5.25 lb: ~$17.16. \u003cstrong\u003eBuy 6 lbs: $19.62.\u003c/strong\u003e",
-                       "Onion Soup Mix, 3.5 oz: ~$3.16. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2.2oz 2ct boxes.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, salt, black pepper): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.52 across 14 servings, so roughly $1.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.35 across 14 servings, roughly $2.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.78. Those containers then feed this batch and many more after it."
+                       "Onion Soup Mix, 3.5 oz: ~$2.05. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2.2oz 2ct boxes.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, salt, black pepper): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.75 across 14 servings, so roughly $1.84 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.58 across 14 servings, roughly $2.04 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.00. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a full pork chop and a serving of gravy-soaked rice. Five ingredients means five chances to overspend, and there are not many of those here.",
     "shop_smart":  [
@@ -69,14 +69,14 @@
     "portion_html":  "Weigh the finished casserole in its pan, subtract the pan weight, divide by 14, and portion to that exact weight so everybody gets chop and rice in the same ratio. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theseasonedmom.com/pork-chop-rice-bake/\" target=\"_blank\" rel=\"noopener\"\u003etheseasonedmom.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eFive ingredients, no stirring, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  26.52,
-    "cost_batch_true":  29.35,
-    "cost_per_serving":  1.89,
-    "cost_per_serving_true":  2.1,
-    "cost_pantry_add":  8.43,
-    "cost_first_run":  37.78,
+    "cost_batch":  25.75,
+    "cost_batch_true":  28.58,
+    "cost_per_serving":  1.84,
+    "cost_per_serving_true":  2.04,
+    "cost_pantry_add":  6.42,
+    "cost_first_run":  35,
     "scaler":  {
-                   "cost":  "29.35",
+                   "cost":  "28.58",
                    "ing":  [
                                {
                                    "item":  "Cream of Mushroom Soup",

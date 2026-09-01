@@ -49,18 +49,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Vegetable Oil, 1 cup: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Ginger, 7 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
                        "Crushed Tomatoes, 1.7 cans: ~$2.66. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Thigh, 5.25 lb: ~$16.90. \u003cstrong\u003eBuy 6 lbs: $19.32.\u003c/strong\u003e",
                        "Garlic, 2.25 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Brown Sugar, 2.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Lemon Juice, 1 lemon worth: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (red pepper flakes, ground coriander, italian seasoning, ground cumin, ground turmeric, black pepper, garam masala, ground cinnamon): ~$3.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.41 across 14 servings, so roughly $1.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $30.15 across 14 servings, roughly $2.15 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.15. Those containers then feed this batch and many more after it."
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (red pepper flakes, ground coriander, italian seasoning, ground cumin, ground turmeric, black pepper, garam masala, ground cinnamon): ~$4.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.20 across 14 servings, so roughly $1.94 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.92 across 14 servings, roughly $2.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.19. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Leaving out coconut milk is not a compromise here, it is the recipe, and it happens to be the reason this lands under the coconut curries on this site.",
     "shop_smart":  [
@@ -82,14 +82,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers, no guessing. Each one lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and a tomato-based curry like this one reheats better than a cream or coconut sauce ever will.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.beyondkimchee.com/cape-malay-chicken-curry/\" target=\"_blank\" rel=\"noopener\"\u003ebeyondkimchee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "South African Cape Malay chicken curry over rice for about ${{cost_ps}} a bowl (at everyday cost). This is one of a few hundred. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  26.41,
-    "cost_batch_true":  30.15,
-    "cost_per_serving":  1.89,
-    "cost_per_serving_true":  2.15,
-    "cost_pantry_add":  15,
-    "cost_first_run":  45.15,
+    "cost_batch":  27.2,
+    "cost_batch_true":  30.92,
+    "cost_per_serving":  1.94,
+    "cost_per_serving_true":  2.21,
+    "cost_pantry_add":  19.27,
+    "cost_first_run":  50.19,
     "scaler":  {
-                   "cost":  "30.15",
+                   "cost":  "30.92",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",

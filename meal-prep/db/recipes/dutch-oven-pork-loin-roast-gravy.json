@@ -50,18 +50,18 @@
                        "All-Purpose Flour, 1 cup: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pork Loin, 7.5 lb: ~$15.85. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
                        "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Olive Oil, 4.75 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 4.75 tbsp: ~$0.63. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1.2 cartons: ~$1.70. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Carrots, 11.7 carrots: ~$1.50. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
-                       "Yellow Onion, 4.7 onions: ~$1.29. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 4.7 onions: ~$1.12. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
                        "Celery, 9.3 stalks: ~$2.70. \u003cstrong\u003eBuy 2 bunches: $4.74.\u003c/strong\u003e",
                        "Garlic, 2.75 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Apple Juice, 2.25 cups: ~$0.61. \u003cstrong\u003eBuy 1 64floz bottle: $1.98.\u003c/strong\u003e",
-                       "Potato, 7 potatoes: ~$1.87. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, dried thyme, italian seasoning, bay leaves, salt): ~$1.92. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "Apple Juice, 2.25 cups: ~$0.66. \u003cstrong\u003eBuy 1 64floz bottle: $2.16.\u003c/strong\u003e",
+                       "Potato, 7 potatoes: ~$1.95. \u003cstrong\u003eBuy 4 lbs: $2.38.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, dried thyme, italian seasoning, bay leaves, salt): ~$2.02. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $29.21 across 14 servings, so roughly $2.09 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.30 across 14 servings, roughly $2.74 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.12. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eTrue shopping cost: about $38.32 across 14 servings, roughly $2.74 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.65 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.97. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a full roast dinner with gravy. Vegetables and potatoes are cheap, the loin goes on sale constantly, and the gravy is made from what was already stuck to the pot.",
     "shop_smart":  [
@@ -83,13 +83,13 @@
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theseasonedmom.com/dutch-oven-pork-roast/\" target=\"_blank\" rel=\"noopener\"\u003etheseasonedmom.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eA full Sunday roast dinner for about ${{cost_ps}} a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  29.21,
-    "cost_batch_true":  38.3,
+    "cost_batch_true":  38.32,
     "cost_per_serving":  2.09,
     "cost_per_serving_true":  2.74,
-    "cost_pantry_add":  13.82,
-    "cost_first_run":  52.12,
+    "cost_pantry_add":  13.65,
+    "cost_first_run":  51.97,
     "scaler":  {
-                   "cost":  "38.30",
+                   "cost":  "38.32",
                    "ing":  [
                                {
                                    "item":  "All-Purpose Flour",

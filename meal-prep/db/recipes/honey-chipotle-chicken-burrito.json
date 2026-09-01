@@ -51,12 +51,12 @@
                        "Buffalo Wing Sauce, 7.5 tbsp: ~$0.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Honey, 4 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 7.5 oz: ~$1.61. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
-                       "Rice, 1.25 cups dry: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lime Juice, 4.75 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (chipotle in adobo, ground cumin, garlic powder): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.82 across 14 servings, so roughly $1.77 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.65 across 14 servings, roughly $2.26 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.66. Those containers then feed this batch and many more after it."
+                       "Rice, 1.25 cups dry: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 4.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (chipotle in adobo, ground cumin, garlic powder): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.92 across 14 servings, so roughly $1.78 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.75 across 14 servings, roughly $2.27 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.46 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.21. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a honey chipotle chicken bowl out. The chicken is the cost. The flavor is nearly free.\u003c/p\u003e",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.tiktok.com/@aussiefitness/video/7513532240375090439\" target=\"_blank\" rel=\"noopener\"\u003etiktok.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
-    "cost_batch":  24.82,
-    "cost_batch_true":  31.65,
-    "cost_per_serving":  1.77,
-    "cost_per_serving_true":  2.26,
-    "cost_pantry_add":  8.01,
-    "cost_first_run":  39.66,
+    "cost_batch":  24.92,
+    "cost_batch_true":  31.75,
+    "cost_per_serving":  1.78,
+    "cost_per_serving_true":  2.27,
+    "cost_pantry_add":  8.46,
+    "cost_first_run":  40.21,
     "scaler":  {
-                   "cost":  "31.65",
+                   "cost":  "31.75",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

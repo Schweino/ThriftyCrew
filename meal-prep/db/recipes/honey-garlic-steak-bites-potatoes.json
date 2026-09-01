@@ -43,18 +43,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Beef Flank/Sirloin Steak, 7 lb: ~$61.74. \u003cstrong\u003eBuy 7 lbs: $61.74.\u003c/strong\u003e",
+                       "Beef Flank/Sirloin Steak, 7 lb: ~$61.72. \u003cstrong\u003eBuy 7 lbs: $61.73.\u003c/strong\u003e",
                        "Vegetable Oil, 5.75 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Honey, 1 cup: ~$6.39. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Honey, 1 cup: ~$2.66. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Soy Sauce, 0.5 cups: ~$0.56. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
-                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$0.95. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Cornstarch, 4.5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 0.5 cups: ~$0.87. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Potato, 10 potatoes: ~$2.63. \u003cstrong\u003eBuy 5 lbs: $2.84.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, red pepper flakes): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $73.66 across 14 servings, so roughly $5.26 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $76.12 across 14 servings, roughly $5.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $88.48. Those containers then feed this batch and many more after it."
+                       "Potato, 10 potatoes: ~$2.75. \u003cstrong\u003eBuy 5 lbs: $2.97.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, red pepper flakes): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $69.96 across 14 servings, so roughly $5.00 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $72.51 across 14 servings, roughly $5.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $83.11. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), and the sirloin is the entire reason. This is the recipe to cook the week your store runs a real steak sale.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of steak bites and glaze into each of 14 containers, scraping the glaze from the bottom as you go so it does not all end up in the last container. Each serving lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/honey-garlic-steak-bites/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Honey garlic steak bites for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  73.66,
-    "cost_batch_true":  76.12,
-    "cost_per_serving":  5.26,
-    "cost_per_serving_true":  5.44,
-    "cost_pantry_add":  12.36,
-    "cost_first_run":  88.48,
+    "cost_batch":  69.96,
+    "cost_batch_true":  72.51,
+    "cost_per_serving":  5,
+    "cost_per_serving_true":  5.18,
+    "cost_pantry_add":  10.6,
+    "cost_first_run":  83.11,
     "scaler":  {
-                   "cost":  "76.12",
+                   "cost":  "72.51",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",

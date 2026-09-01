@@ -38,13 +38,13 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Broccoli, 28 cups broccoli florets (about 5 1/4 lb, 8 medium heads): ~$11.13. \u003cstrong\u003eBuy 6 lbs: $12.72.\u003c/strong\u003e",
+                       "Broccoli, 28 cups broccoli florets (about 5 1/4 lb, 8 medium heads): ~$6.96. \u003cstrong\u003eBuy 6 lbs: $7.95.\u003c/strong\u003e",
                        "Andouille Smoked Sausage, 3 lb andouille smoked sausage, sliced into rounds (about three and a half 14 oz ropes): ~$7.01. \u003cstrong\u003eBuy 4 13.5oz ropes: $7.88.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 3 1/2 cups shredded cheddar, added the last 2 minutes: ~$3.04. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $21.26 across 14 servings, so roughly $1.52 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $24.16 across 14 servings, roughly $1.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $27.54. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $17.10 across 14 servings, so roughly $1.22 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $19.40 across 14 servings, roughly $1.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.81 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $23.21. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a full sheet pan of roasted sausage and broccoli under melted cheddar. The sausage and the cheese carry the flavor and the protein; the broccoli does the job the rice or the potatoes used to, with none of the carbs and none of the cost.",
     "shop_smart":  [
@@ -64,14 +64,14 @@
     "portion_html":  "Tip all the roasted sausage, broccoli, and melted cheddar into the bowl you weighed in Step 1, then subtract that empty weight to get the cooked total. Divide by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thebestketorecipes.com/sausage-broccoli-cheddar-sheet-pan/\" target=\"_blank\" rel=\"noopener\"\u003ethebestketorecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  21.26,
-    "cost_batch_true":  24.16,
-    "cost_per_serving":  1.52,
-    "cost_per_serving_true":  1.73,
-    "cost_pantry_add":  3.38,
-    "cost_first_run":  27.54,
+    "cost_batch":  17.1,
+    "cost_batch_true":  19.4,
+    "cost_per_serving":  1.22,
+    "cost_per_serving_true":  1.39,
+    "cost_pantry_add":  3.81,
+    "cost_first_run":  23.21,
     "scaler":  {
-                   "cost":  "24.16",
+                   "cost":  "19.40",
                    "ing":  [
                                {
                                    "item":  "Broccoli",

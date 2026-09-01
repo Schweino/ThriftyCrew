@@ -37,15 +37,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Hot Italian Sausage, 3 1/2 lb links (about 17 links), sliced into rounds: ~$8.75. \u003cstrong\u003eBuy 4 lbs: $10.00.\u003c/strong\u003e",
+                       "Hot Italian Sausage, 3 1/2 lb links (about 17 links), sliced into rounds: ~$13.72. \u003cstrong\u003eBuy 4 lbs: $15.68.\u003c/strong\u003e",
                        "Red Bell Pepper, 2 lb mixed-color, sliced into strips (about 7 large): ~$11.49. \u003cstrong\u003eBuy 8 each: $12.16.\u003c/strong\u003e",
-                       "Yellow Onion, 7 oz, sliced (about 1 3/4 cups): ~$0.50. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Olive Oil, 3 1/2 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 7 oz, sliced (about 1 3/4 cups): ~$0.43. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 3 1/2 tsp minced (about 3 cloves): ~$0.14. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Marinara Sauce, 1 3/4 cups: ~$0.90. \u003cstrong\u003eBuy 1 24oz jar: $1.42.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $22.29 across 14 servings, so roughly $1.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $25.81 across 14 servings, roughly $1.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.81. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $27.15 across 14 servings, so roughly $1.94 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.30 across 14 servings, roughly $2.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.69. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for sausage and peppers that would run you three or four times as much at a street fair. The sausage does the heavy lifting and the peppers stretch it.",
     "shop_smart":  [
@@ -65,14 +65,14 @@
     "portion_html":  "Set the full skillet on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.lowcarbmaven.com/sausage-peppers-onions/\" target=\"_blank\" rel=\"noopener\"\u003elowcarbmaven.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  22.29,
-    "cost_batch_true":  25.81,
-    "cost_per_serving":  1.59,
-    "cost_per_serving_true":  1.84,
-    "cost_pantry_add":  7,
-    "cost_first_run":  32.81,
+    "cost_batch":  27.15,
+    "cost_batch_true":  31.3,
+    "cost_per_serving":  1.94,
+    "cost_per_serving_true":  2.24,
+    "cost_pantry_add":  6.39,
+    "cost_first_run":  37.69,
     "scaler":  {
-                   "cost":  "25.81",
+                   "cost":  "31.30",
                    "ing":  [
                                {
                                    "item":  "Hot Italian Sausage",

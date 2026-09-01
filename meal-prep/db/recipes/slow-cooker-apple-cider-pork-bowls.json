@@ -38,15 +38,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 9 lb: ~$17.46. \u003cstrong\u003eBuy 9 lbs: $19.26.\u003c/strong\u003e",
-                       "Potato, 6 lb: ~$3.38. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Potato, 6 lb: ~$3.54. \u003cstrong\u003eBuy 6 lbs: $3.56.\u003c/strong\u003e",
                        "Apple, 4 apples: ~$1.67. \u003cstrong\u003eBuy 2 lbs: $2.16.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.80. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.70. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Honey Dijon Mustard, 4 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 12oz bottle: $1.72.\u003c/strong\u003e",
                        "Apple Cider, 12 oz: ~$1.14. \u003cstrong\u003eBuy 1 64floz jug: $3.59.\u003c/strong\u003e",
-                       "Pantry seasonings (onion powder, garlic powder, salt, black pepper, ground coriander, dried thyme): ~$0.44. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.19 across 14 servings, so roughly $1.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.72 across 14 servings, roughly $2.27 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.17 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.89. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (onion powder, garlic powder, salt, black pepper, ground coriander, dried thyme): ~$0.75. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.56 across 14 servings, so roughly $1.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.03 across 14 servings, roughly $2.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.73. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -65,14 +65,14 @@
     "portion_html":  "Each of the 14 servings lands at {{protein}} grams of protein and {{cal}} calories, so this fills you up without wrecking your day.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://amindfullmom.com/roast-pork-loin-with-apples-for-the-slow-cooker/\" target=\"_blank\" rel=\"noopener\"\u003eA Mind Full Mom\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Set it in the morning, forget about it, and come home to dinner already handled. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  25.19,
-    "cost_batch_true":  31.72,
-    "cost_per_serving":  1.8,
-    "cost_per_serving_true":  2.27,
-    "cost_pantry_add":  6.17,
-    "cost_first_run":  37.89,
+    "cost_batch":  25.56,
+    "cost_batch_true":  32.03,
+    "cost_per_serving":  1.83,
+    "cost_per_serving_true":  2.29,
+    "cost_pantry_add":  10.7,
+    "cost_first_run":  42.73,
     "scaler":  {
-                   "cost":  "31.72",
+                   "cost":  "32.03",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",

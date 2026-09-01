@@ -43,17 +43,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Blackberries, 7 cups: ~$15.23. \u003cstrong\u003eBuy 6 6oz clamshells: $15.41.\u003c/strong\u003e",
-                       "Chicken Broth, 1 carton: ~$1.13. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Sugar, 1.75 cups: ~$0.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lime Juice, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Blackberries, 7 cups: ~$16.68. \u003cstrong\u003eBuy 6 6oz clamshells: $16.88.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.28. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Sugar, 1.75 cups: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 3.5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pork Loin, 7.5 lb: ~$15.85. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
-                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$0.95. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, salt): ~$0.65. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $35.78 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $37.37 across 14 servings, roughly $2.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.81. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (black pepper, salt): ~$0.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.86 across 14 servings, so roughly $2.63 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.54 across 14 servings, roughly $2.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.21. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a roast pork dinner with a real fruit sauce on it. Make this in berry season and the cost drops further, because the blackberries are the single biggest line on the list.",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, keeping the sliced pork evenly counted so the protein lands the same in every one. Every bowl comes in near {{cal}} calories with a standout {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mycolombianrecipes.com/lomo-de-cerdo-con-salsa-de-moras-pork-loin-with-blackberry-sauce/\" target=\"_blank\" rel=\"noopener\"\u003emycolombianrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Restaurant plates rebuilt for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  35.78,
-    "cost_batch_true":  37.37,
-    "cost_per_serving":  2.56,
-    "cost_per_serving_true":  2.67,
-    "cost_pantry_add":  15.44,
-    "cost_first_run":  52.81,
+    "cost_batch":  36.86,
+    "cost_batch_true":  38.54,
+    "cost_per_serving":  2.63,
+    "cost_per_serving_true":  2.75,
+    "cost_pantry_add":  6.67,
+    "cost_first_run":  45.21,
     "scaler":  {
-                   "cost":  "37.37",
+                   "cost":  "38.54",
                    "ing":  [
                                {
                                    "item":  "Blackberries",

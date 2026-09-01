@@ -38,16 +38,16 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 6 lb: ~$36.86. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.02. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.00. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Green Cabbage, 4 lb: ~$2.62. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
                        "Crushed Tomatoes, 5 cups: ~$2.30. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 2 cloves: ~$0.16. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Olive Oil, 6 tbsp: ~$0.87. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, dried oregano, paprika, red pepper flakes): ~$0.62. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $45.05 across 14 servings, so roughly $3.22 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $47.66 across 14 servings, roughly $3.40 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.16. Those containers then feed this batch and many more after it."
+                       "Olive Oil, 6 tbsp: ~$0.80. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, dried oregano, paprika, red pepper flakes): ~$0.65. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.91 across 14 servings, so roughly $3.21 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.45 across 14 servings, roughly $3.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.77. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -65,14 +65,14 @@
     "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/unstuffed-cabbage-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, filling, and loaded with veggies, this is meal prep that earns its spot in the fridge. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  45.05,
-    "cost_batch_true":  47.66,
-    "cost_per_serving":  3.22,
-    "cost_per_serving_true":  3.4,
-    "cost_pantry_add":  12.5,
-    "cost_first_run":  60.16,
+    "cost_batch":  44.91,
+    "cost_batch_true":  47.45,
+    "cost_per_serving":  3.21,
+    "cost_per_serving_true":  3.39,
+    "cost_pantry_add":  12.32,
+    "cost_first_run":  59.77,
     "scaler":  {
-                   "cost":  "47.66",
+                   "cost":  "47.45",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

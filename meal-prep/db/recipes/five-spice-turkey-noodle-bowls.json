@@ -42,18 +42,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "93/7 Ground Turkey, 3.5 lb: ~$13.39. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
-                       "White Mushrooms, 1.75 lb: ~$6.62. \u003cstrong\u003eBuy 4 8oz packs: $7.57.\u003c/strong\u003e",
+                       "Olive Oil, 2.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$15.94. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "White Mushrooms, 1.75 lb: ~$6.60. \u003cstrong\u003eBuy 4 8oz packs: $7.55.\u003c/strong\u003e",
                        "Garlic, 1.25 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Chicken Broth, 3.4 cartons: ~$4.26. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "Chicken Broth, 3.4 cartons: ~$4.83. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
                        "Hot Honey, 5.25 oz: ~$2.14. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Lo Mein Noodles, 45.5 oz dry: ~$4.96. \u003cstrong\u003eBuy 4 14oz packs: $6.09.\u003c/strong\u003e",
                        "Green Onions, 14.75 tbsp: ~$1.05. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
-                       "Pantry seasonings (five-spice powder, salt, black pepper): ~$2.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $35.94 across 14 servings, so roughly $2.57 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.38 across 14 servings, roughly $2.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $24.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.79. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (five-spice powder, salt, black pepper): ~$2.85. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.83 across 14 servings, so roughly $2.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.63 across 14 servings, roughly $3.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.61. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost) for a noodle bowl with real depth to it. The five spice jar in your cabinet is what makes the difference, and it costs pennies per serving.",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "Set the pot of noodles on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the noodle bed for each container. Ladle the turkey, mushrooms, and broth evenly across all 14 and top each with sliced green onions. Every bowl lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jennieo.com/recipes/5-spice-turkey-noodle-bowls/\" target=\"_blank\" rel=\"noopener\"\u003ejennieo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A five spice noodle bowl for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  35.94,
-    "cost_batch_true":  40.38,
-    "cost_per_serving":  2.57,
-    "cost_per_serving_true":  2.88,
-    "cost_pantry_add":  24.41,
-    "cost_first_run":  64.79,
+    "cost_batch":  38.83,
+    "cost_batch_true":  43.63,
+    "cost_per_serving":  2.77,
+    "cost_per_serving_true":  3.12,
+    "cost_pantry_add":  19.98,
+    "cost_first_run":  63.61,
     "scaler":  {
-                   "cost":  "40.38",
+                   "cost":  "43.63",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

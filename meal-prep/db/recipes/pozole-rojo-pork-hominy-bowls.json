@@ -48,18 +48,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Dried Guajillo Chiles, 1.75 oz: ~$1.46. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 1.75 oz: ~$1.06. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Dried Ancho Chiles, 3.25 oz: ~$1.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 3.25 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Pork Shoulder, 3.5 lb: ~$7.84. \u003cstrong\u003eBuy 4 lbs: $8.96.\u003c/strong\u003e",
                        "Vegetable Oil, 2.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 2 cartons: ~$3.07. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
                        "Hominy, 4.2 cans: ~$2.53. \u003cstrong\u003eBuy 5 cans: $3.01.\u003c/strong\u003e",
-                       "Rice, 4.5 cups dry: ~$1.02. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Pantry seasonings (dried arbol chiles, chili powder, ground cumin, salt, cocoa powder, black pepper, dried oregano): ~$0.86. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.14 across 14 servings, so roughly $1.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $20.94 across 14 servings, roughly $1.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $26.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.93. Those containers then feed this batch and many more after it."
+                       "Rice, 4.5 cups dry: ~$1.00. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Pantry seasonings (dried arbol chiles, chili powder, ground cumin, salt, cocoa powder, black pepper, dried oregano): ~$0.88. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.74 across 14 servings, so roughly $1.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $20.54 across 14 servings, roughly $1.47 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $26.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.53. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The dried chiles look expensive on the shelf, but a bag lasts through several batches, so the real per bowl cost of the flavor base is small.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Spread the cooked rice across your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every bowl lands near {{cal}} calories with {{protein}} grams of protein. It gets better every day it sits.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/red-posole-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eClassic red pozole for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  19.14,
-    "cost_batch_true":  20.94,
-    "cost_per_serving":  1.37,
-    "cost_per_serving_true":  1.5,
+    "cost_batch":  18.74,
+    "cost_batch_true":  20.54,
+    "cost_per_serving":  1.34,
+    "cost_per_serving_true":  1.47,
     "cost_pantry_add":  26.99,
-    "cost_first_run":  47.93,
+    "cost_first_run":  47.53,
     "scaler":  {
-                   "cost":  "20.94",
+                   "cost":  "20.54",
                    "ing":  [
                                {
                                    "item":  "Dried Guajillo Chiles",

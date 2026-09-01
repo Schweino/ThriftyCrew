@@ -50,10 +50,10 @@
                        "Garlic, 28 cloves, minced (about 2 heads): ~$1.14. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Lemon Juice, 2 tbsp plus 1 tsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Parsley, 7 tbsp chopped (about half a bunch): ~$0.87. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $75.23 across 14 servings, so roughly $5.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $78.81 across 14 servings, roughly $5.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.14. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $75.27 across 14 servings, so roughly $5.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $78.85 across 14 servings, roughly $5.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.73 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.58. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e at everyday prices for garlic butter steak bites you would pay three times as much for out. The sirloin carries the plate and the zucchini stretches it, and that garlic butter is what makes the whole thing taste like more than it cost.",
     "shop_smart":  [
@@ -74,14 +74,14 @@
     "portion_html":  "The honest way to make fourteen even servings is by weight. Weigh the loaded skillet after the garlic butter goes on, subtract the empty weight you noted in Step 1, and that is your cooked total, steak and zucchini and sauce together. Divide it by 14 and give each container that exact amount, aiming for an even share of steak and zucchini in every one. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://blackberrybabe.com/2026/02/02/garlic-butter-steak-bites/\" target=\"_blank\" rel=\"noopener\"\u003eblackberrybabe.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low carb, high protein dinner for about ${{cost_ps}} a serving at everyday prices. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  75.23,
-    "cost_batch_true":  78.81,
-    "cost_per_serving":  5.37,
+    "cost_batch":  75.27,
+    "cost_batch_true":  78.85,
+    "cost_per_serving":  5.38,
     "cost_per_serving_true":  5.63,
-    "cost_pantry_add":  5.33,
-    "cost_first_run":  84.14,
+    "cost_pantry_add":  5.73,
+    "cost_first_run":  84.58,
     "scaler":  {
-                   "cost":  "78.81",
+                   "cost":  "78.85",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",

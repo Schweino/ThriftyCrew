@@ -41,15 +41,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Pork Shoulder, 7.5 lb: ~$22.00. \u003cstrong\u003eBuy 8 lbs: $23.76.\u003c/strong\u003e",
+                       "Pork Shoulder, 7.5 lb: ~$16.59. \u003cstrong\u003eBuy 8 lbs: $17.92.\u003c/strong\u003e",
                        "Brown Sugar, 7 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2 onions: ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "BBQ Sauce, 3.5 cups: ~$3.07. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.44. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "BBQ Sauce, 3.5 cups: ~$2.62. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, chili powder, salt, black pepper): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.97 across 14 servings, so roughly $1.93 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.36 across 14 servings, roughly $2.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.32. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, onion powder, chili powder, salt, black pepper): ~$0.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.05 across 14 servings, so roughly $1.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.93 across 14 servings, roughly $1.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.44. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for slow cooked barbecue pork over rice. A barbecue joint plate would cost you several times that and would not be waiting in your fridge on Wednesday.",
     "shop_smart":  [
@@ -71,14 +71,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container so nobody gets shorted on meat. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-country-style-ribs/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Slow cooker barbecue for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  26.97,
-    "cost_batch_true":  29.36,
-    "cost_per_serving":  1.93,
-    "cost_per_serving_true":  2.1,
-    "cost_pantry_add":  7.96,
-    "cost_first_run":  37.32,
+    "cost_batch":  21.05,
+    "cost_batch_true":  22.93,
+    "cost_per_serving":  1.5,
+    "cost_per_serving_true":  1.64,
+    "cost_pantry_add":  8.51,
+    "cost_first_run":  31.44,
     "scaler":  {
-                   "cost":  "29.36",
+                   "cost":  "22.93",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",

@@ -43,17 +43,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Beef Chuck Roast, 5.25 lb: ~$41.84. \u003cstrong\u003eBuy 6 lbs: $47.82.\u003c/strong\u003e",
-                       "Yellow Onion, 1 onion: ~$0.24. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Beef Broth, 7 cups: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Olive Oil, 3.5 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Chuck Roast, 5.25 lb: ~$34.85. \u003cstrong\u003eBuy 6 lbs: $39.84.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.21. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Beef Broth, 7 cups: ~$2.66. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Cornstarch, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, worcestershire sauce, dijon mustard, paprika): ~$0.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $46.81 across 14 servings, so roughly $3.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $53.77 across 14 servings, roughly $3.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $74.25. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, worcestershire sauce, dijon mustard, paprika): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.95 across 14 servings, so roughly $2.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.82 across 14 servings, roughly $3.27 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.07 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.89. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, one of which is oil and one of which is cornstarch, so the beef and the broth are essentially the whole cost.",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef tips and gravy into each container, then give every one the same weight of rice. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://houseofyumm.com/slow-cooker-beef-tips-and-gravy/\" target=\"_blank\" rel=\"noopener\"\u003ehouseofyumm.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Beef tips and gravy for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  46.81,
-    "cost_batch_true":  53.77,
-    "cost_per_serving":  3.34,
-    "cost_per_serving_true":  3.84,
-    "cost_pantry_add":  20.48,
-    "cost_first_run":  74.25,
+    "cost_batch":  39.95,
+    "cost_batch_true":  45.82,
+    "cost_per_serving":  2.85,
+    "cost_per_serving_true":  3.27,
+    "cost_pantry_add":  16.07,
+    "cost_first_run":  61.89,
     "scaler":  {
-                   "cost":  "53.77",
+                   "cost":  "45.82",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

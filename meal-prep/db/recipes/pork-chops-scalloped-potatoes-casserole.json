@@ -42,15 +42,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Chops, 6 lb: ~$19.73. \u003cstrong\u003eBuy 7 lbs: $22.89.\u003c/strong\u003e",
-                       "Yellow Onion, 3.4 onions: ~$0.95. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.4 onions: ~$0.82. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Butter, 5.25 tbsp: ~$0.49. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Potato, 13.6 potatoes: ~$3.62. \u003cstrong\u003eBuy 7 lbs: $3.98.\u003c/strong\u003e",
+                       "Potato, 13.6 potatoes: ~$3.79. \u003cstrong\u003eBuy 7 lbs: $4.16.\u003c/strong\u003e",
                        "Cream of Mushroom Soup, 2.7 cans: ~$2.03. \u003cstrong\u003eBuy 3 10.5oz cans: $2.22.\u003c/strong\u003e",
-                       "Milk, 3.25 cups: ~$0.66. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $27.76 across 14 servings, so roughly $1.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $36.51 across 14 servings, roughly $2.61 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.95. Those containers then feed this batch and many more after it."
+                       "Milk, 3.25 cups: ~$0.60. \u003cstrong\u003eBuy 1 gallon: $2.76.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.66 across 14 servings, so roughly $1.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.20 across 14 servings, roughly $2.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.90. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Potatoes, onion, milk and a can of soup are close to free, so nearly all of that number is the pork chops.",
     "shop_smart":  [
@@ -71,14 +71,14 @@
     "portion_html":  "Weigh the finished casserole in its dish, subtract the dish weight, divide by 14, and cut portions to that exact weight so every container gets the same ratio of chop to potato. Every serving lands near {{cal}} calories with {{protein}} grams of protein, which is a lot of protein for a dollar and change.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://bakeatmidnite.com/pork-chops-scalloped-potatoes-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ebakeatmidnite.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eScalloped potatoes and pork chops for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  27.76,
-    "cost_batch_true":  36.51,
+    "cost_batch":  27.66,
+    "cost_batch_true":  36.2,
     "cost_per_serving":  1.98,
-    "cost_per_serving_true":  2.61,
-    "cost_pantry_add":  5.44,
-    "cost_first_run":  41.95,
+    "cost_per_serving_true":  2.59,
+    "cost_pantry_add":  3.7,
+    "cost_first_run":  39.9,
     "scaler":  {
-                   "cost":  "36.51",
+                   "cost":  "36.20",
                    "ing":  [
                                {
                                    "item":  "Pork Chops",

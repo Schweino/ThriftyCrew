@@ -45,17 +45,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.76. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Pork Shoulder, 7 lb: ~$15.68. \u003cstrong\u003eBuy 7 lbs: $15.68.\u003c/strong\u003e",
                        "Garlic, 3.5 tbsp: ~$0.39. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Olive Oil, 2.25 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 2.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Apple Cider Vinegar, 1.75 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lime Juice, 1.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (dried oregano, onion powder, ground cumin, chili powder, sugar, salt, black pepper): ~$0.46. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $18.73 across 14 servings, so roughly $1.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $19.18 across 14 servings, roughly $1.37 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.68. Those containers then feed this batch and many more after it."
+                       "Lime Juice, 1.25 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, onion powder, ground cumin, chili powder, sugar, salt, black pepper): ~$0.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.59 across 14 servings, so roughly $1.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $19.01 across 14 servings, roughly $1.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.56 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.57. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Pork shoulder is one of the best protein values in the meat case, and a long slow roast is what turns it from a cheap cut into a great one.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Spread the cooked rice across your 14 containers, then set your mixing pot of pulled pork on the scale, subtract the empty pot weight from Step 1, divide by 14, and lay that exact weight over the rice in each one. Every bowl lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/pernil-roast-pork/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eHoliday pork shoulder for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  18.73,
-    "cost_batch_true":  19.18,
-    "cost_per_serving":  1.34,
-    "cost_per_serving_true":  1.37,
-    "cost_pantry_add":  19.5,
-    "cost_first_run":  38.68,
+    "cost_batch":  18.59,
+    "cost_batch_true":  19.01,
+    "cost_per_serving":  1.33,
+    "cost_per_serving_true":  1.36,
+    "cost_pantry_add":  19.56,
+    "cost_first_run":  38.57,
     "scaler":  {
-                   "cost":  "19.18",
+                   "cost":  "19.01",
                    "ing":  [
                                {
                                    "item":  "Yellow Onion",

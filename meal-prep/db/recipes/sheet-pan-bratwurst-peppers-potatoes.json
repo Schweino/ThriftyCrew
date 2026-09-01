@@ -41,18 +41,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 3.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 9.5 onions: ~$2.64. \u003cstrong\u003eBuy 3 lbs: $3.42.\u003c/strong\u003e",
+                       "Olive Oil, 3.5 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 9.5 onions: ~$2.28. \u003cstrong\u003eBuy 3 lbs: $2.96.\u003c/strong\u003e",
                        "Red Bell Pepper, 10.5 peppers: ~$15.96. \u003cstrong\u003eBuy 11 each: $16.72.\u003c/strong\u003e",
                        "White Mushrooms, 3.5 lb: ~$13.20. \u003cstrong\u003eBuy 7 8oz packs: $13.21.\u003c/strong\u003e",
                        "Garlic, 6 tbsp: ~$0.71. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
-                       "Potato, 7.5 potatoes: ~$1.99. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Potato, 7.5 potatoes: ~$2.08. \u003cstrong\u003eBuy 4 lbs: $2.38.\u003c/strong\u003e",
                        "Bratwurst, 5.5 lb: ~$13.29. \u003cstrong\u003eBuy 5 19oz 5-packs: $14.22.\u003c/strong\u003e",
                        "Chicken Broth, 2.5 cups: ~$0.96. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (dried thyme, black pepper, salt): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $49.99 across 14 servings, so roughly $3.57 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $53.20 across 14 servings, roughly $3.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.33. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried thyme, black pepper, salt): ~$0.80. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $49.75 across 14 servings, so roughly $3.55 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.88 across 14 servings, roughly $3.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.77. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The mushrooms and red peppers push it up, so read the shopping tips below before you commit.",
     "shop_smart":  [
@@ -74,14 +74,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, slicing the brats first so the meat spreads evenly. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.savorynothings.com/brats-and-peppers-sheet-pan-dinner/\" target=\"_blank\" rel=\"noopener\"\u003esavorynothings.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sheet pan dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  49.99,
-    "cost_batch_true":  53.2,
-    "cost_per_serving":  3.57,
-    "cost_per_serving_true":  3.8,
-    "cost_pantry_add":  11.13,
-    "cost_first_run":  64.33,
+    "cost_batch":  49.75,
+    "cost_batch_true":  52.88,
+    "cost_per_serving":  3.55,
+    "cost_per_serving_true":  3.78,
+    "cost_pantry_add":  10.89,
+    "cost_first_run":  63.77,
     "scaler":  {
-                   "cost":  "53.20",
+                   "cost":  "52.88",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

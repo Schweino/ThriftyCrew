@@ -41,16 +41,16 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 17 potatoes: ~$4.57. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
-                       "Olive Oil, 4.5 tbsp: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.79. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 8 tbsp: ~$0.96. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
-                       "Smoked Turkey Sausage, 4.5 lb: ~$18.14. \u003cstrong\u003eBuy 6 13oz ropes: $19.71.\u003c/strong\u003e",
+                       "Potato, 17 potatoes: ~$4.78. \u003cstrong\u003eBuy 9 lbs: $5.35.\u003c/strong\u003e",
+                       "Olive Oil, 4.5 tbsp: ~$0.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.68. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Garlic, 8 tbsp: ~$0.91. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 4.5 lb: ~$21.96. \u003cstrong\u003eBuy 6 13oz ropes: $23.86.\u003c/strong\u003e",
                        "Green Cabbage, 2 heads: ~$3.78. \u003cstrong\u003eBuy 3 heads: $5.06.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.35 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.28 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.60. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.91 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.22 across 14 servings, roughly $2.66 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.18. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a stovetop dinner where the two biggest ingredients by volume, potatoes and cabbage, are also the two cheapest things you can put in a cart.",
     "shop_smart":  [
@@ -72,14 +72,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, stirring between scoops so the sausage stays even. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://barefeetinthekitchen.com/20-minute-kielbasa-cabbage-potato-skillet/\" target=\"_blank\" rel=\"noopener\"\u003ebarefeetinthekitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One skillet dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.35,
-    "cost_batch_true":  33.28,
-    "cost_per_serving":  2.1,
-    "cost_per_serving_true":  2.38,
-    "cost_pantry_add":  14.32,
-    "cost_first_run":  47.6,
+    "cost_batch":  32.91,
+    "cost_batch_true":  37.22,
+    "cost_per_serving":  2.35,
+    "cost_per_serving_true":  2.66,
+    "cost_pantry_add":  9.96,
+    "cost_first_run":  47.18,
     "scaler":  {
-                   "cost":  "33.28",
+                   "cost":  "37.22",
                    "ing":  [
                                {
                                    "item":  "Potato",

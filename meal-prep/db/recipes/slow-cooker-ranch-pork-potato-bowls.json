@@ -34,15 +34,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 8 lb: ~$15.57. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
-                       "Potato, 6 lb: ~$3.32. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Potato, 6 lb: ~$3.47. \u003cstrong\u003eBuy 6 lbs: $3.56.\u003c/strong\u003e",
                        "Shredded Carrots, 9 cups: ~$6.81. \u003cstrong\u003eBuy 4 10oz bags: $7.71.\u003c/strong\u003e",
-                       "Ranch Seasoning Mix, 1 packet: ~$0.43. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Butter, 1/4 cup: ~$0.34. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
+                       "Ranch Seasoning Mix, 1 packet: ~$0.50. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Butter, 1/4 cup: ~$0.39. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Olive Oil, 2 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.86 across 14 servings, so roughly $1.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.62 across 14 servings, roughly $2.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.81 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.43. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.16 across 14 servings, so roughly $1.94 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.29 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.65. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -61,14 +61,14 @@
     "portion_html":  "Every serving runs about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://togetherasfamily.com/easy-ranch-pork-loin-recipe-in-the-crockpot/\" target=\"_blank\" rel=\"noopener\"\u003eTogether as Family\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Simple, hearty, and cheap. Sometimes the plain-looking meals are the ones you crave most. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  26.86,
-    "cost_batch_true":  31.62,
-    "cost_per_serving":  1.92,
-    "cost_per_serving_true":  2.26,
-    "cost_pantry_add":  9.81,
-    "cost_first_run":  41.43,
+    "cost_batch":  27.16,
+    "cost_batch_true":  32.29,
+    "cost_per_serving":  1.94,
+    "cost_per_serving_true":  2.31,
+    "cost_pantry_add":  10.36,
+    "cost_first_run":  42.65,
     "scaler":  {
-                   "cost":  "31.62",
+                   "cost":  "32.29",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",

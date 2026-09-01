@@ -30,11 +30,11 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Turkey Pepperoni, 9 1/4 oz (about 9.5 oz): ~$5.38. \u003cstrong\u003eBuy 2 5oz packs: $5.85.\u003c/strong\u003e",
-                       "Rotini Pasta, 9 2/3 cups (14.5 oz each): ~$2.05. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
-                       "Marinara Sauce, 2 jars (24 oz each): ~$2.95. \u003cstrong\u003eBuy 2 24oz jars: $3.50.\u003c/strong\u003e",
-                       "Reduced Fat Mozzarella, 14 slices (8 oz each): ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.49.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $13.39 across 14 servings, so roughly $0.96 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $15.75 across 14 servings, roughly $1.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
+                       "Rotini Pasta, 9 2/3 cups (14.5 oz each): ~$1.93. \u003cstrong\u003eBuy 3 16oz boxes: $2.74.\u003c/strong\u003e",
+                       "Marinara Sauce, 2 jars (24 oz each): ~$2.39. \u003cstrong\u003eBuy 2 24oz jars: $2.84.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 14 slices (8 oz each): ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $12.71 across 14 servings, so roughly $0.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $14.91 across 14 servings, roughly $1.06 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pizza-night flavor. A large delivery pizza runs $18 or more, so this is one of the easiest swaps on the menu.",
     "shop_smart":  [
@@ -52,14 +52,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
     "upsell_html":  "Pizza-night dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  13.39,
-    "cost_batch_true":  15.75,
-    "cost_per_serving":  0.96,
-    "cost_per_serving_true":  1.12,
+    "cost_batch":  12.71,
+    "cost_batch_true":  14.91,
+    "cost_per_serving":  0.91,
+    "cost_per_serving_true":  1.06,
     "cost_pantry_add":  0,
-    "cost_first_run":  15.75,
+    "cost_first_run":  14.91,
     "scaler":  {
-                   "cost":  "15.75",
+                   "cost":  "14.91",
                    "ing":  [
                                {
                                    "item":  "Turkey Pepperoni",

@@ -47,17 +47,17 @@
     "cost_lines":  [
                        "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
-                       "Olive Oil, 2.25 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 2.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Greek Yogurt, 1.5 cups: ~$1.59. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
-                       "Hot Sauce, 6.5 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hot Sauce, 6.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 7 oz: ~$1.50. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
-                       "Cherry Tomatoes, 5.75 cups: ~$8.36. \u003cstrong\u003eBuy 3 10oz clamshells: $8.45.\u003c/strong\u003e",
-                       "Red Onion, 2.5 onions: ~$0.83. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
-                       "Lime Juice, 1.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, salt): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $31.43 across 14 servings, so roughly $2.24 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.41 across 14 servings, roughly $2.74 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.50. Those containers then feed this batch and many more after it."
+                       "Cherry Tomatoes, 5.75 cups: ~$9.69. \u003cstrong\u003eBuy 3 10oz clamshells: $9.79.\u003c/strong\u003e",
+                       "Red Onion, 2.5 onions: ~$0.79. \u003cstrong\u003eBuy 1 lb: $1.29.\u003c/strong\u003e",
+                       "Lime Juice, 1.75 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, salt): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.82 across 14 servings, so roughly $2.34 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.80 across 14 servings, roughly $2.84 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.75. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for chili lime chicken that costs a rub and a squeeze. The yogurt and hot sauce do the work a bottle of dressing usually charges you for.",
     "shop_smart":  [
@@ -79,14 +79,14 @@
     "portion_html":  "Weigh the chicken and the fresh vegetables, subtract the empty bowl, and divide by 14, then sauce, cheese and roll each tortilla to match. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. If you are freezing these, keep the yogurt drizzle in a side cup and add it after reheating.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.tiktok.com/@its.razi/video/7257568505195728133\" target=\"_blank\" rel=\"noopener\"\u003etiktok.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Chili lime chicken burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
-    "cost_batch":  31.43,
-    "cost_batch_true":  38.41,
-    "cost_per_serving":  2.24,
-    "cost_per_serving_true":  2.74,
-    "cost_pantry_add":  10.09,
-    "cost_first_run":  48.5,
+    "cost_batch":  32.82,
+    "cost_batch_true":  39.8,
+    "cost_per_serving":  2.34,
+    "cost_per_serving_true":  2.84,
+    "cost_pantry_add":  9.95,
+    "cost_first_run":  49.75,
     "scaler":  {
-                   "cost":  "38.41",
+                   "cost":  "39.80",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

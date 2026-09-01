@@ -48,16 +48,16 @@
     "cost_lines":  [
                        "Rice, 9.25 cups dry: ~$2.07. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Butter, 2.25 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Chicken Broth, 3 cups: ~$0.94. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "93/7 Ground Turkey, 2.25 lb: ~$8.96. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
-                       "Yellow Onion, 1.5 onions: ~$0.41. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Tomato Paste, 0.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Chicken Broth, 3 cups: ~$1.07. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.25 lb: ~$10.66. \u003cstrong\u003eBuy 3 lbs: $13.65.\u003c/strong\u003e",
+                       "Yellow Onion, 1.5 onions: ~$0.35. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Tomato Paste, 0.75 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
                        "Eggplant, 2.3 eggplants: ~$3.49. \u003cstrong\u003eBuy 2 each: $3.64.\u003c/strong\u003e",
-                       "Diced Tomatoes, 2.3 cans: ~$2.24. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, ground allspice): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $18.79 across 14 servings, so roughly $1.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $26.37 across 14 servings, roughly $1.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.90. Those containers then feed this batch and many more after it."
+                       "Diced Tomatoes, 2.3 cans: ~$1.96. \u003cstrong\u003eBuy 3 cans: $2.52.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground allspice): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $20.14 across 14 servings, so roughly $1.44 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.81 across 14 servings, roughly $1.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.67. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Rice and eggplant cost almost nothing, allspice does the heavy lifting on flavor, and the turkey stretches further than you would expect across a rice bake this size.",
     "shop_smart":  [
@@ -79,14 +79,14 @@
     "portion_html":  "Weigh the finished dish, subtract the empty dish weight, and divide by 14. Scoop from top to bottom so every container gets rice, meat, and eggplant instead of one layer only. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://amiraspantry.com/maqlooba/\" target=\"_blank\" rel=\"noopener\"\u003eamiraspantry.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A budget-friendly rice bake for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  18.79,
-    "cost_batch_true":  26.37,
-    "cost_per_serving":  1.34,
-    "cost_per_serving_true":  1.88,
-    "cost_pantry_add":  7.53,
-    "cost_first_run":  33.9,
+    "cost_batch":  20.14,
+    "cost_batch_true":  27.81,
+    "cost_per_serving":  1.44,
+    "cost_per_serving_true":  1.99,
+    "cost_pantry_add":  5.86,
+    "cost_first_run":  33.67,
     "scaler":  {
-                   "cost":  "26.37",
+                   "cost":  "27.81",
                    "ing":  [
                                {
                                    "item":  "Rice",

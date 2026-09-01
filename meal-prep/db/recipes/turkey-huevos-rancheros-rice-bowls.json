@@ -46,17 +46,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Tortilla, 14.75 oz: ~$1.21. \u003cstrong\u003eBuy 1 20ct pack: $2.12.\u003c/strong\u003e",
-                       "Turkey Breast, 2 lb: ~$9.93. \u003cstrong\u003eBuy 1 3lb frozen roast: $15.24.\u003c/strong\u003e",
+                       "Turkey Breast, 2 lb: ~$9.41. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
                        "Seasoned Black Beans, 1.6 cans: ~$2.62. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
                        "Eggs, 14 large eggs: ~$1.89. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
                        "Salsa, 1.25 cups: ~$1.32. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 3 oz: ~$0.55. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
-                       "Fresh Cilantro, 9 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 3 oz: ~$0.67. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
+                       "Fresh Cilantro, 9 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Rice, 7 cups dry: ~$1.55. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (vegetable oil, salt, black pepper): ~$0.16. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.37 across 14 servings, so roughly $1.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.93 across 14 servings, roughly $2.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.04 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.97. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (vegetable oil, salt, black pepper): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.14 across 14 servings, so roughly $1.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.36 across 14 servings, roughly $2.17 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.95. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Rice, eggs, canned black beans, and corn tortillas are four of the least expensive foods in an American grocery store, and together they make a genuinely good dinner.",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "Weigh the rice, beans, and turkey together, subtract your empty pot weight, and divide by 14, then top each bowl with one egg. Building to a weight keeps the base even and the eggs make the count obvious. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jennieo.com/recipes/huevos-rancheros-open-faced-taco/\" target=\"_blank\" rel=\"noopener\"\u003ejennieo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A full dinner for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  19.37,
-    "cost_batch_true":  29.93,
-    "cost_per_serving":  1.38,
-    "cost_per_serving_true":  2.14,
-    "cost_pantry_add":  7.04,
-    "cost_first_run":  36.97,
+    "cost_batch":  19.14,
+    "cost_batch_true":  30.36,
+    "cost_per_serving":  1.37,
+    "cost_per_serving_true":  2.17,
+    "cost_pantry_add":  7.59,
+    "cost_first_run":  37.95,
     "scaler":  {
-                   "cost":  "29.93",
+                   "cost":  "30.36",
                    "ing":  [
                                {
                                    "item":  "Tortilla",

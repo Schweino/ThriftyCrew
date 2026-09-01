@@ -24,6 +24,7 @@
     "gram figure moves; only new parses get the better number."
   ],
   "items": {
+    "Artichoke Hearts": {"can": 240, "note": "drained grams per 13.75oz can. LABEL EVIDENCE 2026-08-31: Roland Foods' own product page for 13.75 oz Quartered Artichoke Hearts states the nutrition serving as '1 can drained (240g)'. Independently matches the wave-15 auditor's ~240 g estimate for a 14 oz can. Wired here rather than guessed into a spec: cost-recipes derives the drained basis from this field against ingredients.json buy_pkg_g (391 g gross for the 13.8oz can), which is what stops the casserole pricing 560 g of DRAINED artichoke as though it were gross can weight."},
     "Boneless Skinless Chicken Breast": { "each": 200, "cup": 140 },
     "Boneless Skinless Chicken Thigh": { "each": 100, "cup": 140 },
     "93/7 Ground Beef": {},

@@ -38,17 +38,17 @@
     "cost_lines":  [
                        "Refrigerated Biscuits, 17.5 biscuits: ~$3.90. \u003cstrong\u003eBuy 3 8ct cans: $5.31.\u003c/strong\u003e",
                        "93/7 Ground Beef, 2.5 lb: ~$15.11. \u003cstrong\u003eBuy 3 lbs: $18.51.\u003c/strong\u003e",
-                       "Yellow Onion, 1.3 onions: ~$0.35. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1.3 onions: ~$0.31. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Green Bell Peppers, 0.5 cups: ~$0.36. \u003cstrong\u003eBuy 1 each: $0.77.\u003c/strong\u003e",
                        "Diced Green Chiles, 1.2 cans: ~$1.23. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
-                       "Diced Tomatoes \u0026 Green Chilies, 1.2 cans: ~$1.06. \u003cstrong\u003eBuy 2 10oz cans: $1.74.\u003c/strong\u003e",
+                       "Diced Tomatoes \u0026 Green Chilies, 1.2 cans: ~$1.19. \u003cstrong\u003eBuy 2 10oz cans: $1.94.\u003c/strong\u003e",
                        "Light Sour Cream, 1 cup: ~$0.86. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Mayonnaise, 1 cup: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 12.25 oz: ~$2.65. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
-                       "Pantry seasonings (taco seasoning, salt, black pepper): ~$0.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.90 across 14 servings, so roughly $1.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.40 across 14 servings, roughly $2.53 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.14. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (taco seasoning, salt, black pepper): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.01 across 14 servings, so roughly $1.93 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.47 across 14 servings, roughly $2.53 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.63. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a loaded Tex-Mex casserole that a casual restaurant would happily charge you $12 a plate for.",
     "shop_smart":  [
@@ -68,14 +68,14 @@
     "portion_html":  "Weigh your pot of finished beef filling before assembly, subtract the empty pot number from step 1, and split it evenly as you build. After baking, cut the casserole into 14 squares and box them up. Each serving comes in at {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therecipecritic.com/john-wayne-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eThe Recipe Critic\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  26.9,
-    "cost_batch_true":  35.4,
-    "cost_per_serving":  1.92,
+    "cost_batch":  27.01,
+    "cost_batch_true":  35.47,
+    "cost_per_serving":  1.93,
     "cost_per_serving_true":  2.53,
-    "cost_pantry_add":  6.74,
-    "cost_first_run":  42.14,
+    "cost_pantry_add":  7.16,
+    "cost_first_run":  42.63,
     "scaler":  {
-                   "cost":  "35.40",
+                   "cost":  "35.47",
                    "ing":  [
                                {
                                    "item":  "Refrigerated Biscuits",

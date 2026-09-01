@@ -44,18 +44,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 5 lb: ~$30.47. \u003cstrong\u003eBuy 5 lbs: $30.85.\u003c/strong\u003e",
-                       "Rice, 6.75 cups dry: ~$1.52. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.63. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 6.75 cups dry: ~$1.48. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.54. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Greek Yogurt, 1 tub: ~$2.43. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
                        "Green Bell Peppers, 3 peppers: ~$1.92. \u003cstrong\u003eBuy 3 each: $2.31.\u003c/strong\u003e",
                        "Garlic, 4 cloves: ~$0.27. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Cucumber, 1 cucumber grated (tzatziki): ~$0.76. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
                        "Lemon Juice, 1.5 tbsp (tzatziki): ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Feta Cheese, 4 oz crumbled (tzatziki): ~$2.25. \u003cstrong\u003eBuy 1 6oz tub: $3.38.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, ground cumin, dried oregano, dried thyme, ground nutmeg, dried dill, salt, black pepper): ~$2.99. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $43.29 across 14 servings, so roughly $3.09 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $47.26 across 14 servings, roughly $3.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.12. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, onion powder, ground cumin, dried oregano, dried thyme, ground nutmeg, dried dill, salt, black pepper): ~$3.06. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.23 across 14 servings, so roughly $3.09 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.14 across 14 servings, roughly $3.37 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.20. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -73,14 +73,14 @@
     "portion_html":  "Every one of the 14 bowls delivers {{protein}} grams of protein at {{cal}} calories with just 11 grams of fat, making this the leanest beef bowl of the bunch.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.modernfarmhouseeats.com/easy-ground-beef-gyros-with-tzatziki/\" target=\"_blank\" rel=\"noopener\"\u003eModern Farmhouse Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Bright, fresh, and light on the wallet. Sometimes eating well and spending less go together. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  43.29,
-    "cost_batch_true":  47.26,
+    "cost_batch":  43.23,
+    "cost_batch_true":  47.14,
     "cost_per_serving":  3.09,
-    "cost_per_serving_true":  3.38,
-    "cost_pantry_add":  13.86,
-    "cost_first_run":  61.12,
+    "cost_per_serving_true":  3.37,
+    "cost_pantry_add":  15.06,
+    "cost_first_run":  62.2,
     "scaler":  {
-                   "cost":  "47.26",
+                   "cost":  "47.14",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

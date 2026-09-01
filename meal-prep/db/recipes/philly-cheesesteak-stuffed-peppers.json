@@ -46,16 +46,16 @@
     "cost_lines":  [
                        "Green Bell Peppers, 7 green bell peppers, halved and seeded: ~$5.39. \u003cstrong\u003eBuy 7 each: $5.39.\u003c/strong\u003e",
                        "Shaved Beef Steak, 3 lb shaved beef steak: ~$22.12. \u003cstrong\u003eBuy 4 14oz packs: $25.80.\u003c/strong\u003e",
-                       "Yellow Onion, 3 1/2 lb yellow onions, sliced thin (3 to 4 very large): ~$3.99. \u003cstrong\u003eBuy 4 lbs: $4.56.\u003c/strong\u003e",
+                       "Yellow Onion, 3 1/2 lb yellow onions, sliced thin (3 to 4 very large): ~$3.45. \u003cstrong\u003eBuy 4 lbs: $3.95.\u003c/strong\u003e",
                        "White Mushrooms, 1 3/4 lb, sliced thin (about 11 cups): ~$6.60. \u003cstrong\u003eBuy 4 8oz packs: $7.55.\u003c/strong\u003e",
                        "Provolone Cheese, 14 slices: ~$2.17. \u003cstrong\u003eBuy 2 8oz packs: $3.34.\u003c/strong\u003e",
                        "Butter, 14 tbsp (1 3/4 sticks), divided: ~$1.29. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Vegetable Oil, 14 tbsp (3/4 cup plus 2 tbsp), divided: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Worcestershire Sauce, 3 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $42.39 across 14 servings, so roughly $3.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $50.45 across 14 servings, roughly $3.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.97. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (garlic powder, salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $41.90 across 14 servings, so roughly $2.99 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.89 across 14 servings, roughly $3.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.13. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e at everyday prices for a cheesesteak dinner you can eat all week. The peppers, onions and mushrooms stretch three pounds of beef into fourteen full plates.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "The honest way to make fourteen even servings is by weight. Weigh the loaded skillet, subtract the empty weight from Step 1, and that is your total filling. Divide it by 14 and spoon that exact amount into each pepper half before the cheese goes on. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/philly-cheesesteak-stuffed-peppers/\" target=\"_blank\" rel=\"noopener\"\u003ebudgetbytes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low carb, high protein dinner for about ${{cost_ps}} a serving at everyday prices. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  42.39,
-    "cost_batch_true":  50.45,
-    "cost_per_serving":  3.03,
-    "cost_per_serving_true":  3.6,
-    "cost_pantry_add":  7.52,
-    "cost_first_run":  57.97,
+    "cost_batch":  41.9,
+    "cost_batch_true":  49.89,
+    "cost_per_serving":  2.99,
+    "cost_per_serving_true":  3.56,
+    "cost_pantry_add":  8.24,
+    "cost_first_run":  58.13,
     "scaler":  {
-                   "cost":  "50.45",
+                   "cost":  "49.89",
                    "ing":  [
                                {
                                    "item":  "Green Bell Peppers",

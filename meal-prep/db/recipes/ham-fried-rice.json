@@ -43,18 +43,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Vegetable Oil, 0.5 cups: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Eggs, 7 large eggs: ~$0.83. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Eggs, 7 large eggs: ~$0.95. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
                        "Diced Ham, 2.75 lb: ~$13.02. \u003cstrong\u003eBuy 3 16oz packs: $14.89.\u003c/strong\u003e",
-                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Green Onions, 4.25 cups: ~$2.50. \u003cstrong\u003eBuy 3 bunches: $3.21.\u003c/strong\u003e",
                        "Carrots, 12.6 carrots: ~$1.62. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
                        "Rice, 6.5 cups dry: ~$1.46. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Soy Sauce, 7 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Sesame Oil, 1.25 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, salt): ~$0.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $21.13 across 14 servings, so roughly $1.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $24.68 across 14 servings, roughly $1.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.69. Those containers then feed this batch and many more after it."
+                       "Sesame Oil, 1.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.14 across 14 servings, so roughly $1.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.78 across 14 servings, roughly $1.77 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.65. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for takeout style fried rice made at home. A single order of this at a restaurant costs more than the entire batch of fourteen.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, tossing between scoops so the ham and egg stay even. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/ham-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Takeout at home for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  21.13,
-    "cost_batch_true":  24.68,
+    "cost_batch":  21.14,
+    "cost_batch_true":  24.78,
     "cost_per_serving":  1.51,
-    "cost_per_serving_true":  1.76,
-    "cost_pantry_add":  13.01,
-    "cost_first_run":  37.69,
+    "cost_per_serving_true":  1.77,
+    "cost_pantry_add":  10.87,
+    "cost_first_run":  35.65,
     "scaler":  {
-                   "cost":  "24.68",
+                   "cost":  "24.78",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",

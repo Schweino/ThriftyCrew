@@ -38,17 +38,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 8 lb: ~$34.11. \u003cstrong\u003eBuy 8 lbs: $36.40.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Diced Tomatoes, 2 cans: ~$1.49. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
-                       "Coconut Milk, 0.75 cups: ~$0.92. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.63. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Coconut Milk, 0.75 cups: ~$0.99. \u003cstrong\u003eBuy 1 13.5oz can: $1.98.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Frozen Green Peas, 1 cup frozen: ~$0.95. \u003cstrong\u003eBuy 2 12oz bags: $1.31.\u003c/strong\u003e",
                        "Garlic, 2 cloves, minced: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Olive Oil, 1.25 tbsp EVOO: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp EVOO: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (chili powder, ground cumin, curry powder, salt): ~$0.91. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $40.51 across 14 servings, so roughly $2.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $44.76 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.48. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $40.61 across 14 servings, so roughly $2.90 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.87 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.92. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -66,14 +66,14 @@
     "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfoodonthetable.com/curry-ground-turkey-with-rice-and-peas/\" target=\"_blank\" rel=\"noopener\"\u003eFamily Food on the Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cozy, filling, and easy on the budget, this is comfort food that loves you back. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  40.51,
-    "cost_batch_true":  44.76,
-    "cost_per_serving":  2.89,
+    "cost_batch":  40.61,
+    "cost_batch_true":  44.87,
+    "cost_per_serving":  2.9,
     "cost_per_serving_true":  3.2,
-    "cost_pantry_add":  11.72,
-    "cost_first_run":  56.48,
+    "cost_pantry_add":  11.05,
+    "cost_first_run":  55.92,
     "scaler":  {
-                   "cost":  "44.76",
+                   "cost":  "44.87",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

@@ -39,7 +39,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 7 lb: ~$15.24. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
-                       "Rice, 5.5 cups dry: ~$1.24. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 5.5 cups dry: ~$1.21. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Orange Juice, 1 cup: ~$0.52. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
                        "Soy Sauce, 3 3/4 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Honey, 4 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -47,13 +47,13 @@
                        "Sesame Oil, 1 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 2 cloves: ~$0.11. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Broccoli Florets, 6 cups: ~$1.71. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
-                       "Rice Vinegar, 1 oz: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice Vinegar, 1 oz: ~$0.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Ground Ginger, 2.75 tsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Orange Zest, from orange: ~$0.44. \u003cstrong\u003eBuy 1 each: $7.12.\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $21.25 across 14 servings, so roughly $1.52 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $32.23 across 14 servings, roughly $2.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.28. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.82. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -76,8 +76,8 @@
     "cost_batch_true":  32.23,
     "cost_per_serving":  1.52,
     "cost_per_serving_true":  2.3,
-    "cost_pantry_add":  15.05,
-    "cost_first_run":  47.28,
+    "cost_pantry_add":  15.59,
+    "cost_first_run":  47.82,
     "scaler":  {
                    "cost":  "32.23",
                    "ing":  [

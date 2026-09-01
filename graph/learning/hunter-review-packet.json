@@ -939,6 +939,6 @@
    "why": "held"
   }
  ],
- "generated_at": "2026-08-30T21:30:05",
+ "generated_at": "2026-08-31T21:30:05",
  "instructions": "Each case is an identity the nightly ingest could not settle mechanically. Rule each one and write a verdicts file: {\"verdicts\": [{event_id, verdict: record|supersede|leave, item_id (required for record and supersede), evidence, by: \"adjudication\"}]}. Apply it with meal-prep\\pipeline\\learn_apply.py --apply-reviews <that file>. Nothing here has been applied: this stage promotes nothing, by design."
 }

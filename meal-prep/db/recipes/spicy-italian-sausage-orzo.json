@@ -42,19 +42,19 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Hot Italian Sausage, 2.75 lb: ~$7.00. \u003cstrong\u003eBuy 3 lbs: $7.50.\u003c/strong\u003e",
-                       "Yellow Onion, 1.4 onions: ~$0.39. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Hot Italian Sausage, 2.75 lb: ~$10.98. \u003cstrong\u003eBuy 3 lbs: $11.76.\u003c/strong\u003e",
+                       "Yellow Onion, 1.4 onions: ~$0.33. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 5.75 tbsp: ~$0.67. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
-                       "Orzo Pasta, 16.75 oz dry: ~$1.02. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Orzo Pasta, 16.75 oz dry: ~$0.97. \u003cstrong\u003eBuy 2 16oz boxes: $1.84.\u003c/strong\u003e",
                        "Tomato Sauce, 2.8 cans: ~$2.35. \u003cstrong\u003eBuy 3 15oz cans: $2.51.\u003c/strong\u003e",
                        "Chicken Broth, 2 cups: ~$0.77. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Heavy Cream, 2.75 cups: ~$3.30. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
                        "Parmesan Cheese, 4.5 oz: ~$1.52. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Fresh Basil, 18.75 tbsp: ~$2.39. \u003cstrong\u003eBuy 2 0.5oz packs: $2.39.\u003c/strong\u003e",
-                       "Pantry seasonings (dried oregano, black pepper, salt): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.81 across 14 servings, so roughly $1.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $25.23 across 14 servings, roughly $1.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $29.82. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (dried oregano, black pepper, salt): ~$0.45. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.73 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.29 across 14 servings, roughly $2.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.27. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a creamy one pot pasta. The only pan you wash is the one you cooked it in, which is worth something on a Sunday afternoon.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, stirring between scoops. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.saltandlavender.com/spicy-italian-sausage-orzo/\" target=\"_blank\" rel=\"noopener\"\u003esaltandlavender.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot pastas for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  19.81,
-    "cost_batch_true":  25.23,
-    "cost_per_serving":  1.41,
-    "cost_per_serving_true":  1.8,
-    "cost_pantry_add":  4.59,
-    "cost_first_run":  29.82,
+    "cost_batch":  23.73,
+    "cost_batch_true":  29.29,
+    "cost_per_serving":  1.7,
+    "cost_per_serving_true":  2.09,
+    "cost_pantry_add":  4.98,
+    "cost_first_run":  34.27,
     "scaler":  {
-                   "cost":  "25.23",
+                   "cost":  "29.29",
                    "ing":  [
                                {
                                    "item":  "Hot Italian Sausage",

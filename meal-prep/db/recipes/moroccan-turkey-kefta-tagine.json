@@ -48,17 +48,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 3.5 lb: ~$15.94. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
-                       "Yellow Onion, 5.3 onions: ~$1.45. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 5.3 onions: ~$1.26. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
                        "Garlic, 10.25 tbsp: ~$1.20. \u003cstrong\u003eBuy 3 heads: $1.74.\u003c/strong\u003e",
                        "Fresh Cilantro, 24 tbsp: ~$0.75. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Olive Oil, 3 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Diced Tomatoes, 7 cans: ~$5.37. \u003cstrong\u003eBuy 7 cans: $5.37.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 7 cans: ~$5.88. \u003cstrong\u003eBuy 7 cans: $5.88.\u003c/strong\u003e",
                        "Eggs, 14 large eggs: ~$1.89. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
-                       "Rice, 4.5 cups dry: ~$1.02. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Pantry seasonings (paprika, ground cumin, ground cinnamon, black pepper, salt): ~$1.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.60 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.62 across 14 servings, roughly $2.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.14. Those containers then feed this batch and many more after it."
+                       "Rice, 4.5 cups dry: ~$1.00. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, ground cumin, ground cinnamon, black pepper, salt): ~$1.63. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.97 across 14 servings, so roughly $2.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.87 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.48. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). Meatballs, tomatoes, an egg, and rice, which is the kind of grocery list your grandmother could have read without flinching.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Then split the meatballs, sauce, and eggs evenly across all 14 so nobody ends up with the sad container. Each one lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://tarasmulticulturaltable.com/kefta-mkaouara-moroccan-meatball-and-egg-tagine/\" target=\"_blank\" rel=\"noopener\"\u003etarasmulticulturaltable.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A Moroccan tagine for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.6,
-    "cost_batch_true":  35.62,
-    "cost_per_serving":  2.11,
-    "cost_per_serving_true":  2.54,
-    "cost_pantry_add":  12.52,
-    "cost_first_run":  48.14,
+    "cost_batch":  29.97,
+    "cost_batch_true":  35.87,
+    "cost_per_serving":  2.14,
+    "cost_per_serving_true":  2.56,
+    "cost_pantry_add":  12.61,
+    "cost_first_run":  48.48,
     "scaler":  {
-                   "cost":  "35.62",
+                   "cost":  "35.87",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

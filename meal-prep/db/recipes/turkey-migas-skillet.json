@@ -48,17 +48,17 @@
     "cost_lines":  [
                        "Vegetable Oil, 1 cup: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Tortilla, 18 oz: ~$1.46. \u003cstrong\u003eBuy 1 20ct pack: $2.12.\u003c/strong\u003e",
-                       "Jalapeno, 7.25 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
+                       "Jalapeno, 7.25 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 lb: $0.88.\u003c/strong\u003e",
                        "Red Bell Pepper, 4.7 peppers: ~$7.18. \u003cstrong\u003eBuy 5 each: $7.60.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.83. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.72. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Eggs, 21 large eggs: ~$2.88. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
-                       "Diced Tomatoes, 1.4 cans: ~$1.08. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.4 cans: ~$1.19. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
                        "Mexican Cheese Blend, 9.5 oz: ~$2.03. \u003cstrong\u003eBuy 2 8 oz bags: $3.45.\u003c/strong\u003e",
                        "93/7 Ground Turkey, 3.5 lb: ~$16.12. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, salt): ~$0.59. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $32.86 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.79 across 14 servings, roughly $2.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.37. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (black pepper, salt): ~$0.69. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.88 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.34 across 14 servings, roughly $2.81 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.26. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Eggs and tortillas are two of the cheapest foods in any grocery store, and this dish is built almost entirely out of them plus a couple pounds of turkey.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Weigh the skillet, subtract the empty pan weight you noted, and divide by 14. Portion while it is still warm, since eggs firm up fast and get harder to scoop clean. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chilipeppermadness.com/recipes/migas/\" target=\"_blank\" rel=\"noopener\"\u003echilipeppermadness.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "An Austin breakfast skillet for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  32.86,
-    "cost_batch_true":  39.79,
+    "cost_batch":  32.88,
+    "cost_batch_true":  39.34,
     "cost_per_serving":  2.35,
-    "cost_per_serving_true":  2.84,
-    "cost_pantry_add":  5.58,
-    "cost_first_run":  45.37,
+    "cost_per_serving_true":  2.81,
+    "cost_pantry_add":  5.92,
+    "cost_first_run":  45.26,
     "scaler":  {
-                   "cost":  "39.79",
+                   "cost":  "39.34",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",

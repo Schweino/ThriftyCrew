@@ -42,12 +42,12 @@
     "cost_lines":  [
                        "Boneless Beef Short Ribs, 7 lb: ~$83.93. \u003cstrong\u003eBuy 7 lbs: $83.93.\u003c/strong\u003e",
                        "Garlic, 2 tbsp plus 1 tsp, minced (about 7 cloves): ~$0.27. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Yellow Onion, 1 1/4 medium onions, chopped (about 1 1/8 cups): ~$0.35. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Fire Roasted Diced Tomatoes, 65 1/3 oz canned, with juices (about four and a half 14.5 oz cans): ~$3.46. \u003cstrong\u003eBuy 5 cans: $3.83.\u003c/strong\u003e",
-                       "Pantry seasonings (dried thyme, salt, black pepper): ~$0.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $88.22 across 14 servings, so roughly $6.30 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $89.69 across 14 servings, roughly $6.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.23 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $93.92. Those containers then feed this batch and many more after it."
+                       "Yellow Onion, 1 1/4 medium onions, chopped (about 1 1/8 cups): ~$0.30. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Fire Roasted Diced Tomatoes, 65 1/3 oz canned, with juices (about four and a half 14.5 oz cans): ~$3.78. \u003cstrong\u003eBuy 5 cans: $4.20.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, salt, black pepper): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $88.50 across 14 servings, so roughly $6.32 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $89.92 across 14 servings, roughly $6.42 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $94.58. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for slow-braised short ribs that most people think of as a night out. The beef and the tomatoes carry the whole thing. Spoon it over cauliflower rice or a pile of greens and you have a full plate that never saw the inside of a restaurant.",
     "shop_smart":  [
@@ -66,14 +66,14 @@
     "portion_html":  "Set the full insert on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total, meat and juices together. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://jenniferbanz.com/crockpot-short-ribs-5-ingredients\" target=\"_blank\" rel=\"noopener\"\u003ejenniferbanz.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  88.22,
-    "cost_batch_true":  89.69,
-    "cost_per_serving":  6.3,
-    "cost_per_serving_true":  6.41,
-    "cost_pantry_add":  4.23,
-    "cost_first_run":  93.92,
+    "cost_batch":  88.5,
+    "cost_batch_true":  89.92,
+    "cost_per_serving":  6.32,
+    "cost_per_serving_true":  6.42,
+    "cost_pantry_add":  4.66,
+    "cost_first_run":  94.58,
     "scaler":  {
-                   "cost":  "89.69",
+                   "cost":  "89.92",
                    "ing":  [
                                {
                                    "item":  "Boneless Beef Short Ribs",

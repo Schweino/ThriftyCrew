@@ -31,13 +31,13 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 8 lb: ~$16.04. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Green Cabbage, 4 lb: ~$2.62. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
                        "Liquid Smoke, 15 g: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt): ~$0.02. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.98 across 14 servings, so roughly $1.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $21.81 across 14 servings, roughly $1.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.76 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $24.57. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $19.96 across 14 servings, so roughly $1.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $21.79 across 14 servings, roughly $1.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $24.54. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -56,14 +56,14 @@
     "portion_html":  "Every serving comes in around {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://downshiftology.com/recipes/slow-cooker-kalua-pork/\" target=\"_blank\" rel=\"noopener\"\u003eDownshiftology\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Three ingredients, about ${{cost_ps}} a bowl (at everyday cost), and it tastes like the islands. Hard to argue with that. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  19.98,
-    "cost_batch_true":  21.81,
+    "cost_batch":  19.96,
+    "cost_batch_true":  21.79,
     "cost_per_serving":  1.43,
     "cost_per_serving_true":  1.56,
-    "cost_pantry_add":  2.76,
-    "cost_first_run":  24.57,
+    "cost_pantry_add":  2.75,
+    "cost_first_run":  24.54,
     "scaler":  {
-                   "cost":  "21.81",
+                   "cost":  "21.79",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",

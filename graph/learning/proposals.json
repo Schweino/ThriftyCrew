@@ -2748,6 +2748,18 @@
     "target_id": "buffalo-wing-sauce"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-08-31T21:32:11",
+    "id": "lp:f5a66d65aa151507cae7",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"kraft\\\\s+natural\\\\s+mozzarella\\\\s+shredded\"}",
+    "queue_hash": "2e699d7c466b0130721766804424619c05fd56754b5ea6f045ea0633f2481b5f",
+    "rationale": "Matches 'Kraft Natural Mozzarella Shredded Cheese'. Kraft Natural Mozzarella is typically part-skim.",
+    "status": "proposed",
+    "target_id": "part-skim-mozzarella-shredded"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-24T21:32:21",
     "id": "lp:f6b7c1fe62147e339717",

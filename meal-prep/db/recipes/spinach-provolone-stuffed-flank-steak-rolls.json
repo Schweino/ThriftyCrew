@@ -48,15 +48,15 @@
     "cost_lines":  [
                        "Beef Flank/Sirloin Steak, 3 1/2 lb flank steak, butterflied: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
                        "Vegetable Oil, 7 tbsp vegetable oil: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 1 3/4 cups chopped onion (about 2 medium): ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 3/4 cups chopped onion (about 2 medium): ~$0.44. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 12 cloves garlic, minced (about 1 head): ~$0.49. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 14 oz cream cheese (one and three-quarter 8 oz bricks): ~$3.22. \u003cstrong\u003eBuy 2 8oz bricks: $3.68.\u003c/strong\u003e",
                        "Provolone Cheese, 28 oz sliced provolone (1 3/4 lb): ~$5.85. \u003cstrong\u003eBuy 4 8oz packs: $6.69.\u003c/strong\u003e",
                        "Spinach, 7 cups baby spinach (about 7 oz): ~$1.48. \u003cstrong\u003eBuy 1 10oz bag: $2.00.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $42.74 across 14 servings, so roughly $3.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $49.68 across 14 servings, roughly $3.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.01. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.68 across 14 servings, so roughly $3.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.54 across 14 servings, roughly $3.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.76 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.30. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a stuffed flank steak dinner that looks like a restaurant plate. The steak carries the protein, the cream cheese and provolone carry the richness, and the whole thing stays under 10 grams of carbs a serving.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Set the full baking dish on your scale and subtract the empty weight you noted in Step 1 to get the cooked total. Divide that number by 14 and give each container that exact weight, which works out to about two pinwheels apiece. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://gimmedelicious.com/spinach-cheese-stuffed-flank-steak-rolls/\" target=\"_blank\" rel=\"noopener\"\u003egimmedelicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  42.74,
-    "cost_batch_true":  49.68,
+    "cost_batch":  42.68,
+    "cost_batch_true":  49.54,
     "cost_per_serving":  3.05,
-    "cost_per_serving_true":  3.55,
-    "cost_pantry_add":  6.33,
-    "cost_first_run":  56.01,
+    "cost_per_serving_true":  3.54,
+    "cost_pantry_add":  6.76,
+    "cost_first_run":  56.3,
     "scaler":  {
-                   "cost":  "49.68",
+                   "cost":  "49.54",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",

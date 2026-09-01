@@ -1,20 +1,20 @@
 ﻿{
-    "generated":  "2026-08-30T21:33:12",
-    "started":  "2026-08-30T21:30:01",
-    "deadline":  "2026-08-31T00:00:01",
+    "generated":  "2026-08-31T21:32:38",
+    "started":  "2026-08-31T21:30:01",
+    "deadline":  "2026-09-01T00:00:01",
     "hard_stop":  "06:30",
     "jobs":  4,
     "contested":  0,
-    "elapsed_sec":  190,
+    "elapsed_sec":  156,
     "card_free":  true,
-    "free_vram_mib":  13970,
+    "free_vram_mib":  13701,
     "llama_started":  true,
     "stages":  [
                    {
                        "stage":  "emit",
                        "state":  "OK",
-                       "detail":  "contested: 0 question(s) of 20492 (20492 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 2.7s",
-                       "sec":  3
+                       "detail":  "contested: 0 question(s) of 20492 (20492 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 2.3s",
+                       "sec":  2
                    },
                    {
                        "stage":  "defs",
@@ -25,32 +25,32 @@
                    {
                        "stage":  "hunter",
                        "state":  "OK",
-                       "detail":  "ingest_hunter_events: 476 event(s) in the log, 0 newly filed, 33 review case(s), 0 gold row(s), 0 surprise(s) queued",
+                       "detail":  "ingest_hunter_events: 477 event(s) in the log, 1 newly filed, 33 review case(s), 0 gold row(s), 1 surprise(s) queued",
                        "sec":  0
                    },
                    {
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  144
+                       "sec":  116
                    },
                    {
                        "stage":  "serve",
                        "state":  "OK",
                        "detail":  "4 slots",
-                       "sec":  12
+                       "sec":  8
                    },
                    {
                        "stage":  "resolve",
                        "state":  "OK",
-                       "detail":  "resolved 22124 rows in 2.1s (20492 distinct questions, 0 model calls)",
+                       "detail":  "resolved 22124 rows in 1.9s (20492 distinct questions, 0 model calls)",
                        "sec":  2
                    },
                    {
                        "stage":  "stage1",
                        "state":  "OK",
                        "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
-                       "sec":  25
+                       "sec":  24
                    },
                    {
                        "stage":  "stop",

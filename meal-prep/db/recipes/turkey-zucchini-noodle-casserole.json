@@ -48,16 +48,16 @@
     "cost_lines":  [
                        "93/7 Ground Turkey, 3 1/2 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
                        "Zucchini, 14 medium, spiralized: ~$9.20. \u003cstrong\u003eBuy 7 lbs: $10.64.\u003c/strong\u003e",
-                       "Diced Tomatoes, 3 1/2 14-oz cans, undrained (about 5 3/4 cups): ~$2.59. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3 1/2 14-oz cans, undrained (about 5 3/4 cups): ~$2.84. \u003cstrong\u003eBuy 4 cans: $3.36.\u003c/strong\u003e",
                        "Tomato Sauce, 3 1/2 8-oz cans (about 3 1/4 cups): ~$1.57. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
-                       "Olive Oil, 3 1/2 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 7 tbsp, cut into small cubes: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Mozzarella Cheese, 7 cups shredded: ~$6.07. \u003cstrong\u003eBuy 4 8oz bags: $6.97.\u003c/strong\u003e",
                        "Parmesan Cheese, 3/4 cup plus 2 tbsp: ~$1.18. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, italian seasoning, garlic powder): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $37.91 across 14 servings, so roughly $2.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $47.01 across 14 servings, roughly $3.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.14. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, italian seasoning, garlic powder): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.16 across 14 servings, so roughly $2.73 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.30 across 14 servings, roughly $3.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.19. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked, cheesy casserole that eats like a pasta bake and skips the pasta. The turkey and the cheese carry it; the zucchini does the job the noodles used to, for less.",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theharvestskillet.com/italian-zucchini-noodle-casserole/\" target=\"_blank\" rel=\"noopener\"\u003etheharvestskillet.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  37.91,
-    "cost_batch_true":  47.01,
-    "cost_per_serving":  2.71,
-    "cost_per_serving_true":  3.36,
-    "cost_pantry_add":  9.13,
-    "cost_first_run":  56.14,
+    "cost_batch":  38.16,
+    "cost_batch_true":  47.3,
+    "cost_per_serving":  2.73,
+    "cost_per_serving_true":  3.38,
+    "cost_pantry_add":  8.89,
+    "cost_first_run":  56.19,
     "scaler":  {
-                   "cost":  "47.01",
+                   "cost":  "47.30",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

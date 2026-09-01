@@ -51,8 +51,8 @@
     "cost_lines":  [
                        "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
                        "Rotisserie Chicken (skin removed), 2.62 lb: ~$10.15. \u003cstrong\u003eBuy 2 whole birds: $11.94.\u003c/strong\u003e",
-                       "Olive Oil, 1.25 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Red Bell Pepper, 2.3 peppers: ~$3.55. \u003cstrong\u003eBuy 3 each: $4.56.\u003c/strong\u003e",
                        "Garlic, 3.25 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Frozen Chopped Spinach, 10 oz: ~$1.04. \u003cstrong\u003eBuy 1 10oz box: $1.05.\u003c/strong\u003e",
@@ -60,12 +60,12 @@
                        "Mexican Cheese Blend, 7 oz: ~$1.49. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
                        "Cottage Cheese, 20.75 oz: ~$2.36. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
                        "Greek Yogurt, 7.5 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
-                       "Lime Juice, 1.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 1.75 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 3/4 cup: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, garlic powder, salt): ~$0.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $32.98 across 14 servings, so roughly $2.36 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $45.63 across 14 servings, roughly $3.26 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.54 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.17. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (ground cumin, garlic powder, salt): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.94 across 14 servings, so roughly $2.35 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.52 across 14 servings, roughly $3.25 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.95. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for a rotisserie shortcut that tastes like you worked harder than you did. The bird does the heavy lifting, the crema costs pennies, and the tortilla keeps the carbs low.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "The honest way to keep 14 burritos equal is to weigh the filling, not eyeball the scoop. Set the bowl on the scale, subtract the empty weight, divide by 14, and give each tortilla that much before you add the crema and roll. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped for a minute, then open and crisp the seam in a dry pan if you like.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.anediblemosaic.com/chicken-meal-prep-burritos-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eanediblemosaic.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Salsa verde chicken burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
-    "cost_batch":  32.98,
-    "cost_batch_true":  45.63,
-    "cost_per_serving":  2.36,
-    "cost_per_serving_true":  3.26,
-    "cost_pantry_add":  10.54,
-    "cost_first_run":  56.17,
+    "cost_batch":  32.94,
+    "cost_batch_true":  45.52,
+    "cost_per_serving":  2.35,
+    "cost_per_serving_true":  3.25,
+    "cost_pantry_add":  10.43,
+    "cost_first_run":  55.95,
     "scaler":  {
-                   "cost":  "45.63",
+                   "cost":  "45.52",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

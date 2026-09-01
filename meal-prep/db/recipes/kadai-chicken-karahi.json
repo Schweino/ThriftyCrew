@@ -52,19 +52,19 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Thigh, 3.75 lb: ~$12.42. \u003cstrong\u003eBuy 4 lbs: $12.88.\u003c/strong\u003e",
-                       "Yellow Onion, 5 onions: ~$1.39. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 5 onions: ~$1.20. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
                        "Tomato Sauce, 2.5 cans: ~$2.07. \u003cstrong\u003eBuy 3 15oz cans: $2.51.\u003c/strong\u003e",
                        "Garlic, 6.75 tbsp: ~$0.78. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Butter, 0.75 cups: ~$1.13. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Dried Guajillo Chiles, 1.5 oz: ~$1.23. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 1.5 oz: ~$0.89. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Heavy Cream, 0.75 cups: ~$0.78. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
                        "Fresh Cilantro, 7 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Green Bell Peppers, 1.3 peppers: ~$1.03. \u003cstrong\u003eBuy 2 each: $1.54.\u003c/strong\u003e",
-                       "Rice, 4.75 cups dry: ~$1.08. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, salt, chili powder, ground turmeric, garam masala, ground coriander, italian seasoning, ground cinnamon): ~$1.74. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.87 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.52 across 14 servings, roughly $2.25 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.04. Those containers then feed this batch and many more after it."
+                       "Rice, 4.75 cups dry: ~$1.05. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, salt, chili powder, ground turmeric, garam masala, ground coriander, italian seasoning, ground cinnamon): ~$4.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.90 across 14 servings, so roughly $1.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.43 across 14 servings, roughly $2.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.17 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.60. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a restaurant-style curry with no shortcuts in it. Chicken and dried chiles are the two lines worth watching, and the chiles are a one-time buy that lasts a long while.",
     "shop_smart":  [
@@ -86,14 +86,14 @@
     "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same number in every container. Each one carries \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and because this sauce is thick rather than soupy, it does not turn the rice to mush by day four.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.indianhealthyrecipes.com/kadai-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eindianhealthyrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Kadai chicken with a hand-crushed masala for about ${{cost_ps}} a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  23.87,
-    "cost_batch_true":  31.52,
-    "cost_per_serving":  1.7,
-    "cost_per_serving_true":  2.25,
-    "cost_pantry_add":  10.52,
-    "cost_first_run":  42.04,
+    "cost_batch":  25.9,
+    "cost_batch_true":  33.43,
+    "cost_per_serving":  1.85,
+    "cost_per_serving_true":  2.39,
+    "cost_pantry_add":  12.17,
+    "cost_first_run":  45.6,
     "scaler":  {
-                   "cost":  "31.52",
+                   "cost":  "33.43",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Thigh",

@@ -37,15 +37,15 @@
                        "93/7 Ground Turkey, 3.5 lb raw: ~$15.92. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
                        "Rice, 3.5 cups dry jasmine: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Seasoned Black Beans, 4 cans, drained: ~$5.94. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 5 cups, drained: ~$1.59. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 5 cups, drained: ~$1.19. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
                        "Fat Free Cheddar, about 1 3/4 cups shredded (~7 oz): ~$1.94. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
                        "Salsa, 1 cup chunky tomato salsa (per 4): ~$3.69. \u003cstrong\u003eBuy 2 16oz jars: $3.94.\u003c/strong\u003e",
                        "Olive Oil, 1 tablespoon: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 3 cups (to cook rice in-pan): ~$3.04. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
-                       "Pantry seasonings (taco seasoning): ~$0.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.00 across 14 servings, so roughly $2.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $37.61 across 14 servings, roughly $2.69 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.41. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (taco seasoning): ~$0.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.89 across 14 servings, so roughly $2.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.48 across 14 servings, roughly $2.68 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.84 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.32. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$11 or more\u003c/strong\u003e for a fast-casual burrito bowl. Catch turkey on sale and it drops further.",
     "shop_smart":  [
@@ -64,14 +64,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
     "upsell_html":  "High-protein dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  34,
-    "cost_batch_true":  37.61,
-    "cost_per_serving":  2.43,
-    "cost_per_serving_true":  2.69,
-    "cost_pantry_add":  7.8,
-    "cost_first_run":  45.41,
+    "cost_batch":  33.89,
+    "cost_batch_true":  37.48,
+    "cost_per_serving":  2.42,
+    "cost_per_serving_true":  2.68,
+    "cost_pantry_add":  7.84,
+    "cost_first_run":  45.32,
     "scaler":  {
-                   "cost":  "37.61",
+                   "cost":  "37.48",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

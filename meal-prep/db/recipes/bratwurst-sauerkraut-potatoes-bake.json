@@ -40,14 +40,14 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 18.4 potatoes: ~$4.89. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
-                       "Bratwurst, 3.5 lb: ~$8.51. \u003cstrong\u003eBuy 3 19oz 5-packs: $8.92.\u003c/strong\u003e",
-                       "Sauerkraut, 7.75 cups: ~$3.57. \u003cstrong\u003eBuy 3 14.5oz cans: $3.96.\u003c/strong\u003e",
-                       "Beef Broth, 1.5 cups: ~$0.45. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $17.65 across 14 servings, so roughly $1.26 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $18.67 across 14 servings, roughly $1.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.26 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $24.93. Those containers then feed this batch and many more after it."
+                       "Potato, 18.4 potatoes: ~$5.12. \u003cstrong\u003eBuy 9 lbs: $5.35.\u003c/strong\u003e",
+                       "Bratwurst, 3.5 lb: ~$8.14. \u003cstrong\u003eBuy 3 19oz 5-packs: $8.53.\u003c/strong\u003e",
+                       "Sauerkraut, 7.75 cups: ~$3.01. \u003cstrong\u003eBuy 3 14.5oz cans: $3.34.\u003c/strong\u003e",
+                       "Beef Broth, 1.5 cups: ~$0.53. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $16.97 across 14 servings, so roughly $1.21 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $17.92 across 14 servings, roughly $1.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.64 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $22.56. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a dump and bake dinner with four items on the shopping list. If you want proof that cheap food does not have to be complicated, this is it.",
     "shop_smart":  [
@@ -69,14 +69,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, keeping the sausage coins evenly counted. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theseasonedmom.com/bratwurst-recipe/\" target=\"_blank\" rel=\"noopener\"\u003etheseasonedmom.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Four ingredient dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  17.65,
-    "cost_batch_true":  18.67,
-    "cost_per_serving":  1.26,
-    "cost_per_serving_true":  1.33,
-    "cost_pantry_add":  6.26,
-    "cost_first_run":  24.93,
+    "cost_batch":  16.97,
+    "cost_batch_true":  17.92,
+    "cost_per_serving":  1.21,
+    "cost_per_serving_true":  1.28,
+    "cost_pantry_add":  4.64,
+    "cost_first_run":  22.56,
     "scaler":  {
-                   "cost":  "18.67",
+                   "cost":  "17.92",
                    "ing":  [
                                {
                                    "item":  "Potato",

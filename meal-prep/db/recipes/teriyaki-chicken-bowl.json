@@ -32,14 +32,14 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 6 lb: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
-                       "Teriyaki Sauce, 2 1/2 cups: ~$3.10. \u003cstrong\u003ePantry staple; this batch alone uses about 2 15floz bottles.\u003c/strong\u003e",
+                       "Teriyaki Sauce, 2 1/2 cups: ~$3.40. \u003cstrong\u003ePantry staple; this batch alone uses about 2 15floz bottles.\u003c/strong\u003e",
                        "Olive Oil, 2 1/4 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 1 lb: ~$1.11. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Broccoli Florets, 7 cups: ~$2.04. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
                        "Shredded Carrots, 1 lb: ~$1.36. \u003cstrong\u003eBuy 1 10oz bag: $1.93.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $20.18 across 14 servings, so roughly $1.44 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $22.15 across 14 servings, roughly $1.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $29.55. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $20.48 across 14 servings, so roughly $1.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.45 across 14 servings, roughly $1.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $29.94. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -59,14 +59,14 @@
     "portion_html":  "When the skillet is done, weigh the full pot again and subtract the empty pot weight you wrote down. Divide that number by 14 to get the target weight for each container, then scoop and check on the scale as you go. Even containers mean even meals all week.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/teriyaki-ground-turkey-stir-fry/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That is 14 dinners done in one afternoon, every reheated bowl costing you a fraction of the takeout price. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  20.18,
-    "cost_batch_true":  22.15,
-    "cost_per_serving":  1.44,
-    "cost_per_serving_true":  1.58,
-    "cost_pantry_add":  7.4,
-    "cost_first_run":  29.55,
+    "cost_batch":  20.48,
+    "cost_batch_true":  22.45,
+    "cost_per_serving":  1.46,
+    "cost_per_serving_true":  1.6,
+    "cost_pantry_add":  7.49,
+    "cost_first_run":  29.94,
     "scaler":  {
-                   "cost":  "22.15",
+                   "cost":  "22.45",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

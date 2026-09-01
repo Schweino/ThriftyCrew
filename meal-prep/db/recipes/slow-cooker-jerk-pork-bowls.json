@@ -32,14 +32,14 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 8 lb: ~$15.10. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
-                       "Rice, 5.25 cups dry: ~$1.20. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Broccoli Florets, 14 cups: ~$4.11. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
-                       "Yellow Onion, 2 onions: ~$0.50. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.44. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Chicken Broth, 1 cup: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (jerk seasoning): ~$0.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $21.92 across 14 servings, so roughly $1.57 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $25.12 across 14 servings, roughly $1.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.97 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.09. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $21.83 across 14 servings, so roughly $1.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.94 across 14 servings, roughly $1.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $30.89. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -58,14 +58,14 @@
     "portion_html":  "Each of the 14 servings delivers {{protein}} grams of protein and {{cal}} calories, a genuinely filling bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.garlicandzest.com/slow-cooker-jerk-pork/\" target=\"_blank\" rel=\"noopener\"\u003eGarlic \u0026amp; Zest\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A little heat, a little spice, and proof that cheap dinners never have to be dull. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  21.92,
-    "cost_batch_true":  25.12,
-    "cost_per_serving":  1.57,
-    "cost_per_serving_true":  1.79,
-    "cost_pantry_add":  5.97,
-    "cost_first_run":  31.09,
+    "cost_batch":  21.83,
+    "cost_batch_true":  24.94,
+    "cost_per_serving":  1.56,
+    "cost_per_serving_true":  1.78,
+    "cost_pantry_add":  5.95,
+    "cost_first_run":  30.89,
     "scaler":  {
-                   "cost":  "25.12",
+                   "cost":  "24.94",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",

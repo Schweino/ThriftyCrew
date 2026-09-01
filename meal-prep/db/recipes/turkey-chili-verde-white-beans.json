@@ -43,19 +43,19 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 3.5 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Cannellini Beans, 7 cans: ~$5.75. \u003cstrong\u003eBuy 7 cans: $5.75.\u003c/strong\u003e",
                        "Garlic, 7.25 tbsp: ~$0.83. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Salsa, 7.5 cups: ~$7.90. \u003cstrong\u003eBuy 4 16oz jars: $7.90.\u003c/strong\u003e",
                        "Chicken Broth, 2.7 cartons: ~$3.83. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
-                       "Olive Oil, 7 tbsp: ~$1.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp: ~$0.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Light Sour Cream, 1.25 cups: ~$1.22. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, salt): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.15 across 14 servings, so roughly $2.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $43.54 across 14 servings, roughly $3.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.03. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $38.91 across 14 servings, so roughly $2.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.28 across 14 servings, roughly $3.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.64. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The jarred salsa verde is the single biggest line on this receipt, so this is the pot where watching for a sale on jars makes a real difference.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Spread the cooked rice into your 14 containers, then set the chili pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near {{cal}} calories with {{protein}} grams of protein once the sour cream goes on at reheat.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thewheatlesskitchen.com/one-pot-turkey-chili-verde/\" target=\"_blank\" rel=\"noopener\"\u003ethewheatlesskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eBright, tangy green chili for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  39.15,
-    "cost_batch_true":  43.54,
-    "cost_per_serving":  2.8,
-    "cost_per_serving_true":  3.11,
-    "cost_pantry_add":  10.49,
-    "cost_first_run":  54.03,
+    "cost_batch":  38.91,
+    "cost_batch_true":  43.28,
+    "cost_per_serving":  2.78,
+    "cost_per_serving_true":  3.09,
+    "cost_pantry_add":  10.36,
+    "cost_first_run":  53.64,
     "scaler":  {
-                   "cost":  "43.54",
+                   "cost":  "43.28",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

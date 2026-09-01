@@ -38,18 +38,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 7 lb: ~$30.09. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.95. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.93. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Enchilada Sauce, 3 2/3 cups: ~$3.37. \u003cstrong\u003eBuy 4 10oz cans: $4.24.\u003c/strong\u003e",
                        "Seasoned Black Beans, 3 cans: ~$5.87. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 3 cups: ~$0.95. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 3 cups: ~$0.71. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
                        "Chipotle in Adobo, 3 1/2 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 1 1/2 cups: ~$1.29. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
-                       "Yellow Onion, 1/2 cup diced: ~$0.69. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1/2 cup diced: ~$0.60. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 1 clove, crushed: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, salt, black pepper): ~$0.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $43.99 across 14 servings, so roughly $3.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $49.33 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.31. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $43.64 across 14 servings, so roughly $3.12 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.74 across 14 servings, roughly $3.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.15. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -67,14 +67,14 @@
     "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://healthyfoodiegirl.com/ground-turkey-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eHealthy Foodie Girl\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, saucy, and cheap, this one disappears fast, so make the full batch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  43.99,
-    "cost_batch_true":  49.33,
-    "cost_per_serving":  3.14,
-    "cost_per_serving_true":  3.52,
-    "cost_pantry_add":  5.98,
-    "cost_first_run":  55.31,
+    "cost_batch":  43.64,
+    "cost_batch_true":  48.74,
+    "cost_per_serving":  3.12,
+    "cost_per_serving_true":  3.48,
+    "cost_pantry_add":  6.41,
+    "cost_first_run":  55.15,
     "scaler":  {
-                   "cost":  "49.33",
+                   "cost":  "48.74",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

@@ -58,15 +58,15 @@
                        "Butter, 6.75 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Eggs, 2 large eggs: ~$0.22. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
                        "Diced Green Chiles, 1.6 cans: ~$1.63. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
-                       "Grits, 3.75 cups: ~$0.98. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Grits, 3.75 cups: ~$1.83. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "All-Purpose Flour, 1.75 cups: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sugar, 6.5 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 6.5 oz: ~$1.42. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Light Sour Cream, 1.25 cups: ~$1.28. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, chili powder, garlic powder, black pepper, dried oregano, ground cumin, paprika, baking powder): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $14.20 across 14 servings, so roughly $1.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $20.44 across 14 servings, roughly $1.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.39. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, chili powder, garlic powder, black pepper, dried oregano, ground cumin, paprika, baking powder): ~$0.56. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $15.10 across 14 servings, so roughly $1.08 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $21.34 across 14 servings, roughly $1.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.40. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Corn and flour are inexpensive carbs, and they are what make up the entire topping.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Weigh the finished pie in its dish, subtract the dish weight, divide by 14, and cut squares to that exact weight so nobody gets all crust and no filling. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryenoughtoeatsix.com/savory-shredded-pork-cornbread-pie/\" target=\"_blank\" rel=\"noopener\"\u003ehungryenoughtoeatsix.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eTamale flavor without the tamale labor, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  14.2,
-    "cost_batch_true":  20.44,
-    "cost_per_serving":  1.01,
-    "cost_per_serving_true":  1.46,
-    "cost_pantry_add":  17.95,
-    "cost_first_run":  38.39,
+    "cost_batch":  15.1,
+    "cost_batch_true":  21.34,
+    "cost_per_serving":  1.08,
+    "cost_per_serving_true":  1.52,
+    "cost_pantry_add":  19.06,
+    "cost_first_run":  40.4,
     "scaler":  {
-                   "cost":  "20.44",
+                   "cost":  "21.34",
                    "ing":  [
                                {
                                    "item":  "Salt",

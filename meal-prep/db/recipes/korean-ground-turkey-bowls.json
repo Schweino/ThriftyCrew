@@ -36,17 +36,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 8 lb: ~$33.10. \u003cstrong\u003eBuy 8 lbs: $36.40.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.14. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.11. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Broccoli Florets, 8 1/4 cups: ~$2.40. \u003cstrong\u003eBuy 3 12oz bags: $3.49.\u003c/strong\u003e",
                        "Teriyaki Sauce, 2/3 cup: ~$0.97. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Honey, 3 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Olive Oil, 2 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 2 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 5 cloves: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Sesame Oil, 1 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (ground ginger, red pepper flakes): ~$0.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.18 across 14 servings, so roughly $2.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $43.78 across 14 servings, roughly $3.13 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.28. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $39.13 across 14 servings, so roughly $2.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.73 across 14 servings, roughly $3.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.60. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -64,14 +64,14 @@
     "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://nutritiontofit.com/korean-ground-turkey/\" target=\"_blank\" rel=\"noopener\"\u003eNutrition to Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is the bowl that makes you look forward to opening the fridge at lunch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  39.18,
-    "cost_batch_true":  43.78,
+    "cost_batch":  39.13,
+    "cost_batch_true":  43.73,
     "cost_per_serving":  2.8,
-    "cost_per_serving_true":  3.13,
-    "cost_pantry_add":  15.5,
-    "cost_first_run":  59.28,
+    "cost_per_serving_true":  3.12,
+    "cost_pantry_add":  14.87,
+    "cost_first_run":  58.6,
     "scaler":  {
-                   "cost":  "43.78",
+                   "cost":  "43.73",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

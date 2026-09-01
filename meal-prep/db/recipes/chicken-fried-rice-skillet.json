@@ -48,18 +48,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Boneless Skinless Chicken Breast, 1.75 lb: ~$6.08. \u003cstrong\u003eBuy 2 lbs: $6.54.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 1.75 lb: ~$4.15. \u003cstrong\u003eBuy 2 lbs: $4.46.\u003c/strong\u003e",
                        "Soy Sauce, 5 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Vegetable Oil, 0.5 cups: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 8.25 cups dry: ~$1.84. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Eggs, 6 large eggs: ~$0.69. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.81. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Eggs, 6 large eggs: ~$0.79. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.70. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Green Onions, 7.25 tbsp: ~$0.52. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
-                       "Chicken Broth, 0.25 cups: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (cornstarch, sesame oil, sugar, salt, black pepper): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $10.89 across 14 servings, so roughly $0.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $12.97 across 14 servings, roughly $0.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.18. Those containers then feed this batch and many more after it."
+                       "Chicken Broth, 0.25 cups: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (cornstarch, sesame oil, sugar, salt, black pepper): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $8.89 across 14 servings, so roughly $0.64 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $10.87 across 14 servings, roughly $0.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.93 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $27.80. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Fourteen dinners of fried rice with more chicken in it than the takeout version, built from a day old pot of rice and a couple of eggs.",
     "shop_smart":  [
@@ -81,14 +81,14 @@
     "portion_html":  "Set the full skillet on the scale, subtract the empty weight you wrote down, and divide by 14. Toss the pan thoroughly first so the chicken and egg are spread through the rice, otherwise the containers on the bottom of the stack end up as plain rice. Every portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/classic-chicken-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fried rice for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), made in one skillet. Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
-    "cost_batch":  10.89,
-    "cost_batch_true":  12.97,
-    "cost_per_serving":  0.78,
-    "cost_per_serving_true":  0.93,
-    "cost_pantry_add":  19.21,
-    "cost_first_run":  32.18,
+    "cost_batch":  8.89,
+    "cost_batch_true":  10.87,
+    "cost_per_serving":  0.64,
+    "cost_per_serving_true":  0.78,
+    "cost_pantry_add":  16.93,
+    "cost_first_run":  27.8,
     "scaler":  {
-                   "cost":  "12.97",
+                   "cost":  "10.87",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

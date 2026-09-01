@@ -41,19 +41,19 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 7 lb: ~$31.10. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Zucchini, 4 zucchinis: ~$2.08. \u003cstrong\u003eBuy 2 lbs: $3.04.\u003c/strong\u003e",
-                       "Diced Tomatoes, 2 cups: ~$0.90. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cups: ~$0.99. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
                        "Greek Yogurt, 1 tub: ~$2.76. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
-                       "Yellow Onion, 2 onions: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Olive Oil, 2 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.35. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Olive Oil, 2 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cucumber, 1 cucumber: ~$2.66. \u003cstrong\u003eBuy 4 each: $3.04.\u003c/strong\u003e",
                        "Garlic, 2 cloves, minced: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Lemon Juice, 1 lemon worth: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, dried oregano, garlic powder, dried dill, black pepper): ~$0.49. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $42.16 across 14 servings, so roughly $3.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.64 across 14 servings, roughly $3.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.30. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, dried oregano, garlic powder, dried dill, black pepper): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.18 across 14 servings, so roughly $3.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.62 across 14 servings, roughly $3.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.39. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -72,14 +72,14 @@
     "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/mediterranean-turkey-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Light on the wallet, big on flavor, and it keeps beautifully all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  42.16,
-    "cost_batch_true":  46.64,
+    "cost_batch":  42.18,
+    "cost_batch_true":  46.62,
     "cost_per_serving":  3.01,
     "cost_per_serving_true":  3.33,
-    "cost_pantry_add":  15.66,
-    "cost_first_run":  62.3,
+    "cost_pantry_add":  15.77,
+    "cost_first_run":  62.39,
     "scaler":  {
-                   "cost":  "46.64",
+                   "cost":  "46.62",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

@@ -44,18 +44,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rye Bread, 23.75 oz: ~$2.45. \u003cstrong\u003eBuy 1 24oz loaf: $2.49.\u003c/strong\u003e",
+                       "Rye Bread, 23.75 oz: ~$2.71. \u003cstrong\u003eBuy 1 24oz loaf: $2.75.\u003c/strong\u003e",
                        "Butter, 0.75 cups: ~$1.16. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Dijon Mustard, 1.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Caraway Seeds, 1.5 tsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Caraway Seeds, 1.5 tsp: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Turkey Breast, 3.5 lb: ~$16.84. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
                        "Sauerkraut, 2.25 cups: ~$0.90. \u003cstrong\u003eBuy 1 14.5oz can: $1.11.\u003c/strong\u003e",
                        "Swiss Cheese, 18.5 oz: ~$3.88. \u003cstrong\u003eBuy 3 8oz packages: $5.02.\u003c/strong\u003e",
                        "Mayonnaise, 1.25 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (worcestershire sauce, garlic powder, dill pickles, salt, black pepper): ~$0.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $27.21 across 14 servings, so roughly $1.94 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $42.46 across 14 servings, roughly $3.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.57. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (worcestershire sauce, garlic powder, dill pickles, salt, black pepper): ~$0.69. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.41 across 14 servings, so roughly $1.96 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.66 across 14 servings, roughly $3.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.01. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a deli sandwich you would pay far more than that for at the counter. Sauerkraut is one of the cheapest things in the store and it is the ingredient that makes this taste like the real thing.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut squares to that number and lift them flat so the rye layers stay stacked. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/reuben-casserole-2/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A deli Reuben for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  27.21,
-    "cost_batch_true":  42.46,
-    "cost_per_serving":  1.94,
-    "cost_per_serving_true":  3.03,
-    "cost_pantry_add":  16.11,
-    "cost_first_run":  58.57,
+    "cost_batch":  27.41,
+    "cost_batch_true":  42.66,
+    "cost_per_serving":  1.96,
+    "cost_per_serving_true":  3.05,
+    "cost_pantry_add":  15.35,
+    "cost_first_run":  58.01,
     "scaler":  {
-                   "cost":  "42.46",
+                   "cost":  "42.66",
                    "ing":  [
                                {
                                    "item":  "Rye Bread",

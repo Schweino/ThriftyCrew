@@ -48,7 +48,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 0.75 cups: ~$1.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 0.75 cups: ~$1.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pork Chops, 7 lb: ~$22.89. \u003cstrong\u003eBuy 7 lbs: $22.89.\u003c/strong\u003e",
                        "Salsa, 1.5 cups: ~$1.46. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
                        "Garlic, 3.5 tbsp: ~$0.41. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
@@ -56,14 +56,14 @@
                        "White Vinegar, 3.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1.8 cartons: ~$2.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Olives, 14 tbsp: ~$1.17. \u003cstrong\u003eBuy 1 6oz can: $1.68.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Green Bell Peppers, 3.5 peppers: ~$2.70. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
                        "Fresh Cilantro, 14 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (sazon seasoning, dried oregano, bay leaves, salt, black pepper): ~$2.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $38.84 across 14 servings, so roughly $2.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $42.03 across 14 servings, roughly $3.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.10 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.13. Those containers then feed this batch and many more after it."
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (sazon seasoning, dried oregano, bay leaves, salt, black pepper): ~$2.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.74 across 14 servings, so roughly $2.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.91 across 14 servings, roughly $2.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.04 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.95. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for stewed pork chops with a genuinely high protein number.",
     "shop_smart":  [
@@ -85,14 +85,14 @@
     "portion_html":  "Weigh the rice pot and the stew pot separately, subtract the empty-pot weight from Step 1, and divide each by 14. Give every container the same rice base, then the same weight of pork and gravy. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e, a big protein number for a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/chuletas-guisadas/\" target=\"_blank\" rel=\"noopener\"\u003ebudgetbytes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Protein-packed dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  38.84,
-    "cost_batch_true":  42.03,
+    "cost_batch":  38.74,
+    "cost_batch_true":  41.91,
     "cost_per_serving":  2.77,
-    "cost_per_serving_true":  3,
-    "cost_pantry_add":  12.1,
-    "cost_first_run":  54.13,
+    "cost_per_serving_true":  2.99,
+    "cost_pantry_add":  12.04,
+    "cost_first_run":  53.95,
     "scaler":  {
-                   "cost":  "42.03",
+                   "cost":  "41.91",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

@@ -53,13 +53,13 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Chuck Roast, 7.5 lb: ~$49.19. \u003cstrong\u003eBuy 8 lbs: $53.12.\u003c/strong\u003e",
-                       "Potato, 8.4 potatoes: ~$2.24. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Potato, 8.4 potatoes: ~$2.34. \u003cstrong\u003eBuy 4 lbs: $2.38.\u003c/strong\u003e",
                        "Carrots, 8.4 carrots: ~$1.08. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
                        "Red Bell Pepper, 5.6 peppers: ~$8.51. \u003cstrong\u003eBuy 6 each: $9.12.\u003c/strong\u003e",
                        "Green Bell Peppers, 5.6 peppers: ~$4.31. \u003cstrong\u003eBuy 6 each: $4.62.\u003c/strong\u003e",
                        "Olives, 3 cups: ~$3.92. \u003cstrong\u003eBuy 3 6oz cans: $5.04.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 5.5 oz: ~$1.22. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
-                       "Yellow Onion, 5.6 onions: ~$1.55. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 5.6 onions: ~$1.34. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
                        "Garlic, 8.25 tbsp: ~$0.95. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Soy Sauce, 1 cup: ~$0.85. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Tomato Sauce, 1.5 cans: ~$1.25. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
@@ -67,10 +67,10 @@
                        "Chicken Livers, 0.25 lb: ~$0.52. \u003cstrong\u003eBuy 1 1.25lb tub: $1.89.\u003c/strong\u003e",
                        "Peanut Butter, 0.5 cups: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, salt): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $76.89 across 14 servings, so roughly $5.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $87.27 across 14 servings, roughly $6.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $95.23. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (black pepper, salt): ~$0.41. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $76.83 across 14 servings, so roughly $5.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $87.12 across 14 servings, roughly $6.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $95.47. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). It is a big party stew built for a crowd, and it is loaded with beef, so the price is honest work rather than waste.",
     "shop_smart":  [
@@ -92,14 +92,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Stir the pot well right before you scoop, because the beef and potatoes sink and the sauce floats. Weighing each container is the only way to keep the last one from being a bowl of gravy. Every portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://panlasangpinoy.com/caldereta/\" target=\"_blank\" rel=\"noopener\"\u003epanlasangpinoy.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A Filipino fiesta stew for about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), and it feeds you for a week. Members get the entire Meal Prep library plus every money lesson and calculator on the site for $1 a month.",
-    "cost_batch":  76.89,
-    "cost_batch_true":  87.27,
+    "cost_batch":  76.83,
+    "cost_batch_true":  87.12,
     "cost_per_serving":  5.49,
-    "cost_per_serving_true":  6.23,
-    "cost_pantry_add":  7.96,
-    "cost_first_run":  95.23,
+    "cost_per_serving_true":  6.22,
+    "cost_pantry_add":  8.35,
+    "cost_first_run":  95.47,
     "scaler":  {
-                   "cost":  "87.27",
+                   "cost":  "87.12",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",

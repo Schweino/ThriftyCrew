@@ -46,16 +46,16 @@
     "cost_lines":  [
                        "93/7 Ground Turkey, 5.25 lb: ~$23.87. \u003cstrong\u003eBuy 6 lbs: $27.30.\u003c/strong\u003e",
                        "Green Bell Peppers, 7 peppers: ~$5.39. \u003cstrong\u003eBuy 7 each: $5.39.\u003c/strong\u003e",
-                       "Yellow Onion, 1.7 onions: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1 carton: ~$1.28. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Mexican Cheese Blend, 34.5 oz: ~$7.45. \u003cstrong\u003eBuy 5 8 oz bags: $8.63.\u003c/strong\u003e",
-                       "Rice, 4.25 cups dry: ~$0.97. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, salt, ground cumin, black pepper): ~$0.34. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $40.06 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $45.66 across 14 servings, roughly $3.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.76 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.42. Those containers then feed this batch and many more after it."
+                       "Rice, 4.25 cups dry: ~$0.95. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, salt, ground cumin, black pepper): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.00 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.51 across 14 servings, roughly $3.25 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.71. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), and three pounds of cheese is most of that. This is not a lean dish and it was never trying to be. It is a chile relleno, and the cheese is the point.",
     "shop_smart":  [
@@ -79,14 +79,14 @@
     "portion_html":  "Set the skillet on the scale, subtract the empty pan weight, and divide by 14. Cut wedges to that weight and lift them with the cheese layer intact. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://mytherapistcooks.com/turkey-chile-relleno-casserole-skillet/\" target=\"_blank\" rel=\"noopener\"\u003emytherapistcooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Chile relleno flavor without the frying, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  40.06,
-    "cost_batch_true":  45.66,
+    "cost_batch":  40,
+    "cost_batch_true":  45.51,
     "cost_per_serving":  2.86,
-    "cost_per_serving_true":  3.26,
-    "cost_pantry_add":  7.76,
-    "cost_first_run":  53.42,
+    "cost_per_serving_true":  3.25,
+    "cost_pantry_add":  8.2,
+    "cost_first_run":  53.71,
     "scaler":  {
-                   "cost":  "45.66",
+                   "cost":  "45.51",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

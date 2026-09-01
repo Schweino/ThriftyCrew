@@ -41,18 +41,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Beef Flank/Sirloin Steak, 3.5 lb: ~$30.88. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Beef Flank/Sirloin Steak, 3.5 lb: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
-                       "Chicken Broth, 1 carton: ~$1.43. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.62. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Mirin, 1 cup: ~$2.22. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Soy Sauce, 1.25 cups: ~$1.27. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Sugar, 7 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 7 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 7 cups dry: ~$1.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.96 across 14 servings, so roughly $2.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $45.42 across 14 servings, roughly $3.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.43. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.94 across 14 servings, so roughly $2.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.38 across 14 servings, roughly $3.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.50. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for steak and rice, which sounds impossible until you see how thin the beef is sliced. That is the entire idea behind gyudon and it has worked in Japan for a hundred years.",
     "shop_smart":  [
@@ -74,14 +74,14 @@
     "portion_html":  "Weigh the cooked rice into the containers first so every bowl gets the same base, then set the beef pan on the scale, subtract the empty weight you wrote down, and divide by 14. Spoon a little of the broth over each one, since that is where most of the flavor is. Every bowl lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.justonecookbook.com/gyudon/\" target=\"_blank\" rel=\"noopener\"\u003ejustonecookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Japanese beef bowls for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), ready in half an hour. Members get every recipe in the Meal Prep section along with the full money lesson library and all the site tools for $1 a month.",
-    "cost_batch":  39.96,
-    "cost_batch_true":  45.42,
+    "cost_batch":  39.94,
+    "cost_batch_true":  45.38,
     "cost_per_serving":  2.85,
     "cost_per_serving_true":  3.24,
-    "cost_pantry_add":  11.01,
-    "cost_first_run":  56.43,
+    "cost_pantry_add":  9.12,
+    "cost_first_run":  54.5,
     "scaler":  {
-                   "cost":  "45.42",
+                   "cost":  "45.38",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",

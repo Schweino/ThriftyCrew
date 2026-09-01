@@ -41,15 +41,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Hickory Smoked Bacon, 1.5 lb: ~$5.54. \u003cstrong\u003eBuy 2 lbs: $7.92.\u003c/strong\u003e",
-                       "Ground Pork, 2.75 lb: ~$9.55. \u003cstrong\u003eBuy 3 lbs: $10.23.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.81. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 2 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Baked Beans, 78.5 oz: ~$6.36. \u003cstrong\u003eBuy 3 28oz cans: $6.81.\u003c/strong\u003e",
-                       "Refrigerated Biscuits, 15.6 biscuits: ~$3.93. \u003cstrong\u003eBuy 2 8ct cans: $4.02.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.65 across 14 servings, so roughly $1.90 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $30.93 across 14 servings, roughly $2.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.42. Those containers then feed this batch and many more after it."
+                       "Ground Pork, 2.75 lb: ~$11.05. \u003cstrong\u003eBuy 3 lbs: $11.84.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.70. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Baked Beans, 78.5 oz: ~$5.86. \u003cstrong\u003eBuy 3 28oz cans: $6.28.\u003c/strong\u003e",
+                       "Refrigerated Biscuits, 15.6 biscuits: ~$3.47. \u003cstrong\u003eBuy 2 8ct cans: $3.54.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.01 across 14 servings, so roughly $1.93 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.32 across 14 servings, roughly $2.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.73 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.05. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Canned baked beans are one of the cheapest filling foods in the store, and here they are the base rather than the side.",
     "shop_smart":  [
@@ -70,14 +70,14 @@
     "portion_html":  "Weigh the finished bake in its dish, subtract the dish weight, divide by 14, and portion to that exact weight so every container gets both beans and biscuit. Every serving lands near {{cal}} calories with {{protein}} grams of protein, which makes this a very big plate for the money.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thekitchenmagpie.com/pork-beans-cowboy-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ethekitchenmagpie.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eChuckwagon pork and beans for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  26.65,
-    "cost_batch_true":  30.93,
-    "cost_per_serving":  1.9,
-    "cost_per_serving_true":  2.21,
-    "cost_pantry_add":  5.49,
-    "cost_first_run":  36.42,
+    "cost_batch":  27.01,
+    "cost_batch_true":  31.32,
+    "cost_per_serving":  1.93,
+    "cost_per_serving_true":  2.24,
+    "cost_pantry_add":  3.73,
+    "cost_first_run":  35.05,
     "scaler":  {
-                   "cost":  "30.93",
+                   "cost":  "31.32",
                    "ing":  [
                                {
                                    "item":  "Hickory Smoked Bacon",

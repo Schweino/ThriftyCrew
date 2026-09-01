@@ -40,16 +40,16 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Broccoli Florets, 2.25 lb: ~$4.95. \u003cstrong\u003eBuy 4 12oz bags: $6.36.\u003c/strong\u003e",
-                       "Pasta Shells, 32.5 oz dry: ~$1.96. \u003cstrong\u003eBuy 3 12oz boxes: $2.18.\u003c/strong\u003e",
+                       "Broccoli Florets, 2.25 lb: ~$3.62. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
+                       "Pasta Shells, 32.5 oz dry: ~$1.86. \u003cstrong\u003eBuy 3 12oz boxes: $2.07.\u003c/strong\u003e",
                        "Butter, 4.75 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Hot Italian Sausage, 2.25 lb: ~$5.83. \u003cstrong\u003eBuy 3 lbs: $7.50.\u003c/strong\u003e",
-                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Parmesan Cheese, 7.5 oz: ~$2.57. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, red pepper flakes, salt): ~$0.46. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $16.70 across 14 servings, so roughly $1.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $22.84 across 14 servings, roughly $1.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.08 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $28.92. Those containers then feed this batch and many more after it."
+                       "Hot Italian Sausage, 2.25 lb: ~$9.14. \u003cstrong\u003eBuy 3 lbs: $11.76.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Parmesan Cheese, 7.5 oz: ~$2.54. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, red pepper flakes, salt): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.43 across 14 servings, so roughly $1.32 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.14 across 14 servings, roughly $1.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $29.57. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Six ingredients, one pot for the pasta, one pan for the sausage, and dinner is handled for two weeks.",
     "shop_smart":  [
@@ -71,14 +71,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, tossing the pot between scoops so the sausage spreads evenly. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jocooks.com/recipes/orecchiette-with-sausage-and-broccoli/\" target=\"_blank\" rel=\"noopener\"\u003ejocooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Six ingredient pasta dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  16.7,
-    "cost_batch_true":  22.84,
-    "cost_per_serving":  1.19,
-    "cost_per_serving_true":  1.63,
-    "cost_pantry_add":  6.08,
-    "cost_first_run":  28.92,
+    "cost_batch":  18.43,
+    "cost_batch_true":  25.14,
+    "cost_per_serving":  1.32,
+    "cost_per_serving_true":  1.8,
+    "cost_pantry_add":  4.43,
+    "cost_first_run":  29.57,
     "scaler":  {
-                   "cost":  "22.84",
+                   "cost":  "25.14",
                    "ing":  [
                                {
                                    "item":  "Broccoli Florets",

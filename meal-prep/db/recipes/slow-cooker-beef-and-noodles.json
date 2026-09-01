@@ -40,15 +40,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Beef Chuck Roast, 3.75 lb: ~$30.68. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Beef Chuck Roast, 3.75 lb: ~$25.56. \u003cstrong\u003eBuy 4 lbs: $26.56.\u003c/strong\u003e",
                        "Garlic, 0.5 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Beef Broth, 3.75 cups: ~$1.24. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Beef Broth, 3.75 cups: ~$1.47. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Worcestershire Sauce, 3.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Egg Noodles, 41.5 oz dry: ~$4.51. \u003cstrong\u003eBuy 4 12oz bags: $5.22.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $36.84 across 14 servings, so roughly $2.63 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.26 across 14 servings, roughly $2.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.64. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.92 across 14 servings, so roughly $2.28 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.14 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.73. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Noodles are cheap, broth is cheap, and the roast gets stretched further than it has any right to be.",
     "shop_smart":  [
@@ -70,14 +70,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight into each of 14 containers, stirring between scoops so the beef does not settle to the bottom of the pot. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/beef-and-noodles/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Beef and noodles for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  36.84,
-    "cost_batch_true":  39.26,
-    "cost_per_serving":  2.63,
-    "cost_per_serving_true":  2.8,
-    "cost_pantry_add":  6.38,
-    "cost_first_run":  45.64,
+    "cost_batch":  31.92,
+    "cost_batch_true":  34.14,
+    "cost_per_serving":  2.28,
+    "cost_per_serving_true":  2.44,
+    "cost_pantry_add":  4.59,
+    "cost_first_run":  38.73,
     "scaler":  {
-                   "cost":  "39.26",
+                   "cost":  "34.14",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",

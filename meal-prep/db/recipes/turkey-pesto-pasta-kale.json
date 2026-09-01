@@ -39,15 +39,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rotini Pasta, 28 oz dry: ~$2.18. \u003cstrong\u003eBuy 2 16oz boxes: $2.50.\u003c/strong\u003e",
-                       "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Rotini Pasta, 28 oz dry: ~$1.60. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
                        "Kale, 1.25 lb: ~$3.11. \u003cstrong\u003eBuy 3 bunches: $4.44.\u003c/strong\u003e",
-                       "Basil Pesto, 3 cups: ~$15.44. \u003cstrong\u003eBuy 2 22oz jars: $26.22.\u003c/strong\u003e",
-                       "Feta Cheese, 7 oz: ~$4.54. \u003cstrong\u003eBuy 2 6oz tubs: $7.87.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, black pepper, salt): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $38.87 across 14 servings, so roughly $2.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $56.54 across 14 servings, roughly $4.04 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.07. Those containers then feed this batch and many more after it."
+                       "Basil Pesto, 3 cups: ~$11.15. \u003cstrong\u003eBuy 2 22oz jars: $18.93.\u003c/strong\u003e",
+                       "Feta Cheese, 7 oz: ~$3.89. \u003cstrong\u003eBuy 2 6oz tubs: $6.76.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, black pepper, salt): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.86 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.34 across 14 servings, roughly $3.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.09. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost) for a five ingredient dinner that takes about half an hour. Sometimes the best recipe is the one you will actually cook on a Wednesday.",
     "shop_smart":  [
@@ -69,14 +69,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop it out, then crumble the feta over the top of each so it stays in recognizable pieces instead of melting away into the sauce. Every bowl lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://aggieskitchen.com/pesto-pasta-with-turkey-and-kale/\" target=\"_blank\" rel=\"noopener\"\u003eaggieskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A five ingredient pasta for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  38.87,
-    "cost_batch_true":  56.54,
-    "cost_per_serving":  2.78,
-    "cost_per_serving_true":  4.04,
-    "cost_pantry_add":  6.53,
-    "cost_first_run":  63.07,
+    "cost_batch":  35.86,
+    "cost_batch_true":  50.34,
+    "cost_per_serving":  2.56,
+    "cost_per_serving_true":  3.6,
+    "cost_pantry_add":  4.75,
+    "cost_first_run":  55.09,
     "scaler":  {
-                   "cost":  "56.54",
+                   "cost":  "50.34",
                    "ing":  [
                                {
                                    "item":  "Rotini Pasta",

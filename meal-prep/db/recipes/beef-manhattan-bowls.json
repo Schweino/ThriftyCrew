@@ -38,16 +38,16 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Beef Chuck Roast, 7 lb: ~$55.79. \u003cstrong\u003eBuy 7 lbs: $55.79.\u003c/strong\u003e",
-                       "Olive Oil, 4.75 tbsp: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Brown Gravy Mix, 2.25 oz: ~$1.24. \u003cstrong\u003ePantry staple; this batch alone uses about 3 0.87oz packets.\u003c/strong\u003e",
-                       "Onion Soup Mix, 2.25 oz: ~$2.11. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2.2oz 2ct boxes.\u003c/strong\u003e",
-                       "Red Wine Vinegar, 0.5 cups: ~$0.84. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
-                       "Potato, 6.6 potatoes: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $62.79 across 14 servings, so roughly $4.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $63.31 across 14 servings, roughly $4.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $80.99. Those containers then feed this batch and many more after it."
+                       "Beef Chuck Roast, 7 lb: ~$46.48. \u003cstrong\u003eBuy 7 lbs: $46.48.\u003c/strong\u003e",
+                       "Olive Oil, 4.75 tbsp: ~$0.63. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Gravy Mix, 2.25 oz: ~$1.07. \u003cstrong\u003ePantry staple; this batch alone uses about 3 0.87oz packets.\u003c/strong\u003e",
+                       "Onion Soup Mix, 2.25 oz: ~$1.37. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2.2oz 2ct boxes.\u003c/strong\u003e",
+                       "Red Wine Vinegar, 0.5 cups: ~$0.85. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
+                       "Potato, 6.6 potatoes: ~$1.83. \u003cstrong\u003eBuy 4 lbs: $2.38.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $52.35 across 14 servings, so roughly $3.74 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.90 across 14 servings, roughly $3.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.56. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Six ingredients, one of them potatoes, and the gravy comes out of two packets that cost less than a cup of coffee.",
     "shop_smart":  [
@@ -69,14 +69,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spread that weight of mashed potatoes into each container first, then spoon an even weight of shredded beef and gravy over the top. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/beef-manhattan/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Diner style beef and gravy for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  62.79,
-    "cost_batch_true":  63.31,
-    "cost_per_serving":  4.49,
-    "cost_per_serving_true":  4.52,
-    "cost_pantry_add":  17.68,
-    "cost_first_run":  80.99,
+    "cost_batch":  52.35,
+    "cost_batch_true":  52.9,
+    "cost_per_serving":  3.74,
+    "cost_per_serving_true":  3.78,
+    "cost_pantry_add":  12.66,
+    "cost_first_run":  65.56,
     "scaler":  {
-                   "cost":  "63.31",
+                   "cost":  "52.90",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",

@@ -50,18 +50,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Vegetable Oil, 1.25 cups: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 11.5 onions: ~$3.19. \u003cstrong\u003eBuy 3 lbs: $3.42.\u003c/strong\u003e",
+                       "Yellow Onion, 11.5 onions: ~$2.76. \u003cstrong\u003eBuy 3 lbs: $2.96.\u003c/strong\u003e",
                        "Garlic, 2.25 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Greek Yogurt, 4.25 cups: ~$4.12. \u003cstrong\u003eBuy 2 32oz tubs: $7.36.\u003c/strong\u003e",
                        "93/7 Ground Beef, 3.75 lb: ~$23.80. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
                        "All-Purpose Flour, 7 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Jalapeno, 11 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
+                       "Jalapeno, 11 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 lb: $0.88.\u003c/strong\u003e",
                        "Fresh Cilantro, 7 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (ground cumin, ground coriander, ground turmeric, chili powder, salt, garam masala, black pepper): ~$1.49. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $34.94 across 14 servings, so roughly $2.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $42.28 across 14 servings, roughly $3.02 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.71. Those containers then feed this batch and many more after it."
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, ground coriander, ground turmeric, chili powder, salt, garam masala, black pepper): ~$2.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.59 across 14 servings, so roughly $2.54 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.47 across 14 servings, roughly $3.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.46. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a curry that tastes like it took a lot more than it did. Onions and yogurt are the sauce, and neither one is expensive.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Split the koftas evenly by count first, then pour the same weight of gravy over each, and add the same weight of rice to every container. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chilitochoc.com/beef-kofta-curry-pakistani-meatballs/\" target=\"_blank\" rel=\"noopener\"\u003echilitochoc.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Pakistani kofta curry for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  34.94,
-    "cost_batch_true":  42.28,
-    "cost_per_serving":  2.5,
-    "cost_per_serving_true":  3.02,
-    "cost_pantry_add":  14.43,
-    "cost_first_run":  56.71,
+    "cost_batch":  35.59,
+    "cost_batch_true":  42.47,
+    "cost_per_serving":  2.54,
+    "cost_per_serving_true":  3.03,
+    "cost_pantry_add":  17.99,
+    "cost_first_run":  60.46,
     "scaler":  {
-                   "cost":  "42.28",
+                   "cost":  "42.47",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",

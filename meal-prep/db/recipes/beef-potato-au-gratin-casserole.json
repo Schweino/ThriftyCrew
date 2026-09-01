@@ -41,14 +41,14 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 2.25 lb: ~$14.39. \u003cstrong\u003eBuy 3 lbs: $18.51.\u003c/strong\u003e",
-                       "Potato, 19 potatoes: ~$5.07. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
-                       "Yellow Onion, 2.4 onions: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Potato, 19 potatoes: ~$5.31. \u003cstrong\u003eBuy 9 lbs: $5.35.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4 onions: ~$0.58. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 28 oz: ~$6.07. \u003cstrong\u003eBuy 4 8oz bags: $6.97.\u003c/strong\u003e",
                        "Chicken Broth, 1.25 cups: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (paprika, garlic powder, salt, black pepper): ~$0.16. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.79 across 14 servings, so roughly $1.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.32 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.03 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.35. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (paprika, garlic powder, salt, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.95 across 14 servings, so roughly $1.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.42 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.21. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). A hot dinner with real meat and real cheese in it for right around three dollars, which is the kind of number that makes the case for cooking all on its own.",
     "shop_smart":  [
@@ -70,14 +70,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Cut the set casserole into portions of roughly that weight and lift them into 14 containers so the layers stay intact. Each serving lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-beef-and-potato-au-gratin/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A hot dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  26.79,
-    "cost_batch_true":  32.32,
-    "cost_per_serving":  1.91,
-    "cost_per_serving_true":  2.31,
-    "cost_pantry_add":  6.03,
-    "cost_first_run":  38.35,
+    "cost_batch":  26.95,
+    "cost_batch_true":  32.42,
+    "cost_per_serving":  1.92,
+    "cost_per_serving_true":  2.32,
+    "cost_pantry_add":  6.79,
+    "cost_first_run":  39.21,
     "scaler":  {
-                   "cost":  "32.32",
+                   "cost":  "32.42",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

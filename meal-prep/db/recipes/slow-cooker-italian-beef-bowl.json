@@ -37,18 +37,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Chuck Roast, 4 lb: ~$26.55. \u003cstrong\u003eBuy 4 lbs: $26.56.\u003c/strong\u003e",
-                       "Pepperoncini, 3 1/4 cups: ~$1.54. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Beef Broth, 1 2/3 cups: ~$0.61. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2 onions: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Pepperoncini, 3 1/4 cups: ~$1.56. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Beef Broth, 1 2/3 cups: ~$0.63. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.28. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 3 cloves: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.82. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.80. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Seasoned Black Beans, 2 cans: ~$2.97. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
                        "Green Bell Peppers, 4 peppers: ~$3.05. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 7 slices: ~$1.50. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
-                       "Pantry seasonings (italian seasoning, salt): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $37.84 across 14 servings, so roughly $2.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.65 across 14 servings, roughly $2.83 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.43. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eTrue shopping cost: about $39.54 across 14 servings, roughly $2.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.88 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.42. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -69,13 +69,13 @@
     "credit_html":  "Recipe adapted from \u003ca href=\"https://tasteandsee.com/slow-cooker-italian-beef/\" target=\"_blank\" rel=\"noopener\"\u003eTaste and See\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That is fourteen warm, satisfying Italian beef bowls from one roast and a jar of peppers, at a fraction of the cost of takeout. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  37.84,
-    "cost_batch_true":  39.65,
+    "cost_batch_true":  39.54,
     "cost_per_serving":  2.7,
-    "cost_per_serving_true":  2.83,
-    "cost_pantry_add":  2.78,
-    "cost_first_run":  42.43,
+    "cost_per_serving_true":  2.82,
+    "cost_pantry_add":  2.88,
+    "cost_first_run":  42.42,
     "scaler":  {
-                   "cost":  "39.65",
+                   "cost":  "39.54",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",

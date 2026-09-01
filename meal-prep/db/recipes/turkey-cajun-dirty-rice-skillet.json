@@ -46,7 +46,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Hickory Smoked Bacon, 0.25 lb: ~$1.47. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 6 tbsp: ~$0.71. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Chicken Livers, 1.75 lb: ~$2.64. \u003cstrong\u003eBuy 2 1.25lb tubs: $3.78.\u003c/strong\u003e",
                        "93/7 Ground Turkey, 3.5 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
@@ -54,11 +54,11 @@
                        "Celery, 7 stalks: ~$2.03. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "Chicken Broth, 1.8 cartons: ~$2.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Green Onions, 3.25 cups: ~$1.88. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
-                       "Rice, 6.75 cups dry: ~$1.51. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Pantry seasonings (dried thyme, bay leaves, cajun seasoning, salt, black pepper): ~$1.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $33.70 across 14 servings, so roughly $2.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $41.20 across 14 servings, roughly $2.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.40. Those containers then feed this batch and many more after it."
+                       "Rice, 6.75 cups dry: ~$1.48. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, bay leaves, cajun seasoning, salt, black pepper): ~$1.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.56 across 14 servings, so roughly $2.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.04 across 14 servings, roughly $2.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.64. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a skillet with real Cajun bones. Chicken livers cost almost nothing per pound and do more for flavor than any spice blend you can buy.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Set the pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Scoop that weight into each container while the rice is still warm and loose. Every serving delivers \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://cooktopcove.com/2018/05/14/how-to-make-southern-dirty-rice-with-ground-turkey\" target=\"_blank\" rel=\"noopener\"\u003ecooktopcove.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Real Cajun cooking for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  33.7,
-    "cost_batch_true":  41.2,
-    "cost_per_serving":  2.41,
-    "cost_per_serving_true":  2.94,
-    "cost_pantry_add":  6.2,
-    "cost_first_run":  47.4,
+    "cost_batch":  33.56,
+    "cost_batch_true":  41.04,
+    "cost_per_serving":  2.4,
+    "cost_per_serving_true":  2.93,
+    "cost_pantry_add":  6.6,
+    "cost_first_run":  47.64,
     "scaler":  {
-                   "cost":  "41.20",
+                   "cost":  "41.04",
                    "ing":  [
                                {
                                    "item":  "Hickory Smoked Bacon",

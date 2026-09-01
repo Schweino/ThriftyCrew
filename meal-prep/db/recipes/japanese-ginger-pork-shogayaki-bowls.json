@@ -45,18 +45,18 @@
     "cost_lines":  [
                        "Soy Sauce, 1 cup: ~$0.85. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Mirin, 1 cup: ~$2.22. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Chicken Broth, 1.5 cups: ~$0.45. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.5 cups: ~$0.51. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Sugar, 2.25 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Ginger, 12.75 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Ginger, 12.75 tbsp: ~$0.62. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Pork Loin, 5.25 lb: ~$11.23. \u003cstrong\u003eBuy 6 lbs: $12.84.\u003c/strong\u003e",
                        "All-Purpose Flour, 7 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Vegetable Oil, 0.75 cups: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (black pepper, salt): ~$1.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $18.95 across 14 servings, so roughly $1.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $20.94 across 14 servings, roughly $1.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.71. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (black pepper, salt): ~$1.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.60 across 14 servings, so roughly $1.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $20.54 across 14 servings, roughly $1.47 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.03 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.57. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Japanese lunch-counter staple with a serious amount of pork in it.",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "Weigh the rice pot and the pork pan separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice underneath, even weight of pork and glazed onion on top, and pour the extra sauce over the containers rather than leaving it in the pan. Every bowl lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.justonecookbook.com/ginger-pork-shogayaki/\" target=\"_blank\" rel=\"noopener\"\u003ejustonecookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Ten-minute Japanese dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  18.95,
-    "cost_batch_true":  20.94,
-    "cost_per_serving":  1.35,
-    "cost_per_serving_true":  1.5,
-    "cost_pantry_add":  14.77,
-    "cost_first_run":  35.71,
+    "cost_batch":  18.6,
+    "cost_batch_true":  20.54,
+    "cost_per_serving":  1.33,
+    "cost_per_serving_true":  1.47,
+    "cost_pantry_add":  13.03,
+    "cost_first_run":  33.57,
     "scaler":  {
-                   "cost":  "20.94",
+                   "cost":  "20.54",
                    "ing":  [
                                {
                                    "item":  "Soy Sauce",

@@ -54,17 +54,17 @@
     "cost_lines":  [
                        "93/7 Ground Turkey, 3 1/2 lb lean (93/7) ground turkey: ~$15.94. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
                        "Cannellini Beans, 3 1/2 (14.5 oz) cans cannellini beans, rinsed and drained (about 5 1/4 cups drained): ~$2.87. \u003cstrong\u003eBuy 4 cans: $3.29.\u003c/strong\u003e",
-                       "Diced Tomatoes, 3 1/2 (14.5 oz) cans fire-roasted diced tomatoes: ~$2.68. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3 1/2 (14.5 oz) cans fire-roasted diced tomatoes: ~$2.94. \u003cstrong\u003eBuy 4 cans: $3.36.\u003c/strong\u003e",
                        "Green Bell Peppers, 3 1/2 green bell peppers, chopped: ~$2.70. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
-                       "Yellow Onion, 3 1/2 medium onions, chopped: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 1/2 medium onions, chopped: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Spinach, 7 cups fresh baby spinach (about 7 oz): ~$1.48. \u003cstrong\u003eBuy 1 10oz bag: $2.00.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 3/4 cups grated Parmesan: ~$2.37. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
-                       "Olive Oil, 3 1/2 tbsp extra-virgin olive oil: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp extra-virgin olive oil: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 7 cloves garlic, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Pantry seasonings (italian seasoning, salt, black pepper): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.19 across 14 servings, so roughly $2.16 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.99 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.78. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (italian seasoning, salt, black pepper): ~$0.42. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.32 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.13 across 14 servings, roughly $2.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.79. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a hearty Italian skillet that tastes like it took all afternoon. The turkey and the beans carry the plate; the tomatoes, spinach and parmesan just make it taste like more than it cost.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Give each container an even share of the turkey, beans, tomatoes and spinach, aiming for that weight, and it lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfoodonthetable.com/italian-ground-turkey-skillet/\" target=\"_blank\" rel=\"noopener\"\u003efamilyfoodonthetable.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  30.19,
-    "cost_batch_true":  34.99,
-    "cost_per_serving":  2.16,
-    "cost_per_serving_true":  2.5,
-    "cost_pantry_add":  10.79,
-    "cost_first_run":  45.78,
+    "cost_batch":  30.32,
+    "cost_batch_true":  35.13,
+    "cost_per_serving":  2.17,
+    "cost_per_serving_true":  2.51,
+    "cost_pantry_add":  10.66,
+    "cost_first_run":  45.79,
     "scaler":  {
-                   "cost":  "34.99",
+                   "cost":  "35.13",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

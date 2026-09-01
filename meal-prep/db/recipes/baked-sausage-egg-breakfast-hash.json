@@ -44,17 +44,17 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 17 potatoes: ~$4.56. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
-                       "Olive Oil, 7 tbsp: ~$1.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 17 potatoes: ~$4.77. \u003cstrong\u003eBuy 9 lbs: $5.35.\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp: ~$0.94. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Red Bell Pepper, 3 peppers: ~$4.26. \u003cstrong\u003eBuy 3 each: $4.56.\u003c/strong\u003e",
-                       "Red Onion, 3 onions: ~$0.91. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Red Onion, 3 onions: ~$0.87. \u003cstrong\u003eBuy 1 lb: $1.29.\u003c/strong\u003e",
                        "Hickory Smoked Bacon, 0.5 lb: ~$2.44. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
                        "Ground Pork, 3 lb: ~$12.18. \u003cstrong\u003eBuy 4 lbs: $15.79.\u003c/strong\u003e",
                        "Eggs, 28 large eggs: ~$3.79. \u003cstrong\u003eBuy 3 dozens: $4.87.\u003c/strong\u003e",
-                       "Pantry seasonings (smoked paprika, dried thyme, onion powder, garlic powder, salt, black pepper): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.39 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $36.88 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.30. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (smoked paprika, dried thyme, onion powder, garlic powder, salt, black pepper): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.51 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.02 across 14 servings, roughly $2.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.37. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a plate that would be called a skillet on any diner menu and priced like one. Eggs and potatoes carry the whole thing.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, distributing the eggs by count so every one is equal. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/baked-sausage-breakfast-hash/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Breakfast for dinner for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.39,
-    "cost_batch_true":  36.88,
-    "cost_per_serving":  2.1,
-    "cost_per_serving_true":  2.63,
-    "cost_pantry_add":  13.42,
-    "cost_first_run":  50.3,
+    "cost_batch":  29.51,
+    "cost_batch_true":  37.02,
+    "cost_per_serving":  2.11,
+    "cost_per_serving_true":  2.64,
+    "cost_pantry_add":  14.35,
+    "cost_first_run":  51.37,
     "scaler":  {
-                   "cost":  "36.88",
+                   "cost":  "37.02",
                    "ing":  [
                                {
                                    "item":  "Potato",

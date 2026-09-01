@@ -36,17 +36,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$15.73. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.96. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Broccoli Florets, 4 2/3 cups: ~$1.37. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
-                       "Olive Oil, 1/2 cup: ~$1.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 1/2 cup: ~$1.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Honey, 1/3 cup: ~$0.95. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
-                       "Lime Juice, 1/3 cup: ~$0.18. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
+                       "Lime Juice, 1/3 cup: ~$0.28. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 7.5 cups packed: ~$3.75. \u003cstrong\u003eBuy 3 bunches: $5.34.\u003c/strong\u003e",
                        "Garlic, 3 cloves: ~$0.34. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, salt): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.73 across 14 servings, so roughly $1.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.63 across 14 servings, roughly $2.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.23. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $24.68 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.58 across 14 servings, roughly $2.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.22 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.80. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -65,14 +65,14 @@
     "portion_html":  "Each of the 14 servings runs about {{protein}}g protein for roughly {{cal}} calories, at around ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://realfoodwholelife.com/recipes/crockpot-cilantro-lime-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eReal Food Whole Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, easy, and endlessly repeatable, this one earns a permanent spot in your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  24.73,
-    "cost_batch_true":  29.63,
-    "cost_per_serving":  1.77,
-    "cost_per_serving_true":  2.12,
-    "cost_pantry_add":  10.6,
-    "cost_first_run":  40.23,
+    "cost_batch":  24.68,
+    "cost_batch_true":  29.58,
+    "cost_per_serving":  1.76,
+    "cost_per_serving_true":  2.11,
+    "cost_pantry_add":  10.22,
+    "cost_first_run":  39.8,
     "scaler":  {
-                   "cost":  "29.63",
+                   "cost":  "29.58",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

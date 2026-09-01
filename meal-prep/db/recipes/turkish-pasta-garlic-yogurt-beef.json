@@ -48,8 +48,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Penne Pasta, 37 oz dry: ~$2.11. \u003cstrong\u003eBuy 3 16oz boxes: $2.74.\u003c/strong\u003e",
-                       "Olive Oil, 7 tbsp: ~$1.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 5 onions: ~$1.32. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp: ~$0.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 5 onions: ~$1.14. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
                        "Garlic, 8.25 tbsp: ~$0.95. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Tomato Paste, 7 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
                        "93/7 Ground Beef, 3.5 lb: ~$21.42. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
@@ -58,10 +58,10 @@
                        "Lemon Juice, 1.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Fresh Mint, 23 tbsp: ~$4.65. \u003cstrong\u003eBuy 3 0.5oz packs: $5.27.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, ground cumin, paprika, dried oregano, red pepper flakes): ~$1.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $47.33 across 14 servings, so roughly $3.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $56.40 across 14 servings, roughly $4.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.52. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, ground cumin, paprika, dried oregano, red pepper flakes): ~$1.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $47.08 across 14 servings, so roughly $3.36 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $56.02 across 14 servings, roughly $4.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.00. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a three-layer Turkish pasta that tastes nothing like any other pasta dish in the library.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Weigh the pasta, the beef sauce, and the yogurt separately, subtracting the empty-pot weight from Step 1 where it applies, and divide each by 14. Pasta down first, sauce over it, and store the garlic yogurt and paprika butter in small separate containers so the yogurt stays cold and does not break. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Assemble each one right before you eat it.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.giverecipe.com/turkish-pasta/\" target=\"_blank\" rel=\"noopener\"\u003egiverecipe.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Layered, surprising dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  47.33,
-    "cost_batch_true":  56.4,
-    "cost_per_serving":  3.38,
-    "cost_per_serving_true":  4.03,
-    "cost_pantry_add":  15.12,
-    "cost_first_run":  71.52,
+    "cost_batch":  47.08,
+    "cost_batch_true":  56.02,
+    "cost_per_serving":  3.36,
+    "cost_per_serving_true":  4,
+    "cost_pantry_add":  14.98,
+    "cost_first_run":  71,
     "scaler":  {
-                   "cost":  "56.40",
+                   "cost":  "56.02",
                    "ing":  [
                                {
                                    "item":  "Penne Pasta",

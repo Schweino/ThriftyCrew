@@ -47,14 +47,14 @@
                        "93/7 Ground Turkey, 2.25 lb: ~$10.34. \u003cstrong\u003eBuy 3 lbs: $13.65.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 18.25 oz: ~$3.94. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
                        "Eggs, 14 large eggs: ~$1.85. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
-                       "Milk, 1.25 cups: ~$0.21. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
-                       "Brown Gravy Mix, 12.5 oz: ~$5.74. \u003cstrong\u003ePantry staple; this batch alone uses about 15 0.87oz packets.\u003c/strong\u003e",
+                       "Milk, 1.25 cups: ~$0.20. \u003cstrong\u003eBuy 1 gallon: $2.76.\u003c/strong\u003e",
+                       "Brown Gravy Mix, 12.5 oz: ~$5.77. \u003cstrong\u003ePantry staple; this batch alone uses about 15 0.87oz packets.\u003c/strong\u003e",
                        "Sandwich Bread, 22.5 oz: ~$7.83. \u003cstrong\u003eBuy 2 20oz loafs: $13.94.\u003c/strong\u003e",
                        "Butter, 4.5 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.51 across 14 servings, so roughly $2.18 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $47.78 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.38. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.55 across 14 servings, so roughly $2.18 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.77 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.79. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Bread, eggs, and milk are three of the cheapest items in the store, and seasoning your own ground turkey instead of buying breakfast sausage saves real money on the meat line.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Weigh the whole pan, subtract the empty pan weight, and divide by 14. Strata puffs unevenly, so cut to the scale rather than to the eye. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.plainchicken.com/sausage-gravy-breakfast-bake/\" target=\"_blank\" rel=\"noopener\"\u003eplainchicken.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Biscuits-and-gravy flavor that actually survives the week, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  30.51,
-    "cost_batch_true":  47.78,
+    "cost_batch":  30.55,
+    "cost_batch_true":  47.77,
     "cost_per_serving":  2.18,
     "cost_per_serving_true":  3.41,
-    "cost_pantry_add":  3.6,
-    "cost_first_run":  51.38,
+    "cost_pantry_add":  4.02,
+    "cost_first_run":  51.79,
     "scaler":  {
-                   "cost":  "47.78",
+                   "cost":  "47.77",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",

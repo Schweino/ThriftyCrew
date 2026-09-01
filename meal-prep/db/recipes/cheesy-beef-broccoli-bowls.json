@@ -34,15 +34,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "93/7 Ground Beef, 3.5 lb raw: ~$23.16. \u003cstrong\u003eBuy 4 lbs: $26.48.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb raw: ~$21.59. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
                        "Rice, 3.5 cups dry jasmine: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Broccoli Florets, 7 cups (about 21 oz): ~$2.04. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
                        "Fat Free Cheddar, 1 3/4 cups shredded: ~$1.94. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
-                       "Beef Broth, 1 3/4 cups: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, salt, black pepper): ~$0.37. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.01 across 14 servings, so roughly $2.07 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.93 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.84. Those containers then feed this batch and many more after it."
+                       "Beef Broth, 1 3/4 cups: ~$0.67. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, salt, black pepper): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.50 across 14 servings, so roughly $1.96 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.19 across 14 servings, roughly $2.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.68. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a balanced, veggie-loaded dinner. Frozen broccoli keeps this cheap and fast year round.",
     "shop_smart":  [
@@ -60,14 +60,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
     "upsell_html":  "Balanced dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.01,
-    "cost_batch_true":  32.93,
-    "cost_per_serving":  2.07,
-    "cost_per_serving_true":  2.35,
-    "cost_pantry_add":  5.91,
-    "cost_first_run":  38.84,
+    "cost_batch":  27.5,
+    "cost_batch_true":  31.19,
+    "cost_per_serving":  1.96,
+    "cost_per_serving_true":  2.23,
+    "cost_pantry_add":  6.49,
+    "cost_first_run":  37.68,
     "scaler":  {
-                   "cost":  "32.93",
+                   "cost":  "31.19",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

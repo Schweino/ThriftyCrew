@@ -47,17 +47,17 @@
     "cost_lines":  [
                        "High Fiber Tortilla, 14 tortillas: ~$10.43. \u003cstrong\u003eBuy 3 6ct packs: $13.34.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
-                       "Olive Oil, 1.25 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2.4 onions: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.4 onions: ~$0.58. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Carrots, 4 carrots: ~$0.53. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
                        "Celery, 7 stalks: ~$2.06. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "Cottage Cheese, 28.25 oz: ~$3.20. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 7 oz: ~$1.50. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Buffalo Wing Sauce, 6.5 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $27.14 across 14 servings, so roughly $1.94 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.89 across 14 servings, roughly $2.49 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.22. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.04 across 14 servings, so roughly $1.93 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.73 across 14 servings, roughly $2.48 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.86. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for wing night without the wings, the fryer, or the guilt. The cottage sauce is the trick that keeps it both creamy and lean.",
     "shop_smart":  [
@@ -78,14 +78,14 @@
     "portion_html":  "Weigh the finished filling, subtract the empty bowl, and divide by 14 so every burrito gets the same load of chicken and sauce. Fill, fold and roll each tortilla. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped, then crisp the seam in a dry pan if you want the edges to hold.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://fitfoodiefinds.com/buffalo-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003efitfoodiefinds.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Buffalo chicken burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
-    "cost_batch":  27.14,
-    "cost_batch_true":  34.89,
-    "cost_per_serving":  1.94,
-    "cost_per_serving_true":  2.49,
-    "cost_pantry_add":  12.33,
-    "cost_first_run":  47.22,
+    "cost_batch":  27.04,
+    "cost_batch_true":  34.73,
+    "cost_per_serving":  1.93,
+    "cost_per_serving_true":  2.48,
+    "cost_pantry_add":  12.13,
+    "cost_first_run":  46.86,
     "scaler":  {
-                   "cost":  "34.89",
+                   "cost":  "34.73",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

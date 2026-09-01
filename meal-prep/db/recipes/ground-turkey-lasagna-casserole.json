@@ -48,9 +48,9 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 1.25 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "93/7 Ground Turkey, 2.5 lb: ~$11.14. \u003cstrong\u003eBuy 3 lbs: $13.65.\u003c/strong\u003e",
-                       "Yellow Onion, 2.5 onions: ~$0.68. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2.5 onions: ~$0.59. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Marinara Sauce, 6.75 cups: ~$3.48. \u003cstrong\u003eBuy 3 24oz jars: $4.25.\u003c/strong\u003e",
                        "Chicken Broth, 1.2 cartons: ~$1.79. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
@@ -59,10 +59,10 @@
                        "Eggs, 2 large eggs: ~$0.33. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
                        "Parmesan Cheese, 1.25 oz: ~$0.42. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 9.75 oz: ~$2.13. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
-                       "Pantry seasonings (red pepper flakes, italian seasoning, salt, black pepper): ~$0.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.87 across 14 servings, so roughly $2.20 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $41.44 across 14 servings, roughly $2.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.64 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.08. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (red pepper flakes, italian seasoning, salt, black pepper): ~$0.74. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.79 across 14 servings, so roughly $2.20 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.30 across 14 servings, roughly $2.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.80. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container for lasagna (at everyday cost). The frozen aisle version costs three times that and comes in a tray you could read a newspaper through.",
     "shop_smart":  [
@@ -84,14 +84,14 @@
     "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the base layer in each container. Then cut the casserole into 14 even squares and lay one on each bed so the portions come out honest instead of eyeballed. Every serving lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/healthy-ground-turkey-lasagna-casserole/\" target=\"_blank\" rel=\"noopener\"\u003emasonfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Lasagna for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  30.87,
-    "cost_batch_true":  41.44,
+    "cost_batch":  30.79,
+    "cost_batch_true":  41.3,
     "cost_per_serving":  2.2,
-    "cost_per_serving_true":  2.96,
-    "cost_pantry_add":  12.64,
-    "cost_first_run":  54.08,
+    "cost_per_serving_true":  2.95,
+    "cost_pantry_add":  12.5,
+    "cost_first_run":  53.8,
     "scaler":  {
-                   "cost":  "41.44",
+                   "cost":  "41.30",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",

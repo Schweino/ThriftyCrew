@@ -24,16 +24,16 @@
     "cost_lines":  [
                        "Pork Chops, 5.25 lb: ~$17.16. \u003cstrong\u003eBuy 6 lbs: $19.62.\u003c/strong\u003e",
                        "Frozen Hash Browns, 25.25 cups: ~$7.98. \u003cstrong\u003eBuy 3 26oz bags: $8.34.\u003c/strong\u003e",
-                       "Yellow Onion, 6 onions: ~$1.66. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 6 onions: ~$1.44. \u003cstrong\u003eBuy 2 lbs: $1.97.\u003c/strong\u003e",
                        "Butter, 0.5 cups: ~$0.86. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "White Mushrooms, 9.5 cups: ~$5.50. \u003cstrong\u003eBuy 3 8oz packs: $5.66.\u003c/strong\u003e",
                        "Light Sour Cream, 3.5 cups: ~$3.27. \u003cstrong\u003eBuy 2 16oz tubs: $3.68.\u003c/strong\u003e",
                        "Chicken Broth, 0.25 lb: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 14 oz: ~$3.05. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.84 across 14 servings, so roughly $2.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.40 across 14 servings, roughly $3.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.88. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.64 across 14 servings, so roughly $2.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.11 across 14 servings, roughly $3.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.01. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a chop-and-potatoes plate a diner would ring up at four times that before you even order coffee.",
     "shop_smart":  ["Pork chops are the big line item, so watch for family packs on sale and stock the freezer; chops freeze and thaw with zero drama.","Frozen hash browns cost far less per pound than fresh potatoes once you count your shredding time, and there is no gray-potato panic.","White mushrooms in the 8 oz packs go on sale often. Compare per-ounce to the sliced ones; whole mushrooms are cheaper and slicing takes two minutes."],
@@ -49,14 +49,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number, and divide by 14. Scoop that weight into each of 14 containers. Every bowl delivers \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.foodtasticmom.com/pork-chop-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eFoodtastic Mom\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  39.84,
-    "cost_batch_true":  46.4,
-    "cost_per_serving":  2.85,
-    "cost_per_serving_true":  3.31,
-    "cost_pantry_add":  4.48,
-    "cost_first_run":  50.88,
+    "cost_batch":  39.64,
+    "cost_batch_true":  46.11,
+    "cost_per_serving":  2.83,
+    "cost_per_serving_true":  3.29,
+    "cost_pantry_add":  4.9,
+    "cost_first_run":  51.01,
     "scaler":  {
-                   "cost":  "46.40",
+                   "cost":  "46.11",
                    "ing":  [
                                {
                                    "item":  "Pork Chops",

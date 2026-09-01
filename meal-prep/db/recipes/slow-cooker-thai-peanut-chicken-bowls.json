@@ -36,18 +36,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$16.72. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Red Bell Pepper, 5 peppers: ~$7.60. \u003cstrong\u003eBuy 5 each: $7.60.\u003c/strong\u003e",
                        "Peanut Butter, 2/3 cup: ~$0.54. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
-                       "Coconut Milk, 3/4 cup: ~$0.83. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
+                       "Coconut Milk, 3/4 cup: ~$0.89. \u003cstrong\u003eBuy 1 13.5oz can: $1.98.\u003c/strong\u003e",
                        "Chicken Broth, 1/2 cup: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Soy Sauce, 3 3/4 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Honey, 1 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 2 cloves: ~$0.16. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Rice Vinegar, 4.75 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $27.99 across 14 servings, so roughly $2.00 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $30.54 across 14 servings, roughly $2.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.45 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.99. Those containers then feed this batch and many more after it."
+                       "Rice Vinegar, 4.75 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.06 across 14 servings, so roughly $2.00 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.69 across 14 servings, roughly $2.19 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.56 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.25. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -65,14 +65,14 @@
     "portion_html":  "You get {{protein}} grams of protein and {{cal}} calories per serving, richer than the others but still a smart, filling plate.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-thai-peanut-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Creamy, a little sweet, and cheap enough to keep on repeat. Hard combo to beat. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  27.99,
-    "cost_batch_true":  30.54,
+    "cost_batch":  28.06,
+    "cost_batch_true":  30.69,
     "cost_per_serving":  2,
-    "cost_per_serving_true":  2.18,
-    "cost_pantry_add":  8.45,
-    "cost_first_run":  38.99,
+    "cost_per_serving_true":  2.19,
+    "cost_pantry_add":  8.56,
+    "cost_first_run":  39.25,
     "scaler":  {
-                   "cost":  "30.54",
+                   "cost":  "30.69",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

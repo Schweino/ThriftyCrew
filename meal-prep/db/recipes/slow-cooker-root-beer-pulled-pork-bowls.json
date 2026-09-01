@@ -38,16 +38,16 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Tenderloin, 8 lb: ~$29.76. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
-                       "Potato, 10 lb: ~$5.38. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
-                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Potato, 10 lb: ~$5.63. \u003cstrong\u003eBuy 10 lbs: $5.94.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Garlic, 5 cloves: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "BBQ Sauce (Sugar Free), 1 bottle: ~$1.84. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "BBQ Sauce (Sugar Free), 1 cup: ~$1.84. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Zero-Sugar Soda, 1 1/2 cups: ~$0.18. \u003cstrong\u003eBuy 1 2L bottle: $1.01.\u003c/strong\u003e",
                        "Green Cabbage, 2 lb: ~$0.94. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
-                       "Pantry seasonings (smoked paprika, ground cumin, salt, black pepper, cayenne pepper): ~$1.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $40.10 across 14 servings, so roughly $2.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $44.78 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.29. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (smoked paprika, ground cumin, salt, black pepper, cayenne pepper): ~$1.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.29 across 14 servings, so roughly $2.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.91 across 14 servings, roughly $3.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.93 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.84. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -66,14 +66,14 @@
     "portion_html":  "Each bowl delivers {{protein}} grams of protein and {{cal}} calories, with just 9 grams of fat per serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://giveitsomethyme.com/slow-cooker-pulled-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eGive it Some Thyme\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A fun little trick that turns cheap soda and lean pork into a dinner people ask about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  40.1,
-    "cost_batch_true":  44.78,
-    "cost_per_serving":  2.86,
-    "cost_per_serving_true":  3.2,
-    "cost_pantry_add":  8.51,
-    "cost_first_run":  53.29,
+    "cost_batch":  40.29,
+    "cost_batch_true":  44.91,
+    "cost_per_serving":  2.88,
+    "cost_per_serving_true":  3.21,
+    "cost_pantry_add":  8.93,
+    "cost_first_run":  53.84,
     "scaler":  {
-                   "cost":  "44.78",
+                   "cost":  "44.91",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",

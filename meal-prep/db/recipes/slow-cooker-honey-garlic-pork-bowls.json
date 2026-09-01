@@ -37,7 +37,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 7 lb: ~$14.39. \u003cstrong\u003eBuy 7 lbs: $14.98.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$1.04. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Broccoli Florets, 14 cups: ~$4.11. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
                        "Honey, 1/2 cup: ~$1.19. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Soy Sauce, 2/3 cup: ~$0.68. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
@@ -45,9 +45,9 @@
                        "Chicken Broth, 3/4 cup: ~$0.49. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Cornstarch, 3 Tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (onion powder, red pepper flakes, ground ginger): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.07 across 14 servings, so roughly $1.65 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $24.54 across 14 servings, roughly $1.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.41. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $23.04 across 14 servings, so roughly $1.65 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.51 across 14 servings, roughly $1.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.38. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -66,14 +66,14 @@
     "portion_html":  "Every bowl brings {{protein}} grams of protein at just {{cal}} calories, which is a lot of eating for the money.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/honey-garlic-pork-loin/\" target=\"_blank\" rel=\"noopener\"\u003eThe Magical Slow Cooker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot, a handful of pantry staples, and dinner practically makes itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  23.07,
-    "cost_batch_true":  24.54,
+    "cost_batch":  23.04,
+    "cost_batch_true":  24.51,
     "cost_per_serving":  1.65,
     "cost_per_serving_true":  1.75,
     "cost_pantry_add":  8.87,
-    "cost_first_run":  33.41,
+    "cost_first_run":  33.38,
     "scaler":  {
-                   "cost":  "24.54",
+                   "cost":  "24.51",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",
