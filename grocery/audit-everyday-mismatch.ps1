@@ -80,7 +80,22 @@ foreach ($b in $boards) {
     if ($seen.ContainsKey($key)) { continue }   # same cell on both boards: judge it once
     $e = $link.$store
     if (-not $e -or -not $e.price) { $noLink++; continue }
-    if (([string]$s.type) -ne 'everyday') { $saleSkipped++; continue }   # a sale legitimately differs from the shelf price
+    # A SALE legitimately differs from the shelf price - but `type` does not mean what this line
+    # assumed (2026-09-01). It says `sale` on any cell carrying a dated ad window, INCLUDING cells
+    # whose price came from a live shelf reading: Walmart's 10 lb ground beef row is type=sale with
+    # source_ad "everyday shelf price", and the shop.fareway.com, Aisles Online and kroger-api rows
+    # are tagged the same way. On today's board that is 376 cells - shelf prices, comparable against
+    # their link, silently dropped out of this audit the moment they acquired a date.
+    #
+    # THAT IS WHAT THE COVERAGE RATCHET WAS SHOUTING ABOUT. It went REGRESSED at 2594 examined
+    # against a 2968 high-water baseline, and the tempting reading was "the board shrank, accept the
+    # new floor". The board did not shrink - it GREW, 2860 cells to 3132 - while the everyday subset
+    # fell from 2807 to 2666 as cells migrated to `sale`. Accepting the floor would have written off
+    # 376 unguarded cells permanently. 2666 + 376 = 3042, back above the baseline.
+    #
+    # Test-AdPricedCell is pu-lib's, shared with resolve-worklist's mismatch metric, which had the
+    # identical confusion for the identical reason. One reader, both callers.
+    if (Test-AdPricedCell ([string]$s.source_ad)) { $saleSkipped++; continue }
     $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
     $linkPu = Get-LinkPerUnit -size ([string]$e.size) -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
     if ($null -eq $linkPu) { $uncomputable++; continue }

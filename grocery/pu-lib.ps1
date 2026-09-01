@@ -187,3 +187,31 @@ function Get-LinkPerUnit {
   }
   return $null
 }
+
+# ONE READER FOR "IS THIS AN AD PRICE", because two callers now ask it and this estate has
+# watched that exact shape drift before (Get-LinkPerUnit lived in two files and they
+# disagreed on 13 of 3,342 links). resolve-worklist asks so it does not call a discount a
+# wrong product; audit-everyday-mismatch asks so it does not stop checking a shelf price
+# that merely acquired a date. Same question, one answer.
+function Test-AdPricedCell {
+  <#
+    Did this board cell's price come from a printed WEEKLY AD, rather than from a shelf reading?
+
+    THE MISMATCH CHECK IS NOT VALID ON ONE (2026-09-01). It compares the link's STORED EVERYDAY price
+    against the board's CURRENT per-unit. When the board cell is an ad price, the gap between them IS
+    THE DISCOUNT, so every deep sale manufactures a high-percentage chip that is indistinguishable
+    from a wrong product. Measured on the 2026-08-31 worklist: 29 of the 94 mismatch chips (31%) sat
+    on ad-priced cells. Two of the four worst-looking chips in the whole list - pears at 291% and
+    sports-drinks at 119% - were exactly this, and prune-bad-links' own note already allows the case
+    in words ("or, on a sale cell, the same product at its shelf price").
+
+    IT READS source_ad AND NOT type, AND THAT DISTINCTION IS THE WHOLE POINT. `type` says `sale` on
+    cells whose price came from a live shelf - Walmart's own 10 lb ground beef row is tagged
+    type=sale with source_ad "everyday shelf price", and shop.fareway.com and Aisles Online rows are
+    tagged the same way. Skipping on `type` would have blinded the check on 10 rows that are perfectly
+    comparable, which is the easy wrong version of this fix. Only an ad price is incomparable, so only
+    an ad price is skipped.
+  #>
+  param([string]$SourceAd)
+  return [regex]::IsMatch(([string]$SourceAd), 'weekly\s+ad', 'IgnoreCase')
+}
