@@ -35,6 +35,23 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $here 'head-ingredients-lib.ps1')
 
+function Expand-HrSlugList {
+  <#
+    -Slugs is [string[]], and under `powershell -File` a comma-separated command line arrives as ONE
+    string "a,b,c". That matched no BaseName and the run died on 'no specs matched' - which is exactly the
+    invocation audit-db-agreement prints in its own remediation line, so the guard was handing out a
+    command that could not work. Split on commas, trim, drop empties. A real array (an in-session `&`
+    call, or -File with space-separated values) passes through unchanged.
+
+    Hoisted into a named function rather than inlined at the call site for one reason: the standing rule
+    that a fix ships with a test that can REACH it. -SelfTest below drives this directly.
+    PS 5.1: the @() wrapper is what keeps a single surviving element an ARRAY and not a bare string.
+  #>
+  param([string[]]$Slugs)
+  if (-not $Slugs) { return @() }
+  return @($Slugs | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+}
+
 function Get-HrKeyArraySpan {
   <#
     Byte span of the VALUE of "<key>": [ ... ] starting the search at $from, bracket-matched and
@@ -195,6 +212,27 @@ if ($SelfTest) {
   $r2 = Repair-HrSpecText $r.text $db
   Chk 'second pass changes nothing (idempotent)' ((-not $r2.ingChanged) -and $r2.pluralHits -eq 0 -and $r2.text -eq $r.text) 'not idempotent'
 
+  # ---- -Slugs UNDER `powershell -File`. The founding shape: -Slugs a,b,c arrives as one string, matched
+  # nothing, and threw 'no specs matched' - the very command audit-db-agreement tells you to run.
+  $s1 = @(Expand-HrSlugList @('italian-sausage-minestrone,turkey-migas-skillet'))
+  Chk '-Slugs: a -File comma STRING becomes one slug per name' (($s1 -join '|') -eq 'italian-sausage-minestrone|turkey-migas-skillet') ($s1 -join '|')
+  $s2 = @(Expand-HrSlugList @('a', 'b'))
+  Chk '-Slugs: a real in-session array passes through unchanged' (($s2 -join '|') -eq 'a|b') ($s2 -join '|')
+  $s3 = @(Expand-HrSlugList @(' a , ,b '))
+  Chk '-Slugs: spaces trimmed, empty segments dropped' (($s3 -join '|') -eq 'a|b') ($s3 -join '|')
+  $s4 = @(Expand-HrSlugList @('only-one'))
+  Chk '-Slugs: a single slug stays an ARRAY of one (PS 5.1 unrolling)' ($s4.Count -eq 1 -and $s4[0] -eq 'only-one') ([string]$s4.Count)
+
+  # ---- THE REFUSAL, end to end on a spec's TEXT. Not just "the lib throws": the loaded-gun property of
+  # this script was that Repair-HrSpecText DERIVES head.recipeIngredient from the display line, so a
+  # stale-brand display line got its brand written into the authored JSON-LD and the audit went green by
+  # corruption. Prove the whole transform now refuses, because that refusal is what the caller's per-spec
+  # try/catch turns into "errs, exit 1, nothing written".
+  $staleSample = $sample.Replace('<strong>Penne Pasta (Barilla):</strong>', '<strong>Penne Pasta (Mueller''s):</strong>')
+  $refused = ''
+  try { $null = Repair-HrSpecText $staleSample $db } catch { $refused = $_.Exception.Message }
+  Chk 'MUST REFUSE: a stale brand on a display line aborts the whole spec rewrite' (($refused -match "Mueller") -and ($refused -match 'Barilla')) $(if ($refused) { $refused } else { 'no throw - the repair would have written the stale brand into the spec' })
+
   # ---- ESCAPE PRESERVATION, against a REAL spec rather than a fixture. A hand-written sample cannot
   # prove this: the catalog's specs store their markup and punctuation as \uXXXX byte sequences, which is
   # exactly the content a ConvertFrom-Json | ConvertTo-Json round-trip rewrites (SPEC-SCHEMA.md).
@@ -230,7 +268,7 @@ if ($SelfTest) {
 
 $foodDb = Get-HiFoodDbMap (Join-Path $mp 'food-macros-db.json')
 $specFiles = @(Get-ChildItem (Join-Path $mp 'db\recipes\*.json') | Where-Object { $_.Name -ne '_index.json' })
-if ($Slugs) { $specFiles = @($specFiles | Where-Object { $Slugs -contains $_.BaseName }) }
+if ($Slugs) { $Slugs = Expand-HrSlugList $Slugs; $specFiles = @($specFiles | Where-Object { $Slugs -contains $_.BaseName }) }
 if (-not $specFiles.Count) { throw 'no specs matched' }
 
 $changed = 0; $same = 0; $plural = 0; $pluralFiles = 0; $errs = New-Object System.Collections.Generic.List[string]

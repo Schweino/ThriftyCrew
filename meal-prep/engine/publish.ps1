@@ -42,6 +42,13 @@ function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 function Get-ContentHash([string]$s){ $sha=[System.Security.Cryptography.SHA1]::Create(); return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($s))) -replace '-','') }
 
 if($All){ $Slugs = (Get-ChildItem (Join-Path $root 'db\built\*.body.html')).BaseName -replace '\.body$','' }
+# -Slugs UNDER `powershell -File` (2026-09-01). [string[]] does NOT split a comma list on the -File
+# command line: "a,b,c" arrives as ONE element. Here that is quieter and worse than the throw it caused in
+# repair-head-ingredients.ps1 - the loop below would take the whole joined string as a single slug, find no
+# spec for it, print one ORPHAN CARD line and exit "published+verified OK: 0 / 1", which reads like a
+# no-op rather than a failure to publish N recipes. Split on commas; an in-session array (`& .\publish.ps1
+# -Slugs $stale`, which is how check-ad-cycles.ps1 calls it) passes through untouched.
+if($Slugs){ $Slugs = @($Slugs | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
 if(-not $Slugs){ throw 'no slugs' }
 
 # DELIBERATELY HELD RECIPES (2026-08-31). hold-recipe.ps1 takes ONE live recipe down to a draft, and
@@ -284,7 +291,17 @@ foreach($slug in $Slugs){
     $liveVis = if($existing -and $existing.visibility){ [string]$existing.visibility } else { [string]$spec.visibility }
     $paywalled = if($liveVis -eq 'public'){ $true } else { ($html -notmatch 'What This Batch Costs') }
     $schemaOk = ($html -match 'application/ld\+json')
-    if($titleOk -and $paywalled -and $schemaOk){ $ok++; $pubHashes[$slug]=$contentHash; Save-PubHashes; Write-Output ("OK  $slug") }
+    # -VerifyOnly MUST NOT STAMP (2026-09-01). This line wrote the LOCAL content hash into the publish
+    # journal on every successful verify, -VerifyOnly included - and the verify checks title, paywall and
+    # schema presence, never CONTENT. So a read-only check stamped "these local bytes are live" about
+    # bytes that had never been sent, and the next real publish then skipped every one of them as
+    # UNCHANGED. Measured today: a -VerifyOnly pass over 15 rebuilt cards stamped the 14 that verified,
+    # the real publish reported "published+verified OK: 1 / 15 (skipped-unchanged: 14)", and the live
+    # pages still served the old brand text. The single slug that FAILED the verify was the only one that
+    # actually shipped. The `if(-not $VerifyOnly){ Save-PubHashes }` at the bottom of the file was written
+    # to prevent exactly this and could not, because the write already happened here, per slug.
+    # A watermark may only be written by the code path that did the work.
+    if($titleOk -and $paywalled -and $schemaOk){ $ok++; if(-not $VerifyOnly){ $pubHashes[$slug]=$contentHash; Save-PubHashes }; Write-Output ("OK  $slug") }
     else { $failed += $slug; Write-Output ("VERIFY FAIL  $slug  (title=$titleOk paywalled=$paywalled schema=$schemaOk)") }
   } catch { $failed += $slug; Write-Output ("FETCH FAIL  $slug :: " + $_.Exception.Message) }
 }
