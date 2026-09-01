@@ -95,18 +95,32 @@ Check "CLEAN TWIN a burrito with NO declared floor still faces 550"             
 # UPPER BOUND. The 29 wrapped burritos are capped at 400 by design and say so, which tripped the gate 21
 # times on statements that were all true. The exemption is deliberately narrow, so the must-fire cases below
 # are the point: an UNSATISFIED bound and an unbounded figure must both still fire.
-# MIRRORS pipeline\spec-contradiction-lib.ps1 (search 'Test-CalClaimContradiction'). Edit one, edit both.
+# MIRRORS pipeline\spec-contradiction-lib.ps1 (search 'Test-MacroClaimContradiction'). Edit one, edit both.
 # That pointer named a function that no longer existed for one revision - the mirror contract had a dead
-# address, which is the same failure as the mirror itself drifting, just harder to notice.
+# address, which is the same failure as the mirror itself drifting, just harder to notice. It moved from
+# Test-CalClaimContradiction on 2026-09-01 when carbs and fat started reading through the same function.
 $RX_CAL_T   = '(?i)\b(\d{3,4})\s*cal(?:orie)?s?\b'
+$RX_MACRO_T = '(?i)(?<![\d.])(\d{1,3}(?:\.\d+)?)\s*(?:g\b|grams?\b)\s*(?:of\s+)?(carbohydrates?|carbs?|fat)\b'
 $RX_BOUND_T = '(?i)(?<!\bnot\s)(?<!\bnever\s)(?<![a-z])(?:under|below|beneath|less than|fewer than|no more than|at most)\s*$'
+function BoundedClaimFlags($text, $matchIndex, $claimed, $actual) {
+  $start = [Math]::Max(0, $matchIndex - 24)
+  $bounded = ($text.Substring($start, $matchIndex - $start) -match $RX_BOUND_T)
+  if ($bounded) { return ($actual -ge $claimed) }
+  return ($claimed -ne $actual)
+}
 function StatProseCalFlags($text, $statCal) {
   foreach ($m in [regex]::Matches($text, $RX_CAL_T)) {
-    $claimed = [int]$m.Groups[1].Value
-    $start = [Math]::Max(0, $m.Index - 24)
-    $bounded = ($text.Substring($start, $m.Index - $start) -match $RX_BOUND_T)
-    if ($bounded) { if ($statCal -ge $claimed) { return $true } }
-    elseif ($claimed -ne $statCal) { return $true }
+    if (BoundedClaimFlags $text $m.Index ([int]$m.Groups[1].Value) $statCal) { return $true }
+  }
+  return $false
+}
+# The carbs/fat half of STAT-PROSE, mirrored the same way. $stat is a hashtable of the two.
+function StatProseMacroFlags($text, $stat) {
+  foreach ($m in [regex]::Matches($text, $RX_MACRO_T)) {
+    $key = if ($m.Groups[2].Value.ToLower().StartsWith('fat')) { 'fat' } else { 'carbs' }
+    $actual = [int]$stat[$key]
+    if ($actual -le 0) { continue }
+    if (BoundedClaimFlags $text $m.Index ([int]$m.Groups[1].Value) $actual) { return $true }
   }
   return $false
 }
@@ -124,6 +138,39 @@ Check "MUST FIRE  a bound too far away to reach the number (lookback is a 24-cha
 Check "MUST FIRE  a NEGATED bound 'not under 400 calories' on a 396-cal recipe"                  (StatProseCalFlags 'these are not under 400 calories' 396)
 Check "MUST FIRE  a word merely ENDING in a bound word ('thunder 400 calories')"                 (StatProseCalFlags 'a clap of thunder 400 calories later' 396)
 Check "CLEAN TWIN 'never under 400' still fires, but plain 'under 400' after a comma passes"     (-not (StatProseCalFlags 'lean, under 400 calories' 396))
+
+Write-Output ""
+Write-Output "STAT-PROSE carbs and fat (2026-09-01):"
+# FROZEN FIXTURES, LIFTED FROM THE LIVE CARDS THAT WERE WRONG. These three sentences were on
+# www.thriftycrew.com stating a fat number that was not the recipe's, beside a stat block stating the
+# real one, for as long as this class stopped at calories and protein. They are copied verbatim with
+# their real stats so the bug they encode cannot evaporate: regenerate any of them from the repaired
+# board and the test would pass by finding nothing, which is the whole reason they are frozen here.
+$statBbq  = @{ carbs = 50; fat = 10 }   # bbq-chicken-rice-bowls,   prose said 4
+$statHoney= @{ carbs = 52; fat = 10 }   # hot-honey-chicken-bowls,  prose said 3
+$statGyro = @{ carbs = 78; fat = 13 }   # ground-beef-gyro-bowls,   prose said 11
+$statStuff= @{ carbs = 10; fat = 26 }   # stuffed-chicken-breast,   prose said "under 10"
+Check "MUST FIRE  bbq-chicken-rice-bowls 'just 4 grams of fat' on a 10 g stat (live, 3 fields)"   (StatProseMacroFlags 'This is the leanest bowl in the rotation at just 4 grams of fat, and it still brings' $statBbq)
+Check "MUST FIRE  hot-honey-chicken-bowls 'only 3 grams of fat' on a 10 g stat (live)"            (StatProseMacroFlags 'At 31 grams of protein and only 3 grams of fat for around' $statHoney)
+Check "MUST FIRE  ground-beef-gyro-bowls 'just 11 grams of fat' on a 13 g stat (live)"            (StatProseMacroFlags 'at 620 calories with just 11 grams of fat, making this the leanest beef bowl' $statGyro)
+Check "MUST FIRE  stuffed-chicken-breast 'under 10 grams of carbs' on a 10 g stat (not under it)" (StatProseMacroFlags 'and 524 calories with under 10 grams of carbs, for about' $statStuff)
+# CLEAN TWINS: the same three sentences as they now ship. A token leaves no literal to read, which is
+# what makes the repaired copy silent rather than merely correct.
+Check "CLEAN TWIN the repaired bbq sentence carries a {{fat}} token and no literal at all"        (-not (StatProseMacroFlags 'brings 34 grams of protein at 435 calories and {{fat}} grams of fat' $statBbq))
+Check "CLEAN TWIN the repaired gyro portion line is silent"                                       (-not (StatProseMacroFlags 'delivers 46 grams of protein at 620 calories and {{fat}} grams of fat.' $statGyro))
+Check "CLEAN TWIN a fat literal that EQUALS the stat is not a contradiction"                      (-not (StatProseMacroFlags 'with only 10 grams of fat' $statBbq))
+# CLEAN TWIN: the lowcarb sentence, 57 live occurrences. Reading these as quotes would fire on copy
+# that is true, which is the failure mode that makes a gate something people learn to skip.
+Check "CLEAN TWIN 'with under 20 grams of carbs' on a 16 g stat (the lowcarb sentence, 57 live)"  (-not (StatProseMacroFlags 'a serving, with under 20 grams of carbs. That is' @{ carbs = 16; fat = 9 }))
+Check "MUST FIRE  ...but an UNSATISFIED carb bound 'under 10 grams of carbs' on a 31 g stat"      (StatProseMacroFlags 'a serving, with under 10 grams of carbs' @{ carbs = 31; fat = 9 })
+# CLEAN TWIN: decimals. The stat is a rounded integer, so a decimal that rounds to it is the same
+# claim; and the (?<![\d.]) guard is what stops "9.6 grams of fat" being read as the "6" a leading \b
+# would have captured - the RX_PROTEIN bug, which shipped once already on this exact pattern shape.
+Check "CLEAN TWIN '9.6 grams of fat' on a 10 g stat is the same claim, not a contradiction"       (-not (StatProseMacroFlags 'at 9.6 grams of fat a serving' @{ carbs = 50; fat = 10 }))
+Check "MUST FIRE  ...but '99.9 grams of fat' on a 10 g stat still fires - decimals are not blinded" (StatProseMacroFlags 'at 99.9 grams of fat a serving' @{ carbs = 50; fat = 10 })
+Check "CLEAN TWIN a spec with NO carbs stat is skipped, never compared against zero"              (-not (StatProseMacroFlags 'with 40 grams of carbs' @{ carbs = 0; fat = 10 }))
+# CLEAN TWIN: 'fat' must be the noun, not a word that merely starts with it.
+Check "CLEAN TWIN '12 grams of fatty acids' is not a fat claim"                                   (-not (StatProseMacroFlags 'about 12 grams of fatty acids' @{ carbs = 50; fat = 10 }))
 
 Write-Output ""
 if ($fail -eq 0) { Write-Output "ALL GUARD PREDICATE TESTS PASS" } else { Write-Output ("$fail TEST(S) FAILED"); exit 1 }

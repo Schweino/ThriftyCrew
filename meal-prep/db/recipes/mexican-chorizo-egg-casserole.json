@@ -33,7 +33,7 @@
                  "fat":  39,
                  "cost_ps":  "2.62"
              },
-    "intro_html":  "Chorizo and eggs is a breakfast a lot of us grew up on, and this casserole takes that same skillet and stretches it into a week of dinners. Fresh Mexican chorizo browns down with onion, sweet red pepper, and garlic. That gets layered between quartered corn tortillas and a double hit of pepper jack and sharp cheddar, then the whole pan is flooded with an egg and half and half custard shot through with jalapeno, green onion, and cilantro. It rests overnight so the tortillas drink up the custard, then bakes into something you can cut into fourteen honest squares. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with about 17 grams of carbs. That is a low-carb dinner that eats like a lazy weekend breakfast. Dress a square with a spoon of pico, sour cream, or avocado if you like, though the numbers above are the casserole on its own.",
+    "intro_html":  "Chorizo and eggs is a breakfast a lot of us grew up on, and this casserole takes that same skillet and stretches it into a week of dinners. Fresh Mexican chorizo browns down with onion, sweet red pepper, and garlic. That gets layered between quartered corn tortillas and a double hit of pepper jack and sharp cheddar, then the whole pan is flooded with an egg and half and half custard shot through with jalapeno, green onion, and cilantro. It rests overnight so the tortillas drink up the custard, then bakes into something you can cut into fourteen honest squares. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with about {{carbs}} grams of carbs. That is a low-carb dinner that eats like a lazy weekend breakfast. Dress a square with a spoon of pico, sour cream, or avocado if you like, though the numbers above are the casserole on its own.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Chorizo (Cacique):\u003c/strong\u003e 1 lb 6 oz Mexican pork chorizo (624 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3/4 large yellow onion, finely chopped (113 g)",
@@ -214,7 +214,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Mexican chorizo and egg casserole for meal prep: fresh chorizo browned with onion and pepper, layered with corn tortillas and cheese, then baked under an egg custard with jalapeno, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with about 17 grams of carbs.",
+                 "description":  "Mexican chorizo and egg casserole for meal prep: fresh chorizo browned with onion and pepper, layered with corn tortillas and cheese, then baked under an egg custard with jalapeno, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with about {{carbs}} grams of carbs.",
                  "keywords":  "mexican chorizo egg casserole, chorizo breakfast casserole, low carb casserole, high protein meal prep, egg casserole",
                  "image":  "",
                  "prepTime":  "PT30M",

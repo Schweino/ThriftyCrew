@@ -25,6 +25,21 @@ $script:RX_CAL     = '(?i)\b(\d{3,4})\s*cal(?:orie)?s?\b'
 # The consumer casts with [int], which ROUNDS in PowerShell ([int]'47.3' -> 47), so 47.3 agrees with a
 # stat of 47 and no finding is raised - which is the behaviour the prior ruling described.
 $script:RX_PROTEIN = '(?i)(?<![\d.])(\d{1,3}(?:\.\d+)?)\s*(?:g\b|grams?\b)\s*(?:of\s+)?protein'
+# CARBS AND FAT (2026-09-01). THIS CLASS COULD NOT SEE HALF THE STAT BLOCK, and three live cards paid
+# for it. lib\render-tokens.ps1 grew {{carbs}} and {{fat}} on 2026-08-31; nothing swept the literals
+# behind them and nothing read them, so bbq-chicken-rice-bowls shipped "just 4 grams of fat" on a 10 g
+# stat, hot-honey-chicken-bowls "only 3 grams of fat" on a 10, ground-beef-gyro-bowls "just 11 grams of
+# fat" on a 13. Each one was a nutrition claim on paid content, and each one sat beside a stat block
+# stating the true number on the same page. That is the definition of a contradiction this class exists
+# to read, and it was invisible purely because the pattern list stopped at two macros.
+#
+# NOT A NEW RULE - A TWIN THAT WAS ONLY EVER BUILT ON ONE SIDE. coverage_check.py has carried this exact
+# reading as RX_MACRO since the v3 prose gate, with the comment "NO POWERSHELL TWIN: spec-contradiction-
+# lib carries calorie and protein patterns only". The Python half ran per-recipe before QA, the
+# PowerShell half gates the catalogue at publish, and the catalogue half was the one that could not see
+# fat. Both sides are now registered in ops\twin-rules.json as prose-macro-claim so the next tightening
+# cannot reach one and miss the other, which is the failure this exact pair already produced once.
+$script:RX_MACRO = '(?i)(?<![\d.])(\d{1,3}(?:\.\d+)?)\s*(?:g\b|grams?\b)\s*(?:of\s+)?(carbohydrates?|carbs?|fat)\b'
 
 # BOUNDED CALORIE CLAIMS (2026-08-07, Brad's ruling). RX_CAL exists to catch a STALE number: a card that
 # says "499 calories" when its stat says 373 is quoting a figure that moved. It cannot distinguish that
@@ -47,13 +62,23 @@ $script:RX_PROTEIN = '(?i)(?<![\d.])(\d{1,3}(?:\.\d+)?)\s*(?:g\b|grams?\b)\s*(?:
 # Both failure modes leaked toward PASSING a false claim, which is the direction an exemption must never
 # fail in. Fixtures for both are in pipeline\test-guards.ps1.
 $script:RX_CAL_BOUND = '(?i)(?<!\bnot\s)(?<!\bnever\s)(?<![a-z])(?:under|below|beneath|less than|fewer than|no more than|at most)\s*$'
-function Test-CalClaimContradiction {
+function Test-MacroClaimContradiction {
   <# Reads what the sentence actually CLAIMS, then checks that claim against the stat.
-     A bound word makes it "cal < N", true only when the real figure is strictly below N.
+     A bound word makes it "figure < N", true only when the real figure is strictly below N.
      With no bound word the figure is a direct quote and must BE the stat, which is the original rule.
      Written this way rather than as an equality test plus an exemption because the equality shortcut
      silently passed "under 396 calories" on a 396-cal recipe: a false claim that skipped the bound
-     logic entirely by matching the stat. Measured before tightening - zero live specs are affected. #>
+     logic entirely by matching the stat. Measured before tightening - zero live specs are affected.
+
+     NAMED FOR MACROS, NOT CALORIES, SINCE 2026-09-01, because carbs and fat now read through it and a
+     function called Test-CalClaimContradiction deciding a fat claim is a comment that lies. The rename
+     is why test-guards' mirror pointer moved in the same commit: that pointer named a function that no
+     longer existed for one revision once already, and a mirror contract with a dead address is the same
+     failure as the mirror drifting, only harder to notice.
+
+     IT PROVED ITSELF ON CARBS IMMEDIATELY. stuffed-chicken-breast said "with under 10 grams of carbs"
+     beside a stat block reading 10 g carbs - the exact-equal bound this function exists to catch, sitting
+     live on a card, invisible for as long as the class stopped at calories and protein. #>
   param([string]$Text,[int]$MatchIndex,[int]$Claimed,[int]$Actual)
   $start = [Math]::Max(0, $MatchIndex - 24)
   $bounded = ($Text.Substring($start, $MatchIndex - $start) -match $script:RX_CAL_BOUND)
@@ -584,7 +609,7 @@ function Get-SpecContradictions($spec, $vocab, $pkgMap, $bidMap) {
     if ($cal -gt 0) {
       foreach ($m in [regex]::Matches($t, $script:RX_CAL)) {
         $claimed = [int]$m.Groups[1].Value
-        if (Test-CalClaimContradiction -Text $t -MatchIndex $m.Index -Claimed $claimed -Actual $cal) {
+        if (Test-MacroClaimContradiction -Text $t -MatchIndex $m.Index -Claimed $claimed -Actual $cal) {
           $f.Add(@{ cls = 'STAT-PROSE'; why = ("$k says " + $m.Groups[1].Value + " calories, stat says " + $cal) })
         }
       }
@@ -592,6 +617,25 @@ function Get-SpecContradictions($spec, $vocab, $pkgMap, $bidMap) {
     if ($pro -gt 0) {
       foreach ($m in [regex]::Matches($t, $script:RX_PROTEIN)) {
         if ([int]$m.Groups[1].Value -ne $pro) { $f.Add(@{ cls = 'STAT-PROSE'; why = ("$k says " + $m.Groups[1].Value + "g protein, stat says " + $pro) }) }
+      }
+    }
+    # CARBS AND FAT read through the SAME bounded-claim logic as calories, and they need it: 57 of the
+    # 59 carb figures in this catalogue are the lowcarb sentence "with under 20 grams of carbs" over a
+    # 16 g stat, every one of them true. Reading those as quotes would fire 57 times on correct copy.
+    # Fat carries no bound today (measured 2026-09-01, zero occurrences) but shares the reading because
+    # an upper bound on fat is the same claim shape, and a second copy of this logic is how the two
+    # halves of a rule drift apart.
+    foreach ($m in [regex]::Matches($t, $script:RX_MACRO)) {
+      $key = if ($m.Groups[2].Value.ToLower().StartsWith('fat')) { 'fat' } else { 'carbs' }
+      $actual = 0
+      [void][int]::TryParse(([string]$spec.stat.$key), [ref]$actual)
+      if ($actual -le 0) { continue }
+      # [int] on the WHOLE decimal, matching RX_PROTEIN's consumer and coverage_check's _claimed_int:
+      # a stat is a rounded integer, so "9.6 grams of fat" on a 10 g stat is the same claim, not a
+      # contradiction. The capture takes the whole decimal so "99.9g fat" on a 10 g stat still fires.
+      $claimed = [int]$m.Groups[1].Value
+      if (Test-MacroClaimContradiction -Text $t -MatchIndex $m.Index -Claimed $claimed -Actual $actual) {
+        $f.Add(@{ cls = 'STAT-PROSE'; why = ("$k says " + $m.Groups[1].Value + "g $key, stat says " + $actual) })
       }
     }
     # A bare "$12" is the takeout comparison the sentence is built on, and the cents-less regex below never

@@ -166,6 +166,61 @@ if ($SelfTest) {
   Chk 'MUST FIRE  a DECIMAL protein claim that contradicts the stat fires too - the guard must not blind the check' `
     ($pStaleDec.Count -ge 1) (($pStaleDec | ForEach-Object { $_.why }) -join ' | ')
 
+  # ---- CARBS AND FAT (2026-09-01) --------------------------------------------------------------------
+  # THE CLASS READ HALF THE STAT BLOCK. {{carbs}} and {{fat}} reached lib\render-tokens.ps1 on 2026-08-31
+  # and nothing swept the literals behind them, so three cards sat live on www.thriftycrew.com stating a
+  # fat number that was not theirs, beside a stat block stating the real one on the same page:
+  # bbq-chicken-rice-bowls said 4 g on a 10 g stat (in THREE fields), hot-honey-chicken-bowls 3 on a 10,
+  # ground-beef-gyro-bowls 11 on a 13. A nutrition claim on paid content, and this gate ran clean over all
+  # of them every single day, because the pattern list stopped at calories and protein.
+  # These run through Get-SpecContradictions - the real shared lib - not against a copy of the pattern.
+  function MacroFx([string]$prose, [int]$carbs, [int]$fat) {
+    $fx = [pscustomobject]@{
+      stat = [pscustomobject]@{ cal = 541; protein = 47; carbs = $carbs; fat = $fat; cost_ps = '3.52' }
+      intro_html = ('<p>' + $prose + '</p>')
+      head = [pscustomobject]@{ description = 'A 541 calorie bowl.'; recipeIngredient = @('2 lb ground beef') }
+      make_it = @('Cook it.')
+    }
+    return @(Get-SpecContradictions $fx $vocabFx | Where-Object { $_.why -match 'g (carbs|fat)' })
+  }
+  $mBbq = MacroFx 'the leanest bowl in the rotation at just 4 grams of fat, and it still brings' 50 10
+  Chk 'MUST FIRE  bbq-chicken-rice-bowls "just 4 grams of fat" on a 10 g stat - the founding live defect' `
+    ($mBbq.Count -ge 1) (($mBbq | ForEach-Object { $_.why }) -join ' | ')
+  $mGyro = MacroFx 'with just 11 grams of fat, making this the leanest beef bowl of the bunch.' 78 13
+  Chk 'MUST FIRE  ground-beef-gyro-bowls "just 11 grams of fat" on a 13 g stat' `
+    ($mGyro.Count -ge 1) (($mGyro | ForEach-Object { $_.why }) -join ' | ')
+  # THE EXACT-EQUAL BOUND, found live by this extension on stuffed-chicken-breast: "under 10" beside a
+  # stat block reading 10. 10 is not under 10, and the page says both.
+  $mBound = MacroFx 'and 524 calories with under 10 grams of carbs, for about' 10 26
+  Chk 'MUST FIRE  stuffed-chicken-breast "under 10 grams of carbs" on a 10 g stat (not under it)' `
+    ($mBound.Count -ge 1) (($mBound | ForEach-Object { $_.why }) -join ' | ')
+  # CLEAN TWIN - the lowcarb sentence, 57 live occurrences and every one of them TRUE. A gate that fires
+  # on correct copy is one people learn to skip, so this is the case that keeps the exemption honest.
+  $mLow = MacroFx 'a serving, with under 20 grams of carbs. That is a full plate.' 16 9
+  Chk 'CLEAN TWIN "under 20 grams of carbs" on a 16 g stat stays silent (57 live occurrences)' `
+    ($mLow.Count -eq 0) (($mLow | ForEach-Object { $_.why }) -join ' | ')
+  # CLEAN TWIN - the repaired copy. A token leaves no literal to read at all.
+  $mTok = MacroFx 'brings 47 grams of protein at 541 calories and {{fat}} grams of fat.' 50 10
+  Chk 'CLEAN TWIN the repaired sentence carries a {{fat}} token and is silent' `
+    ($mTok.Count -eq 0) (($mTok | ForEach-Object { $_.why }) -join ' | ')
+  # CLEAN TWIN - decimals, the RX_PROTEIN bug replayed on the new pattern. "9.6" must not read as "6".
+  $mDec = MacroFx 'at 9.6 grams of fat a serving.' 50 10
+  Chk 'CLEAN TWIN "9.6 grams of fat" on a 10 g stat is the same claim, never the "6" a leading \b takes' `
+    ($mDec.Count -eq 0) (($mDec | ForEach-Object { $_.why }) -join ' | ')
+  $mDecBad = MacroFx 'at 99.9 grams of fat a serving.' 50 10
+  Chk 'MUST FIRE  ...but "99.9 grams of fat" on a 10 g stat still fires - decimals captured, not blinded' `
+    ($mDecBad.Count -ge 1) (($mDecBad | ForEach-Object { $_.why }) -join ' | ')
+  # CLEAN TWIN - a spec with no carbs/fat stat is SKIPPED, not compared against a PS 5.1 [int]$null of 0.
+  $mNone = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 541; protein = 47; cost_ps = '3.52' }
+    intro_html = '<p>with 40 grams of carbs and 10 grams of fat</p>'
+    head = [pscustomobject]@{ description = 'A 541 calorie bowl.'; recipeIngredient = @('2 lb ground beef') }
+    make_it = @('Cook it.')
+  }
+  $mNoneR = @(Get-SpecContradictions $mNone $vocabFx | Where-Object { $_.why -match 'g (carbs|fat)' })
+  Chk 'CLEAN TWIN a spec with NO carbs/fat stat is skipped, never compared against zero' `
+    ($mNoneR.Count -eq 0) (($mNoneR | ForEach-Object { $_.why }) -join ' | ')
+
   Chk 'MUST FIRE  UNMEASURABLE-QTY a broth line that reads "0 lb"' (@($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' }).Count -ge 1) (($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  STALE-MONEY a "28 cents" claim in cost_closing' (@($r | Where-Object { $_.cls -eq 'STALE-MONEY' -and $_.why -match '28 cents' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'STALE-MONEY' } | ForEach-Object { $_.why }) -join ' | ')
   # THE PORTION-MONEY CASE. Live for the whole life of 15 specs because this class read two fields and the

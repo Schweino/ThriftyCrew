@@ -34,7 +34,7 @@
                  "fat":  26,
                  "cost_ps":  "3.33"
              },
-    "intro_html":  "Stuffed chicken breast looks like you fussed over it and plates like a restaurant special, but it is really just a paring knife, a bowl of filling, and a hot pan. Each big breast gets a pocket packed with spinach, sun-dried tomatoes, cream cheese, mozzarella, and parmesan, seared golden and finished in the oven. Every serving carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories with under 10 grams of carbs, for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). That is a steakhouse-looking dinner for the price of a side salad.",
+    "intro_html":  "Stuffed chicken breast looks like you fussed over it and plates like a restaurant special, but it is really just a paring knife, a bowl of filling, and a hot pan. Each big breast gets a pocket packed with spinach, sun-dried tomatoes, cream cheese, mozzarella, and parmesan, seared golden and finished in the oven. Every serving carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories with just {{carbs}} grams of carbs, for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). That is a steakhouse-looking dinner for the price of a side salad.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb boneless skinless chicken breasts (14 large breasts, about 8 oz each) (3178 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e About 1 tablespoon salt and 1 1/2 teaspoons black pepper, to taste (21 g)",
@@ -202,7 +202,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Spinach and sun-dried tomato stuffed chicken breast, seared and baked for meal prep. Fourteen servings at {{cal}} calories, {{protein}} grams of protein, and under 10 grams of carbs for about ${{cost_ps}} each (at everyday cost).",
+                 "description":  "Spinach and sun-dried tomato stuffed chicken breast, seared and baked for meal prep. Fourteen servings at {{cal}} calories, {{protein}} grams of protein, and {{carbs}} grams of carbs for about ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "stuffed chicken breast, high protein meal prep, low carb meal prep, spinach sun-dried tomato chicken, budget chicken dinner, keto chicken meal prep, cheap high protein dinner",
                  "image":  "",
                  "prepTime":  "PT20M",

@@ -36,7 +36,7 @@
                  "fat":  22,
                  "cost_ps":  "3.62"
              },
-    "intro_html":  "\u003cp\u003eMexican street corn, the kind you get on a stick from a cart with lime running down your wrist, is one of the best things a few cheap pantry spices can do. The problem is you cannot pack a paper tray of elote into a work bag and expect it to survive Tuesday. So we did the sensible thing and built it into a bowl.\u003c/p\u003e\u003cp\u003eThis is seared chili-lime chicken over cilantro lime rice, with a cold, creamy street corn salad spooned right on top and a scatter of avocado, red onion, cilantro and cotija to finish. It hits like takeout and costs like a pantry. Fourteen containers out of one skillet and one pot of rice, and every one of them carries 45 grams of protein and stays under 600 calories. That is a full week and change of dinner handled, no drive-through required.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eMexican street corn, the kind you get on a stick from a cart with lime running down your wrist, is one of the best things a few cheap pantry spices can do. The problem is you cannot pack a paper tray of elote into a work bag and expect it to survive Tuesday. So we did the sensible thing and built it into a bowl.\u003c/p\u003e\u003cp\u003eThis is seared chili-lime chicken over cilantro lime rice, with a cold, creamy street corn salad spooned right on top and a scatter of avocado, red onion, cilantro and cotija to finish. It hits like takeout and costs like a pantry. Fourteen containers out of one skillet and one pot of rice, and every one of them carries {{protein}} grams of protein and stays under 600 calories. That is a full week and change of dinner handled, no drive-through required.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4 3/4 lb, cut into 1-inch chunks (2183 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tablespoons (47 g)",
@@ -259,7 +259,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Meal-prep street corn chicken rice bowls: chili-lime chicken over cilantro lime rice with a creamy Mexican street corn salad, avocado and cotija. 14 servings, 45g protein and under 600 calories each.",
+                 "description":  "Meal-prep street corn chicken rice bowls: chili-lime chicken over cilantro lime rice with a creamy Mexican street corn salad, avocado and cotija. 14 servings, {{protein}}g protein and under 600 calories each.",
                  "keywords":  "street corn chicken rice bowls, mexican street corn chicken, high protein meal prep, chicken rice bowl meal prep, elote chicken bowl, budget meal prep dinner, cilantro lime rice bowl, 14 serving meal prep",
                  "image":  "",
                  "prepTime":  "PT20M",

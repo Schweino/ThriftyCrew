@@ -24,6 +24,16 @@
       ]
     },
     {
+      "name":  "prose-macro-claim",
+      "why":  "THE TWIN THAT ONLY EVER EXISTED ON ONE SIDE, and three live cards paid for it. coverage_check.py has read carb and fat claims out of prose as RX_MACRO since the v3 gate, and said so in a comment: 'NO POWERSHELL TWIN: spec-contradiction-lib carries calorie and protein patterns only'. The Python half runs per-recipe before QA; the PowerShell half is what gates the whole CATALOGUE at publish - so the half that could see fat never looked at published recipes, and the half that looks at published recipes could not see fat. {{carbs}} and {{fat}} reached render-tokens on 2026-08-31, nothing swept the literals behind them, and bbq-chicken-rice-bowls shipped 'just 4 grams of fat' on a 10 g stat, hot-honey-chicken-bowls 3 on a 10, ground-beef-gyro-bowls 11 on a 13, each beside a stat block printing the true number on the same page. A missing twin is not a smaller version of a drifted twin; it is a rule that runs on a subset of its inputs and reports clean on the rest. Declared with the PowerShell side on 2026-09-01.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/coverage_check.py",
+          "capture":  "RX_MACRO = re\\.compile\\(\\s*r'(.*?)'\\)" },
+        { "file":  "meal-prep/pipeline/spec-contradiction-lib.ps1",
+          "capture":  "\\$script:RX_MACRO\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
       "name":  "deal-builder-size-token",
       "why":  "FOUND BY THIS AUDITOR'S OWN UNDECLARED SWEEP on its first run, 2026-09-01, which is the point of that sweep. The size-token parser that reads a quantity and unit out of a product NAME is byte-identical (139 chars, md5 d7854998dde1) in the Sam's and Walmart deal builders. Nothing was watching it. A unit added to one store's list and not the other's would silently mis-size every product carrying it at that store - and per-unit price is the number this whole estate publishes.",
       "sides":  [

@@ -6,6 +6,14 @@
 #     $3.58            -> ${{cost_ps}}     when 3.58  == stat.cost_ps
 #     610 calories     -> {{cal}} calories when 610   == stat.cal
 #     57 grams of protein / 57g protein -> {{protein}} ...  when 57 == stat.protein
+#     40 grams of carbs -> {{carbs}} ...   when 40    == stat.carbs   (added 2026-09-01)
+#     10 grams of fat   -> {{fat}} ...     when 10    == stat.fat     (added 2026-09-01)
+#
+# CARBS AND FAT WERE ADDED LAST AND THAT IS WHY THEY DRIFTED. lib\render-tokens.ps1 grew {{carbs}} and
+# {{fat}} on 2026-08-31 and nothing swept the literals behind them, so three live cards spent a day
+# stating a fat number that was not theirs: bbq-chicken-rice-bowls said "just 4 grams of fat" on a
+# 10 g stat, hot-honey-chicken-bowls said 3 on a 10, ground-beef-gyro-bowls said 11 on a 13. A token
+# that exists but that no migration reaches is a token nobody uses.
 # lib\render-tokens.ps1 substitutes them back at render, so the rewrite is a NO-OP on every built card -
 # and that is the acceptance test: rebuild the catalog and byte-compare against the pre-migration baseline.
 #
@@ -40,9 +48,66 @@ function Test-BoundContext { param([string]$Text, [int]$MatchIndex)
   return ([regex]::IsMatch($Text.Substring($start, $MatchIndex - $start), $script:RX_BOUND))
 }
 
+# A BOUND CAN SIT ON EITHER SIDE OF THE NUMBER, and this catalog writes both. The leading form is
+# "with under 20 grams of carbs"; the TRAILING form is "with 15 grams of carbs or less", which is the
+# keto sentence - hatch-green-chile-chicken-casserole and keto-cheeseburger-skillet both carry it.
+# In both of those the figure EQUALS the stat, so the equality gate above would have tokenized a
+# deliberate promise into a live-tracking number: the day the stat moved to 22 the card would read
+# "22 grams of carbs or less", a claim nobody wrote. That is precisely the corruption the leading-bound
+# rule exists to prevent, arriving through the side door because the rule only looked left.
+# Measured 2026-09-01 before this was added: 4 occurrences across 2 specs, every one of them a bound.
+#
+# The window stops at the first sentence end so a bound belonging to the NEXT sentence cannot reach
+# back and silently exempt this one - the mirror of the 24-char lookback the leading form uses.
+$script:RX_BOUND_TRAIL = '(?i)\bor\s+(?:less|fewer|under|below)\b'
+
+function Test-TrailingBoundContext { param([string]$Text, [int]$MatchIndex, [int]$MatchLength)
+  $from = $MatchIndex + $MatchLength
+  if ($from -ge $Text.Length) { return $false }
+  $tail = $Text.Substring($from, [Math]::Min(30, $Text.Length - $from))
+  $dot  = $tail.IndexOf('.')
+  if ($dot -ge 0) { $tail = $tail.Substring(0, $dot) }
+  return ([regex]::IsMatch($tail, $script:RX_BOUND_TRAIL))
+}
+
+function Convert-MacroPass {
+  <#
+    ONE macro pass, shared by cal/protein/carbs/fat. It is a function rather than four near-identical
+    [regex]::Replace blocks because this estate's most productive bug source is a rule written down
+    twice - and the decimal fix below is exactly the kind of tightening that would have reached one
+    copy and not the other three.
+
+    A DECIMAL IS NEVER A COPY OF THE STAT, so it is left alone. "42.4 grams of protein" carries a
+    precision {{protein}} cannot express (the token renders the rounded 42), so tokenizing it would
+    CHANGE the rendered page - the one thing this migration promises never to do.
+
+    AND THE OLD PATTERN COULD NOT EVEN SEE THAT. It was `\b(\d{1,3})`, whose \b sits happily between
+    the '.' and the '4' of "42.4", so it captured "4" and the lookahead still matched " grams of
+    protein". On a spec whose stat.protein was 4 that swap would have written "42.{{protein}} grams",
+    i.e. "42.4" -> "42.4" only by luck and "42.4" -> "42.{{protein}}" in fact. The (?<![\d.]) guard is
+    the same one spec-contradiction-lib carries for the same reason, and the capture takes the WHOLE
+    decimal rather than exempting it so the "is this a copy" question is asked about the real figure.
+  #>
+  param([string]$Text, [string]$Pattern, [int]$Stat, [string]$Token)
+  return [regex]::Replace($Text, $Pattern, {
+    param($m)
+    $lit = $m.Groups[1].Value
+    if ($lit -match '\.') { return $m.Value }
+    if ([int]$lit -ne $Stat) { return $m.Value }
+    # The bound checks read $Text - THIS pass's own parameter - and not the $script:stage the caller
+    # happens to have set. Both hold the same string today, but reading a script-scoped variable that a
+    # caller is trusted to have updated first is the exact shape of the bug the three-passes comment
+    # above describes: a regex checked against the wrong text.
+    if (Test-BoundContext -Text $Text -MatchIndex $m.Index) { return $m.Value }
+    if (Test-TrailingBoundContext -Text $Text -MatchIndex $m.Index -MatchLength $m.Length) { return $m.Value }
+    $script:sw++
+    return $Token
+  })
+}
+
 # Tokenize one plain-text field. Returns @{ Text=..; Swaps=..; Left=.. } where Left counts figures that
 # LOOK like stat figures but did not qualify (unequal or bounded) - reported, never touched.
-function Convert-FieldToTokens { param([string]$Text, [string]$CostPs, [int]$Cal, [int]$Protein)
+function Convert-FieldToTokens { param([string]$Text, [string]$CostPs, [int]$Cal, [int]$Protein, $Carbs = $null, $Fat = $null)
   if ([string]::IsNullOrEmpty($Text)) { return @{ Text = $Text; Swaps = 0; Left = @() } }
 
   # THREE PASSES, and each pass's bound-context check reads the string THAT PASS is scanning. An earlier
@@ -59,21 +124,31 @@ function Convert-FieldToTokens { param([string]$Text, [string]$CostPs, [int]$Cal
     $script:lf += ('$' + $m.Groups[1].Value); return $m.Value
   })
 
+  # Bounds and non-stat figures stay silently in every macro pass - they are claims, not copies.
+
   # calories: a bare integer immediately followed by cal/calories.
   $script:stage = $out
-  $out = [regex]::Replace($script:stage, '\b(\d{2,4})(?=\s*calories?\b|\s*cal\b)', {
-    param($m)
-    if ([int]$m.Groups[1].Value -eq $Cal -and -not (Test-BoundContext -Text $script:stage -MatchIndex $m.Index)) { $script:sw++; return '{{cal}}' }
-    return $m.Value   # bounds and non-stat figures stay silently - they are claims, not copies
-  })
+  $out = Convert-MacroPass -Text $script:stage -Stat $Cal -Token '{{cal}}' `
+           -Pattern '(?<![\d.])(\d{2,4}(?:\.\d+)?)(?=\s*calories?\b|\s*cal\b)'
 
   # protein: integer followed by g/grams (of) protein.
   $script:stage = $out
-  $out = [regex]::Replace($script:stage, '\b(\d{1,3})(?=\s*g(?:rams)?\s*(?:of\s*)?protein\b)', {
-    param($m)
-    if ([int]$m.Groups[1].Value -eq $Protein -and -not (Test-BoundContext -Text $script:stage -MatchIndex $m.Index)) { $script:sw++; return '{{protein}}' }
-    return $m.Value
-  })
+  $out = Convert-MacroPass -Text $script:stage -Stat $Protein -Token '{{protein}}' `
+           -Pattern '(?<![\d.])(\d{1,3}(?:\.\d+)?)(?=\s*g(?:rams)?\s*(?:of\s*)?protein\b)'
+
+  # carbs / fat: only when this spec actually HAS the stat. Writing {{carbs}} against a spec with no
+  # stat.carbs does not render a blank, it THROWS at the render boundary (render-tokens refuses to
+  # print a hole), so a missing stat must skip the pass rather than mint a token nothing can expand.
+  if ($null -ne $Carbs) {
+    $script:stage = $out
+    $out = Convert-MacroPass -Text $script:stage -Stat ([int]$Carbs) -Token '{{carbs}}' `
+             -Pattern '(?<![\d.])(\d{1,3}(?:\.\d+)?)(?=\s*g(?:rams)?\s*(?:of\s*)?(?:carbs?|carbohydrates?)\b)'
+  }
+  if ($null -ne $Fat) {
+    $script:stage = $out
+    $out = Convert-MacroPass -Text $script:stage -Stat ([int]$Fat) -Token '{{fat}}' `
+             -Pattern '(?<![\d.])(\d{1,3}(?:\.\d+)?)(?=\s*g(?:rams)?\s*(?:of\s*)?fat\b)'
+  }
   return @{ Text = $out; Swaps = 0; Left = @() }   # counts live in $script:sw / $script:lf (see NOTE below)
 }
 # NOTE on $script:sw / $script:lf: [regex]::Replace evaluators cannot write a local of the enclosing
@@ -102,9 +177,9 @@ function Test-TokenSwapIsNoOp {
   return $bNew
 }
 
-function Invoke-FieldTokenize { param([string]$Text, [string]$CostPs, [int]$Cal, [int]$Protein)
+function Invoke-FieldTokenize { param([string]$Text, [string]$CostPs, [int]$Cal, [int]$Protein, $Carbs = $null, $Fat = $null)
   $script:sw = 0; $script:lf = @()
-  $r = Convert-FieldToTokens -Text $Text -CostPs $CostPs -Cal $Cal -Protein $Protein
+  $r = Convert-FieldToTokens -Text $Text -CostPs $CostPs -Cal $Cal -Protein $Protein -Carbs $Carbs -Fat $Fat
   return @{ Text = $r.Text; Swaps = $script:sw; Left = $script:lf }
 }
 
@@ -134,6 +209,61 @@ if ($runSelfTest) {
   # "57g protein" (no space) and "57 grams of protein" both tokenize.
   $r5 = Invoke-FieldTokenize '57g protein and later 57 grams of protein' '1.00' 500 57
   T 'both protein spellings tokenize' ($r5.Text -eq '{{protein}}g protein and later {{protein}} grams of protein') $r5.Text
+
+  # ---- CARBS AND FAT (2026-09-01) ------------------------------------------------------------------
+  $rF = Invoke-FieldTokenize 'lands near 435 calories with 34 grams of protein at 10 grams of fat' '2.00' 435 34 50 10
+  T 'carbs/fat pass: a fat figure equal to the stat becomes {{fat}}' `
+    ($rF.Text -eq 'lands near {{cal}} calories with {{protein}} grams of protein at {{fat}} grams of fat') $rF.Text
+  $rC = Invoke-FieldTokenize 'a serving with 40 grams of carbs and 24 g fat' '2.00' 435 34 40 24
+  T 'carbs/fat pass: "40 grams of carbs" and "24 g fat" both tokenize' `
+    ($rC.Text -eq 'a serving with {{carbs}} grams of carbs and {{fat}} g fat') $rC.Text
+  # MUST NOT FIRE: the founding defect. A fat figure that is NOT the stat is a defect for a human to
+  # read, never a copy to swap - swapping it would have silently "fixed" bbq-chicken-rice-bowls' false
+  # 4 g into a true 10 g and buried the fact that a card had been lying about a nutrition number.
+  $rFbad = Invoke-FieldTokenize 'the leanest bowl at just 4 grams of fat' '2.00' 435 34 50 10
+  T 'MUST NOT FIRE a fat figure UNEQUAL to the stat is left alone (bbq-chicken-rice-bowls 4 vs 10)' `
+    ($rFbad.Text -eq 'the leanest bowl at just 4 grams of fat' -and $rFbad.Swaps -eq 0) $rFbad.Text
+  # MUST NOT FIRE: a spec with no carbs/fat stat must not mint a token nothing can expand.
+  $rNo = Invoke-FieldTokenize 'with 40 grams of carbs and 10 grams of fat' '2.00' 435 34 $null $null
+  T 'MUST NOT FIRE with no carbs/fat stat the passes are skipped, not run against zero' `
+    ($rNo.Text -eq 'with 40 grams of carbs and 10 grams of fat' -and $rNo.Swaps -eq 0) $rNo.Text
+
+  # ---- TRAILING BOUNDS (2026-09-01) ----------------------------------------------------------------
+  # The keto sentence, frozen from hatch-green-chile-chicken-casserole and keto-cheeseburger-skillet:
+  # the figure EQUALS the stat, so only the trailing-bound reading stops it being tokenized.
+  $rT = Invoke-FieldTokenize 'a serving, with 15 grams of carbs or less.' '2.00' 435 34 15 10
+  T 'MUST NOT FIRE a TRAILING bound "15 grams of carbs or less" equal to the stat stays a literal' `
+    ($rT.Text -eq 'a serving, with 15 grams of carbs or less.' -and $rT.Swaps -eq 0) $rT.Text
+  $rT2 = Invoke-FieldTokenize 'with 6 grams of carbs or fewer' '2.00' 435 34 6 10
+  T 'MUST NOT FIRE "or fewer" is the same bound' ($rT2.Text -eq 'with 6 grams of carbs or fewer' -and $rT2.Swaps -eq 0) $rT2.Text
+  # CLEAN TWIN: a bound in the NEXT sentence must not reach back and exempt this figure.
+  $rT3 = Invoke-FieldTokenize 'with 15 grams of carbs. Buy two or less.' '2.00' 435 34 15 10
+  T 'CLEAN TWIN a bound after the sentence end does NOT exempt the figure - it still tokenizes' `
+    ($rT3.Text -eq 'with {{carbs}} grams of carbs. Buy two or less.') $rT3.Text
+  # CLEAN TWIN: the LEADING bound still works for the new macros too.
+  $rT4 = Invoke-FieldTokenize 'with under 20 grams of carbs' '2.00' 435 34 20 10
+  T 'CLEAN TWIN a LEADING bound equal to the stat is still never tokenized, carbs included' `
+    ($rT4.Text -eq 'with under 20 grams of carbs' -and $rT4.Swaps -eq 0) $rT4.Text
+
+  # ---- THE DECIMAL, which the old \b pattern read as a FRAGMENT (2026-09-01) ------------------------
+  # `\b(\d{1,3})` sits between the '.' and the '4' of "42.4 grams of protein" and captures "4". On a
+  # spec whose stat.protein is 4 the old code wrote "42.{{protein}} grams of protein", which renders
+  # "42.4" today and whatever the stat becomes tomorrow, from a sentence nobody edited.
+  $rD1 = Invoke-FieldTokenize 'packs 42.4 grams of protein' '2.00' 435 4 50 10
+  T 'MUST NOT FIRE "42.4 grams of protein" is never read as the "4" the old pattern captured' `
+    ($rD1.Text -eq 'packs 42.4 grams of protein' -and $rD1.Swaps -eq 0) $rD1.Text
+  # ...and a decimal that ROUNDS to the stat is still not a copy of it: the token renders 42, the page
+  # says 42.4, so tokenizing would change what a reader sees. Left alone, deliberately.
+  $rD2 = Invoke-FieldTokenize 'packs 42.4 grams of protein' '2.00' 435 42 50 10
+  T 'MUST NOT FIRE a decimal that rounds to the stat is still left alone (the token cannot say .4)' `
+    ($rD2.Text -eq 'packs 42.4 grams of protein' -and $rD2.Swaps -eq 0) $rD2.Text
+  $rD3 = Invoke-FieldTokenize 'a 8.5 g fat serving' '2.00' 435 34 50 8
+  T 'MUST NOT FIRE "8.5 g fat" is not the "5" a leading \b would have captured' `
+    ($rD3.Text -eq 'a 8.5 g fat serving' -and $rD3.Swaps -eq 0) $rD3.Text
+  # CLEAN TWIN: whole numbers still tokenize, so the decimal guard did not blind the migration.
+  $rD4 = Invoke-FieldTokenize 'packs 42 grams of protein' '2.00' 435 42 50 10
+  T 'CLEAN TWIN a WHOLE-NUMBER protein figure still tokenizes - the guard did not switch the pass off' `
+    ($rD4.Text -eq 'packs {{protein}} grams of protein') $rD4.Text
 
   # idempotence: running over already-tokenized text changes nothing.
   $r6 = Invoke-FieldTokenize 'near {{cal}} calories at ${{cost_ps}} a bowl' '3.58' 610 57
@@ -186,12 +316,17 @@ foreach ($file in $files) {
   $spec = $raw | ConvertFrom-Json
   $cps = [string]$spec.stat.cost_ps; $cal = [int]$spec.stat.cal; $pro = [int]$spec.stat.protein
   if (-not $cps) { continue }
+  # $null when the spec has no such stat, which SKIPS that pass. PS 5.1 trap: [int]$null is 0, so
+  # reading these with a cast would turn "no carbs stat" into "a carbs stat of 0" and any prose
+  # saying "0 grams of carbs" would tokenize against a stat that does not exist.
+  $carb = if ($null -ne $spec.stat.carbs) { [int]$spec.stat.carbs } else { $null }
+  $fat  = if ($null -ne $spec.stat.fat)   { [int]$spec.stat.fat }   else { $null }
 
   $edits = @{}
   foreach ($k in $FIELDS) {
     $cur = if ($k -eq 'description') { [string]$spec.head.description } else { [string]$spec.$k }
     if (-not $cur) { continue }
-    $r = Invoke-FieldTokenize -Text $cur -CostPs $cps -Cal $cal -Protein $pro
+    $r = Invoke-FieldTokenize -Text $cur -CostPs $cps -Cal $cal -Protein $pro -Carbs $carb -Fat $fat
     foreach ($l in $r.Left) { $leftReport += ('{0} {1} still holds {2} (stat says ${3})' -f $file.BaseName, $k, $l, $cps) }
     if ($r.Swaps -gt 0 -and $r.Text -ne $cur) {
       # PROOF OF NO-OP before anything is written: expanding the tokenized text against this spec's own

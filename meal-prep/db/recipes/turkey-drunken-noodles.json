@@ -18,7 +18,7 @@
                  "fat":  9,
                  "cost_ps":  "4.50"
              },
-    "intro_html":  "Drunken noodles with ground turkey: all the basil, jalapeno, and chewy rice noodles of pad kee mao, with 9 grams of fat per bowl instead of takeout\u0027s mystery number. Each serving brings \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Drunken noodles with ground turkey: all the basil, jalapeno, and chewy rice noodles of pad kee mao, with {{fat}} grams of fat per bowl instead of takeout\u0027s mystery number. Each serving brings \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 45.5 oz dry (1293 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)",

@@ -20,7 +20,7 @@
                  "fat":  13,
                  "cost_ps":  "4.37"
              },
-    "intro_html":  "Greek gyro flavor in a bowl, with a cool yogurt sauce that costs a fraction of the takeout version. Each serving brings {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost) and the batch makes 14. This one is lean, bright, and one of the lowest-fat plates in the whole lineup.",
+    "intro_html":  "Greek gyro flavor in a bowl, with a cool yogurt sauce that costs a fraction of the takeout version. Each serving brings {{protein}} grams of protein at {{cal}} calories and {{fat}} grams of fat for about ${{cost_ps}} (at everyday cost), and the batch makes 14. That is a serious protein number for a bowl that still eats bright and fresh.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.75 cups dry (1201 g)",
@@ -70,7 +70,7 @@
                     "For the tzatziki, whisk the rest of the greek yogurt with the grated cucumber, dried dill, lemon juice, crumbled feta, and a pinch of salt.",
                     "Layer beef and green peppers over rice, then spoon the tzatziki on top."
                 ],
-    "portion_html":  "Every one of the 14 bowls delivers {{protein}} grams of protein at {{cal}} calories with just 11 grams of fat, making this the leanest beef bowl of the bunch.",
+    "portion_html":  "Every one of the 14 bowls delivers {{protein}} grams of protein at {{cal}} calories and {{fat}} grams of fat. Weigh them out equal and those numbers hold for all fourteen.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.modernfarmhouseeats.com/easy-ground-beef-gyros-with-tzatziki/\" target=\"_blank\" rel=\"noopener\"\u003eModern Farmhouse Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Bright, fresh, and light on the wallet. Sometimes eating well and spending less go together. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  43.23,
