@@ -200,14 +200,7 @@
                                                               "price":  "$2.19",
                                                               "size":  "7 oz",
                                                               "verified":  "2026-08-14 DERIVED from the price row (same record the board priced)"
-                                                          },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/833085213",
-                                                          "name":  "Goya Adobo All-Purpose Seasoning with Pepper, 7.5 Lb",
-                                                          "price":  "$25.93",
-                                                          "size":  "120 oz",
-                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                          }
                                       },
                   "air-freshener":  {
                                         "commodity":  "air-freshener",
@@ -3204,13 +3197,6 @@
                                                         "price":  "$1.99",
                                                         "size":  "16 oz",
                                                         "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                    },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/1805883310",
-                                                        "name":  "(6 pack) Hurst\u0027s Brand Dried Lentils, 16 oz",
-                                                        "price":  "$6.00",
-                                                        "size":  "96 oz",
-                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "brown-rice":  {
@@ -3751,13 +3737,6 @@
                                                                   "size":  "32 oz",
                                                                   "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                               },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/588837447",
-                                                          "name":  "(6 pack) Tony Chachere\u0027s, Seasoning, Original, Cajun, 32 oz",
-                                                          "price":  "$33.28",
-                                                          "size":  "192 oz",
-                                                          "verified":  "2026-08-07 DERIVED from the price row (same record the board priced)"
-                                                      },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41184-louisiana-fish-fry-products-seasoning-cajun-8-oz",
                                                           "name":  "Louisiana Fish Fry Products Original Cajun Seasoning",
@@ -4453,13 +4432,6 @@
                                                            "price":  "$1.68",
                                                            "size":  "20 oz",
                                                            "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                       },
-                                           "Walmart":  {
-                                                           "url":  "https://www.walmart.com/ip/1739149914",
-                                                           "price":  "6.48",
-                                                           "size":  "80 oz",
-                                                           "name":  "(4 pack) Del Monte Pineapple Chunks in 100% Juice, Canned Fruit, 20 oz Can",
-                                                           "verified":  "2026-08-31 price-pull self-capture"
                                                        }
                                        },
                   "canned-pinto-beans":  {
@@ -12719,14 +12691,7 @@
                                                      "price":  "$3.99",
                                                      "size":  "24 oz",
                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                 },
-                                "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/15379164095",
-                                                "price":  "8.72",
-                                                "size":  "96 oz",
-                                                "name":  "(4 pack) Great Value Quick Grits, 24 oz",
-                                                "verified":  "2026-08-31 price-pull self-capture"
-                                            }
+                                                 }
                             },
                   "ground-allspice":  {
                                           "commodity":  "Allspice (ground)",
@@ -13146,14 +13111,7 @@
                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
                                                                 "board_pu":  0.7971,
                                                                 "recipe_pu":  0.7971
-                                                            },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/40166857",
-                                                        "name":  "Badia Spices Ground Ginger 12 OZ",
-                                                        "price":  "$14.99",
-                                                        "size":  "12 oz",
-                                                        "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                            }
                                     },
                   "ground-nutmeg":  {
                                         "commodity":  "Nutmeg (ground)",
@@ -13582,14 +13540,7 @@
                                                        "size":  "1.9 oz",
                                                        "name":  "Morton \u0026 Bassett Harissa",
                                                        "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                   },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/544999596",
-                                                        "name":  "Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz",
-                                                        "price":  "$4.98",
-                                                        "size":  "10 oz",
-                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                   }
                                     },
                   "hash-browns":  {
                                       "commodity":  "hash-browns",
@@ -13622,13 +13573,6 @@
                                                       "size":  "32 oz",
                                                       "name":  "Fareway Southern Style Hash Browns"
                                                   },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/19268962404",
-                                                              "name":  "Ore-Ida Crispy Hash Brown Patties, Shredded Potatoes, Frozen, 5 lb.",
-                                                              "price":  "$7.87",
-                                                              "size":  "5 lb",
-                                                              "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/10451009",
                                                       "name":  "Great Value Southern Hash Browns, 32 oz Bag (Frozen)",
@@ -16051,14 +15995,7 @@
                                                           "price":  "$1.99",
                                                           "size":  "15 oz",
                                                           "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                      },
-                                           "Walmart":  {
-                                                           "url":  "https://www.walmart.com/ip/1853747358",
-                                                           "price":  "11.88",
-                                                           "size":  "116 oz",
-                                                           "name":  "(4 pack) Del Monte Mandarin Oranges in Extra Light Syrup, 29 oz Can, Canned Fruit",
-                                                           "verified":  "2026-08-31 price-pull self-capture"
-                                                       }
+                                                      }
                                        },
                   "mangoes":  {
                                   "commodity":  "mangoes",
@@ -20154,14 +20091,7 @@
                                                          "size":  "4 oz",
                                                          "name":  "Thai Kitchen Gluten Free Red Curry Paste",
                                                          "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                     },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/754814279",
-                                                          "price":  "23.4",
-                                                          "size":  "35 oz",
-                                                          "name":  "Thai Kitchen Red Curry Paste, 35.0 oz Cup",
-                                                          "verified":  "2026-08-31 price-pull self-capture"
-                                                      }
+                                                     }
                                       },
                   "red-lentils":  {
                                       "commodity":  "Red Lentils",
@@ -24335,14 +24265,7 @@
                                                     "price":  "$1.95",
                                                     "size":  "2 ct",
                                                     "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/14070519447",
-                                                       "price":  "2",
-                                                       "size":  "12 ct",
-                                                       "name":  "(2 pack) Dr. Fresh Toothbrushes with Tongue Cleaner, Soft, 6 Count",
-                                                       "verified":  "2026-08-31 price-pull self-capture"
-                                                   }
+                                                }
                                    },
                   "toothpaste":  {
                                      "commodity":  "toothpaste",
@@ -25589,14 +25512,7 @@
                                                         "size":  "32 oz",
                                                         "name":  "Fleischmann\u0027s Instant Dry Yeast, 16 oz., 2 pk.",
                                                         "board_pu":  0.215
-                                                    },
-                                "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/31081703",
-                                                "name":  "Red Star Active Dry Yeast 2 lb. bag",
-                                                "price":  "$14.45",
-                                                "size":  "32 oz",
-                                                "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                            }
+                                                    }
                             },
                   "yogurt":  {
                                  "commodity":  "Yogurt",

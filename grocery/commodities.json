@@ -1362,7 +1362,8 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bscrub\\b"
                     ]
     },
     {
@@ -9532,7 +9533,9 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bbouillon\\b",
+                        "\\btomatoes?\\b"
                     ]
     },
     {
@@ -9971,7 +9974,8 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bbowls?\\b"
                     ]
     },
     {
@@ -10921,7 +10925,8 @@
                         "chickpea",
                         "lentil",
                         "\\bbanza\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bbowls?\\b"
                     ]
     },
     {
@@ -11870,7 +11875,8 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bscrub\\b"
                     ]
     },
     {
@@ -19694,7 +19700,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bcans?\\b",
-                        "escabeche"
+                        "escabeche",
+                        "\\btomatoes?\\b"
                     ]
     },
     {
@@ -29812,7 +29819,8 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "hash\\s*browns?"
                     ]
     },
     {
@@ -39944,7 +39952,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\badobo\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\btomatoes?\\b"
                     ]
     },
     {
@@ -45935,7 +45944,8 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bfor\\s+marinades?\\b"
                     ]
     },
     {

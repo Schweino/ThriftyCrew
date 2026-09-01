@@ -3382,6 +3382,68 @@ else {
   if ($r.rc -eq 0 -and $r.text -match 'KNOWN-WRONG AUDIT OK') { Ok 'known-wrong live clean twin: the real blocklist is green on the real board' }
   else { Bad ('known-wrong is RED on the live board (rc=' + $r.rc + ') - an adjudicated-wrong product is published again: ' + $r.text) }
 }
+# ---- UNFIRABLE vs KEY-COLLISION: two shapes of the SAME 48-char key, needing OPPOSITE actions ---------
+# The key is the product name slugged and truncated to 48 chars, so two names that agree for 48 characters
+# produce ONE key and TWO different match targets. That fact has two completely different causes and until
+# 2026-09-01 this audit reported both as the first one.
+#
+#   UNFIRABLE (founding case, Soeos bay leaves, 2026-08-29): the SAME product under two spellings. Walmart
+#   rewrote a 70-char title into a 168-char SEO title; the two slugs still agree for 55 characters, past the
+#   47-char key. The ruling really is inert and Soeos really did hold the Walmart crown at 17x cheap through
+#   a rebuild that was supposed to have dropped it. Re-issue it. This case had NO fixture until now.
+#
+#   KEY-COLLISION (found 2026-09-01 on the live board): TWO DIFFERENT PRODUCTS the truncation merged. The
+#   ruling names "...Long Grain WHITE Rice Pouch, 8.8 oz" - plain white rice, correctly ruled wrong for a
+#   long-grain-AND-WILD commodity - and the board carries "...Long Grain & WILD Rice Pouch, 8.8 oz", which is
+#   the RIGHT product and matches the commodity's own include. The slugs agree for exactly 48 characters and
+#   diverge at 49, so the cut is the only thing that merged them. Acting on the UNFIRABLE advice here - "let
+#   add-known-wrong read the name off the board" - would rule the correct product wrong and delete a good
+#   cell. Understating is as wrong as overstating.
+#
+# Both rows are FROZEN from the real ones and are never re-read from the live board: the collision IS the bug.
+$fxKwU = NewFxDir 'kw-unfirable'
+New-Item -ItemType Directory -Force (Join-Path $fxKwU 'out') | Out-Null
+Set-Content (Join-Path $fxKwU 'commodities.json') '[{"id":"bay-leaves","label":"Bay Leaves","unit":"oz"},{"id":"ready-to-serve-long-grain-wild-rice-pouch","label":"RTS Long Grain & Wild Rice Pouch","unit":"oz"}]' -Encoding UTF8
+Set-Content (Join-Path $fxKwU 'stores.json') '{"stores":[{"name":"Walmart","order":1,"regular_prefix":"walmart"}]}' -Encoding UTF8
+Set-Content (Join-Path $fxKwU 'known-wrong.json') @'
+{
+  "schema": 1,
+  "entries": [
+    { "key": "bay-leaves|Walmart|soeos-bay-leaves-16-oz-454g-bay-leaves-bulk-bay", "commodity": "bay-leaves", "store": "Walmart",
+      "names": ["Soeos Bay Leaves 16 oz (454g), Bay Leaves Bulk, Bay Leaves Whole Dried"],
+      "product_id": "", "verdict": "wrong-product",
+      "evidence": "frozen from the 2026-08-29 founding case: one product, two spellings, key collides and name does not",
+      "ruled_on": "2026-08-29", "ruled_by": "fixture", "retire_when": "ruling-reversed" },
+    { "key": "ready-to-serve-long-grain-wild-rice-pouch|Walmart|great-value-ready-to-heat-90-second-long-grain-w", "commodity": "ready-to-serve-long-grain-wild-rice-pouch", "store": "Walmart",
+      "names": ["Great Value Ready-to-Heat 90-Second Long Grain White Rice Pouch, 8.8 oz"],
+      "product_id": "", "verdict": "wrong-product",
+      "evidence": "frozen from the 2026-09-01 case: WHITE rice ruled wrong, and the board carries the WILD rice blend under a colliding key",
+      "ruled_on": "2026-08-30", "ruled_by": "fixture", "retire_when": "ruling-reversed" }
+  ]
+}
+'@ -Encoding UTF8
+Set-Content (Join-Path $fxKwU 'out\comparison-2026-01-02.json') @'
+{"comparison":[
+ {"id":"bay-leaves","unit":"oz","cheapest_store":"Walmart","stores":[
+   {"store":"Walmart","per_unit":1.4369,"item":"Soeos Bay Leaves 16 oz (454g), Bay Leaves Bulk, Bay Leaves Dry, Bay Leaf, Laurel Leaves, Natural Laurel Leaf, Natural Dried Bay Leaf, Dried Bay Leaves, Whole Bay Leaves","ad":"$22.99","size":"16 oz"}]},
+ {"id":"ready-to-serve-long-grain-wild-rice-pouch","unit":"oz","cheapest_store":"Walmart","stores":[
+   {"store":"Walmart","per_unit":0.15,"item":"Great Value Ready-to-Heat 90-Second Long Grain & Wild Rice Pouch, 8.8 oz","ad":"$1.32","size":"8.8 oz"}]}
+]}
+'@ -Encoding UTF8
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKwU, '-ListFile', (Join-Path $fxKwU 'known-wrong.json'))
+if ($r.text -match 'UNFIRABLE\s+bay-leaves\|Walmart\|soeos' -and $r.text -match 'agree for 55 characters') {
+  Ok 'known-wrong UNFIRABLE still fires on one product under two spellings (the Soeos founding case, which had no fixture until 2026-09-01)'
+} else { Bad ('known-wrong lost the UNFIRABLE founding case - a renamed product can sit on the board with an inert ruling again: ' + $r.text) }
+if ($r.text -match 'KEY-COLLISION\s+ready-to-serve-long-grain-wild-rice-pouch' -and $r.text -match 'may well be CORRECT') {
+  Ok 'known-wrong separates a KEY-COLLISION between two DIFFERENT products from a genuine UNFIRABLE ruling'
+} else { Bad ('known-wrong reported the white-rice/wild-rice key collision as UNFIRABLE - acting on that advice blocks a CORRECT board cell: ' + $r.text) }
+if ($r.text -notmatch 'UNFIRABLE\s+ready-to-serve-long-grain-wild-rice-pouch') {
+  Ok 'known-wrong does NOT tell a reviewer to re-issue a ruling against a board product that is probably correct'
+} else { Bad 'known-wrong still prescribes "read the name off the board" for a collision between two different products - that deletes a good cell' }
+if ($r.rc -eq 0) { Ok 'neither UNFIRABLE nor KEY-COLLISION sets the exit code (both are read-and-decide findings, not gate failures)' }
+else { Bad ('known-wrong gated the publish on a key-shape finding (rc=' + $r.rc + ')') }
+Remove-Item $fxKwU -Recurse -Force -ErrorAction SilentlyContinue
+
 Remove-Item $fxKw, $fxKwB, $fxKwS -Recurse -Force -ErrorAction SilentlyContinue
 
 # ---------------------------------------------------------------- (m) the COVERAGE LEDGER

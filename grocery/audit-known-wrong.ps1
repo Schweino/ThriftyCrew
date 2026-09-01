@@ -270,6 +270,9 @@ $review  = New-Object System.Collections.Generic.List[object]
 $retire  = New-Object System.Collections.Generic.List[string]
 $unevaluable = New-Object System.Collections.Generic.List[string]
 $unfirable   = New-Object System.Collections.Generic.List[string]
+# KEY-COLLISION is a DIFFERENT finding from UNFIRABLE and needs the opposite action - see the block
+# below. Kept as its own list so a reader can never mistake one for the other.
+$collision   = New-Object System.Collections.Generic.List[string]
 $reversed = 0; $evaluable = 0; $idResolved = 0
 
 foreach ($e in $entries) {
@@ -358,11 +361,50 @@ foreach ($e in $entries) {
         $cellSlug = $cellSlug.Trim('-')
         if ($cellSlug.Length -gt 48) { $cellSlug = $cellSlug.Substring(0, 48).Trim('-') }
         if ($cellSlug -eq $keySlug) {
-          [void]$unfirable.Add(($key + " - its key matches the board product '" + $cell.item +
-            "' but none of its stored name(s) do, so this ruling can NEVER fire and that product is priced UNGUARDED at " +
-            $cell.store + ". The key is the name truncated to 48 chars, so a longer board name that agrees for 48 " +
-            "characters collides on the key while missing on the name. Re-issue the ruling with -Key set to something " +
-            "distinct and let add-known-wrong read the name off the board; do NOT reverse the original."))
+          # WHICH OF TWO SHAPES IS THIS? They look identical from the key and they need OPPOSITE actions,
+          # and until 2026-09-01 this check reported both as the first one (measured below).
+          #
+          #   (i) ONE PRODUCT, TWO SPELLINGS. Walmart rewrote the title; the stored name is the old
+          #       spelling. Founding case, Soeos bay leaves: the stored 70-char name and the board's
+          #       168-char SEO title still agree for 55 characters, well past the 47-char key. The
+          #       ruling really is inert and really does leave a wrong product unguarded. Re-issue it.
+          #
+          #   (ii) TWO DIFFERENT PRODUCTS THE TRUNCATION MERGED. Found 2026-09-01 on
+          #       ready-to-serve-long-grain-wild-rice-pouch: the ruling names "...Long Grain WHITE Rice
+          #       Pouch, 8.8 oz" (plain white rice, correctly ruled wrong for a wild-rice commodity) and
+          #       the board carries "...Long Grain & WILD Rice Pouch, 8.8 oz", which is the RIGHT product
+          #       and matches the commodity's own include. The two slugs agree for exactly 48 characters
+          #       and diverge at 49, so the 48-char cut is the ONLY thing that merged them. Following the
+          #       advice above here - re-issue, reading the name off the board - would rule the correct
+          #       product wrong and delete a good cell. The ruling is not inert at all: it matches on the
+          #       stored NAME, which is intact, so it will fire the day its own product returns.
+          #
+          # THE DISCRIMINATOR IS MEASURED, NOT GUESSED: how far do the two full slugs agree, compared to
+          # where the key was cut? Agreeing PAST the cut means the names were already the same string
+          # family and the truncation is incidental (Soeos: 55 > 47). Diverging exactly AT the cut means
+          # the truncation is what merged them (rice: 48 = 48). Same normalizer on both sides.
+          $cellFull = ((([string]$cell.nfull) -replace '[^a-z0-9]+', '-')).Trim('-')
+          $bestCommon = -1; $bestName = ''
+          foreach ($n in @($e.names)) {
+            $sf = (((KwNorm ([string]$n)) -replace '[^a-z0-9]+', '-')).Trim('-')
+            $i = 0
+            while ($i -lt [math]::Min($sf.Length, $cellFull.Length) -and $sf[$i] -eq $cellFull[$i]) { $i++ }
+            if ($i -gt $bestCommon) { $bestCommon = $i; $bestName = [string]$n }
+          }
+          if ($bestCommon -gt $keySlug.Length) {
+            [void]$unfirable.Add(($key + " - its key matches the board product '" + $cell.item +
+              "' but none of its stored name(s) do, so this ruling can NEVER fire and that product is priced UNGUARDED at " +
+              $cell.store + ". The two names still agree for " + $bestCommon + " characters, past the " + $keySlug.Length +
+              "-char key, so this is ONE product under two spellings. Re-issue the ruling with -Key set to something " +
+              "distinct and let add-known-wrong read the name off the board; do NOT reverse the original."))
+          } else {
+            [void]$collision.Add(($key + " - its key collides with the board product '" + $cell.item + "' at " +
+              $cell.store + ", but the two names diverge at character " + $bestCommon + ", which is exactly where the 48-char " +
+              "key was cut. The truncation is what merged them, so these are probably DIFFERENT products and the board one " +
+              "may well be CORRECT. Ruled name: '" + $bestName + "'. Read both names before doing anything: do NOT re-issue " +
+              "this ruling against the board name (that would block a correct cell), and do NOT reverse it. The ruling still " +
+              "matches on its own stored name, so it fires the day its own product returns."))
+          }
           break
         }
       }
@@ -379,6 +421,7 @@ if (-not $commodityRegistryUsable) { Say ('  NOTE          commodities.json load
 if (-not $storeRegistryUsable)     { Say ('  NOTE          stores.json loaded ' + $liveStores.Count + ' store(s), so the store-retired trigger was NOT evaluated this run.') }
 foreach ($m in $retire) { Say ('  ' + $m) }
 foreach ($m in $unfirable)   { Say ('  UNFIRABLE     ' + $m) }
+foreach ($m in $collision)   { Say ('  KEY-COLLISION ' + $m) }
 foreach ($m in $unevaluable) { Say ('  UNEVALUABLE   ' + $m) }
 foreach ($r in $review) {
   Say ("  REVIEW        [{0}] {1} '{2}' {3} - {4}" -f $r.cell.store, $r.cell.id, $r.cell.item, $r.cell.ad, $r.why)
@@ -396,7 +439,7 @@ if ($Report) {
     boards = $boardNames; cells_named = $cellsNamed; cells_unnamed = $cellsUnnamed
     blocked = @($blocked | ForEach-Object { [ordered]@{ key=$_.key; id=$_.cell.id; store=$_.cell.store; item=$_.cell.item; ad=$_.cell.ad; per_unit=$_.cell.per_unit; crown=$_.cell.crown; board=$_.cell.board } })
     review = @($review | ForEach-Object { [ordered]@{ key=$_.key; id=$_.cell.id; store=$_.cell.store; item=$_.cell.item; ad=$_.cell.ad } })
-    retire_ready = @($retire); unevaluable = @($unevaluable); unfirable = @($unfirable); notes = @($notes)
+    retire_ready = @($retire); unevaluable = @($unevaluable); unfirable = @($unfirable); key_collision = @($collision); notes = @($notes)
   }
   if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Force $outDir | Out-Null }
   ($rep | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $outDir 'known-wrong-report.json') -Encoding UTF8

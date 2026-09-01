@@ -1002,6 +1002,95 @@ if ($SelfTest) {
   if (Test-InStore $null)                { Write-Output 'ok    in-store gate: null signal is NOT a verdict' }                else { Write-Output 'FAIL  in-store gate treated a null signal as not-in-store'; $script:fail++ }
   if (Test-InStore ' store ')            { Write-Output 'ok    in-store gate is case/whitespace tolerant' }                  else { Write-Output 'FAIL  in-store gate rejected a padded STORE value'; $script:fail++ }
 
+  # --- 11g2: Get-ChannelVerdict - the CHANNEL PROOF BY ITEM ID (2026-09-01 shelf-badge probe) --------------
+  # FROZEN, and frozen from the rows that were actually wrong. The browser probe read all 21 doubted cells
+  # on 2026-09-01 (out\instore-badge-evidence.json) and found 19 of them are NOT sold in the Omaha store,
+  # eight of those holding a commodity crown. These rows are copied from that evidence and from the frozen
+  # guard fixtures under regression-inputs\guard-fixtures\instore-channel-*; they are NEVER regenerated
+  # from the live board, because the bug they encode would vanish and the test would pass by finding nothing.
+  #
+  # WHY THE ID AND NOT THE ROW. The engine unions 90 days of captures. Refusing the 08-31 row of a ship-only
+  # product does nothing while its pre-field 08-06 row is still standing, which is exactly how red curry
+  # paste published $23.40 from a carried row while the fresher row for the SAME item id read FC. Case 2 is
+  # that pair and it is the case a row-keyed gate cannot see.
+  function _CR($store,$file,$id,$ful,$name) { [pscustomobject]@{ store=$store; src_file=$file; item_id=$id; product_id=$id; fulfillment=$ful; name=$name } }
+  $cRows = @(
+    # walmart-regular-2026-08-06: PRE-FIELD (no row carries the field), so a blank here is "not collected"
+    (_CR 'Walmart' 'walmart-regular-2026-08-06' '754814279'   ''            'Thai Kitchen Red Curry Paste, 35.0 oz Cup'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-06' '8886020987'  ''            'Scott Paper Towels Choose-A-Sheet 6 Double Rolls'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-06' '999999999'   ''            'Fixture Never-Seen-Again Staple, 16 oz'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-06' '111111111'   ''            'Fixture Clean Staple, 16 oz'),
+    # walmart-regular-2026-08-31: FIELD-BEARING (the real file fills it on 11,603 of 11,694 rows), so a
+    # blank here is "the puller could not attribute this row" - over half of those are (N pack) bundles.
+    (_CR 'Walmart' 'walmart-regular-2026-08-31' '754814279'   'FC'          'Thai Kitchen Red Curry Paste, 35.0 oz Cup'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-31' '8886020987'  'FC'          'Scott Paper Towels Choose-A-Sheet 6 Double Rolls'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-31' '15706413058' ''            '(2 pack) Suave Skin Solutions Silkening Body Lotion for Dry Skin with Baby Oil, All Skin Types, 32 oz'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-31' '30919180'    ''            'El Guapo Mexican Bay Leaves, 0.5 oz Bag'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-31' '233387802'   'MARKETPLACE' 'Thai Kitchen Premium Fish Sauce, 23.66 fl oz'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-31' '111111111'   'STORE'       'Fixture Clean Staple, 16 oz'),
+    (_CR 'Walmart' 'walmart-regular-2026-08-31' '222222222'   'STORE'       'Fixture Second Store Row, 8 oz')
+  )
+  $cAllow = @{ 'Walmart|id|30919180' = "browser probe 2026-09-01: 'Out of stock at Omaha L St Supercenter / Available for pickup nearby' - a store-channel SKU"
+               'Walmart|id|8886020987' = "browser probe 2026-09-01: Pickup 'As soon as 6pm today' at 6.84, the price the board publishes" }
+  # BUILT FROM A List[object], WHICH IS WHAT THE ENGINE ACTUALLY PASSES. The first draft of this fixture
+  # handed New-ChannelIndex a plain array, and PS 5.1 treats the two differently: `@($Rows)` on a parameter
+  # bound to a List[object] throws "Argument types do not match" while the same expression on an array is
+  # fine. The gate crashed the entire board build and this suite stayed green, because the fixture could not
+  # reach the caller's real type. See the note in instore-lib.ps1's New-ChannelIndex.
+  $cRowsList = New-Object System.Collections.Generic.List[object]
+  foreach ($cr in $cRows) { [void]$cRowsList.Add($cr) }
+  $cIdx = New-ChannelIndex -Rows $cRowsList -Allowlist $cAllow
+  if ($cIdx -and $cIdx.Bearing.Count -ge 2) { Write-Output 'ok    channel index builds from the List[object] the engine really passes (PS 5.1 @() trap)' }
+  else { Write-Output 'FAIL  channel index could not be built from a List[object] - the shape the engine passes every run'; $script:fail++ }
+  function _CV($file,$id,$ful,$name) { Get-ChannelVerdict -Index $cIdx -Store 'Walmart' -SrcFile $file -ItemId $id -Fulfillment $ful -ItemName $name }
+  # MUST FIRE 1 - the "(N pack)" online bundle: blank inside a capture that fills the field everywhere else.
+  $v = _CV 'walmart-regular-2026-08-31' '15706413058' '' '(2 pack) Suave Skin Solutions Silkening Body Lotion for Dry Skin with Baby Oil, All Skin Types, 32 oz'
+  if ((-not $v.in_store) -and $v.why -eq 'BLANK-IN-FIELD-BEARING-CAPTURE') { Write-Output 'ok    channel gate refuses a blank fulfillment inside a field-bearing capture (the "(2 pack)" bundle that held the lotion crown)' }
+  else { Write-Output ("FAIL  channel gate admitted an unattributed row in a field-bearing capture (why=" + $v.why + ") - the online-bundle class is back on the board"); $script:fail++ }
+  # MUST FIRE 2 - THE FOUNDING PAIR, and the case a row-keyed gate cannot see: the board prices the carried
+  # pre-field 08-06 row while the SAME item id reads FC in the fresher 08-31 capture.
+  $v = _CV 'walmart-regular-2026-08-06' '754814279' '' 'Thai Kitchen Red Curry Paste, 35.0 oz Cup'
+  if ((-not $v.in_store) -and $v.why -eq 'PRE-FIELD-ROW-OUTLIVING-A-REFUSAL') { Write-Output 'ok    channel gate refuses a pre-field row whose item id is refused in a fresher capture (the red-curry founding pair)' }
+  else { Write-Output ("FAIL  channel gate is row-keyed again (why=" + $v.why + ") - a ship-only product can price the board through a 90-day-old carried row"); $script:fail++ }
+  # MUST FIRE 3 - the store says third-party outright.
+  $v = _CV 'walmart-regular-2026-08-31' '233387802' 'MARKETPLACE' 'Thai Kitchen Premium Fish Sauce, 23.66 fl oz'
+  if (-not $v.in_store) { Write-Output "ok    channel gate refuses an explicit MARKETPLACE row (fish sauce, sold by Noelle's Suitcase)" }
+  else { Write-Output 'FAIL  channel gate admitted a third-party marketplace row'; $script:fail++ }
+  # CLEAN TWIN 1 - a real shelf row is untouched.
+  $v = _CV 'walmart-regular-2026-08-31' '111111111' 'STORE' 'Fixture Clean Staple, 16 oz'
+  if ($v.in_store) { Write-Output 'ok    channel gate keeps a STORE row' } else { Write-Output 'FAIL  channel gate dropped a real shelf row'; $script:fail++ }
+  # CLEAN TWIN 2 - THE ONE THAT STOPS THIS EMPTYING THE WALMART COLUMN. A pre-field row whose id no
+  # field-bearing capture has ever seen carries no evidence either way, and absence is still not a verdict.
+  $v = _CV 'walmart-regular-2026-08-06' '999999999' '' 'Fixture Never-Seen-Again Staple, 16 oz'
+  if ($v.in_store -and $v.why -eq 'NO-SIGNAL') { Write-Output 'ok    channel gate: a pre-field row with NO fresher evidence is still admitted (absence is not a verdict)' }
+  else { Write-Output ("FAIL  channel gate condemned an unmeasured pre-field row (why=" + $v.why + ") - this empties most of the Walmart column"); $script:fail++ }
+  # CLEAN TWIN 3 - evidence cuts both ways: a fresher capture that says STORE clears the carried row.
+  $v = _CV 'walmart-regular-2026-08-06' '111111111' '' 'Fixture Clean Staple, 16 oz'
+  if ($v.in_store -and $v.why -eq 'PROVEN-STORE-BY-FRESHER-CAPTURE') { Write-Output 'ok    channel gate clears a carried row whose item id is proven STORE in a fresher capture' }
+  else { Write-Output ("FAIL  channel gate ignored positive fresher evidence (why=" + $v.why + ")"); $script:fail++ }
+  # CLEAN TWIN 4 - the reviewed exception. El Guapo bay leaves is blank in a field-bearing capture and the
+  # browser probe found a store-level line for it, so refusing it would throw away a correct cell.
+  $v = _CV 'walmart-regular-2026-08-31' '30919180' '' 'El Guapo Mexican Bay Leaves, 0.5 oz Bag'
+  if ($v.in_store -and $v.why -eq 'REVIEWED-EXCEPTION') { Write-Output 'ok    channel gate honours a reviewed exception (El Guapo bay leaves, store-level line read on the page)' }
+  else { Write-Output ("FAIL  channel gate refused a cell a human verified in the store (why=" + $v.why + ") - understating is as wrong as overstating"); $script:fail++ }
+  # ...and the exception list may NOT overrule the store's own word. If it could, one allowlist line would
+  # quietly re-open the achiote hole this whole gate exists to close.
+  $cAllow2 = @{ 'Walmart|id|233387802' = 'a reviewer who tried to rescue a marketplace listing' }
+  $cIdx2 = New-ChannelIndex -Rows $cRows -Allowlist $cAllow2
+  $v = Get-ChannelVerdict -Index $cIdx2 -Store 'Walmart' -SrcFile 'walmart-regular-2026-08-31' -ItemId '233387802' -Fulfillment 'MARKETPLACE' -ItemName 'Thai Kitchen Premium Fish Sauce, 23.66 fl oz'
+  if (-not $v.in_store) { Write-Output 'ok    a reviewed exception cannot overrule an explicit FC/MARKETPLACE row (it only ever answers a DOUBT)' }
+  else { Write-Output 'FAIL  the exception list overruled the store stating the channel itself - the achiote hole is re-opened'; $script:fail++ }
+  # ...and with no index at all the gate degrades to exactly the old row-keyed rule, refusing nothing new.
+  $v = Get-ChannelVerdict -Index $null -Store 'Walmart' -SrcFile 'walmart-regular-2026-08-31' -ItemId '15706413058' -Fulfillment '' -ItemName 'x'
+  if ($v.in_store) { Write-Output 'ok    channel gate with no capture context degrades to Test-InStore rather than refusing blind' }
+  else { Write-Output 'FAIL  channel gate refuses rows when it has no index to reason from - a could-not-run reported as a failure'; $script:fail++ }
+  # THE SHIPPED EXCEPTION LIST ITSELF. A gate whose data file quietly stops loading is a gate that quietly
+  # starts dropping two correct cells, so the real file is parsed here and its two probe-verified ids are
+  # named. If a later reviewer retires one of them, update this line - that edit IS the record of the call.
+  $cShip = Get-ChannelAllowlist -Path (Join-Path $PSScriptRoot 'instore-channel-allowlist.json')
+  if ($cShip.ContainsKey('Walmart|id|30919180') -and $cShip.ContainsKey('Walmart|id|8886020987')) { Write-Output 'ok    the shipped instore-channel-allowlist.json parses and still carries both cells the 2026-09-01 probe verified in store' }
+  else { Write-Output 'FAIL  instore-channel-allowlist.json does not load or lost a reviewed exception - two correct cells are being refused'; $script:fail++ }
+
   # --- 11h: Select-StoreWinner - the case-pack tie-break (2026-08-31 harissa ruling) -----------------------
   # The live rows: Walmart listed Mina Harissa as a single 10 oz jar at $4.98 AND as a (12 pack) at $59.76.
   # Both are exactly $0.498/oz, so the two existing keys were silent and the CASE won on group order - the
@@ -1601,7 +1690,7 @@ function Get-RowProductId($row) {
   if ($v) { return $v }
   return ''
 }
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='') {
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='') {
   if (-not $name) { return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
@@ -1629,7 +1718,11 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   }
   # fulfillment: the store's own word on whether this row is sold on the shelf. Carried raw ('' when the
   # capture predates the field) so Test-InStore can tell "not in store" from "not stated".
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful })
+  # src_file: WHICH capture this row came from, carried because "was the field populated in the file this
+  # row came from" is a different question from "does this row carry the field", and the second one cannot
+  # answer it. A blank inside a capture that fills the field on 99% of its rows is an unattributed row,
+  # not a pre-field one. See the channel block in instore-lib.ps1.
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful; src_file=[string]$srcFile })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
@@ -1926,16 +2019,16 @@ if (Test-Path $regDir) {
         # A CUT PRICE IS A SALE, AND IT CARRIES ITS OWN WINDOW. Typed 'sale' so build-sale-windows
         # dates it, the page badges it, and it can expire. Its everyday half is emitted separately
         # below so the cell the shopper reverts to is never lost.
-        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d) ([string]$d.fulfillment)
+        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName)
         # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
         # store discounts an item, which is the other half of Brad's rule - everyday must not be
         # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
         # with no was-price would otherwise publish the sale price twice under two labels.
         if ($spl.everyday_price -and $spl.everyday_price -gt $spl.sale_price) {
-          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment)
+          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName)
         }
       } else {
-        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment)
+        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName)
       }
     }
   }
@@ -2152,6 +2245,15 @@ $mbUnpriced = New-Object System.Collections.Generic.List[object]   # Buy-N-Get-K
 # product owns a cell exist at all.
 . (Join-Path $PSScriptRoot 'match-lib.ps1')
 $fastMatcher = New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE
+# THE CHANNEL INDEX (2026-09-01). Built from the rows already in memory - no capture file is read twice -
+# so it knows, per store and per item id, the freshest thing the store said about that listing's channel.
+# See instore-lib.ps1 for the rule and for the 21-cell browser probe that promoted it from a watcher to a
+# refusal. Built HERE and not at load time because it has to see EVERY capture in the union before it can
+# say which sighting is the newest one.
+$CHANNEL_ALLOW = Get-ChannelAllowlist -Path (Join-Path $PSScriptRoot 'instore-channel-allowlist.json')
+$CHANNEL_INDEX = New-ChannelIndex -Rows $deals -Allowlist $CHANNEL_ALLOW
+$channelRefused = @{}
+$channelAllowed = 0
 # THE IDENTITY TABLE COLLECTS EVERY ROW, INCLUDING THE UNMATCHED ONES. "No commodity owns this product
 # under today's rules" is an answer, and it is the answer audit-coverage-gaps spends 100 seconds a day
 # recomputing. Collected as references to rows already in memory, so this costs nothing here; the actual
@@ -2188,12 +2290,20 @@ foreach ($d in $deals) {
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("max_pack_oz<=$($MAXPACK[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'WRONG-PACK-FORM'   # drop from ranking; board still ships via runner-up
     }
-    elseif (-not (Test-InStore $d.fulfillment)) {
-      # RIGHT PRODUCT, NOT ON THE SHELF (see Test-InStore). A ship-only or third-party listing is not an
-      # in-store price and must not be published as one. Flagged rather than silently dropped, so the day
-      # this gate starts refusing a store's whole column it shows up as findings and not as a quiet gap.
-      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("fulfillment=$([string]$d.fulfillment) not in-store"); price_text=$d.price_text; size_text=$d.size_text })
-      $uprice = $null; $basis = 'NOT-IN-STORE'   # drop from ranking; board still ships via runner-up
+    else {
+      # RIGHT PRODUCT, NOT ON THE SHELF (see the channel block in instore-lib.ps1). A ship-only or
+      # third-party listing is not an in-store price and must not be published as one. Since 2026-09-01
+      # this asks the ID-KEYED question rather than the row-keyed one: refusing the 08-31 row of a
+      # ship-only product achieves nothing while its pre-field 08-11 row is still standing, and the engine
+      # unions 90 days. Flagged rather than silently dropped, so the day this gate starts refusing a
+      # store's whole column it shows up as findings and not as a quiet gap.
+      $chan = Get-ChannelVerdict -Index $CHANNEL_INDEX -Store ([string]$d.store) -SrcFile ([string]$d.src_file) -ItemId ([string]$d.product_id) -Fulfillment $d.fulfillment -ItemName ([string]$d.name)
+      if ($chan.why -eq 'REVIEWED-EXCEPTION') { $channelAllowed++ }
+      if (-not $chan.in_store) {
+        $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("channel=$($chan.why) not in-store"); price_text=$d.price_text; size_text=$d.size_text })
+        $channelRefused[[string]$chan.why] = 1 + $(if ($channelRefused.ContainsKey([string]$chan.why)) { $channelRefused[[string]$chan.why] } else { 0 })
+        $uprice = $null; $basis = 'NOT-IN-STORE'   # drop from ranking; board still ships via runner-up
+      }
     }
   }
   # SAFETY NET: a recognized multibuy that came back UNPRICED means the capture is incomplete
@@ -2266,6 +2376,14 @@ if ($KW_BLOCKS.Count) {
   $matched = $kept
 }
 Write-Output ("known-wrong: $($KW_BLOCKS.Count) active blocked cell(s) in the ruling file, $kwDropped priced row(s) dropped from this board")
+# THE CHANNEL REFUSAL, COUNTED OUT LOUD. A gate that drops rows silently is indistinguishable from a
+# capture that never found them, which is how the whole in-store class stayed invisible for a month.
+if ($channelRefused.Count) {
+  $parts = @(); foreach ($k in ($channelRefused.Keys | Sort-Object)) { $parts += ("$k=" + $channelRefused[$k]) }
+  Write-Output ("in-store channel: " + (($channelRefused.Values | Measure-Object -Sum).Sum) + " priced row(s) refused as not-on-the-shelf (" + ($parts -join ', ') + "); " + $channelAllowed + " row(s) kept by a reviewed exception in instore-channel-allowlist.json")
+} else {
+  Write-Output "in-store channel: no priced row refused (every matched row either records a shelf channel or has no capture that ever recorded one)"
+}
 
 # ---------------------------------------------------------------- rank: cheapest per store, then across stores
 $report = New-Object System.Collections.Generic.List[object]

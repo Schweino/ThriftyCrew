@@ -1,0 +1,25 @@
+{
+    "readme": "Reviewed exceptions to the IN-STORE CHANNEL refusal in instore-lib.ps1. An entry means a human (or the browser agent under one) went and LOOKED at the live product page and found a STORE-LEVEL availability line, so the row is a real Omaha shelf price even though the capture could not attribute its channel. Every entry quotes what the page actually said. An entry only ever overrides a DOUBT verdict (a blank fulfillment): a row whose own capture records FC or MARKETPLACE stays refused whatever this file says, because that is the store stating the answer rather than us failing to find it. DO NOT add an entry to rescue a cell you have not looked at - the refusal exists because 19 of 21 doubted cells were priced from products that are not sold in the store, eight of them holding the crown. THE PICKUP WORD IS NOT PROOF: 'Pickup: Check nearby' and 'Pickup: Get it nearby' are prompts, and two ship-only items wore 'Get it nearby' on 2026-09-01. The proof is a store-level line - a same-day promise, or a named-store stock statement. Match is store + item_id (preferred, ids outlive title rewrites), or store + exact item name for a store that publishes no id.",
+    "allow": [
+        {
+            "commodity": "bay-leaves",
+            "store": "Walmart",
+            "item_id": "30919180",
+            "item": "El Guapo Mexican Bay Leaves, 0.5 oz Bag",
+            "why": "IN-STORE, verified on the live page 2026-09-01 in Brad's Chrome (store context Omaha L St Supercenter / 68137). The page carries a STORE-LEVEL line: 'Out of stock at Omaha L St Supercenter' followed by 'Available for pickup nearby', plus 'Show in-stock stores'. That is a store-channel SKU, not an online-only listing, and the live price 'Now $1.63, was $9.00, $3.26/oz' matches the board exactly. CAVEAT recorded rather than hidden: it is OUT OF STOCK at Omaha L St today, so a shopper may not be able to buy it there this morning. The channel is right and the shelf is empty, which are different facts and only the first one this gate is about.",
+            "reviewed": "2026-09-01",
+            "reviewed_source": "browser shelf-badge probe, out\\instore-badge-evidence.json (21 cells, 0 walled, 0 unreadable)",
+            "url": "https://www.walmart.com/ip/30919180"
+        },
+        {
+            "commodity": "paper-towels",
+            "store": "Walmart",
+            "item_id": "8886020987",
+            "item": "Scott Paper Towels Choose-A-Sheet 6 Double Rolls",
+            "why": "IN-STORE, verified on the live page 2026-09-01 in Brad's Chrome (store context Omaha L St Supercenter / 68137). Same-day store promise on the page: Pickup 'As soon as 6pm today' and Delivery 'As soon as 16 mins', at $6.84, which is the price the board publishes ($6.84 / 6 rolls = $1.14 each). The board prices this from a pre-field carried row while item 8886020987 reads ship-only in a fresher field-bearing capture, so the id-keyed rule would refuse it; the page says otherwise and the page wins.",
+            "reviewed": "2026-09-01",
+            "reviewed_source": "browser shelf-badge probe, out\\instore-badge-evidence.json (21 cells, 0 walled, 0 unreadable)",
+            "url": "https://www.walmart.com/ip/8886020987"
+        }
+    ]
+}

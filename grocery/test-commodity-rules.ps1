@@ -204,6 +204,72 @@ $cases = @(
      why='CLEAN TWIN the sibling fence must not touch fresh raspberries (aldi-regular-2026-09-01)' }
   @{ id='strawberries'; name='Strawberries Package 1 LB'; expect='included'
      why='CLEAN TWIN the berry that already had the fence is unchanged, which is what makes this a parity fix' }
+
+  # ---- the seven LATENT wrong routings from the 2026-09-01 contested review (queue e17a88) --------
+  # audit-match-soundness listed ten new-contested names; seven were genuinely wrong-commodity
+  # routings, none of them holding a cell that day. Latent is not harmless: garlic is unit=each with
+  # band 0.25-2.5, so a bouillon jar lands IN band on any ordinary day and takes the cell.
+  # Blast radius measured as ROUTING over all 45,934 distinct capture names, before and after, using
+  # the estate's own matcher with GLOBAL_EXCLUDE lifted from compare-deals: exactly 25 names move and
+  # every one of them is listed here or is another instance of the same class. Nothing else moves.
+  #
+  # THE FALL-THROUGH IS PART OF THE FIX, and measuring it is what found the other half. Refusing a
+  # name at index 55 only hands it to index 64. The stewed-tomato row walked garlic -> jalapenos ->
+  # ground-cumin, one spice word at a time, and the prepared pasta bowl walked mushrooms -> pasta.
+  # Each of those second and third landings is a wrong cell this change would have CREATED, so each
+  # gets its own fence and its own case below.
+  @{ id='garlic'; name='Better Than Bouillon Premium Roasted Garlic Base, Shelf-Stable, 8 oz Jar'; expect='excluded'
+     why='FOUNDING CASE a bouillon base won the GARLIC cell over the bouillon commodity (garlic is unit=each, band 0.25-2.5, so an 8 oz jar lands in band)' }
+  @{ id='garlic'; name='Del Monte Diced Tomatoes with the Flavors of Basil, Garlic & Oregano, 14.5 oz Can'; expect='excluded'
+     why='FOUNDING CASE canned diced tomatoes won GARLIC on the word Garlic in the flavour list. 18 tomato rows were routing this way, not the 2 the review named' }
+  @{ id='garlic'; name='Del Monte Stewed Mexican Recipe w/Jalapenos Garlic & Cumin Tomatoes, 14.5 oz'; expect='excluded'
+     why='FOUNDING CASE, and the row that proved the fall-through matters it walked garlic to jalapenos to ground-cumin as each fence went in' }
+  @{ id='jalapenos'; name='Del Monte Stewed Mexican Recipe w/Jalapenos Garlic & Cumin Tomatoes, 14.5 oz'; expect='excluded'
+     why='THE SECOND LANDING. With garlic fenced this row fell onto jalapenos (unit lb, band 0.8-4.5). A cell this change created is a cell this change owns' }
+  @{ id='ground-cumin'; name='Del Monte Stewed Mexican Recipe w/Jalapenos Garlic & Cumin Tomatoes, 14.5 oz'; expect='excluded'
+     why='THE THIRD LANDING. With jalapenos fenced it fell onto ground-cumin. It now routes NOWHERE, which is right the estate has no stewed-tomatoes commodity' }
+  @{ id='garlic'; name='Fresh Garlic, Each'; expect='included'
+     why='CLEAN TWIN real fresh garlic is untouched by either fence' }
+  @{ id='diced-tomatoes'; name='Del Monte Diced Tomatoes with the Flavors of Basil, Garlic & Oregano, 14.5 oz Can'; expect='included'
+     why='CLEAN TWIN and the PROOF THE FIX LANDS SOMEWHERE RIGHT the row garlic gave up is claimed by the commodity that should have had it' }
+  @{ id='jalapenos'; name='Fresh Jalapeno Peppers'; expect='included'
+     why='CLEAN TWIN the tomato fence must not touch a real jalapeno' }
+  @{ id='ground-cumin'; name='Great Value Ground Cumin, 2.5 oz'; expect='included'
+     why='CLEAN TWIN the tomato fence must not touch a real cumin jar' }
+
+  @{ id='milk'; name='Dove Macadamia+Rice Milk and Brown Sugar+Coco Body Scrub Mixed Pack, 15 oz., 2 pk.'; expect='excluded'
+     why='FOUNDING CASE a body scrub won the MILK cell (unit gallon, band 1.80-7.00) on the words Rice Milk' }
+  @{ id='brown-sugar'; name='Dove Macadamia+Rice Milk and Brown Sugar+Coco Body Scrub Mixed Pack, 15 oz., 2 pk.'; expect='excluded'
+     why='THE SECOND LANDING with milk fenced the same scrub fell onto brown-sugar on the words Brown Sugar. Both fences sit in the personal-care block both commodities already carry \blotion\b for' }
+  @{ id='milk'; name='Great Value Whole Vitamin D Milk, Gallon, 128 fl oz'; expect='included'
+     why='CLEAN TWIN the real gallon of milk is untouched' }
+  @{ id='brown-sugar'; name='Great Value Light Brown Sugar, 32 oz'; expect='included'
+     why='CLEAN TWIN real brown sugar is untouched' }
+
+  @{ id='instant-mashed-potatoes'; name='Idahoan Shredded Hashbrowns, 2.125 lbs.'; expect='excluded'
+     why='FOUNDING CASE \bidahoan\b is a BRAND include, so every Idahoan product landed on instant mashed potatoes. Hash browns have their own commodity' }
+  @{ id='instant-mashed-potatoes'; name='Idahoan Fresh Cut Hash Browns, 8 servings, 4.8 oz'; expect='excluded'
+     why='SECOND INSTANCE found by measuring the review named one Idahoan hash-brown row, the corpus holds two' }
+  @{ id='hash-browns'; name='Idahoan Shredded Hashbrowns, 2.125 lbs.'; expect='included'
+     why='CLEAN TWIN and the proof the fix lands somewhere right hash-browns claims the row instant-mashed-potatoes gave up' }
+  @{ id='instant-mashed-potatoes'; name='Idahoan Buttery Homestyle Mashed Potatoes, 4 oz'; expect='included'
+     why='CLEAN TWIN the real Idahoan mashed-potato pouch still routes here, so the brand include is fenced and not gutted' }
+
+  @{ id='bottled-marinade'; name='Soeos Whole Bay Leaves 2oz, Dried Laurel, Non-GMO Verified, Herb for Marinades, Stews and Soups'; expect='excluded'
+     why='FOUNDING CASE, and the trap it teaches bottled-marinade claimed this off the word Marinades in the DESCRIPTION, so a fence keyed on the type word alone cannot see it. The fence is the USE claim "for marinades"' }
+  @{ id='bay-leaves'; name='Soeos Whole Bay Leaves 2oz, Dried Laurel, Non-GMO Verified, Herb for Marinades, Stews and Soups'; expect='included'
+     why='CLEAN TWIN and the proof the fix lands somewhere right bay-leaves takes the row bottled-marinade gave up' }
+  @{ id='bottled-marinade'; name='Allegro Original Marinade, 12.7 fl oz'; expect='included'
+     why='CLEAN TWIN a real marinade product is untouched the fence needs the words "for marinades", not the word "marinade"' }
+
+  @{ id='mushrooms'; name='Tangle Creamy Mushroom Pasta Bowl, 6 pk.'; expect='excluded'
+     why='FOUNDING CASE a prepared single-serve bowl won the MUSHROOMS cell (unit oz, band 0.10-0.90)' }
+  @{ id='pasta'; name='Tangle Creamy Mushroom Pasta Bowl, 6 pk.'; expect='excluded'
+     why='THE SECOND LANDING mushrooms is index 57 and pasta is 64, so fencing mushrooms alone just moved the wrong cell one commodity along. With both fences the row routes NOWHERE, which is correct - the estate prices no prepared bowls' }
+  @{ id='mushrooms'; name='Fresh Sliced White Mushrooms, 8 oz'; expect='included'
+     why='CLEAN TWIN real mushrooms are untouched' }
+  @{ id='pasta'; name='Great Value Spaghetti, 16 oz'; expect='included'
+     why='CLEAN TWIN real dry pasta is untouched' }
 )
 
 $bad = 0

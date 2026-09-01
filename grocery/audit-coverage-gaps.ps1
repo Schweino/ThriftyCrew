@@ -168,9 +168,25 @@ foreach ($k in $regNewest.Keys) {
   # "the store carries this but the board is missing it" is a gap nobody can ever close. Shared rule, not a
   # second opinion - see instore-lib.ps1. Rows with no fulfillment field are unaffected (absent is not a
   # verdict), which is every capture written before 2026-08-30.
+  # ...and since 2026-09-01 that agreement has to include the CHANNEL rule, not just the row's own
+  # fulfillment word: the engine refuses a blank fulfillment inside a capture that populates the field on
+  # the rest of its rows (an unattributed row, over half of them "(N pack)" online bundles - see
+  # instore-lib.ps1). Without this, every such row reads here as "the store carries this and the board is
+  # missing it", a gap nobody can ever close.
+  # SCOPED TO ONE FILE ON PURPOSE, and the limit is worth saying out loud: this reader takes the NEWEST
+  # capture per store, so the engine's other shape - a carried pre-field row whose item id is refused in a
+  # fresher capture - cannot arise here at all. There is no second file to carry it.
+  $cgRows = New-Object System.Collections.Generic.List[object]
   foreach ($d in $doc.deals) {
-    if (-not (Test-InStore $d.fulfillment)) { continue }
-    $s = if ($doc.store) { [string]$doc.store } else { [string]$d.store }; AddP $s ([string]$d.item); if ($d.name) { AddP $s ([string]$d.name) }
+    $sN = if ($doc.store) { [string]$doc.store } else { [string]$d.store }
+    [void]$cgRows.Add([pscustomobject]@{ store = $sN; src_file = $entry.file.BaseName; item_id = ([string]$d.item_id); product_id = ([string]$d.product_id); fulfillment = ([string]$d.fulfillment) })
+  }
+  $cgIdx = New-ChannelIndex -Rows $cgRows -Allowlist (Get-ChannelAllowlist -Path (Join-Path $root 'instore-channel-allowlist.json'))
+  foreach ($d in $doc.deals) {
+    $s = if ($doc.store) { [string]$doc.store } else { [string]$d.store }
+    $iid = ([string]$d.item_id); if (-not $iid) { $iid = ([string]$d.product_id) }
+    if (-not (Get-ChannelVerdict -Index $cgIdx -Store $s -SrcFile ($entry.file.BaseName) -ItemId $iid -Fulfillment $d.fulfillment -ItemName ([string]$d.item)).in_store) { continue }
+    AddP $s ([string]$d.item); if ($d.name) { AddP $s ([string]$d.name) }
   }
 }
 # browser-store deal files

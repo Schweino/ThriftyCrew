@@ -26,6 +26,19 @@
   "(4 pack)" beef stew (out of stock in both pack sizes, no pickup, no delivery), which had been holding
   the beef-stew crown at 5.2 c/oz against a true cheapest of 15.4.
 
+  WHAT CHANGED WHEN THE PROBE FINISHED (2026-09-01, later the same day). The browser agent read all 21
+  doubted cells against Omaha L St / 68137 - no wall, no CAPTCHA, nothing unread - and 19 of 21 were NOT
+  sold in the store, eight of them holding a commodity crown. "Cannot prove a channel" predicting "not on
+  the shelf" 19 times out of 21 is what the original refusal-vs-watch decision was waiting for, so the rule
+  moved into the ENGINE (see the channel block in instore-lib.ps1), keyed on the item id rather than the
+  row, with the two the probe verified in instore-channel-allowlist.json.
+  THIS AUDIT IS NOW AN OUTCOME GUARD, not a queue. Every doubted cell it still finds is one of two things,
+  and it names which: a REVIEWED exception, which is correct and is not queued for a browser check again
+  (queueing it every morning is how a watcher becomes noise nobody reads), or a cell the engine's refusal
+  did not reach, which is a defect in the refusal and is exactly what wants looking at. It stays advisory.
+  Even the apple cider vinegar the header above called "almost certainly a real Omaha shelf item" turned
+  out to be ship-only, which is the reason this file never dropped anything on its own reasoning.
+
   HOW A ROW IS ATTRIBUTED, and why NOT by newest. The first draft matched the board item to the NEWEST
   capture row carrying that name, and it missed the founding case outright: all five Walmart captures
   carry "Thai Kitchen Red Curry Paste, 35.0 oz Cup" under item 754814279, so the newest row is the 08-31
@@ -43,13 +56,18 @@
   It APPENDS: audit-sale-fallback.ps1 rewrites that file wholesale, so this must run AFTER it in the chain
   and must preserve what it wrote. Overwriting would silently drop the sale-fallback queue.
 #>
-param([string]$OutDir = "", [string]$CompareFile = "", [string]$WorklistFile = "", [switch]$NoWorklist)
+param([string]$OutDir = "", [string]$CompareFile = "", [string]$WorklistFile = "", [string]$AllowlistFile = "", [switch]$NoWorklist)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $contract = Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1'
 if (Test-Path $contract) { . $contract }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $WorklistFile) { $WorklistFile = Join-Path $OutDir 'research-worklist.json' }
+# THE SAME EXCEPTION LIST THE ENGINE READS, not a second opinion about it. An auditor that disagrees with
+# the engine is a permanent false alarm - the reason instore-lib.ps1 exists as one file in the first place.
+. (Join-Path $root 'instore-lib.ps1')
+if (-not $AllowlistFile) { $AllowlistFile = Join-Path $root 'instore-channel-allowlist.json' }
+$CHANNEL_ALLOW = Get-ChannelAllowlist -Path $AllowlistFile
 
 # ---- the store capture files this audit reads -------------------------------------------------------
 # Same globs audit-sale-fallback uses, so the two agree on what "this store's capture" means.
@@ -163,29 +181,46 @@ foreach ($it in $all) {
       }
     }
     if (-not $why) { continue }
+    # REVIEWED, OR UNREACHED - and the difference is the whole point now that the engine refuses. A cell
+    # on the exception list was looked at on the live product page and kept deliberately; re-queueing it
+    # for the same browser check every morning would turn this file into noise. Anything else the engine
+    # was supposed to have refused and did not, which is a defect in the refusal.
+    $reviewed = ''
+    $aKid = $st + '|id|' + ("" + $row.item_id).Trim()
+    $aKnm = $st + '|nm|' + $nm.ToLower()
+    if ($CHANNEL_ALLOW.ContainsKey($aKid)) { $reviewed = "" + $CHANNEL_ALLOW[$aKid] }
+    elseif ($CHANNEL_ALLOW.ContainsKey($aKnm)) { $reviewed = "" + $CHANNEL_ALLOW[$aKnm] }
     $isCrown = ($crown -and ("" + $crown.store) -eq $st)
     $doubt.Add([pscustomobject]@{
       commodity = $cid; store = $st; item = $nm; per_unit = [double]$s.per_unit
       ad = "" + $s.ad; size = "" + $s.size; is_crown = $isCrown
       why = $why; detail = $detail; source_file = $row.file; item_id = $row.item_id
-      attribution = $attribution
+      attribution = $attribution; reviewed = $reviewed
     })
   }
 }
 
+$unreached = @($doubt | Where-Object { -not $_.reviewed })
+$reviewedCells = @($doubt | Where-Object { $_.reviewed })
 $rep = [ordered]@{
   generated  = (Get-Date -Format 'yyyy-MM-dd HH:mm')
   board      = (Split-Path $CompareFile -Leaf)
-  note       = 'Cells whose winning row cannot prove it is an in-store shelf row. NOT a verdict and nothing is dropped: the shelf-badge check by the browser agent is the only instrument that can answer, and these are queued for it in research-worklist.json.'
+  note       = 'Cells whose winning row cannot prove it is an in-store shelf row. Since 2026-09-01 the engine REFUSES this shape (instore-lib.ps1), so a cell here is either a REVIEWED exception someone verified on the live product page, or a cell the refusal did not reach - which is a defect in the refusal, not a question for the store. Still advisory, still drops nothing.'
   doubt_count = $doubt.Count
   crown_count = @($doubt | Where-Object { $_.is_crown }).Count
+  reviewed_count = $reviewedCells.Count
+  unreached_count = $unreached.Count
+  allowlist_file = (Split-Path $AllowlistFile -Leaf)
+  allowlist_keys = $CHANNEL_ALLOW.Count
   files_read = $fileStats
   doubt      = $doubt
 }
 $rep | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'instore-channel-doubt.json') -Encoding UTF8
 
 # ---- APPEND to the worklist, never overwrite it -----------------------------------------------------
-if (-not $NoWorklist -and $doubt.Count) {
+# Only the UNREACHED ones. A reviewed exception has already had its shelf-badge check; sending it back to
+# the browser agent every morning is how a queue stops being read.
+if (-not $NoWorklist -and $unreached.Count) {
   $existing = New-Object System.Collections.Generic.List[object]
   if (Test-Path $WorklistFile) {
     try {
@@ -196,7 +231,7 @@ if (-not $NoWorklist -and $doubt.Count) {
   $have = @{}
   foreach ($e in $existing) { $have[(("" + $e.commodity) + '|' + ("" + $e.store))] = $true }
   $added = 0
-  foreach ($d in $doubt) {
+  foreach ($d in $unreached) {
     $k = $d.commodity + '|' + $d.store
     if ($have.ContainsKey($k)) { continue }
     $have[$k] = $true; $added++
@@ -213,13 +248,16 @@ if (-not $NoWorklist -and $doubt.Count) {
 }
 
 if ($doubt.Count) {
-  Write-Output ("instore-channel: {0} published cell(s) cannot prove an in-store channel ({1} of them hold the commodity crown)" -f $doubt.Count, $rep.crown_count)
+  Write-Output ("instore-channel: {0} published cell(s) cannot prove an in-store channel from the capture alone - {1} REVIEWED on the live page, {2} the engine's refusal did not reach ({3} of the {0} hold the commodity crown)" -f $doubt.Count, $reviewedCells.Count, $unreached.Count, $rep.crown_count)
   foreach ($d in ($doubt | Sort-Object { -[int]$_.is_crown }, commodity)) {
     $tag = if ($d.is_crown) { 'CROWN ' } else { '      ' }
-    Write-Output ("  {0}{1,-24} {2,-12} {3}" -f $tag, $d.commodity, $d.store, $d.item)
-    Write-Output ("         {0}" -f $d.detail)
+    $mark = if ($d.reviewed) { 'REVIEWED  ' } else { 'UNREACHED ' }
+    Write-Output ("  {0}{1}{2,-24} {3,-12} {4}" -f $tag, $mark, $d.commodity, $d.store, $d.item)
+    if ($d.reviewed) { Write-Output ("         kept deliberately: {0}" -f $d.reviewed) }
+    else { Write-Output ("         {0}" -f $d.detail) }
   }
-  Write-Output '  -> nothing dropped; each is queued for the browser agent shelf-badge check'
+  if ($unreached.Count) { Write-Output '  -> nothing dropped here; the UNREACHED ones are queued for the browser agent shelf-badge check, and each is also a cell instore-lib.ps1 was meant to refuse and did not' }
+  else { Write-Output '  -> every one is a reviewed exception; nothing queued' }
 } else {
   Write-Output 'instore-channel: every published cell traces to a row that either records an in-store channel or predates the field with no fresher refusal'
 }
