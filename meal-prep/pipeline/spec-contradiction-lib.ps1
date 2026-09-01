@@ -1,4 +1,4 @@
-<#
+﻿<#
   spec-contradiction-lib.ps1 - the shared reading of a recipe spec's self-contradictions.
 
   ONE COPY ON PURPOSE. audit-spec-contradictions.ps1 reports these and repair-spec-contradictions.ps1 fixes

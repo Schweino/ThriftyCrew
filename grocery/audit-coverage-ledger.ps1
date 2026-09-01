@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-coverage-ledger.ps1 - THE RATCHET on how much each check actually looked at.
 
   Reads out\coverage-ledger.json (written by coverage-lib.ps1 from inside the checks themselves) and

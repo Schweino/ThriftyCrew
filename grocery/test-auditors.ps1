@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
