@@ -1697,6 +1697,21 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # ORDER: it reads research-worklist.json, which audit-sale-fallback directly above writes, and it must
       # see TODAY's recipe board - recipe-overlay is on the ship path, so it is already applied by here.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') | Out-Null } catch { Log ('resolve-worklist threw: ' + $_.Exception.Message) }
+      # CHANNEL DOUBT on published cells (2026-09-01, queue 2026-09-01-b7da16). The in-store gate passes a
+      # row whose fulfillment field is ABSENT, which is right for pre-field captures and wrong for two
+      # shapes it cannot tell apart: a blank field inside a capture that populates the field, and a
+      # pre-field row still pricing the board while the SAME item id is refused as FC in a fresher one.
+      # Advisory and drops nothing - the browser agent's shelf-badge check is the only instrument that can
+      # answer, so each doubted cell is queued for it.
+      # ORDER: it APPENDS to research-worklist.json, which audit-sale-fallback rewrites wholesale, so it
+      # must stay AFTER that lane. Placed after resolve-worklist for the same reason.
+      try {
+        # NO 2>&1: EAP is 'Stop' here and a native child's redirected stderr becomes a terminating throw.
+        $icOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-instore-channel.ps1')
+        foreach ($ln in @($icOut)) { Log ('  ' + $ln) }
+        $icCrown = @($icOut | Where-Object { "$_" -match '^\s*CROWN\s' })
+        if ($icCrown.Count) { $summary += ("REVIEW    instore-channel: " + $icCrown.Count + " commodity CROWN(s) price from a row that cannot prove an in-store channel - queued for the browser shelf-badge check (out\instore-channel-doubt.json)") }
+      } catch { Log ('audit-instore-channel threw: ' + $_.Exception.Message) }
       # COST-FLAG ALERT (2026-07-26 scale hardening): an unpriced ingredient line silently makes a recipe
       # look CHEAPER (the line is dropped from the batch cost). cost-recipes records these to db\cost-flags.txt
       # but nothing read it. Alert on a NEW flag-set (signature de-dup so a persistent flag does not spam).

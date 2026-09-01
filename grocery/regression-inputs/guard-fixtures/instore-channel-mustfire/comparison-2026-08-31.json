@@ -1,0 +1,52 @@
+{
+  "built_at": "2026-08-31T00:00:00",
+  "week_of": "2026-08-31",
+  "commodities_compared": 3,
+  "comparison": [
+    {
+      "id": "fx-curry",
+      "label": "Fixture Curry Paste",
+      "unit": "oz",
+      "stores": [
+        {
+          "store": "Walmart",
+          "per_unit": 0.6686,
+          "ad": "$23.40",
+          "size": "35 oz",
+          "item": "Thai Kitchen Red Curry Paste, 35.0 oz Cup",
+          "type": "everyday"
+        }
+      ]
+    },
+    {
+      "id": "fx-stew",
+      "label": "Fixture Beef Stew",
+      "unit": "oz",
+      "stores": [
+        {
+          "store": "Walmart",
+          "per_unit": 0.0524,
+          "ad": "$7.96",
+          "size": "152 oz",
+          "item": "(4 pack) Nalley Chunky Beef Stew With Vegetables in a Hearty Gravy, 9g Protein Per Serving, 38 oz. Can",
+          "type": "everyday"
+        }
+      ]
+    },
+    {
+      "id": "fx-clean",
+      "label": "Fixture Clean Staple",
+      "unit": "oz",
+      "stores": [
+        {
+          "store": "Walmart",
+          "per_unit": 0.0625,
+          "ad": "$1.00",
+          "size": "16 oz",
+          "item": "Fixture Clean Staple, 16 oz",
+          "type": "everyday"
+        }
+      ]
+    }
+  ]
+}

@@ -459,6 +459,34 @@ Write-Output ''
 # exist. Reporting the latter would say "4 pending" on a run that successfully captured three of them.
 Write-Output ("capture-run [$Kind] captures done. lanes run={0} failed={1} browser-pending={2}" -f $jobs.Count, $failed.Count, $browserUndone.Count)
 
+# ---- FAMILY FARE SHARD WINDOW 1 OF 3 (2026-09-01, queue 2026-09-01-056e6b) -----------------------
+# The FF sweep is SHARDED BY DESIGN: a window buys about 7 rotation terms out of a 526-term list, which
+# is sized for several windows a day. Only one window ever existed. Get-ScheduledTask on 2026-09-01
+# showed the three grocery tasks are 07:00 ad, 08:00 daily and 09:30 watchdog, and there is no 3-hourly
+# Family Fare job at all - the alert's own premise. At 7 terms x 1 window against a 526-term list and a
+# 90-day carry, the arithmetic can never recover: the catalog sat flat at 5,258 rows for three days and
+# re-verified-in-48h fell 272 -> 10.
+#
+# So the shards get their windows WITHOUT a new scheduled task, by riding the two that already run. This
+# is the 07:00 one. It is deliberately NOT inside the store loop above: that loop only runs a store whose
+# AD has rolled over, so an FF buy placed there would happen on ad-rollover days only, which is not a
+# cadence. Pacing is untouched - the 2026-07-28 probe measured the Freshop budget as per-window REQUEST
+# COUNT, so more windows is the fix and slower pacing is not.
+# Non-fatal and time-boxed by construction: a failed window commits no cursor, so the next window simply
+# re-buys the same slice.
+if ($Kind -eq 'ad' -and -not $WhatIf) {
+  try {
+    Write-Output ''
+    Write-Output 'capture-run [ad]: Family Fare shard window (1 of 3) - piggybacked on the 07:00 task, no new scheduled job'
+    # NO 2>&1: this script sets $ErrorActionPreference='Stop', and under PS 5.1 redirecting a native
+    # child's stderr wraps each line in a NativeCommandError that becomes a TERMINATING throw here. That
+    # is the exact bug that made the 07:00 and 08:00 tasks exit 1 for weeks (fixed 2026-08-22 further
+    # down this file), and test-auditors' tree scan caught this line reintroducing it before it ever ran.
+    $ffOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'pull-regular-familyfare.ps1') -MaxMinutes 5
+    foreach ($l in @($ffOut)) { Write-Output ('  ff> ' + $l) }
+  } catch { Write-Output ('  ff> shard window threw (not fatal, the cursor did not commit): ' + $_.Exception.Message) }
+}
+
 # ---- DOWNSTREAM: capture is only half the job -------------------------------
 # Capturing prices without recomputing and publishing leaves the new numbers
 # sitting in out\ while the live site keeps yesterday's board. check-ad-cycles

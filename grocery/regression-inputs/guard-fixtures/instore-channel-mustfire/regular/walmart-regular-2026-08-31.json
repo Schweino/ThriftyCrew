@@ -1,0 +1,38 @@
+{
+  "store": "Walmart",
+  "as_of": "2026-08-31",
+  "deals": [
+    {
+      "store": "Walmart",
+      "item": "Thai Kitchen Red Curry Paste, 35.0 oz Cup",
+      "ad_price": "$19.32",
+      "size": "35 oz",
+      "item_id": "754814279",
+      "fulfillment": "FC"
+    },
+    {
+      "store": "Walmart",
+      "item": "(4 pack) Nalley Chunky Beef Stew With Vegetables in a Hearty Gravy, 9g Protein Per Serving, 38 oz. Can",
+      "ad_price": "$7.96",
+      "size": "152 oz",
+      "item_id": "1520500029",
+      "fulfillment": ""
+    },
+    {
+      "store": "Walmart",
+      "item": "Fixture Clean Staple, 16 oz",
+      "ad_price": "$1.00",
+      "size": "16 oz",
+      "item_id": "111111111",
+      "fulfillment": "STORE"
+    },
+    {
+      "store": "Walmart",
+      "item": "Fixture Second Store Row, 8 oz",
+      "ad_price": "$2.00",
+      "size": "8 oz",
+      "item_id": "222222222",
+      "fulfillment": "STORE"
+    }
+  ]
+}

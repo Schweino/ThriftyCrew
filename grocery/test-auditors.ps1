@@ -3018,6 +3018,49 @@ else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only chec
 # January 2000) and run from a COPY in TEMP, because the tool writes its lists and a coverage row into
 # -OutDir and a fixture that mutates itself is not frozen. -AsOf is what makes them freezable at all: the
 # tool calls Get-Date nowhere except to default that one parameter.
+# ---- audit-instore-channel: CHANNEL DOUBT on a published cell (2026-09-01, queue 2026-09-01-b7da16) ---
+# The in-store gate PASSES a row whose fulfillment field is absent, which is correct for pre-field captures
+# and blind to two shapes. Both are frozen below, both from real rows, and the clean twin is the case that
+# stops this audit from re-condemning the entire Walmart column.
+#
+# The must-fire fixture also pins the ATTRIBUTION rule, which is where the first draft of this audit was
+# wrong. All five Walmart captures carry "Thai Kitchen Red Curry Paste, 35.0 oz Cup" under item 754814279;
+# the NEWEST is the 08-31 row at $19.32 FC, which the gate already refuses and which is NOT on the board.
+# The board publishes the carried $23.40. An audit that attributes a cell to the newest row of that name
+# reads the row the engine REJECTED and reports nothing, so the fixture prices fx-curry at $23.40 on
+# purpose: if anyone re-simplifies the attribution back to newest-wins, this case goes red.
+$icFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
+$icTmp = Register-Fx (Join-Path $env:TEMP ('icfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
+$null = New-Item -ItemType Directory -Path $icTmp -Force
+function IcFixture([string]$name) {
+  $d = Join-Path $icTmp $name
+  Copy-Item (Join-Path $icFxSrc $name) $d -Recurse -Force
+  $r = RunPS 'audit-instore-channel.ps1' @('-OutDir', $d)
+  $wl = Join-Path $d 'research-worklist.json'
+  $wlText = ''
+  if (Test-Path $wl) { $wlText = [IO.File]::ReadAllText($wl, [Text.Encoding]::UTF8) }
+  return @{ rc = $r.rc; text = $r.text; worklist = $wlText }
+}
+$icA = IcFixture 'instore-channel-mustfire'
+if ($icA.text -match 'PRE-FIELD-ROW-OUTLIVING-A-REFUSAL' -or $icA.text -match 'prices from the PRE-FIELD row') {
+  Ok 'instore-channel FIRES on a pre-field row still pricing the board while the same item id is refused as FC in a fresher capture (the red-curry founding pair)'
+} else { Bad ('instore-channel lost its PRE-FIELD founding case - a ship-only product can price the board through a carried row again. rc=' + $icA.rc) }
+if ($icA.text -match 'EMPTY fulfillment while that capture populates the field') {
+  Ok 'instore-channel FIRES on a blank fulfillment inside a field-bearing capture (the Nalley "(4 pack)" bundle that held the beef-stew crown)'
+} else { Bad 'instore-channel no longer separates a BLANK field inside a field-bearing capture from a pre-field absence - the online-bundle class is invisible again' }
+if ($icA.text -notmatch 'fx-clean') {
+  Ok 'instore-channel CLEAN TWIN: a STORE-fulfilled row in the same capture is not doubted, so the audit is not just flagging every Walmart cell'
+} else { Bad 'instore-channel doubted a row that records STORE fulfillment - the finding set is not selective and will be ignored' }
+if ($icA.rc -eq 0) { Ok 'instore-channel stays ADVISORY (exit 0) with findings: the answer lives at the store, so it queues a shelf-badge check rather than holding the publish' }
+else { Bad ('instore-channel exited ' + $icA.rc + ' with findings - it must not block the chain on a question it cannot answer itself') }
+if ($icA.worklist -match 'channel doubt' -and $icA.worklist -match 'SHELF BADGE') {
+  Ok 'instore-channel queues each doubted cell into research-worklist.json for the browser agent'
+} else { Bad 'instore-channel found doubt but queued nothing - the finding dies here instead of reaching the only instrument that can settle it' }
+$icB = IcFixture 'instore-channel-clean'
+if ($icB.text -match 'every published cell traces to a row that either records an in-store channel or predates the field with no fresher refusal' -and $icB.rc -eq 0) {
+  Ok 'instore-channel CLEAN TWIN: a wholly pre-field capture with no fresher channel evidence stays SILENT (absence is not a verdict)'
+} else { Bad ('instore-channel doubts a carried row with NO fresher evidence against it - that condemns every pre-field capture and empties the Walmart column. rc=' + $icB.rc) }
+
 $rwFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
 $rwTmp = Register-Fx (Join-Path $env:TEMP ('rwfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 $null = New-Item -ItemType Directory -Path $rwTmp -Force

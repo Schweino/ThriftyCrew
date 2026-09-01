@@ -985,6 +985,16 @@ if ($null -ne $commitIdx) {
   try {
     . (Join-Path $root 'capture-policy-lib.ps1')
     Save-CaptureCursor -Store 'Family Fare' -Next $commitIdx -OutDir $OutDir
+    # AND LOG THE ADVANCE (2026-09-01, queue 2026-09-01-056e6b). Save-CaptureCursor writes the cursor
+    # FILE, which records only the latest value; Write-CursorLog is a separate call every other rotation
+    # store makes and Family Fare never did. Measured that day: out\capture-cursor-log.jsonl held 17
+    # Fareway advances, 11 Sam's Club, 11 Hy-Vee, 10 Baker's, 8 Walmart, 7 Aldi - and ZERO Family Fare,
+    # while its cursor sat at #600 and was plainly moving. Any cadence check reading that history for
+    # Family Fare would therefore have been structurally incapable of firing, which is the
+    # gates-that-can-never-arm class. The MISSING-WINDOW watcher in capture-watchdog.ps1 reads exactly
+    # this line, so it has to exist before that watcher means anything. Never fatal: Write-CursorLog
+    # swallows its own errors, because a cursor that moves but cannot be logged is still a moved cursor.
+    Write-CursorLog -Store 'Family Fare' -From $startIdx -To $commitIdx -Today $todayS -OutDir $OutDir
     Write-Output ("Family Fare: term cursor advanced to #$commitIdx (this run bought terms #$startIdx..#$(($startIdx + $lastSuccessRot) % $termList.Count), merged catalog landed)")
   } catch {
     Write-Warning ('Family Fare: merged catalog landed but the shared term cursor could not be written (' + $_.Exception.Message + ') - next run restarts at #' + $startIdx + ' and re-buys this slice; no rows are lost.')

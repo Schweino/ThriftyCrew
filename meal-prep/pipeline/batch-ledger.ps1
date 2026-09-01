@@ -146,7 +146,31 @@ function Test-ClosedIncomplete { param($Batch)
 # is FOR - deciding whether a batch is a finding - was the one thing no fixture could reach. Two of the
 # abandon cases written against the inline version asserted their own inputs and passed without touching
 # it. Returns the finding string, or $null when the row is not a finding.
-function Get-VerifyFinding { param($Batch,[datetime]$Now,[int]$MaxAgeHours)
+function Get-LiveUnreviewed { param($Batch,$LivePublished)
+  <#
+    THE CONDITION THIS AUDITOR EXISTS TO CATCH, AND COULD NOT SEE (2026-09-01, queue 2026-09-01-f2a554).
+    A batch missing its 'publish' stage reads as "never shipped", which is the reassuring reading. But
+    publishing moved to the waved auto-publish lane on 2026-08-15 and that lane does not stamp ledger
+    stages, so the ledger cannot tell "not published" apart from "published and never stamped". On
+    2026-09-01 the seven OPEN-STALE batches held 13 unique slugs and NINE of them were LIVE, three
+    published at 03:01 that morning, every one of them without a recorded post-publish-review. The
+    auditor reported the less alarming of the two readings for all nine.
+    So ask recipes-db, which knows what actually shipped. $LivePublished is slug -> published date;
+    it is a PARAMETER rather than a file read so -SelfTest can drive this with frozen rows.
+    Returns the live slugs with their dates, or an empty array.
+  #>
+  $out = @()
+  if(-not $LivePublished){ return $out }
+  $st = @(@($Batch.stages) | ForEach-Object { [string]$_.stage })
+  if($st -contains 'publish'){ return $out }   # already stamped: this is not the blind spot
+  foreach($sl in @($Batch.slugs)){
+    $s = [string]$sl
+    if(-not $s){ continue }
+    if($LivePublished.ContainsKey($s)){ $out += ($s + ' (published ' + [string]$LivePublished[$s] + ')') }
+  }
+  return $out
+}
+function Get-VerifyFinding { param($Batch,[datetime]$Now,[int]$MaxAgeHours,$LivePublished)
   if(Test-BatchAbandoned $Batch){
     # Exempt from staleness, NEVER exempt from having shipped.
     $st = @(@($Batch.stages) | ForEach-Object { [string]$_.stage })
@@ -161,6 +185,13 @@ function Get-VerifyFinding { param($Batch,[datetime]$Now,[int]$MaxAgeHours)
     return $null
   }
   $miss = @(Test-BatchComplete $Batch)
+  # BEFORE the staleness wording, because it changes the VERDICT and not just the text: a batch whose
+  # recipes are already on the site is not waiting to publish, it is live and unreviewed, and those are
+  # different jobs for whoever reads this.
+  $liveUn = @(Get-LiveUnreviewed $Batch $LivePublished)
+  if($liveUn.Count){
+    return ("LIVE-UNREVIEWED: batch '{0}' never stamped 'publish', but {1} of its recipe(s) are LIVE in recipes-db: {2}. The waved auto-publish lane does not stamp ledger stages, so 'missing publish' here means unstamped, NOT unpublished - these shipped to readers and still owe: {3}" -f $Batch.batch, $liveUn.Count, ($liveUn -join ', '), ($miss -join ', '))
+  }
   if(Test-FutureStamp $Batch $Now){
     return ("FUTURE STAMP: batch '{0}' claims last_activity {1}, which is ahead of now - the staleness check cannot fire on it, so it is exempt until that time passes. Missing: {2}" -f $Batch.batch, $Batch.last_activity, ($miss -join ', '))
   }
@@ -293,6 +324,36 @@ if($SelfTest){
   T 'MUST FIRE  -Verify reports an open stale batch'      ([string](Get-VerifyFinding $interrupted $now 24) -match 'OPEN\+STALE') ([string](Get-VerifyFinding $interrupted $now 24))
   T 'MUST FIRE  -Verify reports a closed-incomplete batch' ([string](Get-VerifyFinding $closedBad $now 24) -match 'CLOSED INCOMPLETE') ([string](Get-VerifyFinding $closedBad $now 24))
   T 'MUST FIRE  -Verify reports a future stamp'            ([string](Get-VerifyFinding $future $now 24) -match 'FUTURE STAMP') ([string](Get-VerifyFinding $future $now 24))
+  # ---- LIVE-UNREVIEWED (2026-09-01, queue 2026-09-01-f2a554) ------------------------------------
+  # Frozen from the real condition: hunt-2026-08-27-highprotein-w1 held ground-beef-cottage-cheese-bowl,
+  # dated back to 2026-08-19 so it sits BEFORE this suite's frozen $now of 2026-08-21 06:47 - a fixture
+  # stamped after $now lands on FUTURE STAMP and never reaches the branch it was written to test.
+  # which was live in recipes-db with published 2026-08-27 while its batch had never stamped 'publish'.
+  # The auditor called that OPEN+STALE missing publish, which reads as "nothing shipped" - the exact
+  # opposite of the truth, and the reason nine live recipes had no recorded post-publish-review.
+  # OWN CLOCK. $now is reassigned further up this block, so these cases pin their own rather than
+  # inheriting one and silently landing on the FUTURE STAMP branch instead of the branch under test.
+  $luNow = [datetime]'2026-09-01 12:00'
+  $liveMap = @{ 'ground-beef-cottage-cheese-bowl' = '2026-08-27'; 'chicken-and-potato-curry' = '2026-09-01' }
+  $shipped = [pscustomobject]@{ batch='hunt-2026-08-27-highprotein-w1'; opened='2026-08-19T03:00:00'
+    last_activity='2026-08-19T03:00:00'; closed=$false
+    slugs=@('ground-beef-cottage-cheese-bowl'); stages=@([pscustomobject]@{stage='hunt'},[pscustomobject]@{stage='write'}) }
+  $notShipped = [pscustomobject]@{ batch='hunt-2026-08-27-highprotein-w9'; opened='2026-08-19T03:00:00'
+    last_activity='2026-08-19T03:00:00'; closed=$false
+    slugs=@('teriyaki-grilled-chicken-and-veggie-rice-bowls'); stages=@([pscustomobject]@{stage='hunt'}) }
+  T 'MUST FIRE  a batch missing publish whose slug IS live in recipes-db reports LIVE-UNREVIEWED and names the slug and date' `
+    ([string](Get-VerifyFinding $shipped $luNow 24 $liveMap) -match 'LIVE-UNREVIEWED.*ground-beef-cottage-cheese-bowl.*2026-08-27') `
+    ([string](Get-VerifyFinding $shipped $luNow 24 $liveMap))
+  T 'CLEAN TWIN a batch whose slugs are ABSENT from recipes-db keeps the old OPEN+STALE wording' `
+    ([string](Get-VerifyFinding $notShipped $luNow 24 $liveMap) -match 'OPEN\+STALE') `
+    ([string](Get-VerifyFinding $notShipped $luNow 24 $liveMap))
+  T 'CLEAN TWIN with no live index at all the check is inert, never a false LIVE-UNREVIEWED' `
+    ([string](Get-VerifyFinding $shipped $luNow 24 $null) -notmatch 'LIVE-UNREVIEWED') `
+    ([string](Get-VerifyFinding $shipped $luNow 24 $null))
+  T 'the OLD reading is genuinely what you get without the cross-check (which is WHY this check exists)' `
+    ([string](Get-VerifyFinding $shipped $luNow 24 $null) -match 'OPEN\+STALE') `
+    ([string](Get-VerifyFinding $shipped $luNow 24 $null))
+
   T 'CLEAN TWIN -Verify says nothing about a properly closed batch' ($null -eq (Get-VerifyFinding $done $now 24)) ([string](Get-VerifyFinding $done $now 24))
   T 'CLEAN TWIN -Verify says nothing about a young open batch'      ($null -eq (Get-VerifyFinding $fresh $now 24)) ([string](Get-VerifyFinding $fresh $now 24))
 
@@ -428,8 +489,27 @@ if($Stamp -or $Close){
 }
 if($Verify){
   $now2 = Get-Date; $findings = @(); $abandoned = @()
+  # WHAT ACTUALLY SHIPPED, read from recipes-db rather than inferred from the ledger's own stamps.
+  # Non-fatal: if the index cannot be read, every batch simply falls back to the old wording rather
+  # than the audit dying - but the fallback is the blind reading, so the failure is printed, not swallowed.
+  $livePublished = @{}
+  try {
+    $rdb = Join-Path (Split-Path $PSScriptRoot -Parent) 'recipes-db.json'
+    if(Test-Path $rdb){
+      $rdoc = Get-Content $rdb -Raw -Encoding UTF8 | ConvertFrom-Json
+      $rrows = if($rdoc -is [System.Object[]]){ @($rdoc) } elseif($null -ne $rdoc.recipes){ @($rdoc.recipes) } else { @() }
+      foreach($r in $rrows){
+        $sl = [string]$r.slug
+        $pb = ''
+        foreach($f in @('published','published_at','date','published_date')){
+          if(($r.PSObject.Properties.Name -contains $f) -and ("" + $r.$f).Trim()){ $pb = "" + $r.$f; break }
+        }
+        if($sl -and $pb){ $livePublished[$sl] = $pb }
+      }
+    }
+  } catch { Write-Output ('  WARN could not read recipes-db to cross-check what is live (' + $_.Exception.Message + ') - a batch that shipped without a stamp will read as merely unpublished') }
   foreach($b in $ledger){
-    $find = Get-VerifyFinding $b $now2 $MaxAgeHours
+    $find = Get-VerifyFinding $b $now2 $MaxAgeHours $livePublished
     if($find){ $findings += $find; continue }
     if(Test-BatchAbandoned $b){ $abandoned += $b.batch; continue }
     if($b.closed){ continue }

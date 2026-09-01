@@ -159,11 +159,66 @@ function Test-FlagWorked {
   return $true
 }
 
+function Measure-CursorAdvances {
+  <#
+    How many times a store advanced its term cursor since $Since, read off capture-cursor-log.jsonl.
+    PURE, and lifted out of the watcher below so -SelfTest can drive it with frozen lines instead of a
+    live log - the same reason compute-v2's package decision is a function. A cadence check whose only
+    test is "run it and see" is a check nobody can prove fires.
+    A line that does not parse, or carries no readable timestamp, is SKIPPED rather than counted: this
+    number is used to decide that a window is MISSING, so an unreadable line must not manufacture one.
+  #>
+  param([string[]]$Lines, [Parameter(Mandatory)][string]$Store, [Parameter(Mandatory)][datetime]$Since)
+  $n = 0
+  foreach ($ln in @($Lines)) {
+    if (-not ("$ln").Trim()) { continue }
+    $rec = $null; try { $rec = "$ln" | ConvertFrom-Json } catch { continue }
+    if ([string]$rec.store -ne $Store) { continue }
+    $at = [datetime]'1900-01-01'
+    if (-not [datetime]::TryParse([string]$rec.at, [ref]$at)) { continue }
+    if ($at -ge $Since) { $n++ }
+  }
+  return $n
+}
+
 if ($SelfTest) {
   # Frozen fixtures: the founding bug (a task that never runs, reported green forever) and
   # its clean twin (a task legitimately still waiting for its first slot).
   $fail = 0
   $now = [datetime]'2026-08-21 06:47'
+
+  # ---- FF SHARD CADENCE (2026-09-01, queue 2026-09-01-056e6b) ---------------------------------
+  # Frozen from the real log shape. The MUST-FIRE case is the condition that actually existed on
+  # 2026-09-01: one window a day where three are configured. The clean twin is the fixed state.
+  # A third case pins the reason the check was unbuildable before: a log carrying every OTHER
+  # store and no Family Fare line must read as ZERO windows, not as "nothing to see".
+  $cadSince = [datetime]'2026-09-01 06:00'
+  $ffOneWindow = @(
+    '{"at":"2026-09-01T08:01:55","store":"Family Fare","from":593,"to":600,"day":"2026-09-01","caller":"capture-run.ps1","pid":1}'
+  )
+  $ffThreeWindows = @(
+    '{"at":"2026-09-01T07:00:41","store":"Family Fare","from":579,"to":586,"day":"2026-09-01","caller":"capture-run.ps1","pid":1}',
+    '{"at":"2026-09-01T08:01:55","store":"Family Fare","from":586,"to":593,"day":"2026-09-01","caller":"capture-run.ps1","pid":2}',
+    '{"at":"2026-09-01T09:31:02","store":"Family Fare","from":593,"to":600,"day":"2026-09-01","caller":"capture-watchdog.ps1","pid":3}'
+  )
+  # the real 2026-09-01 log: six stores advancing, Family Fare absent entirely
+  $ffNoneAtAll = @(
+    '{"at":"2026-09-01T08:03:05","store":"Sam''s Club","from":70,"to":77,"day":"2026-09-01","caller":"build-sams-deals.ps1","pid":48676}',
+    '{"at":"2026-09-01T08:03:10","store":"Fareway","from":84,"to":91,"day":"2026-09-01","caller":"build-fareway-regular.ps1","pid":44468}',
+    '{"at":"2026-09-01T09:08:23","store":"Walmart","from":35,"to":42,"day":"2026-09-01","caller":"build-walmart-deals.ps1","pid":14848}'
+  )
+  $cadA = Measure-CursorAdvances -Lines $ffOneWindow -Store 'Family Fare' -Since $cadSince
+  if ($cadA -lt 3) { Write-Output "ok    FF cadence MUST-FIRE: one window a day against three configured reads as $cadA and pages MISSING-WINDOW" }
+  else { Write-Output "FAIL  FF cadence counted $cadA windows from a single advance - the 2026-09-01 condition would not page"; $fail++ }
+  $cadB = Measure-CursorAdvances -Lines $ffThreeWindows -Store 'Family Fare' -Since $cadSince
+  if ($cadB -eq 3) { Write-Output 'ok    FF cadence CLEAN TWIN: all three shard windows advancing reads as 3 and stays silent' }
+  else { Write-Output "FAIL  FF cadence counted $cadB of 3 healthy windows - a working cadence would page every day and be muted"; $fail++ }
+  $cadC = Measure-CursorAdvances -Lines $ffNoneAtAll -Store 'Family Fare' -Since $cadSince
+  if ($cadC -eq 0) { Write-Output 'ok    FF cadence reads a log full of OTHER stores as zero Family Fare windows (the state that made this check unbuildable until pull-regular-familyfare started logging)' }
+  else { Write-Output "FAIL  FF cadence counted $cadC Family Fare windows in a log with none - it is matching the wrong store"; $fail++ }
+  $cadD = Measure-CursorAdvances -Lines @('not json at all', '{"at":"","store":"Family Fare"}') -Store 'Family Fare' -Since $cadSince
+  if ($cadD -eq 0) { Write-Output 'ok    FF cadence skips an unparseable line rather than counting it (an unreadable line must not invent a window)' }
+  else { Write-Output "FAIL  FF cadence counted $cadD window(s) from unreadable lines"; $fail++ }
 
   # MUST FIRE: registered four days ago, still never run.
   if (-not (Test-NeverRanTooLong -TriggerStart ([datetime]'2026-08-17 07:00') -Now $now)) {
@@ -838,6 +893,44 @@ try {
     }
   }
 } catch { [void]$findings.Add('VISIBILITY SWEEP THREW: ' + $_.Exception.Message + ' - whether a paid recipe is being served free is unknown this run.') }
+
+# ---- FAMILY FARE SHARD WINDOW 3 OF 3, and the cadence check that watches it ---------------------
+# (2026-09-01, queue 2026-09-01-056e6b.) Window 1 rides the 07:00 ad task, window 2 is the 08:00 daily
+# run's own FF lane, and this is window 3. No new scheduled task: the automation inventory stays at
+# three grocery jobs. The cursor design makes a repeated or a missed window safe by construction, so
+# running FF here cannot corrupt anything - a window that buys nothing commits no cursor.
+$FF_EXPECTED_WINDOWS = 3
+if (-not $SelfTest) {
+  try {
+    Write-Output 'capture-watchdog: Family Fare shard window (3 of 3)'
+    # NO 2>&1 - see capture-run.ps1: EAP=Stop plus a native child's redirected stderr is a terminating
+    # throw in PS 5.1, and it would kill the watchdog before it reported anything.
+    $ffOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'pull-regular-familyfare.ps1') -MaxMinutes 5
+    foreach ($l in @($ffOut)) { Write-Output ('  ff> ' + $l) }
+  } catch { Write-Output ('  ff> shard window threw (not fatal, the cursor did not commit): ' + $_.Exception.Message) }
+}
+
+# THE CADENCE WATCHER. The point of 2026-09-01-056e6b is not that Family Fare was throttled; it is that
+# the designed cadence never existed and NOTHING was watching for its absence, so a missing schedule
+# paged three weeks later as "catalog is degrading" instead of as itself. This asks the direct question.
+#
+# It reads capture-cursor-log.jsonl, and that file could not answer it until today: every other rotation
+# store writes an advance line there and Family Fare never did (17 Fareway, 11 Sam's Club, 11 Hy-Vee, 10
+# Baker's, 8 Walmart, 7 Aldi, 0 Family Fare on 2026-09-01), because pull-regular-familyfare called
+# Save-CaptureCursor without the separate Write-CursorLog every other builder calls. That call was added
+# in the same commit as this check; without it this watcher would have been a gate that can never arm.
+try {
+  $curLog = Join-Path $OutDir 'capture-cursor-log.jsonl'
+  if (Test-Path $curLog) {
+    $since = (Get-Date).AddHours(-24)
+    $ffAdv = Measure-CursorAdvances -Lines (Get-Content $curLog -ErrorAction SilentlyContinue) -Store 'Family Fare' -Since $since
+    if ($ffAdv -lt $FF_EXPECTED_WINDOWS) {
+      [void]$findings.Add(("MISSING-WINDOW: Family Fare advanced its term cursor $ffAdv time(s) in the last 24h, against $FF_EXPECTED_WINDOWS configured shard windows (07:00 ad task, 08:00 daily run, 09:30 watchdog). The sweep is sized for several windows a day - about 7 of 526 terms each - so a lost window is not a slow day, it is coverage the 90-day carry has to cover for. This is the check that makes a dead window page as itself instead of surfacing weeks later as 'the catalog is degrading'."))
+    } else {
+      [void]$ok.Add("Family Fare shard cadence: $ffAdv cursor advance(s) in the last 24h, at or above the $FF_EXPECTED_WINDOWS configured windows")
+    }
+  }
+} catch { }
 
 # ---- report ------------------------------------------------------------------
 Write-Output "CAPTURE WATCHDOG - $todayS"
