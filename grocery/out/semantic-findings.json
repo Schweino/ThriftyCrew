@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-31 21:32",
+    "generated":  "2026-09-01 08:15",
     "board":  "comparison-2026-08-31.json",
-    "sidecar_generated":  "2026-08-31 21:31:59",
+    "sidecar_generated":  "2026-09-01 08:15:56",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3132,
-                     "corpus":  40795,
+                     "board_pairs":  3135,
+                     "corpus":  40797,
                      "rule_invisible":  7404
                  },
     "identity_count":  0,
-    "coverage_count":  18,
+    "coverage_count":  17,
     "identity":  [
 
                  ],
@@ -137,16 +137,6 @@
                          "product":  "Fresh Grape Tomato, 10 oz Package",
                          "cos":  0.6858,
                          "score":  0.92343,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-butter-beans",
-                         "commodity":  "Canned Butter Beans",
-                         "store":  "Walmart",
-                         "product":  "Glory Foods Canned Seasoned Butter Beans, 15.5 oz Can",
-                         "cos":  0.6813,
-                         "score":  0.92039,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

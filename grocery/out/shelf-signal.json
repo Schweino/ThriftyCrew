@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-08-31T11:18:30",
+    "generated":  "2026-09-01T08:13:55",
     "board":  "comparison-2026-08-31",
-    "cells":  511,
-    "coverage_pct":  76.9,
+    "cells":  529,
+    "coverage_pct":  86.6,
     "counts":  {
-                   "SHELF":  361,
-                   "SHIP_ONLY":  24,
-                   "THIRD_PARTY":  8,
-                   "UNKNOWN":  118
+                   "SHELF":  448,
+                   "SHIP_ONLY":  6,
+                   "THIRD_PARTY":  4,
+                   "UNKNOWN":  71
                },
     "flagged":  [
                     {
@@ -29,83 +29,11 @@
                         "fulfillment":  "FC"
                     },
                     {
-                        "id":  "applesauce",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.048,
-                        "item":  "(4 pack) Tree Top No Sugar Added Apple Sauce Jar, No Artificial Flavors or Colors, 47.3 Oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "baby-wipes",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0121,
-                        "item":  "(3 pack) Ricitos de Oro Baby Wipes, Chamomile and Aloe Vera Refillable Baby Wipes, Moisturize and Clean, 1 Resealable Pack (80 Total Wipes)",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "balsamic-vinegar",
-                        "crown":  false,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.229,
-                        "item":  "(3 pack) Gia Russa Balsamic Vinegar, 16.9 fl oz Bottle",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "berbere-seasoning",
-                        "crown":  true,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  3.1225,
-                        "item":  "Spice Hut - Ethiopian BerBere, Organic, with Salt, - Vegan, Gluten-Free - 4oz Glass Jar",
-                        "seller":  "The Spice Hut",
-                        "fulfillment":  "MARKETPLACE"
-                    },
-                    {
                         "id":  "cajun-seasoning",
                         "crown":  false,
                         "verdict":  "SHIP-ONLY",
                         "per_unit":  0.1733,
                         "item":  "(6 pack) Tony Chachere\u0027s, Seasoning, Original, Cajun, 32 oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "canned-pinto-beans",
-                        "crown":  false,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0563,
-                        "item":  "(12 pack) Great Value Pinto Beans, No Salt Added, 15.5 oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "canned-yams",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0718,
-                        "item":  "(2 pack) Sugary Sam Golden Cut Sweet Potatoes Yams in Syrup, 40 oz., Can",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "chickpeas",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0539,
-                        "item":  "Bush\u0027s Low Sodium Garbanzo Beans, Canned Chickpeas, 111 oz Can",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "ground-coriander",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.8662,
-                        "item":  "(2 pack) 24 Mantra Organic Coriander Powder, 8 Oz",
                         "seller":  "Walmart.com",
                         "fulfillment":  "FC"
                     },
@@ -131,26 +59,8 @@
                         "id":  "grits",
                         "crown":  false,
                         "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0485,
-                        "item":  "(2 pack) Jim Dandy Quick Grits, 5 lb Bag (80 oz)",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "ground-turmeric",
-                        "crown":  false,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  0.7088,
-                        "item":  "Badia Ground Turmeric, 16 oz",
-                        "seller":  "Buckeye Elite Store",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "hand-sanitizer",
-                        "crown":  false,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.1553,
-                        "item":  "Equate Advanced Hand Sanitizer with Aloe, 32 fl oz",
+                        "per_unit":  0.0908,
+                        "item":  "(4 pack) Great Value Quick Grits, 24 oz",
                         "seller":  "Walmart.com",
                         "fulfillment":  "FC"
                     },
@@ -164,24 +74,6 @@
                         "fulfillment":  "FC"
                     },
                     {
-                        "id":  "stain-remover",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0997,
-                        "item":  "Shout Active Enzyme Laundry Stain Remover Refill, Triple-Acting Formula Clings, Penetrates, and Lifts 100+ Types of Everyday Stains – 60 fl oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "lime-juice",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.06,
-                        "item":  "(12 pack) Great Value Lime 100% Juice, 15 fl oz (Shelf Stable)",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
                         "id":  "miracle-whip",
                         "crown":  false,
                         "verdict":  "THIRD-PARTY",
@@ -191,101 +83,11 @@
                         "fulfillment":  "FC"
                     },
                     {
-                        "id":  "ground-nutmeg",
-                        "crown":  false,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  1.3688,
-                        "item":  "Badia Ground Nutmeg, 16 oz",
-                        "seller":  "Ultimat",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "oyster-sauce",
-                        "crown":  false,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.2587,
-                        "item":  "Heinz Golden Mark Oyster Sauce 9.2oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "pistachios",
-                        "crown":  false,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  0.995,
-                        "item":  "Wonderful Pistachios No Shells Roasted \u0026 Salted Nuts, 12 Ounce Bag",
-                        "seller":  "Kullah Enterprises Inc",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "pomegranate-molasses",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.548,
-                        "item":  "Sadaf brand Pomegranate Molasses, 10 Fl oz. in a bottle",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "red-wine-vinegar",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.1192,
-                        "item":  "(2 pack) Star Italian Kitchen Red Wine Vinegar 25 fl oz, Bottle",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "rice-vinegar",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.2311,
-                        "item":  "(6 pack) (1 pack) Mizkan Rice Vinegar, Mild and Mellow, 12 fl oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "toasted-sesame-seeds",
-                        "crown":  false,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.59,
-                        "item":  "J-Basket Premium Non-GMO White Roasted Sesame Seeds, 8 oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "sweet-soy-sauce",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.374,
-                        "item":  "(2 pack) Kikkoman Gluten-Free Sweet Soy Sauce for Rice, 10 oz Glass Bottle",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "tahini",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.3308,
-                        "item":  "(2 pack) Haddar by Baracke 100% Pure Ground Sesame Tahini, 15.9 oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "tea-bags",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0218,
-                        "item":  "(10 pack) Great Value Black Tea Bags, 8 oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
                         "id":  "red-curry-paste",
                         "crown":  true,
                         "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.4514,
-                        "item":  "Mae Ploy Red Curry Paste, 14 oz",
+                        "per_unit":  0.6686,
+                        "item":  "Thai Kitchen Red Curry Paste, 35.0 oz Cup",
                         "seller":  "Walmart.com",
                         "fulfillment":  "FC"
                     },

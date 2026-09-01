@@ -3438,6 +3438,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "boneless-skinless-chicken-thigh",
+        "store":  "Family Fare",
+        "product":  "Chicken Thighs, Boneless Gold N Plump",
+        "dept":  "meat",
+        "aisle":  "meat/chicken",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
         "id":  "cheddar-cheese-shredded",
         "store":  "Family Fare",
         "product":  "Our Family Mild Cheddar Shredded Cheese 16 Oz",

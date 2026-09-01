@@ -1,1 +1,1 @@
-﻿aji-amarillo-paste|Walmart;coleslaw-mix|Hy-Vee;garlic-bread|Hy-Vee;yukon-gold-potatoes|Fareway
+﻿coleslaw-mix|Walmart;cooked-jasmine-rice|Walmart;pomegranates|Walmart

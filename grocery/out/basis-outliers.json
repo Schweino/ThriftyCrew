@@ -135,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-09-01T07:00:09",
+    "generated":  "2026-09-01T08:19:49",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -1258,6 +1258,18 @@
                               "id":  "vanilla-extract",
                               "commodity":  "Vanilla Extract",
                               "unit":  "floz",
+                              "store":  "Hy-Vee",
+                              "per_unit":  2.985,
+                              "size":  "2 oz",
+                              "item":  "Hy Vee Pure Vanilla Extract",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "vanilla-extract",
+                              "commodity":  "Vanilla Extract",
+                              "unit":  "floz",
                               "store":  "Fareway",
                               "per_unit":  3.2475,
                               "size":  "4 oz",
@@ -1267,25 +1279,13 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "vanilla-extract",
-                              "commodity":  "Vanilla Extract",
-                              "unit":  "floz",
-                              "store":  "Hy-Vee",
-                              "per_unit":  3.395,
-                              "size":  "2 oz",
-                              "item":  "Hy Vee Pure Vanilla Extract",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "vegetable-oil",
                               "commodity":  "Vegetable / Canola Oil",
                               "unit":  "floz",
                               "store":  "Fareway",
-                              "per_unit":  0.0859,
+                              "per_unit":  0.0741,
                               "size":  "128 oz",
-                              "item":  "Fareway Canola Oil",
+                              "item":  "Fareway Vegetable Oil",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

@@ -1,12 +1,12 @@
 {
-    "updated":  "2026-08-31T08:13:30",
+    "updated":  "2026-09-01T08:12:54",
     "board":  "comparison-2026-08-31.json",
     "week_of":  "2026-08-31",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  441,
-    "dated_by_the_store":  204,
-    "traced_to_an_ad":  59,
-    "untraceable":  178,
+    "sale_cells":  472,
+    "dated_by_the_store":  231,
+    "traced_to_an_ad":  60,
+    "untraceable":  181,
     "ad_rows_available":  "Aldi=86 Baker\u0027s=400 Family Fare=1400 Fareway=729 Hy-Vee=717",
     "items":  [
                   {
@@ -326,8 +326,8 @@
                       "id":  "canned-beets",
                       "store":  "Fareway",
                       "item":  "Fareway Diced Beets",
-                      "price":  "$1.44",
-                      "per_unit":  0.096,
+                      "price":  "$1.48",
+                      "per_unit":  0.0987,
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24226630-fareway-beets-diced-15-oz",
                       "first_seen":  "2026-08-21",
@@ -589,7 +589,7 @@
                       "price":  "$9.99",
                       "per_unit":  0.999,
                       "unit":  "each",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43979690-green-mountain-coffee-roasters-k-cup-pods-10-pack",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/31545498-caribou-coffee-caribou-blend-medium-roast-coffee-keurig-k-cup-pod-10-pack",
                       "first_seen":  "2026-08-21",
                       "last_seen":  "2026-08-31",
                       "days_unexplained":  10
@@ -615,7 +615,7 @@
                       "price":  "$1.97",
                       "per_unit":  0.0876,
                       "unit":  "floz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91212795-suave-ess-refrsh-cond-ocean-br",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/90978016-sve-cd-ess-dlyclf-225z",
                       "first_seen":  "2026-08-21",
                       "last_seen":  "2026-08-31",
                       "days_unexplained":  10
@@ -1356,7 +1356,7 @@
                       "price":  "$3.97",
                       "per_unit":  0.1175,
                       "unit":  "floz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19256326-goodsense-mouth-rinse-antiseptic-spring-mint-33-8-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19256333-goodsense-blue-mint-mouthwash-1-l",
                       "first_seen":  "2026-08-21",
                       "last_seen":  "2026-08-31",
                       "days_unexplained":  10
@@ -1460,7 +1460,7 @@
                       "price":  "$0.99",
                       "per_unit":  0.0619,
                       "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25096494-fareway-whole-wheat-macaroni-product-thin-spaghetti-16-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25096769-fareway-whole-wheat-macaroni-product-long-spaghetti-16-oz",
                       "first_seen":  "2026-08-21",
                       "last_seen":  "2026-08-31",
                       "days_unexplained":  10
@@ -2207,6 +2207,32 @@
                       "days_unexplained":  1
                   },
                   {
+                      "key":  "Fareway|bread-crumbs",
+                      "id":  "bread-crumbs",
+                      "store":  "Fareway",
+                      "item":  "Progresso Quality Foods Plain Breadcrumbs",
+                      "price":  "$3.98",
+                      "per_unit":  0.1658,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/191981-progresso-breadcrumbs-24-000-oz",
+                      "first_seen":  "2026-08-31",
+                      "last_seen":  "2026-08-31",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|canned-butter-beans",
+                      "id":  "canned-butter-beans",
+                      "store":  "Fareway",
+                      "item":  "Fareway Large Butter Beans",
+                      "price":  "$1.34",
+                      "per_unit":  0.0865,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24084451-fareway-butter-beans-large-155-oz",
+                      "first_seen":  "2026-08-31",
+                      "last_seen":  "2026-08-31",
+                      "days_unexplained":  0
+                  },
+                  {
                       "key":  "Fareway|cereal",
                       "id":  "cereal",
                       "store":  "Fareway",
@@ -2246,14 +2272,27 @@
                       "days_unexplained":  0
                   },
                   {
-                      "key":  "Fareway|peaches",
-                      "id":  "peaches",
+                      "key":  "Fareway|oat-milk",
+                      "id":  "oat-milk",
                       "store":  "Fareway",
-                      "item":  "Dole Parfait, Peaches \u0026 Creme",
-                      "price":  "$2.99",
-                      "per_unit":  2.7814,
-                      "unit":  "lb",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35657-dole-parfait-peaches-creme-fruit-bowls-4-3-oz",
+                      "item":  "Planet Oat Oatmilk",
+                      "price":  "$3.48",
+                      "per_unit":  0.0669,
+                      "unit":  "floz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35622673-planet-oat-oatmilk-barista-lovers-52-fl-oz",
+                      "first_seen":  "2026-08-31",
+                      "last_seen":  "2026-08-31",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|vegetable-oil",
+                      "id":  "vegetable-oil",
+                      "store":  "Fareway",
+                      "item":  "Fareway Vegetable Oil",
+                      "price":  "$9.48",
+                      "per_unit":  0.0741,
+                      "unit":  "floz",
+                      "url":  "",
                       "first_seen":  "2026-08-31",
                       "last_seen":  "2026-08-31",
                       "days_unexplained":  0
@@ -2292,7 +2331,7 @@
                       "price":  "$1.19",
                       "per_unit":  0.0744,
                       "unit":  "oz",
-                      "url":  "",
+                      "url":  "https://www.hy-vee.com/aisles-online/p/22457/hy-vee-penne-rigate",
                       "first_seen":  "2026-08-31",
                       "last_seen":  "2026-08-31",
                       "days_unexplained":  0

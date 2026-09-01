@@ -139,6 +139,11 @@ foreach($run in @('db')){
         $n = if($cl.buy_n){ [int]$cl.buy_n } else { [int]$cl.starter_n }
         $c = if($cl.buy_cost){ [double]$cl.buy_cost } else { [double]$cl.starter_cost }
         $pkgG = if($cl.pkg_g){ [double]$cl.pkg_g } else { [double]$cl.starter_pkg_g }
+        # A COVERED LINE HAS NO PACKAGE BY DESIGN - its unit is bought under another ingredient, so it
+        # adds NOTHING to a per-serving package total. Both tiers already count the coverer's own
+        # purchase; charging this line again would double it, which is the very over-buy covered_by
+        # exists to remove. The fifth consumer of a costed line to assume every line has a package.
+        if(($cl.PSObject.Properties.Name -contains 'covered_by') -and $cl.covered_by){ continue }
         if($n -lt 1 -or $c -le 0 -or $pkgG -le 0){ throw "bad pkg data on '$key'" }
         $pkgP = $c / $n
         $k = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02))
