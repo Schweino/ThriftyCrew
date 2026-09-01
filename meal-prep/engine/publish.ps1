@@ -44,6 +44,28 @@ function Get-ContentHash([string]$s){ $sha=[System.Security.Cryptography.SHA1]::
 if($All){ $Slugs = (Get-ChildItem (Join-Path $root 'db\built\*.body.html')).BaseName -replace '\.body$','' }
 if(-not $Slugs){ throw 'no slugs' }
 
+# DELIBERATELY HELD RECIPES (2026-08-31). hold-recipe.ps1 takes ONE live recipe down to a draft, and
+# the hold cannot survive on Ghost's status alone: this script sets status='published' UNCONDITIONALLY
+# on update, and it decides what to SKIP by comparing the local content hash to the stored one. A held
+# recipe has had its published-hash removed - it must, or feed-covers-published keeps reporting it as a
+# published page whose feed row is missing - and a slug with no hash reads here as "never published",
+# which is precisely the shape that gets republished. So the hash removal and this refusal are two
+# halves of one mechanism; neither is safe alone, and hold-recipe's own self-test asserts this file
+# reads the list.
+$heldFile = Join-Path $root 'db\held-recipes.json'
+$heldSlugs = @{}
+if(Test-Path $heldFile){
+  try {
+    $hd = (Get-Content $heldFile -Raw | ConvertFrom-Json)
+    foreach($h in @($hd.held)){ if($h -and $h.slug){ $heldSlugs[[string]$h.slug] = [string]$h.reason } }
+  } catch {
+    # A held list we cannot read is not an empty one. Refusing everything would be worse than the
+    # disease, so it is named loudly and the run continues WITHOUT the protection - which is the state
+    # this file was in before the list existed, and now at least it says so.
+    Write-Output 'WARNING: db\held-recipes.json exists but could not be parsed - held recipes are NOT protected on this run'
+  }
+}
+
 # published-content hashes (the change gate + resume journal in one file)
 $hashFile = Join-Path $root 'db\published-hashes.json'
 $pubHashes = @{}
@@ -79,8 +101,16 @@ if(Test-Path $costedFile){
 }
 if(-not $carriageKnown){ Write-Output 'PUBLISH: WARNING - db\costed.json unreadable, so carriage could not be checked. Recost before publishing.' }
 
-$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $orphaned=@()
+$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $refusedHeld=@(); $orphaned=@()
 foreach($slug in $Slugs){
+  # THE HOLD, checked first and not overridable by -Force. -Force exists to overwrite a live body that
+  # drifted; it has nothing to say about whether a page should be live at all, and letting it end a
+  # deliberate takedown would make every -Force run a silent republish of everything under repair.
+  if($heldSlugs.ContainsKey($slug)){
+    $refusedHeld += $slug
+    Write-Output ("REFUSED HELD      $slug  - deliberately drafted via hold-recipe.ps1: " + $heldSlugs[$slug] + "  (release it with hold-recipe.ps1 -Slug $slug -Release)")
+    continue
+  }
   # THE CARRIAGE GUARD, before any work is spent on this slug. Brad's standing rule: if even ONE
   # ingredient is not carried in any Omaha store, we cannot use the recipe. This refuses BOTH create and
   # republish - a recipe already live with an uncarried line is exactly the state that had to be cleaned
@@ -267,6 +297,9 @@ if($orphaned){
   Write-Output ("ORPHAN CARDS (" + $orphaned.Count + " built card(s) with no spec in db\recipes - delete them or restore the spec): " + ($orphaned -join ', '))
 }
 if($failed){ Write-Output ("FAILED (" + $failed.Count + "): " + ($failed -join ', ')) }
+if($refusedHeld){
+  Write-Output ("REFUSED HELD (" + $refusedHeld.Count + " slug(s) deliberately drafted via hold-recipe.ps1; release before publishing): " + ($refusedHeld -join ', '))
+}
 if($refusedCarriage){
   Write-Output ("REFUSED CARRIAGE (" + $refusedCarriage.Count + " slug(s) have an ingredient no Omaha store is proven to stock): " + ($refusedCarriage -join ', '))
   Write-Output ("  These were NOT published. Either prove carriage with store evidence in grocery\carriage.json, re-price the line from a carried board commodity, or drop the recipe.")
