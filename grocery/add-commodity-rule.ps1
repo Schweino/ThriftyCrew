@@ -66,6 +66,23 @@ function Die([string]$s) { Write-Output ('add-commodity-rule: ' + $s); exit 1 }
 # internals. That is the point: the thing this script promises is "the bytes of one entry change and
 # nothing else does", and only an end-to-end run over a whole file can show that. Until 2026-08-28
 # this script had no self-test at all, so run-gates never saw it.
+# A FUNCTION SO IT CAN ACTUALLY BE TESTED. Driving this through the self-test's Run helper cannot
+# reach it: Run shells out with `& powershell -File`, and a native-exe argument list DROPS an empty
+# string element before the script ever binds it - so a case written that way passes whether the check
+# exists or not. A direct `.\add-commodity-rule.ps1 -Include ''` binds it just fine, which is how the
+# 2026-08-31 incident happened. The rule is testable in-process; the invocation is not.
+function Test-PatternUsable {
+  <# $true when this pattern may be written. An EMPTY pattern is a LEGAL regex and a catastrophe:
+     [regex]::new('') succeeds and matches EVERY product string. On 2026-08-31 a stray -Include ''
+     wrote a zero-length include onto dried-parsley and that commodity immediately swallowed roach
+     gel, freezer bags, evaporated goat milk and acorn squash. Two other guards caught it inside one
+     run (audit-household-in-food, 11 rows; compare-deals' routing fixtures, 6 red) - but nothing HERE
+     said no, in the one file whose whole purpose is to refuse rather than guess.
+     Whitespace counts as empty: '\s*' is a deliberate pattern, a bare space is a typo. #>
+  param([string]$P)
+  return -not [string]::IsNullOrWhiteSpace($P)
+}
+
 if ($SelfTest) {
   $bad = 0
   function T([string]$n, [bool]$ok, [string]$got) {
@@ -99,6 +116,25 @@ if ($SelfTest) {
     # MUST FIRE: an invalid regex never reaches the file.
     $r = Run @('-Id','alpha','-RelaxGlobal','[unclosed','-File',$f)
     T 'MUST FIRE  an invalid regex is refused before any write' ($r.rc -ne 0 -and $null -eq (Ent 'alpha').relax_global) $r.out
+    # MUST FIRE: an EMPTY pattern. It is a LEGAL regex, so the check above waves it through, and it
+    # matches every product string - on 2026-08-31 a stray -Include '' gave dried-parsley the whole
+    # catalogue (roach gel, freezer bags, goat milk, acorn squash) until two other guards caught it.
+    # TESTED IN-PROCESS, because the process boundary eats the very input this defends against: a
+    # native-exe argument list drops an empty string element, so no Run-based case can reach it. Two
+    # earlier cuts of this case passed for that reason alone and the neuter is what exposed both.
+    T 'MUST FIRE  an EMPTY pattern is refused - it is legal regex and matches every product' `
+      (-not (Test-PatternUsable '')) 'an empty pattern would be written'
+    T 'MUST FIRE  ...and so is whitespace-only' `
+      ((-not (Test-PatternUsable ' ')) -and (-not (Test-PatternUsable "`t"))) 'a blank pattern would be written'
+    T 'CLEAN TWIN  a real pattern is still usable' `
+      ((Test-PatternUsable 'canned\s+potatoes') -and (Test-PatternUsable '\s*sample\s*')) 'a good pattern was refused'
+    $excBefore = @((Ent 'alpha').exclude).Count
+    $r = Run @('-Id','alpha','-Exclude','   ','-File',$f)
+    T 'MUST FIRE  ...and a whitespace-only pattern too' `
+      ($r.rc -ne 0 -and @((Ent 'alpha').exclude).Count -eq $excBefore) $r.out
+    # CLEAN TWIN: a deliberate whitespace PATTERN is not a blank one and must still be accepted.
+    $r = Run @('-Id','alpha','-Exclude','\s*sample\s*','-File',$f)
+    T 'CLEAN TWIN  a real pattern containing whitespace classes is still accepted' ($r.rc -eq 0) $r.out
     # MUST FIRE: a dry run reports and writes nothing.
     $b4 = Get-Content $f -Raw
     $r = Run @('-Id','alpha','-RelaxGlobal','\bfrozen\b','-File',$f,'-DryRun')
@@ -127,8 +163,20 @@ if ($Include.Count -eq 0 -and $Exclude.Count -eq 0 -and $RemoveExclude.Count -eq
   Die 'nothing to do: pass -Include / -Exclude / -RelaxGlobal / -Remove*.'
 }
 
+
 # validate every pattern as a real regex before touching the file
 foreach ($p in ($Include + $Exclude + $RelaxGlobal)) {
+  # AN EMPTY PATTERN IS A VALID REGEX AND A CATASTROPHE, so it is refused before the regex check
+  # rather than by it. [regex]::new('') succeeds and matches EVERY string; on 2026-08-31 a call that
+  # passed -Include '' alongside -RemoveExclude wrote a zero-length include onto dried-parsley, and
+  # that commodity immediately swallowed roach gel, freezer bags, evaporated goat milk and acorn
+  # squash. It was caught the same run - audit-household-in-food found 11 rows and compare-deals' own
+  # routing fixtures went 6 red - but nothing here said no, and this is the file whose whole purpose
+  # is to refuse rather than guess. Whitespace is treated the same: '\s*' is a deliberate pattern, but
+  # a bare space is a typo.
+  if (-not (Test-PatternUsable $p)) {
+    Die 'an EMPTY (or whitespace-only) pattern was passed. It is a legal regex that matches every product string, so it would hand this commodity the entire catalogue. Refusing - if you meant to remove a pattern, use -RemoveInclude / -RemoveExclude on its own.'
+  }
   try { [void][regex]::new($p) } catch { Die ('not a valid regex, refusing: ' + $p + '  (' + $_.Exception.Message + ')') }
 }
 

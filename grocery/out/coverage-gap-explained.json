@@ -1,10 +1,108 @@
 ﻿[
     {
+        "id":  "vegetable-soup",
+        "store":  "Walmart",
+        "product":  "Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "almond-milk",
+        "store":  "Aldi",
+        "product":  "Friendly Farms Almond Original Milk",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
         "id":  "chicken-breast",
         "store":  "Aldi",
         "product":  "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB",
         "verdict":  "EXCLUDED",
         "detail":  "include \u0027boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast\u0027 matched, exclude \u0027thin[\\s-]*sliced\u0027 killed it"
+    },
+    {
+        "id":  "pudding-cups",
+        "store":  "Walmart",
+        "product":  "Snack Pack Banana Cream Pie Flavored Pudding, 3.25 oz Pudding Cups, 4 Count",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027pudding\\s+(?:cups?|snack)\u0027 matched, exclude \u0027\\bpie\\b\u0027 killed it"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "store":  "Walmart",
+        "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
+    },
+    {
+        "id":  "vegetable-soup",
+        "store":  "Walmart",
+        "product":  "Progresso Vegetable Classics, French Onion Canned Soup, Gluten Free, 18.5 oz.",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "deli-ham",
+        "store":  "Walmart",
+        "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bham\\b\u0027 matched, exclude \u0027spiral\u0027 killed it"
+    },
+    {
+        "id":  "coconut-oil",
+        "store":  "Walmart",
+        "product":  "Carrington Farms Organic Coconut Cooking Oil, 32 Floz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "white-wine",
+        "store":  "Family Fare",
+        "product":  "Vendange Chardonnay White Wine 1.5 L",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bwhite\\s+wine\\b\u0027 matched, exclude \u0027\\b\\d+(?:\\.\\d+)?\\s*l\\b\u0027 killed it"
+    },
+    {
+        "id":  "dried-parsley",
+        "store":  "Walmart",
+        "product":  "Soeos Parsley Flakes, 2.1 oz (60g), Dried Parsley Leaves, Fresh Flavor and Aroma, Perfect for Seasoning, Garnishing, and Cooking",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027(?:dried\\s+parsley|parsley\\s+(?:freeze[\\s-]*dried|(?:leaf\\s+)?flakes?|leaves?))\u0027 matched, exclude \u0027\\bfresh\\b\u0027 killed it"
+    },
+    {
+        "id":  "frozen-fruit",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Frozen Sliced Strawberries",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "quart-storage-bags",
+        "store":  "Walmart",
+        "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bquart\\b.{0,40}bags?\\b\u0027 matched, exclude \u0027vacuum\u0027 killed it"
+    },
+    {
+        "id":  "vegetable-soup",
+        "store":  "Walmart",
+        "product":  "Progresso Vegetable Classics, Lentil With Roasted Vegetables Canned Soup, Gluten Free, 19 oz.",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "sandwich-cookies",
+        "store":  "Walmart",
+        "product":  "Great Value Duplex Sandwich Crème Cookies, 25 oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "canned-potatoes",
+        "store":  "Walmart",
+        "product":  "Del Monte® Cajun Style Diced Potatoes, 14.5 oz. Can",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
     },
     {
         "id":  "chicken-breast",
@@ -14,10 +112,24 @@
         "detail":  "include \u0027boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast\u0027 matched, exclude \u0027thin[\\s-]*sliced\u0027 killed it"
     },
     {
+        "id":  "coconut-oil",
+        "store":  "Walmart",
+        "product":  "Carrington Farms Coconut Cooking Oil, 16.0 FL OZ",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
         "id":  "chicken-breast",
         "store":  "Walmart",
         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
         "verdict":  "EXCLUDED",
         "detail":  "include \u0027boneless,?\\s*skinless\\s+chicken\\s+breast\u0027 matched, exclude \u0027thin[\\s-]*sliced\u0027 killed it"
+    },
+    {
+        "id":  "queso",
+        "store":  "Baker\u0027s",
+        "product":  "Ricos Products Co. Gourmet Nacho Cheddar Cheese Sauce",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
     }
 ]

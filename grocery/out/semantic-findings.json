@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-31 08:16",
+    "generated":  "2026-08-31 19:44",
     "board":  "comparison-2026-08-31.json",
-    "sidecar_generated":  "2026-08-31 08:16:24",
+    "sidecar_generated":  "2026-08-31 19:44:02",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,34 +9,34 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3113,
-                     "corpus":  38249,
-                     "rule_invisible":  6892
+                     "board_pairs":  3132,
+                     "corpus":  40795,
+                     "rule_invisible":  7404
                  },
     "identity_count":  0,
-    "coverage_count":  19,
+    "coverage_count":  18,
     "identity":  [
 
                  ],
     "coverage":  [
                      {
                          "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
                          "store":  "Walmart",
-                         "product":  "Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
-                         "cos":  0.7818,
-                         "score":  0.976813,
+                         "product":  "73% Lean / 27% Fat Ground Beef, 10 lb Roll, Fresh, All Natural*",
+                         "cos":  0.7795,
+                         "score":  0.969468,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "almond-milk",
-                         "commodity":  "Almond Milk",
-                         "store":  "Aldi",
-                         "product":  "Friendly Farms Almond Original Milk",
-                         "cos":  0.6879,
-                         "score":  0.962393,
+                         "id":  "pork-tenderloin",
+                         "commodity":  "Pork Tenderloin",
+                         "store":  "Walmart",
+                         "product":  "Farmer John Steakhouse Fresh Seasoned Pork Tenderloin, 1.0  1.9 lb, 20 Grams of Protein per 4 oz Serving",
+                         "cos":  0.7535,
+                         "score":  0.961571,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -51,16 +51,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "pudding-cups",
-                         "commodity":  "Pudding Cups",
-                         "store":  "Walmart",
-                         "product":  "Snack Pack Banana Cream Pie Flavored Pudding, 3.25 oz Pudding Cups, 4 Count",
-                         "cos":  0.7657,
-                         "score":  0.957026,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "pork-tenderloin",
                          "commodity":  "Pork Tenderloin",
                          "store":  "Walmart",
@@ -71,12 +61,42 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "id":  "sandwich-bags",
+                         "commodity":  "Sandwich Bags",
                          "store":  "Walmart",
-                         "product":  "Progresso Vegetable Classics, French Onion Canned Soup, Gluten Free, 18.5 oz.",
-                         "cos":  0.7262,
-                         "score":  0.94925,
+                         "product":  "Great Value 100 Count Fresh Seal Double Zipper Rectangle Snack Bags",
+                         "cos":  0.6635,
+                         "score":  0.948232,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "85% Lean / 15% Fat Ground Beef, 1 lb Roll, Fresh, All Natural*",
+                         "cos":  0.789,
+                         "score":  0.94105,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "80% Lean / 20% Fat Ground Beef and Pork Blend, 1 lb Roll, Fresh",
+                         "cos":  0.7376,
+                         "score":  0.934528,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "white-wine",
+                         "commodity":  "White Wine",
+                         "store":  "Family Fare",
+                         "product":  "Vendange Chardonnay White Wine 1.5 L",
+                         "cos":  0.5857,
+                         "score":  0.932991,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -101,62 +121,42 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "white-wine",
-                         "commodity":  "White Wine",
-                         "store":  "Family Fare",
-                         "product":  "Vendange Chardonnay White Wine 1.5 L",
-                         "cos":  0.5602,
-                         "score":  0.921828,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "dried-parsley",
-                         "commodity":  "Parsley (dried)",
-                         "store":  "Walmart",
-                         "product":  "Soeos Parsley Flakes, 2.1 oz (60g), Dried Parsley Leaves, Fresh Flavor and Aroma, Perfect for Seasoning, Garnishing, and Cooking",
-                         "cos":  0.6634,
-                         "score":  0.920791,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-fruit",
-                         "commodity":  "Frozen Fruit / Berries",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Frozen Sliced Strawberries",
-                         "cos":  0.6825,
-                         "score":  0.91997,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
                          "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
-                         "cos":  0.6617,
-                         "score":  0.915625,
+                         "cos":  0.6608,
+                         "score":  0.924378,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "id":  "cherry-tomatoes",
+                         "commodity":  "Cherry / Grape Tomatoes",
                          "store":  "Walmart",
-                         "product":  "Progresso Vegetable Classics, Lentil With Roasted Vegetables Canned Soup, Gluten Free, 19 oz.",
-                         "cos":  0.7683,
-                         "score":  0.912944,
+                         "product":  "Fresh Grape Tomato, 10 oz Package",
+                         "cos":  0.6858,
+                         "score":  0.92343,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "sandwich-cookies",
-                         "commodity":  "Sandwich Cookies",
+                         "id":  "canned-butter-beans",
+                         "commodity":  "Canned Butter Beans",
                          "store":  "Walmart",
-                         "product":  "Great Value Duplex Sandwich Crème Cookies, 25 oz",
-                         "cos":  0.6686,
-                         "score":  0.912201,
+                         "product":  "Glory Foods Canned Seasoned Butter Beans, 15.5 oz Can",
+                         "cos":  0.6813,
+                         "score":  0.92039,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "coconut-milk-canned",
+                         "commodity":  "Canned Coconut Milk",
+                         "store":  "Walmart",
+                         "product":  "Thai Kitchen Gluten Free Gluten Free Unsweetened Coconut Cream, 13.66 fl oz Can",
+                         "cos":  0.7532,
+                         "score":  0.91552,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -197,16 +197,6 @@
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
                          "cos":  0.7432,
                          "score":  0.910219,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "queso",
-                         "commodity":  "Queso / Cheese Dip",
-                         "store":  "Baker\u0027s",
-                         "product":  "Ricos Products Co. Gourmet Nacho Cheddar Cheese Sauce",
-                         "cos":  0.7438,
-                         "score":  0.908941,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

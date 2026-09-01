@@ -1434,6 +1434,83 @@
             "why": "RULE-INVISIBLE but worth nothing to fix (reviewed 2026-08-31, queue 2026-08-31-ad3b81). \"Mann's slaw salad mix, 8 to 12 oz. pkg., $2.99\" matches no include because the rule wants 'coleslaw'/'cole slaw' and this says 'slaw salad mix'. Loosening to a bare 'slaw' would also pull in slaw DRESSING and slaw kits that are not the shredded-cabbage bag. And the row would not price even if it matched: '8 to 12 oz.' is a size RANGE, which lands BASIS-NULL, so the actionable gap would simply become an engine-explained one. Measured: coleslaw-mix already has 2 stores, crown Sam's Club 0.0731/oz; this row at $2.99 for 8-12 oz is 0.249-0.374/oz and could not win. Revisit only if Hy-Vee starts stating a single size.",
             "reviewed": "2026-08-31",
             "reviewed_source": "read against comparison-2026-08-31 and the Hy-Vee ad row"
+        },
+        {
+            "commodity":  "vegetable-soup",
+            "why":  "PRODUCT-LINE COLLISION (reviewed 2026-08-31): all three Walmart hits are Progresso's 'Vegetable Classics' RANGE NAME, not vegetable soup - Lentil Soup, French Onion, and Lentil With Roasted Vegetables. The range name is what the sweep matched on; the soups themselves are a lentil and an onion soup. Correctly unmatched, and widening on 'vegetable classics' would hand this commodity every soup in the line.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "chicken-breast",
+            "why":  "THIN-SLICED IS A DIFFERENT CUT (reviewed 2026-08-31): 'Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts' matches the include and the thin[\\s-]*sliced exclude correctly kills it. Thin-sliced cutlets carry a preparation premium per pound; pricing them as plain breast would understate what a shopper pays for the tracked product.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "chicken-breast",
+            "why":  "THIN-SLICED IS A DIFFERENT CUT (reviewed 2026-08-31): 'Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts', same ruling as the Walmart row - the exclude is doing its job.",
+            "store":  "Baker's",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "chicken-breast",
+            "why":  "THIN-SLICED IS A DIFFERENT CUT (reviewed 2026-08-31): 'Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB', same ruling as the Walmart and Baker's rows.",
+            "store":  "Aldi",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "pork-tenderloin",
+            "why":  "SEASONED, NOT PLAIN (reviewed 2026-08-31): 'Smithfield Steakhouse Fresh Seasoned Pork Tenderloin' is a marinated, pre-flavoured product and the 'seasoned' exclude correctly kills it. Same reasoning the estate already applies to seasoned cuts elsewhere.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "deli-ham",
+            "why":  "A WHOLE HAM, NOT DELI MEAT (reviewed 2026-08-31): 'Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb' is a bone-in holiday roast sold by the 8-12 lb piece; the 'spiral' exclude is right. deli-ham is sliced lunch meat.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "white-wine",
+            "why":  "SIZE RULING, DELIBERATE (reviewed 2026-08-31): 'Vendange Chardonnay White Wine 1.5 L' is killed by the litre exclude, which exists to hold this commodity to the 750 ml bottle. That ruling is the reason the exclude is there and must NOT be widened to admit magnums - the per-unit would look cheap against every 750 ml peer.",
+            "store":  "Family Fare",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "quart-storage-bags",
+            "why":  "A DIFFERENT PRODUCT (reviewed 2026-08-31): 'FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut' are vacuum-sealer rolls, not zip storage bags - different use, different machine, several times the price. The 'vacuum' exclude is correct.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "coconut-oil",
+            "why":  "FRACTIONATED LIQUID OIL (reviewed 2026-08-31): 'Carrington Farms Organic Coconut Cooking Oil, 32 Floz' is the same brand and line the 2026-07-29 entry already ruled on - a fractionated oil that stays liquid at room temperature, sold by fluid ounce, not the solid coconut oil this commodity tracks.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "coconut-oil",
+            "why":  "FRACTIONATED LIQUID OIL (reviewed 2026-08-31): 'Carrington Farms Coconut Cooking Oil, 16.0 FL OZ', same brand, same line, same ruling as the 32 floz row above and as the 2026-07-29 entry.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "canned-potatoes",
+            "why":  "SEASONED VARIANT (reviewed 2026-08-31): 'Del Monte Cajun Style Diced Potatoes, 14.5 oz. Can' is canned diced potatoes with a Cajun seasoning, which is a flavoured product at a flavoured price. Ruled the same way as pork-tenderloin's 'seasoned' exclude, so the commodity keeps tracking plain canned potatoes.",
+            "store":  "Walmart",
+            "reviewed":  "2026-08-31",
+            "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
         }
     ]
 }

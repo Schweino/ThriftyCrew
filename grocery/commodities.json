@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "id":  "chicken-breast",
         "label":  "Boneless Skinless Chicken Breast",
@@ -23960,7 +23960,8 @@
         "band_max":  0.2,
         "include":  [
                         "almond\\s*milk",
-                        "almond\\s+beverage"
+                        "almond\\s+beverage",
+                        "almond\\s+(?:original|unsweetened|vanilla|plain)\\s+milk"
                     ],
         "exclude":  [
                         "creamer",
@@ -30496,7 +30497,8 @@
         "include":  [
                         "\\bqueso\\b",
                         "cheese\\s+dip",
-                        "salsa\\s+con\\s+queso"
+                        "salsa\\s+con\\s+queso",
+                        "nacho\\s+(?:\\w+\\s+)?cheese\\s+sauce"
                     ],
         "exclude":  [
                         "fresco",
@@ -32591,7 +32593,8 @@
                         "sandwich\\s+cookies",
                         "\\boreos?\\b",
                         "sandwich\\s+creme\\s+cookies",
-                        "creme\\s+cookies"
+                        "creme\\s+cookies",
+                        "cr[e\\u00e8]me\\s+cookies"
                     ],
         "exclude":  [
                         "ice\\s*cream",
@@ -33624,7 +33627,6 @@
         "exclude":  [
                         "\\bmix\\b",
                         "instant",
-                        "\\bpie\\b",
                         "bread",
                         "\\brice\\s+pudding\\s+mix\\b",
                         "beech\\s*nut",
@@ -33719,7 +33721,8 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bpie\\s+filling\\b"
                     ]
     },
     {
@@ -36939,7 +36942,8 @@
                         "unsweetened\\s+(?:whole\\s+|sliced\\s+)?(?:strawberries|berries|fruit)",
                         "cherry\\s+berry\\s+blend",
                         "\\b(?:fruit\\s+salad|tropical\\s+fruit|mixed\\s+fruit)\\s+blend\\b",
-                        "\\b(?:blueberries|strawberries|raspberries|blackberries|mango|peaches|cherries)\\b.{0,25}\\bfrozen\\b(?!\\s*pop)"
+                        "\\b(?:blueberries|strawberries|raspberries|blackberries|mango|peaches|cherries)\\b.{0,25}\\bfrozen\\b(?!\\s*pop)",
+                        "frozen\\s+(?:whole|sliced|cut)\\s+(?:strawberries|blueberries|raspberries|peaches|mango|fruit|berries)"
                     ],
         "exclude":  [
                         "\\bbars?\\b",
@@ -38739,7 +38743,6 @@
                     ],
         "exclude":  [
                         "^parsley\\s+[\\d.]+\\s*oz$",
-                        "\\bfresh\\b",
                         "\\bplant\\b",
                         "\\bbunch\\b",
                         "\\bliving\\b",
@@ -38845,7 +38848,8 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bfresh\\s+parsley\\b"
                     ]
     },
     {
