@@ -1,3 +1,23 @@
+# ---------------------------------------------------------------------------------------------
+# READ THIS BEFORE TRUSTING A LINE DATED BEFORE 2026-09-01.
+#
+# notify-desktop.ps1 wrote its log line ABOVE its -SelfTest branch, so every ops\run-gates.ps1
+# sweep appended a real-looking entry here: store "[-]", body "An automated grocery run needs
+# attention. Nothing more specific was passed". No dialog was ever raised - the self-test is
+# UI-less - so nothing announced it. 137 of the 161 lines below carry that exact shape.
+#
+# FIXED 2026-09-01 (commit 7035fe58): the self-test now logs to a temp file, and a second
+# assertion fails if the production log grows across a self-test run. Lines from here on are real.
+#
+# THE OLD LINES ARE KEPT, NOT PURGED, and that is deliberate. The generic shape is what a BARE
+# notify-desktop call writes, and the daily chain can make one on a real failure - so the shape
+# alone does not prove a line is an artifact. Several sit inside genuine incident windows: five
+# on 2026-07-29 between 09:49 and 10:09 sit either side of a real Sam's Club bot-wall at 10:05.
+# Deleting 137 unverifiable records to tidy a log would destroy evidence to improve appearances.
+# What can be said is said here; what cannot be proven per-line is left alone.
+#
+# The 24 lines that NAME a store or a test are unaffected and were always trustworthy.
+# ---------------------------------------------------------------------------------------------
 2026-07-29 09:49:18  [-]  
 2026-07-29 09:49:46  [-]  An automated grocery run needs attention. Nothing more specific was passed - check the run's log and notify-log.txt.
 2026-07-29 09:50:23  [-]  An automated grocery run needs attention. Nothing more specific was passed - check the run's log and notify-log.txt.

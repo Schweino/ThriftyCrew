@@ -3023,20 +3023,18 @@
    "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (372 vs 372)"
   },
   {
-   "item": "Artichoke Hearts",
-   "brand": "Hannaford",
-   "serving_qty": 0.5,
-   "serving_unit": "cup",
-   "serving_grams": 130,
-   "calories": 40,
-   "protein_g": 2,
-   "carbs_g": 7,
-   "fat_g": 0,
-   "notes": "canned quartered artichoke hearts, with liquid; swap for a GV label if captured later",
-   "source": "USDA FDC 2433248 (Branded) ARTICHOKE HEARTS QUARTERED (Hannaford Bros.)",
-   "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 36 vs 40 ok (label rounding)"
-  },
+            "item": "Artichoke Hearts",
+            "brand": "Great Value",
+            "serving_qty": 0.75,
+            "serving_unit": "cup",
+            "serving_grams": 130,
+            "calories": 46,
+            "protein_g": 3,
+            "carbs_g": 9,
+            "fat_g": 0,
+            "notes": "canned quartered artichoke hearts, DRAINED - the label states the serving as \"0.75 cup drained\", which is the basis the recipes measure and the basis densities.json prices (240 g drained per 13.75 oz can). The previous row was Hannaford and its note read \"with liquid\"; that annotation was WRONG. Both cans print 130 g servings whose per-100 g values sit within 13% of each other (31 vs 35 cal), and a with-liquid basis would be about 1.6x lower, not 13%. Canned vegetables packed in water are labelled on drained weight, so the old row was never understating - only mis-annotated. Swapped anyway because the board prices Great Value Quartered Artichoke Hearts 13.75 oz at Walmart, so this is the can a reader actually buys, and its serving text removes the ambiguity for good.",
+            "source": "USDA FDC 2313271 (Branded) QUARTERED ARTICHOKE HEARTS (Wal-Mart Stores, Inc.), label per 130 g serving: 45.5 cal / 3.0 P / 9.0 C / 0.0 F / 4.03 fiber; fetched 2026-09-01"
+    },
   {
    "item": "Sumac",
    "brand": "Frontier Co-op",
