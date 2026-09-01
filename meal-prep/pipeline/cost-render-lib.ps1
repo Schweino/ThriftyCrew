@@ -168,6 +168,18 @@ function Render-CostFields($cost,$GramsArr,$ScalerIng,[string]$slug){
       $sumTrue += [double]$cl.buy_cost
       $pkgTxt = $cl.pkg; if(-not $pkgTxt){ $pkgTxt='pack' }
       $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy ' + $cl.buy_n + ' ' + (Get-CostPlural (Get-PkgLabel $pkgTxt) ([int]$cl.buy_n)) + ': $' + ([double]$cl.buy_cost).ToString('0.00') + '.</strong>')
+    } elseif($cl.PSObject.Properties.Name -contains 'covered_by' -and $cl.covered_by){
+      # The unit this comes out of is already on the shopping list under another name. Saying WHICH
+      # one is the whole point: "Buy as needed" on a zest line beside "Buy 2 lemons" reads as a third
+      # thing to buy, which is the contradiction this replaced.
+      $sumTrue += $util
+      # NAME WHAT THE READER ACTUALLY PUT IN THE BASKET. covered_by names the sibling INGREDIENT
+      # ("Fresh Lemon Juice"), but the shopping line above it says "Buy 2 lemons" - so the sentence has
+      # to use the coverer's PACKAGE label, pluralised at the count it bought. "From the fresh lemon
+      # juice you already bought" describes a purchase nobody made.
+      $peerCl = $costLines[[string]$cl.covered_by]
+      $peerNoun = if($peerCl -and $peerCl.pkg){ (Get-CostPlural (Get-PkgLabel ([string]$peerCl.pkg)) ([int]$peerCl.buy_n)) } else { ([string]$cl.covered_by).ToLower() }
+      $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>From the ' + $peerNoun + ' you already bought.</strong>')
     } else {
       $sumTrue += $util
       $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy as needed.</strong>')

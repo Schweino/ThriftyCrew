@@ -34,9 +34,14 @@ $computed = foreach($sf in $specFiles){
   $s = Get-Content $sf.FullName -Raw | ConvertFrom-Json
   [pscustomobject]@{
     proposed_name=[string]$s.name; slug=[string]$s.slug
+    # THE PROJECTION IS THE CONTRACT: a field not copied here does not exist downstream, however
+    # carefully a spec declares it. covered_by was first written onto ingredients_grams, which reads
+    # like the ingredient list and is not the one this engine costs from - the run produced neither
+    # the suppression nor a refusal flag, because the branch never saw the field at all.
     ingredients=@($s.scaler.ing | ForEach-Object {
       $key = if($_.PSObject.Properties.Name -contains 'canon' -and $_.canon){ [string]$_.canon } else { [string]$_.item }
-      [pscustomobject]@{ item=$key; grams=[double]$_.grams }
+      $cov = if($_.PSObject.Properties.Name -contains 'covered_by'){ [string]$_.covered_by } else { '' }
+      [pscustomobject]@{ item=$key; grams=[double]$_.grams; covered_by=$cov }
     })
   }
 }
@@ -179,6 +184,11 @@ foreach($r in $computed){
   foreach($ing in $r.ingredients){
     $g=[double]$ing.grams
     if($g -le 0){ continue }
+    # INITIALISED ON EVERY PATH, not just the branch that reads it. The emitted line below carries
+    # covered_by for all lines, and there is no Set-StrictMode in this tree - so a variable set only
+    # inside the non-bulk branch would leak the PREVIOUS ingredient's value onto a bulk line rather
+    # than erroring. That is the quiet-wrong-answer shape this engine has been bitten by before.
+    $coveredBy = ''
     $row = Resolve-ItemRow ([string]$ing.item)
     $ppg=$null; $basis=''
     # CARRIAGE is judged from the ITEM ROW's bid, not from the basis the line ends up with. That
@@ -244,7 +254,46 @@ foreach($r in $computed){
       $pg=$null
       if($row -and (Has $row 'buy_pkg_g')){ $pg=@{g=[double]$row.buy_pkg_g; label=[string]$row.buy_pkg_label} }
       elseif($labels.ContainsKey($ing.item)){ $pg=@{g=$labels[$ing.item].pkg_g; label=$labels[$ing.item].desc} }
-      if($pg){
+      # COVERED_BY: this line's material comes out of a unit ANOTHER line already buys.
+      #
+      # A lemon yields juice AND zest. The casserole used 70 g of juice and 5 g of zest, and the engine
+      # - costing every line independently - told a reader to buy 2 lemons for the juice and a 3rd for
+      # the zest, while the card's own prose said "zest of the same lemons". Two lemons cover both. The
+      # card contradicted itself and overcharged by a lemon.
+      #
+      # OPT-IN AND VALIDATED, because the failure mode of getting this wrong is UNDER-buying, which
+      # sends a reader home short of an ingredient - strictly worse than the over-buy it fixes. It
+      # applies only where a spec line declares it, and only when the named coverer is in THIS recipe
+      # and lands on the SAME basis. Anything else is refused with a flag rather than quietly honoured,
+      # so it can never become a way to make a purchase disappear.
+      #
+      # NOT GENERALISED TO "same basis = one purchase", deliberately. Two lines can share a basis and
+      # still be two purchases: slow-cooker-pork-green-chili-bowls buys a 450 g jar of Salsa Verde and
+      # 680 g of Green Chile Sauce off one commodity, and ceil(1130/454) = 3 is exactly the 1 + 2 it
+      # already pays. Summing there changes nothing; assuming it everywhere would under-buy.
+      $coveredBy = if(Has $ing 'covered_by'){ [string]$ing.covered_by } else { '' }
+      if($coveredBy){
+        $peer = @($r.ingredients | Where-Object { [string]$_.item -eq $coveredBy })
+        if($peer.Count -ne 1){
+          $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: covered_by names "' + $coveredBy + '", which is not an ingredient of this recipe - buy NOT suppressed'))
+          $coveredBy = ''
+        } else {
+          $peerRow = Resolve-ItemRow $coveredBy
+          $peerBid = if($peerRow -and (Has $peerRow 'bid')){ [string]$peerRow.bid } else { '' }
+          $myBid   = if($row -and (Has $row 'bid')){ [string]$row.bid } else { '' }
+          if(-not $peerBid -or $peerBid -ne $myBid){
+            $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: covered_by "' + $coveredBy + '" resolves to bid "' + $peerBid + '" not "' + $myBid + '" - buy NOT suppressed'))
+            $coveredBy = ''
+          }
+        }
+      }
+      if($coveredBy){
+        # The utilisation still counts - the material is used and the batch pays for it. Only the
+        # separate PURCHASE is suppressed, because the coverer already bought the unit it comes from.
+        $trueCost += $util
+        $pkgLabel = $null
+      }
+      elseif($pg){
         $pgG = [double]$pg.g
         if($DRAINED.ContainsKey($ing.item)){ $pgG = $DRAINED[$ing.item].drained }
         $pkgG = $pgG
@@ -260,7 +309,7 @@ foreach($r in $computed){
         $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: no package def, counted at util in true cost'))
       }
     }
-    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; carriage=$carr.verdict; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; pkg_g=$pkgG; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg; starter_pkg_g=$stPkgG }
+    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; carriage=$carr.verdict; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; pkg_g=$pkgG; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg; starter_pkg_g=$stPkgG; covered_by=$coveredBy }
   }
   $batch=[Math]::Round($batch,2); $trueCost=[Math]::Round($trueCost,2)
   $pantryAdd=[Math]::Round($starterOutlay-$bulkUtil,2)

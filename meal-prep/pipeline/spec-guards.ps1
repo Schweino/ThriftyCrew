@@ -1,4 +1,4 @@
-﻿# spec-guards.ps1 (pipeline, run-agnostic - promoted 2026-07-27 from archive\r300; every guard
+# spec-guards.ps1 (pipeline, run-agnostic - promoted 2026-07-27 from archive\r300; every guard
 # UNCHANGED, hardcoded r300 paths became parameters defaulting under -RunDir).
 #
 # spec-guards.ps1 (R300) - Validates spec files and enforces EVERY invariant before any card build.
@@ -290,7 +290,7 @@ foreach($sf in $specs){
     # "no recognizable Buy instruction" for a line that is perfectly well formed. A guard that re-parses
     # rendered prose has to match the SHAPE the renderer guarantees, not the words it happened to use:
     # see cost-render-lib.ps1's Get-BulkCoverageWords for the ladder this accepts.
-    elseif($li -match '<strong>Buy 1 \([^)<]+\)\.</strong>' -or $li -match '<strong>Buy as needed\.</strong>' -or $li -match '<strong>From jars you keep on hand\.</strong>' -or $li -match '<strong>Pantry staple; this batch alone uses about \d+ [^<]+\.</strong>'){ $sumT += $u }
+    elseif($li -match '<strong>Buy 1 \([^)<]+\)\.</strong>' -or $li -match '<strong>Buy as needed\.</strong>' -or $li -match '<strong>From jars you keep on hand\.</strong>' -or $li -match '<strong>Pantry staple; this batch alone uses about \d+ [^<]+\.</strong>' -or $li -match '<strong>From the [^<]+ you already bought\.</strong>'){ $sumT += $u }
     else { Fail $slug ("cost line has no recognizable Buy instruction: " + $li) }
   }
   if($parsed -lt 1){ Fail $slug 'no ingredient cost lines' }

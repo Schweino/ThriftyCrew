@@ -119,6 +119,12 @@ $static = @(
   # (This comment deliberately does NOT spell the switch declaration out. Writing it in prose here is
   # what made run-gates discover ITSELF on 2026-09-01 and respawn every two minutes for 39 minutes.)
   @{ f = 'ops\audit-twin-drift.ps1';           n = 'no rule this estate keeps in two files has drifted apart' }
+  # THE COST ENGINE'S GOLDEN TEST, ungated until 2026-09-01 and the only thing that caught a schema
+  # change to costed.json the same day. It has no -SelfTest switch, so the discovery pass above cannot
+  # see it, and it was in no static list either - the identical hole coverage_check.py was sitting in.
+  # It is hermetic (frozen inputs, its own -OutFile) so it runs anywhere, and it is the only check that
+  # compares the engine's ACTUAL output against an accepted baseline rather than re-deriving from it.
+  @{ f = 'meal-prep\engine\golden-test.ps1';   n = 'the cost engine still produces its accepted output from frozen inputs' }
 )
 foreach ($g in $static) {
   $p = Join-Path $repo $g.f

@@ -112,10 +112,16 @@ foreach($ing in $spec.scaler.ing){
   $n = if($cl.buy_n){ [int]$cl.buy_n } else { [int]$cl.starter_n }
   $lbl = if($cl.pkg){ [string]$cl.pkg } else { [string]$cl.starter_pkg }
   $pkgG = if($cl.pkg_g){ [double]$cl.pkg_g } else { [double]$cl.starter_pkg_g }
-  if($n -lt 1 -or -not $lbl -or $null -eq $pkgG -or $pkgG -le 0){ throw ("no whole-package data for '{0}' (slug {1}): n=$n lbl='$lbl' pkg_g=$pkgG" -f $key, $spec.slug) }
+  # A COVERED LINE HAS NO PACKAGE BY DESIGN - its unit is bought under another ingredient. The widget
+  # already guards its buy maths on pkg_g>0 && gpu>0, so emitting 0 makes it show the ingredient and
+  # skip the purchase, which is exactly the intent. Without this the throw fires on a spec that is
+  # correct.
+  $isCovered = ($cl.PSObject.Properties.Name -contains 'covered_by') -and $cl.covered_by
+  if($isCovered){ $n = 0; $lbl = ''; $pkgG = 0 }
+  elseif($n -lt 1 -or -not $lbl -or $null -eq $pkgG -or $pkgG -le 0){ throw ("no whole-package data for '{0}' (slug {1}): n=$n lbl='$lbl' pkg_g=$pkgG" -f $key, $spec.slug) }
   # self-test: mirror the engine's own ceil(-0.02) - it must reproduce the engine's package count at base
-  $chk = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02))
-  if($chk -ne $n){ throw ("{0} ({1}): ceil({2}g/{3}g)={4} != engine {5} - pkg_g/buy_n disagree" -f $key,$spec.slug,$ing.grams,$pkgG,$chk,$n) }
+  $chk = if($isCovered){ 0 } else { [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02)) }
+  if(-not $isCovered -and $chk -ne $n){ throw ("{0} ({1}): ceil({2}g/{3}g)={4} != engine {5} - pkg_g/buy_n disagree" -f $key,$spec.slug,$ing.grams,$pkgG,$chk,$n) }
   $p = '{"item":"' + ($ing.item -replace '"','\"') + '","disp":"' + ($dispNames[$di] -replace '"','\"') + '","grams":' + [int]$ing.grams + ',"buy":"' + ($ing.buy -replace '"','\"') + '"'
   if($ing.PSObject.Properties.Name -contains 'bid' -and $ing.bid){ $p += ',"bid":"' + $ing.bid + '","gpu":' + $ing.gpu; $bidHave++ } else { $bidMiss += [string]$ing.item }
   $p += ',"pkg_g":' + $pkgG + ',"pkg_l":"' + ($lbl -replace '"','\"') + '"}'
