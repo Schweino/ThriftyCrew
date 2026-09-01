@@ -1,4 +1,4 @@
-﻿<#
+<#
   resolve-worklist.ps1 - Core of the "product URL" automation.
   Reads the current weekly comparison + recipe board (every priced item x store chip) and the durable
   product-urls.json, then emits a per-store worklist of chips that need a URL resolved:
@@ -81,6 +81,29 @@ function LinkPerUnit([string]$size, [string]$unit, [double]$price, [string]$name
   Get-LinkPerUnit -size $size -unit $unit -price $price -name $name
 }
 
+function Test-AdPricedCell {
+  <#
+    Did this board cell's price come from a printed WEEKLY AD, rather than from a shelf reading?
+
+    THE MISMATCH CHECK IS NOT VALID ON ONE (2026-09-01). It compares the link's STORED EVERYDAY price
+    against the board's CURRENT per-unit. When the board cell is an ad price, the gap between them IS
+    THE DISCOUNT, so every deep sale manufactures a high-percentage chip that is indistinguishable
+    from a wrong product. Measured on the 2026-08-31 worklist: 29 of the 94 mismatch chips (31%) sat
+    on ad-priced cells. Two of the four worst-looking chips in the whole list - pears at 291% and
+    sports-drinks at 119% - were exactly this, and prune-bad-links' own note already allows the case
+    in words ("or, on a sale cell, the same product at its shelf price").
+
+    IT READS source_ad AND NOT type, AND THAT DISTINCTION IS THE WHOLE POINT. `type` says `sale` on
+    cells whose price came from a live shelf - Walmart's own 10 lb ground beef row is tagged
+    type=sale with source_ad "everyday shelf price", and shop.fareway.com and Aisles Online rows are
+    tagged the same way. Skipping on `type` would have blinded the check on 10 rows that are perfectly
+    comparable, which is the easy wrong version of this fix. Only an ad price is incomparable, so only
+    an ad price is skipped.
+  #>
+  param([string]$SourceAd)
+  return [regex]::IsMatch(([string]$SourceAd), 'weekly\s+ad', 'IgnoreCase')
+}
+
 if ($SelfTest) {
   <#
     Frozen fixtures for the two per-unit parsers. Every expected value below is arithmetic done by
@@ -130,6 +153,39 @@ if ($SelfTest) {
   T 'unit-price string "$0.28/oz"'              (LinkPerUnit '$0.28/oz'     'oz'   9.99) 0.28
   T '"dozen" $2.40 per each'                    (LinkPerUnit 'dozen'        'each' 2.40) (2.40/12)
 
+  # --- the mismatch check must not fire on an AD price (2026-09-01) ------------------------------
+  # Every string below is a real source_ad value taken off the 2026-08-31 boards, not invented: a
+  # fixture built from shapes no store writes is the failure this file's own header describes.
+  function TB($label, $got, $want) {
+    if ([bool]$got -eq [bool]$want) { Write-Output "ok    $label" }
+    else { Write-Output "FAIL  $label -> expected $want, got $got"; $script:fail++ }
+  }
+  TB 'AD  "Weekly Ad" is an ad price, so the gap to a stored everyday price is the discount' `
+     (Test-AdPricedCell 'Weekly Ad') $true
+  TB 'AD  a dated store ad reads the same'                                                   `
+     (Test-AdPricedCell 'Fareway Weekly Ad 2026-08-31 to 2026-09-06') $true
+  TB "AD  and Baker's, whose label leads with the store name"                                `
+     (Test-AdPricedCell "Baker's Weekly Ad 2026-08-26 to 2026-09-01") $true
+  # THE OTHER HALF, and the reason this reads source_ad instead of the cell's `type`. All four of
+  # these sit on cells tagged type=sale, yet their price came from a live shelf reading, so the
+  # comparison IS valid and skipping them would blind the check on 10 real rows.
+  TB 'SHELF a type=sale cell priced from the shelf is still comparable'                      `
+     (Test-AdPricedCell 'everyday shelf price') $false
+  TB 'SHELF shop.fareway.com is a shelf read, not an ad'                                     `
+     (Test-AdPricedCell 'shop.fareway.com') $false
+  TB 'SHELF Aisles Online current shelf price'                                               `
+     (Test-AdPricedCell 'Aisles Online current shelf price') $false
+  TB 'SHELF kroger-api'                                                                      `
+     (Test-AdPricedCell 'kroger-api') $false
+  TB 'SHELF a cell with no source_ad at all is not an ad price'                              `
+     (Test-AdPricedCell '') $false
+  TB 'SHELF and neither is $null'                                                            `
+     (Test-AdPricedCell $null) $false
+  # "weekly ad" must be matched as the phrase, not by either word alone: a shelf source that merely
+  # contains "weekly" would otherwise be skipped and its wrong links would never surface.
+  TB 'SHELF "weekly circular pickup" is not a weekly AD'                                     `
+     (Test-AdPricedCell 'weekly circular pickup') $false
+
   if ($fail) { Write-Output "SELF-TEST FAIL ($fail)"; exit 1 }
   Write-Output 'SELF-TEST PASS'
   exit 0
@@ -137,7 +193,7 @@ if ($SelfTest) {
 
 $work = [ordered]@{}
 $seenChips = @{}   # id|store dedup: weekly + recipe occurrences of the same chip must not double-list it
-function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard) {
+function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, $sourceAd) {
   if ($seenChips.ContainsKey($id + '|' + $store)) { return }
   # Prefer the board's exact source product name as the search term - that's the item whose price is shown,
   # so searching for it links the RIGHT product (e.g. "That's Smart! Large Eggs" not just "eggs"). Falls back
@@ -165,7 +221,11 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard) 
     # 'mismatch' = the LINKED product's own price does not equal the board price shown next to it
     # (the eggs bug: board is the budget-brand price, link points at a pricier brand of the same commodity).
     # Compared per-occurrence so a link that matches an equivalent unit elsewhere is not falsely flagged.
-    if (-not $reason -and $curPU -gt 0) {
+    # An ad price and a stored everyday price are not comparable, so the gap between them is not
+    # evidence of anything. `stale` is deliberately still evaluated above: it compares this board's
+    # own snapshot against this board's current value, both on the same footing, and it is the
+    # ad-roll-off trigger by design.
+    if (-not $reason -and $curPU -gt 0 -and -not (Test-AdPricedCell $sourceAd)) {
       # sanitize: some resolver snapshots stored display text ("$6.17"); a bare [double] cast errored
       # and silently SKIPPED the mismatch check for those rows (surfaced 2026-07-26)
       $stPrice = 0.0; [void][double]::TryParse((([string]$st.price) -replace '[^0-9.]',''), [ref]$stPrice)
@@ -188,10 +248,10 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard) 
 }
 
 foreach ($it in $cmp) {
-  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'weekly' }
+  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'weekly' ([string]$s.source_ad) }
 }
 foreach ($it in $ri) {
-  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'recipe' }
+  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'recipe' ([string]$s.source_ad) }
 }
 
 $out = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd'); tolerance = $Tolerance; stores = $work }
