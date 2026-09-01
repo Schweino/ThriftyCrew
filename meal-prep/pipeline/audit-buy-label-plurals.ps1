@@ -1,4 +1,4 @@
-﻿# audit-buy-label-plurals.ps1
+# audit-buy-label-plurals.ps1
 # ---------------------------------------------------------------------------------------------------
 # Every package label must survive being pluralised, because the cost line pluralises it in front of a
 # paying reader: "Buy {n} {label}s".
@@ -37,7 +37,7 @@
 #   .\audit-buy-label-plurals.ps1 -SelfTest
 # Exit 0 clean, 1 findings, 2 self-test failure.
 # ---------------------------------------------------------------------------------------------------
-param([string]$VocabFile, [string]$LabelPricesFile, [switch]$Json, [switch]$SelfTest)
+param([string]$VocabFile, [string]$LabelPricesFile, [string]$CostedFile, [switch]$Json, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $runJson = [bool]$Json; $runSelfTest = [bool]$SelfTest
 
@@ -48,6 +48,7 @@ $repo = Split-Path -Parent $mp
 . (Join-Path $here 'cost-render-lib.ps1')
 if (-not $VocabFile)       { $VocabFile       = Join-Path $mp 'db\ingredients.json' }
 if (-not $LabelPricesFile) { $LabelPricesFile = Join-Path $mp 'db\label-prices.json' }
+if (-not $CostedFile)     { $CostedFile     = Join-Path $mp 'db\costed.json' }
 
 # Unit abbreviations that may legitimately end a label. NONE of them takes -es; that is the whole point.
 $script:UNIT_TOKENS = @('oz','floz','lb','lbs','g','kg','ml','l','ct','pk','qt','pt')
@@ -104,6 +105,52 @@ function Get-LabelFindings {
   return @($out)
 }
 
+function Get-RenderedFindings {
+  <#
+    The labels a card ACTUALLY PRINTS, read from costed.json's frozen cost blocks.
+
+    WHY THIS EXISTS, and it is the gap this auditor was blind to by construction. Everything above
+    reads labels as AUTHORED - db\ingredients.json and db\label-prices.json - and a spec's cost block
+    is a SNAPSHOT taken when the spec was last built. On 2026-08-29 both authored sources were already
+    correct and this check reported "351 vocabulary row(s) checked, 0 finding(s)" while a live PAID
+    page printed:
+
+        Keto Bun, 26.4 buns: ~$15.90. Buy 4 8 bunses: $19.27.
+
+    The relabel had reached ingredients.json and stopped one hop short of the reader, because nothing
+    in the chain read a rendered line. That repair "stopped one hop short" is the same shape as the
+    class it was repairing, and the finding sat in an unmerged worktree commit for three days.
+
+    ONLY AT A COUNT OF TWO OR MORE. A label is pluralised only when the card says "Buy N <label>s", so
+    a buy count of 1 renders the label verbatim and cannot garble it. Checking every row regardless
+    would report labels no reader will ever see pluralised - the same over-reporting the two passes
+    above are carefully scoped to avoid, and the reason this one takes the count from the data rather
+    than assuming it.
+  #>
+  param($CostedRows)
+  $out = @()
+  foreach ($r in @($CostedRows)) {
+    $slug = [string]$r.slug
+    foreach ($l in @($r.lines)) {
+      foreach ($pair in @(@('pkg', 'buy_n'), @('starter_pkg', 'starter_n'))) {
+        $lf = $pair[0]; $nf = $pair[1]
+        if ($l.PSObject.Properties.Name -notcontains $lf) { continue }
+        $lab = [string]$l.$lf
+        if (-not $lab) { continue }
+        $n = 0
+        if ($l.PSObject.Properties.Name -contains $nf -and $null -ne $l.$nf) { $n = [int]$l.$nf }
+        if ($n -lt 2) { continue }
+        $why = Get-PluralProblem $lab
+        if ($why) {
+          $out += [pscustomobject]@{ source = 'costed.json (RENDERED)'; item = ($slug + ' :: ' + [string]$l.item)
+                                     field = $lf; label = $lab; plural = (Get-CostPlural $lab $n); why = $why }
+        }
+      }
+    }
+  }
+  return @($out)
+}
+
 # ---------------------------------------------------------------------------------------------------
 if ($runSelfTest) {
   $f = 0
@@ -151,9 +198,34 @@ if ($runSelfTest) {
   $v = @($vParsed)
   $lpParsed = Get-Content $LabelPricesFile -Raw -Encoding utf8 | ConvertFrom-Json
   $lp = @($lpParsed)
+  $cParsed = if (Test-Path $CostedFile) { Get-Content $CostedFile -Raw -Encoding utf8 | ConvertFrom-Json } else { @() }
   $live = @(Get-LabelFindings $v $lp)
   T 'CLEAN TWIN every package label in the estate survives being pluralised' `
     ($live.Count -eq 0) (($live | ForEach-Object { $_.item + ' "' + $_.label + '"' }) -join ' | ')
+
+  # ---- the RENDERED pass (2026-09-01) ------------------------------------------------------------
+  # THE FOUNDING LINE, verbatim from the live paid page it shipped on: a frozen cost block still
+  # holding "8 buns" at a buy count of 4, while ingredients.json had ALREADY been relabelled and this
+  # auditor reported 0 findings. Nothing in the chain read a rendered line.
+  $rBad = @(Get-RenderedFindings @([pscustomobject]@{ slug = 'turkey-meatball-sub-bake'
+              lines = @([pscustomobject]@{ item = 'Keto Bun'; pkg = '8 buns'; buy_n = 4 }) }))
+  T 'MUST FIRE  a frozen cost block still printing "8 buns" at a buy count of 4 is caught' `
+    ($rBad.Count -eq 1 -and $rBad[0].why -match 'already plural') (($rBad | ForEach-Object { $_.why }) -join '|')
+  # A COUNT OF ONE RENDERS THE LABEL VERBATIM, so it cannot garble and must not be reported. Without
+  # this the pass would flag every "8 buns" in the catalogue, including the ones no reader sees
+  # pluralised - the over-reporting that makes a gate ignorable.
+  $rOne = @(Get-RenderedFindings @([pscustomobject]@{ slug = 'single-buy'
+              lines = @([pscustomobject]@{ item = 'Keto Bun'; pkg = '8 buns'; buy_n = 1 }) }))
+  T 'CLEAN TWIN the same label at a buy count of ONE is not pluralised, so it is not a finding' `
+    ($rOne.Count -eq 0) (($rOne | ForEach-Object { $_.label }) -join '|')
+  # starter_pkg renders the same way and was the other half of the orphaned finding.
+  $rStart = @(Get-RenderedFindings @([pscustomobject]@{ slug = 's'
+              lines = @([pscustomobject]@{ item = 'X'; starter_pkg = '8oz'; starter_n = 2 }) }))
+  T 'MUST FIRE  starter_pkg is rendered too, and "8oz" at two would print "8ozes"' `
+    ($rStart.Count -eq 1 -and $rStart[0].field -eq 'starter_pkg') (($rStart | ForEach-Object { $_.field }) -join '|')
+  $rLive = @(Get-RenderedFindings @(if ($cParsed.PSObject.Properties.Name -contains 'recipes') { $cParsed.recipes } else { $cParsed }))
+  T 'CLEAN TWIN every RENDERED label in the live catalogue survives its own buy count' `
+    ($rLive.Count -eq 0) (($rLive | ForEach-Object { $_.item + ' "' + $_.label + '"' }) -join ' | ')
 
   if ($f -eq 0) { Write-Output 'buy-label-plurals SELF-TEST PASS'; exit 0 }
   Write-Output ("buy-label-plurals SELF-TEST FAIL: {0} case(s)" -f $f); exit 2
@@ -166,11 +238,22 @@ $vocabRows = @($vocabParsed)
 $labelParsed = Get-Content $LabelPricesFile -Raw -Encoding utf8 | ConvertFrom-Json
 $labelRows = @($labelParsed)
 $findings = @(Get-LabelFindings $vocabRows $labelRows)
+# THE RENDERED PASS. costed.json is a BUILD ARTIFACT and is gitignored in a bare checkout, so its
+# absence is announced rather than silently skipped - a check that examined nothing must never read as
+# ok, and this pass covering zero specs is exactly the state the 2026-08-29 bun line slipped through.
+$renderedCount = 0
+if (Test-Path $CostedFile) {
+  $costedParsed = Get-Content $CostedFile -Raw -Encoding utf8 | ConvertFrom-Json
+  $costedRows = @(if ($costedParsed.PSObject.Properties.Name -contains 'recipes') { $costedParsed.recipes } else { $costedParsed })
+  $renderedCount = $costedRows.Count
+  $findings += @(Get-RenderedFindings $costedRows)
+}
 
 if ($runJson) {
   [pscustomobject]@{ labels = $vocabRows.Count; findings = $findings } | ConvertTo-Json -Depth 5
 } else {
-  Write-Output ("buy label plurals: {0} vocabulary row(s) checked, {1} finding(s)" -f $vocabRows.Count, $findings.Count)
+  Write-Output ("buy label plurals: {0} vocabulary row(s) + {1} costed spec(s) checked, {2} finding(s)" -f $vocabRows.Count, $renderedCount, $findings.Count)
+  if ($renderedCount -eq 0) { Write-Output '  NOTE: no costed.json here, so the RENDERED labels were not checked - only the authored ones.' }
   foreach ($x in $findings) {
     Write-Output ("  [{0}] {1} :: {2}" -f $x.source, $x.item, $x.field)
     Write-Output ("      `"{0}`"  renders as  `"Buy 2 {1}`"" -f $x.label, $x.plural)
