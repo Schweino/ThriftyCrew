@@ -229,7 +229,17 @@ $script:NEXT = @{
   # THIS DOES SOFTEN THE ONE-REPAIR RULE and that was Brad's call, made explicitly, not mine to assume.
   # The rule exists so a wave cannot spend unlimited budget re-repairing one recipe; an owner's ruling
   # after the wave has closed is a different authority from the pipeline granting itself another go.
-  'rejected-audit' = @('qa-passed', 'written')
+  # rejected-audit -> waved EXISTS FOR -Recertify AND FOR NOTHING ELSE (2026-09-01), the THIRD declared
+  # exception, on exactly the reasoning of the first two. `waved` is the state the recipe was IN when
+  # the audit rejected it, so restoring it is the literal undo of that one verdict - and it is the only
+  # target that lets the re-audited wave actually publish: wave-publish requires every slug in the
+  # manifest to be `waved` in THIS wave, and -Recertify keeps the wave claim precisely because the
+  # evidence is that wave's own GO. Routing through qa-passed instead looks tidier and strands the
+  # recipe: -WaveClose would have to form a NEW wave, which would need its own audit - re-buying, on
+  # identical bytes, the very verdict that authorised the move. A verdict the state machine cannot
+  # express is a verdict that gets faked or lost, and that is this table's own stated reason for the
+  # other two exceptions.
+  'rejected-audit' = @('qa-passed', 'written', 'waved')
   # rejected-qa -> written EXISTS FOR -Reband AND FOR NOTHING ELSE (2026-08-29), and it is the SECOND
   # declared exception, on the same reasoning as the first. The macro band gate settles a recipe that
   # misses the calorie window straight from `written`, and it files that verdict as `rejected-qa` even
@@ -1504,8 +1514,14 @@ if ($runSelfTest) {
 
     & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-ok' -By 'test' -Reason 'wave-20 re-audit returned GO' | Out-Null
     $rcDoc = Read-Json (Join-Path $rv 'state\rc-ok.json')
-    T 'RECERTIFY a repaired wave re-audited GO returns to qa-passed - the case neither other door could express' `
-      ($LASTEXITCODE -eq 0 -and (StRv 'rc-ok') -eq 'qa-passed') (StRv 'rc-ok')
+    # `waved`, NOT qa-passed, and that is the whole point of the third exception in the table above:
+    # `waved` is the state the recipe was IN when the audit rejected it, so restoring it is the literal
+    # undo of that verdict, and it is the ONLY target wave-publish accepts (it requires every manifest
+    # slug to be `waved` in this wave). Routing through qa-passed reads tidier and strands the recipe:
+    # -WaveClose would have to form a NEW wave needing its own audit, re-buying on identical bytes the
+    # very GO that authorised the move. Wave 15 hit exactly that on 2026-09-01.
+    T 'RECERTIFY a repaired wave re-audited GO returns to WAVED - the case neither other door could express' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rc-ok') -eq 'waved') (StRv 'rc-ok')
     T 'RECERTIFY   ...and the reason AND the re-audit evidence land on the history' `
       (([string]$rcDoc.history[-1].detail) -match 'wave-20 re-audit returned GO' -and `
        ([string]$rcDoc.history[-1].detail) -match 'states GO' -and `
@@ -1571,8 +1587,19 @@ if ($runSelfTest) {
     & $PSCommandPath -Repair -RunDir $rv -Slug 'rc-tri' -By 'test' -Reason 'x' | Out-Null
     $triRepair = $LASTEXITCODE
     T 'CLEAN TWIN a clean GO is refused by BOTH older doors and accepted by this one - three rules, not one' `
-      ($triRevive -ne 0 -and $triRepair -ne 0 -and (StRv 'rc-tri') -eq 'rejected-audit' -and (StRv 'rc-ok') -eq 'qa-passed') `
+      ($triRevive -ne 0 -and $triRepair -ne 0 -and (StRv 'rc-tri') -eq 'rejected-audit' -and (StRv 'rc-ok') -eq 'waved') `
       ('revive=' + $triRevive + ' repair=' + $triRepair + ' tri=' + (StRv 'rc-tri'))
+
+    # The third exception is DECLARED, not a general widening: only rejected-audit gains `waved`, and
+    # only rejected-audit. Without this the table could drift to "any rejection may re-enter a wave"
+    # and every case above still passes.
+    T 'CLEAN TWIN rejected-audit -> waved is the third DECLARED exception, and no other rejection gained it' `
+      ((Test-LegalTransition 'rejected-audit' 'waved') -and `
+       (-not (Test-LegalTransition 'rejected-qa' 'waved')) -and `
+       (-not (Test-LegalTransition 'rejected-macros' 'waved')) -and `
+       (-not (Test-LegalTransition 'rejected-dupe' 'waved')) -and `
+       (-not (Test-LegalTransition 'rejected-unreadable' 'waved')) -and `
+       (-not (Test-LegalTransition 'written' 'waved'))) 'the waved exception was granted too widely'
 
     # The verdict reader itself, pinning the three answers this door branches on. NOT a test of the
     # alternation order: neutering that order reddens nothing, because the trailing `$` is the real
@@ -2138,11 +2165,11 @@ if ($runRecertify) {
     Write-Output ("hunt-run: REFUSED - {0}'s wave-{1} audit ({2}) PREDATES the rejection it would undo ({3}). That GO was written about earlier bytes." -f $Slug, $wk, $auditTime.ToString('s'), $rejTime.ToString('s'))
     exit 1
   }
-  if (-not (Test-LegalTransition $from 'qa-passed')) {
-    Write-Output ("hunt-run: REFUSED {0}: {1} -> qa-passed" -f $Slug, $from); exit 1
+  if (-not (Test-LegalTransition $from 'waved')) {
+    Write-Output ("hunt-run: REFUSED {0}: {1} -> waved" -f $Slug, $from); exit 1
   }
   $detail = ("recertified: " + $Reason + "  [wave-" + $wk + " re-audit " + $auditTime.ToString('s') + " states GO; no open blockers]")
-  $e.state = 'qa-passed'
+  $e.state = 'waved'
   $e.updated = (Get-Stamp)
   $e.reject_reason = $null
   # THE WAVE CLAIM IS KEPT, AND THIS IS THE ONE PLACE -Recertify MUST NOT COPY -Revive. Those two doors
@@ -2152,9 +2179,9 @@ if ($runRecertify) {
   # wave at its manifest check ("sits in wave , not 15"), because that gate exists to catch a slug that
   # slipped out of the wave it is being published as. Copying the line from -Revive put all three of
   # wave 15's recipes in exactly that state, and the manifest gate is what caught it.
-  $e.history = @(@($e.history) + [pscustomobject]@{ state = 'qa-passed'; at = (Get-Stamp); by = $By; detail = $detail })
+  $e.history = @(@($e.history) + [pscustomobject]@{ state = 'waved'; at = (Get-Stamp); by = $By; detail = $detail })
   Write-JsonAtomic -Path $sp -Obj $e
-  Write-Output ("hunt-run: {0}  rejected-audit -> qa-passed  (stays in wave {1})  ({2})" -f $Slug, $wk, $detail)
+  Write-Output ("hunt-run: {0}  rejected-audit -> waved  (stays in wave {1})  ({2})" -f $Slug, $wk, $detail)
   Write-GuardComplete -Name 'hunt-run' -Summary ("recertify {0}" -f $Slug)
   exit 0
 }

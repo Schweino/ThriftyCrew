@@ -1592,7 +1592,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w15",
       "opened":  "2026-08-31T15:50:22",
-      "last_activity":  "2026-08-31T15:50:24",
+      "last_activity":  "2026-09-01T02:39:59",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1624,6 +1624,11 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-31T15:50:24",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-09-01T02:39:59",
+                         "detail":  "3/3 GO (re-audit 2026-09-01; R1 waived by Brad, R2 artichoke drained basis and R3 mozzarella package repaired and verified on disk)"
                      }
                  ]
   }

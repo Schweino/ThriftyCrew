@@ -3,10 +3,10 @@
     "title":  "Chicken Alfredo Lasagna",
     "source_url":  "https://masonfit.com/chicken-alfredo-lasagna/",
     "protein":  "chicken",
-    "state":  "qa-passed",
+    "state":  "waved",
     "wave":  15,
     "created":  "2026-08-27T11:44:57",
-    "updated":  "2026-09-01T02:36:51",
+    "updated":  "2026-09-01T02:42:19",
     "terms":  [
                   {
                       "term":  "frozen lightly breaded chicken breast bites",
@@ -125,8 +125,8 @@
                         "detail":  "wave-15 NO-GO R3 (pipeline): the card says \"Buy 3 8oz balls: $6.22\" but the priced basis is a Sam\u0027s Club per-unit of $0.2588/oz whose only pack is a 32 oz PRE-SLICED at $8.28 - a purchase no store sells in that shape. Real 8 oz balls are $4.99 at Fareway; the true tier understates the line by about $2. Same class as R2: the buy label and the priced package disagree. R1 (440 cal vs the run\u0027s 450 band floor) is RESOLVED - Brad waived it 2026-08-31 on the grounds that the macros are provably label-accurate and protein 43 clears the \u003e=40 gate; the waiver is recorded, this is not what blocks."
                     },
                     {
-                        "state":  "qa-passed",
-                        "at":  "2026-09-01T02:36:51",
+                        "state":  "waved",
+                        "at":  "2026-09-01T02:42:19",
                         "by":  "",
                         "detail":  "recertified: Wave-15 re-audit 2026-09-01 returned GO. All three prior blockers closed: R1 band waived by Brad and recorded in the spec, R2 artichoke drained basis and R3 mozzarella package both repaired at source and verified real on disk by the auditor.  [wave-15 re-audit 2026-09-01T02:11:50 states GO; no open blockers]"
                     }
