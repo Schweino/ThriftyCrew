@@ -1592,7 +1592,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w15",
       "opened":  "2026-08-31T15:50:22",
-      "last_activity":  "2026-09-01T02:39:59",
+      "last_activity":  "2026-09-01T03:01:39",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1629,6 +1629,26 @@
                          "stage":  "audit",
                          "at":  "2026-09-01T02:39:59",
                          "detail":  "3/3 GO (re-audit 2026-09-01; R1 waived by Brad, R2 artichoke drained basis and R3 mozzarella package repaired and verified on disk)"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-09-01T02:44:40",
+                         "detail":  "compute-v2-perserving + reanchor on 3 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-09-01T02:44:41",
+                         "detail":  "3 row(s) via hunt-2026-08-27-highprotein-w15"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-09-01T03:01:38",
+                         "detail":  "3 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-09-01T03:01:39",
+                         "detail":  "3/3 wave slug(s) published through engine\\publish (visibility preserved) + 579 collateral spec(s) carried by propagate (total dirty 582)"
                      }
                  ]
   }

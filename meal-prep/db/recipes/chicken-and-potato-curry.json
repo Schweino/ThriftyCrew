@@ -37,9 +37,9 @@
                  "protein":  42,
                  "carbs":  23,
                  "fat":  26,
-                 "cost_ps":  "3.06"
+                 "cost_ps":  "3.32"
              },
-    "intro_html":  "\u003cp\u003eChicken and potato curry is what I make when I want the house to smell like a restaurant and my wallet to feel like nothing happened. Chicken breast, potato chunks, and a coconut milk gravy built on real spices you toast right in the pan. That is the whole trick, and it is not a hard one.\u003c/p\u003e\u003cp\u003eHere is the math that matters. Each of these 14 containers lands at 500 calories with 42.4 grams of protein, 22.9 grams of carbs, and 25.8 grams of fat. That is a full dinner that hits your protein number without you doing arithmetic at the counter. Forty minutes of work, ten of it prep, and you have fed yourself for two weeks.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eChicken and potato curry is what I make when I want the house to smell like a restaurant and my wallet to feel like nothing happened. Chicken breast, potato chunks, and a coconut milk gravy built on real spices you toast right in the pan. That is the whole trick, and it is not a hard one.\u003c/p\u003e\u003cp\u003eHere is the math that matters. Each of these 14 containers lands at {{cal}} calories with 42.4 grams of protein, 22.9 grams of carbs, and 25.8 grams of fat. That is a full dinner that hits your protein number without you doing arithmetic at the counter. Forty minutes of work, ten of it prep, and you have fed yourself for two weeks.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eCoconut Oil (generic (USDA)):\u003c/strong\u003e 3 1/2 tbsp (48 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 1/2 medium onions, finely diced (385 g)",
@@ -83,7 +83,7 @@
     "make_it":  [
                     "\u003cp\u003eThis is a build-the-flavor-in-layers curry, and the order matters. Heat the coconut oil in your biggest pot over medium heat and cook the diced onion for 8 to 10 minutes until it goes soft and sweet. Do not rush this part, it is the foundation.\u003c/p\u003e\u003cp\u003eAdd the garlic, ginger, and fresh red chili and stir for about a minute until the whole kitchen smells like it. Then stir in the coriander, cumin, turmeric, and cayenne and cook one more minute so the spices bloom in the oil instead of tasting raw later.\u003c/p\u003e\u003cp\u003eStir in the tomato paste, then add the chicken pieces and toss them until they are coated. Cook 3 to 4 minutes just to seal the outside. Now add the potatoes, diced tomatoes, chicken broth, and salt. Bring it to a simmer, cover the pot, and let it go 10 minutes until the potatoes give to a fork.\u003c/p\u003e\u003cp\u003eFinish with the coconut milk. Shake each can before you open it and pour in the whole thing, thin liquid and all. One note on that: the original recipe skims off only the thick cream at the top of the can, but we use the full can on purpose. Nothing gets thrown away, the gravy stays loose enough to portion evenly across 14 containers, and the macros on this page are figured on the whole can. Simmer one more minute until everything is hot, taste it, adjust the salt, stir in the fresh cilantro, and it is done.\u003c/p\u003e"
                 ],
-    "portion_html":  "\u003cp\u003eDo not eyeball this. Once the curry is done, weigh the whole pot, subtract the weight of the empty pot, and divide what is left by 14. That number is your target weight for each container. A kitchen scale turns 14 guesses into 14 identical dinners, and it is the difference between hitting 500 calories and just hoping you did.\u003c/p\u003e\u003cp\u003eSpoon it out by weight and make sure every container gets its fair share of chicken and potato chunks, not just gravy off the top. Top each one with the fresh cilantro right before the lids go on.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eDo not eyeball this. Once the curry is done, weigh the whole pot, subtract the weight of the empty pot, and divide what is left by 14. That number is your target weight for each container. A kitchen scale turns 14 guesses into 14 identical dinners, and it is the difference between hitting {{cal}} calories and just hoping you did.\u003c/p\u003e\u003cp\u003eSpoon it out by weight and make sure every container gets its fair share of chicken and potato chunks, not just gravy off the top. Top each one with the fresh cilantro right before the lids go on.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyspatula.com/chicken-potato-curry/\" target=\"_blank\" rel=\"noopener\"\u003eskinnyspatula.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eIf this is the kind of cooking you want more of, that is exactly what we do here. Every recipe on Thrifty Crew is built the same way, with real macros, real board prices, and a plan you can actually shop. Membership runs a dollar a month, which is less than the cilantro you just chopped. Come cook with us.\u003c/p\u003e",
     "cost_batch":  29.07,
@@ -234,13 +234,13 @@
                            ]
                },
     "head":  {
-                 "description":  "A budget high-protein chicken and potato curry meal prep that makes 14 dinners at 500 calories and 42.4 grams of protein each. Chicken breast simmered in coconut milk and tomatoes with real toasted spices.",
+                 "description":  "A budget high-protein chicken and potato curry meal prep that makes 14 dinners at {{cal}} calories and 42.4 grams of protein each. Chicken breast simmered in coconut milk and tomatoes with real toasted spices.",
                  "keywords":  "chicken and potato curry, chicken curry meal prep, high protein curry, budget meal prep dinner, coconut chicken curry, 14 serving curry, healthy chicken curry",
                  "image":  "",
                  "prepTime":  "PT10M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT40M",
-                 "costPerServing":  3.06,
+                 "costPerServing":  3.32,
                  "recipeIngredient":  [
                                           "Coconut Oil, 3 1/2 tbsp (48 g)",
                                           "Yellow Onion, 3 1/2 medium onions, finely diced (385 g)",
