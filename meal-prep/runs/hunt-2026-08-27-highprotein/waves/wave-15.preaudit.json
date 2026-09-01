@@ -5,8 +5,8 @@
     "wave":  15,
     "batch":  "hunt-2026-08-27-highprotein-w15",
     "scope":  "whole-wave",
-    "generated":  "2026-08-31T15:50:57",
-    "elapsed_sec":  27.1,
+    "generated":  "2026-09-01T01:59:25",
+    "elapsed_sec":  49.7,
     "wave_slugs":  [
                        "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
                        "high-protein-chicken-alfredo-lasagna",
@@ -19,7 +19,7 @@
               ],
     "inputs":  {
                    "run_dir":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein",
-                   "costed_mtime":  "2026-08-31T14:57:17",
+                   "costed_mtime":  "2026-09-01T01:51:13",
                    "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
                    "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
                },
@@ -29,7 +29,7 @@
                                                                                              "check":  "spec-present",
                                                                                              "verdict":  "pass",
                                                                                              "numbers":  {
-                                                                                                             "mtime":  "2026-08-31T13:24:43"
+                                                                                                             "mtime":  "2026-09-01T01:51:35"
                                                                                                          },
                                                                                              "detail":  "spec present and parses"
                                                                                          },
@@ -60,10 +60,10 @@
                                                                                              "check":  "cost-engine-consistency",
                                                                                              "verdict":  "pass",
                                                                                              "numbers":  {
-                                                                                                             "cost_batch":  37.42,
-                                                                                                             "cost_batch_true":  49.44,
-                                                                                                             "cost_per_serving":  2.67,
-                                                                                                             "cost_first_run":  53.43,
+                                                                                                             "cost_batch":  39.43,
+                                                                                                             "cost_batch_true":  51.67,
+                                                                                                             "cost_per_serving":  2.82,
+                                                                                                             "cost_first_run":  55.54,
                                                                                                              "lines":  13,
                                                                                                              "lines_unpriced":  0
                                                                                                          },
@@ -73,9 +73,9 @@
                                                                                              "check":  "cost-reconcile",
                                                                                              "verdict":  "pass",
                                                                                              "numbers":  {
-                                                                                                             "spec_mtime":  "2026-08-31T13:24:43",
-                                                                                                             "costed_mtime":  "2026-08-31T14:57:17",
-                                                                                                             "costed_is_newer_than_spec":  true
+                                                                                                             "spec_mtime":  "2026-09-01T01:51:35",
+                                                                                                             "costed_mtime":  "2026-09-01T01:51:13",
+                                                                                                             "costed_is_newer_than_spec":  false
                                                                                                          },
                                                                                              "detail":  "every spec cost field matches its engine row to the cent"
                                                                                          },
@@ -108,7 +108,7 @@
                                                                                              "verdict":  "pass",
                                                                                              "numbers":  {
                                                                                                              "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-15.preaudit-cards\\no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
-                                                                                                             "body_bytes":  68644,
+                                                                                                             "body_bytes":  68648,
                                                                                                              "make_it_steps":  1,
                                                                                                              "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                                          },
@@ -120,7 +120,7 @@
                                                                          "check":  "spec-present",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "mtime":  "2026-08-31T13:44:38"
+                                                                                         "mtime":  "2026-09-01T01:51:34"
                                                                                      },
                                                                          "detail":  "spec present and parses"
                                                                      },
@@ -151,10 +151,10 @@
                                                                          "check":  "cost-engine-consistency",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "cost_batch":  22.61,
-                                                                                         "cost_batch_true":  32.5,
+                                                                                         "cost_batch":  22.62,
+                                                                                         "cost_batch_true":  34.57,
                                                                                          "cost_per_serving":  1.62,
-                                                                                         "cost_first_run":  35.89,
+                                                                                         "cost_first_run":  38.39,
                                                                                          "lines":  9,
                                                                                          "lines_unpriced":  0
                                                                                      },
@@ -164,9 +164,9 @@
                                                                          "check":  "cost-reconcile",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "spec_mtime":  "2026-08-31T13:44:38",
-                                                                                         "costed_mtime":  "2026-08-31T14:57:17",
-                                                                                         "costed_is_newer_than_spec":  true
+                                                                                         "spec_mtime":  "2026-09-01T01:51:34",
+                                                                                         "costed_mtime":  "2026-09-01T01:51:13",
+                                                                                         "costed_is_newer_than_spec":  false
                                                                                      },
                                                                          "detail":  "every spec cost field matches its engine row to the cent"
                                                                      },
@@ -199,7 +199,7 @@
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
                                                                                          "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-15.preaudit-cards\\high-protein-chicken-alfredo-lasagna",
-                                                                                         "body_bytes":  67543,
+                                                                                         "body_bytes":  67544,
                                                                                          "make_it_steps":  1,
                                                                                          "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                      },
@@ -211,7 +211,7 @@
                                                              "check":  "spec-present",
                                                              "verdict":  "pass",
                                                              "numbers":  {
-                                                                             "mtime":  "2026-08-31T13:21:48"
+                                                                             "mtime":  "2026-09-01T01:51:33"
                                                                          },
                                                              "detail":  "spec present and parses"
                                                          },
@@ -242,10 +242,10 @@
                                                              "check":  "cost-engine-consistency",
                                                              "verdict":  "pass",
                                                              "numbers":  {
-                                                                             "cost_batch":  27.46,
-                                                                             "cost_batch_true":  33.83,
-                                                                             "cost_per_serving":  1.96,
-                                                                             "cost_first_run":  42.79,
+                                                                             "cost_batch":  29.07,
+                                                                             "cost_batch_true":  35.01,
+                                                                             "cost_per_serving":  2.08,
+                                                                             "cost_first_run":  46.51,
                                                                              "lines":  17,
                                                                              "lines_unpriced":  0
                                                                          },
@@ -255,9 +255,9 @@
                                                              "check":  "cost-reconcile",
                                                              "verdict":  "pass",
                                                              "numbers":  {
-                                                                             "spec_mtime":  "2026-08-31T13:21:48",
-                                                                             "costed_mtime":  "2026-08-31T14:57:17",
-                                                                             "costed_is_newer_than_spec":  true
+                                                                             "spec_mtime":  "2026-09-01T01:51:33",
+                                                                             "costed_mtime":  "2026-09-01T01:51:13",
+                                                                             "costed_is_newer_than_spec":  false
                                                                          },
                                                              "detail":  "every spec cost field matches its engine row to the cent"
                                                          },
@@ -290,7 +290,7 @@
                                                              "verdict":  "pass",
                                                              "numbers":  {
                                                                              "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-15.preaudit-cards\\chicken-and-potato-curry",
-                                                                             "body_bytes":  69804,
+                                                                             "body_bytes":  69805,
                                                                              "make_it_steps":  1,
                                                                              "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                          },

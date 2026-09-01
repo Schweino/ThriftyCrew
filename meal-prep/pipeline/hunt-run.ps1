@@ -1,4 +1,4 @@
-﻿# hunt-run.ps1 - the Recipe Hunter v2 run state machine and wave assembler.
+# hunt-run.ps1 - the Recipe Hunter v2 run state machine and wave assembler.
 #
 # WHY THIS EXISTS (2026-08-15). The Hunter streams: a recipe can be in QA while another is still being
 # extracted. Streaming means the run's progress no longer lives in one session's head, and the estate has
@@ -48,6 +48,13 @@ param(
   # -Repair: the complement of -Revive - a defect that WAS this recipe's own, ruled on by Brad, and
   # now allowed to be fixed. See the rejected-audit -> written note in the NEXT table.
   [switch]$Repair,
+  # -Recertify: the door for a rejection the wave's OWN RE-AUDIT has since cleared. -Revive says "the
+  # blockers were never mine"; -Repair says "they were mine and I may now fix them". Neither says the
+  # thing that is true after a repaired wave is re-audited GO, and on 2026-09-01 wave 15 proved it:
+  # three recipes whose recipe-local blockers were all repaired and re-audited clean could reach
+  # neither door, because BOTH require at least one open blocker and a clean GO has none. -Repair
+  # would also have sent them back to `written` to re-buy a source-QA that had nothing left to find.
+  [switch]$Recertify,
   [switch]$Lane, [switch]$LaneSummary, [switch]$StageSummary, [switch]$RecipeSummary,
   [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
@@ -101,6 +108,7 @@ $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool
 $runRevive = [bool]$Revive
 $runReband = [bool]$Reband
 $runRepair = [bool]$Repair
+$runRecertify = [bool]$Recertify
 $runLane = [bool]$Lane; $runWaveSync = [bool]$WaveSync
 $runDrain = [bool]$Drain; $runNoLedger = [bool]$NoLedger; $runJson = [bool]$Json
 
@@ -1473,6 +1481,109 @@ if ($runSelfTest) {
        (-not (Test-LegalTransition 'rejected-unreadable' 'written')) -and `
        (Test-LegalTransition 'rejected-qa' 'written') -and `
        (Test-LegalTransition 'rejected-audit' 'qa-passed')) 'the terminal default was repealed too widely'
+    # ---- -Recertify: the rejection the wave's own RE-AUDIT cleared --------------------------------
+    # Wave 15 (2026-09-01) reached neither door: every recipe-local blocker repaired, a fresh GO on
+    # disk, and both -Revive and -Repair refusing because each REQUIRES an open blocker. Every case
+    # below is seeded so that exactly ONE gate can refuse it - that is what makes the neuter run mean
+    # something, and it is the lesson the rv-noreason/rv-wrongstate pair had to be rewritten to learn.
+    AuditRv 20 "GO`nEvery blocker from the prior NO-GO is repaired and verified.`n### Prior R1 (recipe-local, owner: pipeline) - VERIFIED FIXED`n"
+    AuditRv 21 "NO-GO`nthe report states a verdict, and it is not GO`n"
+    AuditRv 22 "GO`n### BLOCKER 1 (recipe-local, owner: writer) - STILL OPEN`n"
+    AuditRv 23 "GO`nclean, but written before the rejection it would undo`n"
+    AuditRv 24 "the auditor wrote prose and never stated a verdict line`nand nothing here is a blocker heading either`n"
+    (Get-Item (Join-Path $rv 'waves\wave-23.audit.md')).LastWriteTime = [datetime]'2026-08-27T00:00:00'
+
+    SeedRv 'rc-ok'          'rejected-audit' 20
+    SeedRv 'rc-nogo'        'rejected-audit' 21
+    SeedRv 'rc-openblocker' 'rejected-audit' 22
+    SeedRv 'rc-stale'       'rejected-audit' 23
+    SeedRv 'rc-unreadable'  'rejected-audit' 24
+    SeedRv 'rc-noaudit'     'rejected-audit' 25
+    SeedRv 'rc-noreason'    'rejected-audit' 20
+    SeedRv 'rc-wrongstate'  'waved'          20
+
+    & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-ok' -By 'test' -Reason 'wave-20 re-audit returned GO' | Out-Null
+    $rcDoc = Read-Json (Join-Path $rv 'state\rc-ok.json')
+    T 'RECERTIFY a repaired wave re-audited GO returns to qa-passed - the case neither other door could express' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rc-ok') -eq 'qa-passed') (StRv 'rc-ok')
+    T 'RECERTIFY   ...and the reason AND the re-audit evidence land on the history' `
+      (([string]$rcDoc.history[-1].detail) -match 'wave-20 re-audit returned GO' -and `
+       ([string]$rcDoc.history[-1].detail) -match 'states GO' -and `
+       ([string]$rcDoc.history[-1].detail) -match 'no open blockers') ([string]$rcDoc.history[-1].detail)
+    # THE OPPOSITE OF -Revive AND -Repair, deliberately, and asserted against them on the same page so
+    # the difference cannot be read as an oversight. Those two send a recipe back to the pool and clear
+    # its claim; this one certifies the wave it is already in, which has not published yet. The first
+    # cut of this door copied their `$e.wave = $null` and stranded all three of wave 15's recipes -
+    # wave-publish's manifest gate refused the wave with "sits in wave , not 15".
+    T 'RECERTIFY   ...and the wave claim is KEPT - unlike -Revive, the evidence is THIS wave and it has not published' `
+      ([int]$rcDoc.wave -eq 20 -and $null -eq $rcDoc.reject_reason) ('wave=' + [string]$rcDoc.wave)
+    T 'CLEAN TWIN   ...while -Revive on the same page still CLEARS it, so the two are not one rule' `
+      ($null -eq (Read-Json (Join-Path $rv 'state\rv-ok.json')).wave) 'revive stopped clearing the wave'
+
+    # THE FAIL-OPEN CASE, and the reason this door reads a verdict at all. An unparseable report names
+    # zero blockers for the same reason a clean GO does, and this library has been bitten by that twice
+    # (eleven recipes on a heading form, four more on a hash count). A door gated only on "no blockers"
+    # would swing wide on exactly that file. The MESSAGE is asserted, not just the refusal: a refusal
+    # alone would also be produced by the recency gate if the fixture ever drifted.
+    $rcUnread = & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-unreadable' -By 'test' -Reason 'it names no blockers, so it must be clean'
+    T 'MUST FIRE  RECERTIFY a report stating NO verdict is refused AS unreadable - "no blockers" is not "GO"' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rc-unreadable') -eq 'rejected-audit' -and `
+       ((@($rcUnread | ForEach-Object { [string]$_ }) -join ' ') -match 'no verdict this reader can find')) `
+      (@($rcUnread | ForEach-Object { [string]$_ }) -join ' ')
+
+    $rcNogo = & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-nogo' -By 'test' -Reason 'please'
+    T 'MUST FIRE  RECERTIFY a NO-GO naming no blockers is still a NO-GO - and NO-GO must never read as GO' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rc-nogo') -eq 'rejected-audit' -and `
+       ((@($rcNogo | ForEach-Object { [string]$_ }) -join ' ') -match "states 'NO-GO', not GO")) `
+      (@($rcNogo | ForEach-Object { [string]$_ }) -join ' ')
+
+    $rcOpen = & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-openblocker' -By 'test' -Reason 'the GO line says so'
+    T 'MUST FIRE  RECERTIFY a GO above a STILL-OPEN blocker is a report contradicting itself, and the blocker wins' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rc-openblocker') -eq 'rejected-audit' -and `
+       ((@($rcOpen | ForEach-Object { [string]$_ }) -join ' ') -match 'still names 1 open blocker')) `
+      (@($rcOpen | ForEach-Object { [string]$_ }) -join ' ')
+
+    $rcStale = & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-stale' -By 'test' -Reason 'there is a GO on disk'
+    T 'MUST FIRE  RECERTIFY a GO written BEFORE the rejection was about earlier bytes, so it cannot undo it' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rc-stale') -eq 'rejected-audit' -and `
+       ((@($rcStale | ForEach-Object { [string]$_ }) -join ' ') -match 'PREDATES the rejection')) `
+      (@($rcStale | ForEach-Object { [string]$_ }) -join ' ')
+
+    & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-noaudit' -By 'test' -Reason 'trust me' | Out-Null
+    T 'MUST FIRE  RECERTIFY with no audit on disk is no ruling, so it is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rc-noaudit') -eq 'rejected-audit') (StRv 'rc-noaudit')
+
+    & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-noreason' -By 'test' | Out-Null
+    T 'MUST FIRE  RECERTIFY with no -Reason is refused - the command that undoes a verdict must say why' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rc-noreason') -eq 'rejected-audit') (StRv 'rc-noreason')
+
+    & $PSCommandPath -Recertify -RunDir $rv -Slug 'rc-wrongstate' -By 'test' -Reason 'it is mid-wave, not rejected' | Out-Null
+    T 'MUST FIRE  RECERTIFY a slug that is not rejected-audit is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rc-wrongstate') -eq 'waved') (StRv 'rc-wrongstate')
+
+    # The three doors on ONE audit, which is the clearest statement that they are not three spellings
+    # of one rule: wave 20's clean GO recertifies, and is refused by both of the others.
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rc-noaudit' -By 'test' -Reason 'x' 2>&1 | Out-Null
+    $rvOn20 = $LASTEXITCODE
+    SeedRv 'rc-tri' 'rejected-audit' 20
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rc-tri' -By 'test' -Reason 'x' | Out-Null
+    $triRevive = $LASTEXITCODE
+    & $PSCommandPath -Repair -RunDir $rv -Slug 'rc-tri' -By 'test' -Reason 'x' | Out-Null
+    $triRepair = $LASTEXITCODE
+    T 'CLEAN TWIN a clean GO is refused by BOTH older doors and accepted by this one - three rules, not one' `
+      ($triRevive -ne 0 -and $triRepair -ne 0 -and (StRv 'rc-tri') -eq 'rejected-audit' -and (StRv 'rc-ok') -eq 'qa-passed') `
+      ('revive=' + $triRevive + ' repair=' + $triRepair + ' tri=' + (StRv 'rc-tri'))
+
+    # The verdict reader itself, pinning the three answers this door branches on. NOT a test of the
+    # alternation order: neutering that order reddens nothing, because the trailing `$` is the real
+    # guard - see the note in audit-blocker-lib.ps1, which was corrected when the neuter said so.
+    # Blinding the reader outright reddens 8 cases, which is what makes this one non-vacuous.
+    T 'RECERTIFY the verdict reader tells NO-GO from GO, and finds nothing in a report that states neither' `
+      ((Get-AuditVerdict (Join-Path $rv 'waves\wave-21.audit.md')) -eq 'NO-GO' -and `
+       (Get-AuditVerdict (Join-Path $rv 'waves\wave-20.audit.md')) -eq 'GO' -and `
+       (Get-AuditVerdict (Join-Path $rv 'waves\wave-24.audit.md')) -eq '') `
+      ('21=' + (Get-AuditVerdict (Join-Path $rv 'waves\wave-21.audit.md')) + ' 20=' + (Get-AuditVerdict (Join-Path $rv 'waves\wave-20.audit.md')))
+
   } finally { Remove-Item $rv -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
@@ -1967,6 +2078,84 @@ if ($runRevive) {
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  rejected-audit -> qa-passed  ({1})" -f $Slug, $detail)
   Write-GuardComplete -Name 'hunt-run' -Summary ("revive {0}" -f $Slug)
+  exit 0
+}
+
+# ---- -Recertify: the rejection the wave's own RE-AUDIT has since cleared ----------------------------
+# The third exit, and it exists because the first two could not describe a repaired wave (2026-09-01,
+# wave 15). -Revive is gated on "none of the open blockers was mine" and -Repair on "one of them was";
+# both therefore REQUIRE an open blocker, and a wave that has been repaired and re-audited GO has none.
+# All three of wave 15's recipes sat terminal with every blocker closed on the record and a fresh GO
+# on disk, reachable by neither door. -Repair could not have been the answer either: it returns a
+# recipe to `written` and re-buys a source-QA pass that has nothing left to find.
+#
+# THE EVIDENCE IS THE RE-AUDIT, AND THE DANGEROUS READING IS "NO BLOCKERS". Zero open blockers is two
+# different facts wearing one face - a clean GO, or a report the reader could not parse - and this
+# library has already been bitten by the second twice (eleven recipes on a heading form, four more on
+# a hash count). A door that opened on "no blockers found" would swing wide on exactly the unreadable
+# file that has caused every previous incident here. So the gate is the CONJUNCTION: the report must
+# SAY GO in its own words, AND name no open blocker, AND postdate the rejection it is undoing. A
+# report that cannot be read states no verdict, so it fails the first condition and this refuses.
+if ($runRecertify) {
+  if (-not $Slug)   { Write-Output 'hunt-run: -Recertify needs -Slug'; exit 1 }
+  if (-not $Reason) { Write-Output 'hunt-run: -Recertify needs -Reason "<which re-audit cleared this, and when>"'; exit 1 }
+  $sp = Get-StatePath $RunDir $Slug
+  if (-not (Test-Path $sp)) { Write-Output ("hunt-run: '{0}' has no state file" -f $Slug); exit 1 }
+  $e = Read-Json $sp
+  $from = [string]$e.state
+  if ($from -ne 'rejected-audit') {
+    Write-Output ("hunt-run: -Recertify only applies to rejected-audit; {0} is '{1}'" -f $Slug, $from); exit 1
+  }
+  $wk = [int]$e.wave
+  $auditPath = Join-Path $RunDir ("waves\wave-{0}.audit.md" -f $wk)
+  if (-not (Test-Path $auditPath)) {
+    Write-Output ("hunt-run: no audit at {0} - a recertification is the re-audit's ruling, and there is none" -f $auditPath); exit 1
+  }
+  # 1. The auditor must have SAID it. This is what an unparseable report cannot do.
+  $verdict = [string](Get-AuditVerdict $auditPath)
+  if ($verdict -ne 'GO') {
+    $shown = if ($verdict) { $verdict } else { 'no verdict this reader can find' }
+    Write-Output ("hunt-run: REFUSED - {0}'s wave-{1} audit states '{2}', not GO. A recertification is the re-audit's own ruling and cannot be inferred." -f $Slug, $wk, $shown)
+    exit 1
+  }
+  # 2. ...and it must be clean. A GO line above a still-open blocker is a report contradicting itself,
+  #    and the blocker is the half that must win.
+  $openKinds = @(Get-AuditBlockerKinds $auditPath)
+  if ($openKinds.Count) {
+    Write-Output ("hunt-run: REFUSED - {0}'s wave-{1} audit says GO but still names {2} open blocker(s) ({3}). Fix the report or fix the recipe; this will not choose between them." -f $Slug, $wk, $openKinds.Count, (($openKinds | Sort-Object -Unique) -join ', '))
+    exit 1
+  }
+  # 3. ...and it must be NEWER than the rejection it undoes, or an old GO from before the wave went
+  #    bad would reopen every recipe that wave ever rejected. The rejection's own history entry is the
+  #    clock, not $e.updated, which any later bookkeeping write moves.
+  $rejAt = $null
+  foreach ($h in @($e.history)) { if ([string]$h.state -eq 'rejected-audit' -and $h.at) { $rejAt = [string]$h.at } }
+  if (-not $rejAt) { $rejAt = [string]$e.updated }
+  $rejTime = [datetime]::MinValue
+  if ($rejAt -and -not [datetime]::TryParse($rejAt, [ref]$rejTime)) { $rejTime = [datetime]::MinValue }
+  $auditTime = (Get-Item $auditPath).LastWriteTime
+  if ($rejTime -gt [datetime]::MinValue -and $auditTime -lt $rejTime) {
+    Write-Output ("hunt-run: REFUSED - {0}'s wave-{1} audit ({2}) PREDATES the rejection it would undo ({3}). That GO was written about earlier bytes." -f $Slug, $wk, $auditTime.ToString('s'), $rejTime.ToString('s'))
+    exit 1
+  }
+  if (-not (Test-LegalTransition $from 'qa-passed')) {
+    Write-Output ("hunt-run: REFUSED {0}: {1} -> qa-passed" -f $Slug, $from); exit 1
+  }
+  $detail = ("recertified: " + $Reason + "  [wave-" + $wk + " re-audit " + $auditTime.ToString('s') + " states GO; no open blockers]")
+  $e.state = 'qa-passed'
+  $e.updated = (Get-Stamp)
+  $e.reject_reason = $null
+  # THE WAVE CLAIM IS KEPT, AND THIS IS THE ONE PLACE -Recertify MUST NOT COPY -Revive. Those two doors
+  # clear it because they send a recipe back to the POOL: their evidence says nothing about the wave,
+  # so it waits for whichever wave closes next. Here the evidence IS this wave's own re-audit, and the
+  # wave has not published - clearing the claim would strand it. wave-publish then refuses the whole
+  # wave at its manifest check ("sits in wave , not 15"), because that gate exists to catch a slug that
+  # slipped out of the wave it is being published as. Copying the line from -Revive put all three of
+  # wave 15's recipes in exactly that state, and the manifest gate is what caught it.
+  $e.history = @(@($e.history) + [pscustomobject]@{ state = 'qa-passed'; at = (Get-Stamp); by = $By; detail = $detail })
+  Write-JsonAtomic -Path $sp -Obj $e
+  Write-Output ("hunt-run: {0}  rejected-audit -> qa-passed  (stays in wave {1})  ({2})" -f $Slug, $wk, $detail)
+  Write-GuardComplete -Name 'hunt-run' -Summary ("recertify {0}" -f $Slug)
   exit 0
 }
 

@@ -200,3 +200,56 @@ function Get-KindlessBlockerHeadings {
   }
   return @($bad)
 }
+
+function Get-AuditVerdict {
+  <#
+    The report's own verdict: 'GO', 'NO-GO', or '' when the file does not state one.
+
+    WHY THIS EXISTS (2026-09-01). Zero open blockers is TWO different facts wearing one face. A clean
+    GO has none because every blocker was closed; an UNPARSEABLE report has none because the reader
+    could not see them - which is the exact failure this library's header describes, twice over. Every
+    caller that reads "no blockers" as good news is one bad heading away from reviving a recipe whose
+    defects all still stand. So a caller that wants to act on a clean report must ALSO be able to read
+    that the auditor actually said GO, and that reader belongs here beside the blocker reader rather
+    than inlined into whichever command needs it first.
+
+    'NO-?GO' LEADS THE ALTERNATION, AND A NEUTER PROVED THE ORDER DEFENDS NOTHING ON ITS OWN. Swapping
+    it to (GO|NO-?GO) reddens ZERO cases, because the trailing `$` is what actually stops 'GO' matching
+    'NO-GO': the prefix cannot consume the leading 'N', so only the NO-GO branch can ever reach the
+    anchor. THE ANCHOR IS THE GUARD - drop the `$` and 'GO' matches the front of 'NO-GO', and every
+    rejection in the estate reads as an approval. The order is kept because it states the intent, and
+    it is written down as intent rather than as protection because this file has already deleted one
+    dead `Prior` guard for teaching exactly that lie. Blinding this reader entirely reddens 8 cases, so
+    the reader is load-bearing; the ordering inside it is not.
+
+    DELIBERATELY NARROW - two forms, both of which real files on disk use, and nothing else:
+      * the first non-empty line is the verdict, optionally hashed and/or labelled
+        ('GO', 'NO-GO', '## VERDICT: NO-GO')
+      * or a `## Verdict` heading, whose next non-empty line is the verdict
+    Prose is never scanned. A report that says 'this is a GO for the curry' in a paragraph states
+    nothing, and reading it as a verdict is how a sentence becomes an approval.
+  #>
+  param([string]$Path)
+  $verdict = '^\s*#{0,4}\s*(?:VERDICT\s*[:\-]?\s*)?(NO-?GO|GO)\s*[.:]?\s*$'
+  $lines = @(Get-Content $Path)
+  $first = $true
+  for ($i = 0; $i -lt $lines.Count; $i++) {
+    $s = ([string]$lines[$i]).Trim()
+    if (-not $s) { continue }
+    if ($first) {
+      $first = $false
+      $m = [regex]::Match($s, $verdict, 'IgnoreCase')
+      if ($m.Success) { return $m.Groups[1].Value.ToUpperInvariant().Replace('NOGO', 'NO-GO') }
+    }
+    if ([regex]::IsMatch($s, '^#{1,4}\s+Verdict\b', 'IgnoreCase')) {
+      for ($j = $i + 1; $j -lt $lines.Count; $j++) {
+        $t = ([string]$lines[$j]).Trim()
+        if (-not $t) { continue }
+        $m2 = [regex]::Match($t, $verdict, 'IgnoreCase')
+        if ($m2.Success) { return $m2.Groups[1].Value.ToUpperInvariant().Replace('NOGO', 'NO-GO') }
+        break
+      }
+    }
+  }
+  return ''
+}
