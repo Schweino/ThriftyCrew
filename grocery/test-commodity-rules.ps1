@@ -84,6 +84,126 @@ $cases = @(
      why='CLEAN TWIN actual rice is untouched by the exclusion' }
   @{ id='rice'; name='Great Value Long Grain Enriched Rice, 20 lb'; expect='included'
      why='CLEAN TWIN and so is the Walmart row' }
+
+  # =================================================================================================
+  # 2026-09-01 triage (plan-2026-09-01.json, routing frozen in plan-2026-09-01.routing.json).
+  # Every name below is verbatim from a real capture under grocery\out; the capture file is named in
+  # the `why` when it is not walmart-regular-2026-08-31.json. NEVER regenerate these from the live
+  # board: the rows they encode are the ones the rules were wrong about, and a regenerated fixture
+  # would find nothing and pass.
+  # =================================================================================================
+
+  # ---- jalapenos: the fence excluded the ADJECTIVE but not the CONTAINER NOUN (queue b7da16) ------
+  # A canned 3-pack held the FRESH jalapeno cell at $0.877/lb against a real $1.76/lb fresh row, and
+  # last week's winner was the same class, so this cell had been canned-on-fresh for over a week.
+  @{ id='jalapenos'; name='(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can'; expect='excluded'
+     why='FOUNDING CASE: canned peppers held the fresh-jalapeno cell. jalapenos already excluded "canned", "pickled" and "jar"; this name carries none of them, only the container noun "Can"' }
+  @{ id='jalapenos'; name='EMBASA Whole Jalapenos in Escabeche, Shelf Stable, Kosher, 26 oz Steel Can'; expect='excluded'
+     why='the SAME class one week earlier (walmart-regular-2026-08-11) - it was the previous cell holder, and "escabeche" is the preparation noun the adjective fence could not see' }
+  @{ id='jalapenos'; name='Armour Jalapeno Vienna Sausage, 6g Protein Per Serving, 4.6 oz Can'; expect='excluded'
+     why='a latent mis-route the same fix corrects: a jalapeno-FLAVOURED canned sausage was routing to fresh peppers' }
+  @{ id='vienna-sausage'; name='Armour Jalapeno Vienna Sausage, 6g Protein Per Serving, 4.6 oz Can'; expect='included'
+     why='and the other half of that correction - released from jalapenos, it must land on the commodity it actually is' }
+  @{ id='jalapenos'; name='Fresh Jalapenos, Each'; expect='included'
+     why='CLEAN TWIN the real fresh pepper (walmart-regular-2026-07-30) is untouched, and it is the row that takes the cell back' }
+
+  # ---- broccoli / frozen-broccoli: a store name that omits its own type word (queue b7da16) -------
+  # "Great Value Broccoli Florets, 14 oz" carries no frozen or steam token, so the fresh-broccoli
+  # fence could not see it and it held the Walmart broccoli cell at $1.3257/lb. Walmart's own
+  # breadcrumb for item 13925175, read 2026-09-01: Food > Frozen Foods > Frozen Fruits & Vegetables
+  # > Frozen Vegetables. Its found_by_term in the capture is "frozen broccoli florets".
+  @{ id='broccoli'; name='Great Value Broccoli Florets, 14 oz'; expect='excluded'
+     why='FOUNDING CASE: a FROZEN product held the FRESH broccoli cell and the crown. Store-verified frozen by breadcrumb, not inferred' }
+  @{ id='frozen-broccoli'; name='Great Value Broccoli Florets, 14 oz'; expect='included'
+     why='the other half: excluding it from fresh is only right if it lands where it belongs. A drop with no re-home would lose the row entirely' }
+  @{ id='broccoli'; name='Great Value: Broccoli Stir-Fry, 16 oz'; expect='excluded'
+     why='same fix, second instance: a stir-fry BLEND is not a broccoli crown' }
+  @{ id='broccoli'; name='Marketside Broccoli Florets, 12 oz'; expect='included'
+     why='CLEAN TWIN Marketside is Walmart fresh line, and florets are still fresh broccoli - proof the new token is brand-specific and not a florets ban' }
+  @{ id='broccoli'; name='Fresh Whole Green Broccoli Crowns, 1 Each'; expect='included'
+     why='CLEAN TWIN the real fresh crown (walmart-regular-2026-07-23) still matches' }
+  @{ id='frozen-broccoli'; name='Great Value Frozen Cut Broccoli, 16 oz'; expect='included'
+     why='CLEAN TWIN the existing frozen-broccoli cell holder is unmoved by the new include' }
+  @{ id='frozen-broccoli'; name='Marketside Broccoli Florets, 12 oz'; expect='no-include-match'
+     why='CLEAN TWIN and the fresh florets do NOT leak the other way into frozen' }
+
+  # ---- coleslaw-mix: the two-word spelling matched nothing estate-wide (queue 4a481e) -------------
+  @{ id='coleslaw-mix'; name='Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)'; expect='included'
+     why='FOUNDING CASE: the include library knew "coleslaw" and "slaw mix" but not two-word "Cole Slaw", so Walmart had NO cell on a commodity it stocks. The tri-colour token does not help either: it wants "tri-color coleslaw", and this reads "Tri-Color Cole Slaw"' }
+  @{ id='coleslaw-mix'; name='Marketside Angel Hair Cole Slaw, 10 oz Bag (Fresh)'; expect='included'
+     why='second real instance of the same two-word spelling (walmart-regular-2026-08-11)' }
+  @{ id='coleslaw-mix'; name='Freshness Guaranteed Homestyle Cole Slaw, 30 oz Tub (Refrigerated)'; expect='excluded'
+     why='MUST-FIRE FENCE: the first-draft bare token admitted this - a DRESSED deli salad in a tub, not a bag of shredded cabbage. Caught by measurement before shipping, which is why homestyle and tub are on the exclude list' }
+  @{ id='coleslaw-mix'; name='Freshness Guaranteed Homestyle Cole Slaw, 15 oz Small Tub (Refrigerated)'; expect='excluded'
+     why='and its small-tub sibling, so a size change cannot walk one of them back in' }
+  @{ id='coleslaw-mix'; name="Mann's Broccoli Cole Slaw The Original"; expect='excluded'
+     why='CLEAN TWIN broccoli slaw is a different vegetable and the pre-existing broccoli exclude still holds it out' }
+
+  # ---- cooked-jasmine-rice / rice: adjacency and the release exclude (queue 4a481e) ---------------
+  # The include demanded "ready-to-eat" immediately followed by "jasmine rice", so every flavoured or
+  # differently-ordered variant was invisible. Two of them were CLAIMED by `rice` at index 63, which
+  # excluded "ready rice" and "ready to heat" but never "ready to eat" - so widening the include alone
+  # would not have reached them (first-match-wins).
+  @{ id='cooked-jasmine-rice'; name='Mahatma Ready-to-Eat Cilantro Limon Jasmine Rice, Microwaveable Rice, Gluten Free, 8.8 oz Pouch'; expect='included'
+     why='FOUNDING CASE: a flavour word between "ready-to-eat" and "jasmine rice" made the row invisible to every include' }
+  @{ id='cooked-jasmine-rice'; name='Mahatma Ready-to-Eat White Jasmine Rice, Microwavable Rice, 8.8 oz Pouch'; expect='included'
+     why='same shape with a colour word (walmart-regular-2026-08-11)' }
+  @{ id='cooked-jasmine-rice'; name="Ben's Original Ready Rice Jasmine Rice, Easy Dinner Side, 8.5 Ounce Pouch"; expect='included'
+     why='the other word order - "Ready Rice Jasmine" - which needed its own token' }
+  @{ id='cooked-jasmine-rice'; name='Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count'; expect='included'
+     why='the row `rice` used to claim; it must be reachable here once released' }
+  @{ id='rice'; name='Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count'; expect='excluded'
+     why='THE RELEASE EXCLUDE. rice sits at index 63 and cooked-jasmine-rice at 587, so without this the widened include can never be reached. Dry rice is never ready-to-eat' }
+  @{ id='rice'; name='Minute Ready-to-Eat Restaurant-Style Sticky Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count'; expect='excluded'
+     why='the release is about the FORM, not the grain: a cooked cup must not price dry rice (walmart-regular-2026-08-06)' }
+  @{ id='cooked-jasmine-rice'; name='Minute Ready-to-Eat Restaurant-Style Sticky Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count'; expect='no-include-match'
+     why='CLEAN TWIN and it must not land here either - cooked, but not jasmine. It is correct for this row to route nowhere' }
+  @{ id='rice'; name='Golden Star Thai Hom Mali Jasmine Rice, 5 lbs'; expect='included'
+     why='CLEAN TWIN dry bagged jasmine rice is untouched by the ready-to-eat release (walmart-regular-2026-07-23)' }
+
+  # ---- cherry-tomatoes: a plural stem the singular name could never satisfy (queue ff9801) --------
+  # Every include spelled the fruit "tomatoes?" - which is "tomatoe" plus an optional "s", so it
+  # matches "tomatoes" and never "tomato". The singular "Grape Tomato" had therefore never matched
+  # anything estate-wide, and Walmart's cheapest grape tomato was invisible.
+  @{ id='cherry-tomatoes'; name='Fresh Grape Tomato, 10 oz Package'; expect='included'
+     why='FOUNDING CASE: the singular name the plural stem could not see. $2.27 against the organic $3.27 that held the cell' }
+  @{ id='cherry-tomatoes'; name='(2 pack) Bonnie Plants Husky Cherry Red Cherry Tomato 19.3 oz.'; expect='no-include-match'
+     why='THE LIVE GARDEN PLANT, and it is stopped one layer EARLIER than the plan expected. The plan proposed pluralising the plant fence because a FIRST-DRAFT singular token would have admitted this row; the token actually shipped is grape-only, so no include fires and the fence is never reached. Measured over all 45,666 corpus names: ZERO match a cherry-tomatoes include and \bplants?\b, and zero match one and the old singular \bplant\b, so a pluralised fence would have shipped with no reachable test. It was left out and this case is what proves the include is narrow enough to make it unnecessary. If anyone ever widens the token to (?:cherry|grape)\s+tomato, this case goes red and the fence becomes required - four Bonnie tomato PLANT listings are live in the corpus, two of them ending "Live Plants" (walmart-regular-2026-08-06)' }
+  @{ id='cherry-tomatoes'; name='Fresh Organic Grape Tomatoes, 10 oz Package'; expect='included'
+     why='CLEAN TWIN the plural row that already held the cell still matches' }
+
+  # ---- coconut-oil: a STANDING RULING upheld, not a widening (queue ff9801) -----------------------
+  # The 2026-09-01 plan proposed widening the include to admit "Coconut Cooking Oil". Three dated
+  # reviewed rulings say otherwise (coverage-gap-allowlist coconut-oil|Sam's Club 2026-07-29 and two
+  # coconut-oil|Walmart entries of 2026-08-31): the Carrington line is a FRACTIONATED oil that stays
+  # liquid at room temperature, sold by fluid ounce, and "widening the include to catch it would put
+  # two different fats in one row". Re-verified at the store 2026-09-01 (walmart.com/ip/37025807:
+  # "Organic Coconut Cooking Oil, 32 Floz, Unflavored"). Ruled known-wrong instead. This case exists
+  # so a future widening has to argue with a red test rather than with nobody.
+  @{ id='coconut-oil'; name='Carrington Farms Organic Coconut Cooking Oil, 32 Floz'; expect='no-include-match'
+     why='UPHELD RULING: a fractionated liquid oil must NOT enter the solid-coconut-oil row. If this case goes red, someone widened the include past three dated reviews' }
+  @{ id='coconut-oil'; name='Great Value Organic Naturally Refined Coconut Oil, 56 fl oz'; expect='included'
+     why='CLEAN TWIN the real Walmart coconut-oil cell holder is untouched' }
+
+  # ---- blackberries / raspberries: the spread fence two of four berries never had -----------------
+  # DEVIATION, found by rebuilding: today's Aldi capture put a JAM on the fresh-blackberries cell
+  # (0.3983/oz of fresh fruit replaced by 0.2603/oz of spread). strawberries and blueberries have
+  # carried a bare `spread` exclude for months; raspberries and blackberries never got it, and their
+  # only spread-shaped fence is \bfruit\s+spreads?\b, which demands the two words be adjacent. Aldi
+  # writes "Blackberry Spread With 75 Fruit", so the words are in the wrong order and the fence misses.
+  # Same class as this plan's own mechanism (1): the fence knows the adjective, not the noun.
+  # Measured over all 45,666 corpus names: exactly ONE routing change, the row below leaving
+  # blackberries for nothing. No raspberry name moves - that half is parity with the two siblings,
+  # closing an OPEN hole (raspberries includes the bare stem "raspberr", so the same Aldi product
+  # line would be admitted the moment it appears) rather than speculation about a hole that is shut.
+  @{ id='blackberries'; name='Specially Selected Blackberry Spread With 75 Fruit 9.95 OZ'; expect='excluded'
+     why='FOUNDING CASE: a fruit SPREAD held the Aldi fresh-blackberries cell on the 2026-09-01 rebuild (aldi-regular-2026-09-01)' }
+  @{ id='blackberries'; name='Blackberries 6 OZ'; expect='included'
+     why='CLEAN TWIN the real fresh berry, which is the row that takes the cell back' }
+  @{ id='raspberries'; name='Raspberries Package 6 OZ'; expect='included'
+     why='CLEAN TWIN the sibling fence must not touch fresh raspberries (aldi-regular-2026-09-01)' }
+  @{ id='strawberries'; name='Strawberries Package 1 LB'; expect='included'
+     why='CLEAN TWIN the berry that already had the fence is unchanged, which is what makes this a parity fix' }
 )
 
 $bad = 0

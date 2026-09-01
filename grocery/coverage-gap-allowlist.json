@@ -1511,6 +1511,13 @@
             "store":  "Walmart",
             "reviewed":  "2026-08-31",
             "reviewed_by":  "claude (opus5 backlog pass) - triage 2026-08-31-550b2a"
+        },
+        {
+            "commodity":  "pomegranates",
+            "store":  "Walmart",
+            "why":  "PROBE NOISE / SCENT NAME (reviewed 2026-09-01, queue 2026-09-01-4a481e): every candidate the loosened probe returned is a non-food product NAMED for the fragrance, and each is already correctly claimed by the commodity it really is. 'Great Value Soft & Smooth Ultra Dish Liquid, Pomegranate, 28 fl oz' routes to dish-soap; 'eos Shea Better Women's Shave Cream - Pomegranate Raspberry 7 fl oz', the 2.5oz travel size and its (3 pack) all route to shaving-cream. Verified against walmart-regular-2026-08-31.json (the capture that fed comparison-2026-08-31): NO fresh pomegranate exists in any Walmart capture on file - seasonal absence, not a rule gap. An include widening here would be a scent word admitting soap. Ruled known-wrong for the same four names so the semantic sweep stops re-finding them. DELETE-TRIGGER: delete when a Walmart capture carries a whole fresh pomegranate sold by the each.",
+            "reviewed":  "2026-09-01",
+            "reviewed_by":  "claude (opus5 triage-developer) - triage 2026-09-01-4a481e, plan-2026-09-01.json"
         }
     ]
 }

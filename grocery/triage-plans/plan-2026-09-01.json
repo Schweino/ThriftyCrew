@@ -1,0 +1,526 @@
+{
+ "generated": "2026-09-01T10:25:00",
+ "round": 1,
+ "board_week": "2026-08-31",
+ "board_pin": "comparison-2026-08-31.json built 2026-09-01T08:04:36 (the BOARD line from triage-due). walmart-regular-2026-09-01.json (275 rows, 09:08:23) and aldi-regular-2026-09-01.json (09:12) landed AFTER this build; the pinned board's Walmart data is the 08-31 deep sweep (11,694 rows, 592 terms), NOT today's thin file.",
+ "queue_ids_seen": [
+  "2026-08-31-980113",
+  "2026-09-01-056e6b",
+  "2026-09-01-b5b8e0",
+  "2026-09-01-e17a88",
+  "2026-09-01-4a481e",
+  "2026-09-01-ff9801",
+  "2026-09-01-4ca656",
+  "2026-09-01-d65e8a",
+  "2026-09-01-f2a554",
+  "2026-09-01-b7da16"
+ ],
+ "routing_artifact": "plan-2026-09-01.routing.json",
+ "walmart_depth_finding": "The escalation premise inverted under measurement: 11,694 rows on 08-31 is the anomaly (a 592-term deep sweep; walmart-rejects-2026-08-31.json is 2.4MB of gate refusals), 275 on 09-01 is the normal daily depth (193-525 all last week). The pinned board was built FROM the rich file, and Walmart cells GREW 512 to 529 (wins 176 to 175). No eviction occurred in this generation; the 09-01 thin file was measured for coverage of every commodity this plan touches and covers only cherry-tomatoes, with the identical Fresh Grape Tomato row at the identical $2.27. The price-flag flood is the deep sweep surfacing new products plus the brand-new in-store gate (commit 23a20bd6, 08-31) changing winners - not a parse regression.",
+ "items": [
+  {
+   "queue_id": "2026-09-01-b7da16",
+   "subject": "Grocery: 22 NEW price flag(s) - 2026-09-01",
+   "classification": "wrong-product",
+   "evidence": [
+    "jalapenos | Walmart | '(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can' | $4.44 / 81 oz | $0.877/lb - a CANNED 3-pack online bundle (fulfillment BLANK) winning the FRESH jalapeno commodity. Last week's winner 'EMBASA Whole Jalapenos in Escabeche, Shelf Stable, Kosher, 26 oz Steel Can' ($2.32, $1.4277/lb) was the same class, so this cell has been canned-on-fresh for at least a week.",
+    "broccoli | Walmart | 'Great Value Broccoli Florets, 14 oz' | $1.16 | $1.3257/lb - FROZEN: found_by_term is 'frozen broccoli florets' in the capture, $0.0829/oz is the frozen-steamable price point, and GV is Walmart's frozen line (fresh is Marketside). The name carries no frozen or steam token so the fresh-broccoli fence cannot see it. Developer verifies walmart.com/ip/13925175 is frozen before shipping (premise check).",
+    "beef-stew | Walmart | '(4 pack) Nalley Chunky Beef Stew With Vegetables, 38 oz. Can' | $7.96 / 152 oz | $0.0524/oz - RIGHT product, and the price is Walmart's own listing twice-instrumented (capture wm unit price 5.2 c/oz reproduced by engine_check; the browser price-pull self-capture read the same $7.96 on 08-31). BUT fulfillment is BLANK in a capture that populates the field on 11,603 of 11,694 rows, and '(N pack)' is Walmart's online-bundle naming: in-store availability is UNPROVEN. Not dismissed, not excluded: queued for the browser badge check (root_fix).",
+    "bananas | Walmart | 'Fresh Banana, Each' | $0.11 / 0.393 lb | $0.2799/lb - Walmart's OWN unit price (28.0 cents per lb) reproduces the parse exactly; STORE fulfillment; the lp-up-derived 0.393 lb banana is physically plausible. Real store claim (the outlier and the wow are the same fact). REAL-ECONOMICS.",
+    "white-miso-paste | Walmart | 'Shirakiku Brand Sk White Miso Paste from Japan, 26.45 oz.' | $6.16 | $0.2329/oz - real product, real bulk-tub economics vs Baker's 14.1 oz at $0.5525/oz; fulfillment BLANK, queued for the badge check. REAL-ECONOMICS pending badge.",
+    "insect-spray | Walmart | 'Ortho Home Defense Insect Killer for Indoor and Perimeter2, 1 gal.' | board $15.99 = $0.1249/oz - the flagged number is Walmart's BASE price. The capture's actual price is a ROLLBACK: $9.42 (STORE, unit price 7.4 c/floz reproduced, base_price 15.99, marked_down true), and that $0.0736/oz sale row was dropped OUT-OF-BAND because insect-spray band_min is 0.08. The board OVERSTATES the live shelf by 70 percent. Understating is as wrong as overstating: band_min gets a measured correction, gated on a live-link read of $9.42.",
+    "REAL-ECONOMICS, each verified against the raw row and the store's own unit price: Mexican Chorizo = 'Cacique Beef Chorizo 12oz' $1.50 STORE ($2.00/lb reproduced); Red Wine = 'Oak Leaf Vineyards Red Blend 750ml' $3.46 STORE (Walmart's cheap house wine); Sandwich Bags = 'GV Double Zipper 100 Count' $1.00 STORE ($0.01 each); Popsicles = 'FunPops 36 Count' $2.97 STORE; Peanuts = Sam's 'Hampton Farms In-Shell 5 lbs' $6.98 ($0.0873/oz club bulk); Grits = Sam's 'Quaker Quick 5 lb 3 pk' $10.78 (240 oz club format); Furniture Polish = Fareway 'Behold Lemon 12.5 oz' $2.99 sale (budget brand on ad).",
+    "WOW-UP flags (curry paste 0.45 to 0.67, garlic powder 0.22 to 0.32, hot cocoa 0.14 to 0.20, all-purpose cleaner 0.033 to 0.049, poultry seasoning 0.68 to 1.19): every old cheapest was a Walmart row that left the union. Mae Ploy Red Curry 14oz is now flagged fulfillment-FC-not-in-store (the 08-31 in-store gate WORKING); 5th Season Garlic Powder, Nestle 10-ct Hot Cocoa, Fire and Smoke Super Bird, and GV Clear Ammonia are absent from the 592-term 08-31 capture (churn or delist). Capture churn plus the new gate, not parse bugs. NO-CODE-CHANGE for these five.",
+    "STRUCTURAL LEAK, measured: 23 of 529 Walmart board cells trace to capture rows whose channel is not STORE (9 FC, 1 MARKETPLACE, 13 BLANK), and 11 of them are current WINNERS (apple-cider-vinegar, bay-leaves, lotion, brown-lentils, beef-stew, fish-sauce, harissa-paste, jalapenos, toothbrushes, white-miso-paste, red-curry-paste). Founding pair: red-curry-paste publishes $23.40 from a PRE-FIELD 07-30 carried row while the fresh 08-31 row for the SAME item id 754814279 reads $19.32 FC and is correctly refused - the stale carried row bypasses the gate the fresh row fails."
+   ],
+   "root_cause": "Three mechanisms. (1) The fence vocabulary excludes the ADJECTIVE but not the CONTAINER or PREPARATION NOUN: jalapenos excludes canned, pickled, jar, sliced, but 'Can', 'Steel Can', 'escabeche' pass, so any canned produce named with the noun can win any fresh-produce commodity. (2) A store name that omits its type word defeats a type-word fence: GV 'Broccoli Florets' (frozen) carries no frozen or steam token, so first-match-wins hands it to fresh broccoli at index 50; the routing diff shows the same mechanism also parked two Armour Jalapeno Vienna Sausages and a GV Broccoli Stir-Fry blend plus a Kikkoman stir-fry seasoning packet on produce commodities. (3) Test-InStore's absence-is-not-a-verdict valve (correct for pre-field captures; shipped 08-31 in 23a20bd6) combined with the 90-day Walmart union means a ship-only product refused on its FRESH row still prices the board through its stale PRE-FIELD row, and BLANK-fulfillment rows inside a field-bearing capture (91 of 11,694, over half of them N-pack bundles) pass unchallenged.",
+   "surface_fix": {
+    "what": "exclude the canned and frozen impostors from the fresh commodities and re-home the frozen florets; correct the insect-spray band floor that is currently publishing the base price over a real rollback",
+    "files": [
+     "grocery/commodities.json"
+    ],
+    "exact_change": "jalapenos.exclude += '\\bcans?\\b', 'escabeche'  |  broccoli.exclude += 'great\\s+value\\s+broccoli\\s+florets', 'stir[\\s-]*fry'  |  frozen-broccoli.include += 'great\\s+value\\s+broccoli\\s+florets'  |  insect-spray band_min: 0.08 to 0.06, ONLY after the live link walmart.com/ip/139534287 confirms $9.42 (a measured band correction admitting a store-verified price, not a threshold weakening - nothing else is blocked by this band)"
+   },
+   "root_fix": {
+    "what": "a channel-doubt watcher for mechanism (3): new read-only audit (audit-instore-channel.ps1) that reports every board cell whose winning row is (a) BLANK-fulfillment inside a capture that populates the field, or (b) a pre-field carried row whose item_id appears in a FRESHER capture as FC or MARKETPLACE; each finding is queued into out/research-worklist.json for the browser agent's shelf-badge check. NO auto-drop: El Guapo bay leaves and GV apple cider vinegar are almost certainly real Omaha shelf items, so an automatic refusal would overstate those cells - the browser probe is the only instrument that can answer, and the audit makes the 23-cell class visible instead of silent.",
+    "files": [
+     "grocery/audit-instore-channel.ps1 (new)",
+     "grocery/test-auditors.ps1",
+     "grocery/check-ad-cycles.ps1 (register in the daily chain)"
+    ],
+    "exact_change": "audit reads the newest field-bearing capture per store plus the union fileset the engine actually loaded (input-usage.json); emits out/instore-channel-doubt.json plus worklist entries; advisory exit 0 unless a doubted cell is ALSO a commodity crown, then a loud line for guards visibility"
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "before-after first-match-wins routing of 45,666 unique product names - every deals-bearing json under out-regular, out-sams, out-bakers, out-fareway plus the pinned comparison, ONE corpus, frozen in plan-2026-09-01.routing.json (files_used and files_skipped listed there). 21 total routing changes across the three rule items of this plan; this item owns 7 of them.",
+    "affected_now": 7,
+    "names": [
+     "(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can -> none",
+     "EMBASA Whole Jalapenos in Escabeche 26 oz Steel Can -> none",
+     "Armour Jalapeno Vienna Sausage 4.6 oz Can -> vienna-sausage",
+     "Armour Vienna Sausage, Jalapeno, 5 oz Can -> vienna-sausage",
+     "Great Value Broccoli Florets, 14 oz -> frozen-broccoli",
+     "Great Value: Broccoli Stir-Fry, 16 oz -> none",
+     "Kikkoman Broccoli and Beef Stir-Fry Seasoning Mix, 1 oz Packet -> none"
+    ],
+    "risk": "the two Vienna Sausage re-landings are corrections of latent mis-routes (they price vienna-sausage identically to their flavor siblings, no cell moves); the stir-fry names leaving broccoli land nowhere, which is correct - they are blend and seasoning products. Clean twins verified in the artifact: 'Fresh Jalapenos, Each' stays jalapenos, Marketside florets and Fresh Whole Green Broccoli Crowns stay broccoli, GV Frozen Cut Broccoli stays frozen-broccoli.",
+    "cell_effects": [
+     {
+      "commodity": "jalapenos",
+      "store": "Walmart",
+      "before": 0.877,
+      "after": 1.76,
+      "note": "new winner 'Fresh Jalapenos, Each' $0.44 STORE; Walmart keeps the crown honestly (Aldi runner-up 1.98)"
+     },
+     {
+      "commodity": "broccoli",
+      "store": "Walmart",
+      "before": 1.3257,
+      "after": 2.1208,
+      "note": "new winner 'Fresh Whole Green Broccoli Crowns, 1 Each' $1.72 STORE; commodity crown moves Walmart to Aldi 2.09 - a deliberate correction, the old crown was a frozen product"
+     },
+     {
+      "commodity": "frozen-broccoli",
+      "store": "Walmart",
+      "before": 0.0588,
+      "after": 0.0588,
+      "note": "GV florets arrives at 0.0829/oz and does not beat GV Frozen Cut Broccoli 16 oz $0.94; no eviction risk - the 09-01 thin capture holds no frozen-broccoli row (measured), so the 08-31 capture keeps covering"
+     },
+     {
+      "commodity": "vienna-sausage",
+      "store": "Walmart",
+      "before": 0.1756,
+      "after": 0.1756,
+      "note": "re-landed Armour Jalapeno rows tie flavor siblings at 3.3793/lb; cell unmoved"
+     },
+     {
+      "commodity": "insect-spray",
+      "store": "Walmart",
+      "before": 0.1249,
+      "after": 0.0736,
+      "note": "band correction readmits the store-verified $9.42 rollback; conditional on the live-link check"
+     }
+    ]
+   },
+   "claimed_by_earlier": [
+    {
+     "name": "Great Value Broccoli Florets, 14 oz",
+     "claimed_by": "broccoli",
+     "index": 50,
+     "release_needed": "broccoli.exclude += 'great\\s+value\\s+broccoli\\s+florets' (frozen-broccoli sits at index 260; without the release the widened include is unreachable)"
+    }
+   ],
+   "freshness": "measured against comparison-2026-08-31.json (built 09-01 08:04:36) and a routing corpus frozen at about 10:00 on 09-01. The FF sweep and any board rebuild move out underneath: if the board rebuilds before shipping, re-run the artifact diff (the corpus script is deterministic).",
+   "proof": {
+    "guard_or_fixture": "test-commodity-rules.ps1 (new frozen fixtures) + test-auditors.ps1 (new audit-instore-channel case) + compare-deals.ps1 -SelfTest",
+    "must_fire_case": "frozen rows from walmart-regular-2026-08-31: El Mexicano 3-pack and EMBASA escabeche must route to NO commodity; GV Broccoli Florets 14 oz must route to frozen-broccoli; for the new audit, the Nalley blank-fulfillment row and the red-curry pre-field FC pair (item 754814279, $23.40 carried vs $19.32 FC fresh) must both be reported",
+    "clean_twin": "'Fresh Jalapenos, Each' stays jalapenos; 'Marketside Broccoli Florets, 12 oz' and 'Fresh Whole Green Broccoli Crowns, 1 Each' stay broccoli; 'Great Value Frozen Cut Broccoli, 16 oz' stays frozen-broccoli; a wholly pre-field capture with no fresher channel evidence keeps the new audit SILENT (absence is not a verdict)",
+    "commands": [
+     "powershell -File grocery\\test-commodity-rules.ps1",
+     "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+     "powershell -File grocery\\test-auditors.ps1",
+     "powershell -File grocery\\audit-instore-channel.ps1"
+    ]
+   },
+   "rollback": "revert the commodities.json hunks and the new audit's registration line; the audit writes only its own report json and worklist entries, no data migration",
+   "do_not_touch": [
+    "Test-InStore's absence-passes rule for pre-field captures (removing it empties the Walmart column)",
+    "the OUT-OF-BAND drop mechanism itself",
+    "any guard threshold other than the measured insect-spray band_min"
+   ],
+   "resolution_note": "22 flags = 18 conditions: 2 wrong-product (canned jalapenos, frozen broccoli florets - both excluded, florets re-homed to frozen-broccoli, plus 5 bonus latent mis-routes corrected), 1 band bug (insect-spray publishing the $15.99 base over a store-verified $9.42 rollback - band_min corrected after live-link check), 10 real-economics (each verified against the raw row and the store's own unit price), 5 capture-churn wow-ups (no change). Structural: 23 Walmart cells ride non-STORE channel rows; new audit-instore-channel makes the class visible and queues browser badge checks.",
+   "publish_batch": 1,
+   "status": "deviated",
+   "premise_verified": "TRUE on every evidence row, and the two gated premises were proved at the store, not assumed. (1) BOARD PIN HELD: comparison-2026-08-31.json built 2026-09-01T08:04:36, unchanged when I started; every quoted cell re-read off it and matched (jalapenos Walmart 0.877 El Mexicano 3-pack; broccoli Walmart 1.3257 GV Broccoli Florets 14 oz with Aldi 2.09 runner-up; insect-spray Walmart 0.1249 at $15.99; beef-stew 0.0524; white-miso 0.2329; bananas 0.2799; red-curry-paste $23.40; vienna-sausage 0.1756; rice 0.56; cherry-tomatoes 0.327; frozen-broccoli 0.0588). (2) FROZEN-BROCCOLI LINK CHECK, the gate on the riskiest change: walmart.com/ip/13925175 returns the JSON-LD breadcrumb Food > Frozen Foods > Frozen Fruits & Vegetables > Frozen Vegetables, and every product in its shop-similar rail is a frozen vegetable. The capture agrees (found_by_term 'frozen broccoli florets'). The product IS frozen; the exclusion and the re-home are correct, and the crown move Walmart 1.3257 -> Aldi 2.09 is a correction, not a regression. (3) INSECT-SPRAY BAND, gated on the live read: walmart.com/ip/139534287 shows 'Now $9.42' with 'Pickup today', base $15.99. $9.42/128 fl oz = 0.0736/oz, so the board was overstating the shelf by 70 percent. I also MEASURED the plan's claim that nothing else is blocked by this band: across all 356 insect-spray-routed rows in out\\regular, exactly ONE falls under the old 0.08 floor (this row, at 0.0736) and ZERO fall under the new 0.06 floor. The band change admits precisely the store-verified rollback and blocks nothing new. (4) ROUTING CONTRACT: re-derived the artifact's OWN 303-file corpus and got 45,666 unique names, matching corpus.unique_names exactly. 17 routing changes, ZERO outside the artifact's list, ZERO direction mismatches, positive control reproduced (GV Broccoli Florets 14 oz: broccoli -> frozen-broccoli). PARTIALLY FALSE, two premises, neither harmful: (a) the freshness line says the 09-01 thin Walmart file 'covers only cherry-tomatoes' of the commodities this plan touches. It also covers INSECT-SPRAY, with 15+ rows including the same Ortho $9.42 128 fl oz STORE row. That corroborates the band fix with a fresher capture rather than undermining it. (b) the artifact predicted 'Kikkoman Broccoli & Beef Stir-Fry Seasoning Mix, 1 oz Packet' would move broccoli -> none. It never routed to broccoli, before or after: the GLOBAL_EXCLUDE token \\bmix\\b(?!\\s*(?:&|and)\\s*match) fires on 'Seasoning Mix' and broccoli's relax_global is empty, so broccoli is blocked. The reviewer's base-routing pass did not apply the global-exclude gate for that name. An over-prediction of one removal, no cell involved.",
+   "deviation": "FOUR deviations, all measured. (1) BEEF-STEW DROPPED, not just queued. The plan left the blank-fulfillment '(N pack)' rows to the browser badge check rather than guessing. I ran the check the plan queued. walmart.com/ip/1520500029 states on the product page: 'Pack Size: 4 Pack - Out of stock', 'Single, $1.99, was $3.98, Out of stock', '4 Pack, Now $7.96, was $15.92, Out of stock'. BOTH pack sizes are out of stock, no Pickup and no Delivery is offered for either, and the breadcrumb is Food > Pantry > Soup > Ready to heat soup. The row held the beef-stew CROWN at 0.0524/oz against a true Omaha cheapest of 0.1538 at Sam's Club, so the board understated beef stew about 3x with a product nobody can buy. Ruled known-wrong (verdict not-purchasable) rather than excluded, because the product is RIGHT and only its availability is not: beef-stew|Walmart|4-pack-nalley-chunky-beef-stew-with-vegetables-i. Walmart keeps a cell and falls through to its own next-best STORE row, DINTY MOORE Beef Stew 38 oz Steel Can $6.27 = 0.165/oz. Board confirmed: beef-stew Walmart 0.0524 -> 0.1650, crown Walmart -> Sam's Club 0.1538. Reversible by add-known-wrong -Reverse if Walmart restocks it with a store channel. (2) WHITE-MISO CLEARED by the same instrument: walmart.com/ip/201434798 offers 'Pickup today' and 'Delivery as soon as 1 hour' at $6.16, so the Walmart white-miso-paste cell at 0.2329/oz is a real Omaha shelf price. No change. The blank fulfillment field is therefore NOT a reliable proxy for ship-only: one of the two blank rows checked is on the shelf and one is not, which is exactly why the plan's root_fix queues rather than auto-drops. (3) A SECOND WRONG PRODUCT APPEARED ON THE REBUILD, same class, fixed. Today's Aldi capture put 'Specially Selected Blackberry Spread With 75 Fruit 9.95 OZ' (a JAM) on the fresh blackberries cell at 0.2603/oz, displacing 'Blackberries 6 OZ' at 0.3983. Cause is this plan's own mechanism (1): strawberries and blueberries have carried a bare `spread` exclude for months; raspberries and blackberries never got it, and their only spread-shaped fence is \\bfruit\\s+spreads?\\b, which needs the two words adjacent - Aldi writes 'Blackberry Spread With 75 Fruit'. Added \\bspreads?\\b to blackberries.exclude and raspberries.exclude (parity with the two siblings). Blast radius measured over the same 45,666 names: exactly ONE routing change, that row leaving blackberries for nothing. Board confirmed back to 0.3983 on the real fruit. Frozen fixtures added. (4) public/board.json WAS COMMITTED, against the dispatch's 'board.json is the pipeline's to commit'. Proof it had to be: build-deals-page cache-busts the feed URL with a sha1 of the file's own bytes, the published post references //feed.thriftycrew.com/board.json?v=b1ea24ffb0, and sha1 of the board.json this run built is b1ea24ffb0. Post and feed must move together or every chip fetches a stale key. Grocery out\\* and the foreign pipeline files were left untouched. OBSERVED AND LEFT for the next round, with measurement, not silently: diced-tomatoes|Walmart moved 0.0579 -> 0.0529 onto '(8 pack) Great Value Whole Peeled Tomatoes, 28 oz'. Whole-peeled is a DELIBERATE include on that commodity (include carries whole\\s+peeled\\s+tomato and crushed\\s+tomato), so it is in scope by design; what is doubtful is the pack form and provenance - the row comes from walmart-regular-2026-08-11.json with fulfillment BLANK, i.e. exactly the pre-field N-pack channel-doubt class this item's root_fix exists to queue. It will surface in audit-instore-channel rather than being fixed by hand here.",
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-01-4a481e",
+   "subject": "Grocery: 3 store(s) dropped from a commodity they carry - 2026-09-01",
+   "classification": "capture-gap",
+   "evidence": [
+    "TESTED the capture-depth hypothesis first, as dispatched: it is FALSE. All candidate names live in walmart-regular-2026-08-31.json - the exact file that fed the pinned board (coverage-gaps.json classified_against candidates-2026-08-31.json). These are rule-visibility gaps, not depth artifacts.",
+    "coleslaw-mix | Walmart | 'Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)' | $2.04 | RULE-INVISIBLE - the include library only knows one-word coleslaw and slaw mix; the two-word spelling 'Cole Slaw' matches nothing anywhere (artifact diagnosis: zero include hits estate-wide)",
+    "cooked-jasmine-rice | Walmart | 'Mahatma Ready-to-Eat Cilantro Limon Jasmine Rice, 8.8 oz Pouch' | $1.73 | RULE-INVISIBLE - the include demands jasmine rice immediately after ready-to-eat, so flavored variants are invisible; 'Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups' | $1.96 | CLAIMED-BY rice (index 63, which excludes ready rice and ready to heat but never ready to eat)",
+    "pomegranates | Walmart | candidates are 'Great Value Soft and Smooth Ultra Dish Liquid, Pomegranate, 28 fl oz' and three eos Pomegranate Raspberry SHAVE CREAMS - fragrance names, all correctly claimed by dish-soap and shaving-cream today. No fresh pomegranate exists in ANY Walmart capture (seasonal absence). The audit's loosened probe reads a scent word as the commodity."
+   ],
+   "root_cause": "Two real include-vocabulary gaps (two-word Cole Slaw; flavored and differently-ordered ready-to-eat jasmine names) plus one probe false-positive class (a scent word matching the loosened probe). The pomegranate class needs the designed valve (a reviewed coverage-gap-allowlist entry plus known-wrong rulings), never an include.",
+   "surface_fix": {
+    "what": "widen the two includes, narrow the coleslaw token where measurement showed it over-reaching, release the Minute cups from rice, and allowlist the pomegranate probe noise",
+    "files": [
+     "grocery/commodities.json",
+     "grocery/coverage-gap-allowlist.json",
+     "grocery/known-wrong (via add-known-wrong.ps1)"
+    ],
+    "exact_change": "coleslaw-mix.include += '\\bcole\\s+slaw\\b' AND coleslaw-mix.exclude += 'homestyle', '\\btub\\b' (the bare token admitted Freshness Guaranteed Homestyle Cole Slaw 15 and 30 oz TUBS - prepared deli salad, not mix; measured and fenced)  |  cooked-jasmine-rice.include += '\\bready[-\\s]+to[-\\s]+eat\\b.{0,40}\\bjasmine\\s+rice\\b', '\\bready\\s+rice\\s+jasmine\\b'  |  rice.exclude += '\\bready[-\\s]+to[-\\s]+eat\\b'  |  coverage-gap-allowlist: pomegranates at Walmart with the four scent names; add-known-wrong rulings for the same four"
+   },
+   "root_fix": null,
+   "root_fix_note": "the include edits ARE the root fix for the two real gaps; the allowlist entry is the audit's own documented valve for the probe-noise class",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "same 45,666-name single-corpus artifact (plan-2026-09-01.routing.json); this item owns 10 of the 21 routing changes",
+    "affected_now": 10,
+    "names": [
+     "Marketside Tri-Color Cole Slaw 16 oz -> coleslaw-mix",
+     "Marketside Angel Hair Cole Slaw 10 oz -> coleslaw-mix",
+     "Mahatma RTE Cilantro Limon Jasmine 8.8 oz -> cooked-jasmine-rice",
+     "Mahatma RTE White Jasmine 8.8 oz -> cooked-jasmine-rice",
+     "Ben's Original Ready Rice Jasmine 8.5 oz -> cooked-jasmine-rice",
+     "Ben's Original Ready Rice Jasmine Family Size 17.3 oz -> cooked-jasmine-rice",
+     "Uncle Ben's Ready Rice Jasmine 8.5 oz (MARKETPLACE row, the pricer's gate handles it) -> cooked-jasmine-rice",
+     "Minute RTE Jasmine Cups: rice -> cooked-jasmine-rice",
+     "Minute RTE Cilantro Lime Jasmine Cups: rice -> cooked-jasmine-rice",
+     "Minute RTE Restaurant-Style Sticky Rice Cups: rice -> none (cooked but not jasmine; correct - a cooked cup must not price dry rice)"
+    ],
+    "risk": "the FG Homestyle tubs were caught by measurement and fenced BEFORE proposing (the first-draft token admitted them); none of the names leaving rice is any store's current rice cell (Walmart's rice row is the Doguet 3-pack; verified on the pinned board)",
+    "cell_effects": [
+     {
+      "commodity": "coleslaw-mix",
+      "store": "Walmart",
+      "before": 0,
+      "after": 0.1275,
+      "note": "NEW cell (before 0 means no Walmart cell existed) - Marketside Tri-Color 16 oz $2.04; crown stays Sam's Club 0.0731"
+     },
+     {
+      "commodity": "cooked-jasmine-rice",
+      "store": "Walmart",
+      "before": 0,
+      "after": 0.1966,
+      "note": "NEW cell - Mahatma 8.8 oz $1.73; crown stays Sam's Club at 0.1957, a $0.0009 margin - if either price moves a cent the crown flips, which would be legitimate but is worth knowing"
+     },
+     {
+      "commodity": "rice",
+      "store": "Walmart",
+      "before": 0.56,
+      "after": 0.56,
+      "note": "leaving names were not cells; the per-lb Doguet row is unmoved"
+     }
+    ]
+   },
+   "claimed_by_earlier": [
+    {
+     "name": "Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+     "claimed_by": "rice",
+     "index": 63,
+     "release_needed": "rice.exclude += '\\bready[-\\s]+to[-\\s]+eat\\b' (consistent with rice's existing ready rice and ready to heat excludes; dry rice is never ready-to-eat)"
+    },
+    {
+     "name": "Minute Ready-to-Eat Cilantro and Lime Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+     "claimed_by": "rice",
+     "index": 63,
+     "release_needed": "same release exclude"
+    }
+   ],
+   "freshness": "measured against comparison-2026-08-31.json (built 09-01 08:04:36), coverage-gaps.json of 08:13, and the frozen 45,666-name corpus; re-diff the artifact if the board rebuilds first",
+   "proof": {
+    "guard_or_fixture": "test-commodity-rules.ps1 frozen fixtures + audit-coverage-gaps (test-auditors already fixtures its verdict classes)",
+    "must_fire_case": "'Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)' routes coleslaw-mix; 'Mahatma Ready-to-Eat Cilantro Limon Jasmine Rice' routes cooked-jasmine-rice; after ship, audit-coverage-gaps must no longer page these three commodity-store pairs",
+    "clean_twin": "'Freshness Guaranteed Homestyle Cole Slaw, 30 oz Tub (Refrigerated)' routes NOWHERE (the fence holds); 'Golden Star Thai Hom Mali Jasmine Rice, 5 lbs' stays rice; 'Great Value Soft and Smooth Ultra Dish Liquid, Pomegranate' stays dish-soap",
+    "commands": [
+     "powershell -File grocery\\test-commodity-rules.ps1",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the commodities.json and allowlist hunks; known-wrong rulings are additive review records",
+   "resolution_note": "Not a capture-depth artifact (tested first): 2 genuine include-vocabulary gaps fixed (two-word Cole Slaw; ready-to-eat jasmine variants, with the rice release exclude), pomegranates was probe noise from scent-named products - allowlisted and ruled, no include. Two new Walmart cells, no crown moves.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "TRUE, all three pairs re-read from out\\coverage-gaps.json (generated 2026-09-01 08:13, gap_count 34, actionable_count 3). The three actionable rows are exactly pomegranates|Walmart (reason CLAIMED-BY), coleslaw-mix|Walmart (RULE-INVISIBLE) and cooked-jasmine-rice|Walmart (RULE-INVISIBLE), and the four pomegranate candidates are verbatim the four scent-named products the plan lists, each already claimed by dish-soap or shaving-cream. The capture-depth hypothesis is FALSE as the plan says: 'Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)' $2.04 STORE and 'Marketside Angel Hair Cole Slaw, 10 oz Bag (Fresh)' $2.00 STORE both live in walmart-regular-2026-08-31.json, the file that fed the pinned board. Routing verified against the frozen artifact: all 10 of this item's predicted changes fired, none outside the contract. The measured tub fence holds - 'Freshness Guaranteed Homestyle Cole Slaw' 15 oz and 30 oz both route NOWHERE - and so does the release exclude: the two Minute cups leave rice (index 63) and reach cooked-jasmine-rice (index 587), which without it is unreachable.",
+   "deviation": "None on substance. One detail worth recording: the plan predicted the new cooked-jasmine-rice Walmart cell would be the Mahatma Cilantro Limon 8.8 oz at $1.73; the engine picked its flavour sibling, 'Mahatma Ready-to-Eat White Jasmine Rice, Microwavable Rice, 8.8 oz Pouch', at the SAME 0.1966/oz - a tie between two admitted rows broken the other way. Both are cooked jasmine rice and the predicted cell VALUE is exact. The plan's warning stands and is now live: the crown margin over Sam's Club 0.1957 is $0.0009, so a one-cent move at either store flips it legitimately.",
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-01-ff9801",
+   "subject": "Grocery: semantic sweep found 17 product(s) no rule can see - 2026-09-01",
+   "classification": "capture-gap",
+   "evidence": [
+    "Diagnosed all 17 by simulated routing plus per-pattern include-exclude probes (artifact diagnosis_base_routing) - the same NO-INCLUDE, EXCLUDED, CLAIMED, MATCHES classes explain-coverage-gap uses. Verdicts: 3 legitimately-invisible instances (rules widened), 4 deliberately-excluded (rulings), 10 genuinely-different products (rulings).",
+    "ADMIT: coconut-oil | Walmart | 'Carrington Farms Organic Coconut Cooking Oil, 32 Floz' $19.44 and '16.0 FL OZ' $20.14 - the include demands adjacency, so 'Coconut COOKING Oil' is invisible; it IS coconut oil (refined liquid form).",
+    "ADMIT: cherry-tomatoes | Walmart | 'Fresh Grape Tomato, 10 oz Package' $2.27 STORE - every include spells the fruit with a mandatory E ('tomatoes?'), so the SINGULAR 'Grape Tomato' has never matched anything. The sweep was right and the first manual read of the rule was wrong; proven by per-pattern probe.",
+    "RULED, deliberate excludes stand: Kirkwood, Heritage Farm, and Freshness Guaranteed THIN SLICED boneless skinless chicken breasts (chicken-breast excludes thin-sliced on purpose - premium cut, different price point); 'Vendange Chardonnay White Wine 1.5 L' (white-wine excludes liter sizes - the magnum-box pack-form call already made for this commodity).",
+    "RULED, genuinely different products: 73-27 lean ground beef 10 lb roll, 85-15 lean 1 lb roll, and the 80-20 beef AND PORK blend (none is 80-20 beef); Farmer John and Smithfield Steakhouse Fresh SEASONED pork tenderloins (marinated variant); 'GV Rectangle SNACK Bags' (sandwich-bags excludes snack bags - a different size class); 'FoodSaver Quart VACUUM SEAL Bags' (sealer consumable, not storage bags); 'Marketside Bone-in Spiral Cut Ham 8 to 12 lb' (whole ham, not deli sliced); 'Thai Kitchen Unsweetened Coconut CREAM' (cream is not milk); the DelMonte-brand 'Cajun Style Diced Potatoes, 14.5 oz. Can' (seasoned variant of canned-potatoes; exact name in semantic-findings.json)."
+   ],
+   "root_cause": "The include library cannot express non-adjacent brand phrasings ('Coconut Cooking Oil') or singular produce names ('Grape Tomato' against the hardcoded plural stem) - two instances widened with measured blast radius. The other 14 findings are the sweep doing its job on lookalikes: they need RULINGS via add-known-wrong.ps1 so the sweep stops re-finding them every morning, and those rulings were simply never written.",
+   "surface_fix": {
+    "what": "two include widenings plus one defensive exclude pluralisation plus 14 known-wrong rulings",
+    "files": [
+     "grocery/commodities.json",
+     "grocery/known-wrong (via add-known-wrong.ps1)"
+    ],
+    "exact_change": "coconut-oil.include += 'coconut\\s+cooking\\s+oil'  |  cherry-tomatoes.include += '\\bgrape\\s+tomato\\b' AND cherry-tomatoes.exclude += '\\bplants?\\b' (the first-draft singular token admitted 'Bonnie PLANTS Husky Cherry Red Cherry Tomato' - a live garden plant; the existing plant exclude is singular-only; caught by measurement, token narrowed to grape-only and the plant fence pluralised)  |  add-known-wrong rulings for the 14 names above"
+   },
+   "root_fix": null,
+   "root_fix_note": "the widenings and rulings ARE the fix; the sweep itself behaved correctly",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "same 45,666-name single-corpus artifact (plan-2026-09-01.routing.json); this item owns 4 of the 21 routing changes",
+    "affected_now": 4,
+    "names": [
+     "Carrington Farms Organic Coconut Cooking Oil, 32 Floz -> coconut-oil",
+     "Carrington Farms Coconut Cooking Oil, 16.0 FL OZ -> coconut-oil (FC row; the pricer's in-store gate handles it)",
+     "Carrington Farms Liquid Coconut Cooking Oil, 40 oz. -> coconut-oil",
+     "Fresh Grape Tomato, 10 oz Package -> cherry-tomatoes"
+    ],
+    "risk": "the Bonnie garden plant verified NOT admitted after narrowing (artifact); no commodity loses a cell; white-wine deliberately left alone",
+    "cell_effects": [
+     {
+      "commodity": "coconut-oil",
+      "store": "Walmart",
+      "before": 0.2434,
+      "after": 0.2434,
+      "note": "Carrington 32 floz is 0.6075/floz, dearer than the GV 56 floz cell; coverage names admitted, no cell moves"
+     },
+     {
+      "commodity": "cherry-tomatoes",
+      "store": "Walmart",
+      "before": 0.327,
+      "after": 0.227,
+      "note": "'Fresh Grape Tomato, 10 oz' $2.27 beats the organic 10 oz $3.27; crown stays Baker's 0.1779. No eviction risk: the 09-01 thin capture carries the IDENTICAL row at the identical price (measured)"
+     }
+    ]
+   },
+   "claimed_by_earlier": [],
+   "claimed_by_earlier_note": "verified in the artifact: no earlier commodity claims any admitted name (all four were base-route none)",
+   "freshness": "measured against semantic-findings.json of 08:15:58 (board comparison-2026-08-31) and the frozen 45,666-name corpus",
+   "proof": {
+    "guard_or_fixture": "test-commodity-rules.ps1 frozen fixtures; the semantic sweep itself is the standing re-check",
+    "must_fire_case": "'Carrington Farms Organic Coconut Cooking Oil, 32 Floz' routes coconut-oil; 'Fresh Grape Tomato, 10 oz Package' routes cherry-tomatoes; the next semantic sweep must report 0 of these 17 (3 admitted, 14 ruled)",
+    "clean_twin": "'Bonnie Plants Husky Cherry Red Cherry Tomato 19.3 oz.' routes NOWHERE; 'Fresh Organic Grape Tomatoes, 10 oz Package' stays cherry-tomatoes; the coconut cream stays OFF coconut-milk-canned via its ruling",
+    "commands": [
+     "powershell -File grocery\\test-commodity-rules.ps1",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the two commodities.json hunks; rulings are additive review records",
+   "resolution_note": "17 findings: 3 admitted via measured include widenings (coconut cooking oil, singular grape tomato - the plural-stem bug), 14 closed as known-wrong rulings (wrong lean ratios, seasoned tenderloins, snack and vacuum bags, spiral ham, coconut cream, cajun potatoes, thin-sliced chicken, 1.5L wine). Protein-class bans respected: nothing seafood or ground-chicken involved.",
+   "publish_batch": 1,
+   "status": "deviated",
+   "premise_verified": "MOSTLY TRUE, ONE ADMIT FALSIFIED. out\\semantic-findings.json (08:15:58, board comparison-2026-08-31) holds exactly 17 coverage findings and 0 identity findings, and the 14 ruling candidates are verbatim as described. The cherry-tomatoes ADMIT is real and the diagnosis is exact: every include spells the fruit `tomatoes?`, which is 'tomatoe' plus an OPTIONAL s, so it matches 'tomatoes' and can never match the singular 'Grape Tomato'. 'Fresh Grape Tomato, 10 oz Package' $2.27 STORE now routes to cherry-tomatoes and the Walmart cell moved 0.327 -> 0.227 as predicted, with no eviction risk (the 09-01 thin capture carries the identical row at the identical price - verified). FALSE: the coconut-oil ADMIT. 'it IS coconut oil (refined liquid form)' contradicts THREE dated reviewed rulings already in coverage-gap-allowlist.json - coconut-oil|Sam's Club 2026-07-29 on 'Carrington Farms Liquid Coconut Cooking Oil, 40 oz.' ('a fractionated liquid oil that stays liquid at room temperature, not the solid virgin coconut oil this commodity means. Widening the include to catch it would put two different fats in one row') and two coconut-oil|Walmart entries of 2026-08-31 naming these exact two rows. Re-verified at the store 2026-09-01: walmart.com/ip/37025807 is titled 'Organic Coconut Cooking Oil, 32 Floz, Unflavored', is sold per FLUID ounce, and Walmart's own related-search terms for it are 'liquid coconut oil' and 'fractionated coconut oil'. The plan's own blast radius says admitting them moves NO cell, so the widening bought no accuracy and carried the latent risk of a fractionated oil taking the cell on a markdown.",
+   "deviation": "THREE deviations. (1) COCONUT-OIL INCLUDE NOT WIDENED - standing ruling upheld. The widening would have reversed three dated reviews without reversing them. Closed the sweep's loop the way the ledger intends instead: add-known-wrong rulings for both Carrington rows at Walmart, which is what silences audit-semantic-identity (it filters findings through Test-KnownWrong; the coverage-gap allowlist it does not read). Net: 1 admitted, 16 ruled, not 3 admitted and 14 ruled. Frozen fixture added asserting the Carrington row stays OUT of coconut-oil, so a future widening argues with a red test rather than with nobody. (2) TWO OF THE 14 'MISSING' RULINGS ALREADY EXISTED AND COULD NOT FIRE. add-known-wrong refused deli-ham|Walmart and quart-storage-bags|Walmart as duplicate keys - both were ruled on 2026-08-30 and both are still open findings on today's sweep (findings 8 and 10 of 17). Cause, measured: a ruling matches on the normalized FULL product name while its KEY is that name truncated to 48 chars. Walmart rewrote both titles - appended ', 14g of protein per serving' to the ham, and rewrote the FoodSaver tail from 'Align to Seal Design' to 'Align to Seal & Tear to Open for Food Storage, Sous Vide, and Meal Prep' - so the name misses while the key still collides, and the repair path REFUSES the repair. The only detector, audit-known-wrong's UNFIRABLE check, is scoped to products priced on a board, so an unfirable ruling on a non-board product is invisible forever. Swept the whole ledger: 257 active rulings, 4 currently unfirable for this reason (the two above, brown-lentils|Walmart '... Salad Bowl' -> '... Salad Bowl 7.76 oz.', and coconut-milk-canned|Walmart's own -v2 entry, itself already a re-issue - that product now carries THREE entries across three title revisions). None holds a board cell today, checked cell by cell. Re-issued three with distinct keys and current names; originals left standing, not reversed. This is a new SHAPE of the documented rules-that-silently-disarm class (a rename disarming a name-matched rule) on a new surface, so it is fixed and noted rather than bounced - see the memory note. (3) cherry-tomatoes.exclude \\bplants?\\b NOT SHIPPED. The plan added it because a FIRST-DRAFT token would have admitted 'Bonnie Plants Husky Cherry Red Cherry Tomato'. The token actually shipped is grape-only, so no include fires on that name and the fence is never reached. Measured over all 45,666 corpus names: ZERO match a cherry-tomatoes include AND \\bplants?\\b, and zero match one and the pre-existing singular \\bplant\\b either. It would have shipped with no reachable test, which this estate's own rule forbids ('a rule with nothing to match is speculation'). Left out; the pre-existing \\bplant\\b is untouched, and ground-sumac's copy of the plural token is untouched. The frozen fixture records the residual condition: if anyone widens the token to (?:cherry|grape)\\s+tomato, that case goes red and the fence becomes required - four Bonnie tomato PLANT listings are live in the corpus, two ending 'Live Plants'.",
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-01-e17a88",
+   "subject": "Grocery matching soundness - review needed",
+   "classification": "no-code-change",
+   "evidence": [
+    "MOVED=0 DROPPED=0 drift=0 new-contested=260; 256 of the 260 contested names are rows of walmart-regular-2026-08-31.json - the 592-term deep sweep that grew Walmart's capture from 525 to 11,694 rows. Nothing on the board moved; the contested list is the watchlist scaling with the corpus."
+   ],
+   "root_cause": "the deep sweep multiplied the matcher's Walmart name universe about 20x in one day; new-contested counts names entering contested territory, so a corpus explosion IS a contested explosion. Not a defect.",
+   "resolution_note": "Do NOT bare-accept now (it would freeze El Mexicano-on-jalapenos and the frozen-florets routing into the blessed baseline - the contested-flag-baselined-away class). Sequence: ship batch 1 rule edits, rebuild, re-run audit-match-soundness, review the diff - expected to be exactly the artifact's 21 routed names plus the 260 deep-sweep contested - then -Accept with the reviewed classes named in the acceptance note.",
+   "publish_batch": 1,
+   "status": "deviated",
+   "premise_verified": "FALSE as stated, and the correction changes the action. After the batch-1 rebuild, audit-match-soundness reports MOVED=0 DROPPED=0 drift-vs-engine=0 new-contested=10 and EXITS 0, so it does not hold publish. The plan expected the review set to be 'the artifact's 21 routed names plus the 260 deep-sweep contested'. Neither is present. Cause, measured: this audit does NOT read the 90-day union the engine reads. Its feed selection is the NEWEST file per store, and today's newest Walmart file is walmart-regular-2026-09-01.json (275 rows), not the 11,694-row 08-31 deep sweep. The 260 new-contested this morning existed only while the deep-sweep file was briefly the newest one. Confirmed by probe: NONE of the seven rows this triage changed (GV Broccoli Florets, El Mexicano, Marketside Cole Slaw, Fresh Grape Tomato, the two RTE jasmine rows, the Aldi blackberry spread) is present in the committed baseline at all (out\\audit\\match-baseline.json, generated 2026-08-31 09:09, 18,830 names, 421 reviewed contested). An -Accept would therefore neither bless nor record this triage's changes. It would also not shrink the baseline much - today's audit corpus is 18,767 names, a net loss of 63 - so that was not the reason either.",
+   "deviation": "NO -Accept was run, deliberately, and the guard is green without one. Reviewed the 10 pending new-contested LINE BY LINE against the live rules; SIX are genuine wrong-commodity routings, not benign order-dependence: 'Better Than Bouillon Premium Roasted Garlic Base' wins GARLIC over bouillon; 'Del Monte Diced Tomatoes with the Flavors of Basil, Garlic & Oregano' wins GARLIC over diced-tomatoes; 'Del Monte Stewed Mexican Recipe w/Jalapenos Garlic & Cumin Tomatoes' wins GARLIC over jalapenos and ground-cumin; 'Dove Macadamia+Rice Milk and Brown Sugar+Coco Body Scrub Mixed Pack' wins MILK; 'Idahoan Shredded Hashbrowns' wins INSTANT-MASHED-POTATOES over hash-browns; 'Soeos Whole Bay Leaves 2oz ... for Marinades, Stews and Soups' wins BOTTLED-MARINADE over bay-leaves; 'Tangle Creamy Mushroom Pasta Bowl' wins MUSHROOMS. (The two Emporium Selection cheeses and the fantastik cleaner are defensible.) Checked every one against the live board: NONE holds a cell - garlic, milk, instant-mashed-potatoes, bottled-marinade, mushrooms, bay-leaves, hash-browns, diced-tomatoes and bouillon are all held by correct products - so these are latent order-dependence, one price move from taking a cell. Accepting would move all ten into the reviewed-contested list and stop the audit flagging them: the contested-flag-baselined-away class the plan itself cited, arriving from a direction it did not expect. Left unaccepted, on the record, for the next round to rule on individually. Publish was not blocked.",
+   "premise_verified_note": "audit run after the batch-1 rebuild, exit 0"
+  },
+  {
+   "queue_id": "2026-09-01-b5b8e0",
+   "subject": "Recipe per-serving manifest: skipped recipe(s)",
+   "classification": "infra",
+   "evidence": [
+    "db-costed Lemon Zest line for the casserole: buy_n, buy_cost, pkg_g all null WITH covered_by set to 'Fresh Lemon Juice' - null BY DESIGN since commit d1e5cd89 (09-01 07:48, the lemon-yields-juice-AND-zest commit). compute-v2 ran 08:06:04 with the PRE-07:48 code and threw at its pkg check; commit 2190d28b (09-01 08:20, covered_by-broke-the-manifest) added the covered_by skip at compute-v2-perserving.ps1 line 146. Replicated lines 131-147 against current code and data read-only: Lemon Zest is COVERED by Fresh Lemon Juice and skipped - no throw."
+   ],
+   "root_cause": "a new costed-line shape (covered_by, package fields legitimately null) shipped at 07:48 without updating every consumer; compute-v2 was the missed fifth consumer, and the 08:00 chain ran inside the 32-minute gap between the shape change and its consumer fix. The code fix is ALREADY LIVE; only the manifest re-run is outstanding (the chain logged loop NOT closed).",
+   "surface_fix": {
+    "what": "re-run the manifest to close the loop",
+    "files": [
+     "meal-prep/pipeline/compute-v2-perserving.ps1 (run, not edit)"
+    ],
+    "exact_change": "re-run compute-v2-perserving.ps1 with the current feed; expect rc 0 and 584 of 584 including no-boil-chicken-pasta-casserole-with-artichokes-and-peas"
+   },
+   "root_fix": {
+    "what": "verify the covered_by path is REACHABLE by the gates: d1e5cd89 touched ops run-gates - confirm a covered_by line actually flows through compute-v2 line 146 in the gate run; if the gate corpus has no covered_by fixture, add one frozen from the Lemon Zest line",
+    "files": [
+     "ops/run-gates.ps1"
+    ],
+    "exact_change": "assert at least one covered_by costed line exists in the gate's frozen inputs and that compute-v2 processes it without throwing"
+   },
+   "blast_radius": {
+    "measured_as": "consumers",
+    "measured_by": "the d1e5cd89 diff (five consumers touched: cost-recipes, build-card2, cost-render-lib, spec-guards, run-gates) plus a grep for costed-line consumers; compute-v2 was the one missed and is now fixed",
+    "affected_now": 1
+   },
+   "freshness": "measured against costed.json written 09-01 08:05:52 and compute-v2-perserving.ps1 at HEAD (includes 2190d28b)",
+   "proof": {
+    "guard_or_fixture": "ops/run-gates.ps1 plus the compute-v2 re-run itself",
+    "must_fire_case": "a covered_by line with null pkg fields must NOT throw and must add zero package cost",
+    "clean_twin": "a non-covered line with null pkg data must STILL throw the bad-pkg error",
+    "commands": [
+     "powershell -File meal-prep\\pipeline\\compute-v2-perserving.ps1",
+     "powershell -File ops\\run-gates.ps1"
+    ]
+   },
+   "rollback": "nothing to roll back - the re-run is idempotent and the code fix already shipped in 2190d28b",
+   "resolution_note": "Already fixed by 2190d28b (08:20) - the alert caught the 32-minute window between a costed-shape change (07:48) and its consumer fix. Re-ran compute-v2: rc 0, 584 of 584, casserole priced. Gate reachability for the covered_by path confirmed or added.",
+   "publish_batch": 2,
+   "status": "planned"
+  },
+  {
+   "queue_id": "2026-09-01-d65e8a",
+   "subject": "Recipe db drift (index vs specs)",
+   "classification": "infra",
+   "evidence": [
+    "audit-db-agreement.ps1 run 09-01 about 10:05: 7 issues. (1) COST-DRIFT: no-boil-chicken-pasta-casserole cost_batch_true index 51.67 vs spec 51.59 - the recipes-db index copy lags the spec after this morning's lemon-zest recost (sync never ran because compute-v2 failed, see b5b8e0). (2 to 6) HEAD-INGREDIENT drift on 5 artichoke recipes: spec says Artichoke Hearts, card says Artichoke Hearts (Hannaford) - a source-store brand suffix on the card side that the authored specs never had (Hannaford is not even an Omaha store)."
+   ],
+   "root_cause": "both classes are downstream of today's 07:48-to-08:20 covered_by churn: the index cost copy lags because the sync step aborted with compute-v2, and the five artichoke card names carry a brand suffix the authored spec does not - the shared-item-carrying-a-brand class, surfaced by the same recost touching those specs. The audit names its own repair for each side.",
+   "surface_fix": {
+    "what": "run the two repairs the audit prescribes, in order, AFTER b5b8e0's compute-v2 re-run",
+    "files": [
+     "meal-prep/pipeline/sync-recipesdb-cost.ps1 (run)",
+     "meal-prep/pipeline/repair-head-ingredients.ps1 (run)"
+    ],
+    "exact_change": "sync-recipesdb-cost.ps1; then repair-head-ingredients.ps1 -Apply -Slugs italian-sausage-minestrone,mediterranean-chicken-w-marinade,no-boil-chicken-pasta-casserole-with-artichokes-and-peas,spinach-artichoke-chicken-casserole,turkey-spinach-artichoke-rice-casserole; while there, note WHERE the Hannaford suffix entered the card-side name and record it in the commit message"
+   },
+   "root_fix": null,
+   "root_fix_note": "the sync-repair pair is the documented mechanism; the ordering dependency (compute-v2 first) is the only trap",
+   "blast_radius": {
+    "measured_as": "rows",
+    "measured_by": "audit-db-agreement.ps1 output, 09-01",
+    "affected_now": 7
+   },
+   "freshness": "audit run 09-01 about 10:05 against recipes-db.json and db-recipes at HEAD 6e7539da",
+   "proof": {
+    "guard_or_fixture": "audit-db-agreement.ps1 itself",
+    "must_fire_case": "before repair: 7 issues, rc 1",
+    "clean_twin": "after repair: DB-AGREEMENT-COMPLETE issues 0, rc 0",
+    "commands": [
+     "powershell -File meal-prep\\engine\\audit-db-agreement.ps1"
+    ]
+   },
+   "rollback": "git revert of the synced index and prose hunks",
+   "resolution_note": "7 drifts, both classes downstream of the morning covered_by churn: index cost synced (51.59), 5 artichoke head-ingredient lines realigned to the authored spec (dropping the stray Hannaford brand suffix). Audit re-run: 0 issues.",
+   "publish_batch": 2,
+   "status": "planned"
+  },
+  {
+   "queue_id": "2026-09-01-f2a554",
+   "subject": "Recipe batch stalled with stages unfinished",
+   "classification": "infra",
+   "evidence": [
+    "batch-ledger.json vs recipes-db.json cross-check: the seven OPEN-STALE batches hold 13 unique slugs. NINE are LIVE with published dates while their batches record neither publish nor post-publish-review: butter-chicken-pasta, chicken-rice-and-broccoli, ground-beef-cottage-cheese-bowl (2026-08-27), blackened-chicken-with-mango-salsa, crack-chicken-chili (2026-08-29), healthy-hamburger-helper (2026-08-31), high-protein-chicken-alfredo-lasagna, no-boil-chicken-pasta-casserole-with-artichokes-and-peas, chicken-and-potato-curry (2026-09-01, a 03:01 session this morning). FOUR are not in recipes-db (true backlog): teriyaki-grilled-chicken-and-veggie-rice-bowls, pioneer-woman-chili, creamy-roasted-garlic-chicken, street-corn-chicken-rice-bowls.",
+    "The alert's own text under-claims the risk: missing-publish reads as nothing-live, but the ledger simply was never stamped - the waved auto-publish lane (human gate removed 2026-08-15) does not write batch-ledger stages."
+   ],
+   "root_cause": "the publish lane stopped stamping batch-ledger stages when publishing moved to waved auto-publish, so the ledger cannot distinguish published-unreviewed from unstamped, and the stall auditor reports the LESS alarming reading. Checkpoint-before-durable inverted: the durable act (publish) happens without its bookkeeping.",
+   "surface_fix": {
+    "what": "reconcile the nine live slugs: cross-check the runs qa battery artifacts for review evidence, stamp stages where it exists, dispatch post-publish-review for the remainder (at minimum the three published 09-01 03:01), close batches whose slugs are all resolved; the four unpublished slugs stay editorial backlog per Brad's standing 08-30 ruling (do not park the flow)",
+    "files": [
+     "meal-prep/db/batch-ledger.json (stamps)",
+     "post-publish-review dispatch"
+    ],
+    "exact_change": "per slug: stamp publish (date from recipes-db published) plus stamp or dispatch post-publish-review; close hunt-2026-08-27-highprotein w1 w3 w4 w5 w6 w9 and hunt-2026-08-24-v3-phase6b-w2 as their slugs resolve"
+   },
+   "root_fix": {
+    "what": "make the ledger unable to lie by omission: the stall auditor cross-references recipes-db published dates for every open batch's slugs and reports LIVE-UNREVIEWED loudly when a slug is live without a review stamp - the condition this alert exists to catch and currently cannot see",
+    "files": [
+     "meal-prep/pipeline/batch-ledger.ps1"
+    ],
+    "exact_change": "in the stale-batch report: for each missing-publish batch, if any slug IS in recipes-db with a published date, emit LIVE-UNREVIEWED with the slug and date instead of counting publish as merely missing"
+   },
+   "blast_radius": {
+    "measured_as": "batches",
+    "measured_by": "batch-ledger.json (29 batches) vs recipes-db.json (580 entries) full cross-check",
+    "affected_now": 7
+   },
+   "freshness": "measured against batch-ledger.json and recipes-db.json at about 10:10 on 09-01; the 03:01 session's three publishes are included",
+   "proof": {
+    "guard_or_fixture": "batch-ledger.ps1 -SelfTest (existing) plus one new frozen case",
+    "must_fire_case": "a ledger batch missing publish whose slug IS in recipes-db with a published date must report LIVE-UNREVIEWED and name the slug",
+    "clean_twin": "a batch whose slugs are all absent from recipes-db keeps the current OPEN-STALE wording",
+    "commands": [
+     "powershell -File meal-prep\\pipeline\\batch-ledger.ps1 -SelfTest"
+    ]
+   },
+   "rollback": "ledger stamps are additive records; revert the batch-ledger.ps1 hunk",
+   "resolution_note": "The alert under-claimed: nine recipes from the seven stalled batches ARE live without a recorded post-publish-review (three published this morning at 03:01). Reviews dispatched or stamped from qa evidence, batches closed as resolved, four slugs left as editorial backlog per Brad's 08-30 ruling, and the stall auditor now says LIVE-UNREVIEWED instead of missing-publish when a slug is live.",
+   "publish_batch": 3,
+   "status": "planned"
+  },
+  {
+   "queue_id": "2026-09-01-056e6b",
+   "subject": "Grocery: Family Fare catalog is degrading - 1 signal(s)",
+   "classification": "infra",
+   "evidence": [
+    "Get-ScheduledTask: TC Grocery Ad Pulls 0700, TC Grocery Daily Capture 0800, TC Grocery Capture Watchdog 0930 (plus Graph Nightly and Recipe Harvest) - there IS NO 3-hourly Family Fare task. The 3-hourly sharded sweep the alert text describes does not exist as a job.",
+    "Today's single 08:00 run bought FF terms 593 to 599 - SEVEN terms - and landed 10 fresh rows; family-fare-2026-09-01.throttled.json shows throttled true with dozens of staple terms (bananas, milk gallon, butter, large eggs and more) returning EMPTY. Catalog flat at 5,258 for three days; re-verified-in-48h fell from 272 (08-29) to 10 (09-01). Log history shows 7 terms per run, every run, terms 473 through 600."
+   ],
+   "root_cause": "the designed throttle valve - shard the term list ACROSS THE DAY - was never scheduled. The per-run shard (about 7 rotation terms) is sized for many windows a day, but only the 08:00 window exists, and that window now gets hard-throttled (all seven stores pull from one IP in the same minutes), so even the staple terms return empty and the catalog is pure carry-forward. No check watches that the intended cadence exists, so the missing cadence pages as catalog-degrading instead of as itself (rules-that-silently-disarm). The alert did its job; the arithmetic can never recover at 7 terms x 1 window against a 526-term list and a 90-day carry.",
+   "surface_fix": {
+    "what": "give the shards their windows WITHOUT new scheduled tasks: piggyback an FF shard buy onto the two other existing windows (07:00 ad task, 09:30 watchdog task) for 3 windows a day, and stagger the FF pull inside the 08:00 run so it does not share the exact minutes of the other six stores. Do NOT slow pacing (the 2026-07-28 probe proved the budget is per-window request count).",
+    "files": [
+     "grocery/capture-run.ps1 or the two task entry scripts",
+     "grocery/pull-regular-familyfare.ps1 (shard invocation only - no threshold, no alert change)"
+    ],
+    "exact_change": "invoke the FF shard buy from the 07:00 and 09:30 chains; the cursor logic already handles arbitrary windows (it commits per successful window and re-buys the same shard after a failed one)"
+   },
+   "root_fix": {
+    "what": "a cadence watcher: expected shard windows per day vs observed cursor advances, so a dead window pages as MISSING-WINDOW rather than three weeks later as catalog decay",
+    "files": [
+     "grocery/pull-regular-familyfare.ps1 (or capture-watchdog.ps1)"
+    ],
+    "exact_change": "read the cursor-advance history; if advances in the last 24h are fewer than configured windows, page with the window names"
+   },
+   "blast_radius": {
+    "measured_as": "schedule",
+    "measured_by": "Get-ScheduledTask inventory plus cursor-advance greps across the capture-run-daily logs (7 terms per run, 1 run per day, every day on file) plus the throttled diagnostics 08-30 to 09-01",
+    "affected_now": 1
+   },
+   "freshness": "measured 09-01 about 10:10; ff-term-ledger updated 08:01:55; catalog 5,258 rows with 0 expired - the 90-day carry is holding, so nothing is lost YET; this is the window to fix it calmly",
+   "proof": {
+    "guard_or_fixture": "pull-regular-familyfare.ps1 self-test (clean-twin c5: a healthy sharded sweep does not page) plus this very alert as the live must-fire",
+    "must_fire_case": "with a window skipped, the new cadence check pages MISSING-WINDOW",
+    "clean_twin": "with all windows advancing, silent; and within 2 days of the fix, re-verified-in-48h must climb back over the degradation floor, closing this alert by measurement",
+    "commands": [
+     "powershell -File grocery\\pull-regular-familyfare.ps1 -SelfTest",
+     "powershell -File grocery\\triage-due.ps1"
+    ]
+   },
+   "rollback": "back out the added shard invocations; the cursor design makes repeated or missed windows safe by construction",
+   "resolution_note": "The 3-hourly sharded sweep never existed as a job - 7 terms once a day into a hard-throttled window cannot re-verify a 5,258-row catalog. FF shard buys added to the two existing extra windows (no new tasks), FF staggered inside 08:00, and a cadence watcher added so a dead window pages as itself. If Brad prefers a dedicated 3-hourly task instead, that is the one open question.",
+   "publish_batch": 3,
+   "status": "planned"
+  },
+  {
+   "queue_id": "2026-08-31-980113",
+   "subject": "Grocery capture watchdog: 1 issue(s) 2026-08-31",
+   "classification": "no-code-change",
+   "evidence": [
+    "capture-run-daily-2026-08-31.log: rc 1 = FAILED LANES: guards-blocked - guards refused to ship (fail-closed, correct), and WATCHERS was red: test-auditors' four triage-due cases errored because triage-due.ps1 had grown a mute-lib.ps1 dot-source the temp fixture never copies. Board rebuilt 09:26 and published; the 08-31 evening commits (23a20bd6 in-store gate, ad91f341 rules-watcher, 289e1ca5 BOM restore) cleared it; TODAY: test-auditors rc 0 in 380s, watchers ok, daily exit 0."
+   ],
+   "root_cause": "the exit 1 was the system working: guards fail closed and stayed closed until the data was fixed; the watcher blindness was a fixture dependency gap (a script grew a dot-source dependency; the frozen fixture's file list did not), fixed the same day. Both owning checks exist and both ran: the watchdog raised this alert, and test-auditors gates the chain daily and is green today.",
+   "resolution_note": "Past tense, verified: the 08-31 rc 1 was guards-blocked plus a same-day-fixed watcher fixture gap; today's chain is green end to end. No action. (Optional batch-3 hardening while nearby: have the RunPSAt fixture copy a script's dot-sourced deps automatically instead of a hand-enumerated list.)",
+   "publish_batch": 3,
+   "status": "planned"
+  },
+  {
+   "queue_id": "2026-09-01-4ca656",
+   "subject": "Grocery: 4 on-sale item(s) have no everyday fallback - 2026-09-01",
+   "classification": "no-code-change",
+   "evidence": [
+    "research-worklist.json (08:13) holds exactly the three browser-store cells: canned-pumpkin at Hy-Vee, cheddar-cheese-curds at Fareway, pecorino-romano at Fareway; yukon-gold-potatoes at Family Fare is correctly absent because FF self-heals on the daily pull."
+   ],
+   "root_cause": "rolling condition by design: sale-only cells queue for the weekly browser agent to research an everyday fallback; the queue is doing exactly that.",
+   "resolution_note": "No code change: the three browser-store cells are queued for the weekly agent and FF self-heals. Note: item b7da16's channel-doubt audit will ADD entries to this same worklist - the browser agent's next pass covers both.",
+   "publish_batch": 3,
+   "status": "planned"
+  }
+ ],
+ "ship_sequence": [
+  "BATCH 1 - the board. Edit grocery/commodities.json: jalapenos excludes (cans-noun, escabeche); broccoli excludes (GV-broccoli-florets, stir-fry); frozen-broccoli include (GV-broccoli-florets); coleslaw-mix include (cole slaw) plus excludes (homestyle, tub); cooked-jasmine-rice includes (the two RTE-jasmine tokens); rice exclude (ready-to-eat); coconut-oil include (coconut cooking oil); cherry-tomatoes include (grape tomato singular) plus exclude (plants pluralised); insect-spray band_min 0.08 to 0.06 ONLY after the live link walmart.com/ip/139534287 reads $9.42 (cache-busted)",
+  "add-known-wrong.ps1 rulings for the 14 semantic lookalikes plus the coverage-gap-allowlist.json entry for the 4 pomegranate scent names",
+  "add frozen must-fire fixtures plus clean twins to test-commodity-rules.ps1 for every edit above (rows frozen from walmart-regular-2026-08-31, never regenerated)",
+  "diff the new routing against triage-plans/plan-2026-09-01.routing.json (positive control: Great Value Broccoli Florets 14 oz moves broccoli to frozen-broccoli; 21 changes total, nothing else)",
+  "compare-deals.ps1 rebuild + audit-food-category (0) + audit-capture-eviction: verify exactly the cell_effects listed (jalapenos 0.877 to 1.76, broccoli 1.3257 to 2.1208 with the crown to Aldi, cherry-tomatoes 0.327 to 0.227, NEW cells coleslaw-mix 0.1275 and cooked-jasmine-rice 0.1966, insect-spray 0.1249 to 0.0736 if the band shipped, no other Walmart movement)",
+  "audit-match-soundness.ps1: review the diff (expected = the artifact's 21 names plus the 260 deep-sweep contested), THEN -Accept with the reviewed classes named (item e17a88; never bare-accept before the rule edits)",
+  "guards.ps1 (MUST be 0) + audit-basis-reconcile + audit-pack-basis + test-auditors.ps1 (MUST be 0)",
+  "publish-deals-page.ps1; live verification with a cache-busting query param (30-minute edge cache): jalapenos chip shows Fresh Jalapenos $1.76 per lb, broccoli crown Aldi $2.09",
+  "commit and push batch 1 WITH this plan file and the routing artifact",
+  "BATCH 2 - recipes, no board publish: re-run compute-v2-perserving.ps1 (rc 0, 584 of 584 including the casserole; verify ops run-gates reaches the covered_by path); THEN sync-recipesdb-cost.ps1; THEN repair-head-ingredients.ps1 -Apply -Slugs for the 5 artichoke slugs; audit-db-agreement.ps1 expects issues 0; commit and push",
+  "BATCH 3 - watchers and cadence: new audit-instore-channel.ps1 with fixtures, registered in the daily chain, feeding research-worklist (the 23 doubted cells including beef-stew and white-miso queue for the browser badge check); batch-ledger LIVE-UNREVIEWED cross-check plus stamp or dispatch post-publish-review for the nine live slugs; FF shard buys on the 07:00 and 09:30 windows plus stagger inside 08:00 plus the cadence watcher; test-auditors.ps1 (0); commit and push",
+  "next morning: confirm FF re-verified-in-48h is climbing, the semantic sweep reports 0 of the 17, coverage-gaps no longer pages the three Walmart commodities, and the price-flag alert count drops"
+ ],
+ "open_questions_for_brad": [
+  "INFORMATIONAL, not blocking (batch 3 ships without it): Family Fare shard windows are being piggybacked onto the existing 07:00 and 09:30 tasks to avoid changing the three-task automation inventory. If you would rather have a dedicated 3-hourly FF task (cleaner, but a new scheduled job on your machine), say so and the developer will swap the piggyback for a task."
+ ]
+}

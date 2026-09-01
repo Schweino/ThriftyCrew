@@ -4146,8 +4146,20 @@ foreach ($n in $medleyMust) {
 if ($medleyLeak.Count -eq 0) { Ok 'medley rules: no broccoli/cauliflower/carrot BLEND matches a single-vegetable commodity (all 7 live Walmart blends)' }
 else { Bad ('a mixed-vegetable blend is matching a single-vegetable commodity again - it will take that cell the day the real vegetable is dearer or missing: ' + ($medleyLeak -join ' | ')) }
 # CLEAN TWINS - the plain vegetables must still match, or the excludes have eaten the commodity they protect.
+#
+# 2026-09-01: the broccoli twin was RE-POINTED, not relaxed. It used to be
+# 'Great Value Broccoli Florets, 14 oz' -> broccoli, chosen because the name carries no frozen token.
+# That was the assumption, not the fact: Walmart's own breadcrumb for item 13925175 reads
+# Food > Frozen Foods > Frozen Fruits & Vegetables > Frozen Vegetables, its found_by_term in the
+# capture is "frozen broccoli florets", and $0.0829/oz is the frozen-steamable price point. It held the
+# FRESH broccoli cell and the commodity crown at $1.3257/lb until 2026-09-01 (queue 2026-09-01-b7da16).
+# So that row now asserts frozen-broccoli, which makes this fixture a regression test for that bug, and
+# the fresh side is asserted by two products that really are fresh: the crown Walmart actually sells,
+# and a Marketside FLORETS row, which keeps the original point that a florets name must not be eaten.
 $medleyTwin = @(
-  @{ n = 'Great Value Broccoli Florets, 14 oz';            want = 'broccoli' },
+  @{ n = 'Fresh Whole Green Broccoli Crowns, 1 Each';      want = 'broccoli' },        # walmart-regular-2026-07-23
+  @{ n = 'Marketside Broccoli Florets, 12 oz';             want = 'broccoli' },        # walmart-regular-2026-08-31, Walmart's FRESH line
+  @{ n = 'Great Value Broccoli Florets, 14 oz';            want = 'frozen-broccoli' }, # walmart-regular-2026-08-31, store-verified frozen
   @{ n = 'Great Value Broccoli Florets, 32 oz Bag (Frozen)'; want = 'frozen-broccoli' },
   @{ n = 'Fresh Whole White Cauliflower';                  want = 'cauliflower' },
   @{ n = 'Marketside Whole Carrots, 2 lb Bag';             want = 'carrots' },

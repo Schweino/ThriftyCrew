@@ -8467,7 +8467,9 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "great\\s+value\\s+broccoli\\s+florets",
+                        "stir[\\s-]*fry"
                     ]
     },
     {
@@ -10780,7 +10782,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "cauliflower",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bready[-\\s]+to[-\\s]+eat\\b"
                     ]
     },
     {
@@ -16944,7 +16947,8 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -17153,7 +17157,8 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -19687,7 +19692,9 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bcans?\\b",
+                        "escabeche"
                     ]
     },
     {
@@ -35458,7 +35465,8 @@
                         "broccoli\\s+florets\\b.{0,25}(?:frozen|steam)",
                         "steamable\\s+broccoli",
                         "broccoli\\s+cuts",
-                        "cut\\s+broccoli"
+                        "cut\\s+broccoli",
+                        "great\\s+value\\s+broccoli\\s+florets"
                     ],
         "exclude":  [
                         "fresh",
@@ -38066,7 +38074,7 @@
         "id":  "insect-spray",
         "label":  "Insect / Bug Spray (home)",
         "unit":  "oz",
-        "band_min":  0.08,
+        "band_min":  0.06,
         "band_max":  1.6,
         "include":  [
                         "\\b(?:ant|roach|insect|bug|spider)s?\\b[\\s\u0026]+(?:killer|spray)",
@@ -55450,7 +55458,8 @@
                         "tomatoes?,?\\s+cherry",
                         "tomatoes?,?\\s+grape",
                         "\\bcherubs?\\b",
-                        "cherry\\b.{0,15}tomatoes?"
+                        "cherry\\b.{0,15}tomatoes?",
+                        "\\bgrape\\s+tomato\\b"
                     ],
         "exclude":  [
                         "sun[\\s-]?dried",
@@ -63578,7 +63587,8 @@
                         "shredded\\s+(?:coleslaw|slaw)",
                         "angel\\s+hair\\s+coleslaw",
                         "tri[\\s-]?colou?r\\s+(?:coleslaw|slaw)",
-                        "\\blettuce\\s+or\\s+coleslaw\\b"
+                        "\\blettuce\\s+or\\s+coleslaw\\b",
+                        "\\bcole\\s+slaw\\b"
                     ],
         "exclude":  [
                         "concord\\s+foods",
@@ -63773,7 +63783,9 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "homestyle",
+                        "\\btub\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -74445,7 +74457,9 @@
         "include":  [
                         "\\b(?:fully\\s+)?cooked\\s+jasmine\\s+rice\\b",
                         "\\bready(?:[-\\s]+to[-\\s]+eat)?\\s+jasmine\\s+rice\\b",
-                        "\\bready\\s+jasmine\\s+rice\\b"
+                        "\\bready\\s+jasmine\\s+rice\\b",
+                        "\\bready[-\\s]+to[-\\s]+eat\\b.{0,40}\\bjasmine\\s+rice\\b",
+                        "\\bready\\s+rice\\s+jasmine\\b"
                     ],
         "exclude":  [
                         "\\buncooked\\b",

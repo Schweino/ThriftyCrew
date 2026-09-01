@@ -3751,7 +3751,7 @@
                                   ],
                         "product_id":  "",
                         "verdict":  "wrong-product",
-                        "evidence":  "WRONG PRODUCT, LIVE ON THE BOARD: Family Fare pistachios crowned at $0.1248/oz on \"Blue Bunny Premium Pistachio Almond 48 Oz\" ($5.99), which is a 48 oz tub of ICE CREAM - Family Fare shelves it freezer/sweet_stuff (aisle-test BLOCK, 2026-08-30). Real pistachios run 0.35-1.00/oz on the same board; $0.12/oz pistachios do not exist. The commodity already excluded ice cream, gelato, dessert, pudding, cake, cookies, truffles and chocolate BY TYPE WORD, and this name carries only BRAND + FLAVOR, so every type-word fence missed it. Fixed at the rule level too (pistachios excludes blue bunny / frosting / muffins; the blue-bunny brand token is in the frozen_dessert_brand class of category-excludes.json so audit-food-category hard-fails the class estate-wide). Measured by full engine rebuild: exactly ONE cell moves, Family Fare 0.1248 -> 0.4698 (Planters Dry Roasted Pistachios 12.75 Oz $5.99), crown moves to Sam's Club 0.3538.",
+                        "evidence":  "WRONG PRODUCT, LIVE ON THE BOARD: Family Fare pistachios crowned at $0.1248/oz on \"Blue Bunny Premium Pistachio Almond 48 Oz\" ($5.99), which is a 48 oz tub of ICE CREAM - Family Fare shelves it freezer/sweet_stuff (aisle-test BLOCK, 2026-08-30). Real pistachios run 0.35-1.00/oz on the same board; $0.12/oz pistachios do not exist. The commodity already excluded ice cream, gelato, dessert, pudding, cake, cookies, truffles and chocolate BY TYPE WORD, and this name carries only BRAND + FLAVOR, so every type-word fence missed it. Fixed at the rule level too (pistachios excludes blue bunny / frosting / muffins; the blue-bunny brand token is in the frozen_dessert_brand class of category-excludes.json so audit-food-category hard-fails the class estate-wide). Measured by full engine rebuild: exactly ONE cell moves, Family Fare 0.1248 -\u003e 0.4698 (Planters Dry Roasted Pistachios 12.75 Oz $5.99), crown moves to Sam\u0027s Club 0.3538.",
                         "seen_on_board":  "yes - it held the Family Fare cell AND the estate crown when this ruling was made",
                         "ruled_on":  "2026-08-30",
                         "ruled_by":  "triage-developer (plan-2026-08-30-2, queue 2026-08-30-2611d3)",
@@ -3766,10 +3766,242 @@
                                   ],
                         "product_id":  "",
                         "verdict":  "wrong-basis",
-                        "evidence":  "WRONG BASIS from a pack misparse, holding the artichokes CROWN on the live board. Baker's row \"ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)\" is a Kroger FOODSERVICE CASE listing - 8-10 hearts per jar, six 14 oz jars to the case - and $3.59 is not a per-each price for any of those things. The engine read the size string as '10 pk 1.4 oz', took the 8-10 CT count as a pack of 10 and 6/14 OZ as 1.4 oz apiece, and divided: 3.59 / 10 = $0.359 each, basis 'per-10-pack (pack count beats the per-each marker)'. That is 11x under the peer price for one artichoke - Fareway 'Artichoke' $3.99 each - and it takes the crown from it. audit-pack-basis has been reporting this cell since before today's triage (finding_count 2 at 08:25); it is advisory, so nothing blocked on it. The PRICE is real and the NAME is real; only the derived per-each is fabricated, so the row is blocked rather than repriced - no number here can be proven without a capture that states a per-jar size. Crown falls to Fareway $3.99. Measured and ruled 2026-08-30 during plan-2026-08-30-2. REVERSE THIS the day a Baker's capture records a stated per-jar size for this product instead of a foodservice case string - retire_when is a closed vocabulary (ruling-reversed / commodity-retired / store-retired), so the condition has to live here where someone can read it.",
+                        "evidence":  "WRONG BASIS from a pack misparse, holding the artichokes CROWN on the live board. Baker\u0027s row \"ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)\" is a Kroger FOODSERVICE CASE listing - 8-10 hearts per jar, six 14 oz jars to the case - and $3.59 is not a per-each price for any of those things. The engine read the size string as \u002710 pk 1.4 oz\u0027, took the 8-10 CT count as a pack of 10 and 6/14 OZ as 1.4 oz apiece, and divided: 3.59 / 10 = $0.359 each, basis \u0027per-10-pack (pack count beats the per-each marker)\u0027. That is 11x under the peer price for one artichoke - Fareway \u0027Artichoke\u0027 $3.99 each - and it takes the crown from it. audit-pack-basis has been reporting this cell since before today\u0027s triage (finding_count 2 at 08:25); it is advisory, so nothing blocked on it. The PRICE is real and the NAME is real; only the derived per-each is fabricated, so the row is blocked rather than repriced - no number here can be proven without a capture that states a per-jar size. Crown falls to Fareway $3.99. Measured and ruled 2026-08-30 during plan-2026-08-30-2. REVERSE THIS the day a Baker\u0027s capture records a stated per-jar size for this product instead of a foodservice case string - retire_when is a closed vocabulary (ruling-reversed / commodity-retired / store-retired), so the condition has to live here where someone can read it.",
                         "seen_on_board":  "yes - it held the Baker\u0027s cell AND the estate crown when this ruling was made",
                         "ruled_on":  "2026-08-30",
                         "ruled_by":  "triage-developer (plan-2026-08-30-2, found by audit-pack-basis during the batch-1 gate run)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Walmart|73-lean-27-fat-ground-beef-10-lb-roll-fresh-all",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "73% Lean / 27% Fat Ground Beef, 10 lb Roll, Fresh, All Natural*",
+                                      "85% Lean / 15% Fat Ground Beef, 1 lb Roll, Fresh, All Natural*",
+                                      "80% Lean / 20% Fat Ground Beef and Pork Blend, 1 lb Roll, Fresh"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "WRONG LEAN RATIO or WRONG MEAT (semantic sweep 2026-09-01, findings 0/5/6). The commodity is 80/20 GROUND BEEF. 73/27 and 85/15 are different lean ratios that carry different shelf prices, and the third row is an 80/20 BEEF AND PORK BLEND, which is not beef. The sweep is right that they read alike and wrong that they are the same commodity. No include change: the ratio IS the commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "claude (opus5 triage-developer) - triage 2026-09-01-ff9801",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|farmer-john-steakhouse-fresh-seasoned-pork-tende",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Farmer John Steakhouse Fresh Seasoned Pork Tenderloin, 1.0  1.9 lb, 20 Grams of Protein per 4 oz Serving",
+                                      "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "SEASONED / MARINATED VARIANT (semantic sweep 2026-09-01, findings 1 and 3). Both are Steakhouse Fresh SEASONED pork tenderloin, a marinated value-added cut at a marinated price. pork-tenderloin already excludes seasoned on purpose so the commodity tracks the plain cut. Same ruling class as that existing exclude; no rule change.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-breast|Aldi|kirkwood-boneless-skinless-thin-sliced-chicken-b",
+                        "commodity":  "chicken-breast",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "THIN SLICED (semantic sweep 2026-09-01, finding 2). chicken-breast excludes thin-sliced deliberately: a premium cut at a different price point. Mixing it in would misstate the plain-breast cell it displaces. The exclude is working; the sweep is reporting a lookalike.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-breast|Bakers|heritage-farm-boneless-skinless-thin-sliced-chic",
+                        "commodity":  "chicken-breast",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts"
+                                  ],
+                        "product_id":  "0025313700000",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "THIN SLICED (semantic sweep 2026-09-01, finding 14). Same ruling as the Kirkwood and Freshness Guaranteed rows: thin-sliced is a deliberate chicken-breast exclude, a premium cut at its own price point.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-breast|Walmart|freshness-guaranteed-thin-sliced-boneless-skinle",
+                        "commodity":  "chicken-breast",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "THIN SLICED (semantic sweep 2026-09-01, finding 16). Same ruling as the Kirkwood and Heritage Farm rows: thin-sliced is a deliberate chicken-breast exclude.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sandwich-bags|Walmart|great-value-100-count-fresh-seal-double-zipper-r",
+                        "commodity":  "sandwich-bags",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value 100 Count Fresh Seal Double Zipper Rectangle Snack Bags"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "SNACK BAG, A DIFFERENT SIZE CLASS (semantic sweep 2026-09-01, finding 4). sandwich-bags excludes snack bags on purpose: a snack bag is materially smaller, so a per-bag price taken from it would understate the sandwich-bag cell.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "white-wine|FamilyFare|vendange-chardonnay-white-wine-1-5-l",
+                        "commodity":  "white-wine",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Vendange Chardonnay White Wine 1.5 L"
+                                  ],
+                        "product_id":  "182564",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "LITRE PACK FORM (semantic sweep 2026-09-01, finding 7). white-wine excludes litre sizes, the magnum and box pack-form call already made for this commodity, which tracks the 750ml bottle. A 1.5 L bottle would win the cell on pack form alone.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut-milk-canned|Walmart|thai-kitchen-gluten-free-gluten-free-unsweetened",
+                        "commodity":  "coconut-milk-canned",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Thai Kitchen Gluten Free Gluten Free Unsweetened Coconut Cream, 13.66 fl oz Can"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "CREAM IS NOT MILK (semantic sweep 2026-09-01, finding 12). Coconut CREAM is the concentrated fraction and is priced above canned coconut milk; putting it in the milk row would misstate the commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "canned-potatoes|Walmart|del-monte-cajun-style-diced-potatoes-14-5-oz-can",
+                        "commodity":  "canned-potatoes",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Del Monte Cajun Style Diced Potatoes, 14.5 oz. Can"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "SEASONED VARIANT (semantic sweep 2026-09-01, finding 13). Cajun Style diced potatoes are a flavoured variant at a flavoured price; canned-potatoes tracks plain. Already a reviewed coverage-gap-allowlist entry since 2026-08-31; this ruling is what makes the SEMANTIC sweep stop re-finding it, because that sweep reads known-wrong and not the coverage allowlist.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut-oil|Walmart|carrington-farms-organic-coconut-cooking-oil-32",
+                        "commodity":  "coconut-oil",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Carrington Farms Organic Coconut Cooking Oil, 32 Floz",
+                                      "Carrington Farms Coconut Cooking Oil, 16.0 FL OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "FRACTIONATED LIQUID OIL, STANDING RULING UPHELD (semantic sweep 2026-09-01, findings 9 and 15). The plan proposed widening coconut-oil.include to admit these. It would have reversed THREE dated reviewed rulings without reversing them: coverage-gap-allowlist coconut-oil|Sams Club 2026-07-29 (Carrington Farms Liquid Coconut Cooking Oil 40 oz, \"a fractionated liquid oil that stays liquid at room temperature, not the solid virgin coconut oil this commodity means. Widening the include to catch it would put two different fats in one row\"), plus coconut-oil|Walmart entries of 2026-08-31 naming these exact two rows. Re-verified at the store 2026-09-01: walmart.com/ip/37025807 titles it Organic Coconut Cooking Oil, 32 Floz, Unflavored, prices it per FLUID ounce, and Walmart own related-search terms for the item are liquid coconut oil and fractionated coconut oil. The plan own blast radius says admitting them moves NO cell (Walmart coconut-oil stays 0.2434 on the GV 56 fl oz), so the widening buys no accuracy and carries the latent risk of a fractionated oil taking the cell on a future markdown. Ruled instead of admitted, which is what silences this sweep.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "deli-ham|Walmart|marketside-spiral-ham-retitled-2026-09-01",
+                        "commodity":  "deli-ham",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-form",
+                        "evidence":  "RE-ISSUE of deli-ham|Walmart|marketside-natural-juice-bone-in-spiral-cut-brow (ruled 2026-08-30, still correct, NOT reversed). That ruling can no longer fire: Walmart appended \", 14g of protein per serving\" to the title, so the stored name no longer matches while the 48-char key still collides, which is why add-known-wrong refuses a plain re-add. Measured 2026-09-01: this product is finding 8 of 17 on the semantic sweep, i.e. an alert raised by a ruling that already existed. Same verdict as the original: a bone-in spiral-cut 8 to 12 lb glazed ham is a whole roast sold by the pound, not deli-sliced lunch meat. Not on any board cell today (Walmart deli-ham is Smithfield Harwood Smoked Portion Ham at 0.1238/oz).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "quart-storage-bags|Walmart|foodsaver-vacuum-bags-retitled-2026-09-01",
+                        "commodity":  "quart-storage-bags",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "RE-ISSUE of quart-storage-bags|Walmart|foodsaver-quart-vacuum-seal-bags-19-count-pre-cu (ruled 2026-08-30, still correct, NOT reversed). Walmart rewrote the title tail from \"Align to Seal Design\" to \"Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep\", so the stored name misses while the 48-char key collides and the re-add is refused. Measured 2026-09-01: finding 10 of 17 on the semantic sweep. Same verdict: vacuum-sealer bags need the appliance and are priced accordingly, not zip-top quart storage bags. Not on any board cell today (Walmart quart-storage-bags is GV Double Zipper Quart Freezer Bag at 0.0489/ct).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "brown-lentils|Walmart|genova-tuna-lentil-bowl-retitled-2026-09-01",
+                        "commodity":  "brown-lentils",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Genova Premium Tuna Mediterranean Lentil \u0026 Grain Salad Bowl 7.76 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "RE-ISSUE of brown-lentils|Walmart|genova-premium-tuna-mediterranean-lentil-grain-s (still correct, NOT reversed). Walmart appended \" 7.76 oz.\" to the title, disarming the stored-name match while the key still collides. Same verdict: a ready-to-eat tuna salad bowl is not dried brown lentils. Not on any board cell today (Walmart brown-lentils is the Hurst 6-pack of dried lentils at 1.00/lb), so this closes a latent hole rather than moving a number.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "System.Collections.Hashtable",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pomegranates|Walmart|great-value-soft-smooth-ultra-dish-liquid-pomegr",
+                        "commodity":  "pomegranates",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Soft \u0026 Smooth Ultra Dish Liquid, Pomegranate, 28 fl oz",
+                                      "eos Shea Better Women\u0027s Shave Cream - Pomegranate Raspberry   7 fl oz",
+                                      "eos Shea Better Travel Shave Cream - Pomegranate Raspberry   2.5oz",
+                                      "(3 pack) eos Shea Better Travel Shave Cream - Pomegranate Raspberry   2.5oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "SCENT NAME, NOT THE FRUIT (coverage-gap probe 2026-09-01). All four candidates the loosened probe returned for pomegranates at Walmart are non-food products named for the fragrance, and each is already correctly claimed by the commodity it really is: the Great Value dish liquid routes to dish-soap, the three eos shave creams route to shaving-cream. No fresh pomegranate exists in ANY Walmart capture on file, so the gap is seasonal absence, not a rule gap, and an include widening here would be a scent word admitting soap. Paired with a coverage-gap-allowlist entry for pomegranates|Walmart.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "claude (opus5 triage-developer) - triage 2026-09-01-4a481e",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "beef-stew|Walmart|4-pack-nalley-chunky-beef-stew-with-vegetables-i",
+                        "commodity":  "beef-stew",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(4 pack) Nalley Chunky Beef Stew With Vegetables in a Hearty Gravy, 9g Protein Per Serving, 38 oz. Can"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "not-purchasable",
+                        "evidence":  "NOT PURCHASABLE AT THIS STORE (browser badge check, 2026-09-01, the check plan-2026-09-01 item b7da16 queued for this exact row). The product is RIGHT and the price arithmetic is right - $7.96 / 152 oz = 5.2 c/oz reproduces Walmart own unit price - but the row cannot be bought. walmart.com/ip/1520500029 states, on the product page itself: \"Pack Size: 4 Pack - Out of stock\", \"Single, $1.99, was $3.98, Out of stock\", \"4 Pack, Now $7.96, was $15.92, Out of stock\". BOTH pack sizes are out of stock, no Pickup and no Delivery option is offered for either, and its breadcrumb is Food \u003e Pantry \u003e Soup \u003e Ready to heat soup. This is the BLANK-fulfillment class the plan measured: fulfillment is empty in walmart-regular-2026-08-31.json, a capture that populates the field on 11,603 of its 11,694 rows, and \"(N pack)\" is Walmart online-bundle naming. The row held the beef-stew CROWN at 0.0524/oz against a true Omaha cheapest of 0.1538 at Sam Club, so the board was understating beef stew by about 3x with a product no shopper can put in a cart. Walmart keeps a beef-stew cell: it falls through to its own next-best STORE row, DINTY MOORE Beef Stew, Shelf-Stable, 38 oz Steel Can at $6.27 (0.165/oz). Comparable products confirm the level: Dinty Moore 20 oz $3.62 = 0.181/oz, 15 oz $2.97 = 0.198/oz. Reverse this ruling if Walmart restocks the Nalley can with a store channel.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-01",
+                        "ruled_by":  "claude (opus5 triage-developer) - triage 2026-09-01-b7da16, browser badge check",
                         "retire_when":  "ruling-reversed"
                     }
                 ]

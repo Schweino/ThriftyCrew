@@ -1,0 +1,3546 @@
+{
+ "generated": "2026-09-01T10:23:28",
+ "board_week": "2026-08-31",
+ "board_pin": "comparison-2026-08-31.json built 2026-09-01T08:04:36",
+ "measured_as": "routing",
+ "corpus": {
+  "unique_names": 45666,
+  "files_used": [
+   {
+    "file": "out\\regular\\aldi-regular-2026-07-06.json",
+    "rows_with_names": 30
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-07-08.json",
+    "rows_with_names": 29
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-07-12.json",
+    "rows_with_names": 278
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-07-14.json",
+    "rows_with_names": 347
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-07-15.json",
+    "rows_with_names": 403
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-07-18.json",
+    "rows_with_names": 438
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-07-29.json",
+    "rows_with_names": 1664
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-01.json",
+    "rows_with_names": 1675
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-05.json",
+    "rows_with_names": 1772
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-15.json",
+    "rows_with_names": 2217
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-22.json",
+    "rows_with_names": 2248
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-25.json",
+    "rows_with_names": 2474
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-26.json",
+    "rows_with_names": 2720
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-27.json",
+    "rows_with_names": 2780
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-28.json",
+    "rows_with_names": 2841
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-08-29.json",
+    "rows_with_names": 2846
+   },
+   {
+    "file": "out\\regular\\aldi-regular-2026-09-01.json",
+    "rows_with_names": 2953
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-05.json",
+    "rows_with_names": 19
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-06.json",
+    "rows_with_names": 24
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-07.json",
+    "rows_with_names": 29
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-08.json",
+    "rows_with_names": 29
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-12.json",
+    "rows_with_names": 145
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-14.json",
+    "rows_with_names": 187
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-15.json",
+    "rows_with_names": 508
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-18.json",
+    "rows_with_names": 577
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-24.json",
+    "rows_with_names": 6491
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-25.json",
+    "rows_with_names": 6705
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-26.json",
+    "rows_with_names": 6728
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-27.json",
+    "rows_with_names": 6938
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-28.json",
+    "rows_with_names": 6857
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-29.json",
+    "rows_with_names": 6960
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-30.json",
+    "rows_with_names": 6936
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-07-31.json",
+    "rows_with_names": 6928
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-01.json",
+    "rows_with_names": 6947
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-02.json",
+    "rows_with_names": 6945
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-03.json",
+    "rows_with_names": 6937
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-04.json",
+    "rows_with_names": 6949
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-05.json",
+    "rows_with_names": 6929
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-06.json",
+    "rows_with_names": 6934
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-07.json",
+    "rows_with_names": 6944
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-08.json",
+    "rows_with_names": 6950
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-09.json",
+    "rows_with_names": 6961
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-10.json",
+    "rows_with_names": 6948
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-11.json",
+    "rows_with_names": 6946
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-12.json",
+    "rows_with_names": 6963
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-13.json",
+    "rows_with_names": 7012
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-14.json",
+    "rows_with_names": 7269
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-15.json",
+    "rows_with_names": 7266
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-16.json",
+    "rows_with_names": 7286
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-17.json",
+    "rows_with_names": 7295
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-18.json",
+    "rows_with_names": 7286
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-19.json",
+    "rows_with_names": 7281
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-20.json",
+    "rows_with_names": 7313
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-21.json",
+    "rows_with_names": 7279
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-22.json",
+    "rows_with_names": 7289
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-23.json",
+    "rows_with_names": 7291
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-24.json",
+    "rows_with_names": 7291
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-25.json",
+    "rows_with_names": 7291
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-26.json",
+    "rows_with_names": 7296
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-27.json",
+    "rows_with_names": 7287
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-28.json",
+    "rows_with_names": 7292
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-29.json",
+    "rows_with_names": 7292
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-30.json",
+    "rows_with_names": 7292
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-08-31.json",
+    "rows_with_names": 7292
+   },
+   {
+    "file": "out\\regular\\bakers-regular-2026-09-01.json",
+    "rows_with_names": 7293
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-05.json",
+    "rows_with_names": 321
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-06.json",
+    "rows_with_names": 325
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-08.json",
+    "rows_with_names": 235
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-09.json",
+    "rows_with_names": 373
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-10.json",
+    "rows_with_names": 377
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-11.json",
+    "rows_with_names": 471
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-12.json",
+    "rows_with_names": 533
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-13.json",
+    "rows_with_names": 590
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-14.json",
+    "rows_with_names": 1019
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-15.json",
+    "rows_with_names": 1670
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-16.json",
+    "rows_with_names": 1820
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-18.json",
+    "rows_with_names": 1937
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-25.json",
+    "rows_with_names": 1983
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-26.json",
+    "rows_with_names": 2011
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-30.json",
+    "rows_with_names": 3787
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-07-31.json",
+    "rows_with_names": 4331
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-01.json",
+    "rows_with_names": 4706
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-02.json",
+    "rows_with_names": 4691
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-03.json",
+    "rows_with_names": 4720
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-04.json",
+    "rows_with_names": 4756
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-05.json",
+    "rows_with_names": 4807
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-06.json",
+    "rows_with_names": 4848
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-07.json",
+    "rows_with_names": 4861
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-08.json",
+    "rows_with_names": 4869
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-09.json",
+    "rows_with_names": 4879
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-10.json",
+    "rows_with_names": 4894
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-11.json",
+    "rows_with_names": 4919
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-12.json",
+    "rows_with_names": 4945
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-13.json",
+    "rows_with_names": 5021
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-14.json",
+    "rows_with_names": 5091
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-15.json",
+    "rows_with_names": 5124
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-16.json",
+    "rows_with_names": 5144
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-17.json",
+    "rows_with_names": 5167
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-18.json",
+    "rows_with_names": 5175
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-19.json",
+    "rows_with_names": 5221
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-20.json",
+    "rows_with_names": 5222
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-21.json",
+    "rows_with_names": 5222
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-22.json",
+    "rows_with_names": 5224
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-23.json",
+    "rows_with_names": 5231
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-24.json",
+    "rows_with_names": 5236
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-25.json",
+    "rows_with_names": 5238
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-26.json",
+    "rows_with_names": 5242
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-27.json",
+    "rows_with_names": 5243
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-28.json",
+    "rows_with_names": 5243
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-29.json",
+    "rows_with_names": 5250
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-30.json",
+    "rows_with_names": 5258
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-08-31.json",
+    "rows_with_names": 5258
+   },
+   {
+    "file": "out\\regular\\family-fare-regular-2026-09-01.json",
+    "rows_with_names": 5258
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-12.json",
+    "rows_with_names": 100
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-13.json",
+    "rows_with_names": 299
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-14.json",
+    "rows_with_names": 326
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-15.json",
+    "rows_with_names": 382
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-18.json",
+    "rows_with_names": 419
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-23.json",
+    "rows_with_names": 677
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-27.json",
+    "rows_with_names": 743
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-07-31.json",
+    "rows_with_names": 554
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-01.json",
+    "rows_with_names": 576
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-03.json",
+    "rows_with_names": 611
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-05.json",
+    "rows_with_names": 625
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-09.json",
+    "rows_with_names": 615
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-11.json",
+    "rows_with_names": 617
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-15.json",
+    "rows_with_names": 590
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-20.json",
+    "rows_with_names": 902
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-21.json",
+    "rows_with_names": 908
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-22.json",
+    "rows_with_names": 912
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-23.json",
+    "rows_with_names": 732
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-24.json",
+    "rows_with_names": 746
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-25.json",
+    "rows_with_names": 749
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-26.json",
+    "rows_with_names": 750
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-27.json",
+    "rows_with_names": 751
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-28.json",
+    "rows_with_names": 757
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-29.json",
+    "rows_with_names": 758
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-30.json",
+    "rows_with_names": 758
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-08-31.json",
+    "rows_with_names": 771
+   },
+   {
+    "file": "out\\regular\\fareway-regular-2026-09-01.json",
+    "rows_with_names": 794
+   },
+   {
+    "file": "out\\regular\\hunter-aldi-regular-2026-08-16.json",
+    "rows_with_names": 8
+   },
+   {
+    "file": "out\\regular\\hunter-bakers-regular-2026-08-16.json",
+    "rows_with_names": 25
+   },
+   {
+    "file": "out\\regular\\hunter-familyfare-regular-2026-08-16.json",
+    "rows_with_names": 10
+   },
+   {
+    "file": "out\\regular\\hunter-fareway-regular-2026-08-16.json",
+    "rows_with_names": 10
+   },
+   {
+    "file": "out\\regular\\hunter-hyvee-regular-2026-08-16.json",
+    "rows_with_names": 14
+   },
+   {
+    "file": "out\\regular\\hunter-samsclub-regular-2026-08-16.json",
+    "rows_with_names": 7
+   },
+   {
+    "file": "out\\regular\\hunter-walmart-regular-2026-08-16.json",
+    "rows_with_names": 9
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-05.json",
+    "rows_with_names": 15
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-06.json",
+    "rows_with_names": 23
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-08.json",
+    "rows_with_names": 29
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-12.json",
+    "rows_with_names": 306
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-14.json",
+    "rows_with_names": 448
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-15.json",
+    "rows_with_names": 1127
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-16.json",
+    "rows_with_names": 1128
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-17.json",
+    "rows_with_names": 1128
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-18.json",
+    "rows_with_names": 1367
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-19.json",
+    "rows_with_names": 1367
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-20.json",
+    "rows_with_names": 1367
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-21.json",
+    "rows_with_names": 1367
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-22.json",
+    "rows_with_names": 1367
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-23.json",
+    "rows_with_names": 1367
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-24.json",
+    "rows_with_names": 1367
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-25.json",
+    "rows_with_names": 1446
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-26.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-27.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-28.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-29.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-30.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-07-31.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-01.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-02.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-03.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-04.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-05.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-07.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-08.json",
+    "rows_with_names": 1538
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-09.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-10.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-11.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-12.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-13.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-14.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-15.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-17.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-18.json",
+    "rows_with_names": 1552
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-21.json",
+    "rows_with_names": 1554
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-22.json",
+    "rows_with_names": 1554
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-23.json",
+    "rows_with_names": 1554
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-24.json",
+    "rows_with_names": 1550
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-25.json",
+    "rows_with_names": 1550
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-26.json",
+    "rows_with_names": 1550
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-27.json",
+    "rows_with_names": 1550
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-28.json",
+    "rows_with_names": 1550
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-29.json",
+    "rows_with_names": 1551
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-30.json",
+    "rows_with_names": 1551
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-08-31.json",
+    "rows_with_names": 1549
+   },
+   {
+    "file": "out\\regular\\hyvee-regular-2026-09-01.json",
+    "rows_with_names": 1549
+   },
+   {
+    "file": "out\\regular\\sams-regular-2026-07-14.json",
+    "rows_with_names": 60
+   },
+   {
+    "file": "out\\regular\\sams-regular-2026-08-01.json",
+    "rows_with_names": 60
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-05.json",
+    "rows_with_names": 27
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-06.json",
+    "rows_with_names": 30
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-08.json",
+    "rows_with_names": 29
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-12.json",
+    "rows_with_names": 301
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-14.json",
+    "rows_with_names": 337
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-15.json",
+    "rows_with_names": 711
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-18.json",
+    "rows_with_names": 886
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-23.json",
+    "rows_with_names": 1328
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-25.json",
+    "rows_with_names": 1351
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-29.json",
+    "rows_with_names": 2784
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-30.json",
+    "rows_with_names": 4244
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-07-31.json",
+    "rows_with_names": 4863
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-01.json",
+    "rows_with_names": 4881
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-05.json",
+    "rows_with_names": 1209
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-06.json",
+    "rows_with_names": 11092
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-11.json",
+    "rows_with_names": 11256
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-22.json",
+    "rows_with_names": 136
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-25.json",
+    "rows_with_names": 193
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-26.json",
+    "rows_with_names": 219
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-29.json",
+    "rows_with_names": 234
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-30.json",
+    "rows_with_names": 525
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-08-31.json",
+    "rows_with_names": 11694
+   },
+   {
+    "file": "out\\regular\\walmart-regular-2026-09-01.json",
+    "rows_with_names": 275
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-05.json",
+    "rows_with_names": 19
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-06.json",
+    "rows_with_names": 30
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-08.json",
+    "rows_with_names": 263
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-15.json",
+    "rows_with_names": 428
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-17.json",
+    "rows_with_names": 1296
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-18.json",
+    "rows_with_names": 27
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-23.json",
+    "rows_with_names": 173
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-07-29.json",
+    "rows_with_names": 2475
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-01.json",
+    "rows_with_names": 40
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-05.json",
+    "rows_with_names": 1808
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-15.json",
+    "rows_with_names": 2999
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-22.json",
+    "rows_with_names": 122
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-23.json",
+    "rows_with_names": 120
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-24.json",
+    "rows_with_names": 120
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-25.json",
+    "rows_with_names": 122
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-26.json",
+    "rows_with_names": 109
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-27.json",
+    "rows_with_names": 135
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-28.json",
+    "rows_with_names": 133
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-29.json",
+    "rows_with_names": 130
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-30.json",
+    "rows_with_names": 138
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-08-31.json",
+    "rows_with_names": 118
+   },
+   {
+    "file": "out\\sams\\sams-deals-2026-09-01.json",
+    "rows_with_names": 141
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-07-17.json",
+    "rows_with_names": 111
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-07-18.json",
+    "rows_with_names": 0
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-07-29.json",
+    "rows_with_names": 625
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-01.json",
+    "rows_with_names": 74
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-05.json",
+    "rows_with_names": 255
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-15.json",
+    "rows_with_names": 669
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-22.json",
+    "rows_with_names": 32
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-23.json",
+    "rows_with_names": 31
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-24.json",
+    "rows_with_names": 7
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-25.json",
+    "rows_with_names": 18
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-26.json",
+    "rows_with_names": 4
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-27.json",
+    "rows_with_names": 7
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-28.json",
+    "rows_with_names": 6
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-29.json",
+    "rows_with_names": 15
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-30.json",
+    "rows_with_names": 9
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-08-31.json",
+    "rows_with_names": 8
+   },
+   {
+    "file": "out\\sams\\sams-rejects-2026-09-01.json",
+    "rows_with_names": 3
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-07-05.json",
+    "rows_with_names": 14
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-07-08.json",
+    "rows_with_names": 14
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-07-15.json",
+    "rows_with_names": 89
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-07-23.json",
+    "rows_with_names": 47
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-07-29.json",
+    "rows_with_names": 29
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-08-05.json",
+    "rows_with_names": 39
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-08-20.json",
+    "rows_with_names": 60
+   },
+   {
+    "file": "out\\bakers\\bakers-deals-2026-08-26.json",
+    "rows_with_names": 108
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-07-12.json",
+    "rows_with_names": 3
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-07-23.json",
+    "rows_with_names": 7
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-07-27.json",
+    "rows_with_names": 11
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-08-03.json",
+    "rows_with_names": 31
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-08-10.json",
+    "rows_with_names": 183
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-08-20.json",
+    "rows_with_names": 32
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-08-25.json",
+    "rows_with_names": 218
+   },
+   {
+    "file": "out\\fareway\\fareway-deals-2026-08-30.json",
+    "rows_with_names": 244
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-07-15.json",
+    "rows_with_names": 89
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-07-23.json",
+    "rows_with_names": 408
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-07-27.json",
+    "rows_with_names": 450
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-07-31.json",
+    "rows_with_names": 448
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-01.json",
+    "rows_with_names": 211
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-03.json",
+    "rows_with_names": 449
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-05.json",
+    "rows_with_names": 452
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-09.json",
+    "rows_with_names": 454
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-11.json",
+    "rows_with_names": 261
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-15.json",
+    "rows_with_names": 143
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-20.json",
+    "rows_with_names": 23
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-21.json",
+    "rows_with_names": 99
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-22.json",
+    "rows_with_names": 7
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-23.json",
+    "rows_with_names": 45
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-24.json",
+    "rows_with_names": 7
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-25.json",
+    "rows_with_names": 7
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-26.json",
+    "rows_with_names": 4
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-27.json",
+    "rows_with_names": 12
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-28.json",
+    "rows_with_names": 6
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-29.json",
+    "rows_with_names": 6
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-30.json",
+    "rows_with_names": 41
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-08-31.json",
+    "rows_with_names": 45
+   },
+   {
+    "file": "out\\fareway\\fareway-shop-2026-09-01.json",
+    "rows_with_names": 8
+   },
+   {
+    "file": "out\\fareway\\recapture-terms.json",
+    "rows_with_names": 0
+   },
+   {
+    "file": "out\\fareway\\reprice-chips.json",
+    "rows_with_names": 0
+   },
+   {
+    "file": "out/comparison-2026-08-31.json",
+    "rows_with_names": 3135
+   }
+  ],
+  "files_skipped": [
+   {
+    "file": "out\\sams\\sams-rejects-2026-07-23.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\bakers\\ad-window.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\bakers\\meta.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-07-12.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-07-15.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-07-23.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-07-27.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-07-29.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-03.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-05.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-09.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-14.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-20.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-21.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-23.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-24.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-25.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-08-30.json",
+    "why": "no deals array"
+   },
+   {
+    "file": "out\\fareway\\fareway-ad-manifest-2026-09-01.json",
+    "why": "no deals array"
+   }
+  ],
+  "note": "one corpus: every json under out-regular, out-sams, out-bakers, out-fareway holding a deals array, plus the pinned comparison. Same file list for every section of this artifact."
+ },
+ "proposed_edits": {
+  "jalapenos": {
+   "exclude": [
+    "\\bcans?\\b",
+    "escabeche"
+   ]
+  },
+  "broccoli": {
+   "exclude": [
+    "great\\s+value\\s+broccoli\\s+florets",
+    "stir[\\s-]*fry"
+   ]
+  },
+  "frozen-broccoli": {
+   "include": [
+    "great\\s+value\\s+broccoli\\s+florets"
+   ]
+  },
+  "coleslaw-mix": {
+   "include": [
+    "\\bcole\\s+slaw\\b"
+   ],
+   "exclude": [
+    "homestyle",
+    "\\btub\\b"
+   ]
+  },
+  "cooked-jasmine-rice": {
+   "include": [
+    "\\bready[-\\s]+to[-\\s]+eat\\b.{0,40}\\bjasmine\\s+rice\\b",
+    "\\bready\\s+rice\\s+jasmine\\b"
+   ]
+  },
+  "rice": {
+   "exclude": [
+    "\\bready[-\\s]+to[-\\s]+eat\\b"
+   ]
+  },
+  "coconut-oil": {
+   "include": [
+    "coconut\\s+cooking\\s+oil"
+   ]
+  },
+  "cherry-tomatoes": {
+   "include": [
+    "\\bgrape\\s+tomato\\b"
+   ],
+   "exclude": [
+    "\\bplants?\\b"
+   ]
+  }
+ },
+ "positive_control": {
+  "name": "Great Value Broccoli Florets, 14 oz",
+  "expected": "frozen-broccoli",
+  "observed": "frozen-broccoli",
+  "before": "broccoli",
+  "note": "must move broccoli to frozen-broccoli; a zero-change run is invalid"
+ },
+ "secondary_control": {
+  "name": "(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can",
+  "expected_before": "jalapenos",
+  "before": "jalapenos",
+  "after": null
+ },
+ "routing_changes": [
+  {
+   "name": "(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can",
+   "before": "jalapenos",
+   "before_index": 131,
+   "after": null,
+   "after_index": null,
+   "seen_in": [
+    "comparison-2026-08-31.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Armour Jalapeno Vienna Sausage, 6g Protein Per Serving, 4.6 oz Can",
+   "before": "jalapenos",
+   "before_index": 131,
+   "after": "vienna-sausage",
+   "after_index": 546,
+   "seen_in": [
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Armour Vienna Sausage, Jalapeno, 5 oz Can",
+   "before": "jalapenos",
+   "before_index": 131,
+   "after": "vienna-sausage",
+   "after_index": 546,
+   "seen_in": [
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Ben's Original Ready Rice Jasmine Family Size Rice, Easy Dinner Side, 17.3 oz Pouch",
+   "before": null,
+   "before_index": null,
+   "after": "cooked-jasmine-rice",
+   "after_index": 587,
+   "seen_in": [
+    "walmart-regular-2026-07-29.json",
+    "walmart-regular-2026-07-30.json",
+    "walmart-regular-2026-07-31.json",
+    "walmart-regular-2026-08-01.json",
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Ben's Original Ready Rice Jasmine Rice, Easy Dinner Side, 8.5 Ounce Pouch",
+   "before": null,
+   "before_index": null,
+   "after": "cooked-jasmine-rice",
+   "after_index": 587,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Carrington Farms Coconut Cooking Oil, 16.0 FL OZ",
+   "before": null,
+   "before_index": null,
+   "after": "coconut-oil",
+   "after_index": 191,
+   "seen_in": [
+    "walmart-regular-2026-08-06.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Carrington Farms Liquid Coconut Cooking Oil, 40 oz.",
+   "before": null,
+   "before_index": null,
+   "after": "coconut-oil",
+   "after_index": 191,
+   "seen_in": [
+    "sams-deals-2026-07-15.json",
+    "sams-deals-2026-07-17.json",
+    "sams-deals-2026-07-23.json",
+    "sams-deals-2026-07-29.json",
+    "sams-deals-2026-08-05.json",
+    "sams-deals-2026-08-15.json"
+   ]
+  },
+  {
+   "name": "Carrington Farms Organic Coconut Cooking Oil, 32 Floz",
+   "before": null,
+   "before_index": null,
+   "after": "coconut-oil",
+   "after_index": 191,
+   "seen_in": [
+    "walmart-regular-2026-08-06.json",
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "EMBASA Whole Jalapenos in Escabeche, Shelf Stable, Kosher, 26 oz Steel Can",
+   "before": "jalapenos",
+   "before_index": 131,
+   "after": null,
+   "after_index": null,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json"
+   ]
+  },
+  {
+   "name": "Fresh Grape Tomato, 10 oz Package",
+   "before": null,
+   "before_index": null,
+   "after": "cherry-tomatoes",
+   "after_index": 466,
+   "seen_in": [
+    "walmart-regular-2026-07-23.json",
+    "walmart-regular-2026-07-25.json",
+    "walmart-regular-2026-08-06.json",
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json",
+    "walmart-regular-2026-09-01.json"
+   ]
+  },
+  {
+   "name": "Great Value Broccoli Florets, 14 oz",
+   "before": "broccoli",
+   "before_index": 50,
+   "after": "frozen-broccoli",
+   "after_index": 260,
+   "seen_in": [
+    "comparison-2026-08-31.json",
+    "walmart-regular-2026-07-29.json",
+    "walmart-regular-2026-07-30.json",
+    "walmart-regular-2026-07-31.json",
+    "walmart-regular-2026-08-01.json",
+    "walmart-regular-2026-08-06.json"
+   ]
+  },
+  {
+   "name": "Great Value: Broccoli Stir-Fry, 16 oz",
+   "before": "broccoli",
+   "before_index": 50,
+   "after": null,
+   "after_index": null,
+   "seen_in": [
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Kikkoman Broccoli & Beef Stir-Fry Seasoning Mix, 1 oz Packet",
+   "before": "broccoli",
+   "before_index": 50,
+   "after": null,
+   "after_index": null,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json"
+   ]
+  },
+  {
+   "name": "Mahatma Ready-to-Eat Cilantro Limon Jasmine Rice, Microwaveable Rice, Gluten Free, 8.8 oz Pouch",
+   "before": null,
+   "before_index": null,
+   "after": "cooked-jasmine-rice",
+   "after_index": 587,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Mahatma Ready-to-Eat White Jasmine Rice, Microwavable Rice, 8.8 oz Pouch",
+   "before": null,
+   "before_index": null,
+   "after": "cooked-jasmine-rice",
+   "after_index": 587,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Marketside Angel Hair Cole Slaw, 10 oz Bag (Fresh)",
+   "before": null,
+   "before_index": null,
+   "after": "coleslaw-mix",
+   "after_index": 507,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)",
+   "before": null,
+   "before_index": null,
+   "after": "coleslaw-mix",
+   "after_index": 507,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Minute Ready-to-Eat Cilantro and Lime Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+   "before": "rice",
+   "before_index": 63,
+   "after": "cooked-jasmine-rice",
+   "after_index": 587,
+   "seen_in": [
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+   "before": "rice",
+   "before_index": 63,
+   "after": "cooked-jasmine-rice",
+   "after_index": 587,
+   "seen_in": [
+    "walmart-regular-2026-08-05.json",
+    "walmart-regular-2026-08-06.json",
+    "walmart-regular-2026-08-11.json",
+    "walmart-regular-2026-08-31.json"
+   ]
+  },
+  {
+   "name": "Minute Ready-to-Eat Restaurant-Style Sticky Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+   "before": "rice",
+   "before_index": 63,
+   "after": null,
+   "after_index": null,
+   "seen_in": [
+    "walmart-regular-2026-08-06.json"
+   ]
+  },
+  {
+   "name": "Uncle Ben's Ready Rice Jasmine Rice, 8.5 oz Side Item",
+   "before": null,
+   "before_index": null,
+   "after": "cooked-jasmine-rice",
+   "after_index": 587,
+   "seen_in": [
+    "walmart-regular-2026-08-31.json"
+   ]
+  }
+ ],
+ "diagnosis_base_routing": [
+  {
+   "name": "73% Lean / 27% Fat Ground Beef, 10 lb Roll, Fresh, All Natural*",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [],
+   "in_corpus": true
+  },
+  {
+   "name": "Farmer John Steakhouse Fresh Seasoned Pork Tenderloin, 1.0  1.9 lb, 20 Grams of Protein per 4 oz Serving",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "pork-tenderloin",
+     "index": 139,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "chicken-breast",
+     "index": 0,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "pork-tenderloin",
+     "index": 139,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Great Value 100 Count Fresh Seal Double Zipper Rectangle Snack Bags",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [],
+   "in_corpus": true
+  },
+  {
+   "name": "85% Lean / 15% Fat Ground Beef, 1 lb Roll, Fresh, All Natural*",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [],
+   "in_corpus": true
+  },
+  {
+   "name": "80% Lean / 20% Fat Ground Beef and Pork Blend, 1 lb Roll, Fresh",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "ground-beef-8020",
+     "index": 2,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Vendange Chardonnay White Wine 1.5 L",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "white-wine",
+     "index": 539,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "deli-ham",
+     "index": 37,
+     "excluded": true
+    },
+    {
+     "id": "sugar",
+     "index": 70,
+     "excluded": true
+    },
+    {
+     "id": "brown-sugar",
+     "index": 72,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Carrington Farms Organic Coconut Cooking Oil, 32 Floz",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": "coconut-oil",
+   "include_hits": [
+    {
+     "id": "coconut",
+     "index": 479,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal & Tear to Open for Food Storage, Sous Vide, and Meal Prep",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "storage-bags",
+     "index": 107,
+     "excluded": true
+    },
+    {
+     "id": "quart-storage-bags",
+     "index": 108,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Fresh Grape Tomato, 10 oz Package",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": "cherry-tomatoes",
+   "include_hits": [
+    {
+     "id": "grapes",
+     "index": 25,
+     "excluded": true
+    },
+    {
+     "id": "tomatoes",
+     "index": 47,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Thai Kitchen Gluten Free Gluten Free Unsweetened Coconut Cream, 13.66 fl oz Can",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "coconut",
+     "index": 479,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Del Monte\u00ae Cajun Style Diced Potatoes, 14.5 oz. Can",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [],
+   "in_corpus": true
+  },
+  {
+   "name": "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "chicken-breast",
+     "index": 0,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Carrington Farms Coconut Cooking Oil, 16.0 FL OZ",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": "coconut-oil",
+   "include_hits": [
+    {
+     "id": "coconut",
+     "index": 479,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": null,
+   "include_hits": [
+    {
+     "id": "chicken-breast",
+     "index": 0,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Great Value Soft & Smooth Ultra Dish Liquid, Pomegranate, 28 fl oz",
+   "base_route": "dish-soap",
+   "base_index": 103,
+   "mod_route": "dish-soap",
+   "include_hits": [
+    {
+     "id": "dish-soap",
+     "index": 103,
+     "excluded": false
+    },
+    {
+     "id": "pomegranates",
+     "index": 475,
+     "excluded": false
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "eos Shea Better Women's Shave Cream - Pomegranate Raspberry   7 fl oz",
+   "base_route": "shaving-cream",
+   "base_index": 301,
+   "mod_route": "shaving-cream",
+   "include_hits": [
+    {
+     "id": "raspberries",
+     "index": 118,
+     "excluded": true
+    },
+    {
+     "id": "shaving-cream",
+     "index": 301,
+     "excluded": false
+    },
+    {
+     "id": "pomegranates",
+     "index": 475,
+     "excluded": false
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "eos Shea Better Travel Shave Cream - Pomegranate Raspberry   2.5oz",
+   "base_route": "shaving-cream",
+   "base_index": 301,
+   "mod_route": "shaving-cream",
+   "include_hits": [
+    {
+     "id": "raspberries",
+     "index": 118,
+     "excluded": true
+    },
+    {
+     "id": "shaving-cream",
+     "index": 301,
+     "excluded": false
+    },
+    {
+     "id": "pomegranates",
+     "index": 475,
+     "excluded": false
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "(3 pack) eos Shea Better Travel Shave Cream - Pomegranate Raspberry   2.5oz",
+   "base_route": "shaving-cream",
+   "base_index": 301,
+   "mod_route": "shaving-cream",
+   "include_hits": [
+    {
+     "id": "raspberries",
+     "index": 118,
+     "excluded": true
+    },
+    {
+     "id": "shaving-cream",
+     "index": 301,
+     "excluded": false
+    },
+    {
+     "id": "pomegranates",
+     "index": 475,
+     "excluded": false
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": "coleslaw-mix",
+   "include_hits": [],
+   "in_corpus": true
+  },
+  {
+   "name": "Mahatma Ready-to-Eat Cilantro Limon Jasmine Rice, Microwaveable Rice, Gluten Free, 8.8 oz Pouch",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": "cooked-jasmine-rice",
+   "include_hits": [
+    {
+     "id": "rice",
+     "index": 63,
+     "excluded": true
+    },
+    {
+     "id": "cilantro",
+     "index": 132,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+   "base_route": "rice",
+   "base_index": 63,
+   "mod_route": "cooked-jasmine-rice",
+   "include_hits": [
+    {
+     "id": "rice",
+     "index": 63,
+     "excluded": false
+    },
+    {
+     "id": "cooked-jasmine-rice",
+     "index": 587,
+     "excluded": false
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Minute Ready-to-Eat Cilantro and Lime Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+   "base_route": "rice",
+   "base_index": 63,
+   "mod_route": "cooked-jasmine-rice",
+   "include_hits": [
+    {
+     "id": "limes",
+     "index": 46,
+     "excluded": true
+    },
+    {
+     "id": "rice",
+     "index": 63,
+     "excluded": false
+    },
+    {
+     "id": "cilantro",
+     "index": 132,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Ben's Original Ready Rice Jasmine Rice, Easy Dinner Side, 8.5 Ounce Pouch",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": "cooked-jasmine-rice",
+   "include_hits": [
+    {
+     "id": "rice",
+     "index": 63,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  },
+  {
+   "name": "Mahatma Ready-to-Eat White Jasmine Rice, Microwavable Rice, 8.8 oz Pouch",
+   "base_route": null,
+   "base_index": null,
+   "mod_route": "cooked-jasmine-rice",
+   "include_hits": [
+    {
+     "id": "rice",
+     "index": 63,
+     "excluded": true
+    }
+   ],
+   "in_corpus": true
+  }
+ ],
+ "cell_effect_candidates": {
+  "rice": [
+   {
+    "file": "walmart-regular-2026-09-01.json",
+    "name": "(2 pack) Kikkoman Gluten-Free Sweet Soy Sauce for Rice, 10 oz Glass Bottle",
+    "ad_price": "$7.48",
+    "size": "20 fl oz",
+    "engine_check": "0.374/floz [size 20 floz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Green Giant Simply Steam Cheesy Rice & Broccoli, 10 oz Bag (Frozen Vegetables)",
+    "ad_price": "$1.94",
+    "size": "10 oz",
+    "engine_check": "0.194/oz [size 10 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Golden Star Prime Grade Thai Hom Mali Jasmine Rice, 2 lb",
+    "ad_price": "$3.97",
+    "size": "32 oz",
+    "engine_check": "0.1241/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Golden Star Thai Hom Mali Jasmine Rice, 5 lbs",
+    "ad_price": "$7.97",
+    "size": "80 oz",
+    "engine_check": "0.0996/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Success Boil-in-Bag Rice, Aromatic Jasmine Rice, Gluten Free, 14 oz Bags, 4 Count",
+    "ad_price": "$2.48",
+    "size": "14 oz",
+    "engine_check": "0.1771/oz [size 14 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Jasmine Rice, Thai Fragrant Long Grain Rice, Gluten Free, 80 oz Bag (5 lbs)",
+    "ad_price": "$6.88",
+    "size": "80 oz",
+    "engine_check": "0.086/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Jasmine Rice, 2 lb",
+    "ad_price": "$3.57",
+    "size": "32 oz",
+    "engine_check": "0.1116/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Jasmine Rice, Thai Fragrant Long Grain Rice, Gluten Free, 32 oz Bag (2 lbs)",
+    "ad_price": "$3.22",
+    "size": "32 oz",
+    "engine_check": "0.1006/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Golden Star Thai Hom Mali Jasmine Rice, 20 lbs",
+    "ad_price": "$25.86",
+    "size": "320 oz",
+    "engine_check": "0.0808/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Jasmine Rice, 5 lb",
+    "ad_price": "$7.23",
+    "size": "80 oz",
+    "engine_check": "0.0904/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Golden Star Thai Hom Mali Jasmine Rice, 10 lbs",
+    "ad_price": "$16.14",
+    "size": "160 oz",
+    "engine_check": "0.1009/oz [size 160 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Jasmine Rice, 20 lb",
+    "ad_price": "$24.00",
+    "size": "320 oz",
+    "engine_check": "0.075/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Carolina Jasmine Rice, Thai Fragrant Long Grain Rice, Gluten Free, 5 lb Bag",
+    "ad_price": "$6.20",
+    "size": "80 oz",
+    "engine_check": "0.0775/oz [size 80 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Imperial Dragon Jasmine Rice, 20 lbs, Non-GMO",
+    "ad_price": "$24.00",
+    "size": "320 oz",
+    "engine_check": "0.075/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Instant Jasmine Rice, 12 oz",
+    "ad_price": "$1.98",
+    "size": "12 oz",
+    "engine_check": "0.165/oz [size 12 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Imperial Dragon Thai Hom Mali Jasmine Rice, 5 lb, non-GMO",
+    "ad_price": "$8.82",
+    "size": "80 oz",
+    "engine_check": "0.1102/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Minute Instant Jasmine Rice, Fragrant and Fluffy, 12 oz",
+    "ad_price": "$2.48",
+    "size": "12 oz",
+    "engine_check": "0.2067/oz [size 12 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Jasmine White Rice, Thai Fragrant Long Grain Rice, 20 lb Bag",
+    "ad_price": "$22.97",
+    "size": "320 oz",
+    "engine_check": "0.0718/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Lundberg Family Farms Organic Jasmine White Rice, 7 Lbs",
+    "ad_price": "$142.74",
+    "size": "7 lb",
+    "engine_check": "20.3914/lb [size 7 lb]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Food Service Direct"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "GOYA Thai Jasmine Rice, 5 lb Bag, Fat-Free, Low Sodium, Gluten Free",
+    "ad_price": "$11.48",
+    "size": "80 oz",
+    "engine_check": "0.1435/oz [size 80 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "MG Jasmine Rice, 5 lb Bag",
+    "ad_price": "$12.52",
+    "size": "80 oz",
+    "engine_check": "0.1565/oz [size 80 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Tamara Warehouse Co."
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Lundberg Family Farms White Jasmine Rice 32oz",
+    "ad_price": "$18.73",
+    "size": "32 oz",
+    "engine_check": "0.5853/oz [size 32 oz]",
+    "fulfillment": "FC",
+    "seller": "KoFe"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Carolina Jasmine Rice, Thai Fragrant Long Grain Rice, Gluten Free, 20 lb Bag",
+    "ad_price": "$22.97",
+    "size": "320 oz",
+    "engine_check": "0.0718/oz [size 320 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "MG Jasmine Rice, 10 lb Bag",
+    "ad_price": "$29.50",
+    "size": "160 oz",
+    "engine_check": "0.1844/oz [size 160 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "CBB CONVENIENCE STORE"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Madame Gougousse Jasmine Rice 20 Pound Bag, Gluten Free",
+    "ad_price": "$39.99",
+    "size": "320 oz",
+    "engine_check": "0.125/oz [size 320 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "CBB CONVENIENCE STORE"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "RiceSelect Jasmati Rice, American-Style Jasmine Rice, 2 lb Jar",
+    "ad_price": "$12.10",
+    "size": "32 oz",
+    "engine_check": "0.3781/oz [size 32 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Great Deals and Much More"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Golden Star Prime Grade Thai Hom Mali Sustainable Jasmine Rice (8 Pounds)",
+    "ad_price": "$25.10",
+    "size": "8 lb",
+    "engine_check": "3.1375/lb [size 8 lb]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Lanah"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "RiceSelect Organic Jasmati White Rice, American-Style Jasmine Rice, 2 lb Jar",
+    "ad_price": "$9.99",
+    "size": "32 oz",
+    "engine_check": "0.3122/oz [size 32 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Supreme Rice 20lb Bag of Aromatic Jasmine Rice",
+    "ad_price": "$19.98",
+    "size": "oz",
+    "engine_check": "19.98/oz [size 1 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "GOYA Thai Jasmine Rice, 2 lb Bag, Fat-Free, Low Sodium, Gluten Free",
+    "ad_price": "$10.99",
+    "size": "32 oz",
+    "engine_check": "0.3434/oz [size 32 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "V&S Home Haven"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "GOYA Thai Jasmine Rice, 10 lb Bag, Fat-Free, Low Sodium, Gluten Free",
+    "ad_price": "$29.68",
+    "size": "160 oz",
+    "engine_check": "0.1855/oz [size 160 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Online Grocery Outlet"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "ABC JASMINE RICE 5LB",
+    "ad_price": "$18.99",
+    "size": "each",
+    "engine_check": "18.99/each [per-each]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "PowerGrocery"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Enriched Extra Long Grain White Rice, Gluten-Free, 2 lb Bag",
+    "ad_price": "$2.66",
+    "size": "32 oz",
+    "engine_check": "0.0831/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Enriched White Rice, Extra Long Grain Rice, Gluten Free, 5 lb Bag",
+    "ad_price": "$5.12",
+    "size": "80 oz",
+    "engine_check": "0.064/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Enriched Extra Long Grain White Rice, 20 lb Bag",
+    "ad_price": "$11.98",
+    "size": "320 oz",
+    "engine_check": "0.0374/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Long Grain Enriched Rice, 32 oz",
+    "ad_price": "$1.77",
+    "size": "32 oz",
+    "engine_check": "0.0553/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Long Grain Enriched Rice, 16 oz",
+    "ad_price": "$0.92",
+    "size": "16 oz",
+    "engine_check": "0.0575/oz [size 16 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Long Grain Enriched Rice, 5 lbs",
+    "ad_price": "$3.37",
+    "size": "80 oz",
+    "engine_check": "0.0421/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "BEN'S ORIGINAL Converted Brand Enriched Long Grain White Rice, Parboiled Rice, 2 lb Box",
+    "ad_price": "$4.14",
+    "size": "32 oz",
+    "engine_check": "0.1294/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Long Grain Enriched Rice, 20 lb",
+    "ad_price": "$11.46",
+    "size": "320 oz",
+    "engine_check": "0.0358/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Success Boil-in-Bag Rice, Precooked Long Grain White Rice, Gluten Free, 32 oz Bags, 6 Count",
+    "ad_price": "$4.48",
+    "size": "32 oz",
+    "engine_check": "0.14/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Long Grain White Rice, Gluten Free, 2 lb Bag",
+    "ad_price": "$3.98",
+    "size": "32 oz",
+    "engine_check": "0.1244/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Authentic Royal Naturally Aged Indian White Basmati Rice, Long-Grain, Gluten-free - 20 lb. Bag",
+    "ad_price": "$21.44",
+    "size": "320 oz",
+    "engine_check": "0.067/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Authentic Royal Naturally Aged Indian White Basmati Rice, Long-Grain, Gluten-Free - 2 lbs",
+    "ad_price": "$4.23",
+    "size": "32 oz",
+    "engine_check": "0.1322/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "BEN'S ORIGINAL Original Long Grain White Rice, 12 lb",
+    "ad_price": "$24.00",
+    "size": "each",
+    "engine_check": "24/each [per-each]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "GiGa Mart"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Riceland Enriched Long Grain White Rice 20 lb - Kosher, Grown in USA",
+    "ad_price": "$12.26",
+    "size": "320 oz",
+    "engine_check": "0.0383/oz [size 320 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Riceland Extra Long Grain Enriched Rice, 32 oz",
+    "ad_price": "$1.78",
+    "size": "32 oz",
+    "engine_check": "0.0556/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Parish White Rice \u2013 High-Protein Rice with Low Glycemic Index, Locally Grown Long-Grain White Rice (2lb Bag Bundle)",
+    "ad_price": "$14.49",
+    "size": "32 oz",
+    "engine_check": "0.4528/oz [size 32 oz]",
+    "fulfillment": "FC",
+    "seller": "Peak Express Logistics LLC"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Long Grain Parboiled Enriched Rice, 32 oz",
+    "ad_price": "$1.67",
+    "size": "32 oz",
+    "engine_check": "0.0522/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Enriched Parboiled Long Grain Rice, 80 oz",
+    "ad_price": "$4.00",
+    "size": "80 oz",
+    "engine_check": "0.05/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Lundberg Regenerative Organic Certified Long Grain White Rice, Resealable 2lb Bag",
+    "ad_price": "$11.38",
+    "size": "32 oz",
+    "engine_check": "0.3556/oz [size 32 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "ArgoPrep: The Marketplace"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Authentic Royal Ready-to-Heat Long Grain White Basmati Rice, 8.5 oz",
+    "ad_price": "$1.67",
+    "size": "8.5 oz",
+    "engine_check": "0.1965/oz [size 8.5 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Rico Long Grain Rice, 20 lbs, No Allergens Contained",
+    "ad_price": "$13.48",
+    "size": "320 oz",
+    "engine_check": "0.0421/oz [size 320 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Authentic Royal Naturally Aged Indian White Basmati Rice, Long-Grain, Gluten-free - 5 lbs",
+    "ad_price": "$9.52",
+    "size": "80 oz",
+    "engine_check": "0.119/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "BEN'S ORIGINAL Long Grain White Original Enriched Parboiled Rice, 10 lbs.",
+    "ad_price": "$15.30",
+    "size": "10 lb",
+    "engine_check": "1.53/lb [size 10 lb]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "(3 pack) Doguet's Extra Fancy Enriched Long Grain Rice, 48 oz",
+    "ad_price": "$5.04",
+    "size": "144 oz",
+    "engine_check": "0.035/oz [size 144 oz]",
+    "fulfillment": "",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "RiceSelect Royal Blend Rice, Texmati Rice Blend, 21 oz Jar",
+    "ad_price": "$6.98",
+    "size": "21 oz",
+    "engine_check": "0.3324/oz [size 21 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Supreme Rice White Parboiled Rice 5lb Bag",
+    "ad_price": "$8.25",
+    "size": "80 oz",
+    "engine_check": "0.1031/oz [size 80 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "(4 pack) SEEDS OF CHANGE Organic Quinoa, Brown & Red Rice, 8.5oz",
+    "ad_price": "$10.08",
+    "size": "34 oz",
+    "engine_check": "0.2965/oz [size 34 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "RiceSelect Brown Organic Texmati American-Style Basmati Rice, 32 oz Jar",
+    "ad_price": "$17.24",
+    "size": "32 oz",
+    "engine_check": "0.5387/oz [size 32 oz]",
+    "fulfillment": "FC",
+    "seller": "KoFe"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "XO Baking Co. Gluten Free Small Batch Sweet Corn Muffin Mix; Non-GMO; Kosher; Rice & Peanut Free; No Preservatives, Artificial Flavors or Colors, 9.16oz",
+    "ad_price": "$9.58",
+    "size": "9.16 oz",
+    "engine_check": "1.0459/oz [size 9.16 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "(2 pack) Kikkoman Gluten-Free Sweet Soy Sauce for Rice, 10 oz Glass Bottle",
+    "ad_price": "$7.48",
+    "size": "20 fl oz",
+    "engine_check": "0.374/floz [size 20 floz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "SEEDS OF CHANGE Organic Quinoa, Brown & Red Rice, 8.5oz",
+    "ad_price": "$2.52",
+    "size": "8.5 oz",
+    "engine_check": "0.2965/oz [size 8.5 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Taylor Farms Jalapeno Cheddar Chicken with Rice, Microwave Ready Single Serve Meal, 12 oz, Fresh",
+    "ad_price": "$5.38",
+    "size": "12 oz",
+    "engine_check": "0.4483/oz [size 12 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Iberia Long Grain Parboiled Rice 5 lb",
+    "ad_price": "$6.53",
+    "size": "80 oz",
+    "engine_check": "0.0816/oz [size 80 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "RiceSelect Texmati White Rice, Long Grain Basmati Rice, Gluten-Free, 2 lb Jar",
+    "ad_price": "$5.48",
+    "size": "32 oz",
+    "engine_check": "0.1713/oz [size 32 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Basmati Rice, Fragrant Extra Long Grain, Gluten Free, 5 lb Bag",
+    "ad_price": "$9.22",
+    "size": "80 oz",
+    "engine_check": "0.1152/oz [size 80 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Veetee- Thai Jasmine Rice - 10.6oz Microwave Ready, Natural, No Artificial Ingredients, Gluten-Free",
+    "ad_price": "$2.72",
+    "size": "10.6 oz",
+    "engine_check": "0.2566/oz [size 10.6 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "(2 pack) Mahatma Ready-to-Heat Mexican-Style Jasmine Rice, 8.8 oz Bag",
+    "ad_price": "$3.36",
+    "size": "17.6 oz",
+    "engine_check": "0.1909/oz [size 17.6 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   }
+  ],
+  "cherry-tomatoes": [
+   {
+    "file": "walmart-regular-2026-09-01.json",
+    "name": "Fresh Grape Tomato, 10 oz Package",
+    "ad_price": "$2.27",
+    "size": "10 oz",
+    "engine_check": "0.227/oz [size 10 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Fresh Grape Tomato, 10 oz Package",
+    "ad_price": "$2.27",
+    "size": "10 oz",
+    "engine_check": "0.227/oz [size 10 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mutti Cherry Tomatoes (Ciliegini) 14 oz, Can",
+    "ad_price": "$14.16",
+    "size": "14 oz",
+    "engine_check": "1.0114/oz [size 14 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "WhatAmericaBuys"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "FLORA ITALIAN CHERRY TOMATOES 14oz",
+    "ad_price": "$7.90",
+    "size": "14 oz",
+    "engine_check": "0.5643/oz [size 14 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Flora Foods"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Fresh Organic Grape Tomatoes, 10 oz Package",
+    "ad_price": "$3.27",
+    "size": "16 ct",
+    "engine_check": "0.2044/each [per-16-pack]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   }
+  ],
+  "broccoli": [
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Marketside Broccoli Florets, 12 oz",
+    "ad_price": "$2.54",
+    "size": "12 oz",
+    "engine_check": "0.2117/oz [size 12 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Marketside Broccoli Florets 32oz",
+    "ad_price": "$6.16",
+    "size": "32 oz",
+    "engine_check": "0.1925/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Marketside Fresh Broccoli Florets, 32 oz",
+    "ad_price": "$6.16",
+    "size": "32 oz",
+    "engine_check": "0.1925/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Fresh Whole Green Broccoli Crowns, 1 Each",
+    "ad_price": "$1.72",
+    "size": "0.811 lb",
+    "engine_check": "2.1208/lb [size 0.811 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Sprouting Seed Super Sampler- Organic- 2.5 Lbs of 10 Different Delicious Sprout Seeds: Alfalfa, Mung Bean, Broccoli, Green Lentil, Clover, Buckwheat, Radish, Bean Salad & More",
+    "ad_price": "$67.97",
+    "size": "oz",
+    "engine_check": "67.97/oz [size 1 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "True Leaf Market"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Marketside Organic Fresh Broccoli Florets, 12 oz",
+    "ad_price": "$3.97",
+    "size": "12 oz",
+    "engine_check": "0.3308/oz [size 12 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Green Giant Season Broccoli Intro",
+    "ad_price": "$1.94",
+    "size": "13.566 oz",
+    "engine_check": "0.143/oz [size 13.566 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-30.json",
+    "name": "McCormick Beef Broccoli Seasoning Mix, 1.37 oz Packet",
+    "ad_price": "$1.94",
+    "size": "1.37 oz",
+    "engine_check": "1.4161/oz [size 1.37 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   }
+  ],
+  "frozen-broccoli": [
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Frozen Broccoli Florets Steamable Bag, 12 oz",
+    "ad_price": "$1.16",
+    "size": "12 oz",
+    "engine_check": "0.0967/oz [size 12 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Broccoli Florets, 32 oz Bag (Frozen)",
+    "ad_price": "$2.88",
+    "size": "32 oz",
+    "engine_check": "0.09/oz [size 32 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Organic Frozen Broccoli Florets in Steamable Bag, 10 oz",
+    "ad_price": "$1.97",
+    "size": "10 oz",
+    "engine_check": "0.197/oz [size 10 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Broccoli Cuts, Steamable In Bag, 12 oz (Frozen)",
+    "ad_price": "$0.94",
+    "size": "12 oz",
+    "engine_check": "0.0783/oz [size 12 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Broccoli Florets, 14 oz",
+    "ad_price": "$1.16",
+    "size": "14 oz",
+    "engine_check": "0.0829/oz [size 14 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Frozen Cut Broccoli, 16 oz",
+    "ad_price": "$0.94",
+    "size": "16 oz",
+    "engine_check": "0.0588/oz [size 16 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Cut Broccoli, 26 oz",
+    "ad_price": "$2.28",
+    "size": "26 oz",
+    "engine_check": "0.0877/oz [size 26 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   }
+  ],
+  "cooked-jasmine-rice": [
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Ready-to-Eat Cilantro Limon Jasmine Rice, Microwaveable Rice, Gluten Free, 8.8 oz Pouch",
+    "ad_price": "$1.73",
+    "size": "8.8 oz",
+    "engine_check": "0.1966/oz [size 8.8 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+    "ad_price": "$1.96",
+    "size": "8.8 oz",
+    "engine_check": "0.2227/oz [size 8.8 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Minute Ready-to-Eat Cilantro and Lime Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count",
+    "ad_price": "$1.96",
+    "size": "7 oz",
+    "engine_check": "0.28/oz [size 7 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Ben's Original Ready Rice Jasmine Rice, Easy Dinner Side, 8.5 Ounce Pouch",
+    "ad_price": "$2.24",
+    "size": "8.5 oz",
+    "engine_check": "0.2635/oz [size 8.5 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mahatma Ready-to-Eat White Jasmine Rice, Microwavable Rice, 8.8 oz Pouch",
+    "ad_price": "$1.73",
+    "size": "8.8 oz",
+    "engine_check": "0.1966/oz [size 8.8 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Ben's Original Ready Rice Jasmine Family Size Rice, Easy Dinner Side, 17.3 oz Pouch",
+    "ad_price": "$3.98",
+    "size": "17.3 oz",
+    "engine_check": "0.2301/oz [size 17.3 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Uncle Ben's Ready Rice Jasmine Rice, 8.5 oz Side Item",
+    "ad_price": "$2.99",
+    "size": "8.5 oz",
+    "engine_check": "0.3518/oz [size 8.5 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Eileen Enterprises LLC"
+   }
+  ],
+  "coleslaw-mix": [
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)",
+    "ad_price": "$2.04",
+    "size": "16 oz",
+    "engine_check": "0.1275/oz [size 16 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Marketside Angel Hair Cole Slaw, 10 oz Bag (Fresh)",
+    "ad_price": "$2.00",
+    "size": "10 oz",
+    "engine_check": "0.2/oz [size 10 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   }
+  ],
+  "coconut-oil": [
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Spectrum Naturals Organic Unrefined Virgin Coconut Oil, 14 fl oz",
+    "ad_price": "$10.64",
+    "size": "14 fl oz",
+    "engine_check": "0.76/floz [size 14 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Beneficial Blends BOV MCT Coconut Oil Spray, 7 oz Non-Aerosol Bottle \u2013 100% Coconut-Sourced Oil for Cooking and Kitchen Prep",
+    "ad_price": "$7.28",
+    "size": "4.697 fl oz",
+    "engine_check": "1.5499/floz [size 4.697 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Viva Naturals Organic Extra-Virgin Coconut Oil, 54 fl oz",
+    "ad_price": "$21.99",
+    "size": "54 fl oz",
+    "engine_check": "0.4072/floz [size 54 floz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "LouAna 100% Pure Coconut Oil, 14 fl oz",
+    "ad_price": "$5.18",
+    "size": "14 fl oz",
+    "engine_check": "0.37/floz [size 14 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Organic Unrefined Virgin Coconut Oil, 14 fl oz",
+    "ad_price": "$7.27",
+    "size": "14 fl oz",
+    "engine_check": "0.5193/floz [size 14 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "BetterBody Foods MCT Oil Concentrated MCTs from Organic Coconut Oil, 500ml",
+    "ad_price": "$13.97",
+    "size": "16.907 fl oz",
+    "engine_check": "0.8263/floz [size 16.907 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "BetterBody Foods Organic Refined Coconut Oil, 28.0 fl oz",
+    "ad_price": "$11.97",
+    "size": "28 fl oz",
+    "engine_check": "0.4275/floz [size 28 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Garden of Life Raw Extra Virgin Coconut Oil, 14 fl oz",
+    "ad_price": "$7.55",
+    "size": "oz",
+    "engine_check": "7.55/oz [size 1 oz]",
+    "fulfillment": "FC",
+    "seller": "Pattern"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Nutiva Organic, Steam Refined Coconut Oil from non-GMO, Sustainably Farmed Coconuts, 15 Fluid Ounces",
+    "ad_price": "$6.48",
+    "size": "15 fl oz",
+    "engine_check": "0.432/floz [size 15 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Nutiva Organic, Cold-Pressed, Unrefined, Virgin Coconut Oil from Fresh, non-GMO, Sustainably Farmed Coconuts, 15 Fluid Ounces",
+    "ad_price": "$9.84",
+    "size": "15 fl oz",
+    "engine_check": "0.656/floz [size 15 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Organic Naturally Refined Coconut Oil, 56 fl oz",
+    "ad_price": "$13.63",
+    "size": "56 fl oz",
+    "engine_check": "0.2434/floz [size 56 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Organic Unrefined Virgin Coconut Oil, 29 fl oz",
+    "ad_price": "$12.96",
+    "size": "29 fl oz",
+    "engine_check": "0.4469/floz [size 29 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Carrington Farms Organic Coconut Cooking Oil, 32 Floz",
+    "ad_price": "$19.44",
+    "size": "32 fl oz",
+    "engine_check": "0.6075/floz [size 32 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Spectrum Naturals Organic Refined Coconut Oil, 14 fl oz",
+    "ad_price": "$10.87",
+    "size": "14 fl oz",
+    "engine_check": "0.7764/floz [size 14 floz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "LouAna 100% Pure Liquid Coconut Oil, 16 fl oz",
+    "ad_price": "$11.44",
+    "size": "16 fl oz",
+    "engine_check": "0.715/floz [size 16 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Carrington Farms Coconut Cooking Oil, 16.0 FL OZ",
+    "ad_price": "$20.14",
+    "size": "16 fl oz",
+    "engine_check": "1.2588/floz [size 16 floz]",
+    "fulfillment": "FC",
+    "seller": "The HC Supply"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Vita Coco Coconut Oil, 14 fl oz Glass",
+    "ad_price": "$19.41",
+    "size": "14 fl oz",
+    "engine_check": "1.3864/floz [size 14 floz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "US Trade Ent"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "BetterBody Foods Refined Organic Coconut Oil, 56 fl oz",
+    "ad_price": "$19.97",
+    "size": "56 fl oz",
+    "engine_check": "0.3566/floz [size 56 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Organic Unrefined Virgin Coconut Oil, 54 fl oz",
+    "ad_price": "$22.46",
+    "size": "54 fl oz",
+    "engine_check": "0.4159/floz [size 54 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Viva Naturals Organic Extra-Virgin Coconut Oil, 16 fl oz",
+    "ad_price": "$11.99",
+    "size": "16 fl oz",
+    "engine_check": "0.7494/floz [size 16 floz]",
+    "fulfillment": "FC",
+    "seller": "Viva Naturals Inc"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Spectrum Naturals Organic Unrefined Virgin Coconut Oil, 29 fl oz",
+    "ad_price": "$25.40",
+    "size": "29 fl oz",
+    "engine_check": "0.8759/floz [size 29 floz]",
+    "fulfillment": "FC",
+    "seller": "Medave"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Viva Naturals Organic Extra Virgin Coconut Oil, 32 fl oz (946 ml)",
+    "ad_price": "$14.99",
+    "size": "32 fl oz",
+    "engine_check": "0.4684/floz [size 32 floz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Organic Virgin Coconut Oil",
+    "ad_price": "$38.37",
+    "size": "108.085 fl oz",
+    "engine_check": "0.355/floz [size 108.085 floz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Akechi Inc"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Mountain High Organics Certified Organic Virgin Coconut Oil 1/128oz",
+    "ad_price": "$48.52",
+    "size": "128 fl oz",
+    "engine_check": "0.3791/floz [size 128 floz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   }
+  ],
+  "jalapenos": [
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "McCormick Crushed Jalapeno Pepper, 1.37 oz Bottle",
+    "ad_price": "$3.28",
+    "size": "1.37 oz",
+    "engine_check": "2.3942/oz [size 1.37 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Fresh Jalapenos, Each",
+    "ad_price": "$0.44",
+    "size": "0.25 lb",
+    "engine_check": "1.76/lb [size 0.25 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Jeff'S Natural Jeff'S Natural Jalapeno Peppers Jalapeno, 12 Oz",
+    "ad_price": "$7.69",
+    "size": "12 oz",
+    "engine_check": "0.6408/oz [size 12 oz]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "SANTARA USA"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Jeff'S Natural Jeff'S Natural Jalapeno Peppers Jalapeno, 12 Fl Oz",
+    "ad_price": "$11.38",
+    "size": "12 fl oz",
+    "engine_check": "0.9483/floz [size 12 floz]",
+    "fulfillment": "FC",
+    "seller": "Payless Market LLC"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "bettergoods Jalapeno Alfredo Pasta Sauce, 14.5 oz",
+    "ad_price": "$6.34",
+    "size": "14.5 oz",
+    "engine_check": "0.4372/oz [size 14.5 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Fresh Cravings Jalapeno Cilantro Hummus,10oz. Plastic Tub, Gluten-Free, Dairy-Free, 2 Tbsp (32g), Contains: Sesame",
+    "ad_price": "$3.92",
+    "size": "10 oz",
+    "engine_check": "0.392/oz [size 10 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "LA VICTORIA Fiery Jalape\u00f1o Sauce Hot, Shelf Stable, 9oz Plastic Bottle",
+    "ad_price": "$3.00",
+    "size": "9 oz",
+    "engine_check": "0.3333/oz [size 9 oz]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Famous Dave's Jalapeno Cornbread Mix, 15 oz",
+    "ad_price": "$2.68",
+    "size": "15 oz",
+    "engine_check": "0.1787/oz [size 15 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Melinda's Foods Sriracha Hot Chili Sauce, Fermented Red Jalape\u00f1os & Garlic",
+    "ad_price": "$1.08",
+    "size": "2 fl oz",
+    "engine_check": "0.54/floz [size 2 floz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-30.json",
+    "name": "bettergoods Jalapeno Alfredo Pasta Sauce, 14.5 oz",
+    "ad_price": "$6.34",
+    "size": "14.5 oz",
+    "engine_check": "0.4372/oz [size 14.5 oz]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   }
+  ],
+  "vienna-sausage": [
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Star Vienna Sausage, Original Flavor, 7g Protein Per Serving, 4.6 oz Can (Pack of 6)",
+    "ad_price": "$5.36",
+    "size": "1.729 lb",
+    "engine_check": "3.1001/lb [size 1.729 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Original Vienna Sausage, Original, 12g Protein Per Serving,  4.6 oz Can (Pack of 12)",
+    "ad_price": "$9.68",
+    "size": "3.445 lb",
+    "engine_check": "2.8099/lb [size 3.445 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Original Vienna Sausage, 7g Protein Per Serving, 4.6 oz Can",
+    "ad_price": "$0.98",
+    "size": "0.29 lb",
+    "engine_check": "3.3793/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Burbon Barbecue Vienna Sausage, 7g Protein Per Serving, 4.6 oz Can",
+    "ad_price": "$0.98",
+    "size": "0.29 lb",
+    "engine_check": "3.3793/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Star Vienna Sausage, Hot & Spicy Flavored, 7g Protein Per Serving, Canned Sausage, 4.6 oz Can",
+    "ad_price": "$0.98",
+    "size": "0.29 lb",
+    "engine_check": "3.3793/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Libby's Vienna Sausages, 10g Protein Per Serving, 4.6 oz. Can (Pack of 6)",
+    "ad_price": "$5.74",
+    "size": "1.729 lb",
+    "engine_check": "3.3198/lb [size 1.729 lb]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Star Vienna Sausage, Smoked, 7g Protein Per Serving, Canned Sausage, 4.6 oz. Can",
+    "ad_price": "$0.98",
+    "size": "0.29 lb",
+    "engine_check": "3.3793/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Jalapeno Vienna Sausage, 6g Protein Per Serving, 4.6 oz Can",
+    "ad_price": "$0.98",
+    "size": "0.29 lb",
+    "engine_check": "3.3793/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Chicken Vienna Sausage, 7g Protein Per Serving, 4.6 oz Can (Pack of 6)",
+    "ad_price": "$5.36",
+    "size": "1.729 lb",
+    "engine_check": "3.1001/lb [size 1.729 lb]",
+    "fulfillment": "FC",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Barbecue Vienna Sausage, 7g protein Per Serving,  4.6 oz Can",
+    "ad_price": "$0.98",
+    "size": "0.29 lb",
+    "engine_check": "3.3793/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Great Value Vienna Sausage, 4.6 oz",
+    "ad_price": "$0.82",
+    "size": "0.29 lb",
+    "engine_check": "2.8276/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Star Reduced Fat Vienna Sausage, 6g protein Per Serving, Canned Sausage, 4.6 oz. Can",
+    "ad_price": "$0.98",
+    "size": "0.29 lb",
+    "engine_check": "3.3793/lb [size 0.29 lb]",
+    "fulfillment": "STORE",
+    "seller": "Walmart.com"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Vienna Sausage, Smoked, 5 oz Can",
+    "ad_price": "$10.55",
+    "size": "0.3 lb",
+    "engine_check": "35.1667/lb [size 0.3 lb]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Brit Commerce"
+   },
+   {
+    "file": "walmart-regular-2026-08-31.json",
+    "name": "Armour Vienna Sausage, Jalapeno, 5 oz Can",
+    "ad_price": "$61.81",
+    "size": "0.31 lb",
+    "engine_check": "199.3871/lb [size 0.31 lb]",
+    "fulfillment": "MARKETPLACE",
+    "seller": "Shop The King"
+   }
+  ]
+ },
+ "pinned_board_current_cells": {
+  "broccoli": {
+   "unit": "lb",
+   "walmart_cell": {
+    "store": "Walmart",
+    "per_unit": 1.3257,
+    "unit": "lb",
+    "type": "everyday",
+    "bulk": false,
+    "membership": false,
+    "member_label": "",
+    "item": "Great Value Broccoli Florets, 14 oz",
+    "ad": "$1.16",
+    "size": "14 oz",
+    "basis": "size 0.875 lb",
+    "note": "",
+    "source_ad": "everyday shelf price",
+    "ad_from": "",
+    "ad_to": "",
+    "ad_basis": ""
+   },
+   "cheapest_store": "Walmart",
+   "cheapest_price": 1.3257
+  },
+  "cherry-tomatoes": {
+   "unit": "oz",
+   "walmart_cell": {
+    "store": "Walmart",
+    "per_unit": 0.327,
+    "unit": "oz",
+    "type": "everyday",
+    "bulk": false,
+    "membership": false,
+    "member_label": "",
+    "item": "Fresh Organic Grape Tomatoes, 10 oz Package",
+    "ad": "$3.27",
+    "size": "16 ct",
+    "basis": "size 10 oz",
+    "note": "",
+    "source_ad": "everyday shelf price",
+    "ad_from": "",
+    "ad_to": "",
+    "ad_basis": ""
+   },
+   "cheapest_store": "Baker's",
+   "cheapest_price": 0.1779
+  },
+  "coconut-oil": {
+   "unit": "oz",
+   "walmart_cell": {
+    "store": "Walmart",
+    "per_unit": 0.2434,
+    "unit": "oz",
+    "type": "everyday",
+    "bulk": false,
+    "membership": false,
+    "member_label": "",
+    "item": "Great Value Organic Naturally Refined Coconut Oil, 56 fl oz",
+    "ad": "$13.63",
+    "size": "56 fl oz",
+    "basis": "size 56 oz",
+    "note": "",
+    "source_ad": "everyday shelf price",
+    "ad_from": "",
+    "ad_to": "",
+    "ad_basis": ""
+   },
+   "cheapest_store": "Sam's Club",
+   "cheapest_price": 0.1952
+  },
+  "coleslaw-mix": {
+   "unit": "oz",
+   "walmart_cell": null,
+   "cheapest_store": "Sam's Club",
+   "cheapest_price": 0.0731
+  },
+  "cooked-jasmine-rice": {
+   "unit": "oz",
+   "walmart_cell": null,
+   "cheapest_store": "Sam's Club",
+   "cheapest_price": 0.1957
+  },
+  "frozen-broccoli": {
+   "unit": "oz",
+   "walmart_cell": {
+    "store": "Walmart",
+    "per_unit": 0.0588,
+    "unit": "oz",
+    "type": "everyday",
+    "bulk": false,
+    "membership": false,
+    "member_label": "",
+    "item": "Great Value Frozen Cut Broccoli, 16 oz",
+    "ad": "$0.94",
+    "size": "16 oz",
+    "basis": "size 16 oz",
+    "note": "",
+    "source_ad": "everyday shelf price",
+    "ad_from": "",
+    "ad_to": "",
+    "ad_basis": ""
+   },
+   "cheapest_store": "Walmart",
+   "cheapest_price": 0.0588
+  },
+  "jalapenos": {
+   "unit": "lb",
+   "walmart_cell": {
+    "store": "Walmart",
+    "per_unit": 0.877,
+    "unit": "lb",
+    "type": "everyday",
+    "bulk": true,
+    "membership": false,
+    "member_label": "",
+    "item": "(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can",
+    "ad": "$4.44",
+    "size": "81 oz",
+    "basis": "size 5.062 lb",
+    "note": "",
+    "source_ad": "everyday shelf price",
+    "ad_from": "",
+    "ad_to": "",
+    "ad_basis": ""
+   },
+   "cheapest_store": "Walmart",
+   "cheapest_price": 0.877
+  },
+  "rice": {
+   "unit": "lb",
+   "walmart_cell": {
+    "store": "Walmart",
+    "per_unit": 0.56,
+    "unit": "lb",
+    "type": "everyday",
+    "bulk": true,
+    "membership": false,
+    "member_label": "",
+    "item": "(3 pack) Doguet's Extra Fancy Enriched Long Grain Rice, 48 oz",
+    "ad": "$5.04",
+    "size": "144 oz",
+    "basis": "size 9 lb",
+    "note": "",
+    "source_ad": "everyday shelf price",
+    "ad_from": "",
+    "ad_to": "",
+    "ad_basis": ""
+   },
+   "cheapest_store": "Sam's Club",
+   "cheapest_price": 0.4396
+  },
+  "vienna-sausage": {
+   "unit": "oz",
+   "walmart_cell": {
+    "store": "Walmart",
+    "per_unit": 0.1756,
+    "unit": "oz",
+    "type": "everyday",
+    "bulk": false,
+    "membership": false,
+    "member_label": "",
+    "item": "Armour Original Vienna Sausage, Original, 12g Protein Per Serving,  4.6 oz Can (Pack of 12)",
+    "ad": "$9.68",
+    "size": "3.445 lb",
+    "basis": "size 55.12 oz",
+    "note": "",
+    "source_ad": "everyday shelf price",
+    "ad_from": "",
+    "ad_to": "",
+    "ad_basis": ""
+   },
+   "cheapest_store": "Sam's Club",
+   "cheapest_price": 0.1507
+  }
+ }
+}
