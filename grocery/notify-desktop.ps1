@@ -82,14 +82,35 @@ $p = New-Prompt $Store $Detail $Title $Message (Get-Date -Format 'ddd HH:mm')
 $Title = $p.Title; $Message = $p.Message
 
 # ---- log first: the prompt is best-effort, the record is not -------------------------------------------
+# THE SELF-TEST LOGS TO A TEMP FILE, AND THAT IS NOT TIDINESS (2026-09-01). This write sat above the
+# -SelfTest branch, so every ops\run-gates.ps1 sweep appended a real-looking "An automated grocery run
+# needs attention" line - store `[-]`, generic body - to the PRODUCTION notify-log.txt. Three such
+# entries were sitting in it from one session's own gate runs, indistinguishable from real alerts, and
+# the log is the record an operator reads to decide whether anything is wrong. An instrument that
+# writes into the evidence it is checking cannot be trusted about it.
+$prodLog = Join-Path $root 'notify-log.txt'
+$prodLenBefore = if (Test-Path $prodLog) { (Get-Item $prodLog).Length } else { -1 }
+$logTarget = if ($SelfTest) { Join-Path ([IO.Path]::GetTempPath()) ('notify-selftest-' + [guid]::NewGuid().ToString('N') + '.txt') } else { $prodLog }
 $logLine = ('{0}  [{1}]  {2}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $(if($Store){$Store}else{'-'}), ($Message -replace '\s+', ' '))
-try { Add-Content -Path (Join-Path $root 'notify-log.txt') -Value $logLine -ErrorAction Stop } catch { Start-Sleep -Milliseconds 250; try { Add-Content -Path (Join-Path $root 'notify-log.txt') -Value $logLine -ErrorAction SilentlyContinue } catch {} }
+try { Add-Content -Path $logTarget -Value $logLine -ErrorAction Stop } catch { Start-Sleep -Milliseconds 250; try { Add-Content -Path $logTarget -Value $logLine -ErrorAction SilentlyContinue } catch {} }
 
 if ($SelfTest) {
   # prove the pieces work without putting a dialog on screen
   $ok = $true
-  if (-not (Test-Path (Join-Path $root 'notify-log.txt'))) { Write-Output 'FAIL  notify-log.txt was not written'; $ok = $false }
-  else { Write-Output 'ok    the notification is logged before any UI is attempted' }
+  # THE OLD ASSERTION WAS VACUOUS: it read `Test-Path notify-log.txt`, and that file always exists, so
+  # it passed whether or not THIS run had logged anything - it could never have failed. It now reads
+  # back the line this invocation actually wrote, which is the behaviour it always claimed to check.
+  if (-not (Test-Path $logTarget)) { Write-Output 'FAIL  the notification was not logged'; $ok = $false }
+  else {
+    $written = @(Get-Content $logTarget)
+    if ($written.Count -eq 1 -and [string]$written[0] -eq $logLine) { Write-Output 'ok    the notification is logged before any UI is attempted' }
+    else { Write-Output ("FAIL  the log holds {0} line(s) and not this run's own" -f $written.Count); $ok = $false }
+  }
+  # MUST FIRE if anyone ever points the self-test's log back at the production file.
+  $prodLenAfter = if (Test-Path $prodLog) { (Get-Item $prodLog).Length } else { -1 }
+  if ($prodLenAfter -eq $prodLenBefore) { Write-Output 'ok    and the SELF-TEST left the production notify log untouched' }
+  else { Write-Output ("FAIL  the self-test appended to the production notify log ({0} -> {1} bytes)" -f $prodLenBefore, $prodLenAfter); $ok = $false }
+  Remove-Item $logTarget -Force -ErrorAction SilentlyContinue
   try { Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop; Write-Output 'ok    System.Windows.Forms is available for the prompt' }
   catch { Write-Output 'FAIL  System.Windows.Forms unavailable - the prompt would silently not appear'; $ok = $false }
   if ($Title -and $Message) { Write-Output 'ok    a title + body are always composed, even with no arguments' } else { Write-Output 'FAIL  empty title/message'; $ok = $false }
