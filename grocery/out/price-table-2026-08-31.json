@@ -1,6 +1,6 @@
 {
     "week_of":  "2026-08-31",
-    "built_at":  "2026-08-31T18:43:23",
+    "built_at":  "2026-08-31T19:00:48",
     "note":  "WIDE price table, one row per item. Per store: everyday price, ad price, and the ad window. ad is NULL when the item is not on ad - Brad\u0027s founding rule - and an ad whose ad_to has passed is nulled at build time rather than cleaned up later. `shown` is the cheaper of the two, which is what a page must display. Derived from the same candidate rows and the same eligibility rule the board ranks with; price-table-parity proves they agree per cell.",
     "stores":  [
                    "Hy-Vee",
@@ -32200,10 +32200,10 @@
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "everyday":  0.1536,
-                                                             "everyday_product":  "TRESemmé Ultimate Moisture Shampoo \u0026 Conditioner, 39 fl. oz., 2 pk.",
+                                                             "everyday_product":  "TRESemmÃ© Ultimate Moisture Shampoo \u0026 Conditioner, 39 fl. oz., 2 pk.",
                                                              "everyday_size":  "78 fl oz",
                                                              "everyday_price_text":  "$11.98",
-                                                             "everyday_asof":  "2026-08-15",
+                                                             "everyday_asof":  "2026-07-29",
                                                              "everyday_source":  "everyday club price (Omaha 68137)",
                                                              "ad":  null,
                                                              "ad_product":  "",

@@ -1,4 +1,4 @@
-﻿{
+{
     "store":  "Sam\u0027s Club",
     "price_type":  "everyday",
     "club":  "Omaha Sam\u0027s Club, 13130 L St, 68137",
@@ -17,7 +17,8 @@
                       "sams_unit_price":  "$0.14/ea",
                       "sams_item_id":  "15280601537",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.1371/each [per-72-pack]"
+                      "engine_check":  "0.1371/each [per-72-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -30,7 +31,8 @@
                       "sams_unit_price":  "$0.09/foz",
                       "sams_item_id":  "13953261756",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.0877/floz [size 67.6 floz]"
+                      "engine_check":  "0.0877/floz [size 67.6 floz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -43,7 +45,8 @@
                       "sams_unit_price":  "$10.14/lb",
                       "sams_item_id":  "13621807105",
                       "qty_basis":  "per-unit; qty derived lp/up",
-                      "engine_check":  "10.14/lb [per-lb marker]"
+                      "engine_check":  "10.14/lb [per-lb marker]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -56,7 +59,8 @@
                       "sams_unit_price":  "$4.27/oz",
                       "sams_item_id":  "13613464913",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "4.27/oz [size 2 oz]"
+                      "engine_check":  "4.27/oz [size 2 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -69,7 +73,8 @@
                       "sams_unit_price":  "$0.44/oz",
                       "sams_item_id":  "17777018655",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.438/oz [size 20.5 oz]"
+                      "engine_check":  "0.438/oz [size 20.5 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -82,7 +87,8 @@
                       "sams_unit_price":  "$0.41/oz",
                       "sams_item_id":  "17787764079",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.4082/oz [size 22 oz]"
+                      "engine_check":  "0.4082/oz [size 22 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -95,7 +101,8 @@
                       "sams_unit_price":  "$1.06/oz",
                       "sams_item_id":  "13591373938",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "1.0624/oz [size 6.25 oz]"
+                      "engine_check":  "1.0624/oz [size 6.25 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -108,7 +115,8 @@
                       "sams_unit_price":  "$0.88/oz",
                       "sams_item_id":  "13908405858",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.8776/oz [size 8.25 oz]"
+                      "engine_check":  "0.8776/oz [size 8.25 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -121,7 +129,8 @@
                       "sams_unit_price":  "$2.19/lb",
                       "sams_item_id":  "15337355019",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "2.1867/lb [size 3 lb]"
+                      "engine_check":  "2.1867/lb [size 3 lb]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -134,7 +143,8 @@
                       "sams_unit_price":  "$23.44/ea",
                       "sams_item_id":  "13567466088",
                       "qty_basis":  "package; qty derived lp/up",
-                      "engine_check":  "23.44/each [per-each]"
+                      "engine_check":  "23.44/each [per-each]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -147,7 +157,8 @@
                       "sams_unit_price":  "$0.30/oz",
                       "sams_item_id":  "19932052503",
                       "qty_basis":  "package; qty derived lp/up",
-                      "engine_check":  "0.3/oz [size 26.233 oz]"
+                      "engine_check":  "0.3/oz [size 26.233 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -160,7 +171,8 @@
                       "sams_unit_price":  "$5.74/lb",
                       "sams_item_id":  "13613604194",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "5.74/lb [size 2 lb]"
+                      "engine_check":  "5.74/lb [size 2 lb]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -173,7 +185,8 @@
                       "sams_unit_price":  "$3.98/lb",
                       "sams_item_id":  "13602803605",
                       "qty_basis":  "per-unit; qty derived lp/up",
-                      "engine_check":  "3.98/lb [per-lb marker]"
+                      "engine_check":  "3.98/lb [per-lb marker]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -186,7 +199,8 @@
                       "sams_unit_price":  "$3.19/lb",
                       "sams_item_id":  "15209750041",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "3.188/lb [size 2.5 lb]"
+                      "engine_check":  "3.188/lb [size 2.5 lb]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -199,7 +213,8 @@
                       "sams_unit_price":  "$0.09/ea",
                       "sams_item_id":  "15391752102",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.0878/each [per-125-pack]"
+                      "engine_check":  "0.0878/each [per-125-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -212,7 +227,8 @@
                       "sams_unit_price":  "$0.07/ea",
                       "sams_item_id":  "15317171035",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.0665/each [per-150-pack]"
+                      "engine_check":  "0.0665/each [per-150-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -225,7 +241,8 @@
                       "sams_unit_price":  "$4.17/ea",
                       "sams_item_id":  "13886404498",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "4.1733/each [per-3-pack]"
+                      "engine_check":  "4.1733/each [per-3-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -238,7 +255,8 @@
                       "sams_unit_price":  "$4.17/ea",
                       "sams_item_id":  "4650002563",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "4.1733/each [per-3-pack]"
+                      "engine_check":  "4.1733/each [per-3-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -251,7 +269,8 @@
                       "sams_unit_price":  "$5.00/ea",
                       "sams_item_id":  "13606761740",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "4.9967/each [per-6-pack]"
+                      "engine_check":  "4.9967/each [per-6-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -264,7 +283,8 @@
                       "sams_unit_price":  "$1.19/lb",
                       "sams_item_id":  "13803520339",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "1.188/lb [size 5 lb]"
+                      "engine_check":  "1.188/lb [size 5 lb]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -277,7 +297,8 @@
                       "sams_unit_price":  "$0.09/oz",
                       "sams_item_id":  "13580074627",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.0883/oz [size 92 oz]"
+                      "engine_check":  "0.0883/oz [size 92 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -290,7 +311,8 @@
                       "sams_unit_price":  "$1.06/ea",
                       "sams_item_id":  "13620565099",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "1.0633/each [per-6-pack]"
+                      "engine_check":  "1.0633/each [per-6-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -303,7 +325,8 @@
                       "sams_unit_price":  "$0.50/oz",
                       "sams_item_id":  "13598100262",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.499/oz [size 20 oz]"
+                      "engine_check":  "0.499/oz [size 20 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -316,7 +339,8 @@
                       "sams_unit_price":  "$0.20/oz",
                       "sams_item_id":  "13608113191",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.2025/oz [size 32 oz]"
+                      "engine_check":  "0.2025/oz [size 32 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -329,7 +353,8 @@
                       "sams_unit_price":  "$0.14/oz",
                       "sams_item_id":  "13865569340",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.1381/oz [size 48 oz]"
+                      "engine_check":  "0.1381/oz [size 48 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -342,7 +367,8 @@
                       "sams_unit_price":  "$1.82/ea",
                       "sams_item_id":  "13589509183",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "1.82/each [per-4-pack]"
+                      "engine_check":  "1.82/each [per-4-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -355,7 +381,8 @@
                       "sams_unit_price":  "$0.28/oz",
                       "sams_item_id":  "13753702483",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.2803/oz [size 32 oz]"
+                      "engine_check":  "0.2803/oz [size 32 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -368,7 +395,8 @@
                       "sams_unit_price":  "$0.96/ea",
                       "sams_item_id":  "19965214008",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.9578/each [per-9-pack]"
+                      "engine_check":  "0.9578/each [per-9-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -381,7 +409,8 @@
                       "sams_unit_price":  "$1.50/ea",
                       "sams_item_id":  "7294075605",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "1.4975/each [per-8-pack]"
+                      "engine_check":  "1.4975/each [per-8-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -394,7 +423,8 @@
                       "sams_unit_price":  "$0.56/oz",
                       "sams_item_id":  "13591273997",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.5612/oz [size 16 oz]"
+                      "engine_check":  "0.5612/oz [size 16 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -407,7 +437,8 @@
                       "sams_unit_price":  "$0.75/oz",
                       "sams_item_id":  "13884402196",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.7475/oz [size 8 oz]"
+                      "engine_check":  "0.7475/oz [size 8 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -420,7 +451,8 @@
                       "sams_unit_price":  "$1.06/ea",
                       "sams_item_id":  "3940010735",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "1.0633/each [per-6-pack]"
+                      "engine_check":  "1.0633/each [per-6-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -433,7 +465,8 @@
                       "sams_unit_price":  "$0.11/oz",
                       "sams_item_id":  "13766456631",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.1138/oz [size 64 oz]"
+                      "engine_check":  "0.1138/oz [size 64 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -446,7 +479,8 @@
                       "sams_unit_price":  "$0.18/oz",
                       "sams_item_id":  "13861074313",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.1781/oz [size 42 oz]"
+                      "engine_check":  "0.1781/oz [size 42 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -459,7 +493,8 @@
                       "sams_unit_price":  "$0.62/ea",
                       "sams_item_id":  "18666723898",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.6175/each [per-12-pack]"
+                      "engine_check":  "0.6175/each [per-12-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -472,7 +507,8 @@
                       "sams_unit_price":  "$0.32/oz",
                       "sams_item_id":  "13875408716",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.3238/oz [size 24 oz]"
+                      "engine_check":  "0.3238/oz [size 24 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -485,7 +521,8 @@
                       "sams_unit_price":  "$0.67/ea",
                       "sams_item_id":  "7874211804",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.665/each [per-12-pack]"
+                      "engine_check":  "0.665/each [per-12-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -498,7 +535,8 @@
                       "sams_unit_price":  "$0.05/oz",
                       "sams_item_id":  "13602663979",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.0489/oz [size 106 oz]"
+                      "engine_check":  "0.0489/oz [size 106 oz]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -511,7 +549,8 @@
                       "sams_unit_price":  "$0.81/ea",
                       "sams_item_id":  "7874225619",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.8067/each [per-12-pack]"
+                      "engine_check":  "0.8067/each [per-12-pack]",
+                      "as_of": "2026-08-01"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -524,7 +563,8 @@
                       "sams_unit_price":  "$0.02/foz",
                       "sams_item_id":  "13627365855",
                       "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.0234/floz [size 256 floz]"
+                      "engine_check":  "0.0234/floz [size 256 floz]",
+                      "as_of": "2026-08-01"
                   }
               ]
 }

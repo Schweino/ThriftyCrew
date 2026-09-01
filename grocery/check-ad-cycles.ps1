@@ -598,6 +598,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
     if ($mpRef -gt 0) { $summary += ('REVIEW    multipack-repair REFUSED ' + $mpRef + ' row(s) it could not prove (name counts a pack but states no per-unit weight) - these stay a guard-5 HARD FAIL until a human rules in multipack-allowlist.json') }
   } catch { Log ('multipack-repair threw: ' + $_.Exception.Message); $summary += 'REVIEW    multipack-repair threw - any pack-size defect in today''s feeds is unrepaired and guard 5 will block the publish' }
 
+  # STAMP THE AD ROWS BEFORE THE BOARD READS THEM (2026-08-31). Baker's and Fareway ad files are
+  # vision-read from flyer JPGs, and the agent that writes them records a doc-level `captured` date but
+  # never puts one on the rows - so guards' freshness check reported "NO as_of ON ANY ROW - freshness
+  # cannot be measured, only file age" for two stores that can BOTH discount, which is the worst answer
+  # to have about them. This moves the date the document already states onto the rows that came from it.
+  # It REFUSES a file with no `captured` rather than deriving one from the filename: that would be a
+  # freshness number made of the only thing the guard could already see. Idempotent, so a re-run of the
+  # chain restamps nothing, and it only goes non-zero when a CURRENT file is the one it cannot date.
+  try {
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'stamp-ad-as-of.ps1') -Apply | Out-Null
+    if ($LASTEXITCODE -ne 0) { Log 'stamp-ad-as-of: a CURRENT ad file states no captured date - its rows stay undated and guard 9 can only see file age' }
+  } catch { Log ('stamp-ad-as-of threw: ' + $_.Exception.Message) }
+
   $bakers = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $fareway = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   # -IdentityNamespace staple: THIS is the board-building run, so this is the run that writes the product

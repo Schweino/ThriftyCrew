@@ -3,10 +3,10 @@
     "namespace":  "staple",
     "rules_hash":  "84ef334c0fc7ae018bafd5a4ec83938b201cdfa9a0bf1ff0afb3acec1a25f0ae",
     "board_date":  "2026-08-31",
-    "built_at":  "2026-08-31T18:43:29",
-    "rows_total":  42279,
+    "built_at":  "2026-08-31T19:00:54",
+    "rows_total":  42319,
     "rows_reused_from_previous":  42279,
-    "rows_rematched":  0,
+    "rows_rematched":  40,
     "rows_contested":  936,
     "key_collisions_demoted_to_name":  989,
     "stores":  [
@@ -37,8 +37,8 @@
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  3628,
-                       "changed":  false
+                       "rows":  3668,
+                       "changed":  true
                    },
                    {
                        "store":  "Walmart",

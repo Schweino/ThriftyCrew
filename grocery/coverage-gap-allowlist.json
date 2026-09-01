@@ -1074,92 +1074,128 @@
         {
             "commodity": "celery",
             "why": "NOT THE COMMODITY (reviewed 2026-07-29): the only Sam's match is \"Pure Pacific Organic Celery Sticks, 2.5 lbs.\" - organic AND cut/prepped sticks, not a plain celery bunch. Correctly excluded.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "mangoes",
             "why": "NOT FRESH (reviewed 2026-07-29): \"Mango Slices 16 OZ\" is packaged/frozen slices, not a fresh mango sold by the each. Correctly excluded.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "mangoes",
             "why": "NOT THE COMMODITY (reviewed 2026-07-29): \"Nutty & Fruity Chili Tamarind Mango, 28 oz.\" is a dried snack mix. Correctly excluded.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "kale",
             "why": "ORGANIC + PREPPED (reviewed 2026-07-29): \"Simply Nature Organic A Sweet Bold Power Green Chopped Kale 12 OZ\" is an organic chopped salad blend, not a plain kale bunch. Correctly excluded.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "cilantro",
             "why": "SEARCH-TERM COLLISION (reviewed 2026-07-29): the only hit is \"Samyang MEP Ramen Bowl, Red Pepper and Chicken & Cilantro, 6 pk.\" - cilantro is a flavour word in a ramen name. Correctly excluded.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "rotisserie-chicken",
             "why": "DELI MEAT, NOT A BIRD (reviewed 2026-07-29): \"Lunch Mate Rotisserie Chicken 16 OZ\" is sliced lunch meat; the commodity is a whole hot rotisserie chicken priced per each. Aldi does not sell one. Correctly excluded.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "cake-mix",
             "why": "NOT CAKE MIX (reviewed 2026-07-29): \"Kodiak Cakes Power Cakes Flapjack and Waffle Mix, 72 oz.\" is a pancake mix. Correctly excluded.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "coconut-oil",
             "why": "DIFFERENT PRODUCT (reviewed 2026-07-29): \"Carrington Farms Liquid Coconut Cooking Oil, 40 oz.\" is a fractionated liquid oil that stays liquid at room temperature - not the solid virgin coconut oil this commodity means. Widening the include to catch it would put two different fats in one row.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "canned-green-beans",
             "why": "UNPRICEABLE + ORGANIC (reviewed 2026-07-29): matches are \"Organic Green Beans, 2 lbs.\" (organic, and fresh weight) and \"FRENCH CUT GREEN BEANS 8-14.5 OZ.\" whose size is a RANGE, so no single per-oz exists. Correctly excluded.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "canned-pasta",
             "why": "BULK MULTIPACK (reviewed 2026-07-29): \"Chef Boyardee Spaghetti and Meatballs, 14.5 oz., 8 pk.\" matches the include but is an 8-pack club case, not the single can the other six stores price. Left out rather than compare a case price to a can price.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "canned-yams",
             "why": "FRESH, NOT CANNED (reviewed 2026-07-29): \"Sweet Potato Yam Each\" is a fresh yam in produce. Correctly excluded.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "canned-pears",
             "why": "SIZE UNPROVABLE / NOT THE COMMODITY (reviewed 2026-07-29): hits are \"Sweet Harvest Bartlett Pear Slices IN Heavy Syrup 15.25 OZ\" (heavy syrup, not the packed-in-juice base) and \"Lunch Buddies Pear Fruit Bowl IN 100 Juice 4 OZ\" (a lunchbox cup). Correctly excluded.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "canned-pears",
             "why": "SEARCH-TERM COLLISION (reviewed 2026-07-29): \"Pearl Milling Company Original Syrup, 64 oz.\" matched on \"pear\" inside \"Pearl\". Correctly excluded.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "coconut-milk-canned",
             "why": "CARTON, NOT CANNED (reviewed 2026-07-29): \"Friendly Farms Original Coconutmilk 64 FL OZ\" is the refrigerated drinking carton; this commodity is the thick canned cooking milk. Different products, different per-oz economics.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "chili-crisp",
             "why": "SEARCH-TERM COLLISION (reviewed 2026-07-29): hits are \"Aldi Chili Crisp Ready TO Serve Rice 8.8 OZ\" and \"Livegfree Sweet Chili Brown Rice Crisps 7 OZ\" - rice products, not the chili crisp condiment. Correctly excluded.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "wild-rice",
             "why": "SEARCH-TERM COLLISION (reviewed 2026-07-29): \"Member's Mark Wild Caught Cod Fillet, priced per pound\" matched on \"wild\". Correctly excluded.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "dried-cranberries",
             "why": "BLENDS ONLY (reviewed 2026-07-29): both hits are trail-mix blends (\"Sliced Almonds Dried Cranberries 3 OZ\", \"Dried Cranberries Glazed Walnuts 3 OZ\"), priced as mixes not as plain dried cranberries. Correctly excluded.",
-            "store": "Aldi"
+            "store": "Aldi",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "broccolini",
             "why": "UNIT MISMATCH (reviewed 2026-07-29): \"Bimi Baby Broccoli, 1.5 lbs.\" genuinely IS broccolini and matches the include, but this commodity is priced per BUNCH/each and a 1.5 lb club bag states no bunch count. Deriving one would be inventing it.",
-            "store": "Sam's Club"
+            "store": "Sam's Club",
+            "reviewed":  "2026-07-29",
+            "reviewed_by":  "lifted from this entry's own why text 2026-08-31 - the review is real and dated there, only the machine-readable field was missing; NOT re-verified today, and stamping today would have claimed a store check nobody did"
         },
         {
             "commodity": "cherries",
