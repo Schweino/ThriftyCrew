@@ -130,38 +130,29 @@ if ($SelfTest) {
   T 'unit-price string "$0.28/oz"'              (LinkPerUnit '$0.28/oz'     'oz'   9.99) 0.28
   T '"dozen" $2.40 per each'                    (LinkPerUnit 'dozen'        'each' 2.40) (2.40/12)
 
-  # --- the mismatch check must not fire on an AD price (2026-09-01) ------------------------------
-  # Every string below is a real source_ad value taken off the 2026-08-31 boards, not invented: a
-  # fixture built from shapes no store writes is the failure this file's own header describes.
+  # --- the mismatch check compares only EVERYDAY cells (2026-09-01) ------------------------------
+  # pu-lib's rule, shared with audit-everyday-mismatch, so the two cannot drift into disagreeing
+  # about which cells are comparable - which is exactly what happened to Get-LinkPerUnit above.
   function TB($label, $got, $want) {
     if ([bool]$got -eq [bool]$want) { Write-Output "ok    $label" }
     else { Write-Output "FAIL  $label -> expected $want, got $got"; $script:fail++ }
   }
-  TB 'AD  "Weekly Ad" is an ad price, so the gap to a stored everyday price is the discount' `
-     (Test-AdPricedCell 'Weekly Ad') $true
-  TB 'AD  a dated store ad reads the same'                                                   `
-     (Test-AdPricedCell 'Fareway Weekly Ad 2026-08-31 to 2026-09-06') $true
-  TB "AD  and Baker's, whose label leads with the store name"                                `
-     (Test-AdPricedCell "Baker's Weekly Ad 2026-08-26 to 2026-09-01") $true
-  # THE OTHER HALF, and the reason this reads source_ad instead of the cell's `type`. All four of
-  # these sit on cells tagged type=sale, yet their price came from a live shelf reading, so the
-  # comparison IS valid and skipping them would blind the check on 10 real rows.
-  TB 'SHELF a type=sale cell priced from the shelf is still comparable'                      `
-     (Test-AdPricedCell 'everyday shelf price') $false
-  TB 'SHELF shop.fareway.com is a shelf read, not an ad'                                     `
-     (Test-AdPricedCell 'shop.fareway.com') $false
-  TB 'SHELF Aisles Online current shelf price'                                               `
-     (Test-AdPricedCell 'Aisles Online current shelf price') $false
-  TB 'SHELF kroger-api'                                                                      `
-     (Test-AdPricedCell 'kroger-api') $false
-  TB 'SHELF a cell with no source_ad at all is not an ad price'                              `
-     (Test-AdPricedCell '') $false
-  TB 'SHELF and neither is $null'                                                            `
-     (Test-AdPricedCell $null) $false
-  # "weekly ad" must be matched as the phrase, not by either word alone: a shelf source that merely
-  # contains "weekly" would otherwise be skipped and its wrong links would never surface.
-  TB 'SHELF "weekly circular pickup" is not a weekly AD'                                     `
-     (Test-AdPricedCell 'weekly circular pickup') $false
+  TB 'COMPARABLE an everyday cell can be compared against its stored everyday link' `
+     (Test-CellComparableToEverydayLink 'everyday') $true
+  # THE FOUNDING CASE. product-urls.json stores a shelf snapshot, so on a promotional cell the gap
+  # to the board IS the discount: pears read mismatch(291%) and sports-drinks 119% that way, and
+  # both were correct links at their shelf price.
+  TB 'MUST FIRE  a SALE cell is not comparable - the gap to a stored everyday price is the discount' `
+     (Test-CellComparableToEverydayLink 'sale') $false
+  # source_ad WAS TRIED AS THE DISCRIMINATOR AND MEASURED WRONG the same day: skipping only
+  # weekly-ad cells let 19 discounts through as findings in audit-everyday-mismatch, because a price
+  # read off a live shelf can still be a promotion. These two cases pin that the rule reads the cell's
+  # TYPE - what the number is - and never its provenance.
+  TB 'MUST FIRE  a sale cell read off a live shelf is STILL a sale - provenance is not semantics' `
+     (Test-CellComparableToEverydayLink 'sale') $false
+  TB 'MUST FIRE  an unknown or absent type is not assumed comparable' `
+     ((Test-CellComparableToEverydayLink '') -or (Test-CellComparableToEverydayLink $null) -or `
+      (Test-CellComparableToEverydayLink 'clearance')) $false
 
   if ($fail) { Write-Output "SELF-TEST FAIL ($fail)"; exit 1 }
   Write-Output 'SELF-TEST PASS'
@@ -170,7 +161,7 @@ if ($SelfTest) {
 
 $work = [ordered]@{}
 $seenChips = @{}   # id|store dedup: weekly + recipe occurrences of the same chip must not double-list it
-function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, $sourceAd) {
+function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, $cellType) {
   if ($seenChips.ContainsKey($id + '|' + $store)) { return }
   # Prefer the board's exact source product name as the search term - that's the item whose price is shown,
   # so searching for it links the RIGHT product (e.g. "That's Smart! Large Eggs" not just "eggs"). Falls back
@@ -198,11 +189,24 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, 
     # 'mismatch' = the LINKED product's own price does not equal the board price shown next to it
     # (the eggs bug: board is the budget-brand price, link points at a pricier brand of the same commodity).
     # Compared per-occurrence so a link that matches an equivalent unit elsewhere is not falsely flagged.
-    # An ad price and a stored everyday price are not comparable, so the gap between them is not
-    # evidence of anything. `stale` is deliberately still evaluated above: it compares this board's
-    # own snapshot against this board's current value, both on the same footing, and it is the
+    # ONLY EVERYDAY CELLS, because a promotional price and a stored everyday price are not comparable
+    # and the gap between them is the discount, not a wrong product. Measured on the 2026-08-31
+    # worklist: 39 of 94 mismatch chips sat on sale cells, and two of the four WORST-looking chips in
+    # the whole list were this - pears at 291% and sports-drinks at 119%, both triaged by hand and
+    # both correct links at their shelf price. prune-bad-links' own note already allowed the case in
+    # words ("or, on a sale cell, the same product at its shelf price"); this metric had never been told.
+    #
+    # SKIPPING ON source_ad WAS TRIED FIRST AND MEASURED WRONG (same day, both directions recorded in
+    # audit-everyday-mismatch.ps1). The idea was that only a WEEKLY AD is incomparable, since `type`
+    # says sale on cells read off a live shelf too. But a price read off a live shelf can still BE a
+    # promotion: across the board, sale cells that differ from their link at this tolerance are the
+    # board-cheaper shape 75% of the time. source_ad is PROVENANCE - where the number came from.
+    # `type` is the board's statement about WHAT the number is, and that is what this needs.
+    #
+    # `stale` is deliberately still evaluated above for every cell: it compares this board's own
+    # snapshot against this board's current value, both on the same footing, and it is the
     # ad-roll-off trigger by design.
-    if (-not $reason -and $curPU -gt 0 -and -not (Test-AdPricedCell $sourceAd)) {
+    if (-not $reason -and $curPU -gt 0 -and (Test-CellComparableToEverydayLink $cellType)) {
       # sanitize: some resolver snapshots stored display text ("$6.17"); a bare [double] cast errored
       # and silently SKIPPED the mismatch check for those rows (surfaced 2026-07-26)
       $stPrice = 0.0; [void][double]::TryParse((([string]$st.price) -replace '[^0-9.]',''), [ref]$stPrice)
@@ -225,10 +229,10 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, 
 }
 
 foreach ($it in $cmp) {
-  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'weekly' ([string]$s.source_ad) }
+  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'weekly' ([string]$s.type) }
 }
 foreach ($it in $ri) {
-  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'recipe' ([string]$s.source_ad) }
+  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'recipe' ([string]$s.type) }
 }
 
 $out = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd'); tolerance = $Tolerance; stores = $work }

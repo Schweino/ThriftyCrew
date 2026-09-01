@@ -1,0 +1,47 @@
+{
+  "schema":  1,
+  "note":  "THE RULES THIS ESTATE WRITES DOWN TWICE. Every entry names one rule that exists in more than one file - usually because a PowerShell lane and a Python lane must answer the same question - and the exact text to lift out of each side. audit-twin-drift.ps1 lifts them and fails when the copies stop matching. THIS FILE IS THE POINT: a twin nobody declared is a twin nobody is watching, which is how every drift in this estate's history got in. When you write a second implementation of an existing rule, add it here in the same commit.",
+  "history":  "Get-LinkPerUnit lived in two files and they disagreed on 13 of 3,342 links, the private copy wrong on every one. The price formatter had FIVE copies and three surfaces drifted. The notes-vs-bid check has two implementations that fire on disjoint refusal words. stated_mass_grams and Get-StatedMassGrams both dropped the whole number off a mixed fraction, reading '4 3/4 lb' as 340 g against 2154 g. RX_PROTEIN drifted from its PowerShell twin and read '47.3g protein' as 3g - caught by a hand-written LOCKSTEP case in a suite nothing ran, so it sat red for weeks. Not one of these was found by a check that was looking for it.",
+  "twins":  [
+    {
+      "name":  "prose-calorie-claim",
+      "why":  "coverage_check's prose gate and spec-contradiction-lib both read a calorie claim out of recipe prose and compare it to the stat. If one is tightened and the other is not, the audit certifies a repair it does not describe.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/coverage_check.py",
+          "capture":  "RX_CAL = re\\.compile\\(r'(.*?)'\\)" },
+        { "file":  "meal-prep/pipeline/spec-contradiction-lib.ps1",
+          "capture":  "\\$script:RX_CAL\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
+      "name":  "prose-protein-claim",
+      "why":  "THE ONE THAT PROVED THE CLASS. The PowerShell side was fixed for decimals and the Python side was not, so `\\b` sat between the '.' and the '3' of \"47.3g protein\" and the gate reported 'says 3g protein, stat says 47' against a CORRECT spec. Its own LOCKSTEP case caught it and nobody read the suite.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/coverage_check.py",
+          "capture":  "RX_PROTEIN = re\\.compile\\(r'(.*?)'\\)" },
+        { "file":  "meal-prep/pipeline/spec-contradiction-lib.ps1",
+          "capture":  "\\$script:RX_PROTEIN\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
+      "name":  "deal-builder-size-token",
+      "why":  "FOUND BY THIS AUDITOR'S OWN UNDECLARED SWEEP on its first run, 2026-09-01, which is the point of that sweep. The size-token parser that reads a quantity and unit out of a product NAME is byte-identical (139 chars, md5 d7854998dde1) in the Sam's and Walmart deal builders. Nothing was watching it. A unit added to one store's list and not the other's would silently mis-size every product carrying it at that store - and per-unit price is the number this whole estate publishes.",
+      "sides":  [
+        { "file":  "grocery/build-sams-deals.ps1",
+          "capture":  "Matches\\(\\$n, '(\\(\\\\d\\[\\\\d\\.\\]\\*.*?)'\\)" },
+        { "file":  "grocery/build-walmart-deals.ps1",
+          "capture":  "Matches\\(\\$n, '(\\(\\\\d\\[\\\\d\\.\\]\\*.*?)'\\)" }
+      ]
+    },
+    {
+      "name":  "stated-mass-number",
+      "why":  "The number half of the mass reader that decides a recipe's MAIN PROTEIN weight. Both twins carried the identical mixed-fraction bug on 2026-09-01: the mixed alternative must LEAD, or a pattern wanting a unit after the digits cannot match '4 3/4 lb' from the front and the search slides on to '3/4 lb'. band_precheck uses the result, so reading low understates calories and can reject a sound recipe on the macro band.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/coverage_check.py",
+          "capture":  "r'\\(\\?P<n>(.*?)\\)\\[" },
+        { "file":  "meal-prep/pipeline/map-preresolve.ps1",
+          "capture":  "\\$rxNum = '(.*?)'" }
+      ]
+    }
+  ]
+}

@@ -188,30 +188,37 @@ function Get-LinkPerUnit {
   return $null
 }
 
-# ONE READER FOR "IS THIS AN AD PRICE", because two callers now ask it and this estate has
-# watched that exact shape drift before (Get-LinkPerUnit lived in two files and they
-# disagreed on 13 of 3,342 links). resolve-worklist asks so it does not call a discount a
-# wrong product; audit-everyday-mismatch asks so it does not stop checking a shelf price
-# that merely acquired a date. Same question, one answer.
-function Test-AdPricedCell {
+# ONE READER FOR "CAN THIS CELL BE COMPARED AGAINST ITS STORED LINK", because the estate asked that
+# question in two files on the same day and got it wrong in both. Get-LinkPerUnit already taught this
+# lesson here - it lived in two files and they disagreed on 13 of 3,342 links, the private copy wrong
+# on every one - so the rule lives once and both callers read it.
+function Test-CellComparableToEverydayLink {
   <#
-    Did this board cell's price come from a printed WEEKLY AD, rather than from a shelf reading?
+    Can this board cell's price be compared against the everyday price stored on its product link?
 
-    THE MISMATCH CHECK IS NOT VALID ON ONE (2026-09-01). It compares the link's STORED EVERYDAY price
-    against the board's CURRENT per-unit. When the board cell is an ad price, the gap between them IS
-    THE DISCOUNT, so every deep sale manufactures a high-percentage chip that is indistinguishable
-    from a wrong product. Measured on the 2026-08-31 worklist: 29 of the 94 mismatch chips (31%) sat
-    on ad-priced cells. Two of the four worst-looking chips in the whole list - pears at 291% and
-    sports-drinks at 119% - were exactly this, and prune-bad-links' own note already allows the case
-    in words ("or, on a sale cell, the same product at its shelf price").
+    Only when the cell is `everyday`. product-urls.json stores a shelf snapshot, so on a promotional
+    cell the gap between the two IS the discount, and reading it as evidence turns every deep sale
+    into something indistinguishable from a wrong product. Measured on the 2026-08-31 worklist: 39 of
+    94 mismatch chips sat on sale cells, and two of the four WORST-looking chips in the list were
+    exactly this - pears at 291% and sports-drinks at 119%, both hand-triaged, both correct links at
+    their shelf price.
 
-    IT READS source_ad AND NOT type, AND THAT DISTINCTION IS THE WHOLE POINT. `type` says `sale` on
-    cells whose price came from a live shelf - Walmart's own 10 lb ground beef row is tagged
-    type=sale with source_ad "everyday shelf price", and shop.fareway.com and Aisles Online rows are
-    tagged the same way. Skipping on `type` would have blinded the check on 10 rows that are perfectly
-    comparable, which is the easy wrong version of this fix. Only an ad price is incomparable, so only
-    an ad price is skipped.
+    source_ad WAS TRIED AS THE DISCRIMINATOR ON 2026-09-01 AND MEASURED WRONG. The argument was that
+    only a printed WEEKLY AD is incomparable, because `type` says `sale` on cells whose price was read
+    off a live shelf too (Walmart's 10 lb ground beef is type=sale with source_ad "everyday shelf
+    price"). Widening audit-everyday-mismatch that way raised its examined count from 2598 to 2975 and
+    surfaced 26 new findings - and 19 of the 21 landing on newly-included cells had the board CHEAPER
+    than the link, the shape of a discount. Across the whole board, sale cells that differ from their
+    link at the 15% worklist tolerance are board-cheaper 75% of the time.
+
+    THE DISTINCTION WORTH KEEPING: source_ad is PROVENANCE - where the number was read. `type` is the
+    board's own statement about WHAT the number is. A price can be read off a live shelf and still be
+    a promotion, which is what those 19 were. Provenance is not semantics, and this needs semantics.
+
+    A COST THIS ACCEPTS ON PURPOSE: a wrong link on a sale cell cannot be caught by price here, so it
+    is not caught here at all. It stays reachable through `missing` and `stale`, which compare a board
+    against its own snapshot rather than against a link, and are valid on every cell.
   #>
-  param([string]$SourceAd)
-  return [regex]::IsMatch(([string]$SourceAd), 'weekly\s+ad', 'IgnoreCase')
+  param([string]$CellType)
+  return ([string]$CellType) -eq 'everyday'
 }

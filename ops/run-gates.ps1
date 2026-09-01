@@ -53,9 +53,21 @@ $scripts = @(Get-ChildItem $repo -Recurse -File -Filter *.ps1 -ErrorAction Silen
 $withSelfTest = @()
 foreach ($s in $scripts) {
   if ($SKIP.ContainsKey($s.Name)) { continue }
+  # NEVER DISCOVER YOURSELF. run-gates runs every file it discovers with -SelfTest; discovering this
+  # file means running this file, which discovers it again. On 2026-09-01 a COMMENT added here quoted
+  # the switch declaration in prose, the matcher below saw its own text, and run-gates spawned a fresh
+  # copy of itself every two minutes for 39 minutes - 18 live processes, each blocked on its child,
+  # and not one line of output. The guard is one line and costs nothing; the failure it prevents is
+  # unbounded.
+  if ($s.FullName -eq $PSCommandPath) { continue }
   $t = [IO.File]::ReadAllText($s.FullName)
-  # it must ACCEPT the switch, not merely mention it in prose
-  if ($t -match '\[switch\]\$SelfTest' -or $t -match '\$__\w*SelfTest\s*=') { $withSelfTest += $s }
+  # IT MUST ACCEPT THE SWITCH, NOT MERELY MENTION IT IN PROSE - and until 2026-09-01 that rule was
+  # stated here and not enforced, because the match ran over the file INCLUDING its comments. Comment
+  # lines are stripped first now, so writing about the switch can never enrol a script that does not
+  # take it. This file's own recursion is the proof; the same shape would quietly enrol any script
+  # whose header merely discusses self-testing, and then fail it for not accepting the argument.
+  $code = ($t -split "`r?`n" | Where-Object { $_ -notmatch '^\s*#' }) -join "`n"
+  if ($code -match '\[switch\]\$SelfTest' -or $code -match '\$__\w*SelfTest\s*=') { $withSelfTest += $s }
 }
 
 if ($ListOnly) {
@@ -99,6 +111,14 @@ $static = @(
   @{ f = 'grocery\audit-script-census.ps1';    n = 'no script is unreachable and unrecorded' }
   @{ f = 'grocery\audit-json-encoding.ps1';    n = 'the matching rules are still in the encoding they were written in' }
   @{ f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }
+  # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
+  # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
+  # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test
+  # alone would repeat the exact failure the auditor was written for - a check that works and never
+  # looks at production.
+  # (This comment deliberately does NOT spell the switch declaration out. Writing it in prose here is
+  # what made run-gates discover ITSELF on 2026-09-01 and respawn every two minutes for 39 minutes.)
+  @{ f = 'ops\audit-twin-drift.ps1';           n = 'no rule this estate keeps in two files has drifted apart' }
 )
 foreach ($g in $static) {
   $p = Join-Path $repo $g.f

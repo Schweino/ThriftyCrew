@@ -80,22 +80,27 @@ foreach ($b in $boards) {
     if ($seen.ContainsKey($key)) { continue }   # same cell on both boards: judge it once
     $e = $link.$store
     if (-not $e -or -not $e.price) { $noLink++; continue }
-    # A SALE legitimately differs from the shelf price - but `type` does not mean what this line
-    # assumed (2026-09-01). It says `sale` on any cell carrying a dated ad window, INCLUDING cells
-    # whose price came from a live shelf reading: Walmart's 10 lb ground beef row is type=sale with
-    # source_ad "everyday shelf price", and the shop.fareway.com, Aisles Online and kroger-api rows
-    # are tagged the same way. On today's board that is 376 cells - shelf prices, comparable against
-    # their link, silently dropped out of this audit the moment they acquired a date.
+    # A sale legitimately differs from the shelf price, so it cannot be compared against a link that
+    # stores an everyday snapshot.
     #
-    # THAT IS WHAT THE COVERAGE RATCHET WAS SHOUTING ABOUT. It went REGRESSED at 2594 examined
-    # against a 2968 high-water baseline, and the tempting reading was "the board shrank, accept the
-    # new floor". The board did not shrink - it GREW, 2860 cells to 3132 - while the everyday subset
-    # fell from 2807 to 2666 as cells migrated to `sale`. Accepting the floor would have written off
-    # 376 unguarded cells permanently. 2666 + 376 = 3042, back above the baseline.
+    # `source_ad` WAS TRIED HERE ON 2026-09-01 AND MEASURED WRONG, recorded so nobody re-derives it.
+    # The reasoning looked sound: `type` says `sale` on cells whose price came from a live shelf read
+    # (Walmart's 10 lb ground beef is type=sale with source_ad "everyday shelf price"), so 376 cells
+    # were dropping out of this audit and the coverage ratchet was flagging it. Widening the filter to
+    # skip only WEEKLY-AD cells raised examined from 2598 to 2975 and surfaced 26 new mismatches - and
+    # 19 of the 21 that landed on newly-included cells had the board CHEAPER than the link, which is
+    # the shape of a discount, not a wrong product. Across the whole board, sale cells that disagree
+    # with their link do so in the discount direction about 3:1 (9% cheaper vs 3% dearer).
     #
-    # Test-AdPricedCell is pu-lib's, shared with resolve-worklist's mismatch metric, which had the
-    # identical confusion for the identical reason. One reader, both callers.
-    if (Test-AdPricedCell ([string]$s.source_ad)) { $saleSkipped++; continue }
+    # THE LESSON, WHICH IS NOT "type IS PERFECT": source_ad is PROVENANCE - where the number was read.
+    # `type` is the board's own statement about whether the number is promotional. A price can be read
+    # off a live shelf and still be a promotion, which is exactly what those 19 were. Provenance is
+    # not semantics, and this line needs semantics.
+    #
+    # The coverage drop is therefore REAL AND CORRECT: as more of the board becomes promotional, fewer
+    # cells are comparable this way. That is a smaller eligible population, not a blinded audit, and
+    # it is accepted in coverage-baseline.json with this reason rather than papered over here.
+    if (-not (Test-CellComparableToEverydayLink ([string]$s.type))) { $saleSkipped++; continue }
     $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
     $linkPu = Get-LinkPerUnit -size ([string]$e.size) -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
     if ($null -eq $linkPu) { $uncomputable++; continue }

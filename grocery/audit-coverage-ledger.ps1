@@ -1,4 +1,4 @@
-﻿<#
+<#
   audit-coverage-ledger.ps1 - THE RATCHET on how much each check actually looked at.
 
   Reads out\coverage-ledger.json (written by coverage-lib.ps1 from inside the checks themselves) and
@@ -80,6 +80,14 @@ param(
   # -Accept RAISES a check's high-water mark freely and refuses to LOWER one without this, because a
   # ratchet that can be lowered by an ordinary accept is not a ratchet. See the merge block below.
   [switch]$AcceptLower,
+  # -Check SCOPES -AcceptLower TO NAMED ROWS, and it exists because the baseline's own note asked for
+  # it by name (2026-08-31, audit-everyday-mismatch): "-AcceptLower is all-or-nothing across every
+  # dropped row, and of the six it would lower this is the ONLY one in breach... Lowering five rows
+  # that are not in breach to settle one is a net loss of protection. Accept it the day the tool can
+  # lower ONE check by name." That day is 2026-09-01. Omitted, -AcceptLower behaves exactly as before
+  # and lowers every dropped row, so no existing caller changes; named, it lowers only those rows and
+  # says which ones it held.
+  [string[]]$Check = @(),
   [switch]$Gate,
   [switch]$Quiet
 )
@@ -304,8 +312,29 @@ if ($Accept) {
   # floor from 1,010 to 844 and nothing would have said so; the coverage it stopped looking at becomes
   # permanently unguarded, which is the whole failure this file was written for.
   # So: raise freely, lower only with -AcceptLower, and NAME every row that goes down either way.
+  # A TYPO IN -Check MUST NOT READ AS "LOWER NOTHING". Silently accepting an unknown name would make
+  # `-AcceptLower -Check audit-everyday-mismatchh` look like a successful, careful, scoped accept that
+  # in fact changed nothing - and the operator would walk away believing a floor had moved.
+  if ($Check.Count) {
+    $known = @($blRows | ForEach-Object { [string]$_.Name })
+    $unknown = @($Check | Where-Object { $known -notcontains $_ })
+    if ($unknown.Count) {
+      Write-Output ("coverage-ledger: REFUSED - -Check names {0} check(s) the baseline does not carry: {1}" -f $unknown.Count, ($unknown -join ', '))
+      Write-Output ('  the baseline knows: ' + (($known | Sort-Object) -join ', '))
+      # EXIT 3, NOT 2. A refused argument evaluated NOTHING, and 2 in this file means "findings, gated".
+      # It also keeps the guard contract honest: 2 is a verdict exit and must carry the completion
+      # marker, which a refusal has no business writing. audit-guard-contract caught both of these
+      # as HALF-COVERED the moment they were added.
+      exit 3
+    }
+    if (-not $AcceptLower) {
+      Write-Output 'coverage-ledger: REFUSED - -Check scopes -AcceptLower and does nothing on its own. Pass both, or neither.'
+      exit 3
+    }
+  }
   $lowered = @()
   $pinned  = @()
+  $heldByScope = @()
   $merged = [ordered]@{}
   foreach ($bp in ($blRows | Sort-Object Name)) {
     $name = [string]$bp.Name; $b = $bp.Value
@@ -325,7 +354,11 @@ if ($Accept) {
       if ($now -ge $bWas) { $row['examined'] = $now }
       else {
         $lowered += ("{0}: {1} -> {2} ({3}% less coverage)" -f $name, $bWas, $now, [math]::Round(100.0 * ($bWas - $now) / [math]::Max(1, $bWas), 1))
-        if ($AcceptLower) { $row['examined'] = $now }
+        # A NAMED SCOPE MAKES THIS ROW-BY-ROW. Without -Check every dropped row goes down together,
+        # which is why a single genuinely-retired population could not be accepted without also
+        # lowering five healthy rows to their own current counts.
+        if ($AcceptLower -and ($Check.Count -eq 0 -or $Check -contains $name)) { $row['examined'] = $now }
+        elseif ($AcceptLower) { $heldByScope += $name }
       }
     }
     $row['tolerance']    = (Get-Num $b 'tolerance' $Tolerance)
@@ -339,15 +372,33 @@ if ($Accept) {
     if ($merged.Contains($k)) { continue }
     $merged[$k] = [ordered]@{ examined = [int](Get-Num $ledRows[$k] 'examined' 0); tolerance = $Tolerance; max_age_days = 2; phase = 'publish'; why = 'added by -Accept' }
   }
+  # NAME WHAT THE SCOPE HELD BACK. The whole reason -Check exists is that lowering five healthy rows
+  # to settle one is a net loss of protection; an operator who cannot see which rows were spared
+  # cannot tell a scoped accept from a blanket one.
+  if ($heldByScope.Count -gt 0) {
+    Write-Output ''
+    Write-Output ('  -Check scoped this accept to: ' + (($Check | Sort-Object) -join ', '))
+    foreach ($h in ($heldByScope | Sort-Object)) {
+      Write-Output ('  HELD      ' + $h + ': dropped, but NOT named in -Check, so its floor stays where it was')
+    }
+  }
   if ($pinned.Count -gt 0) {
     Write-Output ''
     foreach ($l in $pinned) { Write-Output ('  PINNED    ' + $l) }
   }
   if ($lowered.Count -gt 0) {
     Write-Output ''
-    foreach ($l in $lowered) { Write-Output ('  ' + $(if ($AcceptLower) { 'LOWERED  ' } else { 'KEPT HIGH' }) + '  ' + $l) }
+    # THE LABEL MUST MATCH WHAT HAPPENED TO THAT ROW, not to the run. The first cut of -Check printed
+    # "LOWERED" against all six breached rows while its own HELD lines said five had been spared -
+    # a report contradicting itself in the same output, and the half a reader would believe is the
+    # one naming numbers. $lowered lists every row that DROPPED; only those inside the scope moved.
+    foreach ($l in $lowered) {
+      $lName = ([string]$l -split ':')[0]
+      $tag = if (-not $AcceptLower) { 'KEPT HIGH' } elseif ($heldByScope -contains $lName) { 'HELD     ' } else { 'LOWERED  ' }
+      Write-Output ('  ' + $tag + '  ' + $l)
+    }
     if (-not $AcceptLower) {
-      Write-Output ('  ^ these ' + $lowered.Count + " row(s) examine LESS than their baseline and were left at the higher mark, so the ratchet still defends the coverage they used to have. If the drop is real and permanent, re-run with -AcceptLower once you know WHY - a lowered floor makes the rows it stopped looking at unguarded forever.")
+      Write-Output ('  ^ these ' + $lowered.Count + " row(s) examine LESS than their baseline and were left at the higher mark, so the ratchet still defends the coverage they used to have. If the drop is real and permanent, re-run with -AcceptLower once you know WHY - a lowered floor makes the rows it stopped looking at unguarded forever. -AcceptLower -Check <name> lowers ONE row and leaves the rest defended.")
     }
   }
   $doc = [ordered]@{ schema = 1; set = (Get-Date -Format 'yyyy-MM-dd HH:mm'); checks = $merged }

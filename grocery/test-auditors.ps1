@@ -1,4 +1,4 @@
-﻿<#
+<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -2717,6 +2717,55 @@ $r3 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCl, '-BaselineFile', $cl
 $clAfter2 = ((Get-Content $clBase -Raw) + '').Trim() | ConvertFrom-Json
 if ([int]$clAfter2.checks.'shrunk-check'.examined -eq 40 -and $r3.text -match 'LOWERED') { Ok '-AcceptLower lowers the ratchet deliberately and says which rows it moved down' }
 else { Bad '-AcceptLower did not lower the baseline, so a real permanent drop can never be accepted' }
+
+# ---- -Check: lowering ONE row by name (2026-09-01) -------------------------------------------------
+# WHY THIS EXISTS. audit-everyday-mismatch's floor sat 12.5% above its real population for ten days
+# with the cause proved and written down, because -AcceptLower was all-or-nothing: settling that one
+# row meant also dropping five rows that were NOT in breach to their own current counts. The baseline's
+# own note said "Accept it the day the tool can lower ONE check by name." A SECOND dropped row is
+# injected here on purpose - the shipped fixture has only one, and a scope test with nothing to spare
+# cannot tell scoping from a plain accept.
+$fxCk = Register-Fx (Join-Path $env:TEMP ('taudit-ck-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
+New-Item -ItemType Directory -Path $fxCk -Force | Out-Null
+Copy-Item (Join-Path $fix 'coverage-ledger\coverage-ledger.json') $fxCk -Force
+$ckBase = Join-Path $fxCk 'coverage-baseline.json'
+Copy-Item (Join-Path $fix 'coverage-ledger\coverage-baseline.json') $ckBase -Force
+$ckLed = Join-Path $fxCk 'coverage-ledger.json'
+$ckB = (Get-Content $ckBase -Raw) | ConvertFrom-Json
+$ckL = (Get-Content $ckLed  -Raw) | ConvertFrom-Json
+$ckB.checks | Add-Member -NotePropertyName 'other-shrunk' -NotePropertyValue ([pscustomobject]@{ examined = 800; tolerance = 0.10; max_age_days = 99; phase = 'all'; why = 'second dropped row, so the scope has something to spare' }) -Force
+$ckL.checks | Add-Member -NotePropertyName 'other-shrunk' -NotePropertyValue ([pscustomobject]@{ examined = 100; eligible = 100; skipped = 0; blind = $false; as_of = ([string]$ckL.checks.'shrunk-check'.as_of); detail = 'second dropped row' }) -Force
+$ckB | ConvertTo-Json -Depth 12 | Set-Content $ckBase -Encoding utf8
+$ckL | ConvertTo-Json -Depth 12 | Set-Content $ckLed  -Encoding utf8
+
+# A TYPO MUST NOT READ AS A CAREFUL SCOPED ACCEPT THAT CHANGED NOTHING.
+# rc 3 is COULD NOT EVALUATE, which is what a refused argument is - it evaluated nothing. rc 2 in this
+# auditor means "findings, gated", and using it here also made audit-guard-contract report the file
+# HALF-COVERED, because a verdict exit must carry the completion marker and a refusal must not.
+$rc1 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCk, '-BaselineFile', $ckBase, '-Phase', 'all', '-Accept', '-AcceptLower', '-Check', 'shrunk-checkk')
+$ckT = (Get-Content $ckBase -Raw) | ConvertFrom-Json
+if ($rc1.rc -eq 3 -and $rc1.text -match 'does not carry' -and [int]$ckT.checks.'shrunk-check'.examined -eq 1000) {
+  Ok '-Check refuses a name the baseline does not carry, and writes nothing'
+} else { Bad ('-Check accepted an unknown name (rc=' + $rc1.rc + '), so a typo reads as a scoped accept that silently moved no floor') }
+
+# -Check ALONE does nothing, and saying so beats half-applying an intent.
+$rc2 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCk, '-BaselineFile', $ckBase, '-Phase', 'all', '-Accept', '-Check', 'shrunk-check')
+if ($rc2.rc -eq 3 -and $rc2.text -match 'scopes -AcceptLower') { Ok '-Check without -AcceptLower is refused rather than silently ignored' }
+else { Bad ('-Check without -AcceptLower was accepted (rc=' + $rc2.rc + '), so a scope can be typed and quietly not applied') }
+
+# THE POINT OF THE WHOLE FEATURE: one row down, the other still defended.
+$rc3 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCk, '-BaselineFile', $ckBase, '-Phase', 'all', '-Accept', '-AcceptLower', '-Check', 'shrunk-check')
+$ckA = (Get-Content $ckBase -Raw) | ConvertFrom-Json
+if ([int]$ckA.checks.'shrunk-check'.examined -eq 40 -and [int]$ckA.checks.'other-shrunk'.examined -eq 800) {
+  Ok '-Check lowers ONLY the named row and leaves every other dropped floor defended'
+} else { Bad ('-Check did not scope the lowering: shrunk-check=' + [string]$ckA.checks.'shrunk-check'.examined + ' other-shrunk=' + [string]$ckA.checks.'other-shrunk'.examined) }
+# AND THE LABEL MUST MATCH THE ROW. The first cut printed LOWERED against every breached row while its
+# own HELD lines said otherwise - a report contradicting itself, and the half naming numbers is the
+# half a reader believes.
+if ($rc3.text -match 'HELD\s+other-shrunk' -and $rc3.text -notmatch 'LOWERED\s+other-shrunk') {
+  Ok '-Check reports the spared row as HELD and never labels it LOWERED'
+} else { Bad 'the scoped accept labelled a row it did not touch as LOWERED' }
+Remove-Item $fxCk -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item $fxCl -Recurse -Force -ErrorAction SilentlyContinue
 
 # ---------------------------------------------------------------- N6. Hy-Vee link price provenance
