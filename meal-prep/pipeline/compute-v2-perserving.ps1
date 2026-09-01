@@ -53,6 +53,27 @@ function Resolve-Inversions($rows, $tol, $alertFrac){
   }
   return ,$flagged
 }
+
+# ONE COPY OF THE PACKAGE DECISION, lifted out of the pricing loop 2026-09-01 (queue b5b8e0) so the
+# self-test below exercises THE SAME BYTES the manifest runs. It was inline, ~90 lines past the point
+# where -SelfTest returns, so the covered_by skip that shipped at 08:20 (2190d28b) had no test that could
+# reach it - the fix-needs-a-reachable-self-test class that regressed two same-day fixes on 2026-07-29.
+# Re-implementing the predicate inside the test instead would have been the other trap: two copies of a
+# rule drift, and this one decides whether a line adds package cost.
+#
+# Returns $null for a line that contributes NO package, or the {n, cost, pkg_g} it contributes.
+# A COVERED LINE HAS NO PACKAGE BY DESIGN - its unit is bought under another ingredient, so it adds
+# NOTHING to a per-serving package total. Both tiers already count the coverer's own purchase; charging
+# this line again would double it, which is the very over-buy covered_by exists to remove. compute-v2 was
+# the fifth consumer of a costed line to assume every line has a package.
+function Resolve-LinePackage($cl, [string]$key){
+  $n = if($cl.buy_n){ [int]$cl.buy_n } else { [int]$cl.starter_n }
+  $c = if($cl.buy_cost){ [double]$cl.buy_cost } else { [double]$cl.starter_cost }
+  $pkgG = if($cl.pkg_g){ [double]$cl.pkg_g } else { [double]$cl.starter_pkg_g }
+  if(($cl.PSObject.Properties.Name -contains 'covered_by') -and $cl.covered_by){ return $null }
+  if($n -lt 1 -or $c -le 0 -or $pkgG -le 0){ throw "bad pkg data on '$key'" }
+  return [pscustomobject]@{ n = $n; cost = $c; pkg_g = $pkgG }
+}
 if($SelfTest){
   $t = @(
     [pscustomobject]@{slug='inv-real'; everyday_ps=3.00; cheapest_ps=3.30},   # 10% inverted -> flag + clamp
@@ -61,8 +82,37 @@ if($SelfTest){
   )
   $fl = Resolve-Inversions $t 0.02 0.03
   $pass = ($t[0].cheapest_ps -eq 3.00) -and ($t[1].cheapest_ps -eq 3.00) -and ($t[2].cheapest_ps -eq 2.50) -and ($fl.Count -eq 1) -and ($fl[0].slug -eq 'inv-real')
-  if($pass){ Write-Output 'SELFTEST PASS: cheapest<=everyday clamp + real-inversion flag correct'; exit 0 }
-  Write-Output ("SELFTEST FAIL: clamped=[{0},{1},{2}] flagged={3}" -f $t[0].cheapest_ps,$t[1].cheapest_ps,$t[2].cheapest_ps,$fl.Count); exit 1
+  if(-not $pass){ Write-Output ("SELFTEST FAIL: clamped=[{0},{1},{2}] flagged={3}" -f $t[0].cheapest_ps,$t[1].cheapest_ps,$t[2].cheapest_ps,$fl.Count); exit 1 }
+  Write-Output 'SELFTEST PASS: cheapest<=everyday clamp + real-inversion flag correct'
+
+  # COVERED_BY REACHABILITY (2026-09-01, queue 2026-09-01-b5b8e0). FROZEN from the real line that killed
+  # the 08:00 manifest: db\costed.json, slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas,
+  # item 'Lemon Zest', covered_by 'Fresh Lemon Juice', with buy_n / buy_cost / pkg_g all null BY DESIGN
+  # since d1e5cd89 (07:48) - a lemon yields juice AND zest, so the zest is bought under the juice.
+  # compute-v2 ran at 08:06 with the pre-07:48 code and threw at its pkg check.
+  # NEVER regenerate these two objects from live data: costed.json holds exactly ONE covered_by line
+  # today, so a regenerated fixture would go empty the moment that recipe changes, and this case would
+  # pass by testing nothing.
+  $coveredLine = [pscustomobject]@{ item = 'Lemon Zest'; covered_by = 'Fresh Lemon Juice'
+                                    buy_n = $null; buy_cost = $null; pkg_g = $null
+                                    starter_n = $null; starter_cost = $null; starter_pkg_g = $null }
+  # CLEAN TWIN: byte-identical except that it is NOT covered. The same null package data must STILL
+  # throw, or the skip has been widened into a blanket "ignore bad package data" and the guard is gone.
+  $bareLine    = [pscustomobject]@{ item = 'Lemon Zest'
+                                    buy_n = $null; buy_cost = $null; pkg_g = $null
+                                    starter_n = $null; starter_cost = $null; starter_pkg_g = $null }
+  $covRes = 'unset'; $covThrew = $false
+  try { $covRes = Resolve-LinePackage $coveredLine 'Lemon Zest' } catch { $covThrew = $true }
+  $bareThrew = $false
+  try { [void](Resolve-LinePackage $bareLine 'Lemon Zest') } catch { $bareThrew = $true }
+  $mustFire  = ((-not $covThrew) -and ($null -eq $covRes))   # covered: no throw, and contributes NO package
+  $cleanTwin = $bareThrew                                     # not covered: the bad-pkg error must survive
+  if($mustFire -and $cleanTwin){
+    Write-Output 'SELFTEST PASS: a covered_by line with null package fields is skipped and adds zero package cost, and the same nulls WITHOUT covered_by still throw'
+    exit 0
+  }
+  Write-Output ("SELFTEST FAIL: covered_by path - covered threw={0} covered_result={1} bare_threw={2} (want threw=False result=null bare_threw=True)" -f $covThrew, $covRes, $bareThrew)
+  exit 1
 }
 
 # ---- THE FEED THIS RUN IS ALLOWED TO PRICE ON (2026-08-15) -----------------------------------------
@@ -136,15 +186,11 @@ foreach($run in @('db')){
       foreach($ing in $spec.scaler.ing){
         $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ $ing.canon } else { $ing.item }
         $cl = $clines[$key]; if(-not $cl){ throw "no costed line '$key'" }
-        $n = if($cl.buy_n){ [int]$cl.buy_n } else { [int]$cl.starter_n }
-        $c = if($cl.buy_cost){ [double]$cl.buy_cost } else { [double]$cl.starter_cost }
-        $pkgG = if($cl.pkg_g){ [double]$cl.pkg_g } else { [double]$cl.starter_pkg_g }
-        # A COVERED LINE HAS NO PACKAGE BY DESIGN - its unit is bought under another ingredient, so it
-        # adds NOTHING to a per-serving package total. Both tiers already count the coverer's own
-        # purchase; charging this line again would double it, which is the very over-buy covered_by
-        # exists to remove. The fifth consumer of a costed line to assume every line has a package.
-        if(($cl.PSObject.Properties.Name -contains 'covered_by') -and $cl.covered_by){ continue }
-        if($n -lt 1 -or $c -le 0 -or $pkgG -le 0){ throw "bad pkg data on '$key'" }
+        # The covered_by skip and the bad-package throw both live in Resolve-LinePackage near the top of
+        # this file, so -SelfTest exercises THIS decision rather than a second copy of it.
+        $pk = Resolve-LinePackage $cl $key
+        if($null -eq $pk){ continue }
+        $n = $pk.n; $c = $pk.cost; $pkgG = $pk.pkg_g
         $pkgP = $c / $n
         $k = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02))
         $ev += $k * $pkgP
