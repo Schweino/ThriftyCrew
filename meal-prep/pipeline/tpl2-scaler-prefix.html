@@ -159,8 +159,9 @@ if(window.__smpScaler2)return; window.__smpScaler2=1;
 var SMPFEED='https://feed.thriftycrew.com/smp-feed.json',smpFeedP=null,feedData=null,feedFailed=false;
 function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
-// Scale ONLY the leading quantity, and understand fractions while doing it.
-// The old version multiplied every number in the string, which broke two ways the moment a reader touched
+// Scale ONLY the quantity, and understand fractions while doing it. (Which number IS the quantity is
+// decided in scaleBuy below; these two helpers only parse and render one.)
+// The 2026-07 version multiplied every number in the string, which broke two ways the moment a reader touched
 // the servings control: "1/2 tsp" at 2x became "2/4 tsp" (it scaled the numerator AND the denominator),
 // and a compound label like "2 pk 12 oz" had its pack SIZE scaled along with the count. A recipe list is
 // "<quantity> <unit> <optional note>", so the quantity is the only number that may move.
@@ -175,10 +176,57 @@ function fmtCook(v){ // render back in kitchen fractions, the way the label was 
   w+=c;
   if(!b) return (w<1)?String(Math.round(v*100)/100):String(w);
   return (w<1)?b:(String(w)+' '+b); }
+// A QUANTITY IS NOT ALWAYS THE FIRST NUMBER, AND IS NOT ALWAYS ONE NUMBER (fixed 2026-09-01).
+// Two shapes shipped wrong on live cards, both catalog-wide, both invisible until a reader moved the
+// servings control:
+//   COMPOUND  "2 lb 5 oz" is ONE quantity written in two units. Scaling the leading number alone
+//             rendered "4 lb 5 oz" at 28 servings where the honest answer is 4 lb 10 oz - five ounces
+//             light on the main protein, printed right beside a gram figure that had doubled correctly.
+//             Measured 2026-09-01: 8 such labels across 6 live specs.
+//   QUALIFIED "about 14 cups prepared (...)" and "optional: 2/3 cup ..." never scaled AT ALL. The match
+//             is anchored, a word stood in front of the number, so the whole label froze at base
+//             servings while its grams moved. Measured: 44 labels across 27 specs lead with something
+//             other than their number.
+// THE PREMISE DOES NOT CHANGE. A label is still "<quantity> <unit> <optional note>" and a NOTE's numbers
+// are still untouchable, because a package size must never scale ("2 pk 12 oz" keeps its 12). What
+// widened is what may stand in FRONT of the quantity (a closed list of hedge words, nothing else) and
+// what counts AS one quantity (a lb+oz pair). The qualified path additionally REFUSES any label carrying
+// a second bare quantity outside parentheses ("About 1 tablespoon salt and 1 1/2 teaspoons black
+// pepper"): moving one half of a two-quantity sentence is worse than moving neither, and that shape is
+// repair-range-buy's job, not this function's. The plain leading-number path is deliberately unchanged,
+// so this edit can only alter a label that is a lb+oz pair or that does not scale today at all.
+var SMPQ='(?:\\d+\\s+\\d+/\\d+|\\d+/\\d+|\\d+(?:\\.\\d+)?)';
+// Hedges only. NOT "to taste", NOT "juice of", NOT "for frying": each of those introduces a number that
+// is a restatement or a garnish rather than the amount the reader measures out.
+// Written as a regex LITERAL, not a quoted string, so its text is byte-identical to $script:CM_SB_LEAD
+// in cook-measure-lib.ps1 and ops\audit-twin-drift.ps1 can compare the two copies on every push.
+var SMPLEAD=/(?:~|about|approximately|approx\.?|around|roughly|nearly|a\s+scant|scant|a\s+generous|generous|optional)\s*[:,]?\s*/.source;
+var SMPRE_LBOZ=new RegExp('^(\\s*(?:'+SMPLEAD+')?)('+SMPQ+')\\s*(lbs?|pounds?)\\.?\\s+('+SMPQ+')\\s*(oz|ounces?)\\b','i');
+var SMPRE_LEAD=new RegExp('^(\\s*)('+SMPQ+')');
+var SMPRE_QUAL=new RegExp('^(\\s*'+SMPLEAD+')('+SMPQ+')','i');
+// A digit that is NOT inside a parenthetical. A bracketed note holds package sizes, can counts and
+// restatements, none of which are the amount being scaled, so they never veto the scale.
+function smpBareNum(s){ var d=0,i,c;
+  for(i=0;i<s.length;i++){ c=s.charAt(i);
+    if(c==='(') d++; else if(c===')'){ if(d>0)d--; } else if(d===0&&c>='0'&&c<='9') return true; }
+  return false; }
+// Abbreviations are invariant ("1 lb", "4 lb"); only the spelled-out words take a plural.
+function smpLbWord(w,v){ return (/^p/i.test(w))?((v===1)?'pound':'pounds'):'lb'; }
+function smpOzWord(w,v){ return (/^ou/i.test(w))?((v===1)?'ounce':'ounces'):'oz'; }
+// Re-render a scaled ounce total as normalised lb + oz, carrying when the rounded remainder reaches 16.
+function smpFmtLbOz(totOz,lbw,ozw){
+  var lb=Math.floor(totOz/16+1e-9), oz=totOz-lb*16, os=(oz>0.005)?fmtCook(oz):'';
+  if(os==='16'){ lb+=1; os=''; }
+  if(lb<1) return (os||'0')+' '+smpOzWord(ozw,parseQty(os||'0'));
+  return String(lb)+' '+smpLbWord(lbw,lb)+(os?(' '+os+' '+smpOzWord(ozw,parseQty(os))):''); }
 function scaleBuy(buy,f){
-  var m=buy.match(/^(\s*)(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?)/);
-  if(!m) return buy;
-  return m[1]+fmtCook(parseQty(m[2])*f)+buy.slice(m[0].length); }
+  var m=buy.match(SMPRE_LBOZ);
+  if(m) return m[1]+smpFmtLbOz((parseQty(m[2])*16+parseQty(m[4]))*f,m[3],m[5])+buy.slice(m[0].length);
+  m=buy.match(SMPRE_LEAD);
+  if(m) return m[1]+fmtCook(parseQty(m[2])*f)+buy.slice(m[0].length);
+  m=buy.match(SMPRE_QUAL);
+  if(m&&!smpBareNum(buy.slice(m[0].length))) return m[1]+fmtCook(parseQty(m[2])*f)+buy.slice(m[0].length);
+  return buy; }
 function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
 function money(v){ return '$'+v.toFixed(2); }
 function rm(){ return (window.TC&&window.TC.rm)?window.TC.rm():false; }

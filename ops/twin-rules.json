@@ -42,6 +42,16 @@
         { "file":  "meal-prep/pipeline/map-preresolve.ps1",
           "capture":  "\\$rxNum = '(.*?)'" }
       ]
+    },
+    {
+      "name":  "scaler-quantity-leadin",
+      "why":  "The closed list of hedge words the serving scaler is allowed to look PAST when it hunts for a label's quantity. It exists in the browser (tpl2-scaler-prefix.html, which is what a reader actually runs) and in its PowerShell twin Invoke-CmScaleBuy, which is the only copy the repair scripts' fixtures can execute. Added 2026-09-01 with the widening itself: a word added to one side and not the other means the card and every self-test that claims to mirror it disagree about which labels scale, and the disagreement is invisible until a reader moves the servings control. The JS side is deliberately written as a regex LITERAL rather than a quoted string so the two texts are byte-comparable without normalising escapes.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/tpl2-scaler-prefix.html",
+          "capture":  "var SMPLEAD=/(.*?)/\\.source;" },
+        { "file":  "meal-prep/pipeline/cook-measure-lib.ps1",
+          "capture":  "\\$script:CM_SB_LEAD = '(.*?)'" }
+      ]
     }
   ]
 }

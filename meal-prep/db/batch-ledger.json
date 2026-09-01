@@ -707,7 +707,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w1",
       "opened":  "2026-08-27T12:19:19",
-      "last_activity":  "2026-08-27T12:19:20",
+      "last_activity":  "2026-09-01T18:17:37",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -737,8 +737,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-27T12:19:20",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-09-01T18:17:37",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - superseded wave: ground-beef-cottage-cheese-bowl and chicken-rice-and-broccoli shipped under w8, healthy-hamburger-helper under w14, and teriyaki-grilled-chicken-and-veggie-rice-bowls was never built or published. Post-publish review of the live cards done 2026-09-01 (scaler label class fix + per-recipe corrections)."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-09-01T18:17:37",
+      "abandon_reason":  "superseded wave: ground-beef-cottage-cheese-bowl and chicken-rice-and-broccoli shipped under w8, healthy-hamburger-helper under w14, and teriyaki-grilled-chicken-and-veggie-rice-bowls was never built or published. Post-publish review of the live cards done 2026-09-01 (scaler label class fix + per-recipe corrections)."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w2",
@@ -784,7 +792,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w3",
       "opened":  "2026-08-27T14:59:20",
-      "last_activity":  "2026-08-27T15:13:19",
+      "last_activity":  "2026-09-01T18:17:37",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -827,13 +835,21 @@
                          "stage":  "recipes-db",
                          "at":  "2026-08-27T15:13:19",
                          "detail":  "2 row(s) via hunt-2026-08-27-highprotein-w3"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-09-01T18:17:37",
+                         "detail":  "abandoned owing 3: build-cards, publish, post-publish-review - superseded wave: butter-chicken-pasta shipped under w8; pioneer-woman-chili was never built or published. Post-publish review of the live card done 2026-09-01 (half-and-half and onion labels corrected)."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-09-01T18:17:37",
+      "abandon_reason":  "superseded wave: butter-chicken-pasta shipped under w8; pioneer-woman-chili was never built or published. Post-publish review of the live card done 2026-09-01 (half-and-half and onion labels corrected)."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w4",
       "opened":  "2026-08-27T16:11:53",
-      "last_activity":  "2026-08-27T16:22:58",
+      "last_activity":  "2026-09-01T18:17:38",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -880,13 +896,21 @@
                          "stage":  "recipes-db",
                          "at":  "2026-08-27T16:22:58",
                          "detail":  "6 row(s) via hunt-2026-08-27-highprotein-w4"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-09-01T18:17:38",
+                         "detail":  "abandoned owing 3: build-cards, publish, post-publish-review - superseded wave: chicken-rice-and-broccoli, butter-chicken-pasta and ground-beef-cottage-cheese-bowl shipped under w8, healthy-hamburger-helper under w14; teriyaki and pioneer-woman-chili never built. Post-publish review of the live cards done 2026-09-01."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-09-01T18:17:38",
+      "abandon_reason":  "superseded wave: chicken-rice-and-broccoli, butter-chicken-pasta and ground-beef-cottage-cheese-bowl shipped under w8, healthy-hamburger-helper under w14; teriyaki and pioneer-woman-chili never built. Post-publish review of the live cards done 2026-09-01."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w5",
       "opened":  "2026-08-27T16:27:52",
-      "last_activity":  "2026-08-27T16:27:53",
+      "last_activity":  "2026-09-01T18:17:38",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -918,13 +942,21 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-27T16:27:53",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-09-01T18:17:38",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - superseded wave: same slugs as w4, all shipped under w8/w14. Post-publish review of the live cards done 2026-09-01."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-09-01T18:17:38",
+      "abandon_reason":  "superseded wave: same slugs as w4, all shipped under w8/w14. Post-publish review of the live cards done 2026-09-01."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w6",
       "opened":  "2026-08-27T17:35:10",
-      "last_activity":  "2026-08-27T17:35:12",
+      "last_activity":  "2026-09-01T18:17:39",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -954,8 +986,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-27T17:35:12",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-09-01T18:17:39",
+                         "detail":  "abandoned owing 5: audit, recipes-db, build-cards, publish, post-publish-review - superseded wave: ground-beef-cottage-cheese-bowl, chicken-rice-and-broccoli and butter-chicken-pasta shipped under w8; teriyaki never built. Post-publish review of the live cards done 2026-09-01."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-09-01T18:17:39",
+      "abandon_reason":  "superseded wave: ground-beef-cottage-cheese-bowl, chicken-rice-and-broccoli and butter-chicken-pasta shipped under w8; teriyaki never built. Post-publish review of the live cards done 2026-09-01."
   },
   {
       "batch":  "hunt-2026-08-27-highprotein-w7",

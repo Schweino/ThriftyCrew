@@ -29,17 +29,17 @@
                               ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  544,
-                 "protein":  47,
-                 "carbs":  31,
+                 "cal":  524,
+                 "protein":  46,
+                 "carbs":  27,
                  "fat":  24,
-                 "cost_ps":  "3.06"
+                 "cost_ps":  "3.08"
              },
-    "intro_html":  "\u003cp\u003eSome dinners make you choose between cheap and satisfying. This one flat out refuses. Crack Chicken Chili is a slow cooker full of shredded chicken, three cans of beans, sweet corn, a brick and a half of cream cheese and a pile of crisp bacon, and it comes out rich enough that folks think you fussed over it all day. You did not. You dumped, you waited, you shredded. That is the whole trick.\u003c/p\u003e\u003cp\u003eEach container lands at {{cal}} calories with {{protein}} grams of protein, which is the kind of number that keeps you full clear through the afternoon instead of circling the vending machine. And it does it for ${{cost_ps}} a serving. Let me walk you through it.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eSome dinners make you choose between cheap and satisfying. This one flat out refuses. Crack Chicken Chili is a slow cooker full of shredded chicken, four cans of beans, sweet corn, nearly two bricks of cream cheese and a pile of crisp bacon, and it comes out rich enough that folks think you fussed over it all day. You did not. You dumped, you waited, you shredded. That is the whole trick.\u003c/p\u003e\u003cp\u003eEach container lands at {{cal}} calories with {{protein}} grams of protein, which is the kind of number that keeps you full clear through the afternoon instead of circling the vending machine. And it does it for ${{cost_ps}} a serving. Let me walk you through it.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 1/2 lb, boneless and skinless (1588 g)",
                                 "\u003cstrong\u003eBone Broth (Kettle \u0026 Fire):\u003c/strong\u003e 5 1/4 cups (1260 g)",
-                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 3 tbsp (1 3/4 packets) (49 g)",
+                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 1 3/4 packets (49 g)",
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 tsp (5 g)",
                                 "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 3/4 tsp (4 g)",
                                 "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1 tbsp plus 1/2 tsp (6 g)",
@@ -48,48 +48,48 @@
                                 "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 3 1/2 cups, drained (about two 14.5 oz cans) (525 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 cups, undrained (about two 15 oz cans) (744 g)",
                                 "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 2 1/2 cups, drained and rinsed (about two 15 oz cans) (446 g)",
-                                "\u003cstrong\u003eCanned Black Beans (Great Value):\u003c/strong\u003e 4 cups, drained and rinsed (just under two 15 oz cans) (744 g)",
+                                "\u003cstrong\u003eCanned Black Beans (Great Value):\u003c/strong\u003e 2 1/2 cups, drained and rinsed (about two 15 oz cans) (446 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 3/4 cup (about two 4 oz cans) (198 g)",
                                 "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 18 slices, cooked crisp and chopped (175 g)",
                                 "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz (one and three-quarter 8 oz bricks) (397 g)",
                                 "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 2 2/3 cups shredded (298 g)",
-                                "\u003cstrong\u003eSour Cream (generic (USDA)):\u003c/strong\u003e optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g) (140 g)"
+                                "\u003cstrong\u003eSour Cream (generic (USDA)):\u003c/strong\u003e 2/3 cup, optional, to serve (140 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 3 1/2 lb, boneless and skinless: ~$7.81. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
                        "Bone Broth, 5 1/4 cups: ~$3.58. \u003cstrong\u003eBuy 2 32floz cartons: $5.38.\u003c/strong\u003e",
-                       "Ranch Seasoning Mix, 3 tbsp (1 3/4 packets): ~$0.92. \u003cstrong\u003ePantry staple; this batch alone uses about 2 1oz packets.\u003c/strong\u003e",
+                       "Ranch Seasoning Mix, 1 3/4 packets: ~$0.92. \u003cstrong\u003ePantry staple; this batch alone uses about 2 1oz packets.\u003c/strong\u003e",
                        "Sweet Whole Kernel Corn, 3 1/2 cups, drained (about two 14.5 oz cans): ~$0.74. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
-                       "Diced Tomatoes, 3 cups, undrained (about two 15 oz cans): ~$1.52. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3 cups, undrained (about two 15 oz cans): ~$1.39. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
                        "Kidney Beans, 2 1/2 cups, drained and rinsed (about two 15 oz cans): ~$1.48. \u003cstrong\u003eBuy 2 cans: $1.69.\u003c/strong\u003e",
-                       "Canned Black Beans, 4 cups, drained and rinsed (just under two 15 oz cans): ~$2.68. \u003cstrong\u003eBuy 3 15oz cans: $2.76.\u003c/strong\u003e",
+                       "Canned Black Beans, 2 1/2 cups, drained and rinsed (about two 15 oz cans): ~$1.61. \u003cstrong\u003eBuy 2 15oz cans: $1.84.\u003c/strong\u003e",
                        "Diced Green Chiles, 3/4 cup (about two 4 oz cans): ~$1.75. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
                        "Hickory Smoked Bacon, 18 slices, cooked crisp and chopped: ~$1.53. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 14 oz (one and three-quarter 8 oz bricks): ~$3.22. \u003cstrong\u003eBuy 2 8oz bricks: $3.68.\u003c/strong\u003e",
                        "Mexican Cheese Blend, 2 2/3 cups shredded: ~$2.27. \u003cstrong\u003eBuy 2 8 oz bags: $3.45.\u003c/strong\u003e",
-                       "Sour Cream, optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g): ~$0.56. \u003cstrong\u003eBuy 1 16oz tub: $1.83.\u003c/strong\u003e",
+                       "Sour Cream, 2/3 cup, optional, to serve: ~$0.56. \u003cstrong\u003eBuy 1 16oz tub: $1.83.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, onion powder, cayenne pepper, paprika, chili powder): ~$0.37. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.43 across 14 servings, so roughly $2.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $37.61 across 14 servings, roughly $2.69 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.16. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $27.23 across 14 servings, so roughly $1.94 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.54 across 14 servings, roughly $2.61 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.09. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eHere is where the canned aisle pays you back. Beans, corn, tomatoes, and chiles are some of the cheapest protein and fiber on the shelf, and stretching two pounds of chicken across a pot this size is what drives the number down. This whole batch lands at about ${{cost_ps}} a serving.\u003c/p\u003e\u003cp\u003eRead that twice. A creamy, bacon-loaded, {{protein}}-gram-of-protein dinner for ${{cost_ps}} a plate is not a compromise, it is a win. That is the kind of math that makes eating well feel less like a sacrifice and more like a system that is finally working for you.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eHere is where the canned aisle pays you back. Beans, corn, tomatoes, and chiles are some of the cheapest protein and fiber on the shelf, and stretching three and a half pounds of chicken across a pot this size is what drives the number down. This whole batch lands at about ${{cost_ps}} a serving.\u003c/p\u003e\u003cp\u003eRead that twice. A creamy, bacon-loaded, {{protein}}-gram-of-protein dinner for ${{cost_ps}} a plate is not a compromise, it is a win. That is the kind of math that makes eating well feel less like a sacrifice and more like a system that is finally working for you.\u003c/p\u003e",
     "shop_smart":  "\u003cp\u003eThis is a canned goods recipe, and that is good news for the grocery budget. You are buying two 14.5 oz cans of corn, two 15 oz cans of diced tomatoes, two 15 oz cans of kidney beans, two 15 oz cans of black beans and two 4 oz cans of green chiles. Buy the store brand every single time. Canned beans are canned beans, and the only thing that really changes is the label on the front.\u003c/p\u003e\u003cp\u003eReach for fire roasted tomatoes if the shelf has them, because they do real flavor work for no extra effort, but plain diced will not ruin your day. The cream cheese comes to 14 oz, which is one and three quarter of the standard 8 oz bricks, so pick up two. Ranch seasoning runs about 1 3/4 packets, so grab two of those too. Bacon is 18 slices cooked crisp, right around a full package, and the Mexican blend cheese you buy already shredded in a bag so you touch a grater exactly zero times.\u003c/p\u003e",
     "make_it":  [
-                    "\u003cp\u003eGet out your slow cooker. In goes everything but the shredded Mexican cheese: the chicken breast, the bone broth, the ranch seasoning, the garlic powder, onion powder, cayenne, paprika and chili powder, the drained corn, the undrained tomatoes, the drained and rinsed kidney beans and black beans, the green chiles, the chopped crisp bacon and the cream cheese. Give it a stir, put the lid on, and cook on high for 4 to 5 hours or on low for 6 to 8. The cream cheese melts down into the broth while it works, and that is where the richness comes from.\u003c/p\u003e\u003cp\u003eWhen you have about 30 minutes left, lift the chicken breasts out, shred them with two forks, and drop them right back in to finish cooking. Now stir in the 2 2/3 cups of Mexican blend cheese and mix until it melts all the way through. That is your chili. Give it a taste, because that cayenne carries real heat.\u003c/p\u003e\u003cp\u003eAt serving time, top with sour cream, a little avocado or extra cheese if you held some back. Those are optional, so no stress if you skip them entirely.\u003c/p\u003e"
+                    "\u003cp\u003eGet out your slow cooker. In goes everything but the shredded Mexican cheese: the chicken breast, the bone broth, the ranch seasoning, the garlic powder, onion powder, cayenne, paprika and chili powder, the drained corn, the undrained tomatoes, the drained and rinsed kidney beans and black beans, the green chiles, the chopped crisp bacon and the cream cheese. Give it a stir, put the lid on, and cook on high for 4 to 5 hours or on low for 6 to 8. The cream cheese melts down into the broth while it works, and that is where the richness comes from.\u003c/p\u003e\u003cp\u003eWhen you have about 30 minutes left, lift the chicken breasts out, shred them with two forks, and drop them right back in to finish cooking. Now stir in the 2 2/3 cups of Mexican blend cheese and mix until it melts all the way through. That is your chili. Give it a taste, because that cayenne carries real heat.\u003c/p\u003e\u003cp\u003eAt serving time, top with sour cream, and a little extra cheese if you held some back. Those are optional, so no stress if you skip them entirely.\u003c/p\u003e"
                 ],
     "portion_html":  "\u003cp\u003eFourteen containers is the target, and the honest way to hit it evenly is to weigh the pot. Set your empty container on a kitchen scale, zero it out, then weigh the full cooked chili before you start scooping. Take that total, divide by 14, and that is your grams per container. Fill each one to that number and you are done wondering whether the last three folks got shorted.\u003c/p\u003e\u003cp\u003eThis chili is thick and it holds. It reheats beautifully all week and it freezes well, so if 14 servings is more than your week needs, stack a few in the freezer for the weeks you have no patience left to cook. Each one carries {{cal}} calories and {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://wholesomelymorgan.com/crack-chicken-chili/\" target=\"_blank\" rel=\"noopener\"\u003ewholesomelymorgan.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eIf a number like ${{cost_ps}} a serving is your kind of language, the rest of the site speaks it fluently. Thrifty Crew membership runs a dollar a month and hands you every recipe, every macro and every cost breakdown we have, all built to feed you well without wrecking the grocery budget. One pot at a time, that is how the savings add up.\u003c/p\u003e",
-    "cost_batch":  28.43,
-    "cost_batch_true":  37.61,
-    "cost_per_serving":  2.03,
-    "cost_per_serving_true":  2.69,
+    "cost_batch":  27.23,
+    "cost_batch_true":  36.54,
+    "cost_per_serving":  1.94,
+    "cost_per_serving_true":  2.61,
     "cost_pantry_add":  5.55,
-    "cost_first_run":  43.16,
+    "cost_first_run":  42.09,
     "scaler":  {
-                   "cost":  "37.61",
+                   "cost":  "36.54",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -111,7 +111,7 @@
                                    "item":  "Ranch Seasoning Mix",
                                    "canon":  "Ranch Seasoning Mix",
                                    "grams":  49,
-                                   "buy":  "3 tbsp (1 3/4 packets)",
+                                   "buy":  "1 3/4 packets",
                                    "bid":  "ranch-seasoning-mix",
                                    "gpu":  "28.350"
                                },
@@ -182,8 +182,8 @@
                                {
                                    "item":  "Canned Black Beans",
                                    "canon":  "Canned Black Beans",
-                                   "grams":  744,
-                                   "buy":  "4 cups, drained and rinsed (just under two 15 oz cans)",
+                                   "grams":  446,
+                                   "buy":  "2 1/2 cups, drained and rinsed (about two 15 oz cans)",
                                    "bid":  "canned-black-beans",
                                    "gpu":  "28.350"
                                },
@@ -223,7 +223,7 @@
                                    "item":  "Sour Cream",
                                    "canon":  "Sour Cream",
                                    "grams":  140,
-                                   "buy":  "optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g)",
+                                   "buy":  "2/3 cup, optional, to serve",
                                    "bid":  "sour-cream",
                                    "gpu":  "28.350"
                                }
@@ -236,11 +236,11 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT4H",
                  "totalTime":  "PT4H10M",
-                 "costPerServing":  3.06,
+                 "costPerServing":  3.08,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 3 1/2 lb, boneless and skinless (1588 g)",
                                           "Bone Broth, 5 1/4 cups (1260 g)",
-                                          "Ranch Seasoning Mix, 3 tbsp (1 3/4 packets) (49 g)",
+                                          "Ranch Seasoning Mix, 1 3/4 packets (49 g)",
                                           "Garlic Powder, 1 3/4 tsp (5 g)",
                                           "Onion Powder, 1 3/4 tsp (4 g)",
                                           "Cayenne Pepper, 1 tbsp plus 1/2 tsp (6 g)",
@@ -249,18 +249,18 @@
                                           "Sweet Whole Kernel Corn, 3 1/2 cups, drained (about two 14.5 oz cans) (525 g)",
                                           "Diced Tomatoes, 3 cups, undrained (about two 15 oz cans) (744 g)",
                                           "Kidney Beans, 2 1/2 cups, drained and rinsed (about two 15 oz cans) (446 g)",
-                                          "Canned Black Beans, 4 cups, drained and rinsed (just under two 15 oz cans) (744 g)",
+                                          "Canned Black Beans, 2 1/2 cups, drained and rinsed (about two 15 oz cans) (446 g)",
                                           "Diced Green Chiles, 3/4 cup (about two 4 oz cans) (198 g)",
                                           "Hickory Smoked Bacon, 18 slices, cooked crisp and chopped (175 g)",
                                           "1/3 Fat Cream Cheese, 14 oz (one and three-quarter 8 oz bricks) (397 g)",
                                           "Mexican Cheese Blend, 2 2/3 cups shredded (298 g)",
-                                          "Sour Cream, optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g) (140 g)"
+                                          "Sour Cream, 2/3 cup, optional, to serve (140 g)"
                                       ],
                  "steps":  [
                                "Add the chicken breast, bone broth, ranch seasoning, garlic powder, onion powder, cayenne, paprika, chili powder, drained corn, undrained diced tomatoes, drained and rinsed kidney beans, drained and rinsed black beans, green chiles, chopped crisp bacon and cream cheese to the slow cooker. Stir, cover, and cook on high 4 to 5 hours or on low 6 to 8 hours.",
                                "With about 30 minutes of cook time left, remove the chicken breasts, shred them with two forks, and return them to the cooker to finish.",
                                "Stir in the Mexican blend shredded cheese and mix until fully melted through.",
-                               "Portion into 14 containers and top with sour cream, avocado or extra cheese as desired."
+                               "Portion into 14 containers and top with sour cream or extra cheese as desired."
                            ],
                  "step_names":  [
                                     "Load the slow cooker",
@@ -316,7 +316,7 @@
                               },
                               {
                                   "item":  "Canned Black Beans",
-                                  "grams":  744
+                                  "grams":  446
                               },
                               {
                                   "item":  "Diced Green Chiles",

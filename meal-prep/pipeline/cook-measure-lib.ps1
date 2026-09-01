@@ -78,8 +78,16 @@ function Join-CmTail([string]$measure, [string]$tail) {
 }
 
 function Format-CmQty([double]$n) {
-  <# Friendly kitchen fractions. A recipe says 1/2 cup, never 0.47 cup. Above 10 nothing is fractional. #>
-  if ($n -ge 10) { return [string][int][math]::Round($n) }
+  <# Friendly kitchen fractions. A recipe says 1/2 cup, never 0.47 cup. Above 10 nothing is fractional.
+
+     AwayFromZero IS LOAD-BEARING, not a style choice (2026-09-01). PowerShell's [math]::Round defaults
+     to banker's rounding and JavaScript's Math.round does not, so this mirror and the scaleBuy it
+     mirrors disagreed on every exact .5 at or above 10: "7 tbsp" at 21 servings rendered 11 in the
+     browser and 10 here. Measured over the whole catalog at every serving count from 2 to 42 - 321,645
+     renders - that was 874 distinct label/serving disagreements, and not one of them was visible from
+     either side alone. The browser is what a reader runs, so the browser's rounding is the one that is
+     right and this is the copy that had to move. #>
+  if ($n -ge 10) { return [string][int][math]::Round($n, [MidpointRounding]::AwayFromZero) }
   $whole = [math]::Floor($n)
   $frac = $n - $whole
   $names = @(@(0.0,''), @(0.25,'1/4'), @(0.3333,'1/3'), @(0.5,'1/2'), @(0.6667,'2/3'), @(0.75,'3/4'), @(1.0,''))
@@ -94,6 +102,43 @@ function Format-CmQty([double]$n) {
   return ([string][int]$whole + ' ' + $best)
 }
 
+# THE SHAPES scaleBuy UNDERSTANDS. Kept as script-scope literals so the JS and this twin can be compared
+# term for term rather than by eye (see run-scaler-label-test.ps1, which drives the REAL template).
+$script:CM_SB_Q    = '(?:\d+\s+\d+/\d+|\d+/\d+|\d+(?:\.\d+)?)'
+# Hedge words only. NOT "to taste", NOT "juice of", NOT "for frying": each of those introduces a number
+# that is a restatement or a garnish, not the amount the reader measures out.
+$script:CM_SB_LEAD = '(?:~|about|approximately|approx\.?|around|roughly|nearly|a\s+scant|scant|a\s+generous|generous|optional)\s*[:,]?\s*'
+$script:CM_SB_LBOZ = '^(\s*(?:' + $script:CM_SB_LEAD + ')?)(' + $script:CM_SB_Q + ')\s*(lbs?|pounds?)\.?\s+(' + $script:CM_SB_Q + ')\s*(oz|ounces?)\b'
+$script:CM_SB_HEAD = '^(\s*)(' + $script:CM_SB_Q + ')'
+$script:CM_SB_QUAL = '^(\s*' + $script:CM_SB_LEAD + ')(' + $script:CM_SB_Q + ')'
+
+function Test-CmBareNumber([string]$s) {
+  <# A digit that is NOT inside a parenthetical. A bracketed note holds package sizes, can counts and
+     restatements, none of which are the amount being scaled, so they never veto a scale. #>
+  $d = 0
+  foreach ($c in [char[]]$s) {
+    if ($c -eq '(') { $d++ }
+    elseif ($c -eq ')') { if ($d -gt 0) { $d-- } }
+    elseif ($d -eq 0 -and [char]::IsDigit($c)) { return $true }
+  }
+  return $false
+}
+
+function Format-CmLbOz([double]$totOz, [string]$lbw, [string]$ozw) {
+  <# Re-render a scaled ounce total as normalised lb + oz, carrying when the rounded remainder hits 16.
+     Abbreviations are invariant ("1 lb", "4 lb"); only the spelled-out words take a plural. #>
+  $lb = [math]::Floor($totOz / 16 + 1e-9)
+  $oz = $totOz - ($lb * 16)
+  $os = if ($oz -gt 0.005) { Format-CmQty $oz } else { '' }
+  if ($os -eq '16') { $lb += 1; $os = '' }
+  $ozWord = { param($v) if ($ozw -match '^(?i)ou') { if ($v -eq 1) { 'ounce' } else { 'ounces' } } else { 'oz' } }
+  if ($lb -lt 1) { $t = if ($os) { $os } else { '0' }; return ($t + ' ' + (& $ozWord (Get-CmQty $t))) }
+  $lbWord = if ($lbw -match '^(?i)p') { if ($lb -eq 1) { 'pound' } else { 'pounds' } } else { 'lb' }
+  $head = [string][int]$lb + ' ' + $lbWord
+  if ($os) { return ($head + ' ' + $os + ' ' + (& $ozWord (Get-CmQty $os))) }
+  return $head
+}
+
 function Invoke-CmScaleBuy([string]$buy, [double]$f) {
   <#
     THE POWERSHELL TWIN of scaleBuy() in tpl2-scaler-prefix.html, so the browser behaviour is testable
@@ -102,11 +147,33 @@ function Invoke-CmScaleBuy([string]$buy, [double]$f) {
     "2/4 tsp" (numerator and denominator both scaled) and "2 pk 12 oz" had its pack SIZE scaled too.
     A recipe label is "<quantity> <unit> <note>" - the quantity is the only number allowed to move.
     test-auditors pins this against the JS source so the two cannot drift apart silently.
+
+    WIDENED 2026-09-01, in lockstep with the JS, after nine live recipes were reviewed post-publish:
+      COMPOUND  "2 lb 5 oz" is ONE quantity in two units. Moving only the leading number rendered
+                "4 lb 5 oz" at 28 servings where the truth is 4 lb 10 oz. 8 labels, 6 live specs.
+      QUALIFIED "about 14 cups prepared (...)" and "optional: 2/3 cup ..." never scaled at all, because
+                the match is anchored and a word stood in front of the number. 44 labels, 27 specs.
+    The qualified path REFUSES a label carrying a second bare quantity outside parentheses ("About 1
+    tablespoon salt and 1 1/2 teaspoons black pepper"): moving one half of a two-quantity sentence is
+    worse than moving neither, and that shape belongs to repair-range-buy. The plain leading-number path
+    is unchanged on purpose, so nothing that scales correctly today can start scaling differently.
   #>
-  $m = [regex]::Match($buy, '^(\s*)(\d+\s+\d+/\d+|\d+/\d+|\d+(?:\.\d+)?)')
-  if (-not $m.Success) { return $buy }
-  $q = Get-CmQty $m.Groups[2].Value
-  return ($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $buy.Substring($m.Value.Length))
+  $m = [regex]::Match($buy, $script:CM_SB_LBOZ, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+  if ($m.Success) {
+    $tot = ((Get-CmQty $m.Groups[2].Value) * 16 + (Get-CmQty $m.Groups[4].Value)) * $f
+    return ($m.Groups[1].Value + (Format-CmLbOz $tot $m.Groups[3].Value $m.Groups[5].Value) + $buy.Substring($m.Value.Length))
+  }
+  $m = [regex]::Match($buy, $script:CM_SB_HEAD)
+  if ($m.Success) {
+    $q = Get-CmQty $m.Groups[2].Value
+    return ($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $buy.Substring($m.Value.Length))
+  }
+  $m = [regex]::Match($buy, $script:CM_SB_QUAL, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+  if ($m.Success -and -not (Test-CmBareNumber $buy.Substring($m.Value.Length))) {
+    $q = Get-CmQty $m.Groups[2].Value
+    return ($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $buy.Substring($m.Value.Length))
+  }
+  return $buy
 }
 
 function Get-CmDensity($densItems, [string]$item) {
