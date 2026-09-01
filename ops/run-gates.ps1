@@ -113,6 +113,46 @@ foreach ($g in $static) {
   }
 }
 
+# ---- PYTHON self-tests -----------------------------------------------------------------------------
+# THE DISCOVERY ABOVE READS *.ps1 AND NOTHING ELSE, so every Python suite in this estate was ungated.
+# coverage_check.py carries the recipe QA battery - coverage, scaling ratios, prose numbers, and the
+# mass reader that decides a recipe's main protein weight - and on 2026-09-01 it was found sitting at
+# two failures that had been red for weeks with nobody watching: its protein pattern had drifted out
+# of lockstep with spec-contradiction-lib.ps1 (reading "47.3g protein" as 3g, a false fail against a
+# correct spec), and a splitting case had flipped when the estate learned a head noun. Both were real,
+# both were invisible, and the same file had just produced a 7x mass error. A suite nobody runs is a
+# suite that rots.
+$pySuites = @(
+  @{ f = 'meal-prep\pipeline\coverage_check.py'; a = '--selftest'; n = 'the recipe QA battery: coverage, scaling, prose numbers, the mass reader' }
+)
+# AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
+# Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly
+# the blindness this section exists to end, so the candidates are probed and a miss is reported loudly.
+$pyExe = $null
+foreach ($cand in @('C:\Codex\Python312\python.exe', 'python3', 'python')) {
+  try {
+    $v = & $cand --version 2>&1
+    if ($LASTEXITCODE -eq 0 -and ([string]$v) -match 'Python\s+3') { $pyExe = $cand; break }
+  } catch { }
+}
+foreach ($g in $pySuites) {
+  $p = Join-Path $repo $g.f
+  if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
+  if (-not $pyExe) {
+    $fail += $g.f
+    Write-Output ("  FAIL  {0} - no Python 3 interpreter found, so this battery DID NOT RUN" -f $g.f)
+    continue
+  }
+  $out = & $pyExe $p $g.a 2>&1
+  $rc = $LASTEXITCODE
+  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  else {
+    $fail += $g.f
+    Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
+    @($out) | Where-Object { $_ -match '^FAIL|SELF-TEST FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
+  }
+}
+
 Write-Output ''
 Write-Output ("run-gates: {0} passed, {1} failed" -f $pass, $fail.Count)
 foreach ($f in $fail) { Write-Output ("  failed: " + $f) }

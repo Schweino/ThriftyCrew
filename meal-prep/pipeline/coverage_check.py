@@ -835,8 +835,25 @@ def check_scale_ratio(spec, source) -> dict:
 # the shared patterns against that file's source text, so tightening one turns the other red.
 
 RX_CAL = re.compile(r'(?i)\b(\d{3,4})\s*cal(?:orie)?s?\b')
-RX_PROTEIN = re.compile(r'(?i)\b(\d{1,3})\s*(?:g\b|grams?\b)\s*(?:of\s+)?protein')
-RX_MACRO = re.compile(r'(?i)\b(\d{1,3})\s*(?:g\b|grams?\b)\s*(?:of\s+)?(carbohydrates?|carbs?|fat)\b')
+# THE LOOKBEHIND, NOT \b, AND IT IS THE WHOLE POINT (mirrored from spec-contradiction-lib.ps1 on
+# 2026-09-01). `\b` sits between the '.' and the '3' of "47.3g protein", so this captured "3" and the
+# gate reported 'says 3g protein, stat says 47' against a spec whose 47.3 was CORRECT. "packs 8.5 g
+# protein" was read as 5 the same way. The PowerShell side was fixed and this one was not, so the two
+# ran on disjoint inputs - which is precisely what the LOCKSTEP case below exists to catch, and it was
+# sitting red in an ungated suite where nobody saw it. Decimals are CAPTURED rather than blinded:
+# "99.9g protein" on a 47 g stat must still fire, and every high-protein card writes decimals.
+RX_PROTEIN = re.compile(r'(?i)(?<![\d.])(\d{1,3}(?:\.\d+)?)\s*(?:g\b|grams?\b)\s*(?:of\s+)?protein')
+# NO POWERSHELL TWIN: spec-contradiction-lib carries calorie and protein patterns only, so this one is
+# not under the LOCKSTEP check and nothing would have reported its drift. Same bug, same fix, fixed
+# here on its own evidence: "22.4g carbs" read as 4.
+RX_MACRO = re.compile(
+    r'(?i)(?<![\d.])(\d{1,3}(?:\.\d+)?)\s*(?:g\b|grams?\b)\s*(?:of\s+)?(carbohydrates?|carbs?|fat)\b')
+
+
+def _claimed_int(text):
+    """The claimed macro as the stat compares it: PowerShell's [int] on "47.3" is 47, and this is
+    pinned to agree with it, so a decimal claim matches a whole-number stat instead of failing."""
+    return int(round(float(text)))
 # A $N.NN in one of the five prose fields is a per-serving claim by construction (spec-guards' POST-SYNC
 # NUMERIC VERIFICATION says so). A BARE $N is not, and must not be: the takeout comparison the intro is
 # built on is a bare $12, and every upsell in the catalog ends "all for $1 a month". Widening this to
@@ -892,14 +909,14 @@ def check_prose_numbers(spec) -> dict:
                                  % (field, claimed, actual)})
         for m in RX_PROTEIN.finditer(t):
             checked += 1
-            claimed, actual = int(m.group(1)), int(stat.get('protein') or 0)
+            claimed, actual = _claimed_int(m.group(1)), int(stat.get('protein') or 0)
             if actual and claimed != actual:
                 findings.append({'severity': 'fail', 'detail': '%s says %dg protein, the stat says %d'
                                  % (field, claimed, actual)})
         for m in RX_MACRO.finditer(t):
             checked += 1
             key = 'fat' if m.group(2).lower().startswith('fat') else 'carbs'
-            claimed, actual = int(m.group(1)), int(stat.get(key) or 0)
+            claimed, actual = _claimed_int(m.group(1)), int(stat.get(key) or 0)
             if not actual:
                 continue
             bad = (actual >= claimed) if _bounded(t, m.start()) else (claimed != actual)
@@ -1279,6 +1296,21 @@ def _selftest() -> int:
     T('CLEAN TWIN prose quoting the stat exactly passes',
       check_prose_numbers(dict(base, intro_html='524 calories and 31 grams of protein a serving for $2.66'))['verdict'] == 'pass',
       check_prose_numbers(dict(base, intro_html='524 calories and 31 grams of protein a serving for $2.66'))['detail'])
+    # THE DECIMAL, which this read as its LAST DIGIT until 2026-09-01. `\b` sits between the '.' and
+    # the '3' of "47.3g protein", so the matcher captured "3" and the gate reported 'says 3g protein,
+    # stat says 47' - a FALSE FAIL against a spec whose 47.3 was correct. "packs 8.5 g protein" read
+    # as 5 the same way. spec-contradiction-lib.ps1 was fixed and this file was not; the LOCKSTEP case
+    # further down is what says so, and it had been red in an ungated suite where nobody read it.
+    T('CLEAN TWIN a DECIMAL protein claim matching the stat passes - "31.4g" is not "4g"',
+      check_prose_numbers(dict(base, intro_html='packs 31.4 g protein a serving'))['verdict'] == 'pass',
+      check_prose_numbers(dict(base, intro_html='packs 31.4 g protein a serving'))['detail'])
+    T('CLEAN TWIN  ...and the same for carbs, which has no PowerShell twin to have caught it',
+      check_prose_numbers(dict(base, intro_html='just 6.2 grams of carbs a serving'))['verdict'] == 'pass',
+      check_prose_numbers(dict(base, intro_html='just 6.2 grams of carbs a serving'))['detail'])
+    # AND THE TRUE POSITIVE SURVIVES: blinding the matcher to decimals would clear the false fail by
+    # giving up the real one, and every high-protein card in this catalog writes decimals.
+    T('MUST FIRE  a DECIMAL protein claim that contradicts the stat still fires - "99.9g" on a 31 stat',
+      check_prose_numbers(dict(base, intro_html='a huge 99.9g protein a serving'))['verdict'] == 'fail', '')
     # THE FOUNDING CASE, 2026-07-26: a portion paragraph claiming 499 calories on a 541-calorie recipe.
     T('MUST FIRE  a calorie figure that is not the stat is caught',
       check_prose_numbers(dict(base, portion_html='a 499 calorie bowl'))['verdict'] == 'fail', '')
@@ -1432,18 +1464,24 @@ def _selftest() -> int:
       split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream', H)
       == ['Diced Onion', 'Cilantro', 'Sour Cream'],
       split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream', H))
-    # AND THE MEASURED TERM ITSELF IS STILL LEFT WHOLE, WHICH IS RECORDED HERE RATHER THAN QUIETLY
-    # NOT TESTED. 'Shredded Lettuce' has the head noun 'lettuce' and no vocabulary or food-DB item in
-    # this estate ends in it, so the head guard refuses the whole split - correctly, by its own rule -
-    # and the heading reaches the mapper as one term exactly as it did on 2026-08-26. The label road
-    # fixes the SHAPE and does not fix this line; what stops this line sailing past the map lane is
-    # the food-row postcondition in hunt-daemon.py, which now demands a row or a stated absence for
-    # it and holds the recipe when neither arrives. Add 'lettuce' to the estate and this case flips,
-    # which is why it asserts the reason and not just the empty list.
-    T('MUST FIRE  the measured enchiladas term is STILL left whole, and the head noun the estate '
-      "lacks is why - the label road fixed the shape, not this line",
+    # AND THIS CASE HAS FLIPPED, EXACTLY AS ITS OWN NOTE SAID IT WOULD (2026-09-01).
+    # It used to assert the opposite: that this term was STILL left whole, because 'Shredded Lettuce'
+    # has the head noun 'lettuce' and no vocabulary or food-DB item in the estate ended in it, so the
+    # head guard refused the whole split - correctly, by its own rule - and the heading reached the
+    # mapper as one term. The note closed: "Add 'lettuce' to the estate and this case flips, which is
+    # why it asserts the reason and not just the empty list." Lettuce is now known, the head guard is
+    # satisfied, and the term splits into its four real foods. The case is rewritten to assert the
+    # new behaviour AND the condition that produced it, so the next person to move the vocabulary
+    # gets the same warning this one gave: the assertion is about the head noun, not about lettuce.
+    #
+    # This is why it was worth writing the reason into the assertion rather than the bare answer. The
+    # case went red on a data change, not a code change, and the note in it is what made that legible
+    # in one read instead of an afternoon.
+    T('CLEAN TWIN the enchiladas term now SPLITS, because the estate learned the head noun that used '
+      'to block it - the flip this case was written to predict',
       split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce', H)
-      == [] and _head(_words('Shredded Lettuce')) not in H,
+      == ['Diced Onion', 'Cilantro', 'Sour Cream', 'Shredded Lettuce']
+      and _head(_words('Shredded Lettuce')) in H,
       'split=%s lettuce_head_known=%s'
       % (split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce', H),
          _head(_words('Shredded Lettuce')) in H))
