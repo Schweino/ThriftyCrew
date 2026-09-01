@@ -837,3 +837,24 @@
 [2026-09-01T08:17:47] rescue-worklist: rescue [Walmart]: DROPPED 2  UNTRACEABLE 3  EXPIRING 0  STALE 0 -> out\rescue-terms-walmart.txt
 [2026-09-01T08:17:47] prune-out: now run guards.ps1 + test-auditors.ps1 - a deletion that blinded a watcher must say so TODAY
 [2026-09-01T08:17:47] prune-intermediates: deleted 0 file(s), freeing 0 MB; kept the newest 3
+[2026-09-01T08:24:07] test-auditors: 380 s (rc=0)
+[2026-09-01T08:24:07] watchers ok: every guard still fires on its own founding bug
+[2026-09-01T08:24:07] coverage-cycle:   ok    audit-board-reconciliation     examined 67 of 67 eligible (baseline 67, tol 10%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    audit-everyday-mismatch        examined 2597 of 2617 eligible (baseline 2598, tol 10%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    audit-ff-carry                 examined 45 of 558 eligible (baseline 464, tol 100%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    audit-food-category            examined 3032 of 3429 eligible (baseline 3029, tol 10%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    build-rescue-worklist          examined 1366 of 1382 eligible (baseline 1517, tol 10%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/10-store-charges        examined 68833 of 68833 eligible (baseline 68809, tol 35%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/11-bakers-provenance    examined 7293 of 7293 eligible (baseline 7292, tol 25%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/13-board-vs-identity-recipe examined 332 of 332 eligible (baseline 334, tol 10%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/13-board-vs-identity-staple examined 3135 of 3135 eligible (baseline 3132, tol 10%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/3-pin-derivable         examined 9 of 9 eligible (baseline 19, tol 50%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/3-pin-identity          examined 9 of 9 eligible (baseline 13, tol 50%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/4-factor                examined 2444 of 2444 eligible (baseline 2652, tol 10%)
+[2026-09-01T08:24:07] coverage-cycle:   ok    guards/5-multipack             examined 3148 of 3148 eligible (baseline 3148, tol 50%)
+[2026-09-01T08:24:08] coverage-cycle:   ok    guards/6-collapse              examined 7 of 7 eligible (baseline 7, tol 15%)
+[2026-09-01T08:24:08] coverage-cycle:   ok    guards/9-freshness             examined 14 of 14 eligible (baseline 14, tol 15%)
+[2026-09-01T08:24:08] coverage-cycle:   ok    pull-regular-hyvee             examined 5 of 5 eligible TODAY (100%, floor 90% of the day's slice; absolute count not ratcheted)
+[2026-09-01T08:24:08] coverage-cycle: coverage-ledger: ok - 16 check(s) still examine at least their baseline coverage (phase 'cycle', tolerance 10% unless overridden).
+[2026-09-01T08:24:08] coverage-cycle: COVERAGE-LEDGER-COMPLETE
+[2026-09-01T08:24:08] run complete; flips=0; pull=(no pull - -NoPull; latest ads file reused); ship=460s; total=1257s
