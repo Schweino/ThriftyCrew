@@ -574,17 +574,72 @@ _MASS_G = {'g': 1.0, 'gram': 1.0, 'grams': 1.0, 'kg': 1000.0, 'kilogram': 1000.0
            'kilograms': 1000.0, 'oz': 28.349523125, 'ounce': 28.349523125,
            'ounces': 28.349523125, 'lb': 453.59237, 'lbs': 453.59237,
            'pound': 453.59237, 'pounds': 453.59237}
+# THE MIXED-NUMBER ALTERNATIVE LEADS, AND THAT ORDER IS THE WHOLE FIX (2026-09-01). This pattern used
+# to be `\d+(?:\.\d+)?(?:\s*/\s*\d+)?`, which cannot match "4 3/4 lb" from the front - the "4 " is
+# followed by a digit, not a unit - so the search slid along and matched "3/4 lb" instead. It read
+# FOUR AND THREE QUARTER POUNDS AS THREE QUARTERS OF A POUND: 340 g against a true 2154 g, 6.3x low.
+# "3 1/2 lb ground beef" read 227 g against 1588 g, 7x low. band_precheck.py uses this as the MAIN
+# PROTEIN mass, so an understatement here understates calories and can reject a sound recipe on the
+# macro band - the mirror image of the honey-balsamic-chicken-tenders incident this function was
+# written to fix. Regex alternation is first-match-wins, so the mixed form must be tried before the
+# bare fraction or the bare fraction wins on the same text.
 _RX_MASS = re.compile(
-    r'(?P<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)[\s-]*'
+    r'(?P<n>\d+\s+\d+\s*/\s*\d+|\d+\s*/\s*\d+|\d+(?:\.\d+)?)[\s-]*'
     r'(?P<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kgs?|kilograms?|grams?|g)\b', re.I)
+
+# "1 lb 12 oz": one mass written as two tokens. Only ever read as a SUM when the second follows the
+# first with nothing but space between them AND is the smaller unit of the same system, which is the
+# only arrangement that can only mean addition. "2 lb chicken, plus a 12 oz jar" has words between
+# them and stays the first mass, because there the second token is a different ingredient.
+_RX_MASS_TAIL = re.compile(
+    r'^[\s-]*(?P<n>\d+\s+\d+\s*/\s*\d+|\d+\s*/\s*\d+|\d+(?:\.\d+)?)[\s-]*'
+    r'(?P<u>ozs?\.?|ounces?|grams?|g)\b', re.I)
+_MASS_SYSTEM = {'lb': 'imperial', 'lbs': 'imperial', 'pound': 'imperial', 'pounds': 'imperial',
+                'oz': 'imperial', 'ozs': 'imperial', 'ounce': 'imperial', 'ounces': 'imperial',
+                'kg': 'metric', 'kgs': 'metric', 'kilogram': 'metric', 'kilograms': 'metric',
+                'g': 'metric', 'gram': 'metric', 'grams': 'metric'}
+
+
+def _mass_number(n):
+    """'4 3/4' -> 4.75, '3/4' -> 0.75, '1.5' -> 1.5, anything unreadable -> None."""
+    n = str(n or '').strip()
+    parts = n.split(None, 1)
+    if len(parts) == 2 and '/' in parts[1]:
+        whole, frac = parts
+    else:
+        whole, frac = None, n
+    val = 0.0
+    if whole is not None:
+        try:
+            val += float(whole)
+        except ValueError:
+            return None
+    if '/' in frac:
+        a, _, b = frac.partition('/')
+        try:
+            a, b = float(a.strip()), float(b.strip())
+        except ValueError:
+            return None
+        if b == 0:
+            return None
+        val += a / b
+    else:
+        try:
+            val += float(frac)
+        except ValueError:
+            return None
+    return val
 
 
 def stated_mass_grams(text):
     """The first explicit MASS this line states, in grams, or None when it states none.
 
-    DELIBERATELY CONSERVATIVE, exactly like its PowerShell twin: first token only, no ranges, no
-    addition, no "plus more for serving". Anything it cannot read confidently is None - it exists to
-    correct a number, and a wrong correction is worse than the count it replaces.
+    DELIBERATELY CONSERVATIVE, exactly like its PowerShell twin: first mass only, no ranges, no
+    "plus more for serving". Anything it cannot read confidently is None - it exists to correct a
+    number, and a wrong correction is worse than the count it replaces.
+
+    Two shapes it DOES read, because reading them wrong is not conservative, it is just wrong: a
+    mixed number ("4 3/4 lb"), and one mass written as two adjacent tokens ("1 lb 12 oz").
     """
     t = str(text or '')
     if not t.strip():
@@ -592,26 +647,24 @@ def stated_mass_grams(text):
     m = _RX_MASS.search(t)
     if not m:
         return None
-    n = m.group('n')
     u = m.group('u').replace('.', '').lower()
-    if '/' in n:
-        a, _, b = n.partition('/')
-        try:
-            a, b = float(a.strip()), float(b.strip())
-        except ValueError:
-            return None
-        if b == 0:
-            return None
-        val = a / b
-    else:
-        try:
-            val = float(n)
-        except ValueError:
-            return None
-    if val <= 0:
+    val = _mass_number(m.group('n'))
+    if val is None or val <= 0:
         return None
     g = _MASS_G.get(u)
-    return val * g if g else None
+    if not g:
+        return None
+    total = val * g
+    tail = _RX_MASS_TAIL.match(t[m.end():])
+    if tail:
+        tu = tail.group('u').replace('.', '').lower()
+        tg = _MASS_G.get(tu)
+        # same system, and strictly smaller, so "1 lb 12 oz" adds but "1 lb 2 lb" cannot.
+        if tg and _MASS_SYSTEM.get(tu) == _MASS_SYSTEM.get(u) and tg < g:
+            tval = _mass_number(tail.group('n'))
+            if tval is not None and tval > 0:
+                total += tval * tg
+    return total
 
 
 def to_base(value, unit):
@@ -1102,6 +1155,26 @@ def _selftest() -> int:
       and stated_mass_grams('600 g chicken tenderloin') == 600
       and stated_mass_grams('1.8 kg whole chicken') == 1800
       and abs(stated_mass_grams('1/2 lb ground beef') - 226.796) < 0.1, 'unit table')
+    # THE MIXED NUMBER, which this read as the FRACTION ALONE until 2026-09-01. "4 3/4 lb" cannot be
+    # matched from the front by a pattern that wants a unit after the digits, so the search slid on
+    # and took "3/4 lb": 340 g against a true 2154 g. band_precheck uses this as the main protein
+    # mass, so it understated calories and could reject a sound recipe on the macro band - the exact
+    # mirror of the honey-balsamic incident this function was written to fix. Both numbers are named
+    # so a reader can see the size of the error, not just that there was one.
+    T("MUST FIRE  a MIXED number is the whole plus the fraction - '4 3/4 lb' is 2154 g, not 340",
+      abs(stated_mass_grams('4 3/4 lb chicken') - 2154.56) < 0.6
+      and abs(stated_mass_grams('3 1/2 lb ground beef') - 1587.57) < 0.6,
+      stated_mass_grams('4 3/4 lb chicken'))
+    # ONE mass written as two tokens. Summed only when adjacent and descending within a system.
+    T("MUST FIRE  '1 lb 12 oz' is one mass of 793.8 g, not the 453.6 g of its first token",
+      abs(stated_mass_grams('1 lb 12 oz boneless chicken') - 793.79) < 0.6,
+      stated_mass_grams('1 lb 12 oz boneless chicken'))
+    T("CLEAN TWIN  ...but a SECOND ingredient's weight is not added to the first",
+      abs(stated_mass_grams('2 lb chicken, plus a 12 oz jar of sauce') - 907.18) < 0.6,
+      stated_mass_grams('2 lb chicken, plus a 12 oz jar of sauce'))
+    T("CLEAN TWIN  ...and the hyphenated single mass still reads as itself",
+      abs(stated_mass_grams('1 (14.5-ounce) can diced tomatoes') - 411.07) < 0.6,
+      stated_mass_grams('1 (14.5-ounce) can diced tomatoes'))
     T("CLEAN TWIN a VOLUME is not a mass", stated_mass_grams('1 cup buttermilk') is None
       and stated_mass_grams('3 tablespoons honey') is None, 'volume read as mass')
     T("CLEAN TWIN a bare count states no mass", stated_mass_grams('2 medium yellow onions') is None,

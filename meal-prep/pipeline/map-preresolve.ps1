@@ -404,23 +404,74 @@ function Get-StatedMassGrams {
   # [\s-]* NOT \s* : a page writes "1 (14.5-ounce) can diced tomatoes", and the hyphen between the
   # number and the unit made this refuse a mass that is plainly stated. Its Python twin,
   # coverage_check.stated_mass_grams, carries the identical change - see the note in the self-test.
-  if ($Raw -notmatch '(?<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)[\s-]*(?<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kg|kilograms?|grams?|g)\b') { return $null }
-  $n = $Matches['n']; $u = ($Matches['u'] -replace '\.', '').ToLower()
-  $val = $null
-  if ($n -match '^\s*(\d+(?:\.\d+)?)\s*/\s*(\d+(?:\.\d+)?)\s*$') {
-    $den = [double]$Matches[2]
-    if ($den -ne 0) { $val = [double]$Matches[1] / $den }
-  } else {
-    try { $val = [double]$n } catch { $val = $null }
-  }
+  # THE MIXED-NUMBER ALTERNATIVE LEADS, AND THAT ORDER IS THE WHOLE FIX (2026-09-01). The pattern was
+  # `\d+(?:\.\d+)?(?:\s*/\s*\d+)?`, which cannot match "4 3/4 lb" from the front - the "4 " is
+  # followed by a digit, not a unit - so the match slid along and took "3/4 lb". It read four and
+  # three quarter pounds as three QUARTERS of a pound: 340 g against 2154 g, and "3 1/2 lb ground
+  # beef" as 227 g against 1588 g. Alternation is first-match-wins, so the mixed form must be tried
+  # before the bare fraction. Its Python twin, coverage_check.stated_mass_grams, carries the
+  # identical change and the identical cases - see the note in the self-test there.
+  $rxNum = '\d+\s+\d+\s*/\s*\d+|\d+\s*/\s*\d+|\d+(?:\.\d+)?'
+  $m = [regex]::Match($Raw, '(?<n>' + $rxNum + ')[\s-]*(?<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kg|kilograms?|grams?|g)\b')
+  if (-not $m.Success) { return $null }
+  $u = ($m.Groups['u'].Value -replace '\.', '').ToLower()
+  $val = Get-MassNumber $m.Groups['n'].Value
   if ($null -eq $val -or $val -le 0) { return $null }
-  switch -regex ($u) {
-    '^(lbs?|pounds?)$'  { return $val * 453.592 }
-    '^(ozs?|ounces?)$'  { return $val * 28.3495 }
-    '^(kg|kilograms?)$' { return $val * 1000 }
-    '^(grams?|g)$'      { return $val }
+  $g = Get-MassUnitGrams $u
+  if ($null -eq $g) { return $null }
+  $total = $val * $g
+  # "1 lb 12 oz": one mass written as two tokens. Summed ONLY when the second follows with nothing
+  # but space between and is the smaller unit of the same system - the only arrangement that can
+  # only mean addition. "2 lb chicken, plus a 12 oz jar" has words between and stays the first mass.
+  $tail = [regex]::Match($Raw.Substring($m.Index + $m.Length), '^[\s-]*(?<n>' + $rxNum + ')[\s-]*(?<u>ozs?\.?|ounces?|grams?|g)\b')
+  if ($tail.Success) {
+    $tu = ($tail.Groups['u'].Value -replace '\.', '').ToLower()
+    $tg = Get-MassUnitGrams $tu
+    if ($null -ne $tg -and (Get-MassSystem $tu) -eq (Get-MassSystem $u) -and $tg -lt $g) {
+      $tval = Get-MassNumber $tail.Groups['n'].Value
+      if ($null -ne $tval -and $tval -gt 0) { $total += $tval * $tg }
+    }
+  }
+  return $total
+}
+
+function Get-MassNumber {
+  <# '4 3/4' -> 4.75, '3/4' -> 0.75, '1.5' -> 1.5, anything unreadable -> $null. #>
+  param([string]$N)
+  $s = ([string]$N).Trim()
+  if (-not $s) { return $null }
+  $whole = $null; $frac = $s
+  $mm = [regex]::Match($s, '^(\d+)\s+(\d+\s*/\s*\d+)$')
+  if ($mm.Success) { $whole = $mm.Groups[1].Value; $frac = $mm.Groups[2].Value }
+  $val = 0.0
+  if ($null -ne $whole) { $val += [double]$whole }
+  $fm = [regex]::Match($frac, '^(\d+(?:\.\d+)?)\s*/\s*(\d+(?:\.\d+)?)$')
+  if ($fm.Success) {
+    $den = [double]$fm.Groups[2].Value
+    if ($den -eq 0) { return $null }
+    $val += [double]$fm.Groups[1].Value / $den
+  } else {
+    try { $val += [double]$frac } catch { return $null }
+  }
+  return $val
+}
+
+function Get-MassUnitGrams {
+  param([string]$U)
+  switch -regex ($U) {
+    '^(lbs?|pounds?)$'  { return 453.592 }
+    '^(ozs?|ounces?)$'  { return 28.3495 }
+    '^(kg|kilograms?)$' { return 1000 }
+    '^(grams?|g)$'      { return 1 }
   }
   return $null
+}
+
+function Get-MassSystem {
+  param([string]$U)
+  if ($U -match '^(lbs?|pounds?|ozs?|ounces?)$') { return 'imperial' }
+  if ($U -match '^(kg|kilograms?|grams?|g)$')    { return 'metric' }
+  return ''
 }
 
 function Get-EngineWeightGuessReason {
@@ -3197,6 +3248,22 @@ $r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by
   T '  and a fraction, which is how half these sources print a weight' `
     ([Math]::Abs((Get-StatedMassGrams '1/2 lb ground beef') - 226.796) -lt 0.01) `
     ([string](Get-StatedMassGrams '1/2 lb ground beef'))
+  # THE MIXED NUMBER, read as the FRACTION ALONE until 2026-09-01. "4 3/4 lb" cannot be matched from
+  # the front by a pattern wanting a unit after the digits, so the match slid on and took "3/4 lb":
+  # 340 g against 2154 g, and "3 1/2 lb ground beef" 227 g against 1588 g. This function demotes the
+  # quantity engine's number, so reading LOW here replaces a good number with a bad one - the very
+  # thing its own header promises it cannot do. Both numbers are named so the size of the error is
+  # visible. Its Python twin, coverage_check.stated_mass_grams, carries the identical cases.
+  T '  MIXED numbers: "4 3/4 lb" is 2154 g, not the 340 g of its fraction' `
+    (([Math]::Abs((Get-StatedMassGrams '4 3/4 lb chicken') - 2154.56) -lt 0.6) -and
+     ([Math]::Abs((Get-StatedMassGrams '3 1/2 lb ground beef') - 1587.57) -lt 0.6)) `
+    ([string](Get-StatedMassGrams '4 3/4 lb chicken'))
+  T '  ONE mass in two tokens: "1 lb 12 oz" is 793.8 g, not its first token' `
+    ([Math]::Abs((Get-StatedMassGrams '1 lb 12 oz boneless chicken') - 793.79) -lt 0.6) `
+    ([string](Get-StatedMassGrams '1 lb 12 oz boneless chicken'))
+  T '  CLEAN TWIN but a SECOND ingredient''s weight is never added to the first' `
+    ([Math]::Abs((Get-StatedMassGrams '2 lb chicken, plus a 12 oz jar of sauce') - 907.18) -lt 0.6) `
+    ([string](Get-StatedMassGrams '2 lb chicken, plus a 12 oz jar of sauce'))
   # CLEAN TWINS. This function can only ever DEMOTE a number, so anything it reads wrongly would take
   # a working line's cross-check away. It stays silent on everything it cannot read confidently.
   T 'CLEAN TWIN a line with no mass at all states nothing - the cross-check keeps its full force there' `
