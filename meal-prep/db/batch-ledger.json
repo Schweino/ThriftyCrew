@@ -1855,7 +1855,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w16",
       "opened":  "2026-09-02T12:04:48",
-      "last_activity":  "2026-09-02T14:56:31",
+      "last_activity":  "2026-09-02T14:56:37",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1910,6 +1910,11 @@
                          "stage":  "publish",
                          "at":  "2026-09-02T14:56:31",
                          "detail":  "1/1 wave slug(s) published through engine\\publish (visibility preserved) + 50 collateral spec(s) carried by propagate (total dirty 51)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-09-02T14:56:37",
+                         "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
                      }
                  ]
   }
