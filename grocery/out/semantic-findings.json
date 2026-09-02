@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-01 08:15",
+    "generated":  "2026-09-01 21:32",
     "board":  "comparison-2026-08-31.json",
-    "sidecar_generated":  "2026-09-01 08:15:56",
+    "sidecar_generated":  "2026-09-01 21:32:14",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3135,
-                     "corpus":  40797,
-                     "rule_invisible":  7404
+                     "board_pairs":  3138,
+                     "corpus":  40936,
+                     "rule_invisible":  7477
                  },
     "identity_count":  0,
-    "coverage_count":  17,
+    "coverage_count":  3,
     "identity":  [
 
                  ],
@@ -23,50 +23,20 @@
                          "kind":  "coverage",
                          "id":  "ground-beef-8020",
                          "commodity":  "80/20 Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "73% Lean / 27% Fat Ground Beef, 10 lb Roll, Fresh, All Natural*",
-                         "cos":  0.7795,
-                         "score":  0.969468,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Farmer John Steakhouse Fresh Seasoned Pork Tenderloin, 1.0  1.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.7535,
-                         "score":  0.961571,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Aldi",
-                         "product":  "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB",
-                         "cos":  0.7651,
-                         "score":  0.958761,
+                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count",
+                         "cos":  0.7209,
+                         "score":  0.906298,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.7495,
-                         "score":  0.953225,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sandwich-bags",
-                         "commodity":  "Sandwich Bags",
-                         "store":  "Walmart",
-                         "product":  "Great Value 100 Count Fresh Seal Double Zipper Rectangle Snack Bags",
-                         "cos":  0.6635,
-                         "score":  0.948232,
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count",
+                         "cos":  0.7209,
+                         "score":  0.906298,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -74,119 +44,9 @@
                          "id":  "ground-beef-8020",
                          "commodity":  "80/20 Ground Beef",
                          "store":  "Walmart",
-                         "product":  "85% Lean / 15% Fat Ground Beef, 1 lb Roll, Fresh, All Natural*",
-                         "cos":  0.789,
-                         "score":  0.94105,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "80% Lean / 20% Fat Ground Beef and Pork Blend, 1 lb Roll, Fresh",
-                         "cos":  0.7376,
-                         "score":  0.934528,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "white-wine",
-                         "commodity":  "White Wine",
-                         "store":  "Family Fare",
-                         "product":  "Vendange Chardonnay White Wine 1.5 L",
-                         "cos":  0.5857,
-                         "score":  0.932991,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "deli-ham",
-                         "commodity":  "Ham (deli / sliced)",
-                         "store":  "Walmart",
-                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
-                         "cos":  0.689,
-                         "score":  0.927091,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "coconut-oil",
-                         "commodity":  "Coconut Oil",
-                         "store":  "Walmart",
-                         "product":  "Carrington Farms Organic Coconut Cooking Oil, 32 Floz",
-                         "cos":  0.6733,
-                         "score":  0.924724,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "quart-storage-bags",
-                         "commodity":  "Food Storage Bags (quart)",
-                         "store":  "Walmart",
-                         "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
-                         "cos":  0.6608,
-                         "score":  0.924378,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cherry-tomatoes",
-                         "commodity":  "Cherry / Grape Tomatoes",
-                         "store":  "Walmart",
-                         "product":  "Fresh Grape Tomato, 10 oz Package",
-                         "cos":  0.6858,
-                         "score":  0.92343,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "coconut-milk-canned",
-                         "commodity":  "Canned Coconut Milk",
-                         "store":  "Walmart",
-                         "product":  "Thai Kitchen Gluten Free Gluten Free Unsweetened Coconut Cream, 13.66 fl oz Can",
-                         "cos":  0.7532,
-                         "score":  0.91552,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-potatoes",
-                         "commodity":  "Canned Potatoes",
-                         "store":  "Walmart",
-                         "product":  "Del Monte® Cajun Style Diced Potatoes, 14.5 oz. Can",
-                         "cos":  0.6754,
-                         "score":  0.911906,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Baker\u0027s",
-                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
-                         "cos":  0.706,
-                         "score":  0.910863,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "coconut-oil",
-                         "commodity":  "Coconut Oil",
-                         "store":  "Walmart",
-                         "product":  "Carrington Farms Coconut Cooking Oil, 16.0 FL OZ",
-                         "cos":  0.6478,
-                         "score":  0.910763,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
-                         "cos":  0.7432,
-                         "score":  0.910219,
+                         "product":  "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray",
+                         "cos":  0.6954,
+                         "score":  0.904662,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

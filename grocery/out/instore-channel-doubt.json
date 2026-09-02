@@ -1,0 +1,1690 @@
+﻿{
+    "generated":  "2026-09-01 16:49",
+    "board":  "comparison-2026-08-31.json",
+    "note":  "Cells whose winning row cannot prove it is an in-store shelf row. Since 2026-09-01 the engine REFUSES this shape (instore-lib.ps1), so a cell here is either a REVIEWED exception someone verified on the live product page, or a cell the refusal did not reach - which is a defect in the refusal, not a question for the store. Still advisory, still drops nothing.",
+    "doubt_count":  2,
+    "crown_count":  1,
+    "reviewed_count":  2,
+    "unreached_count":  0,
+    "allowlist_file":  "instore-channel-allowlist.json",
+    "allowlist_keys":  4,
+    "files_read":  [
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-12.json",
+                           "rows":  100,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-13.json",
+                           "rows":  299,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-14.json",
+                           "rows":  326,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-15.json",
+                           "rows":  382,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-18.json",
+                           "rows":  419,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-23.json",
+                           "rows":  677,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-27.json",
+                           "rows":  743,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-07-31.json",
+                           "rows":  554,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-01.json",
+                           "rows":  576,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-03.json",
+                           "rows":  611,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-05.json",
+                           "rows":  625,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-09.json",
+                           "rows":  615,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-11.json",
+                           "rows":  617,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-15.json",
+                           "rows":  590,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-20.json",
+                           "rows":  902,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-21.json",
+                           "rows":  908,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-22.json",
+                           "rows":  912,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-23.json",
+                           "rows":  732,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-24.json",
+                           "rows":  746,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-25.json",
+                           "rows":  749,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-26.json",
+                           "rows":  750,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-27.json",
+                           "rows":  751,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-28.json",
+                           "rows":  757,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-29.json",
+                           "rows":  758,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-30.json",
+                           "rows":  758,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-08-31.json",
+                           "rows":  771,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-09-01.json",
+                           "rows":  794,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-05.json",
+                           "rows":  19,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-06.json",
+                           "rows":  24,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-07.json",
+                           "rows":  29,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-08.json",
+                           "rows":  29,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-12.json",
+                           "rows":  145,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-14.json",
+                           "rows":  187,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-15.json",
+                           "rows":  508,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-18.json",
+                           "rows":  577,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-24.json",
+                           "rows":  6491,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-25.json",
+                           "rows":  6705,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-26.json",
+                           "rows":  6728,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-27.json",
+                           "rows":  6938,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-28.json",
+                           "rows":  6857,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-29.json",
+                           "rows":  6960,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-30.json",
+                           "rows":  6936,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-07-31.json",
+                           "rows":  6928,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-01.json",
+                           "rows":  6947,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-02.json",
+                           "rows":  6945,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-03.json",
+                           "rows":  6937,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-04.json",
+                           "rows":  6949,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-05.json",
+                           "rows":  6929,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-06.json",
+                           "rows":  6934,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-07.json",
+                           "rows":  6944,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-08.json",
+                           "rows":  6950,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-09.json",
+                           "rows":  6961,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-10.json",
+                           "rows":  6948,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-11.json",
+                           "rows":  6946,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-12.json",
+                           "rows":  6963,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-13.json",
+                           "rows":  7012,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-14.json",
+                           "rows":  7269,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-15.json",
+                           "rows":  7266,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-16.json",
+                           "rows":  7286,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-17.json",
+                           "rows":  7295,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-18.json",
+                           "rows":  7286,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-19.json",
+                           "rows":  7281,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-20.json",
+                           "rows":  7313,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-21.json",
+                           "rows":  7279,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-22.json",
+                           "rows":  7289,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-23.json",
+                           "rows":  7291,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-24.json",
+                           "rows":  7291,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-25.json",
+                           "rows":  7291,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-26.json",
+                           "rows":  7296,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-27.json",
+                           "rows":  7287,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-28.json",
+                           "rows":  7292,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-29.json",
+                           "rows":  7292,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-30.json",
+                           "rows":  7292,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-08-31.json",
+                           "rows":  7292,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-09-01.json",
+                           "rows":  7293,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-05.json",
+                           "rows":  27,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-06.json",
+                           "rows":  30,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-08.json",
+                           "rows":  29,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-12.json",
+                           "rows":  301,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-14.json",
+                           "rows":  337,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-15.json",
+                           "rows":  711,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-18.json",
+                           "rows":  886,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-23.json",
+                           "rows":  1328,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-25.json",
+                           "rows":  1351,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-29.json",
+                           "rows":  2784,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-30.json",
+                           "rows":  4244,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-07-31.json",
+                           "rows":  4863,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-01.json",
+                           "rows":  4881,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-05.json",
+                           "rows":  1209,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-06.json",
+                           "rows":  11092,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-11.json",
+                           "rows":  11256,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-22.json",
+                           "rows":  136,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-25.json",
+                           "rows":  193,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-26.json",
+                           "rows":  219,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-29.json",
+                           "rows":  234,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-30.json",
+                           "rows":  525,
+                           "with_field":  499,
+                           "field_bearing":  true
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-08-31.json",
+                           "rows":  11694,
+                           "with_field":  11603,
+                           "field_bearing":  true
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-09-01.json",
+                           "rows":  275,
+                           "with_field":  273,
+                           "field_bearing":  true
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-07-06.json",
+                           "rows":  30,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-07-08.json",
+                           "rows":  29,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-07-12.json",
+                           "rows":  278,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-07-14.json",
+                           "rows":  347,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-07-15.json",
+                           "rows":  403,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-07-18.json",
+                           "rows":  438,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-07-29.json",
+                           "rows":  1664,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-01.json",
+                           "rows":  1675,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-05.json",
+                           "rows":  1772,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-15.json",
+                           "rows":  2217,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-22.json",
+                           "rows":  2248,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-25.json",
+                           "rows":  2474,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-26.json",
+                           "rows":  2720,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-27.json",
+                           "rows":  2780,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-28.json",
+                           "rows":  2841,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-08-29.json",
+                           "rows":  2846,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-09-01.json",
+                           "rows":  2953,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-05.json",
+                           "rows":  321,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-06.json",
+                           "rows":  325,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-08.json",
+                           "rows":  235,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-09.json",
+                           "rows":  373,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-10.json",
+                           "rows":  377,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-11.json",
+                           "rows":  471,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-12.json",
+                           "rows":  533,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-13.json",
+                           "rows":  590,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-14.json",
+                           "rows":  1019,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-15.json",
+                           "rows":  1670,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-16.json",
+                           "rows":  1820,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-18.json",
+                           "rows":  1937,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-25.json",
+                           "rows":  1983,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-26.json",
+                           "rows":  2011,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-30.json",
+                           "rows":  3787,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-07-31.json",
+                           "rows":  4331,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-01.json",
+                           "rows":  4706,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-02.json",
+                           "rows":  4691,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-03.json",
+                           "rows":  4720,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-04.json",
+                           "rows":  4756,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-05.json",
+                           "rows":  4807,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-06.json",
+                           "rows":  4848,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-07.json",
+                           "rows":  4861,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-08.json",
+                           "rows":  4869,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-09.json",
+                           "rows":  4879,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-10.json",
+                           "rows":  4894,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-11.json",
+                           "rows":  4919,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-12.json",
+                           "rows":  4945,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-13.json",
+                           "rows":  5021,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-14.json",
+                           "rows":  5091,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-15.json",
+                           "rows":  5124,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-16.json",
+                           "rows":  5144,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-17.json",
+                           "rows":  5167,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-18.json",
+                           "rows":  5175,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-19.json",
+                           "rows":  5221,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-20.json",
+                           "rows":  5222,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-21.json",
+                           "rows":  5222,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-22.json",
+                           "rows":  5224,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-23.json",
+                           "rows":  5231,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-24.json",
+                           "rows":  5236,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-25.json",
+                           "rows":  5238,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-26.json",
+                           "rows":  5242,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-27.json",
+                           "rows":  5243,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-28.json",
+                           "rows":  5243,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-29.json",
+                           "rows":  5250,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-30.json",
+                           "rows":  5258,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-08-31.json",
+                           "rows":  5258,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-09-01.json",
+                           "rows":  5283,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-05.json",
+                           "rows":  19,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-06.json",
+                           "rows":  30,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-08.json",
+                           "rows":  263,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-15.json",
+                           "rows":  428,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-17.json",
+                           "rows":  1296,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-18.json",
+                           "rows":  27,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-23.json",
+                           "rows":  173,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-07-29.json",
+                           "rows":  2475,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-01.json",
+                           "rows":  40,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-05.json",
+                           "rows":  1808,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-15.json",
+                           "rows":  2999,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-22.json",
+                           "rows":  122,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-23.json",
+                           "rows":  120,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-24.json",
+                           "rows":  120,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-25.json",
+                           "rows":  122,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-26.json",
+                           "rows":  109,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-27.json",
+                           "rows":  135,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-28.json",
+                           "rows":  133,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-29.json",
+                           "rows":  130,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-30.json",
+                           "rows":  138,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-08-31.json",
+                           "rows":  118,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-09-01.json",
+                           "rows":  141,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-05.json",
+                           "rows":  15,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-06.json",
+                           "rows":  23,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-08.json",
+                           "rows":  29,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-12.json",
+                           "rows":  306,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-14.json",
+                           "rows":  448,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-15.json",
+                           "rows":  1127,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-16.json",
+                           "rows":  1128,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-17.json",
+                           "rows":  1128,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-18.json",
+                           "rows":  1367,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-19.json",
+                           "rows":  1367,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-20.json",
+                           "rows":  1367,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-21.json",
+                           "rows":  1367,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-22.json",
+                           "rows":  1367,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-23.json",
+                           "rows":  1367,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-24.json",
+                           "rows":  1367,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-25.json",
+                           "rows":  1446,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-26.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-27.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-28.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-29.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-30.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-07-31.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-01.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-02.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-03.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-04.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-05.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-07.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-08.json",
+                           "rows":  1538,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-09.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-10.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-11.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-12.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-13.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-14.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-15.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-17.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-18.json",
+                           "rows":  1552,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-21.json",
+                           "rows":  1554,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-22.json",
+                           "rows":  1554,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-23.json",
+                           "rows":  1554,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-24.json",
+                           "rows":  1550,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-25.json",
+                           "rows":  1550,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-26.json",
+                           "rows":  1550,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-27.json",
+                           "rows":  1550,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-28.json",
+                           "rows":  1550,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-29.json",
+                           "rows":  1551,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-30.json",
+                           "rows":  1551,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-08-31.json",
+                           "rows":  1549,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-09-01.json",
+                           "rows":  1549,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       }
+                   ],
+    "doubt":  [
+                  {
+                      "commodity":  "bay-leaves",
+                      "store":  "Walmart",
+                      "item":  "El Guapo Mexican Bay Leaves, 0.5 oz Bag",
+                      "per_unit":  3.26,
+                      "ad":  "$1.63",
+                      "size":  "0.5 oz",
+                      "is_crown":  true,
+                      "why":  "BLANK-IN-FIELD-BEARING-CAPTURE",
+                      "detail":  "its row in walmart-regular-2026-09-01.json has an EMPTY fulfillment while that capture populates the field, so the channel was never recorded rather than never collected",
+                      "source_file":  "walmart-regular-2026-09-01.json",
+                      "item_id":  "30919180",
+                      "attribution":  "price-match",
+                      "reviewed":  "IN-STORE, verified on the live page 2026-09-01 in Brad\u0027s Chrome (store context Omaha L St Supercenter / 68137). The page carries a STORE-LEVEL line: \u0027Out of stock at Omaha L St Supercenter\u0027 followed by \u0027Available for pickup nearby\u0027, plus \u0027Show in-stock stores\u0027. That is a store-channel SKU, not an online-only listing, and the live price \u0027Now $1.63, was $9.00, $3.26/oz\u0027 matches the board exactly. CAVEAT recorded rather than hidden: it is OUT OF STOCK at Omaha L St today, so a shopper may not be able to buy it there this morning. The channel is right and the shelf is empty, which are different facts and only the first one this gate is about."
+                  },
+                  {
+                      "commodity":  "paper-towels",
+                      "store":  "Walmart",
+                      "item":  "Scott Paper Towels Choose-A-Sheet 6 Double Rolls",
+                      "per_unit":  1.14,
+                      "ad":  "$6.84",
+                      "size":  "6 ct",
+                      "is_crown":  false,
+                      "why":  "PRE-FIELD-ROW-OUTLIVING-A-REFUSAL",
+                      "detail":  "this cell prices from the PRE-FIELD row in walmart-regular-2026-08-06.json, but item 8886020987 appears in the fresher walmart-regular-2026-08-31.json as FC, where the in-store gate refuses it",
+                      "source_file":  "walmart-regular-2026-08-06.json",
+                      "item_id":  "8886020987",
+                      "attribution":  "price-match",
+                      "reviewed":  "IN-STORE, verified on the live page 2026-09-01 in Brad\u0027s Chrome (store context Omaha L St Supercenter / 68137). Same-day store promise on the page: Pickup \u0027As soon as 6pm today\u0027 and Delivery \u0027As soon as 16 mins\u0027, at $6.84, which is the price the board publishes ($6.84 / 6 rolls = $1.14 each). The board prices this from a pre-field carried row while item 8886020987 reads ship-only in a fresher field-bearing capture, so the id-keyed rule would refuse it; the page says otherwise and the page wins."
+                  }
+              ]
+}

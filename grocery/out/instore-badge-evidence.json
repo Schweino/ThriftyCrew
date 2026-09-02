@@ -1,0 +1,238 @@
+{
+  "generated": "2026-09-01T16:40:00-05:00",
+  "probed": 21,
+  "method": "Live Walmart product pages read in Brad's Chrome, store context Omaha L St Supercenter / ships-to Omaha 68137. Positive in-store tell taken as a STORE-LEVEL availability line (e.g. 'Pickup As soon as 6pm today', 'Out of stock at Omaha L St Supercenter / Available for pickup nearby'). A page showing only 'Ships to Omaha, 68137' with Pickup 'Check nearby' or 'Get it nearby' and Delivery 'Not available' was treated as ship-only (FC), not shelf. No CAPTCHA or bot wall was encountered on any of the 21 probes.",
+  "results": [
+    {
+      "commodity": "apple-cider-vinegar",
+      "item_id": "10451001",
+      "item": "Great Value Apple Cider Vinegar, 128 fl oz",
+      "is_crown": true,
+      "board_price": 6.67,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 6.72,
+      "evidence": "'Sold and shipped by Walmart.com'; fulfillment box reads Shipping 'Arrives tomorrow', Pickup 'Get it nearby', Delivery 'Not available'; the panel resolves to 'Ships to Omaha, 68137' with NO store-level stock line for Omaha L St Supercenter. Selecting Pickup only surfaced a 'Pickup or delivery?' store picker rather than an in-stock confirmation. Ship-from-FC shape, matching the 2026-08-30 capture that recorded this item as FC. Live price is also $6.72, not the board's $6.67.",
+      "url": "https://www.walmart.com/ip/10451001"
+    },
+    {
+      "commodity": "bay-leaves",
+      "item_id": "30919180",
+      "item": "El Guapo Mexican Bay Leaves, 0.5 oz Bag",
+      "is_crown": true,
+      "board_price": 1.63,
+      "verdict": "IN-STORE",
+      "live_price": 1.63,
+      "evidence": "Store-level line present: 'Out of stock at Omaha L St Supercenter' followed by 'Available for pickup nearby', plus 'Show in-stock stores' and Pickup 'Get it nearby'. This is a store-channel SKU (Walmart carries it on the shelf), and the live price 'Now $1.63, was $9.00, $3.26/oz' matches the board exactly. CAVEAT for the reviewer: it is currently OUT OF STOCK at Omaha L St, so a shopper may not be able to buy it there today, but the channel is genuinely in-store.",
+      "url": "https://www.walmart.com/ip/30919180"
+    },
+    {
+      "commodity": "lotion",
+      "item_id": "15706413058",
+      "item": "(2 pack) Suave Skin Solutions Silkening Body Lotion for Dry Skin with Baby Oil, All Skin Types, 32 oz",
+      "is_crown": true,
+      "board_price": 10.44,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 10.44,
+      "evidence": "Multipack bundle listing: 'Multipack Quantity: 2 - Out of stock'; single is $5.22, 2-pack $10.44, both flagged out of stock. Fulfillment box reads Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available', and the store line reads 'Out of stock at Omaha L St Supercenter' with 'Check stores nearby'. No pickup or shelf availability can be proven for this bundle item number.",
+      "url": "https://www.walmart.com/ip/15706413058"
+    },
+    {
+      "commodity": "brown-lentils",
+      "item_id": "1805883310",
+      "item": "(6 pack) Hurst's Brand Dried Lentils, 16 oz",
+      "is_crown": true,
+      "board_price": 6.0,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 6.0,
+      "evidence": "6-pack bundle. Fulfillment box reads Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available'; store line reads out of stock 'at Omaha L St Supercenter'. Price still $6.00 for the 6 Pack, but there is no in-store channel to buy it through.",
+      "url": "https://www.walmart.com/ip/1805883310"
+    },
+    {
+      "commodity": "canned-pineapple",
+      "item_id": "1739149914",
+      "item": "(4 pack) Del Monte Pineapple Chunks in 100% Juice, Canned Fruit, 20 oz Can",
+      "is_crown": true,
+      "board_price": 6.48,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 6.48,
+      "evidence": "4-pack bundle at $6.48. Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available', with an 'Out of stock' status at the Omaha L St Supercenter location. Online-bundle item number with no shelf channel.",
+      "url": "https://www.walmart.com/ip/1739149914"
+    },
+    {
+      "commodity": "fish-sauce",
+      "item_id": "233387802",
+      "item": "Thai Kitchen Premium Fish Sauce, 23.66 fl oz",
+      "is_crown": true,
+      "board_price": 8.82,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 13.8,
+      "evidence": "Explicit marketplace listing: 'Sold and shipped by Noelle's Suitcase', with 'Free shipping' and both Pickup and Delivery not available. Live price is $13.80, far above the board's $8.82. This is a third-party seller item, not an Omaha shelf price.",
+      "url": "https://www.walmart.com/ip/233387802"
+    },
+    {
+      "commodity": "red-curry-paste",
+      "item_id": "754814279",
+      "item": "Thai Kitchen Red Curry Paste, 35.0 oz Cup",
+      "is_crown": true,
+      "board_price": 23.4,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 19.32,
+      "evidence": "'Sold and shipped by Walmart.com' but ship-only: Shipping 'Arrives tomorrow', Pickup 'Check nearby', Delivery 'Not available'. Clicking the Pickup radio did not resolve to a store; the panel stayed on 'Ships to Omaha, 68137'. Matches the 2026-08-31 capture that recorded this item as FC. Live price $19.32 vs board $23.40.",
+      "url": "https://www.walmart.com/ip/754814279"
+    },
+    {
+      "commodity": "toothbrushes",
+      "item_id": "14070519447",
+      "item": "(2 pack) Dr. Fresh Toothbrushes with Tongue Cleaner, Soft, 6 Count",
+      "is_crown": true,
+      "board_price": 2.0,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 2.0,
+      "evidence": "2-pack bundle, out of stock in all three channels: Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Out of stock', and an 'Out of stock' status at Omaha L St Supercenter. A third-party seller name ('EmpriseDirect') appears on the listing. No in-store shelf channel provable.",
+      "url": "https://www.walmart.com/ip/14070519447"
+    },
+    {
+      "commodity": "white-miso-paste",
+      "item_id": "201434798",
+      "item": "Shirakiku Brand Sk White Miso Paste from Japan, 26.45 oz.",
+      "is_crown": true,
+      "board_price": 6.16,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 6.16,
+      "evidence": "Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available', with 'Out of stock' 'at Omaha L St Supercenter'. Price still lists at $6.16 but there is no channel, in store or otherwise, to buy it through today.",
+      "url": "https://www.walmart.com/ip/201434798"
+    },
+    {
+      "commodity": "sea-salt",
+      "item_id": "5271663093",
+      "item": "(3 pack) Hain Pure Foods Iodized Sea Salt, 21 oz",
+      "is_crown": false,
+      "board_price": 8.01,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 8.01,
+      "evidence": "3-pack bundle at $8.01. Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available', and an explicit 'Out of stock at Omaha L St Supercenter' line.",
+      "url": "https://www.walmart.com/ip/5271663093"
+    },
+    {
+      "commodity": "sun-dried-tomatoes",
+      "item_id": "15943254289",
+      "item": "(2 pack) Star Julienne Style Sun Dried Tomatoes in Oil, 8 oz",
+      "is_crown": false,
+      "board_price": 8.44,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 8.44,
+      "evidence": "2-pack bundle at $8.44, variant itself marked 'Out of stock'. Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available', with an 'Out of stock' status at Omaha L St Supercenter.",
+      "url": "https://www.walmart.com/ip/15943254289"
+    },
+    {
+      "commodity": "rice",
+      "item_id": "15382562064",
+      "item": "(3 pack) Doguet's Extra Fancy Enriched Long Grain Rice, 48 oz",
+      "is_crown": false,
+      "board_price": 5.04,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 5.04,
+      "evidence": "3-pack bundle at $5.04. Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available', and an 'Out of stock' status at Omaha L St Supercenter.",
+      "url": "https://www.walmart.com/ip/15382562064"
+    },
+    {
+      "commodity": "yeast",
+      "item_id": "31081703",
+      "item": "Red Star Active Dry Yeast 2 lb. bag",
+      "is_crown": false,
+      "board_price": 13.99,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 14.45,
+      "evidence": "Marketplace listing: 'Sold by Star Sales', 'Fulfilled by Walmart'. Shipping 'Arrives Sep 3', Pickup 'Not available', Delivery 'Not available'. Live price $14.45 vs board $13.99. Seller-shipped, never a shelf price.",
+      "url": "https://www.walmart.com/ip/31081703"
+    },
+    {
+      "commodity": "pasta",
+      "item_id": "3980920856",
+      "item": "(4 pack) Great Value Half-Length Spaghetti, 16 oz",
+      "is_crown": false,
+      "board_price": 3.68,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 3.68,
+      "evidence": "4-pack bundle at $3.68 with Shipping 'Not available', Pickup 'Check nearby', Delivery 'Not available' and an 'Out of stock' status at Omaha L St Supercenter. Every channel on this item number is closed.",
+      "url": "https://www.walmart.com/ip/3980920856"
+    },
+    {
+      "commodity": "mandarin-oranges",
+      "item_id": "1853747358",
+      "item": "(4 pack) Del Monte Mandarin Oranges in Extra Light Syrup, 29 oz Can, Canned Fruit",
+      "is_crown": false,
+      "board_price": 11.88,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 11.88,
+      "evidence": "4-pack bundle at $11.88. Shipping 'Out of stock', Pickup 'Check nearby', Delivery 'Not available', with 'Out of stock' 'at Omaha L St Supercenter'.",
+      "url": "https://www.walmart.com/ip/1853747358"
+    },
+    {
+      "commodity": "cajun-seasoning",
+      "item_id": "588837447",
+      "item": "(6 pack) Tony Chachere's, Seasoning, Original, Cajun, 32 oz",
+      "is_crown": false,
+      "board_price": 33.28,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 35.11,
+      "evidence": "Page title is 'Tony Chachere's Creole Seasoning, 32 oz, 6 Pack Case'. 'Sold and shipped by Walmart.com' with 'Free shipping', Pickup 'Check nearby', Delivery 'Not available', and a 'Low stock' warehouse note. A 6-pack case is an online case pack, not an Omaha shelf item. Live price $35.11 vs board $33.28.",
+      "url": "https://www.walmart.com/ip/588837447"
+    },
+    {
+      "commodity": "adobo-seasoning",
+      "item_id": "833085213",
+      "item": "Goya Adobo All-Purpose Seasoning with Pepper, 7.5 Lb",
+      "is_crown": false,
+      "board_price": 37.99,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 25.93,
+      "evidence": "Explicit marketplace listing: 'Sold and shipped by ElimsWell', Shipping 'Arrives between Sep 8 - Sep 11', Pickup 'Not available', Delivery 'Not available'. Live price $25.93 vs board $37.99. Confirms the capture that recorded this item as MARKETPLACE.",
+      "url": "https://www.walmart.com/ip/833085213"
+    },
+    {
+      "commodity": "ground-ginger",
+      "item_id": "40166857",
+      "item": "Badia Spices Ground Ginger 12 OZ",
+      "is_crown": false,
+      "board_price": 14.99,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 13.34,
+      "evidence": "Marketplace listing: 'Sold by Swift Pick', 'Fulfilled by Walmart'. Shipping 'Arrives Sep 3', Pickup 'Not available', Delivery 'Not available'. Live price $13.34 ($1.11/oz) vs board $14.99.",
+      "url": "https://www.walmart.com/ip/40166857"
+    },
+    {
+      "commodity": "paper-towels",
+      "item_id": "8886020987",
+      "item": "Scott Paper Towels Choose-A-Sheet 6 Double Rolls",
+      "is_crown": false,
+      "board_price": 6.84,
+      "verdict": "IN-STORE",
+      "live_price": 6.84,
+      "evidence": "The clearest in-store shape of the whole run: 'Sold and shipped by Walmart.com' with Shipping 'Arrives tomorrow', Pickup 'As soon as 6pm today', Delivery 'As soon as 16 mins'. Same-day pickup and 16-minute delivery can only come from local store inventory. Live price $6.84 matches the board exactly.",
+      "url": "https://www.walmart.com/ip/8886020987"
+    },
+    {
+      "commodity": "miracle-whip",
+      "item_id": "149914049",
+      "item": "Miracle Whip Dressing, 2 ct Pack, 30 fl oz Jars",
+      "is_crown": false,
+      "board_price": 23.45,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 18.7,
+      "evidence": "Marketplace listing: 'Sold by Ociene LLC', Shipping 'Arrives Sep 4', Pickup 'Not available' at the Omaha store, Delivery 'Not available'. Live price $18.70 vs board $23.45.",
+      "url": "https://www.walmart.com/ip/149914049"
+    },
+    {
+      "commodity": "grits",
+      "item_id": "15379164095",
+      "item": "(4 pack) Great Value Quick Grits, 24 oz",
+      "is_crown": false,
+      "board_price": 8.72,
+      "verdict": "NOT-IN-STORE",
+      "live_price": 8.92,
+      "evidence": "4-pack bundle: 'This item includes: 4-pack of Great Value Quick Grits, 24 oz'; the Single variant ($2.23) is 'Out of stock'. 'Sold and shipped by Walmart.com' with Shipping 'Arrives tomorrow', Pickup 'Get it nearby', Delivery 'Not available', resolving to 'Ships to Omaha, 68137' with no store-level stock line (contrast the sponsored tiles on the same page, which do carry 'Pickup today'). Ship-from-FC bundle. Live price $8.92 vs board $8.72.",
+      "url": "https://www.walmart.com/ip/15379164095"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-09-01T08:04:36",
+    "updated":  "2026-09-01T11:22:20",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -6741,7 +6741,7 @@
                         "item_id":  "10534608",
                         "price":  6.9,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -7542,7 +7542,7 @@
                         "item_id":  "139534287",
                         "price":  9.42,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -7848,7 +7848,7 @@
                         "item_id":  "1511248702",
                         "price":  3.58,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -8019,7 +8019,7 @@
                         "item_id":  "15242767347",
                         "price":  23.17,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -8037,7 +8037,7 @@
                         "item_id":  "15254017336",
                         "price":  5.36,
                         "first_seen":  "2026-08-22",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -8757,7 +8757,7 @@
                         "item_id":  "17548416138",
                         "price":  21.58,
                         "first_seen":  "2026-08-22",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -10026,7 +10026,7 @@
                         "item_id":  "21186531",
                         "price":  12.97,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -10359,7 +10359,7 @@
                         "item_id":  "23598355",
                         "price":  6.96,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -10377,7 +10377,7 @@
                         "item_id":  "23788353",
                         "price":  5.28,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -10395,7 +10395,7 @@
                         "item_id":  "23888911",
                         "price":  9.58,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -10935,7 +10935,7 @@
                         "item_id":  "30919180",
                         "price":  1.63,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -11394,7 +11394,7 @@
                         "item_id":  "351257238",
                         "price":  3.57,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -11556,7 +11556,7 @@
                         "item_id":  "363375241",
                         "price":  6.99,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -11934,7 +11934,7 @@
                         "item_id":  "40926633",
                         "price":  2.97,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -11943,7 +11943,7 @@
                         "item_id":  "40926636",
                         "price":  2.97,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -12168,7 +12168,7 @@
                         "item_id":  "4291458",
                         "price":  15.99,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -12376,7 +12376,7 @@
                         "price":  0.97,
                         "first_seen":  "2026-07-14",
                         "last_seen":  "2026-08-31",
-                        "price_changed":  2
+                        "price_changed":  4
                     },
                     {
                         "key":  "Walmart|44390948",
@@ -12384,7 +12384,7 @@
                         "item_id":  "44390948",
                         "price":  0.11,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -12483,7 +12483,7 @@
                         "item_id":  "45017542",
                         "price":  9.97,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -12879,7 +12879,7 @@
                         "item_id":  "505770642",
                         "price":  5.12,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {
@@ -14517,7 +14517,7 @@
                         "item_id":  "872077",
                         "price":  4.99,
                         "first_seen":  "2026-08-31",
-                        "last_seen":  "2026-08-31",
+                        "last_seen":  "2026-09-01",
                         "price_changed":  0
                     },
                     {

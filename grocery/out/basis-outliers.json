@@ -135,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-09-01T08:19:49",
+    "generated":  "2026-09-01T16:56:01",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -351,18 +351,6 @@
                               "size":  "pint",
                               "item":  "Grape Tomatoes",
                               "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "cherry-tomatoes",
-                              "commodity":  "Cherry / Grape Tomatoes",
-                              "unit":  "oz",
-                              "store":  "Walmart",
-                              "per_unit":  0.327,
-                              "size":  "16 ct",
-                              "item":  "Fresh Organic Grape Tomatoes, 10 oz Package",
-                              "kind":  "count",
                               "row_kind":  "weight",
                               "holds_crown":  false
                           },
@@ -803,7 +791,7 @@
                               "commodity":  "Insect / Bug Spray (home)",
                               "unit":  "oz",
                               "store":  "Walmart",
-                              "per_unit":  0.1249,
+                              "per_unit":  0.0736,
                               "size":  "128 fl oz",
                               "item":  "Ortho Home Defense Insect Killer for Indoor and Perimeter2, Kills Ants and Roaches, 1 gal.",
                               "kind":  "volume",

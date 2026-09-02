@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  593,
-    "cursor_next":  600,
+    "cursor_start":  600,
+    "cursor_next":  5,
     "total_terms":  602,
     "rotation_terms":  [
-                           "wild rice blend",
-                           "worcestershire sauce",
-                           "active dry yeast",
-                           "yellow bell pepper",
-                           "yogurt",
-                           "yuca root",
-                           "yukon gold potatoes"
+                           "zero sugar soda 2 liter",
+                           "zucchini squash",
+                           "15 bean soup mix",
+                           "93/7 lean ground beef",
+                           "achiote paste",
+                           "acorn squash",
+                           "adobo seasoning"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "wild rice blend",
-                  "worcestershire sauce",
-                  "active dry yeast",
-                  "yellow bell pepper",
-                  "yogurt",
-                  "yuca root",
-                  "yukon gold potatoes"
+                  "zero sugar soda 2 liter",
+                  "zucchini squash",
+                  "15 bean soup mix",
+                  "93/7 lean ground beef",
+                  "achiote paste",
+                  "acorn squash",
+                  "adobo seasoning"
               ],
     "commodities":  [
-                        "wild-rice-blend",
-                        "worcestershire",
-                        "yeast",
-                        "yellow-bell-pepper",
-                        "yogurt",
-                        "yuca-root",
-                        "yukon-gold-potatoes"
+                        "zero-sugar-soda-2l",
+                        "zucchini",
+                        "15-bean-soup-mix",
+                        "93-7-ground-beef",
+                        "achiote-paste",
+                        "acorn-squash",
+                        "adobo-seasoning"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,
