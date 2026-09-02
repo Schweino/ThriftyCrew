@@ -86,7 +86,7 @@ function Test-RunSuperseded {
       Pure, so the -SelfTest fixtures can drive it with frozen timestamps.
 
       WHY (2026-08-31). The 08:00 task exits 1 whenever guards refuse to publish - which is the guard
-      doing its job, not the capture failing. This watchdog runs at 09:30 and reported that exit code
+      doing its job, not the capture failing. This watchdog ran at 09:30 back then and reported that exit code
       as "FAILED", so on a day the blocker was found and cleared in between, the email announced a
       failure about a board that was live, current and correct. Measured that morning: the run exited 1
       at 08:00, the board was rebuilt at 09:26 and published, and this watchdog's OWN healthy lines
@@ -392,7 +392,7 @@ foreach ($name in $TASKS) {
     [void]$findings.Add("DID NOT RUN: '$name' last ran $last - nothing captured today.")
   } elseif ($rc -ne 0) {
     # DEFERRED ON PURPOSE (2026-08-31). A non-zero exit here is usually the guards refusing to publish,
-    # which is the guard WORKING - and by the time this runs at 09:30 the blocker may already have been
+    # which is the guard WORKING - and by the time this runs at 10:30 the blocker may already have been
     # cleared and the board shipped. Reporting the stale exit code as FAILED then emails a failure about a
     # board that is live and correct, which is how a real alert gets trained into noise. The facts that
     # settle it (was the board rebuilt after this run, and did it ship) are computed in sections 3 and 4
@@ -925,7 +925,7 @@ try {
     $since = (Get-Date).AddHours(-24)
     $ffAdv = Measure-CursorAdvances -Lines (Get-Content $curLog -ErrorAction SilentlyContinue) -Store 'Family Fare' -Since $since
     if ($ffAdv -lt $FF_EXPECTED_WINDOWS) {
-      [void]$findings.Add(("MISSING-WINDOW: Family Fare advanced its term cursor $ffAdv time(s) in the last 24h, against $FF_EXPECTED_WINDOWS configured shard windows (07:00 ad task, 08:00 daily run, 09:30 watchdog). The sweep is sized for several windows a day - about 7 of 526 terms each - so a lost window is not a slow day, it is coverage the 90-day carry has to cover for. This is the check that makes a dead window page as itself instead of surfacing weeks later as 'the catalog is degrading'."))
+      [void]$findings.Add(("MISSING-WINDOW: Family Fare advanced its term cursor $ffAdv time(s) in the last 24h, against $FF_EXPECTED_WINDOWS configured shard windows (07:00 ad task, 08:00 daily run, 10:30 watchdog). The sweep is sized for several windows a day - about 7 of 526 terms each - so a lost window is not a slow day, it is coverage the 90-day carry has to cover for. This is the check that makes a dead window page as itself instead of surfacing weeks later as 'the catalog is degrading'."))
     } else {
       [void]$ok.Add("Family Fare shard cadence: $ffAdv cursor advance(s) in the last 24h, at or above the $FF_EXPECTED_WINDOWS configured windows")
     }

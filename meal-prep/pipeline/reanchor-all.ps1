@@ -119,35 +119,26 @@ Write-Output ''
 # on disk, and the daily chain reads this file to decide what to republish - so a clean day would have
 # rebuilt and published whatever the last dirty day happened to contain. That is the stale-proof-file class
 # (a proof that outlives the work it certifies), and it was caught the first time this was dry-run.
-# ---- related-recipe widgets: the OTHER number baked into every card ----------------------------------
-# Each card carries a "smp-rel-card" strip quoting up to three sibling recipes' per-serving prices from the
-# manifest at BUILD time. Any price move anywhere therefore stales every card that quotes that recipe -
-# a fan-out nothing owned: measured 2026-08-07, 1,612 of 1,626 embedded prices disagreed with the manifest
-# (mean $0.10 off, max $0.98) and only a catalog-wide force republish cleared it. This folds the check into
-# the same daily stale list, thresholded at $0.15 so ordinary penny drift does not churn republishes; the
-# 150-slug sanity cap and its alert in check-ad-cycles still governs the volume.
-$THRESH = 0.15
-$manifestPath = Join-Path $here 'v2-perserving.json'
-if(Test-Path $manifestPath){
-  . (Join-Path $mp 'lib\json-db-io.ps1')   # @() does not unroll ConvertFrom-Json output in PS 5.1
-  $man = @{}
-  foreach($r in (Read-JsonArrayFile -Path $manifestPath)){ $man[[string]$r.slug] = [double]$r.cheapest_ps }
-  $relRx = [regex]'smp-rel-card. href=.https://www\.thriftycrew\.com/([a-z0-9-]+)/[^>]*>.*?smp-rel-p.>\$(\d+\.\d{2})'
-  $relStale = 0
-  foreach($f in (Get-ChildItem (Join-Path $builtDir '*.body.html'))){
-    $slugName = $f.BaseName -replace '\.body$',''
-    if($stale.Contains($slugName) -or $held.Contains($slugName)){ continue }
-    $html = [IO.File]::ReadAllText($f.FullName)
-    foreach($m in $relRx.Matches($html)){
-      $rs = $m.Groups[1].Value
-      if(-not $man.ContainsKey($rs)){ continue }
-      if([Math]::Abs([double]$m.Groups[2].Value - $man[$rs]) -gt $THRESH){ $stale.Add($slugName); $relStale++; break }
-    }
-  }
-  if($relStale){ Write-Output ("{0} card(s) added to the stale list for RELATED-RECIPE price drift over `${1}" -f $relStale, $THRESH) }
-} else {
-  Write-Output '  (no v2-perserving.json beside this script - related-price drift not checked this run)'
-}
+# ---- related-recipe widgets: CHECK REMOVED 2026-09-02, it could not fire ---------------------------
+# A second staleness check lived here. Each card carries an "smp-rel-card" strip for up to three sibling
+# recipes, and that strip used to quote each sibling's per-serving price BAKED IN AT BUILD TIME. Any price
+# move anywhere therefore staled every card quoting that recipe (measured 2026-08-07: 1,612 of 1,626
+# embedded prices disagreed with the manifest, mean $0.10 off, max $0.98), so this loop folded them into
+# the same daily stale list at a $0.15 threshold.
+#
+# WHY IT IS GONE. Commit 4b446257 "Scale grocery data plane with Parquet and release DAG" stopped
+# build-card2.ps1 baking a price into that strip. It now emits a fixed placeholder instead:
+#     <span class='smp-rel-p'><em>Current price loads on the recipe page</em></span>
+# and the number is fetched from the feed at READ time. This check's regex demanded a dollar amount inside
+# smp-rel-p, so it stopped matching anything the day that commit landed. Measured 2026-09-02 by running the
+# exact regex over the real corpus: 584 of 584 built bodies carry smp-rel-card, and 0 of 584 match. It had
+# been reporting "0 stale" on every run since, which reads as a working gate. A dead check that looks alive
+# is the worse state, so it is removed rather than left to be trusted.
+#
+# WHY NOTHING REPLACES IT. There is no build-time number left to go stale. The strip holds no price to
+# disagree with the manifest, and the price a reader actually sees comes from the same feed that prices the
+# card itself, so it cannot drift away from the card it sits on. Retargeting the check at today's markup
+# would only assert that a constant string is still a constant string, which is not a gate.
 
 $stale | Out-File $listPath -Encoding utf8
 if($held.Count){

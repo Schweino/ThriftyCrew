@@ -151,7 +151,6 @@ var feedData=null;
 
 function esc(s){var d=document.createElement('span');d.textContent=s;return d.innerHTML;}
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
-function scaleBuy(buy,f){ return String(buy).replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
 function money(v){ return '$'+v.toFixed(2); }
 function parseDate(v){ var p=v.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
 function fmtDay(d){ return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); }
