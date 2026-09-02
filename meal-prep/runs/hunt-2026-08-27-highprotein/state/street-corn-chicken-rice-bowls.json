@@ -3,10 +3,10 @@
     "title":  "Street Corn Chicken Rice Bowl",
     "source_url":  "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  16,
     "created":  "2026-08-27T11:51:38",
-    "updated":  "2026-09-02T12:04:48",
+    "updated":  "2026-09-02T14:56:31",
     "terms":  [
                   {
                       "term":  "cotija cheese",
@@ -128,6 +128,12 @@
                         "state":  "waved",
                         "at":  "2026-09-02T12:04:48",
                         "by":  "wave-close",
+                        "detail":  "wave 16"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-09-02T14:56:31",
+                        "by":  "wave-publish",
                         "detail":  "wave 16"
                     }
                 ]
