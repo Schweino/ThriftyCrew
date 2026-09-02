@@ -1779,7 +1779,7 @@
   {
       "batch":  "hunt-2026-08-26-smoke5-w1",
       "opened":  "2026-09-02T05:52:15",
-      "last_activity":  "2026-09-02T06:04:12",
+      "last_activity":  "2026-09-02T06:04:19",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1834,6 +1834,11 @@
                          "stage":  "publish",
                          "at":  "2026-09-02T06:04:12",
                          "detail":  "1/1 wave slug(s) published through engine\\publish (visibility preserved) + 2 collateral spec(s) carried by propagate (total dirty 3)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-09-02T06:04:19",
+                         "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
                      }
                  ]
   }
