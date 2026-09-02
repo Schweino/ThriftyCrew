@@ -449,35 +449,50 @@ if ($serverDue) {
     # and re-point Hy-Vee's stored link snapshots at those same fresh numbers, so the board and its "See item"
     # link quote one number. Skip this and yesterday's snapshots become override pins that drag the board back.
     try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'refresh-hyvee-links.ps1') | Out-Null; Log 'Hy-Vee link snapshots refreshed' } catch { Log ('Hy-Vee link refresh threw: ' + $_.Exception.Message) }
-    # FF PULL-COMPLETENESS GUARD: catch a term the Freshop pull silently dropped (rate-limit -> 0 items) for a
-    # product FF actually carries (the 2026-07-13 ground-pork bug; coverage-gaps can't see a never-pulled item).
-    try {
-      $fcArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-ff-carry.ps1'),'-OutDir',$OutDir)
-      if (-not $NoAlert) { $fcArgs += '-Alert' }
-      # CAPTURE, THEN LOG, THEN CHECK THE EXIT CODE. Piping the child straight into Log means a child that
-      # dies before its first Write-Output logs NOTHING - and a guard that says nothing is indistinguishable
-      # from one that was never wired up. That is not hypothetical: audit-ff-carry threw on its report line
-      # on every run from 2026-07-13, and the string 'ff-carry' appears 0 times in 2,716 lines of
-      # ad-cycle-log.txt. A native child's crash is not a PowerShell exception, so the catch below never saw
-      # it either. This guard prints exactly one line whenever it completes, so zero lines IS the failure.
-      # No 2>&1: $ErrorActionPreference is 'Stop' here, and redirecting a native child's stderr under Stop
-      # turns its first stderr line into a terminating throw that would skip this very check.
-      $fcOut = & powershell @fcArgs
-      $fcRc  = $LASTEXITCODE
-      foreach ($l in @($fcOut)) { Log ('ff-carry: ' + $l) }
-      # Exit 3 is the estate's could-not-evaluate code and must NOT be reported as a crash. ff-carry returns
-      # it when Freshop answered none of the terms it needed to probe: the script ran fine and said so, it
-      # just proved nothing. Both cases leave the watch blind for the cycle, but only one of them means
-      # "go read stderr", and sending someone to an empty stderr is how a real crash stops being believed.
-      if ($fcRc -eq 3) {
-        $summary += 'REVIEW    audit-ff-carry could not evaluate (Freshop refused every probe) - FF pull-drop victims went unchecked this cycle'
-      }
-      elseif ($fcRc -ne 0 -or @($fcOut).Count -eq 0) {
-        Log ("ff-carry: DID NOT RUN - exit $fcRc with " + @($fcOut).Count + ' output line(s); the FF pull-drop watch is blind this cycle (see stderr)')
-        $summary += 'REVIEW    audit-ff-carry did not complete - FF pull-drop victims went unchecked this cycle'
-      }
-    } catch { Log ('ff-carry guard threw: ' + $_.Exception.Message) }
   }
+  # ---- REACHABILITY (2026-09-02, queue 2026-09-02-c9c140) --------------------------------------------
+  # THIS BLOCK USED TO SIT INSIDE `if (-not $NoPull)` ABOVE, AND SO IT NEVER RAN. Since commit 9f938a5b
+  # (2026-08-23) EVERY scheduled caller passes -NoPull - capture-run.ps1 -Kind ad/daily and
+  # bakers-daily-scan.ps1 both do, and this file now REFUSES to pull without -ForcePull - so the pull
+  # branch is a manual-only path and the guard wired into it was dead code on every real run. Measured
+  # 2026-09-02: the string '] ff-carry:' appears 0 times in 1,771 lines of ad-cycle-log.txt, and the last
+  # coverage-ledger row for audit-ff-carry was 2026-08-29 17:21:15 (examined 45 of 558) - six days after
+  # the -NoPull change and the only reason anything noticed was the ledger's own STALE arm, which needed
+  # three days to say so. That is the tested-is-not-run class: a guard whose only path to execution is a
+  # code path nobody takes.
+  # It needs no pull. It reads the newest family-fare-regular file and probes Freshop for the empty terms
+  # (45 of 558 on 2026-08-29, capped by the script), so it belongs on the cycle path beside every other
+  # downstream check. It stays inside `if ($serverDue)`, which is unconditionally true whenever any store
+  # is method=server (:334-335) - i.e. every run.
+  # Pinned structurally by test-auditors.ps1: the $fcArgs line must sit AFTER this block's closing brace.
+  # FF PULL-COMPLETENESS GUARD: catch a term the Freshop pull silently dropped (rate-limit -> 0 items) for a
+  # product FF actually carries (the 2026-07-13 ground-pork bug; coverage-gaps can't see a never-pulled item).
+  try {
+    $fcArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-ff-carry.ps1'),'-OutDir',$OutDir)
+    if (-not $NoAlert) { $fcArgs += '-Alert' }
+    # CAPTURE, THEN LOG, THEN CHECK THE EXIT CODE. Piping the child straight into Log means a child that
+    # dies before its first Write-Output logs NOTHING - and a guard that says nothing is indistinguishable
+    # from one that was never wired up. That is not hypothetical: audit-ff-carry threw on its report line
+    # on every run from 2026-07-13, and the string 'ff-carry' appears 0 times in 2,716 lines of
+    # ad-cycle-log.txt. A native child's crash is not a PowerShell exception, so the catch below never saw
+    # it either. This guard prints exactly one line whenever it completes, so zero lines IS the failure.
+    # No 2>&1: $ErrorActionPreference is 'Stop' here, and redirecting a native child's stderr under Stop
+    # turns its first stderr line into a terminating throw that would skip this very check.
+    $fcOut = & powershell @fcArgs
+    $fcRc  = $LASTEXITCODE
+    foreach ($l in @($fcOut)) { Log ('ff-carry: ' + $l) }
+    # Exit 3 is the estate's could-not-evaluate code and must NOT be reported as a crash. ff-carry returns
+    # it when Freshop answered none of the terms it needed to probe: the script ran fine and said so, it
+    # just proved nothing. Both cases leave the watch blind for the cycle, but only one of them means
+    # "go read stderr", and sending someone to an empty stderr is how a real crash stops being believed.
+    if ($fcRc -eq 3) {
+      $summary += 'REVIEW    audit-ff-carry could not evaluate (Freshop refused every probe) - FF pull-drop victims went unchecked this cycle'
+    }
+    elseif ($fcRc -ne 0 -or @($fcOut).Count -eq 0) {
+      Log ("ff-carry: DID NOT RUN - exit $fcRc with " + @($fcOut).Count + ' output line(s); the FF pull-drop watch is blind this cycle (see stderr)')
+      $summary += 'REVIEW    audit-ff-carry did not complete - FF pull-drop victims went unchecked this cycle'
+    }
+  } catch { Log ('ff-carry guard threw: ' + $_.Exception.Message) }
   # read verification from TODAY's file (real runs); in -NoPull test mode fall back to the newest ads file
   if (Test-Path $adsToday) { $verif = @((Get-Content $adsToday -Raw | ConvertFrom-Json).verification) }
   elseif ($NoPull) { $af = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($af) { $verif = @((Get-Content $af.FullName -Raw | ConvertFrom-Json).verification) } }

@@ -44,6 +44,30 @@ foreach ($cm in $commods) {
 }
 Write-Output ("category-exclude library: +$added patterns across $touched commodities")
 if ($WhatIf) { Write-Output 'WhatIf: commodities.json not written'; return }
-($commods | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $root 'commodities.json') -Encoding UTF8
+# WRITE IT BACK IN THE ENCODING THE FILE IS PINNED TO (2026-09-02, triage plan-2026-09-02-2 item 1527d2).
+# commodities.json expresses every non-ASCII character as a JSON \uXXXX escape and carries no BOM. That is
+# not a preference: audit-json-encoding.ps1 lists it in ASCII_PINNED and a single non-ASCII byte is a hard
+# finding there, because the 2026-08-31 mojibake pass proved that a corrupted character CLASS goes on
+# matching the plain spelling while silently losing the accented one.
+# ConvertTo-Json emits those characters LITERALLY (the \uXXXX escapes decode on read and never come back)
+# and Set-Content -Encoding UTF8 prepends a BOM, so the plain one-line write this used to be turned even a
+# NO-OP bake into 84 non-ASCII bytes plus a BOM. Measured on a scratch copy of the live tree 2026-09-02:
+# "+0 patterns across 0 commodities" still rewrote the file into a PINNED finding for ops\run-gates.ps1.
+# The 2026-08-31 pass fixed this script's READ (-Encoding UTF8, above) and left its WRITE, so the guard and
+# the sanctioned tool that violates it have been shipping side by side ever since.
+# test-auditors.ps1 case (ce1) runs this script over a fixture whose rule carries ñ and fails if the
+# output stops being pure ASCII or grows a BOM.
+function Write-AsciiPinnedJson {
+  param([Parameter(Mandatory)][string]$Json, [Parameter(Mandatory)][string]$Path)
+  $sb = New-Object System.Text.StringBuilder
+  foreach ($ch in $Json.ToCharArray()) {
+    if ([int]$ch -gt 127) { [void]$sb.AppendFormat('\u{0:x4}', [int]$ch) } else { [void]$sb.Append($ch) }
+  }
+  # Set-Content terminated the file with a newline and the stored file has always carried one; WriteAllText
+  # does not, and a missing terminator is a whole-line diff on the last line for no reason.
+  [void]$sb.Append("`r`n")
+  [IO.File]::WriteAllText($Path, $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+}
+Write-AsciiPinnedJson -Json ($commods | ConvertTo-Json -Depth 6) -Path (Join-Path $root 'commodities.json')
 $null = Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding UTF8 | ConvertFrom-Json   # validate round-trip
 Write-Output 'commodities.json updated (JSON validated)'

@@ -153,7 +153,15 @@ function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedE
   $totalExpired = $starvedExpired + $churnExpired
   if ($starvedExpired -gt 0) { $reasons += ("$starvedExpired row(s) aged out past the capture-policy carry on a STARVED search term - that term has not returned a single product inside the carry window, so the sweep genuinely cannot replace those products") }
   if ($mergedCount -gt 0 -and $totalExpired -gt ($mergedCount * 0.02)) { $reasons += ("$totalExpired row(s) aged out in ONE run against a $mergedCount-item catalog - that is a mass loss (over 2%) whatever class the rows are") }
-  if ($recentVerified -lt 500) { $reasons += ("only $recentVerified row(s) re-verified against the store in the last 48h - the sweep is not buying terms") }
+  # THE FLOOR, RE-DERIVED FROM THE CADENCE 2026-09-02 (queue 2026-09-02-a4236e). 300 = 60% of the designed
+  # 48-hour yield: 3 windows a day x ~85 rows re-dated per window x 2 days = 510. The old 500 was set
+  # against the PRE-SHARDING sweep, where one run re-verified 1,259 rows, and was never re-derived for the
+  # cadence that replaced it - so it sat at 70-100% of the steady-state yield and any thin window read as a
+  # frozen store. Measured on 2026-09-02: a healthy day is 450 (379 dated today + 71 dated yesterday) across
+  # four windows in 19 hours, with 5,305 items and 0 expired, and it paged at 07:00 on 163. A genuinely
+  # frozen store is still caught: two days of nothing is 0, and ONE window in two days is ~85-126.
+  # IF CAPTURE-POLICY CHANGES THE WINDOW COUNT, RE-DERIVE THIS - do not nudge it to silence a page.
+  if ($recentVerified -lt 300) { $reasons += ("only $recentVerified row(s) re-verified against the store in the last 48h, under the floor of 300 (60% of the designed 3-windows-a-day x ~85-row x 2-day yield of 510) - the sweep is not buying terms") }
   if ($prevMax -gt 100 -and $mergedCount -lt ($prevMax * 0.80)) { $reasons += ("merged catalog is $mergedCount items against a best-of-recent $prevMax - it shrank by more than 20%") }
   return @{ degraded = ($reasons.Count -gt 0); reasons = $reasons }
 }
@@ -246,6 +254,18 @@ if ($SelfTest) {
   # MUST-FIRE (kept verbatim): the sweep has stopped buying terms at all. A REAL freeze detector - do not soften.
   $d2 = Test-FfCatalogDegraded 4269 4269 0 0 12
   _T 'MUST-FIRE c5: FIRES when almost nothing was re-verified against the store (12 rows)' ($d2.degraded -and ($d2.reasons -join ' ') -match 're-verified')
+  # CLEAN TWIN c6 - TODAY'S REAL HEALTHY SHARDED DAY, frozen (2026-09-02T10:33): 5,305 merged items against
+  # a best-of-recent 5,283, 0 expired, 450 rows re-verified across four windows in 19 hours. The old clean
+  # twin c5 is frozen at 1,259 re-verified, a number the PRE-SHARDING sweep produced and no sharded day can
+  # reach - which is exactly why it could never catch the threshold drifting above the real steady state.
+  # This one can: raise the floor back over 450 and this case goes red.
+  $c6 = Test-FfCatalogDegraded 5305 5283 0 0 450
+  _T 'CLEAN-TWIN c6: a healthy SHARDED day does NOT page (5305 items, 0 expired, 450 re-verified in 4 windows)' (-not $c6.degraded)
+  # MUST-FIRE m4 - THIS MORNING'S REAL PAGE, frozen (2026-09-02T07:00, 163 re-verified). A two-window 48h IS
+  # thin and must still page under the lowered floor, or the change would have bought silence rather than
+  # accuracy. Keep this case and d2 (12 rows) together: they pin both ends of the arm.
+  $m4 = Test-FfCatalogDegraded 5305 5283 0 0 163
+  _T 'MUST-FIRE m4: still FIRES on a genuinely thin 48h (163 re-verified) under the 300 floor' ($m4.degraded -and ($m4.reasons -join ' ') -match 're-verified')
   # MUST-FIRE (kept verbatim): the merged catalog itself collapsed - the original freeze, which bottomed at 207
   # board cells. Also a REAL freeze detector - do not soften.
   $d3 = Test-FfCatalogDegraded 1909 3974 0 0 1259

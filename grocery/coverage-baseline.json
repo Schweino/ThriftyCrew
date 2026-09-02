@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "set":  "2026-09-01 04:21",
+    "set":  "2026-09-02 13:30",
     "checks":  {
                    "audit-board-reconciliation":  {
                                                       "examined":  67,
@@ -24,28 +24,28 @@
                                           "why":  "RATCHET DELIBERATELY OFF - this denominator is INVERSE. It counts EMPTY Family Fare search terms re-probed against Freshop, so the number FALLS when the FF pull gets BETTER (fewer empty terms to re-probe). A ratchet here would fire at whoever fixed the thing it watches, which is worse than no watcher. Pinned by its own clean twin in test-auditors. BLIND still covers the case that matters for this check - it examining nothing at all - which is exactly where it sat on 2026-08-01."
                                       },
                    "audit-food-category":  {
-                                               "examined":  3029,
+                                               "examined":  3037,
                                                "tolerance":  0.1,
                                                "max_age_days":  2,
                                                "phase":  "publish",
                                                "why":  "priced cells scanned for a wrong-CLASS product (the blueberries-as-Bai-beverage guard). Measured 2026-07-30: 2663 scanned of 3196 priced cells, 372 skipped because their commodity\u0027s category maps to no class list and 161 because the cell carries no product name. Board-derived, so the measured 0.10 band applies. A later same-day board rebuild read 2661 of 3194, well inside the band."
                                            },
                    "build-rescue-worklist":  {
-                                                 "examined":  1517,
+                                                 "examined":  1364,
                                                  "tolerance":  0.1,
                                                  "max_age_days":  3,
                                                  "phase":  "cycle",
-                                                 "why":  "everyday walled-store board cells traced to a dated capture file. Measured on the first real run, 2026-07-31: 1,517 everyday cells across the four walled stores (Walmart 436, Sam\u0027s Club 347, Aldi 332, Fareway 402) and all 1,517 traced. Board-derived like guards/4-factor and audit-everyday-mismatch, so the same measured 0.10 band applies. Eligible is everyday cells of the four `walled: true` stores only - sale cells and the three headless stores stay out of the denominator, so the number does not swing on an ad cycle. Examined falls to 0 (BLIND, exit 3) if the capture files vanish from out\\, which is the fresh-clone / cloud-runner state: every cell would read UNTRACEABLE and the emitted lists would be a full re-pull rather than a rescue. max_age_days 3 because it runs on the ad cycle, not on every publish."
+                                                 "why":  "everyday walled-store board cells traced to a dated capture file. Measured on the first real run, 2026-07-31: 1,517 everyday cells across the four walled stores (Walmart 436, Sam\u0027s Club 347, Aldi 332, Fareway 402) and all 1,517 traced. Board-derived like guards/4-factor and audit-everyday-mismatch, so the same measured 0.10 band applies. Eligible is everyday cells of the four `walled: true` stores only - sale cells and the three headless stores stay out of the denominator, so the number does not swing on an ad cycle. Examined falls to 0 (BLIND, exit 3) if the capture files vanish from out\\, which is the fresh-clone / cloud-runner state: every cell would read UNTRACEABLE and the emitted lists would be a full re-pull rather than a rescue. max_age_days 3 because it runs on the ad cycle, not on every publish. FLOOR RE-DERIVED 2026-09-02 (queue 2026-09-02-c9c140), 1517 -\u003e 1364. Nothing went untraced: eligible fell to 1,379 and 1,364 of them traced (Aldi 359/359, Fareway 141/131, Sam\u0027s Club 377/374, Walmart 502/500; 15 untraceable). What shrank is the DENOMINATOR, and only at Fareway: its everyday cells went 402 -\u003e 141 because 562 of the 795 rows in fareway-regular carry marked_down with 30-day TTL windows anchored 08-05/08-09/08-11 (ratios 0.74-0.91), so 277 of Fareway\u0027s 444 board cells are now typed SALE, and this check\u0027s denominator is everyday-only BY DESIGN (see the sentence above). The floor moved on 2026-08-23/24, not today: the series reads 1621 on 08-21/22, 1113 on 08-23, 1363 on 08-24, and 1354-1370 every day since; today\u0027s 1364 is 10.08% under 1517 and yesterday\u0027s 1366 was 9.95%, i.e. a boundary oscillation on a floor that had already moved. The 10% tolerance is UNCHANGED and was deliberately not widened. If Fareway\u0027s shop markdowns turn out to be an online \u0027was\u0027 price rather than the shelf (open question for Brad), this denominator is wrong in the other direction and the baseline should be re-derived again rather than nudged."
                                              },
                    "guards/10-store-charges":  {
-                                                   "examined":  68809,
+                                                   "examined":  69398,
                                                    "tolerance":  0.35,
                                                    "max_age_days":  2,
                                                    "phase":  "publish",
                                                    "why":  "Wide on purpose: the denominator is every priced row across all store feeds, so it steps whenever a walled store lands a big capture (24,018 -\u003e 29,542 in three days). Narrowing it would cry wolf on a normal Walmart or Sams import. Revisit once coverage-ledger-history.jsonl holds a few weeks of per-check movement."
                                                },
                    "guards/11-bakers-provenance":  {
-                                                       "examined":  7292,
+                                                       "examined":  7295,
                                                        "tolerance":  0.25,
                                                        "max_age_days":  2,
                                                        "phase":  "publish",
@@ -59,7 +59,7 @@
                                                               "why":  "added by -Accept"
                                                           },
                    "guards/13-board-vs-identity-staple":  {
-                                                              "examined":  3132,
+                                                              "examined":  3139,
                                                               "tolerance":  0.1,
                                                               "max_age_days":  2,
                                                               "phase":  "publish",
@@ -87,7 +87,7 @@
                                            "why":  "board cells compared against their own linked product\u0027s per-unit. The single largest coverage number on the publish path and the one most directly tied to the board, so the measured 0.10 band applies."
                                        },
                    "guards/5-multipack":  {
-                                              "examined":  3148,
+                                              "examined":  3178,
                                               "tolerance":  0.5,
                                               "max_age_days":  2,
                                               "phase":  "publish",

@@ -152,6 +152,61 @@ try {
   T 'MUST FIRE  a valid manifest does not admit a directory it does not name' `
     ($rOther.refused -and $rOther.staged -eq 0) ("refused=$($rOther.refused) staged=$($rOther.staged)")
 
+  # ---- SERVED-DIRTY: WHAT THE CHAIN WROTE vs WHAT IT STAGED (2026-09-02, queue 2026-09-02-reanch1) ----
+  # Same harness, second shipped block. On 2026-09-02 the chain re-anchored 584 authored specs and rebuilt
+  # three data files and three tool pages AFTER guards passed, and $servedPaths listed none of them, so 536
+  # rewritten files sat dirty on a shared tree and were swept by hand in an unlabelled commit. The paths are
+  # in the list now; this block is what notices the NEXT writer to join the chain. Lifted by marker and run
+  # against a throwaway repo, never this one - a transcribed copy would pass forever while production drifted.
+  $si = $src.IndexOf('# >>> SERVED-DIRTY BLOCK')
+  $sj = $src.IndexOf('# <<< SERVED-DIRTY BLOCK', [Math]::Max($si, 0))
+  if ($si -lt 0 -or $sj -lt 0) { Write-Output 'BLIND: could not find the served-dirty markers in capture-run.ps1 - nothing was proven'; exit 3 }
+  $srv = $src.Substring($si, $sj - $si)
+  # A STUB, SO THE ALERT PATH IS ACTUALLY EXERCISED. Without it the block's Send-Alert throws
+  # CommandNotFound into its own catch and the alert BODY - which interpolates $servedDirty and $today -
+  # would never be composed, so a typo in it would ship unproven.
+  function Send-Alert { param($Subject, $Body) $script:alertSubject = $Subject; $script:alertBody = $Body }
+  function Run-Served([bool]$ship, [scriptblock]$Setup) {
+    $c = Join-Path $env:TEMP ('served-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+    New-Item -ItemType Directory $c -Force | Out-Null
+    & git -C $c init -q .
+    & git -C $c config user.email t@t; & git -C $c config user.name t
+    New-Item -ItemType Directory (Join-Path $c 'meal-prep/db/recipes') -Force | Out-Null
+    New-Item -ItemType Directory (Join-Path $c 'public') -Force | Out-Null
+    '{"slug":"x","cost_ps":1.23}' | Set-Content (Join-Path $c 'meal-prep/db/recipes/x.json')
+    'board' | Set-Content (Join-Path $c 'public/board.json')
+    & git -C $c add -A | Out-Null; & git -C $c commit -q -m seed | Out-Null
+    & $Setup $c
+    # the four variables the block reads, exactly as capture-run holds them at that point
+    $repo = $c; $today = '2026-09-02'; $shipServed = $ship
+    $servedPaths = @('public', 'meal-prep/db/recipes')
+    $failed = @()
+    $script:alertSubject = ''; $script:alertBody = ''
+    # DOT-SOURCE, not &: the block's `$failed += ...` must land in THIS scope or the assertion below
+    # would read an unmodified copy and pass on a block that reported nothing.
+    $out = . ([scriptblock]::Create($srv))
+    Remove-Item $c -Recurse -Force -ErrorAction SilentlyContinue
+    return [pscustomobject]@{ failed = ($failed -join ','); text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n"); subject = $script:alertSubject; body = $script:alertBody }
+  }
+
+  # MUST-FIRE, built from the real 2026-09-02 shape: the chain rewrote a tracked spec and committed without it.
+  $sDirty = Run-Served $true { param($c) '{"slug":"x","cost_ps":2.34}' | Set-Content (Join-Path $c 'meal-prep/db/recipes/x.json') }
+  T 'MUST FIRE  a tracked served file left dirty after the commit is reported and fails the lane' `
+    (($sDirty.failed -match 'served-dirty') -and ($sDirty.text -match 'served-dirty: 1 tracked served file')) ("failed=$($sDirty.failed) text=$($sDirty.text)")
+  T 'MUST FIRE  and the alert body composes (it interpolates the count, the paths and the date)' `
+    (($sDirty.subject -match '2026-09-02') -and ($sDirty.body -match 'meal-prep/db/recipes/x.json')) ("subject=$($sDirty.subject)")
+
+  # CLEAN TWIN: the same repo with nothing left behind. Silent, and the lane is untouched.
+  $sClean = Run-Served $true { param($c) }
+  T 'CLEAN TWIN a clean tree after the commit stays silent and does not fail the lane' `
+    (($sClean.failed -eq '') -and ($sClean.text -match 'served-dirty: none')) ("failed=$($sClean.failed) text=$($sClean.text)")
+
+  # CLEAN TWIN: guards blocked, so the chain deliberately staged INPUTS only. Dirty served files are the
+  # expected state there and must not page - or the block would cry wolf on every genuinely blocked board.
+  $sBlocked = Run-Served $false { param($c) '{"slug":"x","cost_ps":2.34}' | Set-Content (Join-Path $c 'meal-prep/db/recipes/x.json') }
+  T 'CLEAN TWIN a guards-blocked run (shipServed false) does not report served files as dirty' `
+    (($sBlocked.failed -eq '') -and ($sBlocked.text -eq '')) ("failed=$($sBlocked.failed) text=$($sBlocked.text)")
+
   Write-Output ''
   Write-Output ("SELFTEST: {0}/{1} pass" -f ($n-$bad), $n)
   Write-Output ("COMMIT-SIZE-GATE-COMPLETE cases={0} failed={1}" -f $n, $bad)

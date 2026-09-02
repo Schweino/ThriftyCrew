@@ -4003,6 +4003,66 @@
                         "ruled_on":  "2026-09-01",
                         "ruled_by":  "claude (opus5 triage-developer) - triage 2026-09-01-b7da16, browser badge check",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "gruyere|FamilyFare|aidells-smoked-roasted-garlic-gruyere-cheese-chi",
+                        "commodity":  "gruyere",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz"
+                                  ],
+                        "product_id":  "6363",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Chicken sausage flavoured with gruyere, shelved meat/sausage/smoked; held the Family Fare gruyere cell at 0.5825/oz on comparison-2026-09-02. Found by aisle-test. Fenced estate-wide by the new sausage_carrier category-excludes class.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-02",
+                        "ruled_by":  "triage-developer (plan-2026-09-02-2 item 1527d2)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Aldi|usda-80-lean-20-fat-ground-beef-patties-4-count",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pre-formed PATTIES, the by-policy variant the patty/patties exclude on ground-beef-8020 refuses; fourth ruling of the same class (Bakers 2026-08-02, Walmart 2026-08-06 and 2026-08-30). Aldi bulk 80/20 at 5.29/lb already holds the cell.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-02",
+                        "ruled_by":  "triage-developer (plan-2026-09-02-2 item fd3f29)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Aldi|usda-80-lean-20-fat-ground-beef-patties-10-count",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pre-formed PATTIES, the by-policy variant the patty/patties exclude on ground-beef-8020 refuses; fourth ruling of the same class (Bakers 2026-08-02, Walmart 2026-08-06 and 2026-08-30). Aldi bulk 80/20 at 5.29/lb already holds the cell.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-02",
+                        "ruled_by":  "triage-developer (plan-2026-09-02-2 item fd3f29)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sea-salt|Aldi|southern-grove-deluxe-whole-cashews-with-sea-sal",
+                        "commodity":  "sea-salt",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Southern Grove Deluxe Whole Cashews With Sea Salt 30 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "cashews priced as sea salt, $0.3497/oz, live cell on comparison-2026-09-02",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-02",
+                        "ruled_by":  "triage-2026-09-02",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

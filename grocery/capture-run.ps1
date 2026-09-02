@@ -627,7 +627,23 @@ $servedPaths = @('public',
                  'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
                  'meal-prep/pipeline/v2-inversions.json',
                  'meal-prep/free-rotation.json', 'meal-prep/ingredient-map.json',
-                 'meal-prep/recipes-db.json')
+                 'meal-prep/recipes-db.json',
+                 # WHAT THE CHAIN REWRITES AFTER GUARDS, ADDED 2026-09-02 (queue 2026-09-02-reanch1).
+                 # This list was enumerated from "the exact set real bot commits have ever touched"
+                 # (its own comment, 2026-08-22) at a time when reanchor-all and the three surface
+                 # builders had not yet joined the chain. A staging allowlist cannot see a new writer.
+                 # The writers, by name: check-ad-cycles:774 reanchor-all ("re-anchored cost_ps +
+                 # costPerServing on 584 specs", 08:05:50 on 2026-09-02) and check-ad-cycles:1162
+                 # build-cheapnow/dinner/stretcher-data + the tool splice (08:12:50-53). The incident:
+                 # the bot commit 91f895ef touched graph/, grocery/ and out/ only, and 536 rewritten
+                 # files then had to be swept by hand, unlabelled, as 26c2b0e0.
+                 # These are MODIFIED tracked files, so the commit-size gate's ADDED-file caps do not
+                 # see them; and they are gated on $shipServed like the rest, which is exactly the
+                 # condition under which their writers ran (both sit after guards).
+                 'meal-prep/db/recipes',
+                 'meal-prep/cheapnow-data.js', 'meal-prep/dinner-data.js', 'meal-prep/stretcher-data.js',
+                 'site/tools/cheap-dinners-tool.html', 'site/tools/dinner-tonight-tool.html',
+                 'site/tools/payday-stretcher-tool.html')
 # the gate's own verdict, written by check-ad-cycles right after guards ran (never inferred from a log)
 $guardsBlocked = $false
 $verdictSeen = $false
@@ -830,6 +846,30 @@ try {
     }
   }
 } catch { Write-Output ("commit/push threw: " + $_.Exception.Message); $failed += 'push' }
+
+# >>> SERVED-DIRTY BLOCK (2026-09-02, queue 2026-09-02-reanch1) - lifted verbatim by test-commit-size-gate >>>
+# WHAT THE CHAIN WROTE MUST EQUAL WHAT THE CHAIN STAGED, AND NOTHING USED TO COMPARE THE TWO.
+# $servedPaths above is an allowlist, and an allowlist cannot notice a writer that joined the chain after
+# it was written. On 2026-09-02 that cost 536 files: reanchor-all re-anchored 584 authored specs and the
+# surface builders rebuilt three data files and three tool pages, all after guards passed, and the bot
+# commit shipped none of them. They sat dirty on a shared tree until a human noticed. Adding the paths
+# fixes today; this block is what notices the NEXT writer, because the next one has not been written yet.
+# It runs only when the chain actually shipped ($shipServed), so a guards-blocked run - which stages
+# inputs only, on purpose - cannot trip it. No stderr redirect: this file runs under EAP=Stop, where
+# redirecting a native child's stderr turns its first line into a terminating error.
+if ($shipServed) {
+  $servedDirty = @(& git -C $repo status --porcelain -- $servedPaths | Where-Object { $_ })
+  if ($servedDirty.Count) {
+    Write-Output ('served-dirty: ' + $servedDirty.Count + ' tracked served file(s) still dirty after the chain''s commit: ' + (($servedDirty | Select-Object -First 8) -join ' | '))
+    $failed += 'served-dirty'
+    try {
+      Send-Alert -Subject "Daily chain left served files uncommitted - $today" -Body ("The chain ran, guards passed and the bot commit went out, but " + $servedDirty.Count + " tracked file(s) under `$servedPaths are still dirty afterwards. Something in the chain writes them after the staging list was built, so readers get a board and a feed that do not match the specs and tool pages in the repo. First few:`n`n" + (($servedDirty | Select-Object -First 20) -join "`n") + "`n`nAdd the writer's output to `$servedPaths in grocery\capture-run.ps1 (see the 2026-09-02 note there).") | Out-Null
+    } catch { Write-Output ('served-dirty alert threw: ' + $_.Exception.Message) }
+  } else {
+    Write-Output 'served-dirty: none - every tracked served path the chain wrote was committed'
+  }
+}
+# <<< SERVED-DIRTY BLOCK <<<
 
 # ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
 # A successful push is NOT a successful deploy: if the Cloudflare build fails afterwards the edge keeps

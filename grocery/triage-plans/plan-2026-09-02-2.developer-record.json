@@ -1,0 +1,813 @@
+{
+  "readme": "DEVELOPER RECORD for the 2026-09-02 grocery triage, written because the plan FILENAME was contested. Two reviewer rounds both wrote to grocery/triage-plans/plan-2026-09-02-2.json and to its .routing.json sidecar. This session was dispatched against, read in full, and implemented the round generated 2026-09-02T12:22:55 (11 items; c9c140 classified infra and carrying the audit-ff-carry reachability fix and the rescue-worklist re-baseline; a4236e classified infra and carrying the Family Fare 500 -> 300 threshold; 19e1c3 real-economics; 5df03f and 68183c and b00773 no-code-change; blast radii measured_as routing over 33,854 names across 38 files). While this session was running, the round generated 2026-09-02T12:05:00 was written over that path (same 11 queue ids, but c9c140 classified superseded, a4236e no-code-change, 19e1c3 parse-basis-bug, 5df03f infra), and the routing sidecar was replaced at 12:26:49 with a 63-file / 41,072-name / 49-change measurement of a different rule set. THE FILE AT THAT PATH WAS RESTORED TO THE 12:05 ROUND EXACTLY AS FOUND and carries none of this session's stamps; nothing of the other round's work was reverted, overwritten or staged. What shipped is recorded here instead, so the reasoning still travels with the change. Every gate below was run against the live tree.",
+  "implemented_plan": {
+    "generated": "2026-09-02T12:22:55",
+    "round": 1,
+    "board_file": "comparison-2026-09-02.json built 2026-09-02T08:03:41 (chain verdict 08:07:32, rc=0, guards hard=0 warn=17)",
+    "routing_artifact_as_read": "plan-2026-09-02-2.routing.json at 2026-09-02 12:10 (68,839 bytes; 38 files, 33,854 distinct names, 48 routing_changes, per_sim_counts sim2=12 sim3=24 sim4=48)",
+    "routing_artifact_now_at_that_path": "a different round, generated 2026-09-02T12:26:49 (136,055 bytes; 63 files, 41,072 names, 49 changes, rule_changes covering sea-salt / salt / radishes / a GLOBAL_EXCLUDE seed token, with no sausage_carrier class and no block-cheese work)"
+  },
+  "routing_contract": {
+    "note": "FROZEN CONTRACT for plan-2026-09-02-2.json, transcribed verbatim from grocery/triage-plans/plan-2026-09-02-2.routing.json as it stood at 2026-09-02 12:10 (68,839 bytes, corpus 38 files / 33,854 distinct names, routing_changes 48, per_sim_counts sim2=12 sim3=24 sim4=48). At 12:26:49 that path was overwritten by a DIFFERENT reviewer round's artifact (63 files / 41,072 names / 49 changes; rule_changes carrying sea-salt, salt, radishes and a GLOBAL_EXCLUDE addition, and NO sausage_carrier class and NO block-cheese work), so the file on disk no longer measures this plan's rule set. This transcription is what the developer diffed against.",
+    "corpus_files": [
+      "walmart-regular-2026-08-22.json",
+      "walmart-regular-2026-08-25.json",
+      "walmart-regular-2026-08-26.json",
+      "walmart-regular-2026-08-29.json",
+      "walmart-regular-2026-08-30.json",
+      "walmart-regular-2026-08-31.json",
+      "walmart-regular-2026-09-01.json",
+      "walmart-regular-2026-09-02.json",
+      "hyvee-regular-2026-09-02.json",
+      "sams-regular-2026-08-01.json",
+      "bakers-regular-2026-09-02.json",
+      "family-fare-regular-2026-09-02.json",
+      "fareway-regular-2026-09-02.json",
+      "aldi-regular-2026-09-02.json",
+      "sams-deals-2026-08-05.json",
+      "sams-deals-2026-08-15.json",
+      "sams-deals-2026-08-22.json",
+      "sams-deals-2026-08-23.json",
+      "sams-deals-2026-08-24.json",
+      "sams-deals-2026-08-25.json",
+      "sams-deals-2026-08-26.json",
+      "sams-deals-2026-08-27.json",
+      "sams-deals-2026-08-28.json",
+      "sams-deals-2026-08-29.json",
+      "sams-deals-2026-08-30.json",
+      "sams-deals-2026-08-31.json",
+      "sams-deals-2026-09-01.json",
+      "sams-deals-2026-09-02.json",
+      "bakers-deals-2026-08-05.json",
+      "bakers-deals-2026-08-20.json",
+      "bakers-deals-2026-08-26.json",
+      "bakers-deals-2026-09-02.json",
+      "fareway-deals-2026-08-10.json",
+      "fareway-deals-2026-08-20.json",
+      "fareway-deals-2026-08-25.json",
+      "fareway-deals-2026-08-30.json",
+      "ads-2026-09-02.json",
+      "comparison-2026-09-02.json"
+    ],
+    "distinct_names_in_artifact": 33854,
+    "positive_control": {
+      "name": "Little Salad Bar Classic Coleslaw 14 OZ",
+      "expected": "coleslaw-mix",
+      "before": "<unmatched>"
+    },
+    "positive_controls_more": [
+      {
+        "name": "Aidells Smoked Roasted Garlic & Gruyere Cheese Chicken Sausage 12 Oz",
+        "expected": "<unmatched>",
+        "before": "gruyere"
+      },
+      {
+        "name": "Member's Mark Broccoli Salad with Smoked Bacon, priced per pound",
+        "expected": "<unmatched>",
+        "before": "bacon"
+      },
+      {
+        "name": "Outshine Lime, Tangerine, and Lemon Frozen Fruit Pops, Variety Pack, 12 Count",
+        "expected": "popsicles",
+        "before": "frozen-fruit"
+      },
+      {
+        "name": "Quaker Dinosaur Eggs Brown Sugar Instant Oatmeal",
+        "expected": "oatmeal",
+        "before": "eggs"
+      },
+      {
+        "name": "Our Family Natural Sharp Cheddar Cheese 16 Oz",
+        "expected": "block-cheese",
+        "before": "shredded-cheese"
+      }
+    ],
+    "relax_control": {
+      "name": "Johnsonville Original Breakfast Sausage, 14 Links, 12 oz (Fresh)",
+      "expected": "breakfast-sausage"
+    },
+    "routing_changes": [
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Medium Cheddar Cheese 8 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "apples",
+        "name": "Parkview Apple Breakfast Chicken Sausage 8 OZ",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Kirkwood Turkey Cheddar Cheese Sausage 13.5 OZ",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "spinach",
+        "name": "Never Any Spinach Feta Chicken Sausage 12 OZ",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "apples",
+        "name": "Aidells Chicken and Apple Smoked Chicken Sausage Breakfast Links, 24 oz.",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "frozen-fruit",
+        "name": "Outshine No Sugar Added Black Cherry, Strawberry Kiwi, and Mixed Berry Frozen Fruit Pops, 12 Count",
+        "after": "popsicles"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Extra Sharp Cheddar Cheese 8 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "refrigerated-biscuits",
+        "name": "Odom's Tennessee Pride Sausage Buttermilk Biscuits",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "apples",
+        "name": "Never Any Apple Chicken Sausage 12 OZ",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "bacon",
+        "name": "Member's Mark Smoked Sausage Made with Bacon, Jalapeno & Monterey Jack Cheese, 4 oz., 12 c",
+        "after": "kielbasa"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Medium Cheddar Cheese 16 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "bacon",
+        "name": "Member's Mark Broccoli Salad with Smoked Bacon, priced per pound",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "<unmatched>",
+        "name": "Our Family Natural Swiss Cheese 8 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Aidells Smoked Chicken Sausage, Italian Style With Mozzarella Cheese (4 Fully Cooked Links) 12 Oz",
+        "after": "italian-sausage"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Colby Jack Cheese 16 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "chicken-broth",
+        "name": "Grace Chicken Vienna Sausages in Chicken Broth",
+        "after": "vienna-sausage"
+      },
+      {
+        "before": "apples",
+        "name": "Marketside Fully Cooked, Gluten-Free Chicken Apple Sausage 12oz, 4 Count (Refrigerated)",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "frozen-fruit",
+        "name": "Outshine Lime, Tangerine, and Lemon Frozen Fruit Pops, Variety Pack, 12 Count",
+        "after": "popsicles"
+      },
+      {
+        "before": "bacon",
+        "name": "Taylor Farms BLT Salad with Chicken and Bacon, 6.5 oz (Fresh)",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "bacon",
+        "name": "Member's Mark Smoked Sausage Made with Bacon, Jalapeno & Monterey Jack Cheese, 4 oz., 12 ct.",
+        "after": "kielbasa"
+      },
+      {
+        "before": "jalapenos",
+        "name": "Kirkwood Turkey Jalapeno Sausage 13.5 OZ",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "gruyere",
+        "name": "Aidells Smoked Roasted Garlic & Gruyere Cheese Chicken Sausage 12 Oz",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Extra Sharp Cheddar Cheese 16 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "bacon",
+        "name": "Wright Brand Real Wood Smoked White Cheddar & Bacon Smoked Sausage, 12 oz, 4 Count (Refrigerated)",
+        "after": "kielbasa"
+      },
+      {
+        "before": "mushrooms",
+        "name": "Brew Pub Pizza Sausage & Mushroom Pizza",
+        "after": "frozen-pizza"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Mild Cheddar Cheese 8 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "ground-turkey",
+        "name": "JENNIE-O Ground Turkey Italian Sausage, All Natural, Roll, 1 Pound, 10 Grams of Protein per Serving",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Sharp Cheddar Cheese 16 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "teriyaki-sauce",
+        "name": "Armour Star Teriyaki Vienna Sausage, 12g Protein Per Serving, 4.6 oz Can",
+        "after": "vienna-sausage"
+      },
+      {
+        "before": "bacon",
+        "name": "Jimmy Dean Breakfast Sausage 16 oz Roll or Jimmy Dean Bacon 12 oz",
+        "after": "breakfast-sausage"
+      },
+      {
+        "before": "frozen-fruit",
+        "name": "Outshine No Sugar Added Strawberry, Tangerine, and Raspberry Frozen Fruit Pops, 12 Count",
+        "after": "popsicles"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Monterey Jack Cheese 8 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "onions",
+        "name": "Applegate Naturals Chicken Sausage, Red Pepper, Onions and Spinach Frittata Bites, 19g of Protein",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "apples",
+        "name": "Parkview USDA Apple Maple Chicken Breakfast Sausage",
+        "after": "breakfast-sausage"
+      },
+      {
+        "before": "broccoli",
+        "name": "Sprouting Seed Super Sampler- Organic- 2.5 Lbs of 10 Different Delicious Sprout Seeds: Alfalfa, Mung Bean, Broccoli, Green Lentil, Clover, Buckwheat, Radish, Bean Salad & More",
+        "after": "radishes"
+      },
+      {
+        "before": "garlic",
+        "name": "Wright Brand Real Wood Smoked Garlic & Black Pepper Sausage Rope, Fully Cooked, 12 oz, Refrigerated",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Mild Cheddar Cheese 24 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "<unmatched>",
+        "name": "Little Salad Bar Classic Coleslaw 14 OZ",
+        "after": "coleslaw-mix"
+      },
+      {
+        "before": "ground-turkey",
+        "name": "JENNIE-O Taco Ground Turkey Sausage, All Natural, No artificial ingredients, Refrigerated, 1 Pound Roll",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "bacon",
+        "name": "Taylor Farms Caesar Salad with Bacon and Chicken, 5.75 oz (Fresh)",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "honey",
+        "name": "Simms Spicy Honey Smoked Sausages 9.25 OZ",
+        "after": "kielbasa"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Old Wisconsin Natural Cut Turkey Smoked Sausage & Colby Jack Cheese Bites, 1.5 oz., 6 ct.",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "broccoli",
+        "name": "Market Grille broccoli supreme salad, $7.99 lb.",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "eggs",
+        "name": "Quaker Dinosaur Eggs Brown Sugar Instant Oatmeal",
+        "after": "oatmeal"
+      },
+      {
+        "before": "bagels",
+        "name": "Bronco Turkey Sausage, Egg & Cheese on Plain Bagel",
+        "after": "<unmatched>"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Sharp Cheddar Cheese 8 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Low Moisture Part Skim Natural Mozzarella Cheese 16 Oz",
+        "after": "block-cheese"
+      },
+      {
+        "before": "shredded-cheese",
+        "name": "Our Family Natural Colby Jack Cheese 8 Oz",
+        "after": "block-cheese"
+      }
+    ],
+    "expected_deltas_from_the_plan_text": {
+      "note": "The 48 rows above are sim-4, which modelled the sausage class WITHOUT the two chicken excludes the plan also prescribes. plan item 1527d2 states them separately and measures them: 'breakfast-sausage.exclude += \\bchicken\\b and italian-sausage.exclude += \\bchicken\\b move exactly those 4 + 5 names and no cell.' So the shipped rule set is expected to (a) change the destination of 2 of the 48 rows and (b) add 9 rows.",
+      "destination_changes": [
+        {
+          "name": "Parkview USDA Apple Maple Chicken Breakfast Sausage",
+          "artifact_after": "breakfast-sausage",
+          "expected_after": "<unmatched>"
+        },
+        {
+          "name": "Aidells Smoked Chicken Sausage, Italian Style With Mozzarella Cheese (4 Fully Cooked Links) 12 Oz",
+          "artifact_after": "italian-sausage",
+          "expected_after": "<unmatched>"
+        }
+      ],
+      "added_rows_breakfast_sausage_chicken": [
+        "Applegate Naturals Chicken & Maple Breakfast Sausage 10 ea",
+        "Parkview USDA Country Style Chicken Breakfast Sausage",
+        "bettergoods Gluten-Free Chicken and Maple Breakfast Sausage Links, 7 oz"
+      ],
+      "added_rows_italian_sausage_chicken": [
+        "Never Any Mild Italian Chicken Sausage 12 OZ",
+        "Simply Nature Organic Italian Chicken Sausage 12 OZ",
+        "Simple Truth Mild Italian Chicken Sausage",
+        "Simple Truth Italian Chicken Sausage Links 12 OZ",
+        "Boar's Head Robust Italian Chicken Sausage"
+      ]
+    }
+  },
+  "routing_diff_result": {
+    "measured_as": "routing",
+    "when": "2026-09-02T13:26:59",
+    "corpus_files_resolved": 38,
+    "distinct_names_routed": 33924,
+    "method": "first-match-wins routing of every distinct product name through match-lib.ps1 New-CommodityMatcher / Resolve-Commodity (the compiled MatchCore the engine uses) under BEFORE = a snapshot of commodities.json taken at intake and AFTER = the live edited file, with GLOBAL_EXCLUDE extracted from compare-deals.ps1 by the same regex audit-match-soundness uses. Independent parses; no case-only variable pair.",
+    "positive_control_observed": {
+      "name": "Little Salad Bar Classic Coleslaw 14 OZ",
+      "before": "<unmatched>",
+      "after": "coleslaw-mix"
+    },
+    "verdict": "46 of the frozen 48 rows reproduce byte-identically. 2 change destination and 8 are added, and all ten are the plan's own breakfast-sausage.exclude += \\bchicken\\b and italian-sausage.exclude += \\bchicken\\b, which it states in prose ('move exactly those 4 + 5 names and no cell') and which the artifact's sim-4 did not model. The remaining EXTRA rows in the raw diff below are the concurrent session's sea-salt / salt / radishes fences and its GLOBAL_EXCLUDE seed token, which entered commodities.json and compare-deals.ps1 at 13:18 from outside this session; they are listed for completeness and are not this session's work. Over the engine's own 63-file union there are 3 further movers, all sausage-carrier moves out of older Walmart captures, all checked against the board and holding no cell.",
+    "cells_that_moved_because_of_a_rule_change_here": [
+      {
+        "commodity": "gruyere",
+        "store": "Family Fare",
+        "before": 0.5825,
+        "after": 0.9988,
+        "before_item": "Aidells Smoked Roasted Garlic & Gruyere Cheese Chicken Sausage 12 Oz",
+        "after_item": "Smoky Park Cheese, Smoked Gruyere 8 Oz"
+      },
+      {
+        "commodity": "block-cheese",
+        "store": "Family Fare",
+        "before": null,
+        "after": 0.2494,
+        "after_item": "Our Family Low Moisture Part Skim Natural Mozzarella Cheese 16 Oz"
+      },
+      {
+        "commodity": "coleslaw-mix",
+        "store": "Aldi",
+        "before": null,
+        "after": 0.135,
+        "after_item": "Little Salad Bar Classic Coleslaw 14 OZ"
+      },
+      {
+        "commodity": "coleslaw-mix",
+        "store": "Baker's",
+        "before": 0.1458,
+        "after": 0.1636,
+        "note": "the deviation on 995502: the new ad row was fenced, so the cell returns to the value it held on all 34 retained boards",
+        "after_item": "Kroger Tri-Color Coleslaw Mix"
+      }
+    ],
+    "raw_diff_vs_contract": {
+      "mine_total": 92,
+      "extra_vs_contract": [
+        {
+          "name": "Applegate Naturals Chicken & Maple Breakfast Sausage 10 ea",
+          "before": "breakfast-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "bettergoods Gluten-Free Chicken and Maple Breakfast Sausage Links, 7 oz",
+          "before": "breakfast-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Sir Kensington's Classic Mayonnaise Condiments Made with Free-Range Eggs, 12 fl oz Squeeze Bottle",
+          "before": "eggs",
+          "after": "mayonnaise"
+        },
+        {
+          "name": "Celtic Sea Salt Light Grey Sea Salt Resealable Bag Kosher Certified 1 lb",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Radish Vegetable Seeds 5 Pack - Full Sun, Biennial",
+          "before": "radishes",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Mauna Loa Sea Salt Macadamia Nuts - 4oz Bag",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "RITZ Hint of Salt Crackers, Snacks for Kids and Adults, Lunch Snacks, 13.7 oz",
+          "before": "salt",
+          "after": "crackers"
+        },
+        {
+          "name": "Bridgford Sweet Baby Ray's Honey Barbecue Beef Jerky, 2.85oz",
+          "before": "honey",
+          "after": "beef-jerky"
+        },
+        {
+          "name": "Go Raw Organic Sprouted Pumpkin Seeds with Sea Salt, 6g Protein, 6.75 oz, 9 Count",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Celtic Sea Salt Grey Coarse Salt Shaker, 8 oz, Kosher Certified",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "The Only Bean Roasted Edamame Beans Sea Salt, 1.05 oz, 6 ct",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Wonderful Pistachios Chocolate Sea Salt, 4 Ounce Resealable Bag",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Celtic Sea Salt Light Grey Salt, 8 oz, Additive-Free, Kosher, Organic, Non-GMO",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Best Foods Made with Cage Free Eggs Light Mayonnaise, 20 fl oz Bottle",
+          "before": "eggs",
+          "after": "mayonnaise"
+        },
+        {
+          "name": "Simple Truth Mild Italian Chicken Sausage",
+          "before": "italian-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Simple Truth Italian Chicken Sausage Links 12 OZ",
+          "before": "italian-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Boar's Head Robust Italian Chicken Sausage",
+          "before": "italian-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Seapoint Farms Dry Roasted Sea Salt Edamame",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Simple Truth Salt and Pepper Pistachio Kernels",
+          "before": "salt",
+          "after": "pistachios"
+        },
+        {
+          "name": "Wonderful Pistachios Chocolate Sea Salt Pistachios, Resealable Bag",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Celtic Sea Salt Light Grey 1 lb bag",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Simple Truth Sea Salt Roasted Cashews",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Ghirardelli Dark Chocolate Sea Salt Caramel Squares Candy Bag",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Aidells Smoked Chicken Sausage, Italian Style With Mozzarella Cheese (4 Fully Cooked Links) 12 Oz",
+          "before": "shredded-cheese",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Wonderful Salt & Pepper Pistachios 14 Oz",
+          "before": "salt",
+          "after": "pistachios"
+        },
+        {
+          "name": "Sanders Sea Salt Caramels, Milk Chocolate 18 Oz",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Ghirardelli Squares Sea Salt Caramel Milk Chocolate 5.3 Oz",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Finest Reserve Caramels, Sea Salt Milk Chocolate 12 Oz",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Clancys Sea Salt Vinegarjalape Sea Salt Vine 5 OZ",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Southern Grove Deluxe Whole Cashews With Sea Salt 30 OZ",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Never Any Mild Italian Chicken Sausage 12 OZ",
+          "before": "italian-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Simply Nature Organic Italian Chicken Sausage 12 OZ",
+          "before": "italian-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Simply Nature Organic Sea Salt Pop Corn 6 OZ",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Parkview USDA Country Style Chicken Breakfast Sausage",
+          "before": "breakfast-sausage",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Parkview USDA Apple Maple Chicken Breakfast Sausage",
+          "before": "apples",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Crunchmaster Avocado Toast with Salt & Pepper Crackers, 16 oz.",
+          "before": "salt",
+          "after": "crackers"
+        },
+        {
+          "name": "Member's Mark Avocado Oil Veggie Straw Sea Salt, 23.5 oz.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Member's Mark Roasted Whole Cashews with Sea Salt, 33 oz.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Member's Mark The Better Nut Bar, Dark Chocolate and Sea Salt, 24 ct.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Wonderful Salt & Pepper Pistachios, 40 oz.",
+          "before": "salt",
+          "after": "pistachios"
+        },
+        {
+          "name": "Member's Mark Dark Chocolate Soft Sea Salt Caramels, 36 oz.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Member's Mark Milk Chocolate Sea Salt Caramel Thins, 50 ct.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Member's Mark Milk Chocolate Sea Salt Caramels, 36 oz.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Sensible Portions Sea Salt Garden Veggie Straws, 23.5 oz.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Béquet Gourmet Celtic Sea Salt Caramel 15.2 oz.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Member's Mark Dark Chocolate Thins with Almonds & Sea Salt, 20 oz.",
+          "before": "sea-salt",
+          "after": "<unmatched>"
+        },
+        {
+          "name": "Kroger Potato Salad, Macaroni Salad or Cole Slaw",
+          "before": "coleslaw-mix",
+          "after": "<unmatched>"
+        }
+      ],
+      "absent_vs_contract": [
+        {
+          "before": "shredded-cheese",
+          "name": "Aidells Smoked Chicken Sausage, Italian Style With Mozzarella Cheese (4 Fully Cooked Links) 12 Oz",
+          "after": "italian-sausage"
+        },
+        {
+          "before": "apples",
+          "name": "Parkview USDA Apple Maple Chicken Breakfast Sausage",
+          "after": "breakfast-sausage"
+        },
+        {
+          "before": "broccoli",
+          "name": "Sprouting Seed Super Sampler- Organic- 2.5 Lbs of 10 Different Delicious Sprout Seeds: Alfalfa, Mung Bean, Broccoli, Green Lentil, Clover, Buckwheat, Radish, Bean Salad & More",
+          "after": "radishes"
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-02-c9c140",
+      "subject": "Board prices aging inside a fresh file",
+      "classification_in_the_implemented_plan": "infra",
+      "status": "done",
+      "premise_verified": "TRUE, all four legs re-checked against live data before acting. (A) REACHABILITY: check-ad-cycles.ps1 at HEAD carried `$fcArgs = @(` at line 455, inside the `if (-not $NoPull) {` that opens at 382 and closes at 480 - read in the source, not inferred. The string '] ff-carry:' appears 0 times in 1,771 lines of ad-cycle-log.txt, and coverage-ledger.json's audit-ff-carry row is as_of 2026-08-29 17:21:15 (examined 45 of 558), which is the 4-days-vs-limit-3 STALE the 08:24 cycle printed. (B) RESCUE FLOOR: the rescue-terms headers reproduce the plan's numbers exactly - Aldi 359 of 359 traced, Fareway 141 of 131, Sam's Club 377 of 374, Walmart 502 of 500, i.e. 1,379 eligible and 1,364 traced against a 1,517 baseline = 10.1% under a 10% tolerance. (C) MEASURED BEYOND THE PLAN, and it confirms the blast radius rather than widening it: only ONE scheduled task per day reaches the moved block. capture-run.ps1:502 reads `$runDownstream = (-not $NoDownstream) -and (($Kind -ne 'ad') -or $Downstream)`, so the 07:00 -Kind ad task captures only and never calls check-ad-cycles; the 09:30 task is capture-watchdog.ps1, which does not call it at all; bakers-daily-scan is not a scheduled task. So the 08:00 daily chain is the single caller, which is exactly one ~45-probe Freshop burst a day, as the plan predicted. $serverDue is unconditionally true whenever any store is method=server (:334-335), so the new position inside `if ($serverDue)` runs on every one of those.",
+      "deviation": "Two, both small. (1) The plan's surface_fix names the baseline as grocery/out/coverage-baseline.json; the file is at grocery/coverage-baseline.json (out/ holds the LEDGER, the repo root holds the BASELINE). Accepted there. (2) The accept had to be scoped `-Accept -AcceptLower -Check build-rescue-worklist`, because -Accept alone refuses to lower and a bare -AcceptLower would have lowered six other dropped rows that are not in breach (audit-everyday-mismatch, audit-ff-carry 464->45, guards/13-recipe, guards/3-pin-derivable, guards/3-pin-identity, guards/4-factor). The run named all six as HELD and lowered exactly one row, 1517 -> 1364. The reason is written into that row's `why` before the accept, not after. The 10% tolerance was not touched. audit-ff-carry's own floor stays at 464. NOT SHIPPED, and it is the plan's own live proof rather than an omission: the 2026-09-03 08:24 coverage-cycle line and the first '] ff-carry:' entry in ad-cycle-log.txt. audit-ff-carry was deliberately NOT run by hand today - it would have spent ~45 Freshop probes outside a capture window, against the do_not_touch on the Family Fare shard cadence. The ledger therefore still reads STALE for that one check tonight, which is expected and is the last thing left to watch.",
+      "resolution_note_as_written_by_the_reviewer": "The row-age page was the Baker's expired ad (same condition as 68183c, resolved by the 09:07 capture); every store's rows are dated, none exceed the 90-day carry, and no row claims a date newer than its file (checked at all 7 stores, not just the 2 the as_of-evidence guard watches). Two ledger findings folded in: audit-ff-carry has not run from the scheduled chain since 2026-08-23 because it lives inside the pull block every caller skips with -NoPull (moved out, pinned by a structural test); build-rescue-worklist's floor moved on 08-23/24 when Fareway's shop markdowns became sale-typed (402 -> 141 everyday cells), re-baselined with that reason.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-19e1c3",
+      "subject": "Grocery: 6 NEW price flag(s) - 2026-09-02",
+      "classification_in_the_implemented_plan": "real-economics",
+      "status": "done",
+      "premise_verified": "TRUE. All six keys exist in out\\alerted-flags.json as exact strings (checked by exact match, not by substring): SANITY|Broccoli (fresh)|wow, SANITY|Cajun / Creole Seasoning|outlier, SANITY|Clementines / Mandarins|outlier, SANITY|Harissa Paste|wow, SANITY|Insect / Bug Spray (home)|wow, SANITY|Jalapeno Peppers|wow. Worth recording because it is a trap: five of the six commodities ALSO carry a sibling key of the other kind (Broccoli|outlier, Cajun|wow, Harissa|outlier, Insect|outlier, Jalapeno|outlier), so an ack written against the wrong half would have silenced nothing and looked like it had. Only the six the plan names were acked. The Cajun key already had an ack whose expiry had lapsed; it was refreshed rather than duplicated. All six expire 2026-09-16.",
+      "deviation": null,
+      "resolution_note_as_written_by_the_reviewer": "All six real: broccoli, jalapenos and harissa are last week's wrong products (a florets bag not labelled frozen, two canned jalapeno packs, a 12-pack case listing) leaving the board under yesterday's fences and the in-store refusal; cajun is a Sam's 32 oz jar against a 16 oz canister with Sam's own $0.17/oz reproduced; clementines is Aldi's printed ad drop to $2.89 per 3 lb; insect spray is a 1 gal Ortho rollback at Walmart's own 7.4 c/fl oz. Acked with reasons to 2026-09-16.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-4dfb1d",
+      "subject": "Grocery matching soundness - review needed",
+      "classification_in_the_implemented_plan": "wrong-product",
+      "status": "deviated",
+      "premise_verified": "TRUE. All three mis-routes reproduced before the edit and are gone after it: the Sam's broccoli salad, the three Baker's Outshine fruit pops and the Quaker Dinosaur Eggs oatmeal. None of the nine names held a board cell (checked against every store item on the board, not against the crown). audit-match-soundness after the edit reported MOVED=17 DROPPED=18 drift-vs-engine=0, and every one of those 35 lines is either a row in the frozen routing contract or one of the 4+5 chicken names item 1527d2 measured by name.",
+      "deviation": "The plan expects new-contested = 1 after the rebuild. It came back NINE, because the 09:07 Baker's ad and the 09:19/09:24 Walmart and Aldi captures brought names the reviewer's 08:03 board did not contain. I resolved each by hand before accepting anything. Seven are order-dependence between two defensible readings and are what the flag is for: Nalley beef stew (beef-stew over jarred-gravy, correct), 'California Yellow or White Peaches or Nectarines' (peaches over nectarines, an either/or ad row), 'Gourmet Peaches With Ginger Flavor' (peaches over fresh-ginger), 'Kroger Side Dish, Macaroni & Cheese or Homestyle Mashed Potatoes' (mac-and-cheese over instant-mashed-potatoes), the Lay's/Tostitos either/or (tortilla-chips over potato-chips), 'Raspberries or Blackberries' (raspberries over blackberries - the only one of the nine that holds a cell, Baker's $0.4983/oz, and both readings are the same 6 oz at the same $2.99 so the number is right either way), and the plan's own Southern Grove peanuts/sea-salt case. TWO WERE GENUINELY WRONG and are the same bare-token class this item exists to fix: 'Best Foods Made with Cage Free Eggs Light Mayonnaise' and 'Sir Kensington's Classic Mayonnaise ... Made with Free-Range Eggs' were owned by eggs, and 'Bridgford Sweet Baby Ray's Honey Barbecue Beef Jerky' was owned by honey. I fenced them (eggs.exclude += \\bmayonnaise\\b, honey.exclude += \\bjerky\\b) rather than accept, because -Accept blesses every pending contested flag permanently - the contested-flag-baselined-away class - and these two would have been silenced for good. MEASURED over the 48,107-name capture corpus: exactly 3 names move, all three to their correct commodity (2 -> mayonnaise, 1 -> beef-jerky), none holds a cell, and the clean twins 'Kroger Grade AA Large White Eggs', 'Great Value Large White Eggs, 12 Count', 'Kroger Clover Honey' and 'Nature Nate's 100% Pure Raw & Unfiltered Honey, 32 oz' all keep their route. After the fences new-contested is 7, all order-dependence, and only then was the baseline accepted (18,643 names, 384 contested, drift-vs-engine 0). Never -Force.",
+      "resolution_note_as_written_by_the_reviewer": "Three of the four new-contested names were mis-routed (a Sam's broccoli salad on bacon, three Baker's Outshine fruit pops on frozen-fruit, Dinosaur Eggs oatmeal on eggs); none held a cell. Fenced with salad / pops / outshine / dinosaur-eggs / oatmeal excludes (9 names move, 0 cells), then the baseline was reviewed and accepted with only the correct peanuts-before-sea-salt order case left contested.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-995502",
+      "subject": "Grocery: 2 store(s) dropped from a commodity they carry - 2026-09-02",
+      "classification_in_the_implemented_plan": "capture-gap",
+      "status": "deviated",
+      "premise_verified": "TRUE, and the claimed_by_earlier block was the load-bearing part. Verified in the live rules: shredded-cheese sits at index 14 and block-cheese at 15, so an include on block-cheese alone reaches only the unmatched Swiss - the release exclude on the parent is what makes the other 12 move. The natural-chunk pattern was tested against all 15 candidate names before shipping: it matches exactly the 13 Our Family names (including 'Our Family Low Moisture Part Skim Natural Mozzarella Cheese 16 Oz', where 'Natural' sits AFTER the moisture words and the optional group is vestigial), and does NOT match 'Bel Gioioso Sharp Provolone 5 Oz' or 'Our Family Colby Jack Shredded Cheese 16 Oz'. Cells landed exactly as measured: block-cheese @ Family Fare 0 -> $0.2494/oz and coleslaw-mix @ Aldi 0 -> $0.135/oz, with shredded-cheese @ Family Fare unmoved at $0.2188/oz. audit-capture-eviction: 0 findings over 3,140 cells.",
+      "deviation": "The rebuild revealed a second wrong product behind the first, which is the case the contract says to deviate on. Restoring the Baker's ad (item 68183c) put 'Kroger Potato Salad, Macaroni Salad or Cole Slaw' - a $7.00 / 3 lb deli either-or row, two of whose three options are not coleslaw at all and none of which is an undressed bagged mix - onto coleslaw-mix @ Baker's at $0.1458/oz, displacing 'Kroger Tri-Color Coleslaw Mix' at $0.1636/oz. MEASURED that it is new, not long-standing: across all 34 retained boards from 2026-07-26 to 2026-08-31 that cell is Kroger Tri-Color Coleslaw Mix at $0.1636 every single day, and the row is not in the expired bakers-deals-2026-08-26 file at all. It arrived with today's 09:07 capture. The plan's own standard settles it: this item refuses Aldi's 'Coleslaw 30 OZ' precisely because the page shows a PREPARED coleslaw, so a dressed deli tub is not this commodity. Fenced with coleslaw-mix.exclude += \\bpotato\\s+salad\\b, \\bmacaroni\\s+salad\\b. MEASURED over the 48,107-name corpus: exactly ONE name moves (coleslaw-mix -> unmatched) and the other seven coleslaw-mix names keep their route, including the Aldi row this item admits and 'Dole Shredded Lettuce or Coleslaw'. The Baker's cell returns to $0.1636. 'Coleslaw 30 OZ' was left unmatched as the plan instructs.",
+      "resolution_note_as_written_by_the_reviewer": "Neither was a pull gap. Aldi's \"Little Salad Bar Classic Coleslaw 14 OZ\" is the bagged cabbage-and-carrot mix and gets an include ($0.135/oz, crown unchanged); the 30 oz \"Coleslaw\" is unidentifiable and stays out. Family Fare's 13 \"Our Family Natural X Cheese N Oz\" chunks were claimed by shredded-cheese@14 and invisible to block-cheese@15; the carve-out mirror was extended (include + release exclude) so Family Fare gets a block-cheese cell at $0.2494/oz with no other store's routing touched.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-fd3f29",
+      "subject": "Grocery: semantic sweep found 2 product(s) no rule can see - 2026-09-02",
+      "classification_in_the_implemented_plan": "wrong-product",
+      "status": "done",
+      "premise_verified": "TRUE. Both Aldi names match ground-beef-8020's include and are refused by its own deliberate patty/patties excludes, so they route to <unmatched> before and after and change no rule - 0 of 33,924 names change route for this item, as the plan's blast radius states. Both were recorded through add-known-wrong.ps1 (known-wrong now holds 269 entries) and audit-known-wrong finishes green: 0 of 269 adjudicated-wrong products are priced on the board, 260 evaluable against 3,415 named priced cells.",
+      "deviation": "Nothing shipped for the root_fix, and that is what the plan asks: it scopes the sweep's refused-vs-invisible reporting to 'next round, low priority' and requires a measurement (how many of today's 7,479 rule_invisible names are exclude-refusals) to be taken BEFORE any change. That measurement was not taken and no change was made to audit-semantic-identity.ps1. Recorded so the next round does not read this item as closed work.",
+      "resolution_note_as_written_by_the_reviewer": "Both Aldi names are pre-formed patties, the by-policy variant the patties exclude refuses (fourth ruling of the same class). Recorded via add-known-wrong; Aldi's bulk 80/20 at $5.29/lb already holds the cell. Follow-up: the sweep should report exclude-refusals as their own non-paging class instead of \"no rule can see\".",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-1527d2",
+      "subject": "Grocery: 1 board cell(s) sit in the wrong store department - 2026-09-02",
+      "classification_in_the_implemented_plan": "wrong-product",
+      "status": "deviated",
+      "premise_verified": "TRUE, and the class fix reproduced the reviewer's simulation. Before: aisle-test returned BLOCK on gruyere @ Family Fare for the Aidells chicken sausage at $0.5825/oz. After: aisle-test -LiveBoard is 408 ALLOW and 0 BLOCK, and the cell is Smoky Park Smoked Gruyere 8 Oz at $0.9988/oz - the exact number the plan predicted. The 21 exempt ids were checked to exist before the bake (all 21 do) and to carry no pre-existing sausage exclude that would block a re-landing. apply-category-excludes reported +513 patterns across 513 commodities, which reconciles exactly: 533 commodities sit in the three scoped categories and 20 of the 21 exemptions are inside them (dog-treats is category Pet, which no apply block covers). Of the 25 sausage movers exactly ONE held a board cell, checked by name against every store item on the board, and it is this one.",
+      "deviation": "THE BAKE TOOL BREAKS AN ARMED GATE, AND HAD TO BE FIXED BEFORE IT COULD BE RUN. apply-category-excludes.ps1 wrote commodities.json with `($commods | ConvertTo-Json -Depth 6) | Set-Content -Encoding UTF8`. ConvertTo-Json emits non-ASCII characters LITERALLY - the \\uXXXX escapes decode on read and never come back - and Set-Content prepends a BOM. commodities.json is in audit-json-encoding.ps1's ASCII_PINNED list, where a single non-ASCII byte is a hard finding, and ops\\run-gates.ps1 runs that check. MEASURED on a scratch copy of the live tree before touching anything: a NO-OP bake ('+0 patterns across 0 commodities') still rewrote the file with a BOM and 84 literal non-ASCII bytes, turning 'jalape[n\\u00f1]o' into 'jalape[nn-tilde]o' and unescaping the crema, creme-fraiche, rose, entree and sazon classes. That is the exact corruption the 2026-08-31 mojibake pass was written to end: it fixed this script's READ (-Encoding UTF8) and left its WRITE, so the guard and the sanctioned tool that violates it have been shipping side by side. Fixed in place with an ASCII-pinned writer (escape every char > 127 back to \\uXXXX, UTF8 with no BOM, keep the trailing CRLF). A no-op bake now changes exactly 2 lines, both ConvertTo-Json's own ASCII-safe \\u0027 for an apostrophe in the wine ruling text, and audit-json-encoding reports findings=0. Pinned by test-auditors case (ce1), whose must-fire rebuilds the PRE-FIX writer and proves it still un-pins a fixture carrying an n-tilde escape - without that half, the clean case could pass on a fixture with nothing left to lose. register-batch.ps1 and the one-off scripts under out\\r100 and out\\r300 carry the same write shape; they were NOT changed, because none of them is in the chain I had to run and the reviewer measured none of them. That is the next thing to fix in this area. Also of note: the routing bake produced 8 movers beyond the frozen 48 and changed the destination of 2 more, and all ten are the plan's own `breakfast-sausage.exclude += \\bchicken\\b` and `italian-sausage.exclude += \\bchicken\\b`, which the artifact's sim-4 did not model. The plan names those 4+5 rows explicitly, so this is the artifact being narrower than the plan, not a surprise.",
+      "resolution_note_as_written_by_the_reviewer": "Wrong product: a chicken sausage flavoured with gruyere held the Family Fare gruyere cell ($0.5825/oz); excluded and ruled, the cell moves to Smoky Park Smoked Gruyere 8 oz at $0.9988/oz. Root cause is the missing \"sausage as carrier\" class: 25 sausage-named products sit on 15 non-sausage commodities today (apples five times). Shipped as a category-excludes class baked into every scoped commodity with 21 exemptions; 25 names move, 9 re-land on real sausage commodities, no other cell moves.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-a4236e",
+      "subject": "Grocery: Family Fare catalog is degrading - 1 signal(s)",
+      "classification_in_the_implemented_plan": "infra",
+      "status": "deviated",
+      "premise_verified": "TRUE, re-measured against the file as it stands rather than as the plan read it. family-fare-regular-2026-09-02 (re-written 12:35, after the plan's 10:33 read) still reports deal_count 5305, fresh 126, carried 5179, and the as_of histogram is unchanged: 379 rows dated 2026-09-02 and 71 dated 2026-09-01, so recentVerified computes to exactly 450 against the 500 trip. Zero expired. The catalog is not degrading; the threshold was.",
+      "deviation": "The plan lists the self-test fixtures to add but not the test-auditors case that PINS the constant, and that case turned the suite red: test-auditors asserted `$recentVerified -lt 500` verbatim, with the comment 'must not be softened to quieten an alert'. It is right to exist and I did not delete it. I re-pointed it at the re-derived constant and made it stronger in both directions: it now fails if the arm is REMOVED, fails if the number is anything other than 300 (printing what it found), and separately asserts that the two new fixtures are armed by name - c6 (5305/5283/0/0/450, today's healthy sharded day) must stay SILENT, and m4 (5305/5283/0/0/163, this morning's real page) must still FIRE. A future nudge downward breaks m4 and a nudge upward breaks c6, so the constant can now only move by re-deriving it from the window count. The old clean twin c5 at 1,259 re-verified and the 12-row freeze must-fire d2 were both kept verbatim. pull-regular-familyfare.ps1 -SelfTest: 34 of 34 cases pass.",
+      "resolution_note_as_written_by_the_reviewer": "Not degrading: 5305 items and gaining, 0 expired, four windows in 19 hours. The page came from the recent-verified arm's 500 threshold sitting inside the sharded cadence's own steady-state yield; 450 rows are verified today. Threshold set to 300 (60% of the 48h design floor) with the clean twin re-frozen at today's 450 and a must-fire kept at this morning's 163; the 12-row freeze fixture is untouched.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-68183c",
+      "subject": "Baker's ad window advanced with no capture behind it",
+      "classification_in_the_implemented_plan": "no-code-change",
+      "status": "done",
+      "premise_verified": "TRUE. out\\bakers\\bakers-deals-2026-09-02.json landed 09:07:32 with deal_count 83, ad_from 2026-09-02, ad_to 2026-09-08, 13 of 13 pages read. Pinned into the rebuild with -BakersFile and the sale cells are back: ribeye-steak @ Baker's moved $17.99 -> $10.99/lb on 'Ribeye Steaks, Bone-In, Family Pack', and 12 more Baker's cells moved with it, every one traced to a row in the new ad file by name and price (baby-back-ribs $2.99/lb, butter $2.99/lb, watermelon $3.99 each, ground-beef-9010 $6.99/lb, grapes $1.99/lb, bottled-water $3.99/40ct, raspberries $2.99/6oz, sports-drinks $0.88/28floz, beef-jerky $9.99/8oz, clementines $7.99/5lb, mexican-chorizo $1.50/9oz, coleslaw-mix - see 995502).",
+      "deviation": null,
+      "resolution_note_as_written_by_the_reviewer": "Resolved by the 09:07 capture (83 real rows, window 09-02..09-08). The batch-1 rebuild for this plan restores the Baker's sale cells; the developer verifies one (e.g. ribeye at $10.99/lb) is back on the published board, otherwise the 2026-09-03 08:00 chain does it.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-reanch1",
+      "subject": "Daily chain re-anchors 584 authored specs and does not commit them",
+      "classification_in_the_implemented_plan": "infra",
+      "status": "done",
+      "premise_verified": "TRUE, checked against git rather than against the log. All seven proposed paths are tracked at HEAD: meal-prep/db/recipes 584 files, the three data js files 1 each, the three tool pages 1 each - 590 tracked files, so this is a staging omission and not an ignore. `git show --name-only 26c2b0e0` is 530 meal-prep/db/recipes files + 3 site/tools + 3 meal-prep, i.e. the 536 the plan counts, and the bot commit 91f895ef touches only graph/ (17), grocery/ (80), meal-prep/ (5) and public/ (5) - none of the 536. The size gate is genuinely not in the way: it caps ADDED files and these are MODIFIED tracked files.",
+      "deviation": "The served-dirty block ships with a THREE-case proof rather than the two the plan asks for, and the third is the one that matters: a guards-blocked run ($shipServed false) must stay silent, because that run stages inputs only on purpose and dirty served files are its expected state - without that case the block would page on every genuinely blocked board. All three run the SHIPPED block, lifted out of capture-run.ps1 by marker and dot-sourced into a throwaway git repo in %TEMP%, never a transcribed copy. The harness defines a Send-Alert stub so the alert BODY is actually composed and asserted (it interpolates the count, the paths and the date); with the block's own catch swallowing a CommandNotFound, a typo in that body would otherwise have shipped unproven. test-commit-size-gate: 14 of 14 pass. A structural case (sp1) in test-auditors asserts the four new paths are named inside the $servedPaths literal, not merely somewhere in the file.",
+      "resolution_note_as_written_by_the_reviewer": "The chain re-anchors 584 specs and rebuilds three data files and three tool pages after guards, but $servedPaths never listed them, so 536 rewritten files sat dirty and were committed by hand (26c2b0e0). Added to $servedPaths (gated on the chain verdict like the rest) and a served-dirty check after the commit that fails the lane and pages, with a throwaway-repo must-fire and clean twin.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-5df03f",
+      "subject": "Grocery: 28 on-sale item(s) have no everyday fallback - 2026-09-02",
+      "classification_in_the_implemented_plan": "no-code-change",
+      "status": "done",
+      "premise_verified": "TRUE AS THE PLAN MEASURED IT, and then it moved under me - recorded because the number in the resolution note would otherwise not reproduce. At 08:13 out\\research-worklist.json carried the 27 pairs the plan describes. The file was regenerated at 13:24 and now holds FOUR rows (Fareway 2, Hy-Vee 1, Aldi 1) with the 23 Walmart rollback rows gone. Two things changed underneath it: today's board rebuild restored the Baker's ad and re-typed cells, and a CONCURRENT session modified grocery/audit-sale-fallback.ps1 at 13:23:26 - a file I did not touch and did not stage. So the item still needs no code change from me and the owner is still the weekly browser agent, but the count in the note is the 08:13 one.",
+      "deviation": "No code change, as planned. The worklist count is now 4 rather than 27 for the two reasons above; the yukon-gold @ Family Fare exclusion (Family Fare self-heals daily) is unchanged.",
+      "resolution_note_as_written_by_the_reviewer": "No code change: 27 of 28 are queued in research-worklist.json for the weekly browser agent (23 Walmart rollbacks); yukon-gold @ Family Fare self-heals daily. Not related to the Baker's ad.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-02-b00773",
+      "subject": "Recipe batch stalled with stages unfinished",
+      "classification_in_the_implemented_plan": "no-code-change",
+      "status": "done",
+      "premise_verified": "TRUE. meal-prep\\db\\batch-ledger.json row hunt-2026-08-27-highprotein-w9 now lists exactly one slug, street-corn-chicken-rice-bowls, with last_activity 2026-09-02T12:27:13 - reconciled by the concurrent meal-prep dispatch, not by me. The five recipes the alert listed shipped under waves w13 and w15. Nothing under meal-prep/ was touched or staged by this session.",
+      "deviation": null,
+      "resolution_note_as_written_by_the_reviewer": "Already resolved: dispatch B reconciled hunt-2026-08-27-highprotein-w9 to street-corn only at 09:11:52 (batch-ledger -Verify exit 0 at 09:16 per the dispatch); the five \"LIVE-UNREVIEWED\" recipes were published and reviewed under w13 and w15. The alert read the pre-reconcile state.",
+      "shipped_commit": null
+    }
+  ],
+  "developer_notes": [
+    "IMPLEMENTED 2026-09-02 by the triage developer. Board rebuilt from comparison-2026-09-02 (08:03:41) to 13:22:47 with the 09:07 Baker's ad pinned. Net cell effect over the whole board: 0 cells lost, 2 gained (block-cheese @ Family Fare $0.2494/oz, coleslaw-mix @ Aldi $0.135/oz), 30 changed - of which exactly ONE is a rule change of mine (gruyere @ Family Fare $0.5825 -> $0.9988) and the other 29 trace to fresher inputs: 13 to rows in the new Baker's ad, the rest to the 09:19 Walmart and 09:24 Aldi captures.",
+    "ROUTING CONTRACT: the artifact this plan names, grocery/triage-plans/plan-2026-09-02-2.routing.json, was OVERWRITTEN at 12:26:49 (68,839 -> 136,055 bytes) by a different measurement while this session was running. The version the plan's own evidence quotes throughout - 38 files, 33,854 distinct names, 48 routing_changes, per_sim_counts sim2=12/sim3=24/sim4=48, a sausage_exposure_before section - is no longer at that path; the file now holds a 63-file / 41,072-name / 49-change measurement of a DIFFERENT rule set (sea-salt, salt, radishes, a GLOBAL_EXCLUDE seed token) with no sausage_carrier class and no block-cheese work. The routing diff was therefore run against the 48-row contract as this session read it at intake, over that contract's own 38-file corpus. RESULT: 46 of the 48 rows reproduce byte-identically; 2 change destination and 8 are added, and all ten are the two \\bchicken\\b excludes the plan states in prose and the artifact's sim-4 did not model ('move exactly those 4 + 5 names and no cell'). Total 56 movers over 33,924 names; the positive control, all five secondary controls and the relax control all reproduce. Over the engine's actual 63-file union there are 3 further movers, all sausage-carrier moves out of older Walmart captures (Wright Brand bacon/cheddar/jalapeno sausage -> kielbasa, Aidells spicy mango chicken sausage -> unmatched, Klement's garlic summer sausage -> unmatched); all three were checked against the board and hold no cell, and bacon/jalapenos/garlic keep their crowns. Of all 59 movers exactly one holds a cell: the Aidells gruyere sausage.",
+    "CONCURRENCY: a second session titled 'Grocery alert triage' was live in this repo throughout and is implementing the SAME plan - its own source comments cite 'triage plan-2026-09-02-2 item 2026-09-02-4dfb1d'. It edited grocery/compare-deals.ps1 (GLOBAL_EXCLUDE 84 -> 85 tokens, a sprouting-seed token) at 13:18:43, grocery/commodities.json (sea-salt, salt, radishes fences) at 13:18:10, grocery/known-wrong.json at 13:18:56 and grocery/audit-sale-fallback.ps1 at 13:23:26. Both sets of hunks are present and mine were verified to have survived its writes; cross-session messaging was unavailable from this unattended run. compare-deals.ps1 and audit-sale-fallback.ps1 were NOT staged by this session. commodities.json and known-wrong.json were staged because the published board depends on them, and they carry both sessions' hunks; nothing was reverted or overwritten.",
+    "NEW FAILURE CLASS, BOUNCED FOR MEASUREMENT, NOT FIXED HERE. category-excludes.json's `apply` list is matched FIRST-MATCH-WINS with a break (apply-category-excludes.ps1:34), so its fourth block, `^(Vegetables)$` -> dried_carrier, can never be reached: the label 'Vegetables' matches block 1's `^(Fruit|Vegetables)$` and the loop stops. MEASURED: 0 of the 83 Vegetables commodities carry any of dried_carrier's three patterns (\\bdried\\b, \\bflakes?\\b, \\bdill\\s+weed\\b), so the class has never been baked into a single commodity since it was added on 2026-08-20 to stop Dan's Pantry Rosemary, Gourmet Garden basil paste, freeze-dried red onion and McCormick celery flakes from pricing fresh produce rows. The class is inert and nothing in the estate says so. NOT FIXED because the only two fixes are structural and their blast radius is unmeasured: merging dried_carrier into block 1 would apply \\bdried\\b to FRUIT, which that block's own note forbids by name (dried-cranberries and raisins are Fruit rows whose products carry the word dried), and changing the apply loop from first-match to accumulate-all would re-bake every commodity in the estate. That needs a routing simulation before anyone touches it.",
+    "SHIP-SEQUENCE GAPS worth folding into the next plan, both found by a gate rather than by reading. (1) Step 6 omits repair-multipack-sizes.ps1 -Apply, which the real chain runs at check-ad-cycles:608 before guards. The 09:24 Aldi capture re-wrote 'OH Snap Pickling CO Dilly Bites 6pk 6 EA' size from the repaired '6 pk 3.25 oz' back to the raw '3.25 oz', so guard 5 hard-failed until the reviewed hint in multipack-unit-hints.json was re-applied. (2) Step 6 omits -IdentityNamespace staple and recipe-overlay.ps1. Without them the product identity table stays at the old rules_hash and BOTH board-vs-identity guards go BLIND on any rules change - they were populated and passing at 08:07 (3,139 and 332 rows) and went blind the moment commodities.json moved. Re-emitted: 42,546 rows at rules_hash e4f4473179e6, and guards came back to warn=17, the morning's count."
+  ],
+  "gates": {
+    "compare-deals.ps1 -SelfTest": "PASS (all multibuy / BOGO cases correct), rc 0",
+    "compare-deals.ps1 -MinStores 1 -IdentityNamespace staple -BakersFile out\bakers\bakers-deals-2026-09-02.json -FarewayFile out\fareway\fareway-deals-2026-08-30.json": "rc 0; 570 items, 3140 store cells, price-table parity OK on all 3140; identity[staple] 42546 rows at rules_hash e4f4473179e6",
+    "repair-multipack-sizes.ps1 -Apply": "rc 0; 1 repair on the first pass (Aldi 'OH Snap Pickling CO Dilly Bites 6pk 6 EA' size 3.25 oz -> 6 pk 3.25 oz from the reviewed hint), 0 REFUSED",
+    "recipe-overlay.ps1": "rc 0; 67 recipe-only rows, 10 sale prices overlaid",
+    "audit-name-drift.ps1": "rc 0 (run again after prune-bad-links, as the chain does)",
+    "prune-bad-links.ps1 -Tol 0.32": "rc 0; 2431 links verified, 0 dropped on the final pass",
+    "generate-board-overrides.ps1": "rc 0; 9 corrections",
+    "build-deals-page.ps1": "rc 0; 637 commodities, 3434 prices, 0 bare chips",
+    "audit-match-soundness.ps1": "MOVED=17 DROPPED=18 new-contested=7 drift-vs-engine=0, reviewed line by line, then -Accept (18643 names, 384 contested). Never -Force.",
+    "audit-food-category.ps1": "rc 0, 3038 priced cells scanned",
+    "aisle-test.ps1 -LiveBoard": "rc 0; 408 ALLOW, 0 BLOCK (the gruyere BLOCK is gone)",
+    "audit-capture-eviction.ps1": "rc 0; 3140 cells, 20624 candidate rows, 0 findings",
+    "audit-known-wrong.ps1": "rc 0; 0 of 269 adjudicated-wrong products priced on the board",
+    "audit-instore-channel.ps1": "rc 0; every finding a reviewed exception, nothing queued",
+    "audit-basis-reconcile.ps1": "rc 0; 41 cells checked against the store unit price, 0 findings, 0 allowlisted",
+    "audit-pack-basis.ps1": "1 advisory finding, pre-existing and not from this change: hummus @ Sam's Club, first_seen 2026-07-30, previously reviewed and acked with Sam's own arithmetic (16 x $0.35 = $5.60 reproduces the line price); its ack expired 2026-08-14 and re-acking it is outside this plan",
+    "audit-json-encoding.ps1": "rc 0; 3 rule files pure ASCII, no mojibake growth in 2 baselined files",
+    "audit-coverage-ledger.ps1": "rc 0; 1 finding left, audit-ff-carry STALE, which the reachability fix clears on the 2026-09-03 08:00 chain",
+    "guards.ps1": "GUARDS OK - hard=0 warn=17 (the morning chain was hard=0 warn=17; the three extra warns seen mid-run were the coverage ratchet and both board-vs-identity guards, all cleared)",
+    "test-auditors.ps1": "PASS 599 checks, failed=0, skipped=0",
+    "run-test-guards-weekly.ps1 (hermetic; test-guards refuses the live tree)": "rc 0; negative tests 31 passed, 0 failed",
+    "test-match-lib.ps1": "PASSED; 41312 names, 0 divergences, 0 detail divergences",
+    "test-commit-size-gate.ps1": "rc 0; 14 of 14 cases (4 new served-dirty cases)",
+    "pull-regular-familyfare.ps1 -SelfTest": "PASS; 34 of 34 cases including the new c6 and m4",
+    "validate-triage-plan.ps1 -SelfTest": "PASS, all 17 plan-gate cases"
+  },
+  "open_questions_for_brad": [
+    "shredded-cheese (index 14) is still labelled 'Shredded / Block Cheese' although block-cheese (index 15) exists; this plan extends the carve-out so Family Fare's natural chunks reach block-cheese. Should shredded-cheese be relabelled 'Shredded Cheese' and its remaining block/chunk claims retired, or is the overlap intended?",
+    "gruyere: Aldi's 'Happy Farms Preferred Specialty Shredded Swiss Gruyere Cheese 8 OZ' holds the crown ($0.3362/oz) and Walmart's bettergoods shredded cheddar/gouda/gruyere BLEND is runner-up. Should shredded and blended gruyere count as 'Gruyere Cheese', or should the commodity mean the wedge?",
+    "Walmart per-each produce: 'Fresh Jalapenos, Each' is $0.44 each, published at Walmart's own $1.76/lb, which implies a quarter-pound jalapeno. Keep publishing the store's stated $/lb for per-each produce, or refuse per-each rows whose derived weight is physically implausible? The product page could not be read to check it: bot wall, not bypassed.",
+    "Fareway: 562 of 795 shop.fareway.com rows are marked down (ratios 0.74-0.91) and typed as 30-day sales, making 277 of Fareway's 444 board cells 'sale'. Is that the shelf price, or an online 'was' price? It drives the sale-fallback alerts and the rescue-worklist denominator this session just re-baselined."
+  ]
+}

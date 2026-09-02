@@ -1,5 +1,5 @@
 {
-  "note": "THE category-exclude LIBRARY - single source of truth for wrong-class product tokens. Three consumers: (1) audit-food-category.ps1 (blocking guard: a food commodity matched to one of these classes hard-fails the publish), (2) apply-category-excludes.ps1 (bakes these patterns into every commodity's exclude list by category, so NEW commodities are born with the guardrails), (3) build-vet-sheet.ps1 (flags them for batch review). Born from the 2026-07-14 blueberries-as-Bai-beverage live mispricing. RULE FOR ADDING PATTERNS: a token belongs here ONLY if it is wrong for EVERY commodity in the scoped categories (after exempt); anything item-specific stays in that commodity's own exclude list. frozen_dessert_brand (2026-08-30, queue 2026-08-30-2611d3) is the first BRAND class: Blue Bunny crowned Family Fare pistachios at $0.1248/oz with a 48 oz tub of ice cream, and every type-word fence missed it because the retail name carries only BRAND + FLAVOR (no ice cream, no dessert, no frozen). A brand token only belongs here when every product the brand sells is the wrong class: all 40 Blue Bunny strings in out/ are frozen desserts, and the exempt regex carries the commodities a Blue Bunny product legitimately IS.",
+  "note": "THE category-exclude LIBRARY - single source of truth for wrong-class product tokens. Three consumers: (1) audit-food-category.ps1 (blocking guard: a food commodity matched to one of these classes hard-fails the publish), (2) apply-category-excludes.ps1 (bakes these patterns into every commodity's exclude list by category, so NEW commodities are born with the guardrails), (3) build-vet-sheet.ps1 (flags them for batch review). Born from the 2026-07-14 blueberries-as-Bai-beverage live mispricing. RULE FOR ADDING PATTERNS: a token belongs here ONLY if it is wrong for EVERY commodity in the scoped categories (after exempt); anything item-specific stays in that commodity's own exclude list. frozen_dessert_brand (2026-08-30, queue 2026-08-30-2611d3) is the first BRAND class: Blue Bunny crowned Family Fare pistachios at $0.1248/oz with a 48 oz tub of ice cream, and every type-word fence missed it because the retail name carries only BRAND + FLAVOR (no ice cream, no dessert, no frozen). A brand token only belongs here when every product the brand sells is the wrong class: all 40 Blue Bunny strings in out/ are frozen desserts, and the exempt regex carries the commodities a Blue Bunny product legitimately IS. sausage_carrier (2026-09-02, queue 2026-09-02-1527d2) is the first CARRIER-FORM class: a chicken sausage flavoured with gruyere held the Family Fare gruyere cell at $0.5825/oz, and nothing in a library of brand and type words could say that a product is a sausage which lists the food as a flavour. Measured the same day over 33,854 corpus names: 455 carry sausage(s) and 25 of those route to 15 commodities that are not sausage (apples five times over), a gap that had been closed one per-product ruling at a time since 2026-08-01. The exempt regex carries the 21 ids that ARE a sausage or legitimately contain one; a sausage is the wrong product for every other commodity in the scoped categories, which is what makes this a library class rather than 15 separate excludes.",
   "classes": {
     "beverage": [
       "beverage",
@@ -226,6 +226,9 @@
     ],
     "frozen_dessert_brand": [
       "\\bblue\\s+bunny\\b"
+    ],
+    "sausage_carrier": [
+      "\\bsausages?\\b"
     ]
   },
   "apply": [
@@ -243,7 +246,8 @@
         "supplement",
         "preserve_carrier",
         "alcohol",
-        "frozen_dessert_brand"
+        "frozen_dessert_brand",
+        "sausage_carrier"
       ]
     },
     {
@@ -257,7 +261,8 @@
         "snack_carrier",
         "prepared_meal_carrier",
         "alcohol",
-        "frozen_dessert_brand"
+        "frozen_dessert_brand",
+        "sausage_carrier"
       ]
     },
     {
@@ -269,7 +274,8 @@
         "supplement",
         "alcohol",
         "imitation_carrier",
-        "frozen_dessert_brand"
+        "frozen_dessert_brand",
+        "sausage_carrier"
       ]
     },
     {
@@ -295,7 +301,8 @@
     "prepared_meal_carrier": "",
     "alcohol": "wine|beer|brandy|liquor|liqueur|cooking\\s+wine|mirin|vodka|whiskey|rum",
     "imitation_carrier": "",
-    "frozen_dessert_brand": "^(?:ice-cream|popsicles|frozen-yogurt|sherbet|sorbet|gelato|ice-cream-bars|frozen-dessert)$"
+    "frozen_dessert_brand": "^(?:ice-cream|popsicles|frozen-yogurt|sherbet|sorbet|gelato|ice-cream-bars|frozen-dessert)$",
+    "sausage_carrier": "^(breakfast-sausage|italian-sausage|kielbasa|vienna-sausage|smoked-turkey-sausage|veggie-sausages|fresh-sweet-italian-turkey-sausage|mexican-chorizo-fresh|hot-dogs|breakfast-sandwiches|frozen-pizza|frozen-burritos|frozen-lasagna|frozen-meatballs|jarred-gravy|queso|dog-treats|bratwurst|pepperoni|corn-dogs|canned-chili)$"
   },
   "universal_for_unknown": [
     "babyfood",

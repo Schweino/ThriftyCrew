@@ -1,431 +1,456 @@
-﻿{
-    "note":  "ACKNOWLEDGED price-review flags. A flag listed here with a FUTURE `expires` date is not paged. Anything else pages: an ack with no `expires`, an unparseable one, or a past one is treated as EXPIRED, because silencing a price flag forever on the strength of a typo is exactly the failure the review-flag system exists to prevent. Read by check-ad-cycles.ps1; mirrors how coverage-ack.json works for coverage regressions. WHY THIS FILE EXISTS: before 2026-07-30 a flag that stayed open simply went quiet after its first page - last_seen was refreshed on every run, so the 7-day novelty test could never elapse. Being ignored long enough was indistinguishable from being reviewed. Now an open flag RE-ARMS after 14 days and an ack is the only way to make one quiet, with a date on which someone has to look again.",
-    "how_to_ack":  "Add { \"key\": \"\u003cthe flag key from out\\\\alerted-flags.json\u003e\", \"reason\": \"why this is not a bug - be specific, a future reader needs to re-verify it\", \"expires\": \"yyyy-MM-dd\" }. Keep expiries short (weeks, not months): the expiry is the whole point, it forces the question again. Do NOT ack a flag you have not actually checked against the store.",
-    "acks":  [
-                 {
-                     "key":  "SANITY|Curry Powder|outlier",
-                     "reason":  "Sam\u0027s Member\u0027s Mark Salt-Free Curry Powder 18 oz \\.98 = \\.499/oz vs Walmart\u0027s Great Value 2 oz shaker \\.08 = \\.04/oz. Warehouse jar against a spice shaker; both prices reproduce from their own size. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Ginger (ground)|outlier",
-                     "reason":  "Sam\u0027s Member\u0027s Mark Organic Ground Ginger 7 oz \\.58 = \\.797/oz vs Hy-Vee 2 oz \\.99 = \\.495/oz. Same bulk-vs-shaker shape. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Thyme (dried)|outlier",
-                     "reason":  "Sam\u0027s Member\u0027s Mark Thyme Leaves 8.25 oz \\.24 = \\.878/oz vs Walmart 1.4 oz \\.78. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Ground Turmeric|outlier",
-                     "reason":  "Sam\u0027s Member\u0027s Mark Ground Turmeric 20 oz \\.98 = \\.399/oz vs Family Fare 1.37 oz Simply Nature organic \\.99. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Cloves (ground)|outlier",
-                     "reason":  "Walmart Great Value Ground Cloves 2 oz \\.18 vs Hy-Vee own-brand 2 oz \\.99 - same size, store-brand price gap, no parse involved. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Allspice (ground)|outlier",
-                     "reason":  "Walmart Great Value Ground Allspice 2 oz \\.12 vs Baker\u0027s Simple Truth ORGANIC 1.91 oz \\.99. Store brand vs organic. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Nutmeg (ground)|outlier",
-                     "reason":  "Fareway Badia Ground Nutmeg 2 oz \\.68 vs Walmart Great Value 1.5 oz \\.46. Badia is the cheap-line spice brand. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Garam Masala|outlier",
-                     "reason":  "Walmart 24 Mantra Organic Garam Masala 10 oz \\.43 = \\.643/oz vs Baker\u0027s Nomad Blends 2.9 oz \\.79. Bigger jar wins. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Poultry Seasoning|outlier",
-                     "reason":  "Walmart Great Value Poultry Seasoning 1.5 oz \\.97 vs Family Fare Sugar \u0027N Spice 3.4 oz \\.49. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Dill Weed (dried)|outlier",
-                     "reason":  "Walmart Frontier Co-op Organic Dill Weed 15.9 oz bag \\.08 = \\.51/oz vs Family Fare 0.5 oz shaker \\.89 = \\.78/oz. A 1 lb bulk bag; price and size both check out. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Parsley (dried)|outlier",
-                     "reason":  "Same Frontier Co-op bulk shape: Walmart Organic Parsley Leaf Flakes 16 oz \\.03 = \\.439/oz vs Sam\u0027s 3.2 oz \\.43. Real. (The Aldi \\.48/oz row named in the alert is no longer on the board.)",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Fennel Seed / Ground Fennel|outlier",
-                     "reason":  "Family Fare Sugar \u0027N Spice Fennel Seed Whole 5.6 oz \\.49 = \\.623/oz vs Baker\u0027s Simple Truth organic 1.48 oz \\.99. Bulk-line bag vs organic shaker. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Sazon Seasoning|outlier",
-                     "reason":  "Aldi Stonemill Sazon 3 oz \\.69 vs Baker\u0027s Goya 1.41 oz \\.69 - same dollar price, double the size. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Cajun / Creole Seasoning|outlier",
-                     "reason":  "Two separate real rows: Sam\u0027s Slap Ya Mama 16 oz \\.58, and the current cheapest is a Hy-Vee CLEARANCE - Chophouse Cajun Seasoning with Jalapeno 12 oz marked \\.00 from base_price \\.99 (marked_down=true, as_of 07-29, Aisles Online). Both are prices the store charges. The clearance will vanish on its own and Hy-Vee re-pulls daily.",
-                     "expires":  "2026-08-06"
-                 },
-                 {
-                     "key":  "SANITY|Bouillon (cubes / granules / base)|outlier",
-                     "reason":  "Walmart Knorr Granulated Chicken Bouillon 32 oz jar \\.38 = \\.168/oz vs Baker\u0027s 8-cube 3.12 oz box \\.19. Jar vs cube box. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Yeast (baking)|outlier",
-                     "reason":  "Sam\u0027s Fleischmann\u0027s Instant Dry Yeast 2 x 16 oz \\.88 = \\.215/oz vs Hy-Vee Red Star 4 oz \\.48. Bulk yeast is famously this much cheaper; the 2 pk is multiplied into 32 oz correctly. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Sesame Seeds|wow",
-                     "reason":  "Cheapest moved 0.18 -\u003e 0.36/oz because the prior week\u0027s winner rotated out; today\u0027s is Sam\u0027s Member\u0027s Mark Black Sesame Seed 22 oz \\.98. A price going UP is not a parse bug. Real.",
-                     "expires":  "2026-08-06"
-                 },
-                 {
-                     "key":  "SANITY|Parsley (dried)|wow",
-                     "reason":  "Same cause as the parsley outlier: the cheap Aldi row left the board and Walmart\u0027s Frontier bulk bag is now the winner. Real movement, no wrong cell.",
-                     "expires":  "2026-08-06"
-                 },
-                 {
-                     "key":  "SANITY|Sazon Seasoning|wow",
-                     "reason":  "Aldi\u0027s 3 oz Stonemill jar replaced Baker\u0027s 1.41 oz Goya as cheapest - a 53% drop that is entirely the size difference. Real.",
-                     "expires":  "2026-08-06"
-                 },
-                 {
-                     "key":  "SANITY|Coconut Oil|outlier",
-                     "reason":  "Sam\u0027s Carrington Farms Refined Coconut Oil 128 fl oz \\.98 = \\.195/oz vs Baker\u0027s 30 oz \\.79. A gallon jug. Real. (Family Fare\u0027s \u0027Butter Sticks With Coconut Oil\u0027 row was a WRONG product and is now excluded.)",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Thai Red Curry Paste|outlier",
-                     "reason":  "Walmart Mae Ploy Red Curry Paste 14 oz \\.32 = \\.451/oz vs Baker\u0027s Private Selection 4.5 oz \\.49. Mae Ploy\u0027s tub is the standard cheap format. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Harissa Paste|outlier",
-                     "reason":  "Walmart Mina Harissa 10 oz \\.98 = \\.498/oz vs Hy-Vee Morton \u0026 Bassett 1.9 oz \\.99 = \\.31/oz. The Hy-Vee row is a tiny gourmet jar, so the 92% gap is real on both sides. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Chili Crisp / Chili Oil|outlier",
-                     "reason":  "Hy-Vee Lee Kum Kee Chili Crisp Hot Honey 20 oz \\.49 = \\.325/oz vs Walmart Laoganma 7.4 oz \\.97. Real. (Baker\u0027s \u0027SUMM! Pork Gyoza with Chili Crisp Oil\u0027 was a WRONG product and is now excluded.)",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Mirin (Sweet Cooking Wine)|outlier",
-                     "reason":  "Walmart Mizkan Mirin 12 fl oz \\.12 = \\.26/floz vs Fareway Kikkoman 300 ml \\.39. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Italian Dressing|outlier",
-                     "reason":  "Fareway own-brand Zesty Italian 16 oz \\.99 = \\.062/floz vs Sam\u0027s food-service gallon \\.48 = \\.074. A 99-cent store-brand bottle beating a warehouse jug is unusual but both reproduce. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Tartar Sauce|outlier",
-                     "reason":  "Walmart Great Value Tartar Sauce 12 fl oz \\.52 vs Hy-Vee 11.5 oz \\.29. Store brand. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Jarred / Canned Gravy|outlier",
-                     "reason":  "Sam\u0027s Chef-mate Country Sausage Gravy #10 can 105 oz \\.58 = \\.091/oz vs Hy-Vee 10.5 oz can \\.69. Food-service can. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Minced Garlic (jarred)|outlier",
-                     "reason":  "Sam\u0027s Member\u0027s Mark Minced Garlic 48 oz \\.68 = \\.118/oz vs Hy-Vee Spice World 32 oz \\.99. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Hummus|outlier",
-                     "reason":  "Sam\u0027s Member\u0027s Mark Classic Hummus Singles 16 x 2.5 oz \\.58 = 40 oz total = \\.14/oz vs Aldi 10 oz tub \\.59. The 16 ct is multiplied into the size correctly. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Dried Arbol Chiles|outlier",
-                     "reason":  "Family Fare \u0027Chile De Arbol\u0027 3 oz \\.49 = \\.83/oz vs Hy-Vee Don Enrique 0.5 oz \\.99 = \\.98/oz. A 3 oz bulk bag against a 0.5 oz packet - the 86% gap is the packet, not a parse. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Grits (quick)|outlier",
-                     "reason":  "Sam\u0027s Quaker Quick Grits 3 x 5 lb = 240 oz \\.78 = \\.045/oz vs Fareway 24 oz canister \\.99. The 3 pk is multiplied in correctly (this is the same commodity whose \u0027.98 oz\u0027 parse bug was fixed 07-30; this row is the legitimate one). Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Oats / Oatmeal|outlier",
-                     "reason":  "Sam\u0027s Quaker Old Fashioned Oats 160 oz \\.98 = \\.05/oz vs Aldi 42 oz \\.99. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Lasagna Noodles|outlier",
-                     "reason":  "Aldi Reggano Oven Ready 12 oz \\.89 = \\.074/oz vs Walmart Great Value 16 oz \\.84. Aldi pasta really is that cheap. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Feta Cheese|outlier",
-                     "reason":  "Sam\u0027s Athenos Crumbled Feta 24 oz \\.28 = \\.303/oz vs Aldi 4 oz \\.89 - same brand at Walmart in 12 oz for \\.92 brackets it. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|French Bread / Baguette|outlier",
-                     "reason":  "Walmart Freshness Guaranteed French loaf \\.25 each vs Baker\u0027s Private Selection baguette \\.99. Both per-loaf, no basis mismatch. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Popsicles / Ice Pops|outlier",
-                     "reason":  "Walmart FunPops 36 ct \\.97 = \\.083 per pop vs Baker\u0027s 20 ct \\.99. Both divide by a real pop count. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Garden Salad Blend (bagged)|outlier",
-                     "reason":  "Sam\u0027s Garden Salad 2 lb \\.66 = \\.083/oz vs Walmart Marketside 24 oz \\.78. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Spring Mix Salad Greens|outlier",
-                     "reason":  "Aldi Little Salad Bar Spring Mix 12 oz \\.09 = \\.174/oz vs Baker\u0027s Simple Truth ORGANIC 16 oz \\.00. Conventional vs organic. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Spring Mix Salad Greens|wow",
-                     "reason":  "Same row: the cheapest fell 44% because Aldi\u0027s conventional 12 oz bag replaced an organic 16 oz as the winner. Real.",
-                     "expires":  "2026-08-06"
-                 },
-                 {
-                     "key":  "SANITY|Serrano Peppers|outlier",
-                     "reason":  "Family Fare serranos \\.99/lb vs Baker\u0027s and Fareway both \\.99/lb. Per-pound on every row. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Bok Choy|outlier",
-                     "reason":  "Baker\u0027s bok choy \\.49/lb vs Hy-Vee \\.99/lb (its size text prints the rate: \u00271.35 lbs (\\.99/lb)\u0027). Both per-pound. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Beets (fresh)|outlier",
-                     "reason":  "Baker\u0027s Organic Red Beets \\.49/lb vs Family Fare organic 12 oz bunch \\.99 = \\.32/lb. Loose vs packaged. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Sweet Corn (ear)|outlier",
-                     "reason":  "Baker\u0027s corn on the cob \\.40/ear vs Sam\u0027s 8 ct \\.97 = \\.62/ear. Both per-ear. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Limes|outlier",
-                     "reason":  "Walmart fresh lime \\.25 each vs Baker\u0027s \\.69 each. Both per-each. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Lemons|outlier",
-                     "reason":  "Walmart fresh lemon \\.50 each vs Family Fare \\.79. Real. (Sam\u0027s \u0027Starry Mini Cans Lemon Lime 30 pk\u0027 was a SODA matched to lemons and is now excluded.)",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Honeydew Melon|outlier",
-                     "reason":  "Fareway honeydew \\.49 each vs Baker\u0027s \\.99 each. Both per-melon. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Strawberries|wow",
-                     "reason":  "Cheapest moved UP 42% (\\.08 -\u003e \\.118/oz): Aldi 1 lb \\.89. Berry prices move weekly. Real.",
-                     "expires":  "2026-08-06"
-                 },
-                 {
-                     "key":  "SANITY|Turkey Breast (raw)|outlier",
-                     "reason":  "Fareway bone-in turkey breast \\.99/lb vs Walmart Butterball 3 lb boneless roast \\.44 = \\.81/lb. Bone-in vs a boneless roast - a real format difference, both per-pound.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Hand Sanitizer|outlier",
-                     "reason":  "Sam\u0027s Member\u0027s Mark 67.6 fl oz \\.93 = \\.117/floz vs Baker\u0027s 32 oz \\.49. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Toothbrushes|outlier",
-                     "reason":  "Walmart Equate 6 ct \\.00 = \\.167 each vs Baker\u0027s Colgate 4 ct \\.29. Store brand multipack vs a name brand. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Feminine Pads|outlier",
-                     "reason":  "Walmart Equate Maxi 48 ct \\.98 = \\.083 each vs Sam\u0027s Always 96 ct \\.48. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Drain Cleaner|outlier",
-                     "reason":  "Walmart Mister Plumber 32 oz \\.38 = \\.043/floz vs Sam\u0027s Drano 2 pk 160 oz \\.87. A cheap off-brand opener vs Drano. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Furniture Polish / Dusting Spray|outlier",
-                     "reason":  "Fareway Behold 12.5 oz \\.99 vs Sam\u0027s Pledge 3 ct 29 oz \\.52. Real.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Floor Cleaner|wow",
-                     "reason":  "Cheapest moved UP 148% (\\.055 -\u003e \\.135/floz) because Sam\u0027s Member\u0027s Mark gallon left the cheapest slot. Real movement.",
-                     "expires":  "2026-08-06"
-                 },
-                 {
-                     "key":  "MULTIBUY|Hy-Vee|coffee",
-                     "reason":  "Hy-Vee weekly-ad BOGO with no regular retail in the feed - compare-deals DROPS it rather than guess, so nothing wrong is published. The recovery path is the Wednesday browser agent writing regular+size into out\\extra-deals-\u003cdate\u003e.json.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "MULTIBUY|Hy-Vee|soda",
-                     "reason":  "Same: \u0027Poppi prebiotic soda, buy two, get one FREE\u0027 with no regular price. Dropped, not published.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "MULTIBUY|Hy-Vee|sparkling-water",
-                     "reason":  "Same shape - BOGO ad text, no regular retail. Dropped, not published.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "MULTIBUY|Hy-Vee|sports-drinks",
-                     "reason":  "\u0027Gatorade sports drink, buy five, get five FREE\u0027 with no regular price. Dropped, not published.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "MULTIBUY|Hy-Vee|rice",
-                     "reason":  "\u0027Ralston Family Farms rice, buy one, get one FREE\u0027 with no regular price. Dropped, not published.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "MULTIBUY|Hy-Vee|deodorant",
-                     "reason":  "BOGO ad text, no regular retail. Dropped, not published.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "MULTIBUY|Family Fare|soda",
-                     "reason":  "Family Fare \u0027Buy 2 get 1 free\u0027 on 12-packs DOES carry a regular (\\.99 / \\.29) but its size is \u002712 ea\u0027 / \u002712pk can\u0027 with no volume, so there is no unit basis. We will not assume 12 x 12 fl oz - mini-can 12-packs exist (see the Starry 7.5 oz row this same run). Dropped, not published; a real size from the store fixes it.",
-                     "expires":  "2026-08-13"
-                 },
-                 {
-                     "key":  "SANITY|Coleslaw Mix|outlier",
-                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club coleslaw 2 lb bag \\.34 = \\.0731/oz against Baker\u0027s \\.16/oz. A club-size 32 oz bag against grocery-size 14 oz bags is the whole point of the store; the arithmetic reproduces exactly. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Dog Treats|outlier",
-                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club Milk-Bone 15 lb box \\.98 = \\.0582/oz against Baker\u0027s \\.18/oz. A 240 oz box versus retail 24-36 oz boxes. Arithmetic exact; verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Dried Cranberries|outlier",
-                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club Craisins 48 oz \\.62 = \\.1588/oz against Baker\u0027s \\.26/oz. Standard club-pack spread on a shelf-stable dried fruit. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Floor Cleaner|outlier",
-                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club Member\u0027s Mark floor cleaner 1 gallon \\.98 = \\.0545/fl oz against Walmart \\.14. A gallon jug against 32-64 oz retail bottles. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Glass Cleaner|outlier",
-                     "reason":  "REAL STORE-BRAND SPREAD. Walmart Great Value glass cleaner 32 fl oz \\.74 = \\.0544/fl oz against Fareway \\.09. Store brand against national brand on a commodity cleaner; no parse involved, the size is on the bottle. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Gochujang (Korean Chili Paste)|outlier",
-                     "reason":  "REAL STORE-BRAND SPREAD. Walmart bettergoods gochujang 12.5 oz \\.26 = \\.2608/oz against Hy-Vee \\.42. Walmart\u0027s own new premium line undercutting imported jars is expected. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Ground Cinnamon|wow",
-                     "reason":  "REAL REPRICE, NOT A PARSE. The cheapest moved 0.27 -\u003e 0.42/oz because Sam\u0027s Club repriced its bulk cinnamon to \\.4433/oz, which handed the crown to Aldi Stonemill 2.37 oz \\.99 = \\.4177/oz. Both numbers read off their raw rows; the move is the market, not the math.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Microwave Popcorn|outlier",
-                     "reason":  "REAL BULK ECONOMICS, and proven by the store\u0027s own per-each price. Sam\u0027s Club Orville Redenbacher\u0027s Movie Butter 1.5 oz., 36 pk. \\.48, sams_unit_price \\.26/ea, and 0.26 x 36 = 9.36 reproduces the line price - so \\.48 IS the 36-pack total and \\.26/each is correct 36-pack economics against Walmart\u0027s \\.41. Same row and same proof as the PACKBASIS flag on this product.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Peanuts|outlier",
-                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club in-shell peanuts 5 lb \\.98 = \\.0748/oz against Aldi \\.14. An 80 oz bag against retail 16 oz bags. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Pickles (dill)|outlier",
-                     "reason":  "REAL BULK ECONOMICS, corroborated across stores. Sam\u0027s Club Mt. Olive dill pickles 1 gallon \\.34 = \\.0495/oz against Baker\u0027s \\.09. Walmart\u0027s own 128 fl oz Mt. Olive at \\.0623/oz corroborates the gallon basis, so this is jug-versus-jar, not a size parse.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "PACKBASIS|hummus|Sam\u0027s Club",
-                     "reason":  "CORRECT PACK BASIS, proven by Sam\u0027s own arithmetic. \u0027Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.\u0027 \\.58 carries sams_unit_price \\.35/ea, and 16 x 0.35 = 5.60 reproduces the line price - so \\.58 IS the 16-pack total, 40 oz of hummus, and \\.1395/oz is real bulk economics rather than a pack count multiplied into the size. The audit was right to hold it for review; the review says the number is sound.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "PACKBASIS|microwave-popcorn|Sam\u0027s Club",
-                     "reason":  "CORRECT PACK BASIS, proven by Sam\u0027s own arithmetic. \u0027Orville Redenbacher\u0027s Movie Butter, 1.5 oz., 36 pk.\u0027 \\.48 carries a \\.26/ea unit price, and 0.26 x 36 = 9.36 reproduces the line price - so \\.48 IS the 36-pack total and the per-bag basis is right. Held for review correctly; reviewed and sound.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Baby Wipes|wow",
-                     "reason":  "REAL, and the arithmetic is exact. Sam\u0027s Club Pampers 924 ct \\.48 = \\.02/wipe. The 44% \u0027move\u0027 is rounding noise on a two-cent unit (0.01 -\u003e 0.02 displayed), not a price event. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Dill Weed (dried)|wow",
-                     "reason":  "REAL, caused by a capture change rather than a price change. Last week\u0027s cheaper Walmart jar left the capture, so the crown fell to Great Value dill weed 0.75 oz \\.18 = \\.9067/oz. That arithmetic is exact. The board is right; the previous week\u0027s cheaper row is simply no longer available to it.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Drain Cleaner|wow",
-                     "reason":  "REAL STORE-BRAND PRICE. Walmart Great Value drain cleaner 80 fl oz \\.77 = \\.0721/fl oz. Size is on the bottle, arithmetic exact. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Honeydew Melon|wow",
-                     "reason":  "REAL, a lapsed sale. Baker\u0027s whole honeydew is \\.99 each at regular price; last week\u0027s \\.49 was a sale that expired. The board correctly shows the regular price now. Verified against the winning row in comparison-2026-07-30.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Onion Soup Mix (dry packets)|outlier",
-                     "reason":  "REAL STORE-BRAND SPREAD, same package shape both sides. Family Fare \u0027Beefy Onion Soup Mix Our Family (2 Ct)\u0027 2.2 oz \\.29 = \\.5864/oz against Hy-Vee\u0027s IDENTICAL 2.2 oz shape at \\.99. Identical sizes, different brands - a pure store-brand spread with no basis difference to misread.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Steak Sauce (A.1. style)|wow",
-                     "reason":  "REAL, corroborated twice. Aldi Burman\u0027s steak sauce 10 oz \\.99 = \\.199/oz, corroborated by That\u0027s Smart at \\.78 and by A.1. 2-pack \\.68/30 oz. The -50% move is Aldi\u0027s store brand entering the cell, not a parse.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Toothbrushes|wow",
-                     "reason":  "REAL, caused by a capture change. Walmart Reach 2 ct \\.00 = \\.50/each; last week\u0027s \\.17/each 6-pack left the capture. Arithmetic exact on the row that remains.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Vegetable / Vegetable Beef Soup (canned)|wow",
-                     "reason":  "REAL, and corroborated by two other stores. Walmart Progresso 19 oz \\.48 = \\.1305/oz, with Fareway and Hy-Vee both at \\.1319/oz. Three stores within 1% of each other is not a parse error.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Furniture Polish / Dusting Spray|wow",
-                     "reason":  "Catalog rotation, not a parse. Last week the crown was Bakers \"Murphy Oil Soap Wood Cleaner Original\" 32 fl oz at 0.1559/oz (comparison-2026-07-30). Murphy is ABSENT from bakers-regular-2026-08-01.json (0 rows match murphy) because the daily Kroger API pull rotates its catalog, so the crown correctly moved to Fareway \"Behold Furniture Polish, Lemon\" 2.99 / 12.5 oz = 0.2392/oz, which reproduces exactly from its own captured row. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Gelatin (Jell-O)|outlier",
-                     "reason":  "Store brand against a name brand on an each-commodity, both parses correct. Winner Hy-Vee \"Hy-Vee Strawberry Gelatin Dessert 3 oz\" 0.99 per 1 ct box (source: verified on store page 2026-07-14, boxed gelatin open-item resolution); runner-up Walmart \"Jell-O Strawberry Gelatin Dessert Mix, 3 oz Box\" 1.62 per 1 ct. Same 3 oz box either way, so the 39 percent gap is the brand, not a size error. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Wild Rice|outlier",
-                     "reason":  "Real economics: store brand at double the size against a premium organic half-pound. Winner Hy-Vee \"Hy-Vee Select Wild Rice\" 10.99 / 16 oz = 0.6869/oz (Aisles Online shelf price, storeId 1465, as_of 2026-07-30); runner-up Fareway \"Lundberg Family Farms Organic Wild Rice\" 9.29 / 8 oz = 1.1612/oz. Both reproduce exactly from their captured rows. The 2026-07-28 \"Canoe cooked wild rice\" wrong-form bug is not involved - neither row is a cooked product. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
-                     "expires":  "2026-08-14"
-                 },
-                 {
-                     "key":  "SANITY|Rice Vinegar|outlier",
-                     "reason":  "Real economics, verified 2026-08-06 against comparison-2026-08-06: Walmart \"Kikkoman Kosher Rice Vinegar, 10 fl oz Bottle\" $1.87 / 10 fl oz = $0.187/floz vs runner-up Bakers \"Nakano Natural Rice Vinegar\" $3.49 / 12 fl oz = $0.2908/floz (kroger-api); Hy-Vee Marukan $4.69/12 = $0.3908, Family Fare Nakano Organic $5.39/12 = $0.4492. Arithmetic reproduces from each row own size (1.87/10 = 0.187), size parsed from the name itself, and the identical Walmart row appears in the 07-30, 07-31 and 08-01 captures - a stable everyday shelf price for the mainstream brand against pricier brands elsewhere, not a parse bug. Acked by triage plan-2026-08-06 item 2026-08-03-6c488c. DO NOT RENEW BLIND at expiry: re-read the row.",
-                     "expires":  "2026-08-20"
-                 }
-             ]
+{
+  "note": "ACKNOWLEDGED price-review flags. A flag listed here with a FUTURE `expires` date is not paged. Anything else pages: an ack with no `expires`, an unparseable one, or a past one is treated as EXPIRED, because silencing a price flag forever on the strength of a typo is exactly the failure the review-flag system exists to prevent. Read by check-ad-cycles.ps1; mirrors how coverage-ack.json works for coverage regressions. WHY THIS FILE EXISTS: before 2026-07-30 a flag that stayed open simply went quiet after its first page - last_seen was refreshed on every run, so the 7-day novelty test could never elapse. Being ignored long enough was indistinguishable from being reviewed. Now an open flag RE-ARMS after 14 days and an ack is the only way to make one quiet, with a date on which someone has to look again.",
+  "how_to_ack": "Add { \"key\": \"<the flag key from out\\\\alerted-flags.json>\", \"reason\": \"why this is not a bug - be specific, a future reader needs to re-verify it\", \"expires\": \"yyyy-MM-dd\" }. Keep expiries short (weeks, not months): the expiry is the whole point, it forces the question again. Do NOT ack a flag you have not actually checked against the store.",
+  "acks": [
+    {
+      "key": "SANITY|Curry Powder|outlier",
+      "reason": "Sam's Member's Mark Salt-Free Curry Powder 18 oz \\.98 = \\.499/oz vs Walmart's Great Value 2 oz shaker \\.08 = \\.04/oz. Warehouse jar against a spice shaker; both prices reproduce from their own size. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Ginger (ground)|outlier",
+      "reason": "Sam's Member's Mark Organic Ground Ginger 7 oz \\.58 = \\.797/oz vs Hy-Vee 2 oz \\.99 = \\.495/oz. Same bulk-vs-shaker shape. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Thyme (dried)|outlier",
+      "reason": "Sam's Member's Mark Thyme Leaves 8.25 oz \\.24 = \\.878/oz vs Walmart 1.4 oz \\.78. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Ground Turmeric|outlier",
+      "reason": "Sam's Member's Mark Ground Turmeric 20 oz \\.98 = \\.399/oz vs Family Fare 1.37 oz Simply Nature organic \\.99. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Cloves (ground)|outlier",
+      "reason": "Walmart Great Value Ground Cloves 2 oz \\.18 vs Hy-Vee own-brand 2 oz \\.99 - same size, store-brand price gap, no parse involved. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Allspice (ground)|outlier",
+      "reason": "Walmart Great Value Ground Allspice 2 oz \\.12 vs Baker's Simple Truth ORGANIC 1.91 oz \\.99. Store brand vs organic. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Nutmeg (ground)|outlier",
+      "reason": "Fareway Badia Ground Nutmeg 2 oz \\.68 vs Walmart Great Value 1.5 oz \\.46. Badia is the cheap-line spice brand. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Garam Masala|outlier",
+      "reason": "Walmart 24 Mantra Organic Garam Masala 10 oz \\.43 = \\.643/oz vs Baker's Nomad Blends 2.9 oz \\.79. Bigger jar wins. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Poultry Seasoning|outlier",
+      "reason": "Walmart Great Value Poultry Seasoning 1.5 oz \\.97 vs Family Fare Sugar 'N Spice 3.4 oz \\.49. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Dill Weed (dried)|outlier",
+      "reason": "Walmart Frontier Co-op Organic Dill Weed 15.9 oz bag \\.08 = \\.51/oz vs Family Fare 0.5 oz shaker \\.89 = \\.78/oz. A 1 lb bulk bag; price and size both check out. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Parsley (dried)|outlier",
+      "reason": "Same Frontier Co-op bulk shape: Walmart Organic Parsley Leaf Flakes 16 oz \\.03 = \\.439/oz vs Sam's 3.2 oz \\.43. Real. (The Aldi \\.48/oz row named in the alert is no longer on the board.)",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Fennel Seed / Ground Fennel|outlier",
+      "reason": "Family Fare Sugar 'N Spice Fennel Seed Whole 5.6 oz \\.49 = \\.623/oz vs Baker's Simple Truth organic 1.48 oz \\.99. Bulk-line bag vs organic shaker. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Sazon Seasoning|outlier",
+      "reason": "Aldi Stonemill Sazon 3 oz \\.69 vs Baker's Goya 1.41 oz \\.69 - same dollar price, double the size. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Cajun / Creole Seasoning|outlier",
+      "reason": "REAL. Sam's 'Tony Chachere's Original Creole Seasoning 32 oz.' $5.33 / 32 oz = $0.1666/oz, and Sam's own stated unit price $0.17/oz reproduces it (sams-deals-2026-08-15, the 594-term comprehensive capture). The runner-up moved from a Walmart 6-pack 192 oz case listing (gone from every board built after the 2026-09-01 in-store channel refusal) to 'Slap Ya Mama Cajun Seasoning 16 oz Canister' $4.94 = $0.3088/oz. A warehouse 32 oz jar against a 16 oz canister is a real 46% gap, not a parse bug.",
+      "expires": "2026-09-16"
+    },
+    {
+      "key": "SANITY|Bouillon (cubes / granules / base)|outlier",
+      "reason": "Walmart Knorr Granulated Chicken Bouillon 32 oz jar \\.38 = \\.168/oz vs Baker's 8-cube 3.12 oz box \\.19. Jar vs cube box. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Yeast (baking)|outlier",
+      "reason": "Sam's Fleischmann's Instant Dry Yeast 2 x 16 oz \\.88 = \\.215/oz vs Hy-Vee Red Star 4 oz \\.48. Bulk yeast is famously this much cheaper; the 2 pk is multiplied into 32 oz correctly. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Sesame Seeds|wow",
+      "reason": "Cheapest moved 0.18 -> 0.36/oz because the prior week's winner rotated out; today's is Sam's Member's Mark Black Sesame Seed 22 oz \\.98. A price going UP is not a parse bug. Real.",
+      "expires": "2026-08-06"
+    },
+    {
+      "key": "SANITY|Parsley (dried)|wow",
+      "reason": "Same cause as the parsley outlier: the cheap Aldi row left the board and Walmart's Frontier bulk bag is now the winner. Real movement, no wrong cell.",
+      "expires": "2026-08-06"
+    },
+    {
+      "key": "SANITY|Sazon Seasoning|wow",
+      "reason": "Aldi's 3 oz Stonemill jar replaced Baker's 1.41 oz Goya as cheapest - a 53% drop that is entirely the size difference. Real.",
+      "expires": "2026-08-06"
+    },
+    {
+      "key": "SANITY|Coconut Oil|outlier",
+      "reason": "Sam's Carrington Farms Refined Coconut Oil 128 fl oz \\.98 = \\.195/oz vs Baker's 30 oz \\.79. A gallon jug. Real. (Family Fare's 'Butter Sticks With Coconut Oil' row was a WRONG product and is now excluded.)",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Thai Red Curry Paste|outlier",
+      "reason": "Walmart Mae Ploy Red Curry Paste 14 oz \\.32 = \\.451/oz vs Baker's Private Selection 4.5 oz \\.49. Mae Ploy's tub is the standard cheap format. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Harissa Paste|outlier",
+      "reason": "Walmart Mina Harissa 10 oz \\.98 = \\.498/oz vs Hy-Vee Morton & Bassett 1.9 oz \\.99 = \\.31/oz. The Hy-Vee row is a tiny gourmet jar, so the 92% gap is real on both sides. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Chili Crisp / Chili Oil|outlier",
+      "reason": "Hy-Vee Lee Kum Kee Chili Crisp Hot Honey 20 oz \\.49 = \\.325/oz vs Walmart Laoganma 7.4 oz \\.97. Real. (Baker's 'SUMM! Pork Gyoza with Chili Crisp Oil' was a WRONG product and is now excluded.)",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Mirin (Sweet Cooking Wine)|outlier",
+      "reason": "Walmart Mizkan Mirin 12 fl oz \\.12 = \\.26/floz vs Fareway Kikkoman 300 ml \\.39. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Italian Dressing|outlier",
+      "reason": "Fareway own-brand Zesty Italian 16 oz \\.99 = \\.062/floz vs Sam's food-service gallon \\.48 = \\.074. A 99-cent store-brand bottle beating a warehouse jug is unusual but both reproduce. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Tartar Sauce|outlier",
+      "reason": "Walmart Great Value Tartar Sauce 12 fl oz \\.52 vs Hy-Vee 11.5 oz \\.29. Store brand. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Jarred / Canned Gravy|outlier",
+      "reason": "Sam's Chef-mate Country Sausage Gravy #10 can 105 oz \\.58 = \\.091/oz vs Hy-Vee 10.5 oz can \\.69. Food-service can. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Minced Garlic (jarred)|outlier",
+      "reason": "Sam's Member's Mark Minced Garlic 48 oz \\.68 = \\.118/oz vs Hy-Vee Spice World 32 oz \\.99. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Hummus|outlier",
+      "reason": "Sam's Member's Mark Classic Hummus Singles 16 x 2.5 oz \\.58 = 40 oz total = \\.14/oz vs Aldi 10 oz tub \\.59. The 16 ct is multiplied into the size correctly. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Dried Arbol Chiles|outlier",
+      "reason": "Family Fare 'Chile De Arbol' 3 oz \\.49 = \\.83/oz vs Hy-Vee Don Enrique 0.5 oz \\.99 = \\.98/oz. A 3 oz bulk bag against a 0.5 oz packet - the 86% gap is the packet, not a parse. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Grits (quick)|outlier",
+      "reason": "Sam's Quaker Quick Grits 3 x 5 lb = 240 oz \\.78 = \\.045/oz vs Fareway 24 oz canister \\.99. The 3 pk is multiplied in correctly (this is the same commodity whose '.98 oz' parse bug was fixed 07-30; this row is the legitimate one). Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Oats / Oatmeal|outlier",
+      "reason": "Sam's Quaker Old Fashioned Oats 160 oz \\.98 = \\.05/oz vs Aldi 42 oz \\.99. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Lasagna Noodles|outlier",
+      "reason": "Aldi Reggano Oven Ready 12 oz \\.89 = \\.074/oz vs Walmart Great Value 16 oz \\.84. Aldi pasta really is that cheap. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Feta Cheese|outlier",
+      "reason": "Sam's Athenos Crumbled Feta 24 oz \\.28 = \\.303/oz vs Aldi 4 oz \\.89 - same brand at Walmart in 12 oz for \\.92 brackets it. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|French Bread / Baguette|outlier",
+      "reason": "Walmart Freshness Guaranteed French loaf \\.25 each vs Baker's Private Selection baguette \\.99. Both per-loaf, no basis mismatch. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Popsicles / Ice Pops|outlier",
+      "reason": "Walmart FunPops 36 ct \\.97 = \\.083 per pop vs Baker's 20 ct \\.99. Both divide by a real pop count. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Garden Salad Blend (bagged)|outlier",
+      "reason": "Sam's Garden Salad 2 lb \\.66 = \\.083/oz vs Walmart Marketside 24 oz \\.78. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Spring Mix Salad Greens|outlier",
+      "reason": "Aldi Little Salad Bar Spring Mix 12 oz \\.09 = \\.174/oz vs Baker's Simple Truth ORGANIC 16 oz \\.00. Conventional vs organic. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Spring Mix Salad Greens|wow",
+      "reason": "Same row: the cheapest fell 44% because Aldi's conventional 12 oz bag replaced an organic 16 oz as the winner. Real.",
+      "expires": "2026-08-06"
+    },
+    {
+      "key": "SANITY|Serrano Peppers|outlier",
+      "reason": "Family Fare serranos \\.99/lb vs Baker's and Fareway both \\.99/lb. Per-pound on every row. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Bok Choy|outlier",
+      "reason": "Baker's bok choy \\.49/lb vs Hy-Vee \\.99/lb (its size text prints the rate: '1.35 lbs (\\.99/lb)'). Both per-pound. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Beets (fresh)|outlier",
+      "reason": "Baker's Organic Red Beets \\.49/lb vs Family Fare organic 12 oz bunch \\.99 = \\.32/lb. Loose vs packaged. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Sweet Corn (ear)|outlier",
+      "reason": "Baker's corn on the cob \\.40/ear vs Sam's 8 ct \\.97 = \\.62/ear. Both per-ear. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Limes|outlier",
+      "reason": "Walmart fresh lime \\.25 each vs Baker's \\.69 each. Both per-each. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Lemons|outlier",
+      "reason": "Walmart fresh lemon \\.50 each vs Family Fare \\.79. Real. (Sam's 'Starry Mini Cans Lemon Lime 30 pk' was a SODA matched to lemons and is now excluded.)",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Honeydew Melon|outlier",
+      "reason": "Fareway honeydew \\.49 each vs Baker's \\.99 each. Both per-melon. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Strawberries|wow",
+      "reason": "Cheapest moved UP 42% (\\.08 -> \\.118/oz): Aldi 1 lb \\.89. Berry prices move weekly. Real.",
+      "expires": "2026-08-06"
+    },
+    {
+      "key": "SANITY|Turkey Breast (raw)|outlier",
+      "reason": "Fareway bone-in turkey breast \\.99/lb vs Walmart Butterball 3 lb boneless roast \\.44 = \\.81/lb. Bone-in vs a boneless roast - a real format difference, both per-pound.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Hand Sanitizer|outlier",
+      "reason": "Sam's Member's Mark 67.6 fl oz \\.93 = \\.117/floz vs Baker's 32 oz \\.49. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Toothbrushes|outlier",
+      "reason": "Walmart Equate 6 ct \\.00 = \\.167 each vs Baker's Colgate 4 ct \\.29. Store brand multipack vs a name brand. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Feminine Pads|outlier",
+      "reason": "Walmart Equate Maxi 48 ct \\.98 = \\.083 each vs Sam's Always 96 ct \\.48. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Drain Cleaner|outlier",
+      "reason": "Walmart Mister Plumber 32 oz \\.38 = \\.043/floz vs Sam's Drano 2 pk 160 oz \\.87. A cheap off-brand opener vs Drano. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Furniture Polish / Dusting Spray|outlier",
+      "reason": "Fareway Behold 12.5 oz \\.99 vs Sam's Pledge 3 ct 29 oz \\.52. Real.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Floor Cleaner|wow",
+      "reason": "Cheapest moved UP 148% (\\.055 -> \\.135/floz) because Sam's Member's Mark gallon left the cheapest slot. Real movement.",
+      "expires": "2026-08-06"
+    },
+    {
+      "key": "MULTIBUY|Hy-Vee|coffee",
+      "reason": "Hy-Vee weekly-ad BOGO with no regular retail in the feed - compare-deals DROPS it rather than guess, so nothing wrong is published. The recovery path is the Wednesday browser agent writing regular+size into out\\extra-deals-<date>.json.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "MULTIBUY|Hy-Vee|soda",
+      "reason": "Same: 'Poppi prebiotic soda, buy two, get one FREE' with no regular price. Dropped, not published.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "MULTIBUY|Hy-Vee|sparkling-water",
+      "reason": "Same shape - BOGO ad text, no regular retail. Dropped, not published.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "MULTIBUY|Hy-Vee|sports-drinks",
+      "reason": "'Gatorade sports drink, buy five, get five FREE' with no regular price. Dropped, not published.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "MULTIBUY|Hy-Vee|rice",
+      "reason": "'Ralston Family Farms rice, buy one, get one FREE' with no regular price. Dropped, not published.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "MULTIBUY|Hy-Vee|deodorant",
+      "reason": "BOGO ad text, no regular retail. Dropped, not published.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "MULTIBUY|Family Fare|soda",
+      "reason": "Family Fare 'Buy 2 get 1 free' on 12-packs DOES carry a regular (\\.99 / \\.29) but its size is '12 ea' / '12pk can' with no volume, so there is no unit basis. We will not assume 12 x 12 fl oz - mini-can 12-packs exist (see the Starry 7.5 oz row this same run). Dropped, not published; a real size from the store fixes it.",
+      "expires": "2026-08-13"
+    },
+    {
+      "key": "SANITY|Coleslaw Mix|outlier",
+      "reason": "REAL BULK ECONOMICS. Sam's Club coleslaw 2 lb bag \\.34 = \\.0731/oz against Baker's \\.16/oz. A club-size 32 oz bag against grocery-size 14 oz bags is the whole point of the store; the arithmetic reproduces exactly. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Dog Treats|outlier",
+      "reason": "REAL BULK ECONOMICS. Sam's Club Milk-Bone 15 lb box \\.98 = \\.0582/oz against Baker's \\.18/oz. A 240 oz box versus retail 24-36 oz boxes. Arithmetic exact; verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Dried Cranberries|outlier",
+      "reason": "REAL BULK ECONOMICS. Sam's Club Craisins 48 oz \\.62 = \\.1588/oz against Baker's \\.26/oz. Standard club-pack spread on a shelf-stable dried fruit. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Floor Cleaner|outlier",
+      "reason": "REAL BULK ECONOMICS. Sam's Club Member's Mark floor cleaner 1 gallon \\.98 = \\.0545/fl oz against Walmart \\.14. A gallon jug against 32-64 oz retail bottles. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Glass Cleaner|outlier",
+      "reason": "REAL STORE-BRAND SPREAD. Walmart Great Value glass cleaner 32 fl oz \\.74 = \\.0544/fl oz against Fareway \\.09. Store brand against national brand on a commodity cleaner; no parse involved, the size is on the bottle. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Gochujang (Korean Chili Paste)|outlier",
+      "reason": "REAL STORE-BRAND SPREAD. Walmart bettergoods gochujang 12.5 oz \\.26 = \\.2608/oz against Hy-Vee \\.42. Walmart's own new premium line undercutting imported jars is expected. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Ground Cinnamon|wow",
+      "reason": "REAL REPRICE, NOT A PARSE. The cheapest moved 0.27 -> 0.42/oz because Sam's Club repriced its bulk cinnamon to \\.4433/oz, which handed the crown to Aldi Stonemill 2.37 oz \\.99 = \\.4177/oz. Both numbers read off their raw rows; the move is the market, not the math.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Microwave Popcorn|outlier",
+      "reason": "REAL BULK ECONOMICS, and proven by the store's own per-each price. Sam's Club Orville Redenbacher's Movie Butter 1.5 oz., 36 pk. \\.48, sams_unit_price \\.26/ea, and 0.26 x 36 = 9.36 reproduces the line price - so \\.48 IS the 36-pack total and \\.26/each is correct 36-pack economics against Walmart's \\.41. Same row and same proof as the PACKBASIS flag on this product.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Peanuts|outlier",
+      "reason": "REAL BULK ECONOMICS. Sam's Club in-shell peanuts 5 lb \\.98 = \\.0748/oz against Aldi \\.14. An 80 oz bag against retail 16 oz bags. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Pickles (dill)|outlier",
+      "reason": "REAL BULK ECONOMICS, corroborated across stores. Sam's Club Mt. Olive dill pickles 1 gallon \\.34 = \\.0495/oz against Baker's \\.09. Walmart's own 128 fl oz Mt. Olive at \\.0623/oz corroborates the gallon basis, so this is jug-versus-jar, not a size parse.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "PACKBASIS|hummus|Sam's Club",
+      "reason": "CORRECT PACK BASIS, proven by Sam's own arithmetic. 'Member's Mark Classic Hummus Singles 2.5 oz., 16 ct.' \\.58 carries sams_unit_price \\.35/ea, and 16 x 0.35 = 5.60 reproduces the line price - so \\.58 IS the 16-pack total, 40 oz of hummus, and \\.1395/oz is real bulk economics rather than a pack count multiplied into the size. The audit was right to hold it for review; the review says the number is sound.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "PACKBASIS|microwave-popcorn|Sam's Club",
+      "reason": "CORRECT PACK BASIS, proven by Sam's own arithmetic. 'Orville Redenbacher's Movie Butter, 1.5 oz., 36 pk.' \\.48 carries a \\.26/ea unit price, and 0.26 x 36 = 9.36 reproduces the line price - so \\.48 IS the 36-pack total and the per-bag basis is right. Held for review correctly; reviewed and sound.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Baby Wipes|wow",
+      "reason": "REAL, and the arithmetic is exact. Sam's Club Pampers 924 ct \\.48 = \\.02/wipe. The 44% 'move' is rounding noise on a two-cent unit (0.01 -> 0.02 displayed), not a price event. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Dill Weed (dried)|wow",
+      "reason": "REAL, caused by a capture change rather than a price change. Last week's cheaper Walmart jar left the capture, so the crown fell to Great Value dill weed 0.75 oz \\.18 = \\.9067/oz. That arithmetic is exact. The board is right; the previous week's cheaper row is simply no longer available to it.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Drain Cleaner|wow",
+      "reason": "REAL STORE-BRAND PRICE. Walmart Great Value drain cleaner 80 fl oz \\.77 = \\.0721/fl oz. Size is on the bottle, arithmetic exact. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Honeydew Melon|wow",
+      "reason": "REAL, a lapsed sale. Baker's whole honeydew is \\.99 each at regular price; last week's \\.49 was a sale that expired. The board correctly shows the regular price now. Verified against the winning row in comparison-2026-07-30.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Onion Soup Mix (dry packets)|outlier",
+      "reason": "REAL STORE-BRAND SPREAD, same package shape both sides. Family Fare 'Beefy Onion Soup Mix Our Family (2 Ct)' 2.2 oz \\.29 = \\.5864/oz against Hy-Vee's IDENTICAL 2.2 oz shape at \\.99. Identical sizes, different brands - a pure store-brand spread with no basis difference to misread.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Steak Sauce (A.1. style)|wow",
+      "reason": "REAL, corroborated twice. Aldi Burman's steak sauce 10 oz \\.99 = \\.199/oz, corroborated by That's Smart at \\.78 and by A.1. 2-pack \\.68/30 oz. The -50% move is Aldi's store brand entering the cell, not a parse.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Toothbrushes|wow",
+      "reason": "REAL, caused by a capture change. Walmart Reach 2 ct \\.00 = \\.50/each; last week's \\.17/each 6-pack left the capture. Arithmetic exact on the row that remains.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Vegetable / Vegetable Beef Soup (canned)|wow",
+      "reason": "REAL, and corroborated by two other stores. Walmart Progresso 19 oz \\.48 = \\.1305/oz, with Fareway and Hy-Vee both at \\.1319/oz. Three stores within 1% of each other is not a parse error.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Furniture Polish / Dusting Spray|wow",
+      "reason": "Catalog rotation, not a parse. Last week the crown was Bakers \"Murphy Oil Soap Wood Cleaner Original\" 32 fl oz at 0.1559/oz (comparison-2026-07-30). Murphy is ABSENT from bakers-regular-2026-08-01.json (0 rows match murphy) because the daily Kroger API pull rotates its catalog, so the crown correctly moved to Fareway \"Behold Furniture Polish, Lemon\" 2.99 / 12.5 oz = 0.2392/oz, which reproduces exactly from its own captured row. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Gelatin (Jell-O)|outlier",
+      "reason": "Store brand against a name brand on an each-commodity, both parses correct. Winner Hy-Vee \"Hy-Vee Strawberry Gelatin Dessert 3 oz\" 0.99 per 1 ct box (source: verified on store page 2026-07-14, boxed gelatin open-item resolution); runner-up Walmart \"Jell-O Strawberry Gelatin Dessert Mix, 3 oz Box\" 1.62 per 1 ct. Same 3 oz box either way, so the 39 percent gap is the brand, not a size error. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Wild Rice|outlier",
+      "reason": "Real economics: store brand at double the size against a premium organic half-pound. Winner Hy-Vee \"Hy-Vee Select Wild Rice\" 10.99 / 16 oz = 0.6869/oz (Aisles Online shelf price, storeId 1465, as_of 2026-07-30); runner-up Fareway \"Lundberg Family Farms Organic Wild Rice\" 9.29 / 8 oz = 1.1612/oz. Both reproduce exactly from their captured rows. The 2026-07-28 \"Canoe cooked wild rice\" wrong-form bug is not involved - neither row is a cooked product. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
+      "expires": "2026-08-14"
+    },
+    {
+      "key": "SANITY|Rice Vinegar|outlier",
+      "reason": "Real economics, verified 2026-08-06 against comparison-2026-08-06: Walmart \"Kikkoman Kosher Rice Vinegar, 10 fl oz Bottle\" $1.87 / 10 fl oz = $0.187/floz vs runner-up Bakers \"Nakano Natural Rice Vinegar\" $3.49 / 12 fl oz = $0.2908/floz (kroger-api); Hy-Vee Marukan $4.69/12 = $0.3908, Family Fare Nakano Organic $5.39/12 = $0.4492. Arithmetic reproduces from each row own size (1.87/10 = 0.187), size parsed from the name itself, and the identical Walmart row appears in the 07-30, 07-31 and 08-01 captures - a stable everyday shelf price for the mainstream brand against pricier brands elsewhere, not a parse bug. Acked by triage plan-2026-08-06 item 2026-08-03-6c488c. DO NOT RENEW BLIND at expiry: re-read the row.",
+      "expires": "2026-08-20"
+    },
+    {
+      "key": "SANITY|Broccoli (fresh)|wow",
+      "reason": "REAL, and it is a wrong product LEAVING rather than a price move. The $1.3257 prior was Walmart 'Great Value Broccoli Florets, 14 oz' $1.16 = $0.0829/oz (price-history week 2026-08-31), a bagged product that never says frozen; the broccoli exclude list now carries great\\s+value\\s+broccoli\\s+florets so it is refused, and the crown returns to the same Aldi 'Broccoli Crowns Per LB' $2.09/lb it held on the 08-26 and 08-30 boards. The week-over-week wow arm compares cheapest_price only, never the product behind it, so it cannot tell this from a price rise.",
+      "expires": "2026-09-16"
+    },
+    {
+      "key": "SANITY|Clementines / Mandarins|outlier",
+      "reason": "REAL, a printed ad drop. Aldi weekly ad row 'Mandarins' reads 'PRICE DROPS $2.89 Per 3-Lb. Bag' (ads-2026-09-02.json, window 2026-09-02..09-08, basis per-3-lb package) = $0.9633/lb, against runner-up Sam's 'Clementine Mandarins, 5 lbs.' $7.67 = $1.534/lb. Aldi's everyday 'Mandarins Bag 3 LB' $3.99 = $1.33/lb held the crown last week, so this is the same bag on ad.",
+      "expires": "2026-09-16"
+    },
+    {
+      "key": "SANITY|Harissa Paste|wow",
+      "reason": "REAL, the 2026-09-01 in-store channel refusal landing. The $0.498 prior was '(12 pack) Mina, Harissa Spicy Moroccan Red Pepper Sauce, 10 Fl oz' $59.76 / 120 oz, a case listing sold by Walmart.com with FC fulfilment and not on the shelf. Today's crown is Walmart 'Mina Harissa Mild Sauce' $8.45 / 10 oz = $0.845/oz from the Bellevue 68123 shelf capture, with only Hy-Vee ($11.99 / 1.9 oz = $6.31/oz) beside it.",
+      "expires": "2026-09-16"
+    },
+    {
+      "key": "SANITY|Insect / Bug Spray (home)|wow",
+      "reason": "REAL, a rollback on a gallon jug. Walmart 'Ortho Home Defense Insect Killer for Indoor and Perimeter2, 1 gal.' $9.42 / 128 fl oz = $0.0736/fl oz, and Walmart's own stated unit price reads 7.4 c/fl oz; marked down from base $15.99 on a TTL rollback window 08-31..09-30, STORE fulfilment. It is a gallon of ready-to-use perimeter spray against 17.5 oz aerosols (Baker's Hot Shot twin pack 35 oz $9.29 = $0.2654/oz, Raid 17.5 oz $6.99 = $0.3994/oz). CAVEAT, recorded and not a bug: the commodity unit is oz and this row is fl oz; the different-KIND-of-quantity guard passed and every row on the line is a spray.",
+      "expires": "2026-09-16"
+    },
+    {
+      "key": "SANITY|Jalapeno Peppers|wow",
+      "reason": "REAL as the store states it: two CANNED products left. The $0.877 prior was '(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can' $4.44 / 81 oz, refused by the jalapenos fence shipped 2026-09-01 (\\bcans?\\b, escabeche); the 08-26 crown was the EMBASA escabeche can at $1.4277/lb, same class. Today's crown is Walmart 'Fresh Jalapenos, Each' $0.44 published at Walmart's own stated $1.76/lb, inside 12% of three stores' explicit per-lb prices (Aldi $1.98, Baker's $1.99, Family Fare $2.49). CAVEAT, recorded and open for Brad: the 0.25 lb size is DERIVED from Walmart's own line price over its own unit price (qty_basis 'derived lp/up'), and 0.25 lb is 4-8x a real medium jalapeno (roughly 14-25 g). Walmart's product page could not be read to check it (bot wall, not bypassed), so this is the store's arithmetic reproduced, not a weight verified on the page.",
+      "expires": "2026-09-16"
+    }
+  ]
 }
