@@ -1,12 +1,12 @@
 {
-    "slug":  "italian-chicken-tortellini-skillet-recipe-video",
-    "title":  "Italian Chicken Tortellini Skillet + RECIPE VIDEO",
+    "slug":  "italian-chicken-tortellini-skillet",
+    "title":  "Italian Chicken Tortellini Skillet",
     "source_url":  "https://www.thereciperebel.com/italian-chicken-tortellini-skillet-recipe-video/",
     "protein":  "chicken",
-    "state":  "rejected-qa",
-    "wave":  null,
+    "state":  "published",
+    "wave":  1,
     "created":  "2026-08-26T13:16:56",
-    "updated":  "2026-08-26T13:38:33",
+    "updated":  "2026-09-02T06:04:12",
     "terms":  [
                   {
                       "term":  "red pepper flakes",
@@ -71,6 +71,30 @@
                         "at":  "2026-08-26T13:38:33",
                         "by":  "source-qa",
                         "detail":  "failed QA twice: ANCHORS: extraction + live-page (thereciperebel.com fetched clean; the live page\u0027s 17 ingredients, 4 servings, and 6-step method match the transcripti"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-09-02T05:52:02",
+                        "by":  "opus5-dispatch-2026-09-02",
+                        "detail":  "repaired: SEO suffix stripped from name and slug (re-keyed costed, v2-perserving, considered-dishes, ingredient-queue, state file, cards); chicken regrammed 1400 to 1588 g on the source stated 1 lb at 3.5x, macros restatted 535/37/40/24 to 551/40/40/25, recosted; spelled-out money literal removed from intro_html; make_it split from one 4-paragraph blob into six steps aligned 1:1 with head.steps, which also fixed five dangling JSON-LD stepN anchors; shop_smart converted to the array shape in d59c837b; writer_notes[0] and [4] restated off run.json."
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-09-02T05:52:02",
+                        "by":  "recipe-source-qa",
+                        "detail":  "PASS 2026-09-02, anchors extraction + live page. The founding blocker (8 g protein literals vs a 37 g stat across intro/portion/head.description) is closed, those sites carry tokens. Chicken regram confirmed 1 lb x 3.5 = 1588 g on all four surfaces; every other line 3.5x within rounding; six spec steps map 1:1 onto the six source steps. Two notes, neither blocking: the battery scale-ratio FAIL on basil/oregano/salt/cornstarch is a parser artefact (it read only the leading tablespoon of a compound label, the full labels are exactly 3.5x and the grams agree), and diced tomatoes overshoot 3.6% by converting through cups rather than the can weight."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-09-02T05:52:15",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-09-02T06:04:12",
+                        "by":  "wave-publish",
+                        "detail":  "wave 1"
                     }
                 ]
 }

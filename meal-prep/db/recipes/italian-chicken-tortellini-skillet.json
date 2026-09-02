@@ -1,6 +1,6 @@
 {
-    "name":  "Italian Chicken Tortellini Skillet + RECIPE VIDEO",
-    "slug":  "italian-chicken-tortellini-skillet-recipe-video",
+    "name":  "Italian Chicken Tortellini Skillet",
+    "slug":  "italian-chicken-tortellini-skillet",
     "cuisine":  "Italian",
     "protein":  "chicken",
     "servings":  14,
@@ -12,11 +12,11 @@
 
                ],
     "writer_notes":  [
-                         "CONDITION FLAG: run requires \u003c=35 g carbs/serving but locked view shows carbs_g 39.9; calories 535 are inside the 400-650 band. Carb gate fails by 4.9 g. Not altered - flag for repair pass.",
+                         "CONDITION CHECK, RESTATED 2026-09-02. An earlier note here read that the run required 35 g carbs or less and that this recipe failed that gate by 4.9 g. run.json for hunt-2026-08-26-smoke5 states the band as 450 to 750 cal AND 45 g carbohydrate or less AND 35 g protein or more, so the 35 g carb figure was not this run: it is the same dispatched-band-versus-run.json mismatch the wave-3 auditor recorded on creamy-roasted-garlic-chicken the same day. Against run.json the recipe passes on all three: 550.7 cal in band, 39.9 g carb under 45, 39.8 g protein over 35. Nothing was altered to make it pass; the chicken regram below raised protein from 36.8 and left carbs where they were.",
                          "Because carbs are ~40 g/serving, prose intentionally avoids any low-carb/keto/light framing; those terms are in forbidden_prose_terms.",
                          "No cost_ps literal or cost_lines were provided in dispatch; prose uses the ${{cost_ps}} token and makes no per-line or package-cost claims, only references locked buy quantities.",
                          "All 17 locked ingredients are used by a step; no step uses an unbought ingredient. Coverage checked line by line.",
-                         "Only prose numbers used are from the locked view: servings 14, calories 535, protein_g 36.8, total time 30 min, and the locked buy quantities.",
+                         "PROSE NUMBERS. Every number in the reader-facing prose comes from the stat block of this spec, and the stat sites are {{cal}} and {{protein}} tokens rather than literals, so nothing can quote a figure the stat has moved away from. Current values, after the 2026-09-02 chicken regram: servings 14, 550.7 cal and 39.8 g protein per serving from the food-macros-db recompute over ingredients_grams, published stat 551 / 40 / 40 / 25, total time 30 minutes from the source. This note previously recorded 535 cal and 36.8 g protein, which was the build over 1400 g of chicken, before the stated 1 lb on the source line at 3.5x was applied as 1588 g.",
                          "Salt buy (1 tbsp + 1/2 tsp = 3.5 tsp) is a clean 3.5x scale of the source\u0027s 1 tsp but is high for a 14-serving batch; method includes taste-and-adjust guidance."
                      ],
     "forbidden_prose_terms":  [
@@ -33,16 +33,16 @@
                               ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  535,
-                 "protein":  37,
+                 "cal":  551,
+                 "protein":  40,
                  "carbs":  40,
-                 "fat":  24,
+                 "fat":  25,
                  "cost_ps":  "3.35"
              },
-    "intro_html":  "\u003cp\u003eSome dinners try to be fancy. This one just tries to be good, and it lands. Italian Chicken Tortellini Skillet is chicken, cheese tortellini, and a tomato cream sauce that tastes like it simmered all afternoon when it really came together in about half an hour. One pan, real food, and a plate that feels like a restaurant charged you eighteen dollars for it.\u003c/p\u003e\u003cp\u003eHere is the honest pitch. Every serving carries {{protein}} grams of protein at {{cal}} calories, and the whole thing cooks in a single skillet from start to finish in 30 minutes. That is the math I like: big flavor, tidy cleanup, and numbers that make sense.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eSome dinners try to be fancy. This one just tries to be good, and it lands. Italian Chicken Tortellini Skillet is chicken, cheese tortellini, and a tomato cream sauce that tastes like it simmered all afternoon when it really came together in about half an hour. One pan, real food, and a plate that eats like the restaurant version without the restaurant bill.\u003c/p\u003e\u003cp\u003eHere is the honest pitch. Every serving carries {{protein}} grams of protein at {{cal}} calories, and the whole thing cooks in a single skillet from start to finish in 30 minutes. That is the math I like: big flavor, tidy cleanup, and numbers that make sense.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3 1/2 tablespoons (49 g)",
-                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 lb, cut into 1/2-inch pieces (about 7 breasts) (1400 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 1/2 lb, cut into 1/2-inch pieces (about 7 breasts) (1588 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10 to 11 cloves, finely minced (32 g)",
                                 "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1 tablespoon plus 1/2 teaspoon (4 g)",
                                 "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tablespoon plus 1/2 teaspoon (4 g)",
@@ -62,9 +62,9 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Vegetable Oil, 3 1/2 tablespoons: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Boneless Skinless Chicken Breast, 3 lb, cut into 1/2-inch pieces (about 7 breasts): ~$6.88. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3 1/2 lb, cut into 1/2-inch pieces (about 7 breasts): ~$7.81. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
                        "Garlic, 10 to 11 cloves, finely minced: ~$0.44. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Diced Tomatoes, 6 cups with their juice (about three and a half 14 oz cans): ~$2.94. \u003cstrong\u003eBuy 4 cans: $3.36.\u003c/strong\u003e",
+                       "Diced Tomatoes, 6 cups with their juice (about three and a half 14 oz cans): ~$2.68. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
                        "Roasted Red Peppers, 1 3/4 cups, chopped: ~$1.53. \u003cstrong\u003eBuy 1 12oz jar: $2.13.\u003c/strong\u003e",
                        "Heavy Cream, 1 3/4 cups: ~$2.06. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
                        "Chicken Broth, 1 3/4 cups low-sodium: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
@@ -74,30 +74,35 @@
                        "Mozzarella Cheese, 3 1/2 cups, shredded: ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
                        "Parmesan Cheese, 7 tablespoons, grated: ~$0.59. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Pantry seasonings (dried basil, dried oregano, salt, dried thyme, red pepper flakes): ~$0.56. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $27.72 across 14 servings, so roughly $1.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $37.68 across 14 servings, roughly $2.69 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.17. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $28.39 across 14 servings, so roughly $2.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.39 across 14 servings, roughly $2.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.54 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.93. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eHere is where it gets good. Spread across all 14 servings, this comes out to ${{cost_ps}} a serving. That is a tortellini and cream dinner, the kind a restaurant lists in the double digits, for pocket change per box.\u003c/p\u003e\u003cp\u003eRun that math over a week of lunches and the savings stack up fast. Add our one dollar a month membership for the full board of recipes priced to the penny, and you can eat like this every week without wondering where the paycheck went.\u003c/p\u003e",
     "shop_smart":  [
-                       "Buy the chicken smart. This batch wants 3 pounds of boneless skinless breast, about 7 of them, so reach for a family pack instead of the little foam trays. You get exactly what the recipe cuts into half inch pieces, and the bigger pack usually treats your wallet better per pound.",
+                       "Buy the chicken smart. This batch wants 3 1/2 pounds of boneless skinless breast, about 7 of them, so reach for a family pack instead of the little foam trays. You get exactly what the recipe cuts into half inch pieces, and the bigger pack usually treats your wallet better per pound.",
                        "The tortellini does the heavy lifting, and you need a real pile of it, 2 pounds 11 ounces, or roughly 10 and a half cups. Fresh or frozen both work here, so buy whichever is priced better the day you shop. Frozen usually wins and it keeps until you are ready to cook.",
                        "Do not overthink the pantry. Dried basil, oregano, thyme, salt, and a scant half teaspoon of red pepper flakes are staples most of us already own, and this uses about a tablespoon each of the basil, oregano, and salt, so a jar you have on hand likely covers it with room left. Roasted red peppers come in a jar, and 1 and 3 quarter cups chopped is most of a standard one. For the tomatoes, grab the 14 ounce cans, you need about three and a half of them for the 6 cups of diced tomatoes with their juice."
                    ],
     "make_it":  [
-                    "\u003cp\u003eHeat the oil in a large skillet or saucepan over medium. Add the chicken, cut into half inch pieces, and cook 3 to 4 minutes, stirring as needed, until it is no longer pink. At 3 pounds you may want to sear in two rounds so the pan browns the meat instead of steaming it.\u003c/p\u003e\u003cp\u003eAdd the garlic, dried basil, oregano, salt, thyme, and red pepper flakes. Cook one minute, just until the kitchen smells like an Italian place. Now stir in the diced tomatoes with their juice, the chopped roasted red peppers, and the heavy cream.\u003c/p\u003e\u003cp\u003eIn a small bowl, whisk the chicken broth and cornstarch together until smooth, then stir it into the pan. That is your thickener, so do not skip the whisk or you invite lumps.\u003c/p\u003e\u003cp\u003eAdd the tortellini, bring it up to medium high until it simmers, then drop to medium low, cover, and cook 3 to 4 minutes until the pasta is tender. Stir in the chopped spinach, mozzarella, and Parmesan until the cheese melts into the sauce. Taste, then serve.\u003c/p\u003e"
+                    "Heat the oil in a large skillet or saucepan over medium. Add the chicken, cut into half inch pieces, and cook 3 to 4 minutes, stirring as needed, until it is no longer pink. At 3 1/2 pounds you may want to sear in two rounds so the pan browns the meat instead of steaming it.",
+                    "Add the garlic, dried basil, oregano, salt, thyme, and red pepper flakes. Cook one minute, just until the kitchen smells like an Italian place.",
+                    "Now stir in the diced tomatoes with their juice, the chopped roasted red peppers, and the heavy cream.",
+                    "In a small bowl, whisk the chicken broth and cornstarch together until smooth, then stir it into the pan. That is your thickener, so do not skip the whisk or you invite lumps.",
+                    "Add the tortellini, bring it up to medium high until it simmers, then drop to medium low, cover, and cook 3 to 4 minutes until the pasta is tender.",
+                    "Stir in the chopped spinach, mozzarella, and Parmesan until the cheese melts into the sauce. Taste, then serve."
                 ],
     "portion_html":  "\u003cp\u003eThis batch fills 14 containers, and fair portions come from the scale, not the eyeball. Weigh the full pot, tare off the pot weight, and divide what is left by 14. That gives you a gram target per box so nobody gets shorted the chicken and nobody ends up with a lonely scoop of sauce.\u003c/p\u003e\u003cp\u003eLadle it warm, tortellini and sauce together, and each container lands at {{cal}} calories with {{protein}} grams of protein. Cool it down, seal it up, and it reheats like it was made that morning.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thereciperebel.com/italian-chicken-tortellini-skillet-recipe-video/\" target=\"_blank\" rel=\"noopener\"\u003ethereciperebel.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eMake it once and it earns a permanent spot in the rotation. Big protein, real comfort, one pan to wash. Cook a batch this Sunday, line up your 14 containers, and let future you thank present you every time lunch rolls around.\u003c/p\u003e",
-    "cost_batch":  27.72,
-    "cost_batch_true":  37.68,
-    "cost_per_serving":  1.98,
-    "cost_per_serving_true":  2.69,
-    "cost_pantry_add":  9.49,
-    "cost_first_run":  47.17,
+    "cost_batch":  28.39,
+    "cost_batch_true":  37.39,
+    "cost_per_serving":  2.03,
+    "cost_per_serving_true":  2.67,
+    "cost_pantry_add":  9.54,
+    "cost_first_run":  46.93,
     "scaler":  {
-                   "cost":  "37.68",
+                   "cost":  "37.39",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",
@@ -110,8 +115,8 @@
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
                                    "canon":  "Boneless Skinless Chicken Breast",
-                                   "grams":  1400,
-                                   "buy":  "3 lb, cut into 1/2-inch pieces (about 7 breasts)",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb, cut into 1/2-inch pieces (about 7 breasts)",
                                    "bid":  "chicken-breast",
                                    "gpu":  "453.592"
                                },
@@ -247,7 +252,7 @@
                  "costPerServing":  3.35,
                  "recipeIngredient":  [
                                           "Vegetable Oil, 3 1/2 tablespoons (49 g)",
-                                          "Boneless Skinless Chicken Breast, 3 lb, cut into 1/2-inch pieces (about 7 breasts) (1400 g)",
+                                          "Boneless Skinless Chicken Breast, 3 1/2 lb, cut into 1/2-inch pieces (about 7 breasts) (1588 g)",
                                           "Garlic, 10 to 11 cloves, finely minced (32 g)",
                                           "Dried Basil, 1 tablespoon plus 1/2 teaspoon (4 g)",
                                           "Dried Oregano, 1 tablespoon plus 1/2 teaspoon (4 g)",
@@ -288,7 +293,7 @@
                               },
                               {
                                   "item":  "Boneless Skinless Chicken Breast",
-                                  "grams":  1400
+                                  "grams":  1588
                               },
                               {
                                   "item":  "Garlic",

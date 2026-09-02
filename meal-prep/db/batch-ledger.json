@@ -527,7 +527,7 @@
   {
       "batch":  "hunt-2026-08-24-v3-phase6b-w2",
       "opened":  "2026-08-24T19:34:01",
-      "last_activity":  "2026-08-24T19:34:02",
+      "last_activity":  "2026-09-02T05:42:36",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -549,8 +549,16 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-24T19:34:02",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "abandon",
+                         "at":  "2026-09-02T05:42:36",
+                         "detail":  "abandoned owing 6: select, audit, recipes-db, build-cards, publish, post-publish-review - wave-2 NO-GO 2026-08-24; both blockers repaired 2026-08-31, slug revived, wave-2.json reconciled to no slugs 2026-09-02, and creamy-roasted-garlic-chicken shipped under w3 the same day. Superseded, not abandoned work."
                      }
-                 ]
+                 ],
+      "abandoned":  true,
+      "abandoned_at":  "2026-09-02T05:42:36",
+      "abandon_reason":  "wave-2 NO-GO 2026-08-24; both blockers repaired 2026-08-31, slug revived, wave-2.json reconciled to no slugs 2026-09-02, and creamy-roasted-garlic-chicken shipped under w3 the same day. Superseded, not abandoned work."
   },
   {
       "batch":  "hunt-2026-08-27-ten-w1",
@@ -1765,6 +1773,67 @@
                          "stage":  "serveability",
                          "at":  "2026-09-02T05:42:16",
                          "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-26-smoke5-w1",
+      "opened":  "2026-09-02T05:52:15",
+      "last_activity":  "2026-09-02T06:04:12",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "abandoned":  false,
+      "abandoned_at":  null,
+      "abandon_reason":  null,
+      "slugs":  [
+                    "italian-chicken-tortellini-skillet"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-09-02T05:52:16",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-09-02T05:52:16",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-09-02T05:52:16",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-09-02T05:52:17",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-09-02T06:03:01",
+                         "detail":  "1/1 GO - recipe-batch-auditor waves\\wave-1.audit.md 2026-09-02, after the SEO-suffix rename, the 1400 to 1588 g chicken regram, the macro restat and the make_it split"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-09-02T06:03:54",
+                         "detail":  "compute-v2-perserving + reanchor on 1 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-09-02T06:03:54",
+                         "detail":  "1 row(s) via hunt-2026-08-26-smoke5-w1"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-09-02T06:04:12",
+                         "detail":  "1 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-09-02T06:04:12",
+                         "detail":  "1/1 wave slug(s) published through engine\\publish (visibility preserved) + 2 collateral spec(s) carried by propagate (total dirty 3)"
                      }
                  ]
   }
