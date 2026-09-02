@@ -1121,10 +1121,10 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w9",
       "opened":  "2026-08-28T07:31:01",
-      "last_activity":  "2026-09-02T12:27:13",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-09-02T15:22:41",
+      "closed":  true,
+      "closed_at":  "2026-09-02T15:22:41",
+      "close_detail":  "superseded by w16, which carried its one live slug through every stage. Not abandoned: -Abandon correctly refuses a batch whose recipe shipped.",
       "slugs":  [
                     "street-corn-chicken-rice-bowls"
                 ],
@@ -1158,6 +1158,31 @@
                          "stage":  "reconcile",
                          "at":  "2026-09-02T12:27:13",
                          "detail":  "Ownership handed over, NOT closed and NOT abandoned. street-corn-chicken-rice-bowls left w9 on 2026-09-02 for wave 16 (hunt-run -WaveClose, batch hunt-2026-08-27-highprotein-w16), which now tracks it; the other five left earlier and shipped under w13 and w15. w9 has published nothing and never will. -Abandon was ATTEMPTED and correctly REFUSED: the slug is built and unpublished, and abandoning this row would stop anything tracking that it is owed an answer. The guard is right and was not weakened. w9 becomes abandonable the moment street corn publishes under w16. That publish is blocked today by an auditor NO-GO on a real defect: the card cost widget derives its package count from grams/gpu against the feed package size and never reads pkg_g, so every drained-basis line (all 34 corn cards, every bean card, and this one) shows a count one or more cans short of what the engine buys. Bounced as its own finding in grocery/triage-plans/plan-2026-09-02.json item 2026-09-02-corn04."
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-09-02T15:22:40",
+                         "detail":  "carried by hunt-2026-08-27-highprotein-w16: its only live slug, street-corn-chicken-rice-bowls, went through this stage under w16 on 2026-09-02 (audit GO, published 19:56:18Z, post-publish reviewed)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-09-02T15:22:40",
+                         "detail":  "carried by hunt-2026-08-27-highprotein-w16: its only live slug, street-corn-chicken-rice-bowls, went through this stage under w16 on 2026-09-02 (audit GO, published 19:56:18Z, post-publish reviewed)"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-09-02T15:22:41",
+                         "detail":  "carried by hunt-2026-08-27-highprotein-w16: its only live slug, street-corn-chicken-rice-bowls, went through this stage under w16 on 2026-09-02 (audit GO, published 19:56:18Z, post-publish reviewed)"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-09-02T15:22:41",
+                         "detail":  "carried by hunt-2026-08-27-highprotein-w16: its only live slug, street-corn-chicken-rice-bowls, went through this stage under w16 on 2026-09-02 (audit GO, published 19:56:18Z, post-publish reviewed)"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-09-02T15:22:41",
+                         "detail":  "carried by hunt-2026-08-27-highprotein-w16: its only live slug, street-corn-chicken-rice-bowls, went through this stage under w16 on 2026-09-02 (audit GO, published 19:56:18Z, post-publish reviewed)"
                      }
                  ]
   },
@@ -1855,10 +1880,10 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w16",
       "opened":  "2026-09-02T12:04:48",
-      "last_activity":  "2026-09-02T14:56:37",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-09-02T15:22:31",
+      "closed":  true,
+      "closed_at":  "2026-09-02T15:22:31",
+      "close_detail":  "1/1 live and verified: street-corn-chicken-rice-bowls, audit GO (revive), serveability clean, post-publish review found no wave defect.",
       "abandoned":  false,
       "abandoned_at":  null,
       "abandon_reason":  null,
@@ -1915,6 +1940,11 @@
                          "stage":  "serveability",
                          "at":  "2026-09-02T14:56:37",
                          "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-09-02T15:22:30",
+                         "detail":  "NOT CLEAN: 0 wave defects, 2 pre-existing catalogue bugs (widget charges a covered_by line; scaleBuy leaves multi-quantity labels unscaled). Both recorded in plan-2026-09-02-3.json bounced_findings; neither is a regression from this wave."
                      }
                  ]
   }
