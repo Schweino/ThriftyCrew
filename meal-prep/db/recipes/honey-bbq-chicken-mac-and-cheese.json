@@ -13,7 +13,7 @@
                ],
     "writer_notes":  [
                          "ORPHAN RISK RESOLVED: Ground Ginger is bought (3 1/2 tsp) but the source transcription\u0027s seasoning step (step 2) omits it, listing only garlic powder, onion powder, paprika, salt, and black pepper. Ginger sits with the chicken/BBQ seasonings in the source ingredient block, so I added it to the chicken seasoning step to avoid a spec-guards orphan hard-fail. Confirm ginger belongs on the chicken.",
-                         "PASTA NAMING: locked line reads \u0027Ziti Pasta ... (about 10 cups elbow macaroni)\u0027, the dish is \u0027mac and cheese\u0027, and the transcription says only \u0027Pasta\u0027 (300 g). Three noodle identities for one line. Locked, untouched, flagged.",
+                         "PASTA NAMING, RULED 2026-09-02 from the source. The source recipe names NO shape - its ingredient line is \u0027300 g Pasta\u0027 and its own FAQ invites any short shape - so \u0027elbow macaroni\u0027 was never sourced; it was added to the buy string because the dish is called mac and cheese. It is removed. \u0027Ziti Pasta\u0027 stays: it is this estate\u0027s generic dry-semolina row (bid pasta, 16 oz box, the identical Great Value 56 g / 200 cal / 7 P / 42 C / 1 F panel every GV cut prints), and there is no elbow or macaroni commodity in db\\ingredients.json to move it to. PASTA-WATER SALT, same date: the 3 1/2 tsp booked for the boiling water is off the ingredient line. Measured across the 24 specs here that salt pasta water, 23 keep it a cook\u0027s note in the method and book one flat salt line; this was the only exception and carried 4.50 g/serving against a 1.43 median. make_it still salts the pot. Salt is zero-macro and a bulk pantry line, so no stat moves.",
                          "MACRO SANITY: per-serving protein 50.5 g reads a touch high for the ingredient set (3 lb chicken plus dairy over 14 servings). Engine figure, left as-is, flagged for a check.",
                          "No cost_lines were in this dispatch, so shop_smart makes no per-package or per-ounce cost claim. It references buy quantities only, plus the verifiable double-duty of garlic powder, paprika, black pepper, and salt across the chicken and the sauce (traceable to the ingredient lines themselves).",
                          "cost_ps, cal, and protein are written as tokens (${{cost_ps}}, {{cal}}, {{protein}}) for batch-uniform templating; no literal money or macro figures appear in prose except through those tokens.",
@@ -48,7 +48,7 @@
                                 "\u003cstrong\u003eDried Parsley (Great Value):\u003c/strong\u003e 3 1/2 teaspoons dried (2 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 3/4 teaspoons for the chicken; 1 3/4 teaspoons for the cheese sauce (3 1/2 teaspoons total) (8 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (16 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total) (63 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (42 g)",
                                 "\u003cstrong\u003eYellow Mustard (generic (USDA)):\u003c/strong\u003e 3 1/2 teaspoons (18 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 pounds, diced (1400 g)",
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 7 tablespoons (147 g)",
@@ -56,7 +56,7 @@
                                 "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 3/4 cup plus 2 tablespoons (245 g)",
                                 "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 3 1/2 teaspoons (6 g)",
                                 "\u003cstrong\u003eCooking Spray (PAM):\u003c/strong\u003e as needed for the pan (10 g)",
-                                "\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 2 1/3 pounds dry (about 10 cups elbow macaroni) (1050 g)"
+                                "\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 2 1/3 pounds dry (about 10 cups) (1050 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -68,12 +68,12 @@
                        "Boneless Skinless Chicken Breast, 3 pounds, diced: ~$6.88. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
                        "Honey, 7 tablespoons: ~$1.16. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "BBQ Sauce, 3/4 cup plus 2 tablespoons: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Ground Ginger, 3 1/2 teaspoons: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Ziti Pasta, 2 1/3 pounds dry (about 10 cups elbow macaroni): ~$2.13. \u003cstrong\u003eBuy 3 16oz boxes: $2.76.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, dried parsley, black pepper, paprika, salt, onion powder, cooking spray): ~$1.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.11 across 14 servings, so roughly $1.79 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.82 across 14 servings, roughly $2.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.69 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.51. Those containers then feed this batch and many more after it."
+                       "Ground Ginger, 3 1/2 teaspoons: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ziti Pasta, 2 1/3 pounds dry (about 10 cups): ~$2.24. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, dried parsley, black pepper, paprika, salt, onion powder, cooking spray): ~$1.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.29 across 14 servings, so roughly $1.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.04 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.36. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "Here is where it gets good. All fourteen servings, chicken and cheese and pasta included, come out to ${{cost_ps}} a serving. That is restaurant comfort food for the price of a vending machine snack, and it is built on cottage cheese and cream cheese instead of a pan of butter and flour. Cook it once, eat it all week, and let the numbers do the arguing.",
     "shop_smart":  [
@@ -92,14 +92,14 @@
     "portion_html":  "Fourteen servings out of one batch, so a kitchen scale earns its keep here. Weigh your empty container, then weigh the full pot of mac and cheese with the chicken kept separate, subtract the container, and divide that pasta total by 14. Scoop the same weight into every container so nobody gets shorted on the cheesy part. Then split the honey BBQ chicken evenly across all fourteen and lay it on top. Eyeballing it means the first few bowls run rich and the last few run sad, and the scale fixes that in about a minute.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/\" target=\"_blank\" rel=\"noopener\"\u003etheproteinplayground.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "The board that priced this whole thing out, every commodity and every substitution, runs you a dollar a month. One recipe like this pays that back before you finish the first container. Grab the membership, cook the batch, and let the savings stack up quietly in the background while you eat well.",
-    "cost_batch":  25.11,
-    "cost_batch_true":  34.82,
-    "cost_per_serving":  1.79,
-    "cost_per_serving_true":  2.49,
-    "cost_pantry_add":  12.69,
-    "cost_first_run":  47.51,
+    "cost_batch":  25.29,
+    "cost_batch_true":  35.04,
+    "cost_per_serving":  1.81,
+    "cost_per_serving_true":  2.5,
+    "cost_pantry_add":  13.32,
+    "cost_first_run":  48.36,
     "scaler":  {
-                   "cost":  "34.82",
+                   "cost":  "35.04",
                    "ing":  [
                                {
                                    "item":  "Fat Free Cottage Cheese",
@@ -168,8 +168,8 @@
                                {
                                    "item":  "Salt",
                                    "canon":  "Salt",
-                                   "grams":  63,
-                                   "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total)",
+                                   "grams":  42,
+                                   "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total)",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
@@ -233,7 +233,7 @@
                                    "item":  "Ziti Pasta",
                                    "canon":  "Ziti Pasta",
                                    "grams":  1050,
-                                   "buy":  "2 1/3 pounds dry (about 10 cups elbow macaroni)",
+                                   "buy":  "2 1/3 pounds dry (about 10 cups)",
                                    "bid":  "pasta",
                                    "gpu":  "28.350"
                                }
@@ -256,7 +256,7 @@
                                           "Dried Parsley, 3 1/2 teaspoons dried (2 g)",
                                           "Black Pepper, 1 3/4 teaspoons for the chicken; 1 3/4 teaspoons for the cheese sauce (3 1/2 teaspoons total) (8 g)",
                                           "Paprika, 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (16 g)",
-                                          "Salt, 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total) (63 g)",
+                                          "Salt, 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (42 g)",
                                           "Yellow Mustard, 3 1/2 teaspoons (18 g)",
                                           "Boneless Skinless Chicken Breast, 3 pounds, diced (1400 g)",
                                           "Honey, 7 tablespoons (147 g)",
@@ -264,7 +264,7 @@
                                           "BBQ Sauce, 3/4 cup plus 2 tablespoons (245 g)",
                                           "Ground Ginger, 3 1/2 teaspoons (6 g)",
                                           "Cooking Spray, as needed for the pan (10 g)",
-                                          "Ziti Pasta, 2 1/3 pounds dry (about 10 cups elbow macaroni) (1050 g)"
+                                          "Ziti Pasta, 2 1/3 pounds dry (about 10 cups) (1050 g)"
                                       ],
                  "steps":  [
                                "Season the 3 pounds of diced chicken breast with garlic powder, onion powder, paprika, ground ginger, salt, and black pepper.",
@@ -322,7 +322,7 @@
                               },
                               {
                                   "item":  "Salt",
-                                  "grams":  63
+                                  "grams":  42
                               },
                               {
                                   "item":  "Yellow Mustard",

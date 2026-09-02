@@ -421,15 +421,17 @@
   },
   {
    "item": "Sweet Whole Kernel Corn",
-   "brand": "Great Value",
-   "serving_grams": 125,
-   "serving_qty": 0.5,
-   "serving_unit": "cup",
-   "calories": 80,
-   "protein_g": 1,
-   "carbs_g": 14,
-   "fat_g": 1,
-   "notes": "1/2 cup (125g) per serving; from label"
+   "brand": "generic (USDA)",
+   "serving_grams": 100,
+   "serving_qty": 100,
+   "serving_unit": "g",
+   "calories": 67,
+   "protein_g": 2.29,
+   "carbs_g": 14.34,
+   "fat_g": 1.22,
+   "fiber_g": 2.0,
+   "source": "USDA FDC 169214 (SR Legacy) Corn, sweet, yellow, canned, whole kernel, drained solids; portions 1 cup = 164 g, 1 can (303 x 406) = 298 g; fetched from the FDC API 2026-09-02",
+   "notes": "DRAINED SOLIDS basis. The retired Great Value label row (1/2 cup 125 g = 80 cal) was the UNDRAINED panel - 64 cal/100 g, which matches FDC 169360 'solids and liquids', so it was a faithful transcription of the wrong basis rather than a typo. Every spec gram for this item is a drained gram. Do not put an undrained label back on this row."
   },
   {
    "item": "Seasoned Black Beans",
@@ -794,6 +796,19 @@
    "carbs_g": 1.3,
    "fat_g": 0,
    "notes": "fresh; USDA; 1 tbsp (15g); high conf"
+  },
+  {
+   "item": "Fresh Lime Juice",
+   "brand": "",
+   "serving_grams": 15,
+   "serving_qty": 1,
+   "serving_unit": "tbsp",
+   "calories": 4,
+   "protein_g": 0.1,
+   "carbs_g": 1.3,
+   "fat_g": 0,
+   "source": "mirrors the 'Lime Juice' row in this file (fresh, USDA, 1 tbsp = 15 g); the two names are the SAME food and differ only in how they are PRICED",
+   "notes": "LABEL BASIS: 1 tbsp = 15 g of squeezed juice, the same basis the 'Lime Juice' row carries; macros are identical per 100 g (26.7 cal / 0.67 P / 8.67 C / 0 F) because it is the same liquid. The split is a PRICING rule, not a food difference: Brad ruled 2026-08-28 that the plain name 'Lime Juice' prices as the bottle (bid lime-juice, floz) and this name as the fruit squeezed (bid limes, gpu 30 = the juice yield of one lime). db\\ingredients.json gained the price row that day and this macro row was never written, so the rename was blocked for five days - macro lookup is a strict item-name key with no alias fallback, and renaming without this row would have DROPPED the line from the macro recompute silently. Added 2026-09-02 with street-corn-chicken-rice-bowls, the first recipe to use it."
   },
   {
    "item": "Orange Juice",

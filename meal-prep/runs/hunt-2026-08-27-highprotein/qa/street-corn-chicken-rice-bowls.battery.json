@@ -2,7 +2,7 @@
   "battery": "qa-battery",
   "version": 1,
   "slug": "street-corn-chicken-rice-bowls",
-  "generated": "2026-08-31T15:13:52",
+  "generated": "2026-09-02T09:05:02",
   "inputs": {
     "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\street-corn-chicken-rice-bowls.json",
     "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\street-corn-chicken-rice-bowls.json"
@@ -59,8 +59,8 @@
       "check": "scale-ratio",
       "verdict": "pass",
       "numbers": {
-        "rated": 11,
-        "unrated": 8,
+        "rated": 10,
+        "unrated": 9,
         "exempt": 1,
         "recipe_ratio": 3.5,
         "lines": [
@@ -153,15 +153,6 @@
             "deviation": 0.0,
             "quantization_explained": true,
             "severity": "pass"
-          },
-          {
-            "item": "Lime Zest",
-            "source": "1 teaspoon",
-            "spec": "3.5 teaspoon",
-            "ratio": 3.5,
-            "deviation": 0.0,
-            "quantization_explained": true,
-            "severity": "pass"
           }
         ],
         "unrated_lines": [
@@ -178,8 +169,8 @@
             "why": "the two measures are not the same kind (count:scant vs volume), so a ratio needs a density this check deliberately does not carry"
           },
           {
-            "item": "Lime Juice",
-            "why": "could not read a leading amount from 'juice and zest of 3 1/2 limes; 7 tablespoons' / '2 Tablespoons'"
+            "item": "Fresh Lime Juice",
+            "why": "could not read a leading amount from 'juice of 3 1/2 limes; 7 tablespoons' / '2 Tablespoons'"
           },
           {
             "item": "Jalapeno",
@@ -194,6 +185,10 @@
             "why": "the two measures are not the same kind (count:scant vs volume), so a ratio needs a density this check deliberately does not carry"
           },
           {
+            "item": "Lime Zest",
+            "why": "could not read a leading amount from 'zest of 3 1/2 limes; 3 1/2 teaspoons' / '1 teaspoon'"
+          },
+          {
             "item": "Avocado",
             "why": "the two measures are not the same kind (count:avocado vs count:), so a ratio needs a density this check deliberately does not carry"
           }
@@ -205,14 +200,14 @@
           }
         ]
       },
-      "detail": "every rated line scaled at the recipes own 3.5x (median of 11 lines)",
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 10 lines)",
       "findings": []
     },
     {
       "check": "prose-numbers",
       "verdict": "pass",
       "numbers": {
-        "stat_claims_read": 5,
+        "stat_claims_read": 1,
         "fields": [
           "intro_html",
           "portion_html",
@@ -221,7 +216,7 @@
           "head.description"
         ]
       },
-      "detail": "every stat claim in the prose equals the stat it claims (5 read)",
+      "detail": "every stat claim in the prose equals the stat it claims (1 read)",
       "findings": []
     },
     {
@@ -237,21 +232,12 @@
     },
     {
       "check": "dash-sweep",
-      "verdict": "fail",
+      "verdict": "pass",
       "numbers": {
-        "hits": 2
+        "hits": 0
       },
-      "detail": "EN DASH: –; EM DASH: —",
-      "findings": [
-        {
-          "severity": "fail",
-          "detail": "EN DASH: –"
-        },
-        {
-          "severity": "fail",
-          "detail": "EM DASH: —"
-        }
-      ]
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
     },
     {
       "check": "servings-claim",
@@ -268,7 +254,7 @@
   ],
   "summary": {
     "checks": 6,
-    "failed": 2
+    "failed": 1
   },
   "not_checked": [
     "whether a substitution was deliberate and defensible",

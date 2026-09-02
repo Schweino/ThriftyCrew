@@ -24,7 +24,7 @@
                               ],
     "cal_floor":  250,
     "stat":  {
-                 "cal":  392,
+                 "cal":  389,
                  "protein":  40,
                  "carbs":  41,
                  "fat":  11,
@@ -37,7 +37,7 @@
                                 "\u003cstrong\u003eFat Free Cottage Cheese (Great Value):\u003c/strong\u003e 3.5 cups (798 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 1.7 cans (196 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.8 cans (448 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 9 oz (252 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 6 oz, drained (174 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (350 g)",
                                 "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 peppers (350 g)",
                                 "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 7 tbsp (56 g)",
@@ -50,7 +50,7 @@
                        "Fat Free Cottage Cheese, 3.5 cups: ~$3.20. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
                        "Diced Green Chiles, 1.7 cans: ~$1.73. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
                        "Seasoned Black Beans, 1.8 cans: ~$2.92. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 9 oz: ~$0.36. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 6 oz, drained: ~$0.36. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.76. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Red Bell Pepper, 3 peppers: ~$4.43. \u003cstrong\u003eBuy 3 each: $4.56.\u003c/strong\u003e",
                        "Mexican Cheese Blend, 3.5 oz: ~$0.74. \u003cstrong\u003eBuy 1 8 oz bag: $1.73.\u003c/strong\u003e",
@@ -129,8 +129,8 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  252,
-                                   "buy":  "9 oz",
+                                   "grams":  174,
+                                   "buy":  "6 oz, drained",
                                    "bid":  "canned-corn",
                                    "gpu":  "28.350"
                                },
@@ -182,7 +182,7 @@
                                           "Fat Free Cottage Cheese, 3.5 cups (798 g)",
                                           "Diced Green Chiles, 1.7 cans (196 g)",
                                           "Seasoned Black Beans, 1.8 cans (448 g)",
-                                          "Sweet Whole Kernel Corn, 9 oz (252 g)",
+                                          "Sweet Whole Kernel Corn, 6 oz, drained (174 g)",
                                           "Yellow Onion, 3 onions (350 g)",
                                           "Red Bell Pepper, 3 peppers (350 g)",
                                           "Taco Seasoning, 7 tbsp (56 g)",
@@ -220,7 +220,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  252
+                                  "grams":  174
                               },
                               {
                                   "item":  "Yellow Onion",

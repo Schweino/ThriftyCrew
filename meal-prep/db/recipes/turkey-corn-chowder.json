@@ -23,9 +23,9 @@
 
                               ],
     "stat":  {
-                 "cal":  581,
-                 "protein":  36,
-                 "carbs":  58,
+                 "cal":  569,
+                 "protein":  37,
+                 "carbs":  57,
                  "fat":  21,
                  "cost_ps":  "4.90"
              },
@@ -37,7 +37,7 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1.75 tbsp (15 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 15.3 potatoes (3268 g)",
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3.25 lb (1517 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2.3 cans (1001 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 2.3 cans (691 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3 tbsp (42 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (41 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 6 tbsp (49 g)",
@@ -146,7 +146,7 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  1001,
+                                   "grams":  691,
                                    "buy":  "2.3 cans",
                                    "bid":"canned-corn",
                                    "gpu":28.3495
@@ -232,7 +232,7 @@
                                           "Garlic, 1.75 tbsp (15 g)",
                                           "Potato, 15.3 potatoes (3268 g)",
                                           "Turkey Breast, 3.25 lb (1517 g)",
-                                          "Sweet Whole Kernel Corn, 2.3 cans (1001 g)",
+                                          "Sweet Whole Kernel Corn, 2.3 cans (691 g)",
                                           "Butter, 3 tbsp (42 g)",
                                           "Olive Oil, 3 tbsp (41 g)",
                                           "All-Purpose Flour, 6 tbsp (49 g)",
@@ -277,7 +277,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  1001
+                                  "grams":  691
                               },
                               {
                                   "item":  "Butter",

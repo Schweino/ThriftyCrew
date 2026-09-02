@@ -50,6 +50,22 @@
 
   Usage: .\audit-spec-contradictions.ps1 [-Baseline] [-Quiet] [-SelfTest]
 #>
+# THIS AUDIT IS CATALOGUE-WIDE BY DESIGN, AND UNTIL 2026-09-02 IT SAID SO ONLY IN THE HEADER.
+#
+# The param block carried no [CmdletBinding()], which in PowerShell means unrecognised named arguments do
+# not fail - they fall into $args and are discarded. So `audit-spec-contradictions.ps1 -Slugs a,b` ran a
+# FULL unscoped sweep over all 584 specs and exited 0, while the caller believed it had audited two. A
+# scoping argument that is silently ignored is worse than one that does not exist: the verdict is about a
+# different population than the operator thinks, and nothing anywhere says so. Found 2026-09-02 by a
+# caller that passed -Slugs and got a catalogue verdict back.
+#
+# THE FIX IS A LOUD REFUSAL, NOT A NEW -Slugs. Scoping this detector would be the wrong repair twice over.
+# Its verdict is a RATCHET against out\spec-contradictions-baseline.json - per-class counts over the whole
+# catalogue - so a scoped run cannot produce a comparable number, and a scoped count checked against a
+# catalogue baseline would read as "everything got better" every single time. Its siblings that ARE
+# scopable (audit-vocab-integrity, audit-unbid-ingredients, audit-cost-plausibility) take -Slugs because
+# their findings are per-recipe. This one's are not. Now a bogus argument stops the run and names itself.
+[CmdletBinding()]
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
@@ -605,6 +621,54 @@ if ($SelfTest) {
   Chk 'CLEAN TWIN no package map - the class skips rather than guesses' ($bc4.Count -eq 0) (($bc4 | ForEach-Object { $_.why }) -join ' | ')
   $bc5 = @(Get-SpecContradictions $buyBad $vocabFx | Where-Object { $_.cls -eq 'BUY-COVERAGE' })
   Chk 'CLEAN TWIN a 2-arg caller gets no BUY-COVERAGE findings' ($bc5.Count -eq 0) (($bc5 | ForEach-Object { $_.why }) -join ' | ')
+
+  # ---- THE ARGUMENT SINK (2026-09-02) --------------------------------------------------------------
+  # These two cases drive THIS FILE as a subprocess, because the defect lives in parameter BINDING and
+  # nothing inside the script body can observe it - a predicate test would be a self-test that cannot
+  # reach the changed code. -Root points at an empty directory so the run finds no specs and no baseline
+  # and returns in milliseconds: the real param block, the real entry point, none of the catalogue.
+  # -SelfTest is never passed to the child, so this cannot recurse.
+  $__scratch = Join-Path ([IO.Path]::GetTempPath()) ('asc-argsink-' + [Guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Force -Path $__scratch | Out-Null
+  # Start-Process, NOT the call operator. This file runs under $ErrorActionPreference='Stop', and in
+  # PowerShell 5.1 a NATIVE process's stderr becomes NativeCommandError records in the caller's error
+  # stream the moment it is redirected at all - `2>&1` AND `2> file` both do it - which under Stop
+  # terminates this script mid-suite. Both were tried and both killed the run before any Chk printed. The
+  # whole point of these fixtures is to observe a BINDING FAILURE, so the child is guaranteed to write to
+  # stderr every time; Start-Process hands the streams to files without ever touching $error.
+  function __Run { param([string[]]$A)
+    $o = Join-Path $__scratch 'o.txt'; $e = Join-Path $__scratch 'e.txt'
+    $args2 = @('-NoProfile','-ExecutionPolicy','Bypass','-File',('"' + $PSCommandPath + '"')) + $A
+    $p = Start-Process -FilePath 'powershell' -ArgumentList $args2 -Wait -PassThru -NoNewWindow `
+           -RedirectStandardOutput $o -RedirectStandardError $e
+    $txt = ''
+    if (Test-Path $o) { $txt += [IO.File]::ReadAllText($o) }
+    if (Test-Path $e) { $txt += [IO.File]::ReadAllText($e) }
+    # A hashtable, not two Write-Outputs: a function that emits twice returns an ARRAY here and the caller
+    # would silently read the first element as the whole answer.
+    return @{ rc = $p.ExitCode; text = $txt }
+  }
+  try {
+    # MUST FIRE - the founding bug, frozen as the exact shape a caller used: an argument this script does
+    # not declare. Before [CmdletBinding()] it landed in $args, the full 584-spec sweep ran anyway, and the
+    # exit code was 0 - a scoped verdict that was never scoped.
+    $__bogus = __Run @('-Root', $__scratch, '-Quiet', '-TotallyBogusParam', '1')
+    Chk 'MUST FIRE  an undeclared argument now STOPS the run instead of vanishing into $args (-TotallyBogusParam 1)' `
+      ($__bogus.rc -ne 0) ("exit $($__bogus.rc) - the argument was swallowed and an unscoped sweep reported success")
+    Chk 'MUST FIRE  ...and the refusal NAMES the argument, so the caller can see what it believed it passed' `
+      ($__bogus.text -match 'TotallyBogusParam') ($__bogus.text.Trim())
+    # THE SAME SHAPE THAT STARTED THIS: -Slugs is not a parameter of this catalogue-wide audit and must
+    # now say so out loud rather than run a full sweep and call it scoped.
+    $__slugs = __Run @('-Root', $__scratch, '-Quiet', '-Slugs', 'a,b')
+    Chk 'MUST FIRE  -Slugs a,b is refused rather than silently running the whole catalogue' `
+      ($__slugs.rc -ne 0 -and $__slugs.text -match 'Slugs') ("exit $($__slugs.rc) :: " + $__slugs.text.Trim())
+    # CLEAN TWIN - every switch this script really declares must still bind, or the refusal would have
+    # been bought by breaking the callers (check-ad-cycles passes -Quiet; wave-publish P5 passes -Quiet).
+    $__q = __Run @('-Root', $__scratch, '-Quiet')
+    Chk 'CLEAN TWIN -Quiet still binds and the run completes' ($__q.rc -eq 0) ("exit $($__q.rc) :: " + $__q.text.Trim())
+    $__ia = __Run @('-Root', $__scratch, '-Quiet', '-IncludeArchive')
+    Chk 'CLEAN TWIN -IncludeArchive still binds' ($__ia.rc -eq 0) ("exit $($__ia.rc) :: " + $__ia.text.Trim())
+  } finally { Remove-Item $__scratch -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }

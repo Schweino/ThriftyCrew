@@ -14,11 +14,11 @@
     "writer_notes":  [],
     "forbidden_prose_terms":  [],
     "stat":  {
-                 "cal":  556,
+                 "cal":  557,
                  "protein":  53,
-                 "carbs":  70,
-                 "fat":  5,
-                 "cost_ps":  "2.83"
+                 "carbs":  71,
+                 "fat":  6,
+                 "cost_ps":  "2.88"
              },
     "intro_html":  "This is a week of burrito-bowl dinners done the easy way, bright salsa verde chicken slow-cooked until it falls apart, piled over rice with black beans, corn, and cheddar. It is loaded with lean protein and a squeeze of lime keeps it tasting fresh instead of heavy. A build-your-own bowl at the burrito chain costs you $11 or more each time, and this makes the same thing for a fraction of that per serving.",
     "ingredients_display":  [
@@ -28,7 +28,7 @@
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 limes (42 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 cans (910 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 1/2 cups (420 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 2 1/2 cups (420 g)",
                                 "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 3/4 cups (196 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (330 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (350 g)",
@@ -41,16 +41,16 @@
                        "Boneless Skinless Chicken Breast, 6 lb: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
                        "Salsa Verde, 2 jars: ~$5.24. \u003cstrong\u003eBuy 2 16oz jars: $5.28.\u003c/strong\u003e",
                        "Lime Juice, 2 limes: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Seasoned Black Beans, 4 cans: ~$5.94. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 2 1/2 cups: ~$0.59. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 1/2 cups: ~$0.86. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
                        "Fat Free Cheddar, 1 3/4 cups: ~$1.94. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.72. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Green Bell Peppers, 3 peppers: ~$2.25. \u003cstrong\u003eBuy 3 each: $2.31.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, salt, black pepper, garlic powder): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.33 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.86 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.63. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $30.62 across 14 servings, so roughly $2.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.49 across 14 servings, roughly $2.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.27. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -70,14 +70,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot weight you noted at the start, and divide by 14. Scoop that same weight into each of the 14 containers so every burrito bowl lands with an equal, filling share of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://realfoodwholelife.com/recipes/slow-cooker-salsa-verde-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eReal Food Whole Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen burrito bowls for two, at a per-bowl price that undercuts a single trip to the burrito line. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  30.33,
-    "cost_batch_true":  32.86,
-    "cost_per_serving":  2.17,
-    "cost_per_serving_true":  2.35,
-    "cost_pantry_add":  6.77,
-    "cost_first_run":  39.63,
+    "cost_batch":  30.62,
+    "cost_batch_true":  33.49,
+    "cost_per_serving":  2.19,
+    "cost_per_serving_true":  2.39,
+    "cost_pantry_add":  6.78,
+    "cost_first_run":  40.27,
     "scaler":  {
-                   "cost":  "32.86",
+                   "cost":  "33.49",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -175,7 +175,7 @@
     "head":  {
                  "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, salsa verde chicken burrito bowl, budget dinner",
-                 "costPerServing":  2.83,
+                 "costPerServing":  2.88,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 6 lb (2495 g)",
                                           "Salsa Verde, 2 jars (900 g)",

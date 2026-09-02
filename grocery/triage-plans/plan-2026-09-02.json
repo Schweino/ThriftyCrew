@@ -1,0 +1,475 @@
+﻿{
+    "generated":  "2026-09-02T05:05:00",
+    "round":  1,
+    "board_week":  "2026-08-31 (comparison-2026-08-31.json, mtime 2026-09-01 16:39:53; triage-due printed IDLE and no BOARD line; recipe-estate item, no board cell is measured)",
+    "queue_ids_seen":  [
+                           "2026-09-02-corn01",
+                           "2026-09-02-corn02",
+                           "2026-09-02-corn03"
+                       ],
+    "queue_state":  "triage-due.ps1 returned IDLE (2 items parked needs-brad, untouched). The three ids below are minted for the dispatched finding; no matching rule changes, so there is no routing artifact.",
+    "routing_artifact":  null,
+    "items":  [
+                  {
+                      "queue_id":  "2026-09-02-corn01",
+                      "subject":  "Recipe estate: Sweet Whole Kernel Corn is the one canned vegetable on a GROSS basis; 17 drained-basis lines under-buy cans and every corn line carries the wrong macro basis",
+                      "classification":  "parse-basis-bug",
+                      "evidence":  [
+                                       "meal-prep\\db\\ingredients.json | {\"item\":\"Sweet Whole Kernel Corn\",\"bid\":\"canned-corn\",\"gpu\":28.3495,\"unit\":\"oz\",\"board\":\"recipe\",\"buy_pkg_g\":432,\"buy_pkg_label\":\"can\"} | 432 g = the 15.25 oz NET weight, liquid included (correct as the purchase unit; this row does not change)",
+                                       "meal-prep\\db\\densities.json items | \"Sweet Whole Kernel Corn\": {\"can\":432,\"cup\":165} | can == buy_pkg_g (gross), cup == the USDA DRAINED cup (FDC 169214: 1 cup = 164 g). Siblings: \"Kidney Beans\": {\"can\":255,\"cup\":172}; \"Canned Black Beans\": {\"can\":255,\"cup\":172,\"note\":\"drained grams per 15oz can\"}; \"Hominy\": {\"can\":340,\"cup\":165}; \"Pineapple Chunks\": {\"can\":567,\"cup\":165} (also gross, see corn03)",
+                                       "meal-prep\\food-macros-db.json (UTF-8 BOM) | {\"item\":\"Sweet Whole Kernel Corn\",\"brand\":\"Great Value\",\"serving_grams\":125,\"serving_qty\":0.5,\"serving_unit\":\"cup\",\"calories\":80,\"protein_g\":1,\"carbs_g\":14,\"fat_g\":1,\"notes\":\"1/2 cup (125g) per serving; from label\"} | an UNDRAINED label panel: 64 cal/100 g, 250 g per cup with liquid",
+                                       "USDA FDC 169214 (SR Legacy) \u0027Corn, sweet, yellow, canned, whole kernel, drained solids\u0027, fetched live from api.nal.usda.gov 2026-09-02 05:00 | per 100 g: 67.0 cal / 2.29 P / 14.34 C / 1.22 F / 2.0 fiber | foodPortions: \u00271 can (303 x 406)\u0027 = 298 g, \u00271 cup\u0027 = 164 g, \u00271 can (12 oz) yields\u0027 = 211 g | the estate\u0027s cache (db\\fdc-cache.json:18587-18600) holds the same macros with portions [] - the portion list was never cached. FDC 169361 (white) is identical.",
+                                       "USDA FDC 169360 \u0027Corn, sweet, white, canned, whole kernel, no salt added, solids and liquids\u0027 (db\\fdc-cache.json:18618-18628) | 64.0 cal / 1.95 P / 15.4 C / 0.5 F per 100 g | the UNDRAINED basis; agrees with the GV label\u0027s 80/125 = 64 cal/100 g, so the label row is a faithful undrained transcription, not a typo",
+                                       "meal-prep\\db\\recipes\\street-corn-chicken-rice-bowls.json | scaler.ing {\"item\":\"Sweet Whole Kernel Corn\",\"grams\":1148,\"buy\":\"7 cups, drained\",\"bid\":\"canned-corn\"} = 164.0 g/cup, exactly the FDC drained cup | cost_lines: \u0027Sweet Whole Kernel Corn, 7 cups, drained: ~$1.62. \u003cstrong\u003eBuy 3 cans: $1.83.\u003c/strong\u003e\u0027 | stat {\"cal\":597,\"protein\":45,\"carbs\":54,\"fat\":22,\"cost_ps\":\"3.62\"} | intro_html \u0027...stays under 600 calories\u0027 and head description \u0027...under 600 calories each\u0027 are literal bounded claims (protein is a {{protein}} token, the 600 is not)",
+                                       "meal-prep\\db\\costed.json (mtime 2026-09-01 19:15:07) street-corn-chicken-rice-bowls line | item=Sweet Whole Kernel Corn g=1148 util=1.62 basis=board:canned-corn:walmart buy_n=3 pkg_g=432 | NO \u0027+drained\u0027 suffix. Same file, turkey-taco-soup Kidney Beans | g=892 basis=board:kidney-beans:walmart+drained buy_n=4 pkg_g=255 | the beans run through the engine\u0027s drained branch, corn does not",
+                                       "engine\\cost-recipes.ps1:141 | if($canG -gt 0 -and $canG -lt ([double]$row.buy_pkg_g * 0.95)){ $DRAINED[$name]=@{ net=[double]$row.buy_pkg_g; drained=$canG } } | :232 $ppg = $ppg * ($dr.net/$dr.drained) | :298 if($DRAINED.ContainsKey($ing.item)){ $pgG = $DRAINED[$ing.item].drained } | the drained basis is INFERRED from a magnitude comparison between two fields; a row whose densities.can copies the net weight (432 == 432) opts out silently",
+                                       "All 34 canned-corn spec lines (all visibility \u0027paid\u0027; read 2026-09-02 05:00), by buy text | 12 \u0027N cans\u0027 at 385-441 g/can (gross, mean 432) | 5 ounce lines \u00274.5 oz\u0027/\u00279 oz\u0027/\u002710.25 oz\u0027 at 130/252/289 g (gross) | 6 \u0027cups, drained\u0027 at 150-168 g/cup | 11 bare \u0027cups\u0027 at 160-168 g/cup | the 17 cup lines are DRAINED grams (USDA cup 164), the 17 can/oz lines are GROSS grams; one item, two bases, nothing in the row says which",
+                                       "Precedent, measured over every \u0027N cans\u0027 line of the canned class (65 lines, 587 specs): Kidney Beans 245-268 g/can (10 lines), Chickpeas 252-259 (5), Cannellini 251-258 (11), Seasoned Black Beans 228-300 (25, note the spread), Hominy 340-345 (2) = DRAINED grams per can, matching densities.can | Sweet Whole Kernel Corn 385-441 (12) and Pineapple Chunks 567-578 (2) = GROSS | the catalogue\u0027s encoding for a canned item the recipe drains is drained grams everywhere; corn and pineapple are the two outliers",
+                                       "meal-prep\\db\\bid-decisions-2026-07-26.json:51 | {\"item\":\"Sweet Whole Kernel Corn\",\"bid\":\"canned-corn\",...,\"why\":\"db canned-corn (per-oz). The canned-sweet-corn per-each drained-can basis is a separate calibration issue; converging to db keeps cheapest==everyday\"} | the drained basis was named as open on 07-26 and never closed",
+                                       "pipeline\\audit-store-integrity.ps1:265 | if([double]$row.serving_qty -ne 1){ continue } | section 3 BASE-DRIFT skips every food-DB row whose serving is stated as serving_qty 0.5 + unit \u0027cup\u0027, the shape of every Great Value canned-vegetable label row. Live run 2026-09-02 05:01: \u0027store-integrity: 0 HARD, 9 WARN\u0027, none on corn. Simulated with serving_qty normalised: 32 densities-comparable rows are skipped today, 9 would fire, 4 are this class: Sweet Whole Kernel Corn 165 vs 125/0.5=250 (-34.0%), Canned Black Beans 172 vs 260 (-33.8%), Canned Pinto Beans 172 vs 260 (-33.8%), Seasoned Black Beans 172 vs 260 (-33.8%); plus Yellow Onion 115 vs 80/0.5=160 (-28.1%), Fresh Basil 1.5 vs 5/2=2.5 (-40%), 1/3 Fat Cream Cheese 15 vs 14 (+7.1%), BBQ Sauce (Sugar Free) 17 vs 16 (+6.2%), Fresh Mint 1.6 vs 1.5 (+6.7%). 0 rows double-encode (serving_qty != 1 AND a leading number in serving_unit), so qty = serving_qty x Get-LabelUnitQty is unambiguous.",
+                                       "Macro arithmetic positive control (pipeline\\macro-recompute-lib.ps1 Get-MacroRecompute over ingredients_grams, today\u0027s food DB): street-corn recomputes 596.9 vs stored 597; bbq-chicken 435.2 vs 435; crack-chicken 523.9 vs 524. TEN specs already fail the 1-unit reproduce check BEFORE any change (pre-existing stat drift, not this defect): arroz-con-carne-molida 700.2 vs 703, crockpot-mexican-turkey-casserole 562.2 vs 565, ground-turkey-calabacitas-skillet 566.5 vs 570, green-chile-ground-turkey-skillet 721.0 vs 723, turkey-taco-soup 617.0 vs 619, beef-burrito-bowls 500.8 vs 499, slow-cooker-bbq-pulled-chicken-bowls 571.3 vs 574, tex-mex-beef-rice-skillet-bowls 580.6 vs 576, chicken-enchilada-rice-bowls 423.6 vs 426, carbonada-chilean-beef-corn-soup 576.2 vs 578",
+                                       "Buy arithmetic positive control: for all 34 lines costed.json buy_n == ceil(grams/432 - 0.02) and pkg_g == 432 (street-corn 3, pastel-de-choclo 4, turkey-noodle 2); the live board is exactly the gross-can math"
+                                   ],
+                      "ruling":  {
+                                     "question":  "What does \u00271 cup corn\u0027 mean in this catalogue?",
+                                     "answer":  "DRAINED KERNELS. One cup = 164 g drained solids (FDC 169214), one 15.25 oz can yields 298 g drained (FDC 169214 portion \u00271 can (303 x 406)\u0027), and every corn gram in a spec is a drained gram.",
+                                     "why":  "It is the encoding the catalogue already uses for every other canned item a recipe drains (all 63 non-corn, non-pineapple \u0027N cans\u0027 lines are drained grams; densities.can is a drained yield with the literal note \u0027drained grams per 15oz can\u0027; Chickpeas / Kidney / Cannellini macro rows are FDC \u0027canned, drained solids\u0027); the engine already implements it (cost-recipes.ps1 DRAINED branch); densities.cup for corn is ALREADY the drained cup; and 17 of 34 corn lines were authored on it. The other 17 are internally consistent but on the wrong side of the catalogue\u0027s own convention.",
+                                     "single_encoding":  "densities.items.\u0027Sweet Whole Kernel Corn\u0027.can = 298 (cited), which is \u003c 432 x 0.95 = 410.4 and therefore admits corn to $DRAINED with no engine change; the food-DB row moves to the FDC 169214 drained-solids basis per 100 g (the Chickpeas precedent); the 17 gross lines are re-expressed to drained grams (g x 298/432, rounded) so the drained engine reads them right; the 17 cup lines keep their grams.",
+                                     "what_the_other_two_break":  {
+                                                                      "separate_drained_macro_row":  "A second item name for one SKU. audit-store-integrity Test-MissingSide fires HARD on a macro row with no ingredients.json row, so it needs a second price row or an alias too; a duplicate NAME is two seeding paths (orphan-name memory); the shop-this-recipe list prints two corn lines when a recipe has both; and it fixes nothing on BUY - the 17 drained lines still divide by 432 unless that row also gets a drained can, at which point it is this plan plus an extra row and a permanent two-basis item.",
+                                                                      "re_express_the_17_cup_lines_in_gross_grams":  "Fixes buy and keeps the label panel, but \u00277 cups, drained (1664 g)\u0027 is 238 g/cup against densities.cup 165, so friendly-amt-lib regenerates the label as \u002710 cups\u0027 and every basis relabel / measure-vs-grams pass reads a 1.45x label-vs-grams disagreement; per-serving corn grams then include the 31% brine that is poured off; densities.cup would have to move to 250 (the undrained cup), which contradicts what \u0027cups, drained\u0027 measures; and corn becomes the ONLY canned vegetable on a gross basis while every bean and hominy line is drained, so the same question reopens on every future corn spec."
+                                                                  }
+                                 },
+                      "surface_fix":  {
+                                          "what":  "Move corn onto the drained basis end to end: densities can, food-DB row, and the 17 gross-basis spec lines; then recost, restat and re-anchor all 34 specs",
+                                          "files":  [
+                                                        "meal-prep\\db\\densities.json",
+                                                        "meal-prep\\food-macros-db.json",
+                                                        "meal-prep\\db\\recipes\\\u003c34 slugs listed in blast_radius.cell_effects\u003e"
+                                                    ],
+                                          "exact_change":  "(1) densities.json items.\u0027Sweet Whole Kernel Corn\u0027: {\"can\":432,\"cup\":165} -\u003e {\"can\":298,\"cup\":165,\"note\":\"drained solids per 15.25 oz (303 x 406) can, USDA FDC 169214 (cup 164 there; 165 kept, within rounding); net 432 g stays on ingredients.buy_pkg_g\"}. (2) food-macros-db.json row \u0027Sweet Whole Kernel Corn\u0027: serving_qty 100, serving_unit \u0027g\u0027, serving_grams 100, calories 67, protein_g 2.29, carbs_g 14.34, fat_g 1.22, fiber_g 2.0, brand \u0027generic (USDA)\u0027, source \u0027USDA FDC 169214 (SR Legacy) Corn, sweet, yellow, canned, whole kernel, drained solids; portions 1 cup = 164 g, 1 can (303 x 406) = 298 g; fetched from FDC API 2026-09-02\u0027, notes \u0027DRAINED SOLIDS basis. The retired Great Value label row (1/2 cup 125 g = 80 cal) was the UNDRAINED panel (64 cal/100 g, matches FDC 169360 solids and liquids); every spec gram for this item is a drained gram. Do not put an undrained label back on this row.\u0027 Preserve the BOM and splice the row; no ConvertTo-Json round trip. (3) The 17 gross lines: ingredients_grams[].grams, scaler.ing[].grams and the \u0027(N g)\u0027 in ingredients_display move to round(g x 298/432): arroz-con-carne-molida 1008-\u003e695, cheesy-turkey-sausage-vegetable-rice-casserole 385-\u003e266, chili-cornbread-casserole 757-\u003e522, crockpot-mexican-turkey-casserole 404-\u003e279, green-chile-ground-turkey-skillet 866-\u003e597, ground-turkey-calabacitas-skillet 433-\u003e299, high-protein-beef-bean-burrito 868-\u003e599, pastel-de-choclo-chilean-beef-corn-bake 1323-\u003e913, pulled-pork-enchilada-bake 844-\u003e582, turkey-corn-chowder 1001-\u003e691, turkey-noodle-casserole 520-\u003e359, turkey-taco-soup 866-\u003e597, carbonada-chilean-beef-corn-soup 130-\u003e90, creamy-kielbasa-potato-soup 289-\u003e199, green-chile-chicken-burrito 252-\u003e174, pulled-pork-shepherds-pie 289-\u003e199, turkey-tamale-pie 289-\u003e199. The 12 \u0027N cans\u0027 labels stay as written (2 cans = 2 x 298 = 596 g, ceil(596/298 - 0.02) = 2). The 5 ounce labels name the GROSS purchase (\u002710.25 oz\u0027 is 289 g net) and must become \u0027\u003coz\u003e can, drained\u0027 or the drained ounces (\u00277 oz drained (199 g)\u0027); hand-set them, because friendly-amt-lib would otherwise regenerate \u00277 oz\u0027 from 199 g and contradict the source\u0027s can size. (4) The 17 cup lines: grams unchanged; cost_lines, buy lines and stat move via the recost/restat chain."
+                                      },
+                      "root_cause":  "The drained basis is not a declared property of an ingredient; it is INFERRED at cost-recipes.ps1:141 from densities.can being at least 5% below buy_pkg_g. Those are meant to be one can on two bases (drained vs net), so a row that copies the net weight into densities.can (corn 432/432, Pineapple Chunks 567/567) opts out of the drained branch silently, and nothing compares a spec line\u0027s basis (\u0027cups, drained\u0027 at the USDA 164 g cup) with the row\u0027s basis. Writers therefore followed their sources: 17 lines drained, 17 lines gross, one item. The only guard on this seam, audit-store-integrity section 3 BASE-DRIFT (densities cup vs food-DB serving), skips every row with serving_qty != 1 (line 265), and \u00271/2 cup (125 g)\u0027 with serving_qty 0.5 is the shape of every Great Value canned-vegetable label row, so the 165-vs-250 g/cup split has been invisible since the row was written. bid-decisions-2026-07-26.json:51 named the drained-can basis as \u0027a separate calibration issue\u0027 and it was never closed.",
+                      "root_fix":  {
+                                       "what":  "Make the basis VISIBLE and GUARDED rather than inferred: (a) BASE-DRIFT normalises the food-DB serving by serving_qty as well as by the label sentence, so the canned-label class is no longer skipped; (b) a new HARD predicate in audit-store-integrity: a spec line whose buy text says \u0027drained\u0027 on an item whose densities.can is not below 0.95 x buy_pkg_g is a basis contradiction (the recipe drains what the engine buys gross).",
+                                       "files":  [
+                                                     "meal-prep\\pipeline\\audit-store-integrity.ps1"
+                                                 ],
+                                       "exact_change":  "(a) section 3, line 265: replace `if([double]$row.serving_qty -ne 1){ continue }` with: $labelQty = Get-LabelUnitQty ([string]$row.serving_unit) $u; if($null -eq $labelQty -or $labelQty -le 0){ continue }; $sq = [double]$row.serving_qty; if($sq -le 0){ $sq = 1 }; $qty = $sq * $labelQty; $dbPerUnit = [double]$row.serving_grams / $qty. Measured: 0 rows carry both encodings, so the product is never double-applied. Keep BASE-DRIFT at WARN (its 5% band is still rounding-noise territory for most rows). (b) new function Test-DrainedLineWithoutYield { param([string]$BuyText,[double]$CanG,[double]$PkgG) return ($BuyText -match \u0027(?\u003c!un)\\bdrained\\b\u0027 -and $PkgG -gt 0 -and -not ($CanG -gt 0 -and $CanG -lt $PkgG * 0.95)) } wired into the spec loop (section 4 already walks db\\recipes\\*.json) as a HARD finding: \u0027DRAINED-NO-YIELD: \u003cslug\u003e :: \u003citem\u003e :: line says drained but densities.can \u003ccan\u003e is not a drained yield against buy_pkg_g \u003cpkg\u003e\u0027. It reads the same three stores the guard already loads."
+                                   },
+                      "blast_radius":  {
+                                           "measured_as":  "rows",
+                                           "measured_by":  "every scaler.ing line in all 587 specs under meal-prep\\db\\recipes (2026-09-02 05:00) for the canned class; the 34 canned-corn lines recomputed for buy count (ceil(g/pkg - 0.02) at 432 vs 298), cost (live costed.json ppg x 432/298 on drained grams) and per-serving macros (Get-MacroRecompute, today\u0027s food DB vs the FDC 169214 row); BASE-DRIFT simulated over all 434 food-DB rows x densities",
+                                           "affected_now":  34,
+                                           "names":  [
+                                                         "Sweet Whole Kernel Corn (34 lines in 34 specs, all visibility \u0027paid\u0027)"
+                                                     ],
+                                           "buy_corrections":  "13 of the 17 cup lines under-buy by exactly one can today and move +1: bbq-chicken-rice-bowls 840 g 2-\u003e3, beef-chili-rice-bowls 420 g 1-\u003e2, chicken-enchilada-rice-bowls 420 g 1-\u003e2, street-corn-chicken-rice-bowls 1148 g 3-\u003e4, turkey-taco-rice-skillet 840 g 2-\u003e3, beef-burrito-bowls 840 g 2-\u003e3, slow-cooker-bbq-pulled-chicken-bowls 750 g 2-\u003e3, slow-cooker-chicken-tortilla-soup-bowls 400 g 1-\u003e2, slow-cooker-pork-carnitas-bowl 420 g 1-\u003e2, slow-cooker-pulled-pork-bowl 840 g 2-\u003e3, slow-cooker-salsa-verde-chicken-bowl 420 g 1-\u003e2, slow-cooker-salsa-verde-pork-bowls 750 g 2-\u003e3, tex-mex-beef-rice-skillet-bowls 375 g 1-\u003e2. Unchanged: crack-chicken-chili 525 g 2-\u003e2 (its own label says \u0027about two 14.5 oz cans\u0027), beef-enchilada-skillet-bowls / ground-turkey-enchilada-skillet-bowls / loaded-beef-taco-skillet-bowls 500 g 2-\u003e2. The 17 gross lines keep their count once re-grammed (2 cans = 596 g -\u003e 2). The dispatch\u0027s example \u00275 cups, drained (840 g) buys 2 cans\u0027 is right: 3 cans at 298 g drained each.",
+                                           "macro_deltas":  "Per serving (14 servings everywhere), current recompute -\u003e new. Cup lines (drained grams, undrained panel -\u003e drained solids) rise 0.8 to 2.4 cal, 0.4 to 1.3 g protein, 0.8 to 2.6 g carbs, 0.1 to 0.3 g fat; largest is street-corn 596.9 -\u003e 599.3 (+2.4 cal, +1.3 P, +2.6 C, +0.3 F). Gross lines re-grammed to drained fall 1.6 to 16.8 cal (pastel-de-choclo -16.8, arroz-con-carne-molida -12.9, turkey-corn-chowder -12.6, green-chile-ground-turkey-skillet -11.0, high-protein-beef-bean-burrito -11.0, turkey-taco-soup -11.0); protein +0.1 to +0.7, carbs -0.1 to -1.2. The dispatch premise that drained corn is materially richer than the label is only weakly true: USDA drained solids are 67 cal/100 g against the undrained label\u0027s 64, because the packing brine carries nearly the same calories per gram as the kernels (FDC 169360 solids and liquids 64 cal/100 g). The carb and protein moves per gram are larger (14.34 vs 11.2 C, 2.29 vs 0.8 P) and are label rounding plus basis, not basis alone.",
+                                           "claims_and_tiers":  "street-corn-chicken-rice-bowls \u0027under 600 calories\u0027 (intro_html + head description): 599.3 after, holds by 0.7 cal - see corn02. green-chile-chicken-burrito \u0027under 400 cal\u0027 392.2 -\u003e 389.1 holds; its cal_floor 250 holds. high-protein-beef-bean-burrito cal_floor 250 holds (381.8). No other bounded claim found in intro/cost/portion/head/shop_smart/make_it/writer_notes of the 34. No tier field exists on these specs (all visibility \u0027paid\u0027); the free dinner rotation (top 5 cheapest per protein) must be re-run after recost; every cost move is under $0.06 per serving.",
+                                           "cost_effects":  "Cup lines: corn util cost x 432/298 and +1 can where listed: street-corn util $1.62 -\u003e $2.35, buy $1.83 -\u003e $2.44 (+$0.044 per serving true cost); 840 g lines $1.19 -\u003e $1.73 util, $1.22 -\u003e $1.84 buy; 750 g lines $1.06 -\u003e $1.54, $1.22 -\u003e $1.83; 420/400/375 g lines $0.56-0.59 -\u003e $0.81-0.86, $0.61 -\u003e $1.21; 500 g lines $0.71 -\u003e $1.03, buy $1.22 -\u003e $1.23; crack-chicken $0.74 -\u003e $1.07, buy unchanged $1.22. Gross lines: util and buy unchanged to the cent (grams x 298/432 against ppg x 432/298); turkey-noodle-casserole $1.22 -\u003e $1.21 and carbonada $0.61 -\u003e $0.60 from rounding.",
+                                           "class_exposure_not_fixed_here":  "Pineapple Chunks has the identical shape (densities can 567 == buy_pkg_g 567, cup 165) with one live drained line (chicken-al-pastor-burrito \u00274 1/4 cups, drained\u0027 700 g) and one bare-cup line (slow-cooker-sweet-and-sour-pork-bowls 300 g at 171 g/cup); the new HARD predicate WILL fire on chicken-al-pastor-burrito. Three GV bean label rows (Canned Black Beans, Canned Pinto Beans, Seasoned Black Beans: 1/2 cup = 130 g undrained) sit on drained grams (densities cup 172, can 255): the macro half of this defect, buy half already correct. Seasoned Black Beans \u0027N cans\u0027 lines encode three different per-can figures (228 / 250-265 / 300 g). All measured, none prescribed here: see corn03.",
+                                           "cell_effects":  [
+                                                                {
+                                                                    "recipe":  "street-corn-chicken-rice-bowls",
+                                                                    "line":  "7 cups, drained",
+                                                                    "grams":  "1148 -\u003e 1148",
+                                                                    "buy_n":  "3 -\u003e 4",
+                                                                    "corn_buy_cost":  "1.83 -\u003e 2.44",
+                                                                    "cal_per_serving":  "596.9 -\u003e 599.3",
+                                                                    "claim":  "under 600 holds by 0.7"
+                                                                },
+                                                                {
+                                                                    "recipe":  "bbq-chicken-rice-bowls",
+                                                                    "line":  "5 cups, drained",
+                                                                    "grams":  "840 -\u003e 840",
+                                                                    "buy_n":  "2 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.84",
+                                                                    "cal_per_serving":  "435.2 -\u003e 437.0"
+                                                                },
+                                                                {
+                                                                    "recipe":  "beef-chili-rice-bowls",
+                                                                    "line":  "2 1/2 cups, drained",
+                                                                    "grams":  "420 -\u003e 420",
+                                                                    "buy_n":  "1 -\u003e 2",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 1.21",
+                                                                    "cal_per_serving":  "483.7 -\u003e 484.6"
+                                                                },
+                                                                {
+                                                                    "recipe":  "chicken-enchilada-rice-bowls",
+                                                                    "line":  "2 1/2 cups, drained",
+                                                                    "grams":  "420 -\u003e 420",
+                                                                    "buy_n":  "1 -\u003e 2",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 1.21",
+                                                                    "cal_per_serving":  "423.6 -\u003e 424.5",
+                                                                    "note":  "stored stat 426 already drifts 2.4 from today\u0027s recompute"
+                                                                },
+                                                                {
+                                                                    "recipe":  "crack-chicken-chili",
+                                                                    "line":  "3 1/2 cups, drained (about two 14.5 oz cans)",
+                                                                    "grams":  "525 -\u003e 525",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.22",
+                                                                    "cal_per_serving":  "523.9 -\u003e 525.0"
+                                                                },
+                                                                {
+                                                                    "recipe":  "turkey-taco-rice-skillet",
+                                                                    "line":  "5 cups, drained",
+                                                                    "grams":  "840 -\u003e 840",
+                                                                    "buy_n":  "2 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.84",
+                                                                    "cal_per_serving":  "543.9 -\u003e 545.7"
+                                                                },
+                                                                {
+                                                                    "recipe":  "beef-burrito-bowls",
+                                                                    "line":  "5 cups",
+                                                                    "grams":  "840 -\u003e 840",
+                                                                    "buy_n":  "2 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.84",
+                                                                    "cal_per_serving":  "500.8 -\u003e 502.6",
+                                                                    "note":  "stored stat 499 drifts 1.8"
+                                                                },
+                                                                {
+                                                                    "recipe":  "beef-enchilada-skillet-bowls",
+                                                                    "line":  "3 cups",
+                                                                    "grams":  "500 -\u003e 500",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.23",
+                                                                    "cal_per_serving":  "664.1 -\u003e 665.2"
+                                                                },
+                                                                {
+                                                                    "recipe":  "ground-turkey-enchilada-skillet-bowls",
+                                                                    "line":  "3 cups",
+                                                                    "grams":  "500 -\u003e 500",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.23",
+                                                                    "cal_per_serving":  "679.2 -\u003e 680.3"
+                                                                },
+                                                                {
+                                                                    "recipe":  "loaded-beef-taco-skillet-bowls",
+                                                                    "line":  "3 cups",
+                                                                    "grams":  "500 -\u003e 500",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.23",
+                                                                    "cal_per_serving":  "673.9 -\u003e 675.0"
+                                                                },
+                                                                {
+                                                                    "recipe":  "slow-cooker-bbq-pulled-chicken-bowls",
+                                                                    "line":  "4 1/2 cups",
+                                                                    "grams":  "750 -\u003e 750",
+                                                                    "buy_n":  "2 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.83",
+                                                                    "cal_per_serving":  "571.3 -\u003e 572.9",
+                                                                    "note":  "stored stat 574 drifts 2.7"
+                                                                },
+                                                                {
+                                                                    "recipe":  "slow-cooker-chicken-tortilla-soup-bowls",
+                                                                    "line":  "2 1/2 cups",
+                                                                    "grams":  "400 -\u003e 400",
+                                                                    "buy_n":  "1 -\u003e 2",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 1.21",
+                                                                    "cal_per_serving":  "596.0 -\u003e 596.9"
+                                                                },
+                                                                {
+                                                                    "recipe":  "slow-cooker-pork-carnitas-bowl",
+                                                                    "line":  "2 1/2 cups",
+                                                                    "grams":  "420 -\u003e 420",
+                                                                    "buy_n":  "1 -\u003e 2",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 1.21",
+                                                                    "cal_per_serving":  "550.5 -\u003e 551.4"
+                                                                },
+                                                                {
+                                                                    "recipe":  "slow-cooker-pulled-pork-bowl",
+                                                                    "line":  "5 cups",
+                                                                    "grams":  "840 -\u003e 840",
+                                                                    "buy_n":  "2 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.84",
+                                                                    "cal_per_serving":  "511.6 -\u003e 513.4"
+                                                                },
+                                                                {
+                                                                    "recipe":  "slow-cooker-salsa-verde-chicken-bowl",
+                                                                    "line":  "2 1/2 cups",
+                                                                    "grams":  "420 -\u003e 420",
+                                                                    "buy_n":  "1 -\u003e 2",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 1.21",
+                                                                    "cal_per_serving":  "556.3 -\u003e 557.2"
+                                                                },
+                                                                {
+                                                                    "recipe":  "slow-cooker-salsa-verde-pork-bowls",
+                                                                    "line":  "4 1/2 cups",
+                                                                    "grams":  "750 -\u003e 750",
+                                                                    "buy_n":  "2 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.83",
+                                                                    "cal_per_serving":  "617.0 -\u003e 618.6"
+                                                                },
+                                                                {
+                                                                    "recipe":  "tex-mex-beef-rice-skillet-bowls",
+                                                                    "line":  "2 1/4 cups",
+                                                                    "grams":  "375 -\u003e 375",
+                                                                    "buy_n":  "1 -\u003e 2",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 1.22",
+                                                                    "cal_per_serving":  "580.6 -\u003e 581.4",
+                                                                    "note":  "stored stat 576 drifts 4.6"
+                                                                },
+                                                                {
+                                                                    "recipe":  "arroz-con-carne-molida",
+                                                                    "line":  "2.3 cans",
+                                                                    "grams":  "1008 -\u003e 695",
+                                                                    "buy_n":  "3 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.83 -\u003e 1.83",
+                                                                    "cal_per_serving":  "700.2 -\u003e 687.3",
+                                                                    "note":  "stored stat 703 drifts 2.8"
+                                                                },
+                                                                {
+                                                                    "recipe":  "cheesy-turkey-sausage-vegetable-rice-casserole",
+                                                                    "line":  "1 can",
+                                                                    "grams":  "385 -\u003e 266",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.61",
+                                                                    "cal_per_serving":  "586.4 -\u003e 581.5"
+                                                                },
+                                                                {
+                                                                    "recipe":  "chili-cornbread-casserole",
+                                                                    "line":  "1.8 cans",
+                                                                    "grams":  "757 -\u003e 522",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.22",
+                                                                    "cal_per_serving":  "698.5 -\u003e 688.9",
+                                                                    "note":  "golden fixture recipe (Kidney Beans drained case); frozen lane will diff"
+                                                                },
+                                                                {
+                                                                    "recipe":  "crockpot-mexican-turkey-casserole",
+                                                                    "line":  "1 can",
+                                                                    "grams":  "404 -\u003e 279",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.61",
+                                                                    "cal_per_serving":  "562.2 -\u003e 557.0",
+                                                                    "note":  "stored stat 565 drifts 2.8"
+                                                                },
+                                                                {
+                                                                    "recipe":  "green-chile-ground-turkey-skillet",
+                                                                    "line":  "2 cans",
+                                                                    "grams":  "866 -\u003e 597",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.22",
+                                                                    "cal_per_serving":  "721.0 -\u003e 710.0",
+                                                                    "note":  "stored stat 723 drifts 2.0"
+                                                                },
+                                                                {
+                                                                    "recipe":  "ground-turkey-calabacitas-skillet",
+                                                                    "line":  "1 can",
+                                                                    "grams":  "433 -\u003e 299",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.61",
+                                                                    "cal_per_serving":  "566.5 -\u003e 561.0",
+                                                                    "note":  "stored stat 570 drifts 3.5"
+                                                                },
+                                                                {
+                                                                    "recipe":  "high-protein-beef-bean-burrito",
+                                                                    "line":  "2 cans",
+                                                                    "grams":  "868 -\u003e 599",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.22",
+                                                                    "cal_per_serving":  "392.8 -\u003e 381.8",
+                                                                    "claim":  "cal_floor 250 holds"
+                                                                },
+                                                                {
+                                                                    "recipe":  "pastel-de-choclo-chilean-beef-corn-bake",
+                                                                    "line":  "3 cans",
+                                                                    "grams":  "1323 -\u003e 913",
+                                                                    "buy_n":  "4 -\u003e 4",
+                                                                    "corn_buy_cost":  "2.44 -\u003e 2.44",
+                                                                    "cal_per_serving":  "582.9 -\u003e 566.1",
+                                                                    "note":  "largest macro move, -16.8 cal"
+                                                                },
+                                                                {
+                                                                    "recipe":  "pulled-pork-enchilada-bake",
+                                                                    "line":  "2 cans",
+                                                                    "grams":  "844 -\u003e 582",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.22",
+                                                                    "cal_per_serving":  "922.4 -\u003e 911.6"
+                                                                },
+                                                                {
+                                                                    "recipe":  "turkey-corn-chowder",
+                                                                    "line":  "2.3 cans",
+                                                                    "grams":  "1001 -\u003e 691",
+                                                                    "buy_n":  "3 -\u003e 3",
+                                                                    "corn_buy_cost":  "1.83 -\u003e 1.83",
+                                                                    "cal_per_serving":  "581.3 -\u003e 568.7"
+                                                                },
+                                                                {
+                                                                    "recipe":  "turkey-noodle-casserole",
+                                                                    "line":  "1.2 cans",
+                                                                    "grams":  "520 -\u003e 359",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.21",
+                                                                    "cal_per_serving":  "586.4 -\u003e 579.8"
+                                                                },
+                                                                {
+                                                                    "recipe":  "turkey-taco-soup",
+                                                                    "line":  "2 cans",
+                                                                    "grams":  "866 -\u003e 597",
+                                                                    "buy_n":  "2 -\u003e 2",
+                                                                    "corn_buy_cost":  "1.22 -\u003e 1.22",
+                                                                    "cal_per_serving":  "617.0 -\u003e 606.0",
+                                                                    "note":  "stored stat 619 drifts 2.0"
+                                                                },
+                                                                {
+                                                                    "recipe":  "carbonada-chilean-beef-corn-soup",
+                                                                    "line":  "4.5 oz",
+                                                                    "grams":  "130 -\u003e 90",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.60",
+                                                                    "cal_per_serving":  "576.2 -\u003e 574.6",
+                                                                    "note":  "ounce label must be hand-set to the drained form; stored stat 578 drifts 1.8"
+                                                                },
+                                                                {
+                                                                    "recipe":  "creamy-kielbasa-potato-soup",
+                                                                    "line":  "10.25 oz",
+                                                                    "grams":  "289 -\u003e 199",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.61",
+                                                                    "cal_per_serving":  "625.8 -\u003e 622.1",
+                                                                    "note":  "ounce label must be hand-set"
+                                                                },
+                                                                {
+                                                                    "recipe":  "green-chile-chicken-burrito",
+                                                                    "line":  "9 oz",
+                                                                    "grams":  "252 -\u003e 174",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.62",
+                                                                    "cal_per_serving":  "392.2 -\u003e 389.1",
+                                                                    "claim":  "under 400 holds; cal_floor 250 holds; ounce label must be hand-set"
+                                                                },
+                                                                {
+                                                                    "recipe":  "pulled-pork-shepherds-pie",
+                                                                    "line":  "10.25 oz",
+                                                                    "grams":  "289 -\u003e 199",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.61",
+                                                                    "cal_per_serving":  "564.4 -\u003e 560.7",
+                                                                    "note":  "ounce label must be hand-set"
+                                                                },
+                                                                {
+                                                                    "recipe":  "turkey-tamale-pie",
+                                                                    "line":  "10.25 oz",
+                                                                    "grams":  "289 -\u003e 199",
+                                                                    "buy_n":  "1 -\u003e 1",
+                                                                    "corn_buy_cost":  "0.61 -\u003e 0.61",
+                                                                    "cal_per_serving":  "565.0 -\u003e 561.3",
+                                                                    "note":  "ounce label must be hand-set"
+                                                                }
+                                                            ],
+                                           "risk":  "The drained-per-can figure is USDA\u0027s generic 303 x 406 can (298 g), not a Great Value label reading; US labels do not print a drained weight, so no label capture can replace it. It is the same authority the Chickpeas / Kidney / Cannellini rows already rest on. If Brad wants a house measurement (drain one GV can on a kitchen scale) it replaces 298 in exactly one field. The cup lines\u0027 cost rises 45% per gram and one can per recipe; that is the price that was always being paid at the register and never printed."
+                                       },
+                      "freshness":  "Measured 2026-09-02 05:00-05:03 against: db\\recipes\\*.json (street-corn mtime 2026-09-01 18:41:18), db\\costed.json (2026-09-01 19:15:07), db\\built\\street-corn-chicken-rice-bowls.body.html (2026-09-01 20:32:22), food-macros-db.json (2026-09-01 07:53:43, BOM), db\\densities.json (2026-08-31 20:18:05, BOM), db\\ingredients.json (2026-09-02 04:41:34, under concurrent edit by the hygiene batch; this plan does not touch it and only reads buy_pkg_g 432), FDC API live fetch 2026-09-02 05:00. Board: comparison-2026-08-31.json (not used for any number here; corn\u0027s board price enters only through costed.json ppg = 1.62/1148). If costed.json or the food DB has been rewritten since, re-run the two positive controls (street-corn 596.9 and buy_n 3 at pkg_g 432) before acting.",
+                      "proof":  {
+                                    "guard_or_fixture":  "pipeline\\audit-store-integrity.ps1 -SelfTest (existing T harness) + engine\\golden-test.ps1 (frozen lane re-seeded) + engine\\cost-recipes.ps1 log line",
+                                    "must_fire_case":  "(a) BASE-DRIFT after serving_qty normalisation: frozen row Sweet Whole Kernel Corn densities cup 165 vs food DB {serving_qty 0.5, serving_unit \u0027cup\u0027, serving_grams 125} must WARN (250 vs 165, -34%); assert Test-BaseDrift 165 (125 / (0.5 * (Get-LabelUnitQty \u0027cup\u0027 \u0027cup\u0027))). (b) DRAINED-NO-YIELD: frozen line street-corn-chicken-rice-bowls \u0027Sweet Whole Kernel Corn\u0027 buy \u00277 cups, drained\u0027 with densities can 432 and buy_pkg_g 432 must be a HARD finding; assert Test-DrainedLineWithoutYield \u00277 cups, drained\u0027 432 432. Both fixtures are the REAL rows as read today, frozen in the SelfTest block, never regenerated from the live files.",
+                                    "clean_twin":  "(a) Refried Beans densities cup 260 vs {0.5 cup = 130 g} -\u003e 260, silent; Cottage Cheese 226 vs {0.5 cup = 113 g} -\u003e 226, silent; Rice 180 vs {0.25 cup = 45 g} -\u003e 180, silent; and the existing Ricotta \u00271/4 cup (62g)\u0027 with serving_qty 1 must still reconcile (0.25 x 1). (b) chili-cornbread-casserole Kidney Beans \u00273 cans\u0027 with can 255 / buy_pkg_g 425 -\u003e silent (drained yield present); Refried Beans \u00271 can\u0027 with can 454 / buy_pkg_g 454 -\u003e silent (no \u0027drained\u0027 in the text); AFTER the fix the street-corn line with can 298 / 432 -\u003e silent. \u0027undrained\u0027 must not match (the lookbehind in the predicate).",
+                                    "commands":  [
+                                                     "powershell -File meal-prep\\pipeline\\audit-store-integrity.ps1 -SelfTest   (all T cases incl. the 4 new ones pass)",
+                                                     "powershell -File meal-prep\\pipeline\\audit-store-integrity.ps1 -ShowAll     (expect: corn BASE-DRIFT gone after the food-DB row moves; DRAINED-NO-YIELD silent on corn; the three bean BASE-DRIFT WARNs and Yellow Onion / Fresh Basil appear as NEW WARNs - the guard seeing the class, not noise; DRAINED-NO-YIELD fires HARD on chicken-al-pastor-burrito Pineapple Chunks until corn03 is worked, do NOT weaken it)",
+                                                     "powershell -File meal-prep\\engine\\cost-recipes.ps1                            (the \u0027drained-basis items:\u0027 log line must now include \u0027Sweet Whole Kernel Corn 298/432g\u0027)",
+                                                     "powershell -File meal-prep\\engine\\golden-test.ps1                             (structural lane green; frozen lane RED by design on the 34 recipes\u0027 corn lines - diff must show ONLY corn lines moving, then seed-golden-fixture.ps1 re-freezes)",
+                                                     "powershell -File meal-prep\\pipeline\\audit-count-gpu.ps1; audit-cost-plausibility.ps1; spec-guards.ps1; test-guards.ps1"
+                                                 ]
+                                },
+                      "rollback":  "One commit revert: densities hunk, the food-DB row, the 17 re-grammed specs and the 34 recost/restat re-anchors; then engine\\cost-recipes.ps1 + build-cards for the 34 and re-seed the golden frozen lane. No migration, no ingredients.json involvement. The retired GV label row is preserved verbatim in the evidence above if it ever needs to come back as a separate UNDRAINED item.",
+                      "do_not_touch":  [
+                                           "meal-prep\\db\\ingredients.json (buy_pkg_g 432 is the correct purchase unit AND the hygiene batch is editing the file concurrently)",
+                                           "the 0.95 threshold at cost-recipes.ps1:141 and the DRAINED branch arithmetic",
+                                           "the 1-unit reproduce check in rebase-spec-ingredient.ps1 -Restat (10 specs will be refused by it; that is a pre-existing drift to be fixed on its own commit, not a tolerance to widen)",
+                                           "BASE-DRIFT\u0027s 5% band and its WARN tier",
+                                           "any bean row, Hominy, Pineapple Chunks (corn03)"
+                                       ],
+                      "resolution_note":  "Basis bug: Sweet Whole Kernel Corn was the one canned vegetable on a gross basis (densities can 432 == net weight, GV undrained label panel), so 13 of 17 \u0027cups\u0027 lines under-bought by one can and all 34 lines carried an undrained macro panel. Ruled DRAINED (the catalogue convention for every bean and hominy line): densities can -\u003e 298 g (USDA FDC 169214, 1 can 303x406), food-DB row -\u003e FDC drained solids per 100 g, 17 gross lines re-grammed x 298/432, 34 specs recosted and restated. Guard: BASE-DRIFT now normalises by serving_qty (was blind to every GV \u00271/2 cup\u0027 row); new HARD DRAINED-NO-YIELD predicate with the street-corn row as its must-fire fixture.",
+                      "publish_batch":  1,
+                      "status":  "deviated",
+                      "premise_verified":  "TRUE, re-checked against the files on 2026-09-02 08:30-08:45 before any edit. (1) densities.json items.\u0027Sweet Whole Kernel Corn\u0027 still read {can:432, cup:165}, and ingredients.json still read buy_pkg_g 432 - the two numbers the whole ruling rests on. (2) food-macros-db.json still carried the Great Value undrained panel {serving_grams 125, serving_qty 0.5, serving_unit \u0027cup\u0027, 80 cal, 1 P, 14 C, 1 F}. (3) cost-recipes.ps1:141 still infers the drained basis from `canG -lt buy_pkg_g * 0.95`, and audit-store-integrity.ps1 section 3 still opened with `if([double]$row.serving_qty -ne 1){ continue }`. (4) THE FDC CITATION WAS RE-FETCHED LIVE, not taken from the plan: api.nal.usda.gov food/169214 returns \u0027Corn, sweet, yellow, canned, whole kernel, drained solids\u0027 (SR Legacy, pub 4/1/2019) at 67.0 kcal / 2.29 P / 14.34 C / 1.22 F / 2.0 fiber per 100 g, with foodPortions \u00271 can (303 x 406)\u0027 = 298 g, \u00271 cup\u0027 = 164 g, \u00271 can (12 oz) yields\u0027 = 211 g. Every figure the plan quotes is exactly what the API returned. (5) All 34 corn spec lines are present with the grams the plan lists (12 \u0027N cans\u0027, 5 ounce, 6 \u0027cups, drained\u0027, 11 bare \u0027cups\u0027); costed.json\u0027s street-corn row still read grams 1148, util 1.62, buy_n 3, pkg_g 432, basis \u0027board:canned-corn:walmart\u0027 with NO \u0027+drained\u0027. (6) Both positive controls reproduced to the decimal: street-corn recomputes 596.9 against a stored 597, and buy_n == ceil(grams/432 - 0.02) on all 34. (7) The plan\u0027s \u0027no row double-encodes\u0027 measurement was re-run over all 434 food-DB rows: 0 rows carry both serving_qty != 1 AND a leading number in serving_unit, so the serving_qty normalisation can never double-apply. (8) The food DB has 0 duplicate item keys, so a first-wins/last-wins index difference cannot have skewed any of the above.",
+                      "deviation":  "Shipped, with four recorded deviations. Every one of the plan\u0027s 34 cell_effects reproduced EXACTLY (measured before the edit and again after: street-corn 596.9-\u003e599.3, turkey-taco-soup 617.0-\u003e606.0, pastel-de-choclo 582.9-\u003e566.1, arroz 700.2-\u003e687.3, and so on for all 34), all 13 predicted +1-can buy corrections landed, and no bounded claim or cal_floor flipped. \n\n[1] SHIP_SEQUENCE STEP 2 DOES NOT APPLY AS WRITTEN - the \u002710 pre-drifted specs\u0027 is 3, and no food-DB row moved under them. The plan (and its do_not_touch line) assumed rebase-spec-ingredient -Restat enforces a 1-unit reproduce check. It does not: the -Restat tolerance is 5.0 cal / 2.0 g, deliberately matched to build-v2-spec.ps1:335-336\u0027s build gate (see that script\u0027s 2026-08-27 note). Measured against the real tolerance, only THREE of the 34 are refused - ground-turkey-calabacitas-skillet, slow-cooker-pulled-pork-bowl and tex-mex-beef-rice-skillet-bowls - and all three on CARBS (+2.03, +2.33, +2.18 against a 2.0 bar), not on calories. The plan\u0027s remedy (find which food-DB row moved under each) does not fit them: the identical drift reproduces against EVERY committed food-macros-db.json snapshot back to 2026-08-24 (18 snapshots tested), and neither their grams nor their stat has changed since 2026-08-20. Their stored stat has simply never matched a recompute of their own ingredients_grams. That is a pre-existing certification failure in 3 specs, exactly the \u0027fixed on its own commit, not a tolerance to widen\u0027 item the plan\u0027s do_not_touch names. NOT widened, NOT hand-written. Those 3 ship their corrected COST and BUY lines (the reader-facing under-buy is fixed on all 34) and keep their stat; their drift moves from -3.5/-0.4/+4.6 cal to -9.0/+1.4/+5.4. Named for a separate commit.\n\n[2] THE RESTAT PROOF NEEDED THE PRIOR GRAMS, NOT JUST THE PRIOR FOOD DB. Ship_sequence step 5 re-grams 17 specs and step 7 then restats them with -PriorFoodDb; that sequence cannot work, because -Restat proves it understands a spec by recomputing the STORED stat from the prior snapshot, and after a re-gram it is reading NEW grams out of a spec whose stat was written from OLD ones. Measured: turkey-taco-soup reproduces 604.7 against a stored 619 and is refused, and so are the other 16. rebase-spec-ingredient.ps1 gained -PriorSpecDir: the proof reads prior grams + prior DB, which is the SAME safety argument evaluated against a complete snapshot instead of half of one. It is checked, not assumed - the prior file must be the same slug, the same servings and the same ingredient list, so only GRAMS may differ. Six frozen fixtures ship with it (including a must-fire on a prior file for a different recipe, and a clean twin proving a food-DB-only restat with no -PriorSpecDir behaves exactly as before). 31 of 34 specs restated through it, every one landing on the plan\u0027s predicted figure.\n\n[3] THE NEW DRAINED-NO-YIELD PREDICATE FOUND TWO CASES THE PLAN DID NOT MEASURE, and one of them was a false positive the plan\u0027s exact_change would have shipped. Run over live data before the corn data moved, the predicate fired 9 HARD: the 6 expected corn lines, the expected chicken-al-pastor-burrito Pineapple Chunks (corn03), and TWO more. (a) mediterranean-chicken-w-marinade :: Black Olives - a FALSE POSITIVE. Its buy_pkg_g 170 is labelled \u00276oz drained-weight can\u0027, so the package IS a drained weight and 728 g of drained olives over a drained package is correct arithmetic. A false HARD here is not cosmetic: wave-publish P5 hard-fails on any non-zero exit from this guard, so it would have blocked every wave. The predicate now takes the buy_pkg_label and reads the estate\u0027s own declaration; it never infers one. Measured over all 351 ingredient rows, exactly one declares a drained package and exactly one declares a gross one. Two frozen fixtures added: the real Black Olives row must stay silent, and the SAME line against a package NOT declared drained must still fire, so the exemption is the declaration and nothing else. (b) creamy-tuscan-chicken-skillet :: Sun-Dried Tomatoes (Oil-Packed) - a TRUE POSITIVE and a new instance of the same class: buy_pkg_g 680 carries Brad\u0027s own note \u0027GROSS jar weight incl. packing oil (2026-08-16). Do not correct to drained weight - that would be a guess\u0027, while the spec asks for 193 g \u00271 3/4 cups oil-packed, drained\u0027. Frozen as a must-fire fixture. It is left OPEN, because the only honest fix is a drained yield nobody has measured and Brad has already ruled that guessing it is not allowed. So after this change audit-store-integrity exits 1 on TWO HARD findings - pineapple (corn03) and the oil-packed tomatoes - both real, neither weakened.\n\n[4] THE GOLDEN FROZEN LANE DID NOT GO RED, and the plan said it would. It reads its OWN frozen copies of densities.json and db\\recipes (engine\\regression-inputs\\golden\\inputs\\), so a live densities or spec edit cannot reach it; only an ENGINE change can, which is the whole point of that lane. Verified by running it: the frozen corn row there still reads can 432 and the frozen chili-cornbread-casserole still carries 757 g. The fixture was therefore NOT re-seeded - re-seeding it would have been the exact \u0027regenerating fixture inputs from live data\u0027 mistake seed-golden-fixture.ps1\u0027s own header warns against.\n\nMEASURED OUTCOME BANDS. Buy: exactly the 13 predicted cup lines gained one can (street-corn 3-\u003e4, six 2-\u003e3, six 1-\u003e2); the 17 re-grammed gross lines kept their count; crack-chicken-chili and the three 500 g lines held at 2. Macros: cup lines +0.8 to +2.5 cal (the plan\u0027s band said +0.8 to +2.4; the endpoint values are identical to its own cell_effects table, street-corn 596.9 -\u003e 599.3, so the 2.4 was the band label rounded from rounded endpoints, not a different outcome), re-grammed lines -1.6 to -16.8 cal exactly as stated. Claims: street-corn 599.3 (the literal \u0027under 600\u0027 was replaced by the {{cal}} token per corn02), green-chile-chicken-burrito 389.1 under 400, both cal_floors hold. Cost: 33 of the 34 moved at most +$0.050 per serving, inside the plan\u0027s $0.06 band. The one exception is street-corn at +$0.080, and it decomposes cleanly: +$0.052 is corn (util 1.62 -\u003e 2.35 over 14 servings, in band) and the rest is the deliberate lime rebid from queue item 2026-09-02-street-corn-lime, not this item.",
+                      "shipped_commit":  null
+                  },
+                  {
+                      "queue_id":  "2026-09-02-corn02",
+                      "subject":  "Brad: street-corn-chicken-rice-bowls keeps \u0027under 600 calories\u0027 by 0.7 cal after the corn basis fix (599.3); is sub-1-calorie headroom acceptable on a printed bounded claim, and is DRAINED the catalogue-wide meaning of a canned-vegetable cup?",
+                      "classification":  "parse-basis-bug",
+                      "evidence":  [
+                                       "street-corn-chicken-rice-bowls | stat.cal 597 today (recompute 596.9) -\u003e 599.3 on the FDC 169214 drained-solids row over 1148 g drained corn / 14 servings | intro_html \u0027stays under 600 calories\u0027 and head description \u0027under 600 calories each\u0027 are literals, not {{stat}} tokens | the claim holds only because 599.3 rounds to 599; any +1 g corn per serving or a later food-DB corroboration on another row flips it"
+                                   ],
+                      "root_cause":  "A bounded claim written as a literal has no margin policy; the estate has no rule for how much headroom a printed \u0027under N\u0027 must carry, so a 0.7 cal survival is technically compliant and practically fragile.",
+                      "resolution_note":  "Brad ruled reword to the {{cal}} token; implemented with corn01. The bounded claim was true by 0.7 cal and would have flipped on the next basis move.",
+                      "publish_batch":  1,
+                      "premise_verified":  "TRUE. The two literals were still in place and are the only ones in the catalogue within 5 cal of their bound: intro_html read \u0027stays under 600 calories\u0027 and head.description read \u0027under 600 calories each\u0027, both alongside a {{protein}} token, and stat.cal was 597 before the corn re-basis and 599 after. Implemented as Brad ruled: the bound is replaced by the number, not tokenised as a bound - render-tokens.ps1\u0027s own header says bounds are deliberately NOT tokens (\u0027under {{cal}}\u0027 would rewrite the promise every time the stat moved), so the sentences now read \u0027{{protein}} grams of protein and {{cal}} calories\u0027 and \u0027{{protein}}g protein and {{cal}} calories each\u0027. Verified by the QA battery\u0027s prose-numbers check: every stat claim in the prose equals the stat it claims. The 0.7 cal of headroom the plan worried about no longer exists to be lost.",
+                      "deviation":  null,
+                      "shipped_commit":  null,
+                      "status":  "done",
+                      "brad_ruling":  "BRAD RULED 2026-09-02: reword. Replace \"under 600 calories\" in street-corn-chicken-rice-bowls intro_html and head.description with the {{cal}} token (renders the stat, 599 today, tracks it forever). Ships in the same batch as corn01, since the re-basis is what moves the number to 599.3.",
+                      "rollback":  "revert the two prose hunks (intro_html, head.description) in meal-prep/db/recipes/street-corn-chicken-rice-bowls.json; no data migration, the {{cal}} token renders from stat.cal which is unchanged by this item",
+                      "freshness":  "measured against HEAD f6901fa0 (stat.cal 597) and corn01 recompute at the drained basis (599.3, USDA FDC 169214); if the corn re-basis in corn01 ships first the figure the token renders becomes 599, if it does not it stays 597; the reword is correct either way",
+                      "blast_radius":  {
+                                           "measured_as":  "rows",
+                                           "measured_by":  "the two prose fields of one spec (street-corn-chicken-rice-bowls intro_html, head.description); grep over all 584 specs for the literal \"under 600\" shows this is the only spec carrying it against a stat within 5 cal of the bound",
+                                           "affected_now":  1,
+                                           "names":  [
+                                                         "street-corn-chicken-rice-bowls"
+                                                     ],
+                                           "risk":  "none to any other card; the token renders stat.cal, which corn01 moves 597 -\u003e 599 and nothing else touches",
+                                           "cell_effects":  [
+                                                                {
+                                                                    "commodity":  "street-corn-chicken-rice-bowls",
+                                                                    "store":  "card prose",
+                                                                    "before":  "under 600 calories",
+                                                                    "after":  "{{cal}} calories (599 after corn01, 597 before)"
+                                                                }
+                                                            ]
+                                       },
+                      "proof":  {
+                                    "guard_or_fixture":  "meal-prep\\pipeline\\audit-spec-contradictions.ps1 STAT-PROSE / macro-claim class (extended 2026-09-01 to all four macros, bounded claims treated as promises)",
+                                    "must_fire_case":  "frozen: a spec whose prose says \"under 600 calories\" with stat.cal = 600 exits non-zero (ten is not under ten; the stuffed-chicken-breast precedent)",
+                                    "clean_twin":  "the rewritten sentence with {{cal}} renders the stat and passes; a bounded claim over a lower stat (e.g. \"under 20 grams of carbs\" on 16) stays legal",
+                                    "commands":  [
+                                                     "powershell -File meal-prep\\pipeline\\audit-spec-contradictions.ps1 -SelfTest",
+                                                     "powershell -File meal-prep\\pipeline\\audit-spec-contradictions.ps1"
+                                                 ]
+                                }
+                  },
+                  {
+                      "queue_id":  "2026-09-02-corn03",
+                      "subject":  "Sibling class: Pineapple Chunks has the same gross-can shape (567/567) with a live drained line; three GV bean label rows are undrained panels on drained grams; Seasoned Black Beans encodes three per-can figures",
+                      "classification":  "needs-more-time",
+                      "evidence":  [
+                                       "densities \u0027Pineapple Chunks\u0027: {\"can\":567,\"cup\":165} == ingredients buy_pkg_g 567 (20oz can) | chicken-al-pastor-burrito \u00274 1/4 cups, drained\u0027 700 g buys ceil(700/567 - 0.02) = 2 cans off a gross can; slow-cooker-sweet-and-sour-pork-bowls \u00271 3/4 cups\u0027 300 g (171 g/cup); two \u0027N cans\u0027 lines at 567-578 g/can gross | fdc-cache holds \u0027Pineapple, canned, juice pack, drained\u0027 but its per-can portion was NOT fetched in this run: COULD-NOT-MEASURE the drained yield; step 1 is the FDC portion fetch exactly as done for 169214 | food-DB \u0027Pineapple Chunks\u0027 is USDA in-juice (undrained) per 100 g; the \u0027Crushed Pineapple in Juice\u0027 row explicitly says \u0027If a recipe drains the can, do not use this row\u0027 | Canned Black Beans / Canned Pinto Beans / Seasoned Black Beans food-DB rows are GV \u00271/2 cup (130 g)\u0027 undrained panels (260 g/cup) against densities cup 172 / can 255 drained: buy side correct, macro side the corn defect; no drained black or pinto FDC row is in the cache (only raw and boiled), so the delta is unmeasured | Seasoned Black Beans \u0027N cans\u0027 lines: 228 g/can (8 lines, e.g. beef-burrito-bowls 910/4), 248-265 (15 lines), 300 (2 lines: ground-turkey-enchilada-skillet-bowls 900/3, turkey-chili-mac 600/2) against densities can 255"
+                                   ],
+                      "root_cause":  "Same mechanism as corn01: the drained basis is inferred from densities.can vs buy_pkg_g and nothing declares or checks a line\u0027s basis; the new DRAINED-NO-YIELD predicate will fire HARD on chicken-al-pastor-burrito the moment it ships, which is the class being caught, not a false positive.",
+                      "resolution_note":  "Parked at the dispatch\u0027s scope line (\u0027keep the prescribed fix scoped to what you measured\u0027). Work order when picked up: fetch FDC portions for canned pineapple drained (cite the id), set densities Pineapple Chunks.can to it, move its food-DB row to the drained entry, re-gram the two gross \u0027N cans\u0027 lines; then fetch FDC \u0027canned, drained solids\u0027 rows for black and pinto beans and restat the affected specs; then reconcile the Seasoned Black Beans per-can spread to densities.can 255. Every step rides the corn01 proof harness unchanged.",
+                      "publish_batch":  "next-round",
+                      "premise_verified":  "FALSE for step 1, and measured rather than assumed. The plan\u0027s work order opens with \u0027fetch FDC portions for canned pineapple drained (cite the id)\u0027. Done twice, live, on 2026-09-02: (1) api.nal.usda.gov food/167767 \u0027Pineapple, canned, juice pack, drained\u0027 (SR Legacy, pub 4/1/2019, 60.0 kcal / 0.51 P / 15.56 C / 0.11 F per 100 g) returns foodPortions [\u0027cup, sliced\u0027 162 g, \u0027spear\u0027 26 g, \u0027cup, chunks\u0027 181 g, \u0027cup, crushed\u0027 195 g] and NO per-can portion at all - there is no pineapple equivalent of corn\u0027s \u00271 can (303 x 406) = 298 g\u0027. A search of every SR Legacy pineapple entry returns exactly one drained record, 167767, so there is no second FDC row to try. (2) The FDC Branded index was checked as a fallback: 30 canned pineapple chunk labels (Dole, Great Value, Kroger, Hy-Vee, Meijer, Target and others, mostly 20 oz / 567 g cans) every one of which states an UNDRAINED serving of 122-142 g per 1/2 cup. Not one prints a drained weight, which is the same fact the plan records for corn: US labels do not declare one. So the drained yield of a 20 oz pineapple can remains COULD-NOT-MEASURE, and per the dispatch it was NOT invented and the pineapple fix was NOT applied. The consequence is now visible rather than latent: the DRAINED-NO-YIELD predicate shipped with corn01 fires HARD on chicken-al-pastor-burrito, exactly as this item predicted. NOTE, measured on the way: densities \u0027Pineapple Chunks\u0027.cup is 165 g while FDC 167767\u0027s own \u0027cup, chunks\u0027 portion is 181 g drained, so the cup basis is a second question to settle alongside the can. The same run also found a THIRD member of this class the plan had not measured: creamy-tuscan-chicken-skillet asks for 193 g of \u00271 3/4 cups oil-packed, drained\u0027 Sun-Dried Tomatoes against a buy_pkg_g of 680 g that ingredients.json explicitly labels \u0027GROSS jar weight incl. packing oil (Brad, 2026-08-16). Do not correct to drained weight - that would be a guess.\u0027 Add it to this item\u0027s work order: it has the same shape, the same missing number, and Brad has already ruled once that it may not be guessed - so it is a candidate for the kitchen-scale reading this plan already proposes for the corn can.",
+                      "deviation":  null,
+                      "shipped_commit":  null,
+                      "work_order_2026_09_02":  "Work order updated 2026-09-02 after step 1 was attempted and did not land (see premise_verified). Remaining order: (i) get a DRAINED weight for a 20 oz canned-pineapple can that is not a guess - USDA has no can portion for FDC 167767 and no US label prints one, so this is a kitchen-scale reading or nothing; (ii) then densities \u0027Pineapple Chunks\u0027.can, and its .cup against FDC 167767\u0027s 181 g \u0027cup, chunks\u0027; (iii) the same for Sun-Dried Tomatoes (Oil-Packed), 680 g gross jar, added to this item today; (iv) then the three GV bean label rows (Canned Black / Canned Pinto / Seasoned Black Beans, 1/2 cup 130 g undrained panels on drained grams - the macro half of the corn defect, buy half already correct), which the BASE-DRIFT normalisation shipped today now reports as WARNs for the first time; (v) then the Seasoned Black Beans per-can spread (228 / 248-265 / 300 g against densities.can 255). Until (i) and (iii) land, audit-store-integrity exits 1 on two HARD findings. Both are real.",
+                      "status":  "needs-more-time"
+                  }
+              ],
+    "ship_sequence":  [
+                          "0. git status: confirm the hygiene batch\u0027s uncommitted ingredients.json / spec edits are foreign and leave them; never git add -A. Copy food-macros-db.json to food-macros-db.bak-corn-2026-09-02.json (rebase -PriorFoodDb needs the pre-change DB).",
+                          "1. audit-store-integrity.ps1: add the serving_qty normalisation (line 265) + Test-DrainedLineWithoutYield + the 4 frozen fixtures; run -SelfTest (green) and -ShowAll (expect DRAINED-NO-YIELD HARD on street-corn AND chicken-al-pastor-burrito, BASE-DRIFT WARN on corn: the guard sees its founding bug BEFORE the data moves).",
+                          "2. The 10 pre-drifted specs (listed in corn01 evidence): find which food-DB row moved under each (db\\ingredient-events.jsonl / the 2026-08-26 corroboration wave), restat them against TODAY\u0027s DB on their own commit so rebase -Restat can reproduce them; if that is not settled in an hour, record them as deviation and carry them in a second batch rather than widening the 1-unit check.",
+                          "3. densities.json: Sweet Whole Kernel Corn can 432 -\u003e 298 (+note); BOM preserved, targeted splice.",
+                          "4. food-macros-db.json: replace the corn row with the FDC 169214 drained-solids row; BOM preserved, targeted splice.",
+                          "5. Re-gram the 17 gross lines (values in surface_fix.exact_change) on ingredients_grams, scaler.ing and the \u0027(N g)\u0027 in ingredients_display via lib\\json-db-io.ps1 scanners; a small -Apply script with a -SelfTest on a frozen copy of turkey-taco-soup (866 -\u003e 597) and cheesy-turkey-sausage (385 -\u003e 266); hand-set the 5 ounce labels to the drained form.",
+                          "6. engine\\cost-recipes.ps1 (log line must list \u0027Sweet Whole Kernel Corn 298/432g\u0027); pipeline\\recost-spec-cost-block.ps1 -Slugs \u003c34\u003e.",
+                          "7. pipeline\\rebase-spec-ingredient.ps1 -Slug \u003ceach of 34\u003e -Restat -PriorFoodDb food-macros-db.bak-corn-2026-09-02.json -Apply; then pipeline\\reanchor-machine-fields.ps1 -Slugs \u003c34\u003e; sync-recipesdb-macros / sync-recipesdb-cost / sync-recipesdb-buy for the 34.",
+                          "8. Gates: audit-store-integrity -ShowAll (corn silent on both checks; the pineapple HARD remains and is corn03\u0027s - if the wave publisher blocks on any HARD, work corn03 step 1 in this batch rather than acking), audit-count-gpu, audit-cost-plausibility, audit-spec-contradictions, spec-guards, golden-test (frozen lane diff = corn lines only, then seed-golden-fixture re-freeze), test-guards.",
+                          "9. Build cards for the 34 (build-card2 / engine\\build-cards.ps1); verify db\\built\\street-corn-chicken-rice-bowls.body.html shows \u0027Buy 4 cans\u0027 and \u0027~599 cal\u0027; verify chili-cornbread-casserole shows \u00271.8 cans\u0027 unchanged with a 522 g gram figure.",
+                          "10. Publish the 34 (wave-publish.ps1 / engine\\publish.ps1 per the recipe estate\u0027s normal path); re-run the free dinner rotation if it reads cost_per_serving.",
+                          "11. Live verification with a cache-busting query: street-corn card \u0027Buy 4 cans\u0027, 599 cal, \u0027under 600\u0027 still true; one gross-line card (turkey-taco-soup) shows 2 cans and 606 cal.",
+                          "12. Commit (plan file + fixes) and push; close corn01 with its resolution_note; corn02 to Brad; corn03 stays parked with its work order."
+                      ],
+    "open_questions_for_brad":  [
+                                    "street-corn-chicken-rice-bowls will print 599 cal against a literal \u0027under 600 calories\u0027 claim: accept 0.7 cal of headroom, trim a gram elsewhere, or reword to a token / \u0027about 600\u0027? (corn02)",
+                                    "Confirm the ruling that a canned-vegetable cup means DRAINED kernels catalogue-wide (it is already how every bean and hominy line is encoded), so Pineapple Chunks and the three GV bean label rows (corn03) can follow it without a second ruling.",
+                                    "Optional: drain one Great Value 15.25 oz can on a kitchen scale. USDA\u0027s 298 g is the generic 303 x 406 can; a house reading would replace exactly one number (densities can) and is the only way to get a GV-specific figure, since US labels print no drained weight."
+                                ]
+}

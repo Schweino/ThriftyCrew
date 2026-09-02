@@ -18,14 +18,14 @@
                  "protein":  52,
                  "carbs":  48,
                  "fat":  18,
-                 "cost_ps":  "4.08"
+                 "cost_ps":  "4.12"
              },
     "intro_html":  "A loaded Tex-Mex skillet where beef, beans, corn, and rice all cook down together into one easy bowl. You get {{protein}} grams of protein per serving for about ${{cost_ps}} a plate (at everyday cost). It makes 14 servings, so batch it and forget it.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2730 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (587 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 1/2 cups (780 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 1/4 cups (375 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 2 1/4 cups (375 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cups (484 g)",
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 1/2 cups (168 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2 tbsp (14 g)",
@@ -38,15 +38,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 6 lb: ~$37.13. \u003cstrong\u003eBuy 6 lbs: $37.13.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.72. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.74. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Seasoned Black Beans, 4 1/2 cups: ~$5.09. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 2 1/4 cups: ~$0.53. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
-                       "Diced Tomatoes, 2 cups: ~$0.99. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 1/4 cups: ~$0.77. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cups: ~$0.90. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 1 1/2 cups: ~$1.29. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Pantry seasonings (paprika, ground cumin, chili powder, garlic powder, salt, black pepper): ~$0.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $46.56 across 14 servings, so roughly $3.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $49.35 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.22. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $46.73 across 14 servings, so roughly $3.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.83 across 14 servings, roughly $3.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.88 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.71. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -64,14 +64,14 @@
     "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/tex-mex-ground-beef-and-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One skillet, a stack of containers, and your lunches practically make themselves. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  46.56,
-    "cost_batch_true":  49.35,
-    "cost_per_serving":  3.33,
-    "cost_per_serving_true":  3.52,
-    "cost_pantry_add":  7.87,
-    "cost_first_run":  57.22,
+    "cost_batch":  46.73,
+    "cost_batch_true":  49.83,
+    "cost_per_serving":  3.34,
+    "cost_per_serving_true":  3.56,
+    "cost_pantry_add":  7.88,
+    "cost_first_run":  57.71,
     "scaler":  {
-                   "cost":  "49.35",
+                   "cost":  "49.83",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -162,7 +162,7 @@
     "head":  {
                  "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, tex-mex beef and rice skillet bowls, budget dinner",
-                 "costPerServing":  4.08,
+                 "costPerServing":  4.12,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 6 lb (2730 g)",
                                           "Rice, 1 lb (587 g)",

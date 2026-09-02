@@ -14,18 +14,18 @@
     "writer_notes":  [],
     "forbidden_prose_terms":  [],
     "stat":  {
-                 "cal":  484,
+                 "cal":  485,
                  "protein":  37,
-                 "carbs":  62,
+                 "carbs":  63,
                  "fat":  9,
-                 "cost_ps":  "2.81"
+                 "cost_ps":  "2.85"
              },
     "intro_html":  "A big pot of hearty beef chili, spooned over rice and topped with melty cheddar. This is cold-weather comfort that meal-preps like a champion, gets better on day two, and still brings {{protein}} grams of protein a bowl. Make a batch on Sunday and lunch is handled all week.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 cans, drained (910 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 1/2 cups, drained (420 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 2 1/2 cups, drained (420 g)",
                                 "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (116 g)",
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e about 1 3/4 cups (420 g)",
                                 "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 2 packets (49 g)",
@@ -35,17 +35,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 3.5 lb raw: ~$21.59. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
-                       "Rice, 3.5 cups dry jasmine: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Rice, 3.5 cups dry jasmine: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Seasoned Black Beans, 4 cans, drained: ~$5.94. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 2 1/2 cups, drained: ~$0.59. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 1/2 cups, drained: ~$0.86. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
                        "Tomato Paste, 7 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
                        "Beef Broth, about 1 3/4 cups: ~$0.67. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Fat Free Cheddar, about 1 3/4 cups shredded: ~$1.94. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
                        "Yellow Onion, 1 onion, diced: ~$0.72. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Pantry seasonings (taco seasoning): ~$0.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $33.54 across 14 servings, so roughly $2.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.14 across 14 servings, roughly $2.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $1.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.29. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $33.83 across 14 servings, so roughly $2.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.77 across 14 servings, roughly $2.77 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $1.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.93. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a filling, protein-packed chili that tastes like it took all day.",
     "shop_smart":  [
@@ -64,14 +64,14 @@
     "portion_html":  "Weigh the rice and the chili together, subtract the empty-pot weight from Step 1, and divide the total by 14. Scoop equal amounts into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
     "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  33.54,
-    "cost_batch_true":  38.14,
-    "cost_per_serving":  2.4,
-    "cost_per_serving_true":  2.72,
-    "cost_pantry_add":  1.15,
-    "cost_first_run":  39.29,
+    "cost_batch":  33.83,
+    "cost_batch_true":  38.77,
+    "cost_per_serving":  2.42,
+    "cost_per_serving_true":  2.77,
+    "cost_pantry_add":  1.16,
+    "cost_first_run":  39.93,
     "scaler":  {
-                   "cost":  "38.14",
+                   "cost":  "38.77",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -141,7 +141,7 @@
     "head":  {
                  "description":  "A hearty ground beef and black bean chili over rice with cheddar. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, beef chili, budget dinner, chili rice bowl",
-                 "costPerServing":  2.81,
+                 "costPerServing":  2.85,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 3.5 lb raw (1587 g)",
                                           "Rice, 3.5 cups dry jasmine (700 g)",

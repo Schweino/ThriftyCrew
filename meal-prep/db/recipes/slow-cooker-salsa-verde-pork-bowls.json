@@ -14,11 +14,11 @@
     "writer_notes":  [],
     "forbidden_prose_terms":  [],
     "stat":  {
-                 "cal":  617,
+                 "cal":  619,
                  "protein":  55,
-                 "carbs":  74,
+                 "carbs":  75,
                  "fat":  9,
-                 "cost_ps":  "3.25"
+                 "cost_ps":  "3.29"
              },
     "intro_html":  "Salsa verde does the heavy lifting here, so you get bright, tangy pork with almost no effort. It stacks up {{protein}} grams of protein per bowl over rice and corn, all for right around ${{cost_ps}} a serving (at everyday cost). Fourteen servings from one batch is a whole lot of lunch for the money.",
     "ingredients_display":  [
@@ -26,7 +26,7 @@
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (940 g)",
                                 "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1 jar (450 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 8 tbsp (120 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4 1/2 cups (750 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 4 1/2 cups (750 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cups (480 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 tbsp (45 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
@@ -36,18 +36,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Tenderloin, 8 lb: ~$28.89. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
-                       "Rice, 5.25 cups dry: ~$1.16. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.19. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Salsa Verde, 1 jar: ~$2.62. \u003cstrong\u003eBuy 1 16oz jar: $2.64.\u003c/strong\u003e",
                        "Diced Green Chiles, 8 tbsp: ~$1.06. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 4 1/2 cups: ~$1.06. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 4 1/2 cups: ~$1.53. \u003cstrong\u003eBuy 3 cans: $1.83.\u003c/strong\u003e",
                        "Chicken Broth, 2 cups: ~$0.73. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Lime Juice, 3 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 2 cloves: ~$0.16. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Brown Sugar, 0.75 cups: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt): ~$0.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $36.16 across 14 servings, so roughly $2.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.64 across 14 servings, roughly $2.83 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.47. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $36.66 across 14 servings, so roughly $2.62 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.28 across 14 servings, roughly $2.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.85 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.13. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -66,14 +66,14 @@
     "portion_html":  "You are looking at about {{cal}} calories and {{protein}} grams of protein in every serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://beginwithbalance.com/slow-cooker-salsa-verde-pork/\" target=\"_blank\" rel=\"noopener\"\u003eBegin With Balance\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One quiet afternoon of cooking buys you a week of bowls you will actually look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  36.16,
-    "cost_batch_true":  39.64,
-    "cost_per_serving":  2.58,
-    "cost_per_serving_true":  2.83,
-    "cost_pantry_add":  5.83,
-    "cost_first_run":  45.47,
+    "cost_batch":  36.66,
+    "cost_batch_true":  40.28,
+    "cost_per_serving":  2.62,
+    "cost_per_serving_true":  2.88,
+    "cost_pantry_add":  5.85,
+    "cost_first_run":  46.13,
     "scaler":  {
-                   "cost":  "39.64",
+                   "cost":  "40.28",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -150,7 +150,7 @@
     "head":  {
                  "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker salsa verde pork bowls, budget dinner",
-                 "costPerServing":  3.25,
+                 "costPerServing":  3.29,
                  "recipeIngredient":  [
                                           "Pork Tenderloin, 8 lb (3300 g)",
                                           "Rice, 5.25 cups dry (940 g)",

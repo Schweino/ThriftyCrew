@@ -22,9 +22,9 @@
 
                               ],
     "stat":  {
-                 "cal":  583,
-                 "protein":  44,
-                 "carbs":  37,
+                 "cal":  566,
+                 "protein":  45,
+                 "carbs":  35,
                  "fat":  29,
                  "cost_ps":  "5.79"
              },
@@ -41,7 +41,7 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (29 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (122 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 3 cans (1323 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 3 cans (913 g)",
                                 "\u003cstrong\u003eMilk (store brand):\u003c/strong\u003e 1.25 cups (300 g)",
                                 "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 16.75 tbsp (25 g)",
                                 "\u003cstrong\u003eGrits (Quaker):\u003c/strong\u003e 8.75 tbsp (88 g)",
@@ -62,15 +62,15 @@
                        "Sweet Whole Kernel Corn, 3 cans: ~$1.87. \u003cstrong\u003eBuy 4 cans: $2.44.\u003c/strong\u003e",
                        "Milk, 1.25 cups: ~$0.22. \u003cstrong\u003eBuy 1 gallon: $2.76.\u003c/strong\u003e",
                        "Fresh Basil, 16.75 tbsp: ~$2.13. \u003cstrong\u003eBuy 2 0.5oz packs: $2.39.\u003c/strong\u003e",
-                       "Grits, 8.75 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Grits, 8.75 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Olives, 9.75 tbsp: ~$0.82. \u003cstrong\u003eBuy 1 6oz can: $1.68.\u003c/strong\u003e",
                        "Eggs, 5 large eggs: ~$0.66. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
                        "Golden Raisins, 5 tbsp: ~$0.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sugar, 2.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, paprika, salt, black pepper): ~$0.85. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $46.88 across 14 servings, so roughly $3.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $58.67 across 14 servings, roughly $4.19 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $80.03. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $47.02 across 14 servings, so roughly $3.36 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $58.81 across 14 servings, roughly $4.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.28 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $81.09. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Chilean corn-topped beef bake that nobody at your table will have had before.",
     "shop_smart":  [
@@ -92,14 +92,14 @@
     "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut and lift to that weight so nobody ends up with all corn and no pino. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Rest it a good twenty minutes before cutting or the corn layer will not hold its edge.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/pastel-de-choclo-chilean-corn-and-beef-casserole/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "South American comfort food for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  46.88,
-    "cost_batch_true":  58.67,
-    "cost_per_serving":  3.35,
-    "cost_per_serving_true":  4.19,
-    "cost_pantry_add":  21.36,
-    "cost_first_run":  80.03,
+    "cost_batch":  47.02,
+    "cost_batch_true":  58.81,
+    "cost_per_serving":  3.36,
+    "cost_per_serving_true":  4.2,
+    "cost_pantry_add":  22.28,
+    "cost_first_run":  81.09,
     "scaler":  {
-                   "cost":  "58.67",
+                   "cost":  "58.81",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",
@@ -192,7 +192,7 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  1323,
+                                   "grams":  913,
                                    "buy":  "3 cans",
                                    "bid":"canned-corn",
                                    "gpu":28.3495
@@ -275,7 +275,7 @@
                                           "Salt, 1.5 tbsp (29 g)",
                                           "Black Pepper, 0.5 tbsp (3 g)",
                                           "Butter, 0.5 cups (122 g)",
-                                          "Sweet Whole Kernel Corn, 3 cans (1323 g)",
+                                          "Sweet Whole Kernel Corn, 3 cans (913 g)",
                                           "Milk (store brand), 1.25 cups (300 g)",
                                           "Fresh Basil, 16.75 tbsp (25 g)",
                                           "Grits, 8.75 tbsp (88 g)",
@@ -340,7 +340,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  1323
+                                  "grams":  913
                               },
                               {
                                   "item":  "Milk",

@@ -118,7 +118,7 @@
     "Tomato Paste": { "can": 170, "tbsp": 16, "cup": 262 },
     "Diced Tomatoes & Green Chilies": { "can": 283, "cup": 242 },
     "Diced Green Chiles": { "can": 113, "tbsp": 15 },
-    "Sweet Whole Kernel Corn": { "can": 432, "cup": 165 },
+    "Sweet Whole Kernel Corn": { "can": 298, "cup": 165, "note": "drained solids per 15.25 oz (303 x 406) can, USDA FDC 169214 (cup 164 there; 165 kept, within rounding); net 432 g stays on ingredients.buy_pkg_g. Was 432 - a COPY of the net weight - which made cost-recipes' drained branch skip this item silently and 13 recipes under-buy a can each." },
     "Seasoned Black Beans": { "can": 255, "cup": 172, "note": "drained grams per 15oz can" },
     "Kidney Beans": { "can": 255, "cup": 172 },
     "Chickpeas": { "can": 255, "cup": 164 },

@@ -22,7 +22,7 @@
 
                               ],
     "stat":  {
-                 "cal":  586,
+                 "cal":  582,
                  "protein":  23,
                  "carbs":  73,
                  "fat":  22,
@@ -36,7 +36,7 @@
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (42 g)",
                                 "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 peppers (280 g)",
                                 "\u003cstrong\u003eZucchini:\u003c/strong\u003e 4.7 zucchinis (915 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 1 can (385 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 1 can (266 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (350 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)",
@@ -48,7 +48,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rice, 5 cups dry: ~$1.12. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Rice, 5 cups dry: ~$1.15. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "Chicken Broth, 1.5 cartons: ~$2.13. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Smoked Turkey Sausage, 1.25 lb: ~$6.61. \u003cstrong\u003eBuy 2 13oz ropes: $7.95.\u003c/strong\u003e",
                        "Olive Oil, 3 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -62,9 +62,9 @@
                        "Cheddar Cheese, Shredded, 18.75 oz: ~$4.06. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
                        "Fresh Basil, 10 tbsp: ~$1.28. \u003cstrong\u003eBuy 2 0.5oz packs: $2.39.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.83 across 14 servings, so roughly $1.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.05 across 14 servings, roughly $2.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.92. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $24.86 across 14 servings, so roughly $1.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.08 across 14 servings, roughly $2.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.95. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Rice and zucchini cost almost nothing, and a pound and a half of cheddar spread across fourteen servings is cheaper than most people assume.",
     "shop_smart":  [
@@ -86,14 +86,14 @@
     "portion_html":  "Weigh the pot, subtract the empty pot weight you noted, and divide by 14. Stir before every scoop, since the sausage and vegetables settle differently than the rice does. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://iowagirleats.com/cheesy-vegetable-turkey-sausage-rice-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eiowagirleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A cheesy one-pot dinner for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  24.83,
-    "cost_batch_true":  32.05,
-    "cost_per_serving":  1.77,
+    "cost_batch":  24.86,
+    "cost_batch_true":  32.08,
+    "cost_per_serving":  1.78,
     "cost_per_serving_true":  2.29,
     "cost_pantry_add":  12.87,
-    "cost_first_run":  44.92,
+    "cost_first_run":  44.95,
     "scaler":  {
-                   "cost":  "32.05",
+                   "cost":  "32.08",
                    "ing":  [
                                {
                                    "item":  "Rice",
@@ -146,7 +146,7 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  385,
+                                   "grams":  266,
                                    "buy":  "1 can",
                                    "bid":"canned-corn",
                                    "gpu":28.3495
@@ -232,7 +232,7 @@
                                           "Olive Oil, 3 tbsp (42 g)",
                                           "Red Bell Pepper, 2.3 peppers (280 g)",
                                           "Zucchini, 4.7 zucchinis (915 g)",
-                                          "Sweet Whole Kernel Corn, 1 can (385 g)",
+                                          "Sweet Whole Kernel Corn, 1 can (266 g)",
                                           "Yellow Onion, 3 onions (350 g)",
                                           "Garlic, 2.75 tbsp (23 g)",
                                           "Salt, 2.5 tbsp (47 g)",
@@ -277,7 +277,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  385
+                                  "grams":  266
                               },
                               {
                                   "item":  "Yellow Onion",

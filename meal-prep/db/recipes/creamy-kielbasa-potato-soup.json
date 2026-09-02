@@ -23,9 +23,9 @@
 
                               ],
     "stat":  {
-                 "cal":  626,
+                 "cal":  622,
                  "protein":  26,
-                 "carbs":  48,
+                 "carbs":  47,
                  "fat":  37,
                  "cost_ps":  "4.46"
              },
@@ -44,7 +44,7 @@
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 9.25 cups (2240 g)",
                                 "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 7.6 potatoes (1620 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 10.25 oz (289 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 7 oz, drained (199 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
                             ],
@@ -61,7 +61,7 @@
                        "Beef Broth, 9.25 cups: ~$3.55. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
                        "Heavy Cream, 2.25 cups: ~$2.75. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
                        "Potato, 7.6 potatoes: ~$2.12. \u003cstrong\u003eBuy 4 lbs: $2.38.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 10.25 oz: ~$0.41. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 7 oz, drained: ~$0.41. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
                        "Pantry seasonings (paprika, italian seasoning, black pepper, salt): ~$0.49. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $38.28 across 14 servings, so roughly $2.73 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $47.77 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -203,8 +203,8 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  289,
-                                   "buy":  "10.25 oz",
+                                   "grams":  199,
+                                   "buy":  "7 oz, drained",
                                    "bid":"canned-corn",
                                    "gpu":28.3495
                                },
@@ -248,7 +248,7 @@
                                           "Beef Broth, 9.25 cups (2240 g)",
                                           "Heavy Cream, 2.25 cups (555 g)",
                                           "Potato, 7.6 potatoes (1620 g)",
-                                          "Sweet Whole Kernel Corn, 10.25 oz (289 g)",
+                                          "Sweet Whole Kernel Corn, 7 oz, drained (199 g)",
                                           "Black Pepper, 1.25 tbsp (9 g)",
                                           "Salt, 1 tbsp (20 g)"
                                       ],
@@ -315,7 +315,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  289
+                                  "grams":  199
                               },
                               {
                                   "item":  "Black Pepper",

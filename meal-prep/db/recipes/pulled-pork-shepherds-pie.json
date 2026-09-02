@@ -22,9 +22,9 @@
 
                               ],
     "stat":  {
-                 "cal":  564,
+                 "cal":  561,
                  "protein":  36,
-                 "carbs":  38,
+                 "carbs":  37,
                  "fat":  29,
                  "cost_ps":  "3.38"
              },
@@ -47,12 +47,12 @@
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3.5 tbsp (28 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.75 tbsp (30 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 8.25 oz (234 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 10.25 oz (289 g)"
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 7 oz, drained (199 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Shoulder, 5.5 lb: ~$12.10. \u003cstrong\u003eBuy 6 lbs: $13.44.\u003c/strong\u003e",
-                       "Diced Tomatoes, 1.8 cans: ~$1.52. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.8 cans: ~$1.39. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
                        "Beef Broth, 1.25 cups: ~$0.50. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Balsamic Vinegar, 1.75 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
@@ -65,11 +65,11 @@
                        "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Worcestershire Sauce, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Frozen Green Peas, 8.25 oz: ~$0.45. \u003cstrong\u003eBuy 1 12oz bag: $0.66.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 10.25 oz: ~$0.41. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 7 oz, drained: ~$0.41. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, black pepper, salt): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $20.79 across 14 servings, so roughly $1.48 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.03 across 14 servings, roughly $2.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.44. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $20.66 across 14 servings, so roughly $1.48 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.88 across 14 servings, roughly $2.06 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.29. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a full casserole with pulled pork underneath and real mashed potatoes on top. Potatoes and frozen vegetables are the cheap part, and they are most of the volume.",
     "shop_smart":  [
@@ -90,14 +90,14 @@
     "portion_html":  "Weigh the finished pie in its dish, subtract the dish weight, divide by 14, and cut portions to that exact weight so nobody gets all potato and no filling. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theendlessmeal.com/pulled-pork-shepherds-pie/\" target=\"_blank\" rel=\"noopener\"\u003etheendlessmeal.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eShepherd\u0027s pie with pulled pork for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  20.79,
-    "cost_batch_true":  29.03,
+    "cost_batch":  20.66,
+    "cost_batch_true":  28.88,
     "cost_per_serving":  1.48,
-    "cost_per_serving_true":  2.07,
+    "cost_per_serving_true":  2.06,
     "cost_pantry_add":  18.41,
-    "cost_first_run":  47.44,
+    "cost_first_run":  47.29,
     "scaler":  {
-                   "cost":  "29.03",
+                   "cost":  "28.88",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",
@@ -238,8 +238,8 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  289,
-                                   "buy":  "10.25 oz",
+                                   "grams":  199,
+                                   "buy":  "7 oz, drained",
                                    "bid":"canned-corn",
                                    "gpu":28.3495
                                }
@@ -271,7 +271,7 @@
                                           "All-Purpose Flour, 3.5 tbsp (28 g)",
                                           "Worcestershire Sauce, 1.75 tbsp (30 g)",
                                           "Frozen Green Peas, 8.25 oz (234 g)",
-                                          "Sweet Whole Kernel Corn, 10.25 oz (289 g)"
+                                          "Sweet Whole Kernel Corn, 7 oz, drained (199 g)"
                                       ],
                  "steps":  [
                                "Season, sear and slow cook the pork shoulder, then shred it.",
@@ -352,7 +352,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  289
+                                  "grams":  199
                               }
                           ]
 }

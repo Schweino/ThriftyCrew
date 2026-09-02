@@ -14,7 +14,7 @@
     "writer_notes":  [
                          "All 20 locked ingredients are used by a step; no step uses an unbought item. Water is referenced in the rice method and now stated as 7 cups, but it is uncosted and not in the locked list, so it is not treated as a shopped ingredient.",
                          "Sea Salt carries two amounts in the locked view (1 3/4 tsp and 3 1/2 tsp): the first is the chicken spice blend, the second is the rice water. Plain Salt (1 scant tsp) is the corn salad. Both prose and steps keep them distinct.",
-                         "Cotija appears in two uses (2/3 cup in the salad, 1/2 cup as topping); cilantro appears in three (1/2 cup rice, 2/3 cup salad, 1 1/2 cups topping). Lime shows as Lime Juice (juice+zest of 3 1/2 limes for the salad; 7 tbsp for the rice) plus a separate Lime Zest line (3 1/2 tsp for the rice). Prose and steps reference each use without inventing or double-counting an amount.  BASIS RULING 2026-08-31 (w9 R3 repair pass, mapper): the Lime Zest line\u0027s buy package was corrected - db\\ingredients.json \u0027Lime Zest\u0027 carried buy_pkg_g 67 (a whole lime) against gpu 4 (the zest yield of one lime), so the engine charged 16.75 limes for one and the card printed \u0027Buy 1 each: $4.19\u0027 for 7 g of zest. buy_pkg_g now equals gpu (4, label \u0027lime\u0027) and the line reads \u0027Buy 2 limes: $0.50\u0027, off the same board:limes cell that prices classic-beef-and-bean-chili\u0027s whole limes at 4 for $1.00. SEPARATE, NOT YET EXECUTED: the Lime Juice line is RULED WRONG and left in place. Its source lines are \u0027Juice + zest of 1 lime\u0027 and \u00272 Tablespoons fresh lime juice\u0027 - fresh in both uses - and Brad\u0027s 2026-08-28 naming rule reserves the plain name \u0027Lime Juice\u0027 for the BOTTLE (bid lime-juice, floz) and \u0027Fresh Lime Juice\u0027 for the squeezed fruit (bid limes, gpu 30). So this line should be canon \u0027Fresh Lime Juice\u0027, which prices 213 g as 8 limes at $2.00 rather than one $0.48 bottle - and the card currently contradicts itself, telling the reader to buy the juice of 3 1/2 limes and then to buy one bottle. The rename is BLOCKED: meal-prep\\food-macros-db.json has no \u0027Fresh Lime Juice\u0027 row (the 2026-08-28 vocabulary mint added the ingredients row and not the macro row), and macro lookup is a strict item-name key with no alias fallback, so renaming would silently drop the line from the macro recompute. The food-DB row has been returned to the orchestrator; execute the rename once it lands.",
+                         "Cotija appears in two uses (2/3 cup in the salad, 1/2 cup as topping); cilantro appears in three (1/2 cup rice, 2/3 cup salad, 1 1/2 cups topping). Lime shows as Lime Juice (juice+zest of 3 1/2 limes for the salad; 7 tbsp for the rice) plus a separate Lime Zest line (3 1/2 tsp for the rice). Prose and steps reference each use without inventing or double-counting an amount.  BASIS RULING 2026-08-31 (w9 R3 repair pass, mapper): the Lime Zest line\u0027s buy package was corrected - db\\ingredients.json \u0027Lime Zest\u0027 carried buy_pkg_g 67 (a whole lime) against gpu 4 (the zest yield of one lime), so the engine charged 16.75 limes for one and the card printed \u0027Buy 1 each: $4.19\u0027 for 7 g of zest. buy_pkg_g now equals gpu (4, label \u0027lime\u0027) and the line reads \u0027Buy 2 limes: $0.50\u0027, off the same board:limes cell that prices classic-beef-and-bean-chili\u0027s whole limes at 4 for $1.00. SEPARATE, NOT YET EXECUTED: the Lime Juice line is RULED WRONG and left in place. Its source lines are \u0027Juice + zest of 1 lime\u0027 and \u00272 Tablespoons fresh lime juice\u0027 - fresh in both uses - and Brad\u0027s 2026-08-28 naming rule reserves the plain name \u0027Lime Juice\u0027 for the BOTTLE (bid lime-juice, floz) and \u0027Fresh Lime Juice\u0027 for the squeezed fruit (bid limes, gpu 30). So this line should be canon \u0027Fresh Lime Juice\u0027, which prices 213 g as 8 limes at $2.00 rather than one $0.48 bottle - and the card currently contradicts itself, telling the reader to buy the juice of 3 1/2 limes and then to buy one bottle. The rename is BLOCKED: meal-prep\\food-macros-db.json has no \u0027Fresh Lime Juice\u0027 row (the 2026-08-28 vocabulary mint added the ingredients row and not the macro row), and macro lookup is a strict item-name key with no alias fallback, so renaming would silently drop the line from the macro recompute. EXECUTED 2026-09-02: the food-DB row landed (Fresh Lime Juice, mirroring the Lime Juice row at 1 tbsp = 15 g, identical macros - the split is a pricing rule, not a food difference), the line was renamed through rebase-spec-ingredient and rebid to limes at gpu 30, and the ZEST DOUBLE-COUNT went with it: the juice line used to claim \u0027juice and zest of 3 1/2 limes\u0027 while a separate Lime Zest line claimed the zest as well. Each line now names one thing - juice 210 g (3 1/2 limes x 30 g plus 7 tbsp x 15 g) and zest 11 g (3 1/2 limes x 1 g plus 3 1/2 tsp x 2 g), both off the mapper\u0027s own per-unit figures - and the zest line carries covered_by \u0027Fresh Lime Juice\u0027, because the peel comes off limes the juice line has already bought. SALT CHECKED, NOT CHANGED: two rows is deliberate. The source writes \u0027sea salt\u0027 twice (chicken blend, rice water) and plain \u0027salt\u0027 once (corn salad), the mapper ruled sea-salt to its own board id rather than folding it onto salt, and the arithmetic closes on both rows at 3.5x source scale (1 1/2 tsp of source sea salt x 3.5 = 5 1/4 tsp x 6 g = 31 g; 1/4 tsp x 3.5 x 6 g = 5 g).",
                          "No cost_lines were supplied in this dispatch, so shop_smart makes no per-package or per-ounce savings claims. The only money in prose is the ${{cost_ps}} token and the $1/month membership line.",
                          "Macros used only from the locked view. Per-serving stat is 45g protein (44.6 pre-rounding) and 597 cal; prose and head.description now carry the stat figure 45g rather than the pre-round 44. Band satisfied (450-800 cal, protein \u003e= 40). No number was computed in prose."
                      ],
@@ -30,13 +30,13 @@
                               ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  597,
-                 "protein":  45,
-                 "carbs":  54,
+                 "cal":  599,
+                 "protein":  46,
+                 "carbs":  56,
                  "fat":  22,
-                 "cost_ps":  "3.59"
+                 "cost_ps":  "3.67"
              },
-    "intro_html":  "\u003cp\u003eMexican street corn, the kind you get on a stick from a cart with lime running down your wrist, is one of the best things a few cheap pantry spices can do. The problem is you cannot pack a paper tray of elote into a work bag and expect it to survive Tuesday. So we did the sensible thing and built it into a bowl.\u003c/p\u003e\u003cp\u003eThis is seared chili-lime chicken over cilantro lime rice, with a cold, creamy street corn salad spooned right on top and a scatter of avocado, red onion, cilantro and cotija to finish. It hits like takeout and costs like a pantry. Fourteen containers out of one skillet and one pot of rice, and every one of them carries {{protein}} grams of protein and stays under 600 calories. That is a full week and change of dinner handled, no drive-through required.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eMexican street corn, the kind you get on a stick from a cart with lime running down your wrist, is one of the best things a few cheap pantry spices can do. The problem is you cannot pack a paper tray of elote into a work bag and expect it to survive Tuesday. So we did the sensible thing and built it into a bowl.\u003c/p\u003e\u003cp\u003eThis is seared chili-lime chicken over cilantro lime rice, with a cold, creamy street corn salad spooned right on top and a scatter of avocado, red onion, cilantro and cotija to finish. It hits like takeout and costs like a pantry. Fourteen containers out of one skillet and one pot of rice, and every one of them carries {{protein}} grams of protein and {{cal}} calories. That is a full week and change of dinner handled, no drive-through required.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4 3/4 lb, cut into 1-inch chunks (2183 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tablespoons (47 g)",
@@ -46,16 +46,16 @@
                                 "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1 3/4 teaspoons (4 g)",
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 scant teaspoon (3 g)",
                                 "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 scant teaspoon (2 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 7 cups, drained (1148 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 7 cups, drained (1148 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 3/4 cups (427 g)",
                                 "\u003cstrong\u003eCotija Cheese (Cacique):\u003c/strong\u003e 2/3 cup crumbled; 1/2 cup crumbled, for topping (126 g)",
                                 "\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 7 tablespoons (98 g)",
-                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e juice and zest of 3 1/2 limes; 7 tablespoons (213 g)",
+                                "\u003cstrong\u003eFresh Lime Juice:\u003c/strong\u003e juice of 3 1/2 limes; 7 tablespoons (210 g)",
                                 "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3 1/2 jalapenos, finely diced (optional) (49 g)",
                                 "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1/2 cup chopped; 2/3 cup chopped; 1 1/2 cups leaves, for topping (44 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 scant teaspoon (5 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3 1/2 cups uncooked (648 g)",
-                                "\u003cstrong\u003eLime Zest:\u003c/strong\u003e 3 1/2 teaspoons (7 g)",
+                                "\u003cstrong\u003eLime Zest:\u003c/strong\u003e zest of 3 1/2 limes; 3 1/2 teaspoons (11 g)",
                                 "\u003cstrong\u003eAvocado:\u003c/strong\u003e 3 1/2 avocados, cubed (525 g)",
                                 "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1 cup sliced, for topping (105 g)"
                             ],
@@ -63,27 +63,27 @@
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 4 3/4 lb, cut into 1-inch chunks: ~$10.73. \u003cstrong\u003eBuy 5 lbs: $11.15.\u003c/strong\u003e",
                        "Olive Oil, 3 1/2 tablespoons: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 7 cups, drained: ~$1.62. \u003cstrong\u003eBuy 3 cans: $1.83.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 7 cups, drained: ~$2.35. \u003cstrong\u003eBuy 4 cans: $2.44.\u003c/strong\u003e",
                        "Greek Yogurt, 1 3/4 cups: ~$1.73. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
                        "Cotija Cheese, 2/3 cup crumbled; 1/2 cup crumbled, for topping: ~$2.11. \u003cstrong\u003eBuy 1 8oz wedge: $3.79.\u003c/strong\u003e",
                        "Mayonnaise, 7 tablespoons: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lime Juice, juice and zest of 3 1/2 limes; 7 tablespoons: ~$0.66. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Jalapeno, 3 1/2 jalapenos, finely diced (optional): ~$0.09. \u003cstrong\u003eBuy 1 lb: $0.88.\u003c/strong\u003e",
+                       "Fresh Lime Juice, juice of 3 1/2 limes; 7 tablespoons: ~$1.75. \u003cstrong\u003eBuy 7 limes: $1.75.\u003c/strong\u003e",
+                       "Jalapeno, 3 1/2 jalapenos, finely diced (optional): ~$0.19. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
                        "Fresh Cilantro, 1/2 cup chopped; 2/3 cup chopped; 1 1/2 cups leaves, for topping: ~$1.37. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Rice, 3 1/2 cups uncooked: ~$0.80. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Lime Zest, 3 1/2 teaspoons: ~$0.44. \u003cstrong\u003eBuy 2 limes: $0.50.\u003c/strong\u003e",
+                       "Rice, 3 1/2 cups uncooked: ~$0.82. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Lime Zest, zest of 3 1/2 limes; 3 1/2 teaspoons: ~$0.69. \u003cstrong\u003eFrom the limes you already bought.\u003c/strong\u003e",
                        "Avocado, 3 1/2 avocados, cubed: ~$2.03. \u003cstrong\u003eBuy 4 each: $2.32.\u003c/strong\u003e",
                        "Red Onion, 1 cup sliced, for topping: ~$0.30. \u003cstrong\u003eBuy 1 lb: $1.29.\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, sea salt, ground cumin, smoked paprika, garlic powder, onion powder, salt): ~$0.54. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.23 across 14 servings, so roughly $1.66 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $30.03 across 14 servings, roughly $2.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.22. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (chili powder, sea salt, ground cumin, smoked paprika, garlic powder, onion powder, salt): ~$0.55. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.43 across 14 servings, so roughly $1.82 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.83 across 14 servings, roughly $2.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.12. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "\u003cp\u003eRun the numbers and this bowl comes in at ${{cost_ps}} a serving. That is a street-cart dinner, seasoned chicken and a creamy corn salad and avocado on top, for less than the drink you would order to go with the real thing. Fourteen of them out of one shop.\u003c/p\u003e\u003cp\u003eThe membership that gets you every recipe like this one, priced against the actual Omaha shelf, runs a dollar a month. One bowl of takeout costs more than a year of knowing exactly what your dinner costs before you cook it.\u003c/p\u003e",
     "shop_smart":  [
                        "Lean on the shelf-stable stuff, because this recipe was built for it. Canned whole kernel corn is the move for the salad. You are draining it and folding it into yogurt and lime, so you gain nothing from fresh and you skip the shucking. Grab enough cans to reach seven cups drained and you are set.",
                        "Buy the chicken breast as a family pack rather than the small tray. You need four and three quarter pounds of it, and the big pack is how a bulk cook is supposed to shop. Cut it into one-inch chunks yourself at home.",
-                       "The spice drawer carries this dish, so check what you already own before you add to cart: chili powder, cumin, smoked paprika, garlic powder and onion powder are the whole lineup, and most kitchens already have every one of them. That leaves the cotija, the Greek yogurt and a couple of limes as the only fresh things you are really shopping for."
+                       "The spice drawer carries this dish, so check what you already own before you add to cart: chili powder, cumin, smoked paprika, garlic powder and onion powder are the whole lineup, and most kitchens already have every one of them. The fresh half of this cart is longer than it looks, though: cotija, Greek yogurt, seven limes, three and a half avocados, a red onion, a big bunch of cilantro and a few jalapenos. Buy those the day you cook, and cube the avocado at serving time so it does not brown in the fridge."
                    ],
     "make_it":  [
                     "Start the rice. Bring 7 cups water to a boil in a medium pot, then stir in the rice and the sea salt. Cover it, drop the heat to low, and let it simmer about 20 minutes until the rice is tender and the water is gone. While it steams, stir the chopped cilantro together with the lime juice and lime zest, then fold the warm rice through it. That is your cilantro lime base.",
@@ -96,14 +96,14 @@
     "portion_html":  "\u003cp\u003eHere is how you make 14 even containers without guessing. Do not eyeball it. Weigh the pot of finished cilantro lime rice, subtract the empty pot, and divide what is left by 14. That gram number is your rice line in every container, and it is the difference between everybody getting fed and the last three people getting a spoonful.\u003c/p\u003e\u003cp\u003eThe seared chicken splits the same way: weigh it, divide by 14, and lay that weight into each bowl so the protein is even across the batch. The street corn salad and the fresh toppings, the avocado, red onion, cilantro and that last dusting of cotija, go on cold at the end, either right before the lid or the morning you eat it so the avocado stays green. Portion those by eye across the 14 bowls and you are done, with every container weighing out the same.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eeatingbirdfood.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cp\u003eMake it once and you will see why it earns a rotation spot: it reheats without turning sad, the cold corn salad wakes it right back up, and it never tastes like leftovers. If this is the kind of eating you want on repeat, the whole library is built the same way, real macros, real prices, no mystery. Come cook the rest of it with us.\u003c/p\u003e",
-    "cost_batch":  23.23,
-    "cost_batch_true":  30.03,
-    "cost_per_serving":  1.66,
-    "cost_per_serving_true":  2.14,
-    "cost_pantry_add":  19.19,
-    "cost_first_run":  49.22,
+    "cost_batch":  25.43,
+    "cost_batch_true":  32.83,
+    "cost_per_serving":  1.82,
+    "cost_per_serving_true":  2.34,
+    "cost_pantry_add":  19.29,
+    "cost_first_run":  52.12,
     "scaler":  {
-                   "cost":  "30.03",
+                   "cost":  "32.83",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -202,12 +202,12 @@
                                    "gpu":  "28.350"
                                },
                                {
-                                   "item":  "Lime Juice",
-                                   "canon":  "Lime Juice",
-                                   "grams":  213,
-                                   "buy":  "juice and zest of 3 1/2 limes; 7 tablespoons",
-                                   "bid":  "lime-juice",
-                                   "gpu":  "29.570"
+                                   "item":  "Fresh Lime Juice",
+                                   "canon":  "Fresh Lime Juice",
+                                   "grams":  210,
+                                   "buy":  "juice of 3 1/2 limes; 7 tablespoons",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
                                },
                                {
                                    "item":  "Jalapeno",
@@ -244,8 +244,9 @@
                                {
                                    "item":  "Lime Zest",
                                    "canon":  "Lime Zest",
-                                   "grams":  7,
-                                   "buy":  "3 1/2 teaspoons",
+                                   "grams":  11,
+                                   "buy":  "zest of 3 1/2 limes; 3 1/2 teaspoons",
+                                   "covered_by":  "Fresh Lime Juice",
                                    "bid":  "limes",
                                    "gpu":  "4.000"
                                },
@@ -268,13 +269,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Meal-prep street corn chicken rice bowls: chili-lime chicken over cilantro lime rice with a creamy Mexican street corn salad, avocado and cotija. 14 servings, {{protein}}g protein and under 600 calories each.",
+                 "description":  "Meal-prep street corn chicken rice bowls: chili-lime chicken over cilantro lime rice with a creamy Mexican street corn salad, avocado and cotija. 14 servings, {{protein}}g protein and {{cal}} calories each.",
                  "keywords":  "street corn chicken rice bowls, mexican street corn chicken, high protein meal prep, chicken rice bowl meal prep, elote chicken bowl, budget meal prep dinner, cilantro lime rice bowl, 14 serving meal prep",
                  "image":  "",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  3.59,
+                 "costPerServing":  3.67,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 4 3/4 lb, cut into 1-inch chunks (2183 g)",
                                           "Olive Oil, 3 1/2 tablespoons (47 g)",
@@ -288,12 +289,12 @@
                                           "Greek Yogurt, 1 3/4 cups (427 g)",
                                           "Cotija Cheese, 2/3 cup crumbled; 1/2 cup crumbled, for topping (126 g)",
                                           "Mayonnaise, 7 tablespoons (98 g)",
-                                          "Lime Juice, juice and zest of 3 1/2 limes; 7 tablespoons (213 g)",
+                                          "Fresh Lime Juice, juice of 3 1/2 limes; 7 tablespoons (210 g)",
                                           "Jalapeno, 3 1/2 jalapenos, finely diced (optional) (49 g)",
                                           "Fresh Cilantro, 1/2 cup chopped; 2/3 cup chopped; 1 1/2 cups leaves, for topping (44 g)",
                                           "Salt, 1 scant teaspoon (5 g)",
                                           "Rice, 3 1/2 cups uncooked (648 g)",
-                                          "Lime Zest, 3 1/2 teaspoons (7 g)",
+                                          "Lime Zest, zest of 3 1/2 limes; 3 1/2 teaspoons (11 g)",
                                           "Avocado, 3 1/2 avocados, cubed (525 g)",
                                           "Red Onion, 1 cup sliced, for topping (105 g)"
                                       ],
@@ -364,8 +365,8 @@
                                   "grams":  98
                               },
                               {
-                                  "item":  "Lime Juice",
-                                  "grams":  213
+                                  "item":  "Fresh Lime Juice",
+                                  "grams":  210
                               },
                               {
                                   "item":  "Jalapeno",
@@ -385,7 +386,7 @@
                               },
                               {
                                   "item":  "Lime Zest",
-                                  "grams":  7
+                                  "grams":  11
                               },
                               {
                                   "item":  "Avocado",

@@ -22,7 +22,7 @@
 
                               ],
     "stat":  {
-                 "cal":  586,
+                 "cal":  580,
                  "protein":  36,
                  "carbs":  46,
                  "fat":  29,
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 20 oz dry (564 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (132 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 15 oz (422 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 1.2 cans (520 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 1.2 cans (359 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.75 tbsp (32 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 6.25 tbsp (50 g)",
                                 "\u003cstrong\u003eMilk (store brand):\u003c/strong\u003e 3.25 cups (772 g)",
@@ -116,7 +116,7 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  520,
+                                   "grams":  359,
                                    "buy":  "1.2 cans",
                                    "bid":"canned-corn",
                                    "gpu":28.3495
@@ -207,7 +207,7 @@
                                           "Egg Noodles, 20 oz dry (564 g)",
                                           "Butter, 0.5 cups (132 g)",
                                           "Frozen Green Peas, 15 oz (422 g)",
-                                          "Sweet Whole Kernel Corn, 1.2 cans (520 g)",
+                                          "Sweet Whole Kernel Corn, 1.2 cans (359 g)",
                                           "Garlic, 3.75 tbsp (32 g)",
                                           "All-Purpose Flour, 6.25 tbsp (50 g)",
                                           "Milk (store brand), 3.25 cups (772 g)",
@@ -241,7 +241,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  520
+                                  "grams":  359
                               },
                               {
                                   "item":  "Garlic",

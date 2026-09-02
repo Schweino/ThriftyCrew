@@ -40,6 +40,37 @@ function Test-BaseDrift { param([double]$DensityGrams,[double]$FoodDbGrams,[doub
   if($FoodDbGrams -le 0 -or $DensityGrams -le 0){ return $false }
   return ([Math]::Abs($DensityGrams-$FoodDbGrams)/$FoodDbGrams -gt $Tol) }
 
+# THE RECIPE DRAINS WHAT THE ENGINE BUYS GROSS (2026-09-02).
+#
+# There is no field anywhere that declares "this ingredient's grams are drained grams". The cost engine
+# INFERS it (cost-recipes.ps1:141): densities.can is read as a DRAINED yield and buy_pkg_g as the can's
+# NET weight, and a row qualifies only when can < buy_pkg_g x 0.95. So a densities row that copies the net
+# weight into `can` - Sweet Whole Kernel Corn 432/432, Pineapple Chunks 567/567 - opts OUT of the drained
+# branch silently, while its spec lines happily say "cups, drained" and carry drained grams. The engine
+# then divides drained grams by a gross can and under-buys: 13 corn recipes were each a can short.
+#
+# THIS IS THE ONE CONTRADICTION THAT IS VISIBLE WITHOUT A NEW MEASUREMENT. It needs no yield figure and no
+# judgement about what a cup weighs: the SPEC says the cook drains the can, and the DB says the engine
+# bought it undrained. Those two cannot both be right, whatever the true yield turns out to be. HARD,
+# because the wrong number it produces is a shopping list that sends a reader home short.
+#
+# 'undrained' MUST NOT MATCH. \b already refuses it (there is no word boundary inside "undrained"), and
+# the lookbehind states the intent so a later edit to the boundary cannot quietly widen the rule.
+#
+# A PACKAGE THAT IS ITSELF A DRAINED WEIGHT IS NOT A CONTRADICTION - and this term was added the first
+# time the check ran over live data, not designed in. densities.can is one way to say "the buy package
+# needs draining down"; declaring buy_pkg_g AS the drained weight is the other, and Black Olives does
+# exactly that: buy_pkg_g 170 labelled '6oz drained-weight can', with mediterranean-chicken-w-marinade
+# asking for 728 g of drained olives. Drained grams over a drained package is correct arithmetic, so
+# firing there would be a false HARD - and a false HARD on this guard blocks wave-publish P5 outright,
+# which is how a detector gets reached for with -Skip. Measured 2026-09-02 over all 351 ingredient rows:
+# exactly one declares a drained buy package this way and exactly one declares a gross one
+# (Sun-Dried Tomatoes (Oil-Packed), 'GROSS jar weight incl. packing oil'), and the guard must tell those
+# two apart. It reads the estate's own declaration; it never infers one.
+function Test-DrainedLineWithoutYield { param([string]$BuyText,[double]$CanG,[double]$PkgG,[string]$PkgLabel='')
+  if($PkgLabel -match '(?<!un)\bdrain(ed)?\b'){ return $false }
+  return ($BuyText -match '(?<!un)\bdrained\b' -and $PkgG -gt 0 -and -not ($CanG -gt 0 -and $CanG -lt $PkgG * 0.95)) }
+
 # HOW MANY OF $Unit IS ONE SERVING? Returns $null when the label does not LEAD with that unit.
 #
 # WHY THIS EXISTS (2026-08-29). This guard compared densities' grams-per-cup straight against the food
@@ -181,6 +212,72 @@ if($SelfTest){
   T 'a row with no aliases array is handled'                         ($am.ContainsKey('Salt'))                      'threw or skipped'
   # CLEAN TWIN: widening the index must not make an unknown name resolve - that would hide real dropped lines.
   T 'CLEAN TWIN an unmapped name still does NOT resolve'             (-not $am.ContainsKey('Panko Breadcrumbs'))    'alias widening swallowed a real MISSING-SIDE'
+
+  # ---- THE serving_qty HALF OF THE LABEL (2026-09-02) ----------------------------------------------
+  # FROZEN as read from meal-prep\food-macros-db.json and db\densities.json on 2026-09-02, BEFORE the corn
+  # re-basis moved either file. These are the literal rows, not a regeneration: re-reading them from the
+  # live files after the fix would make the founding bug vanish and the case would pass by finding nothing.
+  T 'MUST FIRE  a 1/2-cup label serving is TWO servings to the cup (Sweet Whole Kernel Corn 165 vs 125/0.5 = 250)' `
+    (Test-BaseDrift 165 (125 / (0.5 * (Get-LabelUnitQty 'cup' 'cup')))) `
+    'still skipping every serving_qty != 1 row, which is every Great Value canned-vegetable label'
+  # CLEAN TWINS: three live rows with the SAME serving_qty 0.5 / 0.25 shape whose bases genuinely agree.
+  # Normalising is not excusing - if these went noisy the change would have traded a blind guard for a
+  # crying one, and this file's own header says which of those is worse.
+  T 'CLEAN TWIN Refried Beans 260 vs {0.5 cup = 130 g} -> 260, silent' `
+    (-not (Test-BaseDrift 260 (130 / (0.5 * (Get-LabelUnitQty 'cup' 'cup'))))) 'false positive on a row that agrees'
+  T 'CLEAN TWIN Cottage Cheese 226 vs {0.5 cup = 113 g} -> 226, silent' `
+    (-not (Test-BaseDrift 226 (113 / (0.5 * (Get-LabelUnitQty 'cup' 'cup'))))) 'false positive on a row that agrees'
+  T 'CLEAN TWIN Rice 180 vs {0.25 cup = 45 g} -> 180, silent' `
+    (-not (Test-BaseDrift 180 (45 / (0.25 * (Get-LabelUnitQty 'cup' 'cup'))))) 'false positive on a row that agrees'
+  # AND THE OTHER ENCODING MUST STILL WORK. Ricotta states its fraction in the label SENTENCE with
+  # serving_qty 1; the two encodings multiply, and measured over all 434 rows on 2026-09-02 not one
+  # carries both, so the product is never applied twice.
+  T 'CLEAN TWIN the label-sentence fraction still reconciles when serving_qty is 1 (Ricotta 62 -> 248 vs 246)' `
+    (-not (Test-BaseDrift 246 (62 / (1 * (Get-LabelUnitQty '1/4 cup (62g), about 7 servings per container' 'cup'))))) `
+    'the serving_qty factor broke the label-sentence branch'
+
+  # ---- DRAINED-NO-YIELD (2026-09-02) --------------------------------------------------------------
+  # FROZEN: street-corn-chicken-rice-bowls' real line as it stood this morning - buy '7 cups, drained',
+  # densities can 432, ingredients buy_pkg_g 432. That is the founding bug: the cook drains the can, the
+  # engine buys it whole, and 1148 g / 432 bought three cans where four are needed.
+  T 'MUST FIRE  a line that says drained on an item whose densities.can is the NET weight (street-corn corn 432/432)' `
+    (Test-DrainedLineWithoutYield '7 cups, drained' 432 432) `
+    'the basis contradiction that under-bought a can of corn on 13 recipes is invisible again'
+  # CLEAN TWIN 1: the same shape with a real drained yield present - chili-cornbread-casserole's Kidney
+  # Beans, 255 g drained against a 425 g net can. This is what a correctly encoded drained item looks like.
+  T 'CLEAN TWIN a drained line WITH a yield is silent (Kidney Beans 255 drained / 425 net)' `
+    (-not (Test-DrainedLineWithoutYield '3 cans, drained' 255 425)) 'fires on a correctly encoded drained item'
+  # CLEAN TWIN 2: Refried Beans, can 454 == buy_pkg_g 454 and nothing is drained. A can whose densities
+  # row copies the net weight is only a defect when the RECIPE drains it.
+  T 'CLEAN TWIN a gross can that nobody drains is silent (Refried Beans 454/454, buy "1 can")' `
+    (-not (Test-DrainedLineWithoutYield '1 can' 454 454)) 'fires on every gross can in the catalogue'
+  # CLEAN TWIN 3: the fix itself. After densities.can moves to the USDA drained yield the founding row
+  # must go quiet, or the guard would block its own repair.
+  T 'CLEAN TWIN the SAME street-corn line goes silent once can becomes the drained yield (298/432)' `
+    (-not (Test-DrainedLineWithoutYield '7 cups, drained' 298 432)) 'the guard cannot be satisfied by fixing the data'
+  # 'undrained' IS ITS OWN WORD. A line that says the can goes in juice and all is not a drained line.
+  T 'MUST NOT FIRE  "undrained" is not "drained"' `
+    (-not (Test-DrainedLineWithoutYield '2 cans, undrained' 567 567)) 'matched the substring inside undrained'
+  T 'CLEAN TWIN an item with no buy package at all has nothing to contradict' `
+    (-not (Test-DrainedLineWithoutYield '2 cups, drained' 0 0)) 'fired on a bulk item with no package def'
+  # CLEAN TWIN 4, FROZEN from db\ingredients.json 'Black Olives' as read 2026-09-02: buy_pkg_g 170 with the
+  # label '6oz drained-weight can', against mediterranean-chicken-w-marinade's 728 g of drained olives.
+  # The first live run of this predicate reported it HARD; it is correct arithmetic, and it is the reason
+  # the package label is now part of the question.
+  T 'CLEAN TWIN a buy package that IS a drained weight is not a contradiction (Black Olives 170 g "6oz drained-weight can")' `
+    (-not (Test-DrainedLineWithoutYield 'about 1 1/2 lb drained black olives (three 14.5 oz cans)' 0 170 '6oz drained-weight can')) `
+    'false HARD on a correctly drained package - this blocks wave-publish P5'
+  # AND THE TWIN MUST NOT BECOME A LOOPHOLE. The same line against a package NOT declared drained still
+  # fires, so the exemption is the declaration and nothing else.
+  T 'MUST FIRE  the same olive line against an undeclared package still fires' `
+    (Test-DrainedLineWithoutYield 'about 1 1/2 lb drained black olives (three 14.5 oz cans)' 0 170 '6oz can') `
+    'the package-label term swallowed the whole check'
+  # FROZEN from db\ingredients.json 'Sun-Dried Tomatoes (Oil-Packed)': buy_pkg_g 680, label '24oz jar',
+  # note 'GROSS jar weight incl. packing oil (Brad, 2026-08-16). Do not correct to drained weight - that
+  # would be a guess.' creamy-tuscan-chicken-skillet asks for 193 g '1 3/4 cups oil-packed, drained'.
+  T 'MUST FIRE  a jar declared GROSS against a line that drains it (Sun-Dried Tomatoes 680 g "24oz jar")' `
+    (Test-DrainedLineWithoutYield '1 3/4 cups oil-packed, drained' 0 680 '24oz jar') `
+    'the oil-packed gross-jar case went silent'
   if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -228,6 +325,27 @@ foreach($sf in (Get-ChildItem (Join-Path $mp 'db\recipes\*.json'))){
   # so one macro-only name is matched by one scaler-only name and the arrays stay the same length. A ONE-SIDED
   # split means a line exists on one side and nowhere on the other - macro-only is a cost line silently
   # dropped from the total, scaler-only is an ingredient costed but not counted in the macros.
+  # ---- DRAINED-NO-YIELD: the spec drains a can the engine buys whole ----------------------------------
+  # Read off the SAME three stores this guard already loads. Walks scaler.ing rather than the built card,
+  # because a spec with no card yet is exactly the one about to publish with the defect in it.
+  foreach($si in @($sp.scaler.ing)){
+    if(-not $si){ continue }
+    $sName = if($si.canon){ [string]$si.canon } else { [string]$si.item }
+    $sBuy  = if($si.PSObject.Properties.Name -contains 'buy'){ [string]$si.buy } else { '' }
+    if(-not $sBuy){ continue }
+    if(-not $ingm.ContainsKey($sName)){ continue }               # MISSING-SIDE above already owns that
+    $iRow = $ingm[$sName]
+    if($iRow.PSObject.Properties.Name -notcontains 'buy_pkg_g'){ continue }
+    $pkgG = [double]$iRow.buy_pkg_g
+    $pkgL = if($iRow.PSObject.Properties.Name -contains 'buy_pkg_label'){ [string]$iRow.buy_pkg_label } else { '' }
+    $canG = 0.0
+    $dRow = $dens.PSObject.Properties[$sName]
+    if($dRow -and ($dRow.Value.PSObject.Properties.Name -contains 'can')){ $canG = [double]$dRow.Value.can }
+    if(Test-DrainedLineWithoutYield $sBuy $canG $pkgG $pkgL){
+      $hard.Add("DRAINED-NO-YIELD: $($sf.BaseName) :: $sName :: line says drained but densities.can $canG is not a drained yield against buy_pkg_g $pkgG - the cook drains the can, the engine buys it whole, so buy_n is computed off gross grams and under-buys")
+    }
+  }
+
   $macroOnly  = @($macroNames  | Where-Object { $scalerNames -notcontains $_ })
   $scalerOnly = @($scalerNames | Where-Object { $macroNames  -notcontains $_ })
   $paired = Test-SplitPaired $macroOnly.Count $scalerOnly.Count
@@ -262,12 +380,28 @@ foreach($p in $dens.PSObject.Properties){
   $row=$fdbm[$item]
   foreach($u in @('cup','tbsp','each')){
     if(-not $p.Value.PSObject.Properties[$u]){ continue }
-    if([double]$row.serving_qty -ne 1){ continue }
     # NORMALISE THE LABEL BEFORE COMPARING. serving_grams is the weight of ONE SERVING, and the serving
     # is only sometimes one whole $u - see Get-LabelUnitQty. $null means this unit is not the one the
     # serving is stated in, which is a skip rather than a finding: there is nothing to compare.
-    $qty = Get-LabelUnitQty ([string]$row.serving_unit) $u
-    if($null -eq $qty -or $qty -le 0){ continue }
+    $labelQty = Get-LabelUnitQty ([string]$row.serving_unit) $u
+    if($null -eq $labelQty -or $labelQty -le 0){ continue }
+    # THE SERVING SIZE LIVES IN TWO FIELDS, AND THIS CHECK USED TO READ ONLY ONE (2026-09-02).
+    #
+    # It opened with `if([double]$row.serving_qty -ne 1){ continue }`, which skipped 296 of 434 food-DB
+    # rows - and not a random 296. "1/2 cup (125g)" is transcribed as serving_qty 0.5 with serving_unit
+    # 'cup', which is the shape of EVERY Great Value canned-vegetable label in this DB, so the one class
+    # of row this check exists to police was the one class it never looked at. Sweet Whole Kernel Corn
+    # sat at 165 g/cup in densities against 125/0.5 = 250 g/cup on its label - a 34% split, invisible
+    # since the row was written, and the reason 13 recipes under-bought a can of corn each.
+    #
+    # BOTH FIELDS MULTIPLY. serving_qty is how many of the stated unit make one serving; Get-LabelUnitQty
+    # is how many of $u the LABEL SENTENCE leads with. Measured 2026-09-02 over all 434 rows: ZERO carry
+    # both encodings (no row has serving_qty != 1 AND a leading number in serving_unit), so the product
+    # can never be applied twice. A row that only ever states one of them multiplies by 1 and behaves
+    # exactly as before.
+    $sq = [double]$row.serving_qty
+    if($sq -le 0){ $sq = 1 }
+    $qty = $sq * $labelQty
     $dbPerUnit = [double]$row.serving_grams / $qty
     if(Test-BaseDrift ([double]$p.Value.$u) $dbPerUnit){
       # Show the label's own fraction as a fraction. [Math]::Round on 2/3 prints 0.666666666666667,

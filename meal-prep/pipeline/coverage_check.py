@@ -989,9 +989,22 @@ def _walk_strings(obj):
 
 
 def check_dash_sweep(spec) -> dict:
-    """Brad's rule, over EVERY string - the same walk build-v2-spec.ps1 runs at write time. Checked at
-    three layers on purpose; this is the layer that reaches the QA agent."""
+    """Brad's rule, over every string a READER can reach - the same walk build-v2-spec.ps1 runs at write
+    time. Checked at three layers on purpose; this is the layer that reaches the QA agent.
+
+    forbidden_prose_terms IS NOT PROSE, and reading it as prose is a bug this estate has already fixed
+    once, in the other copy. That field is the spec's own BAN LIST: a recipe that forbids the em dash
+    names the em dash there, so a sweep that walks it fails the spec for declaring the rule it is being
+    checked against. build-v2-spec.ps1:98-103 carries the fix and the fixture ("three recipes of
+    hunt-2026-08-27-ten were refused with 'EM DASH in spec text' without one em dash between them
+    anywhere a reader could see"); this copy never got it, so four live specs - street-corn among them -
+    fail QA every run for a dash no reader will ever see. Measured 2026-09-02 over all 584 specs: 4 carry
+    a dash ONLY in forbidden_prose_terms and ZERO carry one in real prose, so this exclusion silences
+    exactly the false four and nothing else.
+    """
     findings = []
+    if isinstance(spec, dict):
+        spec = {k: v for k, v in spec.items() if k != 'forbidden_prose_terms'}
     for s in _walk_strings(spec):
         if '—' in s:
             findings.append({'severity': 'fail', 'detail': 'EM DASH: ' + s[:70]})
@@ -1363,6 +1376,25 @@ def _selftest() -> int:
       check_dash_sweep({'prose': {'a': 'a fine line—and then some'}})['verdict'] == 'fail', '')
     T('MUST FIRE  an en dash is found too', check_dash_sweep({'a': ['range 4–6']})['verdict'] == 'fail', '')
     T('CLEAN TWIN hyphens are not dashes', check_dash_sweep({'a': 'low-carb, high-protein'})['verdict'] == 'pass', '')
+    # ---- the ban list is not prose (2026-09-02) ----------------------------------------------------
+    # FROZEN from street-corn-chicken-rice-bowls as it stood this morning: clean prose, and a
+    # forbidden_prose_terms array that names both dashes because that is what the field is FOR. The
+    # sibling copy of this rule (build-v2-spec.ps1:98-103) was fixed on 2026-08-27 after it refused
+    # three recipes for exactly this; this copy was still failing four live specs' QA every run.
+    ban_only = {'intro_html': '<p>clean prose, no dashes</p>',
+                'forbidden_prose_terms': ['—', '–', 'delve']}
+    T('MUST NOT FIRE  a spec whose forbidden_prose_terms NAMES the dashes still passes',
+      check_dash_sweep(ban_only)['verdict'] == 'pass', check_dash_sweep(ban_only)['detail'])
+    # AND THE EXCLUSION MUST NOT BECOME A LOOPHOLE. A real dash in real prose still fails, ban list or not.
+    ban_and_real = {'intro_html': 'a real — in prose', 'forbidden_prose_terms': ['—']}
+    T('MUST FIRE  a real em dash in PROSE still fails with the ban list present',
+      check_dash_sweep(ban_and_real)['verdict'] == 'fail', '')
+    ban_and_en = {'head': {'description': 'range 4–6'}, 'forbidden_prose_terms': ['—', '–']}
+    T('MUST FIRE  a real en dash NESTED in prose still fails with the ban list present',
+      check_dash_sweep(ban_and_en)['verdict'] == 'fail', '')
+    ban_arr = {'ingredients_display': ['fine', 'bad —'], 'forbidden_prose_terms': ['—']}
+    T('MUST FIRE  a dash inside an ARRAY of prose is still swept',
+      check_dash_sweep(ban_arr)['verdict'] == 'fail', '')
 
     # ---- servings claim -----------------------------------------------------------------------------
     spec, src = mk(even_spec, even_src)

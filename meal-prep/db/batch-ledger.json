@@ -1121,16 +1121,11 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w9",
       "opened":  "2026-08-28T07:31:01",
-      "last_activity":  "2026-08-28T07:31:02",
+      "last_activity":  "2026-09-02T09:11:52",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
       "slugs":  [
-                    "blackened-chicken-with-mango-salsa",
-                    "high-protein-chicken-alfredo-lasagna",
-                    "crack-chicken-chili",
-                    "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
-                    "chicken-and-potato-curry",
                     "street-corn-chicken-rice-bowls"
                 ],
       "stages":  [
@@ -1153,6 +1148,11 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-28T07:31:02",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "reconcile",
+                         "at":  "2026-09-02T09:11:52",
+                         "detail":  "dropped 5: blackened-chicken-with-mango-salsa, high-protein-chicken-alfredo-lasagna, crack-chicken-chili, no-boil-chicken-pasta-casserole-with-artichokes-and-peas, chicken-and-potato-curry - Reconciled 2026-09-02. wave-9.json itself was reconciled to an EMPTY slug list on 2026-08-28T07:53:22, one second after the auditor\u0027s NO-GO, but this ledger row was not - it still listed all six. Five of them left w9 and shipped under OTHER waves that stamped their own publish and post-publish-review: blackened-chicken-with-mango-salsa and crack-chicken-chili published under w13 (2026-08-29), high-protein-chicken-alfredo-lasagna, no-boil-chicken-pasta-casserole-with-artichokes-and-peas and chicken-and-potato-curry published under w15 (2026-09-01). They are superseded, not abandoned, and this row was reporting them as LIVE-UNREVIEWED. Only street-corn-chicken-rice-bowls is still genuinely w9\u0027s: source-QA PASSED it 2026-09-02 after the lime-juice blocker was cleared, and it is not published."
                      }
                  ]
   },

@@ -14,10 +14,10 @@
     "writer_notes":  [],
     "forbidden_prose_terms":  [],
     "stat":  {
-                 "cal":  674,
-                 "protein":  52,
-                 "carbs":  67,
-                 "fat":  21,
+                 "cal":  675,
+                 "protein":  53,
+                 "carbs":  68,
+                 "fat":  22,
                  "cost_ps":  "5.38"
              },
     "intro_html":  "Everything you love about taco night in one loaded skillet. Lean beef, seasoned black beans, corn, and zucchini simmer together, then get finished with a little melty cheddar. It runs about ${{cost_ps}} a serving (at everyday cost) with a big {{protein}} grams of protein and makes 14 filling bowls.",
@@ -25,7 +25,7 @@
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2230 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 14 cups (2366 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (420 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 3 cups (500 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 3 cups (500 g)",
                                 "\u003cstrong\u003eZucchini:\u003c/strong\u003e 2 zucchinis (400 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1 3/4 cups (450 g)",
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 2 1/2 cups (280 g)",
@@ -45,8 +45,8 @@
     "cost_lines":  [
                        "93/7 Ground Beef, 5 lb: ~$30.33. \u003cstrong\u003eBuy 5 lbs: $30.85.\u003c/strong\u003e",
                        "Seasoned Black Beans, 14 cups: ~$15.44. \u003cstrong\u003eBuy 10 cans: $16.64.\u003c/strong\u003e",
-                       "Rice, 1 lb: ~$0.52. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 3 cups: ~$0.71. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.53. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 3 cups: ~$1.02. \u003cstrong\u003eBuy 2 cans: $1.22.\u003c/strong\u003e",
                        "Zucchini, 2 zucchinis: ~$1.34. \u003cstrong\u003eBuy 1 lb: $1.52.\u003c/strong\u003e",
                        "Tomato Sauce, 1 3/4 cups: ~$0.89. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 2 1/2 cups: ~$2.15. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
@@ -54,9 +54,9 @@
                        "Yellow Onion, 1/2 cup diced: ~$0.61. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Red Bell Pepper, 2 peppers diced: ~$3.29. \u003cstrong\u003eBuy 3 each: $4.56.\u003c/strong\u003e",
                        "Pantry seasonings (chili powder, ground cumin, garlic powder, dried oregano, paprika, salt, red pepper flakes, black pepper): ~$0.94. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $56.29 across 14 servings, so roughly $4.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $62.47 across 14 servings, roughly $4.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.34. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $56.61 across 14 servings, so roughly $4.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $62.48 across 14 servings, roughly $4.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.37. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -75,14 +75,14 @@
     "portion_html":  "Each of the 14 servings brings {{protein}} grams of protein and {{cal}} calories, a genuinely loaded bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://wholesomemadeeasy.com/loaded-taco-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eWholesome Made Easy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Taco night flavor with the budget math working in your favor, all from one pan. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  56.29,
-    "cost_batch_true":  62.47,
-    "cost_per_serving":  4.02,
+    "cost_batch":  56.61,
+    "cost_batch_true":  62.48,
+    "cost_per_serving":  4.04,
     "cost_per_serving_true":  4.46,
-    "cost_pantry_add":  12.87,
-    "cost_first_run":  75.34,
+    "cost_pantry_add":  12.89,
+    "cost_first_run":  75.37,
     "scaler":  {
-                   "cost":  "62.47",
+                   "cost":  "62.48",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

@@ -24,8 +24,8 @@
 
                               ],
     "stat":  {
-                 "cal":  578,
-                 "protein":  32,
+                 "cal":  575,
+                 "protein":  31,
                  "carbs":  82,
                  "fat":  14,
                  "cost_ps":  "4.39"
@@ -42,7 +42,7 @@
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 16 potatoes (3394 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3 carrots (173 g)",
                                 "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 3 oz (87 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4.5 oz (130 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (generic (USDA)):\u003c/strong\u003e 3 oz, drained (90 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 3.75 oz (106 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2.75 cups dry (473 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (38 g)",
@@ -63,13 +63,13 @@
                        "Potato, 16 potatoes: ~$4.44. \u003cstrong\u003eBuy 8 lbs: $4.75.\u003c/strong\u003e",
                        "Carrots, 3 carrots: ~$0.36. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
                        "Green Beans, 3 oz: ~$0.19. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 4.5 oz: ~$0.18. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 3 oz, drained: ~$0.18. \u003cstrong\u003eBuy 1 can: $0.61.\u003c/strong\u003e",
                        "Frozen Green Peas, 3.75 oz: ~$0.20. \u003cstrong\u003eBuy 1 12oz bag: $0.66.\u003c/strong\u003e",
-                       "Rice, 2.75 cups dry: ~$0.58. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Rice, 2.75 cups dry: ~$0.60. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, dried oregano, paprika, black pepper, ground cumin): ~$0.60. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $38.49 across 14 servings, so roughly $2.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $51.30 across 14 servings, roughly $3.66 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.49. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $38.51 across 14 servings, so roughly $2.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.32 across 14 servings, roughly $3.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.52. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Vegetables carry the volume in this pot, not the beef, and that is exactly why the number is where it is.",
     "shop_smart":  [
@@ -91,14 +91,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight into each of 14 containers, stirring hard between scoops because everything in this pot sinks. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.curiouscuisiniere.com/carbonada-chilean-beef-soup/\" target=\"_blank\" rel=\"noopener\"\u003ecuriouscuisiniere.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Chilean carbonada for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  38.49,
-    "cost_batch_true":  51.3,
+    "cost_batch":  38.51,
+    "cost_batch_true":  51.32,
     "cost_per_serving":  2.75,
-    "cost_per_serving_true":  3.66,
-    "cost_pantry_add":  10.19,
-    "cost_first_run":  61.49,
+    "cost_per_serving_true":  3.67,
+    "cost_pantry_add":  10.2,
+    "cost_first_run":  61.52,
     "scaler":  {
-                   "cost":  "51.30",
+                   "cost":  "51.32",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",
@@ -183,8 +183,8 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "canon":  "Sweet Whole Kernel Corn",
-                                   "grams":  130,
-                                   "buy":  "4.5 oz",
+                                   "grams":  90,
+                                   "buy":  "3 oz, drained",
                                    "bid":"canned-corn",
                                    "gpu":28.3495
                                },
@@ -265,7 +265,7 @@
                                           "Potato, 16 potatoes (3394 g)",
                                           "Carrots, 3 carrots (173 g)",
                                           "Green Beans, 3 oz (87 g)",
-                                          "Sweet Whole Kernel Corn, 4.5 oz (130 g)",
+                                          "Sweet Whole Kernel Corn, 3 oz, drained (90 g)",
                                           "Frozen Green Peas, 3.75 oz (106 g)",
                                           "Rice, 2.75 cups dry (473 g)",
                                           "Salt, 2 tbsp (38 g)",
@@ -325,7 +325,7 @@
                               },
                               {
                                   "item":  "Sweet Whole Kernel Corn",
-                                  "grams":  130
+                                  "grams":  90
                               },
                               {
                                   "item":  "Frozen Green Peas",

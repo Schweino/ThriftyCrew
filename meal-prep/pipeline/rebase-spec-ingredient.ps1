@@ -45,6 +45,7 @@ param(
   [string]$FoodDbFile = '',
   [switch]$Restat,          # recompute macros in place: the item did not move, its food-DB NUMBERS did
   [string]$PriorFoodDb = '',# the food DB as it was BEFORE that change - the proof that we understand the spec
+  [string]$PriorSpecDir = '',# the specs as they were BEFORE their GRAMS moved - the other half of that proof
   [switch]$Apply,
   [switch]$SelfTest
 )
@@ -101,6 +102,42 @@ function Get-BrandParen { param([string]$Brand)
 # only thing that can match is the head of an ingredients_display line.
 # The escaped spelling is BUILT, not typed: a literal backslash-u in a PowerShell string is one keystroke
 # away from being read as a .NET regex \uXXXX escape by the next person to touch this line.
+# WHICH ROWS DOES THE PROOF RECOMPUTE? (2026-09-02)
+#
+# -Restat proves it understands a spec by reproducing the stored stat from the world as it was when that
+# stat was written. Until now "the world" meant only the food DB, because the only restat anyone had
+# needed was a corrected food-DB row. The corn basis migration moves BOTH halves at once: the food row
+# goes to the USDA drained-solids basis AND 17 specs' corn grams are re-expressed x 298/432. Against a
+# prior DB alone the proof then fails by construction - turkey-taco-soup reproduces 604.7 against a stored
+# 619, because the recompute is reading NEW grams out of a spec whose stat was written from OLD ones - and
+# the tool refuses a change it does in fact understand perfectly.
+#
+# So the prior SPEC is the other half of the snapshot, and it is supplied rather than inferred: there is no
+# way to guess what the grams used to be, and guessing would be the whole safety argument thrown away. The
+# proof is unchanged in strength - prior grams + prior DB must still reproduce the stored stat to the same
+# tolerance - it is simply evaluated against a complete snapshot instead of half of one.
+#
+# IT MUST BE THIS SPEC'S OWN PAST, and that is checked, not assumed. A prior file for a different recipe,
+# a different serving count, or a different ingredient LIST would let any number reproduce any other. Only
+# the grams may differ; everything that identifies the spec has to match.
+function Select-ProofRows { param($Current, $Prior)
+  if (-not $Prior) { return @{ rows = $Current.ingredients_grams; why = '' } }
+  if ([string]$Prior.slug -ne [string]$Current.slug) {
+    return @{ rows = $null; why = ("the prior spec is slug '" + [string]$Prior.slug + "', not '" + [string]$Current.slug + "'") }
+  }
+  if ([int]$Prior.servings -ne [int]$Current.servings) {
+    return @{ rows = $null; why = ("the prior spec has " + [int]$Prior.servings + " servings, the current one " + [int]$Current.servings + " - a per-serving stat cannot be proved across a servings change") }
+  }
+  # @() is load-bearing on both sides: PS 5.1 unrolls a one-element array and the -join would then read a
+  # bare object's ToString(), which matches nothing and would refuse every single-ingredient spec.
+  $pn = @(@($Prior.ingredients_grams)   | ForEach-Object { [string]$_.item })
+  $cn = @(@($Current.ingredients_grams) | ForEach-Object { [string]$_.item })
+  if (($pn -join '|') -ne ($cn -join '|')) {
+    return @{ rows = $null; why = ("the prior spec's ingredient list differs (" + $pn.Count + ' vs ' + $cn.Count + " rows) - only GRAMS may move between the two") }
+  }
+  return @{ rows = $Prior.ingredients_grams; why = '' }
+}
+
 function Get-DisplayLabelPattern { param([string]$Label)
   $bs  = [string][char]0x5C
   $pre = '(' + [regex]::Escape('<strong>') + '|' + [regex]::Escape($bs + 'u003cstrong' + $bs + 'u003e') + ')'
@@ -147,6 +184,55 @@ if ($SelfTest) {
   T 'MUST FIRE  matches the escaped tag spelling'  ([regex]::IsMatch($escOpen + 'Potato:' , $pat))           'missed'
   T 'MUST FIRE  a brandless label is not replaced mid-sentence' (-not [regex]::IsMatch('and the Potato: see below', $pat)) 'fired on prose'
   T 'a longer name is not a prefix match'         (-not [regex]::IsMatch('<strong>Potatoes:</strong> 2 lb', $pat)) 'matched Potatoes'
+
+  # --- THE PRIOR SPEC, the other half of the restat proof (2026-09-02) --------------------------------
+  # FROZEN from turkey-taco-soup as the corn basis migration moved it: 866 g of corn re-expressed to 597 g
+  # drained, 14 servings, stored stat.cal 619. The prior food DB priced corn at the undrained label
+  # (80 cal / 125 g = 0.64 cal/g); the current one at USDA drained solids (67 cal / 100 g).
+  $curSpec = [pscustomobject]@{ slug = 'turkey-taco-soup'; servings = 14
+    ingredients_grams = @([pscustomobject]@{ item = 'Sweet Whole Kernel Corn'; grams = 597 },
+                          [pscustomobject]@{ item = 'Rest of recipe'; grams = 1000 }) }
+  $prvSpec = [pscustomobject]@{ slug = 'turkey-taco-soup'; servings = 14
+    ingredients_grams = @([pscustomobject]@{ item = 'Sweet Whole Kernel Corn'; grams = 866 },
+                          [pscustomobject]@{ item = 'Rest of recipe'; grams = 1000 }) }
+  $sel1 = Select-ProofRows $curSpec $prvSpec
+  T 'the prior spec supplies the grams the stored stat was written from (866, not 597)' `
+    ($null -ne $sel1.rows -and [double]$sel1.rows[0].grams -eq 866) `
+    ("rows=" + $(if ($sel1.rows) { [string]$sel1.rows[0].grams } else { 'refused: ' + $sel1.why }))
+  # CLEAN TWIN: no prior spec given (a food-DB-only restat, every use before today) still proves against
+  # the current rows, exactly as it did. This mode must not change behaviour for its existing callers.
+  $sel2 = Select-ProofRows $curSpec $null
+  T 'CLEAN TWIN with no -PriorSpecDir the proof still reads the CURRENT rows' `
+    ($null -ne $sel2.rows -and [double]$sel2.rows[0].grams -eq 597) `
+    ("rows=" + $(if ($sel2.rows) { [string]$sel2.rows[0].grams } else { 'refused: ' + $sel2.why }))
+  # MUST FIRE: another recipe's file would let any stat reproduce any other.
+  $wrongSlug = [pscustomobject]@{ slug = 'turkey-corn-chowder'; servings = 14; ingredients_grams = $prvSpec.ingredients_grams }
+  T 'MUST FIRE  a prior file for a DIFFERENT recipe is refused' `
+    ($null -eq (Select-ProofRows $curSpec $wrongSlug).rows) 'accepted another recipe as this one''s past'
+  # MUST FIRE: a per-serving stat cannot be proved across a servings change.
+  $wrongServ = [pscustomobject]@{ slug = 'turkey-taco-soup'; servings = 12; ingredients_grams = $prvSpec.ingredients_grams }
+  T 'MUST FIRE  a prior file with different servings is refused' `
+    ($null -eq (Select-ProofRows $curSpec $wrongServ).rows) 'accepted a servings change'
+  # MUST FIRE: only GRAMS may move. An added or dropped ingredient is a different spec, not a re-gram.
+  $wrongList = [pscustomobject]@{ slug = 'turkey-taco-soup'; servings = 14
+    ingredients_grams = @([pscustomobject]@{ item = 'Sweet Whole Kernel Corn'; grams = 866 }) }
+  T 'MUST FIRE  a prior file with a different ingredient LIST is refused' `
+    ($null -eq (Select-ProofRows $curSpec $wrongList).rows) 'accepted a changed ingredient list'
+  # CLEAN TWIN: a single-ingredient spec must still resolve - the PS 5.1 one-element unroll would
+  # otherwise make the name join compare a bare object and refuse every one of them.
+  $one  = [pscustomobject]@{ slug = 'x'; servings = 2; ingredients_grams = @([pscustomobject]@{ item = 'A'; grams = 100 }) }
+  $oneP = [pscustomobject]@{ slug = 'x'; servings = 2; ingredients_grams = @([pscustomobject]@{ item = 'A'; grams = 200 }) }
+  T 'CLEAN TWIN a ONE-ingredient spec is not refused by the array unroll' `
+    ($null -ne (Select-ProofRows $one $oneP).rows) ((Select-ProofRows $one $oneP).why)
+  # AND THE PROOF MUST STILL BITE. Supplying a prior spec does not excuse a stat that neither snapshot
+  # can reproduce - the arithmetic below is what the caller's tolerance check then runs on.
+  $mmPrior = @{}; $mmPrior['Sweet Whole Kernel Corn'] = [pscustomobject]@{ serving_grams = 125; calories = 80; protein_g = 1; carbs_g = 14; fat_g = 1 }
+  $mmPrior['Rest of recipe'] = [pscustomobject]@{ serving_grams = 100; calories = 500; protein_g = 10; carbs_g = 10; fat_g = 10 }
+  $provedCal = (Get-SpecMacros (Select-ProofRows $curSpec $prvSpec).rows 14 $mmPrior).cal
+  $naiveCal  = (Get-SpecMacros (Select-ProofRows $curSpec $null).rows    14 $mmPrior).cal
+  T 'the prior-grams proof and the current-grams proof are DIFFERENT numbers (so this is not a no-op)' `
+    ([math]::Abs($provedCal - $naiveCal) -gt 5) ("prior=$provedCal current=$naiveCal")
+
   if ($bad) { Say ("rebase-spec-ingredient SELF-TEST FAIL ({0})" -f $bad); exit 1 }
   Say 'rebase-spec-ingredient SELF-TEST PASS'; exit 0
 }
@@ -219,7 +305,15 @@ if ($Restat) {
   $proofM = @{}; foreach ($i in $priorItems) { $proofM[[string]$i.item] = $i }
   if (-not $proofM.ContainsKey($From)) { Die ("the prior food DB has no item '" + $From + "' - it is not the snapshot this spec was built against") }
 }
-$check = Get-SpecMacros $before.ingredients_grams $before.servings $proofM
+$priorSpec = $null
+if ($Restat -and $PriorSpecDir) {
+  $psPath = Join-Path $PriorSpecDir ($Slug + '.json')
+  if (-not (Test-Path $psPath)) { Die ('-PriorSpecDir has no ' + $Slug + '.json - it is not the snapshot this spec was built against') }
+  $priorSpec = Get-Content $psPath -Raw -Encoding utf8 | ConvertFrom-Json
+}
+$sel = Select-ProofRows $before $priorSpec
+if ($null -eq $sel.rows) { Die ('-PriorSpecDir refused: ' + $sel.why) }
+$check = Get-SpecMacros $sel.rows $before.servings $proofM
 if ($null -eq $check) { Die 'could not re-derive the spec''s existing macros (an ingredient has no food-DB row); refusing to write new ones' }
 foreach ($k in @('cal', 'protein', 'carbs', 'fat')) {
   $storedVal = [double]$before.stat.$k
