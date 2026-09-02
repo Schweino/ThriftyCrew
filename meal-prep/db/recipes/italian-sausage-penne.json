@@ -18,7 +18,7 @@
                  "protein":  23,
                  "carbs":  45,
                  "fat":  18,
-                 "cost_ps":  "1.72"
+                 "cost_ps":  "2.05"
              },
     "intro_html":  "Sometimes you just want comfort food that does not blow the budget or the whole day. Spicy Italian sausage, high-protein penne, marinara, and sweet peppers come together in one pan into a rich, satisfying bowl that still costs less than a fast-food value meal. This one is a little heartier on the fat side, and worth every gram.",
     "ingredients_display":  [
@@ -33,22 +33,18 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Hot Italian Sausage, 2 lb (two ~1 lb packages): ~$6.35. \u003cstrong\u003eBuy 2 lbs: $7.84.\u003c/strong\u003e",
-                       "Penne Pasta, 7 1/4 cups (14.5 oz each): ~$1.45. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "Penne Pasta, 7 1/4 cups (14.5 oz each): ~$3.83. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
                        "Marinara Sauce, 4 1/3 cups (24 oz each): ~$2.24. \u003cstrong\u003eBuy 2 24oz jars: $2.84.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 cup grated: ~$1.18. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Green Bell Peppers, 4 medium: ~$2.67. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
                        "Yellow Onion, 1/2 yellow onion, sliced: ~$0.48. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Olive Oil, 1 tablespoon: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $14.87 across 14 servings, so roughly $1.06 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $19.82 across 14 servings, roughly $1.42 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $26.18. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $17.25 across 14 servings, so roughly $1.23 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.37 across 14 servings, roughly $1.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $28.73. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a from-scratch sausage pasta that beats anything from a box or a drive-thru.",
-    "shop_smart":  [
-                       "\u003cstrong\u003eSausage freezes great.\u003c/strong\u003e Buy an extra package when it is on sale and freeze it. It thaws fast and keeps for months.",
-                       "\u003cstrong\u003ePeppers in a 3-count bag are cheaper.\u003c/strong\u003e Or use frozen pepper strips, which cost less and skip the slicing.",
-                       "\u003cstrong\u003eStore-brand parmesan and sauce\u003c/strong\u003e save a dollar or two each with no real difference in the finished dish."
-                   ],
+    "shop_smart":  ["\u003cstrong\u003eSausage freezes great.\u003c/strong\u003e Buy an extra package when it is on sale and freeze it. It thaws fast and keeps for months.","\u003cstrong\u003ePeppers in a 3-count bag are cheaper.\u003c/strong\u003e Or use frozen pepper strips, which cost less and skip the slicing.","\u003cstrong\u003eStore-brand parmesan and sauce\u003c/strong\u003e save a dollar or two each with no real difference in the finished dish.","\u003cstrong\u003eProtein penne is the pasta on this list.\u003c/strong\u003e A box is 14.5 ounces, not a pound, so two boxes cover less than you would guess. It costs more than the plain stuff, and the store brand is the cheaper way into it."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Boil the penne to al dente per the box, then drain.",
@@ -60,14 +56,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
     "upsell_html":  "Comfort-food dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  14.87,
-    "cost_batch_true":  19.82,
-    "cost_per_serving":  1.06,
-    "cost_per_serving_true":  1.42,
+    "cost_batch":  17.25,
+    "cost_batch_true":  22.37,
+    "cost_per_serving":  1.23,
+    "cost_per_serving_true":  1.6,
     "cost_pantry_add":  6.36,
-    "cost_first_run":  26.18,
+    "cost_first_run":  28.73,
     "scaler":  {
-                   "cost":  "19.82",
+                   "cost":  "22.37",
                    "ing":  [
                                {
                                    "item":  "Hot Italian Sausage",
@@ -80,7 +76,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  719,
                                    "buy":  "7 1/4 cups (14.5 oz each)",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -123,7 +119,7 @@
     "head":  {
                  "description":  "A hearty one-pan sausage, penne, marinara, and pepper meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "cheap meal prep, sausage pasta, budget dinner, high protein pasta",
-                 "costPerServing":  1.72,
+                 "costPerServing":  2.05,
                  "recipeIngredient":  [
                                           "Hot Italian Sausage, 2 lb (two ~1 lb packages) (735 g)",
                                           "Penne Pasta, 7 1/4 cups (14.5 oz each) (719 g)",

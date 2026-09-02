@@ -18,7 +18,7 @@
                  "protein":  55,
                  "carbs":  65,
                  "fat":  18,
-                 "cost_ps":  "4.32"
+                 "cost_ps":  "4.62"
              },
     "intro_html":  "A good beef ragu is the kind of meal that tastes expensive and cooks for almost nothing. Lean ground beef simmers with carrots, onion, and crushed tomatoes into a rich sauce, then tosses with penne and a little parmesan. It runs around ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein and makes 14 bowls.",
     "ingredients_display":  [
@@ -40,7 +40,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 6 lb: ~$33.33. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
-                       "Penne Pasta, 11 cups: ~$2.18. \u003cstrong\u003eBuy 3 16oz boxes: $2.74.\u003c/strong\u003e",
+                       "Penne Pasta, 11 cups: ~$5.75. \u003cstrong\u003eBuy 3 14.5oz boxes: $6.57.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Carrots, 1 lb: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
                        "Crushed Tomatoes, 2 cans: ~$2.49. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
@@ -50,16 +50,12 @@
                        "Garlic, 4 cloves: ~$0.27. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Vegetable Oil, 2.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, salt, black pepper, sugar): ~$0.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $41.84 across 14 servings, so roughly $2.99 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $49.84 across 14 servings, roughly $3.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.07 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.91. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $45.41 across 14 servings, so roughly $3.24 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $53.67 across 14 servings, roughly $3.83 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.07 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.74. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  [
-                       "Store-brand canned tomatoes make a sauce every bit as good as the name brands. \u003cstrong\u003eBuy the cheapest crushed tomatoes and tomato paste\u003c/strong\u003e and save the money.",
-                       "A wedge of parmesan grated at home costs less and tastes better than the pre-grated stuff. \u003cstrong\u003eBuy a block of parmesan and grate it yourself\u003c/strong\u003e.",
-                       "Dried pasta is one of the cheapest foods in the store. \u003cstrong\u003eStock up on boxed pasta\u003c/strong\u003e whenever it goes on sale."
-                   ],
+    "shop_smart":  ["Store-brand canned tomatoes make a sauce every bit as good as the name brands. \u003cstrong\u003eBuy the cheapest crushed tomatoes and tomato paste\u003c/strong\u003e and save the money.","A wedge of parmesan grated at home costs less and tastes better than the pre-grated stuff. \u003cstrong\u003eBuy a block of parmesan and grate it yourself\u003c/strong\u003e.","\u003cstrong\u003eProtein penne is not one of the cheap ones.\u003c/strong\u003e It runs well above ordinary dried pasta and its box is 14.5 ounces rather than a pound, so plan on more boxes and more money than a regular pasta night. The protein in every bowl is what that buys, and the store brand takes some of the sting out."],
     "make_it":  [
                     "Heat the vegetable oil in a large skillet and brown the ground beef, breaking it up and seasoning with the salt and black pepper, then drain the grease.",
                     "Add the chopped onion, carrots, and garlic and cook until softened.",
@@ -71,14 +67,14 @@
     "portion_html":  "Each of the 14 servings gives you {{protein}} grams of protein at {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://inquiringchef.com/simple-beef-ragu-slow-cooker-instant-pot-stovetop/\" target=\"_blank\" rel=\"noopener\"\u003eInquiring Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Slow-simmered flavor, weeknight ease, and a price that lets you cook it as often as you like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  41.84,
-    "cost_batch_true":  49.84,
-    "cost_per_serving":  2.99,
-    "cost_per_serving_true":  3.56,
+    "cost_batch":  45.41,
+    "cost_batch_true":  53.67,
+    "cost_per_serving":  3.24,
+    "cost_per_serving_true":  3.83,
     "cost_pantry_add":  11.07,
-    "cost_first_run":  60.91,
+    "cost_first_run":  64.74,
     "scaler":  {
-                   "cost":  "49.84",
+                   "cost":  "53.67",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -91,7 +87,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  1080,
                                    "buy":  "11 cups",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -183,7 +179,7 @@
     "head":  {
                  "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, simple beef ragu pasta, budget dinner",
-                 "costPerServing":  4.32,
+                 "costPerServing":  4.62,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 6 lb (2450 g)",
                                           "Penne Pasta, 11 cups (1080 g)",

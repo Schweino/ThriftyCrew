@@ -18,7 +18,7 @@
                  "protein":  57,
                  "carbs":  49,
                  "fat":  20,
-                 "cost_ps":  "4.56"
+                 "cost_ps":  "4.74"
              },
     "intro_html":  "Chili and mac and cheese had a baby, and it happens to be loaded with protein. This one-skillet meal hits a serious {{protein}} grams of protein per serving for around ${{cost_ps}} (at everyday cost), and it makes 14 hearty bowls. Comfort food that actually works for your goals and your wallet.",
     "ingredients_display":  [
@@ -42,9 +42,9 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 7 lb: ~$30.09. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
-                       "Penne Pasta, 6 1/4 cups: ~$1.25. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "Penne Pasta, 6 1/4 cups: ~$3.30. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
                        "Seasoned Black Beans, 2 cans: ~$3.92. \u003cstrong\u003eBuy 3 cans: $4.99.\u003c/strong\u003e",
-                       "Diced Tomatoes, 3 3/4 cups: ~$1.84. \u003cstrong\u003eBuy 3 cans: $2.52.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3 3/4 cups: ~$1.68. \u003cstrong\u003eBuy 3 cans: $2.30.\u003c/strong\u003e",
                        "Tomato Paste, 1/2 cup: ~$0.47. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Fat Free Cheddar, 1 2/3 cups: ~$1.78. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
@@ -52,16 +52,12 @@
                        "Chicken Broth, 2 1/2 cups low sodium: ~$2.74. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Garlic, 1 tbsp minced (~3 cloves): ~$0.61. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, paprika, chili powder, garlic powder, salt, black pepper): ~$0.96. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $44.60 across 14 servings, so roughly $3.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $50.32 across 14 servings, roughly $3.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.10. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $46.49 across 14 servings, so roughly $3.32 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.65 across 14 servings, roughly $3.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.43. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  [
-                       "Grab the \u003cstrong\u003estore-brand canned beans and tomatoes\u003c/strong\u003e. They are the same beans and tomatoes as the name brand for less, and this recipe uses a stack of them.",
-                       "Undercook the pasta by a minute so it \u003cstrong\u003eholds its bite after reheating\u003c/strong\u003e all week instead of going mushy.",
-                       "One \u003cstrong\u003eseasoning packet or a spoonful of chili powder\u003c/strong\u003e from a jar you already own beats buying pricey pre-made chili kits."
-                   ],
+    "shop_smart":  ["Grab the \u003cstrong\u003estore-brand canned beans and tomatoes\u003c/strong\u003e. They are the same beans and tomatoes as the name brand for less, and this recipe uses a stack of them.","Undercook the pasta by a minute so it \u003cstrong\u003eholds its bite after reheating\u003c/strong\u003e all week instead of going mushy.","One \u003cstrong\u003eseasoning packet or a spoonful of chili powder\u003c/strong\u003e from a jar you already own beats buying pricey pre-made chili kits.","\u003cstrong\u003eProtein penne is the pasta here.\u003c/strong\u003e A box is 14.5 ounces, not a pound, which is worth knowing before you decide how many to grab. It costs more than plain pasta, and the store brand is the cheaper way to buy it."],
     "make_it":  [
                     "Heat the olive oil in a large skillet and brown 6.6 pounds of 93/7 ground turkey with the chopped onion and the minced garlic.",
                     "Boil the penne pasta separately until just shy of tender, then drain.",
@@ -73,14 +69,14 @@
     "portion_html":  "Each of the 14 bowls brings {{protein}} grams of protein at {{cal}} calories, making this one of the highest-protein plates in the lineup.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-chili-mac/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pan, a pile of protein, and the kind of dinner that makes leftovers something to look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  44.6,
-    "cost_batch_true":  50.32,
-    "cost_per_serving":  3.19,
-    "cost_per_serving_true":  3.59,
+    "cost_batch":  46.49,
+    "cost_batch_true":  52.65,
+    "cost_per_serving":  3.32,
+    "cost_per_serving_true":  3.76,
     "cost_pantry_add":  13.78,
-    "cost_first_run":  64.1,
+    "cost_first_run":  66.43,
     "scaler":  {
-                   "cost":  "50.32",
+                   "cost":  "52.65",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -93,7 +89,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  620,
                                    "buy":  "6 1/4 cups",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -199,7 +195,7 @@
     "head":  {
                  "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, high-protein turkey chili mac, budget dinner",
-                 "costPerServing":  4.56,
+                 "costPerServing":  4.74,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 7 lb (3000 g)",
                                           "Penne Pasta, 6 1/4 cups (620 g)",

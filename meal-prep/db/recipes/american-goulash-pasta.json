@@ -18,7 +18,7 @@
                  "protein":  55,
                  "carbs":  65,
                  "fat":  19,
-                 "cost_ps":  "4.87"
+                 "cost_ps":  "5.13"
              },
     "intro_html":  "Old-school American goulash, the humble one-pot dinner that fed families for generations because it stretched a dollar. This version packs {{protein}} grams of protein per serving for about ${{cost_ps}} (at everyday cost) and makes 14 bowls. Cheap, hearty, and honestly hard to beat for feeding a crowd.",
     "ingredients_display":  [
@@ -42,7 +42,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 6 lb: ~$33.33. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
-                       "Penne Pasta, 10 cups: ~$2.11. \u003cstrong\u003eBuy 3 16oz boxes: $2.74.\u003c/strong\u003e",
+                       "Penne Pasta, 10 cups: ~$5.59. \u003cstrong\u003eBuy 3 14.5oz boxes: $6.57.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Carrots, 1 lb: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
                        "Crushed Tomatoes, 2 cans: ~$2.49. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
@@ -54,16 +54,12 @@
                        "Celery, 2 stalks, finely chopped: ~$0.63. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "Worcestershire Sauce, 2.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, salt, black pepper, sugar): ~$0.41. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $43.39 across 14 servings, so roughly $3.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $53.13 across 14 servings, roughly $3.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.95. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $46.87 across 14 servings, so roughly $3.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $56.96 across 14 servings, roughly $4.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.78. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  [
-                       "\u003cstrong\u003eCrushed tomatoes in the large can\u003c/strong\u003e are one of the cheapest ways to build a big pot of sauce, and this recipe leans right into that.",
-                       "A pound of \u003cstrong\u003ewhole carrots\u003c/strong\u003e costs less than pre-shredded and shreds in seconds. Small savings that add up across a batch.",
-                       "Dried \u003cstrong\u003eitalian seasoning from a single jar\u003c/strong\u003e covers this and a dozen other recipes, so buy it once and forget about it."
-                   ],
+    "shop_smart":  ["\u003cstrong\u003eCrushed tomatoes in the large can\u003c/strong\u003e are one of the cheapest ways to build a big pot of sauce, and this recipe leans right into that.","A pound of \u003cstrong\u003ewhole carrots\u003c/strong\u003e costs less than pre-shredded and shreds in seconds. Small savings that add up across a batch.","Dried \u003cstrong\u003eitalian seasoning from a single jar\u003c/strong\u003e covers this and a dozen other recipes, so buy it once and forget about it.","\u003cstrong\u003eBuy the protein penne, not the regular blue box.\u003c/strong\u003e It comes in a 14.5 ounce box instead of the usual pound, so count your boxes off 14.5 and you will not come up short. It costs more than plain pasta, and the protein on this card is exactly what you are paying for."],
     "make_it":  [
                     "Heat the olive oil in a large pot and brown 5.4 pounds of 93/7 ground beef with the chopped onion, shredded carrots, and finely chopped celery, seasoning with the salt, black pepper, and a pinch of sugar, then drain.",
                     "Stir in the crushed tomatoes, tomato paste, beef broth, worcestershire sauce, garlic, and italian seasoning.",
@@ -74,14 +70,14 @@
     "portion_html":  "Each of the 14 servings delivers {{protein}} grams of protein at {{cal}} calories, proving this old-fashioned budget meal still competes on protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://natashaskitchen.com/american-goulash-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eNatashasKitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A classic that has stretched budgets for a hundred years, now stretching yours too. Grandma knew what she was doing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  43.39,
-    "cost_batch_true":  53.13,
-    "cost_per_serving":  3.1,
-    "cost_per_serving_true":  3.8,
+    "cost_batch":  46.87,
+    "cost_batch_true":  56.96,
+    "cost_per_serving":  3.35,
+    "cost_per_serving_true":  4.07,
     "cost_pantry_add":  14.82,
-    "cost_first_run":  67.95,
+    "cost_first_run":  71.78,
     "scaler":  {
-                   "cost":  "53.13",
+                   "cost":  "56.96",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -94,7 +90,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  1050,
                                    "buy":  "10 cups",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -200,7 +196,7 @@
     "head":  {
                  "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, american goulash pasta, budget dinner",
-                 "costPerServing":  4.87,
+                 "costPerServing":  5.13,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 6 lb (2450 g)",
                                           "Penne Pasta, 10 cups (1050 g)",

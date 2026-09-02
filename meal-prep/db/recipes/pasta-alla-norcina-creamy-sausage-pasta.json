@@ -25,7 +25,7 @@
                  "protein":  33,
                  "carbs":  66,
                  "fat":  54,
-                 "cost_ps":  "2.39"
+                 "cost_ps":  "2.94"
              },
     "intro_html":  "Norcia is a small town in Umbria that Italy trusts so completely with pork that the word for a butcher shop there became the name of this pasta. The real version is sausage crumbled out of its casing, cooked in cream until the sauce clings, and finished with parmesan. No tomato, nothing fancy, and it is one of the most satisfying things you can put in a container. Restaurants serve it in a portion that could sink a boat. We cut the cream back to something a human can eat five nights in a row.",
     "ingredients_display":  [
@@ -41,7 +41,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Penne Pasta, 38.75 oz dry: ~$2.22. \u003cstrong\u003eBuy 3 16oz boxes: $2.74.\u003c/strong\u003e",
+                       "Penne Pasta, 38.75 oz dry: ~$5.87. \u003cstrong\u003eBuy 3 14.5oz boxes: $6.57.\u003c/strong\u003e",
                        "Olive Oil, 7 tbsp: ~$0.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 3.7 onions: ~$0.87. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Hot Italian Sausage, 2.75 lb: ~$10.89. \u003cstrong\u003eBuy 3 lbs: $11.76.\u003c/strong\u003e",
@@ -49,17 +49,12 @@
                        "Heavy Cream, 4.75 cups: ~$5.54. \u003cstrong\u003eBuy 3 pints: $7.02.\u003c/strong\u003e",
                        "Parmesan Cheese, 2.75 oz: ~$0.94. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, salt): ~$1.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.68 across 14 servings, so roughly $1.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $28.47 across 14 servings, roughly $2.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.39. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $27.33 across 14 servings, so roughly $1.95 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.30 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.22. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a cream and sausage pasta that shows up on Italian restaurant menus at ten times that, usually with less sausage.",
-    "shop_smart":  [
-                       "\u003cstrong\u003eHot Italian sausage in the rope or the tray is the same meat.\u003c/strong\u003e Squeeze it out of the casing and it becomes crumbles. You are paying for seasoning work someone else already did, and it is still cheaper than buying the spices for one batch.",
-                       "\u003cstrong\u003eHeavy cream is the second biggest line on this receipt.\u003c/strong\u003e It is also the one thing you cannot fake here. Half and half breaks under heat and gives you a thin, sad sauce.",
-                       "\u003cstrong\u003eBuy parmesan as a wedge or a tub, not a shaker.\u003c/strong\u003e The shelf-stable green can is mostly filler, and this sauce leans on real cheese to thicken.",
-                       "\u003cstrong\u003eStore-brand penne is identical to the name brand.\u003c/strong\u003e Pasta is flour and water shaped by a machine, and the machines are the same ones."
-                   ],
+    "shop_smart":  ["\u003cstrong\u003eHot Italian sausage in the rope or the tray is the same meat.\u003c/strong\u003e Squeeze it out of the casing and it becomes crumbles. You are paying for seasoning work someone else already did, and it is still cheaper than buying the spices for one batch.","\u003cstrong\u003eHeavy cream is the second biggest line on this receipt.\u003c/strong\u003e It is also the one thing you cannot fake here. Half and half breaks under heat and gives you a thin, sad sauce.","\u003cstrong\u003eBuy parmesan as a wedge or a tub, not a shaker.\u003c/strong\u003e The shelf-stable green can is mostly filler, and this sauce leans on real cheese to thicken.","\u003cstrong\u003eTake the store-brand protein penne.\u003c/strong\u003e This dish is priced on protein pasta, not the plain flour-and-water kind, and the two are neither the same food nor the same price. Buy the store brand where you can, check that the box says 14.5 ounces, and let the sausage and the parmesan be where the money goes."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Boil the penne in well salted water to just under al dente, since it will finish in the sauce. Save a couple cups of the pasta water before draining.",
@@ -73,21 +68,21 @@
     "portion_html":  "Put the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that exact weight into each container so the sauce gets shared evenly instead of pooling in the last three. Every bowl comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Reheat with a splash of milk or water and stir, and the cream comes right back together.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://pinabresciani.com/pasta-alla-norcina/\" target=\"_blank\" rel=\"noopener\"\u003epinabresciani.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Rich, restaurant-grade dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  23.68,
-    "cost_batch_true":  28.47,
-    "cost_per_serving":  1.69,
-    "cost_per_serving_true":  2.03,
+    "cost_batch":  27.33,
+    "cost_batch_true":  32.3,
+    "cost_per_serving":  1.95,
+    "cost_per_serving_true":  2.31,
     "cost_pantry_add":  8.92,
-    "cost_first_run":  37.39,
+    "cost_first_run":  41.22,
     "scaler":  {
-                   "cost":  "28.47",
+                   "cost":  "32.30",
                    "ing":  [
                                {
                                    "item":  "Penne Pasta",
                                    "canon":  "Penne Pasta",
                                    "grams":  1102,
                                    "buy":  "38.75 oz dry",
-                                   "bid":"penne-pasta",
+                                   "bid":"protein-pasta",
                                    "gpu":28.3495
                                },
                                {
@@ -163,7 +158,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  2.39,
+                 "costPerServing":  2.94,
                  "recipeIngredient":  [
                                           "Penne Pasta, 38.75 oz dry (1102 g)",
                                           "Olive Oil, 7 tbsp (94 g)",

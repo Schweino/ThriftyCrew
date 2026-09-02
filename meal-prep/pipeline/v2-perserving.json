@@ -30,8 +30,8 @@
       "protein":  "beef",
       "protein_g":  55,
       "old_ps":  4.87,
-      "everyday_ps":  4.85,
-      "cheapest_ps":  4.47,
+      "everyday_ps":  5.13,
+      "cheapest_ps":  4.72,
       "protein_rank":  6,
       "is_protein_rank1":  false
   },
@@ -330,8 +330,8 @@
       "protein":  "beef",
       "protein_g":  53,
       "old_ps":  4.04,
-      "everyday_ps":  4.03,
-      "cheapest_ps":  3.8,
+      "everyday_ps":  4.29,
+      "cheapest_ps":  4.06,
       "protein_rank":  13,
       "is_protein_rank1":  false
   },
@@ -450,8 +450,8 @@
       "protein":  "beef",
       "protein_g":  55,
       "old_ps":  4.32,
-      "everyday_ps":  4.35,
-      "cheapest_ps":  3.98,
+      "everyday_ps":  4.62,
+      "cheapest_ps":  4.24,
       "protein_rank":  8,
       "is_protein_rank1":  false
   },
@@ -798,8 +798,8 @@
       "protein":  "beef",
       "protein_g":  38,
       "old_ps":  2.3,
-      "everyday_ps":  2.29,
-      "cheapest_ps":  2.13,
+      "everyday_ps":  2.47,
+      "cheapest_ps":  2.3,
       "protein_rank":  71,
       "is_protein_rank1":  false
   },
@@ -1182,8 +1182,8 @@
       "protein":  "chicken",
       "protein_g":  44,
       "old_ps":  2.48,
-      "everyday_ps":  2.49,
-      "cheapest_ps":  2.36,
+      "everyday_ps":  2.67,
+      "cheapest_ps":  2.53,
       "protein_rank":  89,
       "is_protein_rank1":  false
   },
@@ -1220,7 +1220,7 @@
       "old_ps":  4.43,
       "everyday_ps":  4.52,
       "cheapest_ps":  3.78,
-      "protein_rank":  81,
+      "protein_rank":  80,
       "is_protein_rank1":  false
   },
   {
@@ -1244,7 +1244,7 @@
       "old_ps":  2.97,
       "everyday_ps":  2.97,
       "cheapest_ps":  2.76,
-      "protein_rank":  78,
+      "protein_rank":  77,
       "is_protein_rank1":  false
   },
   {
@@ -1268,7 +1268,7 @@
       "old_ps":  3.41,
       "everyday_ps":  3.43,
       "cheapest_ps":  3.29,
-      "protein_rank":  80,
+      "protein_rank":  79,
       "is_protein_rank1":  false
   },
   {
@@ -1624,11 +1624,11 @@
       "name":  "Crack Chicken Chili",
       "run":  "db",
       "protein":  "chicken",
-      "protein_g":  47,
-      "old_ps":  3.06,
-      "everyday_ps":  3.08,
+      "protein_g":  46,
+      "old_ps":  3.08,
+      "everyday_ps":  3.01,
       "cheapest_ps":  2.71,
-      "protein_rank":  77,
+      "protein_rank":  81,
       "is_protein_rank1":  false
   },
   {
@@ -1638,8 +1638,8 @@
       "protein":  "chicken",
       "protein_g":  44,
       "old_ps":  3.11,
-      "everyday_ps":  3.13,
-      "cheapest_ps":  2.99,
+      "everyday_ps":  3.38,
+      "cheapest_ps":  3.25,
       "protein_rank":  90,
       "is_protein_rank1":  false
   },
@@ -2970,8 +2970,8 @@
       "protein":  "pork",
       "protein_g":  23,
       "old_ps":  1.72,
-      "everyday_ps":  1.87,
-      "cheapest_ps":  1.78,
+      "everyday_ps":  2.05,
+      "cheapest_ps":  1.96,
       "protein_rank":  122,
       "is_protein_rank1":  false
   },
@@ -3762,8 +3762,8 @@
       "protein":  "chicken",
       "protein_g":  55,
       "old_ps":  3.97,
-      "everyday_ps":  3.93,
-      "cheapest_ps":  3.43,
+      "everyday_ps":  4.13,
+      "cheapest_ps":  3.6,
       "protein_rank":  47,
       "is_protein_rank1":  false
   },
@@ -3954,8 +3954,8 @@
       "protein":  "pork",
       "protein_g":  33,
       "old_ps":  2.39,
-      "everyday_ps":  2.67,
-      "cheapest_ps":  2.37,
+      "everyday_ps":  2.94,
+      "cheapest_ps":  2.63,
       "protein_rank":  88,
       "is_protein_rank1":  false
   },
@@ -4436,7 +4436,7 @@
       "old_ps":  3.24,
       "everyday_ps":  3.21,
       "cheapest_ps":  2.87,
-      "protein_rank":  79,
+      "protein_rank":  78,
       "is_protein_rank1":  false
   },
   {
@@ -4722,8 +4722,8 @@
       "protein":  "chicken",
       "protein_g":  68,
       "old_ps":  3.29,
-      "everyday_ps":  3.28,
-      "cheapest_ps":  3.01,
+      "everyday_ps":  3.56,
+      "cheapest_ps":  3.27,
       "protein_rank":  2,
       "is_protein_rank1":  false
   },
@@ -5034,8 +5034,8 @@
       "protein":  "chicken",
       "protein_g":  55,
       "old_ps":  2.37,
-      "everyday_ps":  2.4,
-      "cheapest_ps":  2.09,
+      "everyday_ps":  2.78,
+      "cheapest_ps":  2.42,
       "protein_rank":  48,
       "is_protein_rank1":  false
   },
@@ -5478,8 +5478,8 @@
       "protein":  "chicken",
       "protein_g":  68,
       "old_ps":  3.37,
-      "everyday_ps":  3.32,
-      "cheapest_ps":  3.05,
+      "everyday_ps":  3.7,
+      "cheapest_ps":  3.39,
       "protein_rank":  3,
       "is_protein_rank1":  false
   },
@@ -6030,8 +6030,8 @@
       "protein":  "turkey",
       "protein_g":  35,
       "old_ps":  2.97,
-      "everyday_ps":  2.95,
-      "cheapest_ps":  2.59,
+      "everyday_ps":  3.13,
+      "cheapest_ps":  2.76,
       "protein_rank":  63,
       "is_protein_rank1":  false
   },
@@ -6090,8 +6090,8 @@
       "protein":  "turkey",
       "protein_g":  57,
       "old_ps":  4.56,
-      "everyday_ps":  4.58,
-      "cheapest_ps":  4.17,
+      "everyday_ps":  4.74,
+      "cheapest_ps":  4.35,
       "protein_rank":  3,
       "is_protein_rank1":  false
   },
@@ -6306,8 +6306,8 @@
       "protein":  "turkey",
       "protein_g":  67,
       "old_ps":  4.53,
-      "everyday_ps":  4.51,
-      "cheapest_ps":  4.41,
+      "everyday_ps":  4.69,
+      "cheapest_ps":  4.59,
       "protein_rank":  1,
       "is_protein_rank1":  true
   },
@@ -6450,8 +6450,8 @@
       "protein":  "turkey",
       "protein_g":  57,
       "old_ps":  4.55,
-      "everyday_ps":  4.53,
-      "cheapest_ps":  4.39,
+      "everyday_ps":  4.71,
+      "cheapest_ps":  4.57,
       "protein_rank":  4,
       "is_protein_rank1":  false
   },
@@ -6774,8 +6774,8 @@
       "protein":  "beef",
       "protein_g":  50,
       "old_ps":  5.11,
-      "everyday_ps":  5.07,
-      "cheapest_ps":  4.82,
+      "everyday_ps":  5.34,
+      "cheapest_ps":  5.07,
       "protein_rank":  25,
       "is_protein_rank1":  false
   },

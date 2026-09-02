@@ -18,7 +18,7 @@
                  "protein":  67,
                  "carbs":  54,
                  "fat":  33,
-                 "cost_ps":  "4.53"
+                 "cost_ps":  "4.69"
              },
     "intro_html":  "Meatballs and marinara without spending your evening rolling and frying. Cooked skillet-style, this lean turkey pasta delivers {{protein}} grams of protein per serving for about ${{cost_ps}} (at everyday cost), and it stretches to 14 servings. That is Italian night on repeat for the price of one takeout order.",
     "ingredients_display":  [
@@ -41,7 +41,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 7 lb: ~$31.40. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
-                       "Penne Pasta, 7 1/2 cups: ~$1.51. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "Penne Pasta, 7 1/2 cups: ~$3.99. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
                        "Marinara Sauce, 6 cups: ~$3.13. \u003cstrong\u003eBuy 3 24oz jars: $4.25.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 1/2 cups: ~$1.69. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
@@ -52,16 +52,12 @@
                        "Garlic, 1 clove: ~$0.20. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Mozzarella Cheese, 3 oz cubed + 3/4 cup shredded: ~$3.91. \u003cstrong\u003eBuy 3 8oz bags: $5.22.\u003c/strong\u003e",
                        "Pantry seasonings (dried basil, dried oregano, salt, black pepper): ~$0.89. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $44.36 across 14 servings, so roughly $3.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $51.19 across 14 servings, roughly $3.66 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.08. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $46.84 across 14 servings, so roughly $3.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $53.74 across 14 servings, roughly $3.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.63. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  [
-                       "Jarred \u003cstrong\u003emarinara on sale\u003c/strong\u003e is cheaper and faster than building sauce from scratch, and three jars cover the whole batch.",
-                       "A wedge or tub of \u003cstrong\u003ereal parmesan\u003c/strong\u003e goes a long way. A little grated over the top does more work than a lot of the pre-shredded blends.",
-                       "Buy pasta when it drops to \u003cstrong\u003ea dollar a box\u003c/strong\u003e and stock the pantry. It keeps forever and this recipe leans on it."
-                   ],
+    "shop_smart":  ["Jarred \u003cstrong\u003emarinara on sale\u003c/strong\u003e is cheaper and faster than building sauce from scratch, and three jars cover the whole batch.","A wedge or tub of \u003cstrong\u003ereal parmesan\u003c/strong\u003e goes a long way. A little grated over the top does more work than a lot of the pre-shredded blends.","\u003cstrong\u003eThis one is priced on protein penne, and it is not the dollar-a-box pasta.\u003c/strong\u003e A box is 14.5 ounces instead of a pound, so count off 14.5 when you shop. Buy the store brand where your store has one, and if you ever catch the protein line on sale, that is the box worth stocking."],
     "make_it":  [
                     "Mix the ground turkey with the egg, panko breadcrumbs, worcestershire sauce, grated garlic, dried basil, dried oregano, salt, and black pepper until it just holds together.",
                     "Roll the mixture into meatballs, tucking a cube of mozzarella into the center of each one and sealing the meat around it so the cheese stays put.",
@@ -74,14 +70,14 @@
     "portion_html":  "Every one of the 14 servings packs {{protein}} grams of protein and {{cal}} calories, so it fuels you like a full plate should.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://reciperunner.com/skillet-meatballs-marinara-sauce/\" target=\"_blank\" rel=\"noopener\"\u003eRecipe Runner\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comfort-food Italian, meal-prepped and budget-approved. Twirl your fork and enjoy. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  44.36,
-    "cost_batch_true":  51.19,
-    "cost_per_serving":  3.17,
-    "cost_per_serving_true":  3.66,
+    "cost_batch":  46.84,
+    "cost_batch_true":  53.74,
+    "cost_per_serving":  3.35,
+    "cost_per_serving_true":  3.84,
     "cost_pantry_add":  11.89,
-    "cost_first_run":  63.08,
+    "cost_first_run":  65.63,
     "scaler":  {
-                   "cost":  "51.19",
+                   "cost":  "53.74",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -94,7 +90,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  749,
                                    "buy":  "7 1/2 cups",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -193,7 +189,7 @@
     "head":  {
                  "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, turkey meatball marinara pasta, budget dinner",
-                 "costPerServing":  4.53,
+                 "costPerServing":  4.69,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 7 lb (3130 g)",
                                           "Penne Pasta, 7 1/2 cups (749 g)",

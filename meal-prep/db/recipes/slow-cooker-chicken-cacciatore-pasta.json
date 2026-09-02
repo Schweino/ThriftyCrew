@@ -18,7 +18,7 @@
                  "protein":  68,
                  "carbs":  57,
                  "fat":  10,
-                 "cost_ps":  "3.29"
+                 "cost_ps":  "3.56"
              },
     "intro_html":  "Chicken cacciatore is rustic Italian at its finest, all peppers, mushrooms, and tomato simmered until the flavors marry. This version tosses it with penne for a hearty pasta bowl at {{protein}} grams of protein and about ${{cost_ps}} a serving (at everyday cost). One batch makes 14 servings, so a Sunday in the slow cooker sets up more than a week of dinners.",
     "ingredients_display":  [
@@ -38,7 +38,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$16.22. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Penne Pasta, 9 3/4 cups: ~$1.97. \u003cstrong\u003eBuy 3 16oz boxes: $2.74.\u003c/strong\u003e",
+                       "Penne Pasta, 9 3/4 cups: ~$5.22. \u003cstrong\u003eBuy 3 14.5oz boxes: $6.57.\u003c/strong\u003e",
                        "Traditional Pasta Sauce, 3 2/3 cups: ~$1.88. \u003cstrong\u003eBuy 2 24oz jars: $2.84.\u003c/strong\u003e",
                        "White Mushrooms, 6 1/2 cups: ~$3.74. \u003cstrong\u003eBuy 2 8oz packs: $3.77.\u003c/strong\u003e",
                        "Green Bell Peppers, 2 peppers: ~$1.54. \u003cstrong\u003eBuy 2 each: $1.54.\u003c/strong\u003e",
@@ -47,16 +47,12 @@
                        "Garlic, 2 cloves: ~$0.12. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Balsamic Vinegar, 1 tbsp + 1/2 tsp: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, italian seasoning): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.92 across 14 servings, so roughly $1.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.40 across 14 servings, roughly $2.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.95. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $30.17 across 14 servings, so roughly $2.16 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.23 across 14 servings, roughly $2.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.78. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  [
-                       "A jar of traditional pasta sauce beats making it from scratch on both time and cost, so \u003cstrong\u003egrab the store-brand jar\u003c/strong\u003e and doctor it with the veg.",
-                       "Peppers and mushrooms are cheapest in season and on sale, so \u003cstrong\u003elet the markdown bin pick your vegetables\u003c/strong\u003e.",
-                       "Cook the pasta separately and store it apart from the sauce, so \u003cstrong\u003eit won\u0027t turn to mush\u003c/strong\u003e over a week of reheating."
-                   ],
+    "shop_smart":  ["A jar of traditional pasta sauce beats making it from scratch on both time and cost, so \u003cstrong\u003egrab the store-brand jar\u003c/strong\u003e and doctor it with the veg.","Peppers and mushrooms are cheapest in season and on sale, so \u003cstrong\u003elet the markdown bin pick your vegetables\u003c/strong\u003e.","Cook the pasta separately and store it apart from the sauce, so \u003cstrong\u003eit won\u0027t turn to mush\u003c/strong\u003e over a week of reheating.","\u003cstrong\u003eProtein penne is what this is priced on.\u003c/strong\u003e The box is 14.5 ounces instead of a pound, so count boxes off 14.5. It costs more than ordinary pasta, and that is the protein you see in the numbers above."],
     "make_it":  [
                     "Add the chicken, pasta sauce, sliced mushrooms, chopped bell peppers, onion, olive oil, garlic, the Italian seasoning, most of the balsamic vinegar, and a good pinch of salt and pepper to the slow cooker.",
                     "Cover and cook on low for 6 to 7 hours until the chicken shreds and the vegetables are tender.",
@@ -67,14 +63,14 @@
     "portion_html":  "Each serving carries {{protein}} grams of protein and {{cal}} calories, a genuinely high-protein pasta plate.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wellplated.com/slow-cooker-chicken-cacciatore/\" target=\"_blank\" rel=\"noopener\"\u003eWell Plated\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big-batch Italian comfort that reheats like a dream. This one\u0027s a keeper. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  26.92,
-    "cost_batch_true":  31.4,
-    "cost_per_serving":  1.92,
-    "cost_per_serving_true":  2.24,
+    "cost_batch":  30.17,
+    "cost_batch_true":  35.23,
+    "cost_per_serving":  2.16,
+    "cost_per_serving_true":  2.52,
     "cost_pantry_add":  14.55,
-    "cost_first_run":  45.95,
+    "cost_first_run":  49.78,
     "scaler":  {
-                   "cost":  "31.40",
+                   "cost":  "35.23",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -87,7 +83,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  980,
                                    "buy":  "9 3/4 cups",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -165,7 +161,7 @@
     "head":  {
                  "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken cacciatore pasta, budget dinner",
-                 "costPerServing":  3.29,
+                 "costPerServing":  3.56,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 8 lb (3300 g)",
                                           "Penne Pasta, 9 3/4 cups (980 g)",

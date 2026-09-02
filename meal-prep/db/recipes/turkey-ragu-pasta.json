@@ -18,7 +18,7 @@
                  "protein":  57,
                  "carbs":  46,
                  "fat":  27,
-                 "cost_ps":  "4.55"
+                 "cost_ps":  "4.71"
              },
     "intro_html":  "A hearty, saucy ragu that tastes like it simmered all day but comes together in one skillet. At about ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein, it is a comforting one. It makes 14 servings, so cook once and eat all week.",
     "ingredients_display":  [
@@ -38,7 +38,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 7 lb: ~$31.10. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
-                       "Penne Pasta, 7 cups: ~$1.41. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "Penne Pasta, 7 cups: ~$3.73. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
                        "Marinara Sauce, 5 2/3 cups: ~$2.92. \u003cstrong\u003eBuy 3 24oz jars: $4.25.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
                        "Shredded Carrots, 2 1/4 cups: ~$1.70. \u003cstrong\u003eBuy 1 10oz bag: $1.93.\u003c/strong\u003e",
@@ -47,16 +47,12 @@
                        "Celery, 2 stalks, diced: ~$1.47. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "Garlic, 2 cloves, chopped: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Pantry seasonings (dried thyme, salt, black pepper): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $45.14 across 14 servings, so roughly $3.22 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $52.49 across 14 servings, roughly $3.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.38. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $47.46 across 14 servings, so roughly $3.39 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $55.04 across 14 servings, roughly $3.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.93. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  [
-                       "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps this hearty dish easy on the budget.",
-                       "Jarred \u003cstrong\u003emarinara in the store brand\u003c/strong\u003e saves a couple bucks a jar over the name brands and works great as your base.",
-                       "Buy \u003cstrong\u003epasta by the box on sale\u003c/strong\u003e and keep a couple in the pantry. It is the cheapest way to stretch a meal."
-                   ],
+    "shop_smart":  ["The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps this hearty dish easy on the budget.","Jarred \u003cstrong\u003emarinara in the store brand\u003c/strong\u003e saves a couple bucks a jar over the name brands and works great as your base.","\u003cstrong\u003eProtein penne is not the cheap way to stretch a meal, and it is what this recipe is built on.\u003c/strong\u003e The box is 14.5 ounces rather than a pound, so plan the count off 14.5. Plain pasta costs a fraction of it, but the protein in every bowl comes off the protein pasta panel, so a swap moves the numbers."],
     "make_it":  [
                     "Cook the penne according to the box while you get the sauce going.",
                     "Heat a little olive oil in a large skillet and crisp the chopped turkey bacon, then leave it in the pan as the flavor base.",
@@ -68,14 +64,14 @@
     "portion_html":  "Each of the 14 servings delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.crunchtimekitchen.com/easy-turkey-ragu/\" target=\"_blank\" rel=\"noopener\"\u003eCrunch Time Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comforting, filling, and easy on the wallet, this is a bowl of pasta you can feel good about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  45.14,
-    "cost_batch_true":  52.49,
-    "cost_per_serving":  3.22,
-    "cost_per_serving_true":  3.75,
+    "cost_batch":  47.46,
+    "cost_batch_true":  55.04,
+    "cost_per_serving":  3.39,
+    "cost_per_serving_true":  3.93,
     "cost_pantry_add":  10.89,
-    "cost_first_run":  63.38,
+    "cost_first_run":  65.93,
     "scaler":  {
-                   "cost":  "52.49",
+                   "cost":  "55.04",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -88,7 +84,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  700,
                                    "buy":  "7 cups",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -166,7 +162,7 @@
     "head":  {
                  "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, turkey ragu pasta, budget dinner",
-                 "costPerServing":  4.55,
+                 "costPerServing":  4.71,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 7 lb (3100 g)",
                                           "Penne Pasta, 7 cups (700 g)",

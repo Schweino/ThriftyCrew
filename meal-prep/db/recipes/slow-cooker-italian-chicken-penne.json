@@ -18,7 +18,7 @@
                  "protein":  55,
                  "carbs":  49,
                  "fat":  11,
-                 "cost_ps":  "2.37"
+                 "cost_ps":  "2.78"
              },
     "intro_html":  "This is comfort food that works for your wallet and your goals at the same time. The slow cooker does all the heavy lifting while you go live your life, and coconut milk gives the sauce a creamy richness for pennies compared to heavy cream. You come home to shredded Italian chicken ready to toss with hearty protein penne.",
     "ingredients_display":  [
@@ -41,20 +41,16 @@
                        "Boneless Skinless Chicken Breast, 6 lb: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
                        "Chicken Broth, 1 2/3 cups: ~$0.61. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Coconut Milk, 1 cup: ~$1.19. \u003cstrong\u003eBuy 1 13.5oz can: $1.98.\u003c/strong\u003e",
-                       "Sun-Dried Tomatoes, 1 1/2 cups: ~$1.56. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
-                       "Penne Pasta, 9 cups: ~$1.81. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "Sun-Dried Tomatoes, 1 1/2 cups: ~$1.81. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Penne Pasta, 9 cups: ~$4.79. \u003cstrong\u003eBuy 3 14.5oz boxes: $6.57.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 cup: ~$1.18. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, onion powder, italian seasoning, salt, black pepper, red pepper flakes, paprika): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.19 across 14 servings, so roughly $1.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $22.67 across 14 servings, roughly $1.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.61. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $22.42 across 14 servings, so roughly $1.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.66 across 14 servings, roughly $1.98 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.93. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  [
-                       "\u003cstrong\u003eBuy chicken breast in bulk.\u003c/strong\u003e The big family packs run far cheaper per pound than the small trays. Grab it when it dips under a couple dollars a pound and freeze what you are not cooking today.",
-                       "\u003cstrong\u003eSkip the pricey Italian seasoning jar.\u003c/strong\u003e If you already own oregano, basil, and parsley, mix your own. It is the same herbs for a fraction of the cost.",
-                       "\u003cstrong\u003eWatch the parmesan.\u003c/strong\u003e A wedge you grate yourself lasts longer and tastes stronger than the pre-shredded tubs, so a little goes a long way across all 14 servings."
-                   ],
+    "shop_smart":  ["\u003cstrong\u003eBuy chicken breast in bulk.\u003c/strong\u003e The big family packs run far cheaper per pound than the small trays. Grab it when it dips under a couple dollars a pound and freeze what you are not cooking today.","\u003cstrong\u003eSkip the pricey Italian seasoning jar.\u003c/strong\u003e If you already own oregano, basil, and parsley, mix your own. It is the same herbs for a fraction of the cost.","\u003cstrong\u003eWatch the parmesan.\u003c/strong\u003e A wedge you grate yourself lasts longer and tastes stronger than the pre-shredded tubs, so a little goes a long way across all 14 servings.","\u003cstrong\u003eProtein penne, not the plain kind.\u003c/strong\u003e The intro is not being fancy about it: this is priced and portioned on protein pasta, which comes in a 14.5 ounce box rather than a pound and costs more per ounce. Take the store brand where your store stocks one."],
     "make_it":  [
                     "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
                     "Lay the chicken breast in the bottom of the slow cooker.",
@@ -67,14 +63,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That gives you the grams per container. Scoop each one to that number so every meal comes out even, and you land right around {{protein}} grams of protein per serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/slow-cooker-italian-pulled-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen creamy Italian dinners cooked while you were busy, for a fraction of what one restaurant plate would cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  19.19,
-    "cost_batch_true":  22.67,
-    "cost_per_serving":  1.37,
-    "cost_per_serving_true":  1.62,
-    "cost_pantry_add":  10.94,
-    "cost_first_run":  33.61,
+    "cost_batch":  22.42,
+    "cost_batch_true":  27.66,
+    "cost_per_serving":  1.6,
+    "cost_per_serving_true":  1.98,
+    "cost_pantry_add":  11.27,
+    "cost_first_run":  38.93,
     "scaler":  {
-                   "cost":  "22.67",
+                   "cost":  "27.66",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -129,7 +125,7 @@
                                    "item":  "Penne Pasta",
                                    "grams":  900,
                                    "buy":  "9 cups",
-                                   "bid":  "penne-pasta",
+                                   "bid":  "protein-pasta",
                                    "gpu":  28.3495
                                },
                                {
@@ -172,7 +168,7 @@
     "head":  {
                  "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker italian chicken penne, budget dinner",
-                 "costPerServing":  2.37,
+                 "costPerServing":  2.78,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 6 lb (2495 g)",
                                           "Chicken Broth, 1 2/3 cups (400 g)",
