@@ -30,6 +30,51 @@
   which is why no "cheapest store" can be pinned server-side per commodity.
 #>
 
+# ---------------------------------------------------------------------------------------------------
+# THE SCALER DATA BLOCK'S gpu, AND THE ONE RULE THAT SAYS WHICH BASIS IT IS ON (2026-09-02, corn04).
+#
+# The card's data block carries three numbers per line: grams, pkg_g and gpu. grams and pkg_g are the
+# DRAINED basis wherever the engine has a drained yield (a 15.25 oz can of corn drains to 298 g, not
+# 432 g), because that is the material the recipe actually uses. gpu was still the ingredient row's
+# GROSS grams per feed unit - 28.3495 g/oz of can including the packing water. Nothing declared which
+# basis gpu was on and nothing checked, so:
+#     required = grams / gpu        paired a DRAINED numerator with a GROSS denominator
+#     k        = ceil(required / packageBasisUnits)
+# under-bought on 88 of 105 same-package drained lines across 76 live cards, in the widget, the print
+# module, the store picker, compute-v2's cheapest_ps and (on a third basis of its own) the Meal Plan
+# Builder. The static Buy N line was right the whole time because it pairs grams with pkg_g.
+#
+# THE FIX IS ONE BASIS, NOT ONE MORE FORMULA. gpu becomes THIS LINE's grams per feed unit, so the
+# block is internally consistent and every reader of it - JS included, unchanged - lands on the
+# engine's own count:
+#     required / (pkg_g/gpu_eff)  ==  grams / pkg_g
+# and the authored fallback package pkg_g/gpu_eff becomes the real 15.24 oz can again instead of the
+# 10.51 oz object that never existed.
+#
+# It is a no-op on every non-drained line by construction (PkgGrossG == PkgG), which is why 30,884 of
+# the 31,372 routed rows in the 2026-09-02 measurement could not move.
+function Get-ScalerGpu([double]$Gpu, [double]$PkgG, [double]$PkgGrossG) {
+  if ($Gpu -le 0) { return 0.0 }
+  if ($PkgGrossG -gt 0 -and $PkgG -gt 0 -and $PkgGrossG -ne $PkgG) { return [math]::Round($Gpu * $PkgG / $PkgGrossG, 4) }
+  return $Gpu
+}
+
+# THE OUTCOME CHECK FOR THAT BASIS, in ONE place because two callers need it and a second copy of a
+# 0.5% tolerance is how the estate's twins are born (build-card2 refuses to EMIT a mis-based block;
+# wave-preaudit refuses a CARD carrying one). The question is not "is gpu the number I expect" - it is
+# "does the block's own authored fallback package come out as the physical package a reader buys".
+# That is a fact about the world (a 15.25 oz can), so it is checkable without trusting either input.
+# Returns $null when the block is sound, else the two package sizes and the relative gap.
+function Get-ScalerBasisMismatch([double]$PkgG, [double]$BlockGpu, [double]$PkgGrossG, [double]$AuthoredGpu, [double]$Tol = 0.005) {
+  if (-not ($PkgG -gt 0) -or -not ($BlockGpu -gt 0) -or -not ($PkgGrossG -gt 0) -or -not ($AuthoredGpu -gt 0)) { return $null }
+  $fallback = $PkgG / $BlockGpu
+  $physical = $PkgGrossG / $AuthoredGpu
+  if (-not ($physical -gt 0)) { return $null }
+  $rel = [math]::Abs($fallback - $physical) / $physical
+  if ($rel -le $Tol) { return $null }
+  return [pscustomobject]@{ fallback = [double]$fallback; physical = [double]$physical; rel = [double]$rel; tol = [double]$Tol }
+}
+
 function Get-PkgCellField($cell, [string]$name) {
   if ($null -eq $cell) { return $null }
   $p = $cell.PSObject.Properties[$name]

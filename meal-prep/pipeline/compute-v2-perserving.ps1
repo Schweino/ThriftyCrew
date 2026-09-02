@@ -21,6 +21,11 @@ $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 Add-Type -AssemblyName System.Web -ErrorAction SilentlyContinue
+# ONE PowerShell copy of the card's pricing rule AND of the scaler-gpu basis rule. Dot-sourced up here
+# rather than beside its first pricing use, because -SelfTest returns long before that point and a
+# fixture that cannot reach the function it pins is the 2026-07-29 class this file already carries a
+# scar from (the covered_by skip below).
+. (Join-Path $mp 'lib\package-cost-lib.ps1')
 
 # BLOCK-BEFORE-SHIP (2026-07-27, overhaul-1): a 'cheapest' HIGHER than 'everyday' is nonsensical on every
 # manifest surface (rankings, top5, meal-planner), so we CLAMP the shipped cheapest to everyday - the valid
@@ -66,13 +71,35 @@ function Resolve-Inversions($rows, $tol, $alertFrac){
 # NOTHING to a per-serving package total. Both tiers already count the coverer's own purchase; charging
 # this line again would double it, which is the very over-buy covered_by exists to remove. compute-v2 was
 # the fifth consumer of a costed line to assume every line has a package.
+# pkg_gross_g rides along from 2026-09-02 (corn04): it is the PHYSICAL package the reader buys, which
+# on a drained line is not pkg_g, and cheapest_ps needs it to put its `required` on the same basis the
+# everyday lane below already uses. A row written before the field carries none, and pkg_g is then the
+# gross weight by definition, so the fallback is exact rather than a guess.
 function Resolve-LinePackage($cl, [string]$key){
   $n = if($cl.buy_n){ [int]$cl.buy_n } else { [int]$cl.starter_n }
   $c = if($cl.buy_cost){ [double]$cl.buy_cost } else { [double]$cl.starter_cost }
   $pkgG = if($cl.pkg_g){ [double]$cl.pkg_g } else { [double]$cl.starter_pkg_g }
   if(($cl.PSObject.Properties.Name -contains 'covered_by') -and $cl.covered_by){ return $null }
   if($n -lt 1 -or $c -le 0 -or $pkgG -le 0){ throw "bad pkg data on '$key'" }
-  return [pscustomobject]@{ n = $n; cost = $c; pkg_g = $pkgG }
+  $gross = if(($cl.PSObject.Properties.Name -contains 'pkg_gross_g') -and $cl.pkg_gross_g){ [double]$cl.pkg_gross_g } else { [double]$pkgG }
+  return [pscustomobject]@{ n = $n; cost = $c; pkg_g = $pkgG; pkg_gross_g = $gross }
+}
+# THE CROSS-CHECK'S SECOND QUESTION (2026-09-02, corn04). -CrossCheck compared TOTALS and could never
+# see this class: it read the built block and inherited whatever basis the block carried, so a card
+# whose widget bought three cans where its own cost line said four agreed with itself perfectly.
+#
+# READ THIS BEFORE "TIGHTENING" IT. The obvious extension - compare the block's own count at the
+# block's own authored package, ceil((grams/gpu)/(pkg_g/gpu) - 0.02), against the engine's Buy N - is
+# a TAUTOLOGY IN gpu: the gpu cancels, so the expression is ceil(grams/pkg_g - 0.02) whatever basis
+# gpu is on, and it returned 4 for street corn's block both before and after the fix. It was written
+# that way first and the self-test below caught it; the fixture keeps that fact on the record so
+# nobody re-derives the same dead check. What it IS worth against a card on disk is staleness: the
+# card that shipped can carry a pkg_g the costed row has since moved off.
+function Get-BlockPkgCount([double]$Grams, [double]$Gpu, [double]$PkgG){
+  if($Gpu -le 0 -or $PkgG -le 0){ return 0 }
+  $required = $Grams / $Gpu
+  $basis    = $PkgG / $Gpu
+  return [int][math]::Max(1, [math]::Ceiling($required / $basis - 0.02))
 }
 if($SelfTest){
   $t = @(
@@ -107,12 +134,46 @@ if($SelfTest){
   try { [void](Resolve-LinePackage $bareLine 'Lemon Zest') } catch { $bareThrew = $true }
   $mustFire  = ((-not $covThrew) -and ($null -eq $covRes))   # covered: no throw, and contributes NO package
   $cleanTwin = $bareThrew                                     # not covered: the bad-pkg error must survive
-  if($mustFire -and $cleanTwin){
-    Write-Output 'SELFTEST PASS: a covered_by line with null package fields is skipped and adds zero package cost, and the same nulls WITHOUT covered_by still throw'
-    exit 0
+  if(-not ($mustFire -and $cleanTwin)){
+    Write-Output ("SELFTEST FAIL: covered_by path - covered threw={0} covered_result={1} bare_threw={2} (want threw=False result=null bare_threw=True)" -f $covThrew, $covRes, $bareThrew)
+    exit 1
   }
-  Write-Output ("SELFTEST FAIL: covered_by path - covered threw={0} covered_result={1} bare_threw={2} (want threw=False result=null bare_threw=True)" -f $covThrew, $covRes, $bareThrew)
-  exit 1
+  Write-Output 'SELFTEST PASS: a covered_by line with null package fields is skipped and adds zero package cost, and the same nulls WITHOUT covered_by still throw'
+
+  # WIDGET-COUNT BASIS (2026-09-02, queue 2026-09-02-corn04). FROZEN from the block
+  # street-corn-chicken-rice-bowls shipped: grams 1148 and pkg_g 298 on the DRAINED basis, gpu 28.35
+  # on the GROSS one, against a costed row whose physical can is 432 g and whose Buy N is 4.
+  # Frozen inline: once the emit is fixed no live row carries these numbers any more, and a fixture
+  # rebuilt from db\built would pass by finding nothing.
+
+  # (1) THE DEAD CHECK, pinned as dead. The count at the block's own authored package is blind to gpu
+  #     because gpu cancels - 4 before the fix and 4 after. Anyone who re-adds it as the count guard
+  #     is re-adding a check that reported clean through 88 short lines on 76 live cards.
+  $kShipped = Get-BlockPkgCount 1148 28.35   298
+  $kFixed   = Get-BlockPkgCount 1148 19.5563 298
+  $tautOk = ($kShipped -eq 4 -and $kFixed -eq 4)
+
+  # (2) THE CHECK THAT ACTUALLY FIRES. The block's authored FALLBACK package does not cancel, and it
+  #     is a fact about the world: a 15.25 oz can. The shipped block's works out at 10.51 oz.
+  $mmShipped = Get-ScalerBasisMismatch 298 28.35   432 28.35
+  $mmFixed   = Get-ScalerBasisMismatch 298 19.5563 432 28.35
+  $basisOk = ($null -ne $mmShipped) -and ($null -eq $mmFixed)
+
+  # (3) STALENESS, which is what the count comparison IS good for against a card on disk: a block
+  #     built when the package was 255 g still says 5 where the engine now says 4.
+  $kStale = Get-BlockPkgCount 1148 19.5563 255
+  # (4) CLEAN TWINS: a non-drained line, and the zero guards that must not divide.
+  $kPlain = Get-BlockPkgCount 454 28.3495 454
+  $kZero  = Get-BlockPkgCount 1148 0 298
+  $staleOk = ($kStale -eq 5) -and ($kPlain -eq 1) -and ($kZero -eq 0)
+
+  if(-not ($tautOk -and $basisOk -and $staleOk)){
+    Write-Output ("SELFTEST FAIL: widget-count basis - block count shipped={0}/fixed={1} (both want 4), basis shipped={2}/fixed={3} (want fired/null), stale={4} (want 5), non-drained={5} (want 1), gpu 0={6} (want 0)" -f `
+      $kShipped,$kFixed,$(if($mmShipped){'fired'}else{'null'}),$(if($mmFixed){'fired'}else{'null'}),$kStale,$kPlain,$kZero)
+    exit 1
+  }
+  Write-Output ("SELFTEST PASS: the block-count comparison is gpu-blind by construction (4 both ways) and catches a stale package; the FALLBACK-PACKAGE check is the one that fires on street corn's shipped block ({0:N2} units against a {1:N2} unit can)" -f $mmShipped.fallback, $mmShipped.physical)
+  exit 0
 }
 
 # ---- THE FEED THIS RUN IS ALLOWED TO PRICE ON (2026-08-15) -----------------------------------------
@@ -155,7 +216,7 @@ if($feedDoc.PSObject.Properties['pricing_inputs']){ foreach($p in $feedDoc.prici
 # ONE PowerShell copy of the rule, shared with grocery\measure-cheapest-selection.ps1. Do not transcribe
 # costAt() again here: the JS in tpl2-scaler-prefix.html is the authority, this lib is its single server
 # -side mirror, and -CrossCheck below proves the two agree against the built cards.
-. (Join-Path $mp 'lib\package-cost-lib.ps1')
+# (Dot-sourced at the top of this file since 2026-09-02 so -SelfTest can reach it.)
 function Get-CheapestCost($bid,[double]$req,[double]$fallbackBasis){
   if(-not $bid -or -not $piMap.ContainsKey($bid)){ return $null }
   $r = Get-PkgCheapestAcross $piMap[$bid] $req $fallbackBasis
@@ -175,6 +236,12 @@ foreach($c in (Get-Content (Join-Path $mp 'db\costed.json') -Raw | ConvertFrom-J
 # written for every good recipe, and the run exits 1 with the list so check-ad-cycles alerts.
 $rows = @()
 $bad = @()
+# WHAT THE BUILT BLOCK'S OWN COUNT MUST COME OUT AS, recorded per slug in scaler order while the spec
+# and its costed row are both already open (2026-09-02, corn04). -CrossCheck reads the built cards long
+# after this loop and has only a slug to go on; joining costed lines back to block lines by NAME there
+# would be wrong on every canon'd line, so the join is made HERE, where build-card2's own key rule
+# (canon ?? item) is available, and carried by INDEX - which is exactly how build-card2 emits them.
+$blockExpect = @{}
 foreach($run in @('db')){
   foreach($sf in (Get-ChildItem (Join-Path $mp "db\recipes\*.json"))){
     try {
@@ -183,19 +250,33 @@ foreach($run in @('db')){
       if(-not $cr){ throw "no db\costed entry" }
       $clines = @{}; foreach($l in $cr.lines){ $clines[$l.item] = $l }
       $ev = 0.0; $ch = 0.0
+      $expLines = New-Object System.Collections.Generic.List[object]
       foreach($ing in $spec.scaler.ing){
         $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ $ing.canon } else { $ing.item }
         $cl = $clines[$key]; if(-not $cl){ throw "no costed line '$key'" }
         # The covered_by skip and the bad-package throw both live in Resolve-LinePackage near the top of
         # this file, so -SelfTest exercises THIS decision rather than a second copy of it.
         $pk = Resolve-LinePackage $cl $key
+        # RECORDED BEFORE THE SKIP, so the list stays index-aligned with the block. A covered line has
+        # no package and therefore no count to compare; it is carried as a null and skipped downstream,
+        # never dropped, because dropping it would slide every later line onto the wrong row.
+        [void]$expLines.Add([pscustomobject]@{ item = [string]$ing.item; key = [string]$key
+                                              n = $(if($null -eq $pk){ $null } else { [int]$pk.n })
+                                              pkg_gross_g = $(if($null -eq $pk){ 0.0 } else { [double]$pk.pkg_gross_g })
+                                              spec_gpu = $(if($ing.PSObject.Properties.Name -contains 'gpu' -and $ing.gpu){ [double]$ing.gpu } else { 0.0 }) })
         if($null -eq $pk){ continue }
         $n = $pk.n; $c = $pk.cost; $pkgG = $pk.pkg_g
         $pkgP = $c / $n
         $k = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02))
         $ev += $k * $pkgP
         $bid = if($ing.PSObject.Properties.Name -contains 'bid'){ [string]$ing.bid } else { '' }
-        $gpu = if($ing.PSObject.Properties.Name -contains 'gpu' -and $ing.gpu){ [double]$ing.gpu } else { 0 }
+        $gpuRaw = if($ing.PSObject.Properties.Name -contains 'gpu' -and $ing.gpu){ [double]$ing.gpu } else { 0 }
+        # THE SAME BASIS THE CARD NOW EMITS (2026-09-02, corn04). One recipe row used to carry two:
+        # everyday_ps above pairs grams with pkg_g (both drained, correct), cheapest_ps below paired
+        # the same grams with the ingredient row's GROSS gpu and under-bought on 88 of 105 same-package
+        # drained lines. build-card2 writes gpu_eff into the block; this reads the identical transform
+        # off the identical costed row, so the manifest and the card cannot disagree by construction.
+        $gpu = Get-ScalerGpu $gpuRaw ([double]$pkgG) ([double]$pk.pkg_gross_g)
         # [int]$ing.grams ON PURPOSE: build-card2 emits the scaler data block with `[int]$ing.grams`, so
         # the card's `required` is computed from the ROUNDED grams. Using the unrounded double here would
         # put this number a cent off the card's on some recipes, which is exactly the kind of drift the
@@ -207,6 +288,7 @@ foreach($run in @('db')){
         # fall back to the recipe's own everyday package cost, exactly as before.
         if($null -ne $cc){ $ch += $cc } else { $ch += $k * $pkgP }
       }
+      $blockExpect[[string]$spec.slug] = $expLines
       $rows += [pscustomobject]@{
         slug=$spec.slug; name=$spec.name; run=$run; protein=$spec.protein
         protein_g=[int]$spec.stat.protein
@@ -277,12 +359,52 @@ if($CrossCheck){
   $re = [regex]'(?s)<script type="application/json" class="smp-sc-data">(.*?)</script>'
   $builtDir = Join-Path $mp 'db\built'
   $checked = 0; $mismatch = New-Object System.Collections.Generic.List[string]; $noCard = 0
+  # THE SECOND QUESTION (2026-09-02, corn04). The total comparison below asks whether the manifest and
+  # the card price the same basket the same way - and both read the SAME data block, so a block on the
+  # wrong basis agrees with itself and this cross-check stayed green through 88 short lines on 76 live
+  # cards. This asks whether the block's own package count, at the block's own authored package, is the
+  # count the ENGINE arrived at. Nothing here reads the feed, so it is true whenever it is run.
+  $countBad = New-Object System.Collections.Generic.List[string]
+  $countChecked = 0; $countSkipped = 0
   foreach($r in $rows){
     $cf = Join-Path $builtDir ($r.slug + '.body.html')
     if(-not (Test-Path $cf)){ $noCard++; continue }
     $m = $re.Match([IO.File]::ReadAllText($cf))
     if(-not $m.Success){ $noCard++; continue }
     try { $d = $m.Groups[1].Value | ConvertFrom-Json } catch { $noCard++; continue }
+
+    $exp = $blockExpect[[string]$r.slug]
+    if($null -eq $exp){ $countSkipped += @($d.ing).Count }
+    else {
+      $bIng = @($d.ing)
+      if($bIng.Count -ne $exp.Count){
+        # A card built from a different spec revision than this run read. Say so rather than comparing
+        # row 4 against row 5 and reporting a count bug that is really a staleness bug.
+        $countBad.Add(("{0}: the built card has {1} ingredient line(s), the spec {2} - the card is stale, rebuild before trusting any count" -f $r.slug, $bIng.Count, $exp.Count))
+      } else {
+        for($i=0; $i -lt $bIng.Count; $i++){
+          $it = $bIng[$i]; $e = $exp[$i]
+          if($null -eq $e.n){ $countSkipped++; continue }                       # covered line: no package
+          if([string]$it.item -ne [string]$e.item){ $countSkipped++; continue } # not the row we recorded
+          $kBlock = Get-BlockPkgCount ([double]$it.grams) ([double]$it.gpu) ([double]$it.pkg_g)
+          if($kBlock -eq 0){ $countSkipped++; continue }                        # no gpu or no package
+          $countChecked++
+          # STALENESS: the card on disk against the costed row this run read.
+          if($kBlock -ne [int]$e.n){
+            $countBad.Add(("{0} :: {1}: the card's own block buys {2} package(s) at its authored size, the cost line says {3} (grams {4}, gpu {5}, pkg_g {6}) - rebuild the card" -f `
+              $r.slug, $it.item, $kBlock, [int]$e.n, $it.grams, $it.gpu, $it.pkg_g))
+          }
+          # BASIS: the block's fallback package against the package a reader actually buys. THIS is
+          # the one that sees a card built by the old renderer, because the count above cannot.
+          $bad = Get-ScalerBasisMismatch ([double]$it.pkg_g) ([double]$it.gpu) ([double]$e.pkg_gross_g) ([double]$e.spec_gpu)
+          if($null -ne $bad){
+            $countBad.Add(("{0} :: {1}: the block's authored fallback package is {2:N2} units but the package is {3:N2} units - gpu is on the wrong basis, so the widget, the print list and the store picker all under-buy" -f `
+              $r.slug, $it.item, $bad.fallback, $bad.physical))
+          }
+        }
+      }
+    }
+
     $tot = 0.0; $ok = $true
     foreach($it in $d.ing){
       $gpu = [double]$it.gpu
@@ -303,8 +425,15 @@ if($CrossCheck){
       $mismatch.Add(("{0}: manifest `${1} vs card `${2}" -f $r.slug, [math]::Round($mine,2), [math]::Round($tot,2)))
     }
   }
+  Write-Output ("CROSS-CHECK counts: {0} block line(s) compared against the engine's Buy N, {1} disagreement(s), {2} line(s) not comparable" -f $countChecked, $countBad.Count, $countSkipped)
+  foreach($x in ($countBad | Select-Object -First 20)){ Write-Output ('  ' + $x) }
+  if($countBad.Count -gt 20){ Write-Output ("  ... and {0} more" -f ($countBad.Count - 20)) }
   Write-Output ("CROSS-CHECK vs built cards: {0} recipe(s) fully comparable, {1} disagreement(s), {2} card(s) not comparable" -f $checked, $mismatch.Count, $noCard)
   foreach($x in ($mismatch | Select-Object -First 12)){ Write-Output ('  ' + $x) }
+  if($countBad.Count){
+    Write-Output 'CROSS-CHECK FAILED: a recipe card''s cost widget and its own cost line do not agree on how many packages the batch needs.'
+    exit 2
+  }
   if($mismatch.Count){
     Write-Output 'CROSS-CHECK FAILED: the manifest and the recipe cards are pricing the same basket differently.'
     exit 2

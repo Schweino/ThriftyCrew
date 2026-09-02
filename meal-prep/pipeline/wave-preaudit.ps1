@@ -72,6 +72,7 @@ $repo = Split-Path -Parent $mp
 # so a missing-DATA fixture reported a missing-CODE error (measured 2026-08-27). guard-contract is
 # root-relative for the older reason that the drill stages a copy of it; nothing new should be.
 . (Join-Path (Split-Path -Parent $here) 'lib\dash-sweep.ps1')   # DASH_SWEEP_SKIP - ONE skip list, shared with build-v2-spec
+. (Join-Path (Split-Path -Parent $here) 'lib\package-cost-lib.ps1')   # Get-ScalerGpu / Get-ScalerBasisMismatch - ONE copy of the data-block basis rule
 
 $UTF8 = New-Object Text.UTF8Encoding($false)
 
@@ -127,6 +128,76 @@ function Test-MacroDrift {
     $v = [double]$Stat.($p.s)
     if ([Math]::Abs($c - $v) -gt $p.tol) {
       $out.Add(("{0}: recompute {1} vs stat {2} (drift {3:N1}, tolerance {4})" -f $p.unit, $c, $v, [Math]::Abs($c - $v), $p.tol))
+    }
+  }
+  return , @($out)
+}
+
+function Test-WidgetCountBasis {
+  <#
+    DOES THE CARD'S COST WIDGET BUY WHAT THE CARD'S COST LINE SAYS TO BUY? (2026-09-02, queue
+    2026-09-02-corn04.)
+
+    The card carries two package counts. The static "Buy 4 cans" line is the engine's, computed as
+    ceil(grams/pkg_g - 0.02). The widget, the print list and the store picker all compute their own from
+    the baked data block as ceil((grams/gpu) / packageBasis). Those agree only when grams, pkg_g and gpu
+    are on ONE basis, and for every canned line they were not: grams and pkg_g went DRAINED when the
+    engine learned a drained yield, gpu stayed the ingredient row's GROSS grams per feed unit. 88 of 105
+    same-package drained lines bought short across 76 live cards, and no gate could see it - build-card2
+    checked ceil(grams/pkg_g) == buy_n, and the gpu cancels out of that expression.
+
+    So this asks the question that does NOT cancel:
+
+      (a) COUNT   the block's own count must equal the engine's Buy N at base, and must track the engine
+                  rule at every serving count the control offers (2..42). Cheap, and it catches a card
+                  built against a package the engine has since moved off.
+      (b) PACKAGE the block's authored fallback package, pkg_g/gpu, must be the package a shopper picks
+                  up: db\ingredients.json's buy_pkg_g/gpu for that item. THIS is the half that fires.
+                  street corn's block worked out at a 10.51 oz can. The can is 15.24 oz.
+
+    Only lines with a real BUY package are asked. A bulk staple's block carries its pantry container, not
+    its buy package, and a label-priced line has no ingredients.json package to compare against - both
+    are skipped rather than guessed at, because a check that invents a reference is a check that cries
+    wolf. Returns the list of complaints, empty when clean.
+
+    $Lines is one joined record per block line:
+      item, grams, gpu, pkg_g   from the built data block (the bytes the browser reads)
+      buy_n                     from db\costed.json - the number the static line prints
+      ing_gpu, ing_buy_pkg_g    from db\ingredients.json - an INDEPENDENT statement of the package
+  #>
+  param($Lines, [int]$Base = 14, [int]$MinServ = 2, [int]$MaxServ = 42)
+  $out = New-Object System.Collections.Generic.List[string]
+  # NO @() AROUND $Lines. This file already pins the reason in its own fixtures: @() on a
+  # List[object] THROWS in PS 5.1 ("Argument types do not match"), and it threw here on the first
+  # drill. Callers hand over an array (.ToArray() on a list); a bare foreach handles both.
+  if ($null -eq $Lines) { return , @() }
+  foreach ($l in $Lines) {
+    $grams = [double]$l.grams; $gpu = [double]$l.gpu; $pkgG = [double]$l.pkg_g
+    if ($pkgG -le 0 -or $gpu -le 0) { continue }          # covered line, or a line the widget cannot price
+    if ($null -eq $l.buy_n) { continue }                  # no engine count to compare against
+    $buyN = [int]$l.buy_n
+    # (a) at base, and across the whole range of the serving control
+    $basis = $pkgG / $gpu
+    for ($nn = $MinServ; $nn -le $MaxServ; $nn++) {
+      $g = $grams * $nn / $Base
+      $kBlock  = [int][Math]::Max(1, [Math]::Ceiling(($g / $gpu) / $basis - 0.02))
+      $kEngine = [int][Math]::Max(1, [Math]::Ceiling($g / $pkgG - 0.02))
+      if ($kBlock -ne $kEngine) {
+        $out.Add(("{0}: at {1} servings the widget buys {2} package(s), the engine rule {3} (grams {4}, gpu {5}, pkg_g {6})" -f $l.item, $nn, $kBlock, $kEngine, $grams, $gpu, $pkgG))
+        break
+      }
+      if ($nn -eq $Base -and $kEngine -ne $buyN) {
+        $out.Add(("{0}: the cost line says buy {1}, but ceil({2} g / {3} g - 0.02) is {4} - this card is stale against db\costed.json" -f $l.item, $buyN, $grams, $pkgG, $kEngine))
+        break
+      }
+    }
+    # (b) the fallback package must be a package that exists
+    $ingGpu = [double]$l.ing_gpu; $ingPkg = [double]$l.ing_buy_pkg_g
+    if ($ingGpu -gt 0 -and $ingPkg -gt 0) {
+      $bad = Get-ScalerBasisMismatch $pkgG $gpu $ingPkg $ingGpu
+      if ($null -ne $bad) {
+        $out.Add(("{0}: the block's fallback package is {1:N2} units but the item's package is {2:N2} units ({3:P2} off) - gpu is on the wrong basis, so every count the widget, the print list and the store picker show is derived from a package that does not exist" -f $l.item, $bad.fallback, $bad.physical, $bad.rel))
+      }
     }
   }
   return , @($out)
@@ -464,6 +535,56 @@ if ($runSelfTest) {
   $pPenny = Test-CostSpecVsEngine $specPenny $good $script:CENT
   T 'a sub-cent rounding seam does not trip the reconciliation' ($pPenny.Count -eq 0) ($pPenny -join ' | ')
 
+  # ---- widget count basis (2026-09-02, queue 2026-09-02-corn04) -------------------------------------
+  # FROZEN from the block street-corn-chicken-rice-bowls was carrying when the defect was found: grams
+  # and pkg_g on the DRAINED basis, gpu on the GROSS one, against a 432 g can. NEVER regenerate these
+  # from db\built - the moment the renderer is fixed no live card carries them, and a regenerated
+  # fixture would pass by finding nothing.
+  function WcbLine($item, $grams, $gpu, $pkgG, $buyN, $ingGpu, $ingPkg) {
+    return [pscustomobject]@{ item = $item; grams = $grams; gpu = $gpu; pkg_g = $pkgG; buy_n = $buyN
+                              ing_gpu = $ingGpu; ing_buy_pkg_g = $ingPkg }
+  }
+  $cornShipped = WcbLine 'Sweet Whole Kernel Corn' 1148 28.35 298 4 28.3495 432
+  # ASSIGNED BARE, like every other predicate result in this file: Test-WidgetCountBasis returns
+  # `,@(...)` so a single finding cannot unroll on output, and wrapping THAT call in @() re-wraps the
+  # whole array into ONE element - .Count then reads 1 for two findings and, the dangerous half, 1 for
+  # ZERO. This file has paid for that trap once already (Get-StaleAuditProblems, seven red fixtures).
+  $wShipped = Test-WidgetCountBasis @($cornShipped)
+  T 'MUST FIRE  street corn''s shipped block is refused: its fallback package is a 10.51 oz can and the can is 15.24 oz' `
+    ($wShipped.Count -ge 1 -and ($wShipped -join ' ') -match 'fallback package') ($wShipped -join ' | ')
+  # ...AND THE COUNT HALF STAYS SILENT ON IT, which is the whole reason half (b) exists. gpu cancels out
+  # of ceil((g/gpu)/(pkg_g/gpu)), so a count comparison can never see a wrong gpu. Pinned so nobody
+  # "simplifies" this check down to the half that cannot fire.
+  T 'MUST FIRE  ...and the COUNT half is blind to it, so (b) is not redundant' `
+    ($wShipped.Count -eq 1) ('findings=' + $wShipped.Count + ' :: ' + ($wShipped -join ' | '))
+  # THE FIXED BLOCK: same line, gpu on its own basis. Silent.
+  $cornFixed = WcbLine 'Sweet Whole Kernel Corn' 1148 19.5563 298 4 28.3495 432
+  $wFixed = Test-WidgetCountBasis @($cornFixed)
+  T 'CLEAN TWIN the same line with gpu on this line''s basis passes at every serving count 2..42' `
+    ($wFixed.Count -eq 0) ($wFixed -join ' | ')
+  # THE STALE CARD: a correct basis, but a cost line that says 3 where the block's own package says 4.
+  $cornStale = WcbLine 'Sweet Whole Kernel Corn' 1148 19.5563 298 3 28.3495 432
+  $wStale = Test-WidgetCountBasis @($cornStale)
+  T 'MUST FIRE  a card whose cost line says buy 3 where its own package math says 4 is caught' `
+    ($wStale.Count -ge 1 -and ($wStale -join ' ') -match 'stale against') ($wStale -join ' | ')
+  # NON-DRAINED LINES MUST BE SILENT, or the check is only reporting the drained flag. Refried Beans:
+  # a 454 g package that is its own gross weight.
+  $refried = WcbLine 'Refried Beans' 454 28.3495 454 1 28.3495 454
+  $wRefried = Test-WidgetCountBasis @($refried)
+  T 'CLEAN TWIN a non-drained line is silent, so the check is not just re-reporting "this item drains"' `
+    ($wRefried.Count -eq 0) ($wRefried -join ' | ')
+  # A LABEL-PRICED LINE HAS NO ingredients.json PACKAGE. Half (b) must skip rather than invent a
+  # reference; half (a) still applies.
+  $labelled = WcbLine 'Chili Crisp' 180 28.3495 190 1 0 0
+  $wLabelled = Test-WidgetCountBasis @($labelled)
+  T 'CLEAN TWIN a label-priced line with no ingredients package is skipped by (b), not guessed at' `
+    ($wLabelled.Count -eq 0) ($wLabelled -join ' | ')
+  # A COVERED LINE CARRIES pkg_g 0 AND MUST NOT DIVIDE BY IT.
+  $covered = WcbLine 'Lemon Zest' 5 28.3495 0 $null 28.3495 0
+  $wCovered = Test-WidgetCountBasis @($covered)
+  T 'CLEAN TWIN a covered line (no package) is skipped without dividing by zero' `
+    ($wCovered.Count -eq 0) ($wCovered -join ' | ')
+
   # ---- protein derivation -------------------------------------------------------------------------
   $beefy = @([pscustomobject]@{ item = '80/20 Ground Beef'; grams = 1588 }, [pscustomobject]@{ item = 'Hickory Smoked Bacon'; grams = 168 })
   $pd = Get-ProteinByGrams $beefy
@@ -597,8 +718,9 @@ if ($runSelfTest) {
   $srcSpec = Join-Path $mp ("db\recipes\{0}.json" -f $dSlug)
   $srcCost = Join-Path $mp 'db\costed.json'
   $srcFood = Join-Path $mp 'food-macros-db.json'
+  $srcIng  = Join-Path $mp 'db\ingredients.json'
   $srcRef  = Join-Path $mp 'db\built\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html'
-  $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcRef))
+  $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcIng) -and (Test-Path $srcRef))
   if (-not $canDrill) {
     T 'END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card)' $false 'one of them is missing - the drill could not run, which is not a pass'
   } else {
@@ -610,6 +732,9 @@ if ($runSelfTest) {
     Copy-Item (Join-Path $repo 'lib\guard-contract.ps1') (Join-Path $T 'lib\guard-contract.ps1') -Force
     Copy-Item $srcCost (Join-Path $dMp 'db\costed.json') -Force
     Copy-Item $srcFood (Join-Path $dMp 'food-macros-db.json') -Force
+    # widget-count-basis check (b) reads db\ingredients.json as its INDEPENDENT statement of each item's
+    # package, and a missing required input is a BLOCK, not a skip - so the drill root carries it too.
+    Copy-Item $srcIng (Join-Path $dMp 'db\ingredients.json') -Force
     $pristine = [IO.File]::ReadAllText($srcSpec, [Text.Encoding]::UTF8)
     $dSpecPath = Join-Path $dMp ("db\recipes\{0}.json" -f $dSlug)
     [IO.File]::WriteAllText($dSpecPath, $pristine, $UTF8)
@@ -800,6 +925,15 @@ catch { Block ("food-macros-db does not parse: " + $_.Exception.Message) }
 $costedRows = @{}
 try { foreach ($r in @(Read-JsonFile $costedPath)) { $costedRows[[string]$r.slug] = $r } }
 catch { Block ("db\costed.json does not parse: " + $_.Exception.Message) }
+# THE INDEPENDENT STATEMENT OF EACH ITEM'S PACKAGE, for widget-count-basis check (b). Deliberately not
+# the costed row: the whole point of (b) is to compare the block's implied package against a source the
+# block was not derived from.
+$ingRows = @{}
+$ingPath = Join-Path $mp 'db\ingredients.json'
+if (Test-Path $ingPath) {
+  try { foreach ($r in @(Read-JsonFile $ingPath)) { $ingRows[[string]$r.item] = $r } }
+  catch { Block ("db\ingredients.json does not parse: " + $_.Exception.Message) }
+} else { Block ("required input missing: " + $ingPath) }
 if ($script:blocked.Count) { Write-GuardComplete -Name 'wave-preaudit' -Summary 'blocked: unparseable input'; exit 2 }
 
 $refHtml = [IO.File]::ReadAllText($ReferenceCard, [Text.Encoding]::UTF8)
@@ -1053,6 +1187,56 @@ foreach ($slug in $target) {
         reference = (Split-Path $ReferenceCard -Leaf)
       }) `
       $(if (@($gaps).Count -eq 0) { ("rebuilt to a scratch dir and structurally identical to {0}: every smp-* class and anchor id present, {1} step anchors, no dash bytes, JSON-LD parses as a Recipe" -f (Split-Path $ReferenceCard -Leaf), $stepCount) } else { (@($gaps) -join ' | ') })))
+
+    # ---- widget-count-basis: does the rebuilt card's WIDGET buy what its COST LINE says to buy? ----
+    # Read out of the card that was just rendered, not out of db\built, so a wave is refused before it
+    # publishes rather than after. The typed script tag is the anchor: the template's own JS contains
+    # the bare class name, so searching for that would match the code instead of the payload.
+    $blockRe = [regex]'(?s)<script type="application/json" class="smp-sc-data">(.*?)</script>'
+    $bm = $blockRe.Match($body)
+    if (-not $bm.Success) {
+      $checks.Add((New-Check 'widget-count-basis' $false ([ordered]@{}) 'the rebuilt card carries no smp-sc-data block, so the widget has no numbers to check'))
+    } else {
+      $blockOk = $true; $wcb = @(); $wcbLines = 0; $wcbSkipped = 0
+      try { $blockDoc = $bm.Groups[1].Value | ConvertFrom-Json } catch { $blockOk = $false }
+      if (-not $blockOk) {
+        $checks.Add((New-Check 'widget-count-basis' $false ([ordered]@{}) 'the smp-sc-data block does not parse as JSON'))
+      } else {
+        $cRow = $costedRows[$slug]
+        $cLines = @{}
+        if ($cRow) { foreach ($cl in @($cRow.lines)) { $cLines[[string]$cl.item] = $cl } }
+        $scaler = @($spec.scaler.ing)
+        $bIng = @($blockDoc.ing)
+        $joined = New-Object System.Collections.Generic.List[object]
+        for ($bi = 0; $bi -lt $bIng.Count; $bi++) {
+          $it = $bIng[$bi]
+          # build-card2 emits one block line per scaler line, in order, so the index IS the join. Name
+          # matching would be wrong on every canon'd line, where the costed row is keyed by the canon.
+          $sk = if ($bi -lt $scaler.Count) { $scaler[$bi] } else { $null }
+          $key = if ($null -ne $sk -and ($sk.PSObject.Properties.Name -contains 'canon') -and $sk.canon) { [string]$sk.canon } elseif ($null -ne $sk) { [string]$sk.item } else { [string]$it.item }
+          $cl = $cLines[$key]
+          # only lines the engine gave a real BUY package: a bulk staple's block carries its pantry
+          # container and a covered line carries none, and neither has a buy count to compare against.
+          if ($null -eq $cl -or $null -eq $cl.pkg_g -or [double]$cl.pkg_g -le 0) { $wcbSkipped++; continue }
+          $ir = $ingRows[$key]
+          $wcbLines++
+          [void]$joined.Add([pscustomobject]@{
+            item  = [string]$it.item; grams = [double]$it.grams
+            gpu   = $(if ($it.PSObject.Properties.Name -contains 'gpu') { [double]$it.gpu } else { 0.0 })
+            pkg_g = [double]$it.pkg_g; buy_n = [int]$cl.buy_n
+            ing_gpu         = $(if ($null -ne $ir -and $ir.gpu) { [double]$ir.gpu } else { 0.0 })
+            ing_buy_pkg_g   = $(if ($null -ne $ir -and $ir.buy_pkg_g) { [double]$ir.buy_pkg_g } else { 0.0 })
+          })
+        }
+        # .ToArray(), never @($joined): @() on a List[object] throws in PS 5.1, which is exactly how
+        # this check died on its first drill run.
+        $wcb = Test-WidgetCountBasis ($joined.ToArray())
+        $checks.Add((New-Check 'widget-count-basis' (@($wcb).Count -eq 0) ([ordered]@{
+            lines_checked = $wcbLines; lines_skipped = $wcbSkipped; findings = @($wcb).Count
+          }) `
+          $(if (@($wcb).Count -eq 0) { ("the widget, the print list and the store picker buy exactly what the cost line says on all {0} package line(s), at every serving count from 2 to 42, and every fallback package is the real one ({1} bulk/covered line(s) have no buy package to check)" -f $wcbLines, $wcbSkipped) } else { (@($wcb) -join ' | ') })))
+      }
+    }
   }
 
   $slugChecks.Add($slug, $checks.ToArray())

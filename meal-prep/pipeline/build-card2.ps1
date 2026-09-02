@@ -31,19 +31,95 @@
 # Per-serving basis (Brad, 2026-07-26): whole-package total / servings, priced at current cheapest.
 # The widget live-updates the stat rectangle from the feed; the static JSON-LD costPerServing is the
 # everyday whole-package baseline (spec.head.costPerServing - the caller re-anchors it).
+# -SelfTest pins the DATA-BLOCK BASIS rule this renderer is the only writer of (2026-09-02, corn04).
+# The three path parameters lost [Parameter(Mandatory)] to make it possible: a mandatory parameter
+# turns `-File build-card2.ps1 -SelfTest` into an interactive PROMPT, and ops\run-gates.ps1 runs every
+# discovered self-test non-interactively, so the gate would hang instead of gating. They are still
+# required for a render and still refused by name below.
 param(
-  [Parameter(Mandatory=$true)][string]$SpecFile,
-  [Parameter(Mandatory=$true)][string]$CostedFile,
-  [Parameter(Mandatory=$true)][string]$OutDir,
+  [string]$SpecFile,
+  [string]$CostedFile,
+  [string]$OutDir,
   [string]$SiteBase = 'https://www.thriftycrew.com',
   [string]$Author = 'Thrifty Crew',
   [string]$RecipesDb = '',
   [string]$FreeRotation = '',
   [string]$PerServing = '',
-  [double]$MinBidCoverage = 0.70
+  [double]$MinBidCoverage = 0.70,
+  [switch]$SelfTest
 )
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+# ONE COPY of the scaler-gpu basis rule and its outcome check, shared with compute-v2-perserving and
+# wave-preaudit. Dot-sourced before the self-test so the fixtures below drive THE SAME BYTES a render
+# does, which is the whole reason the rule is not written inline here.
+. (Join-Path $here '..\lib\package-cost-lib.ps1')
+
+if($SelfTest){
+  # =================================================================================================
+  # THE DATA-BLOCK BASIS, frozen from the rows that were actually wrong on 2026-09-02.
+  #
+  # street-corn-chicken-rice-bowls :: Sweet Whole Kernel Corn shipped a block of
+  #     grams 1148 (DRAINED)  pkg_g 298 (DRAINED)  gpu 28.35 (GROSS g per oz of can)
+  # so the widget computed required = 1148/28.35 = 40.49 oz, bought ceil(40.49/15.25) = 3 cans of a
+  # commodity the engine's own Buy N line said needed 4, and the block's authored fallback package
+  # came out as a 10.51 oz can that has never existed. These numbers are frozen HERE, not read from
+  # db\costed.json: the moment the fix lands the live rows stop carrying the bug, and a fixture
+  # regenerated from live data would pass by finding nothing.
+  # =================================================================================================
+  $f = 0
+  function T($msg, $cond, $got){ if($cond){ Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
+
+  # ---- MUST FIRE: the block as built TODAY is refused by the emit-time basis check ----------------
+  $mm = Get-ScalerBasisMismatch 298 28.35 432 28.35
+  T 'MUST FIRE  street corn''s block as built today is caught: a 298 g drained can over a GROSS 28.35 g/oz is a 10.51 oz package, and the can is 15.24 oz' `
+    ($null -ne $mm -and [math]::Round($mm.fallback,2) -eq 10.51 -and [math]::Round($mm.physical,2) -eq 15.24) `
+    $(if($mm){ ("fallback={0:N2} physical={1:N2} rel={2:P2}" -f $mm.fallback,$mm.physical,$mm.rel) } else { 'returned null - the mis-based block was accepted' })
+
+  # ---- MUST FIRE: gpu_eff is what the emit must write, and it changes the COUNT -------------------
+  $gpuEff = Get-ScalerGpu 28.35 298 432
+  T 'MUST FIRE  a drained line''s emitted gpu is this line''s grams per feed unit, not the ingredient row''s gross' `
+    ($gpuEff -gt 19.55 -and $gpuEff -lt 19.56) ("gpu_eff=$gpuEff (28.35 x 298 / 432 = 19.556)")
+  # the count the widget lands on, at the block's own authored package, before and after
+  $kOld = [math]::Max(1,[math]::Ceiling((1148/28.35)/15.25 - 0.02))
+  $kNew = [math]::Max(1,[math]::Ceiling((1148/$gpuEff)/15.25 - 0.02))
+  $kEng = [math]::Max(1,[math]::Ceiling(1148/298 - 0.02))
+  T 'MUST FIRE  and the count moves onto the engine''s: 3 cans of corn before, 4 after, engine 4' `
+    ($kOld -eq 3 -and $kNew -eq 4 -and $kEng -eq 4) ("before=$kOld after=$kNew engine=$kEng")
+
+  # ---- CLEAN TWIN: a non-drained line must not move at all ---------------------------------------
+  # Refried Beans, 454 g package that drains to nothing because it is not drained. If gpu moves here
+  # the rule has widened from "this line's basis" into "rescale everything", and 30,884 sound rows
+  # would move with it.
+  $plain = Get-ScalerGpu 28.3495 454 454
+  T 'CLEAN TWIN a line whose package is its own gross weight keeps its gpu byte for byte' `
+    ($plain -eq 28.3495) ("gpu=$plain")
+  T 'CLEAN TWIN ...and its block passes the basis check silently' `
+    ($null -eq (Get-ScalerBasisMismatch 454 28.3495 454 28.3495)) 'the check fired on a sound line'
+  # A costed row written before pkg_gross_g existed carries none, and the caller passes pkg_g. That
+  # must be a NO-OP, or every legacy row fails to build.
+  T 'CLEAN TWIN a costed row that predates pkg_gross_g falls back to pkg_g and changes nothing' `
+    ((Get-ScalerGpu 28.35 298 298) -eq 28.35 -and $null -eq (Get-ScalerBasisMismatch 298 28.35 298 28.35)) 'the fallback path moved a line'
+
+  # ---- CLEAN TWIN: a drained line whose two bases already agreed stays where it was ---------------
+  # chicken-al-pastor-burrito :: Pineapple Chunks, 700 g on a 412 g drained / 567 g gross can: k = 2
+  # before and after. A fix that moves this line is over-correcting.
+  $pgpu = Get-ScalerGpu 28.3495 412 567
+  $pOld = [math]::Max(1,[math]::Ceiling((700/28.3495)/20 - 0.02))
+  $pNew = [math]::Max(1,[math]::Ceiling((700/$pgpu)/20 - 0.02))
+  T 'CLEAN TWIN a drained line whose gpu and pkg_g bases already agreed on the count is untouched' `
+    ($pOld -eq 2 -and $pNew -eq 2) ("before=$pOld after=$pNew")
+
+  # ---- the zero guards: a covered line has no package and must not divide by anything -------------
+  T 'a covered line (gpu 0) returns 0 rather than dividing' ((Get-ScalerGpu 0 298 432) -eq 0.0) ((Get-ScalerGpu 0 298 432))
+  T 'a covered line (pkg_g 0) is not basis-checked at all' ($null -eq (Get-ScalerBasisMismatch 0 28.35 432 28.35)) 'the check ran on a line with no package'
+
+  if($f -eq 0){ Write-Output 'build-card2 SELF-TEST PASS'; exit 0 }
+  Write-Output "build-card2 SELF-TEST FAIL: $f case(s)"; exit 1
+}
+foreach($req in @('SpecFile','CostedFile','OutDir')){
+  if(-not (Get-Variable $req -ValueOnly)){ throw ("build-card2.ps1: -{0} is required (or run with -SelfTest)" -f $req) }
+}
 $spec = Get-Content $SpecFile -Raw | ConvertFrom-Json
 # BULLET-FIELD SHAPE, BEFORE ANYTHING IS RENDERED (2026-09-02). Every field this script renders with
 # `foreach($li in $spec.<field>){ ... <li> ... }` has to be an array: PS 5.1 iterates a STRING once, so
@@ -132,8 +208,30 @@ foreach($ing in $spec.scaler.ing){
   # self-test: mirror the engine's own ceil(-0.02) - it must reproduce the engine's package count at base
   $chk = if($isCovered){ 0 } else { [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02)) }
   if(-not $isCovered -and $chk -ne $n){ throw ("{0} ({1}): ceil({2}g/{3}g)={4} != engine {5} - pkg_g/buy_n disagree" -f $key,$spec.slug,$ing.grams,$pkgG,$chk,$n) }
+  # THE DATA BLOCK'S gpu IS THIS LINE'S grams PER FEED UNIT (2026-09-02, corn04). The check above pins
+  # the FIRST pairing (grams over pkg_g == the engine's Buy N) and shipped green for weeks while the
+  # SECOND pairing - grams over gpu, which is what the widget, the print module, the store picker and
+  # compute-v2's cheapest_ps all use - was mixing a drained numerator with a gross denominator on every
+  # canned line. The spec stays gross; the transform is here, at build time, so audit-count-gpu and
+  # audit-store-integrity keep reading the inputs they were written against.
+  $pkgGrossG = if($cl.PSObject.Properties.Name -contains 'pkg_gross_g' -and $cl.pkg_gross_g){ [double]$cl.pkg_gross_g } else { [double]$pkgG }
+  # A COVERED LINE KEEPS ITS gpu UNTOUCHED. pkg_g is 0 there, so Get-ScalerGpu is a no-op by its own
+  # guard - and it must be: the widget reads gpu>0 to decide a line is priceable at all, so zeroing it
+  # would make costAt return null, and ONE null line marks the whole receipt incomplete.
+  $gpuEmit = Get-ScalerGpu ([double]$ing.gpu) ([double]$pkgG) $pkgGrossG
+  # ...AND THE BLOCK MUST PROVE IT. ceil(grams/pkg_g) can be right while gpu is nonsense, because the
+  # gpu cancels out of that expression; the fallback package pkg_g/gpu does NOT cancel, and it is a
+  # fact about the world - a 15.24 oz can, not a 10.51 oz one. This is the pairing nothing checked.
+  if(-not $isCovered){
+    $bad = Get-ScalerBasisMismatch ([double]$pkgG) $gpuEmit $pkgGrossG ([double]$ing.gpu)
+    if($null -ne $bad){
+      throw ("{0} ({1}): data-block fallback package {2:N3} units != physical package {3:N3} units - gpu is on the wrong basis" -f $key,$spec.slug,$bad.fallback,$bad.physical)
+    }
+  }
   $p = '{"item":"' + ($ing.item -replace '"','\"') + '","disp":"' + ($dispNames[$di] -replace '"','\"') + '","grams":' + [int]$ing.grams + ',"buy":"' + ($ing.buy -replace '"','\"') + '"'
-  if($ing.PSObject.Properties.Name -contains 'bid' -and $ing.bid){ $p += ',"bid":"' + $ing.bid + '","gpu":' + $ing.gpu; $bidHave++ } else { $bidMiss += [string]$ing.item }
+  # InvariantCulture, not the default ToString(): this string IS JSON, and a decimal comma would ship
+  # 584 unparseable cards. Byte-identical to the old emit on every line the transform does not move.
+  if($ing.PSObject.Properties.Name -contains 'bid' -and $ing.bid){ $p += ',"bid":"' + $ing.bid + '","gpu":' + $gpuEmit.ToString([System.Globalization.CultureInfo]::InvariantCulture); $bidHave++ } else { $bidMiss += [string]$ing.item }
   $p += ',"pkg_g":' + $pkgG + ',"pkg_l":"' + ($lbl -replace '"','\"') + '"}'
   $ingParts += $p
   # Composition is COST, because every label around this bar says cost and the widget's own renderComp()

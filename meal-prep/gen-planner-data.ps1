@@ -56,6 +56,39 @@ $UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
 foreach($p in ((Get-Content (Join-Path $here 'planner-extra-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){
   if(-not $pkg.ContainsKey($p.Name)){ $pkg[$p.Name]=@{ g=[double]$p.Value.g; l=[string]$p.Value.label } }
 }
+
+# THE PACKAGE COMES FROM THE COSTED ROW FIRST (2026-09-02, corn04). This tool was the THIRD copy of the
+# whole-package count rule and it ran on a THIRD basis: pk was db\ingredients.json buy_pkg_g, the GROSS
+# weight of the can, while `g` is the recipe's DRAINED grams, so pkgN = ceil(g/pk - 0.02) under-bought
+# on 89 of 121 drained lines across 79 recipes - chili-cornbread-casserole's kidney beans read 2 cans
+# beside a recipe card saying 4. The engine already resolved that per line; this reads its answer
+# instead of re-deriving one, so the planner, the card and the cost line cannot disagree.
+# ingredients.json stays the fallback for every line the engine gives no buy package (bulk staples buy
+# a pantry container, covered lines buy nothing of their own).
+. (Join-Path $here 'lib\package-cost-lib.ps1')
+$costedPkg=@{}
+foreach($c in (Get-Content (Join-Path $here 'db\costed.json') -Raw | ConvertFrom-Json)){
+  foreach($l in $c.lines){
+    if($null -eq $l.pkg_g -or [double]$l.pkg_g -le 0){ continue }
+    $gross = if(($l.PSObject.Properties.Name -contains 'pkg_gross_g') -and $l.pkg_gross_g){ [double]$l.pkg_gross_g } else { [double]$l.pkg_g }
+    $costedPkg[([string]$c.slug)+'|'+([string]$l.item)]=@{ g=[double]$l.pkg_g; gross=$gross }
+  }
+}
+Write-Output ("db\costed.json: {0} line(s) carry a buy package the planner can price against" -f $costedPkg.Count)
+# ONE resolution, used by the emit AND by the "items without a package def" report below, so the report
+# cannot name an item the emit actually priced.
+function Resolve-PlannerPkg([string]$slug,[string]$item){
+  $c=$costedPkg[$slug+'|'+$item]
+  if($c){
+    # the LABEL still comes from ingredients.json - it is the reader-facing name of the container the
+    # engine's pkg_g measures, and nothing about the basis fix changes what to call a can.
+    $l=if($pkg.ContainsKey($item)){ [string]$pkg[$item].l } else { '' }
+    return @{ g=$c.g; l=$l; gross=$c.gross }
+  }
+  if($pkg.ContainsKey($item)){ return @{ g=[double]$pkg[$item].g; l=[string]$pkg[$item].l; gross=[double]$pkg[$item].g } }
+  return $null
+}
+function InvNum($v){ return ([double]$v).ToString([System.Globalization.CultureInfo]::InvariantCulture) }
 function Feed-Gpu($it){
   if(-not $item.ContainsKey($it)){ return $null }
   $b=$item[$it]
@@ -107,9 +140,16 @@ foreach($r in $db){
     if($g -le 0){ continue }
     $totalIng++
     $fb=Feed-Gpu $ing.item
+    $pk=Resolve-PlannerPkg ([string]$r.slug) ([string]$ing.item)
     $extra=''
-    if($fb){ $withBid++; $extra=',"bid":'+(J $fb.bid)+',"gpu":'+$fb.gpu }
-    if($pkg.ContainsKey($ing.item)){ $extra+=',"pk":'+$pkg[$ing.item].g+',"pl":'+(J $pkg[$ing.item].l) }
+    # gpu is THIS LINE's grams per feed unit, the same transform build-card2 bakes into the card's data
+    # block, so storePkgCost's n * pk * (price/gpu) is n whole physical cans at the store's price.
+    if($fb){
+      $withBid++
+      $gpuEff=if($pk){ Get-ScalerGpu ([double]$fb.gpu) ([double]$pk.g) ([double]$pk.gross) } else { [double]$fb.gpu }
+      $extra=',"bid":'+(J $fb.bid)+',"gpu":'+(InvNum $gpuEff)
+    }
+    if($pk){ $extra+=',"pk":'+(InvNum $pk.g)+',"pl":'+(J $pk.l) }
     $dispName=[string]$ing.item
     $ovKey=([string]$r.slug)+'|'+$dispName
     if($DISPLAY_OVERRIDES.ContainsKey($ovKey)){ $dispName=$DISPLAY_OVERRIDES[$ovKey] }
@@ -135,7 +175,7 @@ $pubPlanner=Join-Path (Split-Path $here -Parent) 'public\planner-data.json'
 Write-Output ("public\planner-data.json: " + [Math]::Round((Get-Item $pubPlanner).Length/1024,0) + " KB (Worker-served)")
 $kb=[Math]::Round((Get-Item (Join-Path $here 'planner-data.js')).Length/1024,0)
 $noPkg=@{}
-foreach($r in $db){ foreach($ing in $r.ingredients){ if($ing.grams -gt 0 -and -not $pkg.ContainsKey($ing.item)){ $noPkg[$ing.item]=1 } } }
+foreach($r in $db){ foreach($ing in $r.ingredients){ if($ing.grams -gt 0 -and $null -eq (Resolve-PlannerPkg ([string]$r.slug) ([string]$ing.item))){ $noPkg[$ing.item]=1 } } }
 Write-Output ("planner-data.js: {0} of {1} recipes, {2}/{3} ingredient lines feed-priced, {4} KB, pkg table {5} items" -f $rows.Count,@($db).Count,$withBid,$totalIng,$kb,$pkg.Count)
 if($noPkg.Count -gt 0){ Write-Output ("ITEMS WITHOUT PACKAGE DEF ({0}): {1}" -f $noPkg.Count, (($noPkg.Keys | Sort-Object) -join ', ')) }
 if($unpriced.Count -gt 0){

@@ -235,7 +235,7 @@ foreach($r in $computed){
     $util = [Math]::Round($g*$ppg,2)
     $batch += $util
     $isBulk = ($row -and (Has $row 'bulk') -and $row.bulk)
-    $buyN=$null; $buyCost=$null; $pkgLabel=$null; $stN=$null; $stCost=$null; $stPkg=$null; $pkgG=$null; $stPkgG=$null
+    $buyN=$null; $buyCost=$null; $pkgLabel=$null; $stN=$null; $stCost=$null; $stPkg=$null; $pkgG=$null; $stPkgG=$null; $pkgGrossG=$null
     if($isBulk){
       $trueCost += $util
       if($row -and (Has $row 'pantry_pkg_g')){
@@ -295,6 +295,14 @@ foreach($r in $computed){
       }
       elseif($pg){
         $pgG = [double]$pg.g
+        # THE PHYSICAL PACKAGE A READER PUTS IN THE CART, recorded beside the drained weight it becomes
+        # (2026-09-02, corn04). pkg_g goes drained the moment an item gets a real yield, and every
+        # downstream reader that pairs it with the ingredient row's GROSS grams-per-unit was then
+        # mixing two bases with nothing to notice - a 15.25 oz can of corn priced as a 10.51 oz one.
+        # This is the number that lets lib\package-cost-lib.ps1 Get-ScalerGpu put the card's data block
+        # back on ONE basis, and lets build-card2 prove the block's fallback package is a real can.
+        # Additive: nothing that read a costed line before reads it differently now.
+        $pkgGrossG = [double]$pg.g
         if($DRAINED.ContainsKey($ing.item)){ $pgG = $DRAINED[$ing.item].drained }
         $pkgG = $pgG
         $pkgPrice = $pgG*$ppg
@@ -309,7 +317,7 @@ foreach($r in $computed){
         $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: no package def, counted at util in true cost'))
       }
     }
-    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; carriage=$carr.verdict; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; pkg_g=$pkgG; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg; starter_pkg_g=$stPkgG; covered_by=$coveredBy }
+    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; carriage=$carr.verdict; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; pkg_g=$pkgG; pkg_gross_g=$pkgGrossG; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg; starter_pkg_g=$stPkgG; covered_by=$coveredBy }
   }
   $batch=[Math]::Round($batch,2); $trueCost=[Math]::Round($trueCost,2)
   $pantryAdd=[Math]::Round($starterOutlay-$bulkUtil,2)
