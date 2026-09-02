@@ -1,0 +1,1833 @@
+﻿{
+    "generated":  "2026-09-02T12:26:49",
+    "plan":  "plan-2026-09-02-2.json",
+    "board_week":  "comparison-2026-09-02.json built 2026-09-02T08:03:41 (pinned by triage-due BOARD line)",
+    "measured_as":  "routing",
+    "simulator":  "scratchpad sim-routing-after.ps1: match-lib.ps1 New-CommodityMatcher/Resolve-CommodityDetail (the compiled MatchCore the engine uses) over the corpus below, BEFORE = commodities.json as committed, AFTER = the rule_changes applied to an independent copy loaded by a separate ConvertFrom-Json call",
+    "harness_note":  "FIRST RUN WAS A FALSE ZERO: @(ConvertFrom-Json \u003carray\u003e) in PS 5.1 wraps the whole array as ONE element, so the matcher had a single entry carrying every include and all 66,862 excludes and routed 302 of 41,072 names. Caught because the Aldi gruyere crown itself came back unrouted. Fixed by assigning to a variable before @(). Recorded so the developer does not rebuild the same trap.",
+    "corpus":  {
+                   "distinct_names":  41072,
+                   "file_count":  63,
+                   "files":  [
+                                 "aldi-regular-2026-09-02.json",
+                                 "bakers-regular-2026-09-02.json",
+                                 "family-fare-regular-2026-09-02.json",
+                                 "fareway-regular-2026-09-02.json",
+                                 "hunter-aldi-regular-2026-08-16.json",
+                                 "hunter-bakers-regular-2026-08-16.json",
+                                 "hunter-familyfare-regular-2026-08-16.json",
+                                 "hunter-fareway-regular-2026-08-16.json",
+                                 "hunter-hyvee-regular-2026-08-16.json",
+                                 "hunter-samsclub-regular-2026-08-16.json",
+                                 "hunter-walmart-regular-2026-08-16.json",
+                                 "hyvee-regular-2026-09-02.json",
+                                 "sams-regular-2026-08-01.json",
+                                 "walmart-regular-2026-09-02.json",
+                                 "walmart-regular-2026-09-01.json",
+                                 "walmart-regular-2026-08-31.json",
+                                 "walmart-regular-2026-08-30.json",
+                                 "walmart-regular-2026-08-29.json",
+                                 "walmart-regular-2026-08-26.json",
+                                 "walmart-regular-2026-08-25.json",
+                                 "walmart-regular-2026-08-22.json",
+                                 "walmart-regular-2026-08-11.json",
+                                 "walmart-regular-2026-08-06.json",
+                                 "walmart-regular-2026-08-05.json",
+                                 "walmart-regular-2026-08-01.json",
+                                 "walmart-regular-2026-07-31.json",
+                                 "walmart-regular-2026-07-30.json",
+                                 "walmart-regular-2026-07-29.json",
+                                 "walmart-regular-2026-07-25.json",
+                                 "walmart-regular-2026-07-23.json",
+                                 "walmart-regular-2026-07-18.json",
+                                 "walmart-regular-2026-07-15.json",
+                                 "walmart-regular-2026-07-14.json",
+                                 "walmart-regular-2026-07-12.json",
+                                 "walmart-regular-2026-07-08.json",
+                                 "walmart-regular-2026-07-06.json",
+                                 "walmart-regular-2026-07-05.json",
+                                 "sams-deals-2026-09-02.json",
+                                 "sams-deals-2026-09-01.json",
+                                 "sams-deals-2026-08-31.json",
+                                 "sams-deals-2026-08-30.json",
+                                 "sams-deals-2026-08-29.json",
+                                 "sams-deals-2026-08-28.json",
+                                 "sams-deals-2026-08-27.json",
+                                 "sams-deals-2026-08-26.json",
+                                 "sams-deals-2026-08-25.json",
+                                 "sams-deals-2026-08-24.json",
+                                 "sams-deals-2026-08-23.json",
+                                 "sams-deals-2026-08-22.json",
+                                 "sams-deals-2026-08-15.json",
+                                 "sams-deals-2026-08-05.json",
+                                 "sams-deals-2026-08-01.json",
+                                 "sams-deals-2026-07-29.json",
+                                 "sams-deals-2026-07-23.json",
+                                 "sams-deals-2026-07-18.json",
+                                 "sams-deals-2026-07-17.json",
+                                 "sams-deals-2026-07-15.json",
+                                 "sams-deals-2026-07-08.json",
+                                 "sams-deals-2026-07-06.json",
+                                 "sams-deals-2026-07-05.json",
+                                 "bakers-deals-2026-09-02.json",
+                                 "fareway-deals-2026-08-30.json",
+                                 "ads-2026-09-02.json"
+                             ],
+                   "note":  "ONE corpus: the engine union (Select-RegularFileSet as-of 2026-09-02, 90d) + Select-EngineSamsFiles + newest bakers-deals + newest fareway-deals + newest ads-*.json + every item on comparison-2026-09-02; every section of this file reads the same list"
+               },
+    "positive_control":  {
+                             "expected":  "coleslaw-mix",
+                             "before":  "",
+                             "observed":  "coleslaw-mix",
+                             "name":  "Little Salad Bar Classic Coleslaw 14 OZ"
+                         },
+    "rule_changes":  [
+                         "gruyere.exclude += \\bsausages?\\b",
+                         "shredded-cheese.exclude += \\bsausages?\\b",
+                         "coleslaw-mix.include += \\bcoleslaw\\b",
+                         "coleslaw-mix.exclude += \\bpotato\\s+salad\\b, \\bmacaroni\\s+salad\\b, \\bhomestyle\\b, \\btubs?\\b, ^coleslaw\\s+30\\s*oz$ (PENDING in-store read of the Aldi 30 oz bag)",
+                         "bacon.exclude += \\bsalads?\\b",
+                         "broccoli.exclude += \\bsalads?\\b",
+                         "radishes.exclude += \\bseeds?\\b, \\bsprouting\\b",
+                         "eggs.exclude += \\boatmeal\\b, \\bdinosaur\\b",
+                         "frozen-fruit.exclude += \\bpops?\\b, \\bfruit\\s+bars?\\b",
+                         "sea-salt.include REPLACED by \\bsea\\s+salt\\b(?=\\s*(?:,|\\d|$|\\(|-|(?:fine|coarse|kosher|grinder|shaker|canister|crystals?|flakes?|iodized|mediterranean|celtic|pure|natural)\\b))",
+                         "sea-salt.exclude += \\b(?:cashews?|almonds?|pistachios?|peanuts?|macadamia|nuts?|seeds?|caramels?|chocolate|thins|squares?|bars?)\\b, \\bpop\\s*corn\\b",
+                         "salt.exclude += \\b(?:pistachios?|crackers?)\\b",
+                         "sea-salt.exclude += \\bstraws?\\b, \\bedamame\\b (measured after the run: exactly 4 sea-salt survivors carry those tokens - MM Avocado Oil Veggie Straw, Sensible Portions Veggie Straws, Seapoint Farms Edamame, The Only Bean Edamame - none is a cell)",
+                         "GLOBAL_EXCLUDE += sprout(?:ing)?\\s+seeds? (measured over the 41,072-name corpus: exactly 1 name, the Walmart \u0027Sprouting Seed Super Sampler\u0027 that re-lands on dry-green-lentils once broccoli releases it)"
+                     ],
+    "routing_changes_count":  49,
+    "unchanged_count":  41023,
+    "routing_changes":  [
+                            {
+                                "before":  "salt",
+                                "name":  "RITZ Hint of Salt Crackers, Snacks for Kids and Adults, Lunch Snacks, 13.7 oz",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$3.97|13.7 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-11|$3.97|13.7 oz|everyday"
+                                         ],
+                                "after":  "crackers"
+                            },
+                            {
+                                "before":  "radishes",
+                                "name":  "Radish Vegetable Seeds 5 Pack - Full Sun, Biennial",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$9.99|5 ct|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Celtic Sea Salt Grey Coarse Salt Shaker, 8 oz, Kosher Certified",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$10.00|8 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Mauna Loa Sea Salt Macadamia Nuts - 4oz Bag",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$5.88|4 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-06|$5.88|4 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "bacon",
+                                "name":  "Taylor Farms Caesar Salad with Bacon and Chicken, 5.75 oz (Fresh)",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$3.47|5.75 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-11|$3.47|5.75 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-06|$3.47|5.75 oz|everyday",
+                                             "Walmart|walmart-regular-2026-07-25|$3.47|5.75 oz|everyday",
+                                             "Walmart|walmart-regular-2026-07-23|$3.47|5.75 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "frozen-fruit",
+                                "name":  "Outshine No Sugar Added Black Cherry, Strawberry Kiwi, and Mixed Berry Frozen Fruit Pops, 12 Count",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$6.99|12 ct|"
+                                         ],
+                                "after":  "popsicles"
+                            },
+                            {
+                                "before":  "broccoli",
+                                "name":  "Sprouting Seed Super Sampler- Organic- 2.5 Lbs of 10 Different Delicious Sprout Seeds: Alfalfa, Mung Bean, Broccoli, Green Lentil, Clover, Buckwheat, Radish, Bean Salad \u0026 More",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$67.97|oz|everyday"
+                                         ],
+                                "after":  "dry-green-lentils"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Simple Truth Sea Salt Roasted Cashews",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$8.99|16 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "salt",
+                                "name":  "Crunchmaster Avocado Toast with Salt \u0026 Pepper Crackers, 16 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-25|$9.98|16 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$9.98|16 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-05|$9.98|16 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-07-29|$9.98|16 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-07-17|$9.98|16 oz|"
+                                         ],
+                                "after":  "crackers"
+                            },
+                            {
+                                "before":  "shredded-cheese",
+                                "name":  "Kirkwood Turkey Cheddar Cheese Sausage 13.5 OZ",
+                                "rows":  [
+                                             "Aldi|aldi-regular-2026-09-02|$3.79|13.5 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Ghirardelli Squares Sea Salt Caramel Milk Chocolate 5.3 Oz",
+                                "rows":  [
+                                             "Family Fare|family-fare-regular-2026-09-02|$8.99|5.3 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "bacon",
+                                "name":  "Member\u0027s Mark Broccoli Salad with Smoked Bacon, priced per pound",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-09-02|$5.85|lb|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-31|$5.85|lb|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-26|$5.85|lb|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-24|$5.85|lb|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$5.85|lb|",
+                                             "Sam\u0027s Club|sams-deals-2026-07-29|$5.85|lb|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Member\u0027s Mark The Better Nut Bar, Dark Chocolate and Sea Salt, 24 ct.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$13.98|24 ct|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Southern Grove Deluxe Whole Cashews With Sea Salt 30 OZ",
+                                "rows":  [
+                                             "Aldi|aldi-regular-2026-09-02|$10.49|30 oz|everyday",
+                                             "Aldi|comparison-2026-09-02|$10.49|30 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Wonderful Pistachios Chocolate Sea Salt Pistachios, Resealable Bag",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$7.49|4 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "GHIRARDELLI Dark Chocolate Sea Salt Caramel SQUARES, 12.7 oz Bag",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-06|$14.97|12.7 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "frozen-fruit",
+                                "name":  "Outshine Lime, Tangerine, and Lemon Frozen Fruit Pops, Variety Pack, 12 Count",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$6.49|12 ct|"
+                                         ],
+                                "after":  "popsicles"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Seapoint Farms Dry Roasted Sea Salt Edamame",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$2.69|4 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Celtic Sea Salt Light Grey Salt, 8 oz, Additive-Free, Kosher, Organic, Non-GMO",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$6.98|0.5 lb|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "gruyere",
+                                "name":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
+                                "rows":  [
+                                             "Family Fare|family-fare-regular-2026-09-02|$6.99|12 oz|",
+                                             "Family Fare|comparison-2026-09-02|$6.99|12 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Member\u0027s Mark Milk Chocolate Sea Salt Caramels, 36 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$13.24|36 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "shredded-cheese",
+                                "name":  "Aidells Smoked Chicken Sausage, Italian Style With Mozzarella Cheese (4 Fully Cooked Links) 12 Oz",
+                                "rows":  [
+                                             "Family Fare|family-fare-regular-2026-09-02|$6.99|12 oz|"
+                                         ],
+                                "after":  "italian-sausage"
+                            },
+                            {
+                                "before":  "coleslaw-mix",
+                                "name":  "Kroger Potato Salad, Macaroni Salad or Cole Slaw",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-deals-2026-09-02|$7.00|3 lb|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Member\u0027s Mark Roasted Whole Cashews with Sea Salt, 33 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-23|$13.98|33 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-22|$13.98|33 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$13.98|33 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-05|$13.98|33 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-07-29|$13.98|33 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-07-23|$13.98|33 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-07-17|$13.98|33 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "salt",
+                                "name":  "Wonderful Salt \u0026 Pepper Pistachios 14 Oz",
+                                "rows":  [
+                                             "Family Fare|family-fare-regular-2026-09-02|$9.99|14 oz|"
+                                         ],
+                                "after":  "pistachios"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "BÃ©quet Gourmet Celtic Sea Salt Caramel 15.2 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$11.98|15.2 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "frozen-fruit",
+                                "name":  "Outshine No Sugar Added Strawberry, Tangerine, and Raspberry Frozen Fruit Pops, 12 Count",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$6.49|12 ct|"
+                                         ],
+                                "after":  "popsicles"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Member\u0027s Mark Dark Chocolate Soft Sea Salt Caramels, 36 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$13.24|36 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "broccoli",
+                                "name":  "Market Grille broccoli supreme salad, $7.99 lb.",
+                                "rows":  [
+                                             "Hy-Vee|ads-2026-09-02|||"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Ghirardelli Dark Chocolate Sea Salt Caramel Squares Candy Bag",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$7.99|5.32 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "shredded-cheese",
+                                "name":  "Member\u0027s Mark Cheesy Southwest Smoked Sausage With Peppers And Cheddar Cheese, 4 oz., 12 ct.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-07-23|$9.44|12 ct 4 oz|"
+                                         ],
+                                "after":  "kielbasa"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Member\u0027s Mark Dark Chocolate Thins with Almonds \u0026 Sea Salt, 20 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$11.48|20 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Simply Nature Organic Sea Salt Pop Corn 6 OZ",
+                                "rows":  [
+                                             "Aldi|aldi-regular-2026-09-02|$3.29|6 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Member\u0027s Mark Milk Chocolate Sea Salt Caramel Thins, 50 ct.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$12.28|21.544 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Sensible Portions Sea Salt Garden Veggie Straws, 23.5 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$6.98|23.5 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-07-29|$6.98|23.5 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "salt",
+                                "name":  "Simple Truth Salt and Pepper Pistachio Kernels",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$5.99|6 oz|"
+                                         ],
+                                "after":  "pistachios"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Clancys Sea Salt Vinegarjalape Sea Salt Vine 5 OZ",
+                                "rows":  [
+                                             "Aldi|aldi-regular-2026-09-02|$2.99|5 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "",
+                                "name":  "Kroger Coleslaw",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-deals-2026-09-02|$1.99|10-16 oz|"
+                                         ],
+                                "after":  "coleslaw-mix"
+                            },
+                            {
+                                "before":  "salt",
+                                "name":  "Wonderful Salt \u0026 Pepper Pistachios, 40 oz.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$15.98|40 oz|"
+                                         ],
+                                "after":  "pistachios"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Wonderful Pistachios Chocolate Sea Salt, 4 Ounce Resealable Bag",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$6.72|4 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Sanders Sea Salt Caramels, Milk Chocolate 18 Oz",
+                                "rows":  [
+                                             "Family Fare|family-fare-regular-2026-09-02|$13.99|18 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Celtic Sea Salt Light Grey Sea Salt Resealable Bag Kosher Certified 1 lb",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$8.72|16 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-11|$9.68|16 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-06|$9.68|16 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-05|$9.68|16 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-01|$9.68|16 oz|everyday",
+                                             "Walmart|walmart-regular-2026-07-31|$9.68|16 oz|everyday",
+                                             "Walmart|walmart-regular-2026-07-30|$9.68|16 oz|everyday",
+                                             "Walmart|walmart-regular-2026-07-29|$9.68|16 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Celtic Sea Salt Light Grey 1 lb bag",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$9.99|lb|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "shredded-cheese",
+                                "name":  "Old Wisconsin Natural Cut Turkey Smoked Sausage \u0026 Colby Jack Cheese Bites, 1.5 oz., 6 ct.",
+                                "rows":  [
+                                             "Sam\u0027s Club|sams-deals-2026-08-31|$8.67|6 ct 1.5 oz|",
+                                             "Sam\u0027s Club|sams-deals-2026-08-15|$7.67|6 ct 1.5 oz|"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "eggs",
+                                "name":  "Quaker Dinosaur Eggs Brown Sugar Instant Oatmeal",
+                                "rows":  [
+                                             "Baker\u0027s|bakers-regular-2026-09-02|$3.29|8 ct|"
+                                         ],
+                                "after":  "oatmeal"
+                            },
+                            {
+                                "before":  "bacon",
+                                "name":  "Taylor Farms BLT Salad with Chicken and Bacon, 6.5 oz (Fresh)",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$3.47|6.5 oz|everyday",
+                                             "Walmart|walmart-regular-2026-08-11|$3.47|6.5 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Go Raw Organic Sprouted Pumpkin Seeds with Sea Salt, 6g Protein, 6.75 oz, 9 Count",
+                                "rows":  [
+                                             "Walmart|walmart-regular-2026-08-31|$6.97|6.75 oz|everyday"
+                                         ],
+                                "after":  ""
+                            },
+                            {
+                                "before":  "",
+                                "name":  "Little Salad Bar Classic Coleslaw 14 OZ",
+                                "rows":  [
+                                             "Aldi|aldi-regular-2026-09-02|$1.89|14 oz|everyday"
+                                         ],
+                                "after":  "coleslaw-mix"
+                            },
+                            {
+                                "before":  "sea-salt",
+                                "name":  "Finest Reserve Caramels, Sea Salt Milk Chocolate 12 Oz",
+                                "rows":  [
+                                             "Family Fare|family-fare-regular-2026-09-02|$9.99|12 oz|"
+                                         ],
+                                "after":  ""
+                            }
+                        ],
+    "cell_effects":  [
+                         {
+                             "before_pu":  0.0381,
+                             "live_board_pu":  0.0381,
+                             "after_item":  "Kroger Iodized Salt",
+                             "commodity":  "salt",
+                             "before_item":  "Kroger Salt",
+                             "live_board_item":  "Kroger Iodized Salt",
+                             "store":  "Baker\u0027s",
+                             "after_pu":  0.0381,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  0.0362,
+                             "live_board_pu":  0.0362,
+                             "after_item":  "Great Value Iodized Salt",
+                             "commodity":  "salt",
+                             "before_item":  "Great Value Iodized Salt, 26 oz",
+                             "live_board_item":  "Great Value Iodized Salt, 26 oz",
+                             "store":  "Walmart",
+                             "after_pu":  0.0362,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  0.0372,
+                             "live_board_pu":  0.0372,
+                             "after_item":  "Morton Iodized Salt",
+                             "commodity":  "salt",
+                             "before_item":  "Morton Iodized Salt, 64 oz.",
+                             "live_board_item":  "Morton Iodized Salt, 64 oz.",
+                             "store":  "Sam\u0027s Club",
+                             "after_pu":  0.0372,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  0.1175,
+                             "live_board_pu":  0.1175,
+                             "after_item":  "Great Value Saltine Crackers, 16 oz, 4 Count",
+                             "commodity":  "crackers",
+                             "before_item":  "Great Value Saltine Crackers",
+                             "live_board_item":  "Great Value Saltine Crackers, 16 oz, 4 Count",
+                             "store":  "Walmart",
+                             "after_pu":  0.1175,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  0.1342,
+                             "live_board_pu":  0.1342,
+                             "after_item":  "Morton All-Purpose Iodized Sea Salt, Fine Sea Salt, 26 oz",
+                             "commodity":  "sea-salt",
+                             "before_item":  "Morton Natural Sea Salt 26 oz. Round Can",
+                             "live_board_item":  "Morton All-Purpose Iodized Sea Salt, Fine Sea Salt, 26 oz",
+                             "store":  "Baker\u0027s",
+                             "after_pu":  0.1342,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  0.3497,
+                             "live_board_pu":  0.3497,
+                             "after_item":  "",
+                             "commodity":  "sea-salt",
+                             "before_item":  "Southern Grove Deluxe Whole Cashews With Sea Salt 30 OZ",
+                             "live_board_item":  "Southern Grove Deluxe Whole Cashews With Sea Salt 30 OZ",
+                             "store":  "Aldi",
+                             "after_pu":  null,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  0.1495,
+                             "live_board_pu":  0.1495,
+                             "after_item":  "Kroger Fruity Ice Pops",
+                             "commodity":  "popsicles",
+                             "before_item":  "Kroger Fruity Ice Pops Variety Pack",
+                             "live_board_item":  "Kroger Fruity Ice Pops Variety Pack",
+                             "store":  "Baker\u0027s",
+                             "after_pu":  0.1495,
+                             "unit":  "each"
+                         },
+                         {
+                             "before_pu":  0.5825,
+                             "live_board_pu":  0.5825,
+                             "after_item":  "Smoky Park Cheese, Smoked Gruyere 8 Oz",
+                             "commodity":  "gruyere",
+                             "before_item":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
+                             "live_board_item":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
+                             "store":  "Family Fare",
+                             "after_pu":  0.9988,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  0.1458,
+                             "live_board_pu":  0.1636,
+                             "after_item":  "Kroger Tri-Color Coleslaw Mix",
+                             "commodity":  "coleslaw-mix",
+                             "before_item":  "Kroger Potato Salad, Macaroni Salad or Cole Slaw",
+                             "live_board_item":  "Kroger Tri-Color Coleslaw Mix",
+                             "store":  "Baker\u0027s",
+                             "after_pu":  0.1636,
+                             "unit":  "oz"
+                         },
+                         {
+                             "before_pu":  null,
+                             "live_board_pu":  null,
+                             "after_item":  "Little Salad Bar Classic Coleslaw 14 OZ",
+                             "commodity":  "coleslaw-mix",
+                             "before_item":  "",
+                             "live_board_item":  "",
+                             "store":  "Aldi",
+                             "after_pu":  0.135,
+                             "unit":  "oz"
+                         }
+                     ],
+    "sea_salt_routing_after":  [
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Celtic Sea Salt Grey Coarse Salt Shaker, 8 oz, Kosher Certified",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Maldon Sea Salt Flakes",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "bettergoods French Grey Sea Salt, 3.95 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Private Selection Fine Mediterranean Sea Salt Shaker",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Mauna Loa Sea Salt Macadamia Nuts - 4oz Bag",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "bettergoods Cyprus Flake Sea Salt, 3.5 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All-Natural Fine Sea Salt, 4.4 Oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Osmo Roasted Garlic Sea Salt",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "McCormick Sea Salt, 13.5 oz Bottle",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "(3 pack) Hain Pure Foods Iodized Sea Salt, 21 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Maldon Smoked Sea Salt Flakes",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Selina Naturally Celtic Sea Salt Fine Ground Bagged",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Simple Truth Sea Salt Roasted Cashews",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Soeos White Sea Salt, Coarse Grain, 20 oz (1.25 lbs)",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Ghirardelli Squares Sea Salt Caramel Milk Chocolate 5.3 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All-Natural Coarse Sea Salt 17.6 oz",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark The Better Nut Bar, Dark Chocolate and Sea Salt, 24 ct.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Southern Grove Deluxe Whole Cashews With Sea Salt 30 OZ",
+                                       "stores":  [
+                                                      "Aldi"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Wonderful Pistachios Chocolate Sea Salt Pistachios, Resealable Bag",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "GHIRARDELLI Dark Chocolate Sea Salt Caramel SQUARES, 12.7 oz Bag",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All Natural Sea Salt 2.5 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Celtic Sea Salt Fine Ground Kosher Sea Salt, 16 oz Resealable Bag",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark Avocado Oil Veggie Straw Sea Salt, 23.5 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Private Selection Coarse Mediterranean Sea Salt Shaker",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Seapoint Farms Dry Roasted Sea Salt Edamame",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Redmond Real Salt Ancient Fine Sea Salt 16 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Celtic Sea Salt Light Grey Salt, 8 oz, Additive-Free, Kosher, Organic, Non-GMO",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All Natural Fine Sea Salt 17.6 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark Milk Chocolate Sea Salt Caramels, 36 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "The Only Bean Roasted Edamame Beans Sea Salt, 1.05 oz, 6 ct",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Great Value Coarse Sea Salt, 17.6 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Baja Gold Mineral Sea Salt - 8 Oz. Resealable Bag",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "MortonÂ® Sea Salt, Natural All-Purpose, 26 oz Round Can",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Maldon Garlic Sea Salt Flakes",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All Natural Coarse Sea Salt 17.6 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark Roasted Whole Cashews with Sea Salt, 33 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "BÃ©quet Gourmet Celtic Sea Salt Caramel 15.2 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark Dark Chocolate Soft Sea Salt Caramels, 36 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Redmond Real Salt Gourmet Kosher Sea Salt, 16 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Ghirardelli Dark Chocolate Sea Salt Caramel Squares Candy Bag",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All-Purpose Iodized Sea Salt, Fine Sea Salt, 26 oz",
+                                       "stores":  [
+                                                      "Baker\u0027s",
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Private Selection Coarse Sea Salt Shaker",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark Dark Chocolate Thins with Almonds \u0026 Sea Salt, 20 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Simply Nature Organic Sea Salt Pop Corn 6 OZ",
+                                       "stores":  [
+                                                      "Aldi"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Celtic Sea Salt Fine Ground 1lb Bag",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark Sea Salt, 36 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Our Family Sea Salt, Fine 17.6 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Our Family Sea Salt, Coarse, Kosher 16 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Member\u0027s Mark Milk Chocolate Sea Salt Caramel Thins, 50 ct.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Hain Pure Foods Sea Salt, 21 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton Natural Sea Salt 26 oz. Round Can",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Sensible Portions Sea Salt Garden Veggie Straws, 23.5 oz.",
+                                       "stores":  [
+                                                      "Sam\u0027s Club"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All-Natural Fine Sea Salt, 17.6 Oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Clancys Sea Salt Vinegarjalape Sea Salt Vine 5 OZ",
+                                       "stores":  [
+                                                      "Aldi"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "(2 pack) Elefante Coarse Sea Salt, 26.45 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Soeos White Sea Salt, Fine Grain, 20 oz (1.25 lbs)",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Wonderful Pistachios Chocolate Sea Salt, 4 Ounce Resealable Bag",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Sanders Sea Salt Caramels, Milk Chocolate 18 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Celtic Sea Salt Light Grey Sea Salt Resealable Bag Kosher Certified 1 lb",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Morton All-Natural Coarse Sea Salt, Finishing Salt 17.6 Oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Celtic Sea Salt Light Grey 1 lb bag",
+                                       "stores":  [
+                                                      "Baker\u0027s"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Alessi Sea Salt Kosher Coarse 2.2 Box",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Great Value Fine Sea Salt, 17.6 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Go Raw Organic Sprouted Pumpkin Seeds with Sea Salt, 6g Protein, 6.75 oz, 9 Count",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  ""
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Great Value Iodized Sea Salt, 24 oz",
+                                       "stores":  [
+                                                      "Walmart"
+                                                  ],
+                                       "after":  "sea-salt"
+                                   },
+                                   {
+                                       "before":  "sea-salt",
+                                       "name":  "Finest Reserve Caramels, Sea Salt Milk Chocolate 12 Oz",
+                                       "stores":  [
+                                                      "Family Fare"
+                                                  ],
+                                       "after":  ""
+                                   }
+                               ],
+    "class_variant_sausage_on_all_cheese":  [
+                                                "[shredded-cheese -\u003e ] Kirkwood Turkey Cheddar Cheese Sausage 13.5 OZ [Aldi]",
+                                                "[queso -\u003e ] Gordo\u0027s Chorizo Sausage Mexican Restaurant Style Queso Cheese Dip [Baker\u0027s]",
+                                                "[gruyere -\u003e ] Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz [Family Fare]",
+                                                "[shredded-cheese -\u003e italian-sausage] Aidells Smoked Chicken Sausage, Italian Style With Mozzarella Cheese (4 Fully Cooked Links) 12 Oz [Family Fare]",
+                                                "[shredded-cheese -\u003e kielbasa] Member\u0027s Mark Cheesy Southwest Smoked Sausage With Peppers And Cheddar Cheese, 4 oz., 12 ct. [Sam\u0027s Club]",
+                                                "[shredded-cheese -\u003e ] Old Wisconsin Natural Cut Turkey Smoked Sausage \u0026 Colby Jack Cheese Bites, 1.5 oz., 6 ct. [Sam\u0027s Club]"
+                                            ],
+    "contested_four_resolution":  [
+                                      {
+                                          "name":  "Member\u0027s Mark Broccoli Salad with Smoked Bacon, priced per pound",
+                                          "before":  "bacon",
+                                          "candidates_before":  [
+                                                                    "broccoli"
+                                                                ],
+                                          "after":  "",
+                                          "stores":  [
+                                                         "Sam\u0027s Club"
+                                                     ]
+                                      },
+                                      {
+                                          "name":  "Outshine Lime, Tangerine, and Lemon Frozen Fruit Pops, Variety Pack, 12 Count",
+                                          "before":  "frozen-fruit",
+                                          "candidates_before":  [
+                                                                    "popsicles"
+                                                                ],
+                                          "after":  "popsicles",
+                                          "stores":  [
+                                                         "Baker\u0027s"
+                                                     ]
+                                      },
+                                      {
+                                          "name":  "Quaker Dinosaur Eggs Brown Sugar Instant Oatmeal",
+                                          "before":  "eggs",
+                                          "candidates_before":  [
+                                                                    "oatmeal"
+                                                                ],
+                                          "after":  "oatmeal",
+                                          "stores":  [
+                                                         "Baker\u0027s"
+                                                     ]
+                                      },
+                                      {
+                                          "name":  "Southern Grove Dry Roasted Peanuts with Sea Salt",
+                                          "before":  "peanuts",
+                                          "candidates_before":  [
+                                                                    "sea-salt"
+                                                                ],
+                                          "after":  "peanuts",
+                                          "stores":  [
+                                                         "Aldi"
+                                                     ]
+                                      }
+                                  ],
+    "garden_seed_packets_still_routed_to_produce_after":  [
+                                                              "kale \u003c- Red Russian Kale Seeds: 25 Lb - Bulk [Walmart]",
+                                                              "kale \u003c- Whitetail Institute Beet \u0026 Greens Kale Radish Deer Attractant Food Plot Seed [Walmart]",
+                                                              "onions \u003c- Utah Yellow Sweet Spanish Onion Garden Seeds - 5 Lb Bulk [Walmart]",
+                                                              "lettuce \u003c- Crisphead Lettuce Garden Seeds - Iceberg - 1 Oz [Walmart]",
+                                                              "(none of the four holds a cell today; follow-up, not in this batch)"
+                                                          ],
+    "sale_fallback_simulation":  {
+                                     "note":  "audit-sale-fallback HasEveryday re-run per gap against (a) the newest file per store as the auditor read it at 08:13 and (b) the engine union from Select-RegularFileSet as-of 2026-09-02 (90d). union_everyday_hits counts rows typed everyday or untyped.",
+                                     "rows":  {
+                                                  "value":  [
+                                                                {
+                                                                    "commodity":  "ground-beef-8020",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  86,
+                                                                    "union_everyday_hits":  86,
+                                                                    "distinct_union_files_with_hits":  19,
+                                                                    "sample":  "walmart-regular-2026-08-31 | 80% Lean / 20% Fat Ground Beef Chuck, 10 lb Roll, Fresh, All Natural | 10 lb | ad=$49.43 cur=$49.43 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "ground-beef-93-7",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  48,
+                                                                    "union_everyday_hits":  48,
+                                                                    "distinct_union_files_with_hits":  14,
+                                                                    "sample":  "walmart-regular-2026-08-31 | 93% Lean / 7% Fat Lean Ground Beef, 3 lb Roll, Fresh, All Natural* | 3 lb | ad=$22.47 cur=$22.47 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "apples",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  331,
+                                                                    "union_everyday_hits":  331,
+                                                                    "distinct_union_files_with_hits":  20,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Fresh Envy Apple, Each | 0.559 lb | ad=$1.05 cur=$1.05 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "baby-back-ribs",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  45,
+                                                                    "union_everyday_hits":  45,
+                                                                    "distinct_union_files_with_hits":  14,
+                                                                    "sample":  "walmart-regular-2026-08-31 | AVA Brand, Whole Back Ribs, Pork, 2.9 - 4.0 lb (Fresh) | 3.601 lb | ad=$12.17 cur=$12.17 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "lotion",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  252,
+                                                                    "union_everyday_hits":  252,
+                                                                    "distinct_union_files_with_hits":  11,
+                                                                    "sample":  "walmart-regular-2026-08-31 | eos Shea Better Body Lotion- Creme de Pistachio, Soothes Dry Skin, 16 fl oz | 16 fl oz | ad=$9.98 cur=$9.98 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "chicken-breast",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  126,
+                                                                    "union_everyday_hits":  126,
+                                                                    "distinct_union_files_with_hits":  17,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Great Value Boneless Skinless Diced Chicken Breast, 2 lb (Frozen) | 2 lb | ad=$7.23 cur=$7.23 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "bottled-water",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  101,
+                                                                    "union_everyday_hits":  101,
+                                                                    "distinct_union_files_with_hits":  11,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Pure Life Purified Water, 12 fl oz, 12-pack Plastic Bottles | 144 fl oz | ad=$3.43 cur=$3.43 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "brandy",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  53,
+                                                                    "union_everyday_hits":  53,
+                                                                    "distinct_union_files_with_hits":  3,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Presidente American oak barrels, Brandy, 750ML | 25.361 fl oz | ad=$20.49 cur=$20.49 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "bratwurst",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  74,
+                                                                    "union_everyday_hits":  74,
+                                                                    "distinct_union_files_with_hits":  10,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Johnsonville Smoked Beef Bratwurst, 6 Links, 12 oz | 0.75 lb | ad=$5.97 cur=$5.97 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "caesar-salad-kit",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  14,
+                                                                    "union_everyday_hits":  14,
+                                                                    "distinct_union_files_with_hits":  2,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Marketside Bacon Caesar Salad Kit, 14.65 oz Bag, Fresh | 14.65 oz | ad=$2.97 cur=$2.97 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "canned-pumpkin",
+                                                                    "store":  "Hy-Vee",
+                                                                    "newest_at_audit":  "hyvee-regular-2026-09-02",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "hyvee-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  1,
+                                                                    "union_hits":  0,
+                                                                    "union_everyday_hits":  0,
+                                                                    "distinct_union_files_with_hits":  0,
+                                                                    "sample":  ""
+                                                                },
+                                                                {
+                                                                    "commodity":  "cantaloupe",
+                                                                    "store":  "Aldi",
+                                                                    "newest_at_audit":  "aldi-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "aldi-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  1,
+                                                                    "union_hits":  0,
+                                                                    "union_everyday_hits":  0,
+                                                                    "distinct_union_files_with_hits":  0,
+                                                                    "sample":  ""
+                                                                },
+                                                                {
+                                                                    "commodity":  "cheddar-cheese-curds",
+                                                                    "store":  "Fareway",
+                                                                    "newest_at_audit":  "fareway-regular-2026-09-02",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "fareway-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  1,
+                                                                    "union_hits":  0,
+                                                                    "union_everyday_hits":  0,
+                                                                    "distinct_union_files_with_hits":  0,
+                                                                    "sample":  ""
+                                                                },
+                                                                {
+                                                                    "commodity":  "chicken-wings",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  108,
+                                                                    "union_everyday_hits":  108,
+                                                                    "distinct_union_files_with_hits":  14,
+                                                                    "sample":  "walmart-regular-2026-08-31 | bettergoods Chicken Wings with Garlic Butter Dry Rub, 22 oz (Frozen) | 1.381 lb | ad=$7.94 cur=$7.94 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "disinfecting-wipes",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  119,
+                                                                    "union_everyday_hits":  119,
+                                                                    "distinct_union_files_with_hits":  9,
+                                                                    "sample":  "walmart-regular-2026-08-31 | (3 pack) Clorox Disinfecting Cleaning Wipes Flex Pack, Bleach Free, Fresh Scent, 75 Count | 225 ct | ad=$12.78 cur=$12.78 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "evaporated-milk",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  61,
+                                                                    "union_everyday_hits":  61,
+                                                                    "distinct_union_files_with_hits":  10,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Nestle Carnation Fat-Free Evaporated Milk with Vitamin A and D Added, 12 fl oz Can | 12 fl oz | ad=$1.78 cur=$1.78 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "grapes",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  109,
+                                                                    "union_everyday_hits":  109,
+                                                                    "distinct_union_files_with_hits":  17,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Marketside Fresh Seedless Whole Grapes, 10 oz Tray (Ready-to-Eat) | 10 oz | ad=$3.34 cur=$3.34 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "jalapenos",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  54,
+                                                                    "union_everyday_hits":  54,
+                                                                    "distinct_union_files_with_hits":  15,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Fresh Cravings Jalapeno Cilantro Hummus,10oz. Plastic Tub, Gluten-Free, Dairy-Free, 2 Tbsp (32g), Contains: Sesame | 10 oz | ad=$3.92 cur=$3.92 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "laundry-detergent",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  54,
+                                                                    "union_everyday_hits":  54,
+                                                                    "distinct_union_files_with_hits":  9,
+                                                                    "sample":  "walmart-regular-2026-08-31 | ARM \u0026 HAMMER Plus OxiClean with Odor Blasters Liquid Laundry Detergent, Fresh Burst, 32.5 Fl Oz | 32.5 fl oz | ad=$3.84 cur=$3.84 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "microwave-popcorn",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  166,
+                                                                    "union_everyday_hits":  166,
+                                                                    "distinct_union_files_with_hits":  10,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Orville Redenbachers Microwave Popcorn, Kettle Corn, 3.3 oz., 6-Count | 19.8 oz | ad=$4.62 cur=$4.62 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "peanut-butter",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  326,
+                                                                    "union_everyday_hits":  326,
+                                                                    "distinct_union_files_with_hits":  17,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Peter Pan Creamy Honey Roast Peanut Butter, Smooth Peanut Butter Spread, Gluten-Free, 16.3 oz Jar | 16.3 oz | ad=$2.47 cur=$2.47 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "pecorino-romano",
+                                                                    "store":  "Fareway",
+                                                                    "newest_at_audit":  "fareway-regular-2026-09-02",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "fareway-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  1,
+                                                                    "union_hits":  0,
+                                                                    "union_everyday_hits":  0,
+                                                                    "distinct_union_files_with_hits":  0,
+                                                                    "sample":  ""
+                                                                },
+                                                                {
+                                                                    "commodity":  "potato-chips",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  127,
+                                                                    "union_everyday_hits":  127,
+                                                                    "distinct_union_files_with_hits":  11,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Baked Ruffles 50% Less Fat Cheddar \u0026 Sour Cream Potato Chips Bag, 6.25 oz | 6.25 oz | ad=$3.98 cur=$3.98 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "salmon",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  118,
+                                                                    "union_everyday_hits":  118,
+                                                                    "distinct_union_files_with_hits":  14,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Marketside Skinless Atlantic Salmon Portions, 1 lb Bag (Frozen) | lb | ad=$13.44 cur=$13.44 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "sandwich-bags",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  97,
+                                                                    "union_everyday_hits":  97,
+                                                                    "distinct_union_files_with_hits":  10,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Ziploc Brand Sandwich Bags with EasyGuide Texture, Grip \u0027n Seal Technology, 105 Count | 105 ct | ad=$8.18 cur=$8.18 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "turkey-lunchmeat",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  102,
+                                                                    "union_everyday_hits":  102,
+                                                                    "distinct_union_files_with_hits":  10,
+                                                                    "sample":  "walmart-regular-2026-08-31 | Great Value, Fat Free, Smoked Turkey Breast, 32 oz Bag, Deli - Sliced | 2 lb | ad=$8.48 cur=$8.48 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "veggie-sausages",
+                                                                    "store":  "Walmart",
+                                                                    "newest_at_audit":  "walmart-regular-2026-09-01",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "walmart-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  24,
+                                                                    "union_hits":  5,
+                                                                    "union_everyday_hits":  5,
+                                                                    "distinct_union_files_with_hits":  2,
+                                                                    "sample":  "walmart-regular-2026-08-31 | MorningStar Farms Veggie Breakfast Original Sausage Links, Vegetarian Sausage, 8 oz Box | 0.5 lb | ad=$5.14 cur=$5.14 reg="
+                                                                },
+                                                                {
+                                                                    "commodity":  "yukon-gold-potatoes",
+                                                                    "store":  "Family Fare",
+                                                                    "newest_at_audit":  "family-fare-regular-2026-09-02",
+                                                                    "hits_newest_at_audit":  0,
+                                                                    "newest_now":  "family-fare-regular-2026-09-02",
+                                                                    "hits_newest_now":  0,
+                                                                    "union_files":  1,
+                                                                    "union_hits":  0,
+                                                                    "union_everyday_hits":  0,
+                                                                    "distinct_union_files_with_hits":  0,
+                                                                    "sample":  ""
+                                                                }
+                                                            ],
+                                                  "Count":  28
+                                              }
+                                 },
+    "walmart_idless_cells":  {
+                                 "note":  "Walmart board cells whose board price exists ONLY on rows with no item_id (pre-field captures 07-05..07-18) in the 24-file union; prefix re-check = id-bearing rows whose name starts with the first 40 chars",
+                                 "count":  24,
+                                 "crowns":  14,
+                                 "prefix_reseen":  8,
+                                 "prefix_reseen_newest_is_FC_or_MARKETPLACE":  1,
+                                 "rows":  {
+                                              "value":  [
+                                                            {
+                                                                "commodity":  "berbere-seasoning",
+                                                                "item":  "Morton \u0026 Bassett Berbere Seasoning, 1.3 oz - Spice Blend",
+                                                                "board_price":  "$6.49",
+                                                                "per_unit":  4.9923,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "cantaloupe",
+                                                                "item":  "Fresh Cantaloupe",
+                                                                "board_price":  "$2.69",
+                                                                "per_unit":  2.69,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "cauliflower",
+                                                                "item":  "Fresh Whole White Cauliflower",
+                                                                "board_price":  "$3.97",
+                                                                "per_unit":  3.97,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "celery",
+                                                                "item":  "Fresh Whole Celery Stalk",
+                                                                "board_price":  "$2.37",
+                                                                "per_unit":  2.37,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "cilantro",
+                                                                "item":  "Fresh Cut Cilantro Clamshell",
+                                                                "board_price":  "$1.78",
+                                                                "per_unit":  1.78,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "cucumbers",
+                                                                "item":  "Fresh Cucumber",
+                                                                "board_price":  "$0.76",
+                                                                "per_unit":  0.76,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "fish-sauce",
+                                                                "item":  "Kikkoman Gluten‑Free Fish Sauce, 6.8 fl oz Glass Bottle",
+                                                                "board_price":  "$2.84",
+                                                                "per_unit":  0.4176,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "french-bread",
+                                                                "item":  "Freshness Guaranteed French Bakery Bread Loaf",
+                                                                "board_price":  "$1.25",
+                                                                "per_unit":  1.25,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "frozen-pizza",
+                                                                "item":  "Red Baron Four Cheese Classic Crust Frozen Pizza",
+                                                                "board_price":  "$4.82",
+                                                                "per_unit":  4.82,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "gelatin",
+                                                                "item":  "Jell-O Strawberry Gelatin Dessert Mix, 3 oz Box",
+                                                                "board_price":  "$1.62",
+                                                                "per_unit":  1.62,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "grapefruit",
+                                                                "item":  "Fresh Grapefruit",
+                                                                "board_price":  "$1.36",
+                                                                "per_unit":  1.36,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "green-onions",
+                                                                "item":  "Fresh Whole Green Onion Bunch",
+                                                                "board_price":  "$1.07",
+                                                                "per_unit":  1.07,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "harissa-paste",
+                                                                "item":  "Mina Harissa Mild Sauce, Homestyle Moroccan Red Pepper Haris",
+                                                                "board_price":  "$8.45",
+                                                                "per_unit":  0.845,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "honeydew",
+                                                                "item":  "Fresh Honeydew Melon",
+                                                                "board_price":  "$4.46",
+                                                                "per_unit":  4.46,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "kale",
+                                                                "item":  "Fresh Kale Greens Bunch",
+                                                                "board_price":  "$1.48",
+                                                                "per_unit":  1.48,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "lemons",
+                                                                "item":  "Fresh Lemon",
+                                                                "board_price":  "$0.50",
+                                                                "per_unit":  0.5,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "limes",
+                                                                "item":  "Fresh Lime",
+                                                                "board_price":  "$0.25",
+                                                                "per_unit":  0.25,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "mangoes",
+                                                                "item":  "Fresh Red Mango",
+                                                                "board_price":  "$0.75",
+                                                                "per_unit":  0.75,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "parchment-paper",
+                                                                "item":  "Great Value Unbleached Parchment Paper 50 Sq Ft",
+                                                                "board_price":  "$2.96",
+                                                                "per_unit":  2.96,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "pineapple",
+                                                                "item":  "Fresh Pineapple",
+                                                                "board_price":  "$1.98",
+                                                                "per_unit":  1.98,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "plastic-wrap",
+                                                                "item":  "Great Value Plastic Wrap 200 Sq Ft",
+                                                                "board_price":  "$2.14",
+                                                                "per_unit":  2.14,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "rotisserie-chicken",
+                                                                "item":  "Freshness Guaranteed Traditional Rotisserie Whole Chicken",
+                                                                "board_price":  "$5.97",
+                                                                "per_unit":  5.97,
+                                                                "crown":  false,
+                                                                "idless_files":  "walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "vegetable-broth",
+                                                                "item":  "Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf",
+                                                                "board_price":  "$1.27",
+                                                                "per_unit":  0.0399,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            },
+                                                            {
+                                                                "commodity":  "watermelon",
+                                                                "item":  "Fresh Seedless Watermelon",
+                                                                "board_price":  "$4.65",
+                                                                "per_unit":  4.65,
+                                                                "crown":  true,
+                                                                "idless_files":  "walmart-regular-2026-07-05,walmart-regular-2026-07-06,walmart-regular-2026-07-08,walmart-regular-2026-07-12,walmart-regular-2026-07-14,walmart-regular-2026-07-15,walmart-regular-2026-07-18",
+                                                                "newest_id_row":  "none"
+                                                            }
+                                                        ],
+                                              "Count":  24
+                                          }
+                             }
+}
