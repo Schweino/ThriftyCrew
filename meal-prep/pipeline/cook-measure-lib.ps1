@@ -139,6 +139,26 @@ function Format-CmLbOz([double]$totOz, [string]$lbw, [string]$ozw) {
   return $head
 }
 
+function Test-CmAuthoredFraction([string]$buy) {
+  <# THE POWERSHELL TWIN of smpAuthoredFrac() in tpl2-scaler-prefix.html. Did the AUTHOR write this
+     label's quantity as a fraction?
+
+     It asks the question of the QUANTITY only, using the same three shapes in the same order as
+     Invoke-CmScaleBuy, so the two can never disagree about which characters are the quantity. A slash
+     anywhere else in the label - "1 lb ground beef, 80/20" - is not a quantity and must not count, which
+     is why this matches rather than scanning the string.
+
+     Only Invoke-CmScaleBuy calls it, and only at f=1. NEVER use it to decide whether to scale: at any
+     other factor the quantity genuinely changes and the fraction table is the intended vocabulary. #>
+  $m = [regex]::Match($buy, $script:CM_SB_LBOZ, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+  if ($m.Success) { return ($m.Groups[2].Value.Contains('/') -or $m.Groups[4].Value.Contains('/')) }
+  $m = [regex]::Match($buy, $script:CM_SB_HEAD)
+  if ($m.Success) { return $m.Groups[2].Value.Contains('/') }
+  $m = [regex]::Match($buy, $script:CM_SB_QUAL, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+  if ($m.Success -and -not (Test-CmBareNumber $buy.Substring($m.Value.Length))) { return $m.Groups[2].Value.Contains('/') }
+  return $false
+}
+
 function Invoke-CmScaleBuy([string]$buy, [double]$f) {
   <#
     THE POWERSHELL TWIN of scaleBuy() in tpl2-scaler-prefix.html, so the browser behaviour is testable
@@ -157,7 +177,26 @@ function Invoke-CmScaleBuy([string]$buy, [double]$f) {
     tablespoon salt and 1 1/2 teaspoons black pepper"): moving one half of a two-quantity sentence is
     worse than moving neither, and that shape belongs to repair-range-buy. The plain leading-number path
     is unchanged on purpose, so nothing that scales correctly today can start scaling differently.
+
+    AT BASE SERVINGS AN AUTHORED FRACTION IS LEFT ALONE (2026-09-01), in lockstep with the JS.
+    The browser re-renders the ingredient list on every page load, so a reader who never touches the
+    servings control still sees this function's output rather than the authored string. Format-CmQty can
+    only express the seven values in its table, so an authored eighth cannot survive the round trip:
+    "about 7/8 cup grated" parmesan (98 g against a 112 g cup, 0.875 exactly) sits at an exact tie
+    between 3/4 and 1, strict less-than takes the first, and the label rendered "about 3/4 cup" - the
+    renderer understating a quantity the author measured.
+
+    BOTH OBVIOUS FIXES ARE WRONG, AND BOTH WERE MEASURED OVER ALL 321,645 RENDERS (584 specs x 7,845
+    labels x servings 2..42) BEFORE THIS ONE WAS WRITTEN:
+      * adding eighths to the table moves 114,800 renders, most of them worse ("2/3 onions" -> "5/8").
+      * returning the authored label whenever f=1 moves 4,326 renders, ALL of them worse: 4,299 authored
+        labels carry a machine DECIMAL ("2.25 oz", "0.6 onions", "3.3 cans"), and rendering those as
+        kitchen fractions is the service this function exists to perform, not a defect.
+    The real defect is narrower than either: re-snapping a quantity the AUTHOR already wrote as a
+    fraction, where the only possible outcome is a DIFFERENT fraction. A decimal is still formatted. A
+    fraction the author chose is returned as written, and only at f=1, where there is nothing to compute.
   #>
+  if ($f -eq 1 -and (Test-CmAuthoredFraction $buy)) { return $buy }
   $m = [regex]::Match($buy, $script:CM_SB_LBOZ, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success) {
     $tot = ((Get-CmQty $m.Groups[2].Value) * 16 + (Get-CmQty $m.Groups[4].Value)) * $f

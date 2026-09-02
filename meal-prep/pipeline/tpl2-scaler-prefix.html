@@ -219,7 +219,31 @@ function smpFmtLbOz(totOz,lbw,ozw){
   if(os==='16'){ lb+=1; os=''; }
   if(lb<1) return (os||'0')+' '+smpOzWord(ozw,parseQty(os||'0'));
   return String(lb)+' '+smpLbWord(lbw,lb)+(os?(' '+os+' '+smpOzWord(ozw,parseQty(os))):''); }
+// AT BASE SERVINGS, AN AUTHORED FRACTION IS ALREADY THE ANSWER (2026-09-01). renderIngredients runs on
+// every page load, not only when a reader touches the control, so an unscaled card is still re-rendered
+// through scaleBuy - and fmtCook can only say the seven values in its table. "about 7/8 cup" of parmesan
+// (98 g against a 112 g cup, 0.875 exactly) sits at an exact tie between 3/4 and 1, strict < takes the
+// first, and the label rendered "about 3/4 cup": the renderer understating a quantity the author measured.
+//
+// THE OBVIOUS TWO FIXES ARE BOTH WRONG, AND BOTH WERE MEASURED OVER ALL 321,645 RENDERS (584 specs x
+// 7,845 labels x servings 2..42) BEFORE THIS ONE WAS WRITTEN:
+//   * adding eighths to the table moves 114,800 renders, most of them worse ("2/3 onions" -> "5/8 onions").
+//   * returning the authored label whenever f===1 moves 4,326 renders, ALL of them worse: 4,299 authored
+//     labels carry a machine DECIMAL ("2.25 oz", "0.6 onions", "3.3 cans") and turning those into kitchen
+//     fractions is the service this function exists to perform, not a bug.
+// The defect is narrower than either. It is re-snapping a quantity the AUTHOR already wrote as a fraction,
+// where the only possible outcome is a DIFFERENT fraction. A decimal still gets formatted; a fraction the
+// author chose is left exactly as written, and only at f===1, where there is nothing to compute.
+function smpAuthoredFrac(buy){
+  var m=buy.match(SMPRE_LBOZ);
+  if(m) return (m[2].indexOf('/')>=0||m[4].indexOf('/')>=0);
+  m=buy.match(SMPRE_LEAD);
+  if(m) return m[2].indexOf('/')>=0;
+  m=buy.match(SMPRE_QUAL);
+  if(m&&!smpBareNum(buy.slice(m[0].length))) return m[2].indexOf('/')>=0;
+  return false; }
 function scaleBuy(buy,f){
+  if(f===1&&smpAuthoredFrac(buy)) return buy;
   var m=buy.match(SMPRE_LBOZ);
   if(m) return m[1]+smpFmtLbOz((parseQty(m[2])*16+parseQty(m[4]))*f,m[3],m[5])+buy.slice(m[0].length);
   m=buy.match(SMPRE_LEAD);

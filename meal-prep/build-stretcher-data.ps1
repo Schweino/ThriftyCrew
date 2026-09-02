@@ -4,7 +4,11 @@
 # classification review table on stdout. Also cross-checks every slug against
 # the live feed so the tool's live-price lookups will actually hit.
 $ErrorActionPreference = 'Stop'
-$dir = 'C:\Codex\ThriftyCrew\meal-prep'
+# $PSScriptRoot, not a hard-coded path (2026-09-01): this now runs from the daily chain, and the cloud
+# runner's checkout is not C:\Codex.
+$dir  = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep' }
+$repo = Split-Path $dir -Parent
+$tool = Join-Path $repo 'site\tools\payday-stretcher-tool.html'
 $db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}
@@ -63,9 +67,29 @@ foreach($r in $recs){
   [void]$sb.Append('{n:'+(JStr $r.n)+',s:'+(JStr $r.s)+',v:'+$r.v+',b:'+$r.b+',p:'+$r.p+',k:'+$r.k+',pr:"'+$r.pr+'"}')
 }
 [void]$sb.Append(']};')
-[IO.File]::WriteAllText("$dir\stretcher-data.js", $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+$js = $sb.ToString()
+[IO.File]::WriteAllText("$dir\stretcher-data.js", $js, (New-Object System.Text.UTF8Encoding($false)))
+
+# ---- SPLICE INTO THE TOOL (2026-09-01) ----------------------------------------------------------
+# The header said "paste into payday-stretcher-tool.html". Nobody pasted: stretcher-data.js was last
+# written 2026-07-26, the live tool was 74 recipes behind and still listed 7 retired ones, and 299 of
+# its 513 baked rows carried one identical batch cost. A build step whose last mile is a person's
+# memory is not a build step.
+$spliced = $false
+if (Test-Path $tool) {
+  $html = [IO.File]::ReadAllText($tool)
+  $m1 = '/*PSD-DATA*/'; $m2 = '/*PSD-END*/'
+  $a = $html.IndexOf($m1); $b = $html.IndexOf($m2)
+  if ($a -ge 0 -and $b -gt $a) {
+    $html = $html.Substring(0, $a + $m1.Length) + $js + $html.Substring($b)
+    [IO.File]::WriteAllText($tool, $html, (New-Object System.Text.UTF8Encoding($false)))
+    $spliced = $true
+  }
+}
 
 "WROTE stretcher-data.js  ($([math]::Round((Get-Item "$dir\stretcher-data.js").Length/1KB,1)) KB)  recipes=$($recs.Count)"
+if ($spliced) { "SPLICED into payday-stretcher-tool.html  ($([math]::Round((Get-Item $tool).Length/1KB,1)) KB total)" }
+else { "WARNING: markers not found in $tool - data NOT spliced, the live tool will stay behind" }
 ""
 "--- PRIMARY PROTEIN REVIEW (eyeball for misfits) ---"
 foreach($c in 'c','b','t','p','o'){

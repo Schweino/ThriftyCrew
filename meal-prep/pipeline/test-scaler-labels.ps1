@@ -109,6 +109,20 @@ $CASES = @(
      buy='1 cup'
      expect='2 cup'
      note='the gram figure still appends and still scales, beside the label (asserted separately)' }
+  # ---- 2026-09-01, THE UNSCALED RENDER. The list is re-rendered through scaleBuy on every page load,
+  # so an authored fraction the seven-value table cannot say was being quietly rewritten at f=1.
+  @{ id='F15'; kind='MUST-FIRE'; serv=14; grams=0
+     buy='7/8 cup grated'
+     expect='7/8 cup grated'
+     note='chicken-parmesan-pasta parmesan, live and rendering "3/4 cup grated" at BASE servings on 2026-09-01 (98 g against a 112 g cup is 0.875 exactly, an exact tie the table breaks downward)' }
+  @{ id='F16'; kind='CLEAN TWIN'; serv=14; grams=0
+     buy='0.6 onions'
+     expect='2/3 onions'
+     note='THE REGRESSION THIS FIX MUST NOT BECOME: 4,299 authored labels carry a machine decimal, and turning those into kitchen fractions at f=1 is the service, not the bug. Returning the authored string whenever f=1 moved 4,326 renders and every one was worse.' }
+  @{ id='F17'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='7/8 cup grated'
+     expect='1 3/4 cup grated'
+     note='SCOPE: the same authored fraction still scales normally at any factor but 1 - 0.875 x 2 = 1.75, which the table says exactly' }
 )
 
 # ---------------------------------------------------------------------------------------------------

@@ -1145,6 +1145,51 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # because the ledger that decides which posts may be re-paywalled belongs to the rotation alone.
       try { (Invoke-Bounded 'paywall-leak' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-paid-not-public.ps1'),'-Alert') 900).Output | ForEach-Object { Log ('paywall-leak: ' + $_) } } catch { Log ('audit-paid-not-public threw: ' + $_.Exception.Message) }
 
+      # ---- THE FOUR READER-FACING PRICE SURFACES (2026-09-01) ------------------------------------------
+      # The hub grid and the three tool pages each bake a per-serving (or per-batch) price in at BUILD
+      # time, off pipeline\v2-perserving.json. Until today NOTHING CALLED THEIR BUILDERS. They were run by
+      # hand, and the drift measured that morning was: hub 440 of 576 rows disagreeing with the manifest,
+      # cheapnow 504 of 576, dinner and stretcher 499 and 506 of 513 - plus 74 catalog recipes missing
+      # from two of them entirely and 7 retired ones still listed, because those two builders wrote a .js
+      # file and left the paste to somebody's memory. A price surface only a human remembers to rebuild
+      # will always drift, so it rebuilds here, daily, with everything else that reads the manifest.
+      #
+      # ORDER. After rotate-free-dinners, because build-hub-grid renders the FREE ribbons and would
+      # otherwise publish yesterday's set. After the manifest is final, which it is: compute-v2-perserving
+      # ran above the ship boundary. Non-fatal like its neighbours - a failed surface rebuild must never
+      # hold the board that already shipped - and the guard below is what turns a silent failure loud.
+      $mpRoot = Split-Path $root -Parent
+      foreach ($b in @('build-cheapnow-data.ps1','build-dinner-data.ps1','build-stretcher-data.ps1')) {
+        try { (Invoke-Bounded ('surface-' + $b) @('-ExecutionPolicy','Bypass','-File',(Join-Path $mpRoot ('meal-prep\' + $b))) 600).Output | Select-Object -First 3 | ForEach-Object { Log ('surface: ' + $_) } }
+        catch { Log ($b + ' threw: ' + $_.Exception.Message) }
+      }
+      # The hub publishes itself (it splices the live Ghost page between its own markers), so it is the
+      # one that carries -Publish. The three tools above only write their local source; publishing those
+      # goes through publish-tool-post.ps1, which refuses to overwrite an unreviewed live body.
+      try { (Invoke-Bounded 'surface-hub' @('-ExecutionPolicy','Bypass','-File',(Join-Path $mpRoot 'meal-prep\build-hub-grid.ps1'),'-Publish') 900).Output | Select-Object -Last 3 | ForEach-Object { Log ('surface-hub: ' + $_) } }
+      catch { Log ('build-hub-grid threw: ' + $_.Exception.Message) }
+
+      # AND THEN ASK WHETHER IT WORKED. Rebuilding without checking is how this went unnoticed for weeks:
+      # every builder above exits 0 whether or not the thing it wrote reached a reader.
+      try {
+        $ssJ = Invoke-Bounded 'surface-staleness' @('-ExecutionPolicy','Bypass','-File',(Join-Path $mpRoot 'meal-prep\pipeline\audit-surface-staleness.ps1')) 600
+        $ss = @($ssJ.Output | ForEach-Object { [string]$_ })
+        $ss | ForEach-Object { Log ('surface-staleness: ' + $_) }
+        # The completion marker, checked inline: this script does not dot-source lib\guard-contract.ps1,
+        # and calling a function that is not here would throw into the catch and read as "it threw",
+        # which is the one verdict that must never stand in for "it never finished".
+        $ssLines = @($ss | Where-Object { $_.Trim() -ne '' })
+        $ssDone  = ($ssLines.Count -gt 0 -and $ssLines[-1].Trim() -match '^SURFACE-STALENESS-COMPLETE(\s|$)')
+        if (-not $ssDone) {
+          $summary += 'REVIEW    surface-staleness did not run to completion - the four price surfaces are UNCHECKED today'
+        } elseif ($ssJ.ExitCode -eq 1) {
+          $summary += 'REVIEW    a reader-facing price surface disagrees with the manifest (meal-prep\pipeline\audit-surface-staleness.ps1 -ShowAll)'
+          if (-not $NoAlert) { try { Send-Alert -Subject 'Price surfaces disagree with the manifest' -Body ("audit-surface-staleness.ps1 compares the meal-prep hub grid and the three tool pages against pipeline\v2-perserving.json. A finding means a reader is being shown a price, or a recipe list, that the manifest no longer agrees with. The hub is the one that matters most: it bakes a STATIC data-cost and does not hydrate from the feed, so a stale row there is what a reader actually sees.`n`n" + ($ss -join "`n")) | Out-Null } catch {} }
+        } elseif ($ssJ.ExitCode -eq 3) {
+          $summary += 'REVIEW    surface-staleness could not evaluate a surface - its payload shape may have moved (that surface is unwatched)'
+        }
+      } catch { Log ('audit-surface-staleness threw: ' + $_.Exception.Message) }
+
       # ==== GROUP B: THE ADVISORY AUDITS, LAUNCHED TOGETHER (2026-08-23, PLAN-use-the-cores phase 1) ====
       # Every lane below is a read-only child that reports and never changes what shipped. They used to run
       # one after another, at the exact spot each result was read, and that tail was ~750 s of a 95-minute

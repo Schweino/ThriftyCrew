@@ -3,7 +3,11 @@
 # + the live feed (to verify board_ids). Output: dinner-data.js (a JS const)
 # and a category review table on stdout.
 $ErrorActionPreference = 'Stop'
-$dir = 'C:\Codex\ThriftyCrew\meal-prep'
+# $PSScriptRoot, not a hard-coded path (2026-09-01), for the same reason build-hub-grid moved off one on
+# 2026-08-01: this now runs from the daily chain, and the cloud runner's checkout is not C:\Codex.
+$dir  = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep' }
+$repo = Split-Path $dir -Parent
+$tool = Join-Path $repo 'site\tools\dinner-tonight-tool.html'
 $db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}
@@ -89,9 +93,29 @@ foreach($r in $recs){
   [void]$sb.Append('{"n":'+(JStr $r.n)+',"s":'+(JStr $r.s)+',"sv":'+$r.sv+',"cal":'+$r.cal+',"p":'+$r.p+',"c":'+$r.c+',"i":['+($r.i -join ',')+']}')
 }
 [void]$sb.Append(']};')
-[IO.File]::WriteAllText("$dir\dinner-data.js", $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+$js = $sb.ToString()
+[IO.File]::WriteAllText("$dir\dinner-data.js", $js, (New-Object System.Text.UTF8Encoding($false)))
+
+# ---- SPLICE INTO THE TOOL (2026-09-01) ----------------------------------------------------------
+# This script wrote a .js file and stopped, and the header told a human to paste it. Nobody did:
+# dinner-data.js was last written 2026-08-04 and the live tool was 74 recipes behind the catalog while
+# still listing 7 retired ones. A build step whose last mile is a person's memory is not a build step.
+# Literal string ops between markers, exactly as build-cheapnow-data.ps1 has always done.
+$spliced = $false
+if (Test-Path $tool) {
+  $html = [IO.File]::ReadAllText($tool)
+  $m1 = '/*DIN-DATA*/'; $m2 = '/*DIN-END*/'
+  $a = $html.IndexOf($m1); $b = $html.IndexOf($m2)
+  if ($a -ge 0 -and $b -gt $a) {
+    $html = $html.Substring(0, $a + $m1.Length) + $js + $html.Substring($b)
+    [IO.File]::WriteAllText($tool, $html, (New-Object System.Text.UTF8Encoding($false)))
+    $spliced = $true
+  }
+}
 
 "WROTE dinner-data.js  ($([math]::Round((Get-Item "$dir\dinner-data.js").Length/1KB,1)) KB)  ingredients=$($ing.Count) recipes=$($recs.Count)"
+if ($spliced) { "SPLICED into dinner-tonight-tool.html  ($([math]::Round((Get-Item $tool).Length/1KB,1)) KB total)" }
+else { "WARNING: markers not found in $tool - data NOT spliced, the live tool will stay behind" }
 "board_id coverage: $(( $ing | Where-Object { $_.b } ).Count) of $($ing.Count) ingredients have live-price ids"
 ""
 "--- CATEGORY REVIEW (eyeball for miscategorized items) ---"
