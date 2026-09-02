@@ -2119,7 +2119,24 @@ $GLOBAL_EXCLUDE = @(
   # the sauce commodities' problem, not applesauce's.
   # applesauce declares this exact token in relax_global so its own 353 rows keep routing to it - without
   # that this token would empty the commodity, the same eviction the serenity\s*kids note warns about.
-  '\bapple\s*sauce'
+  '\bapple\s*sauce',
+  # 'sprout(?:ing)?\s+seeds?' added 2026-09-02 (triage plan-2026-09-02-2 item 2026-09-02-4dfb1d): GARDEN
+  # SEED PACKETS ARE THE PRODUCE TWIN OF THE FLAVOUR-PHRASE CLASS - a seed packet's name IS the vegetable's
+  # name, so "Sprouting Seed Super Sampler- Organic- 2.5 Lbs of 10 Different Delicious Sprout Seeds:
+  # Alfalfa, Mung Bean, Broccoli, Green Lentil, Clover, Buckwheat, Radish, Bean Salad & More" ($67.97,
+  # Walmart) matches broccoli, radishes AND dry-green-lentils. It never held a cell, but a $67.97 2.5 lb
+  # bag of seed is one price move from crowning nothing and one rule change from crowning something.
+  # WHY GLOBAL AND NOT PER-COMMODITY: the same shape as the baby-food and applesauce notes above. Fencing
+  # it on broccoli alone re-lands it on dry-green-lentils (measured: that is exactly what the routing
+  # simulation showed once broccoli released it), and the packet names 10 more vegetables after that.
+  # Only a global token stops the hand-off. The per-commodity radishes fence stays as well: it catches
+  # 'Radish Vegetable Seeds 5 Pack', which carries no 'sprout' token at all.
+  # MEASURED over the 41,072-name corpus of plan-2026-09-02-2.routing.json: exactly ONE name matches.
+  # THE SHAPE IS LOAD-BEARING: 'sprout' must be immediately followed by whitespace and 'seed(s)', so this
+  # cannot touch "Go Raw Organic SPROUTED Pumpkin Seeds with Sea Salt" (sprouted, not sprouting - that row
+  # is sea-salt's own '\bseeds?\b' fence) nor "Fresh Bean Sprouts", which is a real produce row.
+  # No commodity needs relax_global: nothing on the board sells seed for planting.
+  'sprout(?:ing)?\s+seeds?'
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }
