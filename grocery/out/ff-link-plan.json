@@ -1,14 +1,25 @@
 ﻿{
     "resolved":  [
                      {
-                         "id":  "bratwurst",
+                         "id":  "feta",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
+                         "board_pu":  1.1238,
+                         "name":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/athenos_traditional_feta_cheese_chunk_8_oz/p/36780",
+                         "price":  "$8.99",
+                         "size":  "8 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "gruyere",
                          "fault":  "NO-LINK",
-                         "board":  "Bratwurst, Cheddar Our Family",
-                         "board_pu":  5.3244,
-                         "name":  "Bratwurst, Cheddar Our Family",
-                         "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/bratwurst/bratwurst_cheddar_our_family/p/5579476",
-                         "price":  "$5.99",
-                         "size":  "18 oz",
+                         "board":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
+                         "board_pu":  0.5825,
+                         "name":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/aidells_smoked_roasted_garlic_gruyere_cheese_chicken_sausage_12_oz/p/6363",
+                         "price":  "$6.99",
+                         "size":  "12 oz",
                          "score":  1
                      },
                      {
@@ -20,6 +31,17 @@
                          "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
                          "price":  "$2.39",
                          "size":  "12 ct",
+                         "score":  1
+                     },
+                     {
+                         "id":  "yellow-bell-pepper",
+                         "fault":  "NO-LINK",
+                         "board":  "Yellow Bell Pepper",
+                         "board_pu":  1.79,
+                         "name":  "Yellow Bell Pepper",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/yellow_bell_pepper/p/2310571",
+                         "price":  "$1.79",
+                         "size":  "1 ea",
                          "score":  1
                      }
                  ],
@@ -58,7 +80,7 @@
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "queso",
@@ -73,7 +95,7 @@
                         "why":  "match found but per-unit disagrees: board $0.598 vs link $1.398 (57.2%)"
                     }
                 ],
-    "worked":  14,
-    "generated":  "2026-09-01 08:06",
-    "board":  "comparison-2026-08-31.json"
+    "worked":  16,
+    "generated":  "2026-09-02 08:06",
+    "board":  "comparison-2026-09-02.json"
 }

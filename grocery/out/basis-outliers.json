@@ -56,6 +56,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "hand-soap",
+                         "commodity":  "Hand Soap (liquid)",
+                         "unit":  "floz",
+                         "store":  "Fareway",
+                         "per_unit":  0.5987,
+                         "median":  0.0998,
+                         "mult":  6,
+                         "size":  "7.5 fl oz",
+                         "item":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "bay-leaves",
                          "commodity":  "Bay Leaves",
                          "unit":  "oz",
@@ -78,19 +91,6 @@
                          "mult":  4.81,
                          "size":  "12 fl oz",
                          "item":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
-                         "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "hand-soap",
-                         "commodity":  "Hand Soap (liquid)",
-                         "unit":  "floz",
-                         "store":  "Fareway",
-                         "per_unit":  0.4653,
-                         "median":  0.0998,
-                         "mult":  4.66,
-                         "size":  "7.5 fl oz",
-                         "item":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
                      },
@@ -135,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-09-01T16:56:01",
+    "generated":  "2026-09-02T08:07:01",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -254,6 +254,18 @@
                               "per_unit":  0.3914,
                               "size":  "12.75 oz",
                               "item":  "Alessi Balsamic Vinegar 12.75 Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "banana-peppers",
+                              "commodity":  "Banana Peppers / Pepperoncini",
+                              "unit":  "oz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.2056,
+                              "size":  "16 oz",
+                              "item":  "Our Family Hot Banana Pepper Rings 16 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1315,5 +1327,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-31.json"
+    "compare_file":  "comparison-2026-09-02.json"
 }

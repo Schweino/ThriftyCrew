@@ -1,104 +1,15 @@
 ﻿{
-    "generated":  "2026-09-01T08:13:55",
-    "board":  "comparison-2026-08-31",
+    "generated":  "2026-09-02T08:14:01",
+    "board":  "comparison-2026-09-02",
     "cells":  529,
-    "coverage_pct":  86.6,
+    "coverage_pct":  87.1,
     "counts":  {
-                   "SHELF":  448,
-                   "SHIP_ONLY":  6,
-                   "THIRD_PARTY":  4,
-                   "UNKNOWN":  71
+                   "SHELF":  461,
+                   "SHIP_ONLY":  0,
+                   "THIRD_PARTY":  0,
+                   "UNKNOWN":  68
                },
     "flagged":  [
-                    {
-                        "id":  "adobo-seasoning",
-                        "crown":  false,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  0.3166,
-                        "item":  "Goya Adobo All-Purpose Seasoning with Pepper, 7.5 Lb",
-                        "seller":  "ElimsWell",
-                        "fulfillment":  "MARKETPLACE"
-                    },
-                    {
-                        "id":  "apple-cider-vinegar",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0521,
-                        "item":  "Great Value Apple Cider Vinegar, 128 fl oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "cajun-seasoning",
-                        "crown":  false,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.1733,
-                        "item":  "(6 pack) Tony Chachere\u0027s, Seasoning, Original, Cajun, 32 oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "fish-sauce",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.3728,
-                        "item":  "Thai Kitchen Premium Fish Sauce, 23.66 fl oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "ground-ginger",
-                        "crown":  false,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  1.2492,
-                        "item":  "Badia Spices Ground Ginger 12 OZ",
-                        "seller":  "Swift Pick",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "grits",
-                        "crown":  false,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.0908,
-                        "item":  "(4 pack) Great Value Quick Grits, 24 oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "harissa-paste",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.498,
-                        "item":  "Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "miracle-whip",
-                        "crown":  false,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  0.3908,
-                        "item":  "Miracle Whip Dressing, 2 ct Pack, 30 fl oz Jars",
-                        "seller":  "Ociene LLC",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "red-curry-paste",
-                        "crown":  true,
-                        "verdict":  "SHIP-ONLY",
-                        "per_unit":  0.6686,
-                        "item":  "Thai Kitchen Red Curry Paste, 35.0 oz Cup",
-                        "seller":  "Walmart.com",
-                        "fulfillment":  "FC"
-                    },
-                    {
-                        "id":  "yeast",
-                        "crown":  false,
-                        "verdict":  "THIRD-PARTY",
-                        "per_unit":  0.4372,
-                        "item":  "Red Star Active Dry Yeast 2 lb. bag",
-                        "seller":  "Star Sales",
-                        "fulfillment":  "FC"
-                    }
+
                 ]
 }

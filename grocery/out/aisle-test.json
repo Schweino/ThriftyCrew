@@ -182,7 +182,7 @@
     {
         "id":  "bacon",
         "store":  "Family Fare",
-        "product":  "Farmland Bacon, Hickory Smoked, Classic Cut 12 Oz",
+        "product":  "Our Family Bacon, Premium, Original 12 Oz",
         "dept":  "meat",
         "aisle":  "meat/bacon",
         "verdict":  "ALLOW",
@@ -918,6 +918,15 @@
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027coffee-creamer\u0027"
     },
     {
+        "id":  "cookies",
+        "store":  "Family Fare",
+        "product":  "Crav\u0027n Flavor Cookies, Chocolate Chip, Candy Gems 12.4 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/cookies",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "corn-chips",
         "store":  "Family Fare",
         "product":  "Corn Chips, Scoops Our Family",
@@ -1316,7 +1325,7 @@
     {
         "id":  "feta",
         "store":  "Family Fare",
-        "product":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
+        "product":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
@@ -1708,6 +1717,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027ground-turmeric\u0027"
+    },
+    {
+        "id":  "gruyere",
+        "store":  "Family Fare",
+        "product":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/sausage",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027meat\u0027; category \u0027dairy\u0027 allows only: dairy, deli"
     },
     {
         "id":  "half-and-half",
@@ -3402,6 +3420,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "yellow-bell-pepper",
+        "store":  "Family Fare",
+        "product":  "Yellow Bell Pepper",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/peppers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
         "id":  "mustard",
         "store":  "Family Fare",
         "product":  "Our Family Mustard, Yellow 20 Oz",
@@ -3589,6 +3616,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027celery-salt\u0027"
+    },
+    {
+        "id":  "swiss-cheese",
+        "store":  "Family Fare",
+        "product":  "Our Family Natural Swiss Cheese 8 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/cheese",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
         "id":  "white-wine-vinegar",

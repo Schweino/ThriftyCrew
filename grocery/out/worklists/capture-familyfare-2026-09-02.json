@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  5,
-    "cursor_next":  12,
+    "cursor_start":  12,
+    "cursor_next":  19,
     "total_terms":  602,
     "rotation_terms":  [
-                           "air freshener spray",
-                           "aji amarillo paste",
-                           "alfredo sauce",
-                           "all purpose cleaner",
-                           "unsweetened almond milk",
-                           "whole almonds",
-                           "aluminum foil"
+                           "anaheim peppers",
+                           "apple cider vinegar",
+                           "apple juice",
+                           "apples",
+                           "applesauce",
+                           "fresh apricots",
+                           "artichoke hearts"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "air freshener spray",
-                  "aji amarillo paste",
-                  "alfredo sauce",
-                  "all purpose cleaner",
-                  "unsweetened almond milk",
-                  "whole almonds",
-                  "aluminum foil"
+                  "anaheim peppers",
+                  "apple cider vinegar",
+                  "apple juice",
+                  "apples",
+                  "applesauce",
+                  "fresh apricots",
+                  "artichoke hearts"
               ],
     "commodities":  [
-                        "air-freshener",
-                        "aji-amarillo-paste",
-                        "alfredo-sauce",
-                        "all-purpose-cleaner",
-                        "almond-milk",
-                        "almonds",
-                        "aluminum-foil"
+                        "anaheim-peppers",
+                        "apple-cider-vinegar",
+                        "apple-juice",
+                        "apples",
+                        "applesauce",
+                        "apricots",
+                        "artichoke-hearts"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

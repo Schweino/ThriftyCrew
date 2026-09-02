@@ -1,1 +1,1 @@
-﻿coleslaw-mix|Walmart;cooked-jasmine-rice|Walmart;pomegranates|Walmart
+﻿block-cheese|Family Fare;coleslaw-mix|Aldi

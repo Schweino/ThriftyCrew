@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-01 21:32",
-    "board":  "comparison-2026-08-31.json",
-    "sidecar_generated":  "2026-09-01 21:32:14",
+    "generated":  "2026-09-02 08:15",
+    "board":  "comparison-2026-09-02.json",
+    "sidecar_generated":  "2026-09-02 08:15:53",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3138,
-                     "corpus":  40936,
-                     "rule_invisible":  7477
+                     "board_pairs":  3139,
+                     "corpus":  40958,
+                     "rule_invisible":  7479
                  },
     "identity_count":  0,
-    "coverage_count":  3,
+    "coverage_count":  2,
     "identity":  [
 
                  ],
@@ -25,8 +25,8 @@
                          "commodity":  "80/20 Ground Beef",
                          "store":  "Aldi",
                          "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count",
-                         "cos":  0.7209,
-                         "score":  0.906298,
+                         "cos":  0.7173,
+                         "score":  0.905511,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -35,18 +35,8 @@
                          "commodity":  "80/20 Ground Beef",
                          "store":  "Aldi",
                          "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count",
-                         "cos":  0.7209,
-                         "score":  0.906298,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray",
-                         "cos":  0.6954,
-                         "score":  0.904662,
+                         "cos":  0.7173,
+                         "score":  0.905511,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]
