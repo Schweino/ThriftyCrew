@@ -130,7 +130,7 @@
     "Olives": { "cup": 135, "tbsp": 8.5 },
     "Sun-Dried Tomatoes": { "cup": 54, "tbsp": 3.5 },
     "Roasted Red Peppers": { "cup": 140, "each": 45 },
-    "Pineapple Chunks": { "can": 567, "cup": 165 },
+    "Pineapple Chunks": { "can": 412, "cup": 181, "note": "DERIVED drained yield - not a label, not a weighing. USDA FDC 167767 'Pineapple, canned, juice pack, drained' portion 'cup, chunks' = 181 g; FDC 169126 'Pineapple, canned, juice pack, solids and liquids' portion 'cup, crushed, sliced, or chunks' = 249 g; both SR Legacy, both published 4/1/2019, both 60 kcal per 100 g, both re-fetched live from the FDC API 2026-09-02. Drained fraction 181/249 = 0.727, so the 20 oz (567 g) can yields 567 x 0.727 = 412 g drained. FDC carries NO per-can portion for pineapple and none of 30 branded 20 oz labels prints a drained weight, so a derivation is the only non-guessed number available; Brad ruled 2026-09-02 to use it and to overwrite it the day a can is actually weighed. cup was 165, which is FDC 169124 RAW pineapple's 'cup, chunks' - the wrong food entirely - and is now 167767's own drained chunk cup, 181. Net 567 g stays on ingredients.buy_pkg_g." },
     "Golden Raisins": { "cup": 145, "tbsp": 9, "each": 0.5 },
     "Dill Pickles": { "each": 65, "cup": 143, "chip": 6 },
     "Tomatillos": { "each": 34 },

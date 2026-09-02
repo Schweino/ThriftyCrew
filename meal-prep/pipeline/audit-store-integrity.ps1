@@ -71,6 +71,37 @@ function Test-DrainedLineWithoutYield { param([string]$BuyText,[double]$CanG,[do
   if($PkgLabel -match '(?<!un)\bdrain(ed)?\b'){ return $false }
   return ($BuyText -match '(?<!un)\bdrained\b' -and $PkgG -gt 0 -and -not ($CanG -gt 0 -and $CanG -lt $PkgG * 0.95)) }
 
+# THE REVIEWED-EXCEPTION VALVE (2026-09-02, corn03). Separate function on purpose: the predicate above is
+# NOT touched and still fires on every row it fired on before. This only decides the TIER of a finding the
+# predicate already made, and only for one exactly-named row.
+#
+# WHY IT HAD TO EXIST. DRAINED-NO-YIELD shipped this morning with two live findings. Pineapple Chunks was
+# fixed by deriving the yield from USDA (FDC 167767 drained cup 181 g over FDC 169126 undrained cup 249 g,
+# x the 567 g can = 412 g). The same method was then tried on Sun-Dried Tomatoes (Oil-Packed) and MEASURED
+# to be impossible: FDC carries exactly one oil-packed record, 169384, drained only, with no undrained
+# sibling to divide by in SR Legacy, Foundation or Branded. The jar's own ingredients.json note carries
+# Brad's 2026-08-16 ruling that its drained weight may not be guessed. So the finding is true, the
+# fix needs a kitchen scale, and until then a correct HARD blocks wave-publish P5 on every unrelated wave
+# in the estate. That is precisely the pressure that gets a gate reached for with -Skip.
+#
+# WHAT KEEPS IT FROM ROTTING. The entry is keyed on slug + item + the exact buy_pkg_g it was reviewed
+# against, so a package change or a re-encode drops the match and the row returns to HARD on its own. A
+# reason and a date are both required and both checked, so an undated blanket row silences nothing. A
+# missing or unparseable file yields ZERO exceptions: this fails closed, it never fails open. And the
+# finding is still PRINTED, as a WARN, so it stays in the daily cycle's output instead of disappearing.
+function Test-ReviewedException { param($Rows,[string]$Slug,[string]$Item,[double]$PkgG)
+  foreach($r in @($Rows)){
+    if($null -eq $r){ continue }
+    if([string]$r.slug -ne $Slug){ continue }
+    if([string]$r.item -ne $Item){ continue }
+    if($r.PSObject.Properties.Name -notcontains 'buy_pkg_g'){ continue }
+    if([double]$r.buy_pkg_g -ne $PkgG){ continue }
+    if(-not ([string]$r.reason).Trim()){ continue }
+    if(-not ([string]$r.dated).Trim()){ continue }
+    return $true
+  }
+  return $false }
+
 # HOW MANY OF $Unit IS ONE SERVING? Returns $null when the label does not LEAD with that unit.
 #
 # WHY THIS EXISTS (2026-08-29). This guard compared densities' grams-per-cup straight against the food
@@ -278,11 +309,69 @@ if($SelfTest){
   T 'MUST FIRE  a jar declared GROSS against a line that drains it (Sun-Dried Tomatoes 680 g "24oz jar")' `
     (Test-DrainedLineWithoutYield '1 3/4 cups oil-packed, drained' 0 680 '24oz jar') `
     'the oil-packed gross-jar case went silent'
+
+  # ---- THE REVIEWED-EXCEPTION VALVE (2026-09-02) ---------------------------------------------------
+  # FROZEN from db\store-integrity-exceptions.json as written today, against the real creamy-tuscan row.
+  # The predicate above is unchanged and still fires; these cases only pin what may down-tier it.
+  $exReal = @([pscustomobject]@{ slug='creamy-tuscan-chicken-skillet'; item='Sun-Dried Tomatoes (Oil-Packed)'
+                                 buy_pkg_g=680; dated='2026-09-02'; reason='FDC has no undrained oil-packed sibling to derive a yield from; pending a kitchen-scale reading of the 24 oz jar.' })
+  T 'MUST FIRE  with NO exception file at all the reviewed row is still a HARD finding' `
+    (-not (Test-ReviewedException @() 'creamy-tuscan-chicken-skillet' 'Sun-Dried Tomatoes (Oil-Packed)' 680)) `
+    'an empty list excused a finding, so a missing file would fail OPEN'
+  T 'the reviewed row matches its own dated entry (creamy-tuscan :: Sun-Dried Tomatoes (Oil-Packed) :: 680 g)' `
+    (Test-ReviewedException $exReal 'creamy-tuscan-chicken-skillet' 'Sun-Dried Tomatoes (Oil-Packed)' 680) `
+    'the entry written for this row does not match it'
+  # CLEAN TWIN 1 - the exception is not a licence for the ITEM, only for one line of one recipe.
+  T 'CLEAN TWIN the same item in a DIFFERENT recipe is NOT excused' `
+    (-not (Test-ReviewedException $exReal 'some-other-tuscan-thing' 'Sun-Dried Tomatoes (Oil-Packed)' 680)) `
+    'one reviewed line silenced the whole item across the catalogue'
+  # CLEAN TWIN 2 - and not a licence for the RECIPE either.
+  T 'CLEAN TWIN a different item in the SAME recipe is NOT excused' `
+    (-not (Test-ReviewedException $exReal 'creamy-tuscan-chicken-skillet' 'Artichoke Hearts' 680)) `
+    'one reviewed line silenced every drained line in that recipe'
+  # CLEAN TWIN 3 - THE ANTI-ROT CASE. buy_pkg_g is part of the key, so the day the package changes the
+  # exception stops matching and the guard speaks again without anyone having to remember to delete it.
+  T 'MUST FIRE  the SAME slug and item against a package that has since changed (680 -> 454) is NOT excused' `
+    (-not (Test-ReviewedException $exReal 'creamy-tuscan-chicken-skillet' 'Sun-Dried Tomatoes (Oil-Packed)' 454)) `
+    'the exception outlived the fact it was written about'
+  # CLEAN TWIN 4 - an entry with no written reason, or no date, is not a reviewed exception at all.
+  $exBlank = @([pscustomobject]@{ slug='creamy-tuscan-chicken-skillet'; item='Sun-Dried Tomatoes (Oil-Packed)'; buy_pkg_g=680; dated='2026-09-02'; reason='   ' })
+  $exUndated = @([pscustomobject]@{ slug='creamy-tuscan-chicken-skillet'; item='Sun-Dried Tomatoes (Oil-Packed)'; buy_pkg_g=680; reason='because' })
+  T 'MUST FIRE  an entry with an empty reason excuses nothing' `
+    (-not (Test-ReviewedException $exBlank 'creamy-tuscan-chicken-skillet' 'Sun-Dried Tomatoes (Oil-Packed)' 680)) `
+    'a blank reason parked a finding silently'
+  T 'MUST FIRE  an undated entry excuses nothing' `
+    (-not (Test-ReviewedException $exUndated 'creamy-tuscan-chicken-skillet' 'Sun-Dried Tomatoes (Oil-Packed)' 680)) `
+    'an undated entry parked a finding silently'
+  # AND THE VALVE MUST NOT REACH THE PREDICATE. Down-tiering is the only thing it may do; the founding
+  # corn bug must still be a HARD finding no matter what this file says.
+  T 'CLEAN TWIN the founding street-corn contradiction is still detected with an exception file present' `
+    (Test-DrainedLineWithoutYield '7 cups, drained' 432 432) `
+    'the exception valve reached back into the predicate'
+  # AND THE FILE ON DISK MUST SAY WHAT THE SELF-TEST SAYS IT SAYS. A frozen fixture that has drifted from
+  # the live file proves the fixture, not the estate; this is the one case that reads the real file.
+  $exFile = Join-Path $mp 'db\store-integrity-exceptions.json'
+  $exOnDisk = @()
+  if(Test-Path $exFile){ try { $exOnDisk = @((Get-Content $exFile -Raw -Encoding UTF8 | ConvertFrom-Json).drained_no_yield) } catch { $exOnDisk = @() } }
+  T 'the live exceptions file carries exactly the one reviewed row, and it matches' `
+    ($exOnDisk.Count -eq 1 -and (Test-ReviewedException $exOnDisk 'creamy-tuscan-chicken-skillet' 'Sun-Dried Tomatoes (Oil-Packed)' 680)) `
+    ("db\store-integrity-exceptions.json holds $($exOnDisk.Count) drained_no_yield row(s) and the frozen one does not match")
+
   if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
 $hard = New-Object System.Collections.Generic.List[string]
 $warn = New-Object System.Collections.Generic.List[string]
+
+# FAILS CLOSED. Absent, empty or unparseable all mean the same thing here: no exceptions, every finding
+# stays HARD. The one thing this must never do is read as "allow everything" when it cannot read the file.
+$exDrained = @()
+$exPath = Join-Path $mp 'db\store-integrity-exceptions.json'
+if(Test-Path $exPath){
+  try { $exDrained = @((Get-Content $exPath -Raw -Encoding UTF8 | ConvertFrom-Json).drained_no_yield) }
+  catch { $exDrained = @(); Write-Output ("  ~ store-integrity: db\store-integrity-exceptions.json did not parse (" + $_.Exception.Message + ") - proceeding with ZERO exceptions") }
+}
+$exUsed = 0
 
 $ing = Get-Content (Join-Path $mp 'db\ingredients.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $ingm=@{}; $ingm = Add-PriceNames $ing $ingm   # item names AND adjudicated aliases - see Add-PriceNames
@@ -342,7 +431,15 @@ foreach($sf in (Get-ChildItem (Join-Path $mp 'db\recipes\*.json'))){
     $dRow = $dens.PSObject.Properties[$sName]
     if($dRow -and ($dRow.Value.PSObject.Properties.Name -contains 'can')){ $canG = [double]$dRow.Value.can }
     if(Test-DrainedLineWithoutYield $sBuy $canG $pkgG $pkgL){
-      $hard.Add("DRAINED-NO-YIELD: $($sf.BaseName) :: $sName :: line says drained but densities.can $canG is not a drained yield against buy_pkg_g $pkgG - the cook drains the can, the engine buys it whole, so buy_n is computed off gross grams and under-buys")
+      $msg = "DRAINED-NO-YIELD: $($sf.BaseName) :: $sName :: line says drained but densities.can $canG is not a drained yield against buy_pkg_g $pkgG - the cook drains the can, the engine buys it whole, so buy_n is computed off gross grams and under-buys"
+      # The predicate has already ruled. All this decides is the TIER, and only for a row named exactly,
+      # dated, and reasoned in db\store-integrity-exceptions.json. It stays printed either way.
+      if(Test-ReviewedException $exDrained $sf.BaseName $sName $pkgG){
+        $exUsed++
+        $warn.Add("REVIEWED-EXCEPTION " + $msg + " [reviewed " + ([string]($exDrained | Where-Object { [string]$_.slug -eq $sf.BaseName -and [string]$_.item -eq $sName } | Select-Object -First 1).dated) + ", see db\store-integrity-exceptions.json - still true, still open]")
+      } else {
+        $hard.Add($msg)
+      }
     }
   }
 
@@ -442,5 +539,6 @@ if($hard.Count -gt $cap){ Write-Output ("  ... {0} more HARD not shown - rerun w
 $warn | Select-Object -First $cap | ForEach-Object { Write-Output ("  ~ " + $_) }
 if($warn.Count -gt $cap){ Write-Output ("  ... {0} more WARN not shown - rerun with -ShowAll" -f ($warn.Count-$cap)) }
 if($hard.Count -eq 0 -and $warn.Count -eq 0){ Write-Output 'store-integrity: CLEAN (ingredient stores agree, cards match their specs)' }
-Write-GuardComplete -Name 'store-integrity' -Summary ("hard={0} warn={1}" -f $hard.Count, $warn.Count)
+if($exUsed -gt 0){ Write-Output ("store-integrity: {0} finding(s) held at WARN by a dated reviewed exception in db\store-integrity-exceptions.json - each is still true and each names the measurement that retires it" -f $exUsed) }
+Write-GuardComplete -Name 'store-integrity' -Summary ("hard={0} warn={1} reviewed={2}" -f $hard.Count, $warn.Count, $exUsed)
 exit $(if($hard.Count){ 1 } else { 0 })

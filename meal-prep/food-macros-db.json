@@ -1460,11 +1460,13 @@
    "serving_grams": 100,
    "serving_qty": 100,
    "serving_unit": "g",
-   "calories": 50,
-   "protein_g": 0.5,
-   "carbs_g": 13,
-   "fat_g": 0.1,
-   "notes": "NEW wave90 (per 100g). USDA FDC pineapple in juice"
+   "calories": 60,
+   "protein_g": 0.51,
+   "carbs_g": 15.56,
+   "fat_g": 0.11,
+   "fiber_g": 1.3,
+   "source": "USDA FDC 167767 (SR Legacy) Pineapple, canned, juice pack, DRAINED; portions cup sliced 162 g, spear 26 g, cup chunks 181 g, cup crushed 195 g; fetched from the FDC API 2026-09-02",
+   "notes": "DRAINED SOLIDS basis, matching densities 'Pineapple Chunks'.can 412 (derived 181/249 x 567 - see the note there). The retired row read 50 cal / 0.5 P / 13 C / 0.1 F under the label 'USDA FDC pineapple in juice', and it was neither: FDC's in-juice row 169126 (solids and liquids) is 60 kcal per 100 g, while 50 / 0.54 P / 13.12 C / 0.12 F is FDC 169124 'Pineapple, raw, all varieties'. Fresh-fruit macros were sitting under a canned name, and 169124's own 'cup, chunks' is 165 g, which is where densities' old cup came from too. Drained (167767) and undrained (169126) canned-in-juice are BOTH 60 kcal per 100 g, so this correction is about which FOOD the row describes, not about the draining. Every spec gram for this item is a drained gram. Do not put a raw or an undrained row back here."
   },
   {
    "item": "Curry Powder",

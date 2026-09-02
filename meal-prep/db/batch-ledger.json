@@ -1121,7 +1121,7 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w9",
       "opened":  "2026-08-28T07:31:01",
-      "last_activity":  "2026-09-02T09:11:52",
+      "last_activity":  "2026-09-02T12:27:13",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1153,6 +1153,11 @@
                          "stage":  "reconcile",
                          "at":  "2026-09-02T09:11:52",
                          "detail":  "dropped 5: blackened-chicken-with-mango-salsa, high-protein-chicken-alfredo-lasagna, crack-chicken-chili, no-boil-chicken-pasta-casserole-with-artichokes-and-peas, chicken-and-potato-curry - Reconciled 2026-09-02. wave-9.json itself was reconciled to an EMPTY slug list on 2026-08-28T07:53:22, one second after the auditor\u0027s NO-GO, but this ledger row was not - it still listed all six. Five of them left w9 and shipped under OTHER waves that stamped their own publish and post-publish-review: blackened-chicken-with-mango-salsa and crack-chicken-chili published under w13 (2026-08-29), high-protein-chicken-alfredo-lasagna, no-boil-chicken-pasta-casserole-with-artichokes-and-peas and chicken-and-potato-curry published under w15 (2026-09-01). They are superseded, not abandoned, and this row was reporting them as LIVE-UNREVIEWED. Only street-corn-chicken-rice-bowls is still genuinely w9\u0027s: source-QA PASSED it 2026-09-02 after the lime-juice blocker was cleared, and it is not published."
+                     },
+                     {
+                         "stage":  "reconcile",
+                         "at":  "2026-09-02T12:27:13",
+                         "detail":  "Ownership handed over, NOT closed and NOT abandoned. street-corn-chicken-rice-bowls left w9 on 2026-09-02 for wave 16 (hunt-run -WaveClose, batch hunt-2026-08-27-highprotein-w16), which now tracks it; the other five left earlier and shipped under w13 and w15. w9 has published nothing and never will. -Abandon was ATTEMPTED and correctly REFUSED: the slug is built and unpublished, and abandoning this row would stop anything tracking that it is owed an answer. The guard is right and was not weakened. w9 becomes abandonable the moment street corn publishes under w16. That publish is blocked today by an auditor NO-GO on a real defect: the card cost widget derives its package count from grams/gpu against the feed package size and never reads pkg_g, so every drained-basis line (all 34 corn cards, every bean card, and this one) shows a count one or more cans short of what the engine buys. Bounced as its own finding in grocery/triage-plans/plan-2026-09-02.json item 2026-09-02-corn04."
                      }
                  ]
   },
@@ -1844,6 +1849,42 @@
                          "stage":  "serveability",
                          "at":  "2026-09-02T06:04:19",
                          "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w16",
+      "opened":  "2026-09-02T12:04:48",
+      "last_activity":  "2026-09-02T12:04:50",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "abandoned":  false,
+      "abandoned_at":  null,
+      "abandon_reason":  null,
+      "slugs":  [
+                    "street-corn-chicken-rice-bowls"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-09-02T12:04:49",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-09-02T12:04:49",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-09-02T12:04:49",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-09-02T12:04:50",
+                         "detail":  "streamed per-recipe before wave close"
                      }
                  ]
   }

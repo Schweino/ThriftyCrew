@@ -14,9 +14,9 @@
     "writer_notes":  [],
     "forbidden_prose_terms":  [],
     "stat":  {
-                 "cal":  609,
+                 "cal":  611,
                  "protein":  54,
-                 "carbs":  76,
+                 "carbs":  77,
                  "fat":  8,
                  "cost_ps":  "4.22"
              },
@@ -40,22 +40,22 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Tenderloin, 8 lb: ~$28.01. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
-                       "Rice, 5.25 cups dry: ~$1.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.20. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Green Bell Peppers, 3 peppers: ~$2.29. \u003cstrong\u003eBuy 3 each: $2.31.\u003c/strong\u003e",
                        "Red Bell Pepper, 3 peppers: ~$3.80. \u003cstrong\u003eBuy 3 each: $4.56.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.54. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
-                       "Pineapple Chunks, 1 3/4 cups: ~$0.86. \u003cstrong\u003eBuy 1 20oz can: $1.62.\u003c/strong\u003e",
+                       "Pineapple Chunks, 1 3/4 cups: ~$1.22. \u003cstrong\u003eBuy 1 20oz can: $1.68.\u003c/strong\u003e",
                        "Honey, 1/3 cup: ~$0.95. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
                        "Soy Sauce, 1/2 cup: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 2 cloves, crushed: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Brown Sugar, 3.25 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Ground Ginger, 4.5 tsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ground Ginger, 4.5 tsp: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sweet Chili Sauce, 2 tbsp: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "White Wine Vinegar, 1 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 16.9floz bottle: $3.00.\u003c/strong\u003e",
                        "Pantry seasonings (red pepper flakes): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.89 across 14 servings, so roughly $2.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $48.62 across 14 servings, roughly $3.47 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.30. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $40.41 across 14 servings, so roughly $2.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.84 across 14 servings, roughly $3.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.11. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -74,14 +74,14 @@
     "portion_html":  "Each of the 14 servings gives you {{protein}} grams of protein at {{cal}} calories with only {{fat}} grams of fat.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://whitneybond.com/slow-cooker-sweet-and-sour-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eWhitneyBond.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Skip the delivery app and let this one prove homemade beats takeout on price and protein. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  39.89,
-    "cost_batch_true":  48.62,
-    "cost_per_serving":  2.85,
-    "cost_per_serving_true":  3.47,
-    "cost_pantry_add":  9.68,
-    "cost_first_run":  58.3,
+    "cost_batch":  40.41,
+    "cost_batch_true":  48.84,
+    "cost_per_serving":  2.89,
+    "cost_per_serving_true":  3.49,
+    "cost_pantry_add":  10.27,
+    "cost_first_run":  59.11,
     "scaler":  {
-                   "cost":  "48.62",
+                   "cost":  "48.84",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",

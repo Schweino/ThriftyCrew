@@ -23,9 +23,9 @@
                               ],
     "cal_floor":  250,
     "stat":  {
-                 "cal":  372,
-                 "protein":  30,
-                 "carbs":  55,
+                 "cal":  376,
+                 "protein":  29,
+                 "carbs":  57,
                  "fat":  7,
                  "cost_ps":  "3.89"
              },
@@ -57,13 +57,13 @@
                        "Achiote Paste, 3.25 tbsp: ~$1.28. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Dried Ancho Chiles, 0.5 oz: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 2.4 onions: ~$0.58. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
-                       "Pineapple Chunks, 4 1/4 cups, drained: ~$2.00. \u003cstrong\u003eBuy 2 20oz cans: $3.24.\u003c/strong\u003e",
+                       "Pineapple Chunks, 4 1/4 cups, drained: ~$2.85. \u003cstrong\u003eBuy 2 20oz cans: $3.36.\u003c/strong\u003e",
                        "Rice, 1 cup dry: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 3/4 cup: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, salt): ~$0.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.85 across 14 servings, so roughly $2.06 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.03 across 14 servings, roughly $2.79 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.32. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $29.70 across 14 servings, so roughly $2.12 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.15 across 14 servings, roughly $2.80 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.47. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for taqueria al pastor built on cheap thigh instead of a trompo. The achiote brick and a can of pineapple do most of the flavor for almost nothing.",
     "shop_smart":  [
@@ -85,14 +85,14 @@
     "portion_html":  "Weigh the filling, subtract the empty bowl, and divide by 14 so every burrito gets the same char and sweetness. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped, and the pineapple keeps it juicy.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://playswellwithbutter.com/chicken-al-pastor/\" target=\"_blank\" rel=\"noopener\"\u003eplayswellwithbutter.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Chicken al pastor burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
-    "cost_batch":  28.85,
-    "cost_batch_true":  39.03,
-    "cost_per_serving":  2.06,
-    "cost_per_serving_true":  2.79,
-    "cost_pantry_add":  15.29,
-    "cost_first_run":  54.32,
+    "cost_batch":  29.7,
+    "cost_batch_true":  39.15,
+    "cost_per_serving":  2.12,
+    "cost_per_serving_true":  2.8,
+    "cost_pantry_add":  15.32,
+    "cost_first_run":  54.47,
     "scaler":  {
-                   "cost":  "39.03",
+                   "cost":  "39.15",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

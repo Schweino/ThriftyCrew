@@ -1,0 +1,19 @@
+{
+  "_why": "The reviewed-exception valve for audit-store-integrity.ps1, in the shape the estate already uses elsewhere (grocery\\food-class-allowlist.json for audit-food-category, grocery\\basis-reconcile-allowlist.json for the basis reconciler, the aisle test's own $COMMODITY_DEPT table). It does NOT weaken a predicate: Test-DrainedLineWithoutYield still fires on every row it fired on before, and an entry here only moves ONE named finding from HARD to WARN so it stays visible in the daily cycle instead of blocking wave-publish P5 forever. A finding that is real, understood, and cannot be fixed without a number nobody has is not an obstacle to route around with -Skip; it is a WARN with a written reason and a pending measurement.",
+  "_rules": [
+    "An entry matches ONE finding: exact slug, exact item, and the exact buy_pkg_g the exception was reviewed against. It is not a pattern and it cannot wildcard.",
+    "buy_pkg_g is part of the key on purpose. If the package changes, or the item is re-encoded, the entry stops matching and the row goes back to HARD by itself. An exception cannot outlive the fact it excused.",
+    "reason and dated are both REQUIRED and both are checked. An undated or unexplained entry matches nothing, so this file cannot become a place to quietly park findings.",
+    "A missing or unparseable file means ZERO exceptions, never 'allow everything'. It fails closed."
+  ],
+  "drained_no_yield": [
+    {
+      "slug": "creamy-tuscan-chicken-skillet",
+      "item": "Sun-Dried Tomatoes (Oil-Packed)",
+      "buy_pkg_g": 680,
+      "dated": "2026-09-02",
+      "reason": "REVIEWED AND REAL, waiting on a measurement nobody has. The line asks for 193 g of '1 3/4 cups oil-packed, drained' against a 680 g jar that db\\ingredients.json itself declares 'GROSS jar weight incl. packing oil (Brad, 2026-08-16). Do not correct to drained weight - that would be a guess.' The finding is correct and the predicate is right to fire. What is missing is the drained yield. The pineapple ruling of 2026-09-02 derived one from USDA by dividing a DRAINED portion by an UNDRAINED portion of the same food (FDC 167767 'cup, chunks' 181 g over FDC 169126 'cup' 249 g). That method was tried here and cannot be applied: FDC carries exactly ONE oil-packed sun-dried tomato record, 169384 'Tomatoes, sun-dried, packed in oil, drained' (SR Legacy, portions cup 110 g and piece 3 g), and there is no undrained oil-packed sibling to divide by in SR Legacy or Foundation. The only other sun-dried tomato reference row, 168567 'Tomatoes, sun-dried', is the DRY bagged form (258 kcal per 100 g, cup 54 g), a different food and not an undrained twin. Branded oil-packed rows carry a single undrained label serving each and no drained portion, so no pair exists there either. Searched live against the FDC API on 2026-09-02. So there is no non-guessed number, and Brad has already ruled once on this exact jar that it may not be guessed. Held as a WARN under this dispatch (corn03, 2026-09-02) rather than inventing a yield or weakening the rule.",
+      "pending": "Brad: weigh the drained contents of one 24 oz oil-packed sun-dried tomato jar (tip into a sieve, let it drain two minutes, weigh the tomatoes). That single number becomes densities 'Sun-Dried Tomatoes (Oil-Packed)'.can, the engine's existing drained branch picks the item up with no code change, and this entry retires itself the moment the number lands."
+    }
+  ]
+}

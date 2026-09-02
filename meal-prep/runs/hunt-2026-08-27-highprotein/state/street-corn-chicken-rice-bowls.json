@@ -3,10 +3,10 @@
     "title":  "Street Corn Chicken Rice Bowl",
     "source_url":  "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/",
     "protein":  "chicken",
-    "state":  "qa-passed",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  16,
     "created":  "2026-08-27T11:51:38",
-    "updated":  "2026-09-02T09:21:16",
+    "updated":  "2026-09-02T12:04:48",
     "terms":  [
                   {
                       "term":  "cotija cheese",
@@ -123,6 +123,12 @@
                         "at":  "2026-09-02T09:21:16",
                         "by":  "source-qa",
                         "detail":  "source-QA re-run 2026-09-02 and PASSED (recipe-source-qa, anchors extraction + live-page). The 2026-08-31 blocker is cleared: the lime line was renamed to Fresh Lime Juice and rebid to limes after the missing food-DB row landed, the zest double-count was resolved with covered_by, and the card now reads \u0027Buy 7 limes\u0027 with \u0027From the limes you already bought\u0027 and no bottle anywhere. Four non-blocking notes, all matcher artifacts or amounts the source does not state. NOT PUBLISHED: wave-publish P5 hard-fails on any non-zero exit from audit-store-integrity, and that guard now reports two open drained-yield findings (chicken-al-pastor-burrito Pineapple Chunks and creamy-tuscan-chicken-skillet Sun-Dried Tomatoes) that belong to triage item 2026-09-02-corn03. Neither can be closed without a drained weight that USDA does not publish and no US label prints. This recipe is ready and waiting on that."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-09-02T12:04:48",
+                        "by":  "wave-close",
+                        "detail":  "wave 16"
                     }
                 ]
 }
