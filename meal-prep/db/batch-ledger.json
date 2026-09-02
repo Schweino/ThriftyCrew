@@ -1705,7 +1705,7 @@
   {
       "batch":  "hunt-2026-08-24-v3-phase6b-w3",
       "opened":  "2026-09-02T05:22:14",
-      "last_activity":  "2026-09-02T05:42:10",
+      "last_activity":  "2026-09-02T05:42:16",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -1760,6 +1760,11 @@
                          "stage":  "publish",
                          "at":  "2026-09-02T05:42:10",
                          "detail":  "1/1 wave slug(s) published through engine\\publish (visibility preserved) + 3 collateral spec(s) carried by propagate (total dirty 4)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-09-02T05:42:16",
+                         "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
                      }
                  ]
   }
