@@ -75,7 +75,7 @@ async function walmartProbe(term) {
     const name = node.name || node.title;
     const id = node.usItemId || node.productId || node.id;
     /*
-      TWO PRICE SHAPES, AND WE READ BOTH (2026-08-22).
+      THREE PRICE SHAPES, AND WE READ ALL OF THEM (2026-08-22, third added 2026-09-02).
       This read only the OBJECT shape - priceInfo.currentPrice.price / priceDetails.priceLines[0].price.
       Measured against a live /search?q=milk that returned 1.3 MB with 119 usItemId nodes and 69
       priceInfo nodes, this extractor kept ZERO rows: the payload now carries
@@ -86,9 +86,10 @@ async function walmartProbe(term) {
       - flat STRINGS, not nested objects with numeric .price. Neither old path exists on it, so every
       term came back as a store that carries no milk.
 
-      Both shapes are kept because both have been real: this file's own header documents
+      Both of those shapes are kept because both have been real: this file's own header documents
       priceDetails.priceLines as "Walmart's own structure", and it may well be what a different
       response variant still returns. Reading both is cheap; guessing which era we are in is not.
+      A third shape arrived on 2026-09-02 and the same rule applied - see the note below money().
     */
     const money = v => {
       if (v == null || v === '') return undefined;
@@ -107,20 +108,57 @@ async function walmartProbe(term) {
       numeric shape. money() stays, but as the VALIDATOR - it decides whether we have a price at
       all, while the string is what travels.
     */
+    /*
+      THE THIRD SHAPE, AND WHY `??` HAD TO GO (2026-09-02).
+      Measured on a live /search?q=miracle whip from Chrome: every flat field this file learned to
+      read in August is now the EMPTY STRING - linePrice, linePriceDisplay, itemPrice, unitPrice and
+      wasPrice are all "" - and priceInfo.currentPrice is undefined. The price moved one level down,
+      into priceDetails.priceLines as {lineType, values:[{key, value}]}:
+
+          { lineType: 'CURRENT_PRICE', values: [{ key: 'PRICE',       value: '8.97'         }] }
+          { lineType: 'UNIT_PRICE',    values: [{ key: 'UNIT_PRICE',  value: '18.7 c/fl oz' }] }
+
+      The value carries NO dollar sign, so the "$n" synthesis below is what makes it survive
+      build-walmart-deals' Build-Row - which is the same trap already documented above it.
+
+      Adding the new path is the small half of the fix. The structural half is the candidate LIST.
+      The old `??` chain could not have reached priceDetails even with a path added: the new
+      priceLine has no `.price` (the number is under values[]), so the chain fell through to
+      linePrice - and `??` only falls through on null/undefined, so the EMPTY STRING won, money("")
+      returned undefined, and all 127 item nodes were dropped. Against a payload whose absent fields
+      are "" rather than absent, `??` is the wrong operator entirely. So candidates are now ordered
+      and the first one money() can PARSE wins, which no "" can ever do.
+
+      All three shapes stay, newest first, for the reason the 2026-08-22 note gives: each has been
+      real, reading them all is cheap, and guessing which era a given response is from is not.
+    */
+    const detail = (lineType, key) => {
+      const line = (node.priceInfo?.priceDetails?.priceLines || []).find(l => l && l.lineType === lineType);
+      const v = (line?.values || []).find(x => x && x.key === key)?.value;
+      return v === '' || v == null ? undefined : v;
+    };
     const lines = node.priceInfo?.priceDetails?.priceLines || node.priceInfo?.currentPrice;
-    const lpRaw = node.priceInfo?.currentPrice?.price
-      ?? (Array.isArray(lines) ? lines[0]?.price : undefined)
-      ?? node.priceInfo?.linePrice
-      ?? node.priceInfo?.linePriceDisplay;
+    const lpRaw = [
+      detail('CURRENT_PRICE', 'PRICE'),
+      node.priceInfo?.currentPrice?.price,
+      Array.isArray(lines) ? lines[0]?.price : undefined,
+      node.priceInfo?.linePrice,
+      node.priceInfo?.linePriceDisplay,
+    ].find(v => money(v) != null);
     const lpNum = money(lpRaw);
     const lp = lpNum == null ? undefined
       : (typeof lpRaw === 'string' && lpRaw.includes('$') ? lpRaw.trim() : '$' + lpNum.toFixed(2));
     // unitPrice is a DISPLAY STRING in the flat shape ("2.7 c/fl oz"). Kept verbatim rather than
     // parsed to a number: the basis ("/fl oz") is half the fact, and a bare 2.7 beside a $/lb rival
     // is the unit-mismatch error this estate has already paid for at three stores.
-    const up = node.priceInfo?.unitPrice?.price
-      ?? (typeof node.priceInfo?.unitPrice === 'string' ? node.priceInfo.unitPrice : undefined)
-      ?? node.priceInfo?.unitPriceDisplayCondition;
+    // Same ordered-candidate rule, and for the same reason: priceInfo.unitPrice is "" in the third
+    // shape, so a `??` chain would return the empty string and we would report no unit price at all.
+    const up = [
+      detail('UNIT_PRICE', 'UNIT_PRICE'),
+      node.priceInfo?.unitPrice?.price,
+      typeof node.priceInfo?.unitPrice === 'string' ? node.priceInfo.unitPrice : undefined,
+      node.priceInfo?.unitPriceDisplayCondition,
+    ].find(v => v != null && v !== '');
     /*
       THE ROLLBACK, CAPTURED (2026-08-21). Brad: "for walmart and sams, a rollback price we just stick
       with a 30 day TTL from when we first detect". Nothing could anchor that TTL because this capture
@@ -138,7 +176,15 @@ async function walmartProbe(term) {
       infinite. Emitted as extra CSV columns - build-walmart-deals reads q|n|lp|up|id positionally, so
       appending is safe and an older builder simply ignores them.
     */
-    const wasRaw = node.priceInfo?.wasPrice?.price ?? node.priceInfo?.wasPrice;
+    // Third shape again: wasPrice is "" and the was-price, when there is one, is a WAS_PRICE line.
+    // An unparseable candidate must not win here either - "" travelling into the was column would
+    // read as a marked-down row with no base price, and rollback-ttl-lib would anchor a TTL on it.
+    const wasRaw = [
+      detail('WAS_PRICE', 'WAS_PRICE'),
+      node.priceInfo?.wasPrice?.price,
+      node.priceInfo?.wasPrice,
+      // the object shape the emit below unwraps with .amount - kept a candidate so that branch stays live
+    ].find(v => money(v) != null || (v && typeof v === 'object' && v.amount != null));
     const was = typeof wasRaw === 'object' ? (wasRaw?.amount ?? null) : (wasRaw ?? null);
     const rb = !!(node.badges?.flags || []).find(f => f && f.key === 'ROLLBACK');
     /*
