@@ -1713,10 +1713,10 @@
   {
       "batch":  "hunt-2026-08-24-v3-phase6b-w3",
       "opened":  "2026-09-02T05:22:14",
-      "last_activity":  "2026-09-02T05:42:16",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-09-02T06:06:34",
+      "closed":  true,
+      "closed_at":  "2026-09-02T06:06:34",
+      "close_detail":  "1/1 published and live-verified; creamy-roasted-garlic-chicken at https://www.thriftycrew.com/creamy-roasted-garlic-chicken/ after a NO-GO on stat.cal 583 was restatted to 579 and scope-re-audited GO.",
       "abandoned":  false,
       "abandoned_at":  null,
       "abandon_reason":  null,
@@ -1773,6 +1773,11 @@
                          "stage":  "serveability",
                          "at":  "2026-09-02T05:42:16",
                          "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-09-02T06:06:34",
+                         "detail":  "post-publish-reviewer 2026-09-02: publish CLEAN. 579 in body, head and JSON-LD, 583 nowhere; 5 Shop Smart li; credit and feed URL present; paid gating holds. Correction it recorded: the reader sees ~2.77 (feed cheapest basis), not stat.cost_ps 2.92. Verdict NEEDS-BRAD on a SIBLING defect, not on this recipe: 12 live paid cards render Make It as one step because build-v2-spec wraps a string make_it in @() and the shape guard cannot see it."
                      }
                  ]
   },
