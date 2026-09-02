@@ -59,15 +59,39 @@ $suffix = [IO.File]::ReadAllText((Join-Path $here 'tpl2-scaler-suffix.html'), [T
 #   assert a floating-point artifact instead of the rule it exists to pin.
 # Chicken: Hy-Vee's cell is a sale and is also cheapest to buy, so the sale tag must show on the cheapest
 #   tab and the everyday tab must fall through to Aldi.
+# Corn: THE DRAINED-BASIS LINE (2026-09-02, queue 2026-09-02-corn04), frozen from
+#   street-corn-chicken-rice-bowls. 1148 g of DRAINED corn out of cans that drain 298 g from 432 g gross,
+#   so this line's gpu is 19.5559 g per oz of can, not the ingredient row's gross 28.3495. Until this
+#   date the block shipped the gross number, the widget computed 1148/28.35 = 40.49 oz instead of
+#   58.70 oz, and bought 3 cans where the card's own Buy N line said 4. -NegativeTest re-emits the gross
+#   gpu on exactly these lines, so the assertions below are provably able to catch it coming back.
+# Corn window / Corn twin: THE TOLERANCE PAIR. 597 g needs 2.0018 packages and 745 g needs 2.498. Under
+#   the old ceil(x - 1e-9) the first bought THREE cans - one more than the Buy N line printed two inches
+#   above it - while the second was unaffected. Aligned to the engine's ceil(x - 0.02) in the same
+#   commit; the twin is here so an over-wide tolerance cannot pass by rounding everything down.
 $scalerData = @'
 {"slug":"zz-fixture-pricing","base":14,"ing":[
 {"item":"Butter","disp":"Butter","grams":88,"buy":"6 tbsp","bid":"butter","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb box"},
 {"item":"Bulk Butter","disp":"Bulk Butter","grams":544.31,"buy":"1.2 lb","bid":"butter","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb box"},
 {"item":"Salt","disp":"Salt","grams":42.5,"buy":"1.5 oz","bid":"salt","gpu":28.3495,"pkg_g":28.3495,"pkg_l":"oz"},
-{"item":"Chicken","disp":"Chicken","grams":453.592,"buy":"1 lb","bid":"chicken","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb"}
+{"item":"Chicken","disp":"Chicken","grams":453.592,"buy":"1 lb","bid":"chicken","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb"},
+{"item":"Corn","disp":"Corn","grams":1148,"buy":"4 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},
+{"item":"Corn window","disp":"Corn window","grams":597,"buy":"2 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},
+{"item":"Corn twin","disp":"Corn twin","grams":745,"buy":"3 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"}
 ]}
 '@
 $scalerData = ($scalerData -replace "`r?`n",'')
+# -NegativeTest ALSO PUTS THE GROSS gpu BACK on the corn lines (2026-09-02). The template mutation above
+# reverts the cheapest-store SELECTION; this reverts the data-block BASIS, which is a different founding
+# bug on the same page and needs its own proof of reachability. It is a DATA mutation, not a code one,
+# because that is exactly what build-card2 used to emit: 28.35 g per oz of can (the gross weight,
+# packing water included) against grams and pkg_g that had already gone drained. With it back, corn
+# reads 40.49 oz instead of 58.70 and the corn assertions must go red.
+if ($NegativeTest) {
+  $mutatedData = $scalerData.Replace('"gpu":19.5559', '"gpu":28.35')
+  if ($mutatedData -eq $scalerData) { throw 'NEGATIVE TEST could not find the drained corn gpu to revert. The fixture moved: re-read the corn lines in $scalerData and update this mutation, or the basis half of this fixture is silently testing nothing.' }
+  $scalerData = $mutatedData
+}
 
 # ---- the frozen feed. Real shapes: `current`/`everyday` full, `stores` lean, schema 2 with sale flags.
 $feedJson = @'
@@ -80,7 +104,9 @@ $feedJson = @'
   "salt":{"unit":"oz","cheapest":1,"store":"Aldi","type":"everyday","url":"https://example.invalid/aldi-salt","n":2,
     "stores":{"Aldi":1,"Hy-Vee":1.5}},
   "chicken":{"unit":"lb","cheapest":0.99,"store":"Hy-Vee","type":"sale","url":"https://example.invalid/hyvee-chicken","n":2,
-    "stores":{"Hy-Vee":0.99,"Aldi":1.99}}
+    "stores":{"Hy-Vee":0.99,"Aldi":1.99}},
+  "corn":{"unit":"oz","cheapest":0.0400,"store":"Walmart","type":"everyday","url":"https://example.invalid/walmart-corn","n":2,
+    "stores":{"Walmart":0.0400,"Fareway":0.0446}}
  },
  "pricing_inputs":{
   "butter":{
@@ -103,7 +129,13 @@ $feedJson = @'
    "everyday":{"store":"Aldi","unit":"lb","perUnitMicros":1990000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":199},
    "stores":{
     "Hy-Vee":{"perUnitMicros":990000,"variableWeight":false,"sale":true,"packageBasisUnits":1,"purchasePriceMinor":99},
-    "Aldi":{"perUnitMicros":1990000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":199}}}
+    "Aldi":{"perUnitMicros":1990000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":199}}},
+  "corn":{
+   "current":{"store":"Fareway","unit":"oz","perUnitMicros":44600,"variableWeight":false,"packageBasisUnits":15.25,"purchasePriceMinor":68,"sale":true,"url":"https://example.invalid/fareway-corn"},
+   "everyday":{"store":"Walmart","unit":"oz","perUnitMicros":40000,"variableWeight":false,"packageBasisUnits":29,"purchasePriceMinor":116},
+   "stores":{
+    "Fareway":{"perUnitMicros":44600,"variableWeight":false,"sale":true,"packageBasisUnits":15.25,"purchasePriceMinor":68},
+    "Walmart":{"perUnitMicros":40000,"variableWeight":false,"packageBasisUnits":29,"purchasePriceMinor":116}}}
  },
  "recipes":{}
 }
@@ -127,6 +159,10 @@ $asserts = @'
   var R=[], failed=0;
   function ok(name,cond,detail){ R.push({name:name,pass:!!cond,detail:detail||''}); if(!cond)failed++; }
   function q(s){ return document.querySelector(s); }
+  // The package label renders '4 <multiply> 15 oz'. This .ps1 carries no BOM, so PS 5.1 decodes it
+  // as ANSI and a literal U+00D7 in this file would reach the page as mojibake and fail a correct
+  // render. Built from its code point instead, so the generator stays pure ASCII.
+  function QX(n,p){ return n+' '+String.fromCharCode(215)+' '+p; }
   function tabTo(t){ var b=document.querySelector('.smp-ct-btn[data-t="'+t+'"]'); b.click(); }
   function lines(){
     var out={};
@@ -134,7 +170,9 @@ $asserts = @'
       if(li.classList.contains('smp-cp-total'))return;
       var nm=(li.querySelector('label span')||li.querySelector('span')).textContent.replace(/sale$/i,'').trim();
       var tot=li.querySelector('.smp-cp-tot'), st=li.querySelector('.smp-wst'), lp=li.querySelector('.smp-sc-lp');
+      var qy=li.querySelector('.smp-ct-qty');
       out[nm]={cost:tot?tot.textContent.trim():null, store:st?st.textContent.trim():null,
+               qty:qy?qy.textContent.trim():null,
                per:lp?lp.textContent.trim():null, link:li.querySelector('a')?li.querySelector('a').getAttribute('href'):null,
                sale:!!li.querySelector('.smp-sc-saletag')};
     });
@@ -161,6 +199,22 @@ $asserts = @'
     ok('sale tag on the winning sale cell', L['Chicken'] && L['Chicken'].sale===true, 'Hy-Vee cell is the sale and the cost winner');
     ok('chicken bills the sale price', L['Chicken'] && L['Chicken'].cost==='$0.99', 'got '+(L['Chicken']?L['Chicken'].cost:'no line'));
 
+    // ---------- MUST FIRE: the drained-basis line buys enough corn ----------
+    // 1148 g of drained corn at 19.5559 g per oz of can is 58.70 oz, which is 4 cans of 15.25 oz - the
+    // number the card's own Buy N line prints. On the gross gpu the widget read 40.49 oz and bought 3,
+    // sending a reader home a can short. -NegativeTest puts the gross gpu back; these must fail then.
+    ok('MUST-FIRE corn buys 4 cans, not 3', L['Corn'] && L['Corn'].cost==='$2.72', 'got '+(L['Corn']?L['Corn'].cost:'no line')+' (3 cans is $2.04, and 3 cans is 348 g short)');
+    ok('MUST-FIRE corn names the count and the package it counted', L['Corn'] && L['Corn'].qty===QX(4,'15 oz'), 'got '+(L['Corn']?L['Corn'].qty:'no line')+' (fmtQty renders a basis over 10 whole, so a 15.25 oz can reads 15 oz)');
+    ok('MUST-FIRE corn chip names the store that won', L['Corn'] && L['Corn'].store==='Fareway', 'got '+(L['Corn']?L['Corn'].store:'none'));
+
+    // ---------- MUST FIRE: the ceil tolerance is the engine's 0.02, not floating-point noise ----------
+    // 597 g is 30.53 oz, 2.0018 packages. ceil(x - 0.02) buys 2, like the Buy N line beside it;
+    // ceil(x - 1e-9) bought 3. The twin at 745 g is 2.498 packages and buys 3 either way, so a
+    // tolerance widened far enough to swallow real thirds of a package cannot pass this pair.
+    ok('MUST-FIRE a line 0.18% over two packages buys TWO', L['Corn window'] && L['Corn window'].cost==='$1.36', 'got '+(L['Corn window']?L['Corn window'].cost:'no line')+' ($2.04 means it rounded 2.0018 up to 3)');
+    ok('CLEAN TWIN a line half a package over two still buys THREE', L['Corn twin'] && L['Corn twin'].cost==='$2.04', 'got '+(L['Corn twin']?L['Corn twin'].cost:'no line'));
+    ok('CLEAN TWIN and salt is still on a boundary the tolerance must not swallow', L['Salt'] && L['Salt'].cost==='$2.00', 'got '+(L['Salt']?L['Salt'].cost:'no line'));
+
     // ---------- the quantity flip: a warehouse pack CAN be right, and must be allowed to win ----------
     ok('bulk line takes 2 small boxes at base servings', L['Bulk Butter'] && L['Bulk Butter'].cost==='$5.78', 'got '+(L['Bulk Butter']?L['Bulk Butter'].cost:'no line'));
     var chBase=grand();
@@ -178,6 +232,11 @@ $asserts = @'
     ok('everyday tab still shows no store chip', E['Chicken'] && E['Chicken'].store===null, 'pre-existing markup choice; a chip appearing here is an unintended change');
     ok('everyday lane shows no sale tag', E['Chicken'] && E['Chicken'].sale===false, 'a sale tag on the everyday tab is a contradiction');
     ok('everyday butter also uses the min-cost rule', E['Butter'] && E['Butter'].cost==='$2.89', 'got '+(E['Butter']?E['Butter'].cost:'no line'));
+    // Corn's cheapest cell is Fareway's SALE, so the everyday lane falls to Walmart's 29 oz pack:
+    // 58.70/29 = 2.024 packages, ceil(2.024 - 0.02) = 3 at $1.16 each. Hand-computed, not read off a
+    // run: a fixture that freezes whatever the code printed proves only that the code is consistent.
+    ok('MUST-FIRE everyday corn falls to the non-sale 29 oz pack and buys 3', E['Corn'] && E['Corn'].cost==='$3.48', 'got '+(E['Corn']?E['Corn'].cost:'no line')+' (Fareway 15.25 oz is on sale and must not price this lane)');
+    ok('MUST-FIRE and it counts THAT store\'s package, not the recipe\'s', E['Corn'] && E['Corn'].qty===QX(3,'29 oz'), 'got '+(E['Corn']?E['Corn'].qty:'no line'));
     var evTot=grand();
     tabTo('cheapest');
     var chTot=grand();

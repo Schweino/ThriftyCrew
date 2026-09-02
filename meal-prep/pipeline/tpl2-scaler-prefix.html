@@ -313,7 +313,16 @@ function init(box){
     if(!cell||!(cell.perUnitMicros>0)||!(required>0)) return null;
     var up=cell.perUnitMicros/1000000;
     var variable=cell.variableWeight===true, packageBasis=variable?0:pkgBasis(it,cell);
-    var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
+    // THE 0.02 IS THE ESTATE'S ONE WHOLE-PACKAGE CEIL TOLERANCE, and this line used to be the odd one
+// out at 1e-9 (2026-09-02). The engine, the render library, build-card2's own check and the Meal Plan
+// Builder all round with 0.02 - deliberate slack so a batch needing 1005 g out of a 1000 g package is
+// not told to buy two. This line rounded on floating-point noise instead, so whenever a line landed
+// between 0 and 2% over a whole package the widget printed one package MORE than the Buy N line right
+// beside it: 363 lines across 273 recipes in the week this was found, 12 of them on the recipe's own
+// package where a reader could see both numbers at once. Declared in ops\twin-rules.json as
+// whole-package-ceil-tolerance. audit-twin-drift compares the CONSTANT; the BASIS these numbers are on
+// is pinned separately by outcome checks (build-card2's throw, wave-preaudit's widget-count-basis).
+var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-0.02)):0);
     var cost=variable?up*required
       :((Number(cell.packageBasisUnits)>0&&cell.purchasePriceMinor>0&&k>0)?cell.purchasePriceMinor*k/100
       :((packageBasis>0&&k>0)?up*packageBasis*k:null));

@@ -94,7 +94,12 @@ function Get-PkgCellCost($cell, [double]$Required, [double]$FallbackBasis) {
   $basis = 0.0
   if (-not $variable) { $basis = if ($pbu -gt 0) { $pbu } else { $FallbackBasis } }
   $k = 0
-  if ((-not $variable) -and $basis -gt 0) { $k = [int][math]::Max(1, [math]::Ceiling($Required / $basis - 1e-9)) }
+  # 0.02, the estate's ONE whole-package ceil tolerance, matching costAt() in tpl2-scaler-prefix.html
+  # (which this file mirrors) and the engine, the render library and the planner (2026-09-02). Both
+  # sides sat at 1e-9 and rounded on floating-point noise, so a line 0.4% over a whole package bought
+  # an extra one against the Buy N printed beside it. Declared as whole-package-ceil-tolerance in
+  # ops\twin-rules.json; audit-twin-drift fails if this constant and the JS stop agreeing.
+  if ((-not $variable) -and $basis -gt 0) { $k = [int][math]::Max(1, [math]::Ceiling($Required / $basis - 0.02)) }
   $ppmRaw = Get-PkgCellField $cell 'purchasePriceMinor'
   $ppm = if ($null -eq $ppmRaw) { 0.0 } else { [double]$ppmRaw }
   $cost = $null

@@ -62,6 +62,26 @@
         { "file":  "meal-prep/pipeline/cook-measure-lib.ps1",
           "capture":  "\\$script:CM_SB_LEAD = '(.*?)'" }
       ]
+    },
+    {
+      "name":  "whole-package-ceil-tolerance",
+      "why":  "THE SLACK IN 'how many packages does this batch need', written down SEVEN times in two languages. You cannot buy 7.5 tbsp of vinegar, so every surface rounds up - but a batch needing 1005 g out of a 1000 g package should not be told to buy two, so the rule is ceil(x - 0.02) and the 2% is the deliberate part. Six copies carried 0.02 and two carried 1e-9 (costAt in the card widget and its PowerShell mirror Get-PkgCellCost), which rounds on floating-point noise instead. The card therefore printed one package MORE than its own Buy N line whenever a line landed inside that 2% window: 363 lines across 273 recipes the week it was found, 12 of them on the recipe's own package where a reader sees both numbers on one screen. Aligned to 0.02 on 2026-09-02 and declared here in the same commit. READ THIS BEFORE TRUSTING IT: this auditor compares TEXT, so what it pins is the CONSTANT. It cannot see the BASIS the numbers on either side of the minus sign are on - that is what let a gross gpu sit against drained grams for weeks with every twin green - and the basis is pinned instead by outcome: build-card2's fallback-package throw, wave-preaudit's widget-count-basis and compute-v2 -CrossCheck.",
+      "sides":  [
+        { "file":  "meal-prep/engine/cost-recipes.ps1",
+          "capture":  "\\$buyN = \\[Math\\]::Ceiling\\(\\(\\$g/\\$pgG\\) - (0\\.02)\\)" },
+        { "file":  "meal-prep/pipeline/cost-render-lib.ps1",
+          "capture":  "return \\[Math\\]::Max\\(1,\\[Math\\]::Ceiling\\(\\$Grams/\\$PkgG - (0\\.02)\\)\\)" },
+        { "file":  "meal-prep/pipeline/build-card2.ps1",
+          "capture":  "\\$chk = if\\(\\$isCovered\\)\\{ 0 \\} else \\{ \\[math\\]::Max\\(1,\\[math\\]::Ceiling\\(\\[double\\]\\$ing\\.grams / \\$pkgG - (0\\.02)\\)\\) \\}" },
+        { "file":  "meal-prep/pipeline/compute-v2-perserving.ps1",
+          "capture":  "\\$k = \\[math\\]::Max\\(1,\\[math\\]::Ceiling\\(\\[double\\]\\$ing\\.grams / \\$pkgG - (0\\.02)\\)\\)" },
+        { "file":  "meal-prep/pipeline/tpl2-scaler-prefix.html",
+          "capture":  "Math\\.ceil\\(required/packageBasis-(0\\.02)\\)" },
+        { "file":  "meal-prep/lib/package-cost-lib.ps1",
+          "capture":  "\\[math\\]::Ceiling\\(\\$Required / \\$basis - (0\\.02)\\)" },
+        { "file":  "site/tools/meal-plan-builder-template.html",
+          "capture":  "Math\\.ceil\\(it\\.g/it\\.pk-(0\\.02)\\)" }
+      ]
     }
   ]
 }
