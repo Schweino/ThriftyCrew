@@ -40,7 +40,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.66. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for what a soup-and-bread chain charges $8, and theirs comes with maybe a third of the protein and no second helping in your fridge.",
-    "shop_smart":  "Frozen broccoli florets at three bags beat fresh crowns on price, prep time, and waste. They go straight from freezer to pot.\nThe cheddar is the second biggest line. Buy the 8 oz bags on sale and check the block cheese price; shredding your own usually wins per ounce.\nThe milk barely registers here because the rest of the gallon goes to breakfast. Whole ingredients you already buy weekly are the cheapest ingredients there are.",
+    "shop_smart":  [
+                       "Frozen broccoli florets at three bags beat fresh crowns on price, prep time, and waste. They go straight from freezer to pot.",
+                       "The cheddar is the second biggest line. Buy the 8 oz bags on sale and check the block cheese price; shredding your own usually wins per ounce.",
+                       "The milk barely registers here because the rest of the gallon goes to breakfast. Whole ingredients you already buy weekly are the cheapest ingredients there are."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Heat most of the olive oil in your biggest pot. Brown the ground turkey, breaking it up, until it reaches 165F with no pink remaining. Add the onion and cook until soft, then the garlic for 1 minute.",

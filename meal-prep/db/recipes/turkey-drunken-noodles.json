@@ -53,7 +53,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.37 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.95. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for lean drunken noodles. The Thai restaurant charges $14 for pad kee mao, and theirs is not built around 93/7 turkey with macros you can actually track.",
-    "shop_smart":  "Rice noodles are the top line here. An Asian market sells wide rice noodles for a fraction of the name-brand box price, and wide noodles are the authentic move for pad kee mao anyway.\nGround turkey across 3.5 pounds beats ground beef on price and fat both. Watch for the frozen rolls, they run cheaper still.\nOyster sauce, fish sauce, and sriracha are all one-bottle buys that season this batch for very little combined and stay in your fridge door for the next ten recipes.",
+    "shop_smart":  [
+                       "Rice noodles are the top line here. An Asian market sells wide rice noodles for a fraction of the name-brand box price, and wide noodles are the authentic move for pad kee mao anyway.",
+                       "Ground turkey across 3.5 pounds beats ground beef on price and fat both. Watch for the frozen rolls, they run cheaper still.",
+                       "Oyster sauce, fish sauce, and sriracha are all one-bottle buys that season this batch for very little combined and stay in your fridge door for the next ten recipes."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Soak or boil the rice noodles per the package until just shy of tender, drain, and rinse.",

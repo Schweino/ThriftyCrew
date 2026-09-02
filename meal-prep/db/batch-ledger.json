@@ -1701,5 +1701,41 @@
                          "detail":  "post-publish review CLEAN: 3 live and paywall-correct, costed.json == recipes-db on all 4 cost fields, live feed byte-identical to committed, 12 of the 578 collateral republishes sampled with no harm, 4 dirty slugs confirmed as the create-authority guard working, -Recertify door read in full and sound"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-24-v3-phase6b-w3",
+      "opened":  "2026-09-02T05:22:14",
+      "last_activity":  "2026-09-02T05:22:16",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "abandoned":  false,
+      "abandoned_at":  null,
+      "abandon_reason":  null,
+      "slugs":  [
+                    "creamy-roasted-garlic-chicken"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-09-02T05:22:15",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-09-02T05:22:15",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-09-02T05:22:15",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-09-02T05:22:16",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

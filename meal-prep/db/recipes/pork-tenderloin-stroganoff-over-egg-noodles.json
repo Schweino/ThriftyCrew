@@ -40,7 +40,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.44. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for creamy pork tenderloin stroganoff loaded with mushrooms. A sit-down restaurant charges $16 or more for the same plate, and theirs does not come with 13 more bowls waiting in the fridge.",
-    "shop_smart":  "Pork tenderloin is the big line item of this batch. Whole tenderloins go on sale all the time, so when they dip, buy two and freeze one for the next round.\nBuy whole white mushrooms in 8 oz packs and slice them yourself. Pre-sliced runs more per pound for about three minutes of knife work.\nLight sour cream in the store-brand tub tastes identical once it hits a warm sauce. Two 16 oz tubs cover the batch with a little left for taco night.",
+    "shop_smart":  [
+                       "Pork tenderloin is the big line item of this batch. Whole tenderloins go on sale all the time, so when they dip, buy two and freeze one for the next round.",
+                       "Buy whole white mushrooms in 8 oz packs and slice them yourself. Pre-sliced runs more per pound for about three minutes of knife work.",
+                       "Light sour cream in the store-brand tub tastes identical once it hits a warm sauce. Two 16 oz tubs cover the batch with a little left for taco night."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Boil the egg noodles in salted water until just al dente, drain, and set aside. They finish softening in the sauce, so do not overcook them here.",

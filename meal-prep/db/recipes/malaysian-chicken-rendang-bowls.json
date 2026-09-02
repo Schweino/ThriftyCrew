@@ -36,7 +36,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.11. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for rendang that a Malaysian restaurant would charge $16 for, if you can even find one nearby. Fourteen restaurant-grade dinners from one pot.",
-    "shop_smart":  "Chicken breast in the 6 pound pack is a strong per-pound deal on our board, and that low price is the whole reason this dish lands where it does.\nThe lemongrass paste tube looks expensive but replaces a specialty store trip, keeps for months in the fridge, and covers this whole batch with room to spare.\nOnions are the biggest produce line here, so buy the big bag. Six pounds bought in a bag runs roughly half the per-pound cost of buying them loose.",
+    "shop_smart":  [
+                       "Chicken breast in the 6 pound pack is a strong per-pound deal on our board, and that low price is the whole reason this dish lands where it does.",
+                       "The lemongrass paste tube looks expensive but replaces a specialty store trip, keeps for months in the fridge, and covers this whole batch with room to spare.",
+                       "Onions are the biggest produce line here, so buy the big bag. Six pounds bought in a bag runs roughly half the per-pound cost of buying them loose."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Blitz the onions, garlic, ginger, and lemongrass paste into a rough puree in a blender or food processor, working in batches.",

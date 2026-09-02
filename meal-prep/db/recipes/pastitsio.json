@@ -42,7 +42,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.98. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pastitsio that Greek restaurants proudly charge $16 a slab for. One afternoon of layering buys you fourteen of those slabs.",
-    "shop_smart":  "Feta is the most expensive ingredient per ounce here. Watch for tub sales, or swap in more parmesan if feta is priced badly the week you shop.\nMaking bechamel from butter, flour, and milk costs very little for a huge batch. A jarred white sauce would cost triple and taste worse. Whisking is free.\nThe beef is over half the receipt. The 4 pound pack was the play on our board, and every dollar the sale knocks off per pound stacks up fast across four pounds.",
+    "shop_smart":  [
+                       "Feta is the most expensive ingredient per ounce here. Watch for tub sales, or swap in more parmesan if feta is priced badly the week you shop.",
+                       "Making bechamel from butter, flour, and milk costs very little for a huge batch. A jarred white sauce would cost triple and taste worse. Whisking is free.",
+                       "The beef is over half the receipt. The 4 pound pack was the play on our board, and every dollar the sale knocks off per pound stacks up fast across four pounds."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Boil the spaghetti two minutes short of package time, drain, and toss with a little of the melted butter and about a third of the feta.",

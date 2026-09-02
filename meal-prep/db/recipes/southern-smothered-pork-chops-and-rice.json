@@ -36,7 +36,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.80. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for fried pork chops smothered in creamy onion gravy over rice. A soul food plate like this runs $15 at a restaurant, and they will not send you home with 13 more.",
-    "shop_smart":  "Pork chops carry this batch. Family packs and bone-in sales are your friend, and any real markdown is a green light to stock the freezer.\nThe flour, oil, broth, and rice are all pantry players. One bag or bottle covers several batches, so the real cash outlay for this recipe is mostly just the meat.\nHeavy cream is the one small splurge. Buy the pint, use what the gravy needs, and the rest makes your weekend coffee feel expensive.",
+    "shop_smart":  [
+                       "Pork chops carry this batch. Family packs and bone-in sales are your friend, and any real markdown is a green light to stock the freezer.",
+                       "The flour, oil, broth, and rice are all pantry players. One bag or bottle covers several batches, so the real cash outlay for this recipe is mostly just the meat.",
+                       "Heavy cream is the one small splurge. Buy the pint, use what the gravy needs, and the rest makes your weekend coffee feel expensive."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice per the package and set it aside.",

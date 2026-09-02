@@ -42,7 +42,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.40. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for chicken scampi that would run you $16 to $18 with breadsticks and a tip at the chain that made it famous. Fourteen bowls for the price of two restaurant plates is the whole argument.",
-    "shop_smart":  "Six pounds of chicken breast is the anchor here. Club packs are the play; small grocery trays can run nearly double the per-pound price.\nStore-brand spaghetti covers 36 ounces for the same job. Pasta is one of the last places in the store where a name brand buys you almost nothing.\nOne pound of butter makes the entire sauce rich. Compare that to a jar of alfredo that costs more and would only cover half the batch.",
+    "shop_smart":  [
+                       "Six pounds of chicken breast is the anchor here. Club packs are the play; small grocery trays can run nearly double the per-pound price.",
+                       "Store-brand spaghetti covers 36 ounces for the same job. Pasta is one of the last places in the store where a name brand buys you almost nothing.",
+                       "One pound of butter makes the entire sauce rich. Compare that to a jar of alfredo that costs more and would only cover half the batch."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Boil the spaghetti 1 minute short of package time, drain, and toss with a spoonful of oil so it does not clump.",

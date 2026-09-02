@@ -37,7 +37,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.92. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for real mole flavor over rice. A mole plate at a Mexican restaurant typically runs $13 to $16, and this batch feeds you all week for a fraction of eating out.",
-    "shop_smart":  "Chicken thighs beat breasts here twice: they cost less per pound and they stay juicy through the long simmer and the fridge week.\nPoblanos are the flavor backbone for what this batch needs. They are usually the cheapest fresh chile on the wall, and charring them is free flavor.\nA small handful of peanuts from a single jar replaces the pricey nuts and seeds a traditional mole calls for. That one jar covers several batches.",
+    "shop_smart":  [
+                       "Chicken thighs beat breasts here twice: they cost less per pound and they stay juicy through the long simmer and the fridge week.",
+                       "Poblanos are the flavor backbone for what this batch needs. They are usually the cheapest fresh chile on the wall, and charring them is free flavor.",
+                       "A small handful of peanuts from a single jar replaces the pricey nuts and seeds a traditional mole calls for. That one jar covers several batches."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Char the poblanos under the broiler or over a burner flame until blistered all over. Steam them in a covered bowl 10 minutes, then peel, seed, and roughly chop.",

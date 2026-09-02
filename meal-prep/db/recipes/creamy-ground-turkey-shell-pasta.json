@@ -40,7 +40,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.61. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for creamy turkey and shells. Compare that to $12 to $14 for any creamy pasta at a sit-down restaurant, or even $4 a serving for the boxed stuff once you add the meat yourself.",
-    "shop_smart":  "Ground turkey is the biggest line here. When 93/7 turkey goes on sale, it regularly undercuts ground beef by a solid margin per pound.\nStore-brand pasta shells cover a full 28 ounces cheap. Pasta is the cheapest calorie in this dish, which is why the box gets to be big.\nWhite mushrooms add meaty bulk for very little. They shrink in the pan but pull savory weight far beyond their price.",
+    "shop_smart":  [
+                       "Ground turkey is the biggest line here. When 93/7 turkey goes on sale, it regularly undercuts ground beef by a solid margin per pound.",
+                       "Store-brand pasta shells cover a full 28 ounces cheap. Pasta is the cheapest calorie in this dish, which is why the box gets to be big.",
+                       "White mushrooms add meaty bulk for very little. They shrink in the pan but pull savory weight far beyond their price."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Boil the pasta shells 1 minute short of package time, drain, and set aside.",

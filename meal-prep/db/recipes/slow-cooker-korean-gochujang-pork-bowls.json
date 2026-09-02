@@ -44,7 +44,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.26 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.53. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  "Pork loin is your cheap workhorse. It costs about half what tenderloin does and shreds up just as nicely.\nA tub of gochujang looks pricey up front, but you use a little at a time. One tub flavors several batches, so the real cost per meal is tiny.\nGrab frozen broccoli florets instead of fresh. They are cheaper, they never spoil on you, and they steam straight from the bag.",
+    "shop_smart":  [
+                       "Pork loin is your cheap workhorse. It costs about half what tenderloin does and shreds up just as nicely.",
+                       "A tub of gochujang looks pricey up front, but you use a little at a time. One tub flavors several batches, so the real cost per meal is tiny.",
+                       "Grab frozen broccoli florets instead of fresh. They are cheaper, they never spoil on you, and they steam straight from the bag."
+                   ],
     "make_it":  [
                     "Set the pork loin in the slow cooker.",
                     "Whisk the gochujang, soy sauce, honey, and chicken broth, then pour it over the pork.",

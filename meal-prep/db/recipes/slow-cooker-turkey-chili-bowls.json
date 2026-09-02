@@ -57,7 +57,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $70.70. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  "Grab the 7 lb ground turkey pack. It is cheaper than beef and carries this whole pot.\nA little can of chipotle in adobo adds big smoky flavor for pocket change, so do not skip it.\nBuy your beans and tomatoes as store-brand cans and let the pantry staples keep the cost down.",
+    "shop_smart":  [
+                       "Grab the 7 lb ground turkey pack. It is cheaper than beef and carries this whole pot.",
+                       "A little can of chipotle in adobo adds big smoky flavor for pocket change, so do not skip it.",
+                       "Buy your beans and tomatoes as store-brand cans and let the pantry staples keep the cost down."
+                   ],
     "make_it":  [
                     "Brown the ground turkey in the vegetable oil in a skillet, breaking it into crumbles, then add the chopped onion, garlic, celery, and bell peppers for a couple of minutes to soften.",
                     "Scrape it all into the slow cooker and add the black beans, diced tomatoes, tomato paste, and chicken broth.",

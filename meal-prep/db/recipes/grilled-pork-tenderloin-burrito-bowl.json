@@ -40,7 +40,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $5.23 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.39. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a burrito bowl the chains sell for $12 before you say the word guacamole. The tenderloin is the whole trick: lean, tender, and cheaper than people assume.",
-    "shop_smart":  "Whole pork tenderloin is the cheap way in here. Skip the pre-marinated ones; you pay extra for sugar water and lose control of the seasoning.\nThe salsa is canned diced tomatoes, jalapeno, red onion, and lime. A tub of fresh pico that size would cost double.\nRice cooked in chicken broth instead of water is a pennies-on-the-serving upgrade that makes the whole bowl taste intentional.",
+    "shop_smart":  [
+                       "Whole pork tenderloin is the cheap way in here. Skip the pre-marinated ones; you pay extra for sugar water and lose control of the seasoning.",
+                       "The salsa is canned diced tomatoes, jalapeno, red onion, and lime. A tub of fresh pico that size would cost double.",
+                       "Rice cooked in chicken broth instead of water is a pennies-on-the-serving upgrade that makes the whole bowl taste intentional."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Pat the tenderloins dry and rub them all over with most of the taco seasoning, salt, and black pepper.",

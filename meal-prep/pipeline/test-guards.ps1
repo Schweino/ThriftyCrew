@@ -172,5 +172,63 @@ Check "CLEAN TWIN a spec with NO carbs stat is skipped, never compared against z
 # CLEAN TWIN: 'fat' must be the noun, not a word that merely starts with it.
 Check "CLEAN TWIN '12 grams of fatty acids' is not a fat claim"                                   (-not (StatProseMacroFlags 'about 12 grams of fatty acids' @{ carbs = 50; fat = 10 }))
 
+
+# ---- bullet-field shape guard predicate ----
+# FROZEN FIXTURES of the founding bug (2026-09-02), taken from the two real failing rows as they sat on
+# disk at HEAD f6901fa0 - NOT regenerated from the live specs, which have since been repaired and would
+# make this test pass by finding nothing.
+#
+# THE BUG: build-card2.ps1 renders shop_smart, make_it and ingredients_display with
+# `foreach($li in $spec.<field>){ ... <li> ... }`, and PS 5.1 iterates a STRING once. 51 of 584 specs
+# stored shop_smart as a string; 48 held more than one tip and 47 of those were live and paid, each
+# shipping every tip inside a single <li>. Two different string populations existed, which is why the
+# rule is about SHAPE and not about newlines: 37 joined their tips with a newline (HTML collapses it,
+# so the card showed one run-on sentence) and 11 wrapped them in <p> inside the one string (one bullet
+# marker carrying up to four paragraphs). A newline-based guard passes all eleven of those.
+#
+# ONE IMPLEMENTATION: this dot-sources the same guard-lib.ps1 that build-card2.ps1 calls, so a fix here
+# cannot ship while the live path keeps an inline copy of the old rule.
+. (Join-Path $PSScriptRoot 'guard-lib.ps1')
+$ssScampi = "Six pounds of chicken breast is the anchor here. Club packs are the play; small grocery trays can run nearly double the per-pound price.`nStore-brand spaghetti covers 36 ounces for the same job. Pasta is one of the last places in the store where a name brand buys you almost nothing.`nOne pound of butter makes the entire sauce rich. Compare that to a jar of alfredo that costs more and would only cover half the batch."
+$ssCorn   = '<p>Lean on the shelf-stable stuff, because this recipe was built for it.</p><p>Canned whole kernel corn is the move for the salad.</p><p>Buy the rice in the big bag.</p>'
+Write-Output "bullet-field shape guard:"
+Check "MUST FIRE  chicken-scampi's real newline-joined shop_smart string (the founding bug, 37 specs)" `
+  ((Get-BulletFieldShapeProblem 'shop_smart' $ssScampi) -ne '')
+Check "MUST FIRE  street-corn's real <p>-wrapped shop_smart string (the SECOND population, 11 specs)" `
+  ((Get-BulletFieldShapeProblem 'shop_smart' $ssCorn) -ne '')
+Check "MUST FIRE  ...and the message says STRING, so the reader knows what to change" `
+  ((Get-BulletFieldShapeProblem 'shop_smart' $ssScampi) -match 'STRING')
+Check "MUST FIRE  a single-tip string is still refused - the shape is the rule, not the tip count" `
+  ((Get-BulletFieldShapeProblem 'shop_smart' 'Buy the family pack.') -ne '')
+Check "MUST FIRE  an ABSENT field is a problem, not a pass - it would render an empty list silently" `
+  ((Get-BulletFieldShapeProblem 'make_it' $null) -ne '')
+# CLEAN TWINS: chicken-scampi's three tips as they now ship, and the shape the other 533 specs already
+# used. A guard that cannot pass the repaired data is a guard nobody can ship behind.
+Check "CLEAN TWIN the repaired scampi shop_smart, one array element per tip, passes" `
+  ((Get-BulletFieldShapeProblem 'shop_smart' @($ssScampi -split "`n")) -eq '')
+Check "CLEAN TWIN a genuine ONE-tip recipe is a one-element array, not a string, and passes" `
+  ((Get-BulletFieldShapeProblem 'shop_smart' @('Buy the family pack.')) -eq '')
+Check "CLEAN TWIN an empty array passes the SHAPE rule (emptiness is another guard's question)" `
+  ((Get-BulletFieldShapeProblem 'shop_smart' @()) -eq '')
+# CARDINALITY through the exact access shape the live path uses. `,@()` in the lib stops PS 5.1
+# unrolling a single problem into a bare string whose .Count reads its LENGTH; assign it bare here, the
+# way build-card2 does, or this pins nothing.
+$sp0 = Get-SpecBulletShapeProblems ([pscustomobject]@{ ingredients_display = @('a'); shop_smart = @('b'); make_it = @('c') })
+$sp1 = Get-SpecBulletShapeProblems ([pscustomobject]@{ ingredients_display = @('a'); shop_smart = $ssScampi; make_it = @('c') })
+$sp3 = Get-SpecBulletShapeProblems ([pscustomobject]@{ ingredients_display = 'x'; shop_smart = $ssScampi; make_it = 'y' })
+Check "MUST FIRE  a clean spec counts ZERO problems (the gate has to be able to pass)" ($sp0.Count -eq 0)
+Check "MUST FIRE  ONE bad field counts as 1, not as the length of its message"          ($sp1.Count -eq 1)
+Check "MUST FIRE  three bad fields count as 3, not as one joined blob"                  ($sp3.Count -eq 3)
+# THE SEAL. These predicates are worth nothing if the render path does not call them - the
+# tested-is-not-run lesson, and the reason 51 broken specs shipped past every green gate for weeks.
+$bc2 = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'build-card2.ps1'))
+Check "the LIVE renderer calls the predicate before it renders anything" `
+  ($bc2 -match '(?m)^\s*\$shapeBad\s*=\s*Get-SpecBulletShapeProblems')
+Check "...and it THROWS on a finding rather than logging one" `
+  ($bc2 -match '(?m)^\s*if\s*\(\$shapeBad\.Count\)\s*\{\s*throw')
+Check "...and every field it foreach-renders into an <li> is in BULLET_FIELDS" `
+  ((@([regex]::Matches($bc2, 'foreach\(\$li in \$spec\.(\w+)\)') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique) |
+     Where-Object { $script:BULLET_FIELDS -notcontains $_ }).Count -eq 0)
+
 Write-Output ""
 if ($fail -eq 0) { Write-Output "ALL GUARD PREDICATE TESTS PASS" } else { Write-Output ("$fail TEST(S) FAILED"); exit 1 }

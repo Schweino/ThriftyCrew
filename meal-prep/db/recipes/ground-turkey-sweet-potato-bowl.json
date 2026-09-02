@@ -36,7 +36,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.39. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for the kind of sweet potato power bowl the clean-eating spots price at $13. Yours has more meat and no line at lunch.",
-    "shop_smart":  "Sweet potatoes are the biggest line across about 9 lbs. Loose sweet potatoes by the pound usually beat the bagged ones here, so check both tags.\nSalsa from the jar covers tomatoes, onion, and chiles in one pour. Store brand on sale drops it cheaper still.\nLight sour cream costs the same as full fat and trims the calories for free. The 5 lb turkey pack keeps the meat price per pound down.",
+    "shop_smart":  [
+                       "Sweet potatoes are the biggest line across about 9 lbs. Loose sweet potatoes by the pound usually beat the bagged ones here, so check both tags.",
+                       "Salsa from the jar covers tomatoes, onion, and chiles in one pour. Store brand on sale drops it cheaper still.",
+                       "Light sour cream costs the same as full fat and trims the calories for free. The 5 lb turkey pack keeps the meat price per pound down."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Heat the oven to 425F. Scrub and dice the sweet potatoes into half-inch cubes, toss with the olive oil, salt, and black pepper, and spread on sheet pans.",

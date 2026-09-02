@@ -37,7 +37,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.11. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "Even at \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) with every jar bought new, that is churrasco-style pork for less than a Brazilian steakhouse charges just to hand you the little green card.",
-    "shop_smart":  "We swap pork loin in for ribs, and that one substitution is the whole budget story: loin runs about a third the per-pound price of ribs with far more meat and no bones to pay for.\nMustard, Worcestershire, vinegar, and honey are all pantry bottles that last several batches, so the recurring cost of this recipe is basically pork and rice.\nWatch for whole pork loins on sale. Buy the big one, cut it into batch-size pieces, and freeze; it holds quality for months.",
+    "shop_smart":  [
+                       "We swap pork loin in for ribs, and that one substitution is the whole budget story: loin runs about a third the per-pound price of ribs with far more meat and no bones to pay for.",
+                       "Mustard, Worcestershire, vinegar, and honey are all pantry bottles that last several batches, so the recurring cost of this recipe is basically pork and rice.",
+                       "Watch for whole pork loins on sale. Buy the big one, cut it into batch-size pieces, and freeze; it holds quality for months."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Whisk the marinade: minced garlic, grated onion, Dijon mustard, Worcestershire sauce, apple cider vinegar, honey, salt, pepper, oregano, cumin, and cayenne.",

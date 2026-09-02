@@ -54,7 +54,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.24. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  "Brown sugar and soy sauce make a glaze for almost nothing. A bag of brown sugar lasts for months and you use just a little each time.\nToasted sesame seeds are a small touch that makes the bowl look finished. One jar goes a long way, so buy it once.\nLean on pork loin to keep this bowl easy on the grocery budget. Watch for the whole loins on sale and cut your own pieces.",
+    "shop_smart":  [
+                       "Brown sugar and soy sauce make a glaze for almost nothing. A bag of brown sugar lasts for months and you use just a little each time.",
+                       "Toasted sesame seeds are a small touch that makes the bowl look finished. One jar goes a long way, so buy it once.",
+                       "Lean on pork loin to keep this bowl easy on the grocery budget. Watch for the whole loins on sale and cut your own pieces."
+                   ],
     "make_it":  [
                     "Rub the pork loin with a little olive oil and set it in the slow cooker with the sliced onion.",
                     "Stir together the brown sugar, soy sauce, sesame oil, white vinegar, ground ginger, and minced garlic, then pour it over the pork.",

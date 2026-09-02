@@ -55,7 +55,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.81. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pad kee mao that would run $14 at a Thai restaurant. Fourteen bowls here costs less than three there, and yours has more pork in it.",
-    "shop_smart":  "Ground pork covers the protein at about 3.75 pounds. It is consistently cheaper than the sliced pork most stir fry recipes call for, and it browns faster too.\nRice noodles are the other big line. Buy them from the international aisle or an Asian market and that number can drop by a third.\nFish sauce, soy sauce, and rice vinegar are all buy-once bottles that live in the pantry. This batch uses just a splash of soy and vinegar off bottles that season months of cooking.",
+    "shop_smart":  [
+                       "Ground pork covers the protein at about 3.75 pounds. It is consistently cheaper than the sliced pork most stir fry recipes call for, and it browns faster too.",
+                       "Rice noodles are the other big line. Buy them from the international aisle or an Asian market and that number can drop by a third.",
+                       "Fish sauce, soy sauce, and rice vinegar are all buy-once bottles that live in the pantry. This batch uses just a splash of soy and vinegar off bottles that season months of cooking."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Soak or boil the rice noodles per the package until just shy of tender, then drain and rinse. They finish in the pan.",

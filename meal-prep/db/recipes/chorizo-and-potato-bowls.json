@@ -35,7 +35,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.47. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for chorizo con papas that a breakfast-burrito spot would happily charge $10 to $12 to wrap in a tortilla. The potatoes are doing the heavy lifting in this one.",
-    "shop_smart":  "Potatoes are the ultimate budget filler: seven pounds of them stretches 4.5 pounds of chorizo across 14 full bowls.\nChorizo tubes are the cheap cut of the pork case, sold in 9 ounce tubes, and the seasoning is already inside the meat. You are buying spice and fat in one package.\nTomatillos, cilantro, and lime make a quick fresh salsa. A jarred salsa verde of the same volume costs at least twice as much.",
+    "shop_smart":  [
+                       "Potatoes are the ultimate budget filler: seven pounds of them stretches 4.5 pounds of chorizo across 14 full bowls.",
+                       "Chorizo tubes are the cheap cut of the pork case, sold in 9 ounce tubes, and the seasoning is already inside the meat. You are buying spice and fat in one package.",
+                       "Tomatillos, cilantro, and lime make a quick fresh salsa. A jarred salsa verde of the same volume costs at least twice as much."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Dice the potatoes into half-inch cubes, toss with olive oil, salt, chili powder, and garlic powder, and roast at 425 F for 30 to 35 minutes until crispy, flipping once.",

@@ -43,7 +43,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $20.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.02. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for banh mi bowls with pickled veg and sriracha mayo. Sandwich shops charge $13 for a banh mi-inspired bowl half this size. The mayo alone is doing premium work here.",
-    "shop_smart":  "Ground turkey handles the protein at about 3.5 pounds, cheaper than the grilled pork a banh mi shop would use and it soaks up the lemongrass and fish sauce just as well.\nCucumbers and carrots are your volume for very little combined. Quick-pickling them in vinegar and sugar makes cheap produce taste like a specialty condiment.\nSriracha and rice vinegar are one-bottle buys. This batch uses only a little of each, and both keep practically forever in the pantry.",
+    "shop_smart":  [
+                       "Ground turkey handles the protein at about 3.5 pounds, cheaper than the grilled pork a banh mi shop would use and it soaks up the lemongrass and fish sauce just as well.",
+                       "Cucumbers and carrots are your volume for very little combined. Quick-pickling them in vinegar and sugar makes cheap produce taste like a specialty condiment.",
+                       "Sriracha and rice vinegar are one-bottle buys. This batch uses only a little of each, and both keep practically forever in the pantry."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice per the package and set it aside.",

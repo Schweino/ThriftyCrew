@@ -61,7 +61,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.48. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  "Canned diced green chiles give you all the roasted pepper flavor without any roasting or peeling. Stock up when they go on sale.\nA jar of salsa verde rounds out the sauce so you do not need extra spices. One jar covers the whole batch.\nPork loin keeps this cheap. It is the reason this bowl stays easy on the budget, so buy the big loin when it hits a sale.",
+    "shop_smart":  [
+                       "Canned diced green chiles give you all the roasted pepper flavor without any roasting or peeling. Stock up when they go on sale.",
+                       "A jar of salsa verde rounds out the sauce so you do not need extra spices. One jar covers the whole batch.",
+                       "Pork loin keeps this cheap. It is the reason this bowl stays easy on the budget, so buy the big loin when it hits a sale."
+                   ],
     "make_it":  [
                     "Set the pork loin in the slow cooker with the chopped onion, minced garlic, and chopped jalapeno.",
                     "Pour in the diced green chiles, salsa verde, green chile sauce, and chicken broth, then stir in the ground cumin, smoked paprika, cayenne, dried oregano, and a little salt and pepper.",

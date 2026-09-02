@@ -38,7 +38,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.32. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for smothered pork chops with mashed potatoes. A smothered chop plate runs $14 to $17 at a steakhouse or diner, and it comes with exactly zero leftovers.",
-    "shop_smart":  "Pork chops are the whole budget here at 5.25 pounds. This is a recipe worth timing to the weekly ad; sale chops can cut the batch cost by a fifth.\nFour packs of white mushrooms make the gravy taste far more expensive than it is. Mushrooms are the cheapest way to make cream sauce eat like a steakhouse.\nWhole potatoes for the mash come to only pennies of side dish per plate.",
+    "shop_smart":  [
+                       "Pork chops are the whole budget here at 5.25 pounds. This is a recipe worth timing to the weekly ad; sale chops can cut the batch cost by a fifth.",
+                       "Four packs of white mushrooms make the gravy taste far more expensive than it is. Mushrooms are the cheapest way to make cream sauce eat like a steakhouse.",
+                       "Whole potatoes for the mash come to only pennies of side dish per plate."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Start the potatoes: peel, chunk, and boil in salted water 15 to 20 minutes until fork tender. Drain and mash with a spoonful of the butter and a pinch of salt. Cover and keep warm.",

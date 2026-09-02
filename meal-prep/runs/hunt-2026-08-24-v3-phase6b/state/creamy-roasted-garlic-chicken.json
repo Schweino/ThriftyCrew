@@ -3,10 +3,10 @@
     "title":  "Creamy Roasted Garlic Chicken",
     "source_url":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
     "protein":  "chicken",
-    "state":  "qa-passed",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  3,
     "created":  "2026-08-24T18:57:43",
-    "updated":  "2026-08-31T16:13:42",
+    "updated":  "2026-09-02T05:22:14",
     "terms":  [
 
               ],
@@ -92,6 +92,12 @@
                         "at":  "2026-08-31T16:13:42",
                         "by":  "source-qa",
                         "detail":  "post -Repair re-QA 2026-08-31: both anchors read, live page matches line for line; the one blocking finding (stale carbs literal 15 vs stat 17) repaired at root by adding the missing {{carbs}} render token, card rebuilt, battery prose-numbers now clean"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-09-02T05:22:14",
+                        "by":  "wave-close",
+                        "detail":  "wave 3"
                     }
                 ]
 }

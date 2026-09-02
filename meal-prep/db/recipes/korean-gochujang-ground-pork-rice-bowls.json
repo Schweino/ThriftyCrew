@@ -56,7 +56,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.24. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Korean-style pork bowl that would run $12 or more from a takeout counter. That is nearly two weeks of dinners from one skillet.",
-    "shop_smart":  "Ground pork is the whole reason this bowl is so cheap. It routinely undercuts ground beef by a solid margin per pound with the same job description.\nGochujang, mirin, sesame oil, and soy sauce all live in the pantry for months. The first trip stings a little, then every batch after this one costs mostly just the pork.\nFresh ginger freezes whole. Buy the two pieces, use what you need, and grate the rest straight from the freezer next time instead of buying again.",
+    "shop_smart":  [
+                       "Ground pork is the whole reason this bowl is so cheap. It routinely undercuts ground beef by a solid margin per pound with the same job description.",
+                       "Gochujang, mirin, sesame oil, and soy sauce all live in the pantry for months. The first trip stings a little, then every batch after this one costs mostly just the pork.",
+                       "Fresh ginger freezes whole. Buy the two pieces, use what you need, and grate the rest straight from the freezer next time instead of buying again."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice: 2 cups dry with water per your usual method.",

@@ -45,6 +45,16 @@ param(
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $spec = Get-Content $SpecFile -Raw | ConvertFrom-Json
+# BULLET-FIELD SHAPE, BEFORE ANYTHING IS RENDERED (2026-09-02). Every field this script renders with
+# `foreach($li in $spec.<field>){ ... <li> ... }` has to be an array: PS 5.1 iterates a STRING once, so
+# a newline-joined string ships every one of its items inside a single <li> and the card builds clean.
+# That is how 47 live paid cards came to render Shop Smart as one run-on bullet. The predicate and its
+# frozen fixtures live in guard-lib.ps1 / test-guards.ps1; this is the caller that makes it run, because
+# a guard whose only caller is its own test runs never. It THROWS: a card that cannot be rendered
+# correctly must not be rendered at all.
+. (Join-Path $here 'guard-lib.ps1')
+$shapeBad = Get-SpecBulletShapeProblems $spec
+if ($shapeBad.Count) { throw ("bullet-field shape ({0}): {1}" -f $spec.slug, ($shapeBad -join ' | ')) }
 # TOKEN EXPANSION AT THE RENDER BOUNDARY (2026-08-08). Spec prose stores {{cost_ps}}/{{cal}}/{{protein}}
 # instead of literals; they resolve from THIS spec's own stat right here, so nothing downstream - the card
 # body, the JSON-LD, the meta description - can ever quote a number the stat has moved away from. A spec

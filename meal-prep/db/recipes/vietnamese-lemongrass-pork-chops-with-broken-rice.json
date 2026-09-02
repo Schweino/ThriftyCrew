@@ -45,7 +45,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.45. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for lemongrass pork chops with rice, egg, and vegetables. A Vietnamese restaurant charges $16 for com suon, and their chop is half the size of yours.",
-    "shop_smart":  "Pork chops are the headline across 7 pounds. That is a serious protein haul, and chops routinely hit sale prices, so time the buy and this bowl gets even cheaper.\nThe marinade is built from bottles you buy once: fish sauce, soy, oyster sauce, and honey. Spread across the jars that last months, their cost against this batch is small.\nEggs and canned diced tomatoes round out the bowl for very little combined. The canned tomatoes skip the produce-aisle price roulette and taste fine chilled next to rich pork.",
+    "shop_smart":  [
+                       "Pork chops are the headline across 7 pounds. That is a serious protein haul, and chops routinely hit sale prices, so time the buy and this bowl gets even cheaper.",
+                       "The marinade is built from bottles you buy once: fish sauce, soy, oyster sauce, and honey. Spread across the jars that last months, their cost against this batch is small.",
+                       "Eggs and canned diced tomatoes round out the bowl for very little combined. The canned tomatoes skip the produce-aisle price roulette and taste fine chilled next to rich pork."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Whisk the marinade: lemongrass paste, garlic, fish sauce, soy sauce, oyster sauce, honey, brown sugar, salt, black pepper, half the vegetable oil, and the grated onion. Coat the pork chops and marinate at least 30 minutes, overnight is better.",
