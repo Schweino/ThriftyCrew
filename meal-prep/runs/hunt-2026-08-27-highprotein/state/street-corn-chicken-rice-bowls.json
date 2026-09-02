@@ -3,10 +3,10 @@
     "title":  "Street Corn Chicken Rice Bowl",
     "source_url":  "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/",
     "protein":  "chicken",
-    "state":  "written",
+    "state":  "qa-passed",
     "wave":  null,
     "created":  "2026-08-27T11:51:38",
-    "updated":  "2026-08-31T15:13:24",
+    "updated":  "2026-09-02T09:21:16",
     "terms":  [
                   {
                       "term":  "cotija cheese",
@@ -117,6 +117,12 @@
                         "at":  "2026-08-31T15:13:24",
                         "by":  "opus5-backlog-2026-08-31",
                         "detail":  "repaired: R3 repaired: lime zest now Buy 2 limes $0.50, with the ingredients.json buy_pkg_g basis ruling recorded in the spec. R5 gate green. Verified on disk 2026-08-31.  [audit blockers: recipe-local, shared, shared-data; 4 recipe-local; source-QA still owed]"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-09-02T09:21:16",
+                        "by":  "source-qa",
+                        "detail":  "source-QA re-run 2026-09-02 and PASSED (recipe-source-qa, anchors extraction + live-page). The 2026-08-31 blocker is cleared: the lime line was renamed to Fresh Lime Juice and rebid to limes after the missing food-DB row landed, the zest double-count was resolved with covered_by, and the card now reads \u0027Buy 7 limes\u0027 with \u0027From the limes you already bought\u0027 and no bottle anywhere. Four non-blocking notes, all matcher artifacts or amounts the source does not state. NOT PUBLISHED: wave-publish P5 hard-fails on any non-zero exit from audit-store-integrity, and that guard now reports two open drained-yield findings (chicken-al-pastor-burrito Pineapple Chunks and creamy-tuscan-chicken-skillet Sun-Dried Tomatoes) that belong to triage item 2026-09-02-corn03. Neither can be closed without a drained weight that USDA does not publish and no US label prints. This recipe is ready and waiting on that."
                     }
                 ]
 }

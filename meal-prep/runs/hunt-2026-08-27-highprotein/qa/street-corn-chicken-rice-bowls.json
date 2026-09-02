@@ -1,12 +1,17 @@
 {
-  "slug": "street-corn-chicken-rice-bowls",
-  "verdict": "fail",
-  "owner": "mapper",
-  "anchors": [
-    "extraction",
-    "live-page"
-  ],
-  "at": "2026-08-31",
-  "by": "recipe-source-qa (post -Repair re-QA)",
-  "findings": "FAIL - one blocking finding, and it is the un-repaired half of wave-9 R3. The ZEST half IS repaired ('Buy 2 limes: $0.50', with the 2026-08-31 ingredients.json buy_pkg_g basis ruling recorded). The JUICE half is not: cost_lines still reads 'Lime Juice, juice and zest of 3 1/2 limes; 7 tablespoons: ~$0.43. Buy 1 (covers this batch).' Both source uses are FRESH lime juice, but the line bids the BOTTLE (bid lime-juice), so the card tells the reader to squeeze 3.5 limes and then also buy a bottle, and prices about 8 limes' worth of fresh juice at $0.43. The spec's own writer_notes already rule this line wrong; the rename to Fresh Lime Juice (bid limes) is BLOCKED on a missing food-macros-db.json row. Everything else passes: dash-sweep hits are the spec's own forbidden_prose_terms ban-list; the battery's DROPPED 'Juice + zest of 1 lime' is consolidated into the Lime Juice line at 3.5x (~210 g computed vs 213 g spec); DROPPED 'water' is the rice medium, deliberately unbought, and the method carries 7 cups = 2 x 3.5; and all CONSOLIDATED sums check arithmetically (sea salt 1 3/4 + 3 1/2 tsp, cilantro 1/2 + 2/3 cup, cotija 2/3 cup, each exactly 3.5x). Recipe stays at `written`. TO CLEAR IT: add the Fresh Lime Juice food-DB row, re-point the bid to limes, recost, sync-recipesdb-cost, rebuild the card, then re-QA."
+    "slug": "street-corn-chicken-rice-bowls",
+    "verdict": "pass",
+    "owner": "",
+    "anchors": [
+        "extraction",
+        "live-page"
+    ],
+    "at": "2026-09-02",
+    "by": "recipe-source-qa (re-QA after the lime rename and the corn basis change)",
+    "findings": "PASS - the 2026-08-31 blocking finding is cleared and nothing new blocks. The lime line is now canon 'Fresh Lime Juice' at bid limes / gpu 30, 210 g = 7 limes, and the card reads 'Buy 7 limes: $1.75'. The zest line carries covered_by 'Fresh Lime Juice' and prints 'From the limes you already bought', so the card no longer tells the reader to squeeze 3 1/2 limes and then buy a bottle as well; there is no bottle anywhere on it. food-macros-db.json gained the Fresh Lime Juice row mirroring the Lime Juice row (1 tbsp = 15 g, 4 cal, 0.1 P), which is what the whole rename was blocked on. FOUR NOTES, NONE BLOCKING. (1) The battery's DROPPED 'Juice + zest of 1 lime' is a matcher artifact: one source line is carried by TWO spec lines now, juice 210 g (3 1/2 limes x 30 g + 7 tbsp x 15 g) and zest 11 g (3 1/2 limes x 1 g + 3 1/2 tsp x 2 g), and the source amount is accounted for exactly once. (2) DROPPED 'water' is the rice cooking medium, deliberately unbought; step 1 carries it at the recipe's own ratio ('Bring 7 cups water to a boil' = 2 x 3.5). (3) The four CONSOLIDATED notes all reconcile at 3.5x: sea salt 5 1/4 tsp x 6 g = 31 g, cilantro's three uses all named on the line, cotija's two uses both named. (4) Two deliberate substitutions, both defensible: avocado oil mayonnaise -> Mayonnaise, and the source's own 'pickled red onions OR fresh red onions' resolved to fresh. Three source toppings state no quantity, so the mapper's amounts are choices, not scaling deviations. SALT CHECKED AND CORRECT: two rows is what the source says (sea salt twice, plain salt once), the mapper ruled sea-salt to its own board id rather than folding it, and both sums close. METHOD AND IDENTITY INTACT: the six card steps map one to one onto the source's six instructions, no technique swapped, nothing invented or dropped. The live page was fetched and matches the transcription line for line; the only things it carries that the transcription does not are the author's optional tips (char the corn, store components separately, top fresh), which are neither ingredients nor method steps. CORN BASIS: this recipe is one of the 34 moved onto the USDA drained-solids basis today. Its line still reads '7 cups, drained (1148 g)' and now buys 4 cans off densities.can 298 rather than 3 off a gross 432, and stat.cal moved 597 -> 599. The literal 'under 600 calories' claim in intro_html and head.description was replaced by the {{cal}} token per Brad's 2026-09-02 ruling, so the card states the number instead of a bound it was clearing by 0.7. NOT PUBLISHED, and not for a fidelity reason: wave-publish P5 hard-fails on any non-zero exit from audit-store-integrity, which correctly reports two open drained-yield findings belonging to triage item 2026-09-02-corn03 (chicken-al-pastor-burrito Pineapple Chunks, creamy-tuscan-chicken-skillet Sun-Dried Tomatoes). Neither can be closed without a drained weight USDA does not publish and no US label prints. This recipe is QA-clean and waiting on that.",
+    "supersedes": {
+        "at": "2026-08-31",
+        "verdict": "fail",
+        "by": "recipe-source-qa (post -Repair re-QA)"
+    }
 }
