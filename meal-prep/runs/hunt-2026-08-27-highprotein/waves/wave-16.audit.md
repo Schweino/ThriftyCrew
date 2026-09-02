@@ -21,7 +21,15 @@ that ruling alone. I am not making that ruling for him.
 
 ## Blocker
 
-### B1. Card widget + compute-v2 price drained lines on the net basis: this card says 3 cans, the recipe needs 4 (pipeline)
+### B1. Card widget + compute-v2 price drained lines on the net basis: this card says 3 cans, the recipe needs 4 (shared, pipeline)
+
+> KIND TOKEN CORRECTED BY THE DEVELOPER, 2026-09-02, verdict and finding untouched. The heading read
+> `(pipeline)`, which is not one of audit-wave-blocker-headings' five kinds
+> (recipe-local, shared-data, shared, process, orchestration), so opsun-gates failed its CLEAN TWIN
+> and, worse, hunt-run -Revive and -Repair could not have read whose defect this was - which is the
+> exact condition that left eleven recipes permanently unrevivable once before. `shared` is what the
+> report itself argues at length: not recipe-local, a shared-template defect carried by 57 live cards.
+
 
 The engine (meal-prep\engine\cost-recipes.ps1) now runs corn through its drained branch: pkg_g
 298, 1148 g / 298 = 3.85, ceil(3.85 - 0.02) = 4 cans, $2.44. The spec, costed.json and the widget
