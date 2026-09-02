@@ -114,6 +114,31 @@ if($SelfTest){
   $badArr=[pscustomobject]@{ ingredients_display=@('fine',('bad ' + $em)); forbidden_prose_terms=@() }
   $threw=$false; try{ Test-Dashes $badArr }catch{ $threw=$true }
   T 'CLEAN TWIN an em dash inside an ARRAY of prose is still swept' $threw 'array prose was skipped'
+  # ---- BULLET SHAPE AT THE WRITE BOUNDARY (2026-09-02) ------------------------------------------
+  # FROZEN FIXTURE, taken from chicken-scampi's real prose.shop_smart as it sat at f6901fa0. It is a
+  # newline-joined string, and PS 5.1's foreach iterates a string ONCE, so build-card2 shipped all
+  # three tips inside one <li>. 51 of 584 specs stored it this way; 46 were live and paid. Not
+  # regenerated from a live spec: those are repaired now and would make this pass by finding nothing.
+  . (Join-Path $here 'guard-lib.ps1')
+  $ssReal = "Six pounds of chicken breast is the anchor here. Club packs are the play; small grocery trays can run nearly double the per-pound price.`nStore-brand spaghetti covers 36 ounces for the same job.`nOne pound of butter makes the entire sauce rich."
+  T 'MUST FIRE  the real newline-joined shop_smart string is refused BEFORE a spec is written' `
+    ((Get-BulletFieldShapeProblem 'prose.shop_smart' $ssReal) -ne '') 'a string would still be written'
+  T 'MUST FIRE  the <p>-wrapped variant is refused too - the rule is the SHAPE, not the newline' `
+    ((Get-BulletFieldShapeProblem 'prose.shop_smart' '<p>one</p><p>two</p>') -ne '') 'the second population got through'
+  T 'CLEAN TWIN the same three tips as an ARRAY are written without complaint' `
+    ((Get-BulletFieldShapeProblem 'prose.shop_smart' @($ssReal -split "`n")) -eq '') 'refused the correct shape'
+  T 'CLEAN TWIN an ABSENT shop_smart is an empty ARRAY, not a string, so a skeleton spec still builds' `
+    ((Get-BulletFieldShapeProblem 'prose.shop_smart' @()) -eq '') 'a skeleton spec cannot be built'
+  # THE SEAL. A predicate whose only caller is its own test runs never, which is how 51 broken specs
+  # walked past every green gate. This asserts the LIVE write path calls it and throws.
+  $__bvsSrc = [IO.File]::ReadAllText($PSCommandPath)
+  T 'the live write path calls the predicate on prose.shop_smart' `
+    ($__bvsSrc -match '(?m)^\s*\$ssBad\s*=\s*Get-BulletFieldShapeProblem\s+.prose\.shop_smart.') 'the refusal is not wired in'
+  T '   ...and THROWS on a finding rather than warning' `
+    ($__bvsSrc -match '(?m)^\s*if\(\$ssBad\)\{[\s\S]{0,120}?throw') 'a bad shape would only warn'
+  T '   ...and the empty default is an ARRAY, so the guard cannot be satisfied by a bare empty string' `
+    ($__bvsSrc -match "IProp \`$prose 'shop_smart'\)[^\r\n]*\}\s*else\s*\{\s*@\(\)\s*\}") 'the default is still a string'
+
   if($script:f -eq 0){ Write-Output 'build-v2-spec SELF-TEST PASS'; exit 0 }
   Write-Output ("build-v2-spec SELF-TEST FAIL: " + $script:f + " case(s)"); exit 1
 }
@@ -364,8 +389,32 @@ $creditHtml  = ProseStr 'credit_html'
 if(-not $creditHtml){
   $creditHtml = 'Recipe adapted from <a href="' + $srcUrl + '" target="_blank" rel="noopener">' + $srcSite + '</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.'
 }
-# shop_smart is an HTML string on modern specs (a few legacy specs store an array; both render)
-$shopSmart = if((IProp $prose 'shop_smart') -and $prose.shop_smart){ $prose.shop_smart } else { '' }
+# shop_smart IS AN ARRAY, ONE ELEMENT PER BULLET, AND A STRING IS REFUSED HERE (2026-09-02).
+#
+# The comment this replaces said "shop_smart is an HTML string on modern specs (a few legacy specs
+# store an array; both render)". Both did NOT render. build-card2 renders it with
+# `foreach($li in $spec.shop_smart){ ... <li> ... }` and PS 5.1 iterates a STRING once, so every tip
+# in a string landed inside a single <li>. Measured: 51 of 584 live specs, 48 of them holding more
+# than one tip, 46 of them live and paid, every one shipping its whole Shop Smart list as one run-on
+# bullet. The renderer now throws on that shape, so a string written here cannot reach a reader - it
+# just fails LATER, at card build, in a place that cannot say which writer produced it.
+#
+# So the refusal moves to the boundary that writes the spec. The writer contract is the fix and this
+# is where it is enforced: the daemon re-asks rather than minting a spec nothing can render.
+# ONE IMPLEMENTATION - Get-BulletFieldShapeProblem lives in guard-lib.ps1 and build-card2.ps1 calls
+# the same function, so the render boundary and the write boundary cannot drift apart.
+#
+# make_it IS DELIBERATELY NOT REFUSED HERE. `@($prose.make_it)` below wraps a string into a
+# one-element array, which satisfies the shape rule while keeping the whole method in one <li>; 12
+# live paid cards render that way today. Refusing it would block a path that currently ships, and
+# whether those twelve get re-asked as numbered steps or keep a paragraph method is a product call,
+# queued for Brad as 2026-09-02-8647f1. Closing that half needs the answer, not a guess.
+. (Join-Path $here 'guard-lib.ps1')
+$shopSmart = if((IProp $prose 'shop_smart') -and $prose.shop_smart){ $prose.shop_smart } else { @() }
+$ssBad = Get-BulletFieldShapeProblem 'prose.shop_smart' $shopSmart
+if($ssBad){
+  throw ("BULLET SHAPE: " + $ssBad + " Intake " + $InFile + ". The writer must emit prose.shop_smart as a JSON array with one element per tip, the way it already emits head.steps.")
+}
 $makeIt    = @(); if((IProp $prose 'make_it') -and $prose.make_it){ $makeIt = @($prose.make_it) }
 foreach($pk in @('intro_html','portion_html','cost_closing_html','upsell_html')){
   if(-not (ProseStr $pk)){ Write-Warning ("prose field empty: $pk (skeleton spec; the writer wave fills it before spec-guards full mode)") }
