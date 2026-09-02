@@ -3,10 +3,10 @@
     "title":  "Creamy Roasted Garlic Chicken",
     "source_url":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  3,
     "created":  "2026-08-24T18:57:43",
-    "updated":  "2026-09-02T05:22:14",
+    "updated":  "2026-09-02T05:42:11",
     "terms":  [
 
               ],
@@ -97,6 +97,12 @@
                         "state":  "waved",
                         "at":  "2026-09-02T05:22:14",
                         "by":  "wave-close",
+                        "detail":  "wave 3"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-09-02T05:42:11",
+                        "by":  "wave-publish",
                         "detail":  "wave 3"
                     }
                 ]

@@ -4,9 +4,9 @@
     "run":  "hunt-2026-08-24-v3-phase6b",
     "wave":  3,
     "batch":  "hunt-2026-08-24-v3-phase6b-w3",
-    "scope":  "whole-wave",
-    "generated":  "2026-09-02T05:23:13",
-    "elapsed_sec":  51.4,
+    "scope":  "scoped: creamy-roasted-garlic-chicken",
+    "generated":  "2026-09-02T05:38:12",
+    "elapsed_sec":  41.2,
     "wave_slugs":  [
                        "creamy-roasted-garlic-chicken"
                    ],
@@ -25,7 +25,7 @@
                                                                   "check":  "spec-present",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "mtime":  "2026-09-02T05:20:40"
+                                                                                  "mtime":  "2026-09-02T05:35:42"
                                                                               },
                                                                   "detail":  "spec present and parses"
                                                               },
@@ -41,7 +41,7 @@
                                                                                                     "fat":  29.6
                                                                                                 },
                                                                                   "stat":  {
-                                                                                               "cal":  583,
+                                                                                               "cal":  579,
                                                                                                "protein":  61,
                                                                                                "carbs":  17,
                                                                                                "fat":  30
@@ -69,7 +69,7 @@
                                                                   "check":  "cost-reconcile",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "spec_mtime":  "2026-09-02T05:20:40",
+                                                                                  "spec_mtime":  "2026-09-02T05:35:42",
                                                                                   "costed_mtime":  "2026-09-01T19:15:07",
                                                                                   "costed_is_newer_than_spec":  false
                                                                               },
