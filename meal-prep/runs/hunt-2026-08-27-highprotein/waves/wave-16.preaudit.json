@@ -4,9 +4,9 @@
     "run":  "hunt-2026-08-27-highprotein",
     "wave":  16,
     "batch":  "hunt-2026-08-27-highprotein-w16",
-    "scope":  "whole-wave",
-    "generated":  "2026-09-02T12:05:35",
-    "elapsed_sec":  34.7,
+    "scope":  "scoped: street-corn-chicken-rice-bowls",
+    "generated":  "2026-09-02T14:42:07",
+    "elapsed_sec":  35.4,
     "wave_slugs":  [
                        "street-corn-chicken-rice-bowls"
                    ],
@@ -15,7 +15,7 @@
               ],
     "inputs":  {
                    "run_dir":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein",
-                   "costed_mtime":  "2026-09-02T11:54:54",
+                   "costed_mtime":  "2026-09-02T13:44:33",
                    "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
                    "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
                },
@@ -25,7 +25,7 @@
                                                                    "check":  "spec-present",
                                                                    "verdict":  "pass",
                                                                    "numbers":  {
-                                                                                   "mtime":  "2026-09-02T09:10:18"
+                                                                                   "mtime":  "2026-09-02T14:18:30"
                                                                                },
                                                                    "detail":  "spec present and parses"
                                                                },
@@ -69,9 +69,9 @@
                                                                    "check":  "cost-reconcile",
                                                                    "verdict":  "pass",
                                                                    "numbers":  {
-                                                                                   "spec_mtime":  "2026-09-02T09:10:18",
-                                                                                   "costed_mtime":  "2026-09-02T11:54:54",
-                                                                                   "costed_is_newer_than_spec":  true
+                                                                                   "spec_mtime":  "2026-09-02T14:18:30",
+                                                                                   "costed_mtime":  "2026-09-02T13:44:33",
+                                                                                   "costed_is_newer_than_spec":  false
                                                                                },
                                                                    "detail":  "every spec cost field matches its engine row to the cent"
                                                                },
@@ -104,11 +104,21 @@
                                                                    "verdict":  "pass",
                                                                    "numbers":  {
                                                                                    "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-16.preaudit-cards\\street-corn-chicken-rice-bowls",
-                                                                                   "body_bytes":  73310,
+                                                                                   "body_bytes":  73287,
                                                                                    "make_it_steps":  6,
                                                                                    "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                },
                                                                    "detail":  "rebuilt to a scratch dir and structurally identical to al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html: every smp-* class and anchor id present, 6 step anchors, no dash bytes, JSON-LD parses as a Recipe"
+                                                               },
+                                                               {
+                                                                   "check":  "widget-count-basis",
+                                                                   "verdict":  "pass",
+                                                                   "numbers":  {
+                                                                                   "lines_checked":  9,
+                                                                                   "lines_skipped":  11,
+                                                                                   "findings":  0
+                                                                               },
+                                                                   "detail":  "the widget, the print list and the store picker buy exactly what the cost line says on all 9 package line(s), at every serving count from 2 to 42, and every fallback package is the real one (11 bulk/covered line(s) have no buy package to check)"
                                                                }
                                                            ]
                     },
@@ -193,7 +203,7 @@
                       ],
     "summary":  {
                     "slugs":  1,
-                    "checks":  16,
+                    "checks":  17,
                     "failed":  0
                 },
     "not_checked":  [
