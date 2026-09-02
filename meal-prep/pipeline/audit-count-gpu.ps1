@@ -216,6 +216,24 @@ if($SelfTest){
   $ozrow = ,([pscustomobject]@{ item='Tomato Sauce'; bid='tomato-sauce'; gpu=28.3495; unit='oz'; buy_pkg_g=425; buy_pkg_label='15oz can' })
   Check "IGNORES oz-unit rows (not this guard's class)" ((NFind $ozrow $emptyDen $emptyMac $null $null) -eq 0)
 
+  # -- yield row whose label carries a sub-item count (de9c5a95). Egg Yolk's gpu is grams of YOLK per
+  #    purchase unit and the purchase unit is one dozen (12 x ~17 g = 204). The label "12ct carton"
+  #    let Get-PackCount read n=12, so the MULTIPACK arm derived 17 g each and demanded gpu 17 (x0.083).
+  #    The unit itself already IS the count; the label must say 'dozen' like the sibling Eggs row.
+  $yolk = ,([pscustomobject]@{ item='Egg Yolk'; bid='eggs'; gpu=204; unit='dozen'; buy_pkg_g=204; buy_pkg_label='12ct carton' })
+  Check "MUST FIRE: egg-yolk dozen row labelled '12ct carton' (204 / 12 = 17 vs gpu 204)" ((NFind $yolk $emptyDen $emptyMac 'PACK' $null) -eq 1)
+  $yolkFix = ,([pscustomobject]@{ item='Egg Yolk'; bid='eggs'; gpu=204; unit='dozen'; buy_pkg_g=204; buy_pkg_label='dozen' })
+  Check "CLEAN TWIN: egg-yolk dozen row labelled 'dozen' closes 204 against 204" ((NFind $yolkFix $emptyDen $emptyMac $null $null) -eq 0)
+
+  # -- a real multipack whose label the count regex cannot read (de9c5a95). Keto Bun is 8 buns at
+  #    50 g in a 400 g pack, but "8-bun pack" has no digit adjacent to ct/count/pk/pack/ea, so
+  #    Get-PackCount returned null, the row fell into the SINGLE arm and fired gpu 50 vs 400 (x8).
+  #    The catalog form is '8ct pack' (as 6ct pack / 20ct pack / 80ct pack already are).
+  $bun = ,([pscustomobject]@{ item='Keto Bun'; bid='keto-hamburger-buns'; gpu=50; unit='each'; buy_pkg_g=400; buy_pkg_label='8-bun pack' })
+  Check "MUST FIRE: keto-bun '8-bun pack' is unreadable as a count, so SINGLE fires 50 vs 400" ((NFind $bun $emptyDen $emptyMac 'SINGLE' $null) -eq 1)
+  $bunFix = ,([pscustomobject]@{ item='Keto Bun'; bid='keto-hamburger-buns'; gpu=50; unit='each'; buy_pkg_g=400; buy_pkg_label='8ct pack' })
+  Check "CLEAN TWIN: keto-bun '8ct pack' reads n=8, 400 / 8 = 50 = gpu" ((NFind $bunFix $emptyDen $emptyMac $null $null) -eq 0)
+
   Write-Output ''
   if($fail -gt 0){ Write-Output "SELF-TEST: $fail predicate(s) regressed"; exit 1 }
   Write-Output 'SELF-TEST: all predicates hold'
