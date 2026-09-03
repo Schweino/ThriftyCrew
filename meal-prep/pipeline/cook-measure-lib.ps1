@@ -1,4 +1,4 @@
-﻿<#
+<#
   cook-measure-lib.ps1 - turn a gram amount into the measure a COOK uses, not the package a shopper buys.
 
   THE DEFECT (Brad, 2026-08-02, from the General Tso card). The Ingredients list was printing the `buy`
@@ -90,7 +90,15 @@ function Format-CmQty([double]$n) {
   if ($n -ge 10) { return [string][int][math]::Round($n, [MidpointRounding]::AwayFromZero) }
   $whole = [math]::Floor($n)
   $frac = $n - $whole
-  $names = @(@(0.0,''), @(0.25,'1/4'), @(0.3333,'1/3'), @(0.5,'1/2'), @(0.6667,'2/3'), @(0.75,'3/4'), @(1.0,''))
+  # EXACT THIRDS, NOT 0.3333/0.6667 (2026-09-03). Same lesson as AwayFromZero directly above: fmtCook in
+  # tpl2-scaler-prefix.html writes 1/3 and 2/3, and the browser is what a reader runs, so this is the copy
+  # that moves. A rounded literal sits 3.33e-5 below a true third, which changes the nearest-bucket winner
+  # for any value within that distance of a boundary - "0.29165" rendered 1/3 here and 1/4 in the browser.
+  # Invisible from either side alone and invisible to a coarse grid: measured at 1e-6 resolution across the
+  # six bucket boundaries, 396 of 30,861 values disagreed before this line changed, 0 after.
+  $third = 1.0 / 3.0
+  $twoThirds = 2.0 / 3.0
+  $names = @(@(0.0,''), @(0.25,'1/4'), @($third,'1/3'), @(0.5,'1/2'), @($twoThirds,'2/3'), @(0.75,'3/4'), @(1.0,''))
   $best = ''; $bestD = 99.0; $carry = 0
   foreach ($p in $names) {
     $d = [math]::Abs($frac - [double]$p[0])

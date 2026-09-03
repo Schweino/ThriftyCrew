@@ -309,6 +309,41 @@ if ($SelfTest) {
   } else {
     Write-Output 'ok    NEGATIVE every clean twin still passes under the 2026-07 rule (the fix moved only what it had to)'
   }
+  # ---- FRACTION-TABLE PARITY (2026-09-03) -------------------------------------------------------------
+  # Format-CmQty and fmtCook each carry their own copy of the kitchen-fraction table, and the two disagreed
+  # for two years without anyone able to see it: this side wrote 0.3333 and 0.6667 where the browser writes
+  # 1/3 and 2/3. A rounded literal sits 3.33e-5 below a true third, which is far too small to change any
+  # ordinary value and exactly large enough to pick a different bucket for a value sitting near a boundary.
+  # Measured at 1e-6 resolution across the six boundaries: 396 of 30,861 values rendered differently in the
+  # browser than here, "0.29165" being 1/3 on this side and 1/4 on the reader's card.
+  # PARITY WAS MEASURED BY HAND BOTH TIMES IT WAS MEASURED (2026-09-01 and 2026-09-03). That is the actual
+  # defect: a mirror whose faithfulness nobody checks is not a mirror. This asserts the property directly.
+  # It is hermetic on purpose - the jsdom lane needs node, and this has to run in run-gates on every push.
+  $tplPath = Join-Path $here 'tpl2-scaler-prefix.html'
+  if (-not (Test-Path $tplPath)) {
+    $fail++; Write-Output 'FAIL  PARITY the scaler template is missing, so the fraction tables could not be compared at all'
+  } else {
+    $tplSrc = [IO.File]::ReadAllText($tplPath)
+    $libSrc = [IO.File]::ReadAllText((Join-Path $here 'cook-measure-lib.ps1'))
+    # A MISSING ANCHOR IS NOT AGREEMENT: if either table cannot be found, say so rather than pass quietly.
+    $jsTable  = [regex]::Match($tplSrc, "names\s*=\s*(\[\[0,''\].*?\]\])", 'Singleline')
+    $psTable  = [regex]::Match($libSrc, '\$names\s*=\s*@\(@\(0\.0,''''\)(.*?)\)\s*$', 'Multiline')
+    if (-not $jsTable.Success) {
+      $fail++; Write-Output 'FAIL  PARITY could not find fmtCook''s fraction table in tpl2-scaler-prefix.html - the anchor moved, so this check proves nothing'
+    } elseif (-not $psTable.Success) {
+      $fail++; Write-Output 'FAIL  PARITY could not find Format-CmQty''s $names table in cook-measure-lib.ps1 - the anchor moved, so this check proves nothing'
+    } else {
+      $jsHasThirds = ($jsTable.Value -match '\[1/3,') -and ($jsTable.Value -match '\[2/3,')
+      $psRounded   = ($psTable.Value -match '0\.3333') -or ($psTable.Value -match '0\.6667')
+      $psExact     = ($psTable.Value -match '\$third') -and ($psTable.Value -match '\$twoThirds')
+      if ($jsHasThirds -and $psExact -and -not $psRounded) {
+        Write-Output 'ok    PARITY both fraction tables use exact thirds, so Format-CmQty and fmtCook pick the same bucket at every boundary'
+      } else {
+        $fail++
+        Write-Output ("FAIL  PARITY the two fraction tables no longer agree (js exact thirds={0}, ps exact={1}, ps rounded literal present={2}) - a rounded third re-opens the 396-value boundary disagreement, and it is invisible from either side alone" -f $jsHasThirds, $psExact, $psRounded)
+      }
+    }
+  }
   if ($fail) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $fail); exit 1 }
   Write-Output ("SELF-TEST PASS: {0} frozen label case(s) plus both negative checks" -f $CASES.Count)
   exit 0
