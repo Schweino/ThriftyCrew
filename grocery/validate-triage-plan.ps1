@@ -126,6 +126,24 @@ function Test-Plan {
     if (-not [string]$i.rollback) { $problems.Add("$id has no rollback") }
     if (-not [string]$i.freshness) { $problems.Add("$id has no freshness (what the measurement was taken against)") }
 
+    # --- A ROOT CAUSE MUST BECOME A ROOT FIX (2026-09-03, Brad's ruling on the triage process) --------
+    # root_cause has been demanded since this gate existed, but NOTHING ever checked that the plan acted
+    # on it. An item could name the class one level up, ship only the instance fix, and pass clean - which
+    # is exactly how a defect returns wearing a different commodity. The README already said root_fix may
+    # be null "ONLY when surface_fix IS the root fix, and say so"; that was a convention nobody could
+    # enforce. Now it is either a root_fix or an explicit sentence saying why none is needed.
+    $hasRootFix = ($i.root_fix -and ([string]$i.root_fix.what))
+    if (-not $hasRootFix -and -not [string]$i.root_fix_none_because) {
+      $problems.Add("$id names a root_cause but carries no root_fix and no root_fix_none_because - say what stops the CLASS recurring, or say in one line why the surface fix already is that")
+    }
+    # --- AND THE PROOF MUST REPRODUCE THE BUG --------------------------------------------------------
+    # Naming a harness is not a proof. A fixture that does not FIRE on the founding bug is decorative (the
+    # estate has found five structurally dead guards in a single sweep), and a must-fire with no clean twin
+    # passes by being too broad - which is how a fix "works" by flagging everything. Both halves are the
+    # standing guard-fixture rule here; the gate demands them instead of trusting anyone to remember.
+    if ($i.proof -and -not [string]$i.proof.must_fire_case) { $problems.Add("$id proof names a harness but no must_fire_case - a fixture that cannot reproduce the founding bug proves nothing") }
+    if ($i.proof -and -not [string]$i.proof.clean_twin)     { $problems.Add("$id proof has no clean_twin - a must-fire case with no twin passes by being too broad") }
+
     # an item that widens an include must say who currently claims each admitted name
     $widens = $false
     foreach ($f in @($i.surface_fix, $i.root_fix)) {
@@ -196,7 +214,12 @@ function Test-Plan {
 
 if ($SelfTest) {
   $fail = 0
+  # COUNTED, NEVER TYPED. This summary used to carry a literal "17" that four new cases silently made
+  # wrong - the same shape as any hardcoded inventory count, and a self-test whose own summary is stale
+  # is a bad advertisement for a gate that exists to catch exactly that.
+  $ran = 0
   function _Case($label, $doc, $expectRc, $expectMatch) {
+    $script:ran++
     $r = Test-Plan $doc @('q1') $env:TEMP
     $txt = ($r.problems -join ' | ')
     if ($r.rc -eq $expectRc -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
@@ -209,9 +232,10 @@ if ($SelfTest) {
       queue_id='q1'; classification='wrong-product'; evidence=@('lemons | Sam''s | soda row'); root_cause='library cannot express the class'
       blast_radius=[pscustomobject]@{ measured_as='routing'; measured_by='25,939 names'; affected_now=2
         cell_effects=@([pscustomobject]@{ commodity='lemons'; store="Sam's Club"; before=0.5413; after=0.4200 }) }
-      proof=[pscustomobject]@{ guard_or_fixture='test-auditors case d2' }; rollback='revert the hunk'
+      proof=[pscustomobject]@{ guard_or_fixture='test-auditors case d2'; must_fire_case='the frozen soda row on lemons makes audit-food-category exit 2'; clean_twin="'Fresh Lemon' keeps it at exit 0" }; rollback='revert the hunk'
       freshness='measured against comparison-2026-07-30'; resolution_note='fixed'
       surface_fix=[pscustomobject]@{ what='exclude the soda'; exact_change='lemons.exclude += ...' }
+      root_fix=[pscustomobject]@{ what='add the beverage tokens to the food-class library so the guard hard-fails the class estate-wide'; exact_change='category-excludes.json beverage += ...'; files=@('grocery/category-excludes.json') }
     })
   }
   _Case 'complete plan passes' $good 0 $null
@@ -223,9 +247,10 @@ if ($SelfTest) {
   $infra = [pscustomobject]@{ queue_ids_seen=@('q1'); ship_sequence=@('x'); items=@([pscustomobject]@{
       queue_id='q1'; classification='infra'; evidence=@('check-ad-cycles logged: cost-flag alert threw'); root_cause='[string]$null is $null so .Trim() throws on a zero-byte file'
       blast_radius=[pscustomobject]@{ measured_as='callers'; measured_by='grep of all live .ps1 for the idiom'; affected_now=11 }
-      proof=[pscustomobject]@{ guard_or_fixture='test-guards case 0' }; rollback='revert the hunks'
+      proof=[pscustomobject]@{ guard_or_fixture='test-guards case 0'; must_fire_case='a zero-byte cost-flag file makes the old idiom throw in the harness'; clean_twin='a populated file still parses and alerts normally' }; rollback='revert the hunks'
       freshness='measured against the working tree at 2026-07-31T07:00'; resolution_note='fixed'
-      surface_fix=[pscustomobject]@{ what='use the null-safe idiom'; exact_change='((Get-Content $f -Raw) + $emptyString).Trim()'; files=@('grocery/check-ad-cycles.ps1') } }) }
+      surface_fix=[pscustomobject]@{ what='use the null-safe idiom'; exact_change='((Get-Content $f -Raw) + $emptyString).Trim()'; files=@('grocery/check-ad-cycles.ps1') }
+      root_fix=[pscustomobject]@{ what='sweep the idiom estate-wide so no other caller can throw on an empty file'; exact_change='11 call sites moved to the null-safe form'; files=@('grocery/*.ps1') } }) }
   _Case 'an infra item measured as callers passes (routing would be meaningless)' $infra 0 $null
   # MUST-FIRE 2: but an infra item with NO measure at all is still rejected
   $noMeasure = $infra | ConvertTo-Json -Depth 9 | ConvertFrom-Json; $noMeasure.items[0].blast_radius.measured_as = ''
@@ -261,11 +286,36 @@ if ($SelfTest) {
   $halfCells.items[0].blast_radius.cell_effects[0].PSObject.Properties.Remove('after')
   _Case 'a cell_effects entry with no after price is rejected' $halfCells 2 'no after price'
 
+  # --- MUST-FIRE 7-9 (2026-09-03): the plan must CLOSE THE CLASS, not just the instance ---------------
+  # Brad's ruling on the triage process: a review that fixes the issue without ensuring it cannot recur is
+  # not finished. root_cause was already mandatory and was already being written well; what was missing is
+  # that nothing checked the plan ACTED on it. These three pin the acting.
+  $noRootFix = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $noRootFix.items[0].PSObject.Properties.Remove('root_fix')
+  _Case 'a code item that names a root_cause but ships no root_fix is rejected' $noRootFix 2 'no root_fix'
+  # CLEAN TWIN: sometimes the surface fix genuinely IS the root fix. That is a legitimate answer and must
+  # pass - but only when it is SAID, so a reader can tell it apart from an item that simply never asked.
+  $saidSo = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $saidSo.items[0].PSObject.Properties.Remove('root_fix')
+  $saidSo.items[0] | Add-Member -NotePropertyName root_fix_none_because -NotePropertyValue 'the exclude IS the class fix: this token is the only way the beverage family can reach a produce commodity'
+  _Case 'root_fix may be null when the plan says why the surface fix is the root fix' $saidSo 0 $null
+  # MUST-FIRE 8: a proof that names a harness but cannot reproduce the founding bug is decorative. This
+  # estate has found five structurally dead guards in one sweep; a named harness is not evidence.
+  $noFire = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $noFire.items[0].proof.PSObject.Properties.Remove('must_fire_case')
+  _Case 'a proof with no must_fire_case is rejected' $noFire 2 'must_fire_case'
+  # MUST-FIRE 9: a must-fire with no clean twin passes by being too broad - the fix that "works" by
+  # flagging everything. Both halves of the fixture rule, or neither is worth anything.
+  $noTwin = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $noTwin.items[0].proof.PSObject.Properties.Remove('clean_twin')
+  _Case 'a proof with no clean_twin is rejected' $noTwin 2 'clean_twin'
+
   # --- routing artifact positive control (2026-08-06 case-insensitive $b/$B) ----------------------------
   # These need a real file on disk, because the check reads the artifact rather than trusting the plan.
   $artDir = Join-Path $env:TEMP ('vtp-selftest-' + $PID); New-Item -ItemType Directory -Force -Path $artDir | Out-Null
   function _Artifact($obj) { $f = Join-Path $artDir 'art.json'; ($obj | ConvertTo-Json -Depth 8) | Set-Content $f -Encoding UTF8; return 'art.json' }
   function _CaseArt($label, $doc, $expectRc, $expectMatch) {
+    $script:ran++
     $r = Test-Plan $doc @('q1') $artDir
     $txt = ($r.problems -join ' | ')
     if ($r.rc -eq $expectRc -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
@@ -291,11 +341,12 @@ if ($SelfTest) {
   # MUST-FIRE: a comma-joined -OpenIds (what `powershell -File` does to a [string[]]) must be split, not
   # treated as one id. Before this, a COMPLETE plan was reported as missing every queue id.
   $split = @('q1,q2' | Where-Object { $_ } | ForEach-Object { ([string]$_) -split '[,;]' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  $script:ran++
   if ($split.Count -eq 2 -and $split[0] -eq 'q1' -and $split[1] -eq 'q2') { Write-Output 'ok    comma-joined -OpenIds is split back into real ids' }
   else { Write-Output "FAIL  comma-joined -OpenIds not split (got $($split.Count) id(s))"; $script:fail++ }
   Write-Output ''
-  if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (all 17 plan-gate cases)'
+  if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }
+  Write-Output "SELF-TEST PASS (all $ran plan-gate cases)"
   exit 0
 }
 

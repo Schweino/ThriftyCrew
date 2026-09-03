@@ -82,7 +82,16 @@ with the change and a future reader can see why a rule exists.
       // WHY IT HAPPENED AT ALL, one level up. If this is empty the review is not finished.
       "root_cause": "the blocking food-class guard's beverage patterns are brand/word based, so a soda whose name carries no beverage token can win a produce cell at ANY fruit or vegetable commodity, not just lemons",
 
-      // THE FIX FOR THAT. May be null ONLY when surface_fix IS the root fix, and say so.
+      // THE FIX FOR THAT, i.e. what stops the CLASS coming back rather than this instance of it.
+      // GATED SINCE 2026-09-03 (Brad's ruling): a code item must carry a root_fix, or carry
+      // "root_fix_none_because": "<one line>" saying why the surface fix already IS the class fix.
+      // root_cause was mandatory long before this and was being written well; what was missing is that
+      // nothing checked the plan ACTED on it, so an item could name the class one level up, ship only
+      // the instance fix, and pass clean. That is how a defect returns wearing a different commodity.
+      // Measured the day the rule landed: the 2026-09-03 plan passed the OLD gate with 11 clean items
+      // and 4 of them had no class fix at all - two were genuine deferrals nobody had written down
+      // (the Family Fare 7-of-602 term budget, an 86-day rotation; and the feed checker's whole family
+      // of "infer a push from a local artifact" call sites).
       "root_fix": {
         "what": "add the missing tokens to category-excludes.json so audit-food-category hard-fails this class estate-wide",
         "files": ["grocery/category-excludes.json"],
@@ -134,6 +143,10 @@ with the change and a future reader can see why a rule exists.
       // HOW WE WILL KNOW IT WORKED, AND KEEPS WORKING. A fix with no reachable test does not ship
       // (see the 2026-07-29 lesson: two same-day fixes regressed because their self-test could not
       // reach the new code). Name the harness that already exists; invent a new one only if none fits.
+      // must_fire_case AND clean_twin are BOTH gated since 2026-09-03. Naming a harness is not a proof:
+      // a fixture that does not fire on the founding bug is decorative (five structurally dead guards
+      // were found here in one sweep), and a must-fire with no twin passes by being too broad, which is
+      // the "fix" that works by flagging everything.
       "proof": {
         "guard_or_fixture": "test-auditors.ps1 case (d2)",
         "must_fire_case": "frozen rows: the plantain-chips row on lemons and the mini-cans row on limes must make audit-food-category exit 2 AND name both classes",
