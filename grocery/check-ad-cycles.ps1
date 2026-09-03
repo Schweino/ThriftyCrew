@@ -2732,6 +2732,38 @@ try {
   }
 } catch { Log ('prompt-backup weekly threw: ' + $_.Exception.Message) }
 
+# ---- DAILY: is the agent memory store versioned, intact, and OUT of this public repo? ----
+# ops\audit-memory-backup.ps1, added 2026-09-03. The memory files are data this estate reasons from and
+# they live outside any repository. On 2026-09-03 an ordinary three-character repair performed a GLOBAL
+# character substitution in two of them - 2,035 characters damaged, both writes reporting success, neither
+# changing the file size - and with nothing versioning the directory, recovery meant rebuilding the content
+# out of session transcripts. Memory now has its own local git history.
+#
+# DAILY, not weekly like prompt-backup: prompts change when someone edits one, memory changes on almost
+# every session. -Sync so the history can never fall behind on its own.
+#
+# IT IS NOT MIRRORED INTO ops\ AND MUST NOT BE. This repo is PUBLIC (private=False, checked 2026-09-03),
+# and memory carries cost, revenue and account notes. Half of what this guard watches for is memory
+# ARRIVING here: a git remote on the store, or a memory file tracked by ThriftyCrew. Both are alerts.
+try {
+  $mem = (& powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'ops\audit-memory-backup.ps1') -Sync | ForEach-Object { [string]$_ }) -join "`n"
+  $memRc = $LASTEXITCODE
+  if ($mem -notmatch '(?m)^MEMORY-BACKUP-COMPLETE') {
+    Log ('memory-backup DID NOT RUN TO THE END (rc=' + $memRc + ') - no completion marker, so the memory store went unverified')
+    $summary += 'REVIEW    memory-backup did not finish - the agent memory store went unverified today'
+  } elseif ($memRc -eq 0) { Log 'memory-backup: memory is versioned locally, has no remote, is absent from this repo, and its index and encoding are intact' }
+  elseif ($memRc -eq 3) {
+    Log 'memory-backup: BLIND - nothing to check, which is a pass that proves nothing'
+    $summary += 'REVIEW    memory-backup found nothing to check - the store is missing or empty'
+    if (-not $NoAlert) { Send-Alert -Subject 'Ops: the agent memory store could not be checked' -Body ("ops\audit-memory-backup.ps1 exited 3 (BLIND): the memory directory is missing, has no MEMORY.md, or holds zero memory files. A clean result would prove nothing.`n`n" + $mem) | Out-Null }
+  }
+  else {
+    Log ('memory-backup rc=' + $memRc)
+    $summary += 'REVIEW    the agent memory store has a finding (history, index, encoding, or it has reached this PUBLIC repo)'
+    if (-not $NoAlert) { Send-Alert -Subject 'Ops: the agent memory store has a finding' -Body ("ops\audit-memory-backup.ps1 checks that memory is versioned locally, has NO git remote, is NOT tracked by this PUBLIC repo, is fully committed, that MEMORY.md agrees with the files on disk, and that nothing is mojibaked.`n`nA REMOTE or a tracked memory file is the serious one: this repo is public and memory carries cost, revenue and account notes. Neither is fixed by -Sync; remove it by hand.`n`n" + $mem) | Out-Null }
+  }
+} catch { Log ('memory-backup threw: ' + $_.Exception.Message) }
+
 # ---- WEEKLY: does the live Cloudflare estate still match what this repo declares? ----
 # ops\audit-cloudflare-estate.ps1 landed 2026-08-20 and NOTHING in production called it - the same shape
 # audit-prompt-backup.ps1 sat in above, and the same shape that let nine unseen R2 lifecycle rules bill
