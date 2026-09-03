@@ -3874,13 +3874,6 @@
                                    },
                   "canned-black-beans":  {
                                              "commodity":  "canned-black-beans",
-                                             "Aldi":  {
-                                                          "url":  "https://www.aldi.us/store/aldi/products/18648531-dakota-s-black-beans-15-oz",
-                                                          "price":  0.85,
-                                                          "size":  "15 oz",
-                                                          "name":  "Dakota\u0027s Pride Black Beans",
-                                                          "board_pu":  0.0567
-                                                      },
                                              "Baker\u0027s":  {
                                                                   "url":  "https://www.bakersplus.com/p/kroger-black-beans-big-deal-/0001111012475",
                                                                   "name":  "Kroger Black Beans BIG DEAL!",
@@ -6568,14 +6561,6 @@
                                    },
                   "clementines":  {
                                       "commodity":  "clementines",
-                                      "Aldi":  {
-                                                   "url":  "https://www.aldi.us/store/aldi/products/26274163-mandarins-bag-3-lb",
-                                                   "name":  "Mandarins, Bag",
-                                                   "price":  3.99,
-                                                   "size":  "3 lb",
-                                                   "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board",
-                                                   "board_pu":  1.33
-                                               },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/cuties-seedless-california-mandarin-clementine-oranges/0005410722101",
                                                            "name":  "Cuties Seedless California Mandarin Clementine Oranges",
@@ -9524,13 +9509,7 @@
                                                "price":  "$1.65",
                                                "size":  "dozen",
                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                           },
-                               "Family Fare":  {
-                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                                                   "name":  "Large Eggs, Grade A Our Family",
-                                                   "price":  "$2.39",
-                                                   "size":  "12 ct"
-                                               }
+                                           }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -16379,13 +16358,6 @@
                                     },
                   "mexican-chorizo-fresh":  {
                                                 "commodity":  "Mexican Chorizo (Fresh)",
-                                                "Baker\u0027s":  {
-                                                                     "url":  "https://www.bakersplus.com/p/kroger-mercado-chorizo-sausage-pork-links/0001111062555",
-                                                                     "name":  "Kroger Mercado Chorizo Sausage Pork Links",
-                                                                     "price":  3.99,
-                                                                     "size":  "5 pk 3.6 oz",
-                                                                     "verified":  "2026-08-23"
-                                                                 },
                                                 "Walmart":  {
                                                                 "url":  "https://www.walmart.com/ip/10451933",
                                                                 "price":  "1.5",
@@ -21688,14 +21660,7 @@
                                                          "size":  "0.05 lbs ($4.99/lb)",
                                                          "name":  "Green Serrano Peppers",
                                                          "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                     },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/44391143",
-                                                          "price":  "0.71",
-                                                          "size":  "0.281 lb",
-                                                          "name":  "Serrano Pepper",
-                                                          "verified":  "2026-08-31 price-pull self-capture"
-                                                      }
+                                                     }
                                       },
                   "sesame-oil":  {
                                      "commodity":  "Sesame Oil (toasted)",
@@ -22683,13 +22648,6 @@
                                                      "size":  "28 fl oz",
                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                  },
-                                        "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/gatorade-cool-blue-sports-drink-multipack-bottles/0005200020844",
-                                                             "name":  "Gatorade Cool Blue Sports Drink Multipack Bottles",
-                                                             "price":  "$7.99",
-                                                             "size":  "8 pk 20 fl oz",
-                                                             "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                         },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/10450654",
                                                         "name":  "Gatorade Fierce Thirst Quencher Grape Sports Drinks, 20 fl oz, 8 Count Bottles",
@@ -26007,14 +25965,7 @@
                                                   "price":  "$2.67",
                                                   "size":  "7 oz",
                                                   "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                              },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/aidells_smoked_roasted_garlic_gruyere_cheese_chicken_sausage_12_oz/p/6363",
-                                                      "name":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
-                                                      "price":  "$6.99",
-                                                      "size":  "12 oz",
-                                                      "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                              }
                               },
                   "shawarma-spice-blend":  {
                                                "Walmart":  {

@@ -351,6 +351,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "block-cheese",
+        "store":  "Family Fare",
+        "product":  "Our Family Low Moisture Part Skim Natural Mozzarella Cheese 16 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/cheese",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
         "id":  "blue-cheese-dressing",
         "store":  "Family Fare",
         "product":  "Our Family Blue Cheese Dressing 16 Fl Oz",
@@ -1721,11 +1730,11 @@
     {
         "id":  "gruyere",
         "store":  "Family Fare",
-        "product":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
-        "dept":  "meat",
-        "aisle":  "meat/sausage",
-        "verdict":  "BLOCK",
-        "reason":  "candidate sits in \u0027meat\u0027; category \u0027dairy\u0027 allows only: dairy, deli"
+        "product":  "Smoky Park Cheese, Smoked Gruyere 8 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/cheese",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
         "id":  "half-and-half",

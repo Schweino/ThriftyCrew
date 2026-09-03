@@ -1,0 +1,760 @@
+{
+  "store": "Baker's",
+  "ad_from": "2026-09-02",
+  "ad_to": "2026-09-08",
+  "captured": "2026-09-02",
+  "store_label": "Pickup at Saddlecreek | 888 S Saddle Creek Rd",
+  "pages_read": 13,
+  "pages_total": 13,
+  "source": "vision read of ALL 13 of the 13 flyer pages meta.json lists (ad_pages 13, on_disk 13), installed by pull-bakers.ps1 with the OMAHA and CURRENT gates both verified against store label 'Pickup at Saddlecreek | 888 S Saddle Creek Rd'. WINDOW TAKEN FROM THE AD'S OWN PRINTED FOOTER, 'SALE DATES: Wed. September 2 - Tues. September 8, 2026', which agrees with ad-schedule.json and with the on-page header 'September 2 - 8'. This ad is 13 pages where the previous one was 15; pull-bakers.ps1 cleared the folder first so no page from the expired ad survives. EXCLUDED, because the board cannot verify a single-unit price for them: (1) the 'BUY MORE SAVE MORE / SAVE $1 EACH WHEN YOU BUY 5 OR MORE' blocks, which are the whole of page 5 and most of page 6 plus the right rail of page 1 - the discounted price needs 5 participating items in one transaction, and the undiscounted 'With Card' figure beside it is the everyday price, not an ad sale; (2) Buy-1-Get-1 and Buy-2-Get-3 / Buy-2-Get-1 offers, whose only stated regular is an 'up to $X' ceiling (Coca-Cola/Pepsi/7UP 12-packs, Doritos/Cheetos/Ruffles, Tostitos Guacamole, Bush's Beans, Poppi soda, Nature Made/Nature's Bounty supplements, Hormel Marinated Pork Loin); (3) 'FINAL COST when you buy N' offers (Miss Vickie's/Popcorners buy 2, Armour Lunchmakers 5/$5 buy 5); (4) alcohol priced only after a PayPal cash-back rebate or a buy-6 10% discount - all of page 12 and the page 1 and page 4 Bottles & Brews rails; (5) basket-threshold offers (Save $15 on $60 of baby items, Save $10 when you buy 2 household items); (6) items with no fixed printed price ('Everyday Living Gadgets $3.99 AND UP', Private Selection Spices 'SAVE 30%' with no absolute price). Simple N/$X offers ARE included, recorded at their arithmetic unit price (Kroger Sour Cream/Cottage Cheese 3/$5 = $1.67, Kraft Shredded Cheese 2/$5 = $2.50, Kroger Side Dish 2/$6 = $3.00, Cacique Chorizo 2/$3 = $1.50, Rosarita Refried Beans 3/$5 = $1.67, Jarritos and Gamesa Cremax 10/$10 = $1.00). Watermelon is recorded at its $3.99 digital-coupon price with the $5.99 card price as regular - a simple per-item digital offer with no quantity condition, same treatment as the page 2/3/9 digital-coupon items. Page 7 is a pharmacy flu-shot ad and carries no deals; page 12 is alcohol only.",
+  "deal_count": 83,
+  "deals": [
+    {
+      "store": "Baker's",
+      "item": "Ribeye Steaks, Bone-In, Family Pack",
+      "ad_price": "$10.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Pork Back Ribs or Fresh Tyson Boneless Chicken Breast, Thighs or Tenders",
+      "ad_price": "$2.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Sterling Silver 90% Lean Ground Sirloin",
+      "ad_price": "$6.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Sterling Silver 90% Lean Ground Sirloin, 3 lb Package",
+      "ad_price": "$20.97",
+      "size": "3 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Sterling Silver 90% Lean Ground Sirloin, 1 lb Package",
+      "ad_price": "$7.99",
+      "size": "1 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger 80% Lean Ground Beef Patties",
+      "ad_price": "$12.00",
+      "size": "8 ct, 1.9 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "California Yellow or White Peaches or Nectarines",
+      "ad_price": "$1.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Jumbo Blueberries",
+      "ad_price": "$4.99",
+      "size": "9.8 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Whole Seedless Watermelon",
+      "ad_price": "$3.99",
+      "size": "each",
+      "regular": "$5.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Butter",
+      "ad_price": "$2.99",
+      "size": "16 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Sour Cream, Cottage Cheese or Dip",
+      "ad_price": "$1.67",
+      "size": "16 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Buns",
+      "ad_price": "$1.49",
+      "size": "8 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Private Selection Ice Cream, 48 fl oz or Marie Callender's Pies, 25-42 oz",
+      "ad_price": "$5.00",
+      "size": "48 fl oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Powerade, 28 fl oz or Body Armor, 16 fl oz",
+      "ad_price": "$0.88",
+      "size": "28 fl oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "California Red, Green or Black Seedless Grapes",
+      "ad_price": "$1.99",
+      "size": "lb",
+      "regular": "$2.79",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Johnsonville Dinner Sausage, 12-19 oz or Breakfast Sausage, 9.6-12 oz",
+      "ad_price": "$3.99",
+      "size": "12-19 oz",
+      "regular": "$4.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Purified Water, 40-Pack",
+      "ad_price": "$3.99",
+      "size": "40 ct, 16.9 fl oz",
+      "regular": "$4.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Cheese, Mexican Style Blend or Sharp Cheddar",
+      "ad_price": "$4.99",
+      "size": "32 oz",
+      "regular": "$7.29",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Oscar Mayer Bacon",
+      "ad_price": "$4.99",
+      "size": "12-16 oz",
+      "regular": "$6.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Waterloo Sparkling Water",
+      "ad_price": "$2.99",
+      "size": "8-Pack, 12 fl oz",
+      "regular": "$3.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kellogg's Large Size Cereal",
+      "ad_price": "$2.49",
+      "size": "12-20.9 oz",
+      "regular": "$3.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Lay's Potato or Kettle Cooked Potato Chips, 5-8 oz or Tostitos Cantina Tortilla Chips, 8-13 oz",
+      "ad_price": "$1.99",
+      "size": "5-8 oz",
+      "regular": "$3.29",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Nabisco Oreo or Chips Ahoy Cookies",
+      "ad_price": "$3.49",
+      "size": "7.14-20 oz",
+      "regular": "$4.79",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Hellmann's Mayonnaise",
+      "ad_price": "$4.49",
+      "size": "20-30 fl oz",
+      "regular": "$6.49",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Oscar Mayer Meat Wieners",
+      "ad_price": "$1.77",
+      "size": "14-16 oz",
+      "regular": "$2.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Nabisco Family Size Snack Crackers, Ritz 11.5-14 oz or Wheat Thins 17.4-20.8 oz",
+      "ad_price": "$3.49",
+      "size": "11.5-14 oz",
+      "regular": "$4.79",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Haagen-Dazs Ice Cream, 14 fl oz or Outshine Fruit Bars, 5-6 ct",
+      "ad_price": "$2.99",
+      "size": "14 fl oz",
+      "regular": "$3.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Ore-Ida Frozen Potatoes",
+      "ad_price": "$2.99",
+      "size": "19-32 oz",
+      "regular": "$4.49",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Nestle Drumstick Cones",
+      "ad_price": "$5.99",
+      "size": "8-20 ct",
+      "regular": "$6.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "DiGiorno Pizza, 14.14-30.3 oz or Hot Pockets, 4 ct",
+      "ad_price": "$3.99",
+      "size": "14.14-30.3 oz",
+      "regular": "$4.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Hidden Valley Ranch Dressing",
+      "ad_price": "$2.79",
+      "size": "16 fl oz",
+      "regular": "$3.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Hershey's King Size Candy",
+      "ad_price": "$2.49",
+      "size": "2.6-5 oz",
+      "regular": "$2.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Ultra Paper Towels",
+      "ad_price": "$5.99",
+      "size": "6 Double Rolls",
+      "regular": "$9.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kingsford Original or Match Light Charcoal",
+      "ad_price": "$8.99",
+      "size": "12-16 lb",
+      "regular": "$10.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Schweid & Sons Burger Patties",
+      "ad_price": "$10.00",
+      "size": "1.32-1.33 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Private Selection Angus Beef Patties, 4 ct or Kroger Boneless Chicken Tenders, Cutlets or Thighs, 2.5-3 lb, Frozen",
+      "ad_price": "$8.00",
+      "size": "4 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Home Chef St. Louis Style Ribs, Fully Cooked, In the Deli",
+      "ad_price": "$13.99",
+      "size": "2 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Fresh Baked Cookies, In the Bakery",
+      "ad_price": "$3.00",
+      "size": "12 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Big K Soda",
+      "ad_price": "$1.00",
+      "size": "2 Liter",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kraft Shredded Cheese, 7-8 oz or Wish-Bone Salad Dressing, 15 fl oz",
+      "ad_price": "$2.50",
+      "size": "7-8 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kettle Brand Potato Chips",
+      "ad_price": "$3.99",
+      "size": "6-7.5 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Wonder Buns",
+      "ad_price": "$2.49",
+      "size": "8 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Instant Light Charcoal",
+      "ad_price": "$8.79",
+      "size": "11.6-15.4 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Simple Truth Organic Bone Broth",
+      "ad_price": "$3.99",
+      "size": "32 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Yasso Frozen Greek Yogurt",
+      "ad_price": "$5.49",
+      "size": "14 fl oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Almond Breeze Almondmilk",
+      "ad_price": "$4.99",
+      "size": "96 fl oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Amylu Chicken Meatballs, Burgers or Sausage",
+      "ad_price": "$5.00",
+      "size": "8-10 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Hot Wheels Car",
+      "ad_price": "$1.35",
+      "size": "each",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Keurig K-Mini Mate",
+      "ad_price": "$89.99",
+      "size": "each",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "GoodCook Square Cake Pan or Medium Cookie Sheet",
+      "ad_price": "$7.99",
+      "size": "each",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Minute Rice",
+      "ad_price": "$1.49",
+      "size": "8.8-14 oz",
+      "regular": "$1.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Jack Link's Beef Jerky",
+      "ad_price": "$9.99",
+      "size": "8 oz",
+      "regular": "$12.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Muscle Milk Protein Shakes",
+      "ad_price": "$7.99",
+      "size": "4-Pack, 11 fl oz",
+      "regular": "$9.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Cottonelle Bath Tissue",
+      "ad_price": "$10.99",
+      "size": "12 Mega Rolls",
+      "regular": "$13.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Gold Peak Tea",
+      "ad_price": "$6.99",
+      "size": "6-Pack, 16.9 fl oz",
+      "regular": "$8.99",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kleenex Facial Tissues",
+      "ad_price": "$1.39",
+      "size": "60 ct",
+      "regular": "$1.89",
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Simple Truth Organic Red, Green or Black Seedless Grapes",
+      "ad_price": "$5.99",
+      "size": "2 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Private Selection Autumn Crisp or Holiday Grapes",
+      "ad_price": "$5.99",
+      "size": "2 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Cotton Candy, Gum Drops or Moon Drops Grapes",
+      "ad_price": "$3.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Fresh In-Store Cut Fruit Bowls",
+      "ad_price": "$15.99",
+      "size": "62 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Adorbs Seedless Mandarins",
+      "ad_price": "$7.99",
+      "size": "5 lb Bag",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Gala, Pink Lady or Cosmic Crisp Apples",
+      "ad_price": "$4.00",
+      "size": "4 ct Tray",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Raspberries or Blackberries",
+      "ad_price": "$2.99",
+      "size": "6 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Coleslaw",
+      "ad_price": "$1.99",
+      "size": "10-16 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Smart Chicken Air-Chilled Chicken Wings, Bone-In, Value Pack",
+      "ad_price": "$3.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Extra Large Cooked Shrimp, 26-30 ct",
+      "ad_price": "$9.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Extra Large Cooked Shrimp, 26-30 ct, 2 lb Bag",
+      "ad_price": "$19.98",
+      "size": "2 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Side Dish, Macaroni & Cheese or Homestyle Mashed Potatoes",
+      "ad_price": "$3.00",
+      "size": "16-24 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Mini Cupcakes, In the Bakery",
+      "ad_price": "$5.00",
+      "size": "12 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Kroger Potato Salad, Macaroni Salad or Cole Slaw",
+      "ad_price": "$7.00",
+      "size": "3 lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Classic Fried or Baked Chicken, Fully Cooked, 8-Piece",
+      "ad_price": "$8.99",
+      "size": "8 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Cacique Chorizo",
+      "ad_price": "$1.50",
+      "size": "9 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Conchas, In the Bakery",
+      "ad_price": "$3.99",
+      "size": "6 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Tajin Clasico Seasoning",
+      "ad_price": "$3.79",
+      "size": "5 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Jarritos",
+      "ad_price": "$1.00",
+      "size": "11.16-12.5 fl oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Guerrero Zero Net Carbs Tortillas",
+      "ad_price": "$2.99",
+      "size": "14 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Papaya",
+      "ad_price": "$1.99",
+      "size": "lb",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "V&V Supremo Cheese",
+      "ad_price": "$6.49",
+      "size": "16 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Bimbo Buns",
+      "ad_price": "$2.99",
+      "size": "8 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Mission Chicharrones",
+      "ad_price": "$2.29",
+      "size": "4 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Rosarita Refried Beans",
+      "ad_price": "$1.67",
+      "size": "15.2 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Gamesa Cremax Wafers",
+      "ad_price": "$1.00",
+      "size": "5.7 oz",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    },
+    {
+      "store": "Baker's",
+      "item": "Paper Mate Ink Joy Ballpoint Pens",
+      "ad_price": "$2.99",
+      "size": "8 ct",
+      "regular": null,
+      "source_ad": "Baker's Weekly Ad 2026-09-02 to 2026-09-08",
+      "as_of": "2026-09-02"
+    }
+  ]
+}

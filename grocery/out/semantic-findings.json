@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-02 08:15",
+    "generated":  "2026-09-02 21:32",
     "board":  "comparison-2026-09-02.json",
-    "sidecar_generated":  "2026-09-02 08:15:53",
+    "sidecar_generated":  "2026-09-02 21:32:25",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,35 +9,16 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3139,
-                     "corpus":  40958,
-                     "rule_invisible":  7479
+                     "board_pairs":  3140,
+                     "corpus":  41003,
+                     "rule_invisible":  7573
                  },
     "identity_count":  0,
-    "coverage_count":  2,
+    "coverage_count":  0,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count",
-                         "cos":  0.7173,
-                         "score":  0.905511,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count",
-                         "cos":  0.7173,
-                         "score":  0.905511,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     }
+
                  ]
 }

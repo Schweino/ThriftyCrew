@@ -1,41 +1,41 @@
 ﻿{
     "store":  "Family Fare",
-    "date":  "2026-09-02",
+    "date":  "2026-09-03",
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  19,
-    "cursor_next":  26,
+    "cursor_start":  26,
+    "cursor_next":  33,
     "total_terms":  602,
     "rotation_terms":  [
-                           "fresh artichokes",
-                           "baby arugula",
-                           "asparagus",
-                           "avocado oil",
-                           "avocado",
-                           "pork baby back ribs",
-                           "baby food pouches"
+                           "infant formula",
+                           "baby wipes",
+                           "bacon",
+                           "plain bagels",
+                           "baked beans",
+                           "baking powder",
+                           "baking soda"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "fresh artichokes",
-                  "baby arugula",
-                  "asparagus",
-                  "avocado oil",
-                  "avocado",
-                  "pork baby back ribs",
-                  "baby food pouches"
+                  "infant formula",
+                  "baby wipes",
+                  "bacon",
+                  "plain bagels",
+                  "baked beans",
+                  "baking powder",
+                  "baking soda"
               ],
     "commodities":  [
-                        "artichokes",
-                        "arugula",
-                        "asparagus",
-                        "avocado-oil",
-                        "avocados",
-                        "baby-back-ribs",
-                        "baby-food"
+                        "baby-formula",
+                        "baby-wipes",
+                        "bacon",
+                        "bagels",
+                        "baked-beans",
+                        "baking-powder",
+                        "baking-soda"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,
