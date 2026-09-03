@@ -52,6 +52,30 @@ $allowPath     = Join-Path $root 'ghost-drift-allowlist.json'
 # The comparison fixtures live WITH the comparison, in lib\ghost-drift-lib.ps1, and this delegates to them
 # rather than keeping a second copy. Two sets would drift apart, and the one that mattered would be whichever
 # nobody ran - the same duplication trap the lib itself exists to avoid.
+# NOT `git show ... | Out-String`. PowerShell splits native output into lines and rejoins them with CRLF,
+# which added 393 bytes to a 28,965-byte tool file and made every committed copy compare unequal - so the
+# tiebreak silently never fired and every difference stayed classified as live drift. Reading the process
+# stream directly keeps the bytes the blob actually has. Measured, not assumed: via the pipe the committed
+# copy differed from an untouched working tree; via the stream it was byte-identical.
+function Get-CommittedToolSource([string]$RepoRoot, [string]$FileName) {
+  try {
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = 'git'
+    $psi.Arguments = ('-C "' + $RepoRoot + '" show HEAD:site/tools/' + $FileName)
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError  = $true
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow  = $true
+    $psi.StandardOutputEncoding = New-Object System.Text.UTF8Encoding($false)
+    $proc = [System.Diagnostics.Process]::Start($psi)
+    $out = $proc.StandardOutput.ReadToEnd()
+    $null = $proc.StandardError.ReadToEnd()
+    $proc.WaitForExit()
+    if ($proc.ExitCode -ne 0) { return $null }
+    return $out
+  } catch { return $null }
+}
+
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
@@ -73,6 +97,29 @@ if ($SelfTest) {
         $localCount = @(Get-ChildItem (Join-Path $repo 'site\tools\*-tool.html') -File).Count
         ($m.Count -gt 0 -and $m.Count -eq $localCount)
       } else { $false })) 'manifest missing, unparseable, or out of step with the local sources'
+
+  # MUST-FIRE (2026-09-03): the committed copy must come back BYTE-IDENTICAL to a clean working tree.
+  # This is the founding bug of the which-side-moved tiebreak, and it is invisible from the outside: the
+  # first cut read the blob with `git show | Out-String`, PowerShell rejoined the lines with CRLF, and a
+  # 28,965-byte tool file came back 29,358 bytes. Every committed copy therefore compared UNEQUAL, the
+  # tiebreak never once fired, and the sweep went on blaming the live page for local edits while looking
+  # like it worked. Revert to any line-splitting read and this case fails.
+  # It asserts only on a tool whose working tree is clean, because a genuinely edited file SHOULD differ.
+  $cmpTool = @(Get-ChildItem (Join-Path $repo 'site\tools\*-tool.html') -File | Sort-Object Name)
+  $pinned = $null
+  foreach ($cf in $cmpTool) {
+    $st = @(& git -C $repo status --porcelain -- ("site/tools/" + $cf.Name))
+    if ($st.Count -eq 0) { $pinned = $cf; break }
+  }
+  if ($pinned) {
+    $wt = [IO.File]::ReadAllText($pinned.FullName)
+    $hd = Get-CommittedToolSource $repo $pinned.Name
+    T ('the committed copy of ' + $pinned.Name + ' reads back byte-identical to a clean working tree') `
+      ($null -ne $hd -and $hd -eq $wt) `
+      ("committed read is mangled or unavailable (len " + $(if ($null -eq $hd) { 'null' } else { $hd.Length }) + " vs working tree " + $wt.Length + ") - the which-side-moved tiebreak cannot fire, so every local edit will be reported as live drift")
+  } else {
+    T 'a clean tool source exists to pin the committed read against' $false 'every *-tool.html is dirty, so this case could not run - it proves nothing today'
+  }
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
@@ -231,7 +278,20 @@ if (-not $manifest.Count) {
 $allow = @()
 if (Test-Path $allowPath) { try { $allow = @((Get-Content $allowPath -Raw | ConvertFrom-Json).allow) } catch { } }
 
-$clean = @(); $drift = @(); $blind = @()
+$clean = @(); $drift = @(); $blind = @(); $unpublished = @()
+
+# WHICH SIDE MOVED (2026-09-03, the class behind queue 2026-09-03-58057b).
+# This lane compares the live body against the WORKING TREE copy of the tool html, and then reports every
+# difference as "a live page has drifted". Those are two different events with one signal:
+#   the live page was edited in Ghost admin        - real drift, republishing would delete someone's edit
+#   the local source was edited and not published  - nothing is wrong with live at all
+# The feed checker made exactly this mistake on 2026-09-03: it inferred "the push succeeded" from a local
+# artifact and accused Cloudflare of failing to deploy, when the pipeline had simply never committed. A
+# confident alert naming the wrong culprit costs a triage slot every time it fires.
+# The committed copy is the tiebreak. If live matches HEAD exactly, live is untouched and it is the LOCAL
+# file that moved ahead - reported, but not a drift failure. Anything else stays DRIFT and still exits 1,
+# so the condition this guard was built for is untouched.
+
 foreach ($t in $manifest) {
   # site\tools is where discovery (above) reads the tool htmls from; joining the manifest's BARE filename to
   # the repo ROOT went blind on all 16 pages when the 2026-08-15 restructure moved them. ONE derivation.
@@ -246,8 +306,18 @@ foreach ($t in $manifest) {
   if ($r.same) { $clean += $t.slug; continue }
   $h = Get-BodyHash $live
   if (Test-Allowlisted $allow $t.slug $h) { $clean += ($t.slug + ' (reviewed drift)'); continue }
+  # live differs from the working tree. Ask the committed copy WHICH SIDE MOVED before blaming live.
+  $committed = Get-CommittedToolSource $repo $t.file
+  if ($null -ne $committed) {
+    $rc = Compare-ToolBody $committed $live
+    if ($rc.same) {
+      $unpublished += [pscustomobject]@{ slug = $t.slug; file = $t.file; delta = $r.delta }
+      continue
+    }
+  }
   $drift += [pscustomobject]@{ slug = $t.slug; file = $t.file; delta = $r.delta; hash = $h
-                               localMid = $r.localMid; liveMid = $r.liveMid; prefix = $r.prefix }
+                               localMid = $r.localMid; liveMid = $r.liveMid; prefix = $r.prefix
+                               committedReadable = ($null -ne $committed) }
 }
 
 if ($Accept) {
@@ -265,6 +335,13 @@ if ($Accept) {
 
 Write-Output ("ghost-drift: {0} of {1} mapped tool(s) match their local source" -f $clean.Count, $manifest.Count)
 foreach ($b in $blind) { Write-Output ("  BLIND  " + $b) }
+foreach ($u in $unpublished) {
+  Write-Output ("  UNPUBLISHED  {0,-26} live matches the COMMITTED {1}; the working-tree copy is {2:+#;-#;0} byte(s) different and has not been published" -f $u.slug, $u.file, (-1 * $u.delta))
+}
+if ($unpublished.Count) {
+  Write-Output ('  Those are not live drift: nothing edited the live page. Publish them when ready with')
+  Write-Output ('  site\build\publish-tool-post.ps1, or commit the local change. They do not fail this guard.')
+}
 foreach ($d in $drift) {
   Write-Output ("  DRIFT  {0,-26} live is {1:+#;-#;0} byte(s) vs {2}" -f $d.slug, $d.delta, $d.file)
   if ($ShowDiff) {
@@ -281,6 +358,6 @@ if ($drift.Count) {
   Write-Output '  the local source, or record it with -Accept <slug> and say why. -ShowDiff prints what differs.'
 }
 # BLIND anywhere means the run cannot claim a clean sweep, even if everything it DID reach matched.
-if ($blind.Count) { Write-GuardComplete -Name 'ghost-drift' -Summary ("clean={0} drift={1} blind={2}" -f $clean.Count, $drift.Count, $blind.Count); exit 3 }
-Write-GuardComplete -Name 'ghost-drift' -Summary ("clean={0} drift={1}" -f $clean.Count, $drift.Count)
+if ($blind.Count) { Write-GuardComplete -Name 'ghost-drift' -Summary ("clean={0} drift={1} unpublished={2} blind={3}" -f $clean.Count, $drift.Count, $unpublished.Count, $blind.Count); exit 3 }
+Write-GuardComplete -Name 'ghost-drift' -Summary ("clean={0} drift={1} unpublished={2}" -f $clean.Count, $drift.Count, $unpublished.Count)
 exit $(if ($drift.Count) { 1 } else { 0 })
