@@ -10,6 +10,15 @@
       "reviewed": "2026-08-29",
       "reviewed_by": "claude (grocery triage), ruled by Brad",
       "why": "OH SNAP! Pickling Co. sells Dilly Bites in a single pouch size, 3.25 oz, and the recorded size is exactly that number - so this row prices a 6-pack at $5.49 against ONE pouch, publishing pickles at $1.6892/oz when the true figure is $5.49 / 19.5 oz = $0.2815/oz, 6x high. The name states the count ('6pk 6 EA') and nothing else, which is why repair-multipack-sizes could not do the multiplication itself. With the per-unit weight supplied the row repairs to '6 pk 3.25 oz' and pu-lib's existing pack-first math resolves it to 19.5 oz. NOT independently re-read against aldi.us - the 3.25 oz pouch is OH SNAP!'s only Dilly Bites format and the recorded size agrees with it, but if Aldi ever lists a different pouch weight the size will change and this hint will stop matching, which is the intended failure mode."
+    },
+    {
+      "store": "Aldi",
+      "item": "Lacroix Peach Strawberry Sparkling Water 12 Pack",
+      "size": "12 fl oz",
+      "unit_size": "12 fl oz",
+      "reviewed": "2026-09-03",
+      "reviewed_by": "claude (grocery triage, plan-2026-09-03, queue 2026-09-03-83b57e deviation)",
+      "why": "The name counts the pack ('12 Pack') and never states the weight of one can, so repair-multipack-sizes REFUSED it by design and it hard-failed guard 5 on the 2026-09-03 rebuild. The missing fact is the single-can weight, and it is corroborated twice rather than assumed. (1) THE SAME BOARD ALREADY CARRIES THE SAME PACK FORMAT, correctly sized, at another store: sparkling-water @ Hy-Vee is 'LaCroix Lime Sparkling Water 12 Pack' recorded as '12 pk 12 fl oz'. That is the estate's own capture of a LaCroix 12-pack and it puts the can at 12 fl oz. (2) The Aldi row's own size field records exactly '12 fl oz', which is the per-unit figure with the multiplication missing - the same fingerprint as the Heinz 2-pack founding case. With the weight supplied the row repairs to '12 pk 12 fl oz' and the UNCHANGED shared multipack-lib math resolves it to 144 fl oz: $5.99 / 144 = $0.0416/floz against the $0.4992/floz the unrepaired row implied, 12x high. THIS HINT CHANGES NO PUBLISHED PRICE: the row held no cell before and does not take one after, because Aldi's sparkling-water cell is already 'Puraqua Black Cherry 33.8 FL OZ' at 0.0234/floz, cheaper than the repaired 0.0416. It was added because the row is a latent 12x error, not to turn a red board green. Keyed to store + exact name + exact size, so any drift in Aldi's own data voids it and the row returns to being a human's problem."
     }
   ]
 }

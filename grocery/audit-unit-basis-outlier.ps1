@@ -62,6 +62,21 @@ function Get-MeasureKind([string]$size) {
   return 'unknown'
 }
 
+# WHICH KIND OF QUANTITY THE ENGINE ACTUALLY DIVIDED BY (2026-09-03, queue 2026-09-03-83b57e).
+# Pure and declared beside Get-MeasureKind so a fixture can reach it without a board. The row's `unit` field
+# is the divisor compare-deals used, so this is the ONLY reference that says whether a cell's own label
+# agrees with its own arithmetic. Find-MeasureKindMismatch still ELECTS the row basis from the peer label
+# majority (see $major below) and the gate still fires on exactly that; this function only lets a finding
+# SAY which reference it failed. Arming the gate on this reference instead takes it from hard=1 to hard=11
+# in one day, which is booked as deferred work (plan-2026-09-03 deferred_findings) and is deliberately not
+# done here: a gate that fails from day one is a gate that gets switched off.
+function Get-UnitKind([string]$unit) {
+  if (-not $unit) { return 'unknown' }
+  if ($unit -imatch '^\s*(floz|fl\.?\s*oz)\s*$') { return 'volume' }
+  if ($unit -imatch '^\s*(oz|lb)\s*$')           { return 'weight' }
+  return 'unknown'
+}
+
 function Find-MeasureKindMismatch {
   param([object[]]$Rows, [int]$MinStores = 3)
   $out = @()
@@ -84,6 +99,7 @@ function Find-MeasureKindMismatch {
     $major = ($known | Sort-Object { -$kinds[$_] } | Select-Object -First 1)
     # who holds the crown? that is the only cell whose basis error changes the published answer
     $cheapest = ($allPriced | Sort-Object { [double]$_.per_unit } | Select-Object -First 1)
+    $unitKind = Get-UnitKind $unit
     foreach ($s in $priced) {
       $k = Get-MeasureKind ([string]$s.size)
       if ($k -eq 'unknown' -or $k -eq $major) { continue }
@@ -93,6 +109,12 @@ function Find-MeasureKindMismatch {
         size = [string]$s.size; item = [string]$s.item
         kind = $k; row_kind = $major
         holds_crown = ([string]$s.store -eq [string]$cheapest.store)
+        # unit_kind is the kind the ENGINE divided by; agrees_with_engine_divisor says whether this cell's
+        # own label matches its own arithmetic. TRUE means the cell is right and the peer majority is what
+        # accused it (the inverted-reference arm, which is what stopped the board on 2026-09-03). FALSE is
+        # the real class this guard was built for: a cell divided in a currency its label does not name.
+        unit_kind = $unitKind
+        agrees_with_engine_divisor = ($k -eq $unitKind)
       }
     }
   }
@@ -212,6 +234,62 @@ if ($SelfTest) {
     # holding the crown is what makes it reach a reader - that is the field the report ranks on
     if (-not $kh[0].holds_crown) { Write-Output '  X MUST-FIRE: the mismatched row holds the crown and was not marked as such'; $bad++ }
   }
+  # the EXISTING baby-formula fixture is also the CLEAN TWIN for the new reference fields: its unit is 'oz'
+  # (weight) and the flagged cell is a fl oz liquid, so it is the REAL class this guard was built for and must
+  # report agrees_with_engine_divisor FALSE. If this ever reads true the new field has inverted the class.
+  if (@($kh).Count -eq 1) {
+    if ($kh[0].unit_kind -ne 'weight') { Write-Output ("  X MUST-FIRE: baby-formula unit_kind should be weight (unit 'oz'), got '" + $kh[0].unit_kind + "'"); $bad++ }
+    if ($kh[0].agrees_with_engine_divisor) { Write-Output '  X MUST-FIRE: baby-formula ready-to-feed liquid must NOT agree with its engine divisor - the new field has inverted the founding class'; $bad++ }
+  }
+
+  # ---- THE INVERTED REFERENCE (2026-09-03, queue 2026-09-03-83b57e) ----
+  # FROZEN BY HAND from the real comparison-2026-09-02 teriyaki-sauce row and NEVER regenerated from the
+  # board: the fix is an allowlist entry, so a regenerated fixture would encode the silence and pass by
+  # finding nothing. The row's DECLARED unit is floz, but 4 of its 6 sized peers label their bottles by net
+  # weight oz, so the peer-majority reference elects 'weight' and accuses the one cell whose label matches
+  # the divisor compare-deals actually used. That cell holds the crown, which is why the board stopped.
+  $kindInverted = @(
+    [pscustomobject]@{ id='teriyaki-sauce'; commodity='Teriyaki Sauce / Marinade'; unit='floz'; stores=@(
+      [pscustomobject]@{ store='Walmart';    per_unit=0.1653; size='15 fl oz'; item='Great Value Teriyaki Sauce, 15 fl oz, 1 Count' }
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.1738; size='27.5 oz';  item='Kinder''s Teriyaki Marinade Sauce, 27.5 oz.' }
+      [pscustomobject]@{ store="Baker's";    per_unit=0.1856; size='21.5 oz';  item='Kikkoman Gochujang Spicy Miso Teriyaki Sauce' }
+      [pscustomobject]@{ store='Fareway';    per_unit=0.2181; size='16 fl oz'; item='Sweet Baby Ray''s Honey Teriyaki Sauce and Marinade' }
+      [pscustomobject]@{ store='Family Fare';per_unit=0.2290; size='10 oz';    item='Teriyaki Sauce Our Family' }
+      [pscustomobject]@{ store='Hy-Vee';     per_unit=0.2376; size='21 oz';    item='Soy Vay Marinade and Sauce, Less Sodium, Veri Veri Teriyaki' }
+    )}
+  )
+  $k3 = Find-MeasureKindMismatch -Rows $kindInverted
+  $ki = @($k3 | Where-Object { $_.id -eq 'teriyaki-sauce' -and $_.store -eq 'Walmart' })
+  if (@($ki).Count -ne 1) { Write-Output ("  X MUST-FIRE: teriyaki-sauce did not flag Walmart's 15 fl oz crown (found " + @($ki).Count + ")"); $bad++ }
+  else {
+    if (-not $ki[0].holds_crown) { Write-Output '  X MUST-FIRE: the teriyaki Walmart cell holds the crown and was not marked as such'; $bad++ }
+    if ($ki[0].kind -ne 'volume' -or $ki[0].row_kind -ne 'weight') { Write-Output ("  X MUST-FIRE: teriyaki kinds wrong (" + $ki[0].kind + " vs row " + $ki[0].row_kind + ")"); $bad++ }
+    # THESE TWO ASSERTIONS ARE UNSATISFIABLE BEFORE THE 2026-09-03 CHANGE, which is what makes this fixture
+    # able to REACH the new code rather than pass by finding nothing.
+    if ($ki[0].unit_kind -ne 'volume') { Write-Output ("  X MUST-FIRE: teriyaki unit_kind should be volume (unit 'floz'), got '" + $ki[0].unit_kind + "'"); $bad++ }
+    if (-not $ki[0].agrees_with_engine_divisor) { Write-Output '  X MUST-FIRE: the teriyaki Walmart cell DOES agree with its engine divisor (15 fl oz on a floz row) and must be reported as such'; $bad++ }
+  }
+  # THE 08-31 SHAPE, same six cells with Baker's back at 'Subway Sweet Onion Teriyaki Sauce' 16 fl oz. That
+  # makes the label tally 3-3 and NO crown finding is produced, which is why the identical Walmart crown was
+  # green on 08-30 and 08-31. This pins the claim that a single peer product swap flipped the gate verdict
+  # while nothing about the accused cell moved.
+  $kindTie = @(
+    [pscustomobject]@{ id='teriyaki-sauce'; commodity='Teriyaki Sauce / Marinade'; unit='floz'; stores=@(
+      [pscustomobject]@{ store='Walmart';    per_unit=0.1653; size='15 fl oz'; item='Great Value Teriyaki Sauce, 15 fl oz, 1 Count' }
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.1738; size='27.5 oz';  item='Kinder''s Teriyaki Marinade Sauce, 27.5 oz.' }
+      [pscustomobject]@{ store="Baker's";    per_unit=0.1856; size='16 fl oz'; item='Subway Sweet Onion Teriyaki Sauce' }
+      [pscustomobject]@{ store='Fareway';    per_unit=0.2181; size='16 fl oz'; item='Sweet Baby Ray''s Honey Teriyaki Sauce and Marinade' }
+      [pscustomobject]@{ store='Family Fare';per_unit=0.2290; size='10 oz';    item='Teriyaki Sauce Our Family' }
+      [pscustomobject]@{ store='Hy-Vee';     per_unit=0.2376; size='21 oz';    item='Soy Vay Marinade and Sauce, Less Sodium, Veri Veri Teriyaki' }
+    )}
+  )
+  $k4 = Find-MeasureKindMismatch -Rows $kindTie
+  $kt = @($k4 | Where-Object { $_.holds_crown })
+  if (@($kt).Count -ne 0) {
+    foreach ($c in $kt) { Write-Output ("  X 08-31 TIE SHAPE produced a crown finding: " + $c.commodity + " / " + $c.store + " (" + $c.kind + " vs row " + $c.row_kind + ")") }
+    $bad += @($kt).Count
+  }
+
   # the ratio detector must STILL be blind to it, which is the whole reason this second rule exists
   # ASSIGN FIRST, then wrap. These finders `return ,@($out)` to keep a single finding from unrolling into a
   # bare object, and on an EMPTY result that wrapper survives: @(Find-BasisOutliers ...) counts 1, whose one
@@ -254,7 +332,7 @@ if ($SelfTest) {
   $f3 = [pscustomobject]@{ id='ranch-dressing'; store="Sam's Club"; size='126.8 oz' }
   if (TKA $f3 $al) { Write-Output '  X MUST-FIRE: the same size on another commodity was silenced'; $bad++ }
 
-  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (3 must-fire, 5 clean twins, both tails, allowlist keyed to the size)'; exit 0 }
+  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (4 must-fire, 6 clean twins, both tails, both references, allowlist keyed to the size)'; exit 0 }
   Write-Output ("audit-unit-basis-outlier SELF-TEST FAIL ($bad)"); exit 2
 }
 
@@ -305,15 +383,43 @@ Write-Output ("measure-kind mismatch: {0} priced cell(s) across {1} commodit(y/i
 foreach ($f in ($kindCrown | Sort-Object commodity)) {
   Write-Output ("  [CROWN ON A {0} ROW] {1,-24} {2,-12} {3} /{4}  size='{5}'  (row is priced by {6})  {7}" -f `
     $f.kind.ToUpper(), $f.commodity, $f.store, ('{0:N4}' -f $f.per_unit), $f.unit, $f.size, $f.row_kind, $f.item)
+  Write-Output ("      reference: label says {0}, engine divided by {1} (unit '{2}') -> agrees_with_engine_divisor={3}{4}" -f `
+    $f.kind, $f.unit_kind, $f.unit, $f.agrees_with_engine_divisor, `
+    $(if ($f.agrees_with_engine_divisor) { '  <- THIS CELL AGREES WITH ITS OWN DIVISOR; it was accused by the PEER LABEL MAJORITY' } else { '' }))
 }
 if (@($kindCrown).Count) {
   Write-Output '  These publish the cheapest verdict from a cell measured in a different currency than the row it wins.'
   Write-Output '  Fix per commodity: exclude the mismatched FORM, split the commodity, or convert the size properly.'
 }
 
+# WHICH REFERENCE DID EACH FINDING FAIL? (2026-09-03, queue 2026-09-03-83b57e)
+# The gate above elects the row basis from the PEER LABEL MAJORITY. That reference is inverted on any
+# commodity whose declared unit is the minority label among its own sized cells, and on those rows the
+# verdict turns on a label tally any single product swap can flip - which is exactly what stopped the board
+# on 2026-09-03 (teriyaki-sauce went volume=3/weight=3 to 2-4 when Baker's cell changed product). So report
+# BOTH arms, ranked, and let a reader see which one a finding is in. Reporting only; no verdict changes.
+$kindDisagreesUnit = @($kinds | Where-Object { -not $_.agrees_with_engine_divisor } | Sort-Object @{e={-$_.holds_crown}}, commodity, store)
+$kindAgreesUnit    = @($kinds | Where-Object {      $_.agrees_with_engine_divisor } | Sort-Object @{e={-$_.holds_crown}}, commodity, store)
+Write-Output ''
+Write-Output ("  reference split of all {0} kind finding(s): {1} label DISAGREES with the row's declared unit (can actually be mis-divided), {2} AGREE with the declared unit but not the peer majority (the inverted-reference arm)" -f `
+  @($kinds).Count, @($kindDisagreesUnit).Count, @($kindAgreesUnit).Count)
+foreach ($arm in @(
+    @{ label = "LABEL DISAGREES WITH DECLARED UNIT (mis-divided candidates)"; set = $kindDisagreesUnit },
+    @{ label = "AGREES WITH DECLARED UNIT, ACCUSED BY PEER MAJORITY (inverted reference)"; set = $kindAgreesUnit })) {
+  $crowns = @($arm.set | Where-Object { $_.holds_crown })
+  Write-Output ("  -- {0}: {1} cell(s), {2} holding a crown" -f $arm.label, @($arm.set).Count, @($crowns).Count)
+  foreach ($f in ($crowns | Select-Object -First 15)) {
+    Write-Output ("       {0,-26} {1,-12} {2} /{3}  size='{4}'  label={5} unit_kind={6}  {7}" -f `
+      $f.commodity, $f.store, ('{0:N4}' -f $f.per_unit), $f.unit, $f.size, $f.kind, $f.unit_kind, $f.item)
+  }
+  if (@($crowns).Count -gt 15) { Write-Output ("       ... and " + (@($crowns).Count - 15) + " more crown-holder(s) in this arm (full list in basis-outliers.json)") }
+}
+
 $outFile = Join-Path $OutDir 'basis-outliers.json'
 @{ generated = (Get-Date).ToString('s'); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; min_stores = $MinStores
-   findings = @($ranked); kind_mismatch = @($kinds); kind_mismatch_crown = @($kindCrown) } |
+   findings = @($ranked); kind_mismatch = @($kinds); kind_mismatch_crown = @($kindCrown)
+   kind_mismatch_label_vs_declared_unit = @($kindDisagreesUnit)
+   kind_mismatch_agrees_unit_not_majority = @($kindAgreesUnit) } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 Write-Output ("  -> $outFile   ($(@($nearInt).Count) with the pack-shape mismatch, which is the pack-price-on-a-unit-size fingerprint)")
 Write-GuardComplete -Name 'unit-basis-outlier' -Summary ("ratio={0} kind={1} crown={2} reviewed={3}" -f @($findings).Count, @($kinds).Count, @($kindCrown).Count, @($kindReviewed).Count)

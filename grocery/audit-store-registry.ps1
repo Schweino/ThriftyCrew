@@ -165,7 +165,23 @@ function Get-StoreListDrift {
     }
     if ($allowed) { continue }
     $reported[$scopeLine] = $true
-    [void]$found.Add(("code: {0}:{1} names {2} store(s) but is missing {3}" -f $FileLabel, $scopeLine, $r.hit, ($r.missing -join ', ')))
+    $msg = ("code: {0}:{1} names {2} store(s) but is missing {3}" -f $FileLabel, $scopeLine, $r.hit, ($r.missing -join ', '))
+    # UNREGISTERED-FIXTURE HINT (2026-09-03, queue 2026-09-03-494974). A code-scanning guard cannot tell a
+    # policy list from test data that happens to name stores, so every must-fire and clean-twin fixture
+    # written for it becomes a finding against itself. allowed_subsets is the register for that, it is
+    # maintained by hand, and it therefore lags each new fixture by exactly one alert - this was the fifth
+    # instance of the shape. So when a finding sits inside a STRING LITERAL in a test- or measure- file,
+    # say so and hand over the entry to paste. The finding still COUNTS and is never suppressed: this only
+    # appends guidance, so the issue count is identical with and without it.
+    $isLiteral = ($u.Count -gt 0 -and (
+                    $u[0] -is [System.Management.Automation.Language.StringConstantExpressionAst] -or
+                    $u[0] -is [System.Management.Automation.Language.ExpandableStringExpressionAst])) -or
+                 ($code -match "=\s*['""]")
+    if ($isLiteral -and $FileLabel -match '^(test|measure)-') {
+      $msg += ("`n        HINT: this looks like an UNREGISTERED FIXTURE, not a hardcoded store list - it sits inside a string literal in a $($Matches[1])- file. If the subset is legitimate (the region under test does not branch on store), register it rather than editing the fixture; a frozen fixture edited to quiet a different guard is how a watcher goes blind. Paste into stores.json allowed_subsets:" +
+               "`n          { `"file`": `"$FileLabel`", `"contains`": `"<a stable substring from INSIDE the literal, not the assignment prefix>`", `"reason`": `"<why this subset proves the contract for all 7 - name the region under test and show it never branches on store>`" }")
+    }
+    [void]$found.Add($msg)
   }
   return $found
 }

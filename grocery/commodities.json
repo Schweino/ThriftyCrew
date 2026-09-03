@@ -14883,6 +14883,7 @@
                         "frozen\\s+mixed\\s+vegetables?"
                     ],
         "exclude":  [
+                        "diced\\s+mixed\\s+vegetables",
                         "\\bsoup\\b",
                         "\\bcanned\\b",
                         "\\bcans?\\b",
@@ -41850,8 +41851,13 @@
         "id":  "chili-beans",
         "label":  "Chili Beans (in sauce)",
         "unit":  "oz",
+        "relax_global":  [
+                             "\\bsauce\\b",
+                             "\\bcanned\\b"
+                         ],
         "include":  [
-                        "chili\\s+(?:style\\s+)?beans?"
+                        "chili\\s+(?:style\\s+)?beans?",
+                        "beans?\\s+in\\s+(?:\\w+\\s+){0,3}chili\\s+sauce"
                     ],
         "exclude":  [
                         "with\\s+meat",

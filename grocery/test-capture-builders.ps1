@@ -120,6 +120,45 @@ T 'the successful stores are NOT in $failed' (($failed -notcontains 'build-walma
 T 'output is emitted in LAUNCH order (walmart before samsclub before fareway)' `
   ($joined.IndexOf('walmart built') -lt $joined.IndexOf('sams builder is broken') -and $joined.IndexOf('sams builder is broken') -lt $joined.IndexOf('fareway selected'))
 
+# ---- THE EDGE READ-AFTER-WRITE DECISION (2026-09-03, queue 2026-09-03-58057b) ----------------------------
+# READ THE SHIPPED FUNCTION, NEVER A COPY - same rule as the builder block above. The founding bug is the
+# 'skipped' case: on 2026-09-03 guards hard-failed, capture-run staged INPUTS only, public\smp-feed.json was
+# left dirty ON PURPOSE, and the check compared the edge against that WORKING-TREE file while gating on
+# $pushed (true even when nothing shipped). It then accused Cloudflare of a failed deploy. The edge was in
+# fact serving the newest PUSHED feed exactly right.
+$edgeI = $src.IndexOf('# >>> EDGE-DECISION >>>')
+$edgeJ = $src.IndexOf('# <<< EDGE-DECISION <<<')
+if ($edgeI -lt 0 -or $edgeJ -lt 0) {
+  Write-Output 'BLIND: could not find the EDGE-DECISION markers in capture-run.ps1 - the edge cases proved NOTHING'
+  exit 3
+}
+. ([scriptblock]::Create($src.Substring($edgeI, $edgeJ - $edgeI)))
+
+# MUST FIRE (skipped): today's exact shape. Guards blocked, so the chain shipped nothing; the working tree
+# is dirty and the committed feed still matches the edge. NO ALERT.
+T 'E  MUST-FIRE (skipped): shipServed FALSE -> skipped, no alert, even with a dirty working tree' `
+  ((Test-EdgeServesPushed -ShipServed $false -CommittedGenerated '2026-09-02T14:56:36' -LiveGenerated '2026-09-02T14:56:36') -eq 'skipped')
+T 'E  MUST-FIRE (skipped): shipServed FALSE stays skipped even when the two values DIFFER - that was the false alert' `
+  ((Test-EdgeServesPushed -ShipServed $false -CommittedGenerated '2026-09-03T08:06:59' -LiveGenerated '2026-09-02T14:56:36') -eq 'skipped')
+# MUST FIRE (stale): a genuine failed deploy on a run that really shipped.
+T 'E  MUST-FIRE (stale): shipServed TRUE and the edge behind the committed feed -> stale' `
+  ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated '2026-09-03T08:06:59' -LiveGenerated '2026-09-02T14:56:36') -eq 'stale')
+# CLEAN TWIN: shipped and the edge agrees.
+T 'E  CLEAN TWIN: shipServed TRUE and the values match -> ok, no alert' `
+  ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated '2026-09-03T08:06:59' -LiveGenerated '2026-09-03T08:06:59') -eq 'ok')
+# BLIND: could-not-run is not a failure.
+T 'E  could-not-read-the-committed-blob is BLIND, not stale - it must not alert' `
+  ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated '' -LiveGenerated '2026-09-03T08:06:59') -eq 'blind')
+# THE TWO ADJACENT BLOCKS MUST STAY IN STEP. The served-dirty block was already gated on $shipServed and is
+# the reason it stayed correctly quiet on 2026-09-03; the edge check was written before it and never picked
+# up the same predicate. If a future editor un-syncs them, this is where it shows.
+T 'E  the served-dirty block is still gated on $shipServed' ($src -match '(?m)^if \(\$shipServed\) \{\r?\n\s*\$servedDirty')
+T 'E  the edge read-after-write is now gated on $shipServed too, NOT on $runDownstream' ($src -match '(?m)^if \(\$shipServed -and \$pushed\) \{')
+T 'E  the edge check compares against the COMMITTED blob, not the working tree' `
+  (($src -match 'git -C \$repo show HEAD:public/smp-feed\.json') -and ($src -match 'git -C \$repo show HEAD:public/board\.json'))
+T 'E  no working-tree Get-Content of public\smp-feed.json remains in the read-after-write block' `
+  ($src -notmatch "Get-Content \(Join-Path \$repo 'public\\\\smp-feed\.json'\) -Raw -Encoding UTF8")
+
 Remove-Item $sandbox -Recurse -Force -ErrorAction SilentlyContinue
 Write-Output ''
 Write-Output ("failed lanes: " + ($failed -join ', '))

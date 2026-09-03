@@ -296,6 +296,11 @@
       "reason": "frozen (l2) coverage-gap-alert fixture: the 3 quiet engine-explained rows. The region under test (check-ad-cycles.ps1 COVERAGE-GAP-ALERT) filters on the per-gap actionable flag only and never branches on store, so 3 stores prove the contract for all 7. SELF-REFERENTIAL like $asrFive: register any new multi-store fixture line here when you write it"
     },
     {
+      "file": "test-auditors.ps1",
+      "contains": "\"id\":\"breakfast-sausage\",\"unit\":\"lb\",\"stores\":[{\"store\":\"Walmart\",\"per_unit\":2.89,\"item\":\"Johnsonville Original Breakfast Sausage, 14 Links, 12 oz (Fresh)\"}]",
+      "reason": "frozen (afc) sausage_carrier CLEAN TWIN: three hand-written comparison rows proving that a sausage on a SAUSAGE commodity (breakfast-sausage at Walmart, kielbasa at Sam's Club) and a real Smoked Gruyere (Family Fare) all stay silent while the Aidells chicken-sausage-on-gruyere must-fire row hard-fails. The region under test, audit-food-category.ps1, never branches on store - it uses the store field only for the food-class-allowlist key (line 91) and the report text (lines 93 and 120) and decides the class on commodity id plus item name against the category-exclude library - so 3 stores prove the contract for all 7 and four more rows would add zero coverage while making the fixture read as a roster it is not. The fixture is frozen under the guard-fixture rule and must never be regenerated from the board. The needle is taken from INSIDE the string literal rather than from the assignment prefix, so it matches both the widened AST statement text and the raw line; if the fixture text is ever rewritten the needle stops matching and the guard speaks up again, which is the correct behaviour. SELF-REFERENTIAL like $asrFive and $cgQuiet above. Confirmed 2026-09-03 (queue 2026-09-03-494974)."
+    },
+    {
       "file": "probe-ingredient.ps1",
       "contains": "browser_required",
       "reason": "probe covers ONLY the 2 server-searchable stores (Bakers, Family Fare); this list is deliberately the other 5, which the probe cannot reach"

@@ -97,6 +97,14 @@
       "reviewed": "2026-08-31",
       "reviewed_by": "claude (opus5 backlog pass)",
       "reason": "A 16 oz bottle of Our Family red wine vinegar on a row priced per fl oz. Vinegar is about 95% water and its density is within about 1% of water, and 16 is the same number whichever unit the shelf tag names - the standard retail bottle is 16 fl oz and Family Fare's own tag writes it '16 oz'. $2.49 / 16 = 0.1556, the published per-unit, so the arithmetic is right and only the KIND label is weight-shaped. Same class as the clam-chowder entry above: one number, two labels. If anything the ~1% density difference overstates the per-fl-oz price, which cannot hand this cell a crown it has not earned."
+    },
+    {
+      "id": "teriyaki-sauce",
+      "store": "Walmart",
+      "size": "15 fl oz",
+      "reviewed": "2026-09-03",
+      "reviewed_by": "claude (grocery triage, plan-2026-09-03)",
+      "reason": "The size names a VOLUME on a row the guard scored as weight, but the row's OWN declared unit is floz per the commodity rule file, so this is the one cell on the row whose label matches the divisor compare-deals used. 2.48 / 15 fl oz = 0.16533, the published 0.1653, taken verbatim from walmart-regular-2026-08-31.json (current_price 2.48, size 15 fl oz). The flag exists because 4 of 6 sized peers label their bottles by net weight oz, which flipped the peer majority from 3-3 to 2-4 when Baker's cell changed from Subway Sweet Onion (16 fl oz) to Kikkoman Gochujang (21.5 oz) on 09-02; the same crown was green on 08-30 and 08-31, re-run hermetically to prove it. Crown checked for robustness both ways across the whole plausible density range 1.00 to 1.16 oz-weight per fl oz: per weight-oz Walmart is 0.1425 to 0.1653 against Sam's Club 0.1738, and per fl oz Walmart is 0.1653 against Sam's Club 0.1738 to 0.2017. Walmart is cheapest at every point, so no published verdict changes. Same shape and same argument as the pickles at Sam's Club 126.8 oz entry of 2026-08-08. NOT an exclude, because the product IS teriyaki sauce and its number is exact."
     }
   ]
 }

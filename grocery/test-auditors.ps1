@@ -1517,8 +1517,13 @@ if (-not (Test-Path $tcb)) {
   $tcbRc = $LASTEXITCODE
   if ($tcbRc -eq 3) {
     Bad ('test-capture-builders is BLIND - it could not find the builder block in capture-run.ps1, so nothing about the builders was proven: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | '))
-  } elseif ($tcbRc -eq 0 -and $r -match 'SELFTEST: 10/10 pass') {
-    Ok 'capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, and stage 2 is still judged on evidence (test-capture-builders 10/10)'
+  } elseif ($tcbRc -eq 0 -and $r -match 'SELFTEST: 19/19 pass') {
+    # The COUNT is part of the assertion, not decoration: it pins the fixture inventory so a case that is
+    # silently dropped fails here instead of passing by finding nothing. 10 -> 19 on 2026-09-03 when queue
+    # 2026-09-03-58057b added the edge read-after-write cases (Test-EdgeServesPushed: the skipped/stale/ok/
+    # blind arms, plus the assertions that the edge check and the served-dirty block stay gated on the same
+    # $shipServed predicate and that both comparisons read the COMMITTED blob).
+    Ok 'capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, stage 2 is still judged on evidence, and the edge read-after-write is gated on $shipServed and compares against git (test-capture-builders 19/19)'
   } else { Bad ('test-capture-builders failed (rc=' + $tcbRc + '): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 }
 # THE SECOND STAGE MUST STAY SERIAL. build-fareway-regular runs only if stage 1 exited 0, and its failure

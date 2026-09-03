@@ -871,14 +871,50 @@ if ($shipServed) {
 }
 # <<< SERVED-DIRTY BLOCK <<<
 
+# >>> EDGE-DECISION >>>
+# THE DECISION, LIFTED OUT SO A FIXTURE CAN REACH IT (2026-09-03, queue 2026-09-03-58057b).
+# THE RULE THIS FILE NOW RUNS ON: any read-after-write in this chain compares against GIT, never against
+# the working tree, and gates on $shipServed, never on $pushed.
+# What went wrong on 2026-09-03: the block below gated on ($runDownstream -and $pushed) and read its own
+# side of the comparison from the WORKING TREE. Both halves are wrong for a held-back board. $pushed is a
+# whole-run flag - line 816 sets it true for "nothing to ship is not a failed ship" - so it is true on a
+# run where public\** was never in the commit at all; and the recipe lane rewrites public\smp-feed.json
+# BEFORE guards run, so on a guards-blocked day that file is dirty on purpose and comparing the edge
+# against it manufactures a mismatch. The alert then asserted a conclusion it never checked ("The push
+# succeeded, so this is a Cloudflare deploy that has not landed") and accused a third party, on exactly
+# the day the operator is already busy with a real hard fail. The edge was in fact serving the newest
+# PUSHED feed correctly. The correct predicate was already eight lines above, in the served-dirty block.
+function Test-EdgeServesPushed {
+  <# .DESCRIPTION Pure. ok | stale | skipped | blind. No network, no git, no clock - so a fixture can drive
+     every arm without a repo. 'skipped' is the 2026-09-03 founding bug: the chain deliberately did not ship
+     the served files, so there is nothing to verify and NOTHING TO ALERT ABOUT. 'blind' is could-not-run,
+     which is not a failure either. #>
+  param(
+    [bool]$ShipServed,
+    [string]$CommittedGenerated,
+    [string]$LiveGenerated
+  )
+  if (-not $ShipServed) { return 'skipped' }
+  if ([string]::IsNullOrWhiteSpace($CommittedGenerated)) { return 'blind' }
+  if ([string]::IsNullOrWhiteSpace($LiveGenerated))      { return 'stale' }
+  if ([string]$LiveGenerated -eq [string]$CommittedGenerated) { return 'ok' }
+  return 'stale'
+}
+# <<< EDGE-DECISION <<<
+
 # ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
 # A successful push is NOT a successful deploy: if the Cloudflare build fails afterwards the edge keeps
 # serving the OLD feed indefinitely and nothing in the estate notices. Cache-busted on purpose - the
 # response carries max-age=1800, and reading through the edge cache would only confirm the cache. Only
-# after a run that actually rebuilt the feed (the chain), and never fatal: this is a watcher, not a gate.
-if ($runDownstream -and $pushed) {
+# after a run that actually SHIPPED the served files, and never fatal: this is a watcher, not a gate.
+if ($shipServed -and $pushed) {
   try {
-    $repoFeed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    # THE COMMITTED BLOB, not the working tree: that is the only copy the edge could possibly be serving.
+    # No stderr redirect - this file runs under EAP=Stop, where redirecting a native child's stderr turns
+    # its first line into a terminating error (documented twice elsewhere in this file).
+    $repoFeedRaw = (& git -C $repo show HEAD:public/smp-feed.json | Out-String)
+    $feedSha = (& git -C $repo rev-parse --short HEAD | Out-String).Trim()
+    $repoFeed = $repoFeedRaw | ConvertFrom-Json
     # POLL, DO NOT GUESS. A Workers asset deploy takes 1-3 minutes; the single 30-second check this
     # replaced would have reported EDGE STALE on most days, and an alert that cries wolf about the one
     # thing a reader actually sees is worse than no alert. Give it 5 minutes, then say so.
@@ -888,8 +924,13 @@ if ($runDownstream -and $pushed) {
       try { $live = ((Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content | ConvertFrom-Json) } catch { continue }
       if ([string]$live.generated -eq [string]$repoFeed.generated) { break }
     }
-    if ($null -eq $live -or [string]$live.generated -ne [string]$repoFeed.generated) {
-      $m = "The edge is serving a feed generated $($live.generated) but the repo pushed $($repoFeed.generated). The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log."
+    # SAY WHAT WAS COMPARED, not what was inferred. The old body asserted "the push succeeded" without ever
+    # having checked it. This one names the committed value, the commit it came from, and the live value.
+    $verdict = Test-EdgeServesPushed -ShipServed $shipServed -CommittedGenerated ([string]$repoFeed.generated) -LiveGenerated ([string]$live.generated)
+    if ($verdict -eq 'blind') {
+      Write-Output 'EDGE BLIND: could not read HEAD:public/smp-feed.json, so nothing was compared and no alert is sent - could-not-run is not a failure.'
+    } elseif ($verdict -eq 'stale') {
+      $m = "The edge is serving smp-feed.json generated '$($live.generated)'. The COMMITTED copy at HEAD ($feedSha) is generated '$($repoFeed.generated)'. Those differ, so the bytes the edge serves are not the bytes in the commit. This compared the edge against git, not against the working tree, and it only runs when the chain actually shipped the served files. Live recipe prices are stale until the deploy lands. Check the CF dashboard build log."
       Write-Output ("EDGE STALE: " + $m)
       try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m | Out-Null } catch {}
     } else {
@@ -897,17 +938,25 @@ if ($runDownstream -and $pushed) {
       # board.json is 2.5 MB of store chips - every price a shopper reads on the board page - and had no
       # read-after-write at all. Same question, second file.
       try {
-        $repoBoard = (Get-Content (Join-Path $repo 'public\board.json') -Raw -Encoding UTF8)
+        # SAME DEFECT, SAME FIX: compare against the COMMITTED blob, never the working tree.
+        $repoBoard = (& git -C $repo show HEAD:public/board.json | Out-String)
         $liveBoard = (Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/board.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content
         $norm = { param($t) ($t -replace "`r`n", "`n").Trim() }
-        if ((& $norm $liveBoard) -ne (& $norm $repoBoard)) {
-          $bm = 'The edge is serving a board.json that does not match the one just pushed (' + (& $norm $liveBoard).Length + ' vs ' + (& $norm $repoBoard).Length + ' chars). smp-feed deployed, so this is board.json specifically - the store chips on the board page are stale.'
+        if ([string]::IsNullOrWhiteSpace($repoBoard)) {
+          Write-Output 'EDGE BLIND (board): could not read HEAD:public/board.json, so nothing was compared and no alert is sent.'
+        } elseif ((& $norm $liveBoard) -ne (& $norm $repoBoard)) {
+          $bm = 'The edge is serving a board.json that does not match the COMMITTED copy at HEAD (' + $feedSha + '): ' + (& $norm $liveBoard).Length + ' vs ' + (& $norm $repoBoard).Length + ' chars. smp-feed deployed, so this is board.json specifically - the store chips on the board page are stale. Compared against git, not the working tree.'
           Write-Output ('EDGE STALE (board): ' + $bm)
           try { Send-Alert -Subject "board.json edge did not pick up today's push - $today" -Body $bm | Out-Null } catch {}
-        } else { Write-Output 'edge verified: board.json matches the pushed copy' }
+        } else { Write-Output 'edge verified: board.json matches the COMMITTED copy at HEAD ' + $feedSha }
       } catch { Write-Output ("board edge verify threw (not fatal): " + $_.Exception.Message) }
     }
   } catch { Write-Output ("edge verify threw (not fatal): " + $_.Exception.Message) }
+} elseif ($runDownstream) {
+  # THE 2026-09-03 CASE, said out loud instead of alerting: the chain ran but deliberately did not ship the
+  # served files (guards blocked), so public\** was never in the commit and there is nothing for the edge to
+  # have picked up. A dirty working-tree feed here is expected, not evidence of a failed deploy.
+  Write-Output ('edge check skipped: ' + (Test-EdgeServesPushed -ShipServed $shipServed -CommittedGenerated 'n/a' -LiveGenerated 'n/a') + ' - the chain staged INPUTS only (shipServed=false), so no served file was pushed to verify. Readers keep the last good board.')
 }
 
 # ---- ASSERT THE FEED TRULY REFRESHED (was run-daily-local's assert) ------------------------------------
