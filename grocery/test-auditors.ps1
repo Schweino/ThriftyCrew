@@ -1846,6 +1846,39 @@ else { Bad ('sale-fallback still flags a cell whose everyday twin sits in an old
 # and the auditor must SAY what it read - a pool built from zero files answers "no twin" for every cell.
 if ($r.text -match 'everyday pool from the engine fileset' -and $r.text -match 'Walmart=2f/') { Ok 'sale-fallback reports its per-store pool size, so an empty pool is visible on the run that produces it' }
 else { Bad ('sale-fallback no longer reports the per-store everyday pool it built (expected Walmart=2f/ from the union) - an empty pool is indistinguishable from a store with no twins: ' + ($r.text -replace "`n", ' ')) }
+
+# ---------------------------------------------------------------- (k3b) sale-fallback alerts by OWNERSHIP,
+# and that ownership EXPIRES (2026-09-03, queue 2026-09-03-b844ab).
+# THE FOUNDING SHAPE: every gap this auditor finds is routed to an owner by this same script - browser
+# stores to research-worklist.json for the weekly agent, Family Fare to the daily self-heal - and then the
+# daily job emailed the whole list anyway. b844ab spent an entire triage item establishing that all five
+# cells were already queued, i.e. confirming a no-op. The fix routes the email by ownership.
+# The DANGER of that fix is that it is one line away from being a permanent mute, so these three cases pin
+# the escape hatch rather than the silence: a fresh gap is quiet, an ABANDONED one is loud, and a ledger we
+# cannot read makes everything loud. Delete any of them and the mute becomes unconditional.
+$sfLedger = Join-Path $fxSf 'sale-fallback-ownership.json'
+Set-Content (Join-Path $fxSf 'regular\walmart-regular-2026-08-31.json') '{"store":"Walmart","deals":[{"name":"Great Value Whole Milk, 1 Gallon"},{"name":"Marketside Rotisserie Chicken"}]}' -Encoding UTF8
+# CLEAN TWIN: a gap seen for the FIRST time is owned and inside its grace window, so it must NOT escalate.
+# gap_count must still be 1 - the gap is reported and pre-publish still sees it; only the email is gated.
+Remove-Item $sfLedger -Force -ErrorAction SilentlyContinue
+$r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
+$sfg = try { Get-Content (Join-Path $fxSf 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($sfg -and [int]$sfg.gap_count -eq 1 -and [int]$sfg.escalated_count -eq 0 -and [string]@($sfg.owned)[0].owner -eq 'weekly-browser-agent') { Ok 'sale-fallback clean twin: a first-seen browser gap is OWNED and does not escalate, while gap_count still reports it (b844ab noise gone, visibility kept)' }
+else { Bad ('sale-fallback did not route a fresh browser gap to its owner (gap_count=' + [int]$sfg.gap_count + ' escalated=' + [int]$sfg.escalated_count + ') - the b844ab alert is either back, or the gap has vanished from the report entirely: ' + ($r.text -replace "`n", ' ')) }
+# MUST-FIRE 1: the SAME gap, still unworked past the weekly agent's grace window, must escalate. This is the
+# whole reason the routing is safe. first_seen is 2026-07-01 against a 2026-09-02 board = 63d, grace 16d.
+'{"ground-beef-8020|Walmart":{"first_seen":"2026-07-01","owner":"weekly-browser-agent"}}' | Set-Content $sfLedger -Encoding UTF8
+$r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
+$sfg = try { Get-Content (Join-Path $fxSf 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($sfg -and [int]$sfg.escalated_count -eq 1 -and [int]@($sfg.escalated)[0].age_days -gt 16) { Ok 'sale-fallback MUST-FIRE: a gap its owner has not cleared in 63d escalates past the 16d grace - ownership routing cannot become a permanent mute' }
+else { Bad ('sale-fallback did NOT escalate a gap abandoned for 63 days (escalated=' + [int]$sfg.escalated_count + ') - browser-store gaps can now sit forever with nobody looking, which is worse than the noise this replaced: ' + ($r.text -replace "`n", ' ')) }
+# MUST-FIRE 2: an unreadable ledger FAILS CLOSED. Resetting it to empty would restart every clock silently
+# and make the expiry above unreachable - the shape where a gate quietly stops being able to arm.
+'{ this is not json' | Set-Content $sfLedger -Encoding UTF8
+$r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
+$sfg = try { Get-Content (Join-Path $fxSf 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($sfg -and [int]$sfg.escalated_count -eq 1 -and [bool]$sfg.ledger_unreadable) { Ok 'sale-fallback MUST-FIRE: a corrupt ownership ledger escalates every gap and says so, instead of silently restarting the clocks' }
+else { Bad ('sale-fallback did not fail closed on an unreadable ownership ledger (escalated=' + [int]$sfg.escalated_count + ' flag=' + [bool]$sfg.ledger_unreadable + ') - a deleted or corrupt ledger would now mute every gap forever: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSf -Recurse -Force -ErrorAction SilentlyContinue
 
 # ---------------------------------------------------------------- N+6. the verdict-driven record-low purge

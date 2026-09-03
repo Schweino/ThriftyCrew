@@ -102,11 +102,78 @@ foreach ($it in $all) {
 # later in a worklist.
 $pool = (@($everydayNames.Keys) | Sort-Object | ForEach-Object { "{0}={1}f/{2}n" -f $_, ([int]$everydayFileCount[$_]), $everydayNames[$_].Count }) -join ' '
 Write-Output ("sale-fallback: everyday pool from the engine fileset (as-of {0:yyyy-MM-dd}, union {1}d): {2}" -f $asof, (Get-RegularUnionDays), $pool)
-$rep = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); as_of=$asof.ToString('yyyy-MM-dd'); everyday_pool=$pool; gap_count=$gaps.Count; gaps=$gaps }
-$rep | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'sale-fallback-gaps.json') -Encoding UTF8
 ([ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); items=$work }) | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'research-worklist.json') -Encoding UTF8
+
+# ---- OWNERSHIP ROUTING (2026-09-03, queue 2026-09-03-b844ab) --------------------------------------
+# EVERY gap this auditor can find is already owned by another job the moment it is found: the six
+# browser stores are written to research-worklist.json three lines above for the weekly agent, and
+# Family Fare is re-researched daily by research-familyfare-everyday.ps1. The alert therefore told
+# triage about work this same script had just routed elsewhere, and it cost a full triage item
+# (b844ab) whose entire content was confirming a no-op. Alerting is now by OWNERSHIP, not existence.
+#
+# THIS IS NOT A MUTE, and it must never become one. Two properties keep it honest:
+#   * ownership is PROVEN, never assumed. A browser gap counts as owned only if it is genuinely in the
+#     worklist we just wrote. An alert that says "queued for the weekly agent" about something that is
+#     not queued is a worse bug than the noise it replaced, so absence of the row escalates at once.
+#   * ownership EXPIRES at roughly two of the owner's own cycles (weekly agent -> 16d, daily FF
+#     self-heal -> 3d). An owner that stops working a gap surfaces on its own. A window WIDER than the
+#     cadence would never fire, which is the tolerance-wider-than-period shape; two cycles fires on the
+#     third missed one while absorbing a single skip.
+# The ledger is TRACKED (grocery\sale-fallback-ownership.json), deliberately. out\ is gitignored, and a
+# first_seen that reset on a clean checkout would make the expiry permanently unreachable - a gate that
+# can never arm. Fixture runs (any -OutDir other than the real out\) keep their ledger beside the
+# fixture so a test can never write the estate's.
+$OWNER_GRACE = @{ 'weekly-browser-agent' = 16; 'daily-ff-selfheal' = 3 }
+function Get-NormPath([string]$p) { try { [System.IO.Path]::GetFullPath($p).TrimEnd('\') } catch { return $p } }
+$ledgerPath = if ((Get-NormPath $OutDir) -ieq (Get-NormPath (Join-Path $root 'out'))) { Join-Path $root 'sale-fallback-ownership.json' } else { Join-Path $OutDir 'sale-fallback-ownership.json' }
+$script:workKeys = New-Object System.Collections.Generic.HashSet[string]
+foreach ($w in $work) { [void]$script:workKeys.Add(($w.commodity + '|' + $w.store)) }
+function Get-GapOwner([string]$commodity, [string]$store) {
+  if ($store -eq 'Family Fare') { return 'daily-ff-selfheal' }
+  if ($script:workKeys.Contains($commodity + '|' + $store)) { return 'weekly-browser-agent' }
+  return 'NONE'
+}
+# A ledger we cannot read fails CLOSED: every gap escalates. Resetting to empty on a parse error would
+# silently restart every clock and is exactly how an expiry stops existing.
+$ledger = @{}; $ledgerBroken = $false
+if (Test-Path $ledgerPath) {
+  try {
+    $rawL = Get-Content $ledgerPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    foreach ($p in $rawL.PSObject.Properties) { $ledger[$p.Name] = $p.Value }
+  } catch { $ledgerBroken = $true; Write-Output "sale-fallback: OWNERSHIP LEDGER UNREADABLE ($ledgerPath) - every gap escalates until it is repaired" }
+}
+$today = $asof.Date
+$nextLedger = [ordered]@{}
+foreach ($gp in $gaps) {
+  $key   = $gp.commodity + '|' + $gp.store
+  $owner = Get-GapOwner $gp.commodity $gp.store
+  $grace = if ($OWNER_GRACE.ContainsKey($owner)) { [int]$OWNER_GRACE[$owner] } else { 0 }
+  # first_seen survives only while the OWNER is unchanged; a gap that changes hands restarts its clock
+  $first = $null
+  if (-not $ledgerBroken -and $ledger.ContainsKey($key) -and ([string]$ledger[$key].owner -eq $owner)) { $first = [string]$ledger[$key].first_seen }
+  if (-not $first) { $first = $today.ToString('yyyy-MM-dd') }
+  $age = 0; try { $age = [int]([datetime]$today - [datetime]$first).TotalDays } catch { $age = 0 }
+  $escalate = $ledgerBroken -or ($owner -eq 'NONE') -or ($age -gt $grace)
+  $gp | Add-Member -NotePropertyName owner       -NotePropertyValue $owner
+  $gp | Add-Member -NotePropertyName first_seen  -NotePropertyValue $first
+  $gp | Add-Member -NotePropertyName age_days    -NotePropertyValue $age
+  $gp | Add-Member -NotePropertyName grace_days  -NotePropertyValue $grace
+  $gp | Add-Member -NotePropertyName escalated   -NotePropertyValue $escalate
+  $nextLedger[$key] = [ordered]@{ first_seen=$first; owner=$owner }
+}
+# only CURRENT gaps are carried, so a gap the owner clears drops out and its clock is gone with it
+($nextLedger | ConvertTo-Json -Depth 4) | Set-Content $ledgerPath -Encoding UTF8
+$escalated = @($gaps | Where-Object { $_.escalated })
+$owned     = @($gaps | Where-Object { -not $_.escalated })
+
+# gap_count stays the TOTAL and the exit code stays tied to it: test-auditors (k3) pins rc=2 as the
+# must-fire for a real gap, weekly-post-capture logs gap_count pre-publish, and neither is an alerting
+# decision. Only the alert reads escalated_count. Nothing here is allowed to make a gap invisible.
+$rep = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); as_of=$asof.ToString('yyyy-MM-dd'); everyday_pool=$pool; gap_count=$gaps.Count; escalated_count=$escalated.Count; owned_count=$owned.Count; ledger_unreadable=$ledgerBroken; escalated=$escalated; owned=$owned; gaps=$gaps }
+$rep | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'sale-fallback-gaps.json') -Encoding UTF8
 if ($gaps.Count) {
   Write-Output ("sale-fallback: $($gaps.Count) on-sale cell(s) have NO everyday fallback (would vanish when the sale ends):")
-  foreach ($gp in $gaps) { Write-Output ("  {0,-18} {1}" -f $gp.commodity, $gp.store) }
+  foreach ($gp in $gaps) { Write-Output ("  {0,-18} {1,-14} owner={2} age={3}d/{4}d{5}" -f $gp.commodity, $gp.store, $gp.owner, $gp.age_days, $gp.grace_days, $(if ($gp.escalated) { ' ESCALATED' } else { '' })) }
+  Write-Output ("sale-fallback: $($owned.Count) owned and being worked, $($escalated.Count) ESCALATED (no owner, or the owner has not cleared it in its grace window)")
   Write-GuardComplete -Name 'sale-fallback'; exit 2
 } else { Write-Output 'sale-fallback: none - every on-sale cell has an everyday item to revert to'; Write-GuardComplete -Name 'sale-fallback'; exit 0 }

@@ -1735,20 +1735,37 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
       # audit-sale-fallback flags them; FF self-heals daily (researched above), browser-store gaps go to
       # research-worklist.json for the weekly agent to research the next-cheapest everyday item. De-duped alert.
+      # ALERTS ON ESCALATED GAPS ONLY (2026-09-03, queue 2026-09-03-b844ab). Every gap audit-sale-fallback
+      # finds is routed to an owner by that same script, so alerting on gap_count raised a triage item whose
+      # whole content was confirming work already queued elsewhere. audit-sale-fallback now proves ownership
+      # (a browser gap must really be in the worklist) and expires it at ~2 of the owner's own cycles, so
+      # escalated_count means "no owner, or an owner that has stopped working it" - which is the condition
+      # actually worth waking someone for. The REVIEW line still carries the FULL count, so nothing is
+      # hidden from the daily summary; only the email is gated.
       try {
         $null = (Get-FanoutRecord 'sale-fallback' $fanRecs).ExitCode
         $sf = try { Get-Content (Join-Path $OutDir 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
         if ($sf -and [int]$sf.gap_count -gt 0) {
-          $sfSig = (@($sf.gaps | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
+          $sfEsc  = @($sf.escalated)
+          $sfList = (@($sf.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
+          Log ("sale-fallback: $($sf.gap_count) on-sale cell(s) with no everyday fallback ($([int]$sf.owned_count) owned, $([int]$sf.escalated_count) escalated) - $sfList")
+          $summary += "REVIEW    sale-fallback: $($sf.gap_count) on-sale cell(s) would vanish when the sale ends ($([int]$sf.owned_count) owned and being worked, $([int]$sf.escalated_count) escalated) - see sale-fallback-gaps.json"
+          # An UNREADABLE ledger is not a quiet day: audit-sale-fallback escalates everything in that case
+          # and the flag is carried here so the reason reaches the reader rather than looking like a spike.
+          if ([bool]$sf.ledger_unreadable) { $summary += 'REVIEW    sale-fallback: the ownership ledger could not be read, so every gap escalated - repair grocery\sale-fallback-ownership.json' }
           $sfF = Join-Path $OutDir 'sale-fallback-alert.sig'
           $sfPrev = if (Test-Path $sfF) { ((Get-Content $sfF -Raw) + '').Trim() } else { '' }
-          $sfList = (@($sf.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
-          Log ("sale-fallback: $($sf.gap_count) on-sale cell(s) with no everyday fallback - $sfList")
-          $summary += "REVIEW    sale-fallback: $($sf.gap_count) on-sale cell(s) would vanish when the sale ends - see sale-fallback-gaps.json"
-          if ($sfSig -ne $sfPrev -and (-not $NoAlert)) {
-            try { Send-Alert -Subject "Grocery: $($sf.gap_count) on-sale item(s) have no everyday fallback - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends: $sfList. Browser stores are queued in grocery/out/research-worklist.json for the weekly agent to research the next-cheapest everyday item; Family Fare self-heals daily." | Out-Null
-                  if ($LASTEXITCODE -eq 0) { Set-Content -Path $sfF -Value $sfSig -Encoding UTF8; Log 'sale-fallback alert sent' } } catch { Log ('sale-fallback alert threw: ' + $_.Exception.Message) }
-          } else { Log 'sale-fallback gaps unchanged - not re-alerting' }
+          if ($sfEsc.Count -gt 0) {
+            $sfSig  = (@($sfEsc | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
+            $sfEList = (@($sfEsc | ForEach-Object { $_.commodity + ' @ ' + $_.store + ' (owner=' + $_.owner + ', ' + [int]$_.age_days + 'd unworked, grace ' + [int]$_.grace_days + 'd)' }) -join '; ')
+            if ($sfSig -ne $sfPrev -and (-not $NoAlert)) {
+              try { Send-Alert -Subject "Grocery: $($sfEsc.Count) on-sale item(s) have no everyday fallback and NO ONE IS WORKING THEM - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends - and unlike the routine case these are NOT being worked: $sfEList. An owner of NONE means the cell is in no queue at all; an age past the grace window means the owning job (weekly browser agent, or the daily Family Fare self-heal) has had it that long and not cleared it. Routine owned gaps are deliberately not emailed and are listed in grocery/out/sale-fallback-gaps.json under 'owned'." | Out-Null
+                    if ($LASTEXITCODE -eq 0) { Set-Content -Path $sfF -Value $sfSig -Encoding UTF8; Log 'sale-fallback ESCALATED alert sent' } } catch { Log ('sale-fallback alert threw: ' + $_.Exception.Message) }
+            } else { Log 'sale-fallback escalated set unchanged - not re-alerting' }
+          } else {
+            Log "sale-fallback: all $([int]$sf.gap_count) gap(s) are owned and inside their grace window - no alert (this is the routine case)"
+            if (Test-Path $sfF) { Remove-Item $sfF -ErrorAction SilentlyContinue }
+          }
         } else { if (Test-Path (Join-Path $OutDir 'sale-fallback-alert.sig')) { Remove-Item (Join-Path $OutDir 'sale-fallback-alert.sig') -ErrorAction SilentlyContinue } }
       } catch { Log ('sale-fallback guard threw: ' + $_.Exception.Message) }
       # Keep the product-URL worklist current: after prices move, flag any "See item" link whose board price
