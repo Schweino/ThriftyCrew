@@ -67,8 +67,20 @@ foreach($p in ((Get-Content (Join-Path $here 'planner-extra-packages.json') -Raw
 # a pantry container, covered lines buy nothing of their own).
 . (Join-Path $here 'lib\package-cost-lib.ps1')
 $costedPkg=@{}
+# COVERED LINES, RECORDED RATHER THAN JUST SKIPPED (2026-09-03, queue 2026-09-02-corn05).
+# A covered line is one the reader already bought under another ingredient ("From the limes you already
+# bought"). The engine gives it no buy package, so the `continue` below skipped it - and then
+# Resolve-PlannerPkg fell through to the db\ingredients.json catalogue and RE-SUPPLIED the very package
+# the skip had removed, so the Meal Plan Builder charged for it. The Builder's own guard is correct
+# (meal-plan-builder-tool.html pkgN returns null when it.pk<=0); it had nothing to fire on because this
+# file never emitted pk 0. Measured before the fix: ZERO occurrences of "pk":0 in the whole of
+# planner-data.js, on a catalogue with exactly 2 covered lines. Skipping is not the same as saying no.
+$coveredLine=@{}
 foreach($c in (Get-Content (Join-Path $here 'db\costed.json') -Raw | ConvertFrom-Json)){
   foreach($l in $c.lines){
+    if(($l.PSObject.Properties.Name -contains 'covered_by') -and $l.covered_by -and ([string]$l.covered_by).Trim() -ne ''){
+      $coveredLine[([string]$c.slug)+'|'+([string]$l.item)]=$true
+    }
     if($null -eq $l.pkg_g -or [double]$l.pkg_g -le 0){ continue }
     $gross = if(($l.PSObject.Properties.Name -contains 'pkg_gross_g') -and $l.pkg_gross_g){ [double]$l.pkg_gross_g } else { [double]$l.pkg_g }
     $costedPkg[([string]$c.slug)+'|'+([string]$l.item)]=@{ g=[double]$l.pkg_g; gross=$gross }
@@ -78,6 +90,12 @@ Write-Output ("db\costed.json: {0} line(s) carry a buy package the planner can p
 # ONE resolution, used by the emit AND by the "items without a package def" report below, so the report
 # cannot name an item the emit actually priced.
 function Resolve-PlannerPkg([string]$slug,[string]$item){
+  # A COVERED LINE BUYS NOTHING, AND MUST SAY SO. pk 0 is the signal the Builder's pkgN guard reads; the
+  # ingredient-catalogue fallback below must not be reached for these lines, because it would hand back a
+  # real package for a purchase that never happens. gross is 0 too, which keeps Get-ScalerGpu a no-op and
+  # leaves gpu intact - the same contract build-card2.ps1:218 keeps for the card's data block, and for the
+  # same reason: a zeroed gpu makes the line unpriceable rather than free.
+  if($coveredLine.ContainsKey($slug+'|'+$item)){ return @{ g=0.0; l=''; gross=0.0 } }
   $c=$costedPkg[$slug+'|'+$item]
   if($c){
     # the LABEL still comes from ingredients.json - it is the reader-facing name of the container the

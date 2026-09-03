@@ -123,6 +123,77 @@ $CASES = @(
      buy='7/8 cup grated'
      expect='1 3/4 cup grated'
      note='SCOPE: the same authored fraction still scales normally at any factor but 1 - 0.875 x 2 = 1.75, which the table says exactly' }
+  # ---- 2026-09-03, queue 2026-09-02-corn06: ONE AMOUNT WRITTEN IN PARTS. The 2026-09-01 fix installed
+  # "a label is one quantity however many numbers it take to write it" on the lb+oz and qualified paths
+  # and left the plain leading-number path explicitly unchanged, so the estate held the rule and its
+  # counter-example in the same function. Measured over all 7,838 live buy labels, not the 13 the alert
+  # claimed: 55 second-portion labels scaled only their leading quantity, 2 ranges scaled only their
+  # first endpoint, and 4 juice/zest labels scaled nothing while their gram figure doubled.
+  # Every expectation below was read off the shipped implementation, never guessed.
+  @{ id='F18'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='1 tbsp + 1/2 tsp'
+     expect='2 tbsp + 1 tsp'
+     note='slow-cooker-chicken-cacciatore-pasta balsamic vinegar, live: the plus path rendered "2 tbsp + 1/2 tsp", the exact half-move the 09-01 note called worse than moving neither' }
+  @{ id='F19'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='juice of 3 1/2 limes; 7 tablespoons'
+     expect='juice of 7 limes; 14 tablespoons'
+     note='street-corn-chicken-rice-bowls, live: ONE amount stated twice, and the ONLY statement of it. Scaled nothing at all before, while its 210 g doubled beside it' }
+  @{ id='F20'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='zest of 3 1/2 limes; 3 1/2 teaspoons'
+     expect='zest of 7 limes; 7 teaspoons'
+     note='the sibling zest line on the same card; "zest of" admitted with "juice of" as a lead prefix' }
+  @{ id='F21'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='1/8 to 1/2 tsp fine salt'
+     expect='1/4 to 1 tsp fine salt'
+     note='beef-picadillo-rice-bowls, live: a RANGE is one amount in parts, so BOTH endpoints move or neither does' }
+  @{ id='F22'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='10 to 11 cloves, finely minced'
+     expect='20 to 22 cloves, finely minced'
+     note='italian-chicken-tortellini-skillet garlic, the second live range; cloves is in the closed cook-unit list' }
+  @{ id='F23'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='1 tsp (patties) + 1/2 tsp (gravy)'
+     expect='2 tsp (patties) + 1 tsp (gravy)'
+     note='salisbury-steak-potato-bowls worcestershire, live: parentheticals sit BETWEEN the parts and must survive the split untouched' }
+  @{ id='F24'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='1 cup plus 5 tbsp salted (2 sticks plus 5 tbsp)'
+     expect='2 cup plus 10 tbsp salted (2 sticks plus 5 tbsp)'
+     note='garlic-butter-steak-bites-zucchini butter, live. THE SPLIT IS AT PAREN DEPTH 0 ONLY: the "plus" inside the bracketed restatement must not split, and that restatement must not scale' }
+  @{ id='F25'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total)'
+     expect='7 teaspoons for the chicken; 7 teaspoons for the cheese sauce; 7 teaspoons for the pasta water (10 1/2 teaspoons total)'
+     note='honey-bbq-chicken-mac-and-cheese salt, live: THREE portions, each with trailing prose, and the parenthetical TOTAL stays frozen by the 2026-09-01 decision' }
+  @{ id='F26'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='juice of 3 1/2 lemons (about 2/3 cup)'
+     expect='juice of 7 lemons (about 2/3 cup)'
+     note='chicken-piccata-skillet, live: no connector, so this one moves on the LEAD path via the new juice-of prefix' }
+  # ---- THE CLEAN-TWIN CORPUS. These are the 14 measured labels whose SECOND number is a knife cut, a can
+  # size, a per-unit weight, a product name or a cook time. A scale-every-number fix corrupts every one of
+  # them, and they are the whole reason the connector and unit lists are closed. Each must render exactly
+  # as it does today, and each also passes under -NegativeTest, which is what makes the set meaningful.
+  @{ id='F27'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='3 1/2 14-oz cans, undrained (about 5 3/4 cups)'
+     expect='7 14-oz cans, undrained (about 5 3/4 cups)'
+     note='turkey-zucchini-noodle-casserole: the CAN SIZE and the parenthetical cup restatement must not move, only the count. No connector stands between "3 1/2" and "14-oz"' }
+  @{ id='F28'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='4 3/4 lb, cut into 1-inch chunks'
+     expect='9 1/2 lb, cut into 1-inch chunks'
+     note='street-corn chicken breast: a KNIFE CUT. "into" is not the connector "to" - the connector demands whitespace on both sides, and nine of the fourteen twins depend on that' }
+  @{ id='F29'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='9 1/4 sweet potatoes, about 1/2 lb each'
+     expect='19 sweet potatoes, about 1/2 lb each'
+     note='chimichurri-steak-sheet-pan: a PER-UNIT WEIGHT. Doubling the "1/2 lb each" would say the potatoes themselves got bigger' }
+  @{ id='F30'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='14 oz. 1/3-less-fat cream cheese, softened'
+     expect='28 oz. 1/3-less-fat cream cheese, softened'
+     note='stuffed-chicken-breast: the 1/3 is part of a PRODUCT NAME, not a quantity' }
+  @{ id='F31'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='3 1/2 cups shredded cheddar, added the last 2 minutes'
+     expect='7 cups shredded cheddar, added the last 2 minutes'
+     note='sheet-pan-smoked-sausage-broccoli-cheddar: a COOK TIME. This is why "minutes" must never enter the closed cook-unit list' }
+  @{ id='F32'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='9 thick-cut slices, cut into 1/2-inch pieces'
+     expect='18 thick-cut slices, cut into 1/2-inch pieces'
+     note='country-captain-chicken bacon: a knife cut behind a COMMA, which is deliberately not a connector' }
 )
 
 # ---------------------------------------------------------------------------------------------------

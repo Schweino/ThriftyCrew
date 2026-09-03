@@ -366,6 +366,23 @@ if($CrossCheck){
   # count the ENGINE arrived at. Nothing here reads the feed, so it is true whenever it is run.
   $countBad = New-Object System.Collections.Generic.List[string]
   $countChecked = 0; $countSkipped = 0
+  # THE THIRD QUESTION (2026-09-03, queue 2026-09-02-corn05): does the COVERED signal actually reach both
+  # reader surfaces? Until today this cross-check compared only its own arithmetic, so it could sit red
+  # for a day with 2 disagreements while BOTH surfaces kept charging for lines whose own prose says the
+  # reader already bought them. covered_by is authored in db\costed.json; the card learns it as pkg_g 0
+  # in its data block and the Meal Plan Builder learns it as pk 0 in planner-data.js. Neither carries a
+  # covered flag, so those two zeroes ARE the signal and a missing one is silent. Assert them by name.
+  $coveredExpect = @{}
+  foreach($c in (Get-Content (Join-Path $mp 'db\costed.json') -Raw | ConvertFrom-Json)){
+    foreach($l in $c.lines){
+      if(($l.PSObject.Properties.Name -contains 'covered_by') -and $l.covered_by -and ([string]$l.covered_by).Trim() -ne ''){
+        $coveredExpect[([string]$c.slug)+'|'+([string]$l.item)] = [string]$l.covered_by
+      }
+    }
+  }
+  $coveredSeenInCard = @{}
+  $plannerPath = Join-Path $mp 'planner-data.js'
+  $plannerTxt = if(Test-Path $plannerPath){ [IO.File]::ReadAllText($plannerPath,[Text.Encoding]::UTF8) } else { $null }
   foreach($r in $rows){
     $cf = Join-Path $builtDir ($r.slug + '.body.html')
     if(-not (Test-Path $cf)){ $noCard++; continue }
@@ -405,6 +422,17 @@ if($CrossCheck){
       }
     }
 
+    # THE CARD SURFACE: every covered line in this recipe must carry pkg_g 0 in the block the browser reads.
+    foreach($it in @($d.ing)){
+      $ck = ([string]$r.slug)+'|'+([string]$it.item)
+      if($coveredExpect.ContainsKey($ck)){
+        $coveredSeenInCard[$ck] = $true
+        if([double]$it.pkg_g -gt 0){
+          $countBad.Add(("{0} :: {1}: costed.json says this line is covered by '{2}', but the built card's data block carries pkg_g {3} - the widget will charge the reader for a package the line above already bought. Rebuild the card." -f $r.slug, $it.item, $coveredExpect[$ck], $it.pkg_g))
+        }
+      }
+    }
+
     $tot = 0.0; $ok = $true
     foreach($it in $d.ing){
       $gpu = [double]$it.gpu
@@ -412,7 +440,11 @@ if($CrossCheck){
       $req = [double]$it.grams / $gpu
       $fb = if([double]$it.pkg_g -gt 0){ [double]$it.pkg_g / $gpu } else { 0.0 }
       $bid = [string]$it.bid
-      $cc = if($bid -and $piMap.ContainsKey($bid)){ Get-PkgCheapestAcross $piMap[$bid] $req $fb } else { $null }
+      # pkg_g<=0 in a card data block is EXACTLY a covered line and can be nothing else: build-card2.ps1:207
+      # throws for any non-covered line whose pkg_g is null or <=0. Mirrors the covered branch the widget
+      # reads, so this comparison prices the card the same way the reader's browser does.
+      $covered = ([double]$it.pkg_g -le 0)
+      $cc = if($bid -and $piMap.ContainsKey($bid)){ Get-PkgCheapestAcross $piMap[$bid] $req $fb -Covered:$covered } else { $null }
       # a line the card cannot price is a line this comparison cannot speak to
       if($null -eq $cc){ $ok = $false; break }
       $tot += [double]$cc.cost
@@ -425,6 +457,31 @@ if($CrossCheck){
       $mismatch.Add(("{0}: manifest `${1} vs card `${2}" -f $r.slug, [math]::Round($mine,2), [math]::Round($tot,2)))
     }
   }
+  # THE BUILDER SURFACE: planner-data.js must carry pk 0 for the same lines. Checked once, after the loop,
+  # because planner-data.js is one flat file rather than per-recipe. A covered line the card got right and
+  # the planner got wrong is exactly how this defect stayed half-fixed: gen-planner-data.ps1 skipped the
+  # covered row from costed.json and then re-supplied a package from the ingredient catalogue behind it.
+  $coveredChecked = 0
+  if($null -eq $plannerTxt){
+    Write-Output 'CROSS-CHECK covered lines: BLIND on the Meal Plan Builder - meal-prep\planner-data.js is missing, so nothing was proven about that surface.'
+  } else {
+    foreach($ck in $coveredExpect.Keys){
+      $itemName = $ck.Substring($ck.IndexOf('|')+1)
+      $coveredChecked++
+      $rx = [regex]('\{"i":"' + [regex]::Escape($itemName) + '","g":\d+,"b":"(?:[^"\\]|\\.)*"[^}]*\}')
+      $hit = $rx.Match($plannerTxt)
+      if(-not $hit.Success){ continue }   # the Builder does not carry this line at all: nothing to charge
+      if($hit.Value -notmatch '"pk":0(?![.0-9])'){
+        $countBad.Add(("{0}: costed.json says this line is covered, but planner-data.js does not carry pk 0 for it - the Meal Plan Builder will charge for it. Block: {1}" -f $ck, $hit.Value))
+      }
+    }
+  }
+  foreach($ck in $coveredExpect.Keys){
+    if(-not $coveredSeenInCard.ContainsKey($ck)){
+      $countBad.Add(("{0}: costed.json marks this line covered but no built card data block carries it, so the covered signal could not be verified on the card surface" -f $ck))
+    }
+  }
+  Write-Output ("CROSS-CHECK covered lines: {0} covered_by line(s) in costed.json; card blocks checked for pkg_g 0, planner-data.js checked for pk 0 on {1}" -f $coveredExpect.Count, $coveredChecked)
   Write-Output ("CROSS-CHECK counts: {0} block line(s) compared against the engine's Buy N, {1} disagreement(s), {2} line(s) not comparable" -f $countChecked, $countBad.Count, $countSkipped)
   foreach($x in ($countBad | Select-Object -First 20)){ Write-Output ('  ' + $x) }
   if($countBad.Count -gt 20){ Write-Output ("  ... and {0} more" -f ($countBad.Count - 20)) }

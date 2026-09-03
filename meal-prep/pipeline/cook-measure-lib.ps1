@@ -109,8 +109,66 @@ $script:CM_SB_Q    = '(?:\d+\s+\d+/\d+|\d+/\d+|\d+(?:\.\d+)?)'
 # that is a restatement or a garnish, not the amount the reader measures out.
 $script:CM_SB_LEAD = '(?:~|about|approximately|approx\.?|around|roughly|nearly|a\s+scant|scant|a\s+generous|generous|optional)\s*[:,]?\s*'
 $script:CM_SB_LBOZ = '^(\s*(?:' + $script:CM_SB_LEAD + ')?)(' + $script:CM_SB_Q + ')\s*(lbs?|pounds?)\.?\s+(' + $script:CM_SB_Q + ')\s*(oz|ounces?)\b'
-$script:CM_SB_HEAD = '^(\s*)(' + $script:CM_SB_Q + ')'
+# ADMITTED 2026-09-03 (queue 2026-09-02-corn06), in lockstep with SMPOF in the JS. Four live rows state
+# their amount ONLY as "juice of N limes" / "zest of N limes"; their gram figures double at 28 servings
+# while the label sat literal. Admitted for the LEAD path only, exactly as in the JS.
+$script:CM_SB_OF   = '(?:juice|zest)\s+of\s+'
+# The closed cook-unit list. A second quantity is a PORTION only when it carries one of these. This is the
+# whole safety property: the 14 must-not-move labels carry a knife cut, a can size, a per-unit weight, a
+# product name or a cook time, and none of those is a portion. Keep it closed; never add "minutes".
+$script:CM_SB_UNIT = '(?:tsp|teaspoons?|tbsp|tablespoons?|cups?|oz|ounces?|lbs?|pounds?|cloves?|slices?|sticks?|cans?|g|ml)'
+# The closed connector set. "and" is deliberately absent (every "and" label in the corpus is a
+# two-ingredient sentence). "to" is present because a range is one amount in parts, and it demands
+# whitespace on both sides so it cannot fire inside "cut into 1-inch cubes".
+$script:CM_SB_CONN = '^(\s*\+\s*|\s+plus\s+|\s*;\s*|\s+to\s+)'
+$script:CM_SB_PART0 = '^(\s*(?:' + $script:CM_SB_LEAD + ')?(?:' + $script:CM_SB_OF + ')?)(' + $script:CM_SB_Q + ')(?![\d/])'
+$script:CM_SB_PARTN = '^(\s*(?:' + $script:CM_SB_LEAD + ')?)(' + $script:CM_SB_Q + ')(?=\s*' + $script:CM_SB_UNIT + '\b)'
+$script:CM_SB_HEAD = '^(\s*(?:' + $script:CM_SB_OF + ')?)(' + $script:CM_SB_Q + ')'
 $script:CM_SB_QUAL = '^(\s*' + $script:CM_SB_LEAD + ')(' + $script:CM_SB_Q + ')'
+
+function Split-CmConnector([string]$s) {
+  <# Split on the closed connector set, but ONLY outside parentheses. A bracketed note holds package
+     sizes, can counts and restatements - "(2 sticks plus 5 tbsp)", "(10 1/2 teaspoons total)" - and those
+     stay exactly as authored, the same rule Test-CmBareNumber already runs on. Mirrors smpSplitConn. #>
+  $parts = New-Object System.Collections.Generic.List[string]
+  $seps  = New-Object System.Collections.Generic.List[string]
+  $d = 0; $last = 0; $i = 0
+  while ($i -lt $s.Length) {
+    $c = $s[$i]
+    if ($c -eq '(') { $d++; $i++; continue }
+    if ($c -eq ')') { if ($d -gt 0) { $d-- }; $i++; continue }
+    if ($d -eq 0) {
+      $m = [regex]::Match($s.Substring($i), $script:CM_SB_CONN, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+      if ($m.Success) {
+        [void]$parts.Add($s.Substring($last, $i - $last))
+        [void]$seps.Add($m.Groups[1].Value)
+        $i += $m.Groups[1].Value.Length; $last = $i; continue
+      }
+    }
+    $i++
+  }
+  [void]$parts.Add($s.Substring($last))
+  return [pscustomobject]@{ parts = $parts; seps = $seps }
+}
+
+function Invoke-CmScaleConnector([string]$buy, [double]$f) {
+  <# ONE AMOUNT IN PARTS, or $null. $null means the caller falls through to today's behaviour untouched.
+     Refusing the WHOLE label when any part fails is the point: moving one half of a two-quantity sentence
+     is worse than moving neither. Mirrors smpScaleConn. #>
+  $sp = Split-CmConnector $buy
+  if ($sp.seps.Count -eq 0) { return $null }
+  $out = New-Object System.Collections.Generic.List[string]
+  for ($i = 0; $i -lt $sp.parts.Count; $i++) {
+    $rx = if ($i -eq 0) { $script:CM_SB_PART0 } else { $script:CM_SB_PARTN }
+    $m = [regex]::Match($sp.parts[$i], $rx, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    if (-not $m.Success) { return $null }
+    $q = Get-CmQty $m.Groups[2].Value
+    [void]$out.Add($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $sp.parts[$i].Substring($m.Value.Length))
+  }
+  $res = $out[0]
+  for ($i = 0; $i -lt $sp.seps.Count; $i++) { $res += $sp.seps[$i] + $out[$i + 1] }
+  return $res
+}
 
 function Test-CmBareNumber([string]$s) {
   <# A digit that is NOT inside a parenthetical. A bracketed note holds package sizes, can counts and
@@ -152,7 +210,20 @@ function Test-CmAuthoredFraction([string]$buy) {
      other factor the quantity genuinely changes and the fraction table is the intended vocabulary. #>
   $m = [regex]::Match($buy, $script:CM_SB_LBOZ, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success) { return ($m.Groups[2].Value.Contains('/') -or $m.Groups[4].Value.Contains('/')) }
-  $m = [regex]::Match($buy, $script:CM_SB_HEAD)
+  # The connector path answers this too, or a label whose parts are authored fractions is re-snapped at
+  # f=1 - the same 4,326-render defect described below, on a new path. Mirrors smpAuthoredFrac.
+  $sp = Split-CmConnector $buy
+  if ($sp.seps.Count -gt 0) {
+    $all = $true; $any = $false
+    for ($i = 0; $i -lt $sp.parts.Count; $i++) {
+      $rx = if ($i -eq 0) { $script:CM_SB_PART0 } else { $script:CM_SB_PARTN }
+      $pm = [regex]::Match($sp.parts[$i], $rx, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+      if (-not $pm.Success) { $all = $false; break }
+      if ($pm.Groups[2].Value.Contains('/')) { $any = $true }
+    }
+    if ($all) { return $any }
+  }
+  $m = [regex]::Match($buy, $script:CM_SB_HEAD, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success) { return $m.Groups[2].Value.Contains('/') }
   $m = [regex]::Match($buy, $script:CM_SB_QUAL, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success -and -not (Test-CmBareNumber $buy.Substring($m.Value.Length))) { return $m.Groups[2].Value.Contains('/') }
@@ -202,7 +273,10 @@ function Invoke-CmScaleBuy([string]$buy, [double]$f) {
     $tot = ((Get-CmQty $m.Groups[2].Value) * 16 + (Get-CmQty $m.Groups[4].Value)) * $f
     return ($m.Groups[1].Value + (Format-CmLbOz $tot $m.Groups[3].Value $m.Groups[5].Value) + $buy.Substring($m.Value.Length))
   }
-  $m = [regex]::Match($buy, $script:CM_SB_HEAD)
+  # AFTER the lb+oz pair, BEFORE the plain leading number - the same order as the JS.
+  $cn = Invoke-CmScaleConnector $buy $f
+  if ($null -ne $cn) { return $cn }
+  $m = [regex]::Match($buy, $script:CM_SB_HEAD, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success) {
     $q = Get-CmQty $m.Groups[2].Value
     return ($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $buy.Substring($m.Value.Length))

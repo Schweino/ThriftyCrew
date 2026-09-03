@@ -64,6 +64,36 @@
       ]
     },
     {
+      "name":  "scaler-restatement-prefix",
+      "why":  "The two prefixes the serving scaler may look past to find a quantity that is stated as a restatement rather than measured out: 'juice of' and 'zest of'. The 2026-09-01 widening refused both BY NAME, and for the general case that was right; on four live rows it is the only statement of the amount, so they were admitted to the LEAD path on 2026-09-03 (queue 2026-09-02-corn06). Declared in the same commit as the widening itself, because a prefix added to one side and not the other means the card and every fixture that claims to mirror it disagree about which labels scale, and the disagreement is invisible until a reader moves the servings control. The JS side is written as a regex LITERAL, not a quoted string, so the two texts are byte-comparable without normalising escapes.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/tpl2-scaler-prefix.html",
+          "capture":  "var SMPOF=/(.*?)/\\.source;" },
+        { "file":  "meal-prep/pipeline/cook-measure-lib.ps1",
+          "capture":  "\\$script:CM_SB_OF\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
+      "name":  "scaler-connector-set",
+      "why":  "The closed set of connectors that make a label ONE amount written in parts: a plus sign, the word plus, a semicolon, and the word to. Added 2026-09-03 (queue 2026-09-02-corn06) to extend the compound-quantity rule to scaleBuy's third path, the plain leading-number one the 2026-09-01 fix deliberately left alone - which is how the estate came to hold the rule and its counter-example in the same function. TWO THINGS IN THIS TEXT ARE LOAD-BEARING AND MUST NOT BE RELAXED ON ONE SIDE ONLY. 'and' is absent: every 'and' label in the live corpus is a two-ingredient sentence ('About 1 tablespoon salt and 1 1/2 teaspoons black pepper'), not a two-portion sum. And 'to' demands whitespace on BOTH sides, so it cannot fire inside a word - 'cut into 1-inch cubes' is a knife cut, not a range, and nine of the fourteen must-not-move labels depend on exactly that.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/tpl2-scaler-prefix.html",
+          "capture":  "var SMPCONN=/(.*?)/;" },
+        { "file":  "meal-prep/pipeline/cook-measure-lib.ps1",
+          "capture":  "\\$script:CM_SB_CONN\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
+      "name":  "scaler-cook-unit-list",
+      "why":  "The closed list of cook units a SECOND quantity must carry before it counts as another portion of the same amount. This list is the entire safety property of the connector path, measured label by label over all 7,838 live buy labels: 14 of the 71 multi-quantity labels carry a second number that must NEVER move - a knife cut ('cut into 1/2-inch pieces'), a can size ('3 1/2 14-oz cans'), a per-unit weight ('about 1/2 lb each'), a product name ('1/3-less-fat') or a cook time ('added the last 2 minutes') - and a general scale-every-number fix corrupts every one of them. Keep it CLOSED. 'minutes' in particular must never be added: it is the only token standing between the cheddar label and a scaled cook time. Widening it on one side only would move labels on the reader's card that no fixture on the other side can see.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/tpl2-scaler-prefix.html",
+          "capture":  "var SMPUNIT='(.*?)';" },
+        { "file":  "meal-prep/pipeline/cook-measure-lib.ps1",
+          "capture":  "\\$script:CM_SB_UNIT\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
       "name":  "whole-package-ceil-tolerance",
       "why":  "THE SLACK IN 'how many packages does this batch need', written down SEVEN times in two languages. You cannot buy 7.5 tbsp of vinegar, so every surface rounds up - but a batch needing 1005 g out of a 1000 g package should not be told to buy two, so the rule is ceil(x - 0.02) and the 2% is the deliberate part. Six copies carried 0.02 and two carried 1e-9 (costAt in the card widget and its PowerShell mirror Get-PkgCellCost), which rounds on floating-point noise instead. The card therefore printed one package MORE than its own Buy N line whenever a line landed inside that 2% window: 363 lines across 273 recipes the week it was found, 12 of them on the recipe's own package where a reader sees both numbers on one screen. Aligned to 0.02 on 2026-09-02 and declared here in the same commit. READ THIS BEFORE TRUSTING IT: this auditor compares TEXT, so what it pins is the CONSTANT. It cannot see the BASIS the numbers on either side of the minus sign are on - that is what let a gross gpu sit against drained grams for weeks with every twin green - and the basis is pinned instead by outcome: build-card2's fallback-package throw, wave-preaudit's widget-count-basis and compute-v2 -CrossCheck.",
       "sides":  [

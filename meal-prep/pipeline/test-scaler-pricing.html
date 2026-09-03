@@ -18,7 +18,11 @@ window.__FIXTURE_FEED = {
   "salt":{"unit":"oz","cheapest":1,"store":"Aldi","type":"everyday","url":"https://example.invalid/aldi-salt","n":2,
     "stores":{"Aldi":1,"Hy-Vee":1.5}},
   "chicken":{"unit":"lb","cheapest":0.99,"store":"Hy-Vee","type":"sale","url":"https://example.invalid/hyvee-chicken","n":2,
-    "stores":{"Hy-Vee":0.99,"Aldi":1.99}}
+    "stores":{"Hy-Vee":0.99,"Aldi":1.99}},
+  "corn":{"unit":"oz","cheapest":0.0400,"store":"Walmart","type":"everyday","url":"https://example.invalid/walmart-corn","n":2,
+    "stores":{"Walmart":0.0400,"Fareway":0.0446}},
+  "limes":{"unit":"each","cheapest":0.69,"store":"Baker's","type":"everyday","url":"https://example.invalid/bakers-limes","n":1,
+    "stores":{"Baker's":0.69}}
  },
  "pricing_inputs":{
   "butter":{
@@ -41,7 +45,17 @@ window.__FIXTURE_FEED = {
    "everyday":{"store":"Aldi","unit":"lb","perUnitMicros":1990000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":199},
    "stores":{
     "Hy-Vee":{"perUnitMicros":990000,"variableWeight":false,"sale":true,"packageBasisUnits":1,"purchasePriceMinor":99},
-    "Aldi":{"perUnitMicros":1990000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":199}}}
+    "Aldi":{"perUnitMicros":1990000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":199}}},
+  "corn":{
+   "current":{"store":"Fareway","unit":"oz","perUnitMicros":44600,"variableWeight":false,"packageBasisUnits":15.25,"purchasePriceMinor":68,"sale":true,"url":"https://example.invalid/fareway-corn"},
+   "everyday":{"store":"Walmart","unit":"oz","perUnitMicros":40000,"variableWeight":false,"packageBasisUnits":29,"purchasePriceMinor":116},
+   "stores":{
+    "Fareway":{"perUnitMicros":44600,"variableWeight":false,"sale":true,"packageBasisUnits":15.25,"purchasePriceMinor":68},
+    "Walmart":{"perUnitMicros":40000,"variableWeight":false,"packageBasisUnits":29,"purchasePriceMinor":116}}},
+  "limes":{
+   "current":{"store":"Baker's","unit":"each","perUnitMicros":690000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":69,"url":"https://example.invalid/bakers-limes"},
+   "stores":{
+    "Baker's":{"perUnitMicros":690000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":69}}}
  },
  "recipes":{}
 };
@@ -71,10 +85,39 @@ for(var i=0;i<names.length;i++){ var d=Math.abs(fr-names[i][0]); if(d<bd){ bd=d;
 w+=c;
 if(!b) return (w<1)?String(Math.round(v*100)/100):String(w);
 return (w<1)?b:(String(w)+' '+b); }
+var SMPQ='(?:\\d+\\s+\\d+/\\d+|\\d+/\\d+|\\d+(?:\\.\\d+)?)';
+var SMPLEAD=/(?:~|about|approximately|approx\.?|around|roughly|nearly|a\s+scant|scant|a\s+generous|generous|optional)\s*[:,]?\s*/.source;
+var SMPRE_LBOZ=new RegExp('^(\\s*(?:'+SMPLEAD+')?)('+SMPQ+')\\s*(lbs?|pounds?)\\.?\\s+('+SMPQ+')\\s*(oz|ounces?)\\b','i');
+var SMPRE_LEAD=new RegExp('^(\\s*)('+SMPQ+')');
+var SMPRE_QUAL=new RegExp('^(\\s*'+SMPLEAD+')('+SMPQ+')','i');
+function smpBareNum(s){ var d=0,i,c;
+for(i=0;i<s.length;i++){ c=s.charAt(i);
+if(c==='(') d++; else if(c===')'){ if(d>0)d--; } else if(d===0&&c>='0'&&c<='9') return true; }
+return false; }
+function smpLbWord(w,v){ return (/^p/i.test(w))?((v===1)?'pound':'pounds'):'lb'; }
+function smpOzWord(w,v){ return (/^ou/i.test(w))?((v===1)?'ounce':'ounces'):'oz'; }
+function smpFmtLbOz(totOz,lbw,ozw){
+var lb=Math.floor(totOz/16+1e-9), oz=totOz-lb*16, os=(oz>0.005)?fmtCook(oz):'';
+if(os==='16'){ lb+=1; os=''; }
+if(lb<1) return (os||'0')+' '+smpOzWord(ozw,parseQty(os||'0'));
+return String(lb)+' '+smpLbWord(lbw,lb)+(os?(' '+os+' '+smpOzWord(ozw,parseQty(os))):''); }
+function smpAuthoredFrac(buy){
+var m=buy.match(SMPRE_LBOZ);
+if(m) return (m[2].indexOf('/')>=0||m[4].indexOf('/')>=0);
+m=buy.match(SMPRE_LEAD);
+if(m) return m[2].indexOf('/')>=0;
+m=buy.match(SMPRE_QUAL);
+if(m&&!smpBareNum(buy.slice(m[0].length))) return m[2].indexOf('/')>=0;
+return false; }
 function scaleBuy(buy,f){
-var m=buy.match(/^(\s*)(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?)/);
-if(!m) return buy;
-return m[1]+fmtCook(parseQty(m[2])*f)+buy.slice(m[0].length); }
+if(f===1&&smpAuthoredFrac(buy)) return buy;
+var m=buy.match(SMPRE_LBOZ);
+if(m) return m[1]+smpFmtLbOz((parseQty(m[2])*16+parseQty(m[4]))*f,m[3],m[5])+buy.slice(m[0].length);
+m=buy.match(SMPRE_LEAD);
+if(m) return m[1]+fmtCook(parseQty(m[2])*f)+buy.slice(m[0].length);
+m=buy.match(SMPRE_QUAL);
+if(m&&!smpBareNum(buy.slice(m[0].length))) return m[1]+fmtCook(parseQty(m[2])*f)+buy.slice(m[0].length);
+return buy; }
 function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
 function money(v){ return '$'+v.toFixed(2); }
 function rm(){ return (window.TC&&window.TC.rm)?window.TC.rm():false; }
@@ -97,10 +140,12 @@ function pkgs(it,nn){ return Math.max(1,Math.ceil(it.grams*(nn/data.base)/it.pkg
 function pkgLabel(it,k){ var q=fmtQty(k); if(it.pkg_l==='lb'){return q+' lb';} if(it.pkg_l==='head'){return q+(k>1?' heads':' head');} if(k===1){return '1 '+it.pkg_l;} return q+' × '+it.pkg_l; }
 function sourcePkgLabel(it,p){
 if(p.variable) return fmtQty(p.required)+' '+(p.unit||it.pkg_l);
+if(!(p.k>0)) return '';
 if(p.packageBasis>0&&p.unit){ var one=fmtQty(p.packageBasis)+' '+p.unit; return p.k===1?'1 '+one:fmtQty(p.k)+' × '+one; }
 return pkgLabel(it,p.k);
 }
 function pkgBasis(it,source){
+if(!(it.pkg_g>0)) return 0;
 var b=Number(source.packageBasisUnits)||0;
 if(b>0) return b;
 return (it.pkg_g>0&&it.gpu>0)?(it.pkg_g/it.gpu):0;
@@ -108,8 +153,9 @@ return (it.pkg_g>0&&it.gpu>0)?(it.pkg_g/it.gpu):0;
 function costAt(it,cell,required){
 if(!cell||!(cell.perUnitMicros>0)||!(required>0)) return null;
 var up=cell.perUnitMicros/1000000;
+if(!(it.pkg_g>0)) return {cost:0,k:0,up:up,variable:false,packageBasis:0};
 var variable=cell.variableWeight===true, packageBasis=variable?0:pkgBasis(it,cell);
-var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
+var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-0.02)):0);
 var cost=variable?up*required
 :((Number(cell.packageBasisUnits)>0&&cell.purchasePriceMinor>0&&k>0)?cell.purchasePriceMinor*k/100
 :((packageBasis>0&&k>0)?up*packageBasis*k:null));
@@ -199,7 +245,8 @@ var p=price(it,nn,basis);
 var inc=!(tab==='custom'&&removed[i]);
 if(p.cost===null){ complete=false; html+='<li><span>'+esc(it.item)+'</span><span class="smp-ct-r">Price unavailable in this release</span></li>'; return; }
 if(inc){ tot+=p.cost; } else { own+=p.cost; }
-var left, right, qty='<span class="smp-ct-qty">'+sourcePkgLabel(it,p)+'</span> ';
+var qlab=sourcePkgLabel(it,p);
+var left, right, qty=qlab?('<span class="smp-ct-qty">'+qlab+'</span> '):'';
 if(tab==='custom'){ left='<label class="smp-ct-ck"><input type="checkbox" data-i="'+i+'"'+(inc?' checked':'')+'> <span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span></label>'; }
 else{ left='<span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span>'; }
 var wst=(p.live&&p.store)?(' <span class="smp-wst" style="color:'+storeHue(p.store)+'"><i></i>'+esc(p.store)+'</span>'):'';
@@ -582,13 +629,17 @@ markInline();
 }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
 })();</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">Enter the # of servings and the recipe adapts.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1" aria-label="One fewer serving">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14" inputmode="numeric" aria-label="Servings"><button type="button" class="smp-sc-btn" data-d="1" aria-label="One more serving">+</button></div><p class="smp-sc-note">The ingredient list and every cost below update as you change it. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">
-{"slug":"zz-fixture-pricing","base":14,"ing":[{"item":"Butter","disp":"Butter","grams":88,"buy":"6 tbsp","bid":"butter","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb box"},{"item":"Bulk Butter","disp":"Bulk Butter","grams":544.31,"buy":"1.2 lb","bid":"butter","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb box"},{"item":"Salt","disp":"Salt","grams":42.5,"buy":"1.5 oz","bid":"salt","gpu":28.3495,"pkg_g":28.3495,"pkg_l":"oz"},{"item":"Chicken","disp":"Chicken","grams":453.592,"buy":"1 lb","bid":"chicken","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb"}]}</script></div><!--/SMP-SCALER2-->
+{"slug":"zz-fixture-pricing","base":14,"ing":[{"item":"Butter","disp":"Butter","grams":88,"buy":"6 tbsp","bid":"butter","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb box"},{"item":"Bulk Butter","disp":"Bulk Butter","grams":544.31,"buy":"1.2 lb","bid":"butter","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb box"},{"item":"Salt","disp":"Salt","grams":42.5,"buy":"1.5 oz","bid":"salt","gpu":28.3495,"pkg_g":28.3495,"pkg_l":"oz"},{"item":"Chicken","disp":"Chicken","grams":453.592,"buy":"1 lb","bid":"chicken","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb"},{"item":"Corn","disp":"Corn","grams":1148,"buy":"4 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},{"item":"Corn window","disp":"Corn window","grams":597,"buy":"2 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},{"item":"Corn twin","disp":"Corn twin","grams":745,"buy":"3 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},{"item":"Lime Juice","disp":"Lime Juice","grams":210,"buy":"juice of 3 1/2 limes; 7 tablespoons","bid":"limes","gpu":30,"pkg_g":30,"pkg_l":"lime"},{"item":"Lime Zest","disp":"Lime Zest","grams":11,"buy":"zest of 3 1/2 limes; 3 1/2 teaspoons","bid":"limes","gpu":4,"pkg_g":0,"pkg_l":""}]}</script></div><!--/SMP-SCALER2-->
 
 <script>
 (function(){
   var R=[], failed=0;
   function ok(name,cond,detail){ R.push({name:name,pass:!!cond,detail:detail||''}); if(!cond)failed++; }
   function q(s){ return document.querySelector(s); }
+  // The package label renders '4 <multiply> 15 oz'. This .ps1 carries no BOM, so PS 5.1 decodes it
+  // as ANSI and a literal U+00D7 in this file would reach the page as mojibake and fail a correct
+  // render. Built from its code point instead, so the generator stays pure ASCII.
+  function QX(n,p){ return n+' '+String.fromCharCode(215)+' '+p; }
   function tabTo(t){ var b=document.querySelector('.smp-ct-btn[data-t="'+t+'"]'); b.click(); }
   function lines(){
     var out={};
@@ -596,7 +647,9 @@ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded
       if(li.classList.contains('smp-cp-total'))return;
       var nm=(li.querySelector('label span')||li.querySelector('span')).textContent.replace(/sale$/i,'').trim();
       var tot=li.querySelector('.smp-cp-tot'), st=li.querySelector('.smp-wst'), lp=li.querySelector('.smp-sc-lp');
+      var qy=li.querySelector('.smp-ct-qty');
       out[nm]={cost:tot?tot.textContent.trim():null, store:st?st.textContent.trim():null,
+               qty:qy?qy.textContent.trim():null,
                per:lp?lp.textContent.trim():null, link:li.querySelector('a')?li.querySelector('a').getAttribute('href'):null,
                sale:!!li.querySelector('.smp-sc-saletag')};
     });
@@ -623,6 +676,39 @@ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded
     ok('sale tag on the winning sale cell', L['Chicken'] && L['Chicken'].sale===true, 'Hy-Vee cell is the sale and the cost winner');
     ok('chicken bills the sale price', L['Chicken'] && L['Chicken'].cost==='$0.99', 'got '+(L['Chicken']?L['Chicken'].cost:'no line'));
 
+    // ---------- MUST FIRE: the drained-basis line buys enough corn ----------
+    // 1148 g of drained corn at 19.5559 g per oz of can is 58.70 oz, which is 4 cans of 15.25 oz - the
+    // number the card's own Buy N line prints. On the gross gpu the widget read 40.49 oz and bought 3,
+    // sending a reader home a can short. -NegativeTest puts the gross gpu back; these must fail then.
+    ok('MUST-FIRE corn buys 4 cans, not 3', L['Corn'] && L['Corn'].cost==='$2.72', 'got '+(L['Corn']?L['Corn'].cost:'no line')+' (3 cans is $2.04, and 3 cans is 348 g short)');
+    ok('MUST-FIRE corn names the count and the package it counted', L['Corn'] && L['Corn'].qty===QX(4,'15 oz'), 'got '+(L['Corn']?L['Corn'].qty:'no line')+' (fmtQty renders a basis over 10 whole, so a 15.25 oz can reads 15 oz)');
+    ok('MUST-FIRE corn chip names the store that won', L['Corn'] && L['Corn'].store==='Fareway', 'got '+(L['Corn']?L['Corn'].store:'none'));
+
+    // ---------- MUST FIRE: the ceil tolerance is the engine's 0.02, not floating-point noise ----------
+    // 597 g is 30.53 oz, 2.0018 packages. ceil(x - 0.02) buys 2, like the Buy N line beside it;
+    // ceil(x - 1e-9) bought 3. The twin at 745 g is 2.498 packages and buys 3 either way, so a
+    // tolerance widened far enough to swallow real thirds of a package cannot pass this pair.
+    ok('MUST-FIRE a line 0.18% over two packages buys TWO', L['Corn window'] && L['Corn window'].cost==='$1.36', 'got '+(L['Corn window']?L['Corn window'].cost:'no line')+' ($2.04 means it rounded 2.0018 up to 3)');
+    ok('CLEAN TWIN a line half a package over two still buys THREE', L['Corn twin'] && L['Corn twin'].cost==='$2.04', 'got '+(L['Corn twin']?L['Corn twin'].cost:'no line'));
+
+    // ---------- MUST FIRE: a COVERED line is not charged (2026-09-03, queue 2026-09-02-corn05) ----------
+    // Lime Zest carries pkg_g 0, which build-card2 emits ONLY for a covered line. Before the fix pkgBasis
+    // read the feed's packageBasisUnits (1 for limes) first and never looked at pkg_g, so the reader was
+    // billed 3 limes at $2.07 for zest taken off limes the line above had already bought.
+    ok('MUST-FIRE a covered line is not charged', L['Lime Zest'] && L['Lime Zest'].cost==='$0.00', 'got '+(L['Lime Zest']?L['Lime Zest'].cost:'no line')+' ($2.07 is the bug: 3 x $0.69 for limes already bought)');
+    // 0 IS NOT null. A null cost drops the line to unpriceable and marks the whole receipt incomplete,
+    // which is the failure build-card2.ps1:218 keeps gpu intact to avoid - so the line must still RENDER.
+    ok('MUST-FIRE a covered line still renders (0 is not null, or the receipt goes incomplete)', !!L['Lime Zest'], 'the covered line vanished from the receipt entirely');
+    // The package column must be EMPTY, not "0 x". Under the bug it read "3 x 1 each"; the first cut of
+    // the fix left a bare "0 x", which looks more broken to a reader than the wrong charge it replaced.
+    ok('MUST-FIRE a covered line prints no package count at all', L['Lime Zest'] && !L['Lime Zest'].qty, 'got qty '+JSON.stringify(L['Lime Zest']?L['Lime Zest'].qty:'no line')+' (the bug renders "3 '+String.fromCharCode(215)+' 1 each"; a bare "0 '+String.fromCharCode(215)+'" is the half-fix)');
+
+    // ---------- CLEAN TWIN: the genuinely purchased sibling must not move ----------
+    // If this moves, the pkg_g test has swallowed a real purchase rather than a covered line.
+    ok('CLEAN TWIN the purchased lime line still buys 7 limes at $4.83', L['Lime Juice'] && L['Lime Juice'].cost==='$4.83', 'got '+(L['Lime Juice']?L['Lime Juice'].cost:'no line'));
+    ok('CLEAN TWIN the purchased lime line still names its store', L['Lime Juice'] && L['Lime Juice'].store==='Baker\'s', 'got '+(L['Lime Juice']?L['Lime Juice'].store:'none'));
+    ok('CLEAN TWIN and salt is still on a boundary the tolerance must not swallow', L['Salt'] && L['Salt'].cost==='$2.00', 'got '+(L['Salt']?L['Salt'].cost:'no line'));
+
     // ---------- the quantity flip: a warehouse pack CAN be right, and must be allowed to win ----------
     ok('bulk line takes 2 small boxes at base servings', L['Bulk Butter'] && L['Bulk Butter'].cost==='$5.78', 'got '+(L['Bulk Butter']?L['Bulk Butter'].cost:'no line'));
     var chBase=grand();
@@ -640,6 +726,11 @@ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded
     ok('everyday tab still shows no store chip', E['Chicken'] && E['Chicken'].store===null, 'pre-existing markup choice; a chip appearing here is an unintended change');
     ok('everyday lane shows no sale tag', E['Chicken'] && E['Chicken'].sale===false, 'a sale tag on the everyday tab is a contradiction');
     ok('everyday butter also uses the min-cost rule', E['Butter'] && E['Butter'].cost==='$2.89', 'got '+(E['Butter']?E['Butter'].cost:'no line'));
+    // Corn's cheapest cell is Fareway's SALE, so the everyday lane falls to Walmart's 29 oz pack:
+    // 58.70/29 = 2.024 packages, ceil(2.024 - 0.02) = 3 at $1.16 each. Hand-computed, not read off a
+    // run: a fixture that freezes whatever the code printed proves only that the code is consistent.
+    ok('MUST-FIRE everyday corn falls to the non-sale 29 oz pack and buys 3', E['Corn'] && E['Corn'].cost==='$3.48', 'got '+(E['Corn']?E['Corn'].cost:'no line')+' (Fareway 15.25 oz is on sale and must not price this lane)');
+    ok('MUST-FIRE and it counts THAT store\'s package, not the recipe\'s', E['Corn'] && E['Corn'].qty===QX(3,'29 oz'), 'got '+(E['Corn']?E['Corn'].qty:'no line'));
     var evTot=grand();
     tabTo('cheapest');
     var chTot=grand();

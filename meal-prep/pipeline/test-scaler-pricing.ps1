@@ -69,6 +69,19 @@ $suffix = [IO.File]::ReadAllText((Join-Path $here 'tpl2-scaler-suffix.html'), [T
 #   the old ceil(x - 1e-9) the first bought THREE cans - one more than the Buy N line printed two inches
 #   above it - while the second was unaffected. Aligned to the engine's ceil(x - 0.02) in the same
 #   commit; the twin is here so an over-wide tolerance cannot pass by rounding everything down.
+# Lime Juice / Lime Zest: THE COVERED-LINE PAIR (2026-09-03, queue 2026-09-02-corn05), frozen from the
+#   real street-corn-chicken-rice-bowls card. Lime Zest is a COVERED line - its own cost prose reads
+#   "From the limes you already bought" - and build-card2.ps1:206 emits pkg_g 0 and an empty pkg_l for
+#   exactly that, keeping gpu intact (4 g of zest per lime) because a zeroed gpu would make costAt return
+#   null and one null line marks the whole receipt incomplete. pkg_g<=0 IS covered: build-card2.ps1:207
+#   throws for any NON-covered line whose pkg_g is <=0, so no other kind of line can reach this state.
+#   The widget charged it anyway, because pkgBasis read the feed's packageBasisUnits FIRST and only
+#   consulted pkg_g on the fallback branch - and limes have a real basis of 1, so the covered signal was
+#   never read. 11 g / 4 gpu = 2.75 limes -> ceil(2.75-0.02) = 3 -> 3 x Baker's $0.69 = $2.07 charged for
+#   limes the reader had already been billed for on the line above. Lime Juice is the CLEAN TWIN and the
+#   genuinely purchased sibling: 210 g / 30 gpu = 7 limes -> 7 x $0.69 = $4.83, and it must not move.
+#   Numbers frozen here on purpose - never re-read from the live feed, or a lime price change silently
+#   retunes the test.
 $scalerData = @'
 {"slug":"zz-fixture-pricing","base":14,"ing":[
 {"item":"Butter","disp":"Butter","grams":88,"buy":"6 tbsp","bid":"butter","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb box"},
@@ -77,7 +90,9 @@ $scalerData = @'
 {"item":"Chicken","disp":"Chicken","grams":453.592,"buy":"1 lb","bid":"chicken","gpu":453.592,"pkg_g":453.592,"pkg_l":"lb"},
 {"item":"Corn","disp":"Corn","grams":1148,"buy":"4 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},
 {"item":"Corn window","disp":"Corn window","grams":597,"buy":"2 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},
-{"item":"Corn twin","disp":"Corn twin","grams":745,"buy":"3 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"}
+{"item":"Corn twin","disp":"Corn twin","grams":745,"buy":"3 cans","bid":"corn","gpu":19.5559,"pkg_g":298,"pkg_l":"can"},
+{"item":"Lime Juice","disp":"Lime Juice","grams":210,"buy":"juice of 3 1/2 limes; 7 tablespoons","bid":"limes","gpu":30,"pkg_g":30,"pkg_l":"lime"},
+{"item":"Lime Zest","disp":"Lime Zest","grams":11,"buy":"zest of 3 1/2 limes; 3 1/2 teaspoons","bid":"limes","gpu":4,"pkg_g":0,"pkg_l":""}
 ]}
 '@
 $scalerData = ($scalerData -replace "`r?`n",'')
@@ -91,6 +106,22 @@ if ($NegativeTest) {
   $mutatedData = $scalerData.Replace('"gpu":19.5559', '"gpu":28.35')
   if ($mutatedData -eq $scalerData) { throw 'NEGATIVE TEST could not find the drained corn gpu to revert. The fixture moved: re-read the corn lines in $scalerData and update this mutation, or the basis half of this fixture is silently testing nothing.' }
   $scalerData = $mutatedData
+}
+# -NegativeTest ALSO REVERTS THE COVERED-LINE READ ORDER (2026-09-03, queue 2026-09-02-corn05). A third
+# founding bug on the same page, so it needs its own proof of reachability. This is a CODE mutation:
+# it puts the pkg_g test back on the fallback branch only, which is exactly what shipped before today -
+# the feed's packageBasisUnits won first and the covered signal was never consulted. With it back, Lime
+# Zest is billed 3 limes at $2.07 and the covered assertions must go red.
+# BOTH guards must be reverted, not just one. pkgBasis returning 0 is what stops the package being
+# counted, and costAt's explicit early return is what makes the cost 0 rather than null. Leaving either
+# in place would still price the covered line at $0.00 and the negative lane would pass while claiming
+# to reproduce the bug - a mutation that does not restore the defect is the same as no negative test.
+if ($NegativeTest) {
+  $covPkg = [regex]::Replace($prefix, '(function pkgBasis\(it,source\)\{)\s*if\(!\(it\.pkg_g>0\)\)\s*return 0;', '$1', 1)
+  if ($covPkg -eq $prefix) { throw 'NEGATIVE TEST could not find the pkgBasis covered guard to revert. pkgBasis moved or was reformatted: re-read it in tpl2-scaler-prefix.html and update this mutation, or the covered-line half of this fixture is silently testing nothing.' }
+  $covAll = [regex]::Replace($covPkg, '\s*if\(!\(it\.pkg_g>0\)\)\s*return \{cost:0,k:0,up:up,variable:false,packageBasis:0\};', '', 1)
+  if ($covAll -eq $covPkg) { throw 'NEGATIVE TEST could not find the costAt covered early-return to revert. It moved or was reformatted: re-read costAt in tpl2-scaler-prefix.html and update this mutation, or the covered line would still price at zero and the negative lane would pass on a bug it never restored.' }
+  $prefix = $covAll
 }
 
 # ---- the frozen feed. Real shapes: `current`/`everyday` full, `stores` lean, schema 2 with sale flags.
@@ -106,7 +137,9 @@ $feedJson = @'
   "chicken":{"unit":"lb","cheapest":0.99,"store":"Hy-Vee","type":"sale","url":"https://example.invalid/hyvee-chicken","n":2,
     "stores":{"Hy-Vee":0.99,"Aldi":1.99}},
   "corn":{"unit":"oz","cheapest":0.0400,"store":"Walmart","type":"everyday","url":"https://example.invalid/walmart-corn","n":2,
-    "stores":{"Walmart":0.0400,"Fareway":0.0446}}
+    "stores":{"Walmart":0.0400,"Fareway":0.0446}},
+  "limes":{"unit":"each","cheapest":0.69,"store":"Baker's","type":"everyday","url":"https://example.invalid/bakers-limes","n":1,
+    "stores":{"Baker's":0.69}}
  },
  "pricing_inputs":{
   "butter":{
@@ -135,7 +168,11 @@ $feedJson = @'
    "everyday":{"store":"Walmart","unit":"oz","perUnitMicros":40000,"variableWeight":false,"packageBasisUnits":29,"purchasePriceMinor":116},
    "stores":{
     "Fareway":{"perUnitMicros":44600,"variableWeight":false,"sale":true,"packageBasisUnits":15.25,"purchasePriceMinor":68},
-    "Walmart":{"perUnitMicros":40000,"variableWeight":false,"packageBasisUnits":29,"purchasePriceMinor":116}}}
+    "Walmart":{"perUnitMicros":40000,"variableWeight":false,"packageBasisUnits":29,"purchasePriceMinor":116}}},
+  "limes":{
+   "current":{"store":"Baker's","unit":"each","perUnitMicros":690000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":69,"url":"https://example.invalid/bakers-limes"},
+   "stores":{
+    "Baker's":{"perUnitMicros":690000,"variableWeight":false,"packageBasisUnits":1,"purchasePriceMinor":69}}}
  },
  "recipes":{}
 }
@@ -213,6 +250,23 @@ $asserts = @'
     // tolerance widened far enough to swallow real thirds of a package cannot pass this pair.
     ok('MUST-FIRE a line 0.18% over two packages buys TWO', L['Corn window'] && L['Corn window'].cost==='$1.36', 'got '+(L['Corn window']?L['Corn window'].cost:'no line')+' ($2.04 means it rounded 2.0018 up to 3)');
     ok('CLEAN TWIN a line half a package over two still buys THREE', L['Corn twin'] && L['Corn twin'].cost==='$2.04', 'got '+(L['Corn twin']?L['Corn twin'].cost:'no line'));
+
+    // ---------- MUST FIRE: a COVERED line is not charged (2026-09-03, queue 2026-09-02-corn05) ----------
+    // Lime Zest carries pkg_g 0, which build-card2 emits ONLY for a covered line. Before the fix pkgBasis
+    // read the feed's packageBasisUnits (1 for limes) first and never looked at pkg_g, so the reader was
+    // billed 3 limes at $2.07 for zest taken off limes the line above had already bought.
+    ok('MUST-FIRE a covered line is not charged', L['Lime Zest'] && L['Lime Zest'].cost==='$0.00', 'got '+(L['Lime Zest']?L['Lime Zest'].cost:'no line')+' ($2.07 is the bug: 3 x $0.69 for limes already bought)');
+    // 0 IS NOT null. A null cost drops the line to unpriceable and marks the whole receipt incomplete,
+    // which is the failure build-card2.ps1:218 keeps gpu intact to avoid - so the line must still RENDER.
+    ok('MUST-FIRE a covered line still renders (0 is not null, or the receipt goes incomplete)', !!L['Lime Zest'], 'the covered line vanished from the receipt entirely');
+    // The package column must be EMPTY, not "0 x". Under the bug it read "3 x 1 each"; the first cut of
+    // the fix left a bare "0 x", which looks more broken to a reader than the wrong charge it replaced.
+    ok('MUST-FIRE a covered line prints no package count at all', L['Lime Zest'] && !L['Lime Zest'].qty, 'got qty '+JSON.stringify(L['Lime Zest']?L['Lime Zest'].qty:'no line')+' (the bug renders "3 '+String.fromCharCode(215)+' 1 each"; a bare "0 '+String.fromCharCode(215)+'" is the half-fix)');
+
+    // ---------- CLEAN TWIN: the genuinely purchased sibling must not move ----------
+    // If this moves, the pkg_g test has swallowed a real purchase rather than a covered line.
+    ok('CLEAN TWIN the purchased lime line still buys 7 limes at $4.83', L['Lime Juice'] && L['Lime Juice'].cost==='$4.83', 'got '+(L['Lime Juice']?L['Lime Juice'].cost:'no line'));
+    ok('CLEAN TWIN the purchased lime line still names its store', L['Lime Juice'] && L['Lime Juice'].store==='Baker\'s', 'got '+(L['Lime Juice']?L['Lime Juice'].store:'none'));
     ok('CLEAN TWIN and salt is still on a boundary the tolerance must not swallow', L['Salt'] && L['Salt'].cost==='$2.00', 'got '+(L['Salt']?L['Salt'].cost:'no line'));
 
     // ---------- the quantity flip: a warehouse pack CAN be right, and must be allowed to win ----------

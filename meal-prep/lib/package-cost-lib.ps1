@@ -83,11 +83,23 @@ function Get-PkgCellField($cell, [string]$name) {
 }
 
 # Returns $null when the cell cannot be priced; otherwise the cost plus the pieces callers report on.
-function Get-PkgCellCost($cell, [double]$Required, [double]$FallbackBasis) {
+# -Covered marks a line the reader already bought under ANOTHER ingredient ("From the limes you already
+# bought"). It mirrors the covered branch at the top of costAt() in tpl2-scaler-prefix.html, which this
+# function is the single server-side copy of (2026-09-03, queue 2026-09-02-corn05).
+# IT IS AN EXPLICIT FLAG, NOT AN INFERENCE FROM $FallbackBasis being 0, and that is deliberate: the JS
+# takes the fact from the LINE (it.pkg_g), not from the cell, and grocery\measure-cheapest-selection.ps1
+# legitimately passes FallbackBasis 0 for real purchases whose cells carry their own packageBasisUnits.
+# Overloading 0 to mean "covered" would have priced every one of those at zero.
+function Get-PkgCellCost($cell, [double]$Required, [double]$FallbackBasis, [switch]$Covered) {
   $puRaw = Get-PkgCellField $cell 'perUnitMicros'
   $pu = if ($null -eq $puRaw) { 0.0 } else { [double]$puRaw }
   if (-not ($pu -gt 0) -or -not ($Required -gt 0)) { return $null }
   $up = $pu / 1000000
+  # 0, NOT $null: null means "cannot be priced" and drops the whole receipt to incomplete, which is the
+  # failure build-card2.ps1:218 keeps gpu intact to avoid. A covered line is priceable and free.
+  if ($Covered) {
+    return [pscustomobject]@{ cost = 0.0; k = 0; up = $up; variable = $false; packageBasis = 0.0; own_basis = $false }
+  }
   $variable = ((Get-PkgCellField $cell 'variableWeight') -eq $true)
   $pbuRaw = Get-PkgCellField $cell 'packageBasisUnits'
   $pbu = if ($null -eq $pbuRaw) { 0.0 } else { [double]$pbuRaw }
@@ -117,13 +129,13 @@ function Get-PkgCellCost($cell, [double]$Required, [double]$FallbackBasis) {
 # $Inputs is a pricing_inputs[<bid>] object. -NonSaleOnly is the card's everyday lane and requires a
 # schema>=2 feed; on an older feed the caller must not use it, because "no flags" would then read as
 # "nothing is on sale" and let a sale price masquerade as a shelf price.
-function Get-PkgCheapestAcross($Inputs, [double]$Required, [double]$FallbackBasis, [switch]$NonSaleOnly) {
+function Get-PkgCheapestAcross($Inputs, [double]$Required, [double]$FallbackBasis, [switch]$NonSaleOnly, [switch]$Covered) {
   $stores = Get-PkgCellField $Inputs 'stores'
   if ($null -eq $stores) { return $null }
   $best = $null
   foreach ($p in $stores.PSObject.Properties) {
     if ($NonSaleOnly -and ((Get-PkgCellField $p.Value 'sale') -eq $true)) { continue }
-    $r = Get-PkgCellCost $p.Value $Required $FallbackBasis
+    $r = Get-PkgCellCost $p.Value $Required $FallbackBasis -Covered:$Covered
     if ($null -eq $r) { continue }
     if ($null -eq $best -or $r.cost -lt $best.cost) {
       $best = [pscustomobject]@{
