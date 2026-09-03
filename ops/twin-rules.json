@@ -94,6 +94,26 @@
       ]
     },
     {
+      "name":  "scaler-unit-vocabulary",
+      "why":  "THE CLOSED SINGULAR/PLURAL TABLE the serving scaler re-agrees a unit noun against, added 2026-09-03 (queue 2026-09-03-539ff0) with the agreement itself. Until that day both twins re-derived the NUMBER and copied the tail through byte for byte, so a card rendered '2 cup grated' and '1 onion, diced' the moment a reader moved the servings control, and '1/2 cups' when a plural label scaled below one. Measured over all 7,838 live buy labels before the fix: 3,340 disagreeing renders across 328 labels and 564 recipes at f = 2 / 0.5 / 4 / 0.25, rising to 3,925 once every word the corpus actually carries in the unit slot is counted. WHAT IS ABSENT FROM THIS TEXT IS LOAD-BEARING AND MUST NOT BE ADDED ON ONE SIDE ONLY. Abbreviations are absent, so 'lb' and 'tbsp' stay invariant. Modifiers are absent, so '13 corn tortillas' cannot become '13 corns tortillas' and '10 sweet potatoes' cannot become '10 sweets potatoes'. And egg, breast, thigh, stick and bag are absent although the alert named them: not one of them leads the unit slot in any of the 1,365 distinct live labels, so an entry could never fire or be tested, and 'egg' is the likeliest noun-adjunct trap the day it does ('2 egg whites'). A word added to one side and not the other moves labels on the reader's card that no fixture on the other side can see.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/tpl2-scaler-prefix.html",
+          "capture":  "var SMPPAIRS='(.*?)';" },
+        { "file":  "meal-prep/pipeline/cook-measure-lib.ps1",
+          "capture":  "\\$script:CM_UNIT_PAIRS\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
+      "name":  "scaler-unit-leading-word",
+      "why":  "WHICH WORD THE AGREEMENT ABOVE IS ALLOWED TO TOUCH: the first word of the tail, and nothing else. That restriction is the second half of the safety property, because the unit slot is the only place a label's noun is a function of its number - everything after it is a NOTE the writer put there. '3 1/2 cups shredded cheddar, added the last 2 minutes' must agree 'cups' and leave the rest alone, and '12 cloves garlic, minced' must agree 'cloves' and not 'garlic'. The lookahead refuses a hyphen as well as a letter so a hyphenated compound ('9 thick-cut slices') is not read as a bare unit noun. Relaxing the anchor on one side only would let the browser rewrite note text that no PowerShell fixture renders.",
+      "sides":  [
+        { "file":  "meal-prep/pipeline/tpl2-scaler-prefix.html",
+          "capture":  "var SMPUNITRX=/(.*?)/;" },
+        { "file":  "meal-prep/pipeline/cook-measure-lib.ps1",
+          "capture":  "\\$script:CM_UNIT_RX\\s*=\\s*'(.*?)'" }
+      ]
+    },
+    {
       "name":  "whole-package-ceil-tolerance",
       "why":  "THE SLACK IN 'how many packages does this batch need', written down SEVEN times in two languages. You cannot buy 7.5 tbsp of vinegar, so every surface rounds up - but a batch needing 1005 g out of a 1000 g package should not be told to buy two, so the rule is ceil(x - 0.02) and the 2% is the deliberate part. Six copies carried 0.02 and two carried 1e-9 (costAt in the card widget and its PowerShell mirror Get-PkgCellCost), which rounds on floating-point noise instead. The card therefore printed one package MORE than its own Buy N line whenever a line landed inside that 2% window: 363 lines across 273 recipes the week it was found, 12 of them on the recipe's own package where a reader sees both numbers on one screen. Aligned to 0.02 on 2026-09-02 and declared here in the same commit. READ THIS BEFORE TRUSTING IT: this auditor compares TEXT, so what it pins is the CONSTANT. It cannot see the BASIS the numbers on either side of the minus sign are on - that is what let a gross gpu sit against drained grams for weeks with every twin green - and the basis is pinned instead by outcome: build-card2's fallback-package throw, wave-preaudit's widget-count-basis and compute-v2 -CrossCheck.",
       "sides":  [

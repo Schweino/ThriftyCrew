@@ -13,6 +13,15 @@
                AT ALL, because the match is anchored and a word stood in front of the number. The label
                froze at base servings while its grams moved. Measured: 44 labels across 27 specs lead
                with something other than their number.
+    AGREEMENT  (2026-09-03, queue 2026-09-03-539ff0) both twins re-derived the NUMBER and copied the
+               tail through byte for byte, so the unit NOUN never moved with it: "2 cup grated",
+               "1 onion, diced", and - the larger half, which the alert never measured - "1/2 cups"
+               whenever a plural label scaled below one. Measured over all 7,838 live buy labels:
+               3,340 disagreeing renders across 328 labels and 564 recipes at f = 2 / 0.5 / 4 / 0.25,
+               3,616 once f=1 is counted (239 at BASE servings, seen without touching the control),
+               3,925 over every word the corpus actually carries in the unit slot. The rule is PLURAL
+               IFF THE VALUE IS GREATER THAN ONE, over a CLOSED vocabulary matched on the tail's
+               leading word only, so an abbreviation, a modifier and a note are all invariant.
 
   WHY IT IS BUILT, NOT WRITTEN. Same reason as test-scaler-pricing.ps1, which this file is modelled on:
   the rule is client JS, and pasting the template's script into a checked-in page would create a SECOND
@@ -75,8 +84,8 @@ $CASES = @(
      note='blackened-chicken cilantro lime rice; a hedge word in front froze the whole label' }
   @{ id='F06'; kind='MUST-FIRE'; serv=28; grams=0
      buy='optional: 2/3 cup, to serve'
-     expect='optional: 1 1/3 cup, to serve'
-     note='crack-chicken-chili sour cream; "optional:" in front froze the whole label' }
+     expect='optional: 1 1/3 cups, to serve'
+     note='crack-chicken-chili sour cream; "optional:" in front froze the whole label. The plural is the 2026-09-03 agreement rule: 1 1/3 is greater than one' }
   @{ id='F07'; kind='CLEAN TWIN'; serv=28; grams=0
      buy='2 pk 12 oz'
      expect='4 pk 12 oz'
@@ -105,24 +114,24 @@ $CASES = @(
      buy='to taste (about 1/4 tsp)'
      expect='to taste (about 1/4 tsp)'
      note='"to taste" is deliberately NOT a hedge word: the label states no amount to scale' }
-  @{ id='F14'; kind='CLEAN TWIN'; serv=28; grams=150
+  @{ id='F14'; kind='MUST-FIRE'; serv=28; grams=150
      buy='1 cup'
-     expect='2 cup'
-     note='the gram figure still appends and still scales, beside the label (asserted separately)' }
+     expect='2 cups'
+     note='the gram figure still appends and still scales, beside the label (asserted separately). RECLASSIFIED 2026-09-03 from CLEAN TWIN: this was the plainest instance of the unit-agreement defect sitting in the fixture as expected behaviour, rendering "2 cup" beside a doubled 300 g' }
   # ---- 2026-09-01, THE UNSCALED RENDER. The list is re-rendered through scaleBuy on every page load,
   # so an authored fraction the seven-value table cannot say was being quietly rewritten at f=1.
   @{ id='F15'; kind='MUST-FIRE'; serv=14; grams=0
      buy='7/8 cup grated'
      expect='7/8 cup grated'
      note='chicken-parmesan-pasta parmesan, live and rendering "3/4 cup grated" at BASE servings on 2026-09-01 (98 g against a 112 g cup is 0.875 exactly, an exact tie the table breaks downward)' }
-  @{ id='F16'; kind='CLEAN TWIN'; serv=14; grams=0
+  @{ id='F16'; kind='MUST-FIRE'; serv=14; grams=0
      buy='0.6 onions'
-     expect='2/3 onions'
-     note='THE REGRESSION THIS FIX MUST NOT BECOME: 4,299 authored labels carry a machine decimal, and turning those into kitchen fractions at f=1 is the service, not the bug. Returning the authored string whenever f=1 moved 4,326 renders and every one was worse.' }
-  @{ id='F17'; kind='CLEAN TWIN'; serv=28; grams=0
+     expect='2/3 onion'
+     note='TWO RULES IN ONE LABEL. The decimal must still become a kitchen fraction at f=1 - 4,299 authored labels carry a machine decimal and returning the authored string whenever f=1 moved 4,326 renders, every one worse. AND, from 2026-09-03, 2/3 is not greater than one, so the noun is singular. Reclassified from CLEAN TWIN because the 2026-07 rule can no longer produce this render' }
+  @{ id='F17'; kind='MUST-FIRE'; serv=28; grams=0
      buy='7/8 cup grated'
-     expect='1 3/4 cup grated'
-     note='SCOPE: the same authored fraction still scales normally at any factor but 1 - 0.875 x 2 = 1.75, which the table says exactly' }
+     expect='1 3/4 cups grated'
+     note='SCOPE: the same authored fraction still scales normally at any factor but 1 - 0.875 x 2 = 1.75, which the table says exactly - and 1 3/4 is greater than one, so the noun turns plural. Reclassified from CLEAN TWIN on 2026-09-03 for that second half' }
   # ---- 2026-09-03, queue 2026-09-02-corn06: ONE AMOUNT WRITTEN IN PARTS. The 2026-09-01 fix installed
   # "a label is one quantity however many numbers it take to write it" on the lb+oz and qualified paths
   # and left the plain leading-number path explicitly unchanged, so the estate held the rule and its
@@ -156,8 +165,8 @@ $CASES = @(
      note='salisbury-steak-potato-bowls worcestershire, live: parentheticals sit BETWEEN the parts and must survive the split untouched' }
   @{ id='F24'; kind='MUST-FIRE'; serv=28; grams=0
      buy='1 cup plus 5 tbsp salted (2 sticks plus 5 tbsp)'
-     expect='2 cup plus 10 tbsp salted (2 sticks plus 5 tbsp)'
-     note='garlic-butter-steak-bites-zucchini butter, live. THE SPLIT IS AT PAREN DEPTH 0 ONLY: the "plus" inside the bracketed restatement must not split, and that restatement must not scale' }
+     expect='2 cups plus 10 tbsp salted (2 sticks plus 5 tbsp)'
+     note='garlic-butter-steak-bites-zucchini butter, live. THE SPLIT IS AT PAREN DEPTH 0 ONLY: the "plus" inside the bracketed restatement must not split, and that restatement must not scale. From 2026-09-03 the first portion agrees its own noun (cup -> cups) while the second keeps its abbreviation (tbsp), which is the per-part rule in one label' }
   @{ id='F25'; kind='MUST-FIRE'; serv=28; grams=0
      buy='3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total)'
      expect='7 teaspoons for the chicken; 7 teaspoons for the cheese sauce; 7 teaspoons for the pasta water (10 1/2 teaspoons total)'
@@ -194,6 +203,65 @@ $CASES = @(
      buy='9 thick-cut slices, cut into 1/2-inch pieces'
      expect='18 thick-cut slices, cut into 1/2-inch pieces'
      note='country-captain-chicken bacon: a knife cut behind a COMMA, which is deliberately not a connector' }
+  # ---- 2026-09-03, queue 2026-09-03-539ff0: THE UNIT NOUN IS PART OF THE QUANTITY. Both twins re-derived
+  # the NUMBER and copied the tail through byte for byte, so the word beside it never moved. Measured over
+  # all 7,838 live buy labels before the fix: 3,340 disagreeing renders across 328 labels and 564 recipes
+  # at f = 2 / 0.5 / 4 / 0.25 on the reviewer's word list, 3,616 once f=1 is counted (239 of them at BASE
+  # servings, which a reader sees without touching the control), 3,925 over every word the corpus carries.
+  # The FRACTIONAL half - a plural label scaled below one - was the bigger one and nothing had measured it.
+  # Every label below is taken verbatim off a live card; every expectation is arithmetic done by hand.
+  @{ id='F33'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='1 cup grated'
+     expect='2 cups grated'
+     note='the plainest instance, and the one the alert was filed on: parmesan doubling to "2 cup grated"' }
+  @{ id='F34'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='1 onion, diced'
+     expect='2 onions, diced'
+     note='a COUNT noun, not a measure: the same defect where the unit is the food itself. The note behind the comma rides through untouched' }
+  @{ id='F35'; kind='MUST-FIRE'; serv=4; grams=0
+     buy='2 cups'
+     expect='1/2 cup'
+     note='THE FRACTIONAL HALF the alert never measured: a PLURAL authored label scaled below one. 2 x 4/14 = 0.571, which the table says as 1/2, and recipe convention is "1/2 cup". f=0.25 alone was 1,690 of the 3,377' }
+  @{ id='F36'; kind='MUST-FIRE'; serv=14; grams=0
+     buy='0.5 cups dry'
+     expect='1/2 cup dry'
+     note='AT BASE SERVINGS, so a reader who never touches the control still saw it: 239 of the disagreeing renders were at f=1, where a machine decimal below one is rendered as a fraction beside an authored plural' }
+  @{ id='F37'; kind='MUST-FIRE'; serv=28; grams=0
+     buy='1 tablespoon plus 1/2 teaspoon salt; scant 1 teaspoon EACH salt and black pepper'
+     expect='2 tablespoons plus 1 teaspoon salt; scant 2 teaspoons EACH salt and black pepper'
+     note='PER PART, because each part renders its own quantity and carries its own unit slot: three portions, three separate agreements, and the third of them still singular is not an option once its number doubles' }
+  @{ id='F38'; kind='MUST-FIRE'; serv=2; grams=0
+     buy='7 cloves garlic, minced'
+     expect='1 clove garlic, minced'
+     note='THE UNIT SLOT ONLY. "cloves" is the unit and agrees down to "clove"; "garlic" sits one word behind it, is note text, and must never be touched. This is the trap the closed vocabulary exists for' }
+  @{ id='F39'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='5.5 lb raw'
+     expect='11 lb raw'
+     note='AN ABBREVIATION IS INVARIANT. 541 of the 1,365 distinct live labels lead their tail with one, and none of them takes a plural here - "11 lb", never "11 lbs"' }
+  @{ id='F40'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='1 bunch cilantro'
+     expect='2 bunch cilantro'
+     note='A NOUN OUTSIDE THE CLOSED TABLE IS RETURNED BYTE-IDENTICAL. "bunch" is deliberately absent, so this label reads exactly as it did before the change rather than being guessed at' }
+  @{ id='F41'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='1 Cup grated'
+     expect='2 Cup grated'
+     note='THE TABLE IS CASE-SENSITIVE ON PURPOSE, and the PowerShell dictionary carries an ORDINAL comparer to match JavaScript: a default PowerShell hashtable is case-insensitive and the two twins would have disagreed on exactly this label. The only capitalised unit-slot word in the corpus is the abbreviation "Tbsp" on 3 labels, which is outside the table anyway' }
+  @{ id='F42'; kind='CLEAN TWIN'; serv=7; grams=0
+     buy='13 corn tortillas, quartered'
+     expect='6 1/2 corn tortillas, quartered'
+     note='A MODIFIER IS NOT A UNIT. "corn" leads the unit slot here and is excluded from the table for exactly this reason - agreeing it would print "6 1/2 corns tortillas". corn, garlic, sweet, large, medium, small and thirteen more were excluded label by label against every live row they appear in' }
+  @{ id='F43'; kind='CLEAN TWIN'; serv=14; grams=0
+     buy='0.6 bunches'
+     expect='2/3 bunches'
+     note='THE DECIMAL SERVICE SURVIVES THE AGREEMENT. F16 used to carry this half alone; with "onions" now agreeing, this twin keeps a noun the table does not know beside the same f=1 decimal, so "return the authored string at f=1" still cannot creep back in' }
+  @{ id='F44'; kind='MUST-FIRE'; serv=7; grams=0
+     buy='2 1/4 cups'
+     expect='1 cup'
+     note='THE NOUN AGREES WITH THE NUMBER THE READER SEES, not with the arithmetic behind it. 2.25 halved is 1.125, an exact tie between 0 and 1/4 that the seven-value table breaks downward, so the card prints the digit 1 - and agreeing against 1.125 printed "1 cups", the agreement fix reproducing its own defect one rounding step later. Found by re-measuring after the first pass of this change: 109 renders across 23 labels, every one a value that rounds onto 1 from above' }
+  @{ id='F45'; kind='CLEAN TWIN'; serv=28; grams=0
+     buy='2 1/4 cups chopped'
+     expect='4 1/2 cups chopped'
+     note='the same live label in the other direction, so the rounding rule above cannot be read as "always singular near one": 4 1/2 is greater than one and stays plural, and the "chopped" note is untouched either way' }
 )
 
 # ---------------------------------------------------------------------------------------------------

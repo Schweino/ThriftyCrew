@@ -225,16 +225,22 @@ if ($SelfTest) {
             # The widget renders kitchen fractions below 10, so a halved count reads "9 1/4 potatoes".
             # That is its behaviour for EVERY unit ("9 1/4 lb" too), not something a count noun introduces.
             @('18.4 potatoes', 0.5, '9 1/4 potatoes', 'halving a large count keeps the widget fraction style'),
-            @('1 onion', 2.0, '2 onion', 'the noun rides through scaling untouched (widget never re-plurals)'),
-            @('3 lemons worth', 2.0, '6 lemons worth', 'a two-word noun is not mistaken for a quantity'),
-            @('1 leaf', 3.0, '3 leaf', 'irregular plural also rides through unchanged')
+            # UPDATED 2026-09-03 (queue 2026-09-03-539ff0). These two rows used to expect "2 onion" and
+            # "3 leaf" and said "the widget never re-plurals" - the defect written into a self-test as
+            # intended behaviour. It does re-plural now: the noun this repair writes is re-derived from
+            # the scaled quantity against a closed vocabulary, and "leaf" is in it precisely because an
+            # irregular plural cannot be guessed by a rule. Measured before the change: 3,340 disagreeing
+            # renders across 328 labels and 564 recipes at f = 2 / 0.5 / 4 / 0.25.
+            @('1 onion', 2.0, '2 onions', 'the count noun this repair writes agrees with the scaled number'),
+            @('3 lemons worth', 2.0, '6 lemons worth', 'a two-word noun is not mistaken for a quantity, and "worth" behind the unit is note text the agreement never touches'),
+            @('1 leaf', 3.0, '3 leaves', 'an IRREGULAR plural, which is why the vocabulary is a table of pairs and not a rule that appends an s')
         )
         $scBad = @()
         foreach ($c in $sc) {
             $got = Invoke-CmScaleBuy ([string]$c[0]) ([double]$c[1])
             if ($got -ne [string]$c[2]) { $scBad += ("'{0}' x{1} -> '{2}' want '{3}'" -f $c[0], $c[1], $got, $c[2]) }
         }
-        Chk 'serving scaler: only the leading quantity moves, the noun is carried verbatim' ($scBad.Count -eq 0) ($scBad -join ' | ')
+        Chk 'serving scaler: only the leading quantity moves, and the count noun agrees with it' ($scBad.Count -eq 0) ($scBad -join ' | ')
 
         # ---- repair-cook-measures must not undo this work ------------------------------------------
         # Its package-noun test is guilty-until-proven-innocent, so any noun we write that is ALSO a

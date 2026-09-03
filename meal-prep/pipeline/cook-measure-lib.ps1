@@ -126,6 +126,101 @@ $script:CM_SB_PARTN = '^(\s*(?:' + $script:CM_SB_LEAD + ')?)(' + $script:CM_SB_Q
 $script:CM_SB_HEAD = '^(\s*(?:' + $script:CM_SB_OF + ')?)(' + $script:CM_SB_Q + ')'
 $script:CM_SB_QUAL = '^(\s*' + $script:CM_SB_LEAD + ')(' + $script:CM_SB_Q + ')'
 
+<#
+  THE UNIT NOUN IS PART OF THE QUANTITY (2026-09-03, queue 2026-09-03-539ff0).
+
+  Every arm below re-derived the NUMBER and copied the tail through byte for byte, so a label rendered
+  "2 cup grated" and "1 onion, diced" the moment a reader touched the servings control - and, in the
+  larger half nobody had measured, "1/2 cups" when a plural label scaled BELOW one. The unit word is as
+  much a function of the new quantity as the digits are, so it is re-derived in the same place they are.
+
+  MEASURED before the fix, over all 7,838 live buy labels in meal-prep\recipes-db.json:
+    factors 2 / 0.5 / 4 / 0.25, the reviewer's 21-pair word list ....... 3,340 disagreeing renders,
+                                                                         328 labels, 564 recipes
+    the same, checking connector PARTS as well as the label head ....... 3,377
+    the same plus f=1, which every page load runs ....................... 3,616 (239 at base servings)
+    the same over every word the live corpus actually carries .......... 3,925 renders, 415 labels
+  The fractional side is the bigger half: f=0.25 alone was 1,690 of the 3,377.
+
+  THE RULE IS PLURAL IFF THE VALUE IS GREATER THAN ONE. "1/2 cup" and "1 cup" are singular, "1 1/2 cups"
+  and "2 cups" are plural. That is recipe convention, and it is what makes the fractional half real.
+
+  THE TABLE IS CLOSED AND IT IS MEASURED, not guessed. It holds exactly the words that lead the unit
+  slot of a live label, plus their counterpart form. A word that is not in it is returned BYTE-IDENTICAL,
+  which is the whole safety property, so what is left OUT matters more than what is in:
+
+    ABBREVIATIONS ARE ABSENT ON PURPOSE - tbsp, tsp, lb, oz, g, ml, pk, ct, qt, pt. 541 of the 1,365
+    distinct labels lead their tail with one, and none of them takes a plural here ("4 lb", not "4 lbs").
+    Format-CmLbOz already agrees the spelled-out weight words on its own path and keeps abbreviations
+    invariant; nothing here changes that.
+
+    A MODIFIER IS NOT A UNIT. "13 corn tortillas", "8 garlic cloves", "10 sweet potatoes", "14 large
+    eggs", "3 1/2 red bell peppers" all lead the unit slot with a word that is not the unit. corn,
+    garlic, sweet, large, medium, small, green, red, yellow, whole, frozen, dried, ground, thin,
+    boneless, thick-cut, poblano and root are therefore all EXCLUDED, measured one by one against every
+    live label they appear in. Agreeing them would print "13 corns tortillas".
+
+    egg, breast, thigh, stick and bag ARE ON THE REVIEWER'S LIST AND ARE STILL EXCLUDED. Not one of them
+    leads the unit slot in any of the 1,365 distinct live labels, so an entry for them could never fire
+    and could never be tested - and "egg" is this catalogue's likeliest noun-adjunct trap the day it
+    does ("2 egg whites" -> "2 eggs whites"). A word that cannot fire is untestable; a word that can
+    fire wrongly is a corruption. Both are worth more than the zero renders they would move today.
+
+  MATCHED ON THE LEADING WORD ONLY, which is the unit slot. A vocabulary word deeper in the tail is
+  NOTE text and is never touched: "3 1/2 cups shredded cheddar, added the last 2 minutes" agrees "cups"
+  and leaves everything after it alone, and "12 cloves garlic, minced" agrees "cloves" and not "garlic".
+
+  CASE-SENSITIVE, and the dictionary is built with an ORDINAL comparer for exactly that reason:
+  PowerShell hashtables are case-insensitive by default and JavaScript objects are not, so a default
+  hashtable would have made the two twins disagree on "1 Cup". The only capitalised unit-slot word in
+  the whole corpus is the abbreviation "Tbsp", on 3 labels, and an abbreviation is outside the table
+  anyway, so a capitalised word rides through untouched either way.
+#>
+$script:CM_UNIT_PAIRS = 'apple=apples|avocado=avocados|biscuit=biscuits|box=boxes|bun=buns|can=cans|carrot=carrots|carton=cartons|chile=chiles|clove=cloves|cucumber=cucumbers|cup=cups|eggplant=eggplants|head=heads|inch=inches|jalapeno=jalapenos|jar=jars|leaf=leaves|lemon=lemons|lime=limes|mango=mangoes|onion=onions|orange=oranges|ounce=ounces|pack=packs|packet=packets|pepper=peppers|pickle=pickles|potato=potatoes|pound=pounds|quart=quarts|sheet=sheets|slice=slices|stalk=stalks|tablespoon=tablespoons|teaspoon=teaspoons|tortilla=tortillas|tub=tubs|zucchini=zucchinis'
+# The leading word of a tail, and nothing else. The lookahead refuses a hyphen as well as a letter so a
+# hyphenated compound ("thick-cut slices") is never mistaken for a bare unit noun.
+$script:CM_UNIT_RX = '^(\s*)([A-Za-z]+)(?![A-Za-z\-])'
+$script:CM_UNIT_FORMS = New-Object 'System.Collections.Generic.Dictionary[string,string[]]' ([StringComparer]::Ordinal)
+foreach ($cmPair in $script:CM_UNIT_PAIRS.Split('|')) {
+  $cmKv = $cmPair.Split('=')
+  $script:CM_UNIT_FORMS[$cmKv[0]] = $cmKv
+  $script:CM_UNIT_FORMS[$cmKv[1]] = $cmKv
+}
+
+function Set-CmUnitAgreement([double]$v, [string]$tail) {
+  <# THE POWERSHELL TWIN of smpUnitAgree() in tpl2-scaler-prefix.html. Make the tail's leading word
+     agree with the value that was just rendered in front of it, or return the tail byte-identical.
+     ops\audit-twin-drift.ps1 pins the vocabulary and this pattern against the JS copy on every push.
+
+     $v IS THE RENDERED VALUE, NOT THE COMPUTED ONE. See Format-CmScaled below: the caller re-reads the
+     number back out of the string it just printed. #>
+  $m = [regex]::Match($tail, $script:CM_UNIT_RX)
+  if (-not $m.Success) { return $tail }
+  $w = $m.Groups[2].Value
+  if (-not $script:CM_UNIT_FORMS.ContainsKey($w)) { return $tail }
+  $want = $script:CM_UNIT_FORMS[$w][[int]($v -gt 1)]
+  if ($want -ceq $w) { return $tail }
+  return ($m.Groups[1].Value + $want + $tail.Substring($m.Value.Length))
+}
+
+function Format-CmScaled([string]$prefix, [double]$v, [string]$tail) {
+  <# THE ONE PLACE A SCALED QUANTITY IS RENDERED. Every arm of Invoke-CmScaleBuy and of
+     Invoke-CmScaleConnector returns through here, so it is not possible to add a scaling arm that
+     renders a number without agreeing the word beside it - which is the whole reason this is a choke
+     point rather than a line repeated per arm. Mirrors smpRender in the JS twin.
+
+     THE NOUN AGREES WITH THE NUMBER THE READER SEES, so the value is read back OUT of the rendered
+     string rather than taken from the arithmetic. Format-CmQty can only say seven fractional values, so
+     a quantity between them is rounded to one that IS sayable, and the two can land on opposite sides
+     of one: "2 1/4 cups" halved is 1.125, an exact tie between 0 and 1/4 that the table breaks
+     downward, so the card prints the digit 1. Agreeing against 1.125 printed "1 cups" - the fix
+     reproducing its own defect one rounding step later. Measured on the first pass of this change:
+     109 renders across 23 labels, every one of them a value that rounds onto 1 from above. A reader
+     can only check the noun against the number in front of it, so that is the number it agrees with. #>
+  $q = Format-CmQty $v
+  return ($prefix + $q + (Set-CmUnitAgreement (Get-CmQty $q) $tail))
+}
+
 function Split-CmConnector([string]$s) {
   <# Split on the closed connector set, but ONLY outside parentheses. A bracketed note holds package
      sizes, can counts and restatements - "(2 sticks plus 5 tbsp)", "(10 1/2 teaspoons total)" - and those
@@ -163,7 +258,10 @@ function Invoke-CmScaleConnector([string]$buy, [double]$f) {
     $m = [regex]::Match($sp.parts[$i], $rx, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
     if (-not $m.Success) { return $null }
     $q = Get-CmQty $m.Groups[2].Value
-    [void]$out.Add($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $sp.parts[$i].Substring($m.Value.Length))
+    # Per PART, because each part renders its own quantity and carries its own unit slot: a SUM agrees
+    # each portion with itself ("1 cup plus 5 tbsp" -> "2 cups plus 10 tbsp"), and a RANGE agrees its
+    # unit with the endpoint the unit sits beside ("1/8 to 1/2 tsp", "10 to 11 cloves").
+    [void]$out.Add((Format-CmScaled $m.Groups[1].Value ($q * $f) $sp.parts[$i].Substring($m.Value.Length)))
   }
   $res = $out[0]
   for ($i = 0; $i -lt $sp.seps.Count; $i++) { $res += $sp.seps[$i] + $out[$i + 1] }
@@ -266,7 +364,21 @@ function Invoke-CmScaleBuy([string]$buy, [double]$f) {
     The real defect is narrower than either: re-snapping a quantity the AUTHOR already wrote as a
     fraction, where the only possible outcome is a DIFFERENT fraction. A decimal is still formatted. A
     fraction the author chose is returned as written, and only at f=1, where there is nothing to compute.
+
+    A RENDERED QUANTITY IS NOT FINISHED UNTIL THE WORD BESIDE IT AGREES (2026-09-03, queue
+    2026-09-03-539ff0), in lockstep with the JS. Every arm here now returns through Format-CmScaled, so
+    the noun is re-derived wherever the number is. See the CM_UNIT_PAIRS block above for the measurement
+    and for what the closed vocabulary deliberately leaves out.
   #>
+  # THE TWO ARMS THAT DO NOT AGREE A NOUN, and why, measured rather than assumed:
+  #   the authored-fraction return below renders nothing - it hands back the author's own bytes at f=1.
+  #     Of the 20 distinct labels that disagree at f=1, ZERO reach this arm (they are machine decimals
+  #     below one, "0.5 cups" -> "1/2 cups", which the LEAD arm renders and now agrees). So the arm that
+  #     deliberately does not compute also has nothing to agree, and the 2026-09-01 rule stands intact.
+  #   the lb+oz arm's remaining tail is NOTE text, not a unit slot: its unit slot is the lb and the oz,
+  #     and Format-CmLbOz has agreed those two words itself since it was written. Running the vocabulary
+  #     over "raw, cooked and roughly chopped" would be agreeing a note, which is the one thing this
+  #     rule must never do.
   if ($f -eq 1 -and (Test-CmAuthoredFraction $buy)) { return $buy }
   $m = [regex]::Match($buy, $script:CM_SB_LBOZ, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success) {
@@ -279,12 +391,12 @@ function Invoke-CmScaleBuy([string]$buy, [double]$f) {
   $m = [regex]::Match($buy, $script:CM_SB_HEAD, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success) {
     $q = Get-CmQty $m.Groups[2].Value
-    return ($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $buy.Substring($m.Value.Length))
+    return (Format-CmScaled $m.Groups[1].Value ($q * $f) $buy.Substring($m.Value.Length))
   }
   $m = [regex]::Match($buy, $script:CM_SB_QUAL, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
   if ($m.Success -and -not (Test-CmBareNumber $buy.Substring($m.Value.Length))) {
     $q = Get-CmQty $m.Groups[2].Value
-    return ($m.Groups[1].Value + (Format-CmQty ($q * $f)) + $buy.Substring($m.Value.Length))
+    return (Format-CmScaled $m.Groups[1].Value ($q * $f) $buy.Substring($m.Value.Length))
   }
   return $buy
 }
