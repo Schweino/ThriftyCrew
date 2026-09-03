@@ -1,6 +1,17 @@
 ﻿{
     "kind_mismatch_crown":  [
-
+                                {
+                                    "id":  "teriyaki-sauce",
+                                    "commodity":  "Teriyaki Sauce / Marinade",
+                                    "unit":  "floz",
+                                    "store":  "Walmart",
+                                    "per_unit":  0.1653,
+                                    "size":  "15 fl oz",
+                                    "item":  "Great Value Teriyaki Sauce, 15 fl oz, 1 Count",
+                                    "kind":  "volume",
+                                    "row_kind":  "weight",
+                                    "holds_crown":  true
+                                }
                             ],
     "findings":  [
                      {
@@ -135,7 +146,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-09-02T14:42:40",
+    "generated":  "2026-09-03T08:08:43",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -383,8 +394,8 @@
                               "commodity":  "Chicken Broth / Stock",
                               "unit":  "floz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.04,
-                              "size":  "fl oz",
+                              "per_unit":  0.0416,
+                              "size":  "192 fl oz",
                               "item":  "Member\u0027s Mark Chicken Broth, 32 oz., 6 pk.",
                               "kind":  "volume",
                               "row_kind":  "weight",
@@ -1159,18 +1170,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "condensed-milk",
-                              "commodity":  "Sweetened Condensed Milk",
-                              "unit":  "oz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.1426,
-                              "size":  "84 fl oz",
-                              "item":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  true
-                          },
-                          {
                               "id":  "maple-syrup",
                               "commodity":  "Syrup (pancake / maple)",
                               "unit":  "floz",
@@ -1210,36 +1209,24 @@
                               "id":  "teriyaki-sauce",
                               "commodity":  "Teriyaki Sauce / Marinade",
                               "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.1738,
-                              "size":  "27.5 oz",
-                              "item":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
+                              "store":  "Walmart",
+                              "per_unit":  0.1653,
+                              "size":  "15 fl oz",
+                              "item":  "Great Value Teriyaki Sauce, 15 fl oz, 1 Count",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  true
                           },
                           {
                               "id":  "teriyaki-sauce",
                               "commodity":  "Teriyaki Sauce / Marinade",
                               "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.229,
-                              "size":  "10 oz",
-                              "item":  "Teriyaki Sauce Our Family",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "teriyaki-sauce",
-                              "commodity":  "Teriyaki Sauce / Marinade",
-                              "unit":  "floz",
-                              "store":  "Hy-Vee",
-                              "per_unit":  0.2376,
-                              "size":  "21 oz",
-                              "item":  "Soy Vay Marinade \u0026 Sauce, Less Sodium, Veri Veri Teriyaki",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
+                              "store":  "Fareway",
+                              "per_unit":  0.2181,
+                              "size":  "16 fl oz",
+                              "item":  "Sweet Baby Ray\u0027s Honey Teriyaki Sauce \u0026 Marinade",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
                               "holds_crown":  false
                           },
                           {

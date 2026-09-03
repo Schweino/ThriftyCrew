@@ -13,6 +13,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "air-freshener",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.2452,
+        "link":  0.2041,
+        "ratio":  0.83,
+        "price":  1.49,
+        "size":  "7.3 oz",
+        "boardItem":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Apple Cinnamon, 7.3oz, 1 count",
+        "linkItem":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Apple Cinnamon, 7.3oz, 1 count",
+        "board_src":  "main"
+    },
+    {
         "id":  "alfredo-sauce",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -183,19 +196,6 @@
     },
     {
         "id":  "bell-peppers",
-        "store":  "Aldi",
-        "unit":  "each",
-        "board":  0.83,
-        "link":  0.8967,
-        "ratio":  1.08,
-        "price":  2.69,
-        "size":  "3 ct",
-        "boardItem":  "Mixed Bell Peppers",
-        "linkItem":  "Mixed Bell Peppers",
-        "board_src":  "main"
-    },
-    {
-        "id":  "bell-peppers",
         "store":  "Baker\u0027s",
         "unit":  "each",
         "board":  0.89,
@@ -224,13 +224,26 @@
         "id":  "blackberries",
         "store":  "Aldi",
         "unit":  "oz",
-        "board":  0.3983,
+        "board":  0.415,
         "link":  0.3583,
-        "ratio":  0.9,
+        "ratio":  0.86,
         "price":  2.15,
         "size":  "6 oz",
         "boardItem":  "Blackberries 6 OZ",
         "linkItem":  "Blackberries, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "blueberries",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.3883,
+        "link":  0.3606,
+        "ratio":  0.93,
+        "price":  6.49,
+        "size":  "18 oz",
+        "boardItem":  "Fresh Blueberries - 18 OZ - Clamshell",
+        "linkItem":  "Fresh Blueberries - 18 OZ - Clamshell",
         "board_src":  "main"
     },
     {
@@ -257,6 +270,19 @@
         "size":  "24 ct",
         "boardItem":  "Puraqua Natural Spring Water, 24 Pack",
         "linkItem":  "PurAqua Purified Water 24 Pack",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bouillon",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1477,
+        "link":  0.1551,
+        "ratio":  1.05,
+        "price":  6.28,
+        "size":  "40.5 oz",
+        "boardItem":  "Knorr Granulated Chicken Bouillon, 40.5 oz.",
+        "linkItem":  "Knorr Granulated Chicken Bouillon, 40.5 oz.",
         "board_src":  "main"
     },
     {
@@ -309,19 +335,6 @@
         "size":  "4 ct 20 oz",
         "boardItem":  "Betty Crocker HERSHEY\u0027S Triple Chocolate Fudge Brownie Mix, 20 oz., 4 pk.",
         "linkItem":  "Betty Crocker HERSHEY\u0027S Triple Chocolate Fudge Brownie Mix, 20 oz., 4 pk.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "butter",
-        "store":  "Family Fare",
-        "unit":  "lb",
-        "board":  4.49,
-        "link":  5.39,
-        "ratio":  1.2,
-        "price":  5.39,
-        "size":  "1 lb",
-        "boardItem":  "Land O Lakes Butter, Salted, Half Sticks 8 Ea",
-        "linkItem":  "Land O Lakes Butter, Salted, Half Sticks 8 Ea",
         "board_src":  "main"
     },
     {
@@ -504,6 +517,19 @@
         "size":  "5 lb",
         "boardItem":  "Clementine Mandarins, 5 lbs.",
         "linkItem":  "Clementine Mandarins, 5 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cocoa-powder",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.499,
+        "link":  0.5209,
+        "ratio":  1.04,
+        "price":  11.98,
+        "size":  "23 oz",
+        "boardItem":  "Rising Star Baking Supply Premium Cocoa Powder, 20 oz.",
+        "linkItem":  "Hershey\u0027s Cocoa 100% Cacao Natural Unsweetened, 23 oz.",
         "board_src":  "main"
     },
     {
@@ -754,6 +780,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "frosting",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.1244,
+        "link":  0.1119,
+        "ratio":  0.9,
+        "price":  1.79,
+        "size":  "16 oz",
+        "boardItem":  "Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
+        "linkItem":  "Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
+        "board_src":  "main"
+    },
+    {
         "id":  "breakfast-sandwiches",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -767,6 +806,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "frozen-cauliflower-florets",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.212,
+        "link":  0.1852,
+        "ratio":  0.87,
+        "price":  2,
+        "size":  "10.8 oz",
+        "boardItem":  "Birds Eye Steamfresh Cauliflower Florets, Frozen Vegetables",
+        "linkItem":  "Birds Eye Steamfresh Cauliflower Florets, Frozen Vegetables",
+        "board_src":  "main"
+    },
+    {
         "id":  "chicken-nuggets",
         "store":  "Aldi",
         "unit":  "oz",
@@ -777,6 +829,19 @@
         "size":  "48 oz",
         "boardItem":  "Kirkwood Family Size Chicken Nuggets 48 OZ",
         "linkItem":  "Kirkwood Family Pack Chicken Nuggets",
+        "board_src":  "main"
+    },
+    {
+        "id":  "frozen-fries",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.0911,
+        "link":  0.0811,
+        "ratio":  0.89,
+        "price":  6.49,
+        "size":  "5 lb",
+        "boardItem":  "Kroger Crinkle-Cut Frozen French Fries BIG Deal!",
+        "linkItem":  "Kroger Crinkle-Cut Frozen French Fries BIG Deal!",
         "board_src":  "main"
     },
     {
@@ -978,9 +1043,9 @@
         "id":  "nectarines",
         "store":  "Aldi",
         "unit":  "lb",
-        "board":  1.49,
+        "board":  1.845,
         "link":  1.745,
-        "ratio":  1.17,
+        "ratio":  0.95,
         "price":  3.49,
         "size":  "2 lb",
         "boardItem":  "Nectarines Bagged 2 LB",
@@ -1054,6 +1119,19 @@
     },
     {
         "id":  "pepperoni",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.2638,
+        "link":  0.295,
+        "ratio":  1.12,
+        "price":  9.44,
+        "size":  "32 oz",
+        "boardItem":  "Member\u0027s Mark Sliced Pepperoni 16 oz., 2 pk.",
+        "linkItem":  "Member\u0027s Mark Sliced Pepperoni 16 oz., 2 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pepperoni",
         "store":  "Hy-Vee",
         "unit":  "oz",
         "board":  0.4983,
@@ -1089,6 +1167,19 @@
         "size":  "6 ct",
         "boardItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
         "linkItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
+        "board_src":  "main"
+    },
+    {
+        "id":  "plums",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  1.945,
+        "link":  1.49,
+        "ratio":  0.77,
+        "price":  2.98,
+        "size":  "2 lb",
+        "boardItem":  "Plum Bag 2 Lbs",
+        "linkItem":  "Plums, Bag",
         "board_src":  "main"
     },
     {
@@ -1379,6 +1470,19 @@
     },
     {
         "id":  "condensed-milk",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1605,
+        "link":  0.1426,
+        "ratio":  0.89,
+        "price":  11.98,
+        "size":  "84 fl oz",
+        "boardItem":  "Nestle La Lechera Sweetened Condensed Milk, 14 oz., 6 pk.",
+        "linkItem":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "condensed-milk",
         "store":  "Aldi",
         "unit":  "oz",
         "board":  0.1636,
@@ -1453,19 +1557,6 @@
         "size":  "lb",
         "boardItem":  "Roma Tomatoes",
         "linkItem":  "Roma Tomatoes",
-        "board_src":  "main"
-    },
-    {
-        "id":  "tomatoes",
-        "store":  "Walmart",
-        "unit":  "lb",
-        "board":  1.3551,
-        "link":  0.9692,
-        "ratio":  0.72,
-        "price":  0.22,
-        "size":  "0.227 lb",
-        "boardItem":  "Fresh Roma Tomato, Each",
-        "linkItem":  "Fresh Roma Tomato, Each",
         "board_src":  "main"
     },
     {
@@ -1596,6 +1687,19 @@
         "size":  "3 lb",
         "boardItem":  "Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.6 - 6.9 lb Tray",
         "linkItem":  "Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "boneless-skinless-chicken-thigh",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  3.6633,
+        "link":  3.99,
+        "ratio":  1.09,
+        "price":  3.99,
+        "size":  "lb",
+        "boardItem":  "Kroger Frozen Raw Boneless Skinless Chicken Thighs",
+        "linkItem":  "Heritage Farm Boneless Skinless Chicken Thighs",
         "board_src":  "recipe"
     },
     {
@@ -1778,6 +1882,19 @@
         "size":  "40 oz",
         "boardItem":  "Member\u0027s Mark Nonfat Plain Greek Yogurt, 48 oz.",
         "linkItem":  "Chobani Vanilla Zero Sugar Greek Yogurt, 40 oz.",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "greek-yogurt",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.2278,
+        "link":  0.1341,
+        "ratio":  0.59,
+        "price":  4.29,
+        "size":  "32 oz",
+        "boardItem":  "Fage Total Plain Whole Milk Greek Yogurt Tub",
+        "linkItem":  "Kroger Plain Nonfat Greek Yogurt Tub",
         "board_src":  "recipe"
     },
     {

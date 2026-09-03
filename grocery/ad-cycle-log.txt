@@ -1769,3 +1769,907 @@
 [2026-09-02T08:24:49] coverage-cycle: coverage-ledger: 2 coverage finding(s) across 16 rostered check(s); 16 row(s) evaluated.
 [2026-09-02T08:24:49] coverage-cycle: COVERAGE-LEDGER-COMPLETE
 [2026-09-02T08:24:49] run complete; flips=1; pull=(no pull - -NoPull; latest ads file reused); ship=467s; total=1344s
+[2026-09-03T08:04:28] ff-carry: ff-carry: FOUND 2 uncovered term(s) - FF carries these and this pull has no priced row for them (60 of 595 empty term(s) re-probed; 467 skipped because this pull already prices that commodity; 68 RATE-LIMITED by Freshop (HTTP 400 carrying error_code 429)):
+[2026-09-03T08:04:28] ff-carry:   jarred-gravy         <- 'Heinz Home Style Turkey Gravy, 12 Oz Jar'  
+[2026-09-03T08:04:28] ff-carry:   15-bean-soup-mix     <- 'Hurst's Hambeensr Hurst's 15 Bean Soup Mix 20 Oz'  
+[2026-09-03T08:04:28] ff-carry: FF-CARRY-COMPLETE
+[2026-09-03T08:04:34] multipack-repair: repair-multipack-sizes: examining 37 of 232 capture file(s) - the ones inside the engine union window
+[2026-09-03T08:04:34] multipack-repair: repair-multipack-sizes: 37 file(s), 0 guard-5 reject(s) examined, 0 repairable (0 via a reviewed unit-weight hint), 0 REFUSED (need a human) - APPLIED
+[2026-09-03T08:06:01] history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)
+[2026-09-03T08:06:10] sale-expiry re-prices reconciled
+[2026-09-03T08:06:10] sale-windows refreshed
+[2026-09-03T08:06:52] recipe-overlay applied
+[2026-09-03T08:06:58] engine cost-recipes refreshed db\costed
+[2026-09-03T08:07:00] smp-feed exported
+[2026-09-03T08:07:11] v2 per-serving manifest recomputed
+[2026-09-03T08:07:12] ingredient-map regenerated (derived from specs + feed)
+[2026-09-03T08:07:31] reanchor: 1/2 reanchor-machine-fields
+[2026-09-03T08:07:31] reanchor: re-anchored cost_ps + costPerServing on 584 specs (skipped 0)
+[2026-09-03T08:07:31] reanchor: 2/2 verify the invariant (no money literals; every token expands)
+[2026-09-03T08:07:31] reanchor:   clean: no money literal in prose, every token expands against its own stat
+[2026-09-03T08:07:31] reanchor: 
+[2026-09-03T08:07:31] reanchor: every built card agrees with its spec cost - nothing to rebuild
+[2026-09-03T08:07:31] reanchor:   (empty list written to C:\Codex\ThriftyCrew\meal-prep\pipeline\reanchor-stale-cards.txt so a stale one cannot be re-read)
+[2026-09-03T08:07:31] reanchor: REANCHOR-COMPLETE stale=0 held=0 disagreements=0
+[2026-09-03T08:07:31] loop closed: no card cost moved today
+[2026-09-03T08:07:38] derive-links-from-prices: .
+[2026-09-03T08:08:02] family-fare link fill: APPLIED: 4 Family Fare link(s) written from the plan (0 network calls)
+[2026-09-03T08:08:16] prune-bad-links: links DROPPED (wrong product/price)    : 2   (of which 0 were SALE cells the old rule skipped entirely) | links DROPPED (per-unit unverifiable)  : 0   (cannot prove the link shows our price - unknown is not a pass) | links DROPPED (link carries no price)  : 0   (nothing from the store to check against)
+[2026-09-03T08:08:28] name-drift re-derived over the pruned link set (the pruner rewrote product-urls, which stales the drift table tile-integrity grades against)
+[2026-09-03T08:08:39] pins:   board-confirmed-fresh gate: 71741 first-party rows from 61 engine input file(s)  [Aldi=669 Baker's=315 Family Fare=690 Fareway=33 Hy-Vee=16 Sam's Club=11242 Walmart=58776]
+[2026-09-03T08:08:40] pins: board-overrides: wrote 10 corrections  (skipped: sale=483 collision=0 name-drift=9 no-link=304 bad-price=53 already-agree=2575 basis-gap=0 board-confirmed-fresh=0)
+[2026-09-03T08:08:40] guards:   ok    pu-lib per-unit engine self-check
+[2026-09-03T08:08:42] guards:   ok    partial-pull union (compare-deals) self-test
+[2026-09-03T08:08:42] guards:   ok    multipack reject + pricing (walmart-deals) self-test
+[2026-09-03T08:08:43] guards:   ok    name-size vs Walmart unit price (walmart-batch) self-test
+[2026-09-03T08:08:49] guards:   ok    browser-pull JS lane (wall evidence + parse) self-test
+[2026-09-03T08:08:49] guards:   ok    fullpull [Walmart]: ok - newest comprehensive capture walmart-regular-2026-08-31.json (592 terms) is 3 day(s) old (warn at 70, cliff at 90) fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-08-15.json (594 terms) is 19 day(s) old (warn at 70, cliff at 90) fullpull [Walmart] cells: ok - 0 of 525 attributed board cell(s) expire within 5 day(s) (warn at 5%); 4 cell(s) could not be traced to a capture in the window fullpull [Sam's Club] cells: ok - 0 of 372 attributed board cell(s) expire within 5 day(s) (warn at 5%); 5 cell(s) could not be traced to a capture in the window WALMART-FULLPULL-COMPLETE
+[2026-09-03T08:08:49] guards:   ok    allowlist entries all carry a fresh reviewed date
+[2026-09-03T08:08:49] guards:   ok    matching rules carry no mojibake (accented classes use the \u00XX escape form)
+[2026-09-03T08:08:49] guards:   ok    price-mode (in-store pricing)
+[2026-09-03T08:08:49] guards:   ok    household-in-food
+[2026-09-03T08:08:49] guards:   ok    no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)
+[2026-09-03T08:08:49] guards:   ok    no store lost coverage vs the previous board
+[2026-09-03T08:08:49] guards:   ok    no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)
+[2026-09-03T08:08:49] guards:   ok    no cell is cheapest because a pack TOTAL was multiplied by its own count (peer-size fingerprint)
+[2026-09-03T08:08:49] guards:   ok    no published price claims a date newer than the capture it came from (as_of evidence)
+[2026-09-03T08:08:49] guards:   ok    ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)
+[2026-09-03T08:08:52] guards:   ok    board-vs-identity [staple]: all 3140 cell(s) match the engine's own recorded assignment (rules_hash e4f4473179e6, 0 stale row(s) ignored)
+[2026-09-03T08:08:54] guards:   ok    board-vs-identity [recipe]: all 332 cell(s) match the engine's own recorded assignment (rules_hash e4f4473179e6, 0 stale row(s) ignored)
+[2026-09-03T08:08:54] guards:   ok    every override pin is derivable from its own link (10 checked for derivability; product identity checked on 10 of them)
+[2026-09-03T08:08:55] guards:   ok    no board cell differs from its linked product by a factor (2439 cells compared) (3 pinned cell(s) graded at the pin - the number the page prints - and cross-checked by invariant 3)
+[2026-09-03T08:09:00] guards:   ok    no multipack row prices a pack as a single unit (3154 pack-total size(s) verified by arithmetic out of 3178 pack-shaped row(s))
+[2026-09-03T08:09:07] guards:   ok    no store's newest data file collapsed vs its recent history (7 store(s) compared against their own history)
+[2026-09-03T08:09:07] guards:   ok    7 frozen Recipe Hunter snapshot(s) present and non-empty (83 adjudicated row(s)) - one-off in-store prices for long-tail ingredients, not a rotating lane, so the throttled-collapse class does not apply: hunter-aldi, hunter-bakers, hunter-familyfare, hunter-fareway, hunter-hyvee, hunter-samsclub, hunter-walmart
+[2026-09-03T08:09:07] guards:   ok    out\regular holds only canonical <store>-regular-<date>.json data files
+[2026-09-03T08:09:07] guards:   ok    no undated stale discount is being published as a live sale
+[2026-09-03T08:09:10] guards:   ok    no store's price data is older than 90 days - the capture-policy carry (14 store(s) aged)
+[2026-09-03T08:09:14] guards:   ok    every price we publish is the price the store charges (69395 rows verified against their own current_price)
+[2026-09-03T08:09:14] guards:   ok    Baker's prices arrive verbatim from the sanctioned Kroger API (7295 rows, 7295 carrying current_price); independent proof is audit-basis-reconcile's netWeight check
+[2026-09-03T08:09:14] guards:   ok    the board is built from the newest ads file (ads-2026-09-02 -> comparison-2026-09-02)
+[2026-09-03T08:09:14] guards:   ok    coverage-ledger: ok - 16 check(s) still examine at least their baseline coverage (phase 'publish', tolerance 10% unless overridden). | COVERAGE-LEDGER-COMPLETE
+[2026-09-03T08:09:14] guards: 
+[2026-09-03T08:09:14] guards:   warn  cell-drops: WARNING - 4 everyday cell(s) priced on comparison-2026-08-26 are missing from today's board. Walmart runs a comprehensive pull with NO carry-forward by design, so for that store a dead search term is an instant hole - check its pull for failed terms first. Baker's now rotates WITH carry-forward (2026-08-22), so a drop there means a row aged past the 90-day carry, or a term it DID re-read stopped returning that product; check carry_expired and capture_terms in its everyday file. For the browser stores check as_of expiry + carry-forward: |   aji-amarillo-paste @ Walmart (was $1.33) |   miracle-whip @ Walmart (was $0.39) |   sea-salt @ Aldi (was $0.35) |   sweet-soy-sauce @ Walmart (was $0.37)
+[2026-09-03T08:09:14] guards:   warn  145 cell(s) drift from their link by <50% (ordinary price movement; the daily consistency repair handles it)
+[2026-09-03T08:09:14] guards:   warn  Aldi          2982 rows |   0% re-verified against the store TODAY (0 of 2982 dated) | file 1d old
+[2026-09-03T08:09:14] guards:   warn  Baker's       7295 rows |   4% re-verified against the store TODAY (290 of 7295 dated) | file 0d old | 7005 row(s) flagged unverified
+[2026-09-03T08:09:14] guards:   warn  Family Fare   5311 rows |   4% re-verified against the store TODAY (232 of 5311 dated) | file 0d old
+[2026-09-03T08:09:14] guards:   warn  Fareway        794 rows |   1% re-verified against the store TODAY (9 of 794 dated) | file 0d old
+[2026-09-03T08:09:14] guards:   warn  Aldi             8 rows |   0% re-verified against the store TODAY (0 of 8 dated) | file 18d old
+[2026-09-03T08:09:14] guards:   warn  Baker's         83 rows |   0% re-verified against the store TODAY (0 of 83 dated) | file 1d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-09-03T08:09:15] guards:   warn  Family Fare     10 rows |   0% re-verified against the store TODAY (0 of 10 dated) | file 18d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-09-03T08:09:15] guards:   warn  Fareway        244 rows |   0% re-verified against the store TODAY (0 of 244 dated) | file 4d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-09-03T08:09:15] guards:   warn  Hy-Vee          14 rows |   0% re-verified against the store TODAY (0 of 14 dated) | file 18d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-09-03T08:09:15] guards:   warn  Sam's Club     134 rows | 100% re-verified against the store TODAY (134 of 134 dated) | file 0d old
+[2026-09-03T08:09:15] guards:   warn  Walmart          9 rows |   0% re-verified against the store TODAY (0 of 9 dated) | file 18d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-09-03T08:09:15] guards:   warn  Hy-Vee        1549 rows |   0% re-verified against the store TODAY (2 of 1549 dated) | file 0d old | 1547 row(s) flagged unverified
+[2026-09-03T08:09:15] guards:   warn  Sam's Club     134 rows | 100% re-verified against the store TODAY (134 of 134 dated) | file 0d old
+[2026-09-03T08:09:15] guards:   warn  Walmart        162 rows |   0% re-verified against the store TODAY (0 of 162 dated) | file 1d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-09-03T08:09:15] guards:   warn  guard 10 checks Walmart but not all of it: 4 capture(s) in its engine set PREDATE the current_price field, so those rows are compared against nothing. The puller is fine - these are legacy files aging out of the window, and the finding closes itself when they do. Unguarded until then: walmart-regular-2026-07-05.json, walmart-regular-2026-07-06.json, walmart-regular-2026-07-08.json, walmart-regular-2026-07-12.json
+[2026-09-03T08:09:15] guards: 
+[2026-09-03T08:09:15] guards:   HARD FAIL: no cell wins a row while measured in a different KIND of quantity than the row (volume among weights) (see audit-unit-basis-outlier.ps1)
+[2026-09-03T08:09:15] guards: 
+[2026-09-03T08:09:15] guards: GUARDS FAILED: 1 hard invariant(s) violated. Board NOT safe to publish.
+[2026-09-03T08:09:15] guards: GUARDS-COMPLETE hard=1 warn=17
+[2026-09-03T08:09:15] GUARDS FAILED - board NOT republished (left at last good state)
+[2026-09-03T08:09:17] share: share-image: 5 drops -> C:\Codex\ThriftyCrew\public\share\omaha-drops.png
+[2026-09-03T08:09:18] consistency OK - every shown link matches its price
+[2026-09-03T08:09:18] ---- SHIP PATH COMPLETE in 398 s (6.6 min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----
+[2026-09-03T08:09:26] top5-weekly refreshed
+[2026-09-03T08:09:26] free-rotation: rotation: board-week=2026-09-02  target free set = 20 recipe(s)
+[2026-09-03T08:09:26] free-rotation:   chicken #1  $1.83/srv  chicken-pot-pie-biscuit-casserole
+[2026-09-03T08:09:26] free-rotation:   chicken #2  $1.99/srv  chicken-bulgogi-rice-bowls
+[2026-09-03T08:09:26] free-rotation:   chicken #3  $1.99/srv  chicken-fried-rice-skillet
+[2026-09-03T08:09:26] free-rotation:   chicken #4  $1.99/srv  poppy-seed-chicken-and-rice-casserole
+[2026-09-03T08:09:26] free-rotation:   chicken #5  $2.01/srv  buffalo-chicken-pasta-bake
+[2026-09-03T08:09:26] free-rotation:   turkey  #1  $1.87/srv  turkey-biscuit-pot-pie-casserole
+[2026-09-03T08:09:26] free-rotation:   turkey  #2  $1.98/srv  turkey-huevos-rancheros-rice-bowls
+[2026-09-03T08:09:26] free-rotation:   turkey  #3  $2.04/srv  haluski-and-kielbasa-cabbage-noodles
+[2026-09-03T08:09:26] free-rotation:   turkey  #4  $2.09/srv  turkey-maqluba-upside-down-rice-bake
+[2026-09-03T08:09:26] free-rotation:   turkey  #5  $2.10/srv  scalloped-potato-turkey-casserole
+[2026-09-03T08:09:26] free-rotation:   beef    #1  $2.21/srv  low-carb-taco-cabbage-beef-skillet
+[2026-09-03T08:09:26] free-rotation:   beef    #2  $2.29/srv  beef-potato-au-gratin-casserole
+[2026-09-03T08:09:26] free-rotation:   beef    #3  $2.36/srv  lebanese-hashweh
+[2026-09-03T08:09:26] free-rotation:   beef    #4  $2.41/srv  million-dollar-baked-spaghetti
+[2026-09-03T08:09:26] free-rotation:   beef    #5  $2.42/srv  keto-cheeseburger-skillet
+[2026-09-03T08:09:26] free-rotation:   pork    #1  $1.57/srv  orecchiette-italian-sausage-broccoli
+[2026-09-03T08:09:26] free-rotation:   pork    #2  $1.61/srv  bratwurst-sauerkraut-potatoes-bake
+[2026-09-03T08:09:26] free-rotation:   pork    #3  $1.70/srv  slow-cooker-kalua-pork-bowls
+[2026-09-03T08:09:27] free-rotation:   pork    #4  $1.82/srv  pork-egg-roll-in-a-bowl
+[2026-09-03T08:09:27] free-rotation:   pork    #5  $1.85/srv  vietnamese-thit-kho-braised-pork-and-eggs
+[2026-09-03T08:09:27] free-rotation: rotation: same week, same set - nothing to do
+[2026-09-03T08:11:27] paywall-leak: 121 s (rc=0)
+[2026-09-03T08:11:27] paywall-leak: audit-paid-not-public: checked 583 published recipe(s) against Ghost
+[2026-09-03T08:11:27] paywall-leak:   ok - every published recipe is served exactly as the database says it should be
+[2026-09-03T08:11:27] paywall-leak: AUDIT-PAID-NOT-PUBLIC-COMPLETE checked=583 leaks=0 skew=0 unreadable=0
+[2026-09-03T08:11:28] surface: WROTE cheapnow-data.js  (64.7 KB)  recipes=583
+[2026-09-03T08:11:28] surface: SPLICED into cheap-dinners-tool.html  (72.4 KB total)
+[2026-09-03T08:11:28] surface: 
+[2026-09-03T08:11:29] surface: WROTE dinner-data.js  (106.4 KB)  ingredients=313 recipes=583
+[2026-09-03T08:11:29] surface: SPLICED into dinner-tonight-tool.html  (122.6 KB total)
+[2026-09-03T08:11:29] surface: board_id coverage: 313 of 313 ingredients have live-price ids
+[2026-09-03T08:11:31] surface: live feed OK: week_of=2026-09-02, 583 recipes
+[2026-09-03T08:11:31] surface: WROTE stretcher-data.js  (60.7 KB)  recipes=583
+[2026-09-03T08:11:31] surface: SPLICED into payday-stretcher-tool.html  (78.6 KB total)
+[2026-09-03T08:11:44] surface-hub: generated 583 cards | chicken 162  pork 125  beef 150  turkey 146  sum 583 | free 20 | cuisines 124
+[2026-09-03T08:11:44] surface-hub: spliced OK: cards=591 (grid 583 + rail 8)  len 467891 -> 468027  written hub-new.html
+[2026-09-03T08:11:44] surface-hub: PUBLISHED. live cards=591  copy-updated=True  sort-live=True  script-live=True
+[2026-09-03T08:11:45] surface-staleness:   cheap-dinners      rows=583  findings=0
+[2026-09-03T08:11:45] surface-staleness:   dinner-tonight     rows=583  findings=0
+[2026-09-03T08:11:45] surface-staleness:   payday-stretcher   rows=583  findings=0
+[2026-09-03T08:11:45] surface-staleness:   hub (live)         rows=583  findings=0
+[2026-09-03T08:11:45] surface-staleness: audit-surface-staleness: all four price surfaces agree with the source they are built from
+[2026-09-03T08:11:45] surface-staleness:   note: payday-stretcher is compared on the EVERYDAY basis (recipes-db.cost_batch_true), which is
+[2026-09-03T08:11:45] surface-staleness:         what its builder emits. The live tool then hydrates week_cost from the feed, which is the
+[2026-09-03T08:11:45] surface-staleness:         CHEAPEST basis, so its baked fallback and its hydrated value are on different bases. That is
+[2026-09-03T08:11:45] surface-staleness:         a pre-existing basis question for a human, not staleness, and this guard does not rule on it.
+[2026-09-03T08:11:45] surface-staleness: SURFACE-STALENESS-COMPLETE clean
+[2026-09-03T08:14:42] ---- INSPECT AUDITS (fan-out x8): 35 of 35 lane(s) ran in 177 s wall (916 s if run one after another) ----
+[2026-09-03T08:14:42] coverage-gaps: 32 s (rc=2)
+[2026-09-03T08:14:42] semantic: 177 s (rc=0)
+[2026-09-03T08:14:42] match-soundness: 116 s (rc=0)
+[2026-09-03T08:14:42] matcher-parity: 46 s (rc=0)
+[2026-09-03T08:14:42] commodity-dupes: 89 s (rc=0)
+[2026-09-03T08:14:42] search-terms: 115 s (rc=0)
+[2026-09-03T08:14:42] discover-hyvee: 46 s (rc=0)
+[2026-09-03T08:14:42] spec-contradictions: 49 s (rc=0)
+[2026-09-03T08:14:42] basis-reconcile: 109 s (rc=0)
+[2026-09-03T08:14:42] coverage-gaps: 29 gap(s), 0 actionable - every one is engine-explained (BASIS-NULL / BAND-DROPPED); reported, not paged
+[2026-09-03T08:14:42] semantic sweep: 1 product(s) invisible to the rules across 1 commodit(y/ies) - chili-beans
+[2026-09-03T08:14:46] semantic sweep alert sent
+[2026-09-03T08:14:46] aisle test: no live cell sits in a wrong department
+[2026-09-03T08:14:46] match-soundness: match-soundness: MOVED=0  DROPPED=0  new-contested=1  drift-vs-engine=0
+[2026-09-03T08:14:46] match-soundness:   new-contested (order-dependence to review): Fareway Diced Mixed Vegetables
+[2026-09-03T08:14:46] match-soundness: MATCH-SOUNDNESS-COMPLETE
+[2026-09-03T08:14:46] sale-without-ad: SALE-WITHOUT-AD-COMPLETE sale=475 traced=61 untraceable=180
+[2026-09-03T08:14:46] hyvee-store-blend: hyvee-store-blend  -  board speaks for Omaha #02 (storeId 1466)
+[2026-09-03T08:14:46] hyvee-store-blend:   1549 row(s): 120 on target, 1166 from a RETIRED store, 263 unstated  ->  7.7% migrated
+[2026-09-03T08:14:46] hyvee-store-blend:   by storeId: 1465=1166 1466=120 unstated=263
+[2026-09-03T08:14:46] hyvee-store-blend:   NOTE: 1166 row(s) still carry another store's prices. The two Omaha stores disagree on roughly a third
+[2026-09-03T08:14:46] hyvee-store-blend:         of everyday rows and most sale rows, so this is a live count of cells likely wrong for the claimed store.
+[2026-09-03T08:14:46] hyvee-store-blend:   -> C:\Codex\ThriftyCrew\grocery\out\hyvee-store-blend.json
+[2026-09-03T08:14:46] hyvee-store-blend: HYVEE-STORE-BLEND-COMPLETE rows=1549 on=120 off=1166 pct=7.7
+[2026-09-03T08:14:46] price-capture-reach: price-capture-reach  -  prices captured in the codebase vs prices in the table
+[2026-09-03T08:14:46] price-capture-reach:   [GAP   ] ingredient-queue.json      captured  498  reached   20  MISSING  478   Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)
+[2026-09-03T08:14:46] price-capture-reach:            132 ingredient(s) affected; 131 of them have no board row at all (a new commodity id is gated - see the commodity registrar)
+[2026-09-03T08:14:46] price-capture-reach:            bean-sprouts           Family Fare     2.79  Geisha Bean Sprouts, In Water
+[2026-09-03T08:14:46] price-capture-reach:            cornmeal               Fareway         2.99  Quaker Corn Meal, Yellow
+[2026-09-03T08:14:46] price-capture-reach:            cornmeal               Family Fare     2.29  Our Family Yellow Enriched Pre Sifted Corn Meal 32 Oz
+[2026-09-03T08:14:46] price-capture-reach:            cornmeal               Baker's         2.29  Kroger Yellow Corn Meal
+[2026-09-03T08:14:46] price-capture-reach:            bacon bits             Sam's Club     3.784  Member's Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.
+[2026-09-03T08:14:46] price-capture-reach:            bacon bits             Aldi            3.95  Appleton Farms Lower Sodium Bacon
+[2026-09-03T08:14:46] price-capture-reach:   [LEGACY] ingredient-prices.json     captured  537  reached    0  MISSING  537   SMP pilot hand-priced ingredient table, updated 2026-07-06
+[2026-09-03T08:14:46] price-capture-reach:   -> C:\Codex\ThriftyCrew\grocery\out\price-capture-reach.json
+[2026-09-03T08:14:46] price-capture-reach: PRICE-CAPTURE-REACH-COMPLETE stores=2 missing=1015
+[2026-09-03T08:14:46] graph-gates: graph-gates  -  7 gate(s), 1 failing   [ADVISORY: cannot block a publish]
+[2026-09-03T08:14:46] graph-gates:   PASS   omaha_identity
+[2026-09-03T08:14:46] graph-gates:   PASS   ad_window
+[2026-09-03T08:14:46] graph-gates:   PASS   known_wrong_not_priced
+[2026-09-03T08:14:46] graph-gates:   PASS   no_unresolved_pricing
+[2026-09-03T08:14:46] graph-gates:   PASS   row_age
+[2026-09-03T08:14:46] graph-gates:   FAIL   ad_reversion_owed
+[2026-09-03T08:14:46] graph-gates:   PASS   provenance_complete
+[2026-09-03T08:14:46] graph-gates:          {"owed": 68, "grace_days": 3, "worst": [{"commodity_id": "commodity:staple:coffee", "store_id": "store:fareway", "ad_to": "2026-08-22", "ad_product": 
+[2026-09-03T08:14:46] graph-gates:   -> C:\Codex\ThriftyCrew\grocery\out\graph-gates.json
+[2026-09-03T08:14:46] graph-gates: GRAPH-GATES-COMPLETE gates=7 failing=1 advisory=yes
+[2026-09-03T08:14:46] matcher-parity: matcher parity: 400 name(s) compared, 0 disagreement(s)
+[2026-09-03T08:14:46] matcher-parity: MATCHER-PARITY OK - every copy assigns every product name exactly as the engine does.
+[2026-09-03T08:14:46] matcher-parity: MATCHER-PARITY-COMPLETE compared=400 disagreements=0
+[2026-09-03T08:14:46] precedence-ladders: 
+[2026-09-03T08:14:46] precedence-ladders: test-precedence-ladders: 8 passed, 0 failed
+[2026-09-03T08:14:46] precedence-ladders: PRECEDENCE-LADDERS-COMPLETE passed=8 failed=0
+[2026-09-03T08:14:46] category-coverage: category-coverage: OK  all 592 commodities are in exactly one of 16 categories
+[2026-09-03T08:14:46] category-coverage: CATEGORY-COVERAGE-COMPLETE
+[2026-09-03T08:14:46] store-registry: store-registry: 1 drift issue(s):
+[2026-09-03T08:14:46] store-registry:   code: test-auditors.ps1:946 names 3 store(s) but is missing Hy-Vee, Aldi, Fareway, Baker's
+[2026-09-03T08:14:46] store-registry: STORE-REGISTRY-COMPLETE
+[2026-09-03T08:14:46] commodity-dupes: commodity-dupes: OK - 850 ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical 16-label set, no near-duplicate labels in the registry itself
+[2026-09-03T08:14:46] commodity-dupes: COMMODITY-DUPES-COMPLETE
+[2026-09-03T08:14:46] search-terms: SEARCHTERMS: 595 commodity term(s) testable against >= 3 captured rows (0 ids too generic to test)
+[2026-09-03T08:14:46] search-terms: SEARCHTERMS: 1 term(s) never return the food, but the food IS in the corpus under another key - a term/matcher bug, NOT a carriage question:
+[2026-09-03T08:14:46] search-terms:   ~ jicama                     term 'jicama' -> 23 rows, e.g. 'Old El Paso Crunchy Taco Shells'
+[2026-09-03T08:14:46] search-terms: SEARCHTERMS: 1 term(s) return rows but the food they name appears NOWHERE in the corpus:
+[2026-09-03T08:14:46] search-terms:   ? doubanjiang                term 'chili bean sauce' -> 336 rows, e.g. 'Mrs. Grimes Original In Chili Sauce Chili Beans 15 Oz'
+[2026-09-03T08:14:46] search-terms:      A term on this list cannot support a NOT-CARRIED verdict: the silence may be the term, not the shelf.
+[2026-09-03T08:14:46] search-terms:      Fix the term in commodity-search.json and re-capture BEFORE promoting any absence to grocery\carriage.json.
+[2026-09-03T08:14:46] search-terms: SEARCH-TERMS-COMPLETE 1 suspect, 1 drift, 1 untestable
+[2026-09-03T08:14:46] discover-hyvee: DOCKET: 1656 open candidate(s) that beat what we hold -> C:\Codex\ThriftyCrew\grocery\out\hyvee-discovery.json
+[2026-09-03T08:14:46] discover-hyvee:   (20 found by this slice, 1636 carried forward from earlier runs, 0 removed because they are now ruled)
+[2026-09-03T08:14:56] arrivals:   cells today 3140 | baseline union 4531 | ARRIVALS 30 (crown 8) | scored 28 | blind 2
+[2026-09-03T08:14:56] arrivals:   FLAGGED at div >= 0.75: 1  (this is a REVIEW QUEUE - measured precision is low; nothing here blocks a publish)
+[2026-09-03T08:14:56] arrivals: CROWN ARRIVALS (8) - a wrong product is 4x more likely to hold a crown
+[2026-09-03T08:14:56] arrivals: OTHER ARRIVALS (20)
+[2026-09-03T08:14:56] arrivals:   FLAG#9  div=0.75         grapes @ Baker's   $1.9900/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#1  div= n/a  TAKES CROWN  artichokes @ Hy-Vee   $2.9900/each
+[2026-09-03T08:14:56] arrivals:   FLAG#2  div= n/a  TAKES CROWN  habanero-peppers @ Hy-Vee   $9.9900/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#3  div= n/a  TAKES CROWN  habanero-peppers @ Hy-Vee   $7.3882/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#4  div= n/a  TAKES CROWN  lemongrass-paste @ Hy-Vee   $0.6414/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#5  div= n/a  TAKES CROWN  lemongrass-paste @ Hy-Vee   $0.2139/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#6  div= n/a  TAKES CROWN  wild-rice @ Hy-Vee   $0.5619/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#7  div=1.00  TAKES CROWN  cooked-shredded-chicken @ Hy-Vee   $0.3495/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#8  div=1.00  TAKES CROWN  pomegranates @ Hy-Vee   $0.1288/each
+[2026-09-03T08:14:56] arrivals:   FLAG#9  div=1.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0767/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#10  div=0.80  TAKES CROWN  brandy @ Hy-Vee   $0.2957/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#11  div=0.80  TAKES CROWN  fresh-sage @ Hy-Vee   $3.9867/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#12  div=0.80  TAKES CROWN  portobello-mushrooms @ Hy-Vee   $3.1936/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#13  div=0.50  TAKES CROWN  cayenne-pepper @ Hy-Vee   $0.2421/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#14  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3823/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#15  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.4006/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#16  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3694/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#17  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.5588/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#18  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3588/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#19  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.4684/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#20  div=0.00  TAKES CROWN  prunes @ Hy-Vee   $0.1248/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#21  div=0.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0735/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#50  div= n/a  no crown  apricots @ Hy-Vee   $4.9900/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#51  div= n/a  no crown  artichokes @ Hy-Vee   $3.9900/each
+[2026-09-03T08:14:56] arrivals:   FLAG#52  div= n/a  crown UNKNOWN (unit/row mismatch)  buckwheat-soba-noodles @ Hy-Vee   $0.6238/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#53  div= n/a  no crown  chicken-wings @ Hy-Vee   $2.7960/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#54  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1454/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#55  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1788/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#56  div= n/a  no crown  creme-fraiche @ Hy-Vee   $1.1414/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#57  div= n/a  crown UNKNOWN (unit/row mismatch)  daiya-cheddar-style-shreds @ Hy-Vee   $0.8437/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#58  div= n/a  no crown  dryer-sheets @ Hy-Vee   $0.0415/each
+[2026-09-03T08:14:56] arrivals:   FLAG#59  div= n/a  no crown  fresh-cranberries @ Hy-Vee   $1.4123/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#60  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $6.8368/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#61  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $7.3267/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#62  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-lima-beans @ Hy-Vee   $0.2790/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#63  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.1382/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#64  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.2136/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#65  div= n/a  crown UNKNOWN (unit/row mismatch)  ground-sumac @ Hy-Vee   $5.9950/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#66  div= n/a  no crown  habanero-peppers @ Hy-Vee   $12.7787/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#67  div= n/a  crown UNKNOWN (unit/row mismatch)  lamb-shoulder @ Hy-Vee   $9.9900/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#68  div= n/a  no crown  lasagna-noodles @ Hy-Vee   $0.1994/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#69  div= n/a  crown UNKNOWN (unit/row mismatch)  mace-spice @ Hy-Vee   $9.9889/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#70  div= n/a  no crown  mustard-greens @ Hy-Vee   $1.9900/each
+[2026-09-03T08:14:56] arrivals:   FLAG#71  div= n/a  no crown  parsnips @ Hy-Vee   $2.9900/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#72  div= n/a  crown UNKNOWN (unit/row mismatch)  phyllo-dough @ Hy-Vee   $0.4806/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#73  div= n/a  no crown  pomegranates @ Hy-Vee   $3.9900/each
+[2026-09-03T08:14:56] arrivals:   FLAG#74  div= n/a  no crown  raspberries @ Hy-Vee   $0.6650/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#75  div= n/a  no crown  rhubarb @ Hy-Vee   $3.9900/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#76  div= n/a  crown UNKNOWN (unit/row mismatch)  sofrito-cooking-base @ Hy-Vee   $0.3590/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#77  div= n/a  crown UNKNOWN (unit/row mismatch)  sofrito-cooking-base @ Hy-Vee   $0.3590/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#78  div= n/a  no crown  turnip-greens @ Hy-Vee   $1.9900/each
+[2026-09-03T08:14:56] arrivals:   FLAG#79  div= n/a  no crown  white-miso-paste @ Hy-Vee   $0.5707/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#80  div=1.00  no crown  all-purpose-cleaner @ Hy-Vee   $0.1583/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#81  div=1.00  no crown  almonds @ Hy-Vee   $0.4933/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#82  div=1.00  no crown  almonds @ Hy-Vee   $0.2908/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#83  div=1.00  no crown  apple-cider-vinegar @ Hy-Vee   $0.5576/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#84  div=1.00  no crown  asparagus @ Hy-Vee   $4.7840/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#85  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#86  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#87  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#88  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#89  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#90  div=1.00  no crown  baby-formula @ Hy-Vee   $1.0879/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#91  div=1.00  no crown  blueberries @ Hy-Vee   $0.4350/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#92  div=1.00  no crown  canned-chili @ Hy-Vee   $0.1437/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#93  div=1.00  no crown  cat-food @ Hy-Vee   $1.8762/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#94  div=1.00  no crown  cat-food @ Hy-Vee   $1.4807/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#95  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#96  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#97  div=1.00  no crown  cat-food @ Hy-Vee   $1.4077/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#98  div=1.00  no crown  cherries @ Hy-Vee   $2.5960/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#99  div=1.00  no crown  cherry-tomatoes @ Hy-Vee   $0.3329/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#100  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2411/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#101  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2850/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#102  div=1.00  no crown  deodorant @ Hy-Vee   $1.4983/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#103  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4592/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#104  div=1.00  no crown  dog-treats @ Hy-Vee   $0.6633/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#105  div=1.00  no crown  dog-treats @ Hy-Vee   $0.6633/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#106  div=1.00  no crown  dog-treats @ Hy-Vee   $0.5253/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#107  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4592/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#108  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#109  div=1.00  no crown  drain-cleaner @ Hy-Vee   $0.1499/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#110  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#111  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#112  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#113  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#114  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#115  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#116  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#117  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1675/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#118  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#119  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#120  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#121  div=1.00  no crown  energy-drinks @ Hy-Vee   $0.1642/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#122  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.1936/each
+[2026-09-03T08:14:56] arrivals:   FLAG#123  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.3323/each
+[2026-09-03T08:14:56] arrivals:   FLAG#124  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.2489/each
+[2026-09-03T08:14:56] arrivals:   FLAG#125  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.4161/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#126  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.3744/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#127  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.3993/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#128  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2496/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#129  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2486/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#130  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2950/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#131  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2989/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#132  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.4084/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#133  div=1.00  no crown  honey @ Hy-Vee   $0.2028/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#134  div=1.00  no crown  honey @ Hy-Vee   $0.2079/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#135  div=1.00  no crown  italian-sausage @ Hy-Vee   $4.4444/lb
+[2026-09-03T08:14:56] arrivals:   FLAG#136  div=1.00  no crown  lettuce @ Hy-Vee   $3.9900/each
+[2026-09-03T08:14:56] arrivals:   FLAG#137  div=1.00  no crown  lotion @ Hy-Vee   $0.4757/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#138  div=1.00  no crown  lotion @ Hy-Vee   $0.4757/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#139  div=1.00  no crown  mangoes @ Hy-Vee   $1.5000/each
+[2026-09-03T08:14:56] arrivals:   FLAG#140  div=1.00  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#141  div=1.00  no crown  pasta-sauce @ Hy-Vee   $0.0741/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#142  div=1.00  no crown  pecorino-romano @ Hy-Vee   $1.7129/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#143  div=1.00  no crown  pickled-jalapenos @ Hy-Vee   $0.2492/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#144  div=1.00  no crown  pistachios @ Hy-Vee   $1.9975/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#145  div=1.00  no crown  raisins @ Hy-Vee   $0.2071/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#146  div=1.00  no crown  red-lentils @ Hy-Vee   $0.3118/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#147  div=1.00  no crown  red-wine @ Hy-Vee   $0.3151/floz
+[2026-09-03T08:14:56] arrivals:   FLAG#148  div=1.00  no crown  sandwich-cookies @ Hy-Vee   $0.2635/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#149  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#150  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#151  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#152  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#153  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-09-03T08:14:56] arrivals:   FLAG#154  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#155  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#156  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#157  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#158  div=1.00  no crown  sea-salt @ Hy-Vee   $0.5825/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#159  div=1.00  no crown  sea-salt @ Hy-Vee   $0.8317/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#160  div=1.00  no crown  shaving-cream @ Hy-Vee   $0.2470/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#161  div=1.00  no crown  shaving-cream @ Hy-Vee   $0.2470/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#162  div=1.00  no crown  shaving-cream @ Hy-Vee   $0.2470/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#163  div=1.00  no crown  shaving-cream @ Hy-Vee   $0.2470/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#164  div=1.00  no crown  shaving-cream @ Hy-Vee   $0.2470/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#165  div=1.00  no crown  sun-dried-tomatoes @ Hy-Vee   $0.4455/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#166  div=1.00  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-09-03T08:14:57] arrivals:   FLAG#167  div=1.00  no crown  white-wine @ Hy-Vee   $0.5513/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#168  div=1.00  no crown  white-wine @ Hy-Vee   $0.5513/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#169  div=1.00  no crown  white-wine @ Hy-Vee   $0.5911/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#170  div=1.00  no crown  white-wine @ Hy-Vee   $0.3939/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#171  div=0.83  no crown  veggie-sausages @ Hy-Vee   $0.9425/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#172  div=0.80  no crown  brandy @ Hy-Vee   $0.4334/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#173  div=0.80  no crown  brandy @ Hy-Vee   $0.4334/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#174  div=0.80  no crown  brandy @ Hy-Vee   $0.4334/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#175  div=0.80  no crown  brandy @ Hy-Vee   $0.4334/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#176  div=0.80  no crown  brandy @ Hy-Vee   $0.9065/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#177  div=0.80  no crown  brandy @ Hy-Vee   $1.0244/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#178  div=0.80  no crown  brandy @ Hy-Vee   $0.4728/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#179  div=0.80  no crown  cumin-seeds @ Hy-Vee   $4.2000/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#180  div=0.80  no crown  cumin-seeds @ Hy-Vee   $4.9950/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#181  div=0.80  no crown  cumin-seeds @ Hy-Vee   $5.8321/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#182  div=0.80  no crown  cumin-seeds @ Hy-Vee   $2.8167/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#183  div=0.80  no crown  raisins @ Hy-Vee   $0.2497/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#184  div=0.80  no crown  raisins @ Hy-Vee   $0.2494/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#185  div=0.80  no crown  tater-tots @ Hy-Vee   $0.2139/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#186  div=0.80  no crown  tater-tots @ Hy-Vee   $0.2496/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#187  div=0.80  no crown  white-wine @ Hy-Vee   $0.3939/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#188  div=0.80  no crown  white-wine @ Hy-Vee   $0.9457/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#189  div=0.80  no crown  white-wine @ Hy-Vee   $0.7094/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#190  div=0.80  no crown  white-wine @ Hy-Vee   $0.7488/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#191  div=0.80  no crown  white-wine @ Hy-Vee   $0.7094/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#192  div=0.80  no crown  white-wine @ Hy-Vee   $0.3939/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#193  div=0.80  no crown  white-wine @ Hy-Vee   $0.3147/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#194  div=0.80  no crown  white-wine @ Hy-Vee   $0.5911/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#195  div=0.80  no crown  white-wine @ Hy-Vee   $0.3545/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#196  div=0.80  no crown  white-wine @ Hy-Vee   $0.3545/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#197  div=0.80  no crown  white-wine @ Hy-Vee   $0.4334/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#198  div=0.80  no crown  white-wine @ Hy-Vee   $0.7882/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#199  div=0.80  no crown  white-wine @ Hy-Vee   $0.6305/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#200  div=0.80  no crown  white-wine @ Hy-Vee   $0.5516/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#201  div=0.80  no crown  white-wine @ Hy-Vee   $0.5516/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#202  div=0.80  no crown  white-wine @ Hy-Vee   $0.3147/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#203  div=0.80  no crown  white-wine @ Hy-Vee   $1.1054/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#204  div=0.80  no crown  white-wine @ Hy-Vee   $0.3151/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#205  div=0.80  no crown  white-wine @ Hy-Vee   $0.5122/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#206  div=0.80  no crown  white-wine @ Hy-Vee   $0.3147/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#207  div=0.80  no crown  white-wine @ Hy-Vee   $0.2358/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#208  div=0.80  no crown  white-wine @ Hy-Vee   $0.3545/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#209  div=0.80  no crown  white-wine @ Hy-Vee   $0.2957/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#210  div=0.80  no crown  white-wine @ Hy-Vee   $0.4728/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#211  div=0.80  no crown  white-wine @ Hy-Vee   $0.3545/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#212  div=0.75  no crown  body-wash @ Hy-Vee   $0.2495/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#213  div=0.75  no crown  canned-tuna @ Hy-Vee   $0.1745/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#214  div=0.75  no crown  firm-tofu @ Hy-Vee   $0.2850/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#215  div=0.75  no crown  gochujang @ Hy-Vee   $0.3990/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#216  div=0.75  no crown  gochujang @ Hy-Vee   $0.3574/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#217  div=0.75  no crown  horseradish @ Hy-Vee   $0.4200/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#218  div=0.75  no crown  iced-tea @ Hy-Vee   $0.0271/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#219  div=0.75  no crown  iced-tea @ Hy-Vee   $0.0469/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#220  div=0.75  no crown  razors @ Hy-Vee   $1.5000/each
+[2026-09-03T08:14:57] arrivals:   FLAG#221  div=0.75  no crown  razors @ Hy-Vee   $1.4925/each
+[2026-09-03T08:14:57] arrivals:   FLAG#222  div=0.75  no crown  razors @ Hy-Vee   $1.3980/each
+[2026-09-03T08:14:57] arrivals:   FLAG#223  div=0.75  no crown  razors @ Hy-Vee   $1.6225/each
+[2026-09-03T08:14:57] arrivals:   FLAG#224  div=0.75  no crown  red-wine @ Hy-Vee   $0.9065/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#225  div=0.75  no crown  red-wine @ Hy-Vee   $0.3151/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#226  div=0.75  no crown  red-wine @ Hy-Vee   $0.3939/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#227  div=0.75  no crown  sponges @ Hy-Vee   $0.7475/each
+[2026-09-03T08:14:57] arrivals:   FLAG#228  div=0.75  no crown  tampons @ Hy-Vee   $0.2650/each
+[2026-09-03T08:14:57] arrivals:   FLAG#229  div=0.75  no crown  tampons @ Hy-Vee   $0.2650/each
+[2026-09-03T08:14:57] arrivals:   FLAG#230  div=0.75  no crown  tampons @ Hy-Vee   $0.2761/each
+[2026-09-03T08:14:57] arrivals:   FLAG#231  div=0.75  no crown  tampons @ Hy-Vee   $0.2434/each
+[2026-09-03T08:14:57] arrivals:   FLAG#232  div=0.75  no crown  tampons @ Hy-Vee   $0.2761/each
+[2026-09-03T08:14:57] arrivals:   FLAG#233  div=0.75  no crown  tampons @ Hy-Vee   $0.2288/each
+[2026-09-03T08:14:57] arrivals:   FLAG#234  div=0.75  no crown  tampons @ Hy-Vee   $0.2650/each
+[2026-09-03T08:14:57] arrivals:   FLAG#235  div=0.75  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-09-03T08:14:57] arrivals:   FLAG#236  div=0.75  no crown  tampons @ Hy-Vee   $0.2431/each
+[2026-09-03T08:14:57] arrivals:   FLAG#237  div=0.75  no crown  tampons @ Hy-Vee   $0.2288/each
+[2026-09-03T08:14:57] arrivals:   FLAG#238  div=0.75  no crown  tampons @ Hy-Vee   $0.2431/each
+[2026-09-03T08:14:57] arrivals:   FLAG#239  div=0.75  no crown  tampons @ Hy-Vee   $0.2483/each
+[2026-09-03T08:14:57] arrivals:   FLAG#240  div=0.75  no crown  tampons @ Hy-Vee   $0.2431/each
+[2026-09-03T08:14:57] arrivals:   FLAG#241  div=0.75  no crown  tampons @ Hy-Vee   $0.2288/each
+[2026-09-03T08:14:57] arrivals:   FLAG#242  div=0.75  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-09-03T08:14:57] arrivals:   FLAG#243  div=0.75  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-09-03T08:14:57] arrivals:   FLAG#244  div=0.75  no crown  tampons @ Hy-Vee   $0.2483/each
+[2026-09-03T08:14:57] arrivals:   FLAG#245  div=0.75  no crown  tampons @ Hy-Vee   $0.2761/each
+[2026-09-03T08:14:57] arrivals:   FLAG#246  div=0.75  no crown  tampons @ Hy-Vee   $0.2483/each
+[2026-09-03T08:14:57] arrivals:   FLAG#247  div=0.75  no crown  tampons @ Hy-Vee   $0.2483/each
+[2026-09-03T08:14:57] arrivals:   FLAG#248  div=0.75  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-09-03T08:14:57] arrivals:   FLAG#249  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#250  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#251  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#252  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#253  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#254  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#255  div=0.67  no crown  drain-cleaner @ Hy-Vee   $0.1249/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#256  div=0.67  no crown  furniture-polish @ Hy-Vee   $0.5493/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#257  div=0.60  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#258  div=0.60  no crown  dog-treats @ Hy-Vee   $0.7492/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#259  div=0.60  no crown  hoisin-sauce @ Hy-Vee   $0.5518/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#260  div=0.60  no crown  oven-cleaner @ Hy-Vee   $0.3032/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#261  div=0.60  no crown  sea-salt @ Hy-Vee   $0.1248/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#262  div=0.60  no crown  sea-salt @ Hy-Vee   $1.8543/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#263  div=0.60  no crown  sea-salt @ Hy-Vee   $0.6123/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#264  div=0.50  no crown  coconut-oil @ Hy-Vee   $0.2930/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#265  div=0.50  no crown  mayonnaise @ Hy-Vee   $0.0963/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#266  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#267  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#268  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#269  div=0.50  no crown  olive-oil @ Hy-Vee   $0.4333/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#270  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#271  div=0.33  no crown  egg-whites @ Hy-Vee   $0.2184/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#272  div=0.33  no crown  furniture-polish @ Hy-Vee   $0.2792/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#273  div=0.25  no crown  coconut-oil @ Hy-Vee   $0.3330/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#274  div=0.25  no crown  coconut-oil @ Hy-Vee   $0.4279/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#275  div=0.25  no crown  kalamata-olives @ Hy-Vee   $0.5619/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#276  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0588/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#277  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0453/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#278  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0588/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#279  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0588/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#280  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0588/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#281  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0600/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#282  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0588/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#283  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0453/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#284  div=0.00  no crown  chocolate-milk @ Hy-Vee   $1.7627/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#285  div=0.00  no crown  chocolate-milk @ Hy-Vee   $1.2829/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#286  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.4993/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#287  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.2591/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#288  div=0.00  no crown  disinfectant-spray @ Hy-Vee   $0.1730/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#289  div=0.00  no crown  evaporated-milk @ Hy-Vee   $0.1433/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#290  div=0.00  no crown  evaporated-milk @ Hy-Vee   $0.1433/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#291  div=0.00  no crown  evaporated-milk @ Hy-Vee   $0.1483/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#292  div=0.00  no crown  evaporated-milk @ Hy-Vee   $0.1433/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#293  div=0.00  no crown  lemonade @ Hy-Vee   $0.0280/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#294  div=0.00  no crown  lemonade @ Hy-Vee   $0.0280/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#295  div=0.00  no crown  mayonnaise @ Hy-Vee   $0.1160/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#296  div=0.00  no crown  oyster-sauce @ Hy-Vee   $0.6656/floz
+[2026-09-03T08:14:57] arrivals:   FLAG#297  div=0.00  no crown  pickles @ Hy-Vee   $0.1038/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#298  div=0.00  no crown  relish @ Hy-Vee   $0.1056/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#299  div=0.00  no crown  relish @ Hy-Vee   $0.1744/oz
+[2026-09-03T08:14:57] arrivals:   FLAG#300  div=0.00  no crown  relish @ Hy-Vee   $0.2480/oz
+[2026-09-03T08:14:57] taxonomy: taxonomy source: Family Fare: canonical_url from 31 file(s) within 30d -> 5435 product(s) with a department (newest family-fare-regular-2026-09-03.json)
+[2026-09-03T08:14:57] taxonomy: taxonomy source: Hy-Vee: row field store_department in hyvee-regular-2026-09-03.json -> 483 product(s) with a department
+[2026-09-03T08:14:57] taxonomy: taxonomy source: Baker's: row field store_category in bakers-regular-2026-09-03.json -> 6716 product(s) with a department
+[2026-09-03T08:14:57] taxonomy: taxonomy: judged 4743 row(s) across board cells + candidates; 0 LIVE CELL disagreement(s), 15 candidate disagreement(s)
+[2026-09-03T08:14:57] taxonomy: taxonomy: 6893 row(s) from Baker's carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-09-03T08:14:57] taxonomy: taxonomy: 843 row(s) from Hy-Vee carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-09-03T08:14:57] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Pumpkin Tree Fruit & Vegetable Puree, Apple, Sweet Potato & Corn, Organic 4.4 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  coconut-oil @ Family Fare -> household/facial_tissue  Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea
+[2026-09-03T08:14:57] taxonomy:   candidate  grapefruit @ Family Fare -> health_beauty/skin_care  Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  ice-cream @ Family Fare -> health_beauty/adult_nutrition  Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Top Care Milk Of Magnesia, Fresh Mint Flavor 12 Fl Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Phillips' Phillips' Genuine Sugar Free Fresh Mint Milk Of Magnesia 12 Fl Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/grooming_hygiene  Nair Shower Cream Moroccan Argan Oil & Orange Blossom Hair Remover 12 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 114 Tsp 23.3 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, 4 In 1, Orange Flavor 36.8 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 72 Tsp 15 Oz
+[2026-09-03T08:14:57] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy<1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-09-03T08:14:57] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy <1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-09-03T08:14:57] taxonomy:   candidate  yogurt @ Family Fare -> health_beauty/baby_child  Tippy Toes Yogurt Bites, Banana 1 Oz
+[2026-09-03T08:14:57] taxonomy: taxonomy: report -> C:\Codex\ThriftyCrew\grocery\out\taxonomy-disagreements-2026-09-03.json
+[2026-09-03T08:14:57] taxonomy: STORE-TAXONOMY-COMPLETE
+[2026-09-03T08:14:57] sale-fallback: 5 on-sale cell(s) with no everyday fallback - canned-pumpkin @ Hy-Vee; cantaloupe @ Aldi; cheddar-cheese-curds @ Fareway; pecorino-romano @ Fareway; yukon-gold-potatoes @ Family Fare
+[2026-09-03T08:14:59] sale-fallback alert sent
+[2026-09-03T08:16:24]   instore-channel: 2 published cell(s) cannot prove an in-store channel from the capture alone - 2 REVIEWED on the live page, 0 the engine's refusal did not reach (1 of the 2 hold the commodity crown)
+[2026-09-03T08:16:24]     CROWN REVIEWED  bay-leaves               Walmart      El Guapo Mexican Bay Leaves, 0.5 oz Bag
+[2026-09-03T08:16:24]            kept deliberately: IN-STORE, verified on the live page 2026-09-01 in Brad's Chrome (store context Omaha L St Supercenter / 68137). The page carries a STORE-LEVEL line: 'Out of stock at Omaha L St Supercenter' followed by 'Available for pickup nearby', plus 'Show in-stock stores'. That is a store-channel SKU, not an online-only listing, and the live price 'Now $1.63, was $9.00, $3.26/oz' matches the board exactly. CAVEAT recorded rather than hidden: it is OUT OF STOCK at Omaha L St today, so a shopper may not be able to buy it there this morning. The channel is right and the shelf is empty, which are different facts and only the first one this gate is about.
+[2026-09-03T08:16:24]           REVIEWED  paper-towels             Walmart      Scott Paper Towels Choose-A-Sheet 6 Double Rolls
+[2026-09-03T08:16:24]            kept deliberately: IN-STORE, verified on the live page 2026-09-01 in Brad's Chrome (store context Omaha L St Supercenter / 68137). Same-day store promise on the page: Pickup 'As soon as 6pm today' and Delivery 'As soon as 16 mins', at $6.84, which is the price the board publishes ($6.84 / 6 rolls = $1.14 each). The board prices this from a pre-field carried row while item 8886020987 reads ship-only in a fresher field-bearing capture, so the id-keyed rule would refuse it; the page says otherwise and the page wins.
+[2026-09-03T08:16:24]     -> every one is a reviewed exception; nothing queued
+[2026-09-03T08:16:24]   INSTORE-CHANNEL-COMPLETE
+[2026-09-03T08:16:24] golden-test: clean
+[2026-09-03T08:16:24] scaler-pricing: clean
+[2026-09-03T08:16:24] db-agreement guard: clean
+[2026-09-03T08:16:24] spec-contradiction guard: no class worse than baseline
+[2026-09-03T08:16:24] store-integrity: no hard findings (12 warn)
+[2026-09-03T08:16:24] guard-contract: guard-contract: 50 of 50 chain detector(s) can prove they ran to the end
+[2026-09-03T08:16:24] db-build:   OK: every declared foreign key holds -> C:\Codex\ThriftyCrew\meal-prep\db\thriftycrew.db
+[2026-09-03T08:16:24] schema-constraints: no new violations (structural classes at zero)
+[2026-09-03T08:16:24] batch-ledger:   ! OPEN+STALE: batch 'hunt-2026-08-26-smoke5-w1' last touched 2026-09-02T06:04:19 (26h ago), missing: post-publish-review
+[2026-09-03T08:16:26] count-gpu: every count-unit row agrees with its package
+[2026-09-03T08:16:26] row-age: no findings (7 store(s) profiled)
+[2026-09-03T08:17:30] price-alerts: price-alerts done: 0 email(s) sent
+[2026-09-03T08:17:31] basis-reconcile: checked 42 cell(s) against the store's own unit price (66858 indexed, 0 allowlisted)
+[2026-09-03T08:17:31] REVIEW FLAGS: 85 -> SANITY|Adobo seasoning|outlier|Sam's Club $0.13 is 57% below runner-up Baker's $0.31 - verify the price/size parse ; SANITY|Allspice (ground)|outlier|Walmart $1.06 is 47% below runner-up Baker's $1.99 - verify the price/size parse ; SANITY|Anaheim Peppers|outlier|Baker's $1.49 is 49% below runner-up Walmart $2.94 - verify the price/size parse ; SANITY|Baby Potatoes|outlier|Fareway $1.00 is 50% below runner-up Baker's $2.00 - verify the price/size parse
+[2026-09-03T08:17:37] walmart-fullpull: fullpull [Walmart]: ok - newest comprehensive capture walmart-regular-2026-08-31.json (592 terms) is 3 day(s) old (warn at 70, cliff at 90) fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-08-15.json (594 terms) is 19 day(s) old (warn at 70, cliff at 90) fullpull [Walmart] cells: ok - 0 of 525 attributed board cell(s) expire within 5 day(s) (warn at 5%); 4 cell(s) could not be traced to a capture in the window fullpull [Sam's Club] cells: ok - 0 of 372 attributed board cell(s) expire within 5 day(s) (warn at 5%); 5 cell(s) could not be traced to a capture in the window WALMART-FULLPULL-COMPLETE
+[2026-09-03T08:17:37] capture-eviction: audit-capture-eviction: 3140 published cell(s), 20634 dated candidate row(s), 0 cell(s) dearer than the engine's own eligibility rule allows at or above 1.25x
+[2026-09-03T08:17:37] store-coverage OK - every staple commodity shows all 7 stores
+[2026-09-03T08:17:38] notify-item-added: notify-item-added: no new commodities, empty queue - nothing to do
+[2026-09-03T08:17:39] everyday-mismatch: everyday cells with a link, checked : 2594
+[2026-09-03T08:17:39] everyday-mismatch:   by board                          : main=2439  recipe=155
+[2026-09-03T08:17:39] everyday-mismatch: sale cells skipped (expected diff)  : 442
+[2026-09-03T08:17:39] everyday-mismatch: uncomputable size                   : 20
+[2026-09-03T08:17:39] everyday-mismatch: board published no per-unit         : 0
+[2026-09-03T08:17:39] everyday-mismatch: 
+[2026-09-03T08:17:39] everyday-mismatch: EVERYDAY MISMATCHES (board disagrees with its own linked product): 171
+[2026-09-03T08:17:39] everyday-mismatch:   swiss-cheese             Hy-Vee       board=0.3725    link=0.658     x1.77   $3.29 [5 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Hy-Vee Swiss Cheese
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Hy-Vee Sliced Swiss Cheese 10Ct
+[2026-09-03T08:17:39] everyday-mismatch:   greek-yogurt             Baker's      board=0.2278    link=0.1341    x0.59   $4.29 [32 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Fage Total Plain Whole Milk Greek Yogurt Tub
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Kroger Plain Nonfat Greek Yogurt Tub
+[2026-09-03T08:17:39] everyday-mismatch:   red-bell-pepper          Walmart      board=1.52      link=0.98      x0.64   $0.98 [each]
+[2026-09-03T08:17:39] everyday-mismatch:   au-jus-gravy-mix         Hy-Vee       board=0.99      link=0.6667    x0.67   $0.6667 [1 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   sweet-chili-sauce        Hy-Vee       board=0.2752    link=0.1855    x0.67   $2.69 [14.5 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   tomatoes                 Hy-Vee       board=0.97      link=1.28      x1.32   $1.28 [lb]
+[2026-09-03T08:17:39] everyday-mismatch:   bagels                   Hy-Vee       board=0.458     link=0.316     x0.69   $1.58 [5 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   reduced-fat-mozzarella   Hy-Vee       board=0.3543    link=0.2462    x0.7    $1.97 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Hy-Vee Finely Shredded Reduced Fat Low-Moisture Part-Skim Mozzarella Natural Cheese
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese
+[2026-09-03T08:17:39] everyday-mismatch:   celery                   Aldi         board=1.99      link=2.59      x1.3    $2.59 [each]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Celery, Each
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Organic Celery Heart Each
+[2026-09-03T08:17:39] everyday-mismatch:   mozzarella-cheese        Family Fare  board=0.2494    link=0.3238    x1.3    $2.59 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Our Family Part Skim Mozzarella Shredded Cheese 16 Oz
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Our Family Natural Finely Cut Mozzarella Shredded Cheese 8 Oz
+[2026-09-03T08:17:39] everyday-mismatch:   cheddar-cheese-shredded  Family Fare  board=0.2494    link=0.3238    x1.3    $2.59 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Our Family Mild Cheddar Shredded Cheese 16 Oz
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Our Family Extra Sharp Cheddar Shredded Cheese 8 Oz
+[2026-09-03T08:17:39] everyday-mismatch:   alfredo-sauce            Hy-Vee       board=0.1544    link=0.1106    x0.72   $1.77 [16 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   donuts                   Fareway      board=0.3325    link=0.24      x0.72   $2.88 [12 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   greek-yogurt             Sam's Club   board=0.1223    link=0.156     x1.28   $6.24 [40 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Member's Mark Nonfat Plain Greek Yogurt, 48 oz.
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Chobani Vanilla Zero Sugar Greek Yogurt, 40 oz.
+[2026-09-03T08:17:39] everyday-mismatch:   salsa-verde              Hy-Vee       board=0.293     link=0.3744    x1.28   $5.99 [16 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   cherries                 Sam's Club   board=2.94      link=3.74      x1.27   $11.22 [3 lb]
+[2026-09-03T08:17:39] everyday-mismatch:   greek-yogurt             Family Fare  board=0.2817    link=0.3566    x1.27   $1.89 [5.3 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Chobani Plain Nonfat Greek Yogurt 5.3 Oz
+[2026-09-03T08:17:39] everyday-mismatch:   cheddar-cheese-shredded  Hy-Vee       board=0.2462    link=0.31      x1.26   $2.48 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   smoked-turkey-sausage    Sam's Club   board=2.8838    link=3.6457    x1.26   $9.57 [42 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   potato-chips             Hy-Vee       board=0.3362    link=0.25      x0.74   $2 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   cantaloupe               Hy-Vee       board=3.99      link=2.99      x0.75   $2.99 [1 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   frozen-broccoli-florets  Hy-Vee       board=0.1579    link=0.1976    x1.25   $2.49 [12.6 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   frozen-chopped-spinach   Walmart      board=0.105     link=0.0788    x0.75   $1.26 [16 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Great Value Chopped Spinach, 12 oz (Frozen)
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Great Value Chopped Spinach, 16 oz (Frozen)
+[2026-09-03T08:17:39] everyday-mismatch:   razors                   Sam's Club   board=0.2398    link=0.1821    x0.76   $9.47 [52 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   lettuce                  Sam's Club   board=1.0367    link=0.7867    x0.76   $4.72 [6 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   shower-cleaner           Sam's Club   board=0.0832    link=0.1035    x1.24   $9.94 [96 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   sports-drinks            Sam's Club   board=0.027     link=0.0333    x1.23   $15.98 [480 fl oz]
+[2026-09-03T08:17:39] everyday-mismatch:   1-3-fat-cream-cheese     Sam's Club   board=0.2275    link=0.28      x1.23   $8.97 [$0.28/oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: 
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Philadelphia Cream Cheese, 2 pk
+[2026-09-03T08:17:39] everyday-mismatch:   plums                    Aldi         board=1.945     link=1.49      x0.77   $2.98 [2 lb]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Plum Bag 2 Lbs
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Plums, Bag
+[2026-09-03T08:17:39] everyday-mismatch:   buffalo-wing-sauce       Baker's      board=0.27      link=0.2083    x0.77   $2.5 [12 fl oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: KrogerAƒâ?sA,Ar Mild Buffalo Wing Sauce
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Kroger Mild Buffalo Wing Sauce
+[2026-09-03T08:17:39] everyday-mismatch:   sauerkraut               Aldi         board=0.0579    link=0.0704    x1.22   $1.69 [24 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   disinfectant-spray       Fareway      board=0.7192    link=0.5592    x0.78   $6.99 [12.5 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   hand-soap                Fareway      board=0.5987    link=0.4653    x0.78   $3.49 [7.5 fl oz]
+[2026-09-03T08:17:39] everyday-mismatch:   strawberries             Sam's Club   board=0.1553    link=0.1225    x0.79   $3.92 [2 lb]
+[2026-09-03T08:17:39] everyday-mismatch:   avocados                 Sam's Club   board=1.328     link=1.046     x0.79   $5.23 [5 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   grapes                   Sam's Club   board=1.6233    link=1.9567    x1.21   $5.87 [3 lb]
+[2026-09-03T08:17:39] everyday-mismatch:   teriyaki-sauce           Sam's Club   board=0.1738    link=0.2102    x1.21   $5.78 [27.5 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   all-purpose-cleaner      Hy-Vee       board=0.1559    link=0.1872    x1.2    $5.99 [32 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   dijon-mustard            Hy-Vee       board=0.2075    link=0.1658    x0.8    $1.99 [12 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   bottled-water            Aldi         board=0.1662    link=0.1329    x0.8    $3.19 [24 ct]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Puraqua Natural Spring Water, 24 Pack
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: PurAqua Purified Water 24 Pack
+[2026-09-03T08:17:39] everyday-mismatch:   garlic-powder            Hy-Vee       board=0.4167    link=0.5       x1.2    $1.25 [2.5 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Thats Smart Garlic Powder
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: That's Smart Garlic Powder
+[2026-09-03T08:17:39] everyday-mismatch:   93-7-ground-turkey       Family Fare  board=7.99      link=6.49      x0.81   $6.49 [16 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Jennie O 99%/1% Fresh Ground Turkey Breast 16 Oz
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Jennie O Fresh 93%/7% Ground Turkey 16 Oz
+[2026-09-03T08:17:39] everyday-mismatch:   buffalo-wing-sauce       Hy-Vee       board=0.2488    link=0.2025    x0.81   $3.24 [16 fl oz]
+[2026-09-03T08:17:39] everyday-mismatch:   breakfast-sandwiches     Sam's Club   board=0.9775    link=1.165     x1.19   $13.98 [12 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   energy-drinks            Hy-Vee       board=0.1744    link=0.1406    x0.81   $2.25 [16 fl oz]
+[2026-09-03T08:17:39] everyday-mismatch:   curry-powder             Walmart      board=0.89      link=1.06      x1.19   $2.12 [2 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   olive-oil                Aldi         board=0.2808    link=0.334     x1.19   $11.29 [33.8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   raisins                  Sam's Club   board=0.163     link=0.1332    x0.82   $7.99 [60 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   blueberries              Sam's Club   board=0.4011    link=0.3289    x0.82   $5.92 [18 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   air-freshener            Baker's      board=0.2452    link=0.2041    x0.83   $1.49 [7.3 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   strawberries             Aldi         board=0.1431    link=0.1181    x0.83   $1.89 [1 lb]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Strawberries
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Whole Strawberries 1 LB
+[2026-09-03T08:17:39] everyday-mismatch:   pita-bread               Baker's      board=0.4983    link=0.415     x0.83   $2.49 [6 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   pretzels                 Fareway      board=0.1869    link=0.1556    x0.83   $2.49 [16 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   clam-chowder             Baker's      board=0.159     link=0.1324    x0.83   $2.49 [18.8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   cheddar-cheese-shredded  Sam's Club   board=0.1535    link=0.18      x1.17   $5.87 [$0.18/oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Member's Mark Standard Shredded Mild Yellow Cheddar Cheese 5 lbs.
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Member's Mark Mild Cheddar Shredded Cheese, 16 oz 2 pk
+[2026-09-03T08:17:39] everyday-mismatch:   vegetable-broth          Walmart      board=0.0399    link=0.0469    x1.17   $1.5 [32 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf-Stable, No Allergens
+[2026-09-03T08:17:39] everyday-mismatch:   kielbasa                 Sam's Club   board=2.2781    link=2.659     x1.17   $6.98 [2.625 lb]
+[2026-09-03T08:17:39] everyday-mismatch:   pepperoni                Hy-Vee       board=0.4983    link=0.5817    x1.17   $3.49 [6 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   93-7-ground-turkey       Walmart      board=4.55      link=5.3067    x1.17   $15.92 [3 lb]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Honeysuckle White 93% Lean / 7% Fat Ground Turkey Tray, Fresh, 1.2 lbs.
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: JENNIE-O Fresh Lean Ground Turkey 93/7, 3 lb
+[2026-09-03T08:17:39] everyday-mismatch:   brownie-mix              Sam's Club   board=2.37      link=2.745     x1.16   $10.98 [4 ct 20 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   tilapia                  Sam's Club   board=4.2133    link=4.88      x1.16   $14.64 [3 lb]
+[2026-09-03T08:17:39] everyday-mismatch:   sweet-corn               Walmart      board=0.87      link=0.7425    x0.85   $2.97 [4 count]
+[2026-09-03T08:17:39] everyday-mismatch:   condensed-milk           Aldi         board=0.1636    link=0.1393    x0.85   $1.95 [14 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Baker S Corner Sweetened Condensed Milk 14 FL OZ
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Baker's Corner Sweetened Condensed Milk
+[2026-09-03T08:17:39] everyday-mismatch:   1-3-fat-cream-cheese     Walmart      board=0.23      link=0.195     x0.85   $1.56 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Great Value Light Cream Cheese Spread, 8 oz Tub
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Great Value Neufchatel Cheese Brick, 8 oz
+[2026-09-03T08:17:39] everyday-mismatch:   conditioner              Aldi         board=0.4775    link=0.551     x1.15   $5.73 [10.4 fl oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Pantene Fine Volume Conditioner
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Pantene Pro-V Daily Moisture Renewal Conditioner
+[2026-09-03T08:17:39] everyday-mismatch:   black-pepper             Sam's Club   board=0.4185    link=0.481     x1.15   $38.48 [5 lb]
+[2026-09-03T08:17:39] everyday-mismatch:   canned-mushrooms         Fareway      board=0.2257    link=0.1947    x0.86   $2.58 [13.25 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   jalapenos                Aldi         board=1.98      link=1.7       x0.86   $0.85 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Jalapeno Pepper Package 8 OZ
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Jalapeno Peppers, Package
+[2026-09-03T08:17:39] everyday-mismatch:   cherries                 Hy-Vee       board=6.99      link=5.99      x0.86   $5.99 [lb]
+[2026-09-03T08:17:39] everyday-mismatch:   croissants               Hy-Vee       board=1.165     link=0.9983    x0.86   $5.99 [6 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   blackberries             Aldi         board=0.415     link=0.3583    x0.86   $2.15 [6 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Blackberries 6 OZ
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Blackberries, Package
+[2026-09-03T08:17:39] everyday-mismatch:   peanut-butter            Aldi         board=0.0863    link=0.0988    x1.14   $3.95 [40 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   chuck-roast              Aldi         board=6.99      link=7.99      x1.14   $7.99 [lb]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Choice Black Angus Chuck Roast Per LB
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: USDA Choice Black Angus Chuck Roast
+[2026-09-03T08:17:39] everyday-mismatch:   vanilla-extract          Hy-Vee       board=2.985     link=3.395     x1.14   $6.79 [2 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   onion-powder             Sam's Club   board=0.3592    link=0.4112    x1.14   $39.48 [96 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   frozen-cauliflower-florets Baker's      board=0.212     link=0.1852    x0.87   $2 [10.8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   mushrooms                Aldi         board=0.1862    link=0.1612    x0.87   $1.29 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: White Mushroom 8 OZ
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Monterey White Mushrooms Sliced 8 OZ
+[2026-09-03T08:17:39] everyday-mismatch:   dog-food                 Fareway      board=1.7685    link=1.5377    x0.87   $19.99 [208 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   cucumbers                Aldi         board=0.75      link=0.65      x0.87   $0.65 [1 each]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Cucumber Each
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Cucumber
+[2026-09-03T08:17:39] everyday-mismatch:   russet-potatoes          Sam's Club   board=0.522     link=0.456     x0.87   $4.56 [10 lb]
+[2026-09-03T08:17:39] everyday-mismatch:   bbq-sauce                Hy-Vee       board=0.1267    link=0.1106    x0.87   $1.99 [18 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   tortillas                Aldi         board=0.2312    link=0.2612    x1.13   $2.09 [8 ct]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: L'oven Fresh Original Low Carb Tortillas, 8 Count
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Pueblo Lindo Burrito Flour Tortillas 8 CT
+[2026-09-03T08:17:39] everyday-mismatch:   potato-chips             Aldi         board=0.148     link=0.1674    x1.13   $1.59 [9.5 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Clancy S Hot Chili Lime Ridged Potato Chips 12.5 OZ
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Clancy S Spicy Dill Pickle Potato Chips 9.5 OZ
+[2026-09-03T08:17:39] everyday-mismatch:   ground-beef-8020         Aldi         board=5.29      link=5.99      x1.13   $5.99 [lb]
+[2026-09-03T08:17:39] everyday-mismatch:   cheddar-cheese-shredded  Walmart      board=0.2175    link=0.2462    x1.13   $1.97 [8 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Great Value Extra Sharp Cheddar Shredded Cheese, 16 oz Bag
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Great Value Sharp Cheddar Finely Shredded Cheese, 8 oz
+[2026-09-03T08:17:39] everyday-mismatch:   lemon-pepper-seasoning   Sam's Club   board=0.251     link=0.2832    x1.13   $8.78 [31 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Member's Mark Lemon Pepper Seasoning, 31 oz.
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: MemberAƒÆ'A,A¢AƒA¢A¢â,¬Å¡A,A¬AƒA¢A¢â,¬Å_A,A¢s Mark Lemon Pepper Seasoning, 31 oz.
+[2026-09-03T08:17:39] everyday-mismatch:   hot-italian-sausage      Baker's      board=4.88      link=5.49      x1.12   $5.49 [16 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: KrogerAƒâ?sA,Ar Hot Italian Sausage
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Johnsonville Hot Italian Ground Sausage
+[2026-09-03T08:17:39] everyday-mismatch:   beef-jerky               Sam's Club   board=1.055     link=1.18      x1.12   $18.88 [16 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   hot-sauce                Aldi         board=0.1158    link=0.1292    x1.12   $1.55 [12 fl oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Burman S Hot Sauce 12 FL OZ
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Burman's Hot Sauce
+[2026-09-03T08:17:39] everyday-mismatch:   pepperoni                Sam's Club   board=0.2638    link=0.295     x1.12   $9.44 [32 oz]
+[2026-09-03T08:17:39] everyday-mismatch:   eggs                     Aldi         board=1.66      link=1.46      x0.88   $1.46 [12 ct]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Goldhen Grade A Large Eggs 12 CT
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Goldhen Grade A Large Eggs
+[2026-09-03T08:17:39] everyday-mismatch:   jasmine-rice             Baker's      board=0.09      link=0.0999    x1.11   $15.99 [10 lb]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: KrogerAƒâ?sA,Ar Jasmine Rice
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Kroger Jasmine Rice
+[2026-09-03T08:17:39] everyday-mismatch:   bell-peppers             Baker's      board=0.89      link=0.99      x1.11   $0.99 [1 ct]
+[2026-09-03T08:17:39] everyday-mismatch:   toaster-pastries         Walmart      board=0.1692    link=0.1883    x1.11   $2.26 [12 ct]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Great Value Frosted Brown Sugar Cinnamon Toaster Pastries, 20.3 oz, 12 Count
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Great Value Frosted Cherry Toaster Pastries
+[2026-09-03T08:17:39] everyday-mismatch:   chuck-roast              Hy-Vee       board=8.99      link=7.99      x0.89   $7.99 [lb]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: Hy Vee Choice Reserve Boneless Chuck Roast
+[2026-09-03T08:17:39] everyday-mismatch:       link  item: Hy-Vee Choice Reserve Boneless Chuck Roast
+[2026-09-03T08:17:39] everyday-mismatch:   greek-yogurt             Walmart      board=0.115     link=0.1025    x0.89   $3.28 [32 oz]
+[2026-09-03T08:17:39] everyday-mismatch:       board item: bettergoods Plain Whole Milk Greek Yogurt, 32 oz Tub
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Great Value Greek Plain Nonfat Yogurt, 32 oz Tub
+[2026-09-03T08:17:40] everyday-mismatch:   corned-beef-hash         Fareway      board=0.3207    link=0.285     x0.89   $3.99 [14 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   condensed-milk           Sam's Club   board=0.1605    link=0.1426    x0.89   $11.98 [84 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Nestle La Lechera Sweetened Condensed Milk, 14 oz., 6 pk.
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.
+[2026-09-03T08:17:40] everyday-mismatch:   fish-sauce               Walmart      board=0.4176    link=0.3728    x0.89   $8.82 [23.66 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Kikkoman Gluten-Free Fish Sauce, 6.8 fl oz Glass Bottle
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Thai Kitchen Premium Fish Sauce, 23.66 fl oz
+[2026-09-03T08:17:40] everyday-mismatch:   canned-pinto-beans       Hy-Vee       board=0.066     link=0.0587    x0.89   $0.88 [15 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   frozen-fries             Baker's      board=0.0911    link=0.0811    x0.89   $6.49 [5 lb]
+[2026-09-03T08:17:40] everyday-mismatch:   golden-raisins           Baker's      board=0.4158    link=0.4575    x1.1    $5.49 [12 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Sun-MaidAƒâ?sA,Ar California Golden Raisins Dried Fruit Snack
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Sun-Maid California Golden Raisins Dried Fruit Snack
+[2026-09-03T08:17:40] everyday-mismatch:   cheddar-cheese-shredded  Baker's      board=0.2278    link=0.25      x1.1    $2 [8 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Kroger Sharp Cheddar Shredded Cheese Family Size
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Kroger Sharp Cheddar Shredded Cheese
+[2026-09-03T08:17:40] everyday-mismatch:   strawberries             Family Fare  board=0.3119    link=0.2806    x0.9    $4.49 [16 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   jasmine-rice             Hy-Vee       board=0.0934    link=0.0841    x0.9    $2.69 [32 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   pork-chops               Aldi         board=2.9889    link=2.69      x0.9    $2.69 [per lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Assorted Pork Chops
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Premium Bone-In Assorted Pork Chops, per lb
+[2026-09-03T08:17:40] everyday-mismatch:   turkey-pepperoni         Hy-Vee       board=0.994     link=0.892     x0.9    $4.46 [5 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   frozen-waffles           Sam's Club   board=0.1524    link=0.1371    x0.9    $9.87 [72 ct]
+[2026-09-03T08:17:40] everyday-mismatch:   liquid-smoke             Baker's      board=0.7475    link=0.6725    x0.9    $2.69 [4 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:   honey-dijon-mustard      Aldi         board=0.1375    link=0.1242    x0.9    $1.49 [12 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: 
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Burman's Dijon Mustard
+[2026-09-03T08:17:40] everyday-mismatch:   cottage-cheese           Sam's Club   board=0.1512    link=0.1367    x0.9    $6.56 [3 lb]
+[2026-09-03T08:17:40] everyday-mismatch:   frosting                 Baker's      board=0.1244    link=0.1119    x0.9    $1.79 [16 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   yeast                    Walmart      board=1.2425    link=1.3575    x1.09   $5.43 [4 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   boneless-skinless-chicken-thigh Baker's      board=3.6633    link=3.99      x1.09   $3.99 [lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Kroger Frozen Raw Boneless Skinless Chicken Thighs
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Heritage Farm Boneless Skinless Chicken Thighs
+[2026-09-03T08:17:40] everyday-mismatch:   shaving-cream            Sam's Club   board=0.3361    link=0.3677    x1.09   $10.48 [28.5 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Skintimate Summer Splash Shave Gel, 9.5 oz., 3 pk.
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Skintimate Skin Therapy Dry Skin Shave Gel, 9.5 oz., 3 pk.
+[2026-09-03T08:17:40] everyday-mismatch:   brown-rice               Hy-Vee       board=1.745     link=1.895     x1.09   $3.79 [32 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   frozen-chopped-spinach   Aldi         board=0.1344    link=0.1219    x0.91   $1.95 [16 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: 
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Simply Nature Organic Spinach
+[2026-09-03T08:17:40] everyday-mismatch:   golden-raisins           Aldi         board=0.22      link=0.1995    x0.91   $3.99 [20 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: 
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Southern Grove Seedless Raisins
+[2026-09-03T08:17:40] everyday-mismatch:   broccoli                 Baker's      board=2.19      link=1.99      x0.91   $1.99 [lb]
+[2026-09-03T08:17:40] everyday-mismatch:   english-muffins          Sam's Club   board=0.49      link=0.4483    x0.91   $5.38 [12 ct]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Thomas' Light Multi-Grain English Muffins 24 oz., 12 ct.
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Thomas' Original Nooks & Crannies English Muffins 12 ct.
+[2026-09-03T08:17:40] everyday-mismatch:   asparagus                Aldi         board=2.95      link=2.69      x0.91   $2.69 [1 lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Asparagus 1 LB
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Asparagus, Package
+[2026-09-03T08:17:40] everyday-mismatch:   pineapple-juice          Aldi         board=0.1056    link=0.096     x0.91   $4.99 [52 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:   cod                      Aldi         board=8.745     link=7.995     x0.91   $15.99 [32 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   stuffing-mix             Fareway      board=0.4575    link=0.4158    x0.91   $4.99 [12 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   kielbasa                 Hy-Vee       board=4.7289    link=5.0971    x1.08   $4.46 [14 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Johnsonville Polish Kielbasa Smoked Rope Pork Sausage
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Johnsonville Polish Kielbasa Smoked Sausage, 6 Count, 14 oz
+[2026-09-03T08:17:40] everyday-mismatch:   cornstarch               Sam's Club   board=0.1869    link=0.2025    x1.08   $6.48 [32 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   baking-soda              Hy-Vee       board=0.0744    link=0.0806    x1.08   $1.29 [16 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   swiss-cheese             Baker's      board=0.3075    link=0.3325    x1.08   $3.99 [12 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Kroger Swiss Block Cheese
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: KrogerAƒÆ'A¢â,¬Å¡Aƒâ?sA,Ar Swiss Sliced Cheese
+[2026-09-03T08:17:40] everyday-mismatch:   sirloin-steak            Aldi         board=7.99      link=8.59      x1.08   $8.59 [lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Thin Sliced Black Angus Beef Sirloin Tip Steak For Carne Asada Per LB
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Usda Choice Black Angus Sirloin Tip Steak For Carne Asada 1 Each
+[2026-09-03T08:17:40] everyday-mismatch:   tahini                   Walmart      board=0.4044    link=0.3731    x0.92   $5.97 [16 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   salsa-verde              Baker's      board=0.17      link=0.1562    x0.92   $2.5 [16 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: HerdezAƒâ?sA,Ar Salsa Verde Mild
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Herdez Salsa Verde Mild
+[2026-09-03T08:17:40] everyday-mismatch:   ribeye-steak             Hy-Vee       board=14.6533   link=15.69     x1.07   $15.69 [lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Heritage Shaved Ribeye
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Beef Ribeye Steak - Thin
+[2026-09-03T08:17:40] everyday-mismatch:   roasted-red-peppers      Hy-Vee       board=0.4271    link=0.4557    x1.07   $3.19 [7 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: 
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Dunbars Roasted Peppers
+[2026-09-03T08:17:40] everyday-mismatch:   milk                     Aldi         board=2.81      link=3.01      x1.07   $3.01 [1 gal]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Friendly Farms 2 Milk 1 Gal
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Friendly Farms 1 Low Fat Milk 1 Gal
+[2026-09-03T08:17:40] everyday-mismatch:   yogurt                   Aldi         board=0.0809    link=0.0867    x1.07   $0.52 [6 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Friendly Farms Nonfat Plain Yogurt 32 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Friendly Farms Peach Original Lowfat Yogurt 6 OZ
+[2026-09-03T08:17:40] everyday-mismatch:   cheddar-cheese-shredded  Aldi         board=0.2536    link=0.2355    x0.93   $2.59 [11 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Happy Farms Thick Cut Triple Cheddar Shredded Cheese
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Happy Farms Thick Shredded Triple Cheddar
+[2026-09-03T08:17:40] everyday-mismatch:   turkey-bacon             Aldi         board=0.349     link=0.325     x0.93   $3.25 [10 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Appleton Farms Uncured Turkey Bacon 10 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Appleton Farms Uncured Turkey Bacon
+[2026-09-03T08:17:40] everyday-mismatch:   blueberries              Baker's      board=0.3883    link=0.3606    x0.93   $6.49 [18 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   white-wine-vinegar       Baker's      board=0.1681    link=0.1556    x0.93   $2.49 [16 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:   pickles                  Hy-Vee       board=0.1162    link=0.1079    x0.93   $2.59 [24 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:   fish-sticks              Sam's Club   board=0.2281    link=0.2112    x0.93   $12.86 [3.805 lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Gorton's Super Crunchy Fish Sticks, Frozen, 64 ct.
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: GortonAƒÆ'A,A¢AƒA¢A¢â,¬Å¡A,A¬AƒA¢A¢â,¬Å_A,A¢s Super Crunchy Fish Sticks, Frozen, 64 ct.
+[2026-09-03T08:17:40] everyday-mismatch:   shredded-carrots         Hy-Vee       board=0.199     link=0.188     x0.94   $1.88 [10 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   pears                    Hy-Vee       board=1.99      link=1.88      x0.94   $1.88 [lb]
+[2026-09-03T08:17:40] everyday-mismatch:   mozzarella-cheese        Aldi         board=0.2056    link=0.2188    x1.06   $1.75 [8 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Happy Farms Shredded Mozzarella Cheese
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Happy Farms Mozzarella Cheese Block
+[2026-09-03T08:17:40] everyday-mismatch:   coffee                   Sam's Club   board=0.394     link=0.4172    x1.06   $17.98 [43.1 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   ricotta                  Aldi         board=0.166     link=0.1767    x1.06   $2.65 [15 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   cream-cheese             Sam's Club   board=0.13      link=0.1381    x1.06   $6.63 [48 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   fresh-basil              Baker's      board=3.2       link=3.032     x0.95   $3.79 [1.25 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   sun-dried-tomatoes       Aldi         board=0.4738    link=0.4988    x1.05   $3.99 [8 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   bouillon                 Sam's Club   board=0.1477    link=0.1551    x1.05   $6.28 [40.5 oz]
+[2026-09-03T08:17:40] everyday-mismatch:   salmon                   Aldi         board=5.425     link=5.175     x0.95   $10.35 [32 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Fremont Fish Market Value Pack Wild Caught Salmon
+[2026-09-03T08:17:40] everyday-mismatch:   apple-cider-vinegar      Aldi         board=0.1403    link=0.1328    x0.95   $4.49 [33.8 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Simply Nature Organic Apple Cider Vinegar 33 8 FL OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Simply Nature Organic Apple Cider Vinegar
+[2026-09-03T08:17:40] everyday-mismatch:   nectarines               Aldi         board=1.845     link=1.745     x0.95   $3.49 [2 lb]
+[2026-09-03T08:17:40] everyday-mismatch:   carrots                  Sam's Club   board=0.87      link=0.912     x1.05   $4.56 [5 lb]
+[2026-09-03T08:17:40] everyday-mismatch:   sugar                    Aldi         board=0.6975    link=0.7225    x1.04   $2.89 [4 lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Baker S Corner Granulated Sugar 4 LB
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Baker's Corner Granulated Sugar
+[2026-09-03T08:17:40] everyday-mismatch:   cocoa-powder             Sam's Club   board=0.499     link=0.5209    x1.04   $11.98 [23 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Rising Star Baking Supply Premium Cocoa Powder, 20 oz.
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Hershey's Cocoa 100% Cacao Natural Unsweetened, 23 oz.
+[2026-09-03T08:17:40] everyday-mismatch:   asparagus                Sam's Club   board=4.61      link=4.43      x0.96   $8.86 [2 lb]
+[2026-09-03T08:17:40] everyday-mismatch:   almonds                  Aldi         board=0.425     link=0.4421    x1.04   $6.19 [14 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Southern Grove Almonds Snickerdoodle Spiced 14 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Southern Grove Oil Roasted Salted Almonds 14 OZ
+[2026-09-03T08:17:40] everyday-mismatch:   93-7-ground-turkey       Aldi         board=4.075     link=3.9083    x0.96   $4.69 [19.2 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Kirkwood 93% Lean Ground Turkey
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Kirkwood Fresh 93% Lean Ground Turkey
+[2026-09-03T08:17:40] everyday-mismatch:   avocado-oil              Sam's Club   board=0.3965    link=0.4112    x1.04   $13.98 [34 fl oz]
+[2026-09-03T08:17:40] everyday-mismatch:   chicken-nuggets          Aldi         board=0.1435    link=0.1373    x0.96   $6.59 [48 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Kirkwood Family Size Chicken Nuggets 48 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Kirkwood Family Pack Chicken Nuggets
+[2026-09-03T08:17:40] everyday-mismatch:   canned-chicken           Aldi         board=0.2072    link=0.1992    x0.96   $2.49 [12.5 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Brookdale Chunk Chicken Breast
+[2026-09-03T08:17:40] everyday-mismatch:   caesar-salad-kit         Aldi         board=0.2848    link=0.2951    x1.04   $3.29 [11.15 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Dole Chopped Caesar Salad Kit 11 15 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Dole Chopped Caesar Salad Kit 11.15 OZ
+[2026-09-03T08:17:40] everyday-mismatch:   swiss-cheese             Aldi         board=0.2129    link=0.2188    x1.03   $1.75 [8 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Happy Farms Deli Sliced Swiss Cheese
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Happy Farms Swiss Cheese Block
+[2026-09-03T08:17:40] everyday-mismatch:   broccoli                 Aldi         board=2.09      link=2.15      x1.03   $2.15 [lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Broccoli Crowns Per LB
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Broccoli Crowns
+[2026-09-03T08:17:40] everyday-mismatch:   dog-food                 Aldi         board=1.398     link=1.358     x0.97   $6.79 [5 lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Pure Being Chicken Rice Premium Grain Free Dog Food 5 LB
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Pure Being Chicken and Rice Premium Dog Food
+[2026-09-03T08:17:40] everyday-mismatch:   deodorant                Aldi         board=1.3133    link=1.3533    x1.03   $4.06 [3 oz]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Old Spice Anti Perspirant Deodorant For Men Pure Sport Scent 3 OZ
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Old Spice Pure Sport Deodorant
+[2026-09-03T08:17:40] everyday-mismatch:   oranges                  Sam's Club   board=1.3217    link=1.3617    x1.03   $8.17 [6 lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Cara Cara Oranges, 6 lbs.
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Navel Oranges, 6 lbs.
+[2026-09-03T08:17:40] everyday-mismatch:   cauliflower              Aldi         board=2.89      link=2.99      x1.03   $2.99 [each]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Cauliflower Each
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Cauliflower
+[2026-09-03T08:17:40] everyday-mismatch:   clementines              Sam's Club   board=1.534     link=1.572     x1.02   $7.86 [5 lb]
+[2026-09-03T08:17:40] everyday-mismatch:   boneless-skinless-chicken-thigh Walmart      board=3.2196    link=3.29      x1.02   $9.87 [3 lb]
+[2026-09-03T08:17:40] everyday-mismatch:       board item: Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.6 - 6.9 lb Tray
+[2026-09-03T08:17:40] everyday-mismatch:       link  item: Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb
+[2026-09-03T08:17:40] everyday-mismatch: 
+[2026-09-03T08:17:40] everyday-mismatch: saved -> C:\Codex\ThriftyCrew\grocery\out\everyday-mismatches.json
+[2026-09-03T08:17:40] everyday-mismatch: EVERYDAY-MISMATCH-COMPLETE checked=2594 mismatches=171
+[2026-09-03T08:17:40] board-reconciliation: weekly rows 570   recipe rows 67 (examined 67)
+[2026-09-03T08:17:40] board-reconciliation: COMMODITIES PUBLISHED ON BOTH BOARDS: 0
+[2026-09-03T08:17:40] board-reconciliation: CONTRADICTIONS ON AN IDENTICAL PRODUCT STRING: 0
+[2026-09-03T08:17:40] board-reconciliation: saved -> C:\Codex\ThriftyCrew\grocery\out\board-reconciliation.json
+[2026-09-03T08:17:40] board-reconciliation: BOARD-RECONCILIATION-COMPLETE dupes=0 contra=0
+[2026-09-03T08:17:48] rescue-worklist: rescue [Aldi]: DROPPED 1  UNTRACEABLE 0  EXPIRING 0  STALE 0 -> out\rescue-terms-aldi.txt
+[2026-09-03T08:17:48] rescue-worklist: rescue [Fareway]: DROPPED 0  UNTRACEABLE 10  EXPIRING 0  STALE 0 -> out\rescue-terms-fareway.txt
+[2026-09-03T08:17:48] rescue-worklist: rescue [Sam's Club]: DROPPED 0  UNTRACEABLE 3  EXPIRING 0  STALE 0 -> out\rescue-terms-sams.txt
+[2026-09-03T08:17:48] rescue-worklist: rescue [Walmart]: DROPPED 3  UNTRACEABLE 1  EXPIRING 0  STALE 0 -> out\rescue-terms-walmart.txt
+[2026-09-03T08:17:48] prune-out: now run guards.ps1 + test-auditors.ps1 - a deletion that blinded a watcher must say so TODAY
+[2026-09-03T08:17:49] prune-intermediates: deleted 0 file(s), freeing 0 MB; kept the newest 3
+[2026-09-03T08:23:51] test-auditors: 363 s (rc=0)
+[2026-09-03T08:23:51] watchers ok: every guard still fires on its own founding bug
+[2026-09-03T08:24:40] test-guards weekly rc=3
+[2026-09-03T08:24:42] cloudflare-estate weekly: BLIND - no CLOUDFLARE_API_TOKEN, so R2 lifecycle drift would not be seen
+[2026-09-03T08:24:43] coverage-cycle:   ok    audit-board-reconciliation     examined 67 of 67 eligible (baseline 67, tol 10%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    audit-everyday-mismatch        examined 2594 of 2614 eligible (baseline 2598, tol 10%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    audit-ff-carry                 examined 60 of 595 eligible (baseline 464, tol 100%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    audit-food-category            examined 3037 of 3434 eligible (baseline 3037, tol 10%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    build-rescue-worklist          examined 1367 of 1381 eligible (baseline 1364, tol 10%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/10-store-charges        examined 69395 of 69395 eligible (baseline 69398, tol 35%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/11-bakers-provenance    examined 7295 of 7295 eligible (baseline 7295, tol 25%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/13-board-vs-identity-recipe examined 332 of 332 eligible (baseline 334, tol 10%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/13-board-vs-identity-staple examined 3140 of 3140 eligible (baseline 3139, tol 10%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/3-pin-derivable         examined 10 of 10 eligible (baseline 19, tol 50%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/3-pin-identity          examined 10 of 10 eligible (baseline 13, tol 50%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/4-factor                examined 2439 of 2439 eligible (baseline 2652, tol 10%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/5-multipack             examined 3178 of 3178 eligible (baseline 3178, tol 50%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/6-collapse              examined 7 of 7 eligible (baseline 7, tol 15%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    guards/9-freshness             examined 14 of 14 eligible (baseline 14, tol 15%)
+[2026-09-03T08:24:43] coverage-cycle:   ok    pull-regular-hyvee             examined 2 of 2 eligible TODAY (100%, floor 90% of the day's slice; absolute count not ratcheted)
+[2026-09-03T08:24:43] coverage-cycle: coverage-ledger: ok - 16 check(s) still examine at least their baseline coverage (phase 'cycle', tolerance 10% unless overridden).
+[2026-09-03T08:24:43] coverage-cycle: COVERAGE-LEDGER-COMPLETE
+[2026-09-03T08:24:43] run complete; flips=0; pull=(no pull - -NoPull; latest ads file reused); ship=398s; total=1323s

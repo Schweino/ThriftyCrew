@@ -1,1 +1,1 @@
-﻿ground-beef-8020|Aldi|USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count;ground-beef-8020|Aldi|USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count
+﻿chili-beans|Walmart|Bush's Chili Magic Beans, Slow Simmered White Beans in Mild Chili Sauce, 15.5 oz Can

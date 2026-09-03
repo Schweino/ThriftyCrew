@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  26,
-    "cursor_next":  33,
+    "cursor_start":  33,
+    "cursor_next":  40,
     "total_terms":  602,
     "rotation_terms":  [
-                           "infant formula",
-                           "baby wipes",
-                           "bacon",
-                           "plain bagels",
-                           "baked beans",
-                           "baking powder",
-                           "baking soda"
+                           "balsamic vinegar",
+                           "banana pepper rings",
+                           "bananas",
+                           "bar soap",
+                           "aa batteries",
+                           "bay leaves",
+                           "barbecue sauce"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "infant formula",
-                  "baby wipes",
-                  "bacon",
-                  "plain bagels",
-                  "baked beans",
-                  "baking powder",
-                  "baking soda"
+                  "balsamic vinegar",
+                  "banana pepper rings",
+                  "bananas",
+                  "bar soap",
+                  "aa batteries",
+                  "bay leaves",
+                  "barbecue sauce"
               ],
     "commodities":  [
-                        "baby-formula",
-                        "baby-wipes",
-                        "bacon",
-                        "bagels",
-                        "baked-beans",
-                        "baking-powder",
-                        "baking-soda"
+                        "balsamic-vinegar",
+                        "banana-peppers",
+                        "bananas",
+                        "bar-soap",
+                        "batteries",
+                        "bay-leaves",
+                        "bbq-sauce"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

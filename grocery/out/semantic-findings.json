@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-02 21:32",
+    "generated":  "2026-09-03 08:14",
     "board":  "comparison-2026-09-02.json",
-    "sidecar_generated":  "2026-09-02 21:32:25",
+    "sidecar_generated":  "2026-09-03 08:14:40",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,15 +10,24 @@
                    },
     "examined":  {
                      "board_pairs":  3140,
-                     "corpus":  41003,
-                     "rule_invisible":  7573
+                     "corpus":  41014,
+                     "rule_invisible":  7576
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  1,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "chili-beans",
+                         "commodity":  "Chili Beans (in sauce)",
+                         "store":  "Walmart",
+                         "product":  "Bush\u0027s Chili Magic Beans, Slow Simmered White Beans in Mild Chili Sauce, 15.5 oz Can",
+                         "cos":  0.6,
+                         "score":  0.929456,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ]
 }

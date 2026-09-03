@@ -1,0 +1,44 @@
+﻿{
+    "store":  "Hy-Vee",
+    "date":  "2026-09-03",
+    "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
+    "ad_rollover":  false,
+    "ad_note":  "ad current until 2026-09-06; next_pull 2026-09-07",
+    "cursor_start":  0,
+    "cursor_next":  7,
+    "total_terms":  602,
+    "rotation_terms":  [
+                           "15 bean soup mix",
+                           "93/7 lean ground beef",
+                           "achiote paste",
+                           "acorn squash",
+                           "adobo seasoning",
+                           "air freshener spray",
+                           "aji amarillo paste"
+                       ],
+    "sale_terms":  [
+
+                   ],
+    "terms":  [
+                  "15 bean soup mix",
+                  "93/7 lean ground beef",
+                  "achiote paste",
+                  "acorn squash",
+                  "adobo seasoning",
+                  "air freshener spray",
+                  "aji amarillo paste"
+              ],
+    "commodities":  [
+                        "15-bean-soup-mix",
+                        "93-7-ground-beef",
+                        "achiote-paste",
+                        "acorn-squash",
+                        "adobo-seasoning",
+                        "air-freshener",
+                        "aji-amarillo-paste"
+                    ],
+    "call_cap":  120,
+    "expiry_deferred":  0,
+    "expiry_oldest_owed":  "",
+    "note":  "Fetch ONLY these terms today - the list is already capped at this store\u0027s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow\u0027s slice, oldest first - do NOT fetch them here."
+}

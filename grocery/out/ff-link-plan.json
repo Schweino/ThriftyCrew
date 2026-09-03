@@ -1,25 +1,25 @@
 ﻿{
     "resolved":  [
                      {
-                         "id":  "feta",
+                         "id":  "butter",
                          "fault":  "PRICE-DRIFT",
-                         "board":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
-                         "board_pu":  1.1238,
-                         "name":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/athenos_traditional_feta_cheese_chunk_8_oz/p/36780",
-                         "price":  "$8.99",
-                         "size":  "8 oz",
+                         "board":  "Land O Lakes Butter, Salted, Half Sticks 8 Ea",
+                         "board_pu":  4.49,
+                         "name":  "Land O Lakes Butter, Salted, Half Sticks 8 Ea",
+                         "url":  "https://www.shopfamilyfare.com/shop/dairy/butter_margarine/butter/land_o_lakes_butter_salted_half_sticks_8_ea/p/24205",
+                         "price":  "$4.49",
+                         "size":  "1 lb",
                          "score":  1
                      },
                      {
                          "id":  "gruyere",
                          "fault":  "NO-LINK",
-                         "board":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
-                         "board_pu":  0.5825,
-                         "name":  "Aidells Smoked Roasted Garlic \u0026 Gruyere Cheese Chicken Sausage 12 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/aidells_smoked_roasted_garlic_gruyere_cheese_chicken_sausage_12_oz/p/6363",
-                         "price":  "$6.99",
-                         "size":  "12 oz",
+                         "board":  "Smoky Park Cheese, Smoked Gruyere 8 Oz",
+                         "board_pu":  0.9988,
+                         "name":  "Smoky Park Cheese, Smoked Gruyere 8 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/artisan_specialty/smoky_park_cheese_smoked_gruyere_8_oz/p/5539309",
+                         "price":  "$7.99",
+                         "size":  "8 oz",
                          "score":  1
                      },
                      {
@@ -34,14 +34,14 @@
                          "score":  1
                      },
                      {
-                         "id":  "yellow-bell-pepper",
-                         "fault":  "NO-LINK",
-                         "board":  "Yellow Bell Pepper",
-                         "board_pu":  1.79,
-                         "name":  "Yellow Bell Pepper",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/yellow_bell_pepper/p/2310571",
-                         "price":  "$1.79",
-                         "size":  "1 ea",
+                         "id":  "russet-potatoes",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Our Family Potatoes Russet Idaho",
+                         "board_pu":  0.579,
+                         "name":  "Our Family Potatoes Russet Idaho",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_russet_idaho/p/2341145",
+                         "price":  "$5.79",
+                         "size":  "10 lb",
                          "score":  1
                      }
                  ],
@@ -49,6 +49,10 @@
                     {
                         "id":  "dried-basil",
                         "why":  "no confident match (best 0)"
+                    },
+                    {
+                        "id":  "block-cheese",
+                        "why":  "match found but per-unit disagrees: board $0.2494 vs link $0.3238 (23%)"
                     },
                     {
                         "id":  "caesar-salad-kit",
@@ -80,7 +84,7 @@
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "no confident match (best 0)"
+                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
                     },
                     {
                         "id":  "queso",
@@ -95,7 +99,7 @@
                         "why":  "match found but per-unit disagrees: board $0.598 vs link $1.398 (57.2%)"
                     }
                 ],
-    "worked":  16,
-    "generated":  "2026-09-02 08:06",
+    "worked":  17,
+    "generated":  "2026-09-03 08:08",
     "board":  "comparison-2026-09-02.json"
 }
