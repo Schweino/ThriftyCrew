@@ -1814,10 +1814,10 @@
   {
       "batch":  "hunt-2026-08-26-smoke5-w1",
       "opened":  "2026-09-02T05:52:15",
-      "last_activity":  "2026-09-02T06:04:19",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-09-03T13:07:59",
+      "closed":  true,
+      "closed_at":  "2026-09-03T13:07:59",
+      "close_detail":  "post-publish review CLEAN on scope; 1/1 live and paid-gated after the ingredient list, numbers on the page equal spec/costed/recipes-db, class-C chicken label byte-identical through 4cd816ce; one pre-existing catalogue-wide scaler finding filed as triage 2026-09-03-539ff0",
       "abandoned":  false,
       "abandoned_at":  null,
       "abandon_reason":  null,
@@ -1874,6 +1874,11 @@
                          "stage":  "serveability",
                          "at":  "2026-09-02T06:04:19",
                          "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-09-03T13:06:55",
+                         "detail":  "CLEAN on scope (post-publish-reviewer 2026-09-03): live page, Ghost-stored html == built card, macros recompute 550.7/39.8/39.9/24.7 vs stat 551/40/40/25, costed row arithmetic reproduced, not a covered_by card, class-C chicken label byte-identical after 4cd816ce (7 lb at 28), garlic range 20 to 22, paywall after ingredients as paid, 375px clean. One PRE-EXISTING catalogue-wide finding filed as triage 2026-09-03-539ff0 (unit word not re-agreed when the scaler crosses 1)"
                      }
                  ]
   },
