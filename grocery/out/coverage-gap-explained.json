@@ -1,16 +1,7 @@
-﻿[
-    {
-        "id":  "ground-beef-8020",
-        "store":  "Aldi",
-        "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u002780%?\\s*lean[^.]*20%?\\s*fat\u0027 matched, exclude \u0027patties\u0027 killed it"
-    },
-    {
-        "id":  "ground-beef-8020",
-        "store":  "Aldi",
-        "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u002780%?\\s*lean[^.]*20%?\\s*fat\u0027 matched, exclude \u0027patties\u0027 killed it"
-    }
-]
+﻿{
+    "id":  "chili-beans",
+    "store":  "Walmart",
+    "product":  "Bush\u0027s Chili Magic Beans, Slow Simmered White Beans in Mild Chili Sauce, 15.5 oz Can",
+    "verdict":  "NO-INCLUDE",
+    "detail":  "no include pattern matches"
+}

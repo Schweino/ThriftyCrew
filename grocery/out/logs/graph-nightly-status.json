@@ -1,14 +1,14 @@
 ﻿{
-    "generated":  "2026-09-02T21:32:27",
-    "started":  "2026-09-02T21:30:02",
-    "deadline":  "2026-09-03T00:00:02",
+    "generated":  "2026-09-03T21:33:21",
+    "started":  "2026-09-03T21:30:02",
+    "deadline":  "2026-09-04T00:00:02",
     "hard_stop":  "06:30",
     "jobs":  4,
     "contested":  0,
-    "elapsed_sec":  146,
+    "elapsed_sec":  199,
     "card_free":  true,
-    "free_vram_mib":  13475,
-    "llama_started":  false,
+    "free_vram_mib":  13959,
+    "llama_started":  true,
     "stages":  [
                    {
                        "stage":  "emit",
@@ -19,7 +19,7 @@
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:04] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "detail":  "[21:30:05] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
                        "sec":  0
                    },
                    {
@@ -32,13 +32,25 @@
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  143
+                       "sec":  155
                    },
                    {
                        "stage":  "serve",
-                       "state":  "BLIND",
-                       "detail":  "only 13475 MiB free; llama-server needs ~13500 MiB - something else holds the card",
-                       "sec":  0
+                       "state":  "OK",
+                       "detail":  "4 slots",
+                       "sec":  11
+                   },
+                   {
+                       "stage":  "resolve",
+                       "state":  "OK",
+                       "detail":  "resolved 22119 rows in 2.0s (20487 distinct questions, 0 model calls)",
+                       "sec":  2
+                   },
+                   {
+                       "stage":  "stage1",
+                       "state":  "OK",
+                       "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
+                       "sec":  25
                    },
                    {
                        "stage":  "stop",

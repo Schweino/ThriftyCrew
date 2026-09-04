@@ -357,13 +357,6 @@
                                                               "price":  "$8.98",
                                                               "size":  "128 fl oz",
                                                               "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                          },
-                                              "Walmart":  {
-                                                              "url":  "https://www.walmart.com/ip/5080177347",
-                                                              "price":  "6.75",
-                                                              "size":  "128 fl oz",
-                                                              "name":  "Great Value Multi Purpose Cleaner, Lavender Scent, 128 fl oz",
-                                                              "verified":  "2026-08-31 price-pull self-capture"
                                                           }
                                           },
                   "all-purpose-flour":  {
@@ -732,13 +725,6 @@
                                           },
                   "apple-juice":  {
                                       "commodity":  "apple-juice",
-                                      "Aldi":  {
-                                                   "url":  "https://www.aldi.us/store/aldi/products/20324471-nature-s-nectar-100-apple-juice-64-fl-oz",
-                                                   "price":  1.99,
-                                                   "size":  "64 fl oz",
-                                                   "name":  "Nature\u0027s Nectar 100% Apple Juice",
-                                                   "board_pu":  0.0342
-                                               },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/smart-way-apple-juice/0001111012326",
                                                            "name":  "Smart Way Apple Juice",
@@ -2228,14 +2214,7 @@
                                                                "size":  "6 ct",
                                                                "name":  "Green Bell Peppers, 6 ct.",
                                                                "board_pu":  0.8283
-                                                           },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/47770124",
-                                                       "name":  "Fresh Bell Peppers, 3 Count",
-                                                       "price":  "$2.97",
-                                                       "size":  "3 ct",
-                                                       "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                           }
                                    },
                   "berbere-seasoning":  {
                                             "commodity":  "Berbere Seasoning"
@@ -2413,14 +2392,7 @@
                                                                     "price":  "$9.98",
                                                                     "size":  "19.5 oz",
                                                                     "verified":  "2026-08-14 DERIVED from the price row (same record the board priced)"
-                                                                },
-                                            "Walmart":  {
-                                                            "url":  "https://www.walmart.com/ip/10449028",
-                                                            "name":  "Tone\u0027s Black Peppercorns Whole, Kosher, 9 oz",
-                                                            "price":  "$8.82",
-                                                            "size":  "9 oz",
-                                                            "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                                }
                                         },
                   "bleach":  {
                                  "commodity":  "bleach",
@@ -2746,13 +2718,6 @@
                                        },
                   "bottled-water":  {
                                         "commodity":  "bottled-water",
-                                        "Aldi":  {
-                                                     "url":  "https://www.aldi.us/store/aldi/products/23123337-puraqua-purified-water-16-9-fl-oz",
-                                                     "price":  3.19,
-                                                     "size":  "24 ct",
-                                                     "name":  "PurAqua Purified Water 24 Pack",
-                                                     "board_pu":  0.1329
-                                                 },
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/kroger-purified-bottled-water/0001111049213",
                                                              "name":  "Kroger Purified Bottled Water",
@@ -6089,14 +6054,6 @@
                                                            "verified":  "2026-08-23",
                                                            "board_pu":  0.0645
                                                        },
-                                      "Family Fare":  {
-                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/brooks_chili_beans_hot_40_oz/p/542612",
-                                                          "name":  "Brooks Chili Beans, Hot 40 Oz",
-                                                          "price":  "$3.19",
-                                                          "size":  "40 oz",
-                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)",
-                                                          "board_pu":  0.0798
-                                                      },
                                       "Fareway":  {
                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24083182-fareway-chili-beans-155-oz",
                                                       "price":  0.99,
@@ -9517,13 +9474,7 @@
                                                "price":  "$1.65",
                                                "size":  "dozen",
                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                           },
-                               "Family Fare":  {
-                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                                                   "name":  "Large Eggs, Grade A Our Family",
-                                                   "price":  "$2.39",
-                                                   "size":  "12 ct"
-                                               }
+                                           }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -16553,13 +16504,6 @@
                                                                      "name":  "Sweet Mini Peppers, 1.5 lbs.",
                                                                      "board_pu":  0.2146
                                                                  },
-                                             "Walmart":  {
-                                                             "url":  "https://www.walmart.com/ip/5657933143",
-                                                             "name":  "Fresh Mini Sweet Peppers, 16 oz",
-                                                             "price":  "$3.28",
-                                                             "size":  "16 oz",
-                                                             "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
-                                                         },
                                              "Aldi":  {
                                                           "url":  "https://www.aldi.us/store/aldi/products/26274166-mini-sweet-peppers-package-1-lb",
                                                           "name":  "Mini Sweet Peppers Package 1 LB",
@@ -16842,14 +16786,7 @@
                                                     "price":  "$3.77",
                                                     "size":  "16 oz",
                                                     "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                },
-                                    "Sam\u0027s Club":  {
-                                                            "url":  "https://www.samsclub.com/ip/13596258401",
-                                                            "name":  "Organic Baby Bella Mushroom 24 oz.",
-                                                            "price":  "$4.97",
-                                                            "size":  "24 oz",
-                                                            "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                }
                                 },
                   "mustard":  {
                                   "commodity":  "mustard",
