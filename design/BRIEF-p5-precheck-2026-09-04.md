@@ -1,10 +1,9 @@
 # BRIEF: the P5 precheck - do not pay the auditor for a wave wave-publish will refuse
 
 queue_id: p5-precheck-2026-09-04
-shipped_commit: SHIPPED 2026-09-04 - see the commit titled "Don't pay the auditor for a wave
-wave-publish is going to refuse" (hash recorded in the follow-up commit immediately after it,
-which is the only way this field can name a hash that exists). If this field names a commit,
-the work is DONE: verify it and report, do not rebuild.
+shipped_commit: 561f40628ec9a5a187d2c8370a9f3701ad2eaf55 (2026-09-04, "Don't pay the auditor for a wave wave-publish is
+going to refuse"). This field names a commit, so the work is DONE: verify it and report, do
+not rebuild.
 author of the brief: Fable, 2026-09-04, from the measurement in
 design\EVAL-hunter-repeat-work-2026-09-04.md, section "The wave-repeat cost, measured".
 ruled by: Brad, 2026-09-04 ("attack the wave-repeat cost", then asked for this brief).
