@@ -272,6 +272,62 @@ def ps_invoke(script, args, timeout=180):
             (p.stderr or b"").decode("utf-8", errors="replace"))
 
 
+def git_invoke(args, cwd=None, timeout=60):
+    """Call git. Returns (rc, stdout, stderr).
+
+    ONE ROAD PER TOOL, for the reason ps_invoke and py_invoke each exist: the alternative is a third
+    subprocess style growing inside the daemon where no fixture can reach it. The post-publish review
+    dossier needs exactly two facts from git - the sha before the publish and the sha after - and the
+    estate has already been bitten by a seam a neuter could not reach (`qa_battery_args`, 2026-08-25:
+    reverting it to the live path produced ZERO red on a full roster).
+
+    argv goes straight through, so there is no marshalling hazard here and none is invented. A git
+    that cannot run is a could-not-run, never a fabricated sha: the caller gets rc and decides, and
+    the dossier says the range is unavailable rather than printing a range that is a guess.
+    """
+    try:
+        p = subprocess.run(["git"] + [str(a) for a in args], capture_output=True, timeout=timeout,
+                           cwd=cwd or None)
+    except (subprocess.TimeoutExpired, OSError) as e:                 # noqa: BLE001
+        return EXIT_CANNOT_RUN, "", "git could not run: %s" % e
+    return (p.returncode,
+            (p.stdout or b"").decode("utf-8", errors="replace"),
+            (p.stderr or b"").decode("utf-8", errors="replace"))
+
+
+def triage_ids(doc):
+    """The triage queue's item ids, as a SET. Pure, so the shape is pinned without a queue on disk.
+
+    The reviewer's contract includes "alert-triage queue empty of NEW items caused by this work", and
+    NEW is the whole difficulty: after the publish there is no way to tell a pre-existing item from
+    one this run caused. So the daemon snapshots the ids BEFORE the publish and the reviewer diffs.
+    A queue that cannot be read returns the empty set and the dossier SAYS it could not be read -
+    an unreadable queue must never render as "nothing was pending", which would make every
+    pre-existing item look new.
+    """
+    if not isinstance(doc, dict):
+        return set()
+    out = set()
+    for it in (doc.get("items") or []):
+        if isinstance(it, dict) and it.get("id") is not None:
+            out.add(str(it["id"]))
+    return out
+
+
+def db_slugs(doc):
+    """Every slug in recipes-db, as a SET. Pure, same reason as triage_ids.
+
+    Used for the row-count-moved-implausibly check (the reviewer's category 2): the daemon holds the
+    count before and after, and the reviewer is handed both plus the wave's own slugs. It is a COUNT
+    and a set of identities - never the row CONTENTS, because the numbers on the page are what the
+    reviewer must verify against the artifact itself.
+    """
+    if not isinstance(doc, dict):
+        return set()
+    return set(str(r.get("slug")) for r in (doc.get("recipes") or [])
+               if isinstance(r, dict) and r.get("slug") is not None)
+
+
 def ps_spawn_detached(script, args=None):
     """Start a long-running PowerShell script and DO NOT wait for it. Returns (ok, why_not).
 

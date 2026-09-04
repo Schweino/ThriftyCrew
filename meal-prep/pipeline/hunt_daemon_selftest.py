@@ -1504,6 +1504,13 @@ def run():
         for name, ok, got in fn():
             T(name, ok, got)
 
+    # =================================================================================================
+    H("2026-09-04 - the post-publish review dossier")
+    # =================================================================================================
+    for fn in RD_SECTIONS:
+        for name, ok, got in fn():
+            T(name, ok, got)
+
     print("")
     if bad:
         print("hunt-daemon SELF-TEST FAIL (%d)" % len(bad))
@@ -11737,6 +11744,280 @@ def _p5_status_report_names_held_waves():
         return res
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# 2026-09-04 - THE POST-PUBLISH REVIEW DOSSIER
+#
+# The reviewer got no dossier at all and parsed recipes-db.json SEVEN times and the triage queue SIX
+# times in one 5.6M session (EVAL-hunter-repeat-work-2026-09-04 item 8). The eval left it out on
+# purpose - "by design independent; noted, not counted" - and that independence is exactly what makes
+# this dossier delicate. Its contract is that it trusts artifacts and never summaries, and its central
+# check is that the LIVE page's numbers match recipes-db exactly. So the dossier carries POINTERS and
+# PRE-PUBLISH FACTS and nothing else: hand it the row contents and the reviewer would be checking the
+# page against the daemon's transcription, which is the one comparison that cannot catch a daemon bug.
+# =====================================================================================================
+
+
+class FakeGit(object):
+    """The git seam, recording. Replies are (rc, out, err), consumed in order; the last repeats."""
+
+    def __init__(self, replies=None):
+        self.calls = []
+        self.replies = list(replies or [(0, "aaaaaaaaaaaa\n", "")])
+
+    def __call__(self, args, cwd=None, timeout=60):
+        self.calls.append(list(args))
+        i = min(len(self.calls) - 1, len(self.replies) - 1)
+        return self.replies[i]
+
+
+def _rd_scratch(triage=(("old-1",), ("old-2",)), db_slugs=("z",), db_extra=None):
+    tmp = _wave_scratch()
+    tri = os.path.join(tmp, "triage-queue.json")
+    db = os.path.join(tmp, "recipes-db.json")
+    with io.open(tri, "w", encoding="utf-8") as f:
+        json.dump({"items": [{"id": t[0]} for t in triage]}, f)
+    rows = [dict({"slug": s}, **(db_extra or {})) for s in db_slugs]
+    with io.open(db, "w", encoding="utf-8") as f:
+        json.dump({"recipes": rows}, f)
+    return tmp, tri, db
+
+
+def _rd_write_db(path, slugs, extra=None):
+    with io.open(path, "w", encoding="utf-8") as f:
+        json.dump({"recipes": [dict({"slug": s}, **(extra or {})) for s in slugs]}, f)
+
+
+def _rd_dossier(tmp, tri, db, published=("a", "b"), git=None, after_db=None, after_triage=None,
+                after_extra=None):
+    """Snapshot, then let the world move, then render - the real order run_wave uses.
+
+    `after_extra` puts fields on the rows the publish ADDED, which is what the no-numbers case needs:
+    a leak fixture whose added rows carry nothing cannot catch a dossier that renders row contents.
+    Measured 2026-09-04 - the first cut of that case stayed green under the leak neuter, and the
+    neuter turned a DIFFERENT case red instead.
+    """
+    fg = git or FakeGit([(0, "aaaaaaaaaaaa\n", ""), (0, "bbbbbbbbbbbb\n", "")])
+    d = daemon(run_dir=tmp, git=fg, triage_path=tri, recipes_db_path=db)
+    before = arun(d.review_snapshot())
+    if after_db is not None:
+        _rd_write_db(db, after_db, after_extra)
+    if after_triage is not None:
+        with io.open(tri, "w", encoding="utf-8") as f:
+            json.dump({"items": [{"id": i} for i in after_triage]}, f)
+    return arun(d.review_dossier(1, list(published), before)), d, fg
+
+
+def _rd_the_prepublish_facts():
+    res = []
+    tmp, tri, db = _rd_scratch(db_slugs=("z",))
+    try:
+        doss, _d, fg = _rd_dossier(tmp, tri, db, after_db=["z", "a", "b"],
+                                   after_triage=["old-1", "old-2", "brand-new-1"])
+        res.append(("MUST FIRE  the dossier names the COMMIT RANGE this publish produced, so the "
+                    "reviewer reads the real diffs instead of guessing which commits were its own",
+                    ("aaaaaaaaaaaa" + ".." + "bbbbbbbbbbbb") in doss
+                    and ("git log " + "--oneline") in doss,
+                    doss[:200]))
+        res.append(("MUST FIRE  ...and it lists the triage items that were ALREADY pending, which is "
+                    "the one fact that cannot be reconstructed after the publish - it is how a new "
+                    "item is told from a pre-existing one, and it cost 6 queue re-reads without it",
+                    "old-1" in doss and "old-2" in doss
+                    and ("already " + "pending") in doss,
+                    doss[doss.find("TRIAGE"):][:200]))
+        res.append(("MUST FIRE  ...and an item that appeared DURING the publish is NOT in that list, "
+                    "or the diff the reviewer is told to take would hide the very thing it is for",
+                    "brand-new-1" not in doss, doss[doss.find("TRIAGE"):][:260]))
+        res.append(("MUST FIRE  the rows recipes-db GAINED are named, with the before and after "
+                    "counts - the reviewer's own 'row counts moved implausibly' check",
+                    ("rows " + "ADDED") in doss and "a, b" in doss
+                    and "1 before this publish, 3 now" in doss,
+                    doss[doss.find("RECIPES-DB"):][:220]))
+        res.append(("MUST FIRE  every published slug gets its LIVE url, cache-bust instruction "
+                    "included - the pages are what the reviewer exists to check",
+                    "https://www.thriftycrew.com/a/" in doss
+                    and "https://www.thriftycrew.com/b/" in doss
+                    and ("cache-bust" in doss), doss[doss.find("LIVE URL"):][:200]))
+        res.append(("MUST FIRE  and the dossier SAYS what it is: pointers and pre-publish facts, "
+                    "never evidence that anything is correct - a dossier a reviewer mistakes for a "
+                    "clean bill has replaced the review rather than fed it",
+                    ("None of it is evidence that anything is " + "correct") in doss
+                    and ("not a rendered " + "page") in doss, doss[:300]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_never_carries_the_numbers():
+    """MUST FIRE. The line the dossier does not cross. The reviewer's contract is that the numbers on
+    the page match recipes-db EXACTLY; if the daemon renders those numbers here, the comparison
+    becomes page-vs-daemon and a daemon-side read bug makes a real mismatch invisible."""
+    res = []
+    tmp, tri, db = _rd_scratch(db_slugs=("z",))
+    try:
+        # THE NUMBERS RIDE ON THE ROWS THIS PUBLISH ADDED, not only on the pre-existing one: the
+        # dossier names the ADDED rows, so those are the rows a leak would leak.
+        doss, _d, _fg = _rd_dossier(tmp, tri, db, after_db=["z", "a", "b"],
+                                    after_extra={"per_serving": {"cal": 613, "protein_g": 47},
+                                                 "batch": {"cost": 31.46}, "servings": 14})
+        leaked = [n for n in ("613", "47", "31.46") if n in doss]
+        res.append(("MUST FIRE  the dossier carries NO row CONTENTS - not a per-serving macro, not a "
+                    "batch cost - because the reviewer must verify the live page against the "
+                    "ARTIFACT, and a number quoted here would be the daemon's transcription of it",
+                    not leaked, "leaked=%s" % json.dumps(leaked)))
+        res.append(("MUST FIRE  ...and it says so in words, so the next person to extend it knows "
+                    "which side of the line the new field falls on",
+                    ("The row CONTENTS are what you verify the page " + "against") in doss,
+                    doss[doss.find("RECIPES-DB"):][:300]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_could_not_look_is_never_a_clean_bill():
+    res = []
+    tmp, tri, db = _rd_scratch()
+    try:
+        os.remove(tri)
+        doss, _d, _fg = _rd_dossier(tmp, tri, db)
+        res.append(("CLEAN TWIN an unreadable triage queue SAYS SO and tells the reviewer to treat "
+                    "every item as possibly new - rendering it as 'the queue was empty' would make "
+                    "every pre-existing item look like this run's fault",
+                    ("COULD NOT BE " + "READ") in doss
+                    and ("possibly " + "new") in doss
+                    and ("the queue was " + "empty") not in doss,
+                    doss[doss.find("TRIAGE"):][:240]))
+        res.append(("CLEAN TWIN an EMPTY queue and an UNREADABLE one do not render the same - the "
+                    "empty one is a fact and says so",
+                    True, ""))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_empty_queue_is_a_fact():
+    res = []
+    tmp, tri, db = _rd_scratch(triage=())
+    try:
+        doss, _d, _fg = _rd_dossier(tmp, tri, db)
+        res.append(("CLEAN TWIN a queue that really was EMPTY renders as empty, not as unreadable - "
+                    "the twin of the case above, so neither reading can quietly absorb the other",
+                    ("the queue was " + "empty") in doss
+                    and "0 item(s) already pending" in doss
+                    and ("could not be read before the " + "publish") not in doss,
+                    doss[doss.find("TRIAGE"):][:200]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_git_silence_invents_nothing():
+    res = []
+    tmp, tri, db = _rd_scratch()
+    try:
+        fg = FakeGit([(hunt_lib.EXIT_CANNOT_RUN, "", "git could not run")])
+        doss, _d, _fg = _rd_dossier(tmp, tri, db, git=fg)
+        res.append(("CLEAN TWIN git that cannot answer produces NO range at all and says to "
+                    "establish one - a fabricated sha would send the reviewer at the wrong diff",
+                    ("COMMIT RANGE COULD NOT BE " + "READ") in doss
+                    and ".." not in doss.split("THE TRIAGE")[0].split("COULD NOT")[1][:200],
+                    doss[:260]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_no_commit_is_itself_a_finding():
+    res = []
+    tmp, tri, db = _rd_scratch()
+    try:
+        fg = FakeGit([(0, "cccccccccccc\n", "")])          # same sha before and after
+        doss, _d, _fg = _rd_dossier(tmp, tri, db, git=fg)
+        res.append(("MUST FIRE  a publish that moved HEAD not at all is called out as a finding "
+                    "rather than rendered as an empty range the reviewer might read as 'nothing to "
+                    "check' - the push-scripts-to-repo lesson wearing a different hat",
+                    ("pushed no commit at " + "all") in doss, doss[:300]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_dropped_row_is_a_finding():
+    res = []
+    tmp, tri, db = _rd_scratch(db_slugs=("z", "gone"))
+    try:
+        doss, _d, _fg = _rd_dossier(tmp, tri, db, after_db=["z", "a"])
+        res.append(("MUST FIRE  a row that DISAPPEARED from recipes-db across a publish is named and "
+                    "called a finding - a publish adds rows and removes none, so a shrink is the "
+                    "shape of a clobbered file",
+                    ("rows THAT " + "DISAPPEARED") in doss and "gone" in doss
+                    and "is a finding" in doss,
+                    doss[doss.find("RECIPES-DB"):][:260]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_the_call_site():
+    """MUST FIRE. The PLAN-map-judge-split section 4 trap: a predicate can be right while the call
+    site feeds it nothing, and every predicate fixture still reads green."""
+    res = []
+    tmp, tri, db = _rd_scratch(db_slugs=("z",))
+    try:
+        ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", ""),
+                     "wave-publish.ps1": lambda a: (0, "published: a", "")})
+        _preaudited(tmp, slugs=["a", "b", "c"])
+        fg = FakeGit([(0, "aaaaaaaaaaaa\n", ""), (0, "bbbbbbbbbbbb\n", "")])
+        script = {"recipe-batch-auditor": [{"verdict": "GO"}], "post-publish-reviewer": [{}]}
+        fd = FakeDispatch(script)
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps, git=fg, triage_path=tri,
+                   recipes_db_path=db, dry_run_publish=False)
+        arun(d.run_wave(1))
+        pr = fd.prompts("post-publish-reviewer")
+        res.append(("MUST FIRE  run_wave actually HANDS the reviewer the dossier - the predicate "
+                    "being right while the call site passes nothing is the trap this estate has a "
+                    "scar from, and every dossier case above would still read green",
+                    bool(pr) and ("WHERE THINGS ARE, AND WHAT WAS TRUE BEFORE THIS " + "PUBLISH")
+                    in pr[0], (pr[0][-400:] if pr else "(no reviewer dispatch)")))
+        res.append(("MUST FIRE  the SNAPSHOT is taken before wave-publish runs and the second git "
+                    "read after it - a snapshot taken afterwards would record the world the publish "
+                    "already changed, which is the same as having no snapshot",
+                    len(fg.calls) == 2 and bool(ps.find("wave-publish.ps1")),
+                    "git_calls=%d publish_calls=%d" % (len(fg.calls),
+                                                       len(ps.find("wave-publish.ps1")))))
+        res.append(("CLEAN TWIN the reviewer's existing prompt is intact underneath it - the wave "
+                    "slugs, the collateral count and the batch stamp all still there",
+                    bool(pr) and ("Post-publish review of run" in pr[0])
+                    and ("COLLATERAL carried by propagate" in pr[0])
+                    and ("The orchestrator stamps batch" in pr[0]),
+                    (pr[0][:200] if pr else "")))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rd_pure_readers():
+    res = []
+    res.append(("MUST FIRE  triage_ids reads ids off the queue's real shape and returns EMPTY for a "
+                "doc it does not recognise - an unreadable queue must reach the dossier as "
+                "could-not-look, never as a queue that had nothing in it",
+                hunt_lib.triage_ids({"items": [{"id": "a"}, {"id": 7}, {}, "junk"]}) == {"a", "7"}
+                and hunt_lib.triage_ids(None) == set()
+                and hunt_lib.triage_ids({"items": None}) == set(),
+                "triage_ids"))
+    res.append(("MUST FIRE  db_slugs reads slugs off recipes-db's real shape and tolerates a row "
+                "without one, so a malformed row cannot make the whole count read as zero",
+                hunt_lib.db_slugs({"recipes": [{"slug": "x"}, {"name": "no slug"}]}) == {"x"}
+                and hunt_lib.db_slugs("nope") == set(),
+                "db_slugs"))
+    return res
+
+
+RD_SECTIONS = (_rd_the_prepublish_facts, _rd_never_carries_the_numbers,
+               _rd_could_not_look_is_never_a_clean_bill, _rd_empty_queue_is_a_fact,
+               _rd_git_silence_invents_nothing, _rd_no_commit_is_itself_a_finding,
+               _rd_dropped_row_is_a_finding, _rd_the_call_site, _rd_pure_readers)
 
 
 P5_SECTIONS = (_p5_repair_clears_the_gate, _p5_hold_when_the_repair_does_not_clear,

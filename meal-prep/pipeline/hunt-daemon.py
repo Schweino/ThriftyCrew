@@ -93,6 +93,12 @@ RECIPE_COMMODITIES = os.path.join(REPO, "grocery", "recipe-commodities.json")
 BUILD_V2_SPEC_PS = os.path.join(HERE, "build-v2-spec.ps1")
 FIND_SIMILAR_PS = os.path.join(HERE, "find-similar.ps1")
 SPECS_DIR = os.path.join(MP, "db", "recipes")
+# The three artifacts the post-publish reviewer must check and previously had to FIND. Named here so
+# the dossier can point at them; the reviewer still opens them itself, because its whole contract is
+# that it trusts artifacts and never a summary of one.
+RECIPES_DB = os.path.join(MP, "recipes-db.json")
+TRIAGE_QUEUE = os.path.join(os.path.dirname(MP), "grocery", "triage-queue.json")
+SITE_BASE = "https://www.thriftycrew.com"
 RUNS_DIR = os.path.join(MP, "runs")
 
 DEFAULT_COND = ("between 350 and 650 calories per serving AND 35 g carbohydrate or less per serving; "
@@ -349,7 +355,8 @@ class Daemon(object):
     def __init__(self, run_dir, run_id, conditions=None, band=None, wave_size=None,
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
-                 costed_path="", pyrun=None, food_db_path="", queue_path="",
+                 costed_path="", pyrun=None, food_db_path="", queue_path="", git=None,
+                 recipes_db_path="", triage_path="", site_base="",
                  carriage_path="", considered_path="", events_path="", resolutions_path="",
                  ingredients_path=""):
         self.run_dir = run_dir
@@ -457,6 +464,15 @@ class Daemon(object):
         # sys.executable, never through ps_invoke - ps_invoke is for PowerShell and its whole reason
         # for existing (array marshalling through -Command) does not apply and would not survive.
         self._py = pyrun or hunt_lib.py_invoke
+        # THE GIT SEAM. Injectable for the same reason ps and py are: a seam no fixture can reach is
+        # a seam that will quietly come undone (qa_battery_args, 2026-08-25).
+        self._git = git or hunt_lib.git_invoke
+        # The artifacts the post-publish reviewer is contractually required to check. Named here so a
+        # drill can point them at scratch copies - a fixture that snapshotted the LIVE triage queue
+        # would be a suite with a side effect on the estate's own alert surface.
+        self.recipes_db_path = recipes_db_path or RECIPES_DB
+        self.triage_path = triage_path or TRIAGE_QUEUE
+        self.site_base = site_base or SITE_BASE
 
         self.breaker = hunt_lib.make_breaker()
         self.retry_counts = {}
@@ -6827,6 +6843,9 @@ class Daemon(object):
         await self.ledger(["-Stamp", "-Batch", batch, "-Stage", "audit",
                            "-Detail", "%d/%d GO" % (len(slugs), len(slugs))])
 
+        # BEFORE THE PUBLISH, because after it these facts are gone. See review_snapshot.
+        review_before = await self.review_snapshot()
+
         pub_args = ["-RunDir", self.run_dir, "-Wave", wk]
         if self.dry_run_publish:
             pub_args.append("-DryRun")
@@ -6882,7 +6901,9 @@ class Daemon(object):
             return
 
         await self.dispatch("post-publish-reviewer",
-                            self.review_prompt(wk, published, held, collateral, batch),
+                            self.review_prompt(wk, published, held, collateral, batch,
+                                               await self.review_dossier(wk, published,
+                                                                         review_before)),
                             "review", "wave-%d:review" % wk, published, stage="reviewer")
         await self.ledger(["-Stamp", "-Batch", batch, "-Stage", "post-publish-review",
                            "-Detail", "reviewed"])
@@ -7417,7 +7438,137 @@ class Daemon(object):
                                                                           "finding for this slug)"])),
                "\n".join(shown)))
 
-    def review_prompt(self, wk, published, held, collateral, batch):
+    async def git(self, args):
+        """One git call, off the event loop. Returns (rc, out, err)."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, lambda: self._git(list(args), MP))
+
+    def _read_json(self, path):
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                return json.load(f)
+        except Exception:                                         # noqa: BLE001
+            return None
+
+    async def review_snapshot(self):
+        """The facts that only exist BEFORE the publish, taken before wave-publish runs.
+
+        THIS IS THE WHOLE REASON THE DOSSIER IS WORTH BUILDING. Measured 2026-08-27: the post-publish
+        reviewer parsed recipes-db.json seven times and the triage queue six times in one 5.6M
+        session, because after the push there is no way to tell a pre-existing triage item from one
+        this wave caused, and no way to know which commits were this publish's without guessing a
+        range. Neither fact is recoverable afterwards at any price. Everything else in the dossier is
+        a pointer; this is evidence the reviewer cannot reconstruct.
+        """
+        rc, out, _e = await self.git(["rev-parse", "HEAD"])
+        return {"head": out.strip() if rc == 0 else "",
+                "head_ok": rc == 0,
+                "triage_ids": sorted(hunt_lib.triage_ids(self._read_json(self.triage_path))),
+                "triage_ok": self._read_json(self.triage_path) is not None,
+                "db_slugs": sorted(hunt_lib.db_slugs(self._read_json(self.recipes_db_path))),
+                "db_ok": self._read_json(self.recipes_db_path) is not None}
+
+    async def review_dossier(self, wk, published, before):
+        """Pointers and pre-publish facts for the reviewer. NOT a verdict, and NOT the numbers.
+
+        THE LINE THIS DOSSIER DOES NOT CROSS. The reviewer's contract is that it trusts artifacts and
+        never summaries, and its central check is that the numbers on the LIVE page match recipes-db
+        exactly. So this block must never carry those numbers: if it did, the reviewer would be
+        comparing the page against the DAEMON'S transcription of the row, and a daemon-side read bug
+        would make a real mismatch invisible. What it carries instead is identity and location - which
+        rows, which files, which commit range, which queue items were already pending - each of which
+        the reviewer would otherwise spend turns rediscovering, and one of which (the pre-publish
+        state) it cannot rediscover at all.
+        """
+        before = before or {}
+        rc, out, _e = await self.git(["rev-parse", "HEAD"])
+        after = out.strip() if rc == 0 else ""
+        lines = ["WHERE THINGS ARE, AND WHAT WAS TRUE BEFORE THIS PUBLISH.",
+                 "Every line below is a POINTER or a PRE-PUBLISH FACT. None of it is evidence that "
+                 "anything is correct,",
+                 "and none of it is a number you may verify the live page against - open the "
+                 "artifact for that.",
+                 ""]
+
+        if before.get("head_ok") and after:
+            lines.append("  THE COMMIT RANGE THIS PUBLISH PRODUCED: %s..%s" % (before["head"][:12],
+                                                                               after[:12]))
+            lines.append("    git log --oneline %s..%s  /  git show <sha>  - read the real diffs."
+                         % (before["head"][:12], after[:12]))
+            if before["head"] == after:
+                lines.append("    NOTE: the two are IDENTICAL - this publish pushed no commit at "
+                             "all. That is a finding in itself unless the wave was a dry run.")
+        else:
+            lines.append("  THE COMMIT RANGE COULD NOT BE READ (git did not answer). Establish the "
+                         "range yourself; do not assume one.")
+
+        if before.get("triage_ok"):
+            ids = before.get("triage_ids") or []
+            lines.append("")
+            lines.append("  THE TRIAGE QUEUE BEFORE THIS PUBLISH: %d item(s) already pending, at %s"
+                         % (len(ids), self.triage_path))
+            lines.append("    Anything in the queue NOW whose id is not in this list is new since "
+                         "the publish:")
+            lines.append("    %s" % (", ".join(ids) if ids else "(the queue was empty)"))
+            lines.append("    This list is the only way to tell a new item from a pre-existing one "
+                         "after the fact. It is not a claim that the pre-existing ones are fine.")
+        else:
+            lines.append("")
+            lines.append("  THE TRIAGE QUEUE COULD NOT BE READ before the publish (%s). Every item "
+                         "in it now must be treated as possibly new." % self.triage_path)
+
+        if before.get("db_ok"):
+            was = set(before.get("db_slugs") or [])
+            now = hunt_lib.db_slugs(self._read_json(self.recipes_db_path))
+            added = sorted(now - was)
+            dropped = sorted(was - now)
+            lines.append("")
+            lines.append("  RECIPES-DB ROW COUNT: %d before this publish, %d now (%s)"
+                         % (len(was), len(now), self.recipes_db_path))
+            lines.append("    rows ADDED: %s" % (", ".join(added) or "(none)"))
+            if dropped:
+                lines.append("    rows THAT DISAPPEARED: %s - a publish removes nothing, so this is "
+                             "a finding." % ", ".join(dropped))
+            unexpected = sorted(set(added) - set(published))
+            missing = sorted(set(published) - set(added) - was)
+            if unexpected:
+                lines.append("    added but NOT in this wave: %s - the concurrent-pipeline rule may "
+                             "explain it; confirm rather than assume." % ", ".join(unexpected))
+            if missing:
+                lines.append("    published by this wave but NOT added: %s" % ", ".join(missing))
+            lines.append("    Counts and identities only. The row CONTENTS are what you verify the "
+                         "page against, so read them from the file.")
+        else:
+            lines.append("")
+            lines.append("  RECIPES-DB COULD NOT BE READ before the publish (%s)."
+                         % self.recipes_db_path)
+
+        if published:
+            lines.append("")
+            lines.append("  THE LIVE URLS (cache-bust them yourself):")
+            for s in published:
+                lines.append("    %s/%s/" % (self.site_base.rstrip("/"), s))
+
+        lines.append("")
+        lines.append("  THE RUN'S OWN FILES for this wave:")
+        lines.append("    specs      %s" % (self.specs_dir or SPECS_DIR))
+        lines.append("    wave       %s" % os.path.join(self.run_dir, "waves",
+                                                        "wave-%d.json" % wk))
+        lines.append("    audit      %s" % os.path.join(self.run_dir, "waves",
+                                                        "wave-%d.audit.md" % wk))
+        lines.append("    battery    %s" % os.path.join(self.run_dir, "waves",
+                                                        "wave-%d.preaudit.json" % wk))
+        lines.append("    daemon log %s" % os.path.join(self.run_dir, "daemon.log"))
+        lines.append("")
+        lines.append("  WHAT ALREADY RAN, so you spend your turns on what did not. wave-publish.ps1 "
+                     "gated this push on its")
+        lines.append("  P5 and P8 checks and the battery ran the shared gates before the audit - all "
+                     "of them BEFORE the push, none")
+        lines.append("  of them against the LIVE pages. A green gate here is not a rendered page, "
+                     "and that gap is your whole job.")
+        return "\n".join(lines)
+
+    def review_prompt(self, wk, published, held, collateral, batch, dossier=""):
         return (
             "Post-publish review of run %s wave %d, which just shipped.\n"
             "WAVE SLUGS (%d): %s\n"
@@ -7426,9 +7577,11 @@ class Daemon(object):
             "the wave alone samples a fraction of what actually shipped.\n%s"
             "Check live pages, pushed commits, data integrity and gates. Report bugs with fixes.\n"
             "The orchestrator stamps batch %s and advances the verified slugs.\n"
+            "%s"
             % (self.run_id, wk, len(published), ", ".join(published), collateral,
                ("Serveability-held: %s - confirm these are DRAFTS, not live, and recorded held.\n"
-                % ", ".join(held)) if held else "", batch))
+                % ", ".join(held)) if held else "", batch,
+               ("\n" + dossier + "\n") if dossier else ""))
 
     # ---- resume --------------------------------------------------------------------------------
 
