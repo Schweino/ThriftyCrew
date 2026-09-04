@@ -60,7 +60,7 @@
       "status": "done",
       "premise_verified": "TRUE - re-checked at 12:34 on 2026-09-04, before any edit, and the symptom had NOT vanished on its own. (1) public/free-dinners.json still carries week_of=2026-09-02, updated=2026-09-02T08:10:35, 20 free slugs; the newest board is grocery/out/comparison-2026-09-02.json, so week_of still equals the current board week and the rotation has not flipped since the plan was written. (2) Its mtime is unchanged at 2026-09-02 08:10:35 - a baseline health-heartbeat run reported exactly one issue, 'OUTPUT STALE: free-dinners.json is 52.4h old (> 30h)', exit 2, up from 50.3h in the alert and 52.3h at triage and still climbing, so the alert is live and not historical. (3) All five evidence rows re-read from source, not taken on trust: ad-cycle-log.txt line 2781 is '[2026-09-04T08:12:48] free-rotation: rotation: same week, same set - nothing to do' preceded by the 20 ranked slugs; rotate-free-dinners.ps1:129-130 is the early return and the free-dinners.json WriteAllText is at line 228, so the exit does precede the write; the registry row read max_age_hours=30 with why 'this week's free-dinner rotation'. (4) Blast radius re-measured the same way the plan measured it - all four other output_files rows (grocery/out/smp-feed.json, public/smp-feed.json, meal-prep/pipeline/v2-perserving.json, meal-prep/ingredient-map.json) are written on every run and none can no-op, so the new form was made opt-in and all four are pinned to the mtime rule by a fixture that reads the LIVE registry.",
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "e0694b50"
     }
   ],
   "ship_sequence": [
