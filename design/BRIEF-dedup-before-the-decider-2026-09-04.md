@@ -1,8 +1,8 @@
 # BRIEF: stop paying the decider to discover duplicates the estate could already see
 
 queue_id: dedup-before-the-decider-2026-09-04
-shipped_commit: (none yet - if this field names a commit, the work is DONE: verify it and report,
-do not rebuild)
+shipped_commit: b3c1833c (2026-09-04) - the work is DONE: verify it and report, do not rebuild.
+Read section 0a first: two of this brief's own instructions were wrong and were not followed.
 author: Opus 5, 2026-09-04, from measurement on the live pool and on run hunt-2026-09-04-five-b.
 ruled by: Brad, 2026-09-04: "I just dont want to waste token burn in the hunter because of
 duplicates or near duplicates that get rejected."
