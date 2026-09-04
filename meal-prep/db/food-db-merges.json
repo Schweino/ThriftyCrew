@@ -1,0 +1,98 @@
+{
+    "readme":  "Food-DB duplicate merges. Each record carries BOTH rows verbatim so the merge is reversible from this file alone. Written only by retire-food-db-row.ps1.",
+    "merges":  [
+                   {
+                       "at":  "2026-09-04T04:17:36",
+                       "retired":  {
+                                       "item":  "Apples",
+                                       "serving_qty":  100,
+                                       "serving_unit":  "g",
+                                       "serving_grams":  100,
+                                       "calories":  63,
+                                       "protein_g":  0.2,
+                                       "carbs_g":  15.2,
+                                       "fat_g":  0.18,
+                                       "fiber_g":  2.1,
+                                       "source":  "fdc:167793",
+                                       "notes":  "Apples, raw, fuji, with skin [SR Legacy], per 100 g.",
+                                       "added_by":  "recipe-hunter map lane (hunt-2026-08-26-ten)"
+                                   },
+                       "survivor":  {
+                                        "item":  "Apple",
+                                        "brand":  "generic",
+                                        "serving_grams":  100,
+                                        "serving_qty":  100,
+                                        "serving_unit":  "g",
+                                        "calories":  52,
+                                        "protein_g":  0.3,
+                                        "carbs_g":  14,
+                                        "fat_g":  0.2,
+                                        "notes":  "NEW wave90 (per 100g). USDA FDC raw apple"
+                                    },
+                       "reason":  "orphan row, 0 citations; 63 cal/100g is a different form - USDA raw apple with skin is 52, which is the surviving row"
+                   },
+                   {
+                       "at":  "2026-09-04T04:17:36",
+                       "retired":  {
+                                       "item":  "Green Bell Pepper",
+                                       "brand":  "Branded (GREEN BELL PEPPERS)",
+                                       "serving_qty":  100,
+                                       "serving_unit":  "g",
+                                       "serving_grams":  100,
+                                       "calories":  17,
+                                       "protein_g":  0,
+                                       "carbs_g":  4.05,
+                                       "fat_g":  0,
+                                       "fiber_g":  1.4,
+                                       "notes":  "Whole-pepper branded label; protein is printed as 0 by rounding.",
+                                       "source":  "fdc:2174611",
+                                       "added_by":  "recipe-hunter map lane (hunt-2026-08-26-ten)"
+                                   },
+                       "survivor":  {
+                                        "item":  "Green Bell Peppers",
+                                        "brand":  "",
+                                        "serving_grams":  119,
+                                        "serving_qty":  1,
+                                        "serving_unit":  "medium pepper",
+                                        "calories":  24,
+                                        "protein_g":  1,
+                                        "carbs_g":  6,
+                                        "fat_g":  0.2,
+                                        "notes":  "1 medium pepper (119g) per serving; from label"
+                                    },
+                       "reason":  "orphan row, 0 citations; 17 cal/100g is the outlier - the survivor computes to 20.2 cal/100g (24 per 119 g), and USDA raw green bell pepper is 20"
+                   },
+                   {
+                       "at":  "2026-09-04T04:17:37",
+                       "retired":  {
+                                       "item":  "Lemon",
+                                       "brand":  "generic (USDA)",
+                                       "serving_grams":  100,
+                                       "serving_qty":  1,
+                                       "serving_unit":  "medium lemon",
+                                       "calories":  29,
+                                       "protein_g":  1.1,
+                                       "carbs_g":  9.3,
+                                       "fat_g":  0.3,
+                                       "needs_verify":  true,
+                                       "verify_source":  "USDA lemons, raw, without peel: 29 cal / 1.1 P / 9.3 C / 0.3 F per 100 g. Fresh produce has no package label; USDA is the label-equivalent authority (Cauliflower and Fennel Bulb precedent). House each-weight: 100 g per medium lemon.",
+                                       "notes":  "WHOLE fresh lemon, the fruit the lemons board commodity prices by the each. NOT the Lemon Juice row (3 cal / 15 g bottled juice) - form-flip, different price class. In the adding recipe the halved lemon is an aromatic stuffed in the cavity and discarded before serving, so its macros are near-immaterial there, but the fruit is genuinely purchased and a purchased line needs a food on it. Added 2026-08-24 (v3-phase6b, ina-garten-s-roast-chicken).",
+                                       "source":  "USDA lemons raw without peel"
+                                   },
+                       "survivor":  {
+                                        "item":  "Lemons",
+                                        "serving_qty":  100,
+                                        "serving_unit":  "g",
+                                        "serving_grams":  100,
+                                        "calories":  29,
+                                        "protein_g":  1.1,
+                                        "carbs_g":  9.3,
+                                        "fat_g":  0.3,
+                                        "source":  "https://triagemethod.com/tools/human-nutrition-explorer/food/lemons-raw-without-peel.html",
+                                        "notes":  "Lemons, raw, without peel, per 100 g. Fiber deliberately omitted: the page printed 10.6 g, which is impossible for lemon flesh, so I would not transcribe it.",
+                                        "added_by":  "recipe-hunter map lane (hunt-2026-08-26-ten)"
+                                    },
+                       "reason":  "orphan row, 0 citations; macros are IDENTICAL to the survivor, so this settles on arithmetic alone"
+                   }
+               ]
+}
