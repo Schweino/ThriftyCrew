@@ -317,6 +317,7 @@ def cmd_build(a):
     payload = {"generated": now_stamp(), "model": lib_match.EMBED_MODEL, "device": a.device,
                "candidates": len(cands), "catalog": len(cat),
                "top_per_side": a.top,
+               "catalog_fingerprint": digest_fingerprint(),
                "cache_dir": HARVEST_CACHE, "cache_misses": miss_c + miss_k,
                "elapsed_sec": round(elapsed, 2), "neighbours": out}
     with open(NEIGHBOUR_FILE, "w", encoding="utf-8") as f:

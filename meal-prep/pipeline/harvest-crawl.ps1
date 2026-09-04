@@ -76,9 +76,33 @@ if ($SelfTest) {
   # this is where that is enforced rather than merely intended.
   T 'MUST FIRE  the scheduled crawl NEVER probes for new publishers - that is manual by ruling' `
     ($code.Length -gt 0 -and -not ($code -match 'probe|--admit')) 'the scheduled task can source publishers'
-  T 'MUST FIRE  the one external program it runs is the pinned interpreter on harvest.py --crawl' `
+  T 'the crawl itself is still the pinned interpreter on harvest.py --crawl' `
     ($code -match '&\s+\$py\s+@args' -and $code -match "'--crawl'" -and $code -match '\$harvest') `
     'the invocation is not python + harvest.py --crawl'
+  # A SECOND EXTERNAL PROGRAM JOINED IT on 2026-09-04 - harvest_embed.py, which rebuilds the dedup
+  # evidence index. The old case name claimed there was only ONE, and would have stayed green while
+  # its own name became false; that is the shape of assertion this estate has been bitten by, so it
+  # was renamed rather than left to pass. Both halves of the new program are asserted, because the
+  # pinned interpreter has no torch and the card is not this job's to take.
+  T 'MUST FIRE  the index rebuild runs under the SIDECAR venv - the pinned interpreter has no torch' `
+    ($code -match 'sidecar' -and $code -match 'harvest_embed\.py') 'the rebuild is missing or on the wrong interpreter'
+  T 'MUST FIRE  ...and it stays on the CPU. This job never asks for the card, and asking is the one thing it may not do' `
+    ($code -match "'--device'\s*'cpu'" -and -not ($code -match 'cuda')) 'the rebuild could take the GPU'
+  T 'MUST FIRE  the crawl READS the evidence back and alerts when it has gone stale - recording a degradation nobody reads is a clean bill' `
+    ($code -match ('--pool' + '-health') -and $code -match ('Send' + '-Alert')) 'a stale index would pass silently'
+  # THE ORDER IS THE MECHANISM. Each of these four steps is individually correct in any order and the
+  # chain only works in one: ingest the new shelf, build the index over it, score the pool against
+  # that index, then read the result. Shipped 2026-09-04 with the rescore missing, and the reading
+  # said `index fresh, 3134 covered` directly above `997 BLIND`.
+  $iCrawl  = $code.IndexOf('--crawl')
+  $iBuild  = $code.IndexOf('harvest_embed')
+  $iScore  = $code.IndexOf('--' + 'rescore')
+  $iRead   = $code.IndexOf('--pool' + '-health')
+  T 'MUST FIRE  the pool is RESCORED against the fresh index - a rebuild nothing is scored against buys nothing' `
+    ($iScore -gt 0) 'the crawl never rescores, so the new index is never read'
+  T 'MUST FIRE  ...and in THIS order: crawl, rebuild, rescore, read' `
+    ($iCrawl -gt 0 -and $iCrawl -lt $iBuild -and $iBuild -lt $iScore -and $iScore -lt $iRead) `
+    ("crawl={0} build={1} rescore={2} read={3}" -f $iCrawl, $iBuild, $iScore, $iRead)
   Write-Output ''
   if ($bad -gt 0) { Write-Output ("harvest-crawl SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1 }
   Write-Output 'harvest-crawl SELF-TEST PASS'
@@ -100,5 +124,54 @@ $out = & $py @args
 $rc = $LASTEXITCODE
 $out | Out-File -FilePath $log -Append -Encoding utf8
 foreach ($ln in @($out)) { if ($ln -match 'POOL now|new pool entries|FINDING|CANNOT RUN') { Say ('  ' + $ln.Trim()) } }
+# ---- the dedup evidence index, rebuilt on the CPU under the sidecar venv --------------------------
+# Measured 2026-09-04: this index was last written 2026-08-23 and covered 70 of 3,134 available
+# candidates. Nothing built it and nothing read it, so the semantic half of the dedup evidence was
+# absent for twelve days and every one of the 152 dupe rejections this estate has ever made was of a
+# candidate carrying none. Best effort: a crawl that cannot embed still crawled, and says so.
+$sidecar = Join-Path $repo 'sidecar\.venv\Scripts\python.exe'
+$embed   = Join-Path $here 'harvest_embed.py'
+if ((Test-Path $sidecar) -and (Test-Path $embed)) {
+  Say '  rebuilding the dedup evidence index (bge-m3, CPU)'
+  $eo = & $sidecar $embed '--build' '--device' 'cpu'
+  $eo | Out-File -FilePath $log -Append -Encoding utf8
+  foreach ($ln in @($eo)) { if ($ln -match 'candidate|carry no|COMPLETE|Error|Traceback') { Say ('  ' + $ln.Trim()) } }
+} else {
+  Say '  FINDING the evidence index was NOT rebuilt - no sidecar interpreter (torch lives there, the pinned one has none)'
+}
+
+# ---- and then the pool is scored AGAINST the fresh index --------------------------------------
+# WITHOUT THIS THE REBUILD BUYS NOTHING. A candidate's neighbour evidence is written when the pool
+# is scored, so an index rebuilt after the last scoring is an index nothing has read. Measured
+# 2026-09-04: straight after the first real rebuild the reading said `index fresh, 3134 covered` and
+# `997 BLIND` on the line above it, and both were true.
+$ro = & $py $harvest '--rescore'
+$ro | Out-File -FilePath $log -Append -Encoding utf8
+foreach ($ln in @($ro)) { if ($ln -match 'blind|neighbour|scored|FINDING') { Say ('  ' + $ln.Trim()) } }
+
+# ---- and the reading, out loud, with an alert when it has gone stale ------------------------------
+# THE PART THAT IS ACTUALLY "NEVER AGAIN". Every degradation above recorded itself faithfully and
+# nothing ever read one, which is how a broken thing stayed indistinguishable from a working one.
+$ph = @(& $py $harvest '--pool-health' | Where-Object { $_ -notmatch 'HARVEST-COMPLETE' })
+foreach ($ln in $ph) { Say ([string]$ln) }
+$idxLine = @($ph | Where-Object { $_ -match 'embed index' })
+$tagLine = @($ph | Where-Object { $_ -match 'dedup at ingest' })
+$idxStale = ($idxLine.Count -eq 0) -or ($idxLine[0] -notmatch 'embed index\s+fresh')
+# a whole batch that could not reach the model is the second alertable shape: tagged, never judged
+$allUnavail = ($tagLine.Count -gt 0) -and ($tagLine[0] -match 'unavailable=') -and ($tagLine[0] -notmatch 'llm=')
+if ($idxStale -or $allUnavail) {
+  $why = @()
+  if ($idxStale)    { $why += 'the embedding index is not fresh' }
+  if ($allUnavail)  { $why += 'no candidate in the pool has ever been judged by the local model' }
+  Say ('  FINDING ' + ($why -join '; '))
+  $lib = Join-Path $repo 'grocery\alert-lib.ps1'
+  if (Test-Path $lib) {
+    . $lib
+    $bodyTxt = (($why -join "`n") + "`n`n" + ($ph -join "`n") + "`n`nRebuild: sidecar\.venv\Scripts\python.exe meal-prep\pipeline\harvest_embed.py --build --device cpu")
+    Send-Alert -Subject 'Recipe pool: the dedup evidence has gone stale' -Body $bodyTxt | Out-Null
+  }
+  if ($rc -eq 0) { $rc = 1 }
+}
+
 Say ("harvest-crawl: exit {0}  (log: {1})" -f $rc, $log)
 exit $rc

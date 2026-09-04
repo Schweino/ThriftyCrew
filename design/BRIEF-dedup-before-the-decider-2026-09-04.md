@@ -7,6 +7,34 @@ author: Opus 5, 2026-09-04, from measurement on the live pool and on run hunt-20
 ruled by: Brad, 2026-09-04: "I just dont want to waste token burn in the hunter because of
 duplicates or near duplicates that get rejected."
 
+## 0a. CORRECTIONS made at implementation time (2026-09-04)
+
+Two things in this brief were wrong, both because I wrote them without reading the file I was
+telling someone to change. They are recorded here rather than silently edited, because the shape of
+the mistake is worth more than a clean-looking plan.
+
+**3.2 could not be done here, and doing it would have broken a ruling.** The brief says to start
+llama-server from the harvest chain. `harvest-crawl.ps1` forbids exactly that in THREE of its own
+MUST-FIRE assertions - its executing region may not reference `serve`, `llama` or `nvidia` - and its
+header records why: PLAN section 4.4 gives the card to the nightly chain, and only
+`install-nightly-task.ps1` may schedule it. Moving the start into `harvest.py` would have slipped
+past those greps while breaking the thing they protect, so it was not done.
+
+WHAT SHIPPED INSTEAD, and it is a better fit for the actual goal: the ingest dedup drains from the
+DAEMON, which already owns the card, already calls `ensure_local_model`, and is the place where a
+duplicate actually costs a frontier decider call. The crawl keeps the half that is genuinely free -
+a CPU rebuild of the embedding index. Section 3.2's own sentence, "this brief does not weaken the
+ownership rule", is honoured more exactly than the mechanism it proposed.
+
+**3.1's "the fingerprint check already in `load_embed_neighbours`" does not exist.** There was no
+staleness check of any kind on the neighbour index, and the index recorded no fingerprint to check
+against - that is `load_similarity_calibration`, a different function. This is not a footnote: it is
+break 1's actual mechanism. A twelve-day-old index was read as current because nothing could tell
+that it was not. `harvest_embed.py` now writes `catalog_fingerprint` and `load_embed_neighbours`
+refuses an index it cannot date.
+
+Minor: the ingest function is `refuse_near_dupes`; `dedup_at_ingest` is the TAG it writes.
+
 ## 0. Read these first
 
 1. `meal-prep\pipeline\harvest.py`: `dedup_at_ingest` (~line 1911), `refresh_dossiers` (~1506),

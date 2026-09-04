@@ -1121,6 +1121,19 @@ class Daemon(object):
             return []
         avail.sort(key=harvest.dossier_rank)
         picked = avail[:max(1, n)]
+        # A DECIDER CALL SPENT ON AN UNDEDUPED CANDIDATE IS MEASURABLE WASTE, so it is reported as
+        # one. Measured 2026-09-04: every one of the 152 dupe rejections this estate has ever made
+        # was of a candidate carrying no neighbour evidence - the decider derived from scratch what
+        # the estate had the machinery to compute, at roughly 8,000 output tokens and 100 seconds a
+        # call. This finding is what makes the next occurrence visible in the run's own report
+        # instead of only in the bill.
+        blind = [c["slug"] for c in picked if not (c.get("neighbours") or [])]
+        if blind:
+            self.findings.append(
+                "pool: %d of %d popped candidate(s) carry NO neighbour evidence - the decider will "
+                "rule them from scratch. Rebuild the embedding index (harvest_embed.py --build "
+                "under the sidecar venv) and check `harvest.py --pool-health`. First few: %s"
+                % (len(blind), len(picked), ", ".join(blind[:4])))
         catalog_n = harvest.catalog_size()
         out = []
         for c in picked:
@@ -7939,6 +7952,15 @@ class Daemon(object):
                      % (len(self.outcomes),
                         sum(1 for o in self.outcomes if o.get("status") == "stuck")))
         lines.append("  qa-passed pool  %d" % len(self.qa_passed))
+        # HOW MUCH OF THE POOL THE DECIDER CAN SEE THE EVIDENCE FOR. The dedup machinery has always
+        # recorded its own failures faithfully - `unavailable` when the model was down, an empty
+        # neighbour list when the index could not answer - and until 2026-09-04 nothing anywhere
+        # READ them, so a degradation that lasted twelve days was indistinguishable from working.
+        # A could-not-look that nobody reads is a clean bill. This is the reading.
+        try:
+            lines.extend(harvest.format_pool_health(harvest.pool_health(path=self.pool_path)))
+        except Exception as e:                                   # noqa: BLE001
+            lines.append("  pool evidence   COULD NOT BE READ (%s) - which is itself a finding" % e)
         lines.append("  lane-log lines  %d" % self.lane_lines)
         lines.append("  agent calls     %d" % self.breaker.calls)
         if self.breaker.open:
@@ -8467,6 +8489,37 @@ def main(argv=None):
             if not ok:
                 say("hunt-daemon: CANNOT RUN - %s" % why)
                 return hunt_lib.EXIT_CANNOT_RUN
+        # DEDUP BEFORE THE DECIDER. The crawl cannot reach the model by ruling, so the backlog
+        # it stored undeduped drains here, where the card is already ours. Never blocking: if the
+        # model is down the pass tags and stores exactly as it does today, and says so.
+        if "decide" in a.lanes.split(","):
+            # START ONLY IF EXTRACT IS ALREADY HOLDING THE CARD. Dedup has the weaker claim of the
+            # two: extract cannot run a recipe without the model, dedup degrades to `unavailable`
+            # and says so. So it never takes the GPU on its own account.
+            ok, why = ensure_local_model(start=("extract" in a.lanes.split(",")
+                                                and not a.no_start_model))
+            if ok:
+                try:
+                    # ASK ABOUT WHAT THIS RUN WILL ACTUALLY POP, not about the whole shelf. The pop
+                    # is band-filtered and rank-ordered; deduping in that same order means the
+                    # candidates the decider is about to see are the ones carrying a verdict, and
+                    # the 3,000 it will never reach cost nothing. Cap and deadline both apply.
+                    pool0 = harvest.read_pool(d.pool_path)
+                    ranked = sorted([c for c in pool0.get("candidates") or []
+                                     if c.get("status") == "available"
+                                     and harvest.dedup_pending(c)
+                                     and d.candidate_in_band(c)],
+                                    key=harvest.dossier_rank)
+                    cap = max(40, (a.target or 10) * 4)
+                    harvest.dedup_ingest_pool(d.pool_path, log=say,
+                                              only=[c["slug"] for c in ranked[:cap]],
+                                              budget_sec=180)
+                except Exception as e:                           # noqa: BLE001
+                    say("hunt-daemon: the ingest dedup could not run (%s) - candidates will reach "
+                        "the decider undeduped" % e)
+            else:
+                say("hunt-daemon: the ingest dedup is NOT running - %s" % why)
+                say("  candidates will reach the decider undeduped. This is honest, not clean.")
         say("hunt-daemon: %s  lanes %s  publish %s"
             % (d.run_id, a.lanes, "LIVE" if a.publish else "DRY RUN"))
         await d.run(tuple(x.strip() for x in a.lanes.split(",") if x.strip()))

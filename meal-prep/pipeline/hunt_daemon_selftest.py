@@ -572,6 +572,18 @@ def run():
     T("MUST FIRE  a candidate whose nutrition is UNVERIFIED cannot confirm the band, so it waits - an "
       "inferred number is not evidence a dish clears a 50 g floor",
       *_pop_refuses_unverified())
+    T("MUST FIRE  popping a candidate with NO neighbour evidence appends a finding naming the count - "
+      "a decider call spent deriving a duplicate from scratch is measurable waste, and all 152 dupe "
+      "rejections this estate ever made were of exactly this kind",
+      *_blind_pop_is_a_finding())
+    T("CLEAN TWIN a candidate that arrives WITH its neighbour evidence appends nothing",
+      *_evidenced_pop_is_silent())
+    T("MUST FIRE  the ingest dedup is BOUNDED by who it was told to ask about AND by a deadline - "
+      "unbounded it faced 7,386 local-model calls on the live pool, which is a run that never starts",
+      *_dedup_is_bounded())
+    T("MUST FIRE  the status report carries the pool reading - counts of blind rows and the state of "
+      "the embedding index. A could-not-look that nobody reads is a clean bill",
+      *_status_carries_the_pool_reading())
     T("MUST FIRE  a run dir stating NO band runs with NO limits - an unstated edge is unbounded, not "
       "a refusal, because the absence of a constraint cannot wrongly reject anything",
       *_band_absent_is_unbounded())
@@ -6947,6 +6959,101 @@ def _pop_filters_by_protein_floor():
                    "under-floor": (520.0, 20.0, 49.0, True),
                    "no-protein-number": (520.0, 20.0, None, True)})
     return got == ["clears-floor"], "popped %s" % got
+
+
+# =====================================================================================================
+# THE DEDUP EVIDENCE IS READ OUT LOUD (BRIEF-dedup-before-the-decider-2026-09-04)
+#
+# THE DEFECT THESE FREEZE. Measured 2026-09-04: all 152 dupe rejections this estate has ever made were
+# of candidates carrying NO neighbour evidence, and 997 of 3,134 available candidates carried none.
+# The machinery recorded every one of those could-not-looks faithfully and NOTHING READ THEM, so a
+# twelve-day degradation was indistinguishable from working. These are the reading.
+# =====================================================================================================
+
+
+def _pop_findings(neighbours):
+    """Pop one in-band candidate carrying `neighbours`; return (evidence findings, popped)."""
+    import harvest                                               # noqa: PLC0415
+    tmp = scratch_dir(prefix="daemon-blindpop-")
+    try:
+        e = harvest.new_entry("in-band", "In Band", "https://d/in-band", "d", "drill")
+        e["band"] = {"cal": 520.0, "carbs": 20.0, "protein_g": 60.0, "verified": True, "reason": ""}
+        e["neighbours"] = neighbours
+        p = os.path.join(tmp, "pool.json")
+        harvest.write_pool({"candidates": [e]}, p)
+        d = daemon(run_dir=os.path.join(tmp, "run"), pool_path=p, band=dict(_BAND_RUN))
+        os.makedirs(d.run_dir, exist_ok=True)
+        got = d.pop_dossiers(10)
+        return [f for f in d.findings if "neighbour evidence" in f], got
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _dedup_is_bounded():
+    """MUST FIRE: the ingest pass asks only about who it was told to, and stops at its deadline.
+
+    Unbounded this faced 7,386 local-model calls on the live pool. Both bounds are asserted here
+    because either alone still fails: a count bound cannot survive a wedged model, and a time bound
+    alone still walks a pool this run's band will never pop.
+    """
+    import harvest                                               # noqa: PLC0415
+    near = [{"side": "live-catalog", "slug": "x", "name": "X", "score": 40}]
+
+    def pool_of(n):
+        return {"candidates": [{"slug": "c%d" % i, "name": "c%d" % i, "status": "available",
+                                "neighbours": list(near)} for i in range(n)]}
+
+    saved = (harvest.llama_up, harvest.llm_same_dinner, harvest.llm_different_dinner)
+    harvest.llama_up = lambda *a, **k: True
+    harvest.llm_same_dinner = lambda *a, **k: "no"
+    harvest.llm_different_dinner = lambda *a, **k: "yes"
+    try:
+        p = pool_of(5)
+        harvest.refuse_near_dupes(p, quiet=True, only=["c1", "c3"])
+        asked = sorted(c["slug"] for c in p["candidates"] if c.get("dedup_at_ingest"))
+        p2 = pool_of(5)
+        harvest.refuse_near_dupes(p2, quiet=True, budget_sec=-1)
+        timed = [c["slug"] for c in p2["candidates"] if c.get("dedup_at_ingest")]
+        return (asked == ["c1", "c3"] and timed == []), "only=%s past-deadline-tagged=%s" % (asked, timed)
+    finally:
+        (harvest.llama_up, harvest.llm_same_dinner, harvest.llm_different_dinner) = saved
+
+
+def _blind_pop_is_a_finding():
+    f, got = _pop_findings([])
+    return (len(got) == 1 and len(f) == 1 and "1 of 1" in f[0]
+            and "pool-health" in f[0]), "findings=%s popped=%d" % (f, len(got))
+
+
+def _evidenced_pop_is_silent():
+    f, got = _pop_findings([{"side": "live-catalog", "slug": "x", "name": "X", "score": 30}])
+    return (len(got) == 1 and f == []), "findings=%s popped=%d" % (f, len(got))
+
+
+def _status_carries_the_pool_reading():
+    """The health line is on the surface an operator actually reads, not only in a --pool-health run
+    nobody thinks to make."""
+    import harvest                                               # noqa: PLC0415
+    tmp = scratch_dir(prefix="daemon-poolhealth-")
+    try:
+        cands = []
+        for i in range(3):
+            e = harvest.new_entry("b%d" % i, "B%d" % i, "https://d/b%d" % i, "d", "drill")
+            e["neighbours"] = []
+            cands.append(e)
+        e = harvest.new_entry("seen", "Seen", "https://d/seen", "d", "drill")
+        e["neighbours"] = [{"side": "live-catalog", "slug": "x", "name": "X", "score": 30}]
+        cands.append(e)
+        p = os.path.join(tmp, "pool.json")
+        harvest.write_pool({"candidates": cands}, p)
+        d = daemon(run_dir=os.path.join(tmp, "run"), pool_path=p, band=dict(_BAND_RUN))
+        os.makedirs(d.run_dir, exist_ok=True)
+        rep = d.status_report()
+        line = [l for l in rep.splitlines() if "pool evidence" in l]
+        return (len(line) == 1 and "3 BLIND" in line[0] and "4 available" in line[0]
+                and any("embed index" in l for l in rep.splitlines())), (line or rep[-200:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _pop_refuses_unverified():

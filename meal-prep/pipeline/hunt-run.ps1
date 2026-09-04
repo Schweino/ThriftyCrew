@@ -1633,6 +1633,23 @@ if ($runSelfTest) {
 
   } finally { Remove-Item $rv -Recurse -Force -ErrorAction SilentlyContinue }
 
+
+  # ---- the pool reading is really wired into -Status, not merely intended --------------------------
+  # THE REGION IS DELIMITED, not the whole file: this file contains the fixture, so a grep over all of
+  # it matches the assertion's own text and proves nothing. Same tail-eating harvest-crawl.ps1's own
+  # guard took three tries to get honest.
+  $srcHR = Get-Content $PSCommandPath -Raw
+  $mkHR = '# ' + '---- -Status (also the resume entry point)'
+  $iHR = $srcHR.LastIndexOf($mkHR)
+  $codeHR = if ($iHR -ge 0) { $srcHR.Substring($iHR) } else { '' }
+  T 'the -Status region marker is present, or the case below is scanning nothing' ($codeHR.Length -gt 0) 'no marker'
+  T 'MUST FIRE  -Status READS the pool evidence - blind candidates and the embedding index state' `
+    ($codeHR.Length -gt 0 -and $codeHR -match ('--pool' + '-health') -and $codeHR -match 'harvest\.py') `
+    'the status path never asks harvest for the pool reading'
+  T 'MUST FIRE  ...and it reaches BOTH surfaces - the JSON one too, not just the human one' `
+    ($codeHR -match 'pool_health' -and $codeHR -match ('pool' + 'Lines')) `
+    'the reading is missing from one of the two status surfaces'
+
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
   Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -2548,6 +2565,21 @@ $held      = @(@($entries | Where-Object { [string]$_.state -eq 'held' }))
 $inflight  = @(@($entries | Where-Object { @('published', 'verified', 'parked', 'held') -notcontains [string]$_.state -and @($script:REJECTED_STATES) -notcontains [string]$_.state }))
 $waves = @(Get-ChildItem (Join-Path $RunDir 'waves\wave-*.json') -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^wave-\d+\.json$' })
 
+# THE POOL READING (BRIEF-dedup-before-the-decider-2026-09-04). How many available candidates the
+# decider can actually see the dedup evidence for, and whether the embedding index can be believed.
+# The machinery has always recorded its own could-not-looks - `unavailable` when the local model was
+# down, an empty neighbour list when the index could not answer - and until 2026-09-04 no gate, no
+# alert and no status line ever READ one, so a twelve-day degradation was indistinguishable from
+# working. A could-not-look that nobody reads is a clean bill. Best effort: a reading that cannot be
+# taken is reported as one, never as silence, and never blocks the status.
+$hpy = 'C:\Codex\Python312\python.exe'
+$hpp = Join-Path $here 'harvest.py'
+$poolLines = @()
+if ((Test-Path $hpy) -and (Test-Path $hpp)) {
+  $poolLines = @(& $hpy $hpp '--pool-health' | Where-Object { $_ -notmatch 'HARVEST-COMPLETE' })
+}
+if (-not $poolLines.Count) { $poolLines = @('  pool evidence   COULD NOT BE READ - which is itself a finding') }
+
 if ($runJson) {
   $o = [pscustomobject]@{
     run = (Split-Path $RunDir -Leaf); total = $entries.Count
@@ -2557,6 +2589,7 @@ if ($runJson) {
     rejected = @($rejectedRows | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state; reason = [string]$_.reject_reason } })
     in_flight = @($inflight | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state } })
     by_state = $byState; waves = @($waves | ForEach-Object { $_.Name })
+    pool_health = @($poolLines | ForEach-Object { ([string]$_).Trim() })
   }
   ($o | ConvertTo-Json -Depth 8)
   exit 0
@@ -2568,6 +2601,8 @@ Write-Output ("  IN FLIGHT  {0}" -f $inflight.Count)
 Write-Output ("  PARKED     {0}   (waiting on a store, NOT rejected)" -f $parked.Count)
 if ($held.Count) { Write-Output ("  HELD       {0}   (WAS live, taken down - these are pages readers cannot see)" -f $held.Count) }
 Write-Output ("  REJECTED   {0}" -f $rejectedRows.Count)
+Write-Output ''
+foreach ($pl in $poolLines) { Write-Output ([string]$pl) }
 Write-Output ''
 foreach ($s in @($byState.Keys | Sort-Object)) { Write-Output ("  {0,-22} {1}" -f $s, @($byState[$s]).Count) }
 if ($parked.Count) {

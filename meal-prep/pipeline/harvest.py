@@ -1423,13 +1423,168 @@ def load_saturation(path=SATURATION_JSON):
     return out
 
 
-def load_embed_neighbours(path=NEIGHBOUR_FILE):
+# ---- the embedding neighbour index, and whether it can be believed RIGHT NOW ---------------------
+EMBED_INDEX_MAX_AGE_DAYS = 3   # beyond this it is an ops alert, not a shrug - see pool_health
+
+
+def index_age_days(stamp, now=None):
+    """Days since an ISO stamp, or None when it cannot be read. None means UNKNOWN, never 0 - an
+    unreadable stamp must not report as freshly built."""
+    if not stamp:
+        return None
+    for fmt in ("%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+        try:
+            t = datetime.strptime(str(stamp)[:19], fmt)
+        except ValueError:
+            continue
+        return round(((now or datetime.now()) - t).total_seconds() / 86400.0, 1)
+    return None
+
+
+def embed_index_status(path=NEIGHBOUR_FILE, digest_path=CATALOG_DIGEST):
+    r"""Can the bge-m3 neighbour index be believed? Returns (state, detail, meta).
+
+    state is one of: fresh, missing, unreadable, undated, stale-fingerprint. Anything but `fresh`
+    is a could-not-look, and `detail` says which so no caller has to guess.
+
+    WHY THIS EXISTS, MEASURED 2026-09-04. db\harvest-neighbours.json was last written 2026-08-23
+    and covered 70 of 3,134 available candidates. Nothing checked it, nothing dated it and nothing
+    reported it, so for twelve days the dedup evidence was absent and every reader treated the
+    resulting empty neighbour list as "this candidate has no near neighbours" rather than "nobody
+    looked". Every one of the 152 dupe rejections this estate has ever made was on a candidate
+    carrying no neighbour evidence.
+
+    IT DATES ITSELF BY FINGERPRINT, NOT MTIME - the same rule load_similarity_calibration already
+    follows, and for the same reason: reanchor moves mtimes on files whose bytes did not change,
+    so the only honest question is which catalog the index was built against. The fingerprint
+    function is harvest_embed's own, imported rather than re-implemented, so writer and reader can
+    never drift on what "the same digest" means.
+    """
+    meta = {"generated": "", "candidates": 0, "age_days": None, "path": path}
+    if not os.path.exists(path):
+        return "missing", ("no embedding index at %s - nothing has ever built it (harvest_embed.py "
+                           "--build, under the sidecar venv)" % path), meta
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            rec = json.load(f) or {}
+    except Exception as ex:                                       # noqa: BLE001
+        return "unreadable", "the embedding index at %s could not be read (%s)" % (path, ex), meta
+    meta["generated"] = str(rec.get("generated") or "")
+    meta["candidates"] = len(rec.get("neighbours") or {})
+    meta["age_days"] = index_age_days(meta["generated"])
+    fp = rec.get("catalog_fingerprint")
+    if not fp:
+        return "undated", ("the embedding index names no catalog fingerprint, so it cannot be dated "
+                           "against the catalog it claims to describe - rebuild it with "
+                           "harvest_embed.py --build"), meta
+    try:
+        sys.path.insert(0, HERE)
+        import harvest_embed                                      # noqa: PLC0415
+        live = harvest_embed.digest_fingerprint(digest_path)
+    except Exception as ex:                                       # noqa: BLE001
+        return "undated", ("the digest could not be fingerprinted to date the index against "
+                           "(%s)" % ex), meta
+    if str(live) != str(fp):
+        return "stale-fingerprint", ("the embedding index was built against catalog digest %s but "
+                                     "the digest on disk is %s - it answers for a catalog that no "
+                                     "longer exists" % (str(fp)[:12], str(live)[:12])), meta
+    return "fresh", "", meta
+
+
+def pool_health(pool=None, path=POOL, neighbour_path=NEIGHBOUR_FILE, digest_path=CATALOG_DIGEST):
+    """How much of the pool the decider can actually see the evidence for. COUNTS, never shares.
+
+    A share rounds 997 blind candidates in 3,134 to "32%", and a percentage is the one shape of this
+    number that cannot be acted on - you cannot rebuild 32%. Every field here is a count of rows.
+    """
+    pool = pool if pool is not None else read_pool(path)
+    avail = [c for c in (pool.get("candidates") or []) if c.get("status") == "available"]
+    tags = {}
+    blind = 0
+    for c in avail:
+        if not (c.get("neighbours") or []):
+            blind += 1
+        tags[c.get("dedup_at_ingest") or "(unset)"] = tags.get(c.get("dedup_at_ingest")
+                                                               or "(unset)", 0) + 1
+    state, detail, meta = embed_index_status(neighbour_path, digest_path)
+    return {"available": len(avail), "with_neighbours": len(avail) - blind, "blind": blind,
+            "dedup_tags": tags, "undeduped": tags.get("(unset)", 0),
+            "index_state": state, "index_detail": detail,
+            "index_generated": meta["generated"], "index_age_days": meta["age_days"],
+            "index_candidates": meta["candidates"],
+            "index_stale": state != "fresh" or (meta["age_days"] is not None
+                                                and meta["age_days"] > EMBED_INDEX_MAX_AGE_DAYS)}
+
+
+def format_pool_health(h):
+    """The three numbers, on two lines, printed by every surface that reports on a run.
+
+    This is the whole of "never again": the degradation was always recorded and never READ.
+    """
+    age = "unknown age" if h["index_age_days"] is None else "%.1f d old" % h["index_age_days"]
+    tags = ", ".join("%s=%d" % (k, v) for k, v in sorted(h["dedup_tags"].items())) or "(none)"
+    return ["  pool evidence   %d available; %d carry neighbours, %d BLIND to the decider"
+            % (h["available"], h["with_neighbours"], h["blind"]),
+            "  dedup at ingest %s" % tags,
+            "  embed index     %s, %s, %d candidate(s) covered%s"
+            % (h["index_state"], age, h["index_candidates"],
+               (" - " + h["index_detail"]) if h["index_detail"] else "")]
+
+
+def cmd_pool_health(_a):
+    h = pool_health()
+    for ln in format_pool_health(h):
+        say(ln)
+    say("HARVEST-COMPLETE")
+    return 1 if (h["blind"] or h["index_stale"]) else 0
+
+
+def dedup_ingest_pool(path=POOL, log=say, only=None, budget_sec=None):
+    """Run the ingest dedup over candidates already stored undeduped, and SAY what it could see.
+
+    ONE implementation, two callers: the `--dedup-ingest` command and the daemon, which calls this
+    directly rather than shelling out - harvest is still the pool's sole writer either way, and a
+    daemon running under a --run-dir pool must dedup THAT pool, not the default one.
+
+    WHY THE DAEMON IS THE CALLER THAT MATTERS. This pass needs llama-server, and by ruling
+    harvest-crawl.ps1 may never start it (three of its own fixtures enforce that, and PLAN section
+    4.4 gives the card to the nightly chain). So the 18:00 crawl has tagged its whole backlog
+    `unavailable` every night since it was written - correctly, and to no effect. The run is where
+    the model is already up and where a duplicate actually costs a frontier decider call, so the
+    backlog drains there.
+
+    Returns (refused, before, after). DEGRADES, NEVER BLOCKS: with no model every candidate is
+    tagged `unavailable`, nothing is refused, and the pool is written back unharmed.
+    """
+    pool = read_pool(path)
+    before = pool_health(pool)
+    refused = refuse_near_dupes(pool, quiet=True, only=only, budget_sec=budget_sec)
+    write_pool(pool, path)
+    after = pool_health(pool)
+    log("dedup at ingest: %d refused as near-duplicates before the decider ever saw them; "
+        "undeduped %d -> %d" % (refused, before["undeduped"], after["undeduped"]))
+    return refused, before, after
+
+
+def cmd_dedup_ingest(_a):
+    _refused, _before, after = dedup_ingest_pool()
+    for ln in format_pool_health(after):
+        say(ln)
+    say("HARVEST-COMPLETE")
+    return 0
+def load_embed_neighbours(path=NEIGHBOUR_FILE, digest_path=CATALOG_DIGEST):
     """The bge-m3 cosine shortlist the embedding lane (D4) writes, if it has run.
 
     Absent is normal and never blocking: the pool is scored on word overlap and prior rulings alone
     until the embedding lane has run, and the dossier states which signals it carries so the decider
     is never left guessing how much evidence is behind a neighbour block.
     """
+    state, detail, _meta = embed_index_status(path, digest_path)
+    if state != "fresh":
+        # AN INDEX THAT CANNOT BE DATED IS NOT EVIDENCE. Returning its contents anyway is how a
+        # twelve-day-old file answered as current; returning {} is could-not-look, and pool_health
+        # is what makes that visible rather than silent.
+        return {}
     try:
         with open(path, "r", encoding="utf-8-sig") as f:
             return (json.load(f) or {}).get("neighbours") or {}
@@ -1893,7 +2048,25 @@ def llm_different_dinner(cand, neighbour, url=None, timeout=60):
         return ""
 
 
-def refuse_near_dupes(pool, quiet=False):
+def dedup_pending(c):
+    """Is this candidate still owed a dedup verdict? ONE definition, two callers.
+
+    Only `llm` is settled: it is the one tag meaning a model actually judged the candidate under the
+    two-polarity contract. `unavailable` is a could-not-look and must be retried once the model is
+    up. `no-neighbour` is a statement about the INDEX AT THE TIME, and the index is rebuilt and the
+    pool rescored nightly, so it is retried too - and neither retry costs a model call unless the
+    evidence has actually changed.
+
+    THE TRAP THIS CLOSES. The selection was `not c.get("dedup_at_ingest")`, so ANY tag settled a
+    candidate forever, and the first pass to run without a model tagged its whole slice
+    `unavailable` and excluded it permanently from the pass that would have judged it. A tag that
+    records "nobody looked" being the reason nobody looks again is the exact failure this brief was
+    written about, sitting inside the machinery the brief was written about.
+    """
+    return (c.get("dedup_at_ingest") or "") != "llm"
+
+
+def refuse_near_dupes(pool, quiet=False, only=None, budget_sec=None):
     """Rule an obvious near-duplicate OUT before it sits in the pool as a candidate (Brad 2026-08-27:
     "We need to send them through dedup FIRST before storing in the DB").
 
@@ -1914,12 +2087,27 @@ def refuse_near_dupes(pool, quiet=False):
     from ever being stored.
     """
     avail = [c for c in pool["candidates"] if c.get("status") == "available"
-             and not c.get("dedup_at_ingest")]
+             and dedup_pending(c)]
+    # BOUNDED BY WHO IS ASKED AND BY HOW LONG. `only` is the caller naming the candidates it is
+    # actually about to spend a decider on; `budget_sec` is the wall the pass stops at whatever the
+    # model is doing. Unbounded, this pass faced 7,386 local-model calls on the live pool - measured
+    # 2026-09-04 - which is a run that never starts rather than a run that dedups.
+    if only is not None:
+        keep = set(only)
+        avail = [c for c in avail if c.get("slug") in keep]
     if not avail:
         return 0
     up = llama_up()
     refused = 0
+    skipped = 0
+    deadline = (time.time() + budget_sec) if budget_sec else None
     for c in avail:
+        if deadline is not None and time.time() > deadline:
+            # LEFT UNTAGGED ON PURPOSE. An untagged candidate is one the next pass will pick up; a
+            # candidate tagged without being examined is a could-not-look wearing a clean bill,
+            # which is the exact failure this whole change exists to close.
+            skipped += 1
+            continue
         near = [n for n in (c.get("neighbours") or [])
                 if n.get("side") == "live-catalog" and (n.get("score") or 0) >= DEDUP_SHORTLIST_MIN]
         if not near:
@@ -1953,6 +2141,9 @@ def refuse_near_dupes(pool, quiet=False):
     if not quiet:
         state = "local model" if up else "MODEL DOWN - candidates stored UNDEDUPED and tagged"
         say("  dedup at ingest (%s): %d refused as near-duplicates of live recipes" % (state, refused))
+        if skipped:
+            say("  ...and %d candidate(s) were left UNEXAMINED by the time budget - untagged, so the "
+                "next pass takes them" % skipped)
     return refused
 
 
@@ -3256,6 +3447,141 @@ def cmd_selftest(_a):
     # ---- llama-server refusal ------------------------------------------------------------------------
     T("MUST FIRE  --classify's health probe is a real probe, not an assumption",
       llama_up("http://127.0.0.1:1", timeout=1) is False, "claimed up")
+    # ---- the dedup evidence chain (BRIEF-dedup-before-the-decider-2026-09-04) -----------------------
+    # Every one of the 152 dupe rejections this estate has ever made was on a candidate carrying no
+    # neighbour evidence. These fixtures hold the three tags honest and hold the index dateable.
+
+    def _cand(slug, near_score=None, status="available"):
+        n = ([{"side": "live-catalog", "slug": "live-" + slug, "name": "Live " + slug,
+               "score": near_score}] if near_score is not None else [])
+        return {"slug": slug, "name": slug, "status": status, "neighbours": n}
+
+    saved = (llama_up, llm_same_dinner, llm_different_dinner)
+    try:
+        # 1. nothing to ask about is SAID, not silently passed
+        globals()["llama_up"] = lambda *a, **k: True
+        p = {"candidates": [_cand("a"), _cand("b", DEDUP_SHORTLIST_MIN - 1)]}
+        n = refuse_near_dupes(p, quiet=True)
+        T("MUST FIRE  a candidate with no usable neighbour is TAGGED no-neighbour, never passed silently",
+          n == 0 and [c["dedup_at_ingest"] for c in p["candidates"]] == ["no-neighbour", "no-neighbour"],
+          str([c.get("dedup_at_ingest") for c in p["candidates"]]))
+
+        # 2. the model being down is a could-not-look, and it refuses NOBODY
+        globals()["llama_up"] = lambda *a, **k: False
+        globals()["llm_same_dinner"] = lambda *a, **k: "yes"
+        globals()["llm_different_dinner"] = lambda *a, **k: "no"
+        p = {"candidates": [_cand("c", 40), _cand("d", 40)]}
+        n = refuse_near_dupes(p, quiet=True)
+        T("MUST FIRE  with the model down every candidate is tagged `unavailable` and NONE is refused",
+          n == 0 and all(c["dedup_at_ingest"] == "unavailable" for c in p["candidates"])
+          and all(c["status"] == "available" for c in p["candidates"]),
+          str([(c.get("dedup_at_ingest"), c.get("status")) for c in p["candidates"]]))
+
+        # 3. CLEAN TWIN - the model up, and the mirrored question CONTRADICTING, refuses at ingest
+        globals()["llama_up"] = lambda *a, **k: True
+        p = {"candidates": [_cand("e", 40)]}
+        n = refuse_near_dupes(p, quiet=True)
+        c = p["candidates"][0]
+        T("CLEAN TWIN a mirrored-contradiction verdict refuses the candidate BEFORE it is stored",
+          n == 1 and c["status"] == "ruled:rejected-dupe" and c["dedup_at_ingest"] == "llm"
+          and "live-e" in (c.get("exclusion") or ""),
+          "%s / %s" % (c.get("status"), c.get("exclusion")))
+
+        # 4. MUST FIRE - the two-polarity contract. Measured 2026-08-27: the local model answered YES
+        # to BOTH framings on all seven labelled pairs, stroganoff vs burrito included. A model that
+        # agrees with itself has told us nothing, and nothing is what we act on.
+        globals()["llm_different_dinner"] = lambda *a, **k: "yes"
+        p = {"candidates": [_cand("f", 40)]}
+        n = refuse_near_dupes(p, quiet=True)
+        T("MUST FIRE  a model that answers YES to both framings refuses NOBODY - one ask is not a verdict",
+          n == 0 and p["candidates"][0]["status"] == "available"
+          and p["candidates"][0]["dedup_at_ingest"] == "llm",
+          "%s / %s" % (p["candidates"][0]["status"], p["candidates"][0].get("dedup_at_ingest")))
+    finally:
+        globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
+
+    # a could-not-look must not settle the candidate it failed to look at
+    saved = (llama_up, llm_same_dinner, llm_different_dinner)
+    globals()["llama_up"] = lambda *a, **k: True
+    globals()["llm_same_dinner"] = lambda *a, **k: "no"
+    globals()["llm_different_dinner"] = lambda *a, **k: "yes"
+    try:
+        p = {"candidates": [dict(_cand("u", 40), dedup_at_ingest="unavailable"),
+                            dict(_cand("n", 40), dedup_at_ingest="no-neighbour"),
+                            dict(_cand("j", 40), dedup_at_ingest="llm")]}
+        refuse_near_dupes(p, quiet=True)
+        # the retried two get re-tagged by this pass; the judged one is left exactly as it was
+        T("MUST FIRE  a candidate tagged `unavailable` is RE-EXAMINED once a model is up - a tag that "
+          "records 'nobody looked' must not be the reason nobody looks again",
+          dedup_pending({"dedup_at_ingest": "unavailable"}) is True
+          and p["candidates"][0]["dedup_at_ingest"] == "llm",
+          str([c["dedup_at_ingest"] for c in p["candidates"]]))
+        T("MUST FIRE  ...and so is `no-neighbour`, which describes the INDEX at the time and the index "
+          "is rebuilt nightly",
+          dedup_pending({"dedup_at_ingest": "no-neighbour"}) is True
+          and p["candidates"][1]["dedup_at_ingest"] == "llm",
+          str([c["dedup_at_ingest"] for c in p["candidates"]]))
+        T("CLEAN TWIN a candidate a model actually JUDGED is settled and is not asked about again",
+          dedup_pending({"dedup_at_ingest": "llm"}) is False,
+          str(dedup_pending({"dedup_at_ingest": "llm"})))
+    finally:
+        globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
+
+    # 5. an index that cannot be dated against the live catalog is NOT evidence
+    tmpd = os.path.join(os.environ.get("TEMP", "."), "harvest-idx-%d" % os.getpid())
+    os.makedirs(tmpd, exist_ok=True)
+    dig = os.path.join(tmpd, "digest.json")
+    idx = os.path.join(tmpd, "neighbours.json")
+    try:
+        with open(dig, "w", encoding="utf-8") as f:
+            json.dump({"recipes": [{"slug": "x"}]}, f)
+        sys.path.insert(0, HERE)
+        import harvest_embed as _he                               # noqa: PLC0415
+        good = _he.digest_fingerprint(dig)
+        hood = {"z": [{"side": "live-catalog", "slug": "y", "score": 0.9}]}
+
+        def _write(fp):
+            with open(idx, "w", encoding="utf-8") as f:
+                json.dump({"generated": "2026-09-04T00:00:00", "catalog_fingerprint": fp,
+                           "neighbours": hood}, f)
+
+        _write(dict(good, moved_since_this_index_was_built=True))
+        T("MUST FIRE  an index built against a different catalog digest is REFUSED, not used anyway",
+          load_embed_neighbours(idx, dig) == {},
+          str(list(load_embed_neighbours(idx, dig))))
+        T("MUST FIRE  ...and the refusal SAYS which, rather than reading as an empty index",
+          embed_index_status(idx, dig)[0] == "stale-fingerprint", embed_index_status(idx, dig)[0])
+        _write(good)
+        T("CLEAN TWIN an index whose fingerprint matches the live digest IS used",
+          load_embed_neighbours(idx, dig) == hood, str(load_embed_neighbours(idx, dig)))
+        # An index with no fingerprint at all cannot be dated either - this is the shape the live
+        # file was in for twelve days while every reader treated it as current.
+        with open(idx, "w", encoding="utf-8") as f:
+            json.dump({"generated": "2026-08-23T17:28:06", "neighbours": hood}, f)
+        T("MUST FIRE  an index naming no fingerprint is undated, and undated is could-not-look",
+          embed_index_status(idx, dig)[0] == "undated" and load_embed_neighbours(idx, dig) == {},
+          embed_index_status(idx, dig)[0])
+    finally:
+        for f in (dig, idx):
+            if os.path.exists(f):
+                os.remove(f)
+        os.rmdir(tmpd)
+
+    # 6. the health numbers are COUNTS of rows, read off the pool - never a share, never a rounding
+    hp = {"candidates": [_cand("h%d" % i, 40) for i in range(4)]
+                        + [_cand("b%d" % i) for i in range(3)]
+                        + [_cand("t", None, "taken")]}
+    hh = pool_health(hp, neighbour_path=os.path.join(tmpd, "nope.json"))
+    T("MUST FIRE  pool health counts BLIND ROWS - 3 blind of 7 reports 3, not a share and not a rounding",
+      hh["blind"] == 3 and hh["available"] == 7 and hh["with_neighbours"] == 4,
+      "blind=%s available=%s with=%s" % (hh["blind"], hh["available"], hh["with_neighbours"]))
+    T("MUST FIRE  a candidate that is not `available` is not counted - the decider never sees it",
+      hh["available"] == 7 and len(hp["candidates"]) == 8, str(hh["available"]))
+    T("MUST FIRE  a missing embedding index reports `missing`, and that is a stale reading",
+      hh["index_state"] == "missing" and hh["index_stale"] is True, hh["index_state"])
+    T("the health line names the blind count in words a reader can act on",
+      any("BLIND" in ln and "3" in ln for ln in format_pool_health(hh)),
+      " | ".join(format_pool_health(hh)))
 
     print("")
     if bad:
@@ -3295,6 +3621,12 @@ def main(argv=None):
                     help="restore ingredient lines to available candidates from the page cache. "
                          "No network and no model - a re-parse of pages already fetched.")
     ap.add_argument("--resignature", action="store_true")
+    ap.add_argument("--pool-health", dest="pool_health", action="store_true",
+                    help="how many available candidates carry dedup evidence, and whether the "
+                         "embedding index can be believed. Exit 1 when anything is blind.")
+    ap.add_argument("--dedup-ingest", dest="dedup_ingest", action="store_true",
+                    help="drain the undeduped backlog through the local model. Needs llama-server; "
+                         "without it every candidate is tagged `unavailable` and none is refused.")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--run", default="")
     ap.add_argument("--verdict", default="")
@@ -3312,6 +3644,10 @@ def main(argv=None):
     ap.add_argument("--dry-run", dest="dry_run", action="store_true")
     a = ap.parse_args(argv)
 
+    if a.pool_health:
+        return cmd_pool_health(a)
+    if a.dedup_ingest:
+        return cmd_dedup_ingest(a)
     if a.selftest:
         return cmd_selftest(a)
     if a.crawl:
