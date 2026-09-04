@@ -528,10 +528,10 @@
                  "red-pepper-flakes":  {
                                            "verdict":  "CARRIED",
                                            "store":  "Aldi",
-                                           "item":  "Stonemill Crushed Red Pepper",
+                                           "item":  "Stonemill Crushed Red Pepper 1.5 OZ",
                                            "size":  "1.5 oz",
                                            "price":  0.99,
-                                           "as_of":  "2026-08-27",
+                                           "as_of":  "2026-09-04",
                                            "source":  "promoted from ingredient-queue term \u0027red pepper flakes\u0027",
                                            "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
                                        },
@@ -1255,7 +1255,47 @@
                                                        },
                                             "source":  "promoted from ingredient-queue term \u0027aji amarillo paste\u0027",
                                             "why":  "all seven Omaha stores answered and none carry it"
-                                        }
+                                        },
+                 "item:Coconut Sugar":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Baker\u0027s",
+                                            "item":  "Sugar In The Raw Organic Coconut Sugar, 16oz Bag",
+                                            "size":  "16 oz",
+                                            "price":  5.99,
+                                            "as_of":  "2026-09-04",
+                                            "source":  "promoted from ingredient-queue term \u0027coconut sugar\u0027",
+                                            "why":  "carried by Baker\u0027s, Sam\u0027s Club"
+                                        },
+                 "fresh-basil":  {
+                                     "verdict":  "CARRIED",
+                                     "store":  "Family Fare",
+                                     "item":  "Local Roots Organic Basil",
+                                     "size":  "0.5 oz",
+                                     "price":  2.99,
+                                     "as_of":  "2026-09-04",
+                                     "source":  "promoted from ingredient-queue term \u0027fresh basil\u0027",
+                                     "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Fareway, Walmart"
+                                 },
+                 "penne-pasta":  {
+                                     "verdict":  "CARRIED",
+                                     "store":  "Fareway",
+                                     "item":  "Fareway Penne Rigate",
+                                     "size":  "16 oz",
+                                     "price":  1.24,
+                                     "as_of":  "2026-09-04",
+                                     "source":  "promoted from ingredient-queue term \u0027penne pasta\u0027",
+                                     "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                 },
+                 "pine-nuts":  {
+                                   "verdict":  "CARRIED",
+                                   "store":  "Family Fare",
+                                   "item":  "Our Family Pine Nuts 2.25 Oz",
+                                   "size":  "2.25 oz",
+                                   "price":  5.29,
+                                   "as_of":  "2026-09-04",
+                                   "source":  "promoted from ingredient-queue term \u0027pine nuts\u0027",
+                                   "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                               }
              },
     "_parked_doc":  "parked_recipes lists slugs held out of the catalogue by this ingredient. They were unpublished to DRAFT on Ghost, not deleted, precisely so a CARRIED verdict can bring them back. audit-carriage.ps1 -Revivable reads this field; without it, reviving a recipe means reconstructing from commit messages."
 }

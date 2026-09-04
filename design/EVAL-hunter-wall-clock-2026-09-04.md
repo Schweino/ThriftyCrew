@@ -1,5 +1,11 @@
 # EVAL: where the Recipe Hunter's WALL CLOCK goes (2026-09-04)
 
+> **CORRECTED the same day - read section 2b before acting on anything here.** The first
+> pass concluded the unit of wall clock is the API round trip. It is the OUTPUT TOKEN, at
+> ~81 per second, and the difference reverses this file's advice on batching and on
+> concurrency. Sections 3 to 8 are left standing because their MEASUREMENTS are sound and
+> the reasoning is worth seeing corrected rather than deleted.
+
 Brad, 2026-09-04: "We need to figure out WHY it takes so long. We're a machine - it should not take
 so long to send 10 recipes through our system. We need to figure out where the time burn is happening
 and re-think it architecturally."
@@ -34,6 +40,59 @@ not about the pipeline. The number that matters is **6.5 hours of activity for 1
 436 invocations of the spec builder, the cost engine, the preaudit battery, the card builder, the
 publish chain and the guards cost **one hour between them**. Every optimisation aimed at our own code
 is aimed at 8% of the clock.
+
+## 2b. CORRECTED SAME DAY: the unit is the OUTPUT TOKEN, not the round trip
+
+**Everything in section 3 below is arithmetically true and causally wrong, and section 6's plan was
+built on it.** The correction came from `hunt-2026-09-04-five`, a 23-minute run measured with no
+restarts at all.
+
+That run's mapper spent **14.0 minutes on one call**. Splitting it from the session transcript:
+
+| | |
+|---|---|
+| waiting on tools (10 WebFetch, 8 WebSearch, 1 Read) | **0.3 min** |
+| waiting on the model | **13.6 min** |
+
+Four pauses - 229 s, 227 s, 138 s, 125 s - are 12 of the 14 minutes. The web lookups everyone
+assumed were the cost came to 18 seconds.
+
+What actually predicts the wall clock is the OUTPUT VOLUME, and the rate is a constant:
+
+| call | agent | sec | output tokens | tok/sec |
+|---|---|---:|---:|---:|
+| map:4x | mapper | 841 | 71,643 | 85.2 |
+| map:1x | mapper | 255 | 19,712 | 77.3 |
+| queue batch 1 | pricer | 182 | 14,869 | 81.7 |
+| decide:9x | decider | 116 | 9,998 | 86.2 |
+| registrar:3x | registrar | 124 | 9,835 | 79.3 |
+| registrar:1x | registrar | 134 | 7,000 | 52.2 |
+| **all agent calls** | | **1,834** | **148,111** | **80.8** |
+
+**wall clock = output tokens / ~81 per second.** It back-predicts the big run: 3.1M output tokens is
+10.7 hours against 12.18 h measured.
+
+Round trips looked causal because they CORRELATE with output - more turns means more generated text.
+They are not the thing being paid for. Three consequences, each of which reverses a recommendation
+made earlier in this file:
+
+* **Batching cannot help, and section 6's concurrency plan is not the lever.** `map:4x` produced 3.63x
+  the output of `map:1x` and took 3.30x as long, while TURNS went only 17 -> 20. A batch multiplies
+  the output the model must generate, and generation is serial. Five singletons at map cap 2 finish
+  in ~12.6 min with the first recipe reaching pricing at 4.2 min; one batch of five takes ~17.5 min
+  and moves nothing downstream until it ends. **The token eval and this one point in OPPOSITE
+  directions on batch size, and for wall clock this one wins.**
+* **Cutting turns only helps when it cuts OUTPUT.** The dossier work does, because it removes
+  derivation the agent would otherwise write out. Removing a `Read` does not.
+* **`effort: high` is generated output.** The mapper is opus-5 at effort high and its four multi-minute
+  pauses are exactly that shape. Model tier and effort are the first-order levers, not the fourth.
+
+The mapper writes about 18,000 output tokens per recipe - an evidence ruling for every ingredient
+line. That volume IS the fourteen minutes. So the three real levers are **generate less** (a tighter
+output contract), **generate faster** (tier and effort), and **generate in parallel** (more concurrent
+calls, each small).
+
+---
 
 ## 3. The unit of wall clock is the API round trip
 

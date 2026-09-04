@@ -3311,5 +3311,21 @@
                         "Ground Mustard",
                         "Dry Mustard"
                     ]
+    },
+    {
+        "item":  "Bok Choy",
+        "bid":  "bok-choy",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from \"the commodity row for 'bok-choy'\", which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: REUSE of the live bok-choy id (2 of 7, 2.49 at Baker's); pak choi and bok choy are the same food. Thin carriage is a pricing question, not a mapping one."
+    },
+    {
+        "item":  "Bean Sprouts",
+        "bid":  "bean-sprouts",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from \"the commodity row for 'bean-sprouts'\", which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: REUSE of the live bean-sprouts id (2 of 7). Brussels Sprouts is a keyword collision on 'sprouts' and a different food entirely."
     }
 ]

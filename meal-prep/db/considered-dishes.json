@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-31T13:10:26",
-    "count":  339,
+    "updated":  "2026-09-04T04:56:31",
+    "count":  358,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -5110,6 +5110,293 @@
                        "run":  "hunt-2026-08-27-highprotein",
                        "by":  "recipe-dedup-selector",
                        "at":  "2026-08-31T13:10:26"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-zucchini-pasta",
+                       "name":  "Chicken Zucchini Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Lemon-parmesan-pine-nut chicken and zucchini pasta, no cream; a lighter Italian plate distinct from the catalog\u0027s creamy and tomato chicken-pasta cluster.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:46"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-buffalo-chicken-pasta",
+                       "name":  "Creamy Buffalo Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Buffalo-sauce chicken pasta with cheddar/jack; duplicates live buffalo-chicken-pasta-bake (same protein, buffalo-cream sauce and pasta), skillet-vs-bake does not distinguish the dinner.",
+                       "dupe_of":  [
+                                       "buffalo-chicken-pasta-bake"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:48"
+                   },
+                   {
+                       "key":  "chicken|stew|plain",
+                       "slug":  "foolproof-poached-chicken-noodle-soup",
+                       "name":  "Foolproof Poached Chicken Noodle Soup",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Chinese-style poached chicken and egg-noodle soup with bok choy, ginger and star anise; a cuisine widener with no comparable Asian chicken noodle soup in catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:49"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-paprika-chicken-pasta",
+                       "name":  "Creamy Paprika Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Hungarian-paprika, white-wine and cream chicken pasta with a paprikash accent; distinct from catalog cream/tomato chicken pastas and no comparable neighbour.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:51"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-chicken-and-bacon-pasta",
+                       "name":  "Creamy Chicken and Bacon Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Plain cream-and-bacon chicken pasta with no distinguishing accent; adds to the already-saturated creamy chicken-pasta cluster and does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:52"
+                   },
+                   {
+                       "key":  "chicken|braised|cream",
+                       "slug":  "crock-pot-chicken-alfredo",
+                       "name":  "Crock Pot Chicken Alfredo",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Standard chicken alfredo (cream cheese, half-and-half, parmesan, rigatoni); adds to the saturated creamy chicken-pasta cluster without widening the American-skewed catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:53"
+                   },
+                   {
+                       "key":  "beef|skillet|tomato",
+                       "slug":  "flat-ground-beef-enchiladas",
+                       "name":  "Flat Ground Beef Enchiladas",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground beef, enchilada sauce and colby-jack in corn tortillas; duplicates in-flight easy-beef-enchiladas and repeats the oversaturated Tex-Mex beef-enchilada dish.",
+                       "dupe_of":  [
+                                       "easy-beef-enchiladas"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:55"
+                   },
+                   {
+                       "key":  "chicken|skillet|bbq",
+                       "slug":  "bbq-chicken-quesadillas",
+                       "name":  "BBQ Chicken Quesadillas",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "BBQ chicken with cheddar in a tortilla; duplicates live bbq-chicken-burrito, folded-vs-rolled tortilla does not distinguish the dinner (consistent with prior ruling).",
+                       "dupe_of":  [
+                                       "bbq-chicken-burrito"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:57"
+                   },
+                   {
+                       "key":  "chicken|braised|wine",
+                       "slug":  "crock-pot-chicken-marsala",
+                       "name":  "Crock Pot Chicken Marsala",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken, marsala wine and cremini mushrooms; duplicates in-flight chicken-marsala-skillet, slow-cooker-vs-skillet method does not distinguish the dish.",
+                       "dupe_of":  [
+                                       "chicken-marsala-skillet"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:51:58"
+                   },
+                   {
+                       "key":  "chicken|skillet|tomato",
+                       "slug":  "chicken-penne-arrabbiata",
+                       "name":  "Chicken Penne Arrabbiata",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Chili-flake spicy-tomato arrabbiata chicken penne; a distinct Italian dish not held by catalog (whose chicken pennes are creamy/Cajun), lean 405-cal band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:52:00"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "one-pot-chicken-picatta-orzo",
+                       "name":  "One Pot Chicken Picatta Orzo",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken piccata (lemon-caper-white-wine) over one-pot orzo; same piccata dinner as live chicken-piccata-skillet, orzo integration is a starch nuance not a distinct plate.",
+                       "dupe_of":  [
+                                       "chicken-piccata-skillet"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:19"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "meal-prep-greek-chicken-rice-bowls",
+                       "name":  "Meal Prep Greek Chicken Rice Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Greek lemon-oregano chicken over rice with cucumber, tomato, kalamata and feta; same dinner as live chicken-souvlaki-rice-bowls / slow-cooker-greek-chicken-bowls in a saturated Greek-chicken lane.",
+                       "dupe_of":  [
+                                       "chicken-souvlaki-rice-bowls",
+                                       "slow-cooker-greek-chicken-bowls"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:21"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "greek-chicken-cauliflower-rice-bowls",
+                       "name":  "Greek Chicken Cauliflower Rice Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Greek herb chicken with kalamata, artichoke and tomato over cauliflower rice; same Greek-chicken dinner as live slow-cooker-greek-chicken-bowls, low-carb cauliflower-rice swap not distinguishing in a saturated lane.",
+                       "dupe_of":  [
+                                       "slow-cooker-greek-chicken-bowls",
+                                       "chicken-souvlaki-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:22"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "easy-chicken-quesadilla",
+                       "name":  "Easy Chicken Quesadilla",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Generic taco-seasoned chicken-and-cheese flour-tortilla quesadilla; non-widening in a saturated Tex-Mex chicken lane, consistent with prior Tex-Mex chicken cut-not-pad rulings.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:23"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "hibachi-chicken",
+                       "name":  "Hibachi Chicken",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Japanese hibachi chicken with tamari/hoisin/ginger, griddled veg and yum-yum sauce over rice; distinct steakhouse-hibachi identity not in catalog, widens cuisine spread, band verified 432/14/40.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:25"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "peanut-butter-chicken-recipe",
+                       "name":  "Peanut Butter Chicken Recipe",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Peanut-butter-soy-honey-ginger chicken over white rice; same peanut-chicken-and-rice identity as live slow-cooker-thai-peanut-chicken-bowls in a saturated peanut-chicken region.",
+                       "dupe_of":  [
+                                       "slow-cooker-thai-peanut-chicken-bowls"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:26"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "sheet-pan-balsamic-chicken-veggies",
+                       "name":  "Sheet Pan Balsamic Chicken \u0026 Veggies",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Generic balsamic-rosemary chicken with mixed veg and potato on a sheet pan; non-distinct in a saturated sheet-pan chicken-and-veg lane, balsamic accent overlaps in-flight honey-balsamic-chicken-tenders, does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:27"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "sheet-pan-lemon-chicken",
+                       "name":  "Sheet Pan Lemon Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Lemon-rosemary chicken with baby potatoes and asparagus sheet pan; same chicken-and-potato sheet-pan bake as live parmesan-garlic-sheet-pan-chicken-potatoes, lemon-vs-parmesan seasoning not distinguishing (per easy-chicken-and-potatoes precedent).",
+                       "dupe_of":  [
+                                       "parmesan-garlic-sheet-pan-chicken-potatoes"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:29"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "asparagus-stuffed-chicken",
+                       "name":  "Asparagus Stuffed Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Provolone-and-asparagus stuffed baked chicken breast with parmesan; same stuffed-chicken-breast dinner as live stuffed-chicken-breast, filling swap is not a distinct plate.",
+                       "dupe_of":  [
+                                       "stuffed-chicken-breast"
+                                   ],
+                       "run":  "hunt-2026-09-04-five",
+                       "by":  "decider",
+                       "at":  "2026-09-04T04:56:31"
                    }
                ]
 }

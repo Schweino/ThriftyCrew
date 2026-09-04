@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-09-01T19:14:54",
-    "count":  255,
+    "updated":  "2026-09-04T05:13:26",
+    "count":  275,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -2298,6 +2298,186 @@
                             "evidence":  "Quick-pickled at home from a whole onion plus pantry vinegar, so both the purchase and the macros are the onion; canon reuses the existing Yellow Onion row. Unquantified garnish with no stated quantity, hence optional, per the \u0027Sliced onions\u0027 precedent. [slug bang-bang-chicken-bowls, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-28T07:50:49"
+                        },
+                        {
+                            "key":  "grated ginger",
+                            "term":  "grated ginger",
+                            "item_id":  "fresh-ginger",
+                            "bid_exists":  true,
+                            "evidence":  "Grated is a knife/microplane instruction, not a form: this is fresh ginger root, deliberately NOT ground-ginger (dried powder, different price class and gram weight). Follows the 2026-08-26 \u0027fresh ginger\u0027 -\u003e fresh-ginger precedent; board 6 of 7. The parenthetical frozen cubes are a substitution note, not the ingredient. [slug hibachi-chicken, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:01:50"
+                        },
+                        {
+                            "key":  "low sodium tamari or soy sauce",
+                            "term":  "low sodium tamari or soy sauce",
+                            "item_id":  "soy-sauce",
+                            "bid_exists":  true,
+                            "evidence":  "Second identical occurrence of the same source line, ruled the same way; each occurrence is 2 tbsp = 32 g at source scale (64 g total across the recipe). [slug hibachi-chicken, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:01:50"
+                        },
+                        {
+                            "key":  "medium large zucchini",
+                            "term":  "medium/large zucchini",
+                            "item_id":  "zucchini",
+                            "bid_exists":  true,
+                            "evidence":  "Vocabulary row Zucchini [zucchini] is exactly this food, same form; board 6 of 7. Each-weight from the panel I transcribed (1 medium = 196 g), taken at 200 g for medium/large. [slug hibachi-chicken, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:01:51"
+                        },
+                        {
+                            "key":  "medium large yellow onion",
+                            "term":  "medium/large yellow onion",
+                            "item_id":  "onions",
+                            "bid_exists":  true,
+                            "evidence":  "Vocabulary row Yellow Onion [onions] is same-food same-form; deliberately not red-onion, which is a separate variety price class. Board 7 of 7. Medium/large onion 170 g, half = 85 g. [slug hibachi-chicken, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:01:51"
+                        },
+                        {
+                            "key":  "penne",
+                            "term":  "penne",
+                            "item_id":  "penne-pasta",
+                            "bid_exists":  false,
+                            "evidence":  "Follows the 2026-08-27 \u0027uncooked penne pasta\u0027 -\u003e penne-pasta ruling; an existing id, so a reuse, and listed in absent_terms because the board matched only generic pasta. [slug chicken-penne-arrabbiata, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:08:51"
+                        },
+                        {
+                            "key":  "large garlic cloves",
+                            "term":  "large garlic cloves",
+                            "item_id":  "garlic",
+                            "bid_exists":  true,
+                            "evidence":  "Fresh bulb garlic, board 6 of 7; the Ground Cloves near-miss is a keyword collision and \u0027large\u0027 is a size word. [slug chicken-penne-arrabbiata, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:08:52"
+                        },
+                        {
+                            "key":  "red chilli flakes",
+                            "term":  "red chilli flakes",
+                            "item_id":  "red-pepper-flakes",
+                            "bid_exists":  true,
+                            "evidence":  "Chilli flakes is the British name for crushed red pepper flakes, the exact same-form vocabulary row; board ABSENT, so the id is proposed. [slug chicken-penne-arrabbiata, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:08:52"
+                        },
+                        {
+                            "key":  "chopped tomatoes",
+                            "term":  "chopped tomatoes",
+                            "item_id":  "diced-tomatoes",
+                            "bid_exists":  true,
+                            "evidence":  "A can of chopped tomatoes is canned diced tomatoes, same product and price class; refused the board\u0027s fresh tomatoes match as a different food and gram basis. [slug chicken-penne-arrabbiata, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:08:52"
+                        },
+                        {
+                            "key":  "fresh basil leaves",
+                            "term":  "fresh basil leaves",
+                            "item_id":  "fresh-basil",
+                            "bid_exists":  true,
+                            "evidence":  "Refused the board\u0027s dried-basil match under the standing fresh-is-not-dried rejection: different price class and 14 g fresh is not 2 g dried. [slug chicken-penne-arrabbiata, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:08:53"
+                        },
+                        {
+                            "key":  "small garlic cloves",
+                            "term":  "small garlic cloves",
+                            "item_id":  "garlic",
+                            "bid_exists":  true,
+                            "evidence":  "Fresh bulb garlic, board 6 of 7; \u0027small\u0027 is a size word and \u0027crushed\u0027 a knife instruction, neither a form flip. [slug chicken-zucchini-pasta, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:11:11"
+                        },
+                        {
+                            "key":  "juice of half a lemon",
+                            "term":  "Juice of half a lemon",
+                            "item_id":  "lemons",
+                            "bid_exists":  true,
+                            "evidence":  "Follows the 2026-08-27 \u0027fresh lemon juice\u0027 -\u003e lemons ruling, which refused the bottled lemon-juice bridge as a different product and price class; lemons live 5 of 7, so a reuse. [slug chicken-zucchini-pasta, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:11:12"
+                        },
+                        {
+                            "key":  "parmesan",
+                            "term":  "Parmesan",
+                            "item_id":  "parmesan",
+                            "bid_exists":  true,
+                            "evidence":  "Same food as the vocabulary\u0027s Parmesan Cheese row per the 2026-08-27 precedent; grated is prep, not a price class. Board 7 of 7. [slug chicken-zucchini-pasta, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:11:12"
+                        },
+                        {
+                            "key":  "pine nuts",
+                            "term":  "pine nuts",
+                            "item_id":  "pine-nuts",
+                            "bid_exists":  false,
+                            "evidence":  "Board ABSENT and no existing nut id covers them; toasting is a cooking step, not a form. [slug chicken-zucchini-pasta, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:11:13"
+                        },
+                        {
+                            "key":  "salt and freshly ground black pepper",
+                            "term":  "Salt and freshly ground black pepper",
+                            "item_id":  "salt",
+                            "bid_exists":  true,
+                            "evidence":  "Composite line, unsplit; ruled to the dominant food Salt (7 of 7). The Bell Pepper near-misses are keyword collisions on \u0027pepper\u0027. [slug chicken-zucchini-pasta, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:11:13"
+                        },
+                        {
+                            "key":  "bok choys",
+                            "term":  "bok choys",
+                            "item_id":  "bok-choy",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of the live bok-choy id (2 of 7, 2.49 at Baker\u0027s); pak choi and bok choy are the same food. Thin carriage is a pricing question, not a mapping one. [slug foolproof-poached-chicken-noodle-soup, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:13:24"
+                        },
+                        {
+                            "key":  "bean sprouts",
+                            "term":  "bean sprouts",
+                            "item_id":  "bean-sprouts",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of the live bean-sprouts id (2 of 7). Brussels Sprouts is a keyword collision on \u0027sprouts\u0027 and a different food entirely. [slug foolproof-poached-chicken-noodle-soup, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:13:25"
+                        },
+                        {
+                            "key":  "fresh egg noodles",
+                            "term":  "fresh egg noodles",
+                            "item_id":  "fresh-egg-noodles",
+                            "bid_exists":  false,
+                            "evidence":  "Genuine form flip from the dry Egg Noodles row, not an alias: refrigerated Asian egg noodles are pre-steamed and hydrated, so 150 g fresh is about 75 g dry - a different gram basis and a different price class. The board\u0027s eggs match is nonsense. [slug foolproof-poached-chicken-noodle-soup, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:13:25"
+                        },
+                        {
+                            "key":  "chinese cooking wine",
+                            "term":  "chinese cooking wine",
+                            "item_id":  "shaoxing-wine",
+                            "bid_exists":  false,
+                            "evidence":  "Board ABSENT. Refused the white-wine and red-wine near names: Shaoxing is a salted fermented rice wine from the Asian aisle, a different food and price class from drinking wine. [slug foolproof-poached-chicken-noodle-soup, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:13:25"
+                        },
+                        {
+                            "key":  "star anise",
+                            "term":  "star anise",
+                            "item_id":  "star-anise",
+                            "bid_exists":  false,
+                            "evidence":  "Board ABSENT; a whole pod of Illicium verum, a different plant from the anise seed on the FDC shelf. Purchased and simmered, so a real line and not a garnish. [slug foolproof-poached-chicken-noodle-soup, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:13:26"
+                        },
+                        {
+                            "key":  "scallion shallot",
+                            "term":  "scallion/shallot",
+                            "item_id":  "green-onions",
+                            "bid_exists":  true,
+                            "evidence":  "RecipeTinEats is Australian, where \u0027shallot\u0027 means scallion - the slash and \u0027light green and green part only\u0027 confirm it. REUSE of the live green-onions id (5 of 7). [slug foolproof-poached-chicken-noodle-soup, run hunt-2026-09-04-five]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T05:13:26"
                         }
                     ]
 }

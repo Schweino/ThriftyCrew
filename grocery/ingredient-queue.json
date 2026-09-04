@@ -5959,7 +5959,8 @@
                       "term":  "red pepper flakes",
                       "recipes":  [
                                       "italian-chicken-tortellini-skillet",
-                                      "chicken-meatballs-in-cranberry-sauce"
+                                      "chicken-meatballs-in-cranberry-sauce",
+                                      "chicken-penne-arrabbiata"
                                   ],
                       "added":  "2026-08-26T13:26:56",
                       "why":  "italian-chicken-tortellini-skillet needs it",
@@ -5970,56 +5971,56 @@
                                                      "price":  7.78,
                                                      "size":  "12 oz",
                                                      "item":  "Great Value Crushed Red Pepper, 12 oz",
-                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 names Great Value Crushed Red Pepper 12 oz at Walmart, 0.6483/oz = 7.78.",
-                                                     "checked":  "2026-08-27T19:05:34"
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -\u003e board commodity red-pepper-flakes, 7 of 7 stores; Walmart row Great Value Crushed Red Pepper 12 oz $7.78 ($0.6483/oz), everyday shelf price, comparison-2026-09-02.json.",
+                                                     "checked":  "2026-09-04T05:16:58"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  3.99,
                                                      "size":  "1.5 oz",
                                                      "item":  "McCormick Crushed Red Pepper",
-                                                     "evidence":  "driver rung 1 \u0027red pepper flakes\u0027=3 and all three rows are crushed red pepper shakers; McCormick 1.5 oz at 3.99.",
-                                                     "checked":  "2026-08-27T19:05:34"
+                                                     "evidence":  "driver rung 1 \u0027red pepper flakes\u0027: 39 hits; McCormick Crushed Red Pepper 1.5 oz $3.99 and Badia Crushed Red Pepper 4.5 oz $3.99 are the spice jars. Corroborated on disk (board Fareway cell = Badia 4.5 oz $3.99, $0.8867/oz).",
+                                                     "checked":  "2026-09-04T05:16:44"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  2.99,
                                                          "size":  "1.5 oz",
                                                          "item":  "Our Family Red Pepper, Crushed 1.5 Oz",
-                                                         "evidence":  "full ladder \u0027red pepper flakes\u0027=0 -\u003e \u0027red pepper\u0027=23; Our Family Red Pepper Crushed 1.5 oz at 2.99 is the ingredient. Roasted red peppers, red pepper hummus and ground cayenne rows ruled out.",
-                                                         "checked":  "2026-08-27T19:05:34"
+                                                         "evidence":  "pre-pass server probe: rung 1 \u0027red pepper flakes\u0027=0, rung 2 \u0027red pepper\u0027=24 hits; Our Family Red Pepper Crushed 1.5 oz $2.99 and McCormick Crushed Red Pepper 1.5 oz $3.79 are the spice jars. Fresh bell peppers and hummus in the same grid ruled out.",
+                                                         "checked":  "2026-09-04T05:16:44"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "carried",
                                                     "price":  1.25,
                                                     "size":  "2 oz",
                                                     "item":  "That\u0027s Smart! Crushed Red Pepper",
-                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 (comparison-2026-08-26.json, commodity red-pepper-flakes, 7 of 7 stores) names That\u0027s Smart! Crushed Red Pepper 2 oz at Hy-Vee, 0.625/oz = 1.25.",
-                                                    "checked":  "2026-08-27T19:05:34"
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 maps to board commodity red-pepper-flakes, 7 of 7 stores; Hy-Vee row is That\u0027s Smart! Crushed Red Pepper $1.25/2 oz ($0.625/oz), source \u0027Aisles Online current shelf price (storeId 1465, Omaha #01)\u0027.",
+                                                    "checked":  "2026-09-04T05:16:44"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
                                                              "price":  5.98,
                                                              "size":  "13.5 oz",
                                                              "item":  "Member\u0027s Mark Crushed Red Pepper, 13.5 oz.",
-                                                             "evidence":  "driver rung 1 =21 rows; Member\u0027s Mark Crushed Red Pepper 13.5 oz at 5.98 (0.44/oz) is the ingredient. Beef jerky and steak-seasoning rows ruled out.",
-                                                             "checked":  "2026-08-27T19:05:34"
+                                                             "evidence":  "driver rung 1 \u0027red pepper flakes\u0027: 20 hits; Member\u0027s Mark Crushed Red Pepper 13.5 oz $5.98 ($0.44/oz), plus a 3.75 lb club size at $20.98. Base Member\u0027s Mark spice jar, exactly the ingredient.",
+                                                             "checked":  "2026-09-04T05:16:44"
                                                          },
                                      "Aldi":  {
                                                   "state":  "carried",
                                                   "price":  0.99,
                                                   "size":  "1.5 oz",
-                                                  "item":  "Stonemill Crushed Red Pepper",
-                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 names Stonemill Crushed Red Pepper 1.5 oz at Aldi, 0.66/oz = 0.99.",
-                                                  "checked":  "2026-08-27T19:05:34"
+                                                  "item":  "Stonemill Crushed Red Pepper 1.5 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -\u003e commodity red-pepper-flakes; Aldi row Stonemill Crushed Red Pepper 1.5 OZ $0.99 ($0.66/oz), everyday shelf price, comparison-2026-09-02.json.",
+                                                  "checked":  "2026-09-04T05:16:44"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  1.25,
                                                           "size":  "1.5 oz",
                                                           "item":  "Smart Way Crushed Red Pepper",
-                                                          "evidence":  "pre-pass full ladder rung 1 \u0027red pepper flakes\u0027=6; Smart Way Crushed Red Pepper 1.5 oz at 1.25 USD is the plain crushed-pepper shaker. Kroger Grated Parmesan and Red Pepper Flakes Shaker (rel 125) ruled out - that is a cheese product.",
-                                                          "checked":  "2026-08-27T19:05:34"
+                                                          "evidence":  "pre-pass server probe \u0027red pepper flakes\u0027: 6 hits; Smart Way Crushed Red Pepper 1.5 oz $1.25 (also McCormick 4.62 oz $6.99, Kroger 4.25 oz $5.49). Crushed red pepper IS red pepper flakes. Top-relevance row was a parmesan-and-flakes shaker and is excluded.",
+                                                          "checked":  "2026-09-04T05:16:44"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -6857,67 +6858,68 @@
                   {
                       "term":  "penne pasta",
                       "recipes":  [
-                                      "no-boil-chicken-pasta-casserole-with-artichokes-and-peas"
+                                      "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+                                      "chicken-penne-arrabbiata"
                                   ],
                       "added":  "2026-08-27T12:09:46",
                       "why":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas needs it",
                       "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "carried",
-                                                     "price":  1.94,
-                                                     "size":  "32 oz",
-                                                     "item":  "Great Value Penne, 32 oz (Shelf Stable)",
-                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \"penne pasta\" maps to commodity pasta (include /\\bpenne\\b/) and the Walmart board cell in out\\comparison-2026-08-26.json is Great Value Penne 32 oz, ad $1.94, $0.0606/oz, everyday shelf price, Omaha L St.",
-                                                     "checked":  "2026-08-27T12:13:40"
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-09-04T05:16:44"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  1.24,
                                                      "size":  "16 oz",
                                                      "item":  "Fareway Penne Rigate",
-                                                     "evidence":  "driver rung-1 lookup, 6 nodes, all genuine dry penne; store-brand Penne Rigate 16 oz $1.24 is the cheapest qualifying row.",
-                                                     "checked":  "2026-08-27T12:13:40"
+                                                     "evidence":  "driver rung 1 \u0027penne pasta\u0027: 39 hits; Fareway Penne Rigate 16 oz $1.24, Barilla Penne 16 oz $1.50, Fareway Whole Wheat Penne Rigate 16 oz $0.99 - all plain dry penne boxes. Frozen Rao\u0027s penne alla vodka meal ruled out.",
+                                                     "checked":  "2026-09-04T05:16:44"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  1.99,
                                                          "size":  "1 lb",
                                                          "item":  "Barilla Penne Pasta 1 Lb",
-                                                         "evidence":  "server-tier probe, 6 candidates; Barilla Penne 1 lb $1.99 is the ingredient. Ruled out the $7.99 prepared grilled-chicken-with-penne deli item and the Creamette Mostaccioli row.",
-                                                         "checked":  "2026-08-27T12:13:40"
+                                                         "evidence":  "pre-pass server probe \u0027penne pasta\u0027: 8 hits; Barilla Penne Pasta 1 Lb $1.99 (rel 134) and Creamette Penne Rigate 1 Lb $1.89. Prepared \u0027Grilled Chicken w/Penne Pasta\u0027 deli rows ruled out as dishes.",
+                                                         "checked":  "2026-09-04T05:16:44"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "carried",
-                                                    "price":  1.19,
-                                                    "size":  "16 oz",
-                                                    "item":  "Hy-Vee Penne Rigate",
-                                                    "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\regular\\hyvee-regular-2026-08-27.json (Aisles Online storeId 1466 Omaha #02, in-store price) carries Hy-Vee Penne Rigate 16 oz $1.19 (and a second Hy Vee Penne Rigate row at $1.44).",
-                                                    "checked":  "2026-08-27T12:13:40"
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-09-04T05:16:44"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
                                                              "price":  8.52,
-                                                             "size":  "6 pk 16 oz",
+                                                             "size":  "6 x 16 oz",
                                                              "item":  "Barilla Penne Pasta 16 oz., 6 pk.",
-                                                             "evidence":  "driver rung-1 lookup, 19 nodes; Barilla Penne Pasta 16 oz 6 pk linePrice $8.52, unitPrice $1.42/ea. Variety packs and the prepared Members Mark penne-with-sausage entree ruled out.",
-                                                             "checked":  "2026-08-27T12:13:40"
+                                                             "evidence":  "driver rung 1 \u0027penne pasta\u0027: 17 hits; Barilla Penne Pasta 16 oz 6 pk $8.52 ($1.42/ea) - club multipack of plain dry penne. Member\u0027s Mark penne-with-sausage prepared tray ruled out as a dish.",
+                                                             "checked":  "2026-09-04T05:16:44"
                                                          },
                                      "Aldi":  {
                                                   "state":  "carried",
-                                                  "price":  1.09,
+                                                  "price":  1.99,
                                                   "size":  "16 oz",
-                                                  "item":  "Reggano Penne Rigate 16 OZ",
-                                                  "evidence":  "no browser this session; ruled from disk instead - aldi-regular-2026-08-27.json (OLA 42 Omaha, in-store, mode_verified 2026-08-27) carries Reggano Penne Rigate 16 oz $1.09, plus Priano Bronze Cut Penne $1.99 and Reggano Penne 14.5 oz $2.19.",
-                                                  "checked":  "2026-08-27T12:13:40"
+                                                  "item":  "Priano Bronze Cut Penne Pasta 16 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027penne pasta\u0027 returns today\u0027s captures, Aldi row Priano Bronze Cut Penne Pasta 16 OZ $1.99. Aldi\u0027s own private-label dry penne box.",
+                                                  "checked":  "2026-09-04T05:16:44"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  1.89,
                                                           "size":  "16 oz",
                                                           "item":  "Barilla Penne Pasta",
-                                                          "evidence":  "server-tier probe, 25 candidates; base dry semolina Barilla Penne 16 oz $1.89 preferred over the gluten-free/chickpea/lentil variants and the 60-second pouch.",
-                                                          "checked":  "2026-08-27T12:13:40"
+                                                          "evidence":  "pre-pass server probe \u0027penne pasta\u0027: 25 hits (Kroger Protein Penne 14.5 oz $2.19, Carbe Diem 12 oz $3.49, several gluten-free). Corroborated on disk - price-ingredient.ps1 -Name \u0027penne pasta\u0027 lists today\u0027s Baker\u0027s capture Barilla Penne Pasta 16 oz $1.89, the plain semolina box a cook buys.",
+                                                          "checked":  "2026-09-04T05:16:44"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -9681,6 +9683,213 @@
                                                       }
                                  },
                       "verdict":  "NOT-CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "coconut sugar",
+                      "recipes":  [
+                                      "hibachi-chicken"
+                                  ],
+                      "added":  "2026-09-04T05:01:52",
+                      "why":  "hibachi-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-09-04T05:16:44"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 \u0027coconut sugar\u0027 returned MATCHES with 53 hits, but the evidence file retains only the top 8 (Sue Bee honey, Nature Nate\u0027s honey x2, Madhava agave, Truvia x4) - all sweeteners, none coconut sugar. 45 rows unseen and no browser this session to walk them, so this is \u0027could not finish looking\u0027, not an empty shelf.",
+                                                     "checked":  "2026-09-04T05:16:44"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "pre-pass server probe, FULL ladder, rung 1 \u0027coconut sugar\u0027: 6 hits total and all 6 are in evidence - Dr Pepper Zero Sugar Creamy Coconut soda x2, Sparkling Ice coconut-pineapple water, Russell Stover sugar-free coconut candy, and two Once Upon A Farm coconut melts. No sweetener product of any kind; nothing is coconut sugar.",
+                                                         "checked":  "2026-09-04T05:16:44"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-09-04T05:16:44"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  11.98,
+                                                             "size":  "3 lb",
+                                                             "item":  "Health Garden Organic Coconut Sugar, 3 lbs.",
+                                                             "evidence":  "driver rung 1 \u0027coconut sugar\u0027: 22 hits; row 3 is Health Garden Organic Coconut Sugar 3 lbs at $11.98 ($0.25/oz), samsclub.com/p/-/1LERYN73QSCV - a plain bag of coconut sugar, exactly what the recipe buys.",
+                                                             "checked":  "2026-09-04T05:16:44"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-09-04T05:16:44"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.99,
+                                                          "size":  "16 oz",
+                                                          "item":  "Sugar In The Raw Organic Coconut Sugar, 16oz Bag",
+                                                          "evidence":  "pre-pass server probe rung 1 \u0027coconut sugar\u0027: 25 hits, top row rel 128 is the actual granulated coconut sugar bag ($5.99/16 oz, bakersplus.com/p/0004480080101); rest of the grid is coconut water/candy/creamer noise.",
+                                                          "checked":  "2026-09-04T05:16:44"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fresh basil",
+                      "recipes":  [
+                                      "chicken-penne-arrabbiata"
+                                  ],
+                      "added":  "2026-09-04T05:08:55",
+                      "why":  "chicken-penne-arrabbiata needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.63,
+                                                     "size":  "1.5 oz",
+                                                     "item":  "Fresh Basil, 1.5 oz Clamshell",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027fresh basil\u0027 -\u003e board commodity fresh-basil; Walmart row \u0027Fresh Basil, 1.5 oz Clamshell\u0027 $3.63 ($2.42/oz), everyday shelf price, comparison-2026-09-02.json.",
+                                                     "checked":  "2026-09-04T05:16:58"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "0.75 oz",
+                                                     "item":  "Crazy Fresh Organic Basil",
+                                                     "evidence":  "driver rung 1 \u0027fresh basil\u0027: 25 hits; Crazy Fresh Organic Basil 0.75 oz $2.99 is a fresh cut-herb pack (Truefood Basil $5.99 each is a live plant). Corroborated on disk - board fresh-basil Fareway cell is the same item at $2.99/0.75 oz.",
+                                                     "checked":  "2026-09-04T05:16:44"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.99,
+                                                         "size":  "0.5 oz",
+                                                         "item":  "Local Roots Organic Basil",
+                                                         "evidence":  "pre-pass server probe \u0027fresh basil\u0027: 4 hits; Local Roots Organic Basil 0.5 oz $2.99 and That\u0027s Tasty Basil Conventional 0.5 oz $2.99 are fresh-herb clamshells. Corroborated on disk - board fresh-basil cell for Family Fare is Local Roots Organic Basil $2.99/0.5 oz.",
+                                                         "checked":  "2026-09-04T05:16:44"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "item":  "Johnson Family Farm Fresh Basil",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027fresh basil\u0027 -\u003e board commodity fresh-basil, 5 of 7 stores; Hy-Vee row Johnson Family Farm Fresh Basil $2.99/0.75 oz ($3.9867/oz), source \u0027Aisles Online search current price (storeId 1465, Omaha #01)\u0027.",
+                                                    "checked":  "2026-09-04T05:16:44"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only, 22 hits, and the evidence file retains just the top 8 - garlic butter with basil, salad kit, tomatoes, ranch mix, garlic products - none is fresh basil. 14 rows unseen, the ladder was never walked, and no browser this session to walk it; not an empty shelf.",
+                                                             "checked":  "2026-09-04T05:16:44"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-09-04T05:16:44"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4,
+                                                          "size":  "1.25 oz",
+                                                          "item":  "Gotham Greens Fresh Basil",
+                                                          "evidence":  "pre-pass server probe \u0027fresh basil\u0027: 8 hits; Gotham Greens Fresh Basil 1.25 oz $4.00 (rel 134) is the fresh living-herb clamshell. Mozzarella rolls, bruschetta dip and Gourmet Garden dried/paste rows ruled out as not fresh basil leaf.",
+                                                          "checked":  "2026-09-04T05:16:44"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "pine nuts",
+                      "recipes":  [
+                                      "chicken-zucchini-pasta"
+                                  ],
+                      "added":  "2026-09-04T05:11:14",
+                      "why":  "chicken-zucchini-pasta needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-09-04T05:16:44"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  7.49,
+                                                     "size":  "4 oz",
+                                                     "item":  "Fareway Pine Nuts",
+                                                     "evidence":  "driver rung 1 \u0027pine nuts\u0027: 46 hits; top row Fareway Pine Nuts 4 oz $7.49 is the store\u0027s own bag of pine nuts. The rest of the visible grid is pineapple products and a nut topping, ruled out.",
+                                                     "checked":  "2026-09-04T05:16:44"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.29,
+                                                         "size":  "2.25 oz",
+                                                         "item":  "Our Family Pine Nuts 2.25 Oz",
+                                                         "evidence":  "pre-pass server probe \u0027pine nuts\u0027: 3 hits; Our Family Pine Nuts 2.25 oz $5.29 and Diamond of California Pine Nuts 2.25 oz $6.39 are shelled pine nuts. Sabra roasted-pine-nut hummus ruled out.",
+                                                         "checked":  "2026-09-04T05:16:44"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-09-04T05:16:44"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  19.48,
+                                                             "size":  "16 oz",
+                                                             "item":  "Nature\u0027s Eats Pine Nuts, 16 oz.",
+                                                             "evidence":  "driver rung 1 \u0027pine nuts\u0027: 18 hits; Nature\u0027s Eats Pine Nuts 16 oz $19.48 ($1.22/oz) is a plain 1 lb bag of pine nuts.",
+                                                             "checked":  "2026-09-04T05:16:44"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-09-04T05:16:44"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  10.99,
+                                                          "size":  "4 oz",
+                                                          "item":  "Kroger Whole Pine Nuts",
+                                                          "evidence":  "pre-pass server probe \u0027pine nuts\u0027: 3 hits and all 3 are pine nuts - Kroger Whole Pine Nuts 4 oz $10.99, Simple Truth Pine Nuts 4.5 oz $9.99, Fresh Gourmet Raw Whole Pine Nuts 2.5 oz $5.99.",
+                                                          "checked":  "2026-09-04T05:16:44"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
                       "notes":  null
                   }
               ]

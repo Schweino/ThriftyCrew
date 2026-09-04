@@ -1511,6 +1511,13 @@ def run():
         for name, ok, got in fn():
             T(name, ok, got)
 
+    # =================================================================================================
+    H("2026-09-04 - the wall-clock fixes (design\\EVAL-hunter-wall-clock-2026-09-04.md)")
+    # =================================================================================================
+    for fn in WC_SECTIONS:
+        for name, ok, got in fn():
+            T(name, ok, got)
+
     print("")
     if bad:
         print("hunt-daemon SELF-TEST FAIL (%d)" % len(bad))
@@ -8164,12 +8171,18 @@ def _fooddb_near_name_matches_the_live_db():
     # trimming, rather than assumed: the DB still holds a Fresh Thyme row (100 g / 101 cal) beside
     # Dried Thyme, so the pair was MERGED, not dropped. Leaving it listed would have taught this
     # fixture to expect a duplicate the estate had already cleaned.
-    want = sorted([["Apple", "Apples"],
-                   ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"]],
-                  key=lambda v: sorted(v))
+    # ZERO SINCE 2026-09-04. The last three were MERGED through retire_food_db_row.py (d0606fa5):
+    # Apples -> Apple, Green Bell Pepper -> Green Bell Peppers, Lemon -> Lemons. In every pair the row
+    # with zero citations was retired, and the merge ledger at dbood-db-merges.json carries both
+    # rows verbatim so any of them can be reversed from its own record.
+    #
+    # An empty list is this fixture at its strongest, not at its weakest: for the first time since it
+    # was written, ANY collision it finds is a new one. The list above was only ever a tolerance for
+    # duplicates the estate had not yet ruled on, and it is now spent.
+    want = []
     got = sorted(hits, key=lambda v: sorted(v))
     ok = [sorted(v) for v in got] == [sorted(v) for v in want]
-    return ok, ("the live DB's collision set is %s (expected the four known duplicates; a NEW one "
+    return ok, ("the live DB's collision set is %s (expected NONE - all known duplicates were merged "
                 "here is a real find, not a broken fixture)" % json.dumps(hits))
 
 
@@ -12012,6 +12025,195 @@ def _rd_pure_readers():
                 and hunt_lib.db_slugs("nope") == set(),
                 "db_slugs"))
     return res
+
+
+# =====================================================================================================
+# 2026-09-04 - THE WALL-CLOCK FIXES
+#
+# Measured on hunt-2026-08-27-highprotein and on the 23-minute hunt-2026-09-04-five run. Two defects,
+# both of them RESTART defects: a run that is started 17 times re-buys work it already paid for, and
+# the instrument that measures it says the run took 25.6 hours when 19.1 of those were dead air.
+# =====================================================================================================
+
+
+def _wc_run(tmp):
+    """A run dir with the state/ dir a real run has."""
+    os.makedirs(os.path.join(tmp, "state"), exist_ok=True)
+    return tmp
+
+
+def _wc_priced_terms():
+    res = []
+    tmp = scratch_dir(prefix="daemon-wc-pt-")
+    try:
+        _wc_run(tmp)
+        d1 = daemon(run_dir=tmp)
+        d1.priced_terms.update(["Moroccan Spice Mix", "juniper berries"])
+        d1.save_priced_terms()
+        res.append(("MUST FIRE  the terms this run sent the pricer are written to disk - the set was "
+                    "per-PROCESS, and one term was dispatched 19 times across 17 restarts because of "
+                    "it (54% of the price lane's turns)",
+                    os.path.exists(os.path.join(tmp, "state", "priced-terms.json")),
+                    os.path.join(tmp, "state")))
+
+        # A SECOND DAEMON ON THE SAME RUN DIR - which is exactly what a restart is.
+        d2 = daemon(run_dir=tmp)
+        res.append(("CLEAN TWIN a fresh daemon starts with an EMPTY set, so nothing is inherited by "
+                    "accident - the load is a deliberate act, not a constructor side effect",
+                    d2.priced_terms == set(), json.dumps(sorted(d2.priced_terms))))
+        d2.load_priced_terms()
+        res.append(("MUST FIRE  ...and loading it back gives the restart what the previous process "
+                    "knew, so a PENDING term is not re-adjudicated to the same PENDING forever",
+                    d2.priced_terms == {"Moroccan Spice Mix", "juniper berries"},
+                    json.dumps(sorted(d2.priced_terms))))
+
+        # THE CALL SITE. This is the case that matters most: on 2026-09-04 the loader was written,
+        # the saver was wired, and load_priced_terms was NEVER CALLED - a fix that passed the whole
+        # suite and did nothing, because no fixture asked whether anything called it.
+        import inspect                                              # noqa: PLC0415
+        seed_src = inspect.getsource(HD.Daemon.seed)
+        res.append(("MUST FIRE  seed() actually CALLS load_priced_terms - the resume road is the only "
+                    "place the persistence can matter, and a loader nobody calls is a fix that passes "
+                    "every test it has and does nothing (measured: it shipped inert for one suite run)",
+                    ("load_priced" + "_terms()") in seed_src,
+                    seed_src[:200]))
+
+        # AND THE SAVE'S CALL SITE, for the same reason. Neutering the save call turned NOTHING red
+        # on the first run, because the case above calls save_priced_terms() itself - proving the
+        # method and saying nothing about whether the price lane ever invokes it. The dispatch that
+        # updates the set must persist it in the same breath, or a restart reads a stale file.
+        dsrc = io.open(os.path.join(HERE, "hunt-daemon.py"), encoding="utf-8").read()
+        upd = dsrc.find("self.priced" + "_terms.update(")
+        window = dsrc[upd:upd + 300] if upd >= 0 else ""
+        res.append(("MUST FIRE  the price lane PERSISTS the set in the same breath as it updates it - "
+                    "a save nobody calls leaves the restart reading a file that never grew",
+                    upd >= 0 and ("save_priced" + "_terms()") in window, window[:160]))
+
+        # An unreadable file is never a wrong refusal.
+        with io.open(os.path.join(tmp, "state", "priced-terms.json"), "w", encoding="utf-8") as f:
+            f.write("{ this is not json")
+        d3 = daemon(run_dir=tmp)
+        d3.load_priced_terms()
+        res.append(("CLEAN TWIN an unreadable file leaves the set EMPTY rather than raising - that is "
+                    "today's behaviour exactly, and it can only ever cause a term to be priced twice, "
+                    "never to be skipped wrongly",
+                    d3.priced_terms == set(), json.dumps(sorted(d3.priced_terms))))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _wc_force_drain():
+    """A PROCESS ending is not a RUN ending. Measured: the force-close fires on every exit, the run
+    was started 17 times, and it closed ELEVEN waves averaging 3.4 recipes for three publishes - each
+    one buying a full auditor session behind a lane whose cap is 1."""
+    res = []
+    tmp = scratch_dir(prefix="daemon-wc-fd-")
+    try:
+        _wc_run(tmp)
+        d = daemon(run_dir=tmp, wave_size=5, target=5)
+        res.append(("CLEAN TWIN nothing qa-passed means nothing to drain, whatever else is true",
+                    d.should_force_drain() is False, "drained an empty pool"))
+
+        d.qa_passed = ["a", "b"]
+        res.append(("MUST FIRE  a PART wave is NOT force-closed when a process stops - two recipes "
+                    "would buy a whole auditor session, and seed() re-waves them on the next start "
+                    "anyway, which is the road trim_wave's clean branch already relies on",
+                    d.should_force_drain() is False, "closed a 2-recipe wave"))
+
+        d.qa_passed = ["a", "b", "c", "d", "e"]
+        res.append(("CLEAN TWIN a FULL wave is closed - holding a wave that is ready buys nothing",
+                    d.should_force_drain() is True, "held a full wave"))
+
+        d2 = daemon(run_dir=tmp, wave_size=10, target=2)
+        d2.qa_passed = ["x"]
+        d2.wave_results = [{"wave": 1, "published": ["p1", "p2"]}]
+        res.append(("MUST FIRE  a run that MET ITS TARGET drains its remainder even when the wave is "
+                    "short - that is a run genuinely finishing, and its recipes must not be stranded",
+                    d2.should_force_drain() is True, "stranded the remainder of a finished run"))
+
+        d3 = daemon(run_dir=tmp, wave_size=10, target=99)
+        d3.qa_passed = ["x"]
+        d3.breaker.open = True
+        d3.breaker.reason = "drill"
+        res.append(("MUST FIRE  a HALTED run drains too - a halt is a deliberate stop and its "
+                    "recipes should not sit in limbo waiting for a resume that may never come",
+                    d3.should_force_drain() is True, "left a halted run's recipes in limbo"))
+
+        # THE CALL SITE, again.
+        import inspect                                              # noqa: PLC0415
+        run_src = inspect.getsource(HD.Daemon.run)
+        res.append(("MUST FIRE  run()'s drain actually consults should_force_drain - the predicate "
+                    "being right while the drain still force-closes unconditionally is the same trap "
+                    "the priced-terms loader fell into on this very date",
+                    ("should_force" + "_drain()") in run_src, "the drain never asks"))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _wc_published_slugs():
+    res = []
+    tmp = scratch_dir(prefix="daemon-wc-ps-")
+    try:
+        d = daemon(run_dir=_wc_run(tmp))
+        d.wave_results = [{"wave": 1, "published": ["a", "b"]},
+                          {"wave": 2, "published": []},
+                          {"wave": 3, "published": ["b", "c"]}]
+        res.append(("MUST FIRE  published_slugs reads the run's own wave results and DEDUPES - a slug "
+                    "republished as collateral must not count twice toward the target",
+                    d.published_slugs() == ["a", "b", "c"], json.dumps(d.published_slugs())))
+        res.append(("CLEAN TWIN a run that has published nothing reports an empty list, never a count "
+                    "it cannot support", daemon(run_dir=tmp).published_slugs() == [], "non-empty"))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _wc_probe_hit_cap():
+    """MUST FIRE. The evidence travels whole. probe-ingredient truncated each store's hit list to 8
+    before it reached the pricer's prompt; measured across 47 evidence files of the 08-27 run, 21 of
+    30 results carried exactly 8 - the signature of a cap - and one pricer session spent 16 turns
+    re-deriving the ladder the probe had already walked."""
+    res = []
+    src = os.path.join(os.path.dirname(os.path.dirname(HERE)), "grocery", "probe-ingredient.ps1")
+    try:
+        with io.open(src, encoding="utf-8-sig") as f:
+            body = f.read()
+    except Exception as e:                                          # noqa: BLE001
+        return [("MUST FIRE  probe-ingredient.ps1 is readable so its hit cap can be pinned", False,
+                 str(e))]
+    caps = re.findall(r"hits\s*=\s*@\(\$_\.hits\s*\|\s*Select-Object\s*-First\s*(\d+)\)", body)
+    res.append(("MUST FIRE  probe-ingredient hands the pricer more than 8 hits per store - at 8 the "
+                "cap BOUND on 21 of 30 measured results and hid the ladder the pricer then paid 16 "
+                "turns to re-derive",
+                bool(caps) and all(int(c) >= 25 for c in caps), json.dumps(caps)))
+    return res
+
+
+def _wc_writer_tier():
+    """MUST FIRE. The writer's model pin is a latency decision as well as a quality one: opus costs
+    27.9 s per API round trip against fable's 15.3, and wall clock is output tokens at ~81/sec."""
+    res = []
+    p = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "agents", "recipe-writer.md")
+    try:
+        with io.open(p, encoding="utf-8-sig") as f:
+            body = f.read()
+    except Exception as e:                                          # noqa: BLE001
+        return [("MUST FIRE  the recipe-writer agent definition is readable so its tier can be pinned",
+                 False, str(e))]
+    m = re.search(r"(?m)^model:\s*(\S+)", body)
+    res.append(("MUST FIRE  the writer is NOT on an opus tier - it cannot introduce a number "
+                "(apply_writer_fields patches the intake from its payload) and it is the only stage "
+                "with two independent fable gates behind it, source-qa per recipe and the auditor "
+                "per wave",
+                bool(m) and "opus" not in (m.group(1) or "").lower(),
+                m.group(1) if m else "(no model line)"))
+    return res
+
+
+WC_SECTIONS = (_wc_priced_terms, _wc_force_drain, _wc_published_slugs, _wc_probe_hit_cap,
+               _wc_writer_tier)
 
 
 RD_SECTIONS = (_rd_the_prepublish_facts, _rd_never_carries_the_numbers,

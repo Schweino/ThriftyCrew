@@ -279,7 +279,11 @@ foreach ($t in $Term) {
     stores = @($per | ForEach-Object { [pscustomobject]@{ store = $_.store; state = $_.state; note = $_.note
                                                           verdict = $_.verdict.state; term_used = $_.verdict.term_used
                                                           attempts = @($_.verdict.attempts); reason = $_.verdict.reason
-                                                          hits = @($_.hits | Select-Object -First 8) } })
+                                                          # 8 -> 25 on 2026-09-04: at 8 this cap BOUND on 21 of 30 measured
+                                                          # results, and a pricer session spent 16 turns re-deriving the
+                                                          # ladder it had hidden. The evidence travels whole (the A2
+                                                          # precedent); 25 is a bound that cannot bind on a real ladder.
+                                                          hits = @($_.hits | Select-Object -First 25) } })
     ms = $sw.ElapsedMilliseconds })
 }
 

@@ -497,7 +497,16 @@ class Daemon(object):
                    ("decide", "extract", "map", "write", "qa", "price_wake")}
         self.wip_waiters = []
         self.seen_candidates = set()   # dossiers already built this run
-        self.priced_terms = set()      # terms already sent to the pricer: never sent twice
+        # TERMS ALREADY SENT TO THE PRICER: NEVER SENT TWICE - and "never" now survives a restart.
+        # Measured 2026-09-04 on hunt-2026-08-27-highprotein: this set was per-PROCESS, the run was
+        # started 17 times, and `seed` re-populates pending terms off the ingredient queue on every
+        # start. The queue row says PENDING, correctly - the three browser stores are unreachable
+        # headless and PENDING is the designed answer - so the term came back every time. ONE term,
+        # "Moroccan Spice Mix", was dispatched 19 times: 63% of the price lane's calls and 54% of its
+        # turns, 16 of them as the only term in their batch. The producer-side hold shipped the same
+        # day does not touch it, because a restart-seeded singleton always sees an idle upstream and
+        # releases immediately.
+        self.priced_terms = set()
         # THE PRICE LANE'S VIEW OF UPSTREAM (2026-09-04). Batches taken off a channel but not yet
         # finished are invisible to `size()`, and the hold in price_lane needs to see them: a map
         # batch mid-dispatch is the thing most likely to add terms in the next minute.
@@ -881,6 +890,32 @@ class Daemon(object):
             return False
         self.finish(slug, status, state, said if outcome_detail is None else outcome_detail)
         return True
+
+    def should_force_drain(self):
+        """Is this a RUN ending, or just a process ending? See the drain in run().
+
+        Force the close when the run has actually finished its work - the target is met, or there are
+        enough qa-passed recipes to fill a wave on their own, or the operator asked for a drain. A
+        halted run drains too: a halt is a deliberate stop and its recipes should not sit in limbo.
+        """
+        if getattr(self, "force_drain_on_exit", False):
+            return True
+        if not self.qa_passed:
+            return False
+        if len(self.qa_passed) >= self.wave_size:
+            return True
+        if self.target and len(self.published_slugs()) >= self.target:
+            return True
+        return bool(self.halted())
+
+    def published_slugs(self):
+        """Every slug this run has actually published, off the wave results it already keeps."""
+        out = []
+        for w in (self.wave_results or []):
+            for s in (w.get("published") or []):
+                if s not in out:
+                    out.append(s)
+        return out
 
     def wip(self):
         return len(self.accepted_slugs) - len(self.outcomes)
@@ -4234,6 +4269,7 @@ class Daemon(object):
                 terms = self.absent_terms[:hunt_lib.PRICE_BATCH]
                 self.absent_terms = self.absent_terms[hunt_lib.PRICE_BATCH:]
                 self.priced_terms.update(terms)
+                self.save_priced_terms()
                 n += 1
                 self.log("price lane [singleton] invocation %d: %d term(s) across %d recipe(s)"
                          % (n, len(terms), len(self.pricing_slugs)))
@@ -7698,9 +7734,46 @@ class Daemon(object):
             added.append(term)
         return added, ""
 
+    def priced_terms_path(self):
+        return os.path.join(self.run_dir, "state", "priced-terms.json")
+
+    def load_priced_terms(self):
+        """Re-read what this RUN has already sent the pricer. Best effort: an unreadable file leaves
+        the set empty, which is exactly today's behaviour and never a wrong refusal."""
+        try:
+            with open(self.priced_terms_path(), "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+        except Exception:                                         # noqa: BLE001
+            return
+        for t in (doc.get("terms") if isinstance(doc, dict) else doc) or []:
+            if isinstance(t, str) and t:
+                self.priced_terms.add(t)
+
+    def save_priced_terms(self):
+        """Written after every dispatch, not at the end: the whole defect is that a run does not
+        reach its end in one process."""
+        path = self.priced_terms_path()
+        try:
+            d = os.path.dirname(path)
+            if d and not os.path.isdir(d):
+                os.makedirs(d)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"_doc": "Terms this run has already sent to the pricer. Survives a "
+                                   "restart so a PENDING term is not re-adjudicated to the same "
+                                   "PENDING forever (2026-09-04).",
+                           "terms": sorted(self.priced_terms)}, f, ensure_ascii=False, indent=1)
+        except Exception as e:                                    # noqa: BLE001
+            self.findings.append("could not persist priced_terms (%s) - a restart may re-dispatch "
+                                 "terms this run already priced" % e)
+
     async def seed(self):
         """Section 4.5's resume seed table, NORMATIVE so nobody re-derives it. A recipe enters at the
         lane matching the state it actually stopped at, and flows down from there under its own steam."""
+        # WHAT THIS RUN ALREADY SENT THE PRICER, BEFORE ANY TERM IS RE-QUEUED. This is the call site
+        # that makes the persistence load-bearing: seed() is the road a restart takes, and the whole
+        # defect is a term being re-adjudicated on it. Written and never read would be a fix that
+        # passes every test it has and does nothing.
+        self.load_priced_terms()
         st, err = await self.status_json()
         if st is None:
             return False, err
@@ -8004,9 +8077,23 @@ class Daemon(object):
                 self.findings.append("LANE DIED OUTSIDE CONTAINMENT: %s raised %s past its own "
                                      "guard - the guard has a hole in it"
                                      % (name, type(res).__name__))
-        # The drain, ported VERBATIM from the workflow's ending: force-close, await the chain, and
-        # one more round if a trim returned clean recipes to the pool. Mid-run waves already ran -
-        # the qa lane schedules one whenever the pool fills (see schedule_wave).
+        # THE DRAIN - but a PROCESS ending is not a RUN ending, and conflating them was expensive.
+        # Measured 2026-09-04: this force-close fires on every exit, the run was started 17 times, and
+        # it closed ELEVEN waves averaging 3.4 recipes against a wave size of 10 - for three
+        # publishes. Each one bought a full auditor session (27-55 turns), and the wave lane is
+        # LANE_CAPS 1, so those eleven passes are a serial section that held the whole box alone for
+        # 2.79 of 6.48 covered hours. Supervision was being converted directly into barrier passes.
+        #
+        # A qa-passed recipe left unwaved is NOT stranded: seed() returns it to the pool on the next
+        # start, which is the road trim_wave's clean branch already relies on. So the force-close is
+        # kept for a run that is genuinely finishing - the target is met, or the wave is full anyway -
+        # and skipped for a process that is merely stopping.
+        if not self.should_force_drain():
+            self.log("exit: %d qa-passed recipe(s) left unwaved - this process is stopping, the RUN "
+                     "is not finished (target %s). seed() re-waves them next start; a wave closed "
+                     "here would buy a whole auditor session for a part-wave."
+                     % (len(self.qa_passed), self.target or "unset"))
+            return
         self.schedule_wave(force=True)
         if self._wave_chain is not None:
             await self._wave_chain
