@@ -1,7 +1,7 @@
 # PLAN: after the review of the dedup work - what is open, ranked by what it buys
 
 queue_id: after-review-2026-09-04
-shipped_commit: SHIPPED_SHA (2026-09-04 evening) - P5, P1, P2 and P3 are DONE: verify and report,
+shipped_commit: 5137fa56 (2026-09-04 evening) - P5, P1, P2 and P3 are DONE: verify and report,
 do not rebuild. P4 and P6's second half are Brad-launched by design and are NOT built. P7 is parked
 on rulings, and this build ADDED to it - see the note at the end of P7.
 OUTCOME, measured against the live files after the build:
