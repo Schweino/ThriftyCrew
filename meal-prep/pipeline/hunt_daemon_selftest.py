@@ -5326,11 +5326,12 @@ def _map_daemon(tmp, slugs, mapper_result, ps=None, holds=None, residual=None,
 
 def _preresolve_runs_first():
     tmp = scratch_dir(prefix="daemon-pre1-")
+    slugs_n = ["s%d" % i for i in range(1, hunt_lib.MAP_BATCH + 1)]   # ONE batch, whatever the cap
     try:
         ps = FakePS()
-        d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
+        d, fd = _map_daemon(tmp, slugs_n,
                             {"results": [{"slug": s, "status": "ok", "state": "priced"}
-                                         for s in ("s1", "s2", "s3")]}, ps=ps)
+                                         for s in slugs_n]}, ps=ps)
         # -Slugs, NOT every map-preresolve call. Since A1 the same script is ALSO invoked once per slug
         # as `-Assemble` to write mapped\<slug>.json, so an unfiltered count reads 4 for a 3-slug batch
         # and says nothing about the claim under test - which is that the mechanical PRE-RESOLVE pass
@@ -5342,8 +5343,8 @@ def _preresolve_runs_first():
         # carries a lecture instead of a residual. FakePS records calls in order and FakeDispatch
         # records its own, so the proof is that the mapper prompt names the pre-resolved counts at all.
         prompt = fd.prompts("recipe-ingredient-mapper")[0] if fd.prompts("recipe-ingredient-mapper") else ""
-        return (len(calls) == 1 and isinstance(slugs, list) and slugs == ["s1", "s2", "s3"]
-                and "map-preresolve.ps1 has already run" in prompt and len(asm) == 3,
+        return (len(calls) == 1 and isinstance(slugs, list) and slugs == slugs_n
+                and "map-preresolve.ps1 has already run" in prompt and len(asm) == len(slugs_n),
                 "preresolve=%d assemble=%d slugs=%s" % (len(calls), len(asm), json.dumps(slugs)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -5365,13 +5366,14 @@ def _preresolve_two_blocks():
 
 def _preresolve_zero_still_dispatches():
     tmp = scratch_dir(prefix="daemon-pre0-")
+    slugs_n = ["s%d" % i for i in range(1, hunt_lib.MAP_BATCH + 1)]
     try:
         # pre_out carries the "0 residual" line this case is about; the hunt-run half writes the state
         # file every road out of the lane now reads back (Q2).
-        ps = _asm_ps(pre_out="map-preresolve: 3 slug(s), 0 residual")
-        d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
+        ps = _asm_ps(pre_out="map-preresolve: %d slug(s), 0 residual" % len(slugs_n))
+        d, fd = _map_daemon(tmp, slugs_n,
                             {"results": [{"slug": s, "status": "ok", "state": "priced"}
-                                         for s in ("s1", "s2", "s3")]}, ps=ps)
+                                         for s in slugs_n]}, ps=ps)
         return (len(fd.prompts("recipe-ingredient-mapper")) == 1 and not d.outcomes,
                 "dispatches=%d outcomes=%d" % (len(fd.prompts("recipe-ingredient-mapper")),
                                                len(d.outcomes)))
@@ -7515,10 +7517,15 @@ def _extract_batches_when_queued():
     # 4 pages queued up front. Pages 2..4 are still queued while page 1 settles, so nothing flushes
     # until the queue empties: every SETTLE must precede every PUSH. Without the fix the trace
     # alternates settle,push,settle,push and this goes red.
-    trace = _extract_run(4)
+    # MAP_BATCH pages, not four: the case is "a full group is released together", and the group
+    # size is a constant that moved on 2026-09-04 (5 -> 2, the output-token cliff). A literal 4
+    # asserted 4 releases-after-4-settles and turned red for a reason that had nothing to do
+    # with the mechanism it pins.
+    n = hunt_lib.MAP_BATCH
+    trace = _extract_run(n)
     pushes = [i for i, t in enumerate(trace) if t.startswith("push:")]
     settles = [i for i, t in enumerate(trace) if t.startswith("settle:")]
-    ok = (len(pushes) == 4 and len(settles) == 4 and min(pushes) > max(settles))
+    ok = (len(pushes) == n and len(settles) == n and min(pushes) > max(settles))
     return (ok, "trace=%s" % json.dumps(trace))
 
 
@@ -9071,8 +9078,12 @@ def _f1_fill_list_is_the_unresolved_terms():
                                                    seen.get("pause"))
 
 
-def _f1_map_run(tmp, stat=None, raises=False, warm=True, slugs=("s1", "s2", "s3")):
-    """The map lane driven end to end with the fill stubbed. Returns (d, fd, ps, order)."""
+def _f1_map_run(tmp, stat=None, raises=False, warm=True, slugs=None):
+    """The map lane driven end to end with the fill stubbed. Returns (d, fd, ps, order).
+
+    The default is ONE batch of MAP_BATCH slugs. A literal three split into two batches the day
+    the cap moved to 2, and every order assertion here counted two pre-resolve passes for one."""
+    slugs = tuple(slugs or ("s%d" % i for i in range(1, hunt_lib.MAP_BATCH + 1)))
     preresolved(tmp, list(slugs),
                 residual=dict((s, ["parsley leaves", "ras el hanout", "gochujang"]) for s in slugs))
     order, passes = [], {"n": 0}
@@ -12222,16 +12233,18 @@ def _wc_generation_levers():
                 "quality decision at all, since each call keeps its model, effort and prompt and "
                 "only the number in flight moves; the map lane was 22.6 of 23.0 covered minutes",
                 hunt_lib.LANE_CAPS["map"] >= 4, str(hunt_lib.LANE_CAPS["map"])))
-    # MAP_BATCH IS NOT PINNED HERE, and that is the finding. The wall-clock measurement wants it
-    # SMALL (a batch multiplies serially-generated output: map:4x cost 3.63x map:1x's output for
-    # 3.30x the wall) and the token measurement wants it BIG (map:1x cost 436,685 and 577,141 INPUT
-    # tokens for one recipe each against map:5x's 212,244, and three cases in this suite encode
-    # that). They price different resources; the trade is Brad's, and pinning either direction here
-    # would be this file taking a side in it. What IS pinned is that the constant stays sane.
-    res.append(("CLEAN TWIN the mapper batch is a workable size - the wall-clock and token "
-                "measurements disagree on which way it should move, so only the bounds are pinned "
-                "and the direction is left to a ruling",
-                1 <= hunt_lib.MAP_BATCH <= 10, str(hunt_lib.MAP_BATCH)))
+    # THE OUTPUT-TOKEN CLIFF (2026-09-04, second pass). Earlier the same day this case shrugged -
+    # "the two measurements disagree, only the bounds are pinned" - and that was wrong, because the
+    # batch size is not a trade at all past a point: a headless answer has a 32,000-token ceiling
+    # that counts thinking, the mapper returns ONE payload per batch, and a batch that crosses it is
+    # cut off mid-JSON and regenerated in full. Read off the map:4x session: stop=max_tokens at
+    # 32,000, then a 15,405-token answer written again. Five recipes sat on that edge.
+    res.append(("MUST FIRE  the mapper's batch stays under the output-token cliff - a batch whose "
+                "payload crosses the 32,000 ceiling is cut mid-JSON and regenerated in full, which "
+                "cost the 4-recipe call 6.6 of its 14 minutes on text nothing read",
+                hunt_lib.MAP_BATCH <= 2, str(hunt_lib.MAP_BATCH)))
+    res.append(("CLEAN TWIN the batch is not zero or negative - take_batch would starve the lane",
+                hunt_lib.MAP_BATCH >= 1, str(hunt_lib.MAP_BATCH)))
 
     # THE EFFORT PINS, read off the agent definitions rather than restated here.
     base = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "agents")

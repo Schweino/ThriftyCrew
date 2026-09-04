@@ -1663,22 +1663,32 @@ def p5_red_gates(doc):
     return [g for g in P5_GATES if g in verdicts and verdicts[g] != "pass"]
 
 
-# LEFT AT 5 ON 2026-09-04, AND THE REASON IS A GENUINE COLLISION worth recording rather than
-# resolving quietly. The wall-clock measurement says SMALLER: a batch multiplies the OUTPUT the model
-# generates, and generation is serial, so map:4x cost 71,643 output tokens over 841 s against map:1x's
-# 19,712 over 255 s - 3.63x the output for 3.30x the wall, while TURNS went only 17 -> 20. On latency
-# alone, five singletons at map cap 4 beat one batch of five by roughly 8 min to 17.5 min, and the fat
-# batch moves nothing downstream until it ends.
+# 5 -> 2 ON 2026-09-04, and this is not the batching TRADE recorded earlier that day - it is a CLIFF.
 #
-# But the TOKEN measurement says BIGGER, and it is fixtured: `map:1x` cost 436,685 and 577,141 INPUT
-# tokens for ONE RECIPE EACH on the 6b run against `map:5x`'s 212,244, because each call re-sends the
-# whole standing context. Three self-test cases encode that decision.
+# The mapper returns ONE JSON payload for the whole batch, and a headless answer has an output-token
+# ceiling of 32,000 that counts thinking as well as text. Read off the map:4x session of
+# hunt-2026-09-04-five:
 #
-# They are not contradictory - they price different resources. Splitting buys wall clock and spends
-# input tokens; batching does the reverse. That is a trade for Brad with both numbers in front of him,
-# not something to settle by editing whichever fixture is in the way. The map CAP moved to 4 instead,
-# which buys parallelism across batches at no token cost and collides with nothing.
-MAP_BATCH = 5              # section S4: mapper micro-batches of up to 5 recipes
+#     10:04:11  stop=max_tokens   output_tokens=32000   <- the first payload, cut off mid-field:
+#                                                          ..."carbs_g": 25.2, "
+#     10:06:28  stop=end_turn     output_tokens=15405   <- the whole answer, generated again
+#
+# 47,405 output tokens for a 15,405-token answer. At ~81 tok/s that is 6.6 of the call's 14 minutes
+# spent generating text nothing ever read - and the result envelope cannot show it, because its
+# `result` is the final text block only. A batch that crosses the ceiling does not degrade; it pays
+# double, and the useful output of that 4-recipe call was LESS than the 1-recipe call's.
+#
+# Four recipes at effort high produced ~15,400 useful tokens plus ~53,000 of thinking, so five sat
+# right at the edge. Two recipes at effort medium is ~8,000 of answer with the thinking cut, well
+# inside the ceiling with margin for a hard batch.
+#
+# THE TOKEN MEASUREMENT STILL STANDS and still pulls the other way: map:1x cost 436,685 and 577,141
+# INPUT tokens for one recipe each against map:5x's 212,244, because every call re-sends the standing
+# context. 2 rather than 1 keeps that half-alive - and keeps the registrar's proposals batched, which
+# is the one stage batching genuinely helps. Three self-test cases encode the input-token decision;
+# they are written against MAP_BATCH rather than a literal now, so they hold at any size that does
+# not cross the cliff.
+MAP_BATCH = 2              # section S4: mapper micro-batches (was 5; see the ceiling note above)
 PRICE_BATCH = 10           # section 2.4: up to 10 absent terms per pricer invocation, across recipes
 DECIDE_TAKE_BATCH = 5      # the decide channel's greedy sweep; DECIDE_BATCH caps the dispatch itself
 WAVE_SIZE = 10             # plan default
