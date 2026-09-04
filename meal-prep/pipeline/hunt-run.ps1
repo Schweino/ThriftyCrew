@@ -1184,14 +1184,34 @@ if ($runSelfTest) {
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map-preresolve' -ItemList @('a') -By 'mechanical' -Detail '' -At '2026-08-24T10:20:00' -Event 'start')
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map-preresolve' -ItemList @('a') -By 'mechanical' -Detail '' -At '2026-08-24T10:21:00' -Event 'end' -In 0 -Out 0)
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'write' -Label 'never-finished' -ItemList @('z') -By 'mechanical' -Detail '' -At '2026-08-24T10:22:00' -Event 'start')
+    # A STAGE THAT REPORTS NO TOKEN COUNT AT ALL. -Out defaults to -1, which means NOT REPORTED, and
+    # the estate's standing rule is that -1 is never summed as 0. Without this pair the `-ge 0` guard
+    # in the accumulator is unexercised - measured 2026-09-04, when neutering it turned nothing red.
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'qa' -Label 'unreported-tokens' -ItemList @('u') -By 'mechanical' -Detail '' -At '2026-08-24T10:30:00' -Event 'start')
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'qa' -Label 'unreported-tokens' -ItemList @('u') -By 'mechanical' -Detail '' -At '2026-08-24T10:30:30' -Event 'end')
     $stgOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -StageSummary -RunDir $lt3 -Json 2>&1
     $stg = $null
     try { $stg = (@($stgOut | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
     $top = $null; $mech = $null
     if ($stg) { $top = @($stg.stages)[0]; $mech = @($stg.stages | Where-Object { $_.stage -eq 'map-preresolve' })[0] }
+    $unrep = $null
+    if ($stg) { $unrep = @($stg.stages | Where-Object { $_.stage -eq 'unreported-tokens' })[0] }
     T 'MUST FIRE  -StageSummary ranks by STAGE, longest first - map:2x at 15 min outranks a 1 min pre-resolve' `
       ($null -ne $top -and [string]$top.stage -eq 'map:2x' -and [long]$top.total_sec -eq 900) `
       ($(if ($top) { $top.stage + ' ' + $top.total_sec + 's' } else { ($stgOut -join ' ')[0..200] -join '' }))
+    # OUTPUT TOKENS AND THE GENERATION RATE (2026-09-04). Wall clock is output volume: measured at
+    # ~81 tok/sec across every agent and tier, so a stage ranked by time without its token count hides
+    # the mechanism. map:2x is scripted at 76,728 OUTPUT tokens over 900 s = 85.3/sec (245,806 is
+    # its INPUT count - the two are a step apart in the lane line and only one of them is the clock).
+    T 'MUST FIRE  -StageSummary carries each stage OUTPUT TOKENS and the rate, because the duration IS the output volume - ranking by time alone hides why a stage is slow' `
+      ($null -ne $top -and [long]$top.out_tok -eq 76728 -and [double]$top.out_tok_per_sec -eq 85.3) `
+      ($(if ($top) { [string]$top.out_tok + ' tok, ' + [string]$top.out_tok_per_sec + '/sec' } else { 'no json' }))
+    T 'CLEAN TWIN a stage that reports NO output tokens reads 0 rather than inventing a rate - -1 is not-reported and must never be summed as if it were zero work' `
+      ($null -ne $mech -and [long]$mech.out_tok -eq 0 -and [double]$mech.out_tok_per_sec -eq 0) `
+      ($(if ($mech) { [string]$mech.out_tok } else { 'no json' }))
+    T 'MUST FIRE  a stage whose token count is NOT REPORTED (-1) contributes ZERO, never minus one - a negative would subtract real work from the sum and read as a stage that generated backwards' `
+      ($null -ne $unrep -and [long]$unrep.out_tok -eq 0 -and [long]$unrep.total_sec -eq 30) `
+      ($(if ($unrep) { [string]$unrep.out_tok + ' tok over ' + [string]$unrep.total_sec + 's' } else { 'no json' }))
     T 'MUST FIRE  a MECHANICAL stage is timed and named as mechanical - the whole point is that it stopped being invisible' `
       ($null -ne $mech -and [long]$mech.total_sec -eq 60 -and [string]$mech.kind -eq 'mechanical') `
       ($(if ($mech) { $mech.kind + ' ' + $mech.total_sec + 's' } else { 'no map-preresolve row' }))
@@ -1832,6 +1852,7 @@ if ($runLaneSummary) {
   $durations = @{}
   $stageSecs = @{}
   $stageBy = @{}
+  $stageOut = @{}
   # TWO PAIRING DEFECTS, BOTH FIXED 2026-08-25, BOTH MEASURED ON THE jc1 DRILL. This is the
   # instrument the wide proving run gets measured with, and it was quietly losing pairs.
   #
@@ -1871,6 +1892,16 @@ if ($runLaneSummary) {
         if (-not $stageSecs.ContainsKey($sk)) { $stageSecs[$sk] = @() }
         $stageSecs[$sk] += $sec
         $stageBy[$sk] = $(if ($r.PSObject.Properties.Name -contains 'by') { [string]$r.by } else { '' })
+        # OUTPUT TOKENS, because they are what the wall clock is made of (2026-09-04). Measured across
+        # every agent of hunt-2026-09-04-five: generation runs at ~81 output tokens per second and the
+        # rate barely moves between agents or tiers, so a stage's duration is its OUTPUT VOLUME and
+        # very little else. Ranking stages by time without showing the tokens hides the mechanism -
+        # 13.6 of the mapper's 14.0 minutes was generation and 0.3 was every tool call it made.
+        # -1 is 'not reported' and must never be summed as 0, which is the same rule the token stamp
+        # already keeps for `in`/`out`.
+        $oTok = if ($r.PSObject.Properties.Name -contains 'out') { [int]$r.out } else { -1 }
+        if (-not $stageOut.ContainsKey($sk)) { $stageOut[$sk] = 0 }
+        if ($oTok -ge 0) { $stageOut[$sk] += $oTok }
       }
       $starts.Remove($key)
     }
@@ -1895,6 +1926,7 @@ if ($runLaneSummary) {
       [pscustomobject]@{ lane = $parts[0]; label = $parts[1]; n = $secs.Count
                          total = (($secs | Measure-Object -Sum).Sum)
                          mean = (($secs | Measure-Object -Average).Average)
+                         out_tok = [int]$stageOut[$k]
                          by = [string]$stageBy[$k] }
     })
     $grand = (($stageRows | Measure-Object -Property total -Sum).Sum)
@@ -1911,7 +1943,8 @@ if ($runLaneSummary) {
         run = (Split-Path -Leaf $RunDir); measured_sec = $grand; stages = @($stageRows |
           ForEach-Object {
             [pscustomobject]@{ lane = $_.lane; stage = $_.label; n = $_.n; total_sec = $_.total
-                               mean_sec = $_.mean; by = $_.by
+                               mean_sec = $_.mean; by = $_.by; out_tok = $_.out_tok
+                               out_tok_per_sec = $(if ($_.total -gt 0) { [Math]::Round($_.out_tok / $_.total, 1) } else { 0 })
                                kind = $(if ($_.by -eq 'mechanical') { 'mechanical' }
                                         elseif ($_.by -eq 'local') { 'local' } else { 'judgment' }) } })
         unfinished = @($starts.Keys)
@@ -1923,11 +1956,12 @@ if ($runLaneSummary) {
       exit 0
     }
     Write-Output ("hunt-run stage summary: {0}" -f (Split-Path -Leaf $RunDir))
-    Write-Output ("  {0,-9} {1,-30} {2,5} {3,10} {4,9} {5,7}  {6}" -f 'lane','stage','n','total_min','mean_sec','share','kind')
+    Write-Output ("  {0,-9} {1,-30} {2,5} {3,10} {4,9} {5,7} {6,9} {7,7}  {8}" -f 'lane','stage','n','total_min','mean_sec','share','out_tok','tok/sec','kind')
     foreach ($r in $stageRows) {
       $share = if ($grand -gt 0) { '{0:N1}%' -f (100.0 * $r.total / $grand) } else { '-' }
       $kind = if ($r.by -eq 'mechanical') { 'mechanical' } elseif ($r.by -eq 'local') { 'local' } else { 'judgment' }
-      Write-Output ("  {0,-9} {1,-30} {2,5} {3,10:N1} {4,9:N0} {5,7}  {6}" -f $r.lane, $r.label.Substring(0, [Math]::Min(30, $r.label.Length)), $r.n, ($r.total / 60.0), $r.mean, $share, $kind)
+      $tps = if ($r.total -gt 0 -and $r.out_tok -gt 0) { '{0:N1}' -f ($r.out_tok / $r.total) } else { '-' }
+      Write-Output ("  {0,-9} {1,-30} {2,5} {3,10:N1} {4,9:N0} {5,7} {6,9:N0} {7,7}  {8}" -f $r.lane, $r.label.Substring(0, [Math]::Min(30, $r.label.Length)), $r.n, ($r.total / 60.0), $r.mean, $share, $r.out_tok, $tps, $kind)
     }
     $unf = @($starts.Keys)
     if ($unf.Count -gt 0) {
