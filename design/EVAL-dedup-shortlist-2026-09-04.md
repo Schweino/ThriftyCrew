@@ -145,10 +145,70 @@ one order and `different` in the other, and the swap killed both.
 not a session's. This section is the evidence for that decision, and until it is taken the ingest
 dedup widens the ask and refuses nobody.
 
+### The wide validation, and why the repair was NOT implemented after all
+
+Brad approved "validate wide, then implement" on the section-6 evidence. Validated wide, the repair
+does not earn implementation. Both halves were measured against real labelled data.
+
+**Safety - 300 hardest PUBLISHED pairs (score 0.8779-0.9624), every one a known non-duplicate a
+decider ruled distinct. Any `same` here is a recipe the estate would have thrown away.**
+
+| design | wrong refusals |
+|---|---|
+| A  two-polarity contract (shipped) | 0 of 300 - *but only because it cannot fire* |
+| B  forced choice, one order | 4 of 300 (1.3%) |
+| C  forced choice, both orders agree | **0 of 300** |
+
+**Recall - 155 pairs a decider actually ruled duplicate, from the ledger's `dupe_of`.**
+
+| design | fires on a real duplicate |
+|---|---|
+| A | 0 of 155 (0.0%) |
+| B | 15 of 155 (9.7%) |
+| C | **13 of 155 (8.4%)** |
+
+C is safe and nearly useless. At 8.4% it would have caught roughly half of one of the six dupe
+rejections on hunt-2026-09-04-five-b, in exchange for two extra local calls on every popped
+candidate. Safety alone proves nothing here, because the BROKEN contract also scores 0 wrong
+refusals - that is what an off switch looks like on a safety metric.
+
+**WHY, and it is not a prompt bug.** The misses are systematic:
+
+    different/different   Ground Beef Stroganoff  vs  Ground Beef Stroganoff Pasta
+    different/different   Swedish Meatballs       vs  Swedish Meatball and Potato Bowls
+    different/different   Pork Stew               vs  Creamy Pork Stew with Potatoes and Carrots
+    different/different   Chicken Burrito         vs  Chicken and Bean Burrito
+
+The decider rules these duplicates because they are the same DINNER IDENTITY. The local model reads
+them as different dishes because the names differ. Both readings are defensible; they are simply not
+the same question. And every design tested is name-only, because that is all the local model is
+given - `signature_text` is `"dish: <name>. protein: <protein>"`, while the decider rules on a
+dossier carrying ingredients, method, band and neighbour evidence.
+
+**So the honest conclusion is that the ingest gate cannot reproduce the decider's judgement from
+names, and no amount of question design fixes that.** The next thing worth testing is a RICHER
+prompt - the ingredient list, which is what actually distinguishes "Beef Chili" from "Beef Chili
+Mac" - and that test cannot be run today: `slim_ruled` strips a ruled candidate to `RULED_KEEP`, so
+the 155 labelled positives have no ingredients left to prompt with. The `dupe_of` fix below is what
+starts accumulating the data that would answer it.
+
 ### And a second defect it uncovered
 
-A `ruled:rejected-dupe` candidate records **no `exclusion` and no `dupe_of`** - what it duplicated is
-not written back to the pool. So the estate cannot audit its own duplicate rulings, cannot use its
-152 of them as labelled PAIRS, and cannot learn a threshold from them. The floor in section 3 had to
-be read from each dupe's max cosine to the whole catalog rather than to its actual twin, which is a
-weaker measurement than the data should have supported.
+A `ruled:rejected-dupe` candidate in the POOL records no `dupe_of` - only `ruled_reason`, which is
+prose ("...shares the flavor identity of live s..."). So the file every dedup tool actually reads
+held 152 duplicate rulings and not one joinable pair, and the floor in section 3 had to be read from
+each dupe's max cosine to the WHOLE catalog rather than to its actual twin. That is a strictly weaker
+measurement: it asks "how close is this to anything live" where the labelled question is "how close
+is it to the thing it duplicates".
+
+**CORRECTION, made the same day.** An earlier version of this section said the estate could not audit
+its duplicate rulings at all. That was wrong, and wrong in the direction that flatters the finding.
+`db\considered-dishes.json` has carried a structured `dupe_of` from the beginning: 155 of its 199
+rejected-dupe rows name their twin. The ledger was never the problem. The ruling simply stopped
+there and never travelled the last hop to the pool - which is also why the gap survived the
+decide_apply drill, whose every `dupe_of` assertion was made against the ledger, the one surface that
+already had it.
+
+FIXED: `--mark-ruled --dupe-of` carries the twin onto the candidate, `RULED_KEEP` preserves it
+through `slim_ruled`, and the drill now asserts it on the POOL. Existing rows are not backfilled;
+the 155 ledger pairs remain joinable by slug for anyone who wants them.

@@ -919,14 +919,30 @@ def new_entry(slug, name, url, domain, entered_by):
 # so it keeps its identity, its provenance and THE NUMBERS THAT RULED IT, and loses the scoring
 # apparatus that only an available candidate uses. Measured 2026-08-23: 607 B -> ~300 B per row.
 RULED_KEEP = ("slug", "name", "url", "domain", "first_seen", "band", "servings", "signature",
-              "status", "entered_by", "exclusion", "ruled_reason", "ruled_at")
+              "status", "entered_by", "exclusion", "ruled_reason", "ruled_at",
+              # WHAT IT DUPLICATED. Without this a rejected-dupe keeps prose naming its twin
+              # and nothing joinable, so 152 labelled pairs sat in the pool unreadable.
+              "dupe_of")
+
+
+# A DUPE RULING KEEPS ITS EVIDENCE. For every other verdict the band and signature are the whole of
+# the justification, but "is this the same dinner" is settled by what is IN the dish - it is the
+# ingredient list that separates Beef Chili from Beef Chili Mac, and the names that do not. Measured
+# 2026-09-04: with only names to work from, no question design reproduced the decider's duplicate
+# judgement (best recall 9.7%, and the misses were systematic - Ground Beef Stroganoff vs Ground Beef
+# Stroganoff Pasta read as different dishes). The evidence had been thrown away at ruling time, so the
+# richer prompt could not even be TESTED against the estate's own 155 labelled pairs.
+# Cost: 471 bytes median x 152 rulings = ~70 KB against a 29.9 MB pool.
+DUPE_KEEP = RULED_KEEP + ("ingredients_verbatim", "dupe_of")
 
 
 def slim_ruled(entry):
     """Drop what a ruled entry cannot use. Never drops a number that justified the ruling."""
-    if not str(entry.get("status", "")).startswith("ruled:"):
+    status = str(entry.get("status", ""))
+    if not status.startswith("ruled:"):
         return entry
-    return {k: v for k, v in entry.items() if k in RULED_KEEP}
+    keep = DUPE_KEEP if status == "ruled:rejected-dupe" else RULED_KEEP
+    return {k: v for k, v in entry.items() if k in keep}
 
 
 def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_CAL_MAX,
@@ -2624,6 +2640,12 @@ def cmd_mark_ruled(a):
         c["status"] = "ruled:%s" % a.verdict
     c["ruled_reason"] = a.reason or ""
     c["ruled_at"] = now_stamp()
+    # THE TWIN, STRUCTURED. `ruled_reason` is prose and always was; the ledger has carried a
+    # structured `dupe_of` from the start and the pool never did, so the file every dedup tool
+    # reads could not answer "a duplicate of WHAT". A ruling that cannot be joined cannot be
+    # audited and cannot be learned from.
+    if a.dupe_of:
+        c["dupe_of"] = [s.strip() for s in a.dupe_of.split(",") if s.strip()]
     if c["status"].startswith("ruled:"):
         pool["candidates"] = [slim_ruled(x) if x["slug"] == c["slug"] else x
                               for x in pool["candidates"]]
@@ -3556,6 +3578,25 @@ def cmd_selftest(_a):
     finally:
         globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
 
+    # ---- a dupe ruling keeps the evidence that settled it ----------------------------------------
+    _dupe = {"slug": "d", "name": "D", "status": "ruled:rejected-dupe", "band": {}, "url": "u",
+             "ingredients_verbatim": ["1 lb ground beef", "2 cups macaroni"],
+             "dupe_of": ["live-twin"], "neighbours": [{"slug": "x"}], "page_html": "junk"}
+    _slim = slim_ruled(_dupe)
+    T("MUST FIRE  a rejected-dupe KEEPS its ingredient list - names alone could not reproduce the "
+      "decider's duplicate judgement, and the evidence was being discarded at ruling time",
+      _slim.get("ingredients_verbatim") == ["1 lb ground beef", "2 cups macaroni"],
+      ",".join(sorted(_slim)))
+    T("MUST FIRE  ...and its twin, so the ruling is a joinable PAIR",
+      _slim.get("dupe_of") == ["live-twin"], str(_slim.get("dupe_of")))
+    T("CLEAN TWIN it still drops what a ruled entry cannot use",
+      "page_html" not in _slim and "neighbours" not in _slim, ",".join(sorted(_slim)))
+    _unfit = slim_ruled({"slug": "u", "status": "ruled:rejected-not-fit", "band": {},
+                         "ingredients_verbatim": ["x"]})
+    T("CLEAN TWIN a NON-dupe ruling keeps no ingredients - the evidence is kept where it answers a "
+      "question, not everywhere",
+      "ingredients_verbatim" not in _unfit, ",".join(sorted(_unfit)))
+
     # ---- the shortlist is PER SOURCE, because the sources are on different scales ---------------
     # Measured 2026-09-04 on the live pool: 31,340 bge-m3 rows at cosine 0.559-1.000 against
     # DEDUP_SHORTLIST_MIN = 20, a word-overlap COUNT. Zero could ever clear it.
@@ -3737,6 +3778,10 @@ def main(argv=None):
     ap.add_argument("--run", default="")
     ap.add_argument("--verdict", default="")
     ap.add_argument("--reason", default="")
+    ap.add_argument("--dupe-of", dest="dupe_of", default="",
+                    help="with --mark-ruled --verdict rejected-dupe: the live slug(s) this "
+                         "duplicates, comma separated. Recorded on the candidate so the ruling is "
+                         "a joinable PAIR rather than prose.")
     ap.add_argument("--count", type=int, default=10)
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--per-domain", dest="per_domain", type=int, default=0)

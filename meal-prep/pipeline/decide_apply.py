@@ -168,7 +168,8 @@ def apply_verdict(payload, run_dir, run_id, pool_path, store_path, dry_run=False
                                 % (slug, out.strip()))
 
         # ---- 3. the pool ruling, through harvest.py's single-writer verb -------------------------
-        rc = _mark_ruled(slug, verdict, d.get("reason") or "", pool_path)
+        rc = _mark_ruled(slug, verdict, d.get("reason") or "", pool_path,
+                         dupe_of=d.get("dupe_of"))
         if rc != 0:
             findings.append("%s: the pool ruling did not land" % slug)
 
@@ -184,11 +185,17 @@ def apply_verdict(payload, run_dir, run_id, pool_path, store_path, dry_run=False
     return applied, findings
 
 
-def _mark_ruled(slug, verdict, reason, pool_path):
+def _mark_ruled(slug, verdict, reason, pool_path, dupe_of=None):
     """harvest.py is the pool's SOLE writer, so the ruling goes through its verb rather than through
-    a second hand on the same file - even though this process could open it."""
+    a second hand on the same file - even though this process could open it.
+
+    `dupe_of` travels with the ruling. The decider has always returned it and the LEDGER has always
+    stored it; it stopped here, so the pool recorded 152 duplicate rulings with no recoverable twin.
+    """
     args = [sys.executable, os.path.join(HERE, "harvest.py"), "--mark-ruled", slug,
             "--verdict", verdict, "--reason", reason]
+    if dupe_of:
+        args += ["--dupe-of", ",".join(str(x) for x in dupe_of if str(x).strip())]
     if pool_path:
         args += ["--pool", pool_path]
     p = subprocess.run(args, capture_output=True)
@@ -476,6 +483,23 @@ def cmd_selftest(_a):
           json.dumps(rows["drill-dupe"]))
         T("the ruling is attributed to the decider, not to whoever held the pen",
           rows["drill-accept"].get("by") == "decider", str(rows["drill-accept"].get("by")))
+
+        # ---- and the twin reaches the POOL, which is the file every dedup tool actually reads ----
+        # The ledger has carried dupe_of from the start and the pool never did, so the assertions
+        # above were all made against the surface that already had it. 152 duplicate rulings sat in
+        # the pool with prose naming their twin and nothing joinable.
+        with open(pool_path, "r", encoding="utf-8-sig") as f:
+            pooled = {c["slug"]: c for c in (json.load(f).get("candidates") or [])}
+        T("MUST FIRE  the pool candidate records WHAT it duplicated, as a joinable slug and not as "
+          "prose - a ruling that cannot be joined cannot be audited or learned from",
+          pooled.get("drill-dupe", {}).get("dupe_of") == ["drill-accept", "some-live-slug"],
+          json.dumps(pooled.get("drill-dupe", {}).get("dupe_of")))
+        T("MUST FIRE  ...and it SURVIVES slim_ruled, which strips a ruled entry to RULED_KEEP",
+          "dupe_of" in pooled.get("drill-dupe", {}),
+          ",".join(sorted(pooled.get("drill-dupe", {}))))
+        T("CLEAN TWIN a non-dupe ruling records no twin, rather than an empty one",
+          "dupe_of" not in pooled.get("drill-unfit", {}),
+          ",".join(sorted(pooled.get("drill-unfit", {}))))
         T("MUST FIRE  dupe_of arrives as DISTINCT terms, not one composite string (the B8 class)",
           list(rows["drill-dupe"].get("dupe_of") or []) == ["drill-accept", "some-live-slug"],
           json.dumps(rows["drill-dupe"].get("dupe_of")))
