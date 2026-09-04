@@ -144,7 +144,7 @@ class DispatchResult(object):
     """What the daemon gets back. `payload` is None whenever no usable verdict exists, and `failure`
     says which kind of nothing it is - the distinction B5 exists to preserve."""
 
-    __slots__ = ("agent", "payload", "text", "failure", "detail", "problems", "reasked",
+    __slots__ = ("agent", "payload", "text", "failure", "detail", "problems", "reasked", "resumed",
                  "tokens_in", "tokens_out", "cache_read", "cache_creation", "cost_usd",
                  "seconds", "calls", "api_turns", "model_usage", "session_id", "denials", "findings")
 
@@ -156,6 +156,7 @@ class DispatchResult(object):
         self.detail = ""
         self.problems = []
         self.reasked = False
+        self.resumed = False       # the re-ask continued the first session rather than opening a new one
         self.tokens_in = 0         # input + cache_read + cache_creation, the lane-tokens.ps1 rule
         self.tokens_out = 0
         self.cache_read = 0
@@ -187,7 +188,7 @@ class DispatchResult(object):
 
     def as_dict(self):
         return {"agent": self.agent, "ok": self.ok, "failure": self.failure, "detail": self.detail,
-                "problems": list(self.problems), "reasked": self.reasked,
+                "problems": list(self.problems), "reasked": self.reasked, "resumed": self.resumed,
                 "tokens_in": self.tokens_in, "tokens_out": self.tokens_out,
                 "cache_read": self.cache_read, "cache_creation": self.cache_creation,
                 "cost_usd": round(self.cost_usd, 6), "seconds": round(self.seconds, 2),
@@ -240,11 +241,19 @@ def model_usage_totals(model_usage):
     return all_in, all_out, round(cost, 6), names
 
 
-def build_argv(agent, reconstruct=False, extra=None):
+def build_argv(agent, reconstruct=False, extra=None, resume=None):
     """The exact argv. Kept separate from the call so the fixtures can assert its SHAPE without
-    spending a token - the shape is what carries the model pin and the tool contract."""
+    spending a token - the shape is what carries the model pin and the tool contract.
+
+    `resume` is a session id: the argv then CONTINUES that session (`--resume <id>`) instead of
+    opening a fresh one. The agent, its model and its tools are the session's own already, so
+    neither road that declares them is taken - a resumed session that re-stated `--agent` would
+    be two authorities for one pin again.
+    """
     argv = [CLAUDE_BIN, "-p", "--output-format", "json"]
-    if reconstruct:
+    if resume:
+        argv += ["--resume", str(resume)]
+    elif reconstruct:
         # THE FALLBACK ROAD - section 4.1a as originally written. Every field re-stated by this
         # process rather than read by the CLI.
         if agent.model:
@@ -370,6 +379,17 @@ def _absorb(res, env):
     for d in env.get("permission_denials") or []:
         res.denials.append(d if isinstance(d, str) else json.dumps(d)[:200])
 
+
+REASK_RESUME_PREAMBLE = """Your previous answer in THIS conversation did not conform to the schema this
+stage requires, so it was REFUSED WHOLE and nothing was written. Nothing has been coerced or
+half-applied on your behalf.
+
+The named violations, every one of them:
+%s
+
+The original request and your answer are above in this conversation. Do NOT redo the work:
+every table you were given, every label you read and every ruling you made is still in front
+of you. Return the corrected object, whole, and nothing else after it."""
 
 RETURN_CONTRACT = """
 
@@ -511,9 +531,25 @@ def dispatch(agent_name, prompt, schema=None, validator=None, timeout=None, reco
     # ---- ONE re-ask, quoting every named violation. Never a coercion, never a second re-ask. -------
     res.reasked = True
     res.problems = list(problems)
-    reask = (REASK_PREAMBLE % ("\n".join("  - " + p for p in problems), res.text[:4000])
-             + "\n\nTHE ORIGINAL REQUEST FOLLOWS.\n\n" + prompt + contract_text(schema))
-    env2, failure2, detail2, secs2 = call(argv, reask, timeout, cwd)
+    # THE RE-ASK RESUMES THE SESSION IT IS CORRECTING (2026-09-04). It used to open a COLD session
+    # carrying the original prompt plus the first 4,000 chars of the refused answer. Measured on
+    # hunt-2026-08-27-highprotein: 14 re-ask sessions, 4.0M input tokens and 37 web calls - a
+    # mapper's answer runs far past 4,000 chars, so the cold re-ask re-fetched every label the first
+    # session had already read and re-derived every ruling it had already made. The envelope has
+    # carried `session_id` all along and the CLI has `--resume`, so the correction now lands in the
+    # session that still holds the table, the shelf and the pages it fetched, and the prompt says
+    # only what was wrong. The cold road stays, as the fallback for an envelope that named no session.
+    sid = str(res.session_id or "").strip()
+    if sid:
+        res.resumed = True
+        argv2 = build_argv(agent, reconstruct=reconstruct, resume=sid)
+        reask = (REASK_RESUME_PREAMBLE % "\n".join("  - " + p for p in problems)
+                 + contract_text(schema))
+    else:
+        argv2 = argv
+        reask = (REASK_PREAMBLE % ("\n".join("  - " + p for p in problems), res.text[:4000])
+                 + "\n\nTHE ORIGINAL REQUEST FOLLOWS.\n\n" + prompt + contract_text(schema))
+    env2, failure2, detail2, secs2 = call(argv2, reask, timeout, cwd)
     res.seconds += secs2
     if failure2:
         res.failure, res.detail = failure2, detail2
@@ -562,12 +598,12 @@ def _model_row(in_tok, out_tok, cache_read=0, cache_creation=0, cost=0.01):
 
 
 def _env(result_text, in_tok=100, out_tok=50, cache_read=0, cache_creation=0, model="claude-fable-5",
-         is_error=False, extra_models=None):
+         is_error=False, extra_models=None, session_id="s1"):
     mu = {model: _model_row(in_tok, out_tok, cache_read, cache_creation)}
     for name, row in (extra_models or {}).items():
         mu[name] = row
     return {"type": "result", "subtype": "success", "is_error": is_error, "result": result_text,
-            "session_id": "s1", "total_cost_usd": 0.01, "num_turns": 1, "permission_denials": [],
+            "session_id": session_id, "total_cost_usd": 0.01, "num_turns": 1, "permission_denials": [],
             # `usage` covers THE MAIN AGENT ONLY. That is the whole reason C1 also reads modelUsage.
             "usage": {"input_tokens": in_tok, "output_tokens": out_tok,
                       "cache_read_input_tokens": cache_read,
@@ -645,6 +681,13 @@ def selftest():
           primary[primary.index("--effort") + 1] == "high", " ".join(primary))
         T("every dispatch asks for the JSON envelope",
           primary[primary.index("--output-format") + 1] == "json", " ".join(primary))
+        resumed = build_argv(a, resume="abc-123")
+        T("MUST FIRE  the RESUME road continues the session by id and re-declares NEITHER the agent "
+          "nor the model - the session already holds both, and a second declaration is a second "
+          "authority",
+          "--resume" in resumed and resumed[resumed.index("--resume") + 1] == "abc-123"
+          and "--agent" not in resumed and "--model" not in resumed
+          and "--append-system-prompt" not in resumed, " ".join(resumed))
         recon = build_argv(a, reconstruct=True)
         T("CLEAN TWIN the fallback road restates model, body and tools (section 4.1a as written)",
           recon[recon.index("--model") + 1] == "claude-opus-4-8"
@@ -726,13 +769,30 @@ def selftest():
           "state" in bad_then_good.calls[1]["prompt"]
           and "REFUSED WHOLE" in bad_then_good.calls[1]["prompt"],
           bad_then_good.calls[1]["prompt"][:160])
-        T("MUST FIRE  the re-ask carries the ORIGINAL request too - a correction with no question "
-          "attached is a different question",
-          ("\n\ngo" in bad_then_good.calls[1]["prompt"]), "the original prompt was dropped")
-        T("MUST FIRE  the re-ask shows the agent what it actually returned",
-          '"slug": "s"' in bad_then_good.calls[1]["prompt"]
-          or '"slug":"s"' in bad_then_good.calls[1]["prompt"],
-          "the prior answer was not quoted")
+        argv_re = bad_then_good.calls[1]["argv"]
+        T("MUST FIRE  the re-ask RESUMES the session that answered (--resume <its session_id>), so "
+          "the table, the shelf and every page it fetched are still in front of it - a cold re-ask "
+          "re-bought all of that 14 times on 2026-08-27",
+          "--resume" in argv_re and argv_re[argv_re.index("--resume") + 1] == "s1"
+          and "--agent" not in argv_re and r.resumed, " ".join(argv_re))
+        T("MUST FIRE  ...and a resumed re-ask does NOT repeat the original request or quote the "
+          "answer back - both are already in the conversation, and repeating them re-buys them",
+          "\n\ngo" not in bad_then_good.calls[1]["prompt"]
+          and '"slug": "s"' not in bad_then_good.calls[1]["prompt"]
+          and "above in this conversation" in bad_then_good.calls[1]["prompt"]
+          and "RETURN CONTRACT" in bad_then_good.calls[1]["prompt"],
+          bad_then_good.calls[1]["prompt"][:200])
+        cold = FakeRunner([
+            ("env", _env(json.dumps({"slug": "s", "status": "ok"}), session_id="")),
+            ("env", _env(good))])
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp, runner=cold)
+        T("CLEAN TWIN an envelope that named NO session takes the cold road: the original argv, the "
+          "original request and the prior answer all travel with the re-ask",
+          r.ok and not r.resumed and "--resume" not in cold.calls[1]["argv"]
+          and cold.calls[1]["argv"] == cold.calls[0]["argv"]
+          and "\n\ngo" in cold.calls[1]["prompt"]
+          and ('"slug": "s"' in cold.calls[1]["prompt"] or '"slug":"s"' in cold.calls[1]["prompt"]),
+          " ".join(cold.calls[1]["argv"]) + " | " + cold.calls[1]["prompt"][:120])
         twice_bad = FakeRunner([("env", _env(json.dumps({"slug": "s", "status": "ok"}))),
                                 ("env", _env(json.dumps({"slug": "s"})))])
         r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp, runner=twice_bad)

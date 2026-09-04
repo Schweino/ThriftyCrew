@@ -91,6 +91,30 @@ to distrust the empty result and keep sweeping, and GREP_HARNESS_NOTE rides on e
 - The post-publish reviewer gets no dossier at all and parsed `recipes-db.json` 7 times and the triage
   queue 6 times in one 5.6M session. By design independent; noted, not counted.
 
+## Shipped 2026-09-04 (same day, same commit series)
+
+All seven, in `hunt-daemon.py` and `hunt_dispatch.py`, fixtured in `hunt_daemon_selftest.py` (section
+"2026-09-04 - the repeat-work fixes", 30 cases) and `hunt_dispatch.py --selftest` (+2). Neuter proofs
+run and reverted by checksum for each mechanism; counts in the commit message.
+
+1. Write lane: `intake_has_prose` gates the writer dispatch on a kept intake; a spec-build refusal is
+   stamped (`intake\<slug>.write-refusal.json`, hashes of the mapper file and db\ingredients.json) and
+   an identical re-entry is STUCK without paying the writer or the build; a clean build clears it.
+2. Price lane: `hold_for_batch` mirrors the extract lane's three flush conditions (batch full /
+   upstream idle / lane closing) with a 30 s recheck timer; the map lane wakes the price lane after
+   every micro-batch; `price_bid_block` renders term -> bid from the mapped files and says the
+   server-tier probe is done.
+3. Mapper QA repairs: `qa_repair_by_remap` - one-slug `map_prompt` under the findings, MAPPED schema,
+   `assemble_mapped`, skeleton rebuilt with `-Force` and the writer's prose saved and re-applied, spec
+   rebuilt. Extractor-owned repairs keep the old road.
+4. Audit: `AUDIT_DOSSIER_CAP` 6000 -> 24000; `render_wave_rulings` (mapped decisions + food-DB rows);
+   `audit_paths_block` (spec/card/decision paths and the scripts the battery already executed).
+5. Re-ask: `--resume <session_id>` with a short preamble; the cold road stays as the fallback for an
+   envelope with no session id. Probed live: a resumed headless session keeps the agent's pinned
+   model and system prompt.
+6. `spec_ingredient_lines` renders v2 keys in the QA dossier.
+7. Registrar and mapper prompt sentences.
+
 ## What would close each, inside the existing design
 1. Audit: raise `AUDIT_DOSSIER_CAP`; inline spec paths, the card dir, and the wave's mapped rulings +
    food-DB rows (the daemon already renders both for the mapper); state which battery checks already ran

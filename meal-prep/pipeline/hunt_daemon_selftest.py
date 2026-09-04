@@ -866,8 +866,8 @@ def run():
     T("MUST FIRE  a payload with NO verdict writes NOTHING and the recipe is STUCK - a file saying "
       "nothing is worse than no file, because it looks like a ruling",
       *_qa_no_verdict_writes_nothing())
-    T("CLEAN TWIN a QA failure owned by the MAPPER keeps its current owner and its current prompt - "
-      "no field patch reaches a mapping defect",
+    T("CLEAN TWIN a QA failure owned by the MAPPER keeps its owner and never reaches the field patch "
+      "- and with no pre-resolve table its re-map is REFUSED with a finding, not dispatched blind",
       *_qa_mapper_repair_keeps_its_road())
 
     # =================================================================================================
@@ -1489,6 +1489,13 @@ def run():
         T(name, ok, got)
     for name, ok, got in _split_lines_are_explained_to_the_mapper():
         T(name, ok, got)
+
+    # =================================================================================================
+    H("2026-09-04 - the repeat-work fixes (design\\EVAL-hunter-repeat-work-2026-09-04.md)")
+    # =================================================================================================
+    for fn in RW_SECTIONS:
+        for name, ok, got in fn():
+            T(name, ok, got)
 
     print("")
     if bad:
@@ -9293,12 +9300,17 @@ def _audit_dossier_unreadable_is_announced():
 
 def _audit_dossier_truncation_is_announced():
     """MUST FIRE. A quietly cut block is worse than no block: the auditor would believe it had seen
-    every check. 40 slugs is well past the cap and nothing about it is silent."""
+    every check. 40 slugs is well past the ORIGINAL cap and nothing about it is silent.
+
+    THE CAP IS PINNED ON THE INSTANCE (2026-09-04): the class cap rose 6000 -> 24000 so a real
+    6-slug wave is no longer cut, and 40 fixture slugs render ~16.5k - under the new cap. What this
+    case pins is the announcement, not the number, so it holds the cap at the old value."""
     tmp = _wave_scratch()
     try:
         many = tuple("slug-%02d" % i for i in range(40))
         _preaudited(tmp, slugs=many)
         d = daemon(run_dir=tmp)
+        d.AUDIT_DOSSIER_CAP = 6000
         block = d.render_audit_dossier(1)
         return ("THIS BLOCK WAS TRUNCATED" in block and "read it before you rule" in block
                 and len(block) <= d.AUDIT_DOSSIER_CAP + 200,
@@ -9664,7 +9676,10 @@ def _qa_writer_repair_is_a_patch():
 
 def _qa_mapper_repair_keeps_its_road():
     """CLEAN TWIN. A QA finding owned by the mapper needs re-mapping, which no field patch reaches.
-    Its owner routing and its prompt are both unchanged."""
+    Its owner routing is unchanged; since 2026-09-04 its ROAD is the one-slug re-map
+    (qa_repair_by_remap, pinned in the repeat-work section), which starts with map-preresolve. With
+    no pre-resolve table on disk, as here, nothing is dispatched blind: the refusal is a finding
+    naming map-preresolve, the writer's patch road is never reached, and the one re-QA still runs."""
     tmp = scratch_dir(prefix="daemon-qamapper-")
     try:
         skeletoned(tmp, ["s1"])
@@ -9679,10 +9694,12 @@ def _qa_mapper_repair_keeps_its_road():
         d.ch["qa"].close()
         arun(d.run(("qa",)))
         mp = fd.prompts("recipe-ingredient-mapper")
-        return (len(mp) == 1 and "QA file:" in mp[0]
-                and "THE FIELDS AS THEY STAND RIGHT NOW" not in mp[0]
-                and not fd.prompts("recipe-writer"),
-                "mapper=%d writer=%d" % (len(mp), len(fd.prompts("recipe-writer"))))
+        refused = [f for f in d.findings if "could not run map-preresolve" in f]
+        return (not mp and not fd.prompts("recipe-writer") and len(refused) == 1
+                and len(fd.prompts("recipe-source-qa")) == 2,
+                "mapper=%d writer=%d qa=%d findings=%s" % (len(mp), len(fd.prompts("recipe-writer")),
+                                                          len(fd.prompts("recipe-source-qa")),
+                                                          json.dumps(d.findings)[:200]))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -10776,6 +10793,509 @@ def _mechanical_lane_events():
                 "future - an unpairable start reads as a stage that never finished",
                 *_t3_stamp_ago_is_hunt_runs_own_format()))
     return res
+
+
+# =====================================================================================================
+# 2026-09-04 - THE REPEAT-WORK FIXES (design\EVAL-hunter-repeat-work-2026-09-04.md). One section per
+# fix. Every dispatch and every shell call is injected, as everywhere else in this file; the FDC fill
+# and the prior-rulings sidecar are stubbed on the instance exactly as qa_battery is in _qa_run,
+# because both reach the network or a second interpreter.
+# =====================================================================================================
+
+RW_PROSE = {"intro_html": "<p>intro</p>", "shop_smart": "<ul><li>buy</li></ul>",
+            "make_it": "<p>make</p>", "portion_html": "<p>portion</p>",
+            "cost_closing_html": "<p>cost</p>", "upsell_html": "<p>up</p>"}
+
+
+def _rw_intake(tmp, slug="s1", prose=None, steps=("Brown the beef.",)):
+    ip = os.path.join(tmp, "intake", "%s.json" % slug)
+    with io.open(ip, "r", encoding="utf-8-sig") as f:
+        doc = json.load(f)
+    doc["prose"] = dict(RW_PROSE if prose is None else prose)
+    doc["head"]["steps"] = list(steps)
+    with io.open(ip, "w", encoding="utf-8") as f:
+        json.dump(doc, f)
+    return doc
+
+
+def _rw_read_intake(tmp, slug="s1"):
+    with io.open(os.path.join(tmp, "intake", "%s.json" % slug), "r", encoding="utf-8-sig") as f:
+        return json.load(f)
+
+
+def _rw_mapped(tmp, slug="s1"):
+    os.makedirs(os.path.join(tmp, "mapped"), exist_ok=True)
+    doc = {"slug": slug, "source_servings": 4, "target_servings": 14, "scale_factor": 3.5,
+           "ingredients": [{"source_raw": "1 lb ground beef", "item": "93/7 Ground Beef",
+                            "bid": "ground-beef-9307", "grams": 1568, "decision": "mapped",
+                            "buy": "3 1/2 lb", "optional": False},
+                           {"source_raw": "1/2 cup cotija cheese", "item": "Cotija Cheese",
+                            "bid": None, "grams": 120, "decision": "mapped-null",
+                            "buy": "1 cup crumbled", "optional": False}]}
+    with io.open(os.path.join(tmp, "mapped", "%s.json" % slug), "w", encoding="utf-8") as f:
+        json.dump(doc, f)
+
+
+def _rw_specs(tmp, slug="s1"):
+    specs = os.path.join(tmp, "specs")
+    os.makedirs(specs, exist_ok=True)
+    with io.open(os.path.join(specs, "%s.json" % slug), "w", encoding="utf-8") as f:
+        json.dump({"name": slug, "slug": slug, "servings": 14,
+                   "stat": {"cal": 500, "protein": 35, "carbs": 20, "fat": 20, "cost_ps": "2.50"},
+                   "ingredients_display": ["<strong>93/7 Ground Beef:</strong> 3 1/2 lb (1568 g)",
+                                           "<strong>Cotija Cheese:</strong> 1 cup crumbled (120 g)"],
+                   "ingredients_grams": [{"item": "93/7 Ground Beef", "grams": 1568},
+                                         {"item": "Cotija Cheese", "grams": 120}],
+                   "make_it": ["Brown the beef.", "Crumble the cheese over."],
+                   "head": {"recipeIngredient": ["3 1/2 lb ground beef", "1 cup cotija"]}}, f)
+    return specs
+
+
+def _rw_extracted(tmp, slug="s1"):
+    os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+    with io.open(os.path.join(tmp, "extracted", "%s.json" % slug), "w", encoding="utf-8") as f:
+        json.dump({"title": "S1", "source_url": "https://d/%s" % slug, "servings": 4,
+                   "ingredients": [{"raw": "1 lb chicken"}, {"raw": "cotija cheese"}],
+                   "instructions": ["cook"]}, f)
+
+
+def _rw_vocab(tmp, text="[]"):
+    p = os.path.join(tmp, "ingredients.json")
+    with io.open(p, "w", encoding="utf-8") as f:
+        f.write(text)
+    return p
+
+
+def _rw_write_run(tmp, spec_rc=0):
+    """Drive the write lane once over s1 with a CURRENT intake (mapped file + stamp on disk)."""
+    ps = FakePS({"build-v2-spec": (spec_rc, "UNKNOWN INGREDIENT NAME: Cotija Cheese" if spec_rc
+                                   else "", "")})
+    fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written",
+                                          "fields": {"prose.intro_html": "<p>rewritten</p>"}}] * 4})
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps, specs_dir=os.path.join(tmp, "specs"),
+               ingredients_path=os.path.join(tmp, "ingredients.json"))
+    d.write_mapper_stamp("s1")
+    d.ch["write"].push({"slug": "s1"})
+    d.ch["write"].close()
+    arun(d.run(("write",)))
+    return d, ps, fd
+
+
+def _rw_write_lane():
+    res = []
+    tmp = scratch_dir(prefix="daemon-rw-w1-")
+    try:
+        skeletoned(tmp, ["s1"]); _rw_intake(tmp); _rw_mapped(tmp); _rw_specs(tmp); _rw_vocab(tmp)
+        d, ps, fd = _rw_write_run(tmp)
+        res.append(("MUST FIRE  a CURRENT intake whose prose is complete does NOT dispatch the writer - "
+                    "the spec build runs straight off the prose on disk (62 of 95 writer calls on "
+                    "2026-08-27 were this)",
+                    not fd.prompts("recipe-writer") and bool(ps.find("build-v2-spec")),
+                    "writer=%d build=%d outcomes=%s" % (len(fd.prompts("recipe-writer")),
+                                                        len(ps.find("build-v2-spec")),
+                                                        json.dumps(d.outcomes)[:200])))
+        kept = (_rw_read_intake(tmp).get("prose") or {}).get("intro_html")
+        res.append(("  and the prose on disk is the prose that ships - nothing rewrote it",
+                    kept == RW_PROSE["intro_html"], str(kept)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    tmp = scratch_dir(prefix="daemon-rw-w2-")
+    try:
+        skeletoned(tmp, ["s1"]); _rw_intake(tmp); _rw_mapped(tmp); _rw_specs(tmp)
+        vocab = _rw_vocab(tmp)
+        d, ps, fd = _rw_write_run(tmp, spec_rc=1)
+        stamp = os.path.join(tmp, "intake", "s1.write-refusal.json")
+        st = {}
+        if os.path.exists(stamp):
+            with io.open(stamp, "r", encoding="utf-8-sig") as f:
+                st = json.load(f)
+        res.append(("MUST FIRE  a spec-build refusal is STAMPED against the two inputs it depends on - "
+                    "the mapper file's hash and db\\ingredients.json's hash - with the refusal named",
+                    "Cotija" in str(st.get("detail")) and bool(st.get("mapper_sha256"))
+                    and bool(st.get("vocab_sha256")), json.dumps(st)[:240]))
+        d2, ps2, fd2 = _rw_write_run(tmp)
+        o = d2.outcomes[0] if d2.outcomes else {}
+        res.append(("MUST FIRE  the same recipe over the same mapper file and the same vocabulary is "
+                    "STUCK at once - no writer, no spec build - naming the refusal it already earned "
+                    "(15 writer calls and 12 identical refusals per recipe across 17 restarts on "
+                    "2026-08-27)",
+                    not fd2.prompts("recipe-writer") and not ps2.find("build-v2-spec")
+                    and o.get("status") == "stuck" and "IDENTICAL" in json.dumps(o),
+                    "writer=%d build=%d outcome=%s" % (len(fd2.prompts("recipe-writer")),
+                                                       len(ps2.find("build-v2-spec")),
+                                                       json.dumps(o)[:240])))
+        _rw_vocab(tmp, '[{"item": "Cotija Cheese"}]')
+        d3, ps3, fd3 = _rw_write_run(tmp)
+        res.append(("CLEAN TWIN  the moment db\\ingredients.json changes the build is re-bought - and "
+                    "only the build, because the prose is still current",
+                    bool(ps3.find("build-v2-spec")) and not fd3.prompts("recipe-writer"),
+                    "writer=%d build=%d outcomes=%s" % (len(fd3.prompts("recipe-writer")),
+                                                        len(ps3.find("build-v2-spec")),
+                                                        json.dumps(d3.outcomes)[:200])))
+        res.append(("  and a build that SUCCEEDS clears the stamp, so the next refusal is its own",
+                    not os.path.exists(stamp), "stamp still on disk" if os.path.exists(stamp) else ""))
+        _rw_intake(tmp, prose={"intro_html": "<p>only</p>"})
+        d4, ps4, fd4 = _rw_write_run(tmp)
+        res.append(("CLEAN TWIN  a current intake whose prose is INCOMPLETE still pays the writer, once",
+                    len(fd4.prompts("recipe-writer")) == 1,
+                    "writer=%d" % len(fd4.prompts("recipe-writer"))))
+        # the guard cannot freeze a recipe on a hash it could not compute
+        os.remove(vocab)
+        d5, ps5, fd5 = _rw_write_run(tmp)
+        res.append(("CLEAN TWIN  a stamp whose vocabulary hash can no longer be computed reads as "
+                    "CHANGED - the lane runs rather than freezing a recipe on a hash it cannot see",
+                    bool(ps5.find("build-v2-spec")),
+                    "build=%d outcomes=%s" % (len(ps5.find("build-v2-spec")),
+                                              json.dumps(d5.outcomes)[:200])))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
+def _rw_price_daemon(inflight, terms=("saffron",)):
+    tmp = scratch_dir(prefix="daemon-rw-hold-")
+    ps = FakePS({"probe-ingredient": _probe_ok})
+    d = daemon(run_dir=tmp, ps=ps, pyrun=FakePy(),
+               dispatcher=FakeDispatch({"recipe-hunter-pricer": [{"a": 1}, {"a": 2}, {"a": 3}]}))
+    d.PRICE_HOLD_RECHECK_SEC = 0.05
+    d.absent_terms = list(terms)
+    d.map_inflight = inflight
+    d.ch["price_wake"].push("micro-batch of 1")
+    return d, tmp
+
+
+def _rw_terms_of(prompt):
+    i = prompt.find("TERMS:")
+    return prompt[i:prompt.find("\n", i)] if i >= 0 else "(no TERMS line)"
+
+
+async def _rw_wait_calls(d, n, timeout=3.0):
+    """Poll until the pricer has been dispatched n times, or give up. A fixed sleep here was a
+    flake: the evidence pre-pass takes longer than 20 ms on a loaded box, so a poll at 20 ms read
+    'no dispatch yet' as 'held'."""
+    t0 = time.time()
+    while len(d._dispatch.prompts("recipe-hunter-pricer")) < n and time.time() - t0 < timeout:
+        await asyncio.sleep(0.01)
+    return len(d._dispatch.prompts("recipe-hunter-pricer"))
+
+
+def _rw_price_hold():
+    """price_lane() is driven DIRECTLY here, not through run(("price",)): run() closes the wake
+    channel of every lane it is not running, so under it the hold sees 'lane closing' and releases
+    at once - correct, and exactly the case the third fixture below pins on purpose."""
+    res = []
+    # 1. a map batch in flight -> hold, and the term it adds rides in the SAME call
+    d, tmp = _rw_price_daemon(1)
+
+    async def feed():
+        await asyncio.sleep(0.02)
+        d.absent_terms.append("harissa")
+        d.map_inflight = 0
+        d.ch["price_wake"].push("micro-batch of 1 done")
+        d.ch["price_wake"].close()
+
+    async def both():
+        await asyncio.gather(d.price_lane(), feed())
+    arun(both())
+    prompts = d._dispatch.prompts("recipe-hunter-pricer")
+    res.append(("MUST FIRE  with a map batch IN FLIGHT the price lane holds its short batch, and the "
+                "term that batch adds rides in the SAME pricer call (62 terms took 30 calls at 2.1 "
+                "per call on 2026-08-27)",
+                len(prompts) == 1 and "TERMS: saffron, harissa" in prompts[0],
+                "calls=%d %s" % (len(prompts), [_rw_terms_of(p) for p in prompts])))
+    shutil.rmtree(tmp, ignore_errors=True)
+
+    # 2. idle upstream -> immediate, exactly as before (B3: never wait to fill a quota)
+    d, tmp = _rw_price_daemon(0)
+
+    async def feed2():
+        await asyncio.sleep(0.02)
+        d.absent_terms.append("harissa")
+        d.ch["price_wake"].push("micro-batch of 1")
+        d.ch["price_wake"].close()
+
+    async def both2():
+        await asyncio.gather(d.price_lane(), feed2())
+    arun(both2())
+    prompts = d._dispatch.prompts("recipe-hunter-pricer")
+    res.append(("CLEAN TWIN  with NOTHING upstream the lane drains at once - a lone term is priced "
+                "immediately and the later one gets its own call, exactly the pre-hold behaviour",
+                len(prompts) == 2 and "TERMS: saffron\n" in prompts[0] + "\n"
+                and "TERMS: harissa" in prompts[1],
+                "calls=%d %s" % (len(prompts), [_rw_terms_of(p) for p in prompts])))
+    shutil.rmtree(tmp, ignore_errors=True)
+
+    # 3. a hold on a CLOSING lane releases - a held term can never be stranded by the close
+    d, tmp = _rw_price_daemon(1)
+    d.ch["price_wake"].close()
+    arun(d.run(("price",)))
+    prompts = d._dispatch.prompts("recipe-hunter-pricer")
+    res.append(("MUST FIRE  a hold with upstream still 'busy' releases the moment the wake channel "
+                "closes - the lane closing is the third flush condition, and it makes a stranded "
+                "term impossible",
+                len(prompts) == 1 and "TERMS: saffron" in prompts[0],
+                "calls=%d" % len(prompts)))
+    shutil.rmtree(tmp, ignore_errors=True)
+
+    # 4. the recheck timer: upstream goes idle WITHOUT a wake, and the batch still releases
+    d, tmp = _rw_price_daemon(1)
+    seen = {}
+
+    async def feed4():
+        await asyncio.sleep(0.02)
+        d.map_inflight = 0                                   # no wake pushed, on purpose
+        seen["calls"] = await _rw_wait_calls(d, 1)
+        d.ch["price_wake"].close()
+
+    async def both4():
+        await asyncio.gather(d.price_lane(), feed4())
+    arun(both4())
+    res.append(("MUST FIRE  a hold that never gets its wake re-checks upstream on its own timer and "
+                "releases when upstream is idle - the belt behind the wake",
+                seen.get("calls") == 1, "calls before close=%s" % seen.get("calls")))
+    shutil.rmtree(tmp, ignore_errors=True)
+
+    # 5. a FULL batch never holds, busy upstream or not
+    d, tmp = _rw_price_daemon(1, terms=["t%d" % i for i in range(hunt_lib.PRICE_BATCH)])
+    seen = {}
+
+    async def feed5():
+        # upstream stays 'busy' the whole time the poll runs: a full batch must go out regardless
+        seen["calls"] = await _rw_wait_calls(d, 1)
+        d.map_inflight = 0
+        d.ch["price_wake"].close()
+
+    async def both5():
+        await asyncio.gather(d.price_lane(), feed5())
+    arun(both5())
+    res.append(("CLEAN TWIN  a batch already at PRICE_BATCH is dispatched without waiting on anyone",
+                seen.get("calls") == 1, "calls before upstream idled=%s" % seen.get("calls")))
+    shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
+def _rw_remap_ps():
+    """map-preresolve answers as _learn_ps does, and build-intake-skeleton -Force ERASES the prose
+    the way the real script does, so the re-apply is proven rather than assumed."""
+    def pre(args):
+        if "-NewBids" in args:
+            return 0, json.dumps({"slug": "s1", "count": 0, "proposals": []}), ""
+        return 0, "", ""
+
+    def skel(args):
+        if "-Force" in args:
+            run_dir = FakePS.value_after(args, "-RunDir")
+            slug = FakePS.value_after(args, "-Slug")
+            ip = os.path.join(run_dir, "intake", "%s.json" % slug)
+            with io.open(ip, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+            doc["prose"] = {}
+            doc["head"]["steps"] = []
+            with io.open(ip, "w", encoding="utf-8") as f:
+                json.dump(doc, f)
+        return 0, "", ""
+    return FakePS({"map-preresolve": pre, "build-intake-skeleton": skel})
+
+
+async def _rw_none(*_a, **_k):
+    return None
+
+
+def _rw_remap_road():
+    res = []
+    tmp, ev, led = _learn_scratch("daemon-rw-remap-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["cotija cheese"]})
+        skeletoned(tmp, ["s1"]); _rw_intake(tmp); _rw_mapped(tmp); _rw_extracted(tmp)
+        specs = _rw_specs(tmp)
+        fail = {"slug": "s1", "verdict": "FAIL", "owner": "mapper",
+                "findings": "Cotija Cheese was mapped to feta - wrong food"}
+        mres = {"results": [{"slug": "s1", "status": "ok", "state": "priced", "absent_terms": [],
+                             "lines": [{"raw": "1 lb chicken", "buy": "3 1/2 lb"},
+                                       {"raw": "cotija cheese", "buy": "1 cup crumbled",
+                                        "grams_source": 100}],
+                             "rulings": [{"raw": "cotija cheese", "term": "cotija cheese",
+                                          "canon_item": "Cotija Cheese", "bid": None,
+                                          "decision": "mapped-null", "grams_source": 100,
+                                          "evidence": "crumbled Mexican cheese; no board id"}],
+                             "food_db_rows": [], "new_commodity_proposals": [],
+                             "detail": "re-ruled"}]}
+        fd = FakeDispatch({"recipe-source-qa": [fail, {"slug": "s1", "verdict": "PASS"}],
+                           "recipe-ingredient-mapper": [mres]})
+        ps = _rw_remap_ps()
+        d = daemon(run_dir=tmp, ps=ps, dispatcher=fd, events_path=ev, resolutions_path=led,
+                   specs_dir=specs, food_db_path=os.path.join(tmp, "food.json"),
+                   ingredients_path=_rw_vocab(tmp))
+
+        async def noop(_slug):
+            return 0
+        d.qa_battery = noop
+        d.fill_fdc_shelf = _rw_none
+        d.fill_prior_rulings = _rw_none
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.qa_lane())
+        mp = fd.prompts("recipe-ingredient-mapper")
+        calls = [c for c in fd.calls if c["agent"] == "recipe-ingredient-mapper"]
+        res.append(("MUST FIRE  a mapper-owned QA fail is repaired through a ONE-SLUG MAP DISPATCH - the "
+                    "findings on top, the map dossier underneath, the MAPPED schema - not a "
+                    "tool-holding agent handed a file pointer (25.5M tokens for four repairs on "
+                    "2026-08-27)",
+                    len(mp) == 1 and "Cotija Cheese was mapped to feta" in mp[0]
+                    and "Map the RESIDUAL" in mp[0] and "NO files to open" in mp[0]
+                    and calls[0]["schema"] is hunt_lib.MAPPED and calls[0]["validator"] is not None,
+                    "calls=%d prompt=%s" % (len(mp), (mp[0][:200] if mp else ""))))
+        forced = [c for c in ps.find("build-intake-skeleton.ps1") if "-Force" in c["args"]]
+        res.append(("MUST FIRE  the skeleton is rebuilt over the NEW decision file with -Force - the "
+                    "one road that may pass it",
+                    len(forced) == 1, "forced builds=%d" % len(forced)))
+        doc = _rw_read_intake(tmp)
+        res.append(("MUST FIRE  ...and the writer's prose SURVIVES the rebuild - saved before, re-applied "
+                    "after - so the most expensive per-recipe stage is neither erased nor re-bought",
+                    (doc.get("prose") or {}).get("intro_html") == RW_PROSE["intro_html"]
+                    and (doc.get("head") or {}).get("steps") == ["Brown the beef."],
+                    json.dumps({"prose": doc.get("prose"), "steps": (doc.get("head") or {}).get("steps")})[:200]))
+        res.append(("  and the spec is rebuilt on the qa lane, through the cost-engine road",
+                    bool(ps.find("build-v2-spec")), "builds=%d" % len(ps.find("build-v2-spec"))))
+        rp = os.path.join(tmp, "mapped-pre", "s1.rulings.json")
+        ruled = ""
+        if os.path.exists(rp):
+            with io.open(rp, "r", encoding="utf-8-sig") as f:
+                ruled = f.read()
+        res.append(("  and the daemon reassembled the decision file from the re-ruling - the mapper "
+                    "held no pen",
+                    "Cotija Cheese" in ruled and "mapped-null" in ruled, ruled[:160]))
+        res.append(("  and the re-QA ran once and passed, so the recipe reached qa-passed",
+                    "s1" in d.qa_passed and len(fd.prompts("recipe-source-qa")) == 2,
+                    "qa_passed=%s qa calls=%d" % (d.qa_passed, len(fd.prompts("recipe-source-qa")))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # CLEAN TWIN: an extractor-owned fail keeps the road it had
+    tmp, ev, led = _learn_scratch("daemon-rw-remap2-")
+    try:
+        skeletoned(tmp, ["s1"]); _rw_specs(tmp)
+        fail = {"slug": "s1", "verdict": "FAIL", "owner": "extractor",
+                "findings": "the transcription dropped the marinade step"}
+        fd = FakeDispatch({"recipe-source-qa": [fail, {"slug": "s1", "verdict": "PASS"}],
+                           "recipe-hunter-extractor": [{"text": "re-extracted"}]})
+        d = daemon(run_dir=tmp, ps=FakePS(), dispatcher=fd, events_path=ev, resolutions_path=led,
+                   specs_dir=os.path.join(tmp, "specs"))
+
+        async def noop(_slug):
+            return 0
+        d.qa_battery = noop
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.qa_lane())
+        ep = fd.prompts("recipe-hunter-extractor")
+        res.append(("CLEAN TWIN  an EXTRACTOR-owned fail still takes the full-agent road it always had - "
+                    "only the mapper's road changed",
+                    len(ep) == 1 and "routed the repair to you" in ep[0]
+                    and not fd.prompts("recipe-ingredient-mapper"),
+                    "extractor calls=%d mapper calls=%d" % (len(ep), len(fd.prompts("recipe-ingredient-mapper")))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
+def _rw_dossiers():
+    res = []
+    tmp = scratch_dir(prefix="daemon-rw-dos-")
+    try:
+        skeletoned(tmp, ["s1"]); _rw_mapped(tmp); _rw_extracted(tmp); _rw_extracted(tmp, "s2")
+        specs = _rw_specs(tmp)
+        with io.open(os.path.join(specs, "s2.json"), "w", encoding="utf-8") as f:
+            json.dump({"name": "s2", "ingredients": [{"item": "Rice", "buy": "3 cups"}],
+                       "make_it": ["Cook the rice."], "stat": {"cal": 400}}, f)
+        os.makedirs(os.path.join(tmp, "qa"), exist_ok=True)
+        with io.open(os.path.join(tmp, "qa", "s1.battery.json"), "w", encoding="utf-8") as f:
+            json.dump({"checks": [{"check": "coverage", "verdict": "pass", "numbers": {"invented": 0}}]}, f)
+        os.makedirs(os.path.join(tmp, "waves"), exist_ok=True)
+        with io.open(os.path.join(tmp, "waves", "wave-1.preaudit.json"), "w", encoding="utf-8") as f:
+            json.dump({"battery": "wave-preaudit", "version": 1, "scope": "wave",
+                       "summary": {"checks": 1, "slugs": 1, "failed": 0}, "elapsed_sec": 1.0,
+                       "wave_slugs": ["s1"],
+                       "slug_checks": {"s1": [{"check": "macro-recompute", "verdict": "pass",
+                                               "numbers": {"cal": 500}}]},
+                       "shared_checks": [], "not_checked": []}, f)
+        fdb = os.path.join(tmp, "food.json")
+        with io.open(fdb, "w", encoding="utf-8") as f:
+            json.dump({"items": [{"item": "93/7 Ground Beef", "serving_qty": 4, "serving_unit": "oz",
+                                  "serving_grams": 112, "calories": 170, "protein_g": 23,
+                                  "carbs_g": 0, "fat_g": 8}]}, f)
+        d = daemon(run_dir=tmp, specs_dir=specs, food_db_path=fdb)
+
+        qa = d.qa_dossier("s1")
+        res.append(("MUST FIRE  the QA dossier renders a V2 spec's ingredient lines from ingredients_grams "
+                    "and ingredients_display - it read a key v2 specs do not carry and showed all 34 QA "
+                    "sessions on 2026-08-27 'the 0 ingredient lines'",
+                    "the 2 ingredient lines" in qa and "Cotija Cheese | 120 g" in qa
+                    and "as printed: Cotija Cheese: 1 cup crumbled (120 g)" in qa
+                    and "the 0 ingredient" not in qa, qa[qa.find("THE BUILT"):][:300]))
+        qa2 = d.qa_dossier("s2")
+        res.append(("CLEAN TWIN  a legacy spec carrying `ingredients` still renders those lines, buy "
+                    "strings included",
+                    "the 1 ingredient lines" in qa2 and "Rice | buy: 3 cups" in qa2,
+                    qa2[qa2.find("THE BUILT"):][:200]))
+
+        p = d.audit_prompt(1, ["s1"], "batch-1", "whole-wave", "")
+        res.append(("MUST FIRE  the audit prompt carries the wave's MAPPED DECISIONS - bid, grams, decision, "
+                    "buy string - and the food-DB rows behind them, so checklist items 1 and 3 are "
+                    "answered on the page rather than by re-parsing recipes-db and the food DB in "
+                    "PowerShell three times each",
+                    "[ground-beef-9307] 1568 g" in p and "170 cal, 23 P" in p and "[no id] 120 g" in p
+                    and "NO food-DB row could be read for this item" in p,
+                    p[p.find("THE WAVE'S MAPPED"):][:400]))
+        res.append(("MUST FIRE  ...and it names where the specs, the cards and the decisions ARE, and "
+                    "which scripts the battery already ran (six globbing turns and a re-run of "
+                    "update-recipes-db -DryRun per audit on 2026-08-27)",
+                    "wave-1.preaudit-cards" in p and os.path.join(specs, "<slug>.json") in p
+                    and "ALREADY EXECUTED" in p and "recipes-db-dryrun" in p,
+                    p[p.find("WHERE EVERYTHING IS"):][:300]))
+        res.append(("MUST FIRE  the dossier cap no longer truncates a 6-slug wave (7.3-7.6k chars against a "
+                    "cap of 6000 cut waves 4, 5 and 9 on 2026-08-27, each ending 'read the report file')",
+                    HD.Daemon.AUDIT_DOSSIER_CAP >= 20000, str(HD.Daemon.AUDIT_DOSSIER_CAP)))
+        res.append(("CLEAN TWIN  a wave whose decision file cannot be read says so, in place, rather "
+                    "than rendering an empty block",
+                    "mapped\\nope.json COULD NOT BE READ" in d.render_wave_rulings(["nope"]),
+                    d.render_wave_rulings(["nope"])[-200:]))
+
+        d.pricing_slugs = {"s1"}
+        pp = d.price_prompt(["cotija cheese", "ground beef", "harissa"], None, "")
+        res.append(("MUST FIRE  the price prompt names the id each term maps to, from the mapper's own "
+                    "rulings, so -Promote needs no commodities.json parse (3-4 per session on "
+                    "2026-08-27)",
+                    "-Bid 'ground-beef-9307'" in pp and "-Bid 'item:Cotija Cheese'" in pp
+                    and "not in this run's mapped files: -Bid 'item:harissa'" in pp,
+                    pp[pp.find("THE ID EACH TERM"):][:400]))
+        res.append(("  and it says the server-tier probe is DONE - the pricer re-ran it 46 times across "
+                    "30 sessions",
+                    "SERVER-TIER SEARCH IS DONE" in pp, ""))
+
+        preresolved(tmp, ["s1"])
+        with io.open(os.path.join(tmp, "mapped-pre", "s1.json"), "r", encoding="utf-8-sig") as f:
+            tables = {"s1": json.load(f)}
+        mp = d.map_prompt(["s1"], tables)
+        res.append(("MUST FIRE  the map prompt no longer invites a Read of every extraction file for "
+                    "'full context' - the raw lines are declared complete (every mapper session on "
+                    "2026-08-27 opened by Reading all five)",
+                    "VERBATIM AND COMPLETE" in mp and "if you need a line" + "'s full context" not in mp,
+                    mp[mp.find("THE `raw` LINES"):][:200]))
+        rp = d.registrar_batch_prompt("s1", [("cotija-cheese", "cotija cheese",
+                                              "crumbled Mexican cheese", None)])
+        res.append(("MUST FIRE  the registrar is told its dossier IS the sweep of the four files, and that "
+                    "a grep is for a spelling the dossier did not try (commodities.json Read whole in "
+                    "12 of 17 sessions on 2026-08-27)",
+                    "THE DOSSIER ABOVE IS THE SWEEP" in rp and "name\nthe spelling you added" in rp,
+                    rp[rp.find("THE DOSSIER ABOVE"):][:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
+RW_SECTIONS = (_rw_write_lane, _rw_price_hold, _rw_remap_road, _rw_dossiers)
 
 
 # The entry point MUST be the LAST thing in this file. It used to sit at old line 4509 with ~2,300

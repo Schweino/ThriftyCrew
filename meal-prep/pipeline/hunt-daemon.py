@@ -482,6 +482,11 @@ class Daemon(object):
         self.wip_waiters = []
         self.seen_candidates = set()   # dossiers already built this run
         self.priced_terms = set()      # terms already sent to the pricer: never sent twice
+        # THE PRICE LANE'S VIEW OF UPSTREAM (2026-09-04). Batches taken off a channel but not yet
+        # finished are invisible to `size()`, and the hold in price_lane needs to see them: a map
+        # batch mid-dispatch is the thing most likely to add terms in the next minute.
+        self.map_inflight = 0
+        self.extract_inflight = 0
 
         # THE COST-ENGINE MUTEX (section 4.5). build-v2-spec -RunCost shells the cost engine, which
         # rewrites db\costed.json; the write lane runs 3 concurrent writers, so v2 raced on that file
@@ -1330,8 +1335,12 @@ class Daemon(object):
                               "dest": os.path.join(self.run_dir, "extracted"),
                               "run_dir": self.run_dir}
                     loop = asyncio.get_event_loop()
-                    rec = await loop.run_in_executor(
-                        None, lambda t=target: extract_sweep.sweep_one(t, ladder))
+                    self.extract_inflight += 1
+                    try:
+                        rec = await loop.run_in_executor(
+                            None, lambda t=target: extract_sweep.sweep_one(t, ladder))
+                    finally:
+                        self.extract_inflight -= 1
                     if rec.get("contract") is not None:
                         await loop.run_in_executor(
                             None, lambda r=rec, t=target: extract_sweep.write_record(r, t["dest"]))
@@ -2182,6 +2191,13 @@ class Daemon(object):
             "this gate no file read can do.\n"
             "%s\n"
             "%s\n"
+            "THE DOSSIER ABOVE IS THE SWEEP. The orchestrator read grocery\\commodities.json,\n"
+            "recipe-commodities.json, out\\recipe-board-everyday.json and out\\smp-feed.json to build\n"
+            "it, for every proposal here. Do not Read those files whole and do not re-grep them for the\n"
+            "spellings the dossier already tried - on 2026-08-27 this gate Read commodities.json whole\n"
+            "in 12 of 17 sessions, five times twice in one session, for rows already printed above. A\n"
+            "grep is for a spelling or a food-name the dossier did NOT try; when you make one, name\n"
+            "the spelling you added in `reason`.\n\n"
             "Return `rulings`: one entry per proposal, each carrying `proposed_bid` EXACTLY as stated\n"
             "above (it is the key every ruling is joined on), `verdict`, `bid` and `reason`. A\n"
             "proposal you cannot rule on is a `reject` carrying what would settle it - never an\n"
@@ -3056,12 +3072,21 @@ class Daemon(object):
 
     async def map_lane(self):
         async def worker(_i):
+            busy = 0
             while True:
+                # THE IN-FLIGHT COUNT IS SETTLED AT THE TOP OF THE LOOP, not in a finally, because
+                # this body leaves through a dozen `continue`s: whatever the previous iteration held
+                # is released the moment the worker comes back for more.
+                if busy:
+                    self.map_inflight -= busy
+                    busy = 0
                 batch = await self.ch["map"].take_batch(hunt_lib.MAP_BATCH)
                 if batch is None:
                     return
                 if self.halted():
                     return
+                busy = 1
+                self.map_inflight += 1
                 slugs = [b["slug"] for b in batch]
                 woke = False
                 self.log("map: micro-batch of %d (%s)" % (len(slugs), ", ".join(slugs)))
@@ -3464,6 +3489,12 @@ class Daemon(object):
                 # per-recipe stage - the exact shape audit-lane-shape.ps1 was written to refuse.
                 if woke:
                     self.ch["price_wake"].push("micro-batch of %d" % len(slugs))
+                else:
+                    # A WAKE EVEN WHEN NOTHING WAS ENQUEUED (2026-09-04): the price lane may be
+                    # HOLDING a short batch for exactly this micro-batch to finish, and it re-checks
+                    # upstream on a wake. A wake with nothing to drain costs one loop iteration.
+                    self.ch["price_wake"].push("micro-batch of %d done, nothing enqueued"
+                                               % len(slugs))
         await self.pool_worker(hunt_lib.LANE_CAPS["map"], worker)
         self.ch["price_wake"].close()
 
@@ -4013,7 +4044,10 @@ class Daemon(object):
             "enqueue them and move the state itself. That is not a courtesy: -Terms 'a,b' binds as ONE\n"
             "composite string in PowerShell and parked two recipes forever on 2026-08-16, and a JSON\n"
             "array cannot be comma-joined by accident.\n\n"
-            "Transcriptions, if you need a line's full context: %s\\extracted\\<slug>.json\n"
+            "THE `raw` LINES ABOVE ARE THE TRANSCRIPTION'S INGREDIENT LIST, VERBATIM AND COMPLETE. The\n"
+            "extraction file (%s\\extracted\\<slug>.json) adds only the instructions; do not open it to\n"
+            "re-read lines you already have - on 2026-08-27 every mapper session began by Reading all\n"
+            "five of them.\n"
             "This run's conditions: %s\n"
             "%s\n"
             "%s%s"
@@ -4027,14 +4061,148 @@ class Daemon(object):
     # PRICE - SINGLETON, self-looping queue drainer. ARCHITECTURE, not config (section 4.1a).
     # ---------------------------------------------------------------------------------------------
 
+    # ---- THE PRODUCER-SIDE HOLD (2026-09-04) ---------------------------------------------------
+    #
+    # MEASURED on hunt-2026-08-27-highprotein: 62 absent terms went to the pricer in 30 invocations -
+    # 2.1 terms per call against PRICE_BATCH = 10 - because the lane wakes on every mapper
+    # micro-batch and drains at once, and micro-batches were 2.4 recipes wide. Each invocation
+    # carries the 23KB agent body, the prompt, the evidence and ~12 turns of re-read context, so the
+    # fixed cost was amortised over almost nothing: 23.5M tokens, 15% of the run.
+    #
+    # THE FIX IS THE ONE THE EXTRACT LANE ALREADY USES to feed the map lane (see extract_lane's
+    # `pending`): hold on the PRODUCER side, flush on three conditions, one of which is always
+    # eventually true - the batch is full, nothing upstream can add to it, or the lane is closing.
+    # It never makes a channel wait to fill a quota (B3, measured deadlocking against the WIP limit).
+    # "Nothing upstream" asks the CURRENT depth and the CURRENT in-flight count, never a future one,
+    # so an idle upstream releases the batch immediately and a busy one is given until it finishes.
+    # The recheck timer is the belt behind that brace: a hold that missed its wake re-evaluates on
+    # its own every PRICE_HOLD_RECHECK_SEC, so nothing can strand a term behind a stalled producer.
+    PRICE_HOLD_RECHECK_SEC = 30.0
+
+    def upstream_busy(self):
+        """True while work that can still add pricing terms is queued or in flight upstream."""
+        try:
+            return (self.ch["map"].size() > 0 or self.map_inflight > 0
+                    or self.ch["extract"].size() > 0 or self.extract_inflight > 0)
+        except Exception:                                         # noqa: BLE001
+            return False
+
+    def upstream_state(self):
+        try:
+            return ("map queued %d / in flight %d, extract queued %d / in flight %d"
+                    % (self.ch["map"].size(), self.map_inflight, self.ch["extract"].size(),
+                       self.extract_inflight))
+        except Exception:                                         # noqa: BLE001
+            return "upstream state unreadable"
+
+    async def hold_for_batch(self, closed):
+        """Wait, bounded, while fewer than PRICE_BATCH terms are queued and upstream can still add
+        some. Returns the updated `closed`. Never holds a full batch, never holds on an idle
+        upstream, never holds once the wake channel has closed, never holds a halted run."""
+        held = False
+        while (not closed and self.absent_terms
+               and len(self.absent_terms) < hunt_lib.PRICE_BATCH
+               and self.upstream_busy() and not self.halted()):
+            if not held:
+                held = True
+                self.log("price lane: holding %d term(s) for a fuller batch (cap %d) - %s"
+                         % (len(self.absent_terms), hunt_lib.PRICE_BATCH, self.upstream_state()))
+            try:
+                w = await asyncio.wait_for(self.ch["price_wake"].take(),
+                                           timeout=self.PRICE_HOLD_RECHECK_SEC)
+            except asyncio.TimeoutError:
+                continue
+            if w is None:
+                closed = True
+        if held:
+            why = ("lane closing" if closed else
+                   "batch full" if len(self.absent_terms) >= hunt_lib.PRICE_BATCH else
+                   "run halted" if self.halted() else "upstream idle")
+            self.log("price lane: releasing %d term(s) - %s" % (len(self.absent_terms), why))
+        return closed
+
+    def term_bids(self, terms):
+        """{term: (bid, item, slug)} from the mapper's own decision files on disk - the recipes
+        waiting on pricing, or every mapped file when none are recorded. Best effort and never an
+        authority: a term with no match is rendered as not found, and the pricer promotes it by
+        item name exactly as before."""
+        out = {}
+        mdir = os.path.join(self.run_dir, "mapped")
+        slugs = sorted(self.pricing_slugs)
+        if not slugs:
+            try:
+                slugs = sorted(f[:-5] for f in os.listdir(mdir) if f.endswith(".json"))
+            except Exception:                                     # noqa: BLE001
+                slugs = []
+        rows = []
+        for s in slugs:
+            try:
+                with open(os.path.join(mdir, "%s.json" % s), "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f) or {}
+            except Exception:                                     # noqa: BLE001
+                continue
+            for r in (doc.get("ingredients") or []):
+                if isinstance(r, dict):
+                    rows.append((s, r))
+        for t in terms:
+            tl = str(t or "").strip().lower()
+            if not tl:
+                continue
+            hit = None
+            for s, r in rows:
+                item = str(r.get("item") or "").strip()
+                raw = str(r.get("source_raw") or "").strip().lower()
+                il = item.lower()
+                if tl == il:
+                    hit = (r.get("bid"), item, s)
+                    break
+                if hit is None and ((raw and tl in raw) or (il and il in tl)):
+                    hit = (r.get("bid"), item, s)
+            if hit:
+                out[t] = hit
+        return out
+
+    def price_bid_block(self, terms):
+        """Rendered under the price prompt: the id each term maps to (for -Promote), and the fact
+        that the server-tier probe is already done. Measured on 2026-08-27: the pricer parsed
+        commodities.json three or four times per session to find a bid the run already held, and
+        re-ran probe-ingredient.ps1 46 times across 30 sessions for stores the pre-pass had already
+        probed and rendered - one session ran the same probe seven times."""
+        bids = self.term_bids(terms)
+        lines = ["",
+                 "THE ID EACH TERM MAPS TO, from the mapper's own rulings - this is what `-Promote -Bid`",
+                 "takes. Do NOT go and read commodities.json to find it; that read cost a session four",
+                 "turns on 2026-08-27 for an answer the run already held:"]
+        for t in terms:
+            hit = bids.get(t)
+            if hit and hit[0]:
+                lines.append("  %-34s -> -Bid '%s'   (%s, from %s)" % (t, hit[0], hit[1], hit[2]))
+            elif hit:
+                lines.append("  %-34s -> no commodity id: -Bid 'item:%s'   (from %s)"
+                             % (t, hit[1] or t, hit[2]))
+            else:
+                lines.append("  %-34s -> not in this run's mapped files: -Bid 'item:%s'" % (t, t))
+        lines += [
+            "",
+            "THE SERVER-TIER SEARCH IS DONE. Baker's and Family Fare were probed by the pre-pass with",
+            "the FULL retry ladder and the result is rendered below, hit by hit. Do not re-run",
+            "probe-ingredient.ps1 for those two stores: it re-buys the pre-pass, and each run is a",
+            "turn that re-reads this whole session. What is left for the shell is price-ingredient.ps1",
+            "for the three browser stores, and ONE -RecordBatch write.", ""]
+        return "\n".join(lines)
+
     async def price_lane(self):
         n = 0
+        closed = False
         while True:
             woke = await self.ch["price_wake"].take()
-            if woke is None and not self.absent_terms:
+            if woke is None:
+                closed = True
+            if closed and not self.absent_terms:
                 break
             if self.halted():
                 break
+            closed = await self.hold_for_batch(closed)
             # GREEDY EXHAUSTIVE SERVICE, per section 2.4's own loop. Never waits for a full batch: a
             # wait-for-full-batch policy deadlocked against the WIP limit, and throughput comes from
             # batching terms INSIDE one invocation, never from more pricers.
@@ -4062,7 +4230,7 @@ class Daemon(object):
                 # -Derive is a script call now, not an agent asked to run one.
                 await self.ps(HUNT_RUN_PS, ["-Derive", "-RunDir", self.run_dir], timeout=600)
                 await self.reap_priced()
-            if woke is None:
+            if closed:
                 break
         for slug in sorted(self.pricing_slugs):
             self.finish(slug, "parked", "parked",
@@ -4324,6 +4492,7 @@ class Daemon(object):
                price_evidence.NO_BROWSER_EVIDENCE,
                (" - today that is: " + ", ".join(walled)) if walled else "",
                len(terms), 7 * len(terms), self.queue_seam_note()))
+        body += self.price_bid_block(terms)
         if evidence:
             body += "\n" + price_evidence.render(evidence, path=path) + "\n"
         else:
@@ -5170,8 +5339,12 @@ class Daemon(object):
                                  "be ruled on it")
         return True, mac, "macros read from the intake already on disk"
 
-    async def build_skeleton(self, slug):
+    async def build_skeleton(self, slug, force=False):
         """build-intake-skeleton.ps1, before the writer. Returns (ok, macros, detail).
+
+        `force` passes -Force: overwrite an intake that already carries writer prose. ONLY the QA
+        re-map road uses it, and that road saves the prose first and re-applies it after - the
+        write lane never forces, for the reasons intake_is_current records.
 
         `ok` False means the skeleton is not a thing the band can be ruled on - either BLOCKED (exit 2)
         or INCOMPLETE (exit 1, named findings: a missing food-DB row makes the macros partial, and
@@ -5180,7 +5353,8 @@ class Daemon(object):
         """
         rc, out, err = await self.ps_timed("write", "build-intake-skeleton", [slug],
                                           BUILD_SKELETON_PS,
-                                          ["-RunDir", self.run_dir, "-Slug", slug], timeout=600)
+                                          ["-RunDir", self.run_dir, "-Slug", slug]
+                                          + (["-Force"] if force else []), timeout=600)
         detail = ((out or "") + (err or "")).strip()
         if rc != hunt_lib.EXIT_CLEAN:
             # THE FINDINGS, NOT THE TAIL. The script prints two path lines after its summary, so a
@@ -5356,6 +5530,24 @@ class Daemon(object):
                 # refused by design, which used to strand the recipe on its own previous attempt.
                 current, why_cur = self.intake_is_current(slug)
                 if current:
+                    # THE IDENTICAL-REFUSAL GUARD (2026-09-04). The spec build refused this recipe
+                    # before, and the two inputs that refusal depends on - the mapper decision file
+                    # and db\ingredients.json - are byte-for-byte what they were. Re-running the
+                    # writer and the build re-earns the same refusal: measured on
+                    # hunt-2026-08-27-highprotein, three recipes were written 15 times each across
+                    # 17 daemon starts and refused 12 times each on the identical UNKNOWN INGREDIENT
+                    # NAME, 9.3M of the write lane's 11.7M tokens. STUCK is the honest answer until
+                    # one of those two files moves, and the stamp says which refusal it is.
+                    same, prior = self.write_refusal_unchanged(slug)
+                    if same:
+                        self.stuck(slug, "write",
+                                   "the spec build REFUSED this recipe before on IDENTICAL inputs - "
+                                   "the mapper decision file and db\\ingredients.json are unchanged "
+                                   "since - so nothing is re-bought until one of them moves: %s"
+                                   % prior[:220])
+                        self.log("  write: %s skipped - refused before on identical inputs (%s)"
+                                 % (slug, prior[:120]))
+                        continue
                     ok, macros, why = self.read_intake_macros(slug)
                     self.log("  write: %s keeping the intake it already has - %s" % (slug, why_cur))
                 else:
@@ -5387,26 +5579,42 @@ class Daemon(object):
                     await self.retire_out_of_band(slug, verdict, "pre-write")
                     continue
 
-                r = await self.with_retry(
-                    lambda: self.dispatch("recipe-writer", self.write_prompt(slug),
-                                          "write", slug, [slug], schema=hunt_lib.WRITE,
-                                          validator=hunt_lib.validate_writer_fields,
-                                          stage="writer"),
-                    slug, "write")
-                if r is None:
-                    self.stuck(slug, "write", "no response after retries - never actually written")
-                    continue
-                if hunt_lib.is_rejected(r.get("status")):
-                    await self.settle(slug, "rejected-qa", "writer",
-                                      r.get("detail") or "writer rejected", "write")
-                    continue
+                # THE WRITER IS NOT RE-PAID FOR PROSE THAT IS ALREADY ON DISK AND CURRENT
+                # (2026-09-04). intake_is_current already answers "the intake describes the mapper's
+                # own rulings"; what it did not gate was the dispatch below, so a kept intake with
+                # complete prose was handed to the writer again on every restart - 62 of the 95
+                # writer calls on hunt-2026-08-27-highprotein were exactly that. A current intake
+                # whose prose is INCOMPLETE still runs the writer, and says which fields were missing.
+                keep_prose = False
+                if current:
+                    keep_prose, missing_prose = self.intake_has_prose(slug)
+                    if not keep_prose:
+                        self.log("  write: %s intake is current but its prose is incomplete (%s) - "
+                                 "the writer runs" % (slug, ", ".join(missing_prose)[:160]))
+                if keep_prose:
+                    self.log("  write: %s prose already on disk and current - the writer is not "
+                             "dispatched; straight to the spec build" % slug)
+                else:
+                    r = await self.with_retry(
+                        lambda: self.dispatch("recipe-writer", self.write_prompt(slug),
+                                              "write", slug, [slug], schema=hunt_lib.WRITE,
+                                              validator=hunt_lib.validate_writer_fields,
+                                              stage="writer"),
+                        slug, "write")
+                    if r is None:
+                        self.stuck(slug, "write", "no response after retries - never actually written")
+                        continue
+                    if hunt_lib.is_rejected(r.get("status")):
+                        await self.settle(slug, "rejected-qa", "writer",
+                                          r.get("detail") or "writer rejected", "write")
+                        continue
 
-                # CHANGE W: THE DAEMON PATCHES THE INTAKE from the payload. A writer that never opens
-                # the file cannot drift a locked field.
-                okp, whyp = self.apply_writer_fields(slug, r.get("fields"))
-                if not okp:
-                    self.stuck(slug, "write", whyp[:250])
-                    continue
+                    # CHANGE W: THE DAEMON PATCHES THE INTAKE from the payload. A writer that never
+                    # opens the file cannot drift a locked field.
+                    okp, whyp = self.apply_writer_fields(slug, r.get("fields"))
+                    if not okp:
+                        self.stuck(slug, "write", whyp[:250])
+                        continue
 
                 # THE LOCKED-FIELD DIFF STAYS, AND ITS MEANING INVERTS. It used to catch the writer
                 # editing a machine field, and the answer was the one re-ask. Post-patch, the writer
@@ -5439,10 +5647,12 @@ class Daemon(object):
                     # band nobody reported is not a rejection), so a refused build read as a pass.
                     # The predicate is right and the lane was wrong: a build that refused is a
                     # could-not-look, and could-not-look is never a clean bill.
+                    self.write_refusal_stamp(slug, hunt_lib.first_guard_line(sp_out, sp_err))
                     self.stuck(slug, "write",
                                "the spec build REFUSED this recipe (rc %d): %s"
                                % (rc_spec, hunt_lib.first_guard_line(sp_out, sp_err)))
                     continue
+                self.clear_write_refusal(slug)
                 cal, carbs, prot = self.spec_band(slug, specs_dir=self.specs_dir or None)
                 if cal is None and carbs is None:
                     self.stuck(slug, "write",
@@ -5484,6 +5694,82 @@ class Daemon(object):
                 self.ch["qa"].push(self.record(slug, {"state": "written", "cal": cal, "carbs": carbs}))
         await self.pool_worker(hunt_lib.LANE_CAPS["write"], worker)
         self.ch["qa"].close()
+
+    # ---- THE WRITE LANE'S TWO GUARDS (2026-09-04): complete prose, and an identical refusal ---------
+
+    def intake_has_prose(self, slug):
+        """(complete, missing): does the intake carry every prose field and the schema steps?
+
+        The six `prose.*` fields and `head.steps` are what the writer is paid for; the rest of the
+        fillable set (cuisine, description, keywords, notes) may legitimately be empty strings.
+        """
+        path = os.path.join(self.run_dir, "intake", "%s.json" % slug)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f) or {}
+        except Exception as e:                                    # noqa: BLE001
+            return False, ["the intake will not read (%s)" % e]
+        missing = []
+        prose = doc.get("prose") if isinstance(doc.get("prose"), dict) else {}
+        for key in hunt_lib.WRITER_FIELDS:
+            head, sep, tail = key.partition(".")
+            if head != "prose":
+                continue
+            if not str(prose.get(tail) or "").strip():
+                missing.append(key)
+        steps = (doc.get("head") or {}).get("steps") if isinstance(doc.get("head"), dict) else None
+        if not (isinstance(steps, list) and [s for s in steps if str(s or "").strip()]):
+            missing.append("head.steps")
+        return (not missing), missing
+
+    def write_refusal_path(self, slug):
+        return os.path.join(self.run_dir, "intake", "%s.write-refusal.json" % slug)
+
+    def vocab_file_hash(self):
+        """sha256 of db\\ingredients.json's BYTES (the seamed path when one is set), or None."""
+        import hashlib                                            # noqa: PLC0415
+        try:
+            with open(self.ingredients_path or INGREDIENTS_JSON, "rb") as f:
+                return hashlib.sha256(f.read()).hexdigest()
+        except Exception:                                         # noqa: BLE001
+            return None
+
+    def write_refusal_stamp(self, slug, detail):
+        """Record a spec-build refusal against the two inputs it depends on. Best-effort: a stamp
+        that cannot be written must not end a run, and a missing stamp means the lane runs as it
+        always did."""
+        try:
+            with open(self.write_refusal_path(slug), "w", encoding="utf-8") as f:
+                json.dump({"slug": slug, "mapper_sha256": self.mapper_file_hash(slug),
+                           "vocab_sha256": self.vocab_file_hash(),
+                           "detail": as_text(detail, 600),
+                           "at": time.strftime("%Y-%m-%dT%H:%M:%S")}, f, indent=2)
+        except Exception:                                         # noqa: BLE001
+            return ""
+        return self.write_refusal_path(slug)
+
+    def clear_write_refusal(self, slug):
+        try:
+            os.remove(self.write_refusal_path(slug))
+        except Exception:                                         # noqa: BLE001
+            pass
+
+    def write_refusal_unchanged(self, slug):
+        """(True, detail) when a refusal is stamped AND both of its inputs still hash the same.
+        Any unreadable side reads as 'changed', because a guard that cannot see must let the lane
+        run rather than freeze a recipe on a hash it could not compute."""
+        try:
+            with open(self.write_refusal_path(slug), "r", encoding="utf-8-sig") as f:
+                st = json.load(f) or {}
+        except Exception:                                         # noqa: BLE001
+            return False, ""
+        m_old, v_old = st.get("mapper_sha256"), st.get("vocab_sha256")
+        if not m_old or not v_old:
+            return False, ""
+        m_now, v_now = self.mapper_file_hash(slug), self.vocab_file_hash()
+        if m_now == m_old and v_now == v_old:
+            return True, "%s (refused %s)" % (as_text(st.get("detail"), 300), st.get("at") or "?")
+        return False, ""
 
     def spec_band(self, slug, specs_dir=None):
         """The band, read off the BUILT SPEC rather than off the writer's self-report. A mechanical
@@ -5701,6 +5987,9 @@ class Daemon(object):
                     # owner routing above is what decides, and it decided this before CHANGE A too.
                     if owner == "recipe-writer":
                         await self.qa_repair_by_patch(slug, q)
+                    elif owner == "recipe-ingredient-mapper":
+                        # THE MAPPER ROAD GETS A DOSSIER TOO (2026-09-04): see qa_repair_by_remap.
+                        await self.qa_repair_by_remap(slug, q)
                     else:
                         await self.dispatch(owner, self.qa_repair_prompt(slug, q), "qa",
                                             "repair:%s" % slug, [slug], stage=owner)
@@ -5819,6 +6108,136 @@ class Daemon(object):
             self.findings.append("%s: the QA repair patched the intake but the spec build REFUSED "
                                  "(rc %d): %s" % (slug, rc, hunt_lib.first_guard_line(out, err)))
 
+    # ---- THE MAPPER REPAIR ROAD (2026-09-04) ---------------------------------------------------
+    #
+    # MEASURED on hunt-2026-08-27-highprotein: four QA repairs owned by the mapper cost 25.5M input
+    # tokens - 16.6% of the run, 6.4M and ~50 turns each - against ~80k and 1-2 turns for a
+    # writer-owned repair on the patch road. The difference was the dossier. qa_repair_prompt hands
+    # the mapper the findings and a file pointer; the 14.4M honey-bbq session then Read
+    # build-intake-skeleton.ps1 three times, spec-guards.ps1 twice, coverage_check.py twice, grepped
+    # this daemon six times to learn how the mapper stamp works, ran git log, wrote its own fix
+    # script and rebuilt the spec by hand: 84 tool calls for one recipe, re-learning the pipeline
+    # before touching the line the finding named.
+    #
+    # THE MAP LANE ALREADY HAS EVERYTHING THIS NEEDS. A repair is a one-slug map dispatch with the
+    # QA findings on top: the same pre-resolve table, the same shelves, the same return contract,
+    # the same assembler. What is new is only the tail - the skeleton is rebuilt over the new
+    # decision file with the writer's prose SAVED and RE-APPLIED, and the spec rebuilt - so the
+    # most expensive per-recipe stage is neither erased nor re-bought.
+    #
+    # THE ONE-REPAIR RULE IS UNTOUCHED: this consumes the single cycle exactly as the full-agent
+    # road did, and the caller re-QAs once regardless. Every early return here is a FINDING that
+    # names what did not happen; the re-QA then rules on whatever is on disk.
+    async def qa_repair_by_remap(self, slug, q):
+        ok, tables, why = await self.preresolve([slug])
+        if not ok:
+            self.findings.append("%s: the QA re-map could not run map-preresolve (%s) - nothing was "
+                                 "re-ruled" % (slug, why[:200]))
+            return
+        fill = await self.fill_fdc_shelf([slug], tables)
+        if fill and (fill.get("added") or fill.get("failed")):
+            ok2, tables2, _why2 = await self.preresolve([slug])
+            if ok2:
+                tables = tables2
+        await self.fill_prior_rulings([slug], tables)
+        r = await self.dispatch("recipe-ingredient-mapper", self.qa_remap_prompt(slug, q, tables),
+                                "qa", "repair-remap:%s" % slug, [slug], schema=hunt_lib.MAPPED,
+                                validator=lambda pay: hunt_lib.validate_map_food_rows(
+                                    pay, self.map_row_debts(pay, tables)),
+                                stage="recipe-ingredient-mapper")
+        if r is None:
+            self.findings.append("%s: the QA re-map returned NO VERDICT, so nothing was re-ruled"
+                                 % slug)
+            return
+        res = next((x for x in (r.get("results") or []) if x and x.get("slug") == slug), None)
+        if res is None:
+            self.findings.append("%s: the QA re-map answered but said nothing about this slug"
+                                 % slug)
+            return
+        if hunt_lib.is_rejected(res.get("status")):
+            self.findings.append("%s: the QA re-map REJECTED the recipe (%s) - the re-QA rules on the "
+                                 "unchanged spec" % (slug, as_text(res.get("detail"), 200)))
+            return
+        ok_asm, why_asm = await self.assemble_mapped(slug, res, tables)
+        if not ok_asm:
+            self.findings.append("%s: the QA re-map's rulings did not assemble - %s"
+                                 % (slug, why_asm[:300]))
+            return
+        absent = [t for t in (res.get("absent_terms") or []) if t]
+        if absent:
+            # SAID, NOT PRICED. The recipe sits at `written`; this road holds no pricing pen, and
+            # the old road held none either. The auditor reads this finding.
+            self.findings.append("%s: the QA re-map names %d term(s) the board has never carried "
+                                 "(%s); the repair road does not price them, so their carriage is "
+                                 "UNVERIFIED" % (slug, len(absent), ", ".join(absent)[:200]))
+        saved = self.intake_writer_fields(slug)
+        okb, _mac, whyb = await self.build_skeleton(slug, force=True)
+        if not okb:
+            self.findings.append("%s: the QA re-map assembled but the skeleton would not rebuild "
+                                 "(%s)" % (slug, whyb[:250]))
+            return
+        if saved:
+            okp, whyp = self.apply_writer_fields(slug, saved)
+            if not okp:
+                self.findings.append("%s: the prose could not be re-applied after the re-map (%s)"
+                                     % (slug, whyp[:200]))
+                return
+        clean, drift, vdetail = await self.verify_skeleton(slug)
+        if not clean:
+            self.findings.append("%s: after the re-map the skeleton verify did not come back clean "
+                                 "(%s)" % (slug, (("; ".join(drift)) if drift else vdetail)[:200]))
+            return
+        rc, out, err = await self.cost_engine(BUILD_V2_SPEC_PS, self.spec_args(slug),
+                                              lane="qa", stage="repair-spec-build", items=[slug])
+        if rc != 0:
+            self.findings.append("%s: the QA re-map rebuilt the intake but the spec build REFUSED "
+                                 "(rc %d): %s" % (slug, rc, hunt_lib.first_guard_line(out, err)))
+
+    def intake_writer_fields(self, slug):
+        """The writer-fillable fields as they stand on the intake, so a forced skeleton rebuild can
+        put them back. Empty values are left out: re-applying an empty string over a field the
+        rebuild filled would be the patcher erasing machine work."""
+        path = os.path.join(self.run_dir, "intake", "%s.json" % slug)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f) or {}
+        except Exception:                                         # noqa: BLE001
+            return {}
+        out = {}
+        for key in hunt_lib.WRITER_FIELDS:
+            head, sep, tail = key.partition(".")
+            val = (doc.get(head) or {}).get(tail) if sep else doc.get(key)
+            if isinstance(val, list):
+                if [x for x in val if str(x or "").strip()]:
+                    out[key] = val
+            elif str(val or "").strip():
+                out[key] = val
+        return out
+
+    def qa_remap_prompt(self, slug, q, tables):
+        findings = [x for x in str((q or {}).get("findings") or "").replace("\r", "").split("\n")
+                    if x.strip()]
+        return (
+            "Source-QA failed recipe %s and blamed the MAPPING. This is the ONE repair cycle it gets;\n"
+            "a second failure is terminal, so fix the actual finding rather than papering over it.\n\n"
+            "WHAT SOURCE-QA FOUND:\n%s\n\n"
+            "RE-RULE THIS RECIPE'S LINES WITH THOSE FINDINGS IN FRONT OF YOU. The dossier below is the\n"
+            "same one the map lane hands you, rebuilt now over the current estate, and you return the\n"
+            "same contract for this ONE slug: `lines`, `rulings`, `food_db_rows`, `absent_terms`. The\n"
+            "ORCHESTRATOR reassembles the decision file, rebuilds the intake skeleton with the writer's\n"
+            "prose preserved, and rebuilds the spec. You have NO files to open and none to write: do\n"
+            "not read the intake, the spec, the pipeline scripts or the daemon, and do not run\n"
+            "build-intake-skeleton, build-v2-spec or hunt-run yourself. On 2026-08-27 a repair on this\n"
+            "road spent 84 tool calls and 14.4M tokens re-learning the pipeline before it touched the\n"
+            "line the finding named; the finding is the whole job.\n"
+            "If the finding is NOT a mapping defect, say so in `detail` and return the lines as they\n"
+            "stand - that is a legitimate answer.\n\n"
+            "%s"
+            % (slug,
+               "\n".join("  - %s" % as_text(x, 900) for x in findings)
+               or "  (source-QA named no finding)",
+               self.map_prompt([slug], tables)))
+
     def qa_repair_patch_prompt(self, slug, q):
         def read(*parts):
             try:
@@ -5912,12 +6331,10 @@ class Daemon(object):
             if isinstance(mac, dict) and mac:
                 out.append("  per serving: %s" % ", ".join(
                     "%s %s" % (k, mac.get(k)) for k in sorted(mac) if mac.get(k) is not None))
-            lines = [i for i in (spec.get("ingredients") or []) if isinstance(i, dict)]
+            lines = self.spec_ingredient_lines(spec)
             out.append("  the %d ingredient lines, with the buy strings the reader sees:" % len(lines))
-            for i in lines:
-                out.append("    - %s%s" % (as_text(i.get("item"), 90),
-                                           (" | buy: %s" % as_text(i.get("buy"), 160))
-                                           if i.get("buy") else ""))
+            for ln in lines:
+                out.append("    - %s" % ln)
             steps = (spec.get("make_it") or (spec.get("prose") or {}).get("make_it")
                      or (spec.get("head") or {}).get("steps") or [])
             if isinstance(steps, str):
@@ -5949,6 +6366,41 @@ class Daemon(object):
                 out.append("  (the battery report names no checks - say so in your verdict rather "
                            "than treating it as a pass)")
         return "\n".join(out)
+
+    def spec_ingredient_lines(self, spec):
+        """The reader-facing ingredient lines of a spec, whichever shape the spec carries.
+
+        A V2 SPEC HAS NO `ingredients` KEY (2026-09-04). It carries `ingredients_display` (the
+        printed strings, with markup), `ingredients_grams` ({item, grams}) and
+        `head.recipeIngredient`. qa_dossier read only `ingredients`, so every one of the 34 QA
+        sessions on hunt-2026-08-27-highprotein was shown "the 0 ingredient lines" for the recipe
+        it was ruling on - the dossier's central section, empty - and went to disk for it: 5-8
+        greps of the spec and a Read, per session. The legacy key still renders first when present.
+        """
+        legacy = [i for i in (spec.get("ingredients") or []) if isinstance(i, dict)]
+        if legacy:
+            return ["%s%s" % (as_text(i.get("item"), 90),
+                              (" | buy: %s" % as_text(i.get("buy"), 160)) if i.get("buy") else "")
+                    for i in legacy]
+        grams = [g for g in (spec.get("ingredients_grams") or []) if isinstance(g, dict)]
+        display = [d for d in (spec.get("ingredients_display") or []) if isinstance(d, str)]
+        out = []
+        for i in range(max(len(grams), len(display))):
+            g = grams[i] if i < len(grams) else {}
+            d = re.sub(r"<[^>]+>", "", display[i]).strip() if i < len(display) else ""
+            item = as_text(g.get("item"), 90)
+            head = item or d[:90]
+            parts = [head]
+            if g.get("grams") is not None:
+                parts.append("%s g" % g.get("grams"))
+            if d and d != head:
+                parts.append("as printed: %s" % as_text(d, 160))
+            out.append(" | ".join(parts))
+        if out:
+            return out
+        ri = (spec.get("head") or {}).get("recipeIngredient") if isinstance(spec.get("head"), dict) \
+            else None
+        return [as_text(x, 160) for x in (ri or []) if isinstance(x, str)]
 
     def qa_prompt(self, slug, attempt):
         return (
@@ -6488,7 +6940,12 @@ class Daemon(object):
     # SO THE NUMBERS GO INLINE. This is NOT a trim of the audit tier: the authority language below is
     # unchanged word for word, the auditor keeps every tool it had, and the discretionary half of its
     # job is now stated out loud rather than left implied.
-    AUDIT_DOSSIER_CAP = 6000
+    # RAISED 6000 -> 24000 (2026-09-04). At 6000 every 6-slug wave on hunt-2026-08-27-highprotein
+    # rendered 7.3-7.6k chars and was cut, ending in "read the report file" - so the auditor read
+    # the file the block existed to spare it, in 2 sessions per wave. 24k chars is ~6k tokens once,
+    # against a 35-turn session re-reading ~100k per turn.
+    AUDIT_DOSSIER_CAP = 24000
+    AUDIT_RULINGS_CAP = 12000
 
     def render_audit_dossier(self, wk):
         """The preaudit report as a compact numbers block. Returns text, or a plain sentence saying
@@ -6556,6 +7013,96 @@ class Daemon(object):
                       "read it before you rule." % self.AUDIT_DOSSIER_CAP)
         return text
 
+    # ---- WHAT THE AUDITOR WENT TO DISK FOR (2026-09-04), rendered ------------------------------
+    #
+    # MEASURED on hunt-2026-08-27-highprotein: 15 auditor calls, 3.8M tokens and 35 turns each,
+    # 42% of the run. The wave-8 session (9.4M, 92 turns) opened by Reading the preaudit and wave
+    # files already rendered in its prompt, spent turns 3-6 globbing for the spec files (in
+    # db\specs first, which does not exist), Read every spec, Read update-recipes-db.ps1 and
+    # re-ran it -DryRun (the battery's recipes-db-dryrun row had already run it), and parsed
+    # recipes-db.json and food-macros-db.json in PowerShell three times each to recompute macros
+    # the battery had already computed. update-recipes-db.ps1 was Read in 7 of the 15 sessions.
+    # Checklist items 1 and 3 (macros against the food DB and the stated grams; item_ids against
+    # the evidence-gate precedents) need the mapped decisions and the food-DB rows behind them,
+    # and nothing put those on the page. Now the daemon does, the same way it does for the mapper.
+    def render_wave_rulings(self, slugs):
+        idx = self.food_db_index()
+        lines = ["THE WAVE'S MAPPED DECISIONS AND THE FOOD-DB ROWS BEHIND THEM - the identities and grams",
+                 "the macros and costs were computed from. Checklist items 1 and 3 are answered against",
+                 "THIS, not against a re-read of the specs and the food DB:"]
+        for slug in slugs:
+            p = os.path.join(self.run_dir, "mapped", "%s.json" % slug)
+            try:
+                with open(p, "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f) or {}
+            except Exception as e:                                # noqa: BLE001
+                lines.append("  %s: mapped\\%s.json COULD NOT BE READ (%s) - read it yourself before "
+                             "ruling" % (slug, slug, str(e)[:80]))
+                continue
+            rows = [r for r in (doc.get("ingredients") or []) if isinstance(r, dict)]
+            lines.append("")
+            lines.append("  %s  (source %s servings -> %s, scale %s; %d line(s))"
+                         % (slug, doc.get("source_servings"), doc.get("target_servings"),
+                            doc.get("scale_factor"), len(rows)))
+            seen = []
+            for r in rows:
+                item = as_text(r.get("item"), 60)
+                lines.append("    %-34s [%s] %s g  %s%s  buy: %s"
+                             % (item, r.get("bid") or "no id", r.get("grams"),
+                                r.get("decision") or "?", " OPTIONAL" if r.get("optional") else "",
+                                as_text(r.get("buy"), 70)))
+                if item and item.lower() not in seen:
+                    seen.append(item.lower())
+            shown = []
+            for k in seen:
+                row = idx.get(k)
+                if row:
+                    shown.append("      %s: %s %s = %s g, %s cal, %s P, %s C, %s F"
+                                 % (row.get("item") or k, row.get("serving_qty"),
+                                    row.get("serving_unit"), row.get("serving_grams"),
+                                    row.get("calories"), row.get("protein_g"), row.get("carbs_g"),
+                                    row.get("fat_g")))
+                else:
+                    shown.append("      %s: NO food-DB row could be read for this item%s"
+                                 % (k, (" (%s)" % self._food_db_why) if self._food_db_why else ""))
+            if shown:
+                lines.append("    food-DB rows:")
+                lines.extend(shown)
+        text = "\n".join(lines)
+        if len(text) > self.AUDIT_RULINGS_CAP:
+            # ANNOUNCED, never silent - the same rule render_audit_dossier holds itself to.
+            text = (text[:self.AUDIT_RULINGS_CAP]
+                    + "\n  ... THIS BLOCK WAS TRUNCATED at %d chars. The rest is in "
+                      "mapped\\<slug>.json; read it before you rule." % self.AUDIT_RULINGS_CAP)
+        return text
+
+    def audit_paths_block(self, wk, slugs):
+        specs = self.specs_dir or SPECS_DIR
+        cards = os.path.join(self.run_dir, "waves", "wave-%d.preaudit-cards" % wk)
+        return (
+            "WHERE EVERYTHING IS, so no turn goes to finding it (the wave-8 auditor spent its first six\n"
+            "tool calls globbing for spec files, in the wrong directory first):\n"
+            "  specs       %s\\<slug>.json\n"
+            "  cards       %s\\<slug>\\<slug>.body.html (+ .head.html) - the battery's own rebuild\n"
+            "  decisions   %s\\mapped\\<slug>.json     transcriptions   %s\\extracted\\<slug>.json\n"
+            "  food DB     %s\n"
+            "  slugs       %s\n\n"
+            "THE BATTERY ALREADY EXECUTED THESE SCRIPTS, and their results are printed above:\n"
+            "update-recipes-db.ps1 -DryRun (the recipes-db-dryrun row), audit-spec-contradictions,\n"
+            "audit-store-integrity, audit-vocab-integrity, audit-unbid-ingredients,\n"
+            "audit-cost-plausibility, audit-cost-line-coverage, and the P8 endpoint and feed probes.\n"
+            "Do not re-run one to re-earn a result that is printed; re-run it only when the PRINTED\n"
+            "result is the thing you distrust, and say so in the report. The same goes for re-summing\n"
+            "the food DB and recipes-db by hand in PowerShell: the macro-recompute and cost rows show\n"
+            "their arithmetic, and the rows behind them are rendered in the block above this one.\n"
+            % (specs, cards, self.run_dir, self.run_dir, self.food_db_path, ", ".join(slugs)))
+
+    def audit_material(self, wk, slugs):
+        """Everything the auditor is handed inline: the battery's arithmetic, the wave's mapped
+        decisions with their food-DB rows, and the paths and already-run scripts."""
+        return "%s\n\n%s\n\n%s" % (self.render_audit_dossier(wk), self.render_wave_rulings(slugs),
+                                   self.audit_paths_block(wk, slugs))
+
     def repair_delta_block(self, delta):
         """F4: WHAT THE REPAIR CHANGED, for a re-audit only.
 
@@ -6622,7 +7169,7 @@ class Daemon(object):
                # THE DELTA RIDES ON RE-AUDITS ONLY, and `why` is non-empty exactly then: a first
                # audit has no repair behind it, so a block there would be describing nothing.
                (self.repair_delta_block(delta) if why else ""),
-               self.render_audit_dossier(wk),
+               self.audit_material(wk, slugs),
                self.conditions, band_sentence(self.band),
                self.run_dir, wk, scope, self.specs_seam_note(),
                self.GREP_HARNESS_NOTE))
