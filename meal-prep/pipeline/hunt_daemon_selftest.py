@@ -302,47 +302,12 @@ def arun(coro):
 
 
 # =====================================================================================================
-def names_diff(seen, ref_path):
-    """Removed / added case NAMES against a pinned reference. Returns (removed, added, why_not).
-
-    WHY BY NAME AND NOT BY COUNT (PLAN-after-dedup P4, and the rule it comes from). A tally settles
-    nothing: deleting one case and adding one leaves the count identical, and deleting a case on its
-    own leaves the suite GREEN at exit 0 - measured. Only the names can see a case that vanished.
-    """
-    try:
-        with io.open(ref_path, encoding="utf-8-sig") as f:
-            ref = [ln.strip() for ln in f if ln.strip()]
-    except Exception as e:                                        # noqa: BLE001
-        return [], [], "no reference at %s (%s)" % (ref_path, e)
-    if not ref:
-        return [], [], ("the reference at %s names no cases, and an empty reference cannot see a "
-                        "removal - re-pin it from HEAD" % ref_path)
-    # STRIPPED ON BOTH SIDES. Some case names are indented to read as a continuation of the one
-    # above; that indentation is layout, not identity, and comparing it made 31 unchanged cases
-    # read as 31 removals and 31 additions at once - a diff that cries wolf is a diff nobody reads.
-    rs, ss = set(x.strip() for x in ref), set(x.strip() for x in seen)
-    return sorted(rs - ss), sorted(ss - rs), ""
-
-
-def names_report(seen, ref_path):
-    """The VERDICT, so the exit code and the fixture read the same function. Returns (rc, lines).
-
-    rc is EXIT_CLEAN when nothing was removed - an ADDED case is a new fixture and is fine - and
-    EXIT_CANNOT_RUN when any reference case did not run, whatever the cases that did run said.
-    """
-    removed, added, why = names_diff(seen, ref_path)
-    if why:
-        return hunt_lib.EXIT_CANNOT_RUN, ["  CANNOT DIFF - %s" % why]
-    lines = ["  vs %s: %d removed, %d added" % (ref_path, len(removed), len(added))]
-    lines += ["    +  %s" % n for n in added]
-    lines += ["    -  %s" % n for n in removed]
-    if removed:
-        lines.append("")
-        lines.append("  A CASE THAT VANISHED IS NOT A PASS. %d case name(s) in the reference did "
-                     "not run. Either the commit says which and why, or this is coverage lost "
-                     "silently." % len(removed))
-        return hunt_lib.EXIT_CANNOT_RUN, lines
-    return hunt_lib.EXIT_CLEAN, lines
+# THE PINNED-REFERENCE GATE MOVED TO hunt_lib (2026-09-04, PLAN-after-review P5), because three
+# other Python and PowerShell suites needed exactly this and could not reach it here. These two
+# names stay bound so this suite's own fixtures - which are the fixtures for the RULE, not for the
+# daemon - keep calling them unqualified and keep their case names.
+names_diff = hunt_lib.names_diff
+names_report = hunt_lib.names_report
 
 
 def run(names_out=None, names_ref=None):
@@ -631,9 +596,6 @@ def run(names_out=None, names_ref=None):
       *_blind_pop_is_a_finding())
     T("CLEAN TWIN a candidate that arrives WITH its neighbour evidence appends nothing",
       *_evidenced_pop_is_silent())
-    T("MUST FIRE  the ingest dedup is BOUNDED by who it was told to ask about AND by a deadline - "
-      "unbounded it faced 7,386 local-model calls on the live pool, which is a run that never starts",
-      *_dedup_is_bounded())
     T("MUST FIRE  the status report carries the pool reading - counts of blind rows and the state of "
       "the embedding index. A could-not-look that nobody reads is a clean bill",
       *_status_carries_the_pool_reading())
@@ -1584,62 +1546,58 @@ def run(names_out=None, names_ref=None):
             T(name, ok, got)
 
     # =================================================================================================
-    H("2026-09-04 - the ingest dedup pass is OFF, and the run SAYS so (PLAN-after-dedup P2)")
+    H("2026-09-04 - a run reclaims what a DEAD PROCESS OF ITS OWN was holding (PLAN-after-review P2)")
     # =================================================================================================
-    # NOTHING COVERED THIS BLOCK BEFORE TODAY. It was inline in main()'s go() closure, so neither the
-    # bounded call nor the model-down message had a fixture - the plan that asked for these twins
-    # said the bounded call was already pinned, and it was not. It is now, on both sides of the flag.
+    # THE DEFECT, measured: hunt-2026-09-04-five ran a dry-run process that took 20 candidates and was
+    # killed mid-batch; the LIVE process for the SAME run started four minutes later and dropped every
+    # one of them as "already taken by another run" - its own predecessor. Those rows can never be
+    # popped and can never be ruled by anything. 21 were stranded that day across two runs.
     for _case in (0,):
-        _idtmp = scratch_dir(prefix="daemon-ingest-dedup-")
-        _pool = os.path.join(_idtmp, "pool.json")
-        with open(_pool, "w", encoding="utf-8") as _f:
-            json.dump({"candidates": [{"slug": "c%d" % i, "name": "C%d" % i, "status": "available"}
-                                      for i in range(120)]}, _f)
+        _rctmp = scratch_dir(prefix="daemon-reclaim-")
+        _rcpool = os.path.join(_rctmp, "pool.json")
+        with open(_rcpool, "w", encoding="utf-8") as _f:
+            json.dump({"candidates": [
+                {"slug": "mine-unruled", "name": "M", "url": "u1", "status": "taken:run-mine"},
+                {"slug": "mine-ruled", "name": "R", "url": "u2", "status": "taken:run-mine"},
+                {"slug": "theirs", "name": "T", "url": "u3", "status": "taken:run-theirs"},
+                {"slug": "shelf", "name": "S", "url": "u4", "status": "available"}]}, _f)
 
-        class _FakeD(object):
-            pool_path = _pool
+        class _ReclaimD(object):
+            pool_path = _rcpool
+            run_id = "run-mine"
 
-            def candidate_in_band(self, _c):
-                return True
-
-        _calls, _lines = [], []
-        _saved = (HD.harvest.dedup_ingest_pool, HD.ensure_local_model)
-        HD.harvest.dedup_ingest_pool = lambda *a, **k: (_calls.append((a, k)), (0, {}, {}))[1]
-        HD.ensure_local_model = lambda *a, **k: (True, "")
+        _rclines = []
+        _saved_lr = HD.harvest.ledger_rulings
+        HD.harvest.ledger_rulings = lambda *a, **k: {
+            "mine-ruled": {"slug": "mine-ruled", "verdict": "rejected-not-fit",
+                           "reason": "ruled before the process died", "run": "run-mine"}}
         try:
-            tag = HD.ingest_dedup_preflight(_FakeD(), "decide,extract", target=10, enabled=False,
-                                            log=_lines.append)
-            T("MUST FIRE  with the pass off (the default) NO local-model call is made - the gate has "
-              "refused 0 candidates ever and its refusal path is now retired, and 106 s of card "
-              "time bought that",
-              tag == "off-by-default" and not _calls,
-              "tag=%s calls=%d" % (tag, len(_calls)))
-            T("MUST FIRE  ...and the run SAYS it is off and why - a silent skip is the failure class "
-              "this whole week was about",
-              any("ingest dedup pass is OFF" in x for x in _lines)
-              and any("cannot" in x and "both polarities" in x for x in _lines)
-              and any("--ingest-dedup" in x for x in _lines),
-              " | ".join(_lines))
-            _lines[:] = []
-            tag = HD.ingest_dedup_preflight(_FakeD(), "decide,extract", target=10, enabled=True,
-                                            log=_lines.append)
-            _kw = _calls[0][1] if _calls else {}
-            T("CLEAN TWIN with --ingest-dedup the pass runs, and it is BOUNDED - capped at "
-              "max(40, target*4) slugs and walled at 180 s",
-              tag == "ran" and len(_calls) == 1 and _kw.get("budget_sec") == 180
-              and len(_kw.get("only") or []) == 40,
-              "tag=%s only=%d budget=%s" % (tag, len(_kw.get("only") or []), _kw.get("budget_sec")))
-            _calls[:] = []
-            HD.ensure_local_model = lambda *a, **k: (False, "llama-server is down")
-            tag = HD.ingest_dedup_preflight(_FakeD(), "decide", target=10, enabled=True,
-                                            log=_lines.append)
-            T("CLEAN TWIN a model that is down refuses NOBODY and says the candidates reach the "
-              "decider undeduped - honest, not clean",
-              tag == "model-down" and not _calls
-              and any("This is honest, not clean." in x for x in _lines),
-              "tag=%s | %s" % (tag, " | ".join(_lines)))
+            _rel, _land = HD.reclaim_own_takes(_ReclaimD(), log=_rclines.append)
+            _rcafter = {c["slug"]: c["status"]
+                        for c in HD.harvest.read_pool(_rcpool)["candidates"]}
+            T("MUST FIRE  a run takes back at START-UP what an earlier process of ITSELF was holding "
+              "- this process has taken nothing yet, so every take under its own name is a dead "
+              "process's",
+              _rel == 1 and _rcafter["mine-unruled"] == "available",
+              "released=%d %s" % (_rel, _rcafter.get("mine-unruled")))
+            T("MUST FIRE  ...and where the LEDGER already ruled, the ruling lands instead of the "
+              "candidate going back on the shelf to be re-offered",
+              _land == 1 and _rcafter["mine-ruled"] == "ruled:rejected-not-fit",
+              "landed=%d %s" % (_land, _rcafter.get("mine-ruled")))
+            T("CLEAN TWIN another run's take is untouched - the reclaim is of its OWN name only, "
+              "which is the whole reason it is safe to do without asking who is alive",
+              _rcafter["theirs"] == "taken:run-theirs" and _rcafter["shelf"] == "available",
+              "%s / %s" % (_rcafter.get("theirs"), _rcafter.get("shelf")))
+            T("MUST FIRE  ...and it SAYS how many it took back - a silent reclaim of a candidate a "
+              "decider may have been ruling on is the failure class in the other direction",
+              any("reclaimed 2 candidate(s)" in x for x in _rclines), " | ".join(_rclines))
+            _rclines[:] = []
+            _rel2, _land2 = HD.reclaim_own_takes(_ReclaimD(), log=_rclines.append)
+            T("CLEAN TWIN a run holding nothing reclaims nothing and says nothing",
+              (_rel2, _land2) == (0, 0) and not _rclines,
+              "%s %s | %s" % (_rel2, _land2, _rclines))
         finally:
-            HD.harvest.dedup_ingest_pool, HD.ensure_local_model = _saved
+            HD.harvest.ledger_rulings = _saved_lr
 
     # =================================================================================================
     H("2026-09-04 - the pinned-reference gate is a tool, not a scratch script (PLAN-after-dedup P4)")
@@ -1684,17 +1642,9 @@ def run(names_out=None, names_ref=None):
 
     print("")
     print("  %d case(s) ran" % len(seen))
-    if names_out:
-        # newline="" ON PURPOSE: a pinned reference is compared by other tools and by hand, and a
-        # file whose line endings depend on which OS emitted it is a diff that lies.
-        with io.open(names_out, "w", encoding="utf-8", newline="") as f:
-            f.write(chr(10).join(seen) + chr(10))
-        print("  case NAMES pinned to %s - diff a later run against it with --names-diff" % names_out)
-    names_rc = hunt_lib.EXIT_CLEAN
-    if names_ref:
-        names_rc, _lines = names_report(seen, names_ref)
-        for ln in _lines:
-            print(ln)
+    # ONE call, shared with harvest, decide_apply and (in PowerShell) the two .ps1 suites. This block
+    # used to be four lines of pin-and-diff written out here; it is the thing P5 stopped copying.
+    names_rc = hunt_lib.names_finish(seen, names_out, names_ref)
 
     print("")
     if bad:
@@ -7158,36 +7108,6 @@ def _pop_findings(neighbours):
         return [f for f in d.findings if "neighbour evidence" in f], got
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _dedup_is_bounded():
-    """MUST FIRE: the ingest pass asks only about who it was told to, and stops at its deadline.
-
-    Unbounded this faced 7,386 local-model calls on the live pool. Both bounds are asserted here
-    because either alone still fails: a count bound cannot survive a wedged model, and a time bound
-    alone still walks a pool this run's band will never pop.
-    """
-    import harvest                                               # noqa: PLC0415
-    near = [{"side": "live-catalog", "slug": "x", "name": "X", "score": 40}]
-
-    def pool_of(n):
-        return {"candidates": [{"slug": "c%d" % i, "name": "c%d" % i, "status": "available",
-                                "neighbours": list(near)} for i in range(n)]}
-
-    saved = (harvest.llama_up, harvest.llm_same_dinner, harvest.llm_different_dinner)
-    harvest.llama_up = lambda *a, **k: True
-    harvest.llm_same_dinner = lambda *a, **k: "no"
-    harvest.llm_different_dinner = lambda *a, **k: "yes"
-    try:
-        p = pool_of(5)
-        harvest.judge_near_dupes(p, quiet=True, only=["c1", "c3"])
-        asked = sorted(c["slug"] for c in p["candidates"] if c.get("dedup_at_ingest"))
-        p2 = pool_of(5)
-        harvest.judge_near_dupes(p2, quiet=True, budget_sec=-1)
-        timed = [c["slug"] for c in p2["candidates"] if c.get("dedup_at_ingest")]
-        return (asked == ["c1", "c3"] and timed == []), "only=%s past-deadline-tagged=%s" % (asked, timed)
-    finally:
-        (harvest.llama_up, harvest.llm_same_dinner, harvest.llm_different_dinner) = saved
 
 
 def _blind_pop_is_a_finding():

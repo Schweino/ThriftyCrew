@@ -8311,59 +8311,34 @@ def card_is_owned(now):
     return None
 
 
-def ingest_dedup_preflight(d, lanes, target=10, enabled=False, start_model=True, log=say):
-    """DEDUP BEFORE THE DECIDER, or SAY why not. Returns a short tag naming what happened, so the
-    decision is a thing a fixture can read rather than a shape in a log.
+def reclaim_own_takes(d, log=say):
+    """Take back what an EARLIER PROCESS OF THIS RUN was holding when it stopped.
 
-    OFF BY DEFAULT SINCE 2026-09-04, AND THIS IS NOT A REGRESSION - there is no longer a refusal for
-    it to make. `harvest.judge_near_dupes` (was `refuse_near_dupes`) has had its refusal path retired
-    under PLAN-after-dedup P1c: the shipped contract needed the local model to answer "same dinner"
-    yes AND "different dinners" no about the same pair, and it answers YES to both on every pair, a
-    name against itself included; the two forced-choice repairs measured the same day scored 43.3%
-    recall at 4.67% WRONG refusals (names only) and 23.9% at 2.00% (with the ingredient lines in the
-    prompt - richer evidence made it WORSE). Measured cost of running it anyway: 60 candidates, 106 s
-    of card time, 0 refusals; at the run cap (`max(40, target*4)`) roughly 70 s of local-model time
-    per run to tag rows nothing acts on. So it is not run, and the run SAYS it is not run - a silent
-    skip is the exact failure class this week's work was about. `--ingest-dedup` still runs the ASK,
-    which records `dedup_at_ingest` and rules nothing.
+    THE DEFECT THIS CLOSES (measured 2026-09-04). `mark_taken` runs before the decider dispatch so
+    two runs never pay for one dossier, and nothing ever reversed it. hunt-2026-09-04-five ran a
+    dry-run process that took 20 candidates and was killed mid-batch; the LIVE process for the same
+    run started four minutes later and dropped every one of them as "already taken by ANOTHER run" -
+    its own predecessor. Those 20 rows can never be popped or ruled by anything.
+
+    THIS PROCESS HAS TAKEN NOTHING YET, which is what makes the reclaim safe here and nowhere else:
+    at start-up, every `taken:<this run>` row is by definition a dead process's. A row the ledger
+    already ruled on is not thrown back on the shelf - it lands with the ledger's own verdict.
     """
-    if "decide" not in [x.strip() for x in (lanes or "").split(",")]:
-        return "not-a-decide-run"
-    if not enabled:
-        log("hunt-daemon: the ingest dedup pass is OFF (the default since 2026-09-04) - its refusal "
-            "path is RETIRED and it cannot rule anything out: the local model answers yes to both "
-            "polarities on every pair, and both forced-choice repairs wrongly refused live recipes.")
-        log("  ~70 s of card time per run is not being spent on it. Turn it on with --ingest-dedup; "
-            "it will ASK and tag, and refuse nobody.")
-        return "off-by-default"
-    # START ONLY IF EXTRACT IS ALREADY HOLDING THE CARD. Dedup has the weaker claim of the
-    # two: extract cannot run a recipe without the model, dedup degrades to `unavailable`
-    # and says so. So it never takes the GPU on its own account.
-    ok, why = ensure_local_model(start=("extract" in lanes.split(",") and start_model), log=log)
-    if not ok:
-        log("hunt-daemon: the ingest dedup is NOT running - %s" % why)
-        log("  candidates will reach the decider undeduped. This is honest, not clean.")
-        return "model-down"
     try:
-        # ASK ABOUT WHAT THIS RUN WILL ACTUALLY POP, not about the whole shelf. The pop
-        # is band-filtered and rank-ordered; deduping in that same order means the
-        # candidates the decider is about to see are the ones carrying a verdict, and
-        # the 3,000 it will never reach cost nothing. Cap and deadline both apply.
-        pool0 = harvest.read_pool(d.pool_path)
-        ranked = sorted([c for c in pool0.get("candidates") or []
-                         if c.get("status") == "available"
-                         and harvest.dedup_pending(c)
-                         and d.candidate_in_band(c)],
-                        key=harvest.dossier_rank)
-        cap = max(40, (target or 10) * 4)
-        harvest.dedup_ingest_pool(d.pool_path, log=log,
-                                  only=[c["slug"] for c in ranked[:cap]],
-                                  budget_sec=180)
-    except Exception as e:                                       # noqa: BLE001
-        log("hunt-daemon: the ingest dedup could not run (%s) - candidates will reach "
-            "the decider undeduped" % e)
-        return "errored"
-    return "ran"
+        pool = harvest.read_pool(d.pool_path)
+        held = harvest.taken_rows(pool, d.run_id)
+        if not held:
+            return 0, 0
+        released, landed, _rows = harvest.release_taken(pool, d.run_id)
+        harvest.write_pool(pool, d.pool_path)
+        log("hunt-daemon: reclaimed %d candidate(s) an earlier process of this run was holding "
+            "(%d released to the shelf, %d landed from the ledger). A take with no live owner is a "
+            "candidate nothing can ever rule." % (len(held), released, landed))
+        return released, landed
+    except Exception as e:                                        # noqa: BLE001
+        log("hunt-daemon: could not reclaim this run's own takes (%s) - any candidate a dead "
+            "process was holding stays held, and stays unrulable." % e)
+        return 0, 0
 
 
 def ensure_local_model(now=None, start=True, wait_sec=300, log=say):
@@ -8494,18 +8469,8 @@ def main(argv=None):
     ap.add_argument("--no-start-model", dest="no_start_model", action="store_true",
                     help="preflight llama-server but never START one - refuse instead. For when you "
                          "want to own the card yourself.")
-    ap.add_argument("--ingest-dedup", dest="ingest_dedup", action="store_true", default=False,
-                    help="run the ingest dedup pass before the decide lane. OFF by default: as "
-                         "shipped the gate cannot fire (measured 2026-09-04, 0 refusals in 106 s "
-                         "of card time), so the run says so rather than paying ~70 s for it.")
-    ap.add_argument("--no-ingest-dedup", dest="ingest_dedup", action="store_false",
-                    help="the default; here so a caller can say it out loud.")
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--selftest", action="store_true")
-    # PIN ONCE, DIFF MANY. The suite is 300 s and every gate ran it TWICE - once for a HEAD
-    # reference, once for the change - because a case-NAME diff needs a reference and there was no
-    # way to emit one. That second run is the whole of the "13 minutes"; these two flags are the
-    # saving. Exit 2 on any REMOVAL, because a deleted case leaves the suite green at exit 0.
     ap.add_argument("--names-out", dest="names_out", default="",
                     help="with --selftest: write the case NAMES this run executed, one per line, "
                          "to pin as a reference.")
@@ -8561,8 +8526,7 @@ def main(argv=None):
             if not ok:
                 say("hunt-daemon: CANNOT RUN - %s" % why)
                 return hunt_lib.EXIT_CANNOT_RUN
-        ingest_dedup_preflight(d, a.lanes, target=a.target, enabled=a.ingest_dedup,
-                               start_model=not a.no_start_model, log=say)
+        reclaim_own_takes(d)
         say("hunt-daemon: %s  lanes %s  publish %s"
             % (d.run_id, a.lanes, "LIVE" if a.publish else "DRY RUN"))
         await d.run(tuple(x.strip() for x in a.lanes.split(",") if x.strip()))

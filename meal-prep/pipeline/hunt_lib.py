@@ -1890,6 +1890,155 @@ def run_parity(path=None, quiet=False):
 
 
 # =====================================================================================================
+# THE PINNED-REFERENCE GATE, for every Python suite in the pipeline (PLAN-after-review P5).
+#
+# WHY IT LIVES HERE. It shipped on 2026-09-04 inside hunt_daemon_selftest.py, where only the daemon
+# suite could reach it - so harvest (164 cases), decide_apply (46) and the two PowerShell suites were
+# still diffed by a hand-rolled `sed | sort | comm`, and the review of that very change could only
+# reproduce its case-name diff because a scratchpad happened to survive. A gate that cannot be re-run
+# by the next reader is not a gate. This module is the one home the estate has for shared pipeline
+# logic (section 4.5), so the two functions move here whole and the daemon suite re-exports them:
+# nothing about its behaviour changes and none of its case names move.
+#
+# The PowerShell twin is `selftest-names-lib.ps1`, and it is a SECOND implementation of the same
+# rule because PowerShell cannot import this. The two are held in lockstep by a shared vector file -
+# see that file's header.
+# =====================================================================================================
+
+def names_diff(seen, ref_path):
+    """Removed / added case NAMES against a pinned reference. Returns (removed, added, why_not).
+
+    WHY BY NAME AND NOT BY COUNT (PLAN-after-dedup P4, and the rule it comes from). A tally settles
+    nothing: deleting one case and adding one leaves the count identical, and deleting a case on its
+    own leaves the suite GREEN at exit 0 - measured. Only the names can see a case that vanished.
+    """
+    try:
+        with open(ref_path, encoding="utf-8-sig") as f:
+            ref = [ln.strip() for ln in f if ln.strip()]
+    except Exception as e:                                        # noqa: BLE001
+        return [], [], "no reference at %s (%s)" % (ref_path, e)
+    if not ref:
+        return [], [], ("the reference at %s names no cases, and an empty reference cannot see a "
+                        "removal - re-pin it from HEAD" % ref_path)
+    # STRIPPED ON BOTH SIDES. Some case names are indented to read as a continuation of the one
+    # above; that indentation is layout, not identity, and comparing it made 31 unchanged cases
+    # read as 31 removals and 31 additions at once - a diff that cries wolf is a diff nobody reads.
+    rs, ss = set(x.strip() for x in ref), set(x.strip() for x in seen)
+    return sorted(rs - ss), sorted(ss - rs), ""
+
+
+def names_report(seen, ref_path):
+    """The VERDICT, so the exit code and the fixture read the same function. Returns (rc, lines).
+
+    rc is EXIT_CLEAN when nothing was removed - an ADDED case is a new fixture and is fine - and
+    EXIT_CANNOT_RUN when any reference case did not run, whatever the cases that did run said.
+    """
+    removed, added, why = names_diff(seen, ref_path)
+    if why:
+        return EXIT_CANNOT_RUN, ["  CANNOT DIFF - %s" % why]
+    lines = ["  vs %s: %d removed, %d added" % (ref_path, len(removed), len(added))]
+    lines += ["    +  %s" % n for n in added]
+    lines += ["    -  %s" % n for n in removed]
+    if removed:
+        lines.append("")
+        lines.append("  A CASE THAT VANISHED IS NOT A PASS. %d case name(s) in the reference did "
+                     "not run. Either the commit says which and why, or this is coverage lost "
+                     "silently." % len(removed))
+        return EXIT_CANNOT_RUN, lines
+    return EXIT_CLEAN, lines
+
+
+def names_finish(seen, names_out, names_ref, emit=print):
+    """The whole of what a suite has to do at its end: pin, diff, and hand back the rc to fold into
+    its own. ONE call site per suite, so four suites cannot drift into four dialects of it.
+
+    Returns EXIT_CLEAN or EXIT_CANNOT_RUN. The suite's own failures still win - a suite with red
+    cases reports its own failure - but a suite that is GREEN and has lost a case must not exit 0.
+    """
+    if names_out:
+        # newline="" ON PURPOSE: a pinned reference is compared by other tools and by hand, and a
+        # file whose line endings depend on which OS emitted it is a diff that lies.
+        with open(names_out, "w", encoding="utf-8", newline="") as f:
+            f.write("\n".join(seen) + "\n")
+        emit("  case NAMES pinned to %s (%d) - diff a later run against it with --names-diff"
+             % (names_out, len(seen)))
+    if not names_ref:
+        return EXIT_CLEAN
+    rc, lines = names_report(seen, names_ref)
+    for ln in lines:
+        emit(ln)
+    return rc
+
+
+def names_fixtures(T, seen):
+    """The fixtures for the RULE, run inside every suite that owns a copy of the gate.
+
+    Called with the caller's own T and its own live `seen` list, so case 1 is a real behavioural
+    check: it asserts that names recorded EARLIER IN THIS RUN are in the list. A fixture that
+    grepped the suite's source for `seen.append` would match its own text and could never fail -
+    the 2026-08-31 trap. This one goes red the moment a suite prints a case it does not record.
+    """
+    import tempfile                                               # noqa: PLC0415
+    T("MUST FIRE  this suite RECORDS the case names it prints - the pinned reference is built from "
+      "the list, so a suite that prints without recording would pin a lie",
+      len(seen) > 3 and all(isinstance(x, str) and x.strip() for x in seen),
+      "seen=%d" % len(seen))
+    tmp = tempfile.mkdtemp(prefix="names-gate-")
+    ref = os.path.join(tmp, "ref.txt")
+    with open(ref, "w", encoding="utf-8", newline="") as f:
+        f.write("case one\ncase two\ncase three\n")
+    rc, lines = names_report(["case one", "case two"], ref)
+    T("MUST FIRE  a case name that VANISHED exits 2 even though every case that ran passed",
+      rc == EXIT_CANNOT_RUN and any("-  case three" in x for x in lines),
+      "rc=%s | %s" % (rc, " | ".join(lines)))
+    rc, lines = names_report(["case one", "case two", "case three", "case four"], ref)
+    T("CLEAN TWIN an ADDED case is a new fixture, not a regression - exit 0, and it is named",
+      rc == EXIT_CLEAN and any("+  case four" in x for x in lines),
+      "rc=%s | %s" % (rc, " | ".join(lines)))
+    rc, lines = names_report(["  case one", "case two", "   case three"], ref)
+    T("CLEAN TWIN indentation is layout, not identity - an indented continuation name is the same "
+      "case",
+      rc == EXIT_CLEAN and "0 removed, 0 added" in lines[0], "rc=%s | %s" % (rc, lines[0]))
+    rc, lines = names_report(["case one"], os.path.join(tmp, "nope.txt"))
+    T("MUST FIRE  a MISSING reference is a could-not-look, never a clean diff",
+      rc == EXIT_CANNOT_RUN and any("CANNOT DIFF" in x for x in lines),
+      "rc=%s | %s" % (rc, " | ".join(lines)))
+    empty = os.path.join(tmp, "empty.txt")
+    with open(empty, "w", encoding="utf-8") as f:
+        f.write("")
+    rc, _lines = names_report(["case one"], empty)
+    T("MUST FIRE  ...and so is an EMPTY reference - it can never see a removal, so it may not "
+      "report one",
+      rc == EXIT_CANNOT_RUN, "rc=%s" % rc)
+    # The PowerShell twin must agree case for case, and the only way to hold two implementations in
+    # step is to make one file the source of both. This writes the vectors the .ps1 lib reads.
+    vec = os.path.join(os.path.dirname(os.path.abspath(__file__)), "selftest-names-vectors.json")
+    try:
+        with open(vec, encoding="utf-8-sig") as f:
+            vectors = json.load(f)
+    except Exception as e:                                        # noqa: BLE001
+        T("MUST FIRE  the cross-language vectors for this rule are readable - the PowerShell twin "
+          "is held in step by them and by nothing else", False, str(e))
+        return
+    rows = vectors.get("cases") or []
+    bad = []
+    for row in rows:
+        rpath = os.path.join(tmp, "v-%s.txt" % row["name"])
+        if row.get("ref") is None:
+            rpath = os.path.join(tmp, "v-missing-%s.txt" % row["name"])
+        else:
+            with open(rpath, "w", encoding="utf-8", newline="") as f:
+                f.write("".join(x + "\n" for x in row["ref"]))
+        rc, _lines = names_report(row["seen"], rpath)
+        want = EXIT_CANNOT_RUN if row["exit"] == 2 else EXIT_CLEAN
+        if rc != want:
+            bad.append("%s: got %s want %s" % (row["name"], rc, want))
+    T("MUST FIRE  Python answers every cross-language vector exactly as the file states - the "
+      "PowerShell twin answers the same file, and that is what keeps the two in step",
+      rows and not bad, "%d vector(s): %s" % (len(rows), "; ".join(bad) or "all green"))
+
+
+# =====================================================================================================
 # hunt_lib's own self-test: the parity vectors, plus the fixtures that are NOT shared because they have
 # no JS counterpart - the rung-1 retry rule (a D9 addition) and the generic schema validator.
 # =====================================================================================================

@@ -145,6 +145,13 @@ one order and `different` in the other, and the swap killed both.
 not a session's. This section is the evidence for that decision, and until it is taken the ingest
 dedup widens the ask and refuses nobody.
 
+> **SUPERSEDED, 2026-09-04 evening (PLAN-after-review P3).** The two tables in this subsection -
+> 8.4% recall at 0 of 300 wrong refusals - were produced by a forced-choice prompt that was never
+> implemented and whose text is recorded NOWHERE. It cannot be reproduced, and section 8 measured
+> the same design at 43.3% / 4.67% with a prompt that IS recorded. Do not average the two and do not
+> quote these numbers: read them as "an unrecorded prompt scored differently", which is itself the
+> finding section 8 draws from them. The reproducible measurement is section 8's.
+
 ### The wide validation, and why the repair was NOT implemented after all
 
 Brad approved "validate wide, then implement" on the section-6 evidence. Validated wide, the repair
@@ -267,7 +274,18 @@ The decider rules these duplicates because they are the same DINNER IDENTITY in 
 see the shape of. The local model, given names or given ingredients, is answering "are these the
 same recipe" - a different question that no wording turns into the first one.
 
-### What shipped
+### What shipped, and what shipped LATER THE SAME DAY
+
+> **UPDATE, 2026-09-04 evening (PLAN-after-review P3): the ask is DELETED, not merely disarmed.**
+> The minimal disposal below left the estate asking a local model a question whose answer nothing
+> acted on. Worse, on re-reading, the one number it still reported - "N candidates the retired gate
+> WOULD have refused" - was computed with the same two-polarity conjunction section 6 proved can
+> never be true, so it was structurally 0 and watched nothing. `judge_near_dupes`, `dedup_pending`,
+> `dedup_ingest_pool`, `--dedup-ingest`, `llm_same_dinner`, `llm_different_dinner`, the
+> `dedup_at_ingest` tag, the daemon's preflight and both its flags, and the 13 fixtures that held
+> them honest are gone. `dedup_shortlist` and `dedup_ask_floor` are kept and now SAY they have no
+> caller. The evidence the decider actually rules on - the `neighbours` block, the embedding index,
+> the STALE-INDEX alert - is untouched.
 
 `refuse_near_dupes` is now `judge_near_dupes` and **writes no `status`**. It still asks, still
 records `dedup_at_ingest`, and still reports how many the retired gate WOULD have refused - a number
@@ -283,6 +301,41 @@ duplicates a decider let through - `Chicken Tetrazzini` vs `Turkey Tetrazzini` (
 as its own item rather than folded in here: `OPEN-ITEM-published-near-duplicates-2026-09-04.md`.
 Every recall figure above is therefore a LOWER bound by an unknown amount: some "wrong" refusals
 were right, and the labelled negatives inherit whatever the catalog's own duplicate rate is.
+
+### CORRECTIONS, from the adversarial review the same evening (REVIEW-after-dedup-2026-09-04)
+
+Two things in the table above are wrong, and neither changes the ruling.
+
+**1. `norm_line` was unfair to the LIVE side of every pair.** The quantity/unit stripper in
+`dedup_prompt_drill_pairs.py` made the unit optional with no word boundary after it, so a line
+carrying a quantity kept its food (`1 lb ground beef` -> `ground beef`) while a line with no
+quantity lost its first letters (`Garlic` -> `arlic`, `Ground beef 93/7` -> `round beef`). Candidate
+lines come from `ingredients_verbatim` and nearly always carry a quantity; live lines come from
+`ingredients_display` and never do. Measured: 17.5% of the 7,845 live display lines were mangled
+against 2.8% of the 2,176 candidate lines, and 123 of the 134 recall pairs had a mangled live side.
+
+Re-run on the SAME 434 pairs, same model, same prompt, same grammar, with the boundary fixed (868
+calls, 285 s):
+
+| design | as published above | with the boundary fixed |
+|---|---|---|
+| D1 ingredients, ONE order | 29.9% / 4.67% | **35.1% (47) / 5.00% (15)** |
+| D  ingredients, BOTH orders | 23.9% / 2.00% | **24.6% (33) / 2.67% (8)** |
+
+The bars were ~50% recall at 0 wrong refusals. Corrected, D is still 25 points under one bar and
+still above the other, and the C-to-D comparison still says the ingredient lines made the gate more
+conservative in both directions. **P1c stands on the corrected numbers.** The fix adds one pair to
+the wrong-refusal list that the open item does not have: `Slow Cooker Chicken Taco Rice Bowls ||
+Slow Cooker Salsa Chicken Burrito Bowl`.
+
+**2. The 300 negatives were never ruled by a decider.** This section, and the open item it spawned,
+both describe them as "every one a non-duplicate a decider ruled distinct". Measured: the ledger
+holds 93 accepted candidates, of which 16 join to a live recipe by slug and 17 by source URL - so
+**17 of 584 live recipes came through a decider at all**, and ZERO of the 300 pairs contains one.
+The 300 hardest pairs are the pre-hunter catalog, whose distinctness no gate this estate has ever
+ruled on. That does not weaken the safety measurement, because a live recipe thrown away is thrown
+away either way. It changes what the OPEN ITEM is: not "the decider let these through" but "the
+catalog was never deduplicated by the decider's rule at all".
 
 ### The measurement itself
 

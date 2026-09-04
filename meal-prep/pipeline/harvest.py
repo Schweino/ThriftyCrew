@@ -81,6 +81,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 MP = os.path.dirname(HERE)
 REPO = os.path.dirname(MP)
 
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+import hunt_lib                                                   # noqa: E402
+
 POOL = os.path.join(MP, "db", "candidate-pool.json")
 HARVEST_STATE = os.path.join(MP, "db", "harvest-state.json")
 ROBOTS_DIR = os.path.join(MP, "db", "harvest-robots")
@@ -833,7 +837,22 @@ def write_pool(pool, path=POOL):
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(pool, f, indent=1, ensure_ascii=False)
-    os.replace(tmp, path)
+    # RETRIED, BECAUSE A READER CAN BLOCK THE REPLACE ON WINDOWS (2026-09-04, PLAN-after-review P2).
+    # The C runtime opens a file for reading without FILE_SHARE_DELETE, so os.replace raises
+    # PermissionError while another process has the pool open - the 18:00 crawl, --pool-health,
+    # hunt-run -Status, the daemon's own pool lane. One-shot, that made a ruling vanish: on
+    # hunt-2026-09-04-p3 `--mark-ruled` exited non-zero, decide_apply reported "the pool ruling did
+    # not land" with the reason discarded, and the candidate stayed `taken:` forever. The pool is a
+    # 100 MB file, so the window is not small. Re-raises after the last try: a write that could not
+    # happen must still be an error, never a silent no-op.
+    for _try in range(5):
+        try:
+            os.replace(tmp, path)
+            return
+        except PermissionError:
+            if _try == 4:
+                raise
+            time.sleep(0.4)
 
 
 def pool_index(pool):
@@ -919,8 +938,27 @@ def new_entry(slug, name, url, domain, entered_by):
 # again. A ruled entry has exactly one job - answer "have we seen this URL, and what did we decide" -
 # so it keeps its identity, its provenance and THE NUMBERS THAT RULED IT, and loses the scoring
 # apparatus that only an available candidate uses. Measured 2026-08-23: 607 B -> ~300 B per row.
+# THE ONE WORDING, so the rule, the eviction road that re-applies it to rows already on the shelf,
+# and the fixtures that hold both honest all read the same string. A second spelling of it would
+# make the eviction road's count unverifiable.
+#
+# AND IT CLAIMS ONLY WHAT WAS OBSERVED. The first wording was "not a recipe page", which is a claim
+# about the PAGE and is not always true: measured on 200 of the 2,073 rows this evicted, 74 carry
+# both an Ingredients and an Instructions heading in their text. Reading those, they are round-ups
+# ("What To Eat With Butternut Squash - 18 Tasty Ideas"), meal plans and technique posts rather than
+# one dinner - but some publisher out there does print a single recipe with no JSON-LD, and this
+# reason must not be the sentence that forecloses ever extracting it. What is certainly true is the
+# half this pipeline acts on: no machine-readable recipe, so no ingredient lines, no band, no
+# signature, and nothing for a decider or an extractor to rule on.
+NOT_A_RECIPE = "no JSON-LD Recipe block - nothing on the page this pipeline can read as a dinner"
+
 RULED_KEEP = ("slug", "name", "url", "domain", "first_seen", "band", "servings", "signature",
               "status", "entered_by", "exclusion", "ruled_reason", "ruled_at",
+              # WHERE THE NAME CAME FROM. A page with no recipe block has no name to read, so the
+              # crawl derives one from the URL path - and a derived name reads exactly like a dish
+              # ("Christmas Countdown Calendar") to every later reader. Recording the source is what
+              # makes that legible; it survives the ruling because that is when it matters most.
+              "name_source",
               # WHAT IT DUPLICATED. Without this a rejected-dupe keeps prose naming its twin
               # and nothing joinable, so 152 labelled pairs sat in the pool unreadable.
               "dupe_of")
@@ -955,12 +993,31 @@ def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_C
     excluded. Only `out-of-band` and `excluded` are rulings; the other two stay available.
     """
     if node is None:
+        # A PAGE WITH NO RECIPE BLOCK IS NOT A RECIPE (2026-09-04, PLAN-after-review P1).
+        #
+        # This branch used to keep the page `available` and call it `band-unverified`, on the 2026-08-24
+        # reasoning that an unverifiable band is the decider's call and not a filter's. That reasoning
+        # is right and it is about a page that HAS a recipe whose macros cannot be defended - the
+        # branch below, which is untouched. This branch is a page with no recipe at all.
+        #
+        # MEASURED 2026-09-04, which is why this changed: 2,069 of the pool's 2,125 unverified rows
+        # were these. Zero ingredient lines, signature protein/method `any`, and a NAME INVENTED FROM
+        # THE URL PATH because there was none to read - "Diy Dice Drinking Game", "Fall Fashion Made
+        # Easy With Stylist George Brescia", "Christmas Countdown Calendar". They are craft posts,
+        # listicles and product reviews on recipe domains. They cannot be popped by a band-constrained
+        # run (candidate_in_band needs `verified`), so they sat in every count of the shelf as dinners
+        # nobody could reach - and a run stated with NO effective band pops them straight to a
+        # frontier decider, which had already happened once.
+        #
+        # The evidence is kept, exactly as for every other exclusion: url, domain, first_seen and the
+        # reason survive slim_ruled, so the page is never re-fetched to re-earn the same answer.
         entry["band"] = {"cal": None, "carbs": None, "protein_g": None, "verified": False,
                          "reason": "no JSON-LD Recipe block on the page"}
         entry["signature"] = {"protein": "any", "method": "any", "sauce_family": None,
                               "starch": "none"}
-        entry["status"] = "available"
-        return entry, "band-unverified"
+        entry["status"] = "ruled:excluded"
+        entry["exclusion"] = NOT_A_RECIPE
+        return slim_ruled(entry), "excluded"
 
     lines = ingredient_lines(node)
     instr = flatten_instructions(node.get("recipeInstructions"))
@@ -1516,16 +1573,12 @@ def pool_health(pool=None, path=POOL, neighbour_path=NEIGHBOUR_FILE, digest_path
     """
     pool = pool if pool is not None else read_pool(path)
     avail = [c for c in (pool.get("candidates") or []) if c.get("status") == "available"]
-    tags = {}
-    blind = 0
-    for c in avail:
-        if not (c.get("neighbours") or []):
-            blind += 1
-        tags[c.get("dedup_at_ingest") or "(unset)"] = tags.get(c.get("dedup_at_ingest")
-                                                               or "(unset)", 0) + 1
+    blind = sum(1 for c in avail if not (c.get("neighbours") or []))
     state, detail, meta = embed_index_status(neighbour_path, digest_path)
+    not_recipe = sum(1 for c in (pool.get("candidates") or [])
+                     if c.get("status") == "ruled:excluded" and c.get("exclusion") == NOT_A_RECIPE)
     return {"available": len(avail), "with_neighbours": len(avail) - blind, "blind": blind,
-            "dedup_tags": tags, "undeduped": tags.get("(unset)", 0),
+            "not_a_recipe": not_recipe,
             "index_state": state, "index_detail": detail,
             "index_generated": meta["generated"], "index_age_days": meta["age_days"],
             "index_candidates": meta["candidates"],
@@ -1539,10 +1592,12 @@ def format_pool_health(h):
     This is the whole of "never again": the degradation was always recorded and never READ.
     """
     age = "unknown age" if h["index_age_days"] is None else "%.1f d old" % h["index_age_days"]
-    tags = ", ".join("%s=%d" % (k, v) for k, v in sorted(h["dedup_tags"].items())) or "(none)"
     return ["  pool evidence   %d available; %d carry neighbours, %d BLIND to the decider"
             % (h["available"], h["with_neighbours"], h["blind"]),
-            "  dedup at ingest %s" % tags,
+            # WHERE THE SHELF WENT. Without this line the 2,069 rows P1 evicted look like a pool that
+            # shrank for no stated reason, which is the same class of quiet the whole week was about.
+            "  not a recipe    %d row(s) excluded - a page with no Recipe block on it"
+            % h["not_a_recipe"],
             "  embed index     %s, %s, %d candidate(s) covered%s"
             % (h["index_state"], age, h["index_candidates"],
                (" - " + h["index_detail"]) if h["index_detail"] else "")]
@@ -1556,39 +1611,6 @@ def cmd_pool_health(_a):
     return 1 if (h["blind"] or h["index_stale"]) else 0
 
 
-def dedup_ingest_pool(path=POOL, log=say, only=None, budget_sec=None):
-    """Run the ingest dedup over candidates already stored undeduped, and SAY what it could see.
-
-    ONE implementation, two callers: the `--dedup-ingest` command and the daemon, which calls this
-    directly rather than shelling out - harvest is still the pool's sole writer either way, and a
-    daemon running under a --run-dir pool must dedup THAT pool, not the default one.
-
-    WHY THE DAEMON IS THE CALLER THAT MATTERS. This pass needs llama-server, and by ruling
-    harvest-crawl.ps1 may never start it (three of its own fixtures enforce that, and PLAN section
-    4.4 gives the card to the nightly chain). So the 18:00 crawl has tagged its whole backlog
-    `unavailable` every night since it was written - correctly, and to no effect. The run is where
-    the model is already up and where a duplicate actually costs a frontier decider call, so the
-    backlog drains there.
-
-    Returns (refused, before, after). DEGRADES, NEVER BLOCKS: with no model every candidate is
-    tagged `unavailable`, nothing is refused, and the pool is written back unharmed.
-    """
-    pool = read_pool(path)
-    before = pool_health(pool)
-    refused = judge_near_dupes(pool, quiet=True, only=only, budget_sec=budget_sec)
-    write_pool(pool, path)
-    after = pool_health(pool)
-    log("dedup at ingest: %d refused as near-duplicates before the decider ever saw them; "
-        "undeduped %d -> %d" % (refused, before["undeduped"], after["undeduped"]))
-    return refused, before, after
-
-
-def cmd_dedup_ingest(_a):
-    _refused, _before, after = dedup_ingest_pool()
-    for ln in format_pool_health(after):
-        say(ln)
-    say("HARVEST-COMPLETE")
-    return 0
 def load_embed_neighbours(path=NEIGHBOUR_FILE, digest_path=CATALOG_DIGEST):
     """The bge-m3 cosine shortlist the embedding lane (D4) writes, if it has run.
 
@@ -1865,10 +1887,18 @@ def cmd_crawl(a):
             else:
                 counters["cached"] += 1
         node = recipe_jsonld(body)
-        name = (str(node.get("name")).strip() if node and node.get("name") else
+        # A DERIVED NAME IS NOT A DISH NAME, and it is now SAID so (2026-09-04, PLAN-after-review P1).
+        # The slug still comes from the path, because a row must be addressable to be ruled on and
+        # changing how slugs are minted would orphan every row already in the pool. What changes is
+        # that the row carries where its name came from, so "Christmas Countdown Calendar" cannot be
+        # read as a dinner somebody found.
+        from_page = bool(node and node.get("name"))
+        name = (str(node.get("name")).strip() if from_page else
                 urllib.parse.urlparse(url).path.rstrip("/").split("/")[-1].replace("-", " ").title())
         slug = slugify(name)
         entry = new_entry(slug, name, url, domain, "crawl")
+        if not from_page:
+            entry["name_source"] = "url-path"
         entry, disp = qualify(entry, node, families, methods)
         return entry, disp
 
@@ -2013,60 +2043,15 @@ DEDUP_SHORTLIST_MIN = 20      # who to ASK about, never who to refuse - see the 
 DEDUP_ASK_CAP = 3             # at most three neighbours per candidate; the top ones carry the signal
 
 
-def llm_same_dinner(cand, neighbour, url=None, timeout=60):
-    """Ask the LOCAL model whether a candidate is the same dinner as a live recipe. "yes" or "no".
-
-    Grammar-forced closed enum at temperature 0, exactly like classify_sauce_family above - the model
-    picks between two tokens and cannot free-text its way into an ambiguous answer.
-    """
-    url = (url or LLAMA_URL).rstrip("/") + "/completion"
-    ings = "; ".join((cand.get("ingredients_verbatim") or [])[:12])
-    shared = ", ".join((neighbour.get("shared_items") or neighbour.get("shared") or [])[:8])
-    prompt = NL.join([
-        "You are deduplicating a recipe catalog. Two dinners are THE SAME DINNER when a reader "
-        "would not buy both: same main protein, same cooking method, same sauce or flavour "
-        "identity. A different vehicle for the same filling (taco vs burrito vs bowl) is the SAME "
-        "dinner. A genuinely different plate that happens to share ingredients is NOT.",
-        "Already published: %s" % (neighbour.get("name") or neighbour.get("slug")),
-        "Candidate: %s" % (cand.get("name") or cand.get("slug")),
-        "Candidate ingredients: %s" % ings,
-        "Shared with the published one: %s" % (shared or "(not computed)"),
-        "Is the candidate the same dinner as the published recipe? Answer yes or no.",
-        "Answer:"])
-    body = json.dumps({"prompt": prompt, "grammar": 'root ::= ("yes" | "no")',
-                       "n_predict": 4, "temperature": 0.0}).encode("utf-8")
-    try:
-        req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            out = json.loads(r.read().decode("utf-8", errors="replace"))
-        return (out.get("content") or "").strip().lower()
-    except Exception:
-        return ""
-
-
-def llm_different_dinner(cand, neighbour, url=None, timeout=60):
-    """The MIRROR of llm_same_dinner. Its answer is only used to detect that the model is
-    agreeing with whatever it is asked - see the note at the call site."""
-    url = (url or LLAMA_URL).rstrip("/") + "/completion"
-    prompt = NL.join([
-        "Two recipe titles.",
-        "A: %s" % (neighbour.get("name") or neighbour.get("slug")),
-        "B: %s" % (cand.get("name") or cand.get("slug")),
-        "Are A and B DIFFERENT dinners that a reader might want both of? Answer yes or no.",
-        "Answer:"])
-    body = json.dumps({"prompt": prompt, "grammar": 'root ::= ("yes" | "no")',
-                       "n_predict": 4, "temperature": 0.0}).encode("utf-8")
-    try:
-        req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            out = json.loads(r.read().decode("utf-8", errors="replace"))
-        return (out.get("content") or "").strip().lower()
-    except Exception:
-        return ""
-
-
 def dedup_ask_floor():
     """The bge-m3 floor, READ from the calibration, or None with a reason. Never hand-set.
+
+    NO PRODUCTION CALLER SINCE 2026-09-04, and this says so rather than reading as live. Its only
+    caller was the ingest ask, which P3 deleted. It is kept, with `dedup_shortlist` below, because
+    the two of them are the only written record of a measured rule - which neighbour evidence is
+    worth acting on, and why a word-overlap COUNT and a cosine may never be compared - and because
+    the nightly chain still computes the calibration they read. Whether they are deleted or wired to
+    something that needs them is a ruling, not a cleanup: PLAN-after-review P7.
 
     Returns (floor, why_not). A stale or missing calibration means the embedding side contributes
     nothing to the shortlist - and the pass SAYS so, rather than letting an empty embedding
@@ -2084,6 +2069,11 @@ def dedup_ask_floor():
 
 def dedup_shortlist(c, floor=None, cap=None):
     """Who to ask the local model about, PER SOURCE and interleaved by rank.
+
+    NO PRODUCTION CALLER SINCE 2026-09-04 - there is nothing left that asks the local model about a
+    candidate. See `dedup_ask_floor` above for why both are still here and what would settle it.
+    The DECIDER's evidence is the `neighbours` block that `build_dossier` carries, which is a
+    different thing and is untouched.
 
     Word overlap is an integer count and bge-m3 is a cosine; they share no scale, so each is cut at
     its own threshold and ranked among its own kind. The two ranked lists are then interleaved, best
@@ -2116,121 +2106,6 @@ def dedup_shortlist(c, floor=None, cap=None):
                     seen.add(key)
                     out.append(src[i])
     return out[:cap]
-
-
-def dedup_pending(c):
-    """Is this candidate still owed a dedup verdict? ONE definition, two callers.
-
-    Only `llm` is settled: it is the one tag meaning a model actually judged the candidate under the
-    two-polarity contract. `unavailable` is a could-not-look and must be retried once the model is
-    up. `no-neighbour` is a statement about the INDEX AT THE TIME, and the index is rebuilt and the
-    pool rescored nightly, so it is retried too - and neither retry costs a model call unless the
-    evidence has actually changed.
-
-    THE TRAP THIS CLOSES. The selection was `not c.get("dedup_at_ingest")`, so ANY tag settled a
-    candidate forever, and the first pass to run without a model tagged its whole slice
-    `unavailable` and excluded it permanently from the pass that would have judged it. A tag that
-    records "nobody looked" being the reason nobody looks again is the exact failure this brief was
-    written about, sitting inside the machinery the brief was written about.
-    """
-    return (c.get("dedup_at_ingest") or "") != "llm"
-
-
-def judge_near_dupes(pool, quiet=False, only=None, budget_sec=None):
-    """Ask the local model about a candidate's nearest live recipes and RECORD that it was asked.
-    It no longer rules anything out. Returns 0 always; the return is kept so callers still read a
-    refusal count, and that count is now permanently zero by design.
-
-    THE REFUSAL PATH IS RETIRED (2026-09-04, PLAN-after-dedup P1c, ruled by Brad). This function was
-    `refuse_near_dupes` and its job was to rule an obvious near-duplicate OUT before it was stored
-    (Brad 2026-08-27: "We need to send them through dedup FIRST before storing in the DB"). It never
-    refused a single candidate in its life, and three separate measurements say no question design
-    can make it safe to:
-
-      - the SHIPPED two-polarity contract required the model to contradict itself, and asked over
-        controls it answers yes to BOTH framings on every pair, a name against itself included:
-        0 refusals possible, ever.
-      - a forced choice agreed across both ORDERS, names only, measured 2026-09-04 on 134 labelled
-        duplicate pairs and the 300 hardest published pairs: 43.3% recall, 4.67% WRONG refusals -
-        fourteen live recipes the estate would have thrown away.
-      - the same forced choice WITH THE INGREDIENT LINES IN THE PROMPT - the richer prompt the whole
-        `--reingredients-ruled` road was built to test - was WORSE, not better: 23.9% recall at
-        2.00% wrong refusals. Adding the evidence made the model more conservative, not more
-        accurate. The bars were ~50% recall at 0 wrong refusals. Nothing came close.
-
-    So no gate ships, and no code is left here that READS as a safeguard while being an off switch -
-    which is what the shipped contract had become. What is KEPT is the evidence: the shortlist, the
-    embedding neighbours and the `dedup_at_ingest` tag, all of which reach the decider's dossier,
-    where the judgement is actually made and is actually good.
-
-    WHY A THRESHOLD COULD NEVER HAVE DONE IT EITHER, kept because it is the same lesson twice.
-    Scored against the live catalog, the estate's 68 known rejected-dupes and its 51 known accepted
-    candidates have the SAME word-overlap distribution - both median 20, both max 40. There is no
-    cut point, because the signal genuinely does not separate "chicken cordon bleu pasta vs chicken
-    cordon bleu casserole" (a dupe) from "beef chili vs beef chili mac" (not one). Word overlap
-    picked who to ASK about; the ask is what has now been measured and found wanting too.
-
-    BEST EFFORT, NEVER BLOCKING, AND IT SAYS WHICH. Every candidate still carries `dedup_at_ingest`:
-    "llm" when a model was asked, "unavailable" when it was down, "no-neighbour" when there was
-    nothing to ask about. A could-not-look is never recorded as a clean bill. What changed is only
-    that a verdict of `same` no longer buries the candidate - the decide lane rules on everything.
-    """
-    avail = [c for c in pool["candidates"] if c.get("status") == "available"
-             and dedup_pending(c)]
-    # BOUNDED BY WHO IS ASKED AND BY HOW LONG. `only` is the caller naming the candidates it is
-    # actually about to spend a decider on; `budget_sec` is the wall the pass stops at whatever the
-    # model is doing. Unbounded, this pass faced 7,386 local-model calls on the live pool - measured
-    # 2026-09-04 - which is a run that never starts rather than a run that dedups.
-    if only is not None:
-        keep = set(only)
-        avail = [c for c in avail if c.get("slug") in keep]
-    if not avail:
-        return 0
-    up = llama_up()
-    floor, floor_why = dedup_ask_floor()
-    refused = 0       # permanently 0 - kept so the caller's contract does not change. See header.
-    looked = 0        # how many the retired gate WOULD have refused. Reported, never acted on.
-    skipped = 0
-    deadline = (time.time() + budget_sec) if budget_sec else None
-    for c in avail:
-        if deadline is not None and time.time() > deadline:
-            # LEFT UNTAGGED ON PURPOSE. An untagged candidate is one the next pass will pick up; a
-            # candidate tagged without being examined is a could-not-look wearing a clean bill,
-            # which is the exact failure this whole change exists to close.
-            skipped += 1
-            continue
-        near = dedup_shortlist(c, floor)
-        if not near:
-            c["dedup_at_ingest"] = "no-neighbour"
-            continue
-        if not up:
-            c["dedup_at_ingest"] = "unavailable"
-            continue
-        # ASKED, AND THE ANSWER NO LONGER RULES. The two-polarity contract is kept as the ASK
-        # because it is the cheapest one (a `no` on the first question short-circuits), and its
-        # answer is recorded in the tag and nowhere else. NOTHING HERE MAY WRITE `status`. A gate
-        # that refuses on this model's judgement was measured three times and was wrong 4.67% of
-        # the time on the estate's own published pairs - fourteen live recipes - at 43.3% recall,
-        # and worse with more evidence in the prompt. See the header.
-        for n in near:
-            if llm_same_dinner(c, n) == "yes" and llm_different_dinner(c, n) == "no":
-                looked += 1
-                break
-        c["dedup_at_ingest"] = "llm"
-    if not quiet:
-        state = "local model" if up else "MODEL DOWN - candidates stored UNDEDUPED and tagged"
-        say("  dedup at ingest (%s): %d refused as near-duplicates of live recipes (the refusal "
-            "path is RETIRED - measured 2026-09-04, this is permanently 0; %d candidate(s) the "
-            "model would have refused are reaching the decider, which is where they are ruled)"
-            % (state, refused, looked))
-        if floor is None:
-            say("  the EMBEDDING half of the shortlist is unavailable - %s" % floor_why)
-            say("  ...so only word-overlap picked who to ask about, and a duplicate under a "
-                "different vocabulary was not asked about at all")
-        if skipped:
-            say("  ...and %d candidate(s) were left UNEXAMINED by the time budget - untagged, so the "
-                "next pass takes them" % skipped)
-    return refused
 
 
 def cmd_ingest(a):
@@ -2293,10 +2168,12 @@ def cmd_ingest(a):
         by_url[norm_url(url)] = entry
         added += 1
     score_pool(pool)
-    # DEDUP BEFORE STORING (Brad 2026-08-27). score_pool has just attached the neighbours this
-    # needs and write_pool is the next line, so this is the last moment a near-duplicate can be
-    # stopped from entering the pool as a candidate rather than being ruled out of it later.
-    judge_near_dupes(pool)
+    # THE INGEST ASK IS GONE (2026-09-04, PLAN-after-review P3). `judge_near_dupes(pool)` stood here
+    # under Brad's 2026-08-27 ruling "send them through dedup FIRST before storing in the DB". It
+    # never ruled one candidate out in its life, and three measurements say no question design can
+    # make it safe to - so a duplicate is caught where it always actually was, at the decider, which
+    # rules on a dossier rather than on a name. score_pool above still attaches the neighbour
+    # evidence that decider reads.
     write_pool(pool)
     say("harvest --ingest: %d added, %d already known or published, %d refused"
         % (added, skipped, len(failed)))
@@ -2630,6 +2507,210 @@ def restore_ingredients(pool, ruled=False, limit=0, cache_dir=PAGE_CACHE):
     return targets, fixed, uncached, nojson
 
 
+def ledger_rulings(path=CONSIDERED_JSON):
+    """slug -> the ledger's own ruling row. The ledger is authoritative about what was decided; the
+    pool is where that decision has to LAND, and the two can disagree when the landing failed."""
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            doc = json.load(f) or {}
+    except Exception:
+        return {}
+    out = {}
+    for row in (doc.get("dishes") or []):
+        if row.get("slug"):
+            out[row["slug"]] = row
+    return out
+
+
+VERDICT_STATUS = {"accepted": "ruled:accepted", "rejected-dupe": "ruled:rejected-dupe",
+                  "rejected-not-fit": "ruled:rejected-not-fit"}
+
+
+def taken_rows(pool, run=""):
+    """Every row a run is holding. With `run`, only that run's."""
+    want = ("taken:" + run) if run else "taken:"
+    return [c for c in pool["candidates"]
+            if (str(c.get("status") or "") == want if run
+                else str(c.get("status") or "").startswith(want))]
+
+
+def release_taken(pool, run, rulings=None):
+    """Give a stopped run's candidates back, or land the ruling the ledger already holds.
+
+    Returns (released, landed, rows) where `rows` is [(slug, what)] for the caller to print.
+
+    WHY THIS EXISTS (measured 2026-09-04). `mark_taken` runs BEFORE the decider dispatch, on purpose:
+    two runs must never pay for one dossier. Nothing ever reversed it. A killed process, a batch
+    apply_verdict refused whole, or a pool write that failed all leave the row `taken:<run>` forever -
+    and a RESTART of the same run drops its own earlier takes as "already taken by another run". 21
+    rows were stranded that day, 20 from one run's killed dry-run process and 1 from a lost write.
+    A stranded row can neither be popped nor ruled.
+
+    THE LEDGER WINS WHERE IT SPOKE. A row whose run ruled on it in considered-dishes.json is not
+    released back to the shelf - that would re-offer a candidate a decider already rejected. It is
+    marked with the ledger's own verdict, reason and dupe_of. Only rows nobody ruled go back.
+    """
+    rulings = ledger_rulings() if rulings is None else rulings
+    released, landed, rows = 0, 0, []
+    held = taken_rows(pool, run)
+    doomed = {}
+    for c in held:
+        r = rulings.get(c["slug"])
+        verdict = (r or {}).get("verdict")
+        if r is not None and (r.get("run") or "") == run and verdict in VERDICT_STATUS:
+            c["status"] = VERDICT_STATUS[verdict]
+            c["ruled_reason"] = r.get("reason") or ""
+            c["ruled_at"] = now_stamp()
+            if r.get("dupe_of"):
+                c["dupe_of"] = list(r["dupe_of"])
+            doomed[id(c)] = True
+            landed += 1
+            rows.append((c["slug"], "landed the ledger's %s" % verdict))
+        else:
+            c["status"] = "available"
+            released += 1
+            rows.append((c["slug"], "released - no ruling was ever recorded"))
+    if doomed:
+        pool["candidates"] = [slim_ruled(c) if id(c) in doomed else c
+                              for c in pool["candidates"]]
+    return released, landed, rows
+
+
+def run_is_live(run):
+    """Is a hunt-daemon process holding this run RIGHT NOW? Named from the process's own command
+    line, never from a timestamp: a run dir's mtime says when something last wrote, which is not
+    the same question and has been wrong before.
+
+    A failure to ASK is not a no. If the process list cannot be read this returns True, so the
+    release refuses rather than releasing a candidate out from under a live decider.
+    """
+    try:
+        p = subprocess.run(["powershell", "-NoProfile", "-Command",
+                            "(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like "
+                            "'*hunt-daemon.py*' }).CommandLine"],
+                           capture_output=True, timeout=60)
+        if p.returncode != 0:
+            return True
+        return run in p.stdout.decode("utf-8", errors="replace")
+    except Exception:
+        return True
+
+
+def cmd_release_taken(a):
+    """Hand a stopped run's candidates back to the shelf (2026-09-04, PLAN-after-review P2)."""
+    run = (a.run or "").strip()
+    if not run:
+        say("harvest --release-taken: CANNOT RUN - which run? Pass --run <id>.")
+        say("HARVEST-COMPLETE")
+        return 2
+    path = a.pool or POOL
+    pool = read_pool(path)
+    held = taken_rows(pool, run)
+    if not held:
+        say("harvest --release-taken: %s holds nothing - 0 rows" % run)
+        say("HARVEST-COMPLETE")
+        return 0
+    if not a.force and run_is_live(run):
+        say("harvest --release-taken: REFUSING - a hunt-daemon process is holding %s right now, or "
+            "the process list could not be read. %d row(s) left where they are." % (run, len(held)))
+        say("  A take is how two runs are stopped from paying for one dossier; releasing one out "
+            "from under a live decider is the thing it exists to prevent.")
+        say("HARVEST-COMPLETE")
+        return 2
+    released, landed, rows = release_taken(pool, run)
+    if a.dry_run:
+        say("  DRY RUN - nothing written")
+    else:
+        write_pool(pool, path)
+    say("harvest --release-taken %s: %d released to the shelf, %d landed from the ledger"
+        % (run, released, landed))
+    for slug, what in rows[:40]:
+        say("  %-52s %s" % (slug[:52], what))
+    say("HARVEST-COMPLETE")
+    return 0
+
+
+def non_recipe_targets(pool, cache_dir=PAGE_CACHE):
+    """Split the AVAILABLE shelf into what is not a recipe, what could not be looked at, and what is
+    left alone. Returns (evict, uncached, kept) as lists of candidates.
+
+    THE DECISION IS MADE ON THE PAGE, not on the stored `band.reason`. The reason string records what
+    a past qualify() concluded; the cache is the evidence, and a page that has since gained a recipe
+    block must not be evicted on a stale conclusion.
+
+    A ROW WITH INGREDIENT LINES IS NEVER READ FROM DISK. Lines can only have come from a Recipe node,
+    so their presence IS the node's presence - and skipping those rows turns a 3,254-file read into a
+    2,125-file one. It is a shortcut in cost only; it cannot change a verdict.
+
+    An uncached row is left ALONE and counted. A page nobody can look at has not been shown to be a
+    non-recipe, and a could-not-look is never a clean bill.
+    """
+    evict, uncached, kept = [], [], []
+    for c in pool["candidates"]:
+        if c.get("status") != "available":
+            continue
+        if c.get("ingredients_verbatim"):
+            kept.append(c)
+            continue
+        body = cached_body(c.get("url") or "", cache_dir=cache_dir)
+        if body is None:
+            uncached.append(c)
+            continue
+        if recipe_jsonld(body) is None:
+            evict.append(c)
+        else:
+            kept.append(c)
+    return evict, uncached, kept
+
+
+def evict_non_recipes(pool, cache_dir=PAGE_CACHE):
+    """Re-apply qualify()'s no-recipe-block rule to rows ALREADY on the shelf. Returns
+    (evicted, uncached, kept).
+
+    Nothing is deleted: the row becomes `ruled:excluded` with the same reason a freshly crawled
+    non-recipe now gets, and `slim_ruled` keeps its url, domain, first_seen and reason so the page is
+    never re-fetched to re-earn the same answer.
+    """
+    evict, uncached, kept = non_recipe_targets(pool, cache_dir)
+    doomed = set(id(c) for c in evict)
+    out = []
+    for c in pool["candidates"]:
+        if id(c) in doomed:
+            c["status"] = "ruled:excluded"
+            c["exclusion"] = NOT_A_RECIPE
+            c["ruled_at"] = now_stamp()
+            out.append(slim_ruled(c))
+        else:
+            out.append(c)
+    pool["candidates"] = out
+    return len(evict), len(uncached), len(kept)
+
+
+def cmd_evict_non_recipes(a):
+    """The one-shot road for the shelf as it stands (2026-09-04, PLAN-after-review P1).
+
+    `qualify` now rules a page with no Recipe block out at crawl time, but 2,069 rows were admitted
+    before it did. This applies the same rule to them, from the page cache: no network, no model.
+    """
+    path = a.pool or POOL
+    pool = read_pool(path)
+    before = sum(1 for c in pool["candidates"] if c.get("status") == "available")
+    evicted, uncached, kept = evict_non_recipes(pool)
+    after = sum(1 for c in pool["candidates"] if c.get("status") == "available")
+    if a.dry_run:
+        say("  DRY RUN - nothing written")
+    else:
+        write_pool(pool, path)
+    say("harvest --evict-non-recipes: %d evicted, %d left alone, %d could not be looked at "
+        "(no cached page)" % (evicted, kept, uncached))
+    say("  available %d -> %d" % (before, after))
+    if uncached:
+        say("  ...the %d uncached row(s) are UNJUDGED, not clean: nothing looked at their page"
+            % uncached)
+    say("HARVEST-COMPLETE")
+    return 0
+
+
 def cmd_reingredients(a):
     """Restore ingredient lines to pooled candidates from the PAGE CACHE. No network, no model.
 
@@ -2932,10 +3013,15 @@ def cmd_status(a):
 # self-test - every fixture ships with its must-fire and its clean twin
 # =====================================================================================================
 
-def cmd_selftest(_a):
+def cmd_selftest(a):
     bad = []
+    seen = []
 
     def T(name, ok, got=""):
+        # RECORDED AT THE CALL, never scraped from stdout (2026-09-04, PLAN-after-review P5). A
+        # parser over printed lines is a fifth thing to keep in step and it cannot see a name that
+        # wrapped; the list the suite already builds IS the answer.
+        seen.append(name)
         if ok:
             print("  ok    " + name)
         else:
@@ -3567,74 +3653,15 @@ def cmd_selftest(_a):
     # ---- llama-server refusal ------------------------------------------------------------------------
     T("MUST FIRE  --classify's health probe is a real probe, not an assumption",
       llama_up("http://127.0.0.1:1", timeout=1) is False, "claimed up")
-    # ---- the dedup evidence chain (BRIEF-dedup-before-the-decider-2026-09-04) -----------------------
-    # Every one of the 152 dupe rejections this estate has ever made was on a candidate carrying no
-    # neighbour evidence. These fixtures hold the three tags honest and hold the index dateable.
-
-    def _cand(slug, near_score=None, status="available"):
-        n = ([{"side": "live-catalog", "slug": "live-" + slug, "name": "Live " + slug,
-               "score": near_score}] if near_score is not None else [])
-        return {"slug": slug, "name": slug, "status": status, "neighbours": n}
-
-    def _judge_src():
-        """The pass's OWN source, not this file's. Reading the file would match this assertion's
-        own text - the trap that let three greps pass by matching themselves on 2026-08-31."""
-        import inspect                                            # noqa: PLC0415
-        return inspect.getsource(judge_near_dupes)
-
-    saved = (llama_up, llm_same_dinner, llm_different_dinner)
-    try:
-        # 1. nothing to ask about is SAID, not silently passed
-        globals()["llama_up"] = lambda *a, **k: True
-        p = {"candidates": [_cand("a"), _cand("b", DEDUP_SHORTLIST_MIN - 1)]}
-        n = judge_near_dupes(p, quiet=True)
-        T("MUST FIRE  a candidate with no usable neighbour is TAGGED no-neighbour, never passed silently",
-          n == 0 and [c["dedup_at_ingest"] for c in p["candidates"]] == ["no-neighbour", "no-neighbour"],
-          str([c.get("dedup_at_ingest") for c in p["candidates"]]))
-
-        # 2. the model being down is a could-not-look, and it refuses NOBODY
-        globals()["llama_up"] = lambda *a, **k: False
-        globals()["llm_same_dinner"] = lambda *a, **k: "yes"
-        globals()["llm_different_dinner"] = lambda *a, **k: "no"
-        p = {"candidates": [_cand("c", 40), _cand("d", 40)]}
-        n = judge_near_dupes(p, quiet=True)
-        T("MUST FIRE  with the model down every candidate is tagged `unavailable` and NONE is refused",
-          n == 0 and all(c["dedup_at_ingest"] == "unavailable" for c in p["candidates"])
-          and all(c["status"] == "available" for c in p["candidates"]),
-          str([(c.get("dedup_at_ingest"), c.get("status")) for c in p["candidates"]]))
-
-        # 3. THE REFUSAL PATH IS RETIRED (2026-09-04, P1c). This case USED to be the clean twin
-        # proving that a mirrored contradiction refuses at ingest. It now proves the opposite, and
-        # that is the change: even when the model gives the strongest verdict this contract can
-        # produce, NOTHING is ruled out. Measured, that verdict is wrong 4.67% of the time on the
-        # estate's own published pairs at 43.3% recall - fourteen live recipes thrown away.
-        globals()["llama_up"] = lambda *a, **k: True
-        p = {"candidates": [_cand("e", 40)]}
-        n = judge_near_dupes(p, quiet=True)
-        c = p["candidates"][0]
-        T("MUST FIRE  even the STRONGEST verdict this contract can produce refuses nobody - the "
-          "ingest refusal path is retired and the decide lane rules on everything",
-          n == 0 and c["status"] == "available" and c["dedup_at_ingest"] == "llm"
-          and not c.get("exclusion"),
-          "%s / %s / %s" % (n, c.get("status"), c.get("exclusion")))
-        T("MUST FIRE  ...and no code path in the pass writes `status` at all - a gate cannot be "
-          "half-retired",
-          ("ruled:" + "rejected-dupe") not in _judge_src(),
-          "the pass still contains a ruled:rejected-dupe write")
-
-        # 4. THE ASK IS STILL RECORDED, so `dedup_at_ingest` still separates judged from
-        # could-not-look. Measured 2026-08-27: asked both framings the local model answered YES to
-        # both on all seven labelled pairs, stroganoff vs burrito included.
-        globals()["llm_different_dinner"] = lambda *a, **k: "yes"
-        p = {"candidates": [_cand("f", 40)]}
-        n = judge_near_dupes(p, quiet=True)
-        T("CLEAN TWIN a candidate that WAS asked about is tagged `llm` and left available, whatever "
-          "the model said",
-          n == 0 and p["candidates"][0]["status"] == "available"
-          and p["candidates"][0]["dedup_at_ingest"] == "llm",
-          "%s / %s" % (p["candidates"][0]["status"], p["candidates"][0].get("dedup_at_ingest")))
-    finally:
-        globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
+    # ---- the dedup evidence chain, MINUS THE ASK (2026-09-04, PLAN-after-review P3) --------------
+    # Five fixtures stood here holding an INGEST ASK honest: that a candidate with no usable
+    # neighbour was tagged `no-neighbour`, that a model that was down tagged `unavailable`, that the
+    # strongest verdict the contract could produce refused nobody, that no path wrote `status`, and
+    # that a candidate asked about was tagged `llm`. The ask is deleted, so they are too - they
+    # protected a rule about looking, and nothing looks at ingest any more.
+    #
+    # WHAT REPLACED THEM IS NOT NOTHING. The evidence the DECIDER rules on is the `neighbours` block,
+    # and it is still held by the shortlist and index fixtures below and by the dossier's own.
 
     # ---- a dupe ruling keeps the evidence that settled it ----------------------------------------
     _dupe = {"slug": "d", "name": "D", "status": "ruled:rejected-dupe", "band": {}, "url": "u",
@@ -3692,6 +3719,216 @@ def cmd_selftest(_a):
     finally:
         shutil.rmtree(_cd, ignore_errors=True)
 
+    # ---- A TAKE WITH NO LIVE OWNER (2026-09-04, PLAN-after-review P2) ----------------------------
+    # 21 rows were stranded `taken:` on 2026-09-04 by runs that had ended: 20 when a run's dry-run
+    # process was killed mid-batch and the LIVE process for the SAME run dropped its predecessor's
+    # takes as another run's, and 1 when a pool write failed and the ruling was lost. A stranded row
+    # can neither be popped nor ruled, and every stopped run adds more.
+    _ptake = {"candidates": [
+        {"slug": "held", "name": "Held", "url": "u1", "status": "taken:run-x"},
+        {"slug": "ruled-in-ledger", "name": "RL", "url": "u2", "status": "taken:run-x",
+         "band": {}, "page_html": "junk"},
+        {"slug": "other-run", "name": "OR", "url": "u3", "status": "taken:run-y"},
+        {"slug": "shelf", "name": "S", "url": "u4", "status": "available"}]}
+    _led = {"ruled-in-ledger": {"slug": "ruled-in-ledger", "verdict": "rejected-dupe",
+                                "reason": "same dinner as the live twin", "run": "run-x",
+                                "dupe_of": ["live-twin"]}}
+    _rel, _land, _rrows = release_taken(_ptake, "run-x", rulings=_led)
+    _pb = {c["slug"]: c for c in _ptake["candidates"]}
+    T("MUST FIRE  a candidate a STOPPED run was holding goes back on the shelf - a take nothing "
+      "owns is a candidate that can never be popped and can never be ruled",
+      _rel == 1 and _pb["held"]["status"] == "available",
+      "released=%d %s" % (_rel, _pb["held"]["status"]))
+    T("MUST FIRE  ...but where the LEDGER already ruled, the ruling LANDS instead - releasing it "
+      "would re-offer the shelf a candidate a decider has already rejected",
+      _land == 1 and _pb["ruled-in-ledger"]["status"] == "ruled:rejected-dupe"
+      and _pb["ruled-in-ledger"].get("dupe_of") == ["live-twin"]
+      and _pb["ruled-in-ledger"].get("ruled_reason") == "same dinner as the live twin",
+      "landed=%d %s" % (_land, _pb["ruled-in-ledger"]["status"]))
+    T("MUST FIRE  ...and the landed row is SLIMMED like any other ruling, keeping the twin it names",
+      "page_html" not in _pb["ruled-in-ledger"] and "dupe_of" in _pb["ruled-in-ledger"],
+      str(sorted(_pb["ruled-in-ledger"].keys())))
+    T("CLEAN TWIN another run's take is not touched, and neither is a row already on the shelf",
+      _pb["other-run"]["status"] == "taken:run-y" and _pb["shelf"]["status"] == "available",
+      "%s / %s" % (_pb["other-run"]["status"], _pb["shelf"]["status"]))
+    T("CLEAN TWIN every row it moved is NAMED with what happened to it - a count with no names is "
+      "the shape of a release nobody can audit",
+      sorted(x[0] for x in _rrows) == ["held", "ruled-in-ledger"]
+      and all(x[1] for x in _rrows), str(_rrows))
+    _led_wrong = {"held": {"slug": "held", "verdict": "accepted", "reason": "r", "run": "run-OTHER"}}
+    _p2t = {"candidates": [{"slug": "held", "name": "H", "url": "u", "status": "taken:run-x"}]}
+    _r2, _l2, _ = release_taken(_p2t, "run-x", rulings=_led_wrong)
+    T("MUST FIRE  a ledger row from a DIFFERENT run does not settle this run's take - it is "
+      "released, not stamped with a verdict rendered about another run",
+      _r2 == 1 and _l2 == 0 and _p2t["candidates"][0]["status"] == "available",
+      "released=%d landed=%d" % (_r2, _l2))
+    T("MUST FIRE  taken_rows names the holder - a take is per RUN, and the sweep may never be "
+      "'everything taken by anybody'",
+      [c["slug"] for c in taken_rows(_ptake, "run-y")] == ["other-run"]
+      and len(taken_rows(_ptake)) == 1,
+      str([c["slug"] for c in taken_rows(_ptake)]))
+
+    # AND THE REFUSAL, which is the half that keeps the road safe. Releasing a candidate a LIVE
+    # decider is ruling on is exactly what the take exists to prevent, so the verb asks who owns the
+    # run before it moves anything - and a failure to ask counts as a yes.
+    _rl = _tf.mkdtemp(prefix="harvest-rel-")
+    try:
+        _rlp = os.path.join(_rl, "pool.json")
+        write_pool({"candidates": [{"slug": "held", "name": "H", "url": "u",
+                                    "status": "taken:run-live"}]}, _rlp)
+
+        class _A(object):
+            run, pool, dry_run, force = "run-live", _rlp, False, False
+
+        _saved_live = globals()["run_is_live"]
+        try:
+            globals()["run_is_live"] = lambda _r: True
+            _rc_live = cmd_release_taken(_A())
+            _still = read_pool(_rlp)["candidates"][0]["status"]
+            T("MUST FIRE  the release REFUSES while a process is holding the run - a take is how two "
+              "runs are stopped from paying for one dossier, and releasing one out from under a live "
+              "decider is the thing it exists to prevent",
+              _rc_live == 2 and _still == "taken:run-live", "rc=%s %s" % (_rc_live, _still))
+            globals()["run_is_live"] = lambda _r: False
+            _A.dry_run = True
+            _rc_dry = cmd_release_taken(_A())
+            T("CLEAN TWIN ...and a DRY RUN of the same release writes nothing, whatever it reports",
+              _rc_dry == 0 and read_pool(_rlp)["candidates"][0]["status"] == "taken:run-live",
+              "rc=%s %s" % (_rc_dry, read_pool(_rlp)["candidates"][0]["status"]))
+            _A.dry_run = False
+            _rc_go = cmd_release_taken(_A())
+            T("CLEAN TWIN ...and with nobody holding it, the row goes back on the shelf",
+              _rc_go == 0 and read_pool(_rlp)["candidates"][0]["status"] == "available",
+              "rc=%s %s" % (_rc_go, read_pool(_rlp)["candidates"][0]["status"]))
+        finally:
+            globals()["run_is_live"] = _saved_live
+    finally:
+        shutil.rmtree(_rl, ignore_errors=True)
+
+    # THE WRITE THAT COULD NOT LAND. A reader holding the pool open makes os.replace raise on
+    # Windows; one-shot, that lost a ruling and stranded its candidate. This holds the file open for
+    # longer than one attempt and asserts the write still lands.
+    _wd = _tf.mkdtemp(prefix="harvest-write-")
+    try:
+        _wp = os.path.join(_wd, "pool.json")
+        write_pool({"candidates": [{"slug": "a", "status": "available"}]}, _wp)
+        _fh = open(_wp, "r", encoding="utf-8")
+        _t0 = time.time()
+
+        def _release_later():
+            time.sleep(0.9)
+            _fh.close()
+
+        _th = threading.Thread(target=_release_later)
+        _th.start()
+        # CAUGHT, so this is a RED CASE and not a crash. Without the retry the replace raises
+        # PermissionError here - which is the whole point - and an uncaught raise takes the rest of
+        # the suite with it, so the neuter reads as "exit 1, zero red" instead of naming the case.
+        _wrote, _werr = None, ""
+        try:
+            write_pool({"candidates": [{"slug": "b", "status": "available"}]}, _wp)
+            _wrote = True
+        except Exception as _e:                                   # noqa: BLE001
+            _wrote, _werr = False, "%s: %s" % (type(_e).__name__, _e)
+        _th.join()
+        _after = read_pool(_wp) if _wrote else {"candidates": []}
+        T("MUST FIRE  a pool write RETRIES past a reader holding the file - one os.replace lost a "
+          "decider's ruling on 2026-09-04 and stranded its candidate as taken forever",
+          _wrote and [c["slug"] for c in _after["candidates"]] == ["b"] and time.time() - _t0 > 0.5,
+          _werr or "%s in %.1fs" % ([c["slug"] for c in _after["candidates"]], time.time() - _t0))
+    finally:
+        shutil.rmtree(_wd, ignore_errors=True)
+
+    # ---- A PAGE WITH NO RECIPE BLOCK IS NOT A RECIPE (2026-09-04, PLAN-after-review P1) ----------
+    # Measured that day: 2,069 of the pool's 2,125 unverified rows were craft posts, listicles and
+    # product reviews on recipe domains - no Recipe node, no ingredient lines, and a name derived
+    # from the URL path. A band-constrained run could never pop them; a run with no band could, and
+    # did. These fixtures hold both halves: the rule at crawl time, and the road that applies it to
+    # the rows admitted before the rule existed.
+    _nr, _nrdisp = qualify(new_entry("np", "Diy Dice Drinking Game", "https://d/np", "d", "crawl"),
+                           None, fams, meths)
+    T("MUST FIRE  a page with NO Recipe block is ruled out, not shelved as an unverified dinner - "
+      "it is not a dinner, it is a craft post on a recipe domain",
+      _nrdisp == "excluded" and _nr["status"] == "ruled:excluded"
+      and _nr.get("exclusion") == NOT_A_RECIPE,
+      "%s / %s / %s" % (_nrdisp, _nr.get("status"), _nr.get("exclusion")))
+    T("MUST FIRE  ...and its EVIDENCE survives the ruling - url, domain, first_seen and the reason, "
+      "so the page is never re-fetched to re-earn the same answer",
+      _nr.get("url") == "https://d/np" and _nr.get("domain") == "d" and _nr.get("first_seen")
+      and "no JSON-LD Recipe block" in (_nr.get("band") or {}).get("reason", ""),
+      str(sorted(_nr.keys())))
+    T("CLEAN TWIN a page that HAS a recipe and no nutrition block is untouched by this - an "
+      "unverifiable band is the decider's call and always was",
+      disp3 == "band-unverified" and e3["status"] == "available",
+      "%s / %s" % (disp3, e3["status"]))
+
+    _cd1 = _tf.mkdtemp(prefix="harvest-evict-")
+    try:
+        _u_none, _u_rec = "https://x.test/craft", "https://x.test/dinner"
+        with open(os.path.join(_cd1, cache_key(_u_none) + ".html"), "w", encoding="utf-8") as f:
+            f.write("<html><body><h1>Fall Fashion Made Easy</h1></body></html>")
+        with open(os.path.join(_cd1, cache_key(_u_rec) + ".html"), "w", encoding="utf-8") as f:
+            f.write('<script type="application/ld+json">' + json.dumps(
+                {"@type": "Recipe", "name": "Real Dinner",
+                 "recipeIngredient": ["1 lb ground beef", "2 cups rice"]}) + "</script>")
+        _pe = {"candidates": [
+            {"slug": "craft", "name": "Fall Fashion Made Easy", "url": _u_none, "domain": "x.test",
+             "first_seen": "2026-08-30T18:07:39", "status": "available",
+             "band": {"verified": False, "reason": "no JSON-LD Recipe block on the page"}},
+            # THE ROW WHERE THE STORED REASON AND THE PAGE DISAGREE. Its band.reason still says the
+            # page had no Recipe block - that is what a past qualify() concluded - but the cache now
+            # holds one. The cache is the evidence; a conclusion is not. Without this row every
+            # fixture agreed with both readings and the road could have been reduced to a string
+            # match on the reason with nothing going red (measured, 0 red).
+            {"slug": "regained", "name": "Regained", "url": _u_rec, "domain": "x.test",
+             "status": "available",
+             "band": {"verified": False, "reason": "no JSON-LD Recipe block on the page"}},
+            {"slug": "dinner", "name": "Real Dinner", "url": _u_rec, "domain": "x.test",
+             "status": "available", "band": {"verified": False, "reason": "no JSON-LD nutrition"}},
+            {"slug": "gone", "name": "Uncached", "url": "https://x.test/gone", "status": "available"},
+            {"slug": "ruled", "name": "Ruled", "url": _u_none, "status": "ruled:rejected-not-fit"}]}
+        _ev, _unc, _kept = evict_non_recipes(_pe, cache_dir=_cd1)
+        _bs = {c["slug"]: c for c in _pe["candidates"]}
+        T("MUST FIRE  the eviction road rules out an AVAILABLE row whose cached page has no Recipe "
+          "block, with the same reason a fresh crawl now gives it",
+          _ev == 1 and _bs["craft"]["status"] == "ruled:excluded"
+          and _bs["craft"].get("exclusion") == NOT_A_RECIPE,
+          "evicted=%d %s" % (_ev, _bs["craft"].get("status")))
+        T("CLEAN TWIN ...and it leaves a row whose page HAS a recipe exactly as it found it - the "
+          "road is an eviction, not a re-qualification of the whole shelf",
+          _kept == 2 and _bs["dinner"]["status"] == "available"
+          and _bs["dinner"]["band"]["reason"] == "no JSON-LD nutrition",
+          "kept=%d %s" % (_kept, _bs["dinner"]["status"]))
+        T("MUST FIRE  the verdict is read off the PAGE, never off the stored reason - a row whose "
+          "band still says 'no Recipe block' but whose cached page now HAS one is kept",
+          _bs["regained"]["status"] == "available",
+          "%s (evicted=%d kept=%d)" % (_bs["regained"]["status"], _ev, _kept))
+        T("MUST FIRE  a row with NO cached page is left alone and COUNTED - nothing looked at that "
+          "page, and a could-not-look may not be reported as a clean bill",
+          _unc == 1 and _bs["gone"]["status"] == "available",
+          "uncached=%d %s" % (_unc, _bs["gone"]["status"]))
+        T("CLEAN TWIN ...and a row that is already RULED is not re-ruled by it, whatever its page "
+          "says",
+          _bs["ruled"]["status"] == "ruled:rejected-not-fit", _bs["ruled"]["status"])
+        _ev2, _, _ = evict_non_recipes(_pe, cache_dir=_cd1)
+        T("CLEAN TWIN the road is idempotent - a second pass finds nothing left to evict",
+          _ev2 == 0, "second pass evicted %d" % _ev2)
+        _h_nr = pool_health(_pe)
+        T("MUST FIRE  the health reading SAYS where the shelf went - a pool that shrank by 2,069 "
+          "rows with no line naming the reason is the same quiet this week was about",
+          _h_nr["not_a_recipe"] == 1
+          and any("not a recipe" in ln for ln in format_pool_health(_h_nr)),
+          " | ".join(format_pool_health(_h_nr)))
+        _slimmed = slim_ruled({"slug": "s", "name": "Christmas Countdown Calendar",
+                               "url": "u", "status": "ruled:excluded", "exclusion": NOT_A_RECIPE,
+                               "name_source": "url-path", "page_html": "junk"})
+        T("MUST FIRE  a name DERIVED from the URL path keeps saying so through the ruling - the "
+          "row reads like a dish and the only thing that says otherwise is this field",
+          _slimmed.get("name_source") == "url-path" and "page_html" not in _slimmed,
+          str(sorted(_slimmed.keys())))
+    finally:
+        shutil.rmtree(_cd1, ignore_errors=True)
+
     # ---- the shortlist is PER SOURCE, because the sources are on different scales ---------------
     # Measured 2026-09-04 on the live pool: 31,340 bge-m3 rows at cosine 0.559-1.000 against
     # DEDUP_SHORTLIST_MIN = 20, a word-overlap COUNT. Zero could ever clear it.
@@ -3725,52 +3962,9 @@ def cmd_selftest(_a):
       "ask_floor" in open(CALIBRATION_FILE, encoding="utf-8-sig").read()
       if os.path.exists(CALIBRATION_FILE) else True, "no ask_floor in the calibration")
 
-    # AND THROUGH THE REAL PASS, not just the predicate. Four fixtures in this estate passed over a
-    # mechanism that was never wired, because they called the helper directly.
-    saved = (llama_up, llm_same_dinner, llm_different_dinner)
-    globals()["llama_up"] = lambda *a, **k: True
-    globals()["llm_same_dinner"] = lambda *a, **k: "yes"
-    globals()["llm_different_dinner"] = lambda *a, **k: "no"
-    try:
-        p = {"candidates": [{"slug": "emb-only", "name": "emb-only", "status": "available",
-                             "neighbours": [_n("live-twin", 0.96, "bge-m3")]}]}
-        n = judge_near_dupes(p, quiet=True)
-        T("MUST FIRE  judge_near_dupes ITSELF reaches a candidate whose only evidence is embedding - "
-          "the whole point, and the thing that was unreachable before (it is ASKED about and tagged; "
-          "since P1c no answer rules it out)",
-          n == 0 and p["candidates"][0]["dedup_at_ingest"] == "llm"
-          and p["candidates"][0]["status"] == "available",
-          "%s / %s / %s" % (n, p["candidates"][0].get("dedup_at_ingest"),
-                            p["candidates"][0]["status"]))
-    finally:
-        globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
-
-    # a could-not-look must not settle the candidate it failed to look at
-    saved = (llama_up, llm_same_dinner, llm_different_dinner)
-    globals()["llama_up"] = lambda *a, **k: True
-    globals()["llm_same_dinner"] = lambda *a, **k: "no"
-    globals()["llm_different_dinner"] = lambda *a, **k: "yes"
-    try:
-        p = {"candidates": [dict(_cand("u", 40), dedup_at_ingest="unavailable"),
-                            dict(_cand("n", 40), dedup_at_ingest="no-neighbour"),
-                            dict(_cand("j", 40), dedup_at_ingest="llm")]}
-        judge_near_dupes(p, quiet=True)
-        # the retried two get re-tagged by this pass; the judged one is left exactly as it was
-        T("MUST FIRE  a candidate tagged `unavailable` is RE-EXAMINED once a model is up - a tag that "
-          "records 'nobody looked' must not be the reason nobody looks again",
-          dedup_pending({"dedup_at_ingest": "unavailable"}) is True
-          and p["candidates"][0]["dedup_at_ingest"] == "llm",
-          str([c["dedup_at_ingest"] for c in p["candidates"]]))
-        T("MUST FIRE  ...and so is `no-neighbour`, which describes the INDEX at the time and the index "
-          "is rebuilt nightly",
-          dedup_pending({"dedup_at_ingest": "no-neighbour"}) is True
-          and p["candidates"][1]["dedup_at_ingest"] == "llm",
-          str([c["dedup_at_ingest"] for c in p["candidates"]]))
-        T("CLEAN TWIN a candidate a model actually JUDGED is settled and is not asked about again",
-          dedup_pending({"dedup_at_ingest": "llm"}) is False,
-          str(dedup_pending({"dedup_at_ingest": "llm"})))
-    finally:
-        globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
+    # (THE PASS ITSELF had a fixture here too - "judge_near_dupes ITSELF reaches a candidate whose
+    # only evidence is embedding". It went with the pass. The floor and the shortlist it fed are
+    # still asserted above, as pure functions.)
 
     # 5. an index that cannot be dated against the live catalog is NOT evidence
     tmpd = os.path.join(os.environ.get("TEMP", "."), "harvest-idx-%d" % os.getpid())
@@ -3813,6 +4007,13 @@ def cmd_selftest(_a):
         os.rmdir(tmpd)
 
     # 6. the health numbers are COUNTS of rows, read off the pool - never a share, never a rounding
+    # `_cand` used to be defined by the ingest-ask fixtures above; those went with the ask (P3), so
+    # the helper this block needs is declared where this block uses it.
+    def _cand(slug, near_score=None, status="available"):
+        n = ([{"side": "live-catalog", "slug": "live-" + slug, "name": "Live " + slug,
+               "score": near_score}] if near_score is not None else [])
+        return {"slug": slug, "name": slug, "status": status, "neighbours": n}
+
     hp = {"candidates": [_cand("h%d" % i, 40) for i in range(4)]
                         + [_cand("b%d" % i) for i in range(3)]
                         + [_cand("t", None, "taken")]}
@@ -3828,11 +4029,24 @@ def cmd_selftest(_a):
       any("BLIND" in ln and "3" in ln for ln in format_pool_health(hh)),
       " | ".join(format_pool_health(hh)))
 
+    # ---- the pinned-reference gate (2026-09-04, PLAN-after-review P5) ----------------------------
+    # THE RULE IS hunt_lib's, not a fourth copy of it: a REMOVED case name exits 2 even when every
+    # case that ran passed, because a deleted case leaves a suite green at exit 0 - measured.
+    hunt_lib.names_fixtures(T, seen)
+    names_rc = hunt_lib.names_finish(seen, getattr(a, "names_out", ""),
+                                     getattr(a, "names_diff", ""))
+
     print("")
+    print("  %d case(s) ran" % len(seen))
     if bad:
         print("harvest SELF-TEST FAIL (%d)" % len(bad))
         print("HARVEST-COMPLETE")
         return 2
+    if names_rc != hunt_lib.EXIT_CLEAN:
+        print("harvest SELF-TEST: every case that RAN passed, and the pinned reference names cases "
+              "that did not run")
+        print("HARVEST-COMPLETE")
+        return names_rc
     print("harvest SELF-TEST PASS")
     print("HARVEST-COMPLETE")
     return 0
@@ -3868,14 +4082,30 @@ def main(argv=None):
     ap.add_argument("--reingredients-ruled", dest="reingredients_ruled", action="store_true",
                     help="the same re-parse, but for `ruled:rejected-dupe` rows - the estate's only "
                          "labelled duplicate positives. Implies --reingredients.")
+    ap.add_argument("--release-taken", dest="release_taken", action="store_true",
+                    help="with --run <id>: give a stopped run's `taken:` candidates back to the "
+                         "shelf, or land the ruling the ledger already holds for them. Refuses "
+                         "while a hunt-daemon process is holding that run.")
+    ap.add_argument("--force", action="store_true",
+                    help="with --release-taken: release even though a process appears to hold the "
+                         "run.")
+    ap.add_argument("--evict-non-recipes", dest="evict_non_recipes", action="store_true",
+                    help="re-apply the no-Recipe-block rule to rows already on the shelf: a page "
+                         "with no recipe on it becomes ruled:excluded with its evidence kept. "
+                         "Reads the page cache; no network and no model.")
     ap.add_argument("--resignature", action="store_true")
     ap.add_argument("--pool-health", dest="pool_health", action="store_true",
                     help="how many available candidates carry dedup evidence, and whether the "
                          "embedding index can be believed. Exit 1 when anything is blind.")
-    ap.add_argument("--dedup-ingest", dest="dedup_ingest", action="store_true",
-                    help="drain the undeduped backlog through the local model. Needs llama-server; "
-                         "without it every candidate is tagged `unavailable` and none is refused.")
     ap.add_argument("--selftest", action="store_true")
+    # THE PINNED-REFERENCE GATE (PLAN-after-review P5). Pin the case NAMES from HEAD's bytes once,
+    # then diff a later run against them: a REMOVED name exits 2 even when every case that ran
+    # passed, because deleting a case leaves the suite green at exit 0 - measured.
+    ap.add_argument("--names-out", dest="names_out", default="",
+                    help="with --selftest: write the case NAMES this run executed to a file")
+    ap.add_argument("--names-diff", dest="names_diff", default="",
+                    help="with --selftest: rerun and report removed/added by NAME against a pinned "
+                         "reference. Exit 2 on any REMOVAL, and on a missing or empty reference.")
     ap.add_argument("--run", default="")
     ap.add_argument("--verdict", default="")
     ap.add_argument("--reason", default="")
@@ -3898,8 +4128,6 @@ def main(argv=None):
 
     if a.pool_health:
         return cmd_pool_health(a)
-    if a.dedup_ingest:
-        return cmd_dedup_ingest(a)
     if a.selftest:
         return cmd_selftest(a)
     if a.crawl:
@@ -3914,6 +4142,10 @@ def main(argv=None):
         return cmd_mark_ruled(a)
     if a.dossier:
         return cmd_dossier(a)
+    if a.release_taken:
+        return cmd_release_taken(a)
+    if a.evict_non_recipes:
+        return cmd_evict_non_recipes(a)
     if a.resignature:
         return cmd_resignature(a)
     if a.classify_nutrition:

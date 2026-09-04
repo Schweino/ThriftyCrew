@@ -1,7 +1,14 @@
 # PLAN: after the review of the dedup work - what is open, ranked by what it buys
 
 queue_id: after-review-2026-09-04
-shipped_commit: (empty - fill in when built; verify and report, do not rebuild)
+shipped_commit: SHIPPED_SHA (2026-09-04 evening) - P5, P1, P2 and P3 are DONE: verify and report,
+do not rebuild. P4 and P6's second half are Brad-launched by design and are NOT built. P7 is parked
+on rulings, and this build ADDED to it - see the note at the end of P7.
+OUTCOME, measured against the live files after the build:
+  available 3,258 -> 1,185 after the eviction, then 1,205 once the 20 stranded takes were released
+  0 available rows carrying the no-Recipe reason; 0 rows `taken:` by any run; 13,169 rows, none deleted
+  the ingest ask is deleted outright: 7 functions, 13 fixtures, 2 flags, 1 verb
+  all five suites carry --names-out/--names-diff; 16 case names removed in total, every one named
 author: Fable 5.1, 2026-09-04 evening, PLAN ONLY. Written for Opus to build from. Every number
 below was measured this evening against the files; every claim about a file names the line it was
 read at. Bands are per-run and Brad's; none is hard-coded here or may be by the build.
@@ -241,6 +248,14 @@ compacting what it should, record the saving and close.
   `norm_line` correction and the negatives' provenance (0a.3). Both are doc edits; do them with P3.
 - **The two stale worktrees** under `.claude\worktrees` still carry the pre-P1c `refuse_near_dupes`;
   harmless until someone reads one as current.
+- **NEW, from the build itself: `dedup_shortlist` and `dedup_ask_floor` now have NO production
+  caller.** P3's deletion took their only one. This plan's P3 said to keep them as "the decider's
+  evidence"; that justification was WRONG and the build checked it - the decider's evidence is the
+  `neighbours` block `build_dossier` carries, and the shortlist only ever chose who to ask. They are
+  kept, and their docstrings now say they have no caller and why. Deleting them would also strand
+  the nightly chain's `--calibrate` step, whose ordering has its own crawl fixture, so it is a
+  ruling and not a cleanup. Decide: delete both plus the calibrate step, or wire the shortlist to
+  something that needs it.
 - From the previous plan, unchanged: the near-name shelf scorer (plural-stem ruling),
   `DEFAULT_COND` reaching three agent prompts, the `99/1 ground turkey` term-ladder defect and its
   registrar ruling, and whether a fresh checkout should say the two gitignored index files are

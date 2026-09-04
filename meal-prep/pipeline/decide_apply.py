@@ -103,14 +103,24 @@ def apply_verdict(payload, run_dir, run_id, pool_path, store_path, dry_run=False
     accepted = []
 
     # ---- pre-flight: every slug must be a candidate somebody actually harvested ------------------
+    # PER DECISION, NOT PER BATCH (2026-09-04, PLAN-after-review P2). A ruling on a candidate nobody
+    # harvested is a ruling about nothing and is still refused - but refusing the whole payload for
+    # it meant the other nine rulings in that batch were never applied AND their candidates stayed
+    # `taken:` with no verdict, which is how a run eats ten candidates for one bad slug. The batch is
+    # a transport unit; a verdict is per candidate.
+    known = []
     for d in payload["decisions"]:
         if d["slug"] not in by_slug:
             findings.append("%s: the pool has never heard of this slug - refusing to record a ruling "
-                            "about a candidate nobody harvested" % d["slug"])
-    if findings:
+                            "about a candidate nobody harvested. The other %d decision(s) in this "
+                            "payload still apply."
+                            % (d["slug"], len(payload["decisions"]) - 1))
+        else:
+            known.append(d)
+    if not known:
         return applied, findings
 
-    for d in payload["decisions"]:
+    for d in known:
         slug = d["slug"]
         verdict = d["verdict"]
         cand = by_slug[slug]
@@ -168,10 +178,12 @@ def apply_verdict(payload, run_dir, run_id, pool_path, store_path, dry_run=False
                                 % (slug, out.strip()))
 
         # ---- 3. the pool ruling, through harvest.py's single-writer verb -------------------------
-        rc = _mark_ruled(slug, verdict, d.get("reason") or "", pool_path,
-                         dupe_of=d.get("dupe_of"))
+        rc, why = _mark_ruled(slug, verdict, d.get("reason") or "", pool_path,
+                              dupe_of=d.get("dupe_of"))
         if rc != 0:
-            findings.append("%s: the pool ruling did not land" % slug)
+            findings.append("%s: the pool ruling did not land (rc %d) - %s. The LEDGER row above "
+                            "stands; `harvest.py --release-taken --run %s` lands it on the pool."
+                            % (slug, rc, why or "no output", run_id))
 
         if verdict == "accepted":
             accepted.append(slug)
@@ -199,7 +211,18 @@ def _mark_ruled(slug, verdict, reason, pool_path, dupe_of=None):
     if pool_path:
         args += ["--pool", pool_path]
     p = subprocess.run(args, capture_output=True)
-    return p.returncode if p.returncode in (0, 1, 2) else 2
+    rc = p.returncode if p.returncode in (0, 1, 2) else 2
+    # THE REASON TRAVELS WITH THE FAILURE (2026-09-04, PLAN-after-review P2). This used to return the
+    # code alone and throw stdout and stderr away, so a failed ruling reached the run as the bare
+    # words "the pool ruling did not land" - true, unactionable, and it happened for real on
+    # hunt-2026-09-04-p3, where the cause was a PermissionError on the pool replace that nobody could
+    # see. A finding a reader cannot act on is the could-not-look wearing a report.
+    why = ""
+    if rc != 0:
+        tail = (p.stderr or b"").decode("utf-8", errors="replace").strip().splitlines()
+        out = (p.stdout or b"").decode("utf-8", errors="replace").strip().splitlines()
+        why = (tail or out or [""])[-1][:300]
+    return rc, why
 
 
 def flatten_workflow_verdicts(payload):
@@ -277,10 +300,13 @@ def cmd_apply(a):
 # survive every pure-predicate fixture are the ones that only appear once results are COLLECTED.
 # =====================================================================================================
 
-def cmd_selftest(_a):
+def cmd_selftest(a):
     bad = []
+    seen = []
 
     def T(name, ok, got=""):
+        # Recorded at the CALL (2026-09-04, PLAN-after-review P5) - see hunt_lib.names_fixtures.
+        seen.append(name)
         if ok:
             print("  ok    " + name)
         else:
@@ -529,14 +555,47 @@ def cmd_selftest(_a):
         T("  and it left the accepted list untouched",
           json.load(open(os.path.join(run_dir, "accepted-slugs.json"), encoding="utf-8-sig"))
           == ["drill-accept"], "list changed")
+
+        # ONE BAD SLUG MAY NOT REFUSE THE BATCH (2026-09-04, PLAN-after-review P2). The pre-flight
+        # used to return on the first unknown slug, so the other nine rulings in that payload were
+        # never applied and their candidates stayed `taken:` with no verdict - a run eating ten
+        # candidates for one bad name. The refusal is per DECISION now; the batch is transport.
+        mixed = {"decisions": [
+            {"slug": "never-harvested", "verdict": "accepted", "reason": "r",
+             "record": {"name": "N", "protein": "beef", "method": "any", "verdict": "accepted",
+                        "reason": "r"}},
+            {"slug": "drill-defer", "verdict": "rejected-not-fit", "reason": "not a fit after all",
+             "record": {"name": "Drill Defer", "protein": "beef", "method": "skillet",
+                        "verdict": "rejected-not-fit", "reason": "not a fit after all"}}]}
+        ap4, f4 = apply_verdict(mixed, run_dir, "drill-run", pool_path, store_path, quiet=True)
+        st4 = {c["slug"]: c["status"] for c in harvest.read_pool(pool_path)["candidates"]}
+        T("MUST FIRE  a payload carrying ONE unknown slug still applies every OTHER ruling in it - "
+          "refusing the batch stranded nine candidates as taken with no verdict",
+          [x[0] for x in ap4] == ["drill-defer"]
+          and st4["drill-defer"] == "ruled:rejected-not-fit",
+          "applied=%s status=%s" % (ap4, st4.get("drill-defer")))
+        T("MUST FIRE  ...and the unknown slug is STILL refused and named, with how many others "
+          "went through beside it",
+          len(f4) == 1 and "never-harvested" in f4[0] and "1 decision(s)" in f4[0], str(f4))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # ---- the pinned-reference gate (2026-09-04, PLAN-after-review P5) ----------------------------
+    hunt_lib.names_fixtures(T, seen)
+    names_rc = hunt_lib.names_finish(seen, getattr(a, "names_out", ""),
+                                     getattr(a, "names_diff", ""))
+
     print("")
+    print("  %d case(s) ran" % len(seen))
     if bad:
         print("decide_apply SELF-TEST FAIL (%d)" % len(bad))
         print("DECIDE-APPLY-COMPLETE")
         return hunt_lib.EXIT_CANNOT_RUN
+    if names_rc != hunt_lib.EXIT_CLEAN:
+        print("decide_apply SELF-TEST: every case that RAN passed, and the pinned reference names "
+              "cases that did not run")
+        print("DECIDE-APPLY-COMPLETE")
+        return names_rc
     print("decide_apply SELF-TEST PASS")
     print("DECIDE-APPLY-COMPLETE")
     return hunt_lib.EXIT_CLEAN
@@ -551,6 +610,11 @@ def main(argv=None):
     ap.add_argument("--store", default="")
     ap.add_argument("--dry-run", dest="dry_run", action="store_true")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--names-out", dest="names_out", default="",
+                    help="with --selftest: write the case NAMES this run executed to a file")
+    ap.add_argument("--names-diff", dest="names_diff", default="",
+                    help="with --selftest: rerun and report removed/added by NAME against a pinned "
+                         "reference. Exit 2 on any REMOVAL, and on a missing or empty reference.")
     a = ap.parse_args(argv)
     if a.selftest:
         return cmd_selftest(a)

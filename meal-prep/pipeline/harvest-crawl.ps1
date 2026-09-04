@@ -31,7 +31,11 @@
   Exit 0 = crawled (or correctly found no room). Exit 1 = the crawl reported findings. Exit 2 = it
   could not run at all.
 #>
-param([switch]$SelfTest, [int]$Limit = 400, [int]$PerDomain = 60, [switch]$DryRun)
+param([switch]$SelfTest, [int]$Limit = 400, [int]$PerDomain = 60, [switch]$DryRun,
+      # THE PINNED-REFERENCE GATE (2026-09-04, PLAN-after-review P5). With -SelfTest:
+      # -NamesOut pins the case NAMES this run executed; -NamesDiff reruns and exits 2 on any
+      # REMOVAL, even when every case that ran passed.
+      [string]$NamesOut = '', [string]$NamesDiff = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = Split-Path -Parent $here
@@ -44,7 +48,14 @@ function Say([string]$s) { Write-Output $s }
 
 if ($SelfTest) {
   $bad = 0
+  # The ONE implementation of the pinned-reference gate on this side of the language line, shared
+  # with hunt-run.ps1 and held in step with hunt_lib's copy by selftest-names-vectors.json.
+  . (Join-Path $here 'selftest-names-lib.ps1')
+  $script:SeenNames = @()
   function T([string]$name, [bool]$ok, $got = '') {
+    # RECORDED AT THE CALL, never scraped from stdout: a parser over printed lines is a fifth thing
+    # to keep in step, and it cannot see a name that wrapped.
+    $script:SeenNames += $name
     if ($ok) { Write-Output ("  ok    " + $name) }
     else { Write-Output ("  X     {0}   got: {1}" -f $name, $got); $script:bad++ }
   }
@@ -90,14 +101,12 @@ if ($SelfTest) {
     ($code -match "'--device'\s*'cpu'" -and -not ($code -match 'cuda')) 'the rebuild could take the GPU'
   T 'MUST FIRE  the crawl READS the evidence back and alerts when it has gone stale - recording a degradation nobody reads is a clean bill' `
     ($code -match ('--pool' + '-health') -and $code -match ('Send' + '-Alert')) 'a stale index would pass silently'
-  # AND IT ALERTS ON THE ONE THING THAT IS STILL A DEGRADATION. The `llm=` arm watched an ingest gate
-  # that no longer exists (P1c): `judge_near_dupes` rules nothing and the daemon's pass is off, so no
-  # ordinary run produces that tag. An alert that fires nightly on a designed state trains its reader
-  # to ignore the alert, which costs the STALE-INDEX arm beside it.
-  T 'MUST FIRE  a missing `llm=` tag is NOT alertable - the ingest refusal path is retired, so it would page every night about a designed state' `
-    (-not ($code -match ('all' + 'Unavail'))) 'the retired gate still has a live alert arm'
-  T 'CLEAN TWIN ...and a stale embedding index still IS - that arm is the one this whole chain exists for' `
-    ($code -match ('idx' + 'Stale') -and $code -match 'embedding index is not fresh') 'the stale-index alert went with it'
+  # THE DEDUP TAG IS GONE ENTIRELY (2026-09-04, PLAN-after-review P3). Two fixtures stood here: one
+  # holding the retired `llm=` alert arm removed, one holding the STALE-INDEX arm beside it alive.
+  # The first watched a tag that no longer exists anywhere, so it went with the tag. The second is
+  # the arm this whole chain exists for, and it is kept.
+  T 'MUST FIRE  a stale embedding index IS alertable - that arm is the one this whole chain exists for' `
+    ($code -match ('idx' + 'Stale') -and $code -match 'embedding index is not fresh') 'the stale-index alert went with the dedup one'
   # THE ORDER IS THE MECHANISM. Each of these four steps is individually correct in any order and the
   # chain only works in one: ingest the new shelf, build the index over it, score the pool against
   # that index, then read the result. Shipped 2026-09-04 with the rescore missing, and the reading
@@ -114,8 +123,18 @@ if ($SelfTest) {
   T 'MUST FIRE  ...and in THIS order: crawl, rebuild, calibrate, rescore, read' `
     ($iCrawl -gt 0 -and $iCrawl -lt $iBuild -and $iBuild -lt $iCal -and $iCal -lt $iScore -and $iScore -lt $iRead) `
     ("crawl={0} build={1} calibrate={2} rescore={3} read={4}" -f $iCrawl, $iBuild, $iCal, $iScore, $iRead)
+  Invoke-NamesFixtures -TBlock ${function:T} -Seen $script:SeenNames -VectorFile (Join-Path $here 'selftest-names-vectors.json')
+  $nf = Get-NamesFinish -Seen $script:SeenNames -NamesOut $NamesOut -NamesDiff $NamesDiff
+  foreach ($ln in $nf.Lines) { Write-Output $ln }
+  $namesRc = [int]$nf.Rc
+
   Write-Output ''
+  Write-Output ("  {0} case(s) ran" -f @($script:SeenNames).Count)
   if ($bad -gt 0) { Write-Output ("harvest-crawl SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1 }
+  if ($namesRc -ne 0) {
+    Write-Output 'harvest-crawl SELF-TEST: every case that RAN passed, and the pinned reference names cases that did not run'
+    exit $namesRc
+  }
   Write-Output 'harvest-crawl SELF-TEST PASS'
   exit 0
 }
@@ -177,17 +196,11 @@ foreach ($ln in @($ro)) { if ($ln -match 'blind|neighbour|scored|FINDING') { Say
 $ph = @(& $py $harvest '--pool-health' | Where-Object { $_ -notmatch 'HARVEST-COMPLETE' })
 foreach ($ln in $ph) { Say ([string]$ln) }
 $idxLine = @($ph | Where-Object { $_ -match 'embed index' })
-$tagLine = @($ph | Where-Object { $_ -match 'dedup at ingest' })
 $idxStale = ($idxLine.Count -eq 0) -or ($idxLine[0] -notmatch 'embed index\s+fresh')
-# THE SECOND ALERT ARM WAS RETIRED WITH THE THING IT WATCHED (2026-09-04, PLAN-after-dedup P1c).
-# It alerted when no candidate carried the `llm` tag - "tagged, never judged" - which was a real
-# signal while an ingest gate existed to do the judging. It does not now: `judge_near_dupes` rules
-# nothing, the ingest pass is OFF by default at run start, and no candidate will carry `llm` on any
-# ordinary run. Left in, this pages every night about a designed state, which is how an estate
-# learns to ignore its own alerts. The tag line is still PRINTED above; it is no longer alertable.
-if ($tagLine.Count -gt 0) {
-  Say '  the dedup tag line is a reading, not an alert: the ingest refusal path is retired (P1c), so `llm=` may legitimately never appear'
-}
+# THE DEDUP READING IS GONE, not just its alert (2026-09-04, PLAN-after-review P3). The arm that
+# alerted on a missing `llm=` tag was removed earlier the same day, when the refusal path was
+# retired. The tag itself, the pass that wrote it and the ask behind it are now deleted, so there is
+# no line left to read. What this chain watches is the EMBEDDING INDEX - the decider's evidence.
 if ($idxStale) {
   $why = @('the embedding index is not fresh')
   Say ('  FINDING ' + ($why -join '; '))

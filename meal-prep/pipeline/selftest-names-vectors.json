@@ -1,0 +1,15 @@
+{
+ "_doc": "THE PINNED-REFERENCE GATE, stated once for both implementations (2026-09-04, PLAN-after-review P5). hunt_lib.names_report (Python) and selftest-names-lib.ps1 (PowerShell) are two implementations of one rule, and two implementations drift. Each reads THIS file in its own self-test and must answer every case with the stated exit. `ref: null` means the reference file does not exist. exit 2 = a removal or a could-not-look; exit 0 = clean or additions only. Add a case here first, then make both sides answer it.",
+ "cases": [
+  {"name": "identical", "ref": ["case one", "case two"], "seen": ["case one", "case two"], "exit": 0},
+  {"name": "removal", "ref": ["case one", "case two"], "seen": ["case one"], "exit": 2},
+  {"name": "addition", "ref": ["case one"], "seen": ["case one", "case two"], "exit": 0},
+  {"name": "removal-and-addition-same-count", "ref": ["case one", "case two"], "seen": ["case one", "case three"], "exit": 2},
+  {"name": "indentation-is-layout", "ref": ["case one", "case two"], "seen": ["   case one", "case two"], "exit": 0},
+  {"name": "reference-indented", "ref": ["  case one", "case two"], "seen": ["case one", "case two"], "exit": 0},
+  {"name": "empty-reference", "ref": [], "seen": ["case one"], "exit": 2},
+  {"name": "missing-reference", "ref": null, "seen": ["case one"], "exit": 2},
+  {"name": "reorder-is-not-a-change", "ref": ["case one", "case two"], "seen": ["case two", "case one"], "exit": 0},
+  {"name": "duplicate-name-in-seen", "ref": ["case one"], "seen": ["case one", "case one"], "exit": 0}
+ ]
+}

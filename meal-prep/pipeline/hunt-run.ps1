@@ -91,7 +91,11 @@ param(
   # is not offered: a band nobody typed is a band nobody agreed to, and it would be enforced silently
   # by two gates for the whole run. -ProteinMin 0 is how you say "no protein floor" out loud.
   [double]$CalMin = -1, [double]$CalMax = -1, [double]$CarbMax = -1, [double]$ProteinMin = -1,
-  [string]$QueueScript = '', [switch]$Drain, [switch]$NoLedger, [switch]$Json
+  [string]$QueueScript = '', [switch]$Drain, [switch]$NoLedger, [switch]$Json,
+  # THE PINNED-REFERENCE GATE (2026-09-04, PLAN-after-review P5). With the self-test switch:
+  # -NamesOut pins the case NAMES this run executed; -NamesDiff reruns and exits 2 on any
+  # REMOVAL, even when every case that ran passed - a deleted case leaves a suite green at 0.
+  [string]$NamesOut = '', [string]$NamesDiff = ''
 )
 $ErrorActionPreference = 'Stop'
 
@@ -104,6 +108,9 @@ $runRecipeSummary = [bool]$RecipeSummary
 # GROUPING. A second reader over the same file is a second place for the two to disagree.
 $runLaneSummary = [bool]$LaneSummary -or $runStageSummary
 $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Advance
+# Captured here for the same reason as every switch above: a dot-sourced lib runs its own param()
+# block in this scope. selftest-names-lib.ps1 deliberately has none, and this does not depend on it.
+$runNamesOut = [string]$NamesOut; $runNamesDiff = [string]$NamesDiff
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
 $runRevive = [bool]$Revive
 $runReband = [bool]$Reband
@@ -700,7 +707,13 @@ function Read-LaneLog {
 # ===================================================================================================
 if ($runSelfTest) {
   $f = 0
-  function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
+  # The pinned-reference gate, shared with harvest-crawl.ps1 and held in step with hunt_lib's copy of
+  # the same rule by selftest-names-vectors.json (2026-09-04, PLAN-after-review P5).
+  . (Join-Path $here 'selftest-names-lib.ps1')
+  $script:SeenNames = @()
+  # RECORDED AT THE CALL. A parser over stdout would be a fifth implementation of "what is a case
+  # name", and this suite prints its cases with no leading spaces where the others use two.
+  function T($m, $c, $g) { $script:SeenNames += $m; if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
 
   # ---- FIXTURE 1. THE FOUNDING BUG of this whole design, frozen. Brad's flow chart discarded a recipe
   # when "0 stores have a price", which cannot tell a store that said no from a store that was walled.
@@ -1727,8 +1740,18 @@ if ($runSelfTest) {
       ("n={0} skipped={1}" -f $p5be.Count, (@($script:NonRecipeStateFiles) -join ','))
   } finally { Remove-Item -LiteralPath $p5b -Recurse -Force -ErrorAction SilentlyContinue }
 
-  if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
-  Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
+  Invoke-NamesFixtures -TBlock ${function:T} -Seen $script:SeenNames -VectorFile (Join-Path $here 'selftest-names-vectors.json')
+  $nf = Get-NamesFinish -Seen $script:SeenNames -NamesOut $runNamesOut -NamesDiff $runNamesDiff
+  foreach ($ln in $nf.Lines) { Write-Output $ln }
+  $namesRc = [int]$nf.Rc
+
+  Write-Output ("  {0} case(s) ran" -f @($script:SeenNames).Count)
+  if ($f -gt 0) { Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1 }
+  if ($namesRc -ne 0) {
+    Write-Output 'hunt-run SELF-TEST: every case that RAN passed, and the pinned reference names cases that did not run'
+    exit $namesRc
+  }
+  Write-Output 'hunt-run SELF-TEST PASS'; exit 0
 }
 
 # ===================================================================================================
