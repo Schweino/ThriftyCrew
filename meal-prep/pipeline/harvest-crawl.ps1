@@ -90,6 +90,14 @@ if ($SelfTest) {
     ($code -match "'--device'\s*'cpu'" -and -not ($code -match 'cuda')) 'the rebuild could take the GPU'
   T 'MUST FIRE  the crawl READS the evidence back and alerts when it has gone stale - recording a degradation nobody reads is a clean bill' `
     ($code -match ('--pool' + '-health') -and $code -match ('Send' + '-Alert')) 'a stale index would pass silently'
+  # AND IT ALERTS ON THE ONE THING THAT IS STILL A DEGRADATION. The `llm=` arm watched an ingest gate
+  # that no longer exists (P1c): `judge_near_dupes` rules nothing and the daemon's pass is off, so no
+  # ordinary run produces that tag. An alert that fires nightly on a designed state trains its reader
+  # to ignore the alert, which costs the STALE-INDEX arm beside it.
+  T 'MUST FIRE  a missing `llm=` tag is NOT alertable - the ingest refusal path is retired, so it would page every night about a designed state' `
+    (-not ($code -match ('all' + 'Unavail'))) 'the retired gate still has a live alert arm'
+  T 'CLEAN TWIN ...and a stale embedding index still IS - that arm is the one this whole chain exists for' `
+    ($code -match ('idx' + 'Stale') -and $code -match 'embedding index is not fresh') 'the stale-index alert went with it'
   # THE ORDER IS THE MECHANISM. Each of these four steps is individually correct in any order and the
   # chain only works in one: ingest the new shelf, build the index over it, score the pool against
   # that index, then read the result. Shipped 2026-09-04 with the rescore missing, and the reading
@@ -171,12 +179,17 @@ foreach ($ln in $ph) { Say ([string]$ln) }
 $idxLine = @($ph | Where-Object { $_ -match 'embed index' })
 $tagLine = @($ph | Where-Object { $_ -match 'dedup at ingest' })
 $idxStale = ($idxLine.Count -eq 0) -or ($idxLine[0] -notmatch 'embed index\s+fresh')
-# a whole batch that could not reach the model is the second alertable shape: tagged, never judged
-$allUnavail = ($tagLine.Count -gt 0) -and ($tagLine[0] -match 'unavailable=') -and ($tagLine[0] -notmatch 'llm=')
-if ($idxStale -or $allUnavail) {
-  $why = @()
-  if ($idxStale)    { $why += 'the embedding index is not fresh' }
-  if ($allUnavail)  { $why += 'no candidate in the pool has ever been judged by the local model' }
+# THE SECOND ALERT ARM WAS RETIRED WITH THE THING IT WATCHED (2026-09-04, PLAN-after-dedup P1c).
+# It alerted when no candidate carried the `llm` tag - "tagged, never judged" - which was a real
+# signal while an ingest gate existed to do the judging. It does not now: `judge_near_dupes` rules
+# nothing, the ingest pass is OFF by default at run start, and no candidate will carry `llm` on any
+# ordinary run. Left in, this pages every night about a designed state, which is how an estate
+# learns to ignore its own alerts. The tag line is still PRINTED above; it is no longer alertable.
+if ($tagLine.Count -gt 0) {
+  Say '  the dedup tag line is a reading, not an alert: the ingest refusal path is retired (P1c), so `llm=` may legitimately never appear'
+}
+if ($idxStale) {
+  $why = @('the embedding index is not fresh')
   Say ('  FINDING ' + ($why -join '; '))
   $lib = Join-Path $repo 'grocery\alert-lib.ps1'
   if (Test-Path $lib) {
