@@ -487,6 +487,12 @@ class Daemon(object):
         # batch mid-dispatch is the thing most likely to add terms in the next minute.
         self.map_inflight = 0
         self.extract_inflight = 0
+        # THE P5 PRECHECK'S ONE-REPAIR-PER-GATE CAP (2026-09-04). Gate -> True once this run has
+        # spent a shared repair on it. A second wave closing over the same red gate must cost a
+        # battery run and nothing else: the first repair either cleared it or could not, and
+        # buying the same agent again to be told the same thing is the shape this precheck exists
+        # to remove.
+        self.p5_repairs_spent = {}
 
         # THE COST-ENGINE MUTEX (section 4.5). build-v2-spec -RunCost shells the cost engine, which
         # rewrites db\costed.json; the write lane runs 3 concurrent writers, so v2 raced on that file
@@ -6505,6 +6511,169 @@ class Daemon(object):
         self.wave_no += 1
         return self.wave_no
 
+    # ---- THE P5 PRECHECK (2026-09-04, design\\BRIEF-p5-precheck-2026-09-04.md) -------------------
+    #
+    # WHOSE DEFECT EACH P5 GATE IS. These mirror wave-publish.ps1's own comments on the gates:
+    # vocab-integrity means the canon NAME is wrong (a mapping question), unbid means the name
+    # resolved to a row that genuinely has no bid (a wiring question), store-integrity and
+    # cost-plausibility are about what a store actually carries and what it actually costs. A
+    # contradiction between a spec's prose and its numbers, or a cost line that never reached the
+    # spec's block, is the writer's road because that is where a spec is rebuilt.
+    #
+    # This is the brief's ruling. Brad may change it; this code may not.
+    P5_OWNERS = {"audit-spec-contradictions": "recipe-writer",
+                 "audit-cost-line-coverage": "recipe-writer",
+                 "audit-vocab-integrity": "recipe-ingredient-mapper",
+                 "audit-unbid-ingredients": "recipe-ingredient-mapper",
+                 "audit-store-integrity": "recipe-hunter-pricer",
+                 "audit-cost-plausibility": "recipe-hunter-pricer"}
+
+    def p5_owner(self, gate):
+        # An unmapped gate cannot happen while P5_GATES is pinned to wave-publish's list, but the
+        # conservative direction if it ever does is the writer - the same default owner_agent takes.
+        return self.P5_OWNERS.get(gate, "recipe-writer")
+
+    def read_preaudit(self, wk):
+        """The battery report as a dict, or None when it cannot be read. utf-8-sig, as
+        render_audit_dossier reads it - PowerShell writes the BOM and a plain utf-8 read chokes on it.
+        """
+        path = os.path.join(self.run_dir, "waves", "wave-%d.preaudit.json" % wk)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+        except Exception:                                         # noqa: BLE001
+            return None
+        return doc if isinstance(doc, dict) else None
+
+    def p5_repair_prompt(self, wk, slugs, red, doc):
+        """The shared repair the precheck buys INSTEAD of an audit that would be refused anyway.
+
+        It carries the battery's own detail and numbers per red gate, verbatim, because the whole
+        point is that the agent does not go and re-run the gate to find out what it said. And it says
+        plainly that the gate is a wave-publish P5 refusal, so the agent is fixing the ESTATE and not
+        dressing up one wave to get past it.
+        """
+        shared = {}
+        for chk in ((doc or {}).get("shared_checks") or []):
+            if isinstance(chk, dict) and isinstance(chk.get("check"), str):
+                shared[chk["check"]] = chk
+        blocks = []
+        for g in red:
+            chk = shared.get(g) or {}
+            nums = chk.get("numbers") or {}
+            blocks.append("  %s\n    the battery's detail, verbatim: %s\n    its numbers: %s"
+                          % (g, as_text(chk.get("detail"), 1200),
+                             json.dumps(nums, sort_keys=True, default=str)[:600]))
+        return (
+            "Wave %d of run %s has NOT been audited and will not be, because the pre-audit battery\n"
+            "already reports %d of wave-publish.ps1's six P5 gates as FAILING. P5 is a hard refusal:\n"
+            "wave-publish would refuse this publish no matter what an auditor said, so paying for the\n"
+            "audit first would buy a verdict that cannot be acted on. You are being asked to fix the\n"
+            "GATE.\n\n"
+            "THE RED GATE(S), AS THE BATTERY REPORTED THEM:\n%s\n\n"
+            "These are SHARED-DATA defects. They are not about any one of this wave's recipes (%s),\n"
+            "and no recipe here is at fault for them. Fix the estate, not the wave: do not adjust a\n"
+            "recipe so a gate stops noticing, and NEVER weaken a gate to make it pass.\n\n"
+            "Repair through the sanctioned path: build-v2-spec.ps1 -InFile %s\\intake\\<slug>.json for\n"
+            "anything spec-shaped. Never hand-edit a spec. Report exactly what you changed. If nothing\n"
+            "needed changing, SAY SO explicitly - that is a legitimate answer and it is treated\n"
+            "differently from claiming a change that did not happen; the orchestrator re-runs the\n"
+            "battery itself and reads the verdict rather than your word for it.\n\n"
+            "AND IF THE DEFECT IS NOT YOURS TO FIX - a vocabulary row, a board cell, a price basis\n"
+            "that belongs to another owner - say that plainly and change NOTHING. The daemon will hold\n"
+            "the wave and return its recipes to the pool; that is a correct outcome and a far cheaper\n"
+            "one than a repair that reaches for something adjacent to the real defect.\n"
+            % (wk, self.run_id, len(red), "\n".join(blocks), ", ".join(slugs), self.run_dir))
+
+    async def p5_precheck(self, wk, slugs):
+        """Returns True when the wave may go on to the auditor, False when run_wave must return.
+
+        The order this fixes: today the wave is audited BEFORE the thing that will veto it is fixed,
+        so the audit is bought again after the repair. Measured on hunt-2026-08-27-highprotein at
+        21.8M tokens across five waves.
+        """
+        doc = self.read_preaudit(wk)
+        if doc is None:
+            # ANNOUNCED, NEVER INFERRED. An unreadable report is not a red gate and it is not a clean
+            # bill either; the auditor road is the safe direction, and the finding says why.
+            self.findings.append("wave %d: the pre-audit report could not be read, so the P5 precheck "
+                                 "could not run - the auditor was dispatched without it" % wk)
+            self.log("WAVE %d: pre-audit report unreadable - the P5 precheck cannot run; auditing "
+                     "as before" % wk)
+            return True
+        red = hunt_lib.p5_red_gates(doc)
+        if not red:
+            return True
+
+        label = "p5-precheck w%d" % wk
+        await self.lane("audit", label, slugs, "mechanical", "start")
+        await self.lane_free_end("audit", label, slugs, "mechanical",
+                                 "P5 red: %s - auditor not dispatched" % ", ".join(red))
+        self.log("WAVE %d: P5 gate(s) red in the battery (%s) - the auditor is not paid for a wave "
+                 "wave-publish will refuse" % (wk, ", ".join(red)))
+        self.findings.append("wave %d: P5 gate(s) red in the battery (%s) - the auditor is not paid "
+                             "for a wave wave-publish will refuse" % (wk, ", ".join(red)))
+
+        owner = ""
+        if red[0] not in self.p5_repairs_spent:
+            owner = self.p5_owner(red[0])
+            audit_path = os.path.join(self.run_dir, "waves", "wave-%d.audit.md" % wk)
+            before = self.mtimes(slugs, audit_path)
+            await self.dispatch(owner, self.p5_repair_prompt(wk, slugs, red, doc), "audit",
+                                "wave-%d:p5-repair" % wk, slugs, stage=owner)
+            self.p5_repairs_spent[red[0]] = True
+            # THE SAME REBUILD THE AGENT REPAIR ROAD DOES. An agent repair edits a spec directly and
+            # nothing downstream re-runs the cost engine over it, so db\costed.json would keep the row
+            # it had before.
+            await self.rebuild_repaired_specs(wk, slugs, before)
+            await self.preaudit(wk)
+            doc = self.read_preaudit(wk)
+            red = hunt_lib.p5_red_gates(doc) if doc is not None else red
+            if not red:
+                self.log("WAVE %d: the P5 repair cleared the gate(s) - auditing" % wk)
+                return True
+        else:
+            self.log("WAVE %d: a repair for %s was already spent this run - holding without paying "
+                     "for another" % (wk, red[0]))
+
+        await self.p5_hold(wk, slugs, red, owner)
+        return False
+
+    async def p5_hold(self, wk, slugs, red, owner):
+        """Put the wave down without paying the auditor, and let its recipes go.
+
+        NOT trim_wave. That road rejects recipes once a repair is spent, and no recipe in this wave is
+        at fault for a shared gate - the clean branch's road (advance to qa-passed, back into the
+        pool, manifest reconciled) is the whole of what is correct here.
+        """
+        path = os.path.join(self.run_dir, "waves", "wave-%d.p5-held.json" % wk)
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"wave": wk, "run": self.run_id, "gates": list(red),
+                           "at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                           "slugs": list(slugs),
+                           "repair_spent": bool(owner), "owner_tried": owner or ""}, f, indent=2)
+        except Exception as e:                                    # noqa: BLE001
+            self.findings.append("wave %d: the P5 hold file could not be written (%s), so --status "
+                                 "cannot report this wave as held" % (wk, e))
+        detail = "returned to the pool: wave %d held on P5 gate(s) %s" % (wk, ", ".join(red))
+        for s in slugs:
+            await self.advance(s, "qa-passed", "daemon", detail)
+            if s not in self.qa_passed:
+                self.qa_passed.append(s)
+        # ...and the manifest must let go of them, or Get-ClaimedSlugs answers "already claimed by an
+        # open wave" and the next close refuses outright. Same reason trim_wave syncs.
+        await self.sync_wave_manifest(wk)
+        self.log("WAVE %d: HELD on P5 - %d recipe(s) returned to the pool, no auditor paid"
+                 % (wk, len(slugs)))
+        self.findings.append("wave %d HELD: P5 gate(s) %s red after %s - no auditor paid; clear the "
+                             "gate and the next wave close re-runs the battery for free"
+                             % (wk, ", ".join(red),
+                                "a %s repair" % owner if owner else "a repair already spent this run"))
+        self.wave_results.append({"wave": wk, "slugs": slugs, "published": [], "held": list(slugs),
+                                  "verdict": "P5-HELD", "gates": list(red)})
+
     async def run_wave(self, k, drain=False):
         # Publishing must never start on a dying run: a half-dispatched wave leaves the ledger open
         # and the audit stranded. qa-passed recipes simply wait for the next resume.
@@ -6543,6 +6712,11 @@ class Daemon(object):
                                    "-Detail", "streamed pre-wave"])
 
         await self.preaudit(wk)
+        # THE P5 PRECHECK. The battery just told us whether the six gates wave-publish refuses on
+        # are clean. A red one means the publish is refused no matter what the auditor says, so
+        # the repair goes FIRST and the audit is bought once, afterwards - or not at all.
+        if not await self.p5_precheck(wk, slugs):
+            return
         audit = await self.dispatch("recipe-batch-auditor", self.audit_prompt(wk, slugs, batch,
                                                                              "whole-wave", None),
                                     "audit", "wave-%d:audit" % wk, slugs,
@@ -7508,6 +7682,27 @@ class Daemon(object):
         self.seed_counts = counts
         return True, ""
 
+    def p5_held_waves(self):
+        """Every wave-<k>.p5-held.json in the run, oldest wave first."""
+        out = []
+        d = os.path.join(self.run_dir, "waves")
+        try:
+            names = sorted(os.listdir(d))
+        except Exception:                                         # noqa: BLE001
+            return out
+        for n in names:
+            if not (n.startswith("wave-") and n.endswith(".p5-held.json")):
+                continue
+            try:
+                with open(os.path.join(d, n), "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f)
+            except Exception:                                     # noqa: BLE001
+                continue
+            if isinstance(doc, dict):
+                out.append(doc)
+        out.sort(key=lambda h: int(h.get("wave") or 0))
+        return out
+
     def status_report(self):
         lines = ["hunt-daemon status: %s" % self.run_id, ""]
         lines.append("  seeded          %s" % (", ".join("%s=%d" % (k, v) for k, v in
@@ -7568,6 +7763,18 @@ class Daemon(object):
             lines += ["", "  HELD (reported, never auto-dispatched):"]
             for slug, why in self.held:
                 lines.append("    %-38s %s" % (slug, why))
+        # A RUN THAT PUBLISHED NOTHING MUST SAY WHY. A wave held on a red P5 gate paid no auditor
+        # and refused no publish, so without this line the report has a silence where the reason
+        # is. Read off the hold files rather than memory, so a --status on a finished run says it
+        # too.
+        held_waves = self.p5_held_waves()
+        if held_waves:
+            lines += ["", "  HELD WAVES (P5 gate red in the battery - no auditor was paid, and the",
+                      "  recipes went back to the pool; clear the gate and the next close is free):"]
+            for h in held_waves:
+                lines.append("    wave %-4s %d recipe(s)  %s"
+                             % (h.get("wave"), len(h.get("slugs") or []),
+                                ", ".join(h.get("gates") or [])))
         if self.review_pending:
             lines += ["", "  POST-PUBLISH REVIEW PENDING:"]
             for s in self.review_pending:

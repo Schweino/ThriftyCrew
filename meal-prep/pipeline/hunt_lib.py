@@ -1551,6 +1551,50 @@ def validate_schema(payload, schema, where="payload"):
 TARGET_SERVINGS = 14       # the house batch size. Named here so the mapper's prompt, the assembler's
                            # -TargetServings default and the scale in every mapped file cannot drift
                            # apart - the same reason section 4.5 has one contract per artifact.
+# ---------------------------------------------------------------------------------------------------
+# THE P5 GATE LIST - a MIRROR of wave-publish.ps1's own `$gates = @(` array, first six entries.
+#
+# wave-publish P5 hard-refuses a publish when any of these is not clean, and wave-preaudit.ps1 runs
+# EXACTLY these six as its shared gates and writes their verdicts into wave-<k>.preaudit.json BEFORE
+# the auditor is dispatched. So the daemon can know the publish will be refused without paying for an
+# audit to find out. Measured on hunt-2026-08-27-highprotein: audit-spec-contradictions was already
+# red in the report for waves 1, 2, 9, 10 and 11, each of which then bought a full auditor session
+# that returned NO-GO citing that gate - 21.8M tokens, 38% of audit spend, ~14% of the run.
+#
+# THE DISCIPLINE THIS NEEDS. `recipes-db-dryrun` failed in twelve of fifteen preaudits and waves 3, 4
+# and 8 PUBLISHED anyway, because it is not a P5 gate. Neither are p8-endpoint-provenance and
+# p8-feed-liveness. "Any red in the battery" would have blocked three good publishes. Nothing is
+# added to this tuple that wave-publish does not refuse on, and the cross-file pin in the self-test
+# regexes the labels out of wave-publish.ps1 itself so a drift there turns this red.
+#
+# The three gates BELOW these six in wave-publish's array (audit-ghost-field-limits,
+# audit-wave-blocker-headings, test-guards) are real P5 gates that the BATTERY does not run, so no
+# preaudit report can ever carry a verdict for them. An absent check is not red here - see below.
+# ---------------------------------------------------------------------------------------------------
+P5_GATES = ("audit-spec-contradictions", "audit-store-integrity", "audit-vocab-integrity",
+            "audit-unbid-ingredients", "audit-cost-plausibility", "audit-cost-line-coverage")
+
+
+def p5_red_gates(doc):
+    """Which P5 gates the battery report says are NOT clean, in P5_GATES order.
+
+    A gate ABSENT from shared_checks is NOT red: the battery did not run it, and could-not-look is
+    announced by its own road (an unreadable report is a finding) rather than refused here. A doc
+    that is not a dict returns [] for the same reason - this function never invents a refusal out of
+    a shape it does not recognise.
+    """
+    if not isinstance(doc, dict):
+        return []
+    verdicts = {}
+    for chk in (doc.get("shared_checks") or []):
+        if not isinstance(chk, dict):
+            continue
+        name = chk.get("check")
+        if isinstance(name, str):
+            verdicts[name] = str(chk.get("verdict") or "").strip().lower()
+    return [g for g in P5_GATES if g in verdicts and verdicts[g] != "pass"]
+
+
 MAP_BATCH = 5              # section S4: mapper micro-batches of up to 5 recipes
 PRICE_BATCH = 10           # section 2.4: up to 10 absent terms per pricer invocation, across recipes
 DECIDE_TAKE_BATCH = 5      # the decide channel's greedy sweep; DECIDE_BATCH caps the dispatch itself

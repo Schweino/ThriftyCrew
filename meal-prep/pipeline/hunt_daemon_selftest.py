@@ -1497,6 +1497,13 @@ def run():
         for name, ok, got in fn():
             T(name, ok, got)
 
+    # =================================================================================================
+    H("2026-09-04 - the P5 precheck (design\\BRIEF-p5-precheck-2026-09-04.md)")
+    # =================================================================================================
+    for fn in P5_SECTIONS:
+        for name, ok, got in fn():
+            T(name, ok, got)
+
     print("")
     if bad:
         print("hunt-daemon SELF-TEST FAIL (%d)" % len(bad))
@@ -9239,7 +9246,7 @@ def _f1_shelf_coverage_line():
 # CHANGE A - THE BATTERY SHOWS ITS ARITHMETIC, AND RECIPE-LOCAL REPAIRS ARE PATCHES (2026-08-25)
 # =====================================================================================================
 
-def _preaudited(tmp, wk=1, slugs=("a", "b", "c"), failed=0):
+def _preaudited(tmp, wk=1, slugs=("a", "b", "c"), failed=0, shared_fail=(), shared=None):
     """A wave-preaudit report in the shape wave-preaudit.ps1 actually writes, read off
     meal-prep\runs\hunt-2026-08-24-v3-phase6b\waves\wave-1.preaudit.json: slug_checks is a DICT of
     slug -> LIST of {check, verdict, numbers, detail}, and shared_checks is a flat list."""
@@ -9268,9 +9275,20 @@ def _preaudited(tmp, wk=1, slugs=("a", "b", "c"), failed=0):
             {"check": "protein-derivation", "verdict": "pass",
              "numbers": {"claimed": "chicken", "derived": "chicken", "derived_grams": 3178},
              "detail": "matches the heaviest protein ingredient"}]
-    for name in ("audit-spec-contradictions", "audit-store-integrity", "audit-vocab-integrity"):
-        doc["shared_checks"].append({"check": name, "verdict": "pass", "numbers": {"rc": 0},
-                                     "detail": "clean"})
+    # `shared` names WHICH shared checks the battery ran (default: the three this file's older
+    # cases were written against); `shared_fail` flips those to the failing shape the real battery
+    # writes - rc 1, and the sentence Get-SharedVerdict puts in `detail`.
+    for name in (shared if shared is not None
+                 else ("audit-spec-contradictions", "audit-store-integrity", "audit-vocab-integrity")):
+        if name in (shared_fail or ()):
+            doc["shared_checks"].append(
+                {"check": name, "verdict": "fail", "numbers": {"rc": 1},
+                 "detail": ("%s is not clean (exited 1). Fix it through the owning stage - never "
+                            "weaken a gate to pass a wave. Tail: PHANTOM ingredient in 2 spec(s)"
+                            % name)})
+        else:
+            doc["shared_checks"].append({"check": name, "verdict": "pass", "numbers": {"rc": 0},
+                                         "detail": "clean"})
     with open(os.path.join(tmp, "waves", "wave-%d.preaudit.json" % wk), "w", encoding="utf-8") as f:
         json.dump(doc, f)
     return doc
@@ -11313,6 +11331,419 @@ def _rw_dossiers():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return res
+
+
+# =====================================================================================================
+# 2026-09-04 - THE P5 PRECHECK
+#
+# wave-preaudit.ps1 runs the six gates wave-publish.ps1's P5 hard-refuses on, and writes their
+# verdicts into wave-<k>.preaudit.json BEFORE the auditor is dispatched. The daemon paid the auditor
+# anyway. Measured on hunt-2026-08-27-highprotein: audit-spec-contradictions was ALREADY red in the
+# report for waves 1, 2, 9, 10 and 11; each bought a full auditor session that returned NO-GO citing
+# that gate. 21.8M tokens, 38% of audit spend, ~14% of the run, spent reaching a verdict wave-publish
+# would have refused regardless.
+#
+# Every dispatch and every shell call below is injected: zero tokens.
+# =====================================================================================================
+
+P5_WAVE_SLUGS = ("a", "b", "c")
+
+
+def _p5_ps(tmp, clears_on_call=0, publish_ok=True, gate="audit-spec-contradictions"):
+    """A FakePS whose wave-preaudit handler REWRITES the report, so a fixture can make the repair
+    clear the gate (or not) exactly the way a real repair does - by changing what the battery says
+    the next time it runs.
+
+    `clears_on_call` is the 1-based preaudit invocation from which the report comes back clean; 0
+    means it never clears.
+    """
+    state = {"n": 0}
+
+    def preaudit(_args):
+        state["n"] += 1
+        clean = bool(clears_on_call) and state["n"] >= clears_on_call
+        _preaudited(tmp, slugs=list(P5_WAVE_SLUGS),
+                    shared=("audit-spec-contradictions", "audit-store-integrity",
+                            "audit-vocab-integrity"),
+                    shared_fail=() if clean else (gate,),
+                    failed=0 if clean else 1)
+        return 0, "wave-preaudit: wrote the report", ""
+
+    replies = {"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", ""),
+               "wave-preaudit.ps1": preaudit}
+    if publish_ok:
+        replies["wave-publish.ps1"] = lambda a: (0, "== DRY RUN - every gate above passed", "")
+    ps = FakePS(replies)
+    ps.preaudit_state = state
+    return ps
+
+
+def _p5_advances(ps):
+    """slug -> the list of states hunt-run -Advance was asked to move it to."""
+    out = {}
+    for c in ps.find("hunt-run.ps1", "-Advance"):
+        out.setdefault(FakePS.value_after(c["args"], "-Slug"), []).append(
+            FakePS.value_after(c["args"], "-To"))
+    return out
+
+
+def _p5_agents(fd):
+    """The dispatched agents in ORDER, with their labels - the order is the whole finding."""
+    return [(c["agent"], c["prompt"]) for c in fd.calls]
+
+
+def _p5_repair_clears_the_gate():
+    """MUST FIRE. The repair goes FIRST and the audit is bought ONCE, afterwards. On
+    hunt-2026-08-27-highprotein this order was reversed on five waves and cost 21.8M tokens."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        ps = _p5_ps(tmp, clears_on_call=2)
+        _preaudited(tmp, slugs=list(P5_WAVE_SLUGS), shared_fail=("audit-spec-contradictions",),
+                    failed=1)
+        d, fd = _wave_daemon([{"verdict": "GO"}], tmp, ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        agents = [a for a, _p in _p5_agents(fd)]
+        writer_at = agents.index("recipe-writer") if "recipe-writer" in agents else -1
+        auditor_at = (agents.index("recipe-batch-auditor")
+                      if "recipe-batch-auditor" in agents else -1)
+        res.append(("MUST FIRE  a red P5 gate buys the shared repair BEFORE the audit, not a 3.8M "
+                    "auditor session that returns NO-GO citing the gate the battery already flagged "
+                    "- waves 1, 2, 9, 10 and 11 of hunt-2026-08-27-highprotein, 21.8M tokens",
+                    writer_at >= 0 and auditor_at >= 0 and writer_at < auditor_at,
+                    "agents=%s" % json.dumps(agents)))
+        res.append(("MUST FIRE  exactly ONE repair dispatch and exactly ONE auditor dispatch - the "
+                    "precheck must not double either",
+                    agents.count("recipe-writer") == 1
+                    and agents.count("recipe-batch-auditor") == 1,
+                    "agents=%s" % json.dumps(agents)))
+        want_label = "wave-1" + ":p5-" + "repair"
+        res.append(("MUST FIRE  the repair is dispatched on the AUDIT lane under the label "
+                    "wave-<k>:p5-repair, so the lane log distinguishes it from a post-NO-GO repair "
+                    "and audit-lane-shape.ps1 can tell the two roads apart",
+                    [ln for ln in _lane_lines(ps) if ln[1] == want_label]
+                    == [("audit", want_label, "start"), ("audit", want_label, "end")],
+                    json.dumps([ln for ln in _lane_lines(ps) if "p5" in ln[1]])))
+        res.append(("MUST FIRE  the repair prompt names the red gate and carries the battery's own "
+                    "detail VERBATIM, so the agent does not re-run the gate to learn what it said",
+                    bool(fd.prompts("recipe-writer"))
+                    and ("audit-spec" + "-contradictions") in fd.prompts("recipe-writer")[0]
+                    and ("PHANTOM ingredient in " + "2 spec(s)") in fd.prompts("recipe-writer")[0]
+                    and ("P5 is a hard " + "refusal") in fd.prompts("recipe-writer")[0]
+                    and ("NOT YOURS TO " + "FIX") in fd.prompts("recipe-writer")[0],
+                    (fd.prompts("recipe-writer") or [""])[0][:400]))
+        res.append(("MUST FIRE  the cleared wave then publishes - the precheck is a reorder, not a "
+                    "new refusal",
+                    bool(ps.find("wave-publish.ps1"))
+                    and not os.path.exists(os.path.join(tmp, "waves", "wave-1.p5-held.json")),
+                    "publish_calls=%d" % len(ps.find("wave-publish.ps1"))))
+        res.append(("MUST FIRE  the battery was re-run after the repair, so the verdict that lets the "
+                    "audit proceed is a FRESH one and not the agent's word for it",
+                    ps.preaudit_state["n"] == 2, "preaudit_runs=%d" % ps.preaudit_state["n"]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _p5_hold_when_the_repair_does_not_clear():
+    """MUST FIRE. A repair that cannot clear a shared gate must cost NOTHING more. Not trim_wave: no
+    recipe in the wave is at fault for a shared gate, and trim rejects recipes once a repair is
+    spent."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        ps = _p5_ps(tmp, clears_on_call=0)
+        _preaudited(tmp, slugs=list(P5_WAVE_SLUGS), shared_fail=("audit-spec-contradictions",),
+                    failed=1)
+        d, fd = _wave_daemon([{"verdict": "GO"}], tmp, ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        agents = [a for a, _p in _p5_agents(fd)]
+        held_path = os.path.join(tmp, "waves", "wave-1.p5-held.json")
+        held = {}
+        if os.path.exists(held_path):
+            with io.open(held_path, encoding="utf-8-sig") as f:
+                held = json.load(f)
+        adv = _p5_advances(ps)
+        res.append(("MUST FIRE  a repair that does not clear the gate does NOT then buy the auditor - "
+                    "an audit on a wave wave-publish will refuse is the whole measured waste",
+                    "recipe-batch-auditor" not in agents, "agents=%s" % json.dumps(agents)))
+        res.append(("MUST FIRE  wave-publish.ps1 is never called for a wave held on a red P5 gate",
+                    not ps.find("wave-publish.ps1"),
+                    "publish_calls=%d" % len(ps.find("wave-publish.ps1"))))
+        res.append(("MUST FIRE  the hold is on DISK, naming the red gate and the owner that was "
+                    "tried, so --status on a finished run can still say why nothing published",
+                    held.get("gates") == ["audit-spec-contradictions"]
+                    and held.get("owner_tried") == "recipe-writer"
+                    and held.get("repair_spent") is True,
+                    json.dumps(held)[:300]))
+        res.append(("MUST FIRE  every recipe in a held wave goes back to the pool at qa-passed with "
+                    "the held detail - NOT rejected, because no recipe is at fault for a shared gate",
+                    all(adv.get(s) == ["qa-passed"] for s in P5_WAVE_SLUGS)
+                    and all(s in d.qa_passed for s in P5_WAVE_SLUGS)
+                    and not any("rejected" in (v or "")
+                                for vs in adv.values() for v in vs),
+                    json.dumps(adv)))
+        detail = ""
+        for c in ps.find("hunt-run.ps1", "-Advance"):
+            detail = FakePS.value_after(c["args"], "-Detail") or detail
+        res.append(("MUST FIRE  ...and the advance DETAIL says which wave and which gate held them, "
+                    "so the state file explains itself without the run log",
+                    ("held on P5 " + "gate(s)") in detail
+                    and "audit-spec-contradictions" in detail, detail))
+        res.append(("MUST FIRE  the wave manifest is reconciled on the hold road, or Get-ClaimedSlugs "
+                    "answers 'already claimed by an open wave' and the next close refuses outright",
+                    bool(ps.find("hunt-run.ps1", "-WaveSync")),
+                    "wavesync_calls=%d" % len(ps.find("hunt-run.ps1", "-WaveSync"))))
+        res.append(("MUST FIRE  a finding says the wave was HELD and that no auditor was paid",
+                    any(("HELD: P5 " + "gate(s)") in f and ("no auditor " + "paid") in f
+                        for f in d.findings),
+                    json.dumps(d.findings)[:400]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _p5_second_wave_spends_nothing():
+    """MUST FIRE. The loop the run actually had, minus the 3.8M audit per turn: battery (free) ->
+    precheck red -> no repair (already spent) -> hold."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        ps = _p5_ps(tmp, clears_on_call=0)
+        _preaudited(tmp, slugs=list(P5_WAVE_SLUGS), shared_fail=("audit-spec-contradictions",),
+                    failed=1)
+        d, fd = _wave_daemon([{"verdict": "GO"}, {"verdict": "GO"}], tmp, ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        first = [a for a, _p in _p5_agents(fd)]
+        arun(d.run_wave(1))
+        second = [a for a, _p in _p5_agents(fd)][len(first):]
+        res.append(("MUST FIRE  a SECOND wave close over the same red gate spends NO repair and NO "
+                    "auditor - the first repair either cleared it or could not, and re-buying the "
+                    "same agent to be told the same thing is the shape this precheck removes",
+                    second == [], "second_wave_agents=%s" % json.dumps(second)))
+        res.append(("CLEAN TWIN the first close DID spend exactly one repair, so the cap is a cap "
+                    "and not a switch that was never on",
+                    first.count("recipe-writer") == 1, "first=%s" % json.dumps(first)))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _p5_dryrun_alone_is_not_a_p5_gate():
+    """CLEAN TWIN. recipes-db-dryrun failed in TWELVE of fifteen preaudits and waves 3, 4 and 8
+    published anyway. "Any red in the battery" would have blocked three good publishes."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        ps = _p5_ps(tmp, clears_on_call=1)
+        _preaudited(tmp, slugs=list(P5_WAVE_SLUGS),
+                    shared=("audit-spec-contradictions", "audit-store-integrity",
+                            "audit-vocab-integrity", "audit-unbid-ingredients",
+                            "audit-cost-plausibility", "audit-cost-line-coverage",
+                            "recipes-db-dryrun", "p8-endpoint-provenance", "p8-feed-liveness"),
+                    shared_fail=("recipes-db-dryrun", "p8-endpoint-provenance", "p8-feed-liveness"),
+                    failed=3)
+        # the battery must NOT be re-run here, so the handler would overwrite this report; drop it
+        ps.replies.pop("wave-preaudit.ps1")
+        d, fd = _wave_daemon([{"verdict": "GO"}], tmp, ps)
+        arun(d.run_wave(1))
+        agents = [a for a, _p in _p5_agents(fd)]
+        res.append(("CLEAN TWIN recipes-db-dryrun and the p8-* checks failing ALONE are not P5 gates: "
+                    "the auditor is dispatched exactly as before, no repair and no hold - waves 3, 4 "
+                    "and 8 published with the dry run red",
+                    agents.count("recipe-batch-auditor") == 1
+                    and "recipe-writer" not in agents
+                    and not os.path.exists(os.path.join(tmp, "waves", "wave-1.p5-held.json")),
+                    "agents=%s" % json.dumps(agents)))
+        res.append(("CLEAN TWIN ...and the precheck stamps no lane pair when it does not refuse",
+                    not [ln for ln in _lane_lines(ps) if ln[1].startswith("p5-precheck")],
+                    json.dumps(_lane_lines(ps))))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _p5_all_clean_is_byte_for_byte_today():
+    """CLEAN TWIN. If a wave's P5 gates are clean, every byte of today's path runs unchanged."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        ps = _p5_ps(tmp, clears_on_call=1)
+        _preaudited(tmp, slugs=list(P5_WAVE_SLUGS), failed=0)
+        ps.replies.pop("wave-preaudit.ps1")
+        d, fd = _wave_daemon([{"verdict": "GO"}], tmp, ps)
+        arun(d.run_wave(1))
+        agents = [a for a, _p in _p5_agents(fd)]
+        res.append(("CLEAN TWIN a clean battery report takes the unchanged road: the auditor is the "
+                    "FIRST agent dispatched and wave-publish runs, with no repair spent and nothing "
+                    "the precheck added in between",
+                    agents[:1] == ["recipe-batch-auditor"]
+                    and agents.count("recipe-batch-auditor") == 1
+                    and "recipe-writer" not in agents
+                    and bool(ps.find("wave-publish.ps1"))
+                    and not d.p5_repairs_spent,
+                    "agents=%s spent=%s" % (json.dumps(agents), json.dumps(d.p5_repairs_spent))))
+        res.append(("CLEAN TWIN a clean precheck adds no lane line and no finding of its own",
+                    not [ln for ln in _lane_lines(ps) if ln[1].startswith("p5-precheck")]
+                    and not [f for f in d.findings if "P5 " in f],
+                    json.dumps(d.findings)[:300]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _p5_unreadable_report_is_announced():
+    """CLEAN TWIN. An unreadable report is ANNOUNCED, never treated as a red gate and never as a
+    clean one - the same rule render_audit_dossier already keeps."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        ps = _p5_ps(tmp, clears_on_call=1)
+        ps.replies.pop("wave-preaudit.ps1")     # nothing writes a report at all
+        d, fd = _wave_daemon([{"verdict": "GO"}], tmp, ps)
+        arun(d.run_wave(1))
+        agents = [a for a, _p in _p5_agents(fd)]
+        res.append(("CLEAN TWIN an unreadable battery report dispatches the auditor as before and "
+                    "holds nothing - could-not-look is not a refusal",
+                    "recipe-batch-auditor" in agents
+                    and not os.path.exists(os.path.join(tmp, "waves", "wave-1.p5-held.json")),
+                    "agents=%s" % json.dumps(agents)))
+        res.append(("CLEAN TWIN ...and it SAYS SO in a finding, because a check that could not run "
+                    "must never read the same as a check that passed",
+                    any(("pre-audit report could not be " + "read") in f for f in d.findings),
+                    json.dumps(d.findings)[:300]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _p5_gates_pinned_to_wave_publish():
+    """MUST FIRE. The cross-file pin: P5_GATES is a MIRROR of wave-publish.ps1's own array, read off
+    THAT file. Grepping the file under test would be the self-grep trap; this greps the authority."""
+    res = []
+    src = os.path.join(HERE, "wave-publish.ps1")
+    with io.open(src, encoding="utf-8-sig") as f:
+        body = f.read()
+    head = body[body.index("$gates = @("):]
+    labels = re.findall(r"label\s*=\s*'([^']+)'", head)
+    res.append(("MUST FIRE  hunt_lib.P5_GATES is EXACTLY the first six labels in wave-publish.ps1's "
+                "$gates array - a gate added, removed or reordered there turns this red rather than "
+                "letting the daemon's copy drift into blocking or waving through the wrong wave",
+                tuple(labels[:6]) == tuple(hunt_lib.P5_GATES),
+                "wave-publish=%s p5_gates=%s" % (json.dumps(labels[:6]),
+                                                 json.dumps(list(hunt_lib.P5_GATES)))))
+    res.append(("MUST FIRE  ...and the gates BELOW those six are still the three the BATTERY does not "
+                "run (so no report can carry a verdict for them). A new gate inserted into P5 turns "
+                "this red and forces the ruling to be made rather than inherited",
+                labels[6:] == ["audit-ghost-field-limits", "audit-wave-blocker-headings",
+                               "test-guards"],
+                json.dumps(labels[6:])))
+    res.append(("MUST FIRE  recipes-db-dryrun is NOT in P5_GATES, and neither is any p8 check - the "
+                "one discipline the measurement demanded",
+                "recipes-db-dryrun" not in hunt_lib.P5_GATES
+                and not [g for g in hunt_lib.P5_GATES if g.startswith("p8-")],
+                json.dumps(list(hunt_lib.P5_GATES))))
+    res.append(("MUST FIRE  every P5 gate has an owner in the daemon's P5_OWNERS map, so no red gate "
+                "can route to the default by accident",
+                all(g in HD.Daemon.P5_OWNERS for g in hunt_lib.P5_GATES),
+                json.dumps(sorted(HD.Daemon.P5_OWNERS))))
+    res.append(("MUST FIRE  p5_red_gates treats an ABSENT check as not-red and a non-dict as no "
+                "verdict at all - the battery not running a gate is announced elsewhere, never "
+                "refused here",
+                hunt_lib.p5_red_gates({"shared_checks": []}) == []
+                and hunt_lib.p5_red_gates(None) == []
+                and hunt_lib.p5_red_gates("nope") == []
+                and hunt_lib.p5_red_gates(
+                    {"shared_checks": [{"check": "audit-vocab-integrity", "verdict": "FAIL"}]})
+                == ["audit-vocab-integrity"],
+                "case-insensitive verdict + absent-is-clean"))
+    return res
+
+
+def _p5_lane_log_explains_the_missing_audit():
+    """MUST FIRE. Section 4.5's completeness rule: audit-lane-shape.ps1 reads this log, and a wave
+    whose auditor never ran must say so IN the lane log rather than leaving a silence."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        ps = _p5_ps(tmp, clears_on_call=0, gate="audit-store-integrity")
+        _preaudited(tmp, slugs=list(P5_WAVE_SLUGS), shared_fail=("audit-store-integrity",),
+                    failed=1)
+        d, fd = _wave_daemon([{"verdict": "GO"}], tmp, ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        lines = [ln for ln in _lane_lines(ps) if ln[1] == ("p5-precheck " + "w1")]
+        detail = ""
+        for c in ps.find("hunt-run.ps1", "-Lane"):
+            if FakePS.value_after(c["args"], "-Label") == "p5-precheck w1" \
+                    and FakePS.value_after(c["args"], "-Event") == "end":
+                detail = FakePS.value_after(c["args"], "-Detail") or ""
+        res.append(("MUST FIRE  the lane log carries a p5-precheck start/end PAIR on the audit lane "
+                    "when the precheck refuses, so the run's own instrument explains why no auditor "
+                    "session appears against this wave",
+                    [ln[2] for ln in lines] == ["start", "end"]
+                    and all(ln[0] == "audit" for ln in lines),
+                    json.dumps(lines)))
+        res.append(("MUST FIRE  ...and the end line names the red gates and says the auditor was not "
+                    "dispatched - a free pair with an empty detail would be a silence with a "
+                    "timestamp on it",
+                    "audit-store-integrity" in detail
+                    and ("auditor not " + "dispatched") in detail, detail))
+        res.append(("MUST FIRE  the end line goes through lane_free_end, so the stage is stamped 0 "
+                    "tokens rather than -1 'not reported' - a free stage is measured work",
+                    all(FakePS.value_after(c["args"], "-InputTokens") == 0
+                        and FakePS.value_after(c["args"], "-Calls") == 0
+                        for c in ps.find("hunt-run.ps1", "-Lane")
+                        if FakePS.value_after(c["args"], "-Label") == "p5-precheck w1"
+                        and FakePS.value_after(c["args"], "-Event") == "end"),
+                    "free-end stamp"))
+        res.append(("MUST FIRE  the P5 owner is read from the gate, not fixed: a store-integrity red "
+                    "goes to the PRICER, where a store question actually lives",
+                    [a for a, _p in _p5_agents(fd)][:1] == ["recipe-hunter-pricer"],
+                    json.dumps([a for a, _p in _p5_agents(fd)])))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _p5_status_report_names_held_waves():
+    """MUST FIRE. The run's final --status must never say "nothing published" without saying why."""
+    res = []
+    tmp = _wave_scratch()
+    try:
+        d = daemon(run_dir=tmp)
+        before = d.status_report()
+        res.append(("CLEAN TWIN no hold file, no HELD WAVES line - the section appears only when it "
+                    "has something to report",
+                    ("HELD " + "WAVES") not in before, before[-200:]))
+        with io.open(os.path.join(tmp, "waves", "wave-1.p5-held.json"), "w",
+                     encoding="utf-8") as f:
+            json.dump({"wave": 1, "run": "drill-run", "gates": ["audit-cost-plausibility"],
+                       "at": "2026-09-04T09:00:00", "slugs": ["a", "b", "c"],
+                       "repair_spent": True, "owner_tried": "recipe-hunter-pricer"}, f)
+        after = d.status_report()
+        res.append(("MUST FIRE  status_report grows a HELD WAVES line naming the wave, its recipe "
+                    "count and the gate that held it, read off the hold FILE so a --status on a "
+                    "finished run reports it too",
+                    ("HELD " + "WAVES") in after
+                    and "audit-cost-plausibility" in after
+                    and ("wave " + "1") in after
+                    and "3 recipe(s)" in after,
+                    after[after.find("HELD WAVES"):][:250] if "HELD WAVES" in after
+                    else after[-250:]))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+P5_SECTIONS = (_p5_repair_clears_the_gate, _p5_hold_when_the_repair_does_not_clear,
+               _p5_second_wave_spends_nothing, _p5_dryrun_alone_is_not_a_p5_gate,
+               _p5_all_clean_is_byte_for_byte_today, _p5_unreadable_report_is_announced,
+               _p5_gates_pinned_to_wave_publish, _p5_lane_log_explains_the_missing_audit,
+               _p5_status_report_names_held_waves)
 
 
 RW_SECTIONS = (_rw_write_lane, _rw_price_hold, _rw_remap_road, _rw_dossiers)
