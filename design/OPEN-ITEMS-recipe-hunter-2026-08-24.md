@@ -448,18 +448,31 @@ Corpus depth is not a side issue; it is the second of the three multiplicative t
 
 ## 4. OPEN QUESTIONS for Brad (nothing can be fixtured until these are answered)
 
+> **STALE HEADING, corrected 2026-09-04 (PLAN-after-dedup P6).** Four of the five questions below
+> were ANSWERED by Brad the same day they were written and the rulings are recorded in section 3A
+> ABOVE, which says BUILT with a commit while this section still said OPEN. A ledger whose two
+> halves disagree is worse than no ledger: a reader takes the pessimistic half and re-asks a
+> question that has a shipped answer. The question text is kept below because it is what the
+> rulings were made against; each now carries its ruling. **Only 4.4 is still open.**
+
 ### 4.1 What should the pipeline do with an ALTERNATIVES ingredient line?
+**ANSWERED - see 3A D5, BUILT 2c14b4f4.** Price them, take the cheapest, disclose it on the card,
+and only for alternatives that resolve through a board id or label.
 `"brown and wild rice blend, brown rice, quinoa, or cauliflower rice"`. Options: park the recipe (today's
 behaviour); pick the first alternative and say so on the card; reject the recipe at extraction before
 anything is paid for; or flag it at extraction so the mapper is never dispatched. The last is cheapest
 and needs no model - it is an `or`-list check on an ingredient line.
 
 ### 4.2 What should the pipeline do with a GARNISH line that states no quantity?
+**ANSWERED - see 3A D1, BUILT b4679175.** Treat it as optional: drop it from the cost and the
+macros, keep it named for the reader.
 `"Fresh parsley (to garnish)"`. Options: park (today); treat garnish lines as optional and drop them from
 the cost and the macros with a note; or assign a conventional garnish weight, which invents a number and
 would need its own justification.
 
 ### 4.3 Which cost items are ordered? (full detail in `WORKLIST-token-cost-2026-08-24.md`)
+**ANSWERED - see 3A D3.** All four ordered and all four BUILT: F 051fb9e7, B 19a63e9a, A cd1ddd92,
+plus the yield fixes. The ranking table below is kept as the evidence the ruling was made on.
 
 | id | item | measured evidence | risk | my ranking |
 |---|---|---|---|---|
@@ -494,6 +507,8 @@ And if so, under what verification conditions - specifically, is a COMPLETENESS 
 substring proof) acceptable as the gate, and what card-ownership window may it take?
 
 ### 4.5 Is the 6b target of 12 abandoned, or is a second run wanted?
+**ANSWERED - see 3A D8: a fresh full run YES, but BLOCKED on the exhausted pool (3.7).** Overtaken
+by events since: many runs have happened, most recently hunt-2026-09-04-five-b.
 The qualifying pool held 21 candidates and yielded 9 acceptances; the band is narrow against a pool
 harvested under a wider one. Item **5.1** below would widen what is reachable without touching the band.
 

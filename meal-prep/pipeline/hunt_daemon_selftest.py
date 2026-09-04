@@ -302,10 +302,55 @@ def arun(coro):
 
 
 # =====================================================================================================
-def run():
+def names_diff(seen, ref_path):
+    """Removed / added case NAMES against a pinned reference. Returns (removed, added, why_not).
+
+    WHY BY NAME AND NOT BY COUNT (PLAN-after-dedup P4, and the rule it comes from). A tally settles
+    nothing: deleting one case and adding one leaves the count identical, and deleting a case on its
+    own leaves the suite GREEN at exit 0 - measured. Only the names can see a case that vanished.
+    """
+    try:
+        with io.open(ref_path, encoding="utf-8-sig") as f:
+            ref = [ln.strip() for ln in f if ln.strip()]
+    except Exception as e:                                        # noqa: BLE001
+        return [], [], "no reference at %s (%s)" % (ref_path, e)
+    if not ref:
+        return [], [], ("the reference at %s names no cases, and an empty reference cannot see a "
+                        "removal - re-pin it from HEAD" % ref_path)
+    # STRIPPED ON BOTH SIDES. Some case names are indented to read as a continuation of the one
+    # above; that indentation is layout, not identity, and comparing it made 31 unchanged cases
+    # read as 31 removals and 31 additions at once - a diff that cries wolf is a diff nobody reads.
+    rs, ss = set(x.strip() for x in ref), set(x.strip() for x in seen)
+    return sorted(rs - ss), sorted(ss - rs), ""
+
+
+def names_report(seen, ref_path):
+    """The VERDICT, so the exit code and the fixture read the same function. Returns (rc, lines).
+
+    rc is EXIT_CLEAN when nothing was removed - an ADDED case is a new fixture and is fine - and
+    EXIT_CANNOT_RUN when any reference case did not run, whatever the cases that did run said.
+    """
+    removed, added, why = names_diff(seen, ref_path)
+    if why:
+        return hunt_lib.EXIT_CANNOT_RUN, ["  CANNOT DIFF - %s" % why]
+    lines = ["  vs %s: %d removed, %d added" % (ref_path, len(removed), len(added))]
+    lines += ["    +  %s" % n for n in added]
+    lines += ["    -  %s" % n for n in removed]
+    if removed:
+        lines.append("")
+        lines.append("  A CASE THAT VANISHED IS NOT A PASS. %d case name(s) in the reference did "
+                     "not run. Either the commit says which and why, or this is coverage lost "
+                     "silently." % len(removed))
+        return hunt_lib.EXIT_CANNOT_RUN, lines
+    return hunt_lib.EXIT_CLEAN, lines
+
+
+def run(names_out=None, names_ref=None):
     bad = []
+    seen = []
 
     def T(name, ok, got=""):
+        seen.append(name)
         if ok:
             print("  ok    " + name)
         else:
@@ -1538,6 +1583,96 @@ def run():
         for name, ok, got in fn():
             T(name, ok, got)
 
+    # =================================================================================================
+    H("2026-09-04 - the ingest dedup pass is OFF, and the run SAYS so (PLAN-after-dedup P2)")
+    # =================================================================================================
+    # NOTHING COVERED THIS BLOCK BEFORE TODAY. It was inline in main()'s go() closure, so neither the
+    # bounded call nor the model-down message had a fixture - the plan that asked for these twins
+    # said the bounded call was already pinned, and it was not. It is now, on both sides of the flag.
+    for _case in (0,):
+        _idtmp = scratch_dir(prefix="daemon-ingest-dedup-")
+        _pool = os.path.join(_idtmp, "pool.json")
+        with open(_pool, "w", encoding="utf-8") as _f:
+            json.dump({"candidates": [{"slug": "c%d" % i, "name": "C%d" % i, "status": "available"}
+                                      for i in range(120)]}, _f)
+
+        class _FakeD(object):
+            pool_path = _pool
+
+            def candidate_in_band(self, _c):
+                return True
+
+        _calls, _lines = [], []
+        _saved = (HD.harvest.dedup_ingest_pool, HD.ensure_local_model)
+        HD.harvest.dedup_ingest_pool = lambda *a, **k: (_calls.append((a, k)), (0, {}, {}))[1]
+        HD.ensure_local_model = lambda *a, **k: (True, "")
+        try:
+            tag = HD.ingest_dedup_preflight(_FakeD(), "decide,extract", target=10, enabled=False,
+                                            log=_lines.append)
+            T("MUST FIRE  with the pass off (the default) NO local-model call is made - the gate has "
+              "refused 0 candidates ever and its refusal path is now retired, and 106 s of card "
+              "time bought that",
+              tag == "off-by-default" and not _calls,
+              "tag=%s calls=%d" % (tag, len(_calls)))
+            T("MUST FIRE  ...and the run SAYS it is off and why - a silent skip is the failure class "
+              "this whole week was about",
+              any("ingest dedup pass is OFF" in x for x in _lines)
+              and any("cannot" in x and "both polarities" in x for x in _lines)
+              and any("--ingest-dedup" in x for x in _lines),
+              " | ".join(_lines))
+            _lines[:] = []
+            tag = HD.ingest_dedup_preflight(_FakeD(), "decide,extract", target=10, enabled=True,
+                                            log=_lines.append)
+            _kw = _calls[0][1] if _calls else {}
+            T("CLEAN TWIN with --ingest-dedup the pass runs, and it is BOUNDED - capped at "
+              "max(40, target*4) slugs and walled at 180 s",
+              tag == "ran" and len(_calls) == 1 and _kw.get("budget_sec") == 180
+              and len(_kw.get("only") or []) == 40,
+              "tag=%s only=%d budget=%s" % (tag, len(_kw.get("only") or []), _kw.get("budget_sec")))
+            _calls[:] = []
+            HD.ensure_local_model = lambda *a, **k: (False, "llama-server is down")
+            tag = HD.ingest_dedup_preflight(_FakeD(), "decide", target=10, enabled=True,
+                                            log=_lines.append)
+            T("CLEAN TWIN a model that is down refuses NOBODY and says the candidates reach the "
+              "decider undeduped - honest, not clean",
+              tag == "model-down" and not _calls
+              and any("This is honest, not clean." in x for x in _lines),
+              "tag=%s | %s" % (tag, " | ".join(_lines)))
+        finally:
+            HD.harvest.dedup_ingest_pool, HD.ensure_local_model = _saved
+
+    # =================================================================================================
+    H("2026-09-04 - the pinned-reference gate is a tool, not a scratch script (PLAN-after-dedup P4)")
+    # =================================================================================================
+    _p4tmp = scratch_dir(prefix="daemon-names-")
+    _ref = os.path.join(_p4tmp, "ref.txt")
+    with io.open(_ref, "w", encoding="utf-8") as _f:
+        _f.write("case one" + chr(10) + "case two" + chr(10) + "case three" + chr(10))
+    _rc, _ln = names_report(["case one", "case two"], _ref)
+    T("MUST FIRE  a case name that VANISHED exits 2 even though every case that ran passed - a "
+      "deleted case leaves the suite green at exit 0, measured",
+      _rc == hunt_lib.EXIT_CANNOT_RUN and any("-  case three" in x for x in _ln),
+      "rc=%s | %s" % (_rc, " | ".join(_ln)))
+    _rc, _ln = names_report(["case one", "case two", "case three", "case four"], _ref)
+    T("CLEAN TWIN an ADDED case is a new fixture, not a regression - exit 0, and it is named",
+      _rc == hunt_lib.EXIT_CLEAN and any("+  case four" in x for x in _ln),
+      "rc=%s | %s" % (_rc, " | ".join(_ln)))
+    _rc, _ln = names_report(["  case one", "case two", "   case three"], _ref)
+    T("CLEAN TWIN a case name INDENTED to read as a continuation is the same case - indentation is "
+      "layout, not identity, and comparing it made 31 unchanged cases read as 31 removals",
+      _rc == hunt_lib.EXIT_CLEAN and "0 removed, 0 added" in _ln[0], "rc=%s | %s" % (_rc, _ln[0]))
+    _rc, _ln = names_report(["case one", "case two"], os.path.join(_p4tmp, "nope.txt"))
+    T("MUST FIRE  a MISSING reference is a could-not-look, never a clean diff",
+      _rc == hunt_lib.EXIT_CANNOT_RUN and any("CANNOT DIFF" in x for x in _ln),
+      "rc=%s | %s" % (_rc, " | ".join(_ln)))
+    _empty = os.path.join(_p4tmp, "empty.txt")
+    with io.open(_empty, "w", encoding="utf-8") as _f:
+        _f.write("")
+    _rc, _ln = names_report(["case one"], _empty)
+    T("MUST FIRE  ...and so is an EMPTY reference - it can never see a removal, so it may not "
+      "report one",
+      _rc == hunt_lib.EXIT_CANNOT_RUN, "rc=%s | %s" % (_rc, " | ".join(_ln)))
+
     if _now[1] is not None:
         _cost.append((time.time() - _now[0], _now[1]))
     _cost.sort(reverse=True)
@@ -1548,10 +1683,29 @@ def run():
         print("    %6.1fs  %3.0f%%  %s" % (secs, 100.0 * secs / max(_total, 0.001), title[:96]))
 
     print("")
+    print("  %d case(s) ran" % len(seen))
+    if names_out:
+        # newline="" ON PURPOSE: a pinned reference is compared by other tools and by hand, and a
+        # file whose line endings depend on which OS emitted it is a diff that lies.
+        with io.open(names_out, "w", encoding="utf-8", newline="") as f:
+            f.write(chr(10).join(seen) + chr(10))
+        print("  case NAMES pinned to %s - diff a later run against it with --names-diff" % names_out)
+    names_rc = hunt_lib.EXIT_CLEAN
+    if names_ref:
+        names_rc, _lines = names_report(seen, names_ref)
+        for ln in _lines:
+            print(ln)
+
+    print("")
     if bad:
         print("hunt-daemon SELF-TEST FAIL (%d)" % len(bad))
         print("HUNT-DAEMON-COMPLETE")
         return hunt_lib.EXIT_CANNOT_RUN
+    if names_rc != hunt_lib.EXIT_CLEAN:
+        print("hunt-daemon SELF-TEST: every case that RAN passed, and the pinned reference names "
+              "cases that did not run")
+        print("HUNT-DAEMON-COMPLETE")
+        return names_rc
     print("hunt-daemon SELF-TEST PASS")
     print("HUNT-DAEMON-COMPLETE")
     return hunt_lib.EXIT_CLEAN
@@ -7026,10 +7180,10 @@ def _dedup_is_bounded():
     harvest.llm_different_dinner = lambda *a, **k: "yes"
     try:
         p = pool_of(5)
-        harvest.refuse_near_dupes(p, quiet=True, only=["c1", "c3"])
+        harvest.judge_near_dupes(p, quiet=True, only=["c1", "c3"])
         asked = sorted(c["slug"] for c in p["candidates"] if c.get("dedup_at_ingest"))
         p2 = pool_of(5)
-        harvest.refuse_near_dupes(p2, quiet=True, budget_sec=-1)
+        harvest.judge_near_dupes(p2, quiet=True, budget_sec=-1)
         timed = [c["slug"] for c in p2["candidates"] if c.get("dedup_at_ingest")]
         return (asked == ["c1", "c3"] and timed == []), "only=%s past-deadline-tagged=%s" % (asked, timed)
     finally:

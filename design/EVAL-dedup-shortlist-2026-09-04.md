@@ -212,3 +212,81 @@ already had it.
 FIXED: `--mark-ruled --dupe-of` carries the twin onto the candidate, `RULED_KEEP` preserves it
 through `slim_ruled`, and the drill now asserts it on the POOL. Existing rows are not backfilled;
 the 155 ledger pairs remain joinable by slug for anyone who wants them.
+
+## 8. The richer prompt WAS run, and it made the gate worse. The refusal path is retired.
+
+author: Opus 5, 2026-09-04, later the same day, under PLAN-after-dedup-2026-09-04 P1. Ruled by
+Brad on the numbers below: retire the refusal path (P1c).
+
+Section 7 said the ingredient-carrying prompt "cannot be run today" because `slim_ruled` had
+stripped the labelled positives. The plan corrected that - every one of the 152 pooled
+`ruled:rejected-dupe` rows still had a cached page - and `harvest.py --reingredients-ruled` restored
+all 152 from the page cache with no network and no model (152 restored, 0 uncached, 0 without
+JSON-LD ingredients). So the test that was supposed to be the road to a working gate was run.
+
+**It refutes its own hypothesis.** Adding the ingredient lines did not make the local model
+reproduce the decider's judgement. It made it more conservative in BOTH directions.
+
+    pairs: 134 labelled duplicates (the 152 pooled rows joined to a LIVE twin by the ledger's
+    `dupe_of`; 18 twins are no longer live), and the 300 hardest published pairs, cosine
+    0.8775-0.9624, every one a non-duplicate a decider ruled distinct.
+    local model, temperature 0, grammar root ::= ("same" | "different"), 434 pairs x 2 orders x 2
+    prompts = 1,736 calls, 608 s, zero Claude tokens.
+
+| design | recall on 134 real dupes | wrong refusals on 300 published |
+|---|---|---|
+| B  forced choice, names only, ONE order | 60.4% (81) | 6.00% (18) |
+| C  forced choice, names only, BOTH orders | 43.3% (58) | 4.67% (14) |
+| D1 forced choice, WITH ingredients, ONE order | 29.9% (40) | 4.67% (14) |
+| **D  forced choice, WITH ingredients, BOTH orders** | **23.9% (32)** | **2.00% (6)** |
+
+The bars the plan set were ~50% recall at **0** wrong refusals. Nothing came close, and the richer
+prompt moved recall the wrong way by 19 points.
+
+**These numbers are NOT comparable to section 7's 8.4% / 0-of-300, and that is itself a finding.**
+Section 7's forced-choice prompt was never implemented and its text is recorded nowhere, so it
+cannot be reproduced. The prompt used here carries the same rubric as `llm_same_dinner`. Same model,
+same grammar, same temperature, same 300 negatives, a 134-of-155 subset of the positives - and the
+"safe" design scores 14 wrong refusals rather than 0. A contract whose safety swings from 0% to
+4.67% on prompt wording alone is not a contract, and that is the strongest argument in this
+document against shipping any of these as a gate.
+
+**C and D are not nested.** C fires on 33 pairs D misses; D fires on 7 C misses; 25 in common. The
+ingredients do not refine the name judgement, they replace it with a different one. Their union
+would be 48.5% recall at 14+ wrong refusals - still under one bar and far over the other.
+
+**What both miss, and why no prompt fixes it.** The systematic misses are the estate's own
+definition of a duplicate:
+
+    Chicken Cordon Bleu              vs  Chicken Cordon Bleu Casserole
+    Chicken and Stuffing Casserole   vs  Turkey and Stuffing Casserole
+    Chicken Enchilada Skillet        vs  Chicken Enchilada Rice Bowls
+    Taco Stack                       vs  Turkey Taco Casserole
+
+The decider rules these duplicates because they are the same DINNER IDENTITY in a catalog it can
+see the shape of. The local model, given names or given ingredients, is answering "are these the
+same recipe" - a different question that no wording turns into the first one.
+
+### What shipped
+
+`refuse_near_dupes` is now `judge_near_dupes` and **writes no `status`**. It still asks, still
+records `dedup_at_ingest`, and still reports how many the retired gate WOULD have refused - a number
+to watch, never a number to act on. The name changed because a function called `refuse_near_dupes`
+that refuses nothing is the exact "reads as a working safeguard, behaves as an off switch" failure
+section 6 named. Three fixtures changed name with it, and the daemon's pass is off by default.
+
+### And the negatives are not all clean negatives
+
+Six published pairs D would have refused, and fourteen C would have. Several read as genuine
+duplicates a decider let through - `Chicken Tetrazzini` vs `Turkey Tetrazzini` (0.9080),
+`Salsa Verde Chicken Burrito` vs `...Burrito Bowl` (0.9624). Ruled by Brad 2026-09-04 to be opened
+as its own item rather than folded in here: `OPEN-ITEM-published-near-duplicates-2026-09-04.md`.
+Every recall figure above is therefore a LOWER bound by an unknown amount: some "wrong" refusals
+were right, and the labelled negatives inherit whatever the catalog's own duplicate rate is.
+
+### The measurement itself
+
+Two scratch scripts, deliberately not shipped: one builds the pair sets (the sidecar venv, for the
+catalog-vs-catalog cosines that pick the 300 hardest), one asks the local model. What IS shipped is
+`--reingredients-ruled`, because without it the pairs cannot be rebuilt, and a measurement whose
+inputs cannot be reconstructed is an anecdote.

@@ -64,6 +64,7 @@ import json
 import os
 import random
 import re
+import shutil
 import subprocess
 import sys
 import threading
@@ -1574,7 +1575,7 @@ def dedup_ingest_pool(path=POOL, log=say, only=None, budget_sec=None):
     """
     pool = read_pool(path)
     before = pool_health(pool)
-    refused = refuse_near_dupes(pool, quiet=True, only=only, budget_sec=budget_sec)
+    refused = judge_near_dupes(pool, quiet=True, only=only, budget_sec=budget_sec)
     write_pool(pool, path)
     after = pool_health(pool)
     log("dedup at ingest: %d refused as near-duplicates before the decider ever saw them; "
@@ -2135,25 +2136,44 @@ def dedup_pending(c):
     return (c.get("dedup_at_ingest") or "") != "llm"
 
 
-def refuse_near_dupes(pool, quiet=False, only=None, budget_sec=None):
-    """Rule an obvious near-duplicate OUT before it sits in the pool as a candidate (Brad 2026-08-27:
-    "We need to send them through dedup FIRST before storing in the DB").
+def judge_near_dupes(pool, quiet=False, only=None, budget_sec=None):
+    """Ask the local model about a candidate's nearest live recipes and RECORD that it was asked.
+    It no longer rules anything out. Returns 0 always; the return is kept so callers still read a
+    refusal count, and that count is now permanently zero by design.
 
-    WHY A THRESHOLD CANNOT DO THIS, MEASURED. Scored against the live catalog, the estate's 68 known
-    rejected-dupes and its 51 known accepted candidates have the SAME word-overlap distribution -
-    both median 20, both max 40. At >= 20 a threshold catches 85% of the dupes and wrongly refuses
-    71% of the ACCEPTED ones; at >= 25 it catches 21% and still wrongly refuses 8%. There is no cut
-    point, because the signal genuinely does not separate "chicken cordon bleu pasta vs chicken
-    cordon bleu casserole" (a dupe) from "beef chili vs beef chili mac" (not one). So word overlap
-    picks WHO TO ASK ABOUT and the local model makes the call.
+    THE REFUSAL PATH IS RETIRED (2026-09-04, PLAN-after-dedup P1c, ruled by Brad). This function was
+    `refuse_near_dupes` and its job was to rule an obvious near-duplicate OUT before it was stored
+    (Brad 2026-08-27: "We need to send them through dedup FIRST before storing in the DB"). It never
+    refused a single candidate in its life, and three separate measurements say no question design
+    can make it safe to:
 
-    BEST EFFORT, NEVER BLOCKING, AND IT SAYS WHICH. The 18:00 crawl calls this and nothing starts
-    llama-server for it. A dedup pass that could not reach the model has not deduplicated anything,
-    and recording that as clean is the could-not-look-is-not-a-clean-bill failure this estate has
-    mechanised against repeatedly - so every candidate carries `dedup_at_ingest`: "llm" when it was
-    judged, "unavailable" when the model was down, "no-neighbour" when there was nothing to ask
-    about. The decide lane still rules on everything either way; this only stops the obvious ones
-    from ever being stored.
+      - the SHIPPED two-polarity contract required the model to contradict itself, and asked over
+        controls it answers yes to BOTH framings on every pair, a name against itself included:
+        0 refusals possible, ever.
+      - a forced choice agreed across both ORDERS, names only, measured 2026-09-04 on 134 labelled
+        duplicate pairs and the 300 hardest published pairs: 43.3% recall, 4.67% WRONG refusals -
+        fourteen live recipes the estate would have thrown away.
+      - the same forced choice WITH THE INGREDIENT LINES IN THE PROMPT - the richer prompt the whole
+        `--reingredients-ruled` road was built to test - was WORSE, not better: 23.9% recall at
+        2.00% wrong refusals. Adding the evidence made the model more conservative, not more
+        accurate. The bars were ~50% recall at 0 wrong refusals. Nothing came close.
+
+    So no gate ships, and no code is left here that READS as a safeguard while being an off switch -
+    which is what the shipped contract had become. What is KEPT is the evidence: the shortlist, the
+    embedding neighbours and the `dedup_at_ingest` tag, all of which reach the decider's dossier,
+    where the judgement is actually made and is actually good.
+
+    WHY A THRESHOLD COULD NEVER HAVE DONE IT EITHER, kept because it is the same lesson twice.
+    Scored against the live catalog, the estate's 68 known rejected-dupes and its 51 known accepted
+    candidates have the SAME word-overlap distribution - both median 20, both max 40. There is no
+    cut point, because the signal genuinely does not separate "chicken cordon bleu pasta vs chicken
+    cordon bleu casserole" (a dupe) from "beef chili vs beef chili mac" (not one). Word overlap
+    picked who to ASK about; the ask is what has now been measured and found wanting too.
+
+    BEST EFFORT, NEVER BLOCKING, AND IT SAYS WHICH. Every candidate still carries `dedup_at_ingest`:
+    "llm" when a model was asked, "unavailable" when it was down, "no-neighbour" when there was
+    nothing to ask about. A could-not-look is never recorded as a clean bill. What changed is only
+    that a verdict of `same` no longer buries the candidate - the decide lane rules on everything.
     """
     avail = [c for c in pool["candidates"] if c.get("status") == "available"
              and dedup_pending(c)]
@@ -2168,7 +2188,8 @@ def refuse_near_dupes(pool, quiet=False, only=None, budget_sec=None):
         return 0
     up = llama_up()
     floor, floor_why = dedup_ask_floor()
-    refused = 0
+    refused = 0       # permanently 0 - kept so the caller's contract does not change. See header.
+    looked = 0        # how many the retired gate WOULD have refused. Reported, never acted on.
     skipped = 0
     deadline = (time.time() + budget_sec) if budget_sec else None
     for c in avail:
@@ -2185,30 +2206,23 @@ def refuse_near_dupes(pool, quiet=False, only=None, budget_sec=None):
         if not up:
             c["dedup_at_ingest"] = "unavailable"
             continue
-        verdict = ""
+        # ASKED, AND THE ANSWER NO LONGER RULES. The two-polarity contract is kept as the ASK
+        # because it is the cheapest one (a `no` on the first question short-circuits), and its
+        # answer is recorded in the tag and nowhere else. NOTHING HERE MAY WRITE `status`. A gate
+        # that refuses on this model's judgement was measured three times and was wrong 4.67% of
+        # the time on the estate's own published pairs - fourteen live recipes - at 43.3% recall,
+        # and worse with more evidence in the prompt. See the header.
         for n in near:
-            # TWO POLARITIES, AND THE MODEL MUST DISAGREE WITH ITSELF TO BE BELIEVED.
-            # Measured 2026-08-27 on seven labelled pairs: asked "are these the same dinner?"
-            # AND "are these different dinners?", the local model answered YES to BOTH on every
-            # single pair - including stroganoff vs burrito. A grammar-forced binary makes it
-            # answer, it does not make it discriminate, and a one-sided ask read that bias as 14
-            # near-duplicate refusals out of 15 candidates, ten of them plainly wrong. So a
-            # verdict counts ONLY when the mirrored question contradicts it. A model that agrees
-            # with both framings has told us nothing, and nothing is what we act on.
             if llm_same_dinner(c, n) == "yes" and llm_different_dinner(c, n) == "no":
-                verdict = n.get("slug") or n.get("name")
+                looked += 1
                 break
-        if verdict:
-            c["status"] = "ruled:rejected-dupe"
-            c["exclusion"] = ("near-duplicate of live recipe '%s', ruled at ingest by the local model "
-                              "before storing" % verdict)
-            c["dedup_at_ingest"] = "llm"
-            refused += 1
-        else:
-            c["dedup_at_ingest"] = "llm"
+        c["dedup_at_ingest"] = "llm"
     if not quiet:
         state = "local model" if up else "MODEL DOWN - candidates stored UNDEDUPED and tagged"
-        say("  dedup at ingest (%s): %d refused as near-duplicates of live recipes" % (state, refused))
+        say("  dedup at ingest (%s): %d refused as near-duplicates of live recipes (the refusal "
+            "path is RETIRED - measured 2026-09-04, this is permanently 0; %d candidate(s) the "
+            "model would have refused are reaching the decider, which is where they are ruled)"
+            % (state, refused, looked))
         if floor is None:
             say("  the EMBEDDING half of the shortlist is unavailable - %s" % floor_why)
             say("  ...so only word-overlap picked who to ask about, and a duplicate under a "
@@ -2282,7 +2296,7 @@ def cmd_ingest(a):
     # DEDUP BEFORE STORING (Brad 2026-08-27). score_pool has just attached the neighbours this
     # needs and write_pool is the next line, so this is the last moment a near-duplicate can be
     # stopped from entering the pool as a candidate rather than being ruled out of it later.
-    refuse_near_dupes(pool)
+    judge_near_dupes(pool)
     write_pool(pool)
     say("harvest --ingest: %d added, %d already known or published, %d refused"
         % (added, skipped, len(failed)))
@@ -2581,26 +2595,28 @@ def cmd_classify_nutrition(a):
     return 0
 
 
-def cmd_reingredients(a):
-    """Restore ingredient lines to pooled candidates from the PAGE CACHE. No network, no model.
+def reingredient_targets(pool, ruled=False, limit=0):
+    """Who a re-parse is for. ONE definition, so the status filter is a thing a fixture can hold.
 
-    WHY THIS EXISTS (2026-08-24). `slim_ruled` strips `ingredients_verbatim` from a ruled entry to keep
-    the pool small - correct while the entry is buried. When the ingest band was dropped and 1,555
-    band-ruled candidates came back to `available`, they came back WITHOUT their lines, and lines are
-    load-bearing: the exclusions filter reads them (a rib recipe whose title hides the cut is caught
-    only there), the decider's dossier is built from them, and the mapper's table starts from them.
-    Their pages are already in the content-addressed cache, so this is a re-parse, not a re-fetch:
-    measured 95% of a 250-candidate sample recoverable.
+    Default: `available` candidates with no lines - the road built 2026-08-24. With `ruled`, the
+    `ruled:rejected-dupe` rows instead, and ONLY those: an available candidate's lines are not
+    touched unless asked for, because the two roads answer different questions and a pass that
+    quietly did both would make "how many did the ruled road restore" unanswerable.
     """
-    pool = read_pool(a.pool or POOL)
+    want = "ruled:rejected-dupe" if ruled else "available"
     targets = [c for c in pool["candidates"]
-               if c.get("status") == "available" and not c.get("ingredients_verbatim")]
-    if a.limit:
-        targets = targets[:a.limit]
-    say("harvest --reingredients: %d available candidate(s) carry no ingredient lines" % len(targets))
+               if c.get("status") == want and not c.get("ingredients_verbatim")]
+    return targets[:limit] if limit else targets
+
+
+def restore_ingredients(pool, ruled=False, limit=0, cache_dir=PAGE_CACHE):
+    """Re-parse ingredient lines from the page cache into the pool. Returns (targets, fixed,
+    uncached, nojson). Takes the cache dir so a fixture can prove the restore against a scratch
+    cache instead of asserting on the live one."""
+    targets = reingredient_targets(pool, ruled=ruled, limit=limit)
     fixed = uncached = nojson = 0
     for c in targets:
-        body = cached_body(c.get("url") or "")
+        body = cached_body(c.get("url") or "", cache_dir=cache_dir)
         if body is None:
             uncached += 1
             continue
@@ -2611,6 +2627,32 @@ def cmd_reingredients(a):
             continue
         c["ingredients_verbatim"] = lines
         fixed += 1
+    return targets, fixed, uncached, nojson
+
+
+def cmd_reingredients(a):
+    """Restore ingredient lines to pooled candidates from the PAGE CACHE. No network, no model.
+
+    WHY THIS EXISTS (2026-08-24). `slim_ruled` strips `ingredients_verbatim` from a ruled entry to keep
+    the pool small - correct while the entry is buried. When the ingest band was dropped and 1,555
+    band-ruled candidates came back to `available`, they came back WITHOUT their lines, and lines are
+    load-bearing: the exclusions filter reads them (a rib recipe whose title hides the cut is caught
+    only there), the decider's dossier is built from them, and the mapper's table starts from them.
+    Their pages are already in the content-addressed cache, so this is a re-parse, not a re-fetch:
+    measured 95% of a 250-candidate sample recoverable.
+
+    AND THE RULED ROAD (2026-09-04, `--reingredients-ruled`). The estate's 152 `ruled:rejected-dupe`
+    rows are its ONLY labelled duplicate positives, and until 2026-09-04 `slim_ruled` stripped their
+    lines - so the one prompt worth testing (ingredients, not names) could not be tested against the
+    estate's own labels. `DUPE_KEEP` now preserves lines on new rulings; the 152 already ruled get
+    theirs back from the cache. Same re-parse, same verb, same writer - only the status filter moves.
+    """
+    pool = read_pool(a.pool or POOL)
+    ruled = bool(getattr(a, "reingredients_ruled", False))
+    targets, fixed, uncached, nojson = restore_ingredients(pool, ruled=ruled, limit=a.limit)
+    say("harvest --reingredients%s: %d %s candidate(s) carry no ingredient lines"
+        % ("-ruled" if ruled else "", len(targets),
+           "rejected-dupe" if ruled else "available"))
     if a.dry_run:
         say("  DRY RUN - nothing written")
     else:
@@ -3534,12 +3576,18 @@ def cmd_selftest(_a):
                "score": near_score}] if near_score is not None else [])
         return {"slug": slug, "name": slug, "status": status, "neighbours": n}
 
+    def _judge_src():
+        """The pass's OWN source, not this file's. Reading the file would match this assertion's
+        own text - the trap that let three greps pass by matching themselves on 2026-08-31."""
+        import inspect                                            # noqa: PLC0415
+        return inspect.getsource(judge_near_dupes)
+
     saved = (llama_up, llm_same_dinner, llm_different_dinner)
     try:
         # 1. nothing to ask about is SAID, not silently passed
         globals()["llama_up"] = lambda *a, **k: True
         p = {"candidates": [_cand("a"), _cand("b", DEDUP_SHORTLIST_MIN - 1)]}
-        n = refuse_near_dupes(p, quiet=True)
+        n = judge_near_dupes(p, quiet=True)
         T("MUST FIRE  a candidate with no usable neighbour is TAGGED no-neighbour, never passed silently",
           n == 0 and [c["dedup_at_ingest"] for c in p["candidates"]] == ["no-neighbour", "no-neighbour"],
           str([c.get("dedup_at_ingest") for c in p["candidates"]]))
@@ -3549,29 +3597,39 @@ def cmd_selftest(_a):
         globals()["llm_same_dinner"] = lambda *a, **k: "yes"
         globals()["llm_different_dinner"] = lambda *a, **k: "no"
         p = {"candidates": [_cand("c", 40), _cand("d", 40)]}
-        n = refuse_near_dupes(p, quiet=True)
+        n = judge_near_dupes(p, quiet=True)
         T("MUST FIRE  with the model down every candidate is tagged `unavailable` and NONE is refused",
           n == 0 and all(c["dedup_at_ingest"] == "unavailable" for c in p["candidates"])
           and all(c["status"] == "available" for c in p["candidates"]),
           str([(c.get("dedup_at_ingest"), c.get("status")) for c in p["candidates"]]))
 
-        # 3. CLEAN TWIN - the model up, and the mirrored question CONTRADICTING, refuses at ingest
+        # 3. THE REFUSAL PATH IS RETIRED (2026-09-04, P1c). This case USED to be the clean twin
+        # proving that a mirrored contradiction refuses at ingest. It now proves the opposite, and
+        # that is the change: even when the model gives the strongest verdict this contract can
+        # produce, NOTHING is ruled out. Measured, that verdict is wrong 4.67% of the time on the
+        # estate's own published pairs at 43.3% recall - fourteen live recipes thrown away.
         globals()["llama_up"] = lambda *a, **k: True
         p = {"candidates": [_cand("e", 40)]}
-        n = refuse_near_dupes(p, quiet=True)
+        n = judge_near_dupes(p, quiet=True)
         c = p["candidates"][0]
-        T("CLEAN TWIN a mirrored-contradiction verdict refuses the candidate BEFORE it is stored",
-          n == 1 and c["status"] == "ruled:rejected-dupe" and c["dedup_at_ingest"] == "llm"
-          and "live-e" in (c.get("exclusion") or ""),
-          "%s / %s" % (c.get("status"), c.get("exclusion")))
+        T("MUST FIRE  even the STRONGEST verdict this contract can produce refuses nobody - the "
+          "ingest refusal path is retired and the decide lane rules on everything",
+          n == 0 and c["status"] == "available" and c["dedup_at_ingest"] == "llm"
+          and not c.get("exclusion"),
+          "%s / %s / %s" % (n, c.get("status"), c.get("exclusion")))
+        T("MUST FIRE  ...and no code path in the pass writes `status` at all - a gate cannot be "
+          "half-retired",
+          ("ruled:" + "rejected-dupe") not in _judge_src(),
+          "the pass still contains a ruled:rejected-dupe write")
 
-        # 4. MUST FIRE - the two-polarity contract. Measured 2026-08-27: the local model answered YES
-        # to BOTH framings on all seven labelled pairs, stroganoff vs burrito included. A model that
-        # agrees with itself has told us nothing, and nothing is what we act on.
+        # 4. THE ASK IS STILL RECORDED, so `dedup_at_ingest` still separates judged from
+        # could-not-look. Measured 2026-08-27: asked both framings the local model answered YES to
+        # both on all seven labelled pairs, stroganoff vs burrito included.
         globals()["llm_different_dinner"] = lambda *a, **k: "yes"
         p = {"candidates": [_cand("f", 40)]}
-        n = refuse_near_dupes(p, quiet=True)
-        T("MUST FIRE  a model that answers YES to both framings refuses NOBODY - one ask is not a verdict",
+        n = judge_near_dupes(p, quiet=True)
+        T("CLEAN TWIN a candidate that WAS asked about is tagged `llm` and left available, whatever "
+          "the model said",
           n == 0 and p["candidates"][0]["status"] == "available"
           and p["candidates"][0]["dedup_at_ingest"] == "llm",
           "%s / %s" % (p["candidates"][0]["status"], p["candidates"][0].get("dedup_at_ingest")))
@@ -3596,6 +3654,43 @@ def cmd_selftest(_a):
     T("CLEAN TWIN a NON-dupe ruling keeps no ingredients - the evidence is kept where it answers a "
       "question, not everywhere",
       "ingredients_verbatim" not in _unfit, ",".join(sorted(_unfit)))
+
+    # ---- --reingredients-ruled: the labelled positives get their evidence back ---------------------
+    # `DUPE_KEEP` only helps rulings made from 2026-09-04 on. The 152 already in the pool were
+    # slimmed under the old rule, and they are the estate's ONLY labelled duplicate positives - so
+    # the ingredient-carrying prompt could not be measured against the estate's own labels. Their
+    # pages are all in the cache; this is the re-parse that unblocks the measurement.
+    import tempfile as _tf
+    _cd = _tf.mkdtemp(prefix="harvest-reing-")
+    try:
+        _u_dupe, _u_avail = "https://x.test/dupe", "https://x.test/avail"
+        for _u, _ing in ((_u_dupe, "1 lb ground beef"), (_u_avail, "2 cups rice")):
+            with open(os.path.join(_cd, cache_key(_u) + ".html"), "w", encoding="utf-8") as f:
+                f.write('<script type="application/ld+json">' + json.dumps(
+                    {"@type": "Recipe", "name": "x", "recipeIngredient": [_ing]}) + "</script>")
+        _p = {"candidates": [
+            {"slug": "d1", "name": "D1", "url": _u_dupe, "status": "ruled:rejected-dupe"},
+            {"slug": "a1", "name": "A1", "url": _u_avail, "status": "available"}]}
+        _t, _fixed, _unc, _nj = restore_ingredients(_p, ruled=True, cache_dir=_cd)
+        _byslug = {c["slug"]: c for c in _p["candidates"]}
+        T("MUST FIRE  --reingredients-ruled restores a rejected-dupe's ingredient lines from the "
+          "page cache - the 152 labelled positives are the only duplicate labels the estate has",
+          _fixed == 1 and _byslug["d1"].get("ingredients_verbatim") == ["1 lb ground beef"],
+          "fixed=%d %s" % (_fixed, _byslug["d1"].get("ingredients_verbatim")))
+        T("CLEAN TWIN ...and it leaves an AVAILABLE candidate's lines alone unless asked - one road "
+          "per question, or 'how many did the ruled road restore' has no answer",
+          [c["slug"] for c in _t] == ["d1"] and "ingredients_verbatim" not in _byslug["a1"],
+          "targets=%s a1=%s" % ([c["slug"] for c in _t], _byslug["a1"].get("ingredients_verbatim")))
+        _p2 = {"candidates": [dict(c) for c in _p["candidates"]]}
+        for _c in _p2["candidates"]:
+            _c.pop("ingredients_verbatim", None)
+        _t2, _fixed2, _, _ = restore_ingredients(_p2, ruled=False, cache_dir=_cd)
+        T("CLEAN TWIN the default road is unchanged - it still takes the available candidate and "
+          "not the ruled one",
+          [c["slug"] for c in _t2] == ["a1"] and _fixed2 == 1,
+          "targets=%s fixed=%d" % ([c["slug"] for c in _t2], _fixed2))
+    finally:
+        shutil.rmtree(_cd, ignore_errors=True)
 
     # ---- the shortlist is PER SOURCE, because the sources are on different scales ---------------
     # Measured 2026-09-04 on the live pool: 31,340 bge-m3 rows at cosine 0.559-1.000 against
@@ -3639,11 +3734,14 @@ def cmd_selftest(_a):
     try:
         p = {"candidates": [{"slug": "emb-only", "name": "emb-only", "status": "available",
                              "neighbours": [_n("live-twin", 0.96, "bge-m3")]}]}
-        n = refuse_near_dupes(p, quiet=True)
-        T("MUST FIRE  refuse_near_dupes ITSELF acts on a candidate whose only evidence is embedding - "
-          "the whole point, and the thing that was unreachable before",
-          n == 1 and p["candidates"][0]["status"] == "ruled:rejected-dupe",
-          "%s / %s" % (n, p["candidates"][0]["status"]))
+        n = judge_near_dupes(p, quiet=True)
+        T("MUST FIRE  judge_near_dupes ITSELF reaches a candidate whose only evidence is embedding - "
+          "the whole point, and the thing that was unreachable before (it is ASKED about and tagged; "
+          "since P1c no answer rules it out)",
+          n == 0 and p["candidates"][0]["dedup_at_ingest"] == "llm"
+          and p["candidates"][0]["status"] == "available",
+          "%s / %s / %s" % (n, p["candidates"][0].get("dedup_at_ingest"),
+                            p["candidates"][0]["status"]))
     finally:
         globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
 
@@ -3656,7 +3754,7 @@ def cmd_selftest(_a):
         p = {"candidates": [dict(_cand("u", 40), dedup_at_ingest="unavailable"),
                             dict(_cand("n", 40), dedup_at_ingest="no-neighbour"),
                             dict(_cand("j", 40), dedup_at_ingest="llm")]}
-        refuse_near_dupes(p, quiet=True)
+        judge_near_dupes(p, quiet=True)
         # the retried two get re-tagged by this pass; the judged one is left exactly as it was
         T("MUST FIRE  a candidate tagged `unavailable` is RE-EXAMINED once a model is up - a tag that "
           "records 'nobody looked' must not be the reason nobody looks again",
@@ -3767,6 +3865,9 @@ def main(argv=None):
     ap.add_argument("--reingredients", action="store_true",
                     help="restore ingredient lines to available candidates from the page cache. "
                          "No network and no model - a re-parse of pages already fetched.")
+    ap.add_argument("--reingredients-ruled", dest="reingredients_ruled", action="store_true",
+                    help="the same re-parse, but for `ruled:rejected-dupe` rows - the estate's only "
+                         "labelled duplicate positives. Implies --reingredients.")
     ap.add_argument("--resignature", action="store_true")
     ap.add_argument("--pool-health", dest="pool_health", action="store_true",
                     help="how many available candidates carry dedup evidence, and whether the "
@@ -3819,7 +3920,7 @@ def main(argv=None):
         return cmd_classify_nutrition(a)
     if a.probe_domains:
         return cmd_probe_domains(a)
-    if a.reingredients:
+    if a.reingredients or a.reingredients_ruled:
         return cmd_reingredients(a)
     if a.rescore:
         return cmd_rescore(a)

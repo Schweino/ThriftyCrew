@@ -434,10 +434,30 @@ function Get-Stamp { (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss') }
 function Get-StateDir { param([string]$Dir) Join-Path $Dir 'state' }
 function Get-StatePath { param([string]$Dir, [string]$S) Join-Path (Get-StateDir $Dir) ($S + '.json') }
 function Read-Entries {
+  <#
+    THE RECIPES IN state\, AND ONLY THE RECIPES (2026-09-04, PLAN-after-dedup P5).
+
+    state\ is not exclusively the state machine's. hunt-daemon writes state\priced-terms.json there -
+    a RUN-level ledger of terms already sent to the pricer, which survives a restart - and this
+    function globbed *.json, so -Status counted that ledger as an eleventh recipe and bucketed it
+    '(no state recorded)'. It read as a recipe that could neither advance nor be rejected, which is
+    a real and serious shape; it was a file that was never a recipe.
+
+    A recipe state file is the one carrying a `slug`. Nothing is silently dropped: what was skipped
+    is recorded so -Status can name it, because "the count went down by one" with no explanation is
+    the same class of quiet as the bucket it replaces.
+  #>
   param([string]$Dir)
+  $script:NonRecipeStateFiles = @()
   $sd = Get-StateDir $Dir
   if (-not (Test-Path $sd)) { return @() }
-  return @(Get-ChildItem (Join-Path $sd '*.json') -File | ForEach-Object { Read-Json $_.FullName })
+  $out = @()
+  foreach ($f in @(Get-ChildItem (Join-Path $sd '*.json') -File)) {
+    $e = Read-Json $f.FullName
+    if ($null -ne $e -and -not [string]::IsNullOrWhiteSpace([string]$e.slug)) { $out += $e }
+    else { $script:NonRecipeStateFiles += $f.Name }
+  }
+  return @($out)
 }
 
 # The live verdict map. ONE call to the queue, and we read the `verdict` it recomputes on every -Record
@@ -1679,6 +1699,34 @@ if ($runSelfTest) {
   T 'MUST FIRE  the -Status bucketing actually CALLS it, rather than casting .state itself' `
     ($codeHR -match ('Get-State' + 'Label')) 'the status path still buckets on a raw cast'
 
+  # ---- state\ is not exclusively the state machine's (2026-09-04, PLAN-after-dedup P5) -----------
+  # hunt-2026-09-04-five-b showed one entry bucketed '(no state recorded)'. It was
+  # state\priced-terms.json - a RUN-level ledger the daemon writes beside the recipes - counted as an
+  # eleventh recipe by a *.json glob. A recipe that can neither advance nor be rejected is a real and
+  # serious shape; this was never a recipe.
+  $p5 = Join-Path ([IO.Path]::GetTempPath()) ('hunt-p5-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  [void](New-Item -ItemType Directory -Path (Join-Path $p5 'state') -Force)
+  try {
+    Write-JsonAtomic (Join-Path $p5 'state\real-recipe.json') ([pscustomobject]@{ slug = 'real-recipe'; state = 'priced' })
+    Write-JsonAtomic (Join-Path $p5 'state\priced-terms.json') ([pscustomobject]@{ _doc = 'run-level'; terms = @('rice') })
+    $p5e = @(Read-Entries $p5)
+    T 'MUST FIRE  a RUN-LEVEL ledger in state\ is not counted as a stateless recipe - priced-terms.json has no slug and is not one' `
+      ($p5e.Count -eq 1 -and [string]$p5e[0].slug -eq 'real-recipe') `
+      (($p5e | ForEach-Object { [string]$_.slug }) -join ',')
+    T 'MUST FIRE  ...and it is NAMED rather than silently dropped - a count that quietly shrinks is the same class of quiet' `
+      (@($script:NonRecipeStateFiles) -contains 'priced-terms.json') `
+      (@($script:NonRecipeStateFiles) -join ',')
+  } finally { Remove-Item -LiteralPath $p5 -Recurse -Force -ErrorAction SilentlyContinue }
+  $p5b = Join-Path ([IO.Path]::GetTempPath()) ('hunt-p5b-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  [void](New-Item -ItemType Directory -Path (Join-Path $p5b 'state') -Force)
+  try {
+    Write-JsonAtomic (Join-Path $p5b 'state\only-recipe.json') ([pscustomobject]@{ slug = 'only-recipe'; state = 'written' })
+    $p5be = @(Read-Entries $p5b)
+    T 'CLEAN TWIN ...and with no ledger present the skipped list is EMPTY, so the line never appears for nothing' `
+      ($p5be.Count -eq 1 -and @($script:NonRecipeStateFiles).Count -eq 0) `
+      ("n={0} skipped={1}" -f $p5be.Count, (@($script:NonRecipeStateFiles) -join ','))
+  } finally { Remove-Item -LiteralPath $p5b -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
   Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -2619,6 +2667,7 @@ if ($runJson) {
     in_flight = @($inflight | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state } })
     by_state = $byState; waves = @($waves | ForEach-Object { $_.Name })
     pool_health = @($poolLines | ForEach-Object { ([string]$_).Trim() })
+    non_recipe_state_files = @($script:NonRecipeStateFiles)
   }
   ($o | ConvertTo-Json -Depth 8)
   exit 0
@@ -2634,6 +2683,10 @@ Write-Output ''
 foreach ($pl in $poolLines) { Write-Output ([string]$pl) }
 Write-Output ''
 foreach ($s in @($byState.Keys | Sort-Object)) { Write-Output ("  {0,-22} {1}" -f $s, @($byState[$s]).Count) }
+if (@($script:NonRecipeStateFiles).Count) {
+  Write-Output ''
+  Write-Output ("  state\ also holds {0} run-level ledger(s), counted as neither recipe nor rejection: {1}" -f @($script:NonRecipeStateFiles).Count, (@($script:NonRecipeStateFiles) -join ', '))
+}
 if ($parked.Count) {
   Write-Output ''
   Write-Output '  PARKED detail (this is the resume worklist):'
