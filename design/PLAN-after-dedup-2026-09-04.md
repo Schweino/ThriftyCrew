@@ -1,8 +1,14 @@
 # PLAN: after the dedup work - what is open, ranked by what it buys
 
 queue_id: after-dedup-2026-09-04
-shipped_commit: (none yet - if this field names a commit, the work is DONE: verify it and report,
-do not rebuild)
+shipped_commit: 69289acc (2026-09-04) - P1, P1c, P2, P4, P5 and the P6 ledger correction are DONE:
+verify and report, do not rebuild. P3 shipped separately (it needs the card and a real run); P6's
+remaining entries are parked on rulings by design.
+OUTCOME, so nobody rebuilds from the plan's hypothesis: P1's richer prompt was RUN and it made the
+gate WORSE - 23.9% recall at 2.00% wrong refusals, against 43.3% / 4.67% for names alone. The road
+this plan opened is closed, and it took P1c, not P1b. See EVAL-dedup-shortlist section 8.
+CORRECTION to this plan's own text: P2 says "the daemon suite already pins the bounded call
+(`_dedup_is_bounded`)". It does not - no fixture of any kind covered that block. It does now.
 author: Fable 5.1, 2026-09-04, PLAN ONLY. Written for Opus to build from. Every number below was
 measured the same day; every claim about a file was checked against the file, not remembered.
 ruled by: Brad, 2026-09-04 - "create a PLAN ONLY for Opus to address the above open items and/or
