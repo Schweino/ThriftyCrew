@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  54,
-    "cursor_next":  61,
+    "cursor_start":  61,
+    "cursor_next":  68,
     "total_terms":  602,
     "rotation_terms":  [
-                           "blueberries",
-                           "blue cheese dressing",
-                           "body wash",
-                           "bok choy",
-                           "steak marinade",
-                           "purified water 24 pack",
-                           "chicken bouillon cubes"
+                           "brandy",
+                           "bratwurst",
+                           "white bread",
+                           "bread crumbs",
+                           "frozen breakfast sandwiches",
+                           "breakfast sausage",
+                           "broccoli crowns"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "blueberries",
-                  "blue cheese dressing",
-                  "body wash",
-                  "bok choy",
-                  "steak marinade",
-                  "purified water 24 pack",
-                  "chicken bouillon cubes"
+                  "brandy",
+                  "bratwurst",
+                  "white bread",
+                  "bread crumbs",
+                  "frozen breakfast sandwiches",
+                  "breakfast sausage",
+                  "broccoli crowns"
               ],
     "commodities":  [
-                        "blueberries",
-                        "blue-cheese-dressing",
-                        "body-wash",
-                        "bok-choy",
-                        "bottled-marinade",
-                        "bottled-water",
-                        "bouillon"
+                        "brandy",
+                        "bratwurst",
+                        "bread",
+                        "bread-crumbs",
+                        "breakfast-sandwiches",
+                        "breakfast-sausage",
+                        "broccoli"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

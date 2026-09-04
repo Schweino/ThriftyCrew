@@ -357,6 +357,13 @@
                                                               "price":  "$8.98",
                                                               "size":  "128 fl oz",
                                                               "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                          },
+                                              "Walmart":  {
+                                                              "url":  "https://www.walmart.com/ip/Great-Value-Ammonia-All-Purpose-Cleaner-Lemon-64-fl-oz/811827543",
+                                                              "name":  "Great Value Ammonia All Purpose Cleaner, Lemon Scent, 64 fl oz",
+                                                              "price":  "$2.12",
+                                                              "size":  "64 fl oz",
+                                                              "verified":  "2026-09-04 DERIVED from the price row (same record the board priced)"
                                                           }
                                           },
                   "all-purpose-flour":  {
@@ -2392,7 +2399,14 @@
                                                                     "price":  "$9.98",
                                                                     "size":  "19.5 oz",
                                                                     "verified":  "2026-08-14 DERIVED from the price row (same record the board priced)"
-                                                                }
+                                                                },
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/44981959",
+                                                            "name":  "McCormick Non-GMO Kosher Whole Black Pepper, 3.5 oz Bottle",
+                                                            "price":  "$7.47",
+                                                            "size":  "3.5 oz",
+                                                            "verified":  "2026-09-04 DERIVED from the price row (same record the board priced)"
+                                                        }
                                         },
                   "bleach":  {
                                  "commodity":  "bleach",
@@ -2469,20 +2483,20 @@
                                                                "size":  "2 lb",
                                                                "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
                                                            },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/10452459",
-                                                       "name":  "Great Value Low-Moisture Part-Skim Mozzarella Block Cheese, 32 oz Chunk",
-                                                       "price":  "$6.96",
-                                                       "size":  "32 oz",
-                                                       "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                   },
                                        "Family Fare":  {
                                                            "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/our_family_low_moisture_part_skim_natural_mozzarella_cheese_16_oz/p/7081803",
                                                            "name":  "Our Family Low Moisture Part Skim Natural Mozzarella Cheese 16 Oz",
                                                            "price":  "$3.99",
                                                            "size":  "16 oz",
                                                            "verified":  "2026-09-03 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/934674254",
+                                                       "name":  "Great Value Colby \u0026 Monterey Jack Block Cheese, 64 oz Chunk",
+                                                       "price":  "$13.46",
+                                                       "size":  "64 oz",
+                                                       "verified":  "2026-09-04 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "blueberries":  {
                                       "commodity":  "Blueberries",
@@ -3846,14 +3860,6 @@
                                    },
                   "canned-black-beans":  {
                                              "commodity":  "canned-black-beans",
-                                             "Baker\u0027s":  {
-                                                                  "url":  "https://www.bakersplus.com/p/kroger-black-beans-big-deal-/0001111012475",
-                                                                  "name":  "Kroger Black Beans BIG DEAL!",
-                                                                  "price":  3.89,
-                                                                  "size":  "4 pk 15.5 oz",
-                                                                  "verified":  "2026-08-23",
-                                                                  "board_pu":  0.0627
-                                                              },
                                              "Fareway":  {
                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806571-fareway-black-beans-1525-oz",
                                                              "price":  0.99,
@@ -3880,7 +3886,14 @@
                                                              "price":  "$0.92",
                                                              "size":  "15 oz",
                                                              "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                             "Baker\u0027s":  {
+                                                                  "url":  "https://www.bakersplus.com/p/kroger-black-beans-big-deal-/0001111015356",
+                                                                  "name":  "Kroger Black Beans BIG DEAL!",
+                                                                  "price":  "$3.89",
+                                                                  "size":  "4 pk 15.25 oz",
+                                                                  "verified":  "2026-09-04 DERIVED from the price row (same record the board priced)"
+                                                              }
                                          },
                   "canned-butter-beans":  {
                                               "commodity":  "Canned Butter Beans",
@@ -6080,7 +6093,13 @@
                                                       "price":  "$0.92",
                                                       "size":  "15.5 oz",
                                                       "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_chili_beans_in_mild_chili_sauce_15_5_oz/p/6786953",
+                                                          "name":  "Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz",
+                                                          "price":  "$0.99",
+                                                          "size":  "15.5 oz"
+                                                      }
                                   },
                   "chili-crisp":  {
                                       "commodity":  "Chili Crisp / Chili Oil",
@@ -16510,7 +16529,14 @@
                                                           "price":  "$3.19",
                                                           "size":  "1 lb",
                                                           "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                             "Walmart":  {
+                                                             "url":  "https://www.walmart.com/ip/111146370",
+                                                             "name":  "Fresh Organic Mini Sweet Peppers, 8 oz",
+                                                             "price":  "$3.46",
+                                                             "size":  "8 oz",
+                                                             "verified":  "2026-09-04 DERIVED from the price row (same record the board priced)"
+                                                         }
                                          },
                   "miracle-whip":  {
                                        "commodity":  "Miracle Whip (Salad Dressing Spread)",
@@ -19833,11 +19859,11 @@
                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                  },
                                 "Sam\u0027s Club":  {
-                                                        "url":  "https://www.samsclub.com/ip/18385815807",
-                                                        "name":  "Nongshim Shin Ramyun Spicy Beef Ramen Noodle Soup, 4.23 oz., 10 pk.",
-                                                        "price":  "$9.98",
-                                                        "size":  "10 ct 4.23 oz",
-                                                        "verified":  "2026-09-03 DERIVED from the price row (same record the board priced)"
+                                                        "url":  "https://www.samsclub.com/ip/18239212180",
+                                                        "name":  "Nissin Top Ramen, Chicken, 24 pk.",
+                                                        "price":  "$6.98",
+                                                        "size":  "24 ct",
+                                                        "verified":  "2026-09-04 DERIVED from the price row (same record the board priced)"
                                                     }
                             },
                   "ranch-dressing":  {

@@ -3528,6 +3528,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "frozen-green-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Green Beans, Cut, Fresh Frozen 24 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
         "id":  "hot-honey",
         "store":  "Family Fare",
         "product":  "Nate\u0027s 100% Pure Hot Honey 16 Oz",

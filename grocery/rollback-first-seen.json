@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-09-03T08:05:44",
+    "updated":  "2026-09-04T08:02:18",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -4734,7 +4734,7 @@
                         "item_id":  "1VPBRC1OVEPT",
                         "price":  9.98,
                         "first_seen":  "2026-08-24",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -4797,7 +4797,7 @@
                         "item_id":  "275FRN340YP4",
                         "price":  8.98,
                         "first_seen":  "2026-08-28",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -4914,7 +4914,7 @@
                         "item_id":  "2S73WU5YUXI8",
                         "price":  7.58,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -5022,7 +5022,7 @@
                         "item_id":  "37XZDMNMJ03R",
                         "price":  7.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -5032,6 +5032,15 @@
                         "price":  14.78,
                         "first_seen":  "2026-08-30",
                         "last_seen":  "2026-08-30",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|3EU6L4YHVBHK",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "3EU6L4YHVBHK",
+                        "price":  11.74,
+                        "first_seen":  "2026-09-04",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -5076,7 +5085,7 @@
                         "item_id":  "3PG07CPAQA0M",
                         "price":  8.44,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -5508,7 +5517,7 @@
                         "item_id":  "5FUAUK2V218M",
                         "price":  9.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -5634,7 +5643,7 @@
                         "item_id":  "5X4U54DBN62O",
                         "price":  10.58,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {
@@ -6012,7 +6021,7 @@
                         "item_id":  "7BNH2BF10EO6",
                         "price":  7.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-04",
                         "price_changed":  0
                     },
                     {

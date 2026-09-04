@@ -1,15 +1,15 @@
 ﻿{
-    "FamilyFare":  61,
+    "FamilyFare":  68,
     "note":  "index into the commodity-search term order where each TERM-ROTATION store starts next. Advanced only after that store\u0027s capture landed. Baker\u0027s joined this cursor on 2026-08-22 (it used to pull all 598 terms daily). Hy-Vee is deliberately absent: it rotates by PRODUCT ID and keeps hyvee-rotation-cursor.json.",
-    "Bakers":  84,
-    "updated":  "2026-09-04T07:01:12",
+    "Bakers":  91,
+    "updated":  "2026-09-04T08:02:24",
     "Aldi_last":  "2026-09-03",
     "Walmart":  56,
-    "SamsClub_last":  "2026-09-03",
-    "SamsClub":  91,
-    "Fareway_last":  "2026-09-03",
+    "SamsClub_last":  "2026-09-04",
+    "SamsClub":  98,
+    "Fareway_last":  "2026-09-04",
     "Aldi":  63,
-    "Fareway":  105,
+    "Fareway":  112,
     "Walmart_last":  "2026-09-03",
-    "Bakers_last":  "2026-09-03"
+    "Bakers_last":  "2026-09-04"
 }

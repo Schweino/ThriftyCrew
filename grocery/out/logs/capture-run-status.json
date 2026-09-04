@@ -1,20 +1,20 @@
 ﻿{
     "daily":  {
-                  "date":  "2026-09-03",
-                  "pid":  26508,
-                  "started":  "2026-09-03T08:00:02",
-                  "updated":  "2026-09-03T08:30:07",
-                  "stage":  "complete",
-                  "exit_code":  1,
-                  "log":  "--- run-log: capture-run-daily | 2026-09-03T08:00:02 | pid 26508 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-03.log"
+                  "date":  "2026-09-04",
+                  "pid":  15364,
+                  "started":  "2026-09-04T08:00:02",
+                  "updated":  "2026-09-04T08:29:01",
+                  "stage":  "publishing",
+                  "exit_code":  null,
+                  "log":  "--- run-log: capture-run-daily | 2026-09-04T08:00:02 | pid 15364 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-04.log"
               },
     "ad":  {
                "date":  "2026-09-04",
                "pid":  33612,
                "started":  "2026-09-04T07:00:02",
-               "updated":  "2026-09-04T07:01:12",
-               "stage":  "publishing",
-               "exit_code":  null,
+               "updated":  "2026-09-04T07:01:20",
+               "stage":  "complete",
+               "exit_code":  0,
                "log":  "--- run-log: capture-run-ad | 2026-09-04T07:00:02 | pid 33612 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-04.log"
            }
 }

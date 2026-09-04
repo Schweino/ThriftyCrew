@@ -1,0 +1,44 @@
+﻿{
+    "store":  "Baker\u0027s",
+    "date":  "2026-09-04",
+    "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
+    "ad_rollover":  false,
+    "ad_note":  "ad current until 2026-09-08; next_pull 2026-09-09",
+    "cursor_start":  84,
+    "cursor_next":  91,
+    "total_terms":  602,
+    "rotation_terms":  [
+                           "cajun seasoning",
+                           "yellow cake mix",
+                           "canned beets",
+                           "black beans",
+                           "butter beans",
+                           "canned chunk chicken breast",
+                           "chili with beans can"
+                       ],
+    "sale_terms":  [
+
+                   ],
+    "terms":  [
+                  "cajun seasoning",
+                  "yellow cake mix",
+                  "canned beets",
+                  "black beans",
+                  "butter beans",
+                  "canned chunk chicken breast",
+                  "chili with beans can"
+              ],
+    "commodities":  [
+                        "cajun-seasoning",
+                        "cake-mix",
+                        "canned-beets",
+                        "canned-black-beans",
+                        "canned-butter-beans",
+                        "canned-chicken",
+                        "canned-chili"
+                    ],
+    "call_cap":  250,
+    "expiry_deferred":  0,
+    "expiry_oldest_owed":  "",
+    "note":  "Fetch ONLY these terms today - the list is already capped at this store\u0027s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow\u0027s slice, oldest first - do NOT fetch them here."
+}
