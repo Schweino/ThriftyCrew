@@ -26,6 +26,11 @@ The ten-run has the same top three: mapper-owned repair 23%, audit 22%, price 21
 ## Findings, largest first
 
 ### 1. Audits are paid per WAVE, and the same recipes were audited up to eight times
+
+> **CORRECTED 2026-09-04, later the same day.** The re-audit half of this finding was a hypothesis
+> and the measurement REFUTES it. See "The wave-repeat cost, measured" below before acting on the
+> paragraph that follows. The per-audit half (what one audit reads and re-derives) stands and is
+> fixed.
 - 50 slug-audits across 15 auditor calls; 36 of the 50 were a slug already audited in an earlier wave.
   butter-chicken-pasta was audited 8 times, ground-beef-cottage-cheese-bowl and chicken-rice-and-broccoli
   7 times each. Publish refusals (wave-4.publish-refusal.txt) and NO-GO churn re-waved the same slugs.
@@ -114,6 +119,60 @@ run and reverted by checksum for each mechanism; counts in the commit message.
    model and system prompt.
 6. `spec_ingredient_lines` renders v2 keys in the QA dossier.
 7. Registrar and mapper prompt sentences.
+
+## The wave-repeat cost, measured (2026-09-04, second pass)
+
+The eval above assumed the 36 repeat slug-audits were largely re-reads of specs that had not moved,
+and that a spec-hash rule would skip them. **That is wrong, and the measurement says so.**
+
+Method: every auditor call from the lane log against each spec's git blob history, asking whether the
+slug's spec was byte-identical to what its own previous audit saw AND that audit said GO. An
+uncommitted edit reads as unchanged, so this is an UPPER bound.
+
+| measure | value |
+|---|---|
+| slug-audits | 50 |
+| unchanged since that slug's own GO | 5 (10%) |
+| audit tokens in calls where EVERY slug was unchanged | 3.3M of 56.8M (6%) |
+
+So the re-audits were real: the specs HAD moved, because repairs and recosts moved them. **A
+spec-hash skip would have saved almost nothing, and building one would have been waste.**
+
+### What the repeats were actually made of
+
+Eleven of the fifteen auditor calls returned NO-GO. Reading every `wave-<k>.audit.md` blocker, the
+recurring cause is a handful of SHARED-DATA defects that blocked wave after wave, not defects in the
+recipes each wave carried:
+
+| blocker | waves it blocked |
+|---|---|
+| `audit-spec-contradictions` red (STAT-PROSE, then PHANTOM) | 1, 2, 9, 10, 11 |
+| recipes-db carrying audit-rejected rows marked published | 6, 7 |
+| cost-engine defects (citrus zest per-pound as per-each, cheddar priced by mozzarella, turkey price class, Protein+ pasta macros) | 2, 5, 9, 11 |
+| a dish-identity question nobody had ruled | 1, 6 |
+| recost aftercare: spec recut, recost never run | 9 |
+
+### The finding that matters: the battery already knew, and the auditor was paid anyway
+
+`wave-preaudit.ps1` runs the shared gates and writes their verdicts into the report BEFORE the
+auditor is dispatched. `wave-publish.ps1`'s P5 then hard-refuses the publish on six of those same
+gates: audit-spec-contradictions, audit-store-integrity, audit-vocab-integrity,
+audit-unbid-ingredients, audit-cost-plausibility, audit-cost-line-coverage.
+
+`audit-spec-contradictions` was ALREADY red in the preaudit report for waves 1, 2, 9, 10 and 11. Each
+of those waves then bought a full auditor session that returned NO-GO citing that gate. Those five
+waves' audits and re-audits cost **21.8M tokens, 38% of all audit spend and ~14% of the run** - to
+reach a verdict `wave-publish` would have refused regardless.
+
+Note the discipline this needs: `recipes-db-dryrun` failed in twelve of fifteen preaudits and waves
+3, 4 and 8 published anyway, because it is NOT one of P5's six. A precheck must key on P5's exact
+list, never on "any red in the battery".
+
+This is not the auditor doing anything wrong. It refused correctly every time, and its recipe-local
+findings in those waves were real work. What is wasted is the ORDER: the wave is audited before the
+thing that will veto it is fixed, so the audit is bought again after the repair.
+
+**Not built. This is a policy change to the wave chain and it is Brad's to rule on.**
 
 ## What would close each, inside the existing design
 1. Audit: raise `AUDIT_DOSSIER_CAP`; inline spec paths, the card dir, and the wave's mapped rulings +

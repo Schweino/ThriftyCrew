@@ -6322,6 +6322,16 @@ def _band_gate_real_machine():
         # A WRITER THAT ACTUALLY WRITES. The REAL -Verify runs in this fixture, and it now refuses an
         # intake carrying no prose at all - which is exactly what a scripted FakeDispatch leaves
         # behind. So the scripted reply comes with the side effect a real writer would have had.
+        #
+        # AND IT MUST KEEP UP WITH THE REAL WRITE-BOUNDARY GUARDS (2026-09-04). This fixture went red
+        # when build-v2-spec grew its BULLET SHAPE guard on 2026-09-02: `prose.shop_smart` must be a
+        # JSON ARRAY, one element per tip, because a newline-joined string shipped all three tips
+        # inside one <li> on 46 live paid cards. The fake writer wrote intro_html alone, so the real
+        # spec build refused, the lane recorded a STUCK, and the recipe never reached the band gate
+        # this case is about - reported as "state=priced findings=[]", which reads like the band gate
+        # failing and is nothing of the sort. THE DAEMON WAS RIGHT EVERY DAY: a refused spec build IS
+        # a STUCK. What was stale is the writer's stand-in. Anything this fake emits must satisfy the
+        # same write-boundary guards a real writer's payload does.
         class ProseWriter(FakeDispatch):
             def __call__(self, agent, prompt, **kw):
                 ip = os.path.join(run_dir, "intake", "band-drill.json")
@@ -6329,8 +6339,18 @@ def _band_gate_real_machine():
                     with open(ip, "r", encoding="utf-8-sig") as fh:
                         doc = json.load(fh)
                     doc["cuisine"] = "American"
-                    doc["prose"] = {"intro_html": "The dinner."}
+                    doc["prose"] = {"intro_html": "<p>The dinner.</p>",
+                                    # AN ARRAY, one element per tip - the BULLET SHAPE contract.
+                                    "shop_smart": ["Buy the beef in a club pack.",
+                                                   "Store-brand rice does the same job."],
+                                    "make_it": "<p>Brown the beef, cook the rice, fold together.</p>",
+                                    "portion_html": "<p>Fourteen containers, weighed.</p>",
+                                    "cost_closing_html": "<p>That is what it costs.</p>",
+                                    "upsell_html": "<p>Come back next week.</p>"}
                     doc["head"]["description"] = "A drill."
+                    doc["head"]["keywords"] = "drill"
+                    doc["head"]["steps"] = ["Brown the beef.", "Cook the rice.", "Fold together."]
+                    doc["head"]["step_names"] = ["Brown", "Cook", "Fold"]
                     with open(ip, "w", encoding="utf-8") as fh:
                         json.dump(doc, fh)
                 except Exception:                                 # noqa: BLE001
