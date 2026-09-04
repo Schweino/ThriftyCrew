@@ -130,7 +130,19 @@ DECIDE_RECORDS_RULING = {"accepted": True, "rejected-dupe": True, "rejected-not-
 LANE_CAPS = {
     "decide": 1,
     "extract": 3,
-    "map": 2,
+    # 2 -> 4 ON 2026-09-04. THE ONLY LEVER HERE THAT TOUCHES NO QUALITY DECISION AT ALL: each mapper
+    # call stays byte-identical - same model, same effort, same prompt - and more of them run at once.
+    # Generation is serial WITHIN a call and parallel ACROSS calls, and the map lane was 22.6 of the
+    # 23.0 covered minutes of hunt-2026-09-04-five. The food DB write is already behind food_db_lock,
+    # so the added concurrency cannot race it. Caps now total 17 concurrent slots on a 32-core box.
+    #
+    # AND THE 'global min(16, cpus-2) = 16' THE COMMENT BELOW CITES IS NOT ENFORCED ANYWHERE -
+    # checked 2026-09-04: no semaphore, no cpu_count, no limiter of any kind in the daemon, the
+    # lib or the dispatcher. It is an aspiration someone wrote down, and its arithmetic was
+    # already stale (it says the caps totalled 13; they totalled 15). Recorded rather than
+    # quietly relied on: raising a cap here raises real concurrency with nothing above it to
+    # catch an over-subscription, so the next cap change should measure the box, not the ceiling.
+    "map": 4,
     "price": 1,      # ARCHITECTURE, not config. The price lane stays a singleton, full stop.
     # 5 as of 2026-08-24, raised from 3 by Brad against a measurement rather than a hunch. WRITE IS
     # THE BOTTLENECK LANE: measured 5.0 min per recipe per writer, so at cap 3 the whole pipeline's
@@ -1651,6 +1663,21 @@ def p5_red_gates(doc):
     return [g for g in P5_GATES if g in verdicts and verdicts[g] != "pass"]
 
 
+# LEFT AT 5 ON 2026-09-04, AND THE REASON IS A GENUINE COLLISION worth recording rather than
+# resolving quietly. The wall-clock measurement says SMALLER: a batch multiplies the OUTPUT the model
+# generates, and generation is serial, so map:4x cost 71,643 output tokens over 841 s against map:1x's
+# 19,712 over 255 s - 3.63x the output for 3.30x the wall, while TURNS went only 17 -> 20. On latency
+# alone, five singletons at map cap 4 beat one batch of five by roughly 8 min to 17.5 min, and the fat
+# batch moves nothing downstream until it ends.
+#
+# But the TOKEN measurement says BIGGER, and it is fixtured: `map:1x` cost 436,685 and 577,141 INPUT
+# tokens for ONE RECIPE EACH on the 6b run against `map:5x`'s 212,244, because each call re-sends the
+# whole standing context. Three self-test cases encode that decision.
+#
+# They are not contradictory - they price different resources. Splitting buys wall clock and spends
+# input tokens; batching does the reverse. That is a trade for Brad with both numbers in front of him,
+# not something to settle by editing whichever fixture is in the way. The map CAP moved to 4 instead,
+# which buys parallelism across batches at no token cost and collides with nothing.
 MAP_BATCH = 5              # section S4: mapper micro-batches of up to 5 recipes
 PRICE_BATCH = 10           # section 2.4: up to 10 absent terms per pricer invocation, across recipes
 DECIDE_TAKE_BATCH = 5      # the decide channel's greedy sweep; DECIDE_BATCH caps the dispatch itself

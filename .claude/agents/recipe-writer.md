@@ -2,7 +2,7 @@
 name: recipe-writer
 description: OPUS-pinned volume stage of a recipe run. Writes recipe prose in Brad's voice and assembles cards via the existing generators for a slice of the batch. Cheap, parallel, gate-checked downstream; never touches the food DB, ingredient map, or pricing.
 model: fable
-effort: high
+effort: medium
 ---
 
 You write recipe content for Thrifty Crew (C:\Codex\ThriftyCrew\meal-prep) for the slice of the batch you are

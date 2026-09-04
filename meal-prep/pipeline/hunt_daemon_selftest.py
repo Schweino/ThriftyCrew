@@ -12212,8 +12212,52 @@ def _wc_writer_tier():
     return res
 
 
+def _wc_generation_levers():
+    """MUST FIRE. Wall clock is OUTPUT TOKENS at ~81/sec, and thinking is 63-78% of every agent's
+    output (mapper 73.8%, pricer 62.9%, registrar 76-78%). These three constants are what the
+    measurement bought; each is a config decision Brad made on 2026-09-04 and each is cheap to
+    revert, so they are pinned here rather than left to drift back."""
+    res = []
+    res.append(("MUST FIRE  the map lane runs MORE calls at once - the one lever that changes no "
+                "quality decision at all, since each call keeps its model, effort and prompt and "
+                "only the number in flight moves; the map lane was 22.6 of 23.0 covered minutes",
+                hunt_lib.LANE_CAPS["map"] >= 4, str(hunt_lib.LANE_CAPS["map"])))
+    # MAP_BATCH IS NOT PINNED HERE, and that is the finding. The wall-clock measurement wants it
+    # SMALL (a batch multiplies serially-generated output: map:4x cost 3.63x map:1x's output for
+    # 3.30x the wall) and the token measurement wants it BIG (map:1x cost 436,685 and 577,141 INPUT
+    # tokens for one recipe each against map:5x's 212,244, and three cases in this suite encode
+    # that). They price different resources; the trade is Brad's, and pinning either direction here
+    # would be this file taking a side in it. What IS pinned is that the constant stays sane.
+    res.append(("CLEAN TWIN the mapper batch is a workable size - the wall-clock and token "
+                "measurements disagree on which way it should move, so only the bounds are pinned "
+                "and the direction is left to a ruling",
+                1 <= hunt_lib.MAP_BATCH <= 10, str(hunt_lib.MAP_BATCH)))
+
+    # THE EFFORT PINS, read off the agent definitions rather than restated here.
+    base = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "agents")
+    for agent, why in (("recipe-writer",
+                        "a 1.8-turn prose stage that cannot introduce a number and has two "
+                        "independent gates behind it"),
+                       ("recipe-ingredient-mapper",
+                        "73.8% of its output was thinking, and it is the biggest lane in the run")):
+        p = os.path.join(base, agent + ".md")
+        try:
+            with io.open(p, encoding="utf-8-sig") as f:
+                body = f.read()
+        except Exception as e:                                      # noqa: BLE001
+            res.append(("MUST FIRE  %s's definition is readable so its effort can be pinned" % agent,
+                        False, str(e)))
+            continue
+        m = re.search(r"(?m)^effort:\s*(\S+)", body)
+        got = (m.group(1) if m else "")
+        res.append(("MUST FIRE  %s runs at effort MEDIUM - extended thinking IS generated output and "
+                    "output is the wall clock; %s" % (agent, why),
+                    got == "medium", got or "(no effort line)"))
+    return res
+
+
 WC_SECTIONS = (_wc_priced_terms, _wc_force_drain, _wc_published_slugs, _wc_probe_hit_cap,
-               _wc_writer_tier)
+               _wc_writer_tier, _wc_generation_levers)
 
 
 RD_SECTIONS = (_rd_the_prepublish_facts, _rd_never_carries_the_numbers,
