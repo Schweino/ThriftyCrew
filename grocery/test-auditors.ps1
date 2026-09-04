@@ -5727,6 +5727,103 @@ if (-not $dsMkLive) {
   }
 }
 
+# ---------------------------------------------------------------- heartbeat CONTENT-CURRENCY (2026-09-04, queue 2026-09-04-2feb5c)
+# AN OUTPUT THAT IS REWRITTEN ONLY WHEN IT CHANGES HAS NO mtime LIVENESS SIGNAL AT ALL. health-heartbeat
+# paged "OUTPUT STALE: free-dinners.json is 52.4h old" every morning while rotate-free-dinners.ps1 was
+# running fine at 08:12 and exiting 0, and while the file's CONTENT was correct (week_of=2026-09-02, the
+# current board week). The writer no-ops when the free set has not flipped (its early return at
+# rotate-free-dinners.ps1:129-130 sits before the write at line 228), so the mtime tracks the WEEKLY
+# rotation while the registry asserted a 30h DAILY window over it.
+# The decision is EXTRACTED AND RUN, never transcribed - a copy of a decision is a decision that can drift.
+# The two cases below are opposites and both are frozen. Do NOT regenerate them from public\free-dinners.json:
+# the next time the rotation flips, the shape they encode disappears and both would pass by finding nothing.
+$hbSrc = Get-Content (Join-Path $root 'health-heartbeat.ps1') -Raw
+$hbM = [regex]::Match($hbSrc, '(?s)# >>> CONTENT-CURRENCY[^\r\n]*\r?\n(.*?)\r?\n# <<< CONTENT-CURRENCY')
+if (-not $hbM.Success) {
+  Bad 'CONTENT-CURRENCY region is GONE from health-heartbeat.ps1 - this check EXAMINED NOTHING, so an output whose writer legitimately no-ops is back to being judged on an mtime that proves nothing about it'
+} else {
+  . ([scriptblock]::Create($hbM.Groups[1].Value))
+  function CcMtimeH($detail) { $m = [regex]::Match([string]$detail, 'mtime ([0-9.]+)h'); if ($m.Success) { [double]$m.Groups[1].Value } else { -1 } }
+  $ccDir = NewFxDir 'hb-content-currency'
+  New-Item -ItemType Directory -Force (Join-Path $ccDir 'grocery\out') | Out-Null
+  New-Item -ItemType Directory -Force (Join-Path $ccDir 'public') | Out-Null
+  $ccFd  = Join-Path $ccDir 'public\free-dinners.json'
+  $ccNow = [datetime]'2026-09-04T12:34:00'
+  # The registry row under test, frozen in the shape it ships in.
+  $ccRow = [pscustomobject]@{ path = 'public/free-dinners.json'; max_age_hours = 30; currency_field = 'week_of'; currency_equals = 'board_week'; why = "this week's free-dinner rotation" }
+  # THE BOARD WEEK IS TAKEN BY NAME, NOT BY mtime, because that is how rotate-free-dinners.ps1 takes it and
+  # a disagreement between the two derivations would page as a dead rotation. The older board here carries
+  # the NEWER mtime on purpose - the live tree does exactly this (comparison-2026-08-26.json was rebuilt on
+  # 08-29). A derivation that sorted by LastWriteTime would call 2026-08-26 "this week" and then report a
+  # perfectly current rotation as dead.
+  Set-Content (Join-Path $ccDir 'grocery\out\comparison-2026-08-26.json') '{"week_of":"2026-08-26"}' -Encoding UTF8
+  Set-Content (Join-Path $ccDir 'grocery\out\comparison-2026-09-02.json') '{"week_of":"2026-09-02"}' -Encoding UTF8
+  (Get-Item (Join-Path $ccDir 'grocery\out\comparison-2026-08-26.json')).LastWriteTime = [datetime]'2026-09-04T11:59:00'
+  (Get-Item (Join-Path $ccDir 'grocery\out\comparison-2026-09-02.json')).LastWriteTime = [datetime]'2026-09-04T11:30:16'
+  $ccWeek = Get-BoardWeek $ccDir
+  if ($ccWeek -eq '2026-09-02') { Ok 'heartbeat content-currency: the board week is taken by NAME - the newest comparison file by mtime is an older board and it did not win' }
+  else { Bad ("heartbeat content-currency: board week resolved to '" + $ccWeek + "', not 2026-09-02 - this check no longer agrees with rotate-free-dinners' own week key, so it will page a current rotation as dead") }
+
+  # ---- MUST FIRE: a rotation stuck on a PREVIOUS board week, with an mtime minutes old. This is precisely
+  #      the failure the mtime rule cannot see, and the reason the answer was not a wider window.
+  [IO.File]::WriteAllText($ccFd, '{"week_of":"2026-08-26","updated":"2026-08-26T08:09:12","free":[]}', (New-Object Text.UTF8Encoding($false)))
+  (Get-Item $ccFd).LastWriteTime = [datetime]'2026-09-04T12:20:00'
+  $cc1 = Test-ContentCurrency -Row $ccRow -Path $ccFd -BoardWeek $ccWeek -Now $ccNow
+  $cc1Age = CcMtimeH $cc1.detail
+  if ($cc1.applies -and (-not $cc1.current) -and $cc1.detail -match 'week_of=2026-08-26' -and $cc1.detail -match '2026-09-02') {
+    Ok 'heartbeat content-currency: MUST FIRE - a rotation still on the 2026-08-26 board week is reported even though its file was written 14 minutes ago'
+  } else { Bad ('heartbeat content-currency: a DEAD rotation with a fresh mtime read as current (applies=' + $cc1.applies + ' current=' + $cc1.current + ' detail=' + $cc1.detail + ')') }
+  if ($cc1Age -ge 0 -and $cc1Age -lt 30) {
+    Ok ('heartbeat content-currency: the must-fire fixture is genuinely fresh by mtime (' + $cc1Age + 'h, inside the row 30h window), so the old rule would have called this dead rotation healthy - the case cannot pass for the wrong reason')
+  } else { Bad ('heartbeat content-currency: the must-fire fixture reported mtime ' + $cc1Age + 'h, so it may be firing on staleness rather than on content - the case would prove nothing') }
+
+  # ---- CLEAN TWIN: today's exact shape. week_of is the current board week and the mtime is 52.4h old,
+  #      well past the row's 30h. It must report clean and send nothing, or the check never moved off mtime.
+  [IO.File]::WriteAllText($ccFd, '{"week_of":"2026-09-02","updated":"2026-09-02T08:10:35","free":[]}', (New-Object Text.UTF8Encoding($false)))
+  (Get-Item $ccFd).LastWriteTime = [datetime]'2026-09-02T08:10:35'
+  $cc2 = Test-ContentCurrency -Row $ccRow -Path $ccFd -BoardWeek $ccWeek -Now $ccNow
+  $cc2Age = CcMtimeH $cc2.detail
+  if ($cc2.applies -and $cc2.current) { Ok 'heartbeat content-currency: CLEAN TWIN - an honest no-op whose week_of is the current board week reports clean and pages nobody' }
+  else { Bad ('heartbeat content-currency: the 2026-09-04 false page is back - a current rotation still reports stale (current=' + $cc2.current + ' detail=' + $cc2.detail + ')') }
+  if ($cc2Age -gt 30) { Ok ('heartbeat content-currency: the clean twin really is past the row window by mtime (' + $cc2Age + 'h > 30h), so it proves the check moved off mtime rather than passing on freshness') }
+  else { Bad ('heartbeat content-currency: the clean twin reported mtime ' + $cc2Age + 'h, inside the 30h window - it would pass under the OLD rule too and proves nothing') }
+
+  # ---- FAIL CLOSED. Everything this check cannot prove is reported, never assumed clean.
+  $cc3 = Test-ContentCurrency -Row $ccRow -Path $ccFd -BoardWeek '' -Now $ccNow
+  if ($cc3.applies -and (-not $cc3.current) -and $cc3.detail -match 'BLIND') { Ok 'heartbeat content-currency: no board to compare against is reported as BLIND, not as clean' }
+  else { Bad ('heartbeat content-currency: with no comparison board the check went quiet instead of reporting (current=' + $cc3.current + ' detail=' + $cc3.detail + ')') }
+  $ccRowX = [pscustomobject]@{ path = 'public/free-dinners.json'; max_age_hours = 30; currency_field = 'week_of'; currency_equals = 'whenever'; why = 'x' }
+  $cc4 = Test-ContentCurrency -Row $ccRowX -Path $ccFd -BoardWeek $ccWeek -Now $ccNow
+  if ($cc4.applies -and (-not $cc4.current)) { Ok 'heartbeat content-currency: a currency_equals form this code has never heard of is UNPROVEN (allowlist, not denylist)' }
+  else { Bad 'heartbeat content-currency: an unrecognised currency_equals passed as current - a typo in the registry would silently disarm the row' }
+  [IO.File]::WriteAllText($ccFd, '{"updated":"2026-09-02T08:10:35","free":[]}', (New-Object Text.UTF8Encoding($false)))
+  $cc5 = Test-ContentCurrency -Row $ccRow -Path $ccFd -BoardWeek $ccWeek -Now $ccNow
+  if ($cc5.applies -and (-not $cc5.current) -and $cc5.detail -match 'no week_of field') { Ok 'heartbeat content-currency: a file with no week_of at all is reported, not read as agreement' }
+  else { Bad ('heartbeat content-currency: a file missing its currency stamp did not report (current=' + $cc5.current + ' detail=' + $cc5.detail + ')') }
+  Remove-Item $ccFd -Force -ErrorAction SilentlyContinue
+  $cc6 = Test-ContentCurrency -Row $ccRow -Path $ccFd -BoardWeek $ccWeek -Now $ccNow
+  if ($cc6.applies -and (-not $cc6.current) -and $cc6.detail -match 'does not exist') { Ok 'heartbeat content-currency: a missing output is still reported under the content form' }
+  else { Bad 'heartbeat content-currency: a deleted output went unreported under the content form' }
+
+  # ---- IT IS OPT-IN, AND THAT IS THE BLAST RADIUS. The other four output_files rows are rewritten on EVERY
+  #      run and their mtime IS a real liveness signal; a default-on content check would silently disarm all
+  #      four. This arm reads the LIVE registry, so adding currency_field to one of them fires here.
+  $ccCfg = Get-Content (Join-Path $root 'expected-automations.json') -Raw | ConvertFrom-Json
+  $ccWrong = @()
+  foreach ($ccP in @('grocery/out/smp-feed.json', 'public/smp-feed.json', 'meal-prep/pipeline/v2-perserving.json', 'meal-prep/ingredient-map.json')) {
+    $ccR = @(@($ccCfg.output_files) | Where-Object { [string]$_.path -eq $ccP })
+    if ($ccR.Count -ne 1) { $ccWrong += ($ccP + ' (no such row in the registry any more)'); continue }
+    if ((Test-ContentCurrency -Row $ccR[0] -Path $ccFd -BoardWeek $ccWeek -Now $ccNow).applies) { $ccWrong += $ccP }
+  }
+  if ($ccWrong.Count -eq 0) { Ok 'heartbeat content-currency: all four write-every-run rows are still on the plain mtime rule - the content form did not leak into outputs whose writers cannot no-op' }
+  else { Bad ('heartbeat content-currency: ' + $ccWrong.Count + ' row(s) whose writer cannot no-op are now judged on content, which disarms the mtime check that is their only liveness signal: ' + ($ccWrong -join '; ')) }
+  $ccFdRow = @(@($ccCfg.output_files) | Where-Object { [string]$_.path -eq 'public/free-dinners.json' })
+  if ($ccFdRow.Count -eq 1 -and (Test-ContentCurrency -Row $ccFdRow[0] -Path $ccFd -BoardWeek $ccWeek -Now $ccNow).applies) {
+    Ok 'heartbeat content-currency: the live free-dinners row still opts in - the fix is wired in the registry, not just available in the code'
+  } else { Bad 'heartbeat content-currency: the live public/free-dinners.json row no longer declares currency_field, so it is back on the 30h mtime rule and will page again from ~30h after every flip' }
+  Remove-Item $ccDir -Recurse -Force -ErrorAction SilentlyContinue
+}
+
 # ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
 # WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
 # at least three auditors - one of them, audit-household-in-food, a HARD guard. test-matcher-parity.ps1 was

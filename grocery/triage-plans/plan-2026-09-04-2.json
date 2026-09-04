@@ -1,0 +1,77 @@
+{
+  "generated": "2026-09-04T12:35:00",
+  "round": 2,
+  "board_week": "comparison-2026-09-02",
+  "queue_ids_seen": ["2026-09-04-2feb5c"],
+  "routing_artifact": null,
+  "note": "Mid-run arrival, drained per STEP 4.5 of the triage SKILL. It fired at 10:30:05, after round 1's STEP 0 snapshot of the queue, so it is not a bounce and it does not belong to round 1's cap. Diagnosed inline by the orchestrator (Class C: deterministic, single mechanism, proved from the writer's source and its own log) rather than by the reviewer. It still carries the full field set, because tiering changes who does the work, never what the work is.",
+  "items": [
+    {
+      "queue_id": "2026-09-04-2feb5c",
+      "subject": "Automation silent-death: 1 issue(s)",
+      "classification": "infra",
+      "evidence": [
+        "THE JOB DID NOT STOP. grocery/ad-cycle-log.txt carries '[2026-09-04T08:12:48] free-rotation: rotation: board-week=2026-09-02  target free set = 20 recipe(s)', then all 20 ranked slugs, then '[2026-09-04T08:12:48] free-rotation: rotation: same week, same set - nothing to do'. The identical pair is at [2026-09-03T08:09:27]. It ran on both days and exited 0.",
+        "IT ONLY WRITES ON A FLIP. meal-prep/rotate-free-dinners.ps1:129-130 is 'if (-not $Force -and $state -and [string]$state.week_of -eq $boardWeek -and $targetKey -eq $stateKey) { Write-Output 'rotation: same week, same set - nothing to do'; exit 0 }'. That exit is BEFORE the write at line 228, [IO.File]::WriteAllText((Join-Path $pubDir 'free-dinners.json') ...). So the file's mtime advances at most once per board-week, when the free set actually changes.",
+        "THE THRESHOLD ASSUMES A DAILY WRITE. grocery/expected-automations.json registers public/free-dinners.json with max_age_hours=30, and that same row's own why field reads 'this week's free-dinner rotation'. The config states the cadence is weekly in the very row that asserts a 30h daily window over it.",
+        "THE CONTENT IS CORRECT AND CURRENT. public/free-dinners.json carries week_of=2026-09-02 and 20 free slugs, and the current board generation is comparison-2026-09-02. The file is stale in mtime only. Nothing a reader sees is wrong.",
+        "IT WILL KEEP FIRING. mtime is 2026-09-02 08:10:35. The alert fired at 10:30:05 quoting 50.3h; re-measured during triage it was 52.3h and still climbing. Under the current rule this pages every day from roughly 30h after each flip until the next flip, which is most of every week."
+      ],
+      "surface_fix": {
+        "what": "key public/free-dinners.json's freshness to its own week_of against the current board week, instead of a 30h window over its mtime",
+        "files": ["grocery/expected-automations.json", "grocery/health-heartbeat.ps1"],
+        "exact_change": "the public/free-dinners.json row stops using the plain max_age_hours mtime rule and declares that it is rewritten only on change, with week_of as the field that proves currency; health-heartbeat's output_files loop honours that form and compares week_of to the current board week"
+      },
+      "root_cause": "the heartbeat's output_files model has exactly one freshness knob, max_age_hours applied to a file's mtime, and it assumes every registered output is rewritten on every run. For a writer that legitimately no-ops when its inputs have not changed, mtime is not a liveness signal at all, and the config has no way to say so. The weekly cadence was already known here - the row's own why field says 'this week's' - it was simply unexpressible, so the only knob available was set to the wrong number.",
+      "root_fix": {
+        "what": "give the heartbeat a way to prove an output's currency from its CONTENT for outputs that are rewritten only on change, then key this row to it. Two remedies are explicitly rejected and the reasons must survive in the code comment: raising max_age_hours past a week is the tolerance-wider-than-period defect and would let a genuinely dead rotation go unnoticed for a full week; touching the file on a no-op is date laundering, and would leave it reading fresh with nothing whatsoever proving the rotation ran.",
+        "files": ["grocery/expected-automations.json", "grocery/health-heartbeat.ps1"],
+        "exact_change": "add an opt-in content-currency form to the output_files schema (the field that carries the currency stamp, plus what it must equal) and teach Check-Age's caller to use it when present; leave the four mtime-rule rows untouched so the default behaviour does not move"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "read every row of grocery/expected-automations.json output_files and classified each by whether its writer can no-op",
+        "affected_now": 1,
+        "names": ["public/free-dinners.json"],
+        "risk": "the other four output_files rows are rewritten on every run and their registered why says so - grocery/out/smp-feed.json and public/smp-feed.json ('public price feed every card fetches', 'the SERVED feed'), meal-prep/pipeline/v2-perserving.json, and meal-prep/ingredient-map.json ('regenerated daily'). None of them can no-op, so none should change behaviour. The new form MUST be opt-in for exactly that reason: a default-on content check would silently disarm the mtime rule on four rows that depend on it.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against board comparison-2026-09-02 (rebuilt 11:30:16 today, after round 1's publish) and public/free-dinners.json mtime 2026-09-02 08:10:35. WATCH THIS: if the rotation flips the set before this ships, the mtime resets and the symptom disappears on its own without the defect being fixed. Re-check week_of against the board week, never the mtime, or a vanished symptom will read as a fix.",
+      "proof": {
+        "guard_or_fixture": "health-heartbeat fixture cases driven through the output_files loop, in the style of the existing Test-ProofLanded cases",
+        "must_fire_case": "a frozen fixture where free-dinners.json carries a week_of from a PREVIOUS board week - a genuinely dead rotation - must still be reported as an issue EVEN WHEN its mtime is minutes old. That is precisely the failure the mtime rule cannot see, and it is the reason the answer is not simply a wider window.",
+        "clean_twin": "a frozen fixture in today's exact shape - week_of equal to the current board week, mtime 52h old - must report clean and send nothing. If it still pages, the check has not actually moved off mtime.",
+        "commands": [
+          "powershell -File grocery\\health-heartbeat.ps1",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the expected-automations.json row and the health-heartbeat.ps1 hunk; behaviour returns to the 30h mtime rule. No data migration, no board impact.",
+      "do_not_touch": [
+        "max_age_hours on this row - do not widen it, that is the defect this item exists to avoid",
+        "public/free-dinners.json itself - do not rewrite or touch it to refresh its mtime",
+        "the row's presence in the heartbeat - a genuinely dead rotation must still page",
+        "the four output_files rows whose writers cannot no-op",
+        "meal-prep/rotate-free-dinners.ps1:129-130 - the no-op early return is correct behaviour and is not the bug"
+      ],
+      "resolution_note": "False positive. The rotation ran at 08:12:48 and exited 0; it writes free-dinners.json only when the free set flips, so the file's mtime tracks the weekly rotation and not the daily run, while a 30h daily window was asserted over it. Content was correct throughout (week_of=2026-09-02, matching the current board week). Re-keyed the heartbeat row to prove currency from week_of, so a genuinely dead rotation still pages and an honest no-op does not.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "TRUE - re-checked at 12:34 on 2026-09-04, before any edit, and the symptom had NOT vanished on its own. (1) public/free-dinners.json still carries week_of=2026-09-02, updated=2026-09-02T08:10:35, 20 free slugs; the newest board is grocery/out/comparison-2026-09-02.json, so week_of still equals the current board week and the rotation has not flipped since the plan was written. (2) Its mtime is unchanged at 2026-09-02 08:10:35 - a baseline health-heartbeat run reported exactly one issue, 'OUTPUT STALE: free-dinners.json is 52.4h old (> 30h)', exit 2, up from 50.3h in the alert and 52.3h at triage and still climbing, so the alert is live and not historical. (3) All five evidence rows re-read from source, not taken on trust: ad-cycle-log.txt line 2781 is '[2026-09-04T08:12:48] free-rotation: rotation: same week, same set - nothing to do' preceded by the 20 ranked slugs; rotate-free-dinners.ps1:129-130 is the early return and the free-dinners.json WriteAllText is at line 228, so the exit does precede the write; the registry row read max_age_hours=30 with why 'this week's free-dinner rotation'. (4) Blast radius re-measured the same way the plan measured it - all four other output_files rows (grocery/out/smp-feed.json, public/smp-feed.json, meal-prep/pipeline/v2-perserving.json, meal-prep/ingredient-map.json) are written on every run and none can no-op, so the new form was made opt-in and all four are pinned to the mtime rule by a fixture that reads the LIVE registry.",
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "0. Re-check the premise before editing: confirm public/free-dinners.json still carries week_of equal to the current board week and that its mtime has not moved. If the rotation has flipped in the meantime, the symptom is gone but the defect is not - fix it anyway and say so in premise_verified.",
+    "1. Add the opt-in content-currency form to grocery/expected-automations.json's output_files schema and point the public/free-dinners.json row at week_of; leave the other four rows on the mtime rule.",
+    "2. Teach grocery/health-heartbeat.ps1's output_files loop to honour that form, with the two rejected remedies and their reasons written into the comment so the next reader does not re-propose them.",
+    "3. Add the must_fire_case and clean_twin fixtures and wire them where test-auditors can reach them - a fixture no scheduled caller runs is decorative.",
+    "4. Run health-heartbeat.ps1: expect the free-dinners issue GONE and no other row's verdict changed. Run test-auditors.ps1: expect rc 1 with the single known HYGIENE line and ZERO FAIL lines.",
+    "5. NO BOARD REBUILD AND NO PUBLISH. This touches a watcher and its config only; nothing a reader sees changes, so ordering a publish here would be habit, not need.",
+    "6. Commit per file (grocery/expected-automations.json, grocery/health-heartbeat.ps1, the fixtures, this plan) and push. Never git add -A: a recipe-hunter session is dirty in this tree.",
+    "7. Close 2026-09-04-2feb5c with the resolution note."
+  ],
+  "open_questions_for_brad": []
+}

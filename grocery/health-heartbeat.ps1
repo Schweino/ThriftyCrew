@@ -10,7 +10,9 @@
   Reads grocery\expected-automations.json (the registry - add new daily automations there) and checks:
     - each Windows task EXISTS, is not Disabled, and ran within max_age_hours (a missing/disabled task =
       silent death; LastTaskResult "not yet run" is OK only when allow_pending);
-    - each critical output file / glob exists and is fresher than max_age_hours.
+    - each critical output file / glob exists and is fresher than max_age_hours, EXCEPT an output_files row
+      that declares currency_field: that one is rewritten only when it changes, so its mtime proves nothing
+      and it is judged on the currency stamp inside it instead (see the CONTENT-CURRENCY block).
 
   Exit 0 = all healthy, 2 = one or more silently dead/stale. -Alert emails Brad (de-duped by signature so
   a persistent outage is one email). Meant to run INDEPENDENTLY of the pipeline it watches - it is invoked
@@ -61,6 +63,87 @@ function Test-ProofLanded {
   return @{ fresh = $true; ageH = $ageH; why = '' }
 }
 # <<< PROOF-FRESHNESS
+
+# >>> CONTENT-CURRENCY  (test-auditors.ps1 extracts and executes THIS text verbatim - keep the sentinels)
+# AN OUTPUT THAT IS REWRITTEN ONLY WHEN IT CHANGES HAS NO mtime LIVENESS SIGNAL AT ALL.
+# Founding case 2026-09-04, queue 2026-09-04-2feb5c. rotate-free-dinners.ps1 ran at 08:12:48 and exited 0,
+# as it had every morning; it writes public\free-dinners.json only when the free set actually flips (an
+# early return at rotate-free-dinners.ps1:129-130 sits before the write at line 228). So the file's mtime
+# tracks the WEEKLY rotation while this registry asserted a 30h DAILY window over it, and the heartbeat
+# paged every day from roughly 30h after each flip until the next one, which is most of every week. The
+# content was correct throughout: week_of=2026-09-02, matching the board week. Nothing a reader saw was wrong.
+#
+# TWO REMEDIES WERE CONSIDERED AND REJECTED. Both are the obvious answer and both are wrong, so the reasons
+# live here rather than in a report, to stop the next reader re-proposing them:
+#   1. RAISE max_age_hours PAST A WEEK. That is the tolerance-wider-than-period defect: a staleness window
+#      wider than the cadence it watches can never fire on time, so a genuinely DEAD rotation would sit
+#      unnoticed for a full week and the alert would only arrive after the damage. The estate has already
+#      been bitten by exactly this shape. Do not widen the number on a row that uses this form.
+#   2. TOUCH THE FILE ON A NO-OP so its mtime refreshes. That is date laundering: the file would read fresh
+#      with nothing whatsoever proving the rotation ran, and the check would be measuring its own write.
+# The answer is to prove currency from the CONTENT instead: the file itself says which week it describes.
+#
+# IT IS OPT-IN, AND THAT IS LOAD-BEARING. Four of the five output_files rows (grocery\out\smp-feed.json,
+# public\smp-feed.json, meal-prep\pipeline\v2-perserving.json, meal-prep\ingredient-map.json) are rewritten
+# on EVERY run and cannot no-op, so mtime is a true liveness signal for them. A default-on content check
+# would silently disarm the mtime rule on all four. A row uses this form only by declaring currency_field.
+#
+# max_age_hours STAYS ON THE ROW and is deliberately NOT consulted while currency_field is present. It is
+# kept so that deleting the two currency_* fields restores exactly the old behaviour (that is the rollback),
+# and so nobody "fixes" a false positive here by widening it. The mtime age is still printed, as context.
+#
+# A DEAD ROTATION STILL PAGES: when the board week moves and the rotation does not run, week_of falls behind
+# and this reports. And if the BOARD stops rebuilding, the comparison-*.json output_globs row pages, so the
+# reference this check leans on cannot go stale unnoticed either. Every ambiguity below FAILS CLOSED.
+function Get-BoardWeek {
+  param([string]$RepoRoot)
+  # THE SAME DERIVATION THE WRITER USES (rotate-free-dinners.ps1:93-94): the newest comparison-<date>.json
+  # BY NAME, not by mtime - an older board rebuilt today must not become "this week". If this check derived
+  # the week any other way, a disagreement between two derivations would page as a dead rotation.
+  $wk = @(Get-ChildItem (Join-Path $RepoRoot 'grocery\out\comparison-*.json') -ErrorAction SilentlyContinue |
+          Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } |
+          Sort-Object Name -Descending | Select-Object -First 1)
+  if ($wk.Count -eq 0) { return '' }
+  return [regex]::Match($wk[0].BaseName, '\d{4}-\d{2}-\d{2}').Value
+}
+function Test-ContentCurrency {
+  param($Row, [string]$Path, [string]$BoardWeek, [datetime]$Now)
+  # applies=$false means "this row is not on the content form" and the caller uses the plain mtime rule.
+  $r = @{ applies = $false; current = $false; detail = '' }
+  if (-not $Row) { return $r }
+  $field = if ($Row.PSObject.Properties['currency_field']) { [string]$Row.currency_field } else { '' }
+  if (-not $field) { return $r }
+  $r.applies = $true
+  $equals = if ($Row.PSObject.Properties['currency_equals']) { [string]$Row.currency_equals } else { '' }
+  if ($equals -ne 'board_week') {
+    # ALLOWLIST, NOT DENYLIST. A form this code has never heard of is unproven, not fine.
+    $r.detail = "declares currency_field '$field' but currency_equals '$equals' is not a form this check knows, so its currency is UNPROVEN"
+    return $r
+  }
+  if (-not (Test-Path $Path)) { $r.detail = 'does not exist'; return $r }
+  # THE AGE IS REPORTED, NEVER GATED, and every detail below quotes it in the SAME shape, "mtime <n>h",
+  # because the fixtures read that number back out to prove they are not passing for the wrong reason
+  # (the must-fire must be provably FRESH, the clean twin provably past the window). Reword it and both
+  # go blind while still reporting PASS.
+  $ageH = [math]::Round(($Now - (Get-Item $Path).LastWriteTime).TotalHours, 1)
+  if (-not $BoardWeek) {
+    $r.detail = "carries $field, but no grocery\out\comparison-<date>.json exists to compare it against, so this check is BLIND rather than clean (mtime ${ageH}h)"
+    return $r
+  }
+  $doc = $null
+  try { $doc = Get-Content $Path -Raw -ErrorAction Stop | ConvertFrom-Json } catch { $doc = $null }
+  if (-not $doc) { $r.detail = "could not be read as JSON, so its $field proves nothing (mtime ${ageH}h)"; return $r }
+  $stamp = if ($doc.PSObject.Properties[$field]) { [string]$doc.$field } else { '' }
+  if (-not $stamp) { $r.detail = "has no $field field, so nothing in it says which week it describes (mtime ${ageH}h)"; return $r }
+  if ($stamp -ne $BoardWeek) {
+    $r.detail = "carries $field=$stamp but the current board week is $BoardWeek, so the job that writes it has not run for this week (mtime ${ageH}h, which is NOT the tell here)"
+    return $r
+  }
+  $r.current = $true
+  $r.detail  = "$field=$stamp matches the board week (mtime ${ageH}h, not gated: this output is rewritten only when it changes)"
+  return $r
+}
+# <<< CONTENT-CURRENCY
 
 # ---- Windows scheduled tasks (silent death = deleted / disabled / long-since-run) ----
 foreach ($t in @($cfg.windows_tasks)) {
@@ -120,7 +203,18 @@ function Check-Age($path, $maxH, $why, $label) {
   if ($ageH -gt [double]$maxH) { $issues.Add(("OUTPUT STALE: {0} is {1}h old (> {2}h) - the job that writes it stopped? {3}" -f $label, $ageH, $maxH, $why)) }
   else { $okLines.Add(("{0,-38} {1}h fresh" -f $label, $ageH)) }
 }
-foreach ($f in @($cfg.output_files)) { Check-Age (Join-Path $repo ([string]$f.path)) $f.max_age_hours $f.why ([IO.Path]::GetFileName([string]$f.path)) }
+# A row that declares currency_field proves its currency from its own CONTENT and the mtime rule is not
+# applied to it; every other row takes exactly the path it always took. See the CONTENT-CURRENCY block above
+# for why this is opt-in and why widening max_age_hours or touching the file are both the wrong answer.
+$boardWeek = Get-BoardWeek $repo
+foreach ($f in @($cfg.output_files)) {
+  $fPath  = Join-Path $repo ([string]$f.path)
+  $fLabel = [IO.Path]::GetFileName([string]$f.path)
+  $cc = Test-ContentCurrency -Row $f -Path $fPath -BoardWeek $boardWeek -Now $now
+  if (-not $cc.applies) { Check-Age $fPath $f.max_age_hours $f.why $fLabel; continue }
+  if ($cc.current) { $okLines.Add(("{0,-38} {1}" -f $fLabel, $cc.detail)) }
+  else { $issues.Add(("OUTPUT NOT CURRENT: {0} {1} - {2}" -f $fLabel, $cc.detail, $f.why)) }
+}
 foreach ($g in @($cfg.output_globs)) {
   $newest = Get-ChildItem (Join-Path $repo ([string]$g.glob)) -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
   if (-not $newest) { $issues.Add("OUTPUT MISSING: no file matches $($g.glob) - $($g.why)") }
