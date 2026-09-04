@@ -1,0 +1,31 @@
+{
+    "slug":  "buffalo-chicken-rice-bowl",
+    "title":  "Buffalo Chicken Rice Bowl",
+    "source_url":  "https://ohsnapmacros.com/buffalo-chicken-rice-bowl/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:00:13",
+    "updated":  "2026-09-04T16:00:13",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Buffalo (Frank\u0027s + ranch) chicken over rice with veg is the same dinner as live slow-cooker-buffalo-chicken-bowl (Buffalo Chicken and Rice Bowl); protein, buffalo sauce and rice all match, only the cook method differs.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:00:13",
+                        "by":  "harvest",
+                        "detail":  "https://ohsnapmacros.com/buffalo-chicken-rice-bowl/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:00:13",
+                        "by":  "decider",
+                        "detail":  "Buffalo (Frank\u0027s + ranch) chicken over rice with veg is the same dinner as live slow-cooker-buffalo-chicken-bowl (Buffalo Chicken and Rice Bowl); protein, buffalo sauce and rice all match, only the cook method differs."
+                    }
+                ]
+}

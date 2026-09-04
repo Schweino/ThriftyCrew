@@ -1,0 +1,31 @@
+{
+    "slug":  "sheet-pan-fajita-bowls",
+    "title":  "Sheet Pan Fajita Bowls",
+    "source_url":  "https://ohsnapmacros.com/sheet-pan-fajita-bowls/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:14",
+    "updated":  "2026-09-04T16:05:14",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chili/cumin/paprika chicken strips with peppers and onion over basmati is the same dinner as live fajita-chicken-rice-bowl; collides in-batch with instant-pot-chicken-fajita-rice.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:14",
+                        "by":  "harvest",
+                        "detail":  "https://ohsnapmacros.com/sheet-pan-fajita-bowls/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:14",
+                        "by":  "decider",
+                        "detail":  "Chili/cumin/paprika chicken strips with peppers and onion over basmati is the same dinner as live fajita-chicken-rice-bowl; collides in-batch with instant-pot-chicken-fajita-rice."
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "epic-chicken-tacos",
+    "title":  "Epic Chicken Tacos",
+    "source_url":  "https://www.laurafuentes.com/chicken-tacos/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:12",
+    "updated":  "2026-09-04T16:05:12",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Salsa-verde/honey/taco-seasoning shredded chicken with cheese, romaine and pico is the same Tex-Mex chicken-taco identity as live slow-cooker-chicken-tacos-rice-bowls; the taco-shell vehicle does not make a distinct plate in an already-crowded region, and an in-flight sriracha chicken taco is also pending.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:12",
+                        "by":  "harvest",
+                        "detail":  "https://www.laurafuentes.com/chicken-tacos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:12",
+                        "by":  "decider",
+                        "detail":  "Salsa-verde/honey/taco-seasoning shredded chicken with cheese, romaine and pico is the same Tex-Mex chicken-taco identity as live slow-cooker-chicken-tacos-rice-bowls; the taco-shell vehicle does not make a distinct plate in an already-crowded region, and an in-flight sriracha chicken taco is also pending."
+                    }
+                ]
+}

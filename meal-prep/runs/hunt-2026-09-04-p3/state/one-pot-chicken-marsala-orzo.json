@@ -1,0 +1,31 @@
+{
+    "slug":  "one-pot-chicken-marsala-orzo",
+    "title":  "One Pot Chicken Marsala Orzo",
+    "source_url":  "https://thecleaneatingcouple.com/chicken-marsala-orzo/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:00:22",
+    "updated":  "2026-09-04T16:00:22",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken in mushroom-marsala-wine sauce shares its whole flavor identity with in-flight chicken-marsala-skillet (priced, hunt-2026-08-15); same protein/marsala sauce/method, only the orzo one-pot format differs, and shipping two chicken marsalas is the in-flight collision this stage exists to catch.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:00:22",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/chicken-marsala-orzo/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:00:22",
+                        "by":  "decider",
+                        "detail":  "Chicken in mushroom-marsala-wine sauce shares its whole flavor identity with in-flight chicken-marsala-skillet (priced, hunt-2026-08-15); same protein/marsala sauce/method, only the orzo one-pot format differs, and shipping two chicken marsalas is the in-flight collision this stage exists to catch."
+                    }
+                ]
+}

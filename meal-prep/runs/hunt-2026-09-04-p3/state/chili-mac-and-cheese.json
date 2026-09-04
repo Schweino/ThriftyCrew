@@ -1,0 +1,31 @@
+{
+    "slug":  "chili-mac-and-cheese",
+    "title":  "Chili Mac and Cheese",
+    "source_url":  "https://skinnyspatula.com/chili-mac-cheese/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:02",
+    "updated":  "2026-09-04T16:05:02",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground beef, chili spice, elbow macaroni, kidney beans and cheddar in tomato is the same dinner as live beef-chili-mac; the estate already rejected instant-pot-chili-mac on this identity.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:02",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/chili-mac-cheese/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:02",
+                        "by":  "decider",
+                        "detail":  "Ground beef, chili spice, elbow macaroni, kidney beans and cheddar in tomato is the same dinner as live beef-chili-mac; the estate already rejected instant-pot-chili-mac on this identity."
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "turkey-taco-bowl",
+    "title":  "Turkey Taco Bowl",
+    "source_url":  "https://ohsnapmacros.com/turkey-taco-bowls/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:04",
+    "updated":  "2026-09-04T16:05:04",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground-turkey taco filling over cauli-rice with pinto beans and a yogurt/cottage crema duplicates the live turkey taco/burrito bowl family; the estate already rejected turkey-taco-meal-prep-bowl on this identity.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:04",
+                        "by":  "harvest",
+                        "detail":  "https://ohsnapmacros.com/turkey-taco-bowls/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:04",
+                        "by":  "decider",
+                        "detail":  "Ground-turkey taco filling over cauli-rice with pinto beans and a yogurt/cottage crema duplicates the live turkey taco/burrito bowl family; the estate already rejected turkey-taco-meal-prep-bowl on this identity."
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-florentine-pasta",
+    "title":  "Chicken Florentine Pasta",
+    "source_url":  "https://skinnyspatula.com/chicken-florentine-pasta/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:00:16",
+    "updated":  "2026-09-04T16:00:17",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Creamy spinach-mushroom-parmesan chicken over penne is the same dinner as live chicken-florentine (bge 0.958, shares butter/chicken/heavy-cream/parmesan); adding pasta to an existing Florentine is a near-duplicate in a crowded creamy-chicken-pasta region.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:00:16",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/chicken-florentine-pasta/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:00:17",
+                        "by":  "decider",
+                        "detail":  "Creamy spinach-mushroom-parmesan chicken over penne is the same dinner as live chicken-florentine (bge 0.958, shares butter/chicken/heavy-cream/parmesan); adding pasta to an existing Florentine is a near-duplicate in a crowded creamy-chicken-pasta region."
+                    }
+                ]
+}

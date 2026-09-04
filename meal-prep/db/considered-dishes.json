@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-09-04T04:56:31",
-    "count":  358,
+    "updated":  "2026-09-04T16:05:18",
+    "count":  406,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -5397,6 +5397,733 @@
                        "run":  "hunt-2026-09-04-five",
                        "by":  "decider",
                        "at":  "2026-09-04T04:56:31"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-parmesan-garlic-pasta",
+                       "name":  "Chicken Parmesan Garlic Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Creamy garlic-parmesan-cream chicken pasta with white wine and basil; adds nothing to a saturated creamy chicken-pasta region (chicken-parmesan-pasta, mushroom, tuscan) and does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:33:49"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "southwest-chicken-foil-packet-recipe",
+                       "name":  "Southwest Chicken Foil Packet Recipe",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken breast baked with black beans, corn, salsa, taco seasoning and Mexican cheese; same Tex-Mex baked-chicken-and-bean identity as tex-mex-baked-chicken, foil-packet format not distinguishing.",
+                       "dupe_of":  [
+                                       "tex-mex-baked-chicken"
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:33:51"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "sheet-pan-chicken-and-potatoes-five-ingredients",
+                       "name":  "Sheet Pan Chicken and Potatoes (Five Ingredients)",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ranch-garlic-parmesan chicken and potatoes sheet pan; same chicken+potato+parmesan sheet-pan dinner as parmesan-garlic-sheet-pan-chicken-potatoes, seasoning-only difference.",
+                       "dupe_of":  [
+                                       "parmesan-garlic-sheet-pan-chicken-potatoes"
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:33:52"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "chicken-stuffed-peppers",
+                       "name":  "Chicken Stuffed Peppers",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Tex-Mex chicken-rice-cheddar filling baked in bell peppers; generic saturated Tex-Mex chicken flavor that does not widen the catalog, pepper vessel not distinguishing.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:33:54"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "caprese-stuffed-chicken-breast",
+                       "name":  "Caprese Stuffed Chicken Breast",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Baked chicken breast with pesto, fresh roma tomato, mozzarella and balsamic glaze; distinct caprese flavor, no live dupe (Tuscan stuffed-chicken-breast is a different creamy filling), verified 439cal/10c/43p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:33:56"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "salsa-fresca-baked-chicken-breast-recipe",
+                       "name":  "Salsa Fresca Baked Chicken Breast",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Baked chicken breast topped with fresh tomato/onion/cilantro/jalapeno pico and mozzarella; generic salsa-chicken in a saturated Mexican chicken region, non-distinct and non-widening.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:33:57"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "baked-cashew-chicken",
+                       "name":  "Baked Cashew Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken, broccoli, peppers and cashews in soy-hoisin sauce over rice; same cashew-chicken identity as live thai-cashew-chicken, oven vs wok not distinguishing.",
+                       "dupe_of":  [
+                                       "thai-cashew-chicken"
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:33:59"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "grilled-avocado-chicken-salad",
+                       "name":  "Grilled Avocado Chicken Salad",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold composed chicken-avocado-tomato-feta salad with lime dressing; does not batch or hold as a hot dinner, consistent with prior cold-salad rejections.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:34:00"
+                   },
+                   {
+                       "key":  "beef|skillet|tomato",
+                       "slug":  "smash-burger-with-cheese-lettuce-and-tomato",
+                       "name":  "Smash Burger with Cheese Lettuce and Tomato",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Single-serve smash burger on a brioche bun; an assembled sandwich that does not batch-prep or hold, not a portioned batch dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:34:01"
+                   },
+                   {
+                       "key":  "turkey|bake|spice",
+                       "slug":  "healthy-taco-salad",
+                       "name":  "Healthy Taco Salad",
+                       "protein":  "turkey",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cold ground-turkey taco salad with salsa, corn, cheese and tortilla chips; duplicates the saturated live turkey-taco family (casserole, rice skillet), cold salad vehicle not distinguishing.",
+                       "dupe_of":  [
+                                       "turkey-taco-casserole",
+                                       "turkey-taco-rice-skillet"
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:34:03"
+                   },
+                   {
+                       "key":  "chicken|bake|cheese",
+                       "slug":  "high-protein-lavash-bread-pizza",
+                       "name":  "High Protein Lavash Bread Pizza",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Single-serve lavash flatbread pizza assembled per portion; a light personal lunch that goes soggy on reheat, not a batch-prep dinner format the catalog wants.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:07"
+                   },
+                   {
+                       "key":  "chicken|any|herb",
+                       "slug":  "chicken-bacon-ranch-wrap",
+                       "name":  "Chicken Bacon Ranch Wrap",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken, bacon, ranch and cheddar rolled in a flour tortilla; same bacon-ranch-chicken-in-tortilla dinner as live chicken-bacon-ranch-burrito, and a cold assembled wrap that doesn\u0027t batch (bacon-ranch chicken also saturated: in-flight cauliflower bake).",
+                       "dupe_of":  [
+                                       "chicken-bacon-ranch-burrito"
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:09"
+                   },
+                   {
+                       "key":  "turkey|bake|plain",
+                       "slug":  "turkey-stuffed-peppers",
+                       "name":  "Turkey Stuffed Peppers",
+                       "protein":  "turkey",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Ground-turkey and quinoa Italian stuffed bell peppers with mozzarella; distinct protein/starch from live pulled-pork stuffed peppers and in-flight italian-sausage stuffed peppers (only 2 of 4 axes overlap), no turkey stuffed pepper live (a soup only), verified 401cal/35c/40p leaner batch main; not-a-main flag spurious.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:11"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-with-onion-thyme-sauce",
+                       "name":  "Chicken with Onion Thyme Sauce",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Flour-dredged seared chicken breast in an onion/garlic/broth pan gravy; same chicken-in-onion-gravy dinner as live smothered-chicken-onion-gravy (chicken, skillet, onion-gravy sauce, starch all match), thyme + rice-vinegar accent is not a distinguishing plate.",
+                       "dupe_of":  [
+                                       "smothered-chicken-onion-gravy"
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:13"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "southwest-chicken-salad-recipe",
+                       "name":  "Southwest Chicken Salad Recipe",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold BBQ southwest chicken salad over romaine with black beans, corn, Monterey Jack, fried tortilla strips and ranch; a composed salad that wilts and doesn\u0027t batch as a hot dinner, matching prior southwest-chicken-salad not-fit ruling.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:14"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "chicken-avocado-salad-wrap",
+                       "name":  "Chicken Avocado Salad Wrap",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Single-serve cold wrap of chicken, avocado, spinach, tomato and ranch in a tortilla; avocado browns and the wrap goes soggy, does not hold for batch meal prep, consistent with prior cold chicken-wrap rejections.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:15"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "grilled-chicken-caesar-salad",
+                       "name":  "Grilled Chicken Caesar Salad",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Grilled chicken breast over romaine with sourdough croutons, Caesar dressing and parmesan; a cold composed salad that wilts and doesn\u0027t hold for batch meal prep, consistent with prior chicken-caesar-salad not-fit ruling.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:16"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "sheet-pan-cranberry-chicken-and-stuffing",
+                       "name":  "Sheet Pan Cranberry Chicken and Stuffing",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Chicken breasts baked over herbed bread-cube stuffing with a cranberry-sauce/onion-soup glaze; distinct holiday chicken-and-stuffing one-pan dinner with no live dupe and different from in-flight chicken-meatballs-in-cranberry-sauce (whole breast + stuffing vs meatballs), verified 529cal/26c/51p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:18"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "chicken-caesar-cutlets",
+                       "name":  "Chicken Caesar Cutlets",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Breaded parmesan chicken cutlets topped with a chopped romaine Caesar salad, Caesar dressing and croutons; the cold salad and croutons wilt so the assembled plate doesn\u0027t batch, consistent with prior chicken-caesar-salad not-fit rulings.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-five-b",
+                       "by":  "decider",
+                       "at":  "2026-09-04T08:36:19"
+                   },
+                   {
+                       "key":  "beef|skillet|cream",
+                       "slug":  "creamy-chipotle-broth-bowls",
+                       "name":  "Creamy Chipotle Broth Bowls",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Ground beef simmered in a creamy chipotle-adobo broth over rice; novel broth-bowl in an empty saturation region, band 540/59/45 verified.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:08"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "grilled-balsamic-chicken-with-a-strawberry-and-avocado-salsa",
+                       "name":  "Grilled Balsamic Chicken with Strawberry and Avocado Salsa",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "accepted",
+                       "reason":  "Grilled balsamic-marinated chicken with strawberry-avocado salsa over quinoa; distinct fresh/fruit profile, band 633/59/47 verified.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:10"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "trader-joe-s-bruschetta-chicken-bowls",
+                       "name":  "Trader Joe\u0027s Bruschetta Chicken Bowls",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Assembly of Trader Joe\u0027s-brand pre-made products (bruschetta sauce, burrata, marinated pesto chicken); not costable or scalable from carried generic ingredients.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:11"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "buffalo-chicken-rice-bowl",
+                       "name":  "Buffalo Chicken Rice Bowl",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Franks-hot buffalo chicken over rice duplicates live Slow Cooker Buffalo Chicken and Rice Bowl; same protein/sauce/starch, crowded buffalo-chicken region.",
+                       "dupe_of":  [
+                                       "slow-cooker-buffalo-chicken-bowl"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:13"
+                   },
+                   {
+                       "key":  "pork|braised|bbq",
+                       "slug":  "dutch-oven-honey-garlic-pork-tenderloin",
+                       "name":  "Dutch Oven Honey Garlic Pork Tenderloin",
+                       "protein":  "pork",
+                       "method":  "braised",
+                       "verdict":  "accepted",
+                       "reason":  "Honey-garlic-soy glazed pork tenderloin roast with potatoes and carrots; sweet-glaze profile distinguishes it from the gravy roast and the rice-bowl honey-garlic pork, band 474/47/44 verified.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:15"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-florentine-pasta",
+                       "name":  "Chicken Florentine Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Creamy spinach-parmesan Florentine chicken with penne duplicates live Chicken Florentine; same cream/spinach sauce and protein, only pasta added, region already includes Tuscan chicken pasta.",
+                       "dupe_of":  [
+                                       "chicken-florentine"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:17"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "grilled-sweet-and-spicy-thai-chicken-kabobs",
+                       "name":  "Grilled Sweet and Spicy Thai Chicken Kabobs",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "accepted",
+                       "reason":  "Grilled chicken-pineapple kabobs with sambal-honey glaze over rice; distinct grilled skewer format from existing Thai chicken dishes, band 459/51/50 verified.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:19"
+                   },
+                   {
+                       "key":  "chicken|skillet|wine",
+                       "slug":  "chicken-piccata-risotto",
+                       "name":  "Chicken Piccata Risotto",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Lemon-caper-wine chicken piccata over risotto duplicates live Chicken Piccata Skillet; same protein/sauce/method, only starch differs.",
+                       "dupe_of":  [
+                                       "chicken-piccata-skillet"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:21"
+                   },
+                   {
+                       "key":  "chicken|skillet|wine",
+                       "slug":  "one-pot-chicken-marsala-orzo",
+                       "name":  "One Pot Chicken Marsala Orzo",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Mushroom-marsala chicken with orzo duplicates in-flight Chicken Marsala Skillet\u0027s flavor identity; same protein/sauce, one-pot pasta format only distinction.",
+                       "dupe_of":  [
+                                       "chicken-marsala-skillet"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:23"
+                   },
+                   {
+                       "key":  "chicken|braised|bbq",
+                       "slug":  "slow-cooker-honey-garlic-chicken",
+                       "name":  "Slow Cooker Honey Garlic Chicken",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Honey-soy-hoisin braised chicken with broccoli over rice duplicates live Hot Honey Chicken and Broccoli Bowls / Honey Sesame Chicken Bowls; saturated sweet-soy chicken region, carbs 73g also high.",
+                       "dupe_of":  [
+                                       "hot-honey-chicken-bowls",
+                                       "slow-cooker-honey-sesame-chicken-bowls"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:00:24"
+                   },
+                   {
+                       "key":  "beef|bake|spice",
+                       "slug":  "street-corn-taco-beef-bowls-easy-taco-bowl-recipe",
+                       "name":  "Street Corn Taco Beef Bowls",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Taco ground-beef bowl with street-corn topping and sweet potato; same taco-beef-bowl dinner as live loaded-beef-taco-skillet-bowls, elote/sweet-potato are additions not a new plate, Tex-Mex beef saturated.",
+                       "dupe_of":  [
+                                       "loaded-beef-taco-skillet-bowls"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:08"
+                   },
+                   {
+                       "key":  "chicken|braised|cream",
+                       "slug":  "one-pot-creamy-lemon-chicken-orzo",
+                       "name":  "One Pot Creamy Lemon Chicken Orzo",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Boursin/sun-dried-tomato/spinach creamy chicken orzo; adds to the saturated creamy-chicken-pasta region already covered by creamy-tuscan-chicken-skillet, does not widen cuisine.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:09"
+                   },
+                   {
+                       "key":  "chicken|braised|cream",
+                       "slug":  "creamy-chicken-noodle-soup",
+                       "name":  "Creamy Chicken Noodle Soup",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "American creamy chicken noodle soup; creamy-soup region already covered by multiple live turkey/kielbasa versions, does not widen cuisine.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:10"
+                   },
+                   {
+                       "key":  "beef|bake|spice",
+                       "slug":  "taco-stuffed-sweet-potatoes",
+                       "name":  "Taco Stuffed Sweet Potatoes",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Taco ground beef in sweet-potato shells; saturated Tex-Mex taco-beef region already covered live, overlaps another taco-beef-sweet-potato candidate in the same batch.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:11"
+                   },
+                   {
+                       "key":  "chicken|braised|cream",
+                       "slug":  "creamy-chicken-feta-pasta",
+                       "name":  "Creamy Chicken Feta Pasta",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Creamy chicken pasta with feta and sun-dried tomato; saturated creamy-chicken-pasta region already covered live, does not widen cuisine.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:12"
+                   },
+                   {
+                       "key":  "chicken|braised|cream",
+                       "slug":  "instant-pot-creamy-chicken-pasta",
+                       "name":  "Instant Pot Creamy Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Standard cream-cheese/parmesan/spinach chicken pasta; saturated creamy-chicken-pasta region, does not widen the American-skewed catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:14"
+                   },
+                   {
+                       "key":  "beef|bake|tomato",
+                       "slug":  "ground-beef-enchiladas",
+                       "name":  "Ground Beef Enchiladas",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground beef enchiladas with enchilada sauce/tortillas/cheese; identical dinner to already-accepted in-flight easy-beef-enchiladas.",
+                       "dupe_of":  [
+                                       "easy-beef-enchiladas"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:16"
+                   },
+                   {
+                       "key":  "beef|any|cream",
+                       "slug":  "creamy-gochujang-noodles",
+                       "name":  "Creamy Gochujang Noodles",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Recipe is built on Trader Joe\u0027s Knife Cut Noodles and their included sauce packets; specialty product not costable/reproducible for batch prep, carbs 69g high.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:17"
+                   },
+                   {
+                       "key":  "chicken|casserole|spice",
+                       "slug":  "chicken-fajita-casserole",
+                       "name":  "Chicken Fajita Casserole",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Fajita chicken + rice + peppers casserole; same dinner as live fajita-chicken-rice-bowl, consistent with prior chicken|casserole rejection, Tex-Mex saturated.",
+                       "dupe_of":  [
+                                       "fajita-chicken-rice-bowl"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:19"
+                   },
+                   {
+                       "key":  "chicken|braised|herb",
+                       "slug":  "easy-chicken-pesto-pasta",
+                       "name":  "Easy Chicken Pesto Pasta",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Pesto chicken pasta; cross-protein twin of live turkey-pesto-pasta-kale in a saturated chicken-pasta region, does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:03:20"
+                   },
+                   {
+                       "key":  "beef|stew|tomato",
+                       "slug":  "chili-mac-and-cheese",
+                       "name":  "Chili Mac and Cheese",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground beef chili with elbow macaroni, kidney beans and cheddar; indistinguishable from live beef-chili-mac.",
+                       "dupe_of":  [
+                                       "beef-chili-mac"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:03"
+                   },
+                   {
+                       "key":  "turkey|skillet|spice",
+                       "slug":  "turkey-taco-bowl",
+                       "name":  "Turkey Taco Bowl",
+                       "protein":  "turkey",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-turkey taco filling over rice with taco seasoning and beans; same plate as live ground-turkey-burrito-bowl at saturation 7.",
+                       "dupe_of":  [
+                                       "ground-turkey-burrito-bowl",
+                                       "turkey-taco-casserole"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:05"
+                   },
+                   {
+                       "key":  "turkey|stew|tomato",
+                       "slug":  "simple-turkey-chili",
+                       "name":  "Simple Turkey Chili",
+                       "protein":  "turkey",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Classic ground-turkey-and-bean tomato chili; duplicates live slow-cooker-turkey-chili-bowls at saturation 7, no distinguishing plate.",
+                       "dupe_of":  [
+                                       "slow-cooker-turkey-chili-bowls",
+                                       "turkey-pumpkin-chili"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:07"
+                   },
+                   {
+                       "key":  "turkey|stew|tomato",
+                       "slug":  "ground-turkey-chili",
+                       "name":  "Ground Turkey Chili",
+                       "protein":  "turkey",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-turkey-and-bean tomato chili with corn; same dinner as live turkey chili family at saturation 7.",
+                       "dupe_of":  [
+                                       "slow-cooker-turkey-chili-bowls",
+                                       "turkey-pumpkin-chili"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:09"
+                   },
+                   {
+                       "key":  "chicken|stew|plain",
+                       "slug":  "slow-cooker-chicken-stew-recipe",
+                       "name":  "Slow Cooker Chicken Stew Recipe",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Classic herbed chicken-and-vegetable stew (potato, carrot, celery, peas); fills an empty plain-chicken-stew region distinct from the catalog\u0027s regional chicken stews.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:10"
+                   },
+                   {
+                       "key":  "chicken|braised|spice",
+                       "slug":  "epic-chicken-tacos",
+                       "name":  "Epic Chicken Tacos",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Salsa-verde honey taco-seasoned shredded chicken tacos; same Tex-Mex chicken-taco dinner as live slow-cooker-chicken-tacos-rice-bowls, taco shell not a distinguishing plate.",
+                       "dupe_of":  [
+                                       "slow-cooker-chicken-tacos-rice-bowls",
+                                       "slow-cooker-salsa-chicken-bowl"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:12"
+                   },
+                   {
+                       "key":  "chicken|bake|spice",
+                       "slug":  "sheet-pan-fajita-bowls",
+                       "name":  "Sheet Pan Fajita Bowls",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken fajita strips and peppers over rice; same plate as live fajita-chicken-rice-bowl.",
+                       "dupe_of":  [
+                                       "fajita-chicken-rice-bowl"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:14"
+                   },
+                   {
+                       "key":  "chicken|braised|spice",
+                       "slug":  "instant-pot-chicken-fajita-rice",
+                       "name":  "Instant Pot Chicken Fajita Rice",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Fajita-seasoned chicken, peppers, beans and rice; same dinner as live fajita-chicken-rice-bowl.",
+                       "dupe_of":  [
+                                       "fajita-chicken-rice-bowl"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:16"
+                   },
+                   {
+                       "key":  "chicken|bake|spice",
+                       "slug":  "copycat-chipotle-chicken-burrito-bowl",
+                       "name":  "Copycat Chipotle Chicken Burrito Bowl",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chili-cumin chicken over cilantro-lime rice with pinto beans and peppers; standard chicken burrito bowl duplicating live salsa chicken burrito bowls in a saturated region.",
+                       "dupe_of":  [
+                                       "slow-cooker-salsa-chicken-bowl",
+                                       "slow-cooker-salsa-verde-chicken-bowl"
+                                   ],
+                       "run":  "hunt-2026-09-04-p3",
+                       "by":  "decider",
+                       "at":  "2026-09-04T16:05:18"
                    }
                ]
 }

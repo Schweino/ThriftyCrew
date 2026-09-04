@@ -1,0 +1,31 @@
+{
+    "slug":  "ground-turkey-chili",
+    "title":  "Ground Turkey Chili",
+    "source_url":  "https://thecleaneatingcouple.com/ground-turkey-chili/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:08",
+    "updated":  "2026-09-04T16:05:08",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground-turkey chili with black beans, corn and tomato duplicates the live turkey chili family and collides in-batch with simple-turkey-chili; no distinguishing plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:08",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/ground-turkey-chili/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:08",
+                        "by":  "decider",
+                        "detail":  "Ground-turkey chili with black beans, corn and tomato duplicates the live turkey chili family and collides in-batch with simple-turkey-chili; no distinguishing plate."
+                    }
+                ]
+}

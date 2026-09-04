@@ -1,0 +1,31 @@
+{
+    "slug":  "instant-pot-chicken-fajita-rice",
+    "title":  "Instant Pot Chicken Fajita Rice",
+    "source_url":  "https://skinnyspatula.com/instant-pot-chicken-fajita-rice/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:16",
+    "updated":  "2026-09-04T16:05:16",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Fajita-seasoned chicken with peppers, black beans and rice shares protein, fajita sauce, peppers and starch with live fajita-chicken-rice-bowl (word-overlap 36); collides in-batch with sheet-pan-fajita-bowls.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:16",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/instant-pot-chicken-fajita-rice/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:16",
+                        "by":  "decider",
+                        "detail":  "Fajita-seasoned chicken with peppers, black beans and rice shares protein, fajita sauce, peppers and starch with live fajita-chicken-rice-bowl (word-overlap 36); collides in-batch with sheet-pan-fajita-bowls."
+                    }
+                ]
+}

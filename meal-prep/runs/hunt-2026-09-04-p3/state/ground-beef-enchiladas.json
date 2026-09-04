@@ -1,0 +1,31 @@
+{
+    "slug":  "ground-beef-enchiladas",
+    "title":  "Ground Beef Enchiladas",
+    "source_url":  "https://www.spendwithpennies.com/ground-beef-enchiladas/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:03:15",
+    "updated":  "2026-09-04T16:03:15",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground beef, taco seasoning, enchilada sauce, cheese and corn tortillas baked is the same dinner as easy-beef-enchiladas, which this estate accepted and is now in-flight (mapped, hunt-2026-08-26-smoke); an unpublished-recipe collision that must not ship twice.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:03:15",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/ground-beef-enchiladas/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:03:15",
+                        "by":  "decider",
+                        "detail":  "Ground beef, taco seasoning, enchilada sauce, cheese and corn tortillas baked is the same dinner as easy-beef-enchiladas, which this estate accepted and is now in-flight (mapped, hunt-2026-08-26-smoke); an unpublished-recipe collision that must not ship twice."
+                    }
+                ]
+}

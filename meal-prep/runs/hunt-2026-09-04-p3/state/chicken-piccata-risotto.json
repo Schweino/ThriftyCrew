@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-piccata-risotto",
+    "title":  "Chicken Piccata Risotto",
+    "source_url":  "https://iowagirleats.com/chicken-piccata-risotto-crispy-capers/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:00:20",
+    "updated":  "2026-09-04T16:00:20",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken in a lemon-caper-wine piccata sauce is the same dinner as live chicken-piccata-skillet (bge 0.926, shares butter/chicken/broth/olive-oil/parmesan); serving it over risotto is a starch swap on an existing piccata, and the piccata region is already crowded in backlog.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:00:20",
+                        "by":  "harvest",
+                        "detail":  "https://iowagirleats.com/chicken-piccata-risotto-crispy-capers/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:00:20",
+                        "by":  "decider",
+                        "detail":  "Chicken in a lemon-caper-wine piccata sauce is the same dinner as live chicken-piccata-skillet (bge 0.926, shares butter/chicken/broth/olive-oil/parmesan); serving it over risotto is a starch swap on an existing piccata, and the piccata region is already crowded in backlog."
+                    }
+                ]
+}

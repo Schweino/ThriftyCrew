@@ -1,0 +1,31 @@
+{
+    "slug":  "copycat-chipotle-chicken-burrito-bowl",
+    "title":  "Copycat Chipotle Chicken Burrito Bowl",
+    "source_url":  "https://fitfoodiefinds.com/naked-chicken-burritos/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:17",
+    "updated":  "2026-09-04T16:05:18",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chili/cumin chicken with cilantro-lime rice, pinto beans, peppers, cheese and guac is the canonical chicken burrito bowl duplicating live salsa/salsa-verde chicken burrito bowls at saturation 9.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:17",
+                        "by":  "harvest",
+                        "detail":  "https://fitfoodiefinds.com/naked-chicken-burritos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:18",
+                        "by":  "decider",
+                        "detail":  "Chili/cumin chicken with cilantro-lime rice, pinto beans, peppers, cheese and guac is the canonical chicken burrito bowl duplicating live salsa/salsa-verde chicken burrito bowls at saturation 9."
+                    }
+                ]
+}

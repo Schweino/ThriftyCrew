@@ -290,3 +290,67 @@ Two scratch scripts, deliberately not shipped: one builds the pair sets (the sid
 catalog-vs-catalog cosines that pick the 300 hardest), one asks the local model. What IS shipped is
 `--reingredients-ruled`, because without it the pairs cannot be rebuilt, and a measurement whose
 inputs cannot be reconstructed is an anecdote.
+
+## 9. P3: does the decider rule more cheaply now the dossiers carry evidence? INCONCLUSIVE, and the
+## metric is why.
+
+author: Opus 5, 2026-09-04. Run `hunt-2026-09-04-p3`, decide lane only, dry-run publish, launched by
+Brad's ruling. Band ruled by Brad: 350-650 cal, NO carb limit, >= 40 g protein.
+
+**Why the band moved, and it is a finding of its own.** P3 was specified as "one run at the same band
+and target" as `hunt-2026-09-04-five-b`. That is impossible: of 3,134 available candidates, **0**
+cleared five-b's band (350-650 / <= 35 g carb / >= 40 g protein) on verified numbers. A full
+`harvest-crawl.ps1` was run specifically to unblock it, added 148 candidates, and **none of them were
+in band either**. The breakdown after the crawl, of 3,282 available:
+
+    unverified band  2,125      out on calories  514
+    out on carbs       422      out on protein   221
+    IN BAND              0
+
+`candidate_in_band` requires `band.verified` - an inferred macro is not evidence a dish clears a 40 g
+floor - so roughly two thirds of the shelf is structurally unpoppable at ANY band. "3,282 available"
+is not a number of candidates a run can use.
+
+### The comparison
+
+five-b's decide calls ran 08:32-08:36; the evidence fix (b3c1833c) landed 09:57. So five-b is a
+genuine BEFORE: its dossiers carried word-overlap neighbours and almost no embedding ones (70 of
+3,134 at the time). Every p3 dossier carried both.
+
+| | five-b (before) | p3 (after) |
+|---|---|---|
+| decider calls | 2 | 3 |
+| candidates ruled | 19 | 30 |
+| output tokens | 16,761 | 33,057 |
+| **per candidate ruled** | **882** | **1,102**  (+25%) |
+| dupe rejections | 6 (32%) | 16 (53%) |
+| **per dupe rejection** | **2,794** | **2,066**  (-26%) |
+
+**The two numbers move in opposite directions, and that is the answer.** Per candidate it got dearer;
+per dupe rejection it got cheaper. Both are explained by the same thing - the MIX changed, from 32%
+duplicates to 53% - and the mix changed because the band changed. Neither figure can be attributed to
+the neighbour evidence.
+
+**So the plan's chosen metric is confounded, and would have been even at the same band.** "Output
+tokens per candidate ruled" is a ratio whose denominator the run itself selects: a decider facing
+more duplicates writes more rejections and fewer acceptances, and those cost different amounts. The
+measurement that would actually answer the question is the SAME candidates ruled twice, once with the
+neighbour block and once without - a within-pairs design, not a between-runs one. That costs two
+decider calls on identical dossiers and is the honest next experiment.
+
+**What IS clean, and it is worth stating.** The decider writes on the order of 1,000 output tokens
+per candidate either way. At ~81 tokens/sec that is ~12 seconds of wall clock per candidate ruled.
+Whatever the evidence did, it did not make the decide lane cheap, and the ingest gate that was
+supposed to stop duplicates before they got there is retired (section 8). Duplicates are being paid
+for at the decider, and on this run they were 53% of everything ruled.
+
+### And a defect the run surfaced: candidates stranded as `taken:`
+
+p3 reported one finding - `creamy-chicken-feta-pasta: the pool ruling did not land`. Reading the pool
+for that shape found **21 candidates stuck at `status: taken:<run>`** by runs that have since ended:
+20 from `hunt-2026-09-04-five` and 1 from p3. A `taken:` candidate is not `available`, so `pool_lane`
+never pops it and no ruling ever settles it: it is leased to a dead run, permanently, and silently.
+
+`--mark-ruled` on the p3 one succeeded when re-run by hand, so the failure is transient rather than
+structural - which makes it worse, not better: nothing retries, and nothing sweeps. Not fixed here,
+because it is outside this plan and the fix is a lease-expiry decision, not a patch.

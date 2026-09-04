@@ -2,8 +2,8 @@
 
 queue_id: after-dedup-2026-09-04
 shipped_commit: 69289acc (2026-09-04) - P1, P1c, P2, P4, P5 and the P6 ledger correction are DONE:
-verify and report, do not rebuild. P3 shipped separately (it needs the card and a real run); P6's
-remaining entries are parked on rulings by design.
+verify and report, do not rebuild. P3 was RUN and is written up in EVAL section 9 (inconclusive, and
+the metric is why); P6's remaining entries are parked on rulings by design.
 OUTCOME, so nobody rebuilds from the plan's hypothesis: P1's richer prompt was RUN and it made the
 gate WORSE - 23.9% recall at 2.00% wrong refusals, against 43.3% / 4.67% for names alone. The road
 this plan opened is closed, and it took P1c, not P1b. See EVAL-dedup-shortlist section 8.

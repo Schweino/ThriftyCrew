@@ -1,0 +1,31 @@
+{
+    "slug":  "simple-turkey-chili",
+    "title":  "Simple Turkey Chili",
+    "source_url":  "https://lemonsandzest.com/simple-turkey-chili/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T16:05:06",
+    "updated":  "2026-09-04T16:05:06",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Plain ground-turkey chili with kidney and pinto beans and tomato is the same dinner as the live turkey chili family; also collides in-batch with ground-turkey-chili, and carbs run high at 69g.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T16:05:06",
+                        "by":  "harvest",
+                        "detail":  "https://lemonsandzest.com/simple-turkey-chili/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T16:05:06",
+                        "by":  "decider",
+                        "detail":  "Plain ground-turkey chili with kidney and pinto beans and tomato is the same dinner as the live turkey chili family; also collides in-batch with ground-turkey-chili, and carbs run high at 69g."
+                    }
+                ]
+}
