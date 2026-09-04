@@ -900,6 +900,24 @@ function Test-EdgeServesPushed {
   if ([string]$LiveGenerated -eq [string]$CommittedGenerated) { return 'ok' }
   return 'stale'
 }
+# THE BYTE COMPARISON (2026-09-04, queue 2026-09-04-4ec26c). The board.json read-after-write compared a
+# CONSOLE-CODE-PAGE decode of the git blob (`git show | Out-String`) against a UTF-8 decode of the live
+# response, so it compared two different decodings of identical bytes and could never pass on a board
+# containing a single non-ASCII character. Measured the morning it fired: the edge and HEAD were byte-for-
+# byte identical (SHA256 C24A9BF3..., 2,961,318 bytes on both sides), and the alert's own two numbers were
+# that one file in two units - 2,961,318 bytes, 2,959,184 UTF-8 characters, and the board carries exactly
+# 2,134 characters above U+007F.
+# Pure, and it takes HASHES rather than the payloads: a byte-by-byte loop over 2.9 MB in PowerShell costs
+# seconds, and a hash is the same answer. An unreadable side is BLIND, never 'ok' - two empty hashes must
+# not compare equal and read as agreement.
+function Test-EdgeServesPushedBytes {
+  <# .DESCRIPTION Pure. ok | stale | blind. Hex SHA256 of the committed blob vs the live response. #>
+  param([string]$CommittedHash, [string]$LiveHash)
+  if ([string]::IsNullOrWhiteSpace($CommittedHash)) { return 'blind' }
+  if ([string]::IsNullOrWhiteSpace($LiveHash))      { return 'blind' }
+  if ($CommittedHash -eq $LiveHash) { return 'ok' }
+  return 'stale'
+}
 # <<< EDGE-DECISION <<<
 
 # ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
@@ -910,18 +928,36 @@ function Test-EdgeServesPushed {
 if ($shipServed -and $pushed) {
   try {
     # THE COMMITTED BLOB, not the working tree: that is the only copy the edge could possibly be serving.
+    # AND AS BYTES (2026-09-04, queue 2026-09-04-4ec26c). This used to be
+    #     (& git -C $repo show HEAD:public/smp-feed.json | Out-String)
+    # which decodes a native command's stdout through the console code page. The blob is UTF-8, so every
+    # multi-byte sequence became 2+ characters. It survived here only by accident - the string is
+    # ConvertFrom-Json'd and one ASCII field (`generated`) is compared - and the same pattern at the
+    # board.json check below, which compares the WHOLE payload, could never pass and paged every day.
+    # lib\git-blob-lib.ps1 reads git's raw stdout stream, so no encoding is applied in either direction.
     # No stderr redirect - this file runs under EAP=Stop, where redirecting a native child's stderr turns
     # its first line into a terminating error (documented twice elsewhere in this file).
-    $repoFeedRaw = (& git -C $repo show HEAD:public/smp-feed.json | Out-String)
+    . (Join-Path $repo 'lib\git-blob-lib.ps1')
+    $repoFeedBytes = Get-CommittedBlobBytes -Repo $repo -Spec 'HEAD:public/smp-feed.json'
+    $repoFeedHash  = Get-Sha256Hex $repoFeedBytes
+    # DECODE EXPLICITLY, and say which encoding. The bytes are what git stored; UTF-8 is what wrote them.
+    $repoFeedRaw = if ($repoFeedBytes) { [Text.Encoding]::UTF8.GetString($repoFeedBytes) } else { '' }
     $feedSha = (& git -C $repo rev-parse --short HEAD | Out-String).Trim()
-    $repoFeed = $repoFeedRaw | ConvertFrom-Json
+    $repoFeed = if ($repoFeedRaw) { $repoFeedRaw | ConvertFrom-Json } else { $null }
     # POLL, DO NOT GUESS. A Workers asset deploy takes 1-3 minutes; the single 30-second check this
     # replaced would have reported EDGE STALE on most days, and an alert that cries wolf about the one
     # thing a reader actually sees is worse than no alert. Give it 5 minutes, then say so.
     $live = $null
+    $liveFeedBytes = $null
     foreach ($try in 1..10) {
       Start-Sleep -Seconds 30
-      try { $live = ((Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content | ConvertFrom-Json) } catch { continue }
+      try {
+        $resp = Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45
+        # keep the RAW BYTES as well as the parsed object: the poll question is "has generated caught up",
+        # the read-after-write question is "are these the bytes we committed", and only bytes answer that.
+        $liveFeedBytes = Get-ResponseBytes $resp
+        $live = ([Text.Encoding]::UTF8.GetString($liveFeedBytes) | ConvertFrom-Json)
+      } catch { continue }
       if ([string]$live.generated -eq [string]$repoFeed.generated) { break }
     }
     # SAY WHAT WAS COMPARED, not what was inferred. The old body asserted "the push succeeded" without ever
@@ -935,20 +971,38 @@ if ($shipServed -and $pushed) {
       try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m | Out-Null } catch {}
     } else {
       Write-Output ("edge verified: serving generated $($live.generated), $($live.recipe_count) recipes")
+      # ...AND THE SAME BYTE QUESTION FOR smp-feed (2026-09-04). `generated` catching up proves the deploy
+      # landed a file stamped at the right moment; it does not prove the file is the one we committed.
+      $liveFeedHash = Get-Sha256Hex $liveFeedBytes
+      $fv = Test-EdgeServesPushedBytes -CommittedHash $repoFeedHash -LiveHash $liveFeedHash
+      if ($fv -eq 'blind') {
+        Write-Output 'EDGE BLIND (smp-feed bytes): one side could not be read, so nothing was compared and no alert is sent - could-not-run is not a failure.'
+      } elseif ($fv -eq 'stale') {
+        $fm = 'The edge is serving an smp-feed.json whose BYTES differ from the COMMITTED copy at HEAD (' + $feedSha + '), even though its generated stamp matches. Committed SHA256 ' + $repoFeedHash + ' (' + $repoFeedBytes.Length + ' bytes); live SHA256 ' + $liveFeedHash + ' (' + $liveFeedBytes.Length + ' bytes). Compared as bytes, against git, never against the working tree.'
+        Write-Output ('EDGE STALE (smp-feed bytes): ' + $fm)
+        try { Send-Alert -Subject "smp-feed edge bytes do not match the push - $today" -Body $fm | Out-Null } catch {}
+      } else { Write-Output ("edge verified: smp-feed.json is byte-identical to HEAD " + $feedSha + " (SHA256 " + $repoFeedHash + ", " + $repoFeedBytes.Length + " bytes)") }
       # board.json is 2.5 MB of store chips - every price a shopper reads on the board page - and had no
       # read-after-write at all. Same question, second file.
       try {
-        # SAME DEFECT, SAME FIX: compare against the COMMITTED blob, never the working tree.
-        $repoBoard = (& git -C $repo show HEAD:public/board.json | Out-String)
-        $liveBoard = (Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/board.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content
-        $norm = { param($t) ($t -replace "`r`n", "`n").Trim() }
-        if ([string]::IsNullOrWhiteSpace($repoBoard)) {
-          Write-Output 'EDGE BLIND (board): could not read HEAD:public/board.json, so nothing was compared and no alert is sent.'
-        } elseif ((& $norm $liveBoard) -ne (& $norm $repoBoard)) {
-          $bm = 'The edge is serving a board.json that does not match the COMMITTED copy at HEAD (' + $feedSha + '): ' + (& $norm $liveBoard).Length + ' vs ' + (& $norm $repoBoard).Length + ' chars. smp-feed deployed, so this is board.json specifically - the store chips on the board page are stale. Compared against git, not the working tree.'
+        # SAME DEFECT, SAME FIX: compare against the COMMITTED blob, never the working tree - AND COMPARE
+        # BYTES TO BYTES (2026-09-04, queue 2026-09-04-4ec26c). This block used to read the blob through
+        # `git show | Out-String` (console code page) and the response through .Content (UTF-8), then
+        # compare the two strings. It could not return ok while the board held one non-ASCII character, so
+        # it paged every day. The `$norm` CRLF/trim normaliser is gone with it: it existed to paper over a
+        # text comparison, and a byte comparison must not silently forgive a changed line ending.
+        $repoBoardBytes = Get-CommittedBlobBytes -Repo $repo -Spec 'HEAD:public/board.json'
+        $repoBoardHash  = Get-Sha256Hex $repoBoardBytes
+        $liveBoardBytes = Get-ResponseBytes (Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/board.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45)
+        $liveBoardHash  = Get-Sha256Hex $liveBoardBytes
+        $bv = Test-EdgeServesPushedBytes -CommittedHash $repoBoardHash -LiveHash $liveBoardHash
+        if ($bv -eq 'blind') {
+          Write-Output 'EDGE BLIND (board): could not read HEAD:public/board.json or the live response as bytes, so nothing was compared and no alert is sent.'
+        } elseif ($bv -eq 'stale') {
+          $bm = 'The edge is serving a board.json that does not match the COMMITTED copy at HEAD (' + $feedSha + '). Committed SHA256 ' + $repoBoardHash + ' (' + $repoBoardBytes.Length + ' bytes); live SHA256 ' + $liveBoardHash + ' (' + $liveBoardBytes.Length + ' bytes). smp-feed deployed, so this is board.json specifically - the store chips on the board page are stale. Compared as bytes, against git, not the working tree.'
           Write-Output ('EDGE STALE (board): ' + $bm)
           try { Send-Alert -Subject "board.json edge did not pick up today's push - $today" -Body $bm | Out-Null } catch {}
-        } else { Write-Output 'edge verified: board.json matches the COMMITTED copy at HEAD ' + $feedSha }
+        } else { Write-Output ('edge verified: board.json is byte-identical to the COMMITTED copy at HEAD ' + $feedSha + ' (SHA256 ' + $repoBoardHash + ', ' + $repoBoardBytes.Length + ' bytes)') }
       } catch { Write-Output ("board edge verify threw (not fatal): " + $_.Exception.Message) }
     }
   } catch { Write-Output ("edge verify threw (not fatal): " + $_.Exception.Message) }

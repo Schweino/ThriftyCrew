@@ -43,7 +43,17 @@ function PSChild {
 }
 
 $fix  = Join-Path $root 'regression-inputs\guard-fixtures'
-$pass = 0; $failed = 0; $skipped = 0
+# A FOURTH TALLY, AND IT IS THE POINT (2026-09-04, queue 2026-09-04-0b63d3).
+# This harness grew from a fixture-replay suite into the estate's general self-check - gitignore coverage,
+# script census, orphan wiring, prompt backups - but kept ONE Bad() tally and ONE exit code, and
+# check-ad-cycles reads that single bit into the strongest sentence the estate has: "any quiet report from
+# that guard is unproven - including a clean board". On 2026-09-04 that sentence was printed because a COPY
+# of a prompt in ops\prompt-backup was stale. 601 fixtures fired; not one watcher had gone blind. The page
+# also pointed the reader at a remedy (-Sync) that writes live user-scope prompt files and would have pushed
+# a personal flight-price watch into a public repo.
+# A stale backup is ops hygiene. A fixture that stopped firing is a blind watcher. They are not the same
+# verdict and must not share an exit code.
+$pass = 0; $failed = 0; $skipped = 0; $hygiene = 0
 
 # EVERY SCRATCH PATH THIS HARNESS MAKES IS REGISTERED AND SWEPT, and the sweep is a `finally`.
 #
@@ -95,6 +105,28 @@ function Bad($m)  { Write-Output ("  FAIL  " + $m); $script:failed++ }
 # A case that could not run is NOT a pass. It gets its own counter and its own line in BOTH summaries, so
 # "every watcher can still see its own bug" can never be printed over a case that never executed.
 function Skip($m) { Write-Output ("  SKIP  " + $m); $script:skipped++ }
+# HYGIENE: a finding about the ESTATE'S HOUSEKEEPING, not about a watcher's eyesight. It is still reported,
+# still counted, still paged - through its own subject - but it may never claim the board is unproven.
+# Use it ONLY where the check itself is working and what it found is a stale copy, a missing mirror, an
+# uncommitted artefact. A check that cannot SEE stays Bad: "the backup is out of date" and "the backup
+# checker went blind" are opposite findings.
+function Hygiene($m) { Write-Output ("  HYGIENE  " + $m); $script:hygiene++ }
+# THE VERDICT, AS A PURE FUNCTION so the two cases below can drive it without running a 600-check suite.
+# rc 2 = a watcher has gone blind (BLIND-class, publish-holding, the loudest page in the estate)
+# rc 1 = every watcher still fires; ops hygiene drift was found (guard-contract's "findings")
+# rc 0 = clean
+# ORDER MATTERS: failed wins over hygiene, so a run that is BOTH blind and untidy pages as blind.
+function Get-AuditorsVerdict([int]$failed, [int]$hygiene, [int]$pass, [int]$skipped) {
+  $skipNote = if ($skipped) { ", $skipped SKIPPED (proved nothing - see the SKIP lines)" } else { '' }
+  $hygNote  = if ($hygiene) { ", $hygiene HYGIENE" } else { '' }
+  if ($failed -gt 0) {
+    return @{ rc = 2; line = ("test-auditors FAIL  ($failed failed, $pass passed$hygNote$skipNote) - a watcher has gone blind. Fix it before trusting a quiet board.") }
+  }
+  if ($hygiene -gt 0) {
+    return @{ rc = 1; line = ("test-auditors HYGIENE ($hygiene) - every watcher still sees its bug ($pass check(s) passed$skipNote); ops hygiene drift listed above. The board is NOT unproven.") }
+  }
+  return @{ rc = 0; line = ("test-auditors PASS  ($pass check(s)$skipNote) - every watcher that could run can still see its own bug.") }
+}
 function RunPS($script, $argList) {
   # A DELEGATED CHILD'S STDERR MUST NOT KILL THIS HARNESS (2026-08-08). In PS 5.1, merging with 2>&1 while
   # $ErrorActionPreference is 'Stop' turns the child's FIRST stderr line into a terminating NativeCommandError
@@ -950,6 +982,77 @@ if ($r.rc -eq 0) { Ok 'food-category clean twin: Johnsonville on breakfast-sausa
 else { Bad ('food-category flagged sausages on SAUSAGE commodities (rc=' + $r.rc + ') - the sausage_carrier exempt regex has lost breakfast-sausage/kielbasa: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSc -Recurse -Force -ErrorAction SilentlyContinue
 
+# (d5) MUST-FIRE for cheese_carrier and cracker_carrier (2026-09-04, queue 2026-09-04-2cd17a). TWO FOUNDING
+# ROWS, frozen verbatim off the 09-04 Aldi capture that produced them:
+#   * 'Emporium Selection Bacon Bread Cheese 6 OZ' is a BAKED CHEESE. It routed to bacon (index 4) because
+#     bacon's include is a bare type word and bacon's own exclude carried 'bacon\s+cheese' - the word BREAD
+#     sits between them. Its Original sibling routed to bread, a cheese in the loaf commodity.
+#   * 'Savoritz Sea Salt Sourdough Pita Cracker 5 OZ' is a CRACKER. It routed to pita-bread (index 175)
+#     because that commodity's hand-written exclude carried the literal plural 'crackers' and the SINGULAR
+#     walked past it. The library already had the \bcrackers?\b form in snack_carrier; no bake scope reached
+#     Bread & Bakery, which is why Bread now has an apply block of its own.
+# Both were one `audit-match-soundness -Accept` away from being baselined as reviewed.
+# NEVER REGENERATE THESE ROWS FROM THE BOARD: the fix removed them, so a regenerated fixture would encode
+# the fix and pass by finding nothing ([[guard-fixture-rule]]).
+$fxCc = NewFxDir 'afc-carrier'
+$ccRow = '{"week_of":"2026-09-02","comparison":[{"commodity":"Bacon","id":"bacon","unit":"oz","stores":[{"store":"Aldi","per_unit":0.3317,"item":"Emporium Selection Bacon Bread Cheese 6 OZ"}]},{"commodity":"Pita Bread","id":"pita-bread","unit":"oz","stores":[{"store":"Aldi","per_unit":0.498,"item":"Savoritz Sea Salt Sourdough Pita Cracker 5 OZ"}]}]}'
+Set-Content (Join-Path $fxCc 'comparison-2026-09-02.json') $ccRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxCc)
+if ($r.rc -eq 2 -and $r.text -match 'cheese_carrier' -and $r.text -match 'cracker_carrier') {
+  Ok 'food-category MUST-FIRE: a bread cheese on bacon and a pita cracker on pita-bread hard-fail, naming cheese_carrier and cracker_carrier (exit 2)'
+} else {
+  Bad ('food-category did NOT catch the bread-cheese/pita-cracker rows (rc=' + $r.rc + ') - cheese_carrier is gone from the ^Meat scope, or cracker_carrier is gone from the ^Bread block (and if the ^Bread block was moved BELOW the shared Dairy/Canned/... block it is unreachable: apply-category-excludes takes the FIRST matching block): ' + ($r.text -replace "`n", ' '))
+}
+# CLEAN TWIN: a real bacon, a real pita bread, a real bagel, and the LIVE Sam's muffins crown that the
+# rejected snack_carrier-on-Bread bake would have ejected. If any of these fires, a token is too broad and
+# the release has started eating the products the commodities are for.
+$ccTwin = '{"week_of":"2026-09-02","comparison":[{"commodity":"Bacon","id":"bacon","unit":"oz","stores":[{"store":"Aldi","per_unit":0.3106,"item":"Appleton Farms Lower Sodium Bacon 16 OZ"}]},{"commodity":"Pita Bread","id":"pita-bread","unit":"oz","stores":[{"store":"Walmart","per_unit":0.2492,"item":"Joseph''s Flax Oat Bran & Whole Wheat Pita Bread"}]},{"commodity":"Bagels","id":"bagels","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.1806,"item":"Kroger Blueberry Bagels"}]},{"commodity":"Muffins","id":"muffins","unit":"oz","stores":[{"store":"Sam''s Club","per_unit":0.1699,"item":"Entenmann''s Little Bites Chocolate Chip Muffins"}]}]}'
+Set-Content (Join-Path $fxCc 'comparison-2026-09-02.json') $ccTwin -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxCc)
+if ($r.rc -eq 0) { Ok 'food-category clean twin: a real bacon, a real pita bread, a real bagel and the live Sam''s muffins crown all stay silent under the two new carrier classes' }
+else { Bad ('food-category flagged REAL bread/meat products (rc=' + $r.rc + ') - cheese_carrier or cracker_carrier is too broad; the measured-and-rejected snack_carrier-on-Bread bake ejected exactly these: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxCc -Recurse -Force -ErrorAction SilentlyContinue
+
+# (d6) BAKE CURRENCY (2026-09-04, queue 2026-09-04-2cd17a). A library class ships INERT until someone runs
+# apply-category-excludes.ps1: audit-food-category reads the library, but the ENGINE reads each commodity's
+# own baked exclude list, so a class added to the library and never baked flags on the board while still
+# letting the product win the cell. This case asserts the LIVE commodities.json is CURRENT with the library
+# - i.e. a bake right now would add nothing.
+# It is the same shape as the token-added-sweep-and-gate-not class, applied to the bake.
+$fxBk = NewFxDir 'catex-currency'
+Copy-Item (Join-Path $root 'commodities.json')      (Join-Path $fxBk 'commodities.json')
+Copy-Item (Join-Path $root 'categories.json')       (Join-Path $fxBk 'categories.json')
+Copy-Item (Join-Path $root 'category-excludes.json') (Join-Path $fxBk 'category-excludes.json')
+$r = RunPS 'apply-category-excludes.ps1' @('-Root', $fxBk, '-WhatIf')
+if ($r.rc -eq 0 -and $r.text -match 'library:\s*\+0 patterns') {
+  Ok 'category-exclude bake is CURRENT: a bake over the live rule files would add 0 patterns, so every library class the guard checks is actually in the engine''s rules'
+} else {
+  Bad ('category-exclude bake is STALE (' + (($r.text -split "`n")[0]) + ') - a library class is not baked into commodities.json, so audit-food-category can name it while the engine still lets the product win the cell. Run grocery\apply-category-excludes.ps1 and re-run the board.')
+}
+# MUST FIRE: the same check over a PRE-FIX library (the two new classes deleted) must report DRIFT, or the
+# case above would pass on a bake that can no longer detect anything.
+$bkLib = Get-Content (Join-Path $root 'category-excludes.json') -Raw | ConvertFrom-Json
+$bkLib.classes.PSObject.Properties.Remove('cheese_carrier')
+$bkLib.classes.PSObject.Properties.Remove('cracker_carrier')
+$bkApply = @()
+foreach ($a in $bkLib.apply) {
+  $a.classes = @(@($a.classes) | Where-Object { $_ -ne 'cheese_carrier' -and $_ -ne 'cracker_carrier' })
+  $bkApply += $a
+}
+$bkLib.apply = $bkApply
+# a commodities.json that predates the two classes: strip the two baked patterns back out
+$bkCom = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+foreach ($c in $bkCom) { if ($c.exclude) { $c.exclude = @(@($c.exclude) | Where-Object { $_ -ne 'bread\s+cheese' }) } }
+Set-Content (Join-Path $fxBk 'commodities.json') ($bkCom | ConvertTo-Json -Depth 6) -Encoding UTF8
+# the LIBRARY still carries the classes; only the baked file was rolled back - that is what DRIFT means
+$r = RunPS 'apply-category-excludes.ps1' @('-Root', $fxBk, '-WhatIf')
+if ($r.rc -eq 0 -and $r.text -notmatch 'library:\s*\+0 patterns') {
+  Ok 'bake-currency MUST-FIRE: a commodities.json missing the baked cheese_carrier pattern is reported as drift, not as current'
+} else {
+  Bad 'bake-currency check cannot detect drift - it would report CURRENT over a rule file that never got the class, which is the whole failure it exists to catch'
+}
+Remove-Item $fxBk -Recurse -Force -ErrorAction SilentlyContinue
+
 # (ce1) THE BAKE MUST NOT UN-PIN THE RULE FILE'S ENCODING (2026-09-02, found while shipping 1527d2).
 # commodities.json expresses every non-ASCII character as a JSON \uXXXX escape and carries no BOM, and
 # audit-json-encoding.ps1 lists it in ASCII_PINNED where a single non-ASCII byte is a hard finding. That
@@ -1517,13 +1620,17 @@ if (-not (Test-Path $tcb)) {
   $tcbRc = $LASTEXITCODE
   if ($tcbRc -eq 3) {
     Bad ('test-capture-builders is BLIND - it could not find the builder block in capture-run.ps1, so nothing about the builders was proven: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | '))
-  } elseif ($tcbRc -eq 0 -and $r -match 'SELFTEST: 19/19 pass') {
+  } elseif ($tcbRc -eq 0 -and $r -match 'SELFTEST: 28/28 pass') {
     # The COUNT is part of the assertion, not decoration: it pins the fixture inventory so a case that is
     # silently dropped fails here instead of passing by finding nothing. 10 -> 19 on 2026-09-03 when queue
     # 2026-09-03-58057b added the edge read-after-write cases (Test-EdgeServesPushed: the skipped/stale/ok/
     # blind arms, plus the assertions that the edge check and the served-dirty block stay gated on the same
     # $shipServed predicate and that both comparisons read the COMMITTED blob).
-    Ok 'capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, stage 2 is still judged on evidence, and the edge read-after-write is gated on $shipServed and compares against git (test-capture-builders 19/19)'
+    # 19 -> 28 on 2026-09-04 (queue 2026-09-04-4ec26c): the committed blob is now read as BYTES, so the
+    # byte-comparison arms (stale on one changed price digit, ok on identical bytes carrying non-ASCII, the
+    # three BLIND arms, the empty-hash reachability check, the frozen reconstruction of the founding
+    # two-decodings bug, and the assertion that no committed blob is read through the TEXT pipeline).
+    Ok 'capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, stage 2 is still judged on evidence, and the edge read-after-write is gated on $shipServed and compares COMMITTED BYTES against git (test-capture-builders 28/28)'
   } else { Bad ('test-capture-builders failed (rc=' + $tcbRc + '): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 }
 # THE SECOND STAGE MUST STAY SERIAL. build-fareway-regular runs only if stage 1 exited 0, and its failure
@@ -2069,6 +2176,165 @@ if (-not $rfD.Success -or -not $rfS.Success -or -not $rfA.Success) {
   $null = RfRunDay $rfT0.AddDays(0) $rfSt $false $true
   if (@($rfSt.Keys | Where-Object { $rfSt[$_].last_alerted -eq $rfT0.ToString('s') }).Count -eq 0) { Ok 'review flags: a FAILED send stamps nothing (existing guard still intact)' }
   else { Bad 'review flags: a failed send stamped last_alerted - the alert is lost' }
+}
+
+# ---------------------------------------------------------------- (k2b) THE STORE'S OWN UNIT PRICE
+# 2026-09-04, queue 2026-09-04-def37c. sanity-check has carried a native_unit_price cross-check since it was
+# written and NOT ONE comparison row has ever carried that field - no producer populated it - so the check
+# was dormant for every store from day one. The consequence was not a missing check but a paging loop: the
+# only valve for a true-but-47%-cheaper cell was a hand-written ack with a short expiry, and the designed
+# re-arm-on-expiry paged the same reviewed-real row again every time the ack lapsed.
+# THE FOUNDING PAIR, frozen verbatim off comparison-2026-09-02 and out\sams\sams-deals-2026-07-29.json:
+# Sam's Quaker Old Fashioned Oats 160 oz (a 10 lb sack) at $7.98 = $0.0499/oz against Aldi's 42 oz at
+# $3.99 = $0.0950/oz, and Sam's own shelf publishes $0.05/oz. Paged 2026-07-29, acked as real, ack expired
+# 2026-08-13, paged again 2026-09-04.
+$fxSv = NewFxDir 'sanity-native'
+$svOats = '{"week_of":"2026-09-02","comparison":[{"commodity":"Oats / Oatmeal","id":"oatmeal","unit":"oz","cheapest_price":0.0499,"stores":[{"store":"Sam''s Club","per_unit":0.0499,"unit":"oz","item":"Quaker Old Fashioned Oats, 160 oz.","native_unit_price":0.05,"native_unit":"oz"},{"store":"Aldi","per_unit":0.095,"unit":"oz","item":"Millville Hearty 100 Whole Grain Old Fashioned Rolled Oats 42 OZ"}]}]}'
+Set-Content (Join-Path $fxSv 'comparison-2026-09-02.json') $svOats -Encoding UTF8
+# ASSIGN, THEN WRAP. PS 5.1's ConvertFrom-Json writes a JSON ARRAY to the pipeline as ONE object, so
+# `@(Get-Content | ConvertFrom-Json)` is a 1-element array CONTAINING the array. Reading .type off that
+# then member-enumerates and stringifies to "outlier native-mismatch", and every -contains test silently
+# answers the wrong question. Same trap check-ad-cycles documents at the review-flag loader.
+# the comma keeps the array from unrolling on the way out, so a ONE-flag result is still an array
+function SvRead([string]$p) { $d = Get-Content $p -Raw | ConvertFrom-Json; return , @($d) }
+$r = RunPS 'sanity-check.ps1' @('-CompareFile', (Join-Path $fxSv 'comparison-2026-09-02.json'), '-OutDir', $fxSv)
+$svJ = SvRead (Join-Path $fxSv 'guards-2026-09-02.json')
+$svOat = @($svJ | Where-Object { $_.commodity -eq 'Oats / Oatmeal' -and $_.type -eq 'outlier-verified' })
+if ($svOat.Count -eq 1 -and $svOat[0].detail -match '0\.0499' -and $svOat[0].detail -match '0\.0500') {
+  Ok 'sanity native: MUST FIRE - the founding oats pair is written as outlier-verified and the detail quotes BOTH our number and the store''s'
+} else { Bad ('sanity native: the oats pair did not become outlier-verified quoting both numbers (' + (($svJ | ForEach-Object { $_.type }) -join ',') + ') - the cross-check is dormant again, or the tolerance no longer accepts a cent-rounded store price') }
+# MUST FIRE: a DISAGREEING store price must page as BOTH an ordinary outlier and a native-mismatch. A
+# verified flag is only meaningful if a contradicted one is still loud.
+$svBad = $svOats -replace '"native_unit_price":0\.05,', '"native_unit_price":0.10,'
+Set-Content (Join-Path $fxSv 'comparison-2026-09-02.json') $svBad -Encoding UTF8
+$r = RunPS 'sanity-check.ps1' @('-CompareFile', (Join-Path $fxSv 'comparison-2026-09-02.json'), '-OutDir', $fxSv)
+$svJ = SvRead (Join-Path $fxSv 'guards-2026-09-02.json')
+$svT = @($svJ | ForEach-Object { [string]$_.type })
+if (($svT -contains 'outlier') -and ($svT -contains 'native-mismatch') -and ($svT -notcontains 'outlier-verified')) {
+  Ok 'sanity native: MUST FIRE - a store price that DISAGREES with ours pages as an ordinary outlier AND as native-mismatch'
+} else { Bad ('sanity native: a disagreeing store unit price produced ' + ($svT -join ',') + ' - a contradicted cell would be recorded as verified') }
+# MUST FIRE: not comparable is not agreement. A Sam''s row priced per EACH on an OUNCE commodity carries no
+# native field at all (compare-deals refuses to emit one), so its outlier must page exactly as before.
+$svEa = '{"week_of":"2026-09-02","comparison":[{"commodity":"Hummus","id":"hummus","unit":"oz","cheapest_price":0.1395,"stores":[{"store":"Sam''s Club","per_unit":0.1395,"unit":"oz","item":"Member''s Mark Classic Hummus Singles 2.5 oz., 16 ct."},{"store":"Aldi","per_unit":0.259,"unit":"oz","item":"Park Street Deli Classic Hummus 10 OZ"}]}]}'
+Set-Content (Join-Path $fxSv 'comparison-2026-09-02.json') $svEa -Encoding UTF8
+$r = RunPS 'sanity-check.ps1' @('-CompareFile', (Join-Path $fxSv 'comparison-2026-09-02.json'), '-OutDir', $fxSv)
+$svJ = SvRead (Join-Path $fxSv 'guards-2026-09-02.json')
+if (@($svJ | Where-Object { $_.type -eq 'outlier' }).Count -eq 1 -and @($svJ | Where-Object { $_.type -eq 'outlier-verified' }).Count -eq 0) {
+  Ok 'sanity native: CLEAN TWIN - a row with NO store unit price stays an ordinary outlier; absence of proof is not proof'
+} else { Bad 'sanity native: a row carrying no native unit price was treated as verified - an unproven cell would stop paging' }
+# CLEAN TWIN: the three rounding edges the live board actually contains. A store publishes to the cent, so
+# "$0.15/oz" is anything in [0.145,0.155) and our 0.155 reproduces it; a pure 3% test calls that a
+# disagreement. The tolerance is max(half a cent, 3%) and it is INCLUSIVE - 0.005 <= 0.00501, the 0.00001
+# being float slack, not data slack. The fourth pair must still FAIL, or the tolerance is just wide.
+$svEdges = @(
+  @{ ours = 0.155;  nat = 0.15; want = $true;  what = 'Sam''s saltines 0.155 vs $0.15/oz (the one boundary case on the whole board)' },
+  @{ ours = 0.0449; nat = 0.04; want = $true;  what = 'grits 0.0449 vs $0.04/oz' },
+  @{ ours = 0.215;  nat = 0.21; want = $true;  what = 'yeast 0.215 vs $0.21/oz' },
+  @{ ours = 0.0499; nat = 0.06; want = $false; what = 'a genuine 20% disagreement 0.0499 vs $0.06/oz' }
+)
+$svEdgeBad = 0
+foreach ($e in $svEdges) {
+  $row = '{"week_of":"2026-09-02","comparison":[{"commodity":"Edge","id":"edge","unit":"oz","cheapest_price":' + $e.ours + ',"stores":[{"store":"Sam''s Club","per_unit":' + $e.ours + ',"unit":"oz","item":"Edge fixture","native_unit_price":' + $e.nat + ',"native_unit":"oz"},{"store":"Aldi","per_unit":' + ([math]::Round($e.ours * 4, 4)) + ',"unit":"oz","item":"Edge runner-up"}]}]}'
+  Set-Content (Join-Path $fxSv 'comparison-2026-09-02.json') $row -Encoding UTF8
+  $null = RunPS 'sanity-check.ps1' @('-CompareFile', (Join-Path $fxSv 'comparison-2026-09-02.json'), '-OutDir', $fxSv)
+  $j = SvRead (Join-Path $fxSv 'guards-2026-09-02.json')
+  $verified = (@($j | Where-Object { $_.type -eq 'outlier-verified' }).Count -eq 1)
+  if ($verified -ne $e.want) { $svEdgeBad++; Bad ('sanity native tolerance: ' + $e.what + ' read as ' + $(if ($verified) { 'AGREEMENT' } else { 'disagreement' }) + ', expected the opposite') }
+}
+if ($svEdgeBad -eq 0) { Ok 'sanity native: CLEAN TWIN - all three cent-rounding edges read as agreement and a real 20% gap still does not' }
+Remove-Item $fxSv -Recurse -Force -ErrorAction SilentlyContinue
+
+# ---- and the PAGER: a verified outlier is recorded but not paged, while an UNKNOWN type still pages ----
+# Extracted and run, never transcribed. FAIL CLOSED is the property under test: the quiet list is an
+# ALLOWLIST of one, so a type this code has never heard of pages by construction.
+$spSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$spM = [regex]::Match($spSrc, '(?s)<<SANITY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SANITY-PAGER-END>>')
+if (-not $spM.Success) {
+  Bad 'SANITY-PAGER region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the quiet-type allowlist is untested'
+} else {
+  $SP = $spM.Groups[1].Value
+  $fxSp = NewFxDir 'sanity-pager'
+  $spRows = '[{"commodity":"Oats / Oatmeal","type":"outlier-verified","detail":"store agrees"},{"commodity":"Anaheim Peppers","type":"outlier","detail":"unverified"},{"commodity":"Mystery","type":"outlier-nonsense","detail":"a type this code has never seen"},{"commodity":"Something","type":"wow","detail":"moved 60%"}]'
+  Set-Content (Join-Path $fxSp 'guards-2026-09-02.json') $spRows -Encoding UTF8
+  $gf = Get-Item (Join-Path $fxSp 'guards-2026-09-02.json')
+  $flagParts = @(); $flagKeys = @()
+  . ([scriptblock]::Create($SP))
+  if ($sanityQuiet -eq 1 -and ($flagKeys -notcontains 'SANITY|Oats / Oatmeal|outlier-verified')) {
+    Ok 'sanity pager: MUST FIRE - a store-verified outlier is counted and NOT paged (the ack-expiry re-page loop is closed)'
+  } else { Bad ('sanity pager: outlier-verified still pages (quiet=' + $sanityQuiet + ', keys=' + ($flagKeys -join ' ; ') + ')') }
+  if (($flagKeys -contains 'SANITY|Mystery|outlier-nonsense') -and ($flagKeys -contains 'SANITY|Anaheim Peppers|outlier') -and ($flagKeys -contains 'SANITY|Something|wow')) {
+    Ok 'sanity pager: CLEAN TWIN - an UNKNOWN flag type still pages, and so do ordinary outliers and wow moves (allowlist, not denylist)'
+  } else { Bad ('sanity pager: FAIL-CLOSED broken - an unrecognised flag type went quiet. keys=' + ($flagKeys -join ' ; ')) }
+  Remove-Item $fxSp -Recurse -Force -ErrorAction SilentlyContinue
+}
+
+# ---------------------------------------------------------------- (k3) THIS HARNESS'S OWN VERDICT
+# 2026-09-04, queue 2026-09-04-0b63d3. On 2026-09-04 this suite ran 601 fixtures, every one fired, and it
+# exited 2 - which check-ad-cycles reads as "a GUARD has gone blind ... any quiet report from that guard is
+# unproven - including a clean board". The single Bad() was a STALE COPY of a prompt in ops\prompt-backup.
+# This file had grown from a fixture-replay harness into the estate's general self-check but kept one tally
+# and one exit code, so ops housekeeping and a watcher losing its sight became the same page - and the page
+# recommended a remedy (-Sync) that writes live user-scope prompt files and mirrors a personal scheduled
+# task into a public repo.
+# Both halves of the fix are asserted here: the VERDICT function in this file, and the DECISION region in
+# check-ad-cycles that reads it. The region is extracted and run, never transcribed - a copy of a decision
+# is a decision that can drift.
+$av = Get-AuditorsVerdict 1 1 601 0
+if ($av.rc -eq 2 -and $av.line -match 'gone blind') { Ok 'auditors verdict: MUST FIRE - a failed fixture is rc 2 and says "gone blind", even with hygiene findings alongside it' }
+else { Bad ('auditors verdict: a failed fixture did not produce rc 2 + "gone blind" (rc=' + $av.rc + ', line=' + $av.line + ') - a blind watcher would page as ordinary housekeeping') }
+$av = Get-AuditorsVerdict 0 1 601 0
+if ($av.rc -eq 1 -and $av.line -notmatch 'gone blind') { Ok 'auditors verdict: CLEAN TWIN - hygiene alone is rc 1 and never claims a watcher went blind' }
+else { Bad ('auditors verdict: a hygiene-only run produced rc=' + $av.rc + ' / ' + $av.line + ' - the 2026-09-04 false BLIND page is back') }
+$av = Get-AuditorsVerdict 0 0 601 0
+if ($av.rc -eq 0) { Ok 'auditors verdict: a clean run is still rc 0' }
+else { Bad ('auditors verdict: a clean run returned rc ' + $av.rc) }
+$av = Get-AuditorsVerdict 3 0 601 2
+if ($av.rc -eq 2 -and $av.line -match 'SKIPPED') { Ok 'auditors verdict: skips are still reported in the FAIL line (a case that could not run is not a pass)' }
+else { Bad 'auditors verdict: the skip note vanished from the FAIL line' }
+# The tier is only worth having if the HYGIENE function actually exists and increments its own tally.
+if ((Get-Command Hygiene -ErrorAction SilentlyContinue) -and (Get-Command Get-AuditorsVerdict -ErrorAction SilentlyContinue)) { Ok 'auditors verdict: the HYGIENE tier and the verdict function are both present in this harness' }
+else { Bad 'auditors verdict: the HYGIENE tier is missing - every ops-hygiene finding is a BLIND page again' }
+# ---- the OTHER half: check-ad-cycles must route the two tiers differently ----
+$wdSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$wdM = [regex]::Match($wdSrc, '(?s)<<WATCHERS-DECISION-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<WATCHERS-DECISION-END>>')
+if (-not $wdM.Success) {
+  Bad 'WATCHERS-DECISION region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the two-tier routing is untested'
+} else {
+  $WD = $wdM.Groups[1].Value
+  function WdRun([int]$rc) {
+    $taRc = $rc
+    $taKind = ''; $taSubject = ''; $taLog = ''; $taSummary = ''; $taFileTag = ''; $taLookFor = ''; $taHeader = ''
+    . ([scriptblock]::Create($WD))
+    return @{ kind = $taKind; subject = $taSubject; summary = $taSummary; fileTag = $taFileTag; header = $taHeader; lookFor = $taLookFor }
+  }
+  # MUST FIRE: rc 2 keeps the existing page, word for word. Every reader and the dated evidence-file
+  # convention depend on this subject and this file name.
+  $w = WdRun 2
+  if ($w.subject -eq 'Grocery: a GUARD has gone blind (test-auditors failed)' -and $w.header -match 'unproven' -and $w.fileTag -eq 'test-auditors-fail' -and $w.summary -match '^WATCHERS') {
+    Ok 'watchers routing: MUST FIRE - rc 2 still selects the blind-watcher subject, the "unproven" body and test-auditors-fail-<date>.txt'
+  } else { Bad ('watchers routing: rc 2 no longer selects the blind page (' + $w.subject + ' / ' + $w.fileTag + ')') }
+  # MUST FIRE: FAIL CLOSED. A crash, a throw, an Invoke-Bounded timeout - any rc this code does not know -
+  # takes the blind path. The new tier must not be able to swallow an unknown verdict.
+  foreach ($odd in @(3, 4, 124, 255, -1)) {
+    $w = WdRun $odd
+    if ($w.subject -eq 'Grocery: a GUARD has gone blind (test-auditors failed)' -and $w.header -match 'unproven') {
+      Ok ("watchers routing: MUST FIRE - an unrecognised rc $odd fails CLOSED to the blind page")
+    } else { Bad ("watchers routing: rc $odd did NOT take the blind path - an unknown verdict from the harness that proves the guards was treated as benign") }
+  }
+  # CLEAN TWIN: rc 1 is routed, not silenced. Its own subject, its own evidence file, and a body that
+  # claims neither that a watcher is blind nor that the board is unproven.
+  $w = WdRun 1
+  $twinOk = ($w.subject -eq 'Grocery: test-auditors hygiene finding(s) - watchers intact') -and
+            ($w.fileTag -eq 'test-auditors-hygiene') -and
+            ($w.header -notmatch 'unproven') -and ($w.header -notmatch 'gone blind') -and
+            ($w.summary -match '^HYGIENE') -and ($w.lookFor -eq 'HYGIENE') -and
+            ($w.subject -ne '')
+  if ($twinOk) { Ok 'watchers routing: CLEAN TWIN - rc 1 pages its OWN subject to out\test-auditors-hygiene-<date>.txt, and the body says neither "unproven" nor "gone blind"' }
+  else { Bad ('watchers routing: the hygiene tier is wrong (subject=' + $w.subject + ', file=' + $w.fileTag + ', summary=' + $w.summary + ') - a hygiene finding must be SENT, just not as a blind-guard page') }
+  # A HYGIENE RUN MUST STILL SEND. Silencing is the opposite failure to over-paging, and it is the one a
+  # new quiet tier invites: an empty subject would make Send-Alert a no-op and the finding would vanish.
+  if ($w.subject -and $w.summary) { Ok 'watchers routing: a hygiene run still produces a subject and a summary line - it is routed, never silenced' }
+  else { Bad 'watchers routing: the hygiene tier produced no subject or no summary - the finding would be silently dropped' }
 }
 
 # ---------------------------------------------------------------- (l2) coverage-gap alert: ACTIONABLE only
@@ -4308,7 +4574,17 @@ if (Test-Path $pb) {
     Skip ('prompt-backup: none of its live-prompt roots exist here (' + ($pbRoots -join '; ') + ') - this machine does not host the prompts, so nothing was compared')
   }
   elseif ($rc -eq 3) { Bad ('prompt-backup went BLIND (found zero live prompts) - the .claude paths moved: ' + ($txt -replace "`n", ' ')) }
-  else { Bad ('prompt-backup drift (rc=' + $rc + ') - run ops\audit-prompt-backup.ps1 -Sync and commit: ' + ($txt -replace "`n", ' ')) }
+  # HYGIENE, NOT BLIND (2026-09-04, queue 2026-09-04-0b63d3). rc 2 here means the audit RAN and found a
+  # stale/missing MIRROR - a copy of a prompt in ops\prompt-backup that no longer matches the live file.
+  # That is housekeeping. The three Bad() arms above stay Bad because each of them means the backup CHECK
+  # cannot see: it lost its own roots, or it went BLIND with the roots present.
+  # The remedy line is deliberately NOT "-Sync": that command writes LIVE user-scope prompt files
+  # (audit-prompt-backup.ps1:159 copies project scope over C:\Users\Owner\.claude\agents\<name>.md) and
+  # mirrors every scheduled-task SKILL into ops\prompt-backup, which is tracked in a PUBLIC repo. The drift
+  # is normally a live session's in-flight edit, and syncing changes an agent prompt underneath it.
+  # This finding has its OWN channel already: check-ad-cycles runs the same audit weekly and pages
+  # 'Ops: an agent prompt is not backed up'.
+  else { Hygiene ('prompt-backup drift (rc=' + $rc + ') - a MIRROR is stale, no watcher is blind. Do NOT reflexively -Sync: it writes live user-scope prompts and mirrors scheduled-task SKILLs into a public repo. Reconcile the named files deliberately (or add an exemption to ops\prompt-backup-exempt.json), then commit ops\prompt-backup: ' + ($txt -replace "`n", ' ')) }
 } else { Bad 'prompt-backup audit is MISSING from ops\ - the agent prompts have no backup check' }
 
 # ---- (h) THE DISPLAY FORMATTER (2026-07-31) ------------------------------------------------------------
@@ -5470,14 +5746,10 @@ else { Bad ('matcher parity FAILED (rc=' + $r.rc + ') - an auditor no longer des
 # ordinary findings-exit. The exit code carries the VERDICT; this line carries the fact that the run
 # REACHED THE END. check-ad-cycles requires it before believing a quiet result.
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-$skipNote = if ($skipped) { ", $skipped SKIPPED (proved nothing - see the SKIP lines)" } else { '' }
-if ($failed -eq 0) {
-  Write-Output ("test-auditors PASS  ($pass check(s)$skipNote) - every watcher that could run can still see its own bug.")
-  Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=0 skipped=$skipped"
-  exit 0
-}
-Write-Output ("test-auditors FAIL  ($failed failed, $pass passed$skipNote) - a watcher has gone blind. Fix it before trusting a quiet board.")
-Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=$failed skipped=$skipped"
-exit 2
+# ONE decision, taken by the pure function above, so the cases that prove it cannot drift from it.
+$verdict = Get-AuditorsVerdict $failed $hygiene $pass $skipped
+Write-Output $verdict.line
+Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=$failed hygiene=$hygiene skipped=$skipped"
+exit $verdict.rc
 } finally { Sweep-FxPaths }
 

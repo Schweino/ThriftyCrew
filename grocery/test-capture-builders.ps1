@@ -154,10 +154,60 @@ T 'E  could-not-read-the-committed-blob is BLIND, not stale - it must not alert'
 # up the same predicate. If a future editor un-syncs them, this is where it shows.
 T 'E  the served-dirty block is still gated on $shipServed' ($src -match '(?m)^if \(\$shipServed\) \{\r?\n\s*\$servedDirty')
 T 'E  the edge read-after-write is now gated on $shipServed too, NOT on $runDownstream' ($src -match '(?m)^if \(\$shipServed -and \$pushed\) \{')
+# SAME INVARIANT, NEW SPELLING (2026-09-04, queue 2026-09-04-4ec26c). The property asserted here has not
+# moved an inch - both read-after-writes still read the COMMITTED blob and never the working tree - but the
+# mechanism did: `git show | Out-String` is gone, because it decodes a native command's stdout through the
+# console code page and the comparison was therefore between two different decodings of identical bytes.
+# The assertion now names the byte-safe reader and both blob specs, so it is exactly as strong.
 T 'E  the edge check compares against the COMMITTED blob, not the working tree' `
-  (($src -match 'git -C \$repo show HEAD:public/smp-feed\.json') -and ($src -match 'git -C \$repo show HEAD:public/board\.json'))
+  (($src -match "Get-CommittedBlobBytes -Repo \`$repo -Spec 'HEAD:public/smp-feed\.json'") -and ($src -match "Get-CommittedBlobBytes -Repo \`$repo -Spec 'HEAD:public/board\.json'"))
+# CODE ONLY. The comment above the fixed call site quotes the old expression verbatim, on purpose - that is
+# how the next reader learns what was wrong - and an assertion that cannot tell a quotation from a call site
+# would force the explanation out of the file to stay green. Comment lines are stripped before the test.
+$srcCode = (($src -split "`r?`n") | Where-Object { $_ -notmatch '^\s*#' }) -join "`n"
+T 'E  MUST-FIRE: no committed blob is read through the TEXT pipeline any more (that is the founding bug)' `
+  ($srcCode -notmatch 'git -C \$repo show HEAD:public/[a-z\-]+\.json \| Out-String')
 T 'E  no working-tree Get-Content of public\smp-feed.json remains in the read-after-write block' `
   ($src -notmatch "Get-Content \(Join-Path \$repo 'public\\\\smp-feed\.json'\) -Raw -Encoding UTF8")
+
+# ---- THE BYTE COMPARISON, DRIVEN ON FROZEN BYTES (2026-09-04, queue 2026-09-04-4ec26c) ------------------
+# FROZEN, and built from character CODE POINTS rather than typed literals: a non-ASCII needle typed into a
+# source file in this estate has arrived mangled before, and a fixture whose own bytes are uncertain proves
+# nothing about a byte comparison. The name carries U+00F1 (jalapeno with a tilde), which is exactly the
+# shape that made the live board's 2,134 multi-byte characters and broke the old check.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1')
+$jal = 'Jalape' + [char]0x00F1 + 'o'
+$boardA = '{"rows":[{"item":"' + $jal + ' Peppers","price":"$1.98"}]}'          # the committed board
+$boardB = '{"rows":[{"item":"' + $jal + ' Peppers","price":"$1.99"}]}'          # ONE price digit different
+$bytesA = [Text.Encoding]::UTF8.GetBytes($boardA)
+$bytesB = [Text.Encoding]::UTF8.GetBytes($boardB)
+T 'E  fixture integrity: the frozen board bytes really do carry a multi-byte character' `
+  ($bytesA.Length -gt $boardA.Length)
+# MUST FIRE: a genuinely different board must still be reported stale. This is the case that proves the fix
+# did not simply disable the check.
+T 'E  MUST-FIRE (board bytes): live bytes differing by ONE price digit are reported stale' `
+  ((Test-EdgeServesPushedBytes -CommittedHash (Get-Sha256Hex $bytesA) -LiveHash (Get-Sha256Hex $bytesB)) -eq 'stale')
+# CLEAN TWIN: the founding false positive. Identical bytes containing non-ASCII must read ok and send nothing.
+T 'E  CLEAN TWIN (board bytes): identical bytes containing non-ASCII are ok, not stale' `
+  ((Test-EdgeServesPushedBytes -CommittedHash (Get-Sha256Hex $bytesA) -LiveHash (Get-Sha256Hex $bytesA)) -eq 'ok')
+# ...and the OLD comparison, reconstructed on the SAME frozen bytes, still gets it wrong. This is what makes
+# the twin above a proof rather than a coincidence: decode one side through the console code page and the
+# other as UTF-8, exactly as `git show | Out-String` vs Invoke-WebRequest .Content did, and the two strings
+# differ although the bytes are identical.
+$asConsole = [Console]::OutputEncoding.GetString($bytesA)
+$asUtf8    = [Text.Encoding]::UTF8.GetString($bytesA)
+T 'E  MUST-FIRE (founding bug): the OLD two-decodings comparison disagrees on bytes that are identical' `
+  (($asConsole -ne $asUtf8) -or ([Console]::OutputEncoding.CodePage -eq 65001))
+# BLIND: an unreadable side must never read as agreement. Two empty hashes are not a match.
+T 'E  MUST-FIRE (board bytes): an unreadable committed blob is BLIND, not ok and not stale' `
+  ((Test-EdgeServesPushedBytes -CommittedHash '' -LiveHash (Get-Sha256Hex $bytesA)) -eq 'blind')
+T 'E  MUST-FIRE (board bytes): an unreadable live response is BLIND too' `
+  ((Test-EdgeServesPushedBytes -CommittedHash (Get-Sha256Hex $bytesA) -LiveHash '') -eq 'blind')
+T 'E  MUST-FIRE (board bytes): BOTH sides unreadable is BLIND, never a false agreement' `
+  ((Test-EdgeServesPushedBytes -CommittedHash '' -LiveHash '') -eq 'blind')
+# Get-Sha256Hex must refuse to give an empty payload a real hash, or the BLIND arm above can never arm.
+T 'E  an empty/null payload hashes to the empty string, so BLIND stays reachable' `
+  (((Get-Sha256Hex $null) -eq '') -and ((Get-Sha256Hex ([byte[]]@())) -eq ''))
 
 Remove-Item $sandbox -Recurse -Force -ErrorAction SilentlyContinue
 Write-Output ''

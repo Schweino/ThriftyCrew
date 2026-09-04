@@ -819,6 +819,44 @@ function Test-AdWindowClosed {
 # ships. The self-test cases below still exercise it through the lib.
 . (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 
+# Get-DisplayedUnitPrice / ConvertTo-DisplayedUnitToken. ONE parser for the stores' unit-price literals,
+# shared with audit-basis-reconcile, audit-pack-basis and the derived-size density rule, rather than a
+# second inline copy here - a shared-lib fix ships nothing while callers keep inline copies.
+. (Join-Path $PSScriptRoot 'derived-size-density-lib.ps1')
+
+# ---------------------------------------------------------------- THE STORE'S OWN PER-UNIT NUMBER
+# (2026-09-04, queue 2026-09-04-def37c, triage-plans\plan-2026-09-04.json)
+#
+# Sam's and Walmart publish a unit price on every row they capture (sams_unit_price "$0.05/oz",
+# wm_unit_price "37.3 c/fl oz"). It is the store's OWN arithmetic on its OWN pack, so it is the one
+# machine-readable proof that a warehouse pack really is that cheap per ounce - and it never reached the
+# board. sanity-check.ps1 has carried a native_unit_price cross-check since it was written, and NOT ONE
+# comparison row has ever carried that field: no producer populated it, so the check has been dormant for
+# every store since day one and the only valve for a true-but-47%-cheaper cell was a hand-written ack with
+# a short expiry. Sam's Quaker Old Fashioned Oats 160 oz at $7.98 (= $0.0499/oz, and Sam's own shelf says
+# $0.05/oz) was acked as real on 2026-07-29, the ack expired 2026-08-13, and the flag re-armed and paged
+# again today. It would page again on every future expiry, as would 32 other store-verified outliers.
+#
+# TWO FUNCTIONS, BOTH PURE, BOTH REACHED BY -SelfTest, because the two halves happen at different moments:
+# the PARSE happens at ingest (Add-Norm, which sees the capture row but not the commodity) and the RESOLVE
+# happens at the emit (which knows the commodity's unit but no longer has the capture row).
+#
+# THE UNIT FAMILY IS THE WHOLE POINT. A store pricing per EACH against a commodity priced per OUNCE is not
+# a disagreement, it is a different question, and reporting it as a mismatch is how a cross-check earns a
+# reputation for crying wolf (measured: 5 of the 38 verifiable outlier rows, and 168 of 906 Sam's/Walmart
+# cells, are exactly this shape). So: emit NOTHING when the families differ. The single exception is lb
+# against an oz commodity, which is the same measure in a different magnitude and converts exactly.
+function Resolve-NativeUnitPrice($Value, [string]$NativeUnit, [string]$CommodityUnit) {
+  if ($null -eq $Value) { return $null }
+  $v = [double]$Value
+  if ($v -le 0) { return $null }
+  if (-not $NativeUnit -or -not $CommodityUnit) { return $null }
+  $n = $NativeUnit.Trim().ToLower(); $c = $CommodityUnit.Trim().ToLower()
+  if ($n -eq $c) { return [pscustomobject]@{ price = [math]::Round($v, 6); unit = $c } }
+  if ($n -eq 'lb' -and $c -eq 'oz') { return [pscustomobject]@{ price = [math]::Round($v / 16.0, 6); unit = 'oz' } }
+  return $null
+}
+
 if ($SelfTest) {
   $script:fail = 0
   function _Near($label, $got, $want, $tol) {
@@ -1658,6 +1696,50 @@ if ($SelfTest) {
     else { Write-Output ("FAIL  lift-closure: $lf lifts a function whose callee is NOT on its list - " + ($missing -join '; ') + " (it will die at CALL time, not load time)"); $script:fail++ }
   }
 
+  # ---- NATIVE UNIT PRICE: the store's own per-unit number, onto the row (queue 2026-09-04-def37c) ----
+  # Driven in the SAME ORDER the engine runs it: parse at ingest (Get-DisplayedUnitPrice, which sees the
+  # capture row), resolve at emit (Resolve-NativeUnitPrice, which sees the commodity's unit). A test that
+  # exercised only one half could not reach the family gate, which is the half that decides whether a
+  # number is emitted at all.
+  Write-Output ('-'*54)
+  function _Native($label, $row, $commodityUnit, $wantPrice, $wantUnit) {
+    $p = Get-DisplayedUnitPrice $row
+    $r = if ($p) { Resolve-NativeUnitPrice $p.Value $p.Unit $commodityUnit } else { $null }
+    if ($null -eq $wantPrice) {
+      if ($null -eq $r) { Write-Output ("ok    native: $label -> no native field (correct)") }
+      else { Write-Output ("FAIL  native: $label should emit NOTHING, got " + $r.price + '/' + $r.unit); $script:fail++ }
+      return
+    }
+    if ($null -eq $r) { Write-Output ("FAIL  native: $label got <null>, want $wantPrice/$wantUnit"); $script:fail++; return }
+    if ([math]::Abs([double]$r.price - [double]$wantPrice) -le 0.0000005 -and [string]$r.unit -eq [string]$wantUnit) {
+      Write-Output ("ok    native: $label = " + $r.price + '/' + $r.unit)
+    } else { Write-Output ("FAIL  native: $label got " + $r.price + '/' + $r.unit + ", want $wantPrice/$wantUnit"); $script:fail++ }
+  }
+  # THE FOUNDING ROW, verbatim from out\sams\sams-deals-2026-07-29.json.
+  _Native "Sam's oats '`$0.05/oz' on an oz commodity" ([pscustomobject]@{ sams_unit_price = '$0.05/oz' }) 'oz' 0.05 'oz'
+  # Walmart writes cents with the CENT SIGN; built from the code point, never typed as a literal (a typed
+  # non-ASCII needle has arrived mangled in this estate before).
+  _Native "Walmart '12.4 <cent>/fl oz' on a floz commodity" ([pscustomobject]@{ wm_unit_price = ('12.4 ' + [char]0x00A2 + '/fl oz') }) 'floz' 0.124 'floz'
+  _Native "Walmart '12.4 cents/fl oz' spelled out, on a floz commodity" ([pscustomobject]@{ wm_unit_price = '12.4 cents/fl oz' }) 'floz' 0.124 'floz'
+  # MUST NOT EMIT: the store priced per EACH and the commodity is priced per OUNCE. Different question,
+  # not a disagreement - this is the Hummus $0.35/ea shape, and emitting it would page a false mismatch.
+  _Native "Sam's '`$0.35/ea' on an oz commodity" ([pscustomobject]@{ sams_unit_price = '$0.35/ea' }) 'oz' $null $null
+  _Native "Walmart '`$0.80/oz' on an each commodity" ([pscustomobject]@{ wm_unit_price = '$0.80/oz' }) 'each' $null $null
+  # fl oz is NOT oz. Tested explicitly because 'fl oz' contains 'oz' and an oz-first token test reads a
+  # per-volume price as a per-weight one.
+  _Native "'`$1.12/fl oz' on an OZ commodity is not comparable" ([pscustomobject]@{ wm_unit_price = '$1.12/fl oz' }) 'oz' $null $null
+  _Native "Sam's short form '`$0.14/foz' on a floz commodity" ([pscustomobject]@{ sams_unit_price = '$0.14/foz' }) 'floz' 0.14 'floz'
+  # lb against an oz commodity is the SAME measure, and converts exactly.
+  _Native "'`$7.15/lb' on an oz commodity converts /16" ([pscustomobject]@{ wm_unit_price = '$7.15/lb' }) 'oz' 0.446875 'oz'
+  _Native "'`$0.75/lb' on an lb commodity is taken as-is" ([pscustomobject]@{ sams_unit_price = '$0.75/lb' }) 'lb' 0.75 'lb'
+  _Native "'`$1.73/count' on an each commodity" ([pscustomobject]@{ wm_unit_price = '$1.73/count' }) 'each' 1.73 'each'
+  # A row with no unit-price field at all emits nothing - most stores (Aldi, Baker's, Fareway, FF, Hy-Vee).
+  _Native 'a row with no unit-price field' ([pscustomobject]@{ item = 'Whatever' }) 'oz' $null $null
+  # An unreadable unit is an ABSTENTION, never a guess that the units agree.
+  _Native "an unrecognised unit '`$2.00/sq ft' on an oz commodity" ([pscustomobject]@{ unit_price = '$2.00/sq ft' }) 'oz' $null $null
+  if ((ConvertTo-DisplayedUnitToken '37.3 c/fl oz') -eq 'floz') { Write-Output 'ok    native: fl oz is tokenised before oz' }
+  else { Write-Output 'FAIL  native: fl oz tokenised as ' + (ConvertTo-DisplayedUnitToken '37.3 c/fl oz'); $script:fail++ }
+
   Write-Output ('-'*54)
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
@@ -1690,7 +1772,7 @@ function Get-RowProductId($row) {
   if ($v) { return $v }
   return ''
 }
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='') {
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='',$srcRow=$null) {
   if (-not $name) { return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
@@ -1722,7 +1804,14 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   # row came from" is a different question from "does this row carry the field", and the second one cannot
   # answer it. A blank inside a capture that fills the field on 99% of its rows is an unattributed row,
   # not a pre-field one. See the channel block in instore-lib.ps1.
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful; src_file=[string]$srcFile })
+  # native_up / native_up_unit: THE STORE'S OWN PER-UNIT NUMBER, parsed once at ingest from the capture row
+  # ($srcRow, passed only by the loaders whose rows carry sams_unit_price / wm_unit_price). Carried RAW -
+  # value plus the unit the store quoted it in - because the commodity is not known here; the emit resolves
+  # it against the commodity's unit. Absent on every other store's rows, which is correct: they publish no
+  # unit price and an absent proof must never read as an agreeing one.
+  $nup = $null
+  if ($srcRow) { $nup = Get-DisplayedUnitPrice $srcRow }
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful; src_file=[string]$srcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }) })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
@@ -1840,7 +1929,9 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
     foreach ($d in $ex.deals) {
       $rFrom = if ($d.ad_from) { [string]$d.ad_from } else { [string]$ex.ad_from }
       $rTo   = if ($d.ad_to)   { [string]$d.ad_to }   else { [string]$ex.ad_to }
-      Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd $rFrom $rTo '' (Get-RowProductId $d)
+      # $d LAST: the capture row itself, so Add-Norm can read the store's own published unit price off it
+      # (out\sams\sams-deals-*.json carries sams_unit_price on every row). Passed, never re-parsed here.
+      Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd $rFrom $rTo '' (Get-RowProductId $d) '' '' $d
     }
   }
 }
@@ -1882,7 +1973,7 @@ if ($extraF) {
     $claimsDiscount = ($ap -gt 0 -and $rg -gt 0 -and $ap -lt $rg)
     $dated = [bool]$d.sale_end
     if ($claimsDiscount -and (-not $dated) -and ($exDate -ne $todayReal)) { $staleDiscount++; continue }
-    Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt '' '' '' '' (Get-RowProductId $d)
+    Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt '' '' '' '' (Get-RowProductId $d) '' '' $d
   }
   if ($staleDiscount -gt 0) {
     Write-Warning ("extra-deals: skipped $staleDiscount undated discount row(s) from $exDate (captured before today, no end date - cannot be shown as a live sale). The board falls back to each store's everyday shelf price, which IS verified against its product link.")
@@ -2019,7 +2110,11 @@ if (Test-Path $regDir) {
         # A CUT PRICE IS A SALE, AND IT CARRIES ITS OWN WINDOW. Typed 'sale' so build-sale-windows
         # dates it, the page badges it, and it can expire. Its everyday half is emitted separately
         # below so the cell the shopper reverts to is never lost.
-        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName)
+        # $d LAST so the store's own published unit price rides this row. THE SALE HALF ONLY: wm_unit_price
+        # / sams_unit_price describe the price the store is charging TODAY, which is this half. The everyday
+        # half below is what the row was cut FROM, and pairing the store's sale unit price with it would
+        # manufacture a disagreement out of a discount.
+        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName) $d
         # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
         # store discounts an item, which is the other half of Brad's rule - everyday must not be
         # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
@@ -2028,7 +2123,8 @@ if (Test-Path $regDir) {
           Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName)
         }
       } else {
-        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName)
+        # not split: the row's own price IS what the store's published unit price describes, so carry $d.
+        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName) $d
       }
     }
   }
@@ -2348,6 +2444,9 @@ foreach ($d in $deals) {
     # fields, which is why the tie-break silently did nothing the first time it was written - it was
     # reading link_url off a shape that never had it.
     has_identity=[bool]($d.link_url -or $d.item_id -or $d.product_id -or $d.sams_item_id)
+    # THE STORE'S OWN PER-UNIT NUMBER, still raw. Resolved against $f.unit at the emit below, because only
+    # there is it known which commodity's unit this row is finally being compared in.
+    native_up=$d.native_up; native_up_unit=$d.native_up_unit
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -2455,7 +2554,19 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     # date a sale from the deal that actually won the cell instead of from the store's one ad cycle.
     # Emitted for every cell; empty on an everyday cell, which is correct - an everyday price has no
     # window and must never be given one.
-    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis } })
+    # native_unit_price / native_unit: THE STORE'S OWN per-unit number for THIS row, in THIS commodity's
+    # unit, or absent. Emitted only when the store's unit and the commodity's unit are the same family
+    # (lb converts to oz; everything else that disagrees emits nothing, because a per-each price against
+    # a per-ounce commodity is a different question, not a disagreement). sanity-check.ps1 reads it: an
+    # outlier the store's own arithmetic reproduces is recorded as outlier-verified instead of paging.
+    # ABSENT MEANS UNPROVEN, NEVER AGREEING - Aldi, Baker's, Fareway, Family Fare and Hy-Vee publish no
+    # unit price, so their outliers stay ordinary outliers and keep paging.
+    stores = @($ranked | ForEach-Object {
+      $nat = Resolve-NativeUnitPrice $_.native_up ([string]$_.native_up_unit) ([string]$f.unit)
+      $row = [ordered]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis }
+      if ($nat) { $row['native_unit_price'] = $nat.price; $row['native_unit'] = $nat.unit }
+      [pscustomobject]$row
+    })
   })
 }
 $report = @($report | Sort-Object commodity)

@@ -2055,7 +2055,27 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # into a single flagPart whose fields were arrays - the 2026-07-28 email said "16 price(s) to review" for
       # 54 outliers + 15 multibuys (69), and printed all 54 commodity names mashed into one unreadable line.
       # Worse, the whole set shared one dedupe signature. Assign first, THEN wrap, so each outlier is its own flag.
-      if ($gf) { $gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json; foreach ($x in @($gj)) { $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail); $flagKeys += ('SANITY|' + $x.commodity + '|' + $x.type) } }
+      # THE QUIET-TYPE ALLOWLIST, AND IT FAILS CLOSED (2026-09-04, queue 2026-09-04-def37c).
+      # sanity-check now distinguishes an outlier the STORE'S OWN published unit price reproduces
+      # ('outlier-verified') from one nothing corroborates ('outlier'). A verified one is still WRITTEN to
+      # guards-<week>.json - nothing is deleted, it is all still reviewable - it just does not page, because
+      # paging a cell that was reviewed as real on 2026-07-29 every time its hand-written ack lapses is the
+      # cry-wolf this whole block exists to prevent (33 of today's 62 outliers are that shape).
+      # ALLOWLIST, NOT A DENYLIST: only the types NAMED here are quiet. A type this code has never heard of
+      # - a new check, a typo, a producer change - pages, by construction. The one thing a triage channel
+      # must never do is go quiet about something it does not understand.
+      # <<SANITY-PAGER-BEGIN>> test-auditors.ps1 extracts this region and runs it against a frozen guards file.
+      $SANITY_QUIET = @('outlier-verified')
+      $sanityQuiet = 0
+      if ($gf) {
+        $gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json
+        foreach ($x in @($gj)) {
+          if ($SANITY_QUIET -contains ([string]$x.type)) { $sanityQuiet++; continue }
+          $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail); $flagKeys += ('SANITY|' + $x.commodity + '|' + $x.type)
+        }
+      }
+      # <<SANITY-PAGER-END>>
+      if ($sanityQuiet -gt 0) { Log ("review flags: $sanityQuiet store-verified outlier(s) recorded in guards-*.json, not paged (the store's own published unit price reproduces ours)") }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       if ($ff) { $mb = @((Get-Content $ff.FullName -Raw | ConvertFrom-Json).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }
       # ---- BASIS CHECKS (2026-07-28). Bands and freshness cannot see a basis error: the price is real and
@@ -2212,6 +2232,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($reArmed)    { $extra += ", $reArmed RE-ARMED after $REARM_DAYS days open" }
         if ($ackReArmed) { $extra += ", $ackReArmed RE-ARMED the day their ack expired" }
         if ($ackExpired) { $extra += ", $ackExpired ack(s) EXPIRED" }
+        if ($sanityQuiet) { $extra += ", $sanityQuiet store-verified outlier(s) recorded, not paged" }
         $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen$extra) - see guards-/flagged- json")
         if ($newIdx.Count -gt 0 -and -not $NoAlert) {
           $newLines = @($newIdx | ForEach-Object { $flagParts[$_] })
@@ -2593,9 +2614,45 @@ try {
   # suite cost ~7.5 minutes per chain, the single largest item in the stage profile. Capture once.
   $taJ = Invoke-Bounded 'test-auditors' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'test-auditors.ps1')) 1200
   $ta = ($taJ.Output -join "`n")
-  if ($taJ.ExitCode -ne 0) {
-    Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
-    $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
+  $taRc = $taJ.ExitCode
+  if ($taRc -ne 0) {
+    # <<WATCHERS-DECISION-BEGIN>> test-auditors.ps1 extracts this region and runs it against frozen rc values.
+    # THREE OUTCOMES, NOT TWO (2026-09-04, queue 2026-09-04-0b63d3). This branch used to be `-ne 0`, so a
+    # stale COPY of a prompt in ops\prompt-backup produced the estate's loudest page - "any quiet report from
+    # that guard is unproven - including a clean board" - on a run where all 601 fixtures fired. It cost the
+    # trust ordering of every other alert that morning and pointed the reader at a remedy (-Sync) that writes
+    # LIVE user-scope prompt files and mirrors a personal scheduled task into a public repo.
+    # FAIL CLOSED: rc 1 is the ONLY quiet-ish tier. rc 2, a crash, a throw, an Invoke-Bounded timeout (124) -
+    # anything this code does not recognise - takes the BLIND path, because an unknown verdict from the
+    # harness that proves the guards is a BLIND verdict. The rc-2 subject, body and file name are unchanged
+    # so every existing reader and the dated evidence-file convention keep working.
+    # A HYGIENE run still PAGES. It is routed, not silenced: a different subject, a different body, a
+    # different summary prefix, and an evidence file of its own.
+    if ($taRc -eq 1) {
+      $taKind    = 'HYGIENE'
+      $taSubject = 'Grocery: test-auditors hygiene finding(s) - watchers intact'
+      $taLog     = 'test-auditors HYGIENE: every watcher still fires on its own founding bug; ops housekeeping drift was found'
+      $taSummary = 'HYGIENE   every watcher still fires on its own founding bug; ops hygiene drift found - see the HYGIENE lines in the saved output'
+      $taFileTag = 'test-auditors-hygiene'
+      $taLookFor = 'HYGIENE'
+      # THE WORDING IS LOAD-BEARING and is asserted by test-auditors: this body must contain neither
+      # "unproven" nor "gone blind". Those two phrases are how a reader (and a grep) tells a housekeeping
+      # page from a blind-watcher page, and a hygiene body that merely says it is NOT one is still a body
+      # with the words in it.
+      $taHeader  = "test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. EVERY FIXTURE FIRED on this run: every watcher still sees the bug it was written for, and nothing here puts the board in doubt." +
+                   "`n`nWhat it found is ops HYGIENE - the estate's own housekeeping (a stale prompt mirror, an uncommitted artefact, a census gap). Fix it deliberately; do NOT reach for a -Sync style remedy quoted inside a finding without reading what it writes."
+    } else {
+      $taKind    = 'WATCHERS'
+      $taSubject = 'Grocery: a GUARD has gone blind (test-auditors failed)'
+      $taLog     = 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
+      $taSummary = 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
+      $taFileTag = 'test-auditors-fail'
+      $taLookFor = 'BAD'
+      $taHeader  = "test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board."
+    }
+    # <<WATCHERS-DECISION-END>>
+    Log $taLog
+    $summary += $taSummary
     # PERSIST THE WHOLE THING BEFORE ALERTING (2026-07-31). send-alert used to truncate its body, and on
     # 2026-07-31T06:20 that truncation ate the only copy of WHICH case failed: the email carried the first
     # ~28 PASS lines and stopped, the log line says only "a guard has gone blind", and by the time anyone
@@ -2610,18 +2667,18 @@ try {
     # hand send-alert THAT PATH: nothing on this path can be too long, and the mail carries the whole run
     # instead of the first 28 PASS lines. The explanatory header goes into the file rather than only into
     # the email, which also makes the artefact self-describing for whoever finds it days later.
-    $taF = Join-Path $OutDir ('test-auditors-fail-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt')
-    $taBody = "test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`n" +
+    $taF = Join-Path $OutDir ($taFileTag + '-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt')
+    $taBody = $taHeader + "`n`n" +
               "Saved copy of this run: " + $taF + "`n" +
-              "FULL test-auditors OUTPUT FOLLOWS - look for the BAD lines.`n" + ('-' * 78) + "`n" + $ta
+              "FULL test-auditors OUTPUT FOLLOWS - look for the " + $taLookFor + " lines.`n" + ('-' * 78) + "`n" + $ta
     $taSaved = $false
-    try { Set-Content -Path $taF -Value $taBody -Encoding UTF8; $taSaved = $true; Log ('WATCHERS: full test-auditors output saved to ' + $taF) }
-    catch { Log ('WATCHERS: could not save test-auditors output: ' + $_.Exception.Message) }
+    try { Set-Content -Path $taF -Value $taBody -Encoding UTF8; $taSaved = $true; Log ($taKind + ': full test-auditors output saved to ' + $taF) }
+    catch { Log ($taKind + ': could not save test-auditors output: ' + $_.Exception.Message) }
     if (-not $NoAlert) {
       # normal path: the evidence file IS the body. If it could not be written, Send-Alert spools the same
       # text to %TEMP% instead - a failed evidence write must not also cost us the page.
-      if ($taSaved) { Send-Alert -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -BodyFile $taF -What 'WATCHERS' | Out-Null }
-      else          { Send-Alert -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body $taBody -What 'WATCHERS' | Out-Null }
+      if ($taSaved) { Send-Alert -Subject $taSubject -BodyFile $taF -What $taKind | Out-Null }
+      else          { Send-Alert -Subject $taSubject -Body $taBody -What $taKind | Out-Null }
     }
   } else { Log 'watchers ok: every guard still fires on its own founding bug' }
 } catch { Log ('test-auditors threw: ' + $_.Exception.Message) }

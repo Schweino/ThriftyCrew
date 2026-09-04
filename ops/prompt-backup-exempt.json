@@ -1,0 +1,11 @@
+{
+  "note": "Prompts and SKILLs that are DELIBERATELY not mirrored into ops\\prompt-backup. ops\\prompt-backup is tracked in the ThriftyCrew repository and https://github.com/Schweino/ThriftyCrew loads without a login, so anything copied in there is public. An entry here is a decision that a live file must stay off that mirror; audit-prompt-backup.ps1 then reports it as EXEMPT (still counted in `checked`) instead of NO BACKUP, and its -Sync loop refuses to copy it, so the exemption cannot be undone by the very command the finding used to recommend. Born 2026-09-04, queue 2026-09-04-0b63d3, triage-plans\\plan-2026-09-04.json: the NO BACKUP finding on a personal flight-price watch was one -Sync away from publishing travel dates and alert recipients to a public repo. AN UNREADABLE OR MALFORMED FILE HERE MAKES THE AUDIT EXIT 3 (BLIND), never clean - a typo must not silently exempt everything.",
+  "exempt": [
+    {
+      "kind": "scheduled-task",
+      "name": "aa-fare-watch-tys-oma",
+      "reason": "personal flight-price watch, carries travel dates and alert recipients; ops\\prompt-backup is tracked in a PUBLIC repo",
+      "added": "2026-09-04"
+    }
+  ]
+}

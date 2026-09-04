@@ -167,7 +167,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -320,7 +321,8 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bcone\\b,ice\\s*cream,frozen\\s+dessert",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -483,7 +485,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -634,7 +637,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -796,7 +800,9 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsalad\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bbrats\\b"
                     ]
     },
     {
@@ -1114,7 +1120,8 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bboneless\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -2564,7 +2571,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "protein\\s+bars?"
                     ]
     },
     {
@@ -5110,7 +5118,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -5644,7 +5654,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -5807,7 +5818,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bchicken\\b"
+                        "\\bchicken\\b",
+                        "bread\\s+cheese",
+                        "\\bbrats\\b"
                     ]
     },
     {
@@ -5951,7 +5964,8 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -6109,7 +6123,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "italian\\s+sandwich"
                     ]
     },
     {
@@ -6275,7 +6291,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -6435,7 +6452,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -6601,7 +6619,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -6722,7 +6741,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -6847,7 +6867,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -7655,7 +7676,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bcoconut\\b"
                     ]
     },
     {
@@ -10370,7 +10392,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -10482,7 +10506,9 @@
                         "\\bketo\\b",
                         "low[\\s-]?carb",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -10590,7 +10616,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -10705,7 +10733,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ],
         "relax_global":  [
                              "flavored"
@@ -14018,7 +14048,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bwhole\\s+black\\s+peppercorns?\\b"
                     ]
     },
     {
@@ -15541,7 +15572,11 @@
                         "\\bpen\\b",
                         "crystals",
                         "\\bgel\\b",
-                        "bathroom\\s+cleaner"
+                        "bathroom\\s+cleaner",
+                        "multi[\\s-]*surface",
+                        "all[\\s-]*purpose",
+                        "cleaner\\s*\\+\\s*bleach",
+                        "cleaner\\s+with\\s+bleach"
                     ]
     },
     {
@@ -21012,7 +21047,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -21164,7 +21200,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -21315,7 +21352,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -21469,7 +21507,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -21614,7 +21653,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -21770,7 +21810,8 @@
                         "similac",
                         "little\\s+journey\\s+baby",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -21920,7 +21961,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -22075,7 +22117,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bchicken\\b"
+                        "\\bchicken\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -22226,7 +22269,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "bread\\s+cheese"
                     ],
         "relax_global":  [
                              "\\bbeer\\b"
@@ -22382,7 +22426,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -22536,7 +22581,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -22695,7 +22741,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -22851,7 +22898,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -23007,7 +23055,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -23167,7 +23216,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -23327,7 +23377,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -23478,7 +23529,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "bread\\s+cheese",
+                        "italian\\s+sandwich"
                     ]
     },
     {
@@ -23637,7 +23690,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -23785,7 +23839,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -25222,7 +25277,9 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -25336,7 +25393,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -25447,7 +25506,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -25560,7 +25621,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ],
         "relax_global":  [
                              "\\bbake\\b",
@@ -25684,7 +25747,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -25798,7 +25863,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -25913,7 +25980,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -26022,7 +26091,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ],
         "relax_global":  [
                              "\\bbaked\\b",
@@ -37522,7 +37593,15 @@
                         "detergent",
                         "\\bbar\\b",
                         "\\bpowder\\b",
-                        "toilet\\s+bowl"
+                        "toilet\\s+bowl",
+                        "\\bbathroom\\b",
+                        "\\bshower\\b",
+                        "\\btub\\b",
+                        "\\bmold\\b",
+                        "\\bmildew\\b",
+                        "\\bgrout\\b",
+                        "\\btile\\b",
+                        "scrubbing\\s+bubbles"
                     ]
     },
     {
@@ -37958,7 +38037,8 @@
                         "sunscreen",
                         "\\bspf\\b",
                         "\\btanning\\b",
-                        "calamine"
+                        "calamine",
+                        "body\\s*wash"
                     ]
     },
     {
@@ -39301,7 +39381,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bbiscuits?\\b"
                     ]
     },
     {
@@ -52860,7 +52941,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -53387,7 +53469,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "relax_global":  [
                              "\\bwater\\b"
@@ -53997,7 +54080,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -55188,7 +55272,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -55536,7 +55621,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -56483,7 +56569,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -56650,7 +56737,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -56815,7 +56903,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -58452,7 +58541,8 @@
                         "\\bschnapps\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\blimes?\\b"
                     ]
     },
     {
@@ -67460,7 +67550,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -67611,7 +67703,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "band_min":  0.04,
         "band_max":  0.65
@@ -68226,7 +68319,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ],
         "band_min":  0.14,
         "band_max":  22.44
@@ -68373,7 +68467,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "bread\\s+cheese"
                     ],
         "band_min":  0.05,
         "band_max":  14.97
@@ -71639,7 +71734,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "bread\\s+cheese"
                     ],
         "band_min":  0.15,
         "band_max":  1.32
@@ -73867,7 +73963,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {
@@ -74443,7 +74540,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bread\\s+cheese"
                     ]
     },
     {

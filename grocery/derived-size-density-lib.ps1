@@ -232,10 +232,36 @@ function Get-PackMultiple([double]$DerivedNominal, [double]$StatedNominal, [doub
   return [int]$n
 }
 
-# The store's displayed unit price, in dollars, WITH the half-width of its own rounding. Sam's writes
-# "$0.07/foz" (2 decimals -> +/- $0.005); Walmart writes "50.7 c/fl oz" (1 decimal on cents ->
-# +/- $0.0005). The half-width is read from the literal's own precision rather than assumed, because the
-# abstention below is precisely a statement about how coarse that number is.
+# THE UNIT THE STORE PRICED BY, normalised into the engine's own vocabulary (2026-09-04, queue
+# 2026-09-04-def37c). The stores write the same unit five ways - Sam's "$0.14/foz", Walmart "37.3 c/fl oz",
+# "$1.73/count", "$2.37/ea" - and the number is worthless to a cross-check until you know whether it is the
+# SAME KIND of unit the commodity is priced in. Measured over today's captures: oz, fl oz, foz, ea, count, lb.
+#
+# FLUID OUNCES ARE TESTED BEFORE OUNCES, and that order is the whole function. "fl oz" contains "oz", so an
+# oz-first test reads a per-fluid-ounce price as a per-weight price - the unit-label-vs-unit-magnitude class
+# this estate has already paid for once (an "each == each" that differed 16x).
+# An unrecognised unit returns '' rather than a guess: a cross-check that cannot name the unit must abstain,
+# not assume the units agree.
+function ConvertTo-DisplayedUnitToken([string]$Text) {
+  if (-not $Text) { return '' }
+  # only what follows the slash is the unit; "$0.05/oz" and "37.3 c/fl oz" both put it there
+  $u = $Text
+  $slash = $Text.LastIndexOf('/')
+  if ($slash -ge 0) { $u = $Text.Substring($slash + 1) }
+  $u = $u.Trim().ToLower() -replace '[\.\s]+', ' '
+  $u = $u.Trim()
+  if ($u -match '^(fl(uid)?\s*oz(s)?|floz|foz)$')     { return 'floz' }
+  if ($u -match '^(oz|ozs|ounce|ounces)$')            { return 'oz' }
+  if ($u -match '^(lb|lbs|pound|pounds)$')            { return 'lb' }
+  if ($u -match '^(ea|each|ct|count|pk|pack|pieces?)$') { return 'each' }
+  return ''
+}
+
+# The store's displayed unit price, in dollars, WITH the half-width of its own rounding, AND the unit it
+# is quoted in. Sam's writes "$0.07/foz" (2 decimals -> +/- $0.005); Walmart writes "50.7 c/fl oz"
+# (1 decimal on cents -> +/- $0.0005). The half-width is read from the literal's own precision rather than
+# assumed, because the abstention below is precisely a statement about how coarse that number is.
+# Unit is ADDITIVE: every existing caller reads Value/Half/Text/Field and is unaffected.
 function Get-DisplayedUnitPrice($row) {
   if (-not $row) { return $null }
   foreach ($f in @('sams_unit_price', 'wm_unit_price', 'unit_price')) {
@@ -251,7 +277,7 @@ function Get-DisplayedUnitPrice($row) {
     # cents -> dollars, in BOTH the value and its half-width
     if ($t -match ([char]0x00A2) -or $t -match '(?i)\bcents?\b') { $v = $v / 100.0; $half = $half / 100.0 }
     if ($v -le 0) { continue }
-    return [pscustomobject]@{ Value = $v; Half = $half; Text = $t; Field = $f }
+    return [pscustomobject]@{ Value = $v; Half = $half; Text = $t; Field = $f; Unit = (ConvertTo-DisplayedUnitToken $t) }
   }
   return $null
 }
