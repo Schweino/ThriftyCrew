@@ -100,9 +100,12 @@ if ($SelfTest) {
   $iRead   = $code.IndexOf('--pool' + '-health')
   T 'MUST FIRE  the pool is RESCORED against the fresh index - a rebuild nothing is scored against buys nothing' `
     ($iScore -gt 0) 'the crawl never rescores, so the new index is never read'
-  T 'MUST FIRE  ...and in THIS order: crawl, rebuild, rescore, read' `
-    ($iCrawl -gt 0 -and $iCrawl -lt $iBuild -and $iBuild -lt $iScore -and $iScore -lt $iRead) `
-    ("crawl={0} build={1} rescore={2} read={3}" -f $iCrawl, $iBuild, $iScore, $iRead)
+  $iCal = $code.IndexOf('--' + 'calibrate')
+  T 'MUST FIRE  the ask floor is RE-READ off the labelled rulings - it is gitignored and dates itself against the digest, so nothing else maintains it' `
+    ($iCal -gt 0) 'the crawl never recalibrates, so the embedding half of the shortlist can go quietly dead'
+  T 'MUST FIRE  ...and in THIS order: crawl, rebuild, calibrate, rescore, read' `
+    ($iCrawl -gt 0 -and $iCrawl -lt $iBuild -and $iBuild -lt $iCal -and $iCal -lt $iScore -and $iScore -lt $iRead) `
+    ("crawl={0} build={1} calibrate={2} rescore={3} read={4}" -f $iCrawl, $iBuild, $iCal, $iScore, $iRead)
   Write-Output ''
   if ($bad -gt 0) { Write-Output ("harvest-crawl SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1 }
   Write-Output 'harvest-crawl SELF-TEST PASS'
@@ -138,6 +141,17 @@ if ((Test-Path $sidecar) -and (Test-Path $embed)) {
   foreach ($ln in @($eo)) { if ($ln -match 'candidate|carry no|COMPLETE|Error|Traceback') { Say ('  ' + $ln.Trim()) } }
 } else {
   Say '  FINDING the evidence index was NOT rebuilt - no sidecar interpreter (torch lives there, the pinned one has none)'
+}
+
+# ---- and the ask floor is re-read off the labelled rulings -------------------------------------
+# catalog-similarity.json is gitignored and dates itself against the catalog digest, so it is absent
+# on a fresh checkout and stale whenever the catalog moves - and without it the embedding half of the
+# dedup shortlist contributes nothing at all. The floor is read from the estate's own labelled dupes,
+# which grow every run, so this is also how it sharpens.
+if ((Test-Path $sidecar) -and (Test-Path $embed)) {
+  $co = & $sidecar $embed '--calibrate' '--device' 'cpu'
+  $co | Out-File -FilePath $log -Append -Encoding utf8
+  foreach ($ln in @($co)) { if ($ln -match 'ask floor|OVERLAP|CANNOT RUN') { Say ('  ' + $ln.Trim()) } }
 }
 
 # ---- and then the pool is scored AGAINST the fresh index --------------------------------------

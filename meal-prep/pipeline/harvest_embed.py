@@ -133,6 +133,9 @@ def load_catalog(digest_path=None):
     return rows
 
 
+MIN_LABELLED_FOR_FLOOR = 20   # below this the labelled set is too small to read a floor off
+
+
 def load_candidates(pool_path=POOL):
     try:
         with open(pool_path, "r", encoding="utf-8-sig") as f:
@@ -333,6 +336,54 @@ def cmd_build(a):
     return 1 if starved else 0
 
 
+def load_labelled(status, pool_path=POOL):
+    """Candidates the estate has already RULED, for reading a floor off outcomes instead of a corpus.
+
+    The corpus percentiles say what is unusual among published pairs. They cannot say what is
+    diagnostic of a duplicate, because a corpus of published recipes contains no duplicates by
+    construction. These rows do: 152 the decider rejected as dupes, 85 it accepted.
+    """
+    try:
+        with open(pool_path, "r", encoding="utf-8-sig") as f:
+            d = json.load(f)
+    except Exception:                                             # noqa: BLE001
+        return []
+    rows = []
+    for c in (d.get("candidates") or []):
+        if (c.get("status") or "") != status:
+            continue
+        sig = c.get("signature") or {}
+        rows.append({"slug": c.get("slug"), "name": c.get("name"),
+                     "text": signature_text(c.get("name"), sig.get("protein"))})
+    return rows
+
+
+def _norm_name(s):
+    return "".join(ch for ch in (s or "").lower() if ch.isalnum())
+
+
+def best_to_catalog(em, rows, cat, kv):
+    """Each row's highest cosine to the live catalog, SELF EXCLUDED.
+
+    The self-exclusion is not a nicety: an ACCEPTED candidate became a live recipe, so it scores ~1.0
+    against itself and would make the accepted distribution look like the dupe distribution. Excluded
+    by slug the way top_per_side does, and by normalised name too, because a candidate's slug and its
+    published slug are not always the same string.
+    """
+    if not rows:
+        return []
+    cv, _miss = em.embed([r["text"] for r in rows])
+    sims = cv @ kv.T
+    out = []
+    for i, r in enumerate(rows):
+        s = sims[i].copy()
+        for j, k in enumerate(cat):
+            if k.get("slug") == r["slug"] or _norm_name(k.get("name")) == _norm_name(r["name"]):
+                s[j] = -1.0
+        out.append(float(s.max()))
+    return sorted(out)
+
+
 def cmd_calibrate(a):
     """The live catalog's OWN internal pairwise similarity, written beside the digest (S2a part b).
 
@@ -395,12 +446,50 @@ def cmd_calibrate(a):
                  "the decider rules. A reader that cannot find this file, or finds its generated_from "
                  "fingerprint different from the digest on disk, is BLIND and must say so."),
     }
+    # ---- and the ASK FLOOR, read off outcomes rather than off the corpus ----------------------
+    # The corpus above is a null distribution: it contains no duplicates by construction, so it can
+    # say what is UNUSUAL and never what is DIAGNOSTIC. These rows are the estate's own rulings.
+    dup = best_to_catalog(em, load_labelled("ruled:rejected-dupe"), cat, kv)
+    acc = best_to_catalog(em, load_labelled("ruled:accepted"), cat, kv)
+    em.save()
+    floor, floor_basis, overlap = None, "", None
+    if len(dup) >= MIN_LABELLED_FOR_FLOOR:
+        floor = round(float(dup[0]) - 0.005, 3)   # just under the lowest a known dupe has ever sat
+        floor_basis = ("the lowest max-cosine at which any of the %d labelled rejected-dupes sits "
+                       "(%.4f), less a hair. It is a FLOOR for who to ASK the local model about, "
+                       "never a rule that refuses: measured on the same labelled sets, the dupe and "
+                       "acceptance distributions overlap end to end (dupe median %.4f vs acceptance "
+                       "median %.4f), so no cut separates them and S2a's no-auto-rejection stands."
+                       % (len(dup), dup[0], dup[len(dup) // 2], acc[len(acc) // 2] if acc else -1))
+        overlap = {"labelled_dupes": len(dup), "labelled_accepted": len(acc),
+                   "dupe_median": round(dup[len(dup) // 2], 4),
+                   "accepted_median": round(acc[len(acc) // 2], 4) if acc else None,
+                   "dupe_min": round(dup[0], 4),
+                   "accepted_min": round(acc[0], 4) if acc else None,
+                   "dupes_above_floor": sum(1 for v in dup if v >= floor),
+                   "accepted_above_floor": sum(1 for v in acc if v >= floor)}
+    rec["ask_floor"] = floor
+    rec["ask_floor_basis"] = floor_basis or (
+        "NOT SET - only %d labelled rejected-dupe(s) available and %d are required. Without it the "
+        "embedding side contributes no shortlist and the pass says so rather than reading an empty "
+        "shortlist as 'no near neighbour'." % (len(dup), MIN_LABELLED_FOR_FLOOR))
+    rec["ask_floor_separation"] = overlap
     with open(CALIBRATION_FILE, "w", encoding="utf-8") as f:
         json.dump(rec, f, indent=1)
     print("harvest_embed --calibrate  [%s]" % a.device)
     print("  %d live recipes -> %d pairs: p50 %.4f  p90 %.4f  p99 %.4f  max %.4f  (%.1f s)"
           % (len(cat), dist["n"], dist["p50"], dist["p90"], dist["p99"], dist["max"], elapsed))
     print("  closest published pair: %s <-> %s" % (top_pair[0], top_pair[1]))
+    if rec["ask_floor"] is None:
+        print("  ask floor: NOT SET - %s" % rec["ask_floor_basis"])
+    else:
+        o = rec["ask_floor_separation"]
+        print("  ask floor READ from %d labelled dupe(s): %.3f  (catches %d/%d dupes; %d/%d "
+              "acceptances are also asked about, which costs a local call each and refuses nobody)"
+              % (o["labelled_dupes"], rec["ask_floor"], o["dupes_above_floor"], o["labelled_dupes"],
+                 o["accepted_above_floor"], o["labelled_accepted"]))
+        print("  the two distributions OVERLAP (dupe median %.4f vs acceptance median %.4f) - this "
+              "is a floor for who to ASK, not a rule that refuses" % (o["dupe_median"], o["accepted_median"]))
     print("  -> %s" % CALIBRATION_FILE)
     print("HARVEST-EMBED-COMPLETE")
     return 0

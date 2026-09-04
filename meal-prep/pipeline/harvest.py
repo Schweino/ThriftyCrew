@@ -2048,6 +2048,59 @@ def llm_different_dinner(cand, neighbour, url=None, timeout=60):
         return ""
 
 
+def dedup_ask_floor():
+    """The bge-m3 floor, READ from the calibration, or None with a reason. Never hand-set.
+
+    Returns (floor, why_not). A stale or missing calibration means the embedding side contributes
+    nothing to the shortlist - and the pass SAYS so, rather than letting an empty embedding
+    shortlist read as "this candidate has no near neighbour".
+    """
+    rec, reason = load_similarity_calibration()
+    if rec is None:
+        return None, reason
+    f = rec.get("ask_floor")
+    if not isinstance(f, (int, float)):
+        return None, (rec.get("ask_floor_basis")
+                      or "the calibration names no ask_floor - re-run harvest_embed.py --calibrate")
+    return float(f), ""
+
+
+def dedup_shortlist(c, floor=None, cap=None):
+    """Who to ask the local model about, PER SOURCE and interleaved by rank.
+
+    Word overlap is an integer count and bge-m3 is a cosine; they share no scale, so each is cut at
+    its own threshold and ranked among its own kind. The two ranked lists are then interleaved, best
+    first, deduped by the live recipe they point at - so a cap of 3 can never be filled entirely by
+    one source, and no number from one scale is ever compared to a number from the other.
+
+    The floor is a floor for ASKING. Measured on 152 labelled dupes and 85 labelled acceptances, the
+    two distributions overlap end to end, so nothing here refuses anything: the two-polarity contract
+    still makes every call.
+    """
+    cap = DEDUP_ASK_CAP if cap is None else cap
+    wo, bge = [], []
+    for n in (c.get("neighbours") or []):
+        if n.get("side") != "live-catalog":
+            continue
+        s = n.get("score") or 0
+        if str(n.get("source") or "").startswith("bge"):
+            if floor is not None and s >= floor:
+                bge.append(n)
+        elif s >= DEDUP_SHORTLIST_MIN:
+            wo.append(n)
+    bge.sort(key=lambda n: -(n.get("score") or 0))
+    wo.sort(key=lambda n: -(n.get("score") or 0))
+    out, seen = [], set()
+    for i in range(max(len(bge), len(wo))):
+        for src in (bge, wo):
+            if i < len(src):
+                key = src[i].get("slug") or src[i].get("name")
+                if key not in seen:
+                    seen.add(key)
+                    out.append(src[i])
+    return out[:cap]
+
+
 def dedup_pending(c):
     """Is this candidate still owed a dedup verdict? ONE definition, two callers.
 
@@ -2098,6 +2151,7 @@ def refuse_near_dupes(pool, quiet=False, only=None, budget_sec=None):
     if not avail:
         return 0
     up = llama_up()
+    floor, floor_why = dedup_ask_floor()
     refused = 0
     skipped = 0
     deadline = (time.time() + budget_sec) if budget_sec else None
@@ -2108,17 +2162,15 @@ def refuse_near_dupes(pool, quiet=False, only=None, budget_sec=None):
             # which is the exact failure this whole change exists to close.
             skipped += 1
             continue
-        near = [n for n in (c.get("neighbours") or [])
-                if n.get("side") == "live-catalog" and (n.get("score") or 0) >= DEDUP_SHORTLIST_MIN]
+        near = dedup_shortlist(c, floor)
         if not near:
             c["dedup_at_ingest"] = "no-neighbour"
             continue
         if not up:
             c["dedup_at_ingest"] = "unavailable"
             continue
-        near.sort(key=lambda n: -(n.get("score") or 0))
         verdict = ""
-        for n in near[:DEDUP_ASK_CAP]:
+        for n in near:
             # TWO POLARITIES, AND THE MODEL MUST DISAGREE WITH ITSELF TO BE BELIEVED.
             # Measured 2026-08-27 on seven labelled pairs: asked "are these the same dinner?"
             # AND "are these different dinners?", the local model answered YES to BOTH on every
@@ -2141,6 +2193,10 @@ def refuse_near_dupes(pool, quiet=False, only=None, budget_sec=None):
     if not quiet:
         state = "local model" if up else "MODEL DOWN - candidates stored UNDEDUPED and tagged"
         say("  dedup at ingest (%s): %d refused as near-duplicates of live recipes" % (state, refused))
+        if floor is None:
+            say("  the EMBEDDING half of the shortlist is unavailable - %s" % floor_why)
+            say("  ...so only word-overlap picked who to ask about, and a duplicate under a "
+                "different vocabulary was not asked about at all")
         if skipped:
             say("  ...and %d candidate(s) were left UNEXAMINED by the time budget - untagged, so the "
                 "next pass takes them" % skipped)
@@ -3497,6 +3553,56 @@ def cmd_selftest(_a):
           n == 0 and p["candidates"][0]["status"] == "available"
           and p["candidates"][0]["dedup_at_ingest"] == "llm",
           "%s / %s" % (p["candidates"][0]["status"], p["candidates"][0].get("dedup_at_ingest")))
+    finally:
+        globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
+
+    # ---- the shortlist is PER SOURCE, because the sources are on different scales ---------------
+    # Measured 2026-09-04 on the live pool: 31,340 bge-m3 rows at cosine 0.559-1.000 against
+    # DEDUP_SHORTLIST_MIN = 20, a word-overlap COUNT. Zero could ever clear it.
+    def _n(slug, score, source, side="live-catalog"):
+        return {"slug": slug, "name": slug, "score": score, "source": source, "side": side}
+
+    _mix = {"neighbours": [_n("w1", 64, "word-overlap"), _n("w2", 25, "word-overlap"),
+                           _n("w3", 21, "word-overlap"),   # enough to FILL the cap on its own
+                           _n("b1", 0.998, "bge-m3"), _n("b2", 0.90, "bge-m3"),
+                           _n("b3", 0.60, "bge-m3"), _n("far", 0.99, "bge-m3", "backlog")]}
+    got = [x["slug"] for x in dedup_shortlist(_mix, 0.747)]
+    T("MUST FIRE  an embedding neighbour is shortlisted on ITS OWN scale - a cosine was compared "
+      "against a word count, so no bge-m3 row could ever be asked about",
+      "b1" in got, str(got))
+    T("MUST FIRE  ...and a flat sort across the two scales does not let word-overlap crowd it out: "
+      "both sources are represented inside the cap",
+      any(s.startswith("b") for s in got) and any(s.startswith("w") for s in got), str(got))
+    T("MUST FIRE  a bge-m3 row BELOW the floor is not asked about",
+      "b3" not in got, str(got))
+    T("MUST FIRE  a backlog-side neighbour is never shortlisted - the question is duplication of a "
+      "LIVE recipe", "far" not in got, str(got))
+    T("MUST FIRE  with NO floor (a blind or missing calibration) the embedding side contributes "
+      "nothing, and word overlap still does its half",
+      [x["slug"] for x in dedup_shortlist(_mix, None)] == ["w1", "w2", "w3"],
+      str([x["slug"] for x in dedup_shortlist(_mix, None)]))
+    T("CLEAN TWIN word overlap keeps its own threshold exactly as it was",
+      [x["slug"] for x in dedup_shortlist({"neighbours": [_n("lo", 19, "word-overlap"),
+                                                          _n("hi", 20, "word-overlap")]}, 0.747)]
+      == ["hi"], "the word-overlap cut moved")
+    T("the floor is READ from the calibration, never hand-set in code",
+      "ask_floor" in open(CALIBRATION_FILE, encoding="utf-8-sig").read()
+      if os.path.exists(CALIBRATION_FILE) else True, "no ask_floor in the calibration")
+
+    # AND THROUGH THE REAL PASS, not just the predicate. Four fixtures in this estate passed over a
+    # mechanism that was never wired, because they called the helper directly.
+    saved = (llama_up, llm_same_dinner, llm_different_dinner)
+    globals()["llama_up"] = lambda *a, **k: True
+    globals()["llm_same_dinner"] = lambda *a, **k: "yes"
+    globals()["llm_different_dinner"] = lambda *a, **k: "no"
+    try:
+        p = {"candidates": [{"slug": "emb-only", "name": "emb-only", "status": "available",
+                             "neighbours": [_n("live-twin", 0.96, "bge-m3")]}]}
+        n = refuse_near_dupes(p, quiet=True)
+        T("MUST FIRE  refuse_near_dupes ITSELF acts on a candidate whose only evidence is embedding - "
+          "the whole point, and the thing that was unreachable before",
+          n == 1 and p["candidates"][0]["status"] == "ruled:rejected-dupe",
+          "%s / %s" % (n, p["candidates"][0]["status"]))
     finally:
         globals()["llama_up"], globals()["llm_same_dinner"], globals()["llm_different_dinner"] = saved
 

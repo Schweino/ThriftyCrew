@@ -414,6 +414,22 @@ function Write-JsonAtomic {
     }
   }
 }
+function Get-StateLabel {
+  <#
+    The bucket an entry counts into on -Status, and it is NEVER the empty string.
+
+    An entry with no state produced "" here, which became a by_state KEY - and PowerShell 5.1's
+    ConvertFrom-Json refuses a property with an empty name, failing the WHOLE document. So the JSON
+    status surface was unreadable to every PowerShell consumer because of one stateless entry. On the
+    text surface the same "" printed as a blank label with a count next to it, which reads as a
+    rendering glitch rather than as the data defect it is.
+  #>
+  param([object]$E)
+  $s = [string]$E.state
+  if ([string]::IsNullOrWhiteSpace($s)) { return '(no state recorded)' }
+  return $s
+}
+
 function Get-Stamp { (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss') }
 function Get-StateDir { param([string]$Dir) Join-Path $Dir 'state' }
 function Get-StatePath { param([string]$Dir, [string]$S) Join-Path (Get-StateDir $Dir) ($S + '.json') }
@@ -1650,6 +1666,19 @@ if ($runSelfTest) {
     ($codeHR -match 'pool_health' -and $codeHR -match ('pool' + 'Lines')) `
     'the reading is missing from one of the two status surfaces'
 
+  # ---- a stateless entry must not produce an empty JSON key (PS 5.1 cannot parse one) -------------
+  T 'MUST FIRE  an entry with NO state gets a NAMED bucket - an empty by_state key makes PS 5.1 fail the whole document' `
+    ((Get-StateLabel ([pscustomobject]@{ slug = 'x' })) -eq '(no state recorded)') `
+    (Get-StateLabel ([pscustomobject]@{ slug = 'x' }))
+  T 'MUST FIRE  ...and so does a whitespace-only state, which is the same defect wearing a space' `
+    ((Get-StateLabel ([pscustomobject]@{ state = '   ' })) -eq '(no state recorded)') `
+    (Get-StateLabel ([pscustomobject]@{ state = '   ' }))
+  T 'CLEAN TWIN a real state is passed through untouched' `
+    ((Get-StateLabel ([pscustomobject]@{ state = 'published' })) -eq 'published') `
+    (Get-StateLabel ([pscustomobject]@{ state = 'published' }))
+  T 'MUST FIRE  the -Status bucketing actually CALLS it, rather than casting .state itself' `
+    ($codeHR -match ('Get-State' + 'Label')) 'the status path still buckets on a raw cast'
+
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
   Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -2555,7 +2584,7 @@ if ($runWaveClose) {
 # ---- -Status (also the resume entry point) --------------------------------------------------------
 $entries = @(Read-Entries $RunDir)
 $byState = @{}
-foreach ($e in $entries) { $s = [string]$e.state; if (-not $byState.ContainsKey($s)) { $byState[$s] = @() }; $byState[$s] += [string]$e.slug }
+foreach ($e in $entries) { $s = Get-StateLabel $e; if (-not $byState.ContainsKey($s)) { $byState[$s] = @() }; $byState[$s] += [string]$e.slug }
 $published = @(@($entries | Where-Object { @('published', 'verified') -contains [string]$_.state }))
 $rejectedRows  = @(@($entries | Where-Object { @($script:REJECTED_STATES) -contains [string]$_.state }))
 $parked    = @(@($entries | Where-Object { [string]$_.state -eq 'parked' }))

@@ -312,7 +312,15 @@ def run():
             print("  X     %s   got: %s" % (name, got))
             bad.append(name)
 
+    # SECTION TIMING. The suite is the estate's slowest gate and nothing measured where its time
+    # went, so every proposal to speed it up was a guess. H() already delimits all 55 sections.
+    _cost = []
+    _now = [time.time(), None]
+
     def H(title):
+        if _now[1] is not None:
+            _cost.append((time.time() - _now[0], _now[1]))
+        _now[0], _now[1] = time.time(), title
         print("")
         print(title)
 
@@ -1529,6 +1537,15 @@ def run():
     for fn in WC_SECTIONS:
         for name, ok, got in fn():
             T(name, ok, got)
+
+    if _now[1] is not None:
+        _cost.append((time.time() - _now[0], _now[1]))
+    _cost.sort(reverse=True)
+    _total = sum(s for s, _ in _cost)
+    print("")
+    print("  suite cost %.0fs across %d section(s); the slowest:" % (_total, len(_cost)))
+    for secs, title in _cost[:8]:
+        print("    %6.1fs  %3.0f%%  %s" % (secs, 100.0 * secs / max(_total, 0.001), title[:96]))
 
     print("")
     if bad:
