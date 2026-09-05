@@ -1,0 +1,31 @@
+{
+    "slug":  "baked-cashew-chicken",
+    "title":  "Baked Cashew Chicken",
+    "source_url":  "https://lemonsandzest.com/baked-cashew-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T08:33:58",
+    "updated":  "2026-09-04T08:33:58",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken with broccoli, peppers, cashews in a soy/hoisin sauce over rice is the same cashew-chicken dinner as live thai-cashew-chicken (shares cashews, peppers, soy, rice); baked-vs-stir-fry method does not make a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:33:58",
+                        "by":  "harvest",
+                        "detail":  "https://lemonsandzest.com/baked-cashew-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T08:33:58",
+                        "by":  "decider",
+                        "detail":  "Chicken with broccoli, peppers, cashews in a soy/hoisin sauce over rice is the same cashew-chicken dinner as live thai-cashew-chicken (shares cashews, peppers, soy, rice); baked-vs-stir-fry method does not make a distinct plate."
+                    }
+                ]
+}

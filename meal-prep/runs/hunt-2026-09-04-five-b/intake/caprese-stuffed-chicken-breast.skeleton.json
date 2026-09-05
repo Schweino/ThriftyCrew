@@ -1,0 +1,102 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-09-04T08:37:06",
+    "slug":  "caprese-stuffed-chicken-breast",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "Caprese Stuffed Chicken Breast",
+                   "slug":  "caprese-stuffed-chicken-breast",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://thecleaneatingcouple.com/chicken-caprese/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  2381,
+                                           "buy":  "5 1/4 lb (about 14 small breasts), each sliced open into a pocket"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  5,
+                                           "buy":  "scant 1 teaspoon kosher salt"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  4,
+                                           "buy":  "1 3/4 teaspoons, freshly ground"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  94,
+                                           "buy":  "7 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Balsamic Vinegar",
+                                           "grams":  446,
+                                           "buy":  "1 3/4 cups"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  5,
+                                           "buy":  "1 3/4 teaspoons minced (about 2 cloves)"
+                                       },
+                                       {
+                                           "item":  "Brown Sugar",
+                                           "grams":  47,
+                                           "buy":  "3 1/2 tablespoons, packed"
+                                       },
+                                       {
+                                           "item":  "Basil Pesto",
+                                           "grams":  224,
+                                           "buy":  "14 tablespoons (about 3/4 cup plus 2 tablespoons)"
+                                       },
+                                       {
+                                           "item":  "Tomatoes",
+                                           "grams":  472,
+                                           "buy":  "28 thin slices (about 7 roma tomatoes)"
+                                       },
+                                       {
+                                           "item":  "Fresh Mozzarella",
+                                           "grams":  392,
+                                           "buy":  "14 slices (about 14 oz), each cut in half"
+                                       },
+                                       {
+                                           "item":  "Fresh Basil",
+                                           "grams":  210,
+                                           "buy":  "3 1/2 bunches leaves (about 7 oz)"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  437,
+                                              "protein_g":  44,
+                                              "carbs_g":  11.9,
+                                              "fat_g":  22.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT20M",
+                                "totalTime":  "PT30M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

@@ -1,0 +1,52 @@
+C:\Codex\ThriftyCrew\meal-prep\pipeline\fdc_lookup.py:24: SyntaxWarning: invalid escape sequence '\d'
+  FDC_KEY_FILE, or from meal-prep\db\fdc-api-key.txt. Absent, every entry point returns a CANNOT-RUN
+hunt-daemon: band cal 350-650, carbs <= 35, protein >= 40
+hunt-daemon: conditions (read from the run dir) between 350 and 650 calories per serving AND 35 g carbohydrate or less per serving AND at least 40 g protein per serving; budget meal-prep dinner; scalable to 14 servings; no seafood
+preflight: llama-server is down and the card is free - starting C:\Codex\ThriftyCrew\tools\local-llm\serve.ps1
+preflight: llama-server answered after 10s
+hunt-daemon: hunt-2026-09-04-five-b  lanes pool,decide,extract,map,price,write,qa  publish LIVE
+pool: no available candidate left in the backlog
+extract lane: llama-server reports 16384 tokens per slot; rung 2 needs ~11465 -> rung 2 available
+decide batch 1: 10 ruling(s), 1 accepted so far
+extract: released 1 settled recipe(s) to the map lane (nothing else queued for extraction)
+map: micro-batch of 1 (caprese-stuffed-chicken-breast)
+  map: prior-rulings shelf ok - 10 neighbour(s) over 2 term(s) from 304 past ruling(s)
+map shelf: 2 of 2 term(s) with no food-DB row carry FDC candidates
+decide batch 2: 9 ruling(s), 3 accepted so far
+  vocab: Tomatoes -> tomatoes, basis inherited from the commodity row for 'tomatoes'
+  map: caprese-stuffed-chicken-breast learned 2 event(s) (2 projected, 0 held, 0 surprise)
+extract: released 2 settled recipe(s) to the map lane (batch full)
+map: micro-batch of 2 (turkey-stuffed-peppers, sheet-pan-cranberry-chicken-and-stuffing)
+  map: prior-rulings shelf ok - 65 neighbour(s) over 13 term(s) from 306 past ruling(s)
+map shelf: 9 of 9 term(s) with no food-DB row carry FDC candidates
+  map: turkey-stuffed-peppers learned 9 event(s) (6 projected, 0 held, 0 surprise)
+  map: sheet-pan-cranberry-chicken-and-stuffing STUCK - a rejected verdict naming no state
+price lane [singleton] invocation 1: 3 term(s) across 1 recipe(s)
+  pre-pass batch 1: EMPTY 1, MATCHES 11, UNUSABLE 9
+exit: 0 qa-passed recipe(s) left unwaved - this process is stopping, the RUN is not finished (target 5). seed() re-waves them next start; a wave closed here would buy a whole auditor session for a part-wave.
+
+hunt-daemon status: hunt-2026-09-04-five-b
+
+  seeded          (nothing)
+  accepted        3
+  resolved        3  (2 stuck - no verdict was ever rendered)
+  qa-passed pool  0
+  lane-log lines  48
+  agent calls     7
+  slot context    16384 tokens/slot (rung 2 needs ~11465) - rung 2 available
+
+  STUCK (no verdict was rendered - resumable, and each one says why):
+    caprese-stuffed-chicken-breast         write: the spec build REFUSED this recipe (rc 1): BULLET SHAPE: prose.shop_smart is a STRING, not an array. PowerShell 5.1 iterates a string ONCE, so build-card2 would
+    sheet-pan-cranberry-chicken-and-stuffing map: mapper returned a rejected verdict but named no terminal state, so nothing here can say which one it is: the mapper returned rejected-macros and NO basis for it. A terminal rejection citing nothing cannot be re-examined or defended, so it is not recorded as one - re-ask it.
+
+  FINDINGS (9):
+    map/map:1x: this dispatch billed 510 output tokens MORE than its own session (10277 across claude-haiku-4-5-20251001/claude-opus-5 vs 9767 for the main agent). That difference is delegation, and it used to appear in no ledger.
+    map/map:1x: RE-ASKED and then succeeded, at the price of a second session. The first answer's violations were: caprese-stuffed-chicken-breast: the pre-resolve table names 1 food(s) with no food-macros-db row and this payload answers for neither a row nor an absence on 1 of them: 'Tomatoes'. Every one of those needs EITHER an entry in `food_db_rows` (a label you read, transcribed as printed - a food that truly carries no macros is a row of ZEROES, not an omission) OR an entry in `food_db_absent` as {item, w
+    map/map:2x: RE-ASKED and then succeeded, at the price of a second session. The first answer's violations were: turkey-stuffed-peppers: the pre-resolve table names 2 food(s) with no food-macros-db row and this payload answers for neither a row nor an absence on 2 of them: 'Cooked Quinoa', 'Shredded Mozzarella'. Every one of those needs EITHER an entry in `food_db_rows` (a label you read, transcribed as printed - a food that truly carries no macros is a row of ZEROES, not an omission) OR an entry in `food_db
+    map/turkey-stuffed-peppers: 3 new commodity id(s) reached the registrar that the mapper did NOT declare (99-1-ground-turkey, quinoa, shredded-mozzarella) - the by-omission sweep is what caught them
+    mint/turkey-stuffed-peppers: the registrar APPROVED '99-1-ground-turkey' but the pricer recorded no CARRIED store row with a price AND a size for it, so there is nothing to build a board row from. This one needs a capture pass before it can be born.
+    vocab/turkey-stuffed-peppers: 'Cooked Quinoa' was ruled onto 'quinoa', and NEITHER an existing vocabulary row NOR a commodity row yields a priced basis for it, so none will be invented. Either the id does not exist - which makes this a MINT needing a registrar ruling and store evidence - or it is priced per `each`, where the grams in one of the thing is a fact about the food that no unit name can supply.
+    vocab/turkey-stuffed-peppers: 'Shredded Mozzarella' was ruled onto 'shredded-mozzarella', and NEITHER an existing vocabulary row NOR a commodity row yields a priced basis for it, so none will be invented. Either the id does not exist - which makes this a MINT needing a registrar ruling and store evidence - or it is priced per `each`, where the grams in one of the thing is a fact about the food that no unit name can supply.
+    turkey-stuffed-peppers: the food DB already carries '99/1 Ground Turkey' and the mapper's row DIFFERS on calories, protein_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 107.1 cal / 23.2 P / 0.0 C / 1.3 F  vs  mapper 89.3 / 24.1 / 0.0 / 0.4. On one basis (the mapper's row scaled onto the DB's 4 oz = 112 g) they still disagree: calories 100 vs 120; protein_g 27 vs 26; fat_g 0.5 vs 1.5. existing={"calories": 120, "protein_g": 26, "fat_g": 1.5} new={"calories": 100, "protein_g": 27, "fat_g": 0.5}
+    turkey-stuffed-peppers: the food DB already carries 'Diced Tomatoes' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 20.7 cal / 0.8 P / 4.1 C / 0.0 F  vs  mapper 18.0 / 0.8 / 3.3 / 0.5. On one basis (the mapper's row scaled onto the DB's 0.5 cup = 121 g) they still disagree: carbs_g 4.017 vs 5; fat_g 0.605 vs 0. existing={"serving_grams": 121, "serving_qty": 0.5, "serving_unit": "cup", "calories": 25, "protein_g": 1, "carbs_g": 5, "fat_g": 0} new={"serving_grams": 100, "serving_qty": 100, "serving_unit": "g", "calories": 18, "protein_g": 0.84, "carbs_g": 3.32, "fat_g": 0.5}
+HUNT-DAEMON-COMPLETE

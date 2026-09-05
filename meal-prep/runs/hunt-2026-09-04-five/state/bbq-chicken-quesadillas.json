@@ -1,0 +1,31 @@
+{
+    "slug":  "bbq-chicken-quesadillas",
+    "title":  "BBQ Chicken Quesadillas",
+    "source_url":  "https://iowagirleats.com/bbq-chicken-quesadillas/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:56",
+    "updated":  "2026-09-04T04:51:56",
+    "terms":  [
+
+              ],
+    "reject_reason":  "BBQ sauce + shredded chicken + cheddar in a tortilla is the same dinner as live bbq-chicken-burrito; folded-vs-rolled is not a distinguishing plate, matching this estate\u0027s prior bbq-chicken-quesadilla ruling.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:56",
+                        "by":  "harvest",
+                        "detail":  "https://iowagirleats.com/bbq-chicken-quesadillas/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:51:56",
+                        "by":  "decider",
+                        "detail":  "BBQ sauce + shredded chicken + cheddar in a tortilla is the same dinner as live bbq-chicken-burrito; folded-vs-rolled is not a distinguishing plate, matching this estate\u0027s prior bbq-chicken-quesadilla ruling."
+                    }
+                ]
+}

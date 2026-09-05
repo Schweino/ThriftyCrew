@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-with-onion-thyme-sauce",
+    "title":  "Chicken with Onion Thyme Sauce",
+    "source_url":  "https://amandascookin.com/chicken-with-onion-thyme-sauce/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T08:36:12",
+    "updated":  "2026-09-04T08:36:13",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Floured seared chicken with an onion + broth + flour pan gravy is the same chicken-smothered-in-onion-gravy dinner as live smothered-chicken-onion-gravy; the thyme/rice-vinegar accent doesn\u0027t change the plate, and it doesn\u0027t widen the American-skewed catalog.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:36:12",
+                        "by":  "harvest",
+                        "detail":  "https://amandascookin.com/chicken-with-onion-thyme-sauce/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T08:36:13",
+                        "by":  "decider",
+                        "detail":  "Floured seared chicken with an onion + broth + flour pan gravy is the same chicken-smothered-in-onion-gravy dinner as live smothered-chicken-onion-gravy; the thyme/rice-vinegar accent doesn\u0027t change the plate, and it doesn\u0027t widen the American-skewed catalog."
+                    }
+                ]
+}

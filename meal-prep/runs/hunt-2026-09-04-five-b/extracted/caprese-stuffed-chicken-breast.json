@@ -1,0 +1,132 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Caprese Stuffed Chicken Breast",
+  "source_url": "https://thecleaneatingcouple.com/chicken-caprese/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1.5 lbs boneless, skinless chicken breasts (4 small breasts)",
+      "item": "boneless, skinless chicken breasts",
+      "qty": "1.5",
+      "unit": "lbs",
+      "prep": "(4 small breasts)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon fresh black pepper",
+      "item": "fresh black pepper",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup balsamic vinegar",
+      "item": "balsamic vinegar",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon minced garlic",
+      "item": "minced garlic",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon brown sugar",
+      "item": "brown sugar",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tablespoons basil pesto",
+      "item": "basil pesto",
+      "qty": "4",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 slices roma tomatoes (sliced thin-about 3/4 cup)",
+      "item": "roma tomatoes",
+      "qty": "8",
+      "unit": "slices",
+      "prep": "sliced thin-about 3/4 cup",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 slices fresh mozzarella (cut in half -about 3/4 cup)",
+      "item": "fresh mozzarella",
+      "qty": "4",
+      "unit": "slices",
+      "prep": "cut in half -about 3/4 cup",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 bunch fresh basil leaves",
+      "item": "fresh basil leaves",
+      "qty": "1",
+      "unit": "bunch",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Trim chicken breasts and slice a large pocket horizontally in the center of the breast, making sure not to cut all the way through. Season chicken all over with salt and pepper.",
+    "Make the balsamic reduction. In a small saucepan, over medium heat whisk together the balsamic, garlic and brown sugar. (Tip: You can buy already made balsamic glaze at the grocery store in the same aisle as the vinegars, if you want to take a shortcut. )",
+    "Bring the balsamic mixture to a boil, and cook until it has reduced by half, until only a ¼ cup remains and the mixture is just thick enough to coat the back of a spoon, about 15 minutes. Set aside.",
+    "Preheat oven to 375℉. Prep the chicken. Place 1 tablespoon of pesto into the pocket of each breast and spread evenly. Stuff each chicken breast with 2 halves of the mozzarella, 2 slices of tomato and 1 to 2 basil leaves.",
+    "Secure the chicken together with toothpicks to make sure the filling is secured.",
+    "In a large oven safe skillet over medium heat, add enough olive oil to thinly coat the pan. Sear the chicken breasts until the outside is golden brown.",
+    "Once the chicken has seared, bake in the oven until the chicken is fully cooked and the inside temperature reaches 165℉, about 8-12 minutes depending on the thickness of the chicken. If you do not have a large oven safe skillet, you can transfer the chicken to a baking dish or sheet tray to finish baking in the oven.",
+    "Remove from the oven and let rest for 5 minutes. Serve with a drizzle of the balsamic glaze and fresh basil for garnish."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 11,
+    "verified": 11,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

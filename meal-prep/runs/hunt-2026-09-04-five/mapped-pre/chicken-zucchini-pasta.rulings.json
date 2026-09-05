@@ -1,0 +1,169 @@
+{
+ "slug": "chicken-zucchini-pasta",
+ "lines": [
+  {
+   "raw": "8 oz (250 g) short pasta",
+   "buy": "1 lb 15 oz dry short pasta",
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon olive oil",
+   "buy": "3 1/2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon (20 g) butter",
+   "buy": "3 1/2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 lb (450 g) chicken breast",
+   "buy": "3 1/2 lb",
+   "notes": ""
+  },
+  {
+   "raw": "1 lb (450 g) zucchini (about 2 medium ones)",
+   "buy": "3 1/2 lb (about 7 medium), sliced into half-moons",
+   "notes": ""
+  },
+  {
+   "raw": "2 small garlic cloves, crushed",
+   "buy": "7 small cloves, crushed",
+   "grams_source": 6,
+   "notes": "3 g per clove."
+  },
+  {
+   "raw": "Juice of half a lemon",
+   "buy": "juice of 2 lemons (about 1/3 cup)",
+   "grams_source": 22,
+   "notes": "Half a lemon yields about 22 g juice."
+  },
+  {
+   "raw": "1 teaspoon Italian seasoning",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "1/3 cup (30 g) Parmesan, grated",
+   "buy": "scant 1 cup grated",
+   "grams_source": 30,
+   "notes": "Source states its own weight."
+  },
+  {
+   "raw": "1/4 cup (30 g) pine nuts, toasted",
+   "buy": "1 cup minus 2 tablespoons, toasted",
+   "grams_source": 30,
+   "notes": "Source states its own weight."
+  },
+  {
+   "raw": "1/2 cup fresh parsley, roughly chopped",
+   "buy": "1 3/4 cups roughly chopped",
+   "grams_source": 15,
+   "notes": "Settled line arrived with NO weight, which is an assembly refusal, so I weighed it: 1/2 cup roughly chopped is 15 g."
+  },
+  {
+   "raw": "Salt and freshly ground black pepper to taste",
+   "buy": "to taste (about 2 1/2 teaspoons salt and 1 teaspoon black pepper)",
+   "grams_source": 4,
+   "notes": "4 g source = ~14 g at batch, matching the 15 g salt precedent."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 small garlic cloves, crushed",
+   "term": "small garlic cloves",
+   "canon_item": "Garlic",
+   "bid": "garlic",
+   "decision": "mapped",
+   "grams_source": 6,
+   "evidence": "Fresh bulb garlic, board 6 of 7; 'small' is a size word and 'crushed' a knife instruction, neither a form flip."
+  },
+  {
+   "raw": "Juice of half a lemon",
+   "term": "Juice of half a lemon",
+   "canon_item": "Fresh Lemon Juice",
+   "bid": "lemons",
+   "decision": "mapped",
+   "grams_source": 22,
+   "evidence": "Follows the 2026-08-27 'fresh lemon juice' -> lemons ruling, which refused the bottled lemon-juice bridge as a different product and price class; lemons live 5 of 7, so a reuse."
+  },
+  {
+   "raw": "1/3 cup (30 g) Parmesan, grated",
+   "term": "Parmesan",
+   "canon_item": "Parmesan Cheese",
+   "bid": "parmesan",
+   "decision": "mapped",
+   "grams_source": 30,
+   "evidence": "Same food as the vocabulary's Parmesan Cheese row per the 2026-08-27 precedent; grated is prep, not a price class. Board 7 of 7."
+  },
+  {
+   "raw": "1/4 cup (30 g) pine nuts, toasted",
+   "term": "pine nuts",
+   "canon_item": "Pine Nuts",
+   "bid": "pine-nuts",
+   "decision": "mapped",
+   "grams_source": 30,
+   "evidence": "Board ABSENT and no existing nut id covers them; toasting is a cooking step, not a form."
+  },
+  {
+   "raw": "Salt and freshly ground black pepper to taste",
+   "term": "Salt and freshly ground black pepper",
+   "canon_item": "Salt",
+   "bid": "salt",
+   "decision": "mapped",
+   "grams_source": 4,
+   "evidence": "Composite line, unsplit; ruled to the dominant food Salt (7 of 7). The Bell Pepper near-misses are keyword collisions on 'pepper'."
+  }
+ ],
+ "absent_terms": [
+  "pine nuts"
+ ],
+ "db_entries_written": [
+  "Pine Nuts"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "pine nuts",
+   "proposed_bid": "pine-nuts",
+   "evidence": "Board ABSENT - no commodity and no capture match. Pine nuts (pignoli, pinon) are not covered by any existing nut id: a distinct product sold in 4-8 oz bags at roughly $25-30/lb, several times the price class of walnuts, almonds or pecans, so bridging them onto another nut would publish a badly wrong price. Searched by food across all three spellings.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "pine-nuts",
+   "verdict": "approve",
+   "bid": "pine-nuts",
+   "reason": "Verified genuinely unpriced under any name: the only 'pine nut' strings in the whole live estate are inside couscous's EXCLUDE list (commodities.json lines 67739/67869 - couscous deliberately fences out 'pine nut couscous' flavor products, which confirms no id claims them), and 'pignoli'/'pinon'/'pinenut' appear nowhere in commodities.json, recipe-commodities.json, recipe-board-everyday.json, or smp-feed.json (swept per-file with -o context on the minified feed, not trusting one empty brace-glob). No nut sibling can carry it: mixed-nuts includes only 'mixed nuts'/'nut mix', walnuts only '\\bwalnuts?\\b', peanuts only '\\bpeanuts\\b' - none matches a 'Pine Nuts' product name, and bridging is ruled out on price class anyway (~$25-30/lb vs walnuts' live $0.265/oz = ~$4.24/lb; an alias would misprice by ~6x, the exact bread-crumbs failure). Same food different id nowhere; this is a new food to the estate, not a variant, so no allowlist pair is needed. Sole batch member - no sibling collision to read against. Separate vocabulary ruling: 'pine nuts' also needs a NEW ingredients.json row (no existing name resolves to it), macro source fdc:170591 'Nuts, pine nuts, dried' (the generic retail pignoli; 170592 pinyon is a regional different nut - do not use), and a densities.json row or UNMEASURABLE-QTY will refuse volumetric lines.",
+   "term": "",
+   "mint": {
+    "unit": "oz",
+    "include": [
+     "pine\\s?nuts?\\b",
+     "\\bpignolia?s?\\b",
+     "\\bpi[nñ]on\\s+nuts?\\b"
+    ],
+    "extra_exclude": [
+     "\\bcouscous\\b",
+     "\\bpesto\\b",
+     "\\bhummus\\b",
+     "\\bsalad\\b",
+     "\\bdressing\\b",
+     "\\bcrusted\\b",
+     "trail\\s+mix"
+    ],
+    "clone_exclude_from": "walnuts",
+    "namespace": "commodities",
+    "category": "Coffee, Oils & Spreads",
+    "gpu": 28.35,
+    "pantry_pkg_oz": 4,
+    "companion_edits": []
+   }
+  }
+ ],
+ "macro_cross_check": "FAILS THE CARB GATE AND SITS UNDER THE PROTEIN FLOOR. Per serving at 4 servings, all 12 lines: 514 cal, 38.4 g protein, 53 g carbs, against stated 481 / 44 / 33. Calories within 7% and protein 13% under, both inside tolerance, so the chicken portion is sound. Carbs 53 g against a 35 g ceiling (250 g dry pasta = 62 g per serving carrying 47 g carbohydrate alone), and protein 38.4 g is below the 40 g floor. Recommend rejected-macros."
+}

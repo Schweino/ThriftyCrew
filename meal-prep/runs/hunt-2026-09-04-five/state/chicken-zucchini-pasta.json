@@ -1,0 +1,68 @@
+{
+    "slug":  "chicken-zucchini-pasta",
+    "title":  "Chicken Zucchini Pasta",
+    "source_url":  "https://skinnyspatula.com/chicken-zucchini-pasta/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:46",
+    "updated":  "2026-09-04T05:17:31",
+    "terms":  [
+                  {
+                      "term":  "pine nuts",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  "macro gate (pre-write): 53.2g carbs above the 35 limit",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:46",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/chicken-zucchini-pasta/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T04:51:46",
+                        "by":  "decider",
+                        "detail":  "Light lemon-parmesan-pine-nut chicken-zucchini pasta with no cream sauce; distinct from the catalog\u0027s creamy/tomato chicken pastas and its clean 481/33/44 band fits well."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T04:52:17",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-09-04T05:11:13",
+                        "by":  "mapper",
+                        "detail":  "5 residual lines ruled, 0 rejected, 2 DB rows, 1 id proposed. Called out: the settled \u00271/2 cup fresh parsley\u0027 arrived with NO weight computed, which would refuse at assembly - I weighed it at 15 g and said so on the line. \u0027Salt and freshly ground black pepper\u0027 arrived as one unsplit composite, so it is ruled to Salt and the pepper is not separately costed; the buy string still prints both because "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-09-04T05:11:14",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-09-04T05:17:30",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-09-04T05:17:31",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 53.2g carbs above the 35 limit"
+                    }
+                ]
+}

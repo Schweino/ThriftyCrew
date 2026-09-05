@@ -1,0 +1,31 @@
+{
+    "slug":  "sheet-pan-chicken-and-potatoes-five-ingredients",
+    "title":  "Sheet Pan Chicken and Potatoes (Five Ingredients)",
+    "source_url":  "https://www.lecremedelacrumb.com/sheet-pan-chicken-and-potatoes-five-ingredients/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T08:33:52",
+    "updated":  "2026-09-04T08:33:52",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ranch/garlic/parmesan chicken and baby potatoes on a sheet pan is the same chicken+potato+parmesan sheet-pan dinner as live parmesan-garlic-sheet-pan-chicken-potatoes (easy-chicken-and-potatoes and parmesan-crusted-chicken-sheet-pan already rejected the same way); ranch is a seasoning nuance.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:33:52",
+                        "by":  "harvest",
+                        "detail":  "https://www.lecremedelacrumb.com/sheet-pan-chicken-and-potatoes-five-ingredients/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T08:33:52",
+                        "by":  "decider",
+                        "detail":  "Ranch/garlic/parmesan chicken and baby potatoes on a sheet pan is the same chicken+potato+parmesan sheet-pan dinner as live parmesan-garlic-sheet-pan-chicken-potatoes (easy-chicken-and-potatoes and parmesan-crusted-chicken-sheet-pan already rejected the same way); ranch is a seasoning nuance."
+                    }
+                ]
+}

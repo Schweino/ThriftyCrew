@@ -1,0 +1,102 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-09-04T05:17:31",
+    "slug":  "chicken-penne-arrabbiata",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "Chicken Penne Arrabbiata",
+                   "slug":  "chicken-penne-arrabbiata",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://skinnyspatula.com/chicken-penne-arrabbiata/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Penne Pasta",
+                                           "grams":  1050,
+                                           "buy":  "2 lb 5 oz dry penne"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  47,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1575,
+                                           "buy":  "3 1/2 lb, cut into bite-size pieces"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  385,
+                                           "buy":  "3 1/2 medium onions, finely chopped"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  21,
+                                           "buy":  "7 large cloves, finely chopped"
+                                       },
+                                       {
+                                           "item":  "Red Pepper Flakes",
+                                           "grams":  7,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Tomato Paste",
+                                           "grams":  112,
+                                           "buy":  "7 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Diced Tomatoes",
+                                           "grams":  1400,
+                                           "buy":  "49 oz canned chopped tomatoes with their juice (about 6 cups)"
+                                       },
+                                       {
+                                           "item":  "Parmesan Cheese",
+                                           "grams":  105,
+                                           "buy":  "scant 1 cup freshly grated (3 3/4 oz)"
+                                       },
+                                       {
+                                           "item":  "Fresh Basil",
+                                           "grams":  14,
+                                           "buy":  "24 fresh basil leaves, torn"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  70,
+                                           "buy":  "to taste (about 4 teaspoons salt)"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  487,
+                                              "protein_g":  42.7,
+                                              "carbs_g":  60.3,
+                                              "fat_g":  9.6
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT5M",
+                                "cookTime":  "PT14M",
+                                "totalTime":  "PT19M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

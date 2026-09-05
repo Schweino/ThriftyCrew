@@ -1,0 +1,1549 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-09-04-five",
+ "batch": 1,
+ "generated": "2026-09-04T05:14:26",
+ "batch_terms": [
+  "coconut sugar",
+  "red pepper flakes",
+  "fresh basil",
+  "penne pasta",
+  "pine nuts"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "coconut sugar",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "coconut sugar",
+     "attempts": [
+      {
+       "term": "coconut sugar",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sugar In The Raw® Organic Coconut Sugar, 16oz Bag",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0004480080101"
+      },
+      {
+       "item": "Atkins Low Sugar Endulge Chocolate Coconut Bar",
+       "price": 7.99,
+       "size": "5 ct",
+       "relevance": 88,
+       "url": "https://www.bakersplus.com/p/0063748007506"
+      },
+      {
+       "item": "Coffee Mate Sugar Free Coconut Creme Coffee Creamer",
+       "price": 3.99,
+       "size": "32 fl oz",
+       "relevance": 87,
+       "url": "https://www.bakersplus.com/p/0005000072784"
+      },
+      {
+       "item": "Chobani® Zero Sugar Toasted Coconut Vanilla Greek Yogurt Cup",
+       "price": 1.5,
+       "size": "5.3 oz",
+       "relevance": 85,
+       "url": "https://www.bakersplus.com/p/0081829001867"
+      },
+      {
+       "item": "Simple Truth Organic® Original No Sugar Added Coconut Water Carton",
+       "price": 1.99,
+       "size": "16.9 fl oz",
+       "relevance": 84,
+       "url": "https://www.bakersplus.com/p/0001111085486"
+      },
+      {
+       "item": "Simple Truth Organic® Original No Sugar Added Coconut Water Carton",
+       "price": 3.49,
+       "size": "33.8 fl oz",
+       "relevance": 84,
+       "url": "https://www.bakersplus.com/p/0001111090594"
+      },
+      {
+       "item": "Cascadian Farm™ Organic® No Added Sugar Coconut Cashew Granola",
+       "price": 4.99,
+       "size": "11 oz",
+       "relevance": 84,
+       "url": "https://www.bakersplus.com/p/0002190813315"
+      },
+      {
+       "item": "Simple Truth Organic® Original No Sugar Added Coconut Water Carton",
+       "price": 13.79,
+       "size": "4 carton / 1 liter",
+       "relevance": 84,
+       "url": "https://www.bakersplus.com/p/0001111011935"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "coconut sugar",
+     "attempts": [
+      {
+       "term": "coconut sugar",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Dr Pepper Zero Sugar Creamy Coconut Soda 12 Ea",
+       "price": 10.99,
+       "size": "12 ea",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/other_sodas/dr_pepper_zero_sugar_creamy_coconut_soda_12_ea/p/1564405684715363475"
+      },
+      {
+       "item": "Dr Pepper Soda, Zero Sugar, Creamy Coconut 20 Fl Oz",
+       "price": 2.99,
+       "size": "20 fl oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/soda_singles/dr_pepper_soda_zero_sugar_creamy_coconut_20_fl_oz/p/1564405684715363481"
+      },
+      {
+       "item": "Sparkling Ice Zero Sugar Coconut Pineapple Sparkling Water 17 Fl Oz",
+       "price": 1.39,
+       "size": "17 oz",
+       "relevance": 83,
+       "url": "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_coconut_pineapple_sparkling_water_17_fl_oz/p/16405"
+      },
+      {
+       "item": "Russell Stover Sugar Free Coconut In Chocolate Candy, 2 Oz. Bag 2 Oz",
+       "price": 3.49,
+       "size": "2 oz",
+       "relevance": 83,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/candy/chocolate_candy/russell_stover_sugar_free_coconut_in_chocolate_candy_2_oz_bag_2_oz/p/1564405684716633813"
+      },
+      {
+       "item": "Once Upon A Farm No Added Sugar Organic & Dairy Free Mixed Berry Coconut Melts 1 Oz",
+       "price": 4.99,
+       "size": "1 oz",
+       "relevance": 79,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/once_upon_a_farm_no_added_sugar_organic_dairy_free_mixed_berry_coconut_melts_1_oz/p/1564405684716234431"
+      },
+      {
+       "item": "Once Upon A Farm No Added Sugar Organic & Dairy Free Strawberry Banana Coconut Melts 1 Oz",
+       "price": 5.79,
+       "size": "1 oz",
+       "relevance": 78,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/once_upon_a_farm_no_added_sugar_organic_dairy_free_strawberry_banana_coconut_melts_1_oz/p/1564405684716234429"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "coconut sugar",
+     "attempts": [
+      {
+       "term": "coconut sugar",
+       "state": "OK",
+       "hits": 53
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sue Bee Honey Premium Pure Honey",
+       "price": 5.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/37094-suebee-clover-honey-12-0-oz"
+      },
+      {
+       "item": "Nature Nate's Honey, Raw & Unfiltered, 100% Pure",
+       "price": 14.44,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/259793-nature-nates-honey-raw-unfiltered-32-oz"
+      },
+      {
+       "item": "Madhava Light Agave, Organic",
+       "price": 5.19,
+       "size": "11.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23937-madhava-light-agave-organic-11-75-oz"
+      },
+      {
+       "item": "Truvia Calorie-Free Sweetener Jar from the Stevia Leaf, 9.8 oz Jar",
+       "price": 6.99,
+       "size": "9.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/34995-truvia-natural-sweetener-9-8-oz"
+      },
+      {
+       "item": "Truvia Calorie Free Sweetener",
+       "price": 3.69,
+       "size": "40 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18695793-truvia-calorie-free-sweetener-40-ct"
+      },
+      {
+       "item": "Truvia Sweet Complete Brown Sweetener With Stevia Leaf",
+       "price": 6.99,
+       "size": "14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24496220-truvia-sweetener-brown-calorie-free-14-oz"
+      },
+      {
+       "item": "Nate's Organic Raw & Unfiltered Honey",
+       "price": 17.97,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17393185-nature-nates-honey-organic-raw-unfiltered-32-oz"
+      },
+      {
+       "item": "Truvia Calorie-Free Sweetener",
+       "price": 6.48,
+       "size": "80 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18686346-truvia-calorie-free-sweetener-80-ct"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "coconut sugar",
+     "attempts": [
+      {
+       "term": "coconut sugar",
+       "state": "MATCHES",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "Unreal Dark Chocolate Coconut Minis, 11.13 oz",
+       "price": 10.48,
+       "size": "",
+       "unit_price": "$0.94/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1GYE80QX4THZ"
+      },
+      {
+       "item": "Bai Coconut Flavored Water Variety Pack 18 fl. oz., 15 pk.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.06/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6TFEPLABDPI8"
+      },
+      {
+       "item": "Health Garden Organic Coconut Sugar, 3 lbs.",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1LERYN73QSCV"
+      },
+      {
+       "item": "So Delicious Unsweetened Organic Coconut Milk, 32 fl. oz., 6 pk.",
+       "price": 12.88,
+       "size": "",
+       "unit_price": "$2.15/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1628CVVG64JV"
+      },
+      {
+       "item": "Splenda Zero Calorie Sweetener Packets, 1,000 ct.",
+       "price": 18.98,
+       "size": "",
+       "unit_price": "$0.02/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5N9ZMB12LRD3"
+      },
+      {
+       "item": "Sugar in the Raw Turbinado Cane Sugar, 6 lbs.",
+       "price": 8.78,
+       "size": "",
+       "unit_price": "$1.46/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1T3VI5KGSVW2"
+      },
+      {
+       "item": "Wholesome Organic Cane Sugar, 6 lbs.",
+       "price": 8.88,
+       "size": "",
+       "unit_price": "$1.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4GE0187MRTW5"
+      },
+      {
+       "item": "C&H Pure Cane Sugar Packets, 2000 ct.",
+       "price": 15.98,
+       "size": "",
+       "unit_price": "$0.01/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3AH2QS49054W"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "red pepper flakes",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Grated Parmesan Cheese and Red Pepper Flakes Shaker",
+       "price": 3,
+       "size": "8 oz",
+       "relevance": 125,
+       "url": "https://www.bakersplus.com/p/0001111016336"
+      },
+      {
+       "item": "Smart Way™ Crushed Red Pepper",
+       "price": 1.25,
+       "size": "1.5 oz",
+       "relevance": 60,
+       "url": "https://www.bakersplus.com/p/0001111011745"
+      },
+      {
+       "item": "McCormick Crushed Red Pepper",
+       "price": 6.99,
+       "size": "4.62 oz",
+       "relevance": 60,
+       "url": "https://www.bakersplus.com/p/0005210003835"
+      },
+      {
+       "item": "Kroger® Crushed Red Pepper Shaker",
+       "price": 5.49,
+       "size": "4.25 oz",
+       "relevance": 59,
+       "url": "https://www.bakersplus.com/p/0001111000320"
+      },
+      {
+       "item": "Spice Islands Crushed Red Pepper, Kosher",
+       "price": 7.99,
+       "size": "1.4 oz",
+       "relevance": 57,
+       "url": "https://www.bakersplus.com/p/0001732400303"
+      },
+      {
+       "item": "Simple Truth Organic® Crushed Red Pepper Shaker",
+       "price": 3.99,
+       "size": "1.19 oz",
+       "relevance": 55,
+       "url": "https://www.bakersplus.com/p/0001111002384"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "red pepper",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "red pepper",
+       "state": "OK",
+       "hits": 24
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Peppers",
+       "price": 1.79,
+       "size": "1 ct",
+       "relevance": 137,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/red_peppers/p/78440"
+      },
+      {
+       "item": "Our Family Red Pepper, Crushed 1.5 Oz",
+       "price": 2.99,
+       "size": "1.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/our_family_red_pepper_crushed_1_5_oz/p/7081493"
+      },
+      {
+       "item": "Mc Cormick Crushed Red Pepper 1.5 Oz",
+       "price": 3.79,
+       "size": "1.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_crushed_red_pepper_1_5_oz/p/34736"
+      },
+      {
+       "item": "Mt. Olive Roasted Red Peppers 12 Fl Oz",
+       "price": 3.29,
+       "size": "12 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mt_olive_roasted_red_peppers_12_fl_oz/p/12781"
+      },
+      {
+       "item": "Mc Cormick Ground Cayenne Red Pepper 1 Oz",
+       "price": 3.69,
+       "size": "1 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_ground_cayenne_red_pepper_1_oz/p/34668"
+      },
+      {
+       "item": "Full Circle Market Crushed Red Pepper 1.2 Oz",
+       "price": 4.99,
+       "size": "1.2 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/full_circle_market_crushed_red_pepper_1_2_oz/p/8028177"
+      },
+      {
+       "item": "Fresh & Finest By Our Family Roasted Red Pepper Hummus 10 Oz",
+       "price": 4.49,
+       "size": "10 oz",
+       "relevance": 125,
+       "url": "https://www.shopfamilyfare.com/shop/deli/party_trays_dips/fresh_finest_by_our_family_roasted_red_pepper_hummus_10_oz/p/1564405684713576563"
+      },
+      {
+       "item": "Mezzetta Roasted Red Peppers, California Fresh Pack, Mild 16 Oz",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": 124,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mezzetta_roasted_red_peppers_california_fresh_pack_mild_16_oz/p/41756"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 39
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Crushed Red Pepper",
+       "price": 3.99,
+       "size": "1.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16848421-mccormick-crushed-red-pepper-1-5-oz"
+      },
+      {
+       "item": "Badia Spices Crushed Red Pepper",
+       "price": 3.99,
+       "size": "4.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458676-badia-spices-red-pepper-crushed-4-5-oz"
+      },
+      {
+       "item": "Simply Organic Red Pepper, Crushed",
+       "price": 6.99,
+       "size": "1.59 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56512-simply-organic-red-pepper-crushed-1-59-oz"
+      },
+      {
+       "item": "Mini Peppers",
+       "price": 3.88,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16703600-mini-peppers-1-lb"
+      },
+      {
+       "item": "Birds Eye Pepper Stir Fry Vegetables, Frozen Vegetables",
+       "price": 1.99,
+       "size": "14.4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/102166-birds-eye-pepper-stir-fry-14-4-oz"
+      },
+      {
+       "item": "Badia Spices Cayenne Pepper",
+       "price": 1.68,
+       "size": "1.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314328-badia-spices-cayenne-pepper-1-75-oz"
+      },
+      {
+       "item": "Green Serrano Pepper",
+       "price": 0.12,
+       "size": "$2.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb"
+      },
+      {
+       "item": "Red Bell Pepper",
+       "price": 1.5,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3259137-red-bell-pepper-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Old trapper Hot & Spicy Beef Jerky, 18 oz.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "$1.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4QL2M49YI1SL"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Member's Mark Crushed Red Pepper, 13.5 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6VIC6DIW1WTD"
+      },
+      {
+       "item": "Member's Mark Crushed Red Pepper, 3.75 lbs.",
+       "price": 20.98,
+       "size": "",
+       "unit_price": "$5.59/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2JJILIIX4EJO"
+      },
+      {
+       "item": "Member’s Mark Taco Seasoning, 23 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.26/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2Z6S0T7JV2I8"
+      },
+      {
+       "item": "Member's Mark Granulated Garlic, 26 oz.",
+       "price": 9.28,
+       "size": "",
+       "unit_price": "$0.36/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2O9B1XVL2QNZ"
+      },
+      {
+       "item": "Member's Mark Ground White Pepper, 18 oz.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.83/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+      },
+      {
+       "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "fresh basil",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "fresh basil",
+     "attempts": [
+      {
+       "term": "fresh basil",
+       "state": "OK",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "Gotham Greens® Fresh Basil",
+       "price": 4,
+       "size": "1.25 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0085392700300"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese Prosciutto & Basil Roll",
+       "price": 9.99,
+       "size": "8 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0003114200553"
+      },
+      {
+       "item": "Fresh Cravings® Classic Bruschetta Tomato Basil Dip and Spread",
+       "price": 4.99,
+       "size": "12 oz",
+       "relevance": 84,
+       "url": "https://www.bakersplus.com/p/0004427609170"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Marinated Basil & Garlic, Ciliegine, Cup 12oz.",
+       "price": 7.99,
+       "size": "12oz / 340g",
+       "relevance": 82,
+       "url": "https://www.bakersplus.com/p/0003114210177"
+      },
+      {
+       "item": "Gotham Greens Basil",
+       "price": 2.49,
+       "size": "0.5 oz",
+       "relevance": 45,
+       "url": "https://www.bakersplus.com/p/0085392700397"
+      },
+      {
+       "item": "Simple Truth Organic® Basil",
+       "price": null,
+       "size": "3 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0001111000876"
+      },
+      {
+       "item": "Gourmet Garden Lightly Dried Basil",
+       "price": 4.99,
+       "size": "0.42 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0087520800155"
+      },
+      {
+       "item": "Gourmet Garden Basil Stir-In Paste",
+       "price": 4.99,
+       "size": "4 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0087520800063"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "fresh basil",
+     "attempts": [
+      {
+       "term": "fresh basil",
+       "state": "OK",
+       "hits": 4
+      }
+     ],
+     "hits": [
+      {
+       "item": "Local Roots Organic Basil",
+       "price": 2.99,
+       "size": "0.5 oz",
+       "relevance": 44,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/local_roots_organic_basil/p/1564405684716871941"
+      },
+      {
+       "item": "Sugar 'N Spice Whole Basil",
+       "price": 4.39,
+       "size": "1 ea",
+       "relevance": 44,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_whole_basil/p/5920129"
+      },
+      {
+       "item": "Thats Tasty Basil Conventional",
+       "price": 2.99,
+       "size": "0.5 oz",
+       "relevance": 42,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/thats_tasty_basil_conventional/p/1564405684704625846"
+      },
+      {
+       "item": "Gourmet Garden Herb Blend, Basil",
+       "price": 5.89,
+       "size": "4 oz",
+       "relevance": 42,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/gourmet_garden_herb_blend_basil/p/2367001"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "fresh basil",
+     "attempts": [
+      {
+       "term": "fresh basil",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Crazy Fresh Organic Basil",
+       "price": 2.99,
+       "size": "0.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26483122-crazy-fresh-organic-basil-0-75-oz"
+      },
+      {
+       "item": "Truefood Basil",
+       "price": 5.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27842551-truefood-basil-1-each"
+      },
+      {
+       "item": "Crazy Fresh Mint",
+       "price": 2.99,
+       "size": "0.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26483251-crazy-fresh-mint-0-75-oz"
+      },
+      {
+       "item": "Cilantro",
+       "price": 1.49,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+      },
+      {
+       "item": "Gourmet Garden™ Basil Stir-In Paste",
+       "price": 5.99,
+       "size": "4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1454792-gourmet-garden-basil-stir-in-paste-4-oz"
+      },
+      {
+       "item": "Green Onions (Scallions)",
+       "price": 0.99,
+       "size": "1 bunch",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+      },
+      {
+       "item": "Fresh Limes",
+       "price": 2.99,
+       "size": "1 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71329922-capital-city-fruit-lime-1-lb"
+      },
+      {
+       "item": "Cucumber",
+       "price": 0.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3253345-cucumber-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "fresh basil",
+     "attempts": [
+      {
+       "term": "fresh basil",
+       "state": "MATCHES",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Garlic Butter With Parmesan Cheese & Basil,10 oz.",
+       "price": 6.44,
+       "size": "",
+       "unit_price": "$0.64/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2JOIKPXKBZLL"
+      },
+      {
+       "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+       "price": 2.97,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/51UHB4PTHYY8"
+      },
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+      },
+      {
+       "item": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.56/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4F1CFKBSTLFC"
+      },
+      {
+       "item": "Member's Mark Granulated Garlic, 7.25 lbs.",
+       "price": 36.98,
+       "size": "",
+       "unit_price": "$0.32/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2G6DT70TG92N"
+      },
+      {
+       "item": "Member's Mark Minced Garlic, 48 oz.",
+       "price": 5.68,
+       "size": "",
+       "unit_price": "$0.12/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/519FEIRI4HPG"
+      },
+      {
+       "item": "Kinder's Prime Steak with Black Garlic and Truffle Seasoning, 7.9 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.88/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6E2474NV9I5I"
+      },
+      {
+       "item": "Member's Mark Garlic Powder, 22.5 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4AO1496894LO"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "penne pasta",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "penne pasta",
+     "attempts": [
+      {
+       "term": "penne pasta",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Carbe Diem™! Penne Pasta",
+       "price": 3.49,
+       "size": "12 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001600020941"
+      },
+      {
+       "item": "Kroger® Protein Penne Pasta",
+       "price": 2.19,
+       "size": "14.5 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0001111014947"
+      },
+      {
+       "item": "Banza® Gluten Free Brown Rice Penne Pasta",
+       "price": 4.29,
+       "size": "10 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0085001144394"
+      },
+      {
+       "item": "Kroger® 60 Second Fully Cooked Penne Pasta Pouch",
+       "price": 1.99,
+       "size": "7.05 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001111003595"
+      },
+      {
+       "item": "Simple Truth® Gluten Free Brown Rice Penne Pasta",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001111013336"
+      },
+      {
+       "item": "Banza® Wheat and Chickpea High Protein Penne Pasta",
+       "price": 4.99,
+       "size": "12 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0085007323609"
+      },
+      {
+       "item": "Jovial® Organic Gluten Free Brown Rice Penne Pasta",
+       "price": 5.99,
+       "size": "12 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0081542101122"
+      },
+      {
+       "item": "Simple Truth® Gluten Free Organic Chickpea Penne Pasta",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0001111014551"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "penne pasta",
+     "attempts": [
+      {
+       "term": "penne pasta",
+       "state": "OK",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Penne Pasta 1 Lb",
+       "price": 1.99,
+       "size": "1 lb",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/penne_mostaccioli/barilla_penne_pasta_1_lb/p/44992"
+      },
+      {
+       "item": "Creamette Protein Penne Pasta 14.5 Oz",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/other_pastas/creamette_protein_penne_pasta_14_5_oz/p/1764405684715890208"
+      },
+      {
+       "item": "Grilled Chicken W/Penne Pasta For 1 (Cold)",
+       "price": 7.99,
+       "size": "17 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/grilled_chicken_w_penne_pasta_for_1_cold/p/1564405684713025646"
+      },
+      {
+       "item": "Grilled Citrus Chicken W/Penne Pasta For 1 (Cold)",
+       "price": 7.99,
+       "size": "17 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/grilled_citrus_chicken_w_penne_pasta_for_1_cold/p/1564405684713025650"
+      },
+      {
+       "item": "Rao's Homemade® Penne Rigate Pasta 16.000 Oz",
+       "price": 3.99,
+       "size": "16.000 oz",
+       "relevance": 89,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/bowtie_farfalla/rao_s_homemade_penne_rigate_pasta_16_000_oz/p/1564405684703900651"
+      },
+      {
+       "item": "Barilla Penne 7 Oz",
+       "price": 2.99,
+       "size": "7 oz",
+       "relevance": 46,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/other_pastas/barilla_penne_7_oz/p/1564405684713605838"
+      },
+      {
+       "item": "Creamette Penne Rigate 1 Lb",
+       "price": 1.89,
+       "size": "1 lb",
+       "relevance": 43,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/penne_mostaccioli/creamette_penne_rigate_1_lb/p/597827"
+      },
+      {
+       "item": "Creamette Mostaccioli 1 Lb",
+       "price": 1.89,
+       "size": "1 lb",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/penne_mostaccioli/creamette_mostaccioli_1_lb/p/590488"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "penne pasta",
+     "attempts": [
+      {
+       "term": "penne pasta",
+       "state": "OK",
+       "hits": 39
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Penne Rigate",
+       "price": 1.24,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24859003-fareway-penne-rigate-16-oz"
+      },
+      {
+       "item": "Barilla Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher Certified",
+       "price": 1.5,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/144046-barilla-classic-blue-box-pasta-penne-16-oz"
+      },
+      {
+       "item": "Barilla Mini Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher",
+       "price": 1.5,
+       "size": "1 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/153018-barilla-classic-blue-box-pasta-mini-penne-1-lb"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
+      },
+      {
+       "item": "Fareway Whole Wheat Penne Rigate",
+       "price": 0.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24881952-fareway-whole-wheat-macaroni-product-penne-rigate-16-oz"
+      },
+      {
+       "item": "Rao's Penne Rigate Macaroni Product",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19373047-rao-s-homemade-penne-rigate-macaroni-product-1-0-lb"
+      },
+      {
+       "item": "Annie's Organic Penne Pasta and Four Cheese",
+       "price": 1.98,
+       "size": "5.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2751641-annie-s-penne-and-four-cheese-pasta-and-cheese-5-500-oz"
+      },
+      {
+       "item": "Rao's Made For Home Penne alla Vodka Frozen Meal",
+       "price": 6.29,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21305711-rao-s-homemade-made-for-home-penna-alla-vodka-9-0-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "penne pasta",
+     "attempts": [
+      {
+       "term": "penne pasta",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
+      },
+      {
+       "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
+      },
+      {
+       "item": "Barilla Penne Pasta 16 oz., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$1.42/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/701R3QYOQQ76"
+      },
+      {
+       "item": "Barilla Pasta Variety Pack 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$1.42/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1CTME0624C4X"
+      },
+      {
+       "item": "Barilla Gluten-Free Pasta, Variety Pack 12 oz., 4 pk.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$2.25/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0W72DRN01XTS"
+      },
+      {
+       "item": "Kraft Original Macaroni and Cheese Easy Microwavable Dinner, 2.05 oz., 12 pk.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.83/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KC00Q25WV6T"
+      },
+      {
+       "item": "Member's Mark High Protein Penne Pasta with Italian Sausage, priced per pound",
+       "price": 17.15,
+       "size": "",
+       "unit_price": "$5.12/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4Y6URBC6J0MS"
+      },
+      {
+       "item": "Kraft Original Macaroni and Cheese Dinner 18 pk.",
+       "price": 10.96,
+       "size": "",
+       "unit_price": "$0.61/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6ZF9ZGIS7WAW"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "pine nuts",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "pine nuts",
+     "attempts": [
+      {
+       "term": "pine nuts",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Simple Truth® Pine Nuts",
+       "price": 9.99,
+       "size": "4.5 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111000800"
+      },
+      {
+       "item": "Kroger® Whole Pine Nuts",
+       "price": 10.99,
+       "size": "4 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111010685"
+      },
+      {
+       "item": "Fresh Gourmet Raw Whole Pine Nuts",
+       "price": 5.99,
+       "size": "2.5 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0078735917937"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "pine nuts",
+     "attempts": [
+      {
+       "term": "pine nuts",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Pine Nuts 2.25 Oz",
+       "price": 5.29,
+       "size": "2.25 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/nuts_more/our_family_pine_nuts_2_25_oz/p/1564405684689268168"
+      },
+      {
+       "item": "Diamond Of California Pine Nuts 2.25 Oz",
+       "price": 6.39,
+       "size": "2.25 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/nuts_more/diamond_of_california_pine_nuts_2_25_oz/p/262581"
+      },
+      {
+       "item": "Sabra Roasted Pine Nut Hummus 8 Oz",
+       "price": 4.79,
+       "size": "8 oz",
+       "relevance": 42,
+       "url": "https://www.shopfamilyfare.com/shop/deli/snacks_desserts/sabra_roasted_pine_nut_hummus_8_oz/p/1764405684715905810"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "pine nuts",
+     "attempts": [
+      {
+       "term": "pine nuts",
+       "state": "OK",
+       "hits": 46
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Pine Nuts",
+       "price": 7.49,
+       "size": "4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24187841-fareway-pine-nuts-4-oz"
+      },
+      {
+       "item": "Pineapple",
+       "price": 4.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/439841-pineapple-each"
+      },
+      {
+       "item": "Fareway Nut Topping",
+       "price": 2.49,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24213939-fareway-nut-topping-6-oz"
+      },
+      {
+       "item": "Fareway Chunk Pineapple in Heavy Syrup",
+       "price": 1.68,
+       "size": "20 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25859516-fareway-pineapple-in-heavy-syrup-chunk-20-oz"
+      },
+      {
+       "item": "Fareway Sliced Pineapple in Natural Juice",
+       "price": 0.88,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388772-sliced-pineapple-in-juice"
+      },
+      {
+       "item": "Fareway Pineapple, Chunk",
+       "price": 0.88,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386647-chunk-pineapple-in-juice"
+      },
+      {
+       "item": "Fareway Sliced Pineapple",
+       "price": 1.68,
+       "size": "20 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23958875-fareway-pineapple-sliced-20-oz"
+      },
+      {
+       "item": "Fareway Chunk Pineapple",
+       "price": 1.68,
+       "size": "20 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24068568-fareway-pineapple-chunk-20-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "pine nuts",
+     "attempts": [
+      {
+       "term": "pine nuts",
+       "state": "MATCHES",
+       "hits": 18
+      }
+     ],
+     "hits": [
+      {
+       "item": "Nature's Eats Pine Nuts, 16 oz.",
+       "price": 19.48,
+       "size": "",
+       "unit_price": "$1.22/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3F2K5E72OBYE"
+      },
+      {
+       "item": "Nature's Eats Pecan Pieces, 24 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.42/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4GO3SKKWZ4WZ"
+      },
+      {
+       "item": "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$0.14/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2IG9803WDK0V"
+      },
+      {
+       "item": "Eagle Brand Sweetened Condensed Milk, 14 oz. cans, 4 pk.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$0.17/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1C5CCB5R7AOP"
+      },
+      {
+       "item": "McCormick Imitation Vanilla Flavor, 32 fl. oz.",
+       "price": 6.22,
+       "size": "",
+       "unit_price": "$0.19/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4G1RT5GAGT7Q"
+      },
+      {
+       "item": "McCormick Pure Vanilla Extract, 8 fl. oz.",
+       "price": 10.48,
+       "size": "",
+       "unit_price": "$1.31/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2KRAUVCMWF1Z"
+      },
+      {
+       "item": "Nielsen-Massey Pure Lemon Paste, 8 fl. oz.",
+       "price": 16.98,
+       "size": "",
+       "unit_price": "$2.12/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6HWPNBDIGGYX"
+      },
+      {
+       "item": "Nielsen-Massey Pure Lemon Extract, 8 fl. oz.",
+       "price": 18.98,
+       "size": "",
+       "unit_price": "$2.37/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4JVH5EGCU6MR"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

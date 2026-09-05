@@ -1,0 +1,242 @@
+{
+ "slug": "hibachi-chicken",
+ "lines": [
+  {
+   "raw": "1 ½ lbs boneless skinless chicken breast (cut into small chunks)",
+   "buy": "5 1/4 lb, cut into small chunks",
+   "notes": "Settled line, carried through."
+  },
+  {
+   "raw": "1 Tablespoon unsalted butter",
+   "buy": "3 1/2 tablespoons, for the chicken",
+   "notes": ""
+  },
+  {
+   "raw": "2 cloves garlic (minced)",
+   "buy": "7 cloves, minced",
+   "notes": ""
+  },
+  {
+   "raw": "2 Tablespoons hoisin sauce",
+   "buy": "7 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "½ Tablespoon sesame oil",
+   "buy": "1 3/4 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "2 teaspoons grated ginger (I use the frozen ginger cubes)",
+   "buy": "2 tablespoons plus 1 teaspoon, grated",
+   "grams_source": 4,
+   "notes": "1 tsp grated fresh ginger weighs about 2 g."
+  },
+  {
+   "raw": "2 Tablespoons low sodium tamari or soy sauce",
+   "buy": "7 tablespoons",
+   "grams_source": 32,
+   "notes": "1 tbsp soy sauce = 16 g. This exact raw line appears twice in the source; both occurrences take this buy string and this per-line weight."
+  },
+  {
+   "raw": "2 Tablespoons low sodium tamari or soy sauce",
+   "buy": "7 tablespoons",
+   "grams_source": 32,
+   "notes": "Second occurrence of the identical source line, same per-line weight."
+  },
+  {
+   "raw": "Black pepper (to taste)",
+   "buy": "to taste (14 g)",
+   "notes": "Unquantified line weighed by the pre-resolver at 4 g source basis; buy string states the target-scale weight so measure and grams agree."
+  },
+  {
+   "raw": "2 Tablespoons unsalted butter",
+   "buy": "7 tablespoons, for the vegetables",
+   "notes": ""
+  },
+  {
+   "raw": "3 cloves garlic (minced)",
+   "buy": "10 cloves, minced",
+   "notes": ""
+  },
+  {
+   "raw": "1 medium/large zucchini (cut into half moons)",
+   "buy": "1 1/2 lb (about 3 1/2 medium), cut into half moons",
+   "grams_source": 200,
+   "notes": "Each-weight from the label panel I read: 1 medium zucchini = 196 g; medium/large taken at 200 g."
+  },
+  {
+   "raw": "½ medium/large yellow onion (sliced)",
+   "buy": "10 1/2 oz (about 2 medium), sliced",
+   "grams_source": 85,
+   "notes": "Medium/large yellow onion taken at 170 g, half = 85 g."
+  },
+  {
+   "raw": "4 oz (1 ½ cups) baby bella mushrooms (sliced)",
+   "buy": "14 oz (about 5 1/4 cups), sliced",
+   "notes": ""
+  },
+  {
+   "raw": "1 cup carrots (about 2 large or 3 small, thinly sliced)",
+   "buy": "3 1/2 cups thinly sliced (about 7 large carrots)",
+   "notes": ""
+  },
+  {
+   "raw": "1 Tablespoon water",
+   "buy": "3 1/2 tablespoons",
+   "grams_source": 15,
+   "notes": "Tap water, not a purchase; carried for the ingredient list and the macro arithmetic only."
+  },
+  {
+   "raw": "½ teaspoon coconut sugar",
+   "buy": "1 3/4 teaspoons",
+   "grams_source": 2,
+   "notes": "1 tsp coconut sugar = 4 g per the label panel read."
+  },
+  {
+   "raw": "¼ cup mayonnaise",
+   "buy": "3/4 cup plus 2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon tomato paste",
+   "buy": "3 1/2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon rice vinegar",
+   "buy": "3 1/2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "¼ teaspoon garlic powder",
+   "buy": "scant 1 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "¼ teaspoon paprika",
+   "buy": "scant 1 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "¼ teaspoon onion powder",
+   "buy": "scant 1 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "¼ teaspoon salt",
+   "buy": "scant 1 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "pinch of cayenne",
+   "buy": "3/4 teaspoon",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 teaspoons grated ginger (I use the frozen ginger cubes)",
+   "term": "grated ginger",
+   "canon_item": "Ginger",
+   "bid": "fresh-ginger",
+   "decision": "mapped",
+   "grams_source": 4,
+   "evidence": "Grated is a knife/microplane instruction, not a form: this is fresh ginger root, deliberately NOT ground-ginger (dried powder, different price class and gram weight). Follows the 2026-08-26 'fresh ginger' -> fresh-ginger precedent; board 6 of 7. The parenthetical frozen cubes are a substitution note, not the ingredient."
+  },
+  {
+   "raw": "2 Tablespoons low sodium tamari or soy sauce",
+   "term": "low sodium tamari or soy sauce",
+   "canon_item": "Soy Sauce",
+   "bid": "soy-sauce",
+   "decision": "mapped",
+   "grams_source": 32,
+   "evidence": "Reduced sodium is a label variant of the same bottle at the same shelf price, matching the 2026-08-27 'low-sodium soy sauce' and 2026-08-26 'less sodium soy sauce' rulings; no gram or price change, so not a form flip. The 'or' leaves the cook buying soy sauce. Board 7 of 7."
+  },
+  {
+   "raw": "2 Tablespoons low sodium tamari or soy sauce",
+   "term": "low sodium tamari or soy sauce",
+   "canon_item": "Soy Sauce",
+   "bid": "soy-sauce",
+   "decision": "mapped",
+   "grams_source": 32,
+   "evidence": "Second identical occurrence of the same source line, ruled the same way; each occurrence is 2 tbsp = 32 g at source scale (64 g total across the recipe)."
+  },
+  {
+   "raw": "1 medium/large zucchini (cut into half moons)",
+   "term": "medium/large zucchini",
+   "canon_item": "Zucchini",
+   "bid": "zucchini",
+   "decision": "mapped",
+   "grams_source": 200,
+   "evidence": "Vocabulary row Zucchini [zucchini] is exactly this food, same form; board 6 of 7. Each-weight from the panel I transcribed (1 medium = 196 g), taken at 200 g for medium/large."
+  },
+  {
+   "raw": "½ medium/large yellow onion (sliced)",
+   "term": "medium/large yellow onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 85,
+   "evidence": "Vocabulary row Yellow Onion [onions] is same-food same-form; deliberately not red-onion, which is a separate variety price class. Board 7 of 7. Medium/large onion 170 g, half = 85 g."
+  },
+  {
+   "raw": "1 Tablespoon water",
+   "term": "water",
+   "canon_item": "Water",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 15,
+   "evidence": "Tap water: no commodity claims it and no shopper buys it. Weighed at 15 g so it carries a defensible weight rather than none; food-macros-db already has a water row of zeroes."
+  },
+  {
+   "raw": "½ teaspoon coconut sugar",
+   "term": "coconut sugar",
+   "canon_item": "Coconut Sugar",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 2,
+   "evidence": "Coconut palm sap sugar is a distinct specialty sweetener several times the price of cane [sugar] or [brown-sugar]; bridging it onto either would publish a wrong price, so null and pantry-static. Reported in absent_terms rather than proposed as a new id, because a full seven-store hunt for 2 g of source-scale sweetener is not worth holding the recipe on."
+  }
+ ],
+ "absent_terms": [
+  "coconut sugar"
+ ],
+ "db_entries_written": [
+  "Coconut Sugar"
+ ],
+ "db_row_findings": [
+  "hibachi-chicken: the food DB already carries 'Ginger' and the mapper's row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 80.0 cal / 1.8 P / 18.0 C / 0.8 F  vs  mapper 62.0 / 1.2 / 11.5 / 1.0. On one basis (the mapper's row scaled onto the DB's 100 g = 100 g) they still disagree: calories 62 vs 80; protein_g 1.2 vs 1.8; carbs_g 11.5 vs 18. existing={\"calories\": 80, \"protein_g\": 1.8, \"carbs_g\": 18, \"fat_g\": 0.8} new={\"calories\": 62, \"protein_g\": 1.2, \"carbs_g\": 11.5, \"fat_g\": 1.0}",
+  "hibachi-chicken: the food DB already carries 'Soy Sauce' and the mapper's row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 53.0 cal / 8.1 P / 4.9 C / 0.6 F  vs  mapper 57.0 / 9.1 / 5.6 / 0.3. On one basis (the mapper's row scaled onto the DB's 100 g = 100 g) they still disagree: protein_g 9.05 vs 8.1; carbs_g 5.59 vs 4.9. existing={\"calories\": 53, \"protein_g\": 8.1, \"carbs_g\": 4.9, \"fat_g\": 0.6} new={\"calories\": 57, \"protein_g\": 9.05, \"carbs_g\": 5.59, \"fat_g\": 0.3}"
+ ],
+ "db_row_notes": [
+  "hibachi-chicken: 'Zucchini' arrived on a different serving basis (1 medium zucchini = 196 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 cup sliced = 124 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule.",
+  "hibachi-chicken: 'Yellow Onion' arrived on a different serving basis (1 cup, chopped = 160 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 0.5 cup chopped = 80 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "computed_by": "this stage, over all 26 lines (the precheck covered only 19 and was marked partial)",
+  "basis": "source scale, 4 servings",
+  "ours_per_serving": {
+   "calories": 454.7,
+   "protein_g": 42.1,
+   "carbs_g": 14.9,
+   "fat_g": 25.5
+  },
+  "source_published_per_serving": {
+   "calories": 432.0,
+   "protein_g": 40.0,
+   "carbs_g": 14.0
+  },
+  "gaps": {
+   "calories_pct": 5.3,
+   "protein_pct": 5.2,
+   "carbs_pct": 6.4
+  },
+  "verdict": "PASS. Protein is the sharp instrument and it lands at +5.2%, far inside the 15% threshold, so no portion is misweighed. The main protein carries 151.9 g of the 168.2 g total, i.e. 38 g per serving from 170 g of raw chicken breast per serving, which sits comfortably in the catalog's own 167 g average and rules out an each-weight error of the Chicken Florentine kind. Band check at the 14-serving target (per-serving figures are scale-invariant): 455 cal within 350-650, 14.9 g carbs under the 35 g ceiling, 42.1 g protein over the 40 g floor. Passes all three gates, but protein clears the floor by only 2.1 g, so any later trim to the chicken line puts the recipe under it.",
+  "self_consistency": "Our own totals Atwater-check to 457 cal against the 454.7 summed from the DB rows."
+ }
+}

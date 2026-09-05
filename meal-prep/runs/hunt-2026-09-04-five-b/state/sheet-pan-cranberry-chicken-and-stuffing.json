@@ -1,0 +1,37 @@
+{
+    "slug":  "sheet-pan-cranberry-chicken-and-stuffing",
+    "title":  "Sheet Pan Cranberry Chicken and Stuffing",
+    "source_url":  "https://www.lecremedelacrumb.com/sheet-pan-cranberry-chicken-and-stuffing/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-09-04T08:36:17",
+    "updated":  "2026-09-04T08:37:10",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:36:17",
+                        "by":  "harvest",
+                        "detail":  "https://www.lecremedelacrumb.com/sheet-pan-cranberry-chicken-and-stuffing/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T08:36:18",
+                        "by":  "decider",
+                        "detail":  "Chicken breasts baked over bread-cube stuffing with a cranberry-sauce glaze and celery/onion; a distinct one-pan Thanksgiving-style chicken-and-stuffing dinner with no live dupe (in-flight cranberry item is meatballs, a different format), verified 529/26/51."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T08:37:10",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

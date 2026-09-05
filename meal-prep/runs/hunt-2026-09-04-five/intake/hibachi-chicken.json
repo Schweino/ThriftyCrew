@@ -1,0 +1,141 @@
+﻿{
+    "name":  "Hibachi Chicken",
+    "slug":  "hibachi-chicken",
+    "protein":  "chicken",
+    "cuisine":  "",
+    "source_url":  "https://www.eatingbirdfood.com/hibachi-chicken/",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb, cut into small chunks"
+                        },
+                        {
+                            "item":  "Butter",
+                            "grams":  147,
+                            "buy":  "3 1/2 tablespoons, for the chicken; 7 tablespoons, for the vegetables"
+                        },
+                        {
+                            "item":  "Garlic",
+                            "grams":  53,
+                            "buy":  "7 cloves, minced; 10 cloves, minced"
+                        },
+                        {
+                            "item":  "Ginger",
+                            "grams":  14,
+                            "buy":  "2 tablespoons plus 1 teaspoon, grated"
+                        },
+                        {
+                            "item":  "Soy Sauce",
+                            "grams":  224,
+                            "buy":  "7 tablespoons"
+                        },
+                        {
+                            "item":  "Hoisin Sauce",
+                            "grams":  112,
+                            "buy":  "7 tablespoons"
+                        },
+                        {
+                            "item":  "Sesame Oil",
+                            "grams":  24,
+                            "buy":  "1 3/4 tablespoons"
+                        },
+                        {
+                            "item":  "Black Pepper",
+                            "grams":  28,
+                            "buy":  "to taste (14 g)"
+                        },
+                        {
+                            "item":  "Zucchini",
+                            "grams":  700,
+                            "buy":  "1 1/2 lb (about 3 1/2 medium), cut into half moons"
+                        },
+                        {
+                            "item":  "White Mushrooms",
+                            "grams":  397,
+                            "buy":  "14 oz (about 5 1/4 cups), sliced"
+                        },
+                        {
+                            "item":  "Carrots",
+                            "grams":  385,
+                            "buy":  "3 1/2 cups thinly sliced (about 7 large carrots)"
+                        },
+                        {
+                            "item":  "Yellow Onion",
+                            "grams":  298,
+                            "buy":  "10 1/2 oz (about 2 medium), sliced"
+                        },
+                        {
+                            "item":  "Mayonnaise",
+                            "grams":  182,
+                            "buy":  "3/4 cup plus 2 tablespoons"
+                        },
+                        {
+                            "item":  "Tomato Paste",
+                            "grams":  19,
+                            "buy":  "3 1/2 teaspoons"
+                        },
+                        {
+                            "item":  "Rice Vinegar",
+                            "grams":  18,
+                            "buy":  "3 1/2 teaspoons"
+                        },
+                        {
+                            "item":  "Coconut Sugar",
+                            "grams":  7,
+                            "buy":  "1 3/4 teaspoons"
+                        },
+                        {
+                            "item":  "Garlic Powder",
+                            "grams":  3,
+                            "buy":  "scant 1 teaspoon"
+                        },
+                        {
+                            "item":  "Paprika",
+                            "grams":  2,
+                            "buy":  "scant 1 teaspoon"
+                        },
+                        {
+                            "item":  "Onion Powder",
+                            "grams":  2,
+                            "buy":  "scant 1 teaspoon"
+                        },
+                        {
+                            "item":  "Salt",
+                            "grams":  5,
+                            "buy":  "scant 1 teaspoon"
+                        },
+                        {
+                            "item":  "Cayenne Pepper",
+                            "grams":  1,
+                            "buy":  "3/4 teaspoon"
+                        }
+                    ],
+    "macros_per_serving":  {
+                               "calories":  454,
+                               "protein_g":  42,
+                               "carbs_g":  14.8,
+                               "fat_g":  25.5
+                           },
+    "writer_notes":  [
+
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "prose":  {
+
+              },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT35M",
+                 "steps":  [
+
+                           ]
+             }
+}

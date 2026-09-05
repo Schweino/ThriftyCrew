@@ -1,0 +1,270 @@
+{
+ "slug": "foolproof-poached-chicken-noodle-soup",
+ "lines": [
+  {
+   "raw": "1 chicken breast ((up to 300g/10 oz))",
+   "buy": "4 lb 10 oz boneless skinless chicken breast (about 7)",
+   "grams_source": 300,
+   "notes": "WEIGHT CORRECTED from the settled 200 g to the source's own stated 300 g - at 200 g the dish computes 32.5 g protein and 306 cal and is retired; at 300 g it matches the source's published macros almost exactly."
+  },
+  {
+   "raw": "2 cups / 16 oz / 500 mls chicken stock",
+   "buy": "14 cups (3 1/2 quarts)",
+   "notes": ""
+  },
+  {
+   "raw": "1 cup water",
+   "buy": "7 cups",
+   "grams_source": 240,
+   "notes": ""
+  },
+  {
+   "raw": "1 1/2 tbsp soy sauce",
+   "buy": "2/3 cup",
+   "notes": ""
+  },
+  {
+   "raw": "2 tsp sugar",
+   "buy": "4 tablespoons plus 2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "2 tsp ginger (, minced)",
+   "buy": "4 1/2 tablespoons minced fresh ginger",
+   "notes": ""
+  },
+  {
+   "raw": "2 garlic cloves (, minced)",
+   "buy": "14 cloves, minced",
+   "notes": ""
+  },
+  {
+   "raw": "3 bok choys ((or 4 small ones))",
+   "buy": "6 lb bok choy (about 21 small heads), halved lengthwise",
+   "grams_source": 390,
+   "notes": "130 g per small head."
+  },
+  {
+   "raw": "1 cup bean sprouts",
+   "buy": "7 cups (about 1 1/2 lb)",
+   "grams_source": 104,
+   "notes": "1 cup mung bean sprouts is 104 g."
+  },
+  {
+   "raw": "5 oz / 150 g fresh egg noodles",
+   "buy": "2 lb 5 oz fresh egg noodles",
+   "grams_source": 150,
+   "notes": "Source states its own weight."
+  },
+  {
+   "raw": "1 1/2 tbsp chinese cooking wine ((or sub with 2 tsp sherry or sake (rice wine)))",
+   "buy": "2/3 cup Shaoxing wine",
+   "grams_source": 22,
+   "notes": "Water-like at 14.8 g per tablespoon."
+  },
+  {
+   "raw": "1 star anise",
+   "buy": "7 whole star anise",
+   "grams_source": 1,
+   "notes": "A whole pod is about 1 g."
+  },
+  {
+   "raw": "1 scallion/shallot (, light green and green part only, sliced)",
+   "buy": "7 green onions, green parts only, sliced",
+   "grams_source": 10,
+   "notes": "Green parts of one scallion, about 10 g."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "3 bok choys ((or 4 small ones))",
+   "term": "bok choys",
+   "canon_item": "Bok Choy",
+   "bid": "bok-choy",
+   "decision": "mapped",
+   "grams_source": 390,
+   "evidence": "REUSE of the live bok-choy id (2 of 7, 2.49 at Baker's); pak choi and bok choy are the same food. Thin carriage is a pricing question, not a mapping one."
+  },
+  {
+   "raw": "1 cup bean sprouts",
+   "term": "bean sprouts",
+   "canon_item": "Bean Sprouts",
+   "bid": "bean-sprouts",
+   "decision": "mapped",
+   "grams_source": 104,
+   "evidence": "REUSE of the live bean-sprouts id (2 of 7). Brussels Sprouts is a keyword collision on 'sprouts' and a different food entirely."
+  },
+  {
+   "raw": "5 oz / 150 g fresh egg noodles",
+   "term": "fresh egg noodles",
+   "canon_item": "Fresh Egg Noodles",
+   "bid": "fresh-egg-noodles",
+   "decision": "mapped",
+   "grams_source": 150,
+   "evidence": "Genuine form flip from the dry Egg Noodles row, not an alias: refrigerated Asian egg noodles are pre-steamed and hydrated, so 150 g fresh is about 75 g dry - a different gram basis and a different price class. The board's eggs match is nonsense."
+  },
+  {
+   "raw": "1 cup water",
+   "term": "water",
+   "canon_item": "water",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 240,
+   "evidence": "Tap water: no commodity claims it and none should, so pantry-static at zero cost, per the 2026-08-28 water precedent. The DB already carries the zero row."
+  },
+  {
+   "raw": "1 1/2 tbsp chinese cooking wine ((or sub with 2 tsp sherry or sake (rice wine)))",
+   "term": "chinese cooking wine",
+   "canon_item": "Chinese Cooking Wine",
+   "bid": "shaoxing-wine",
+   "decision": "mapped",
+   "grams_source": 22,
+   "evidence": "Board ABSENT. Refused the white-wine and red-wine near names: Shaoxing is a salted fermented rice wine from the Asian aisle, a different food and price class from drinking wine."
+  },
+  {
+   "raw": "1 star anise",
+   "term": "star anise",
+   "canon_item": "Star Anise",
+   "bid": "star-anise",
+   "decision": "mapped",
+   "grams_source": 1,
+   "evidence": "Board ABSENT; a whole pod of Illicium verum, a different plant from the anise seed on the FDC shelf. Purchased and simmered, so a real line and not a garnish."
+  },
+  {
+   "raw": "1 scallion/shallot (, light green and green part only, sliced)",
+   "term": "scallion/shallot",
+   "canon_item": "Green Onions",
+   "bid": "green-onions",
+   "decision": "mapped",
+   "grams_source": 10,
+   "evidence": "RecipeTinEats is Australian, where 'shallot' means scallion - the slash and 'light green and green part only' confirm it. REUSE of the live green-onions id (5 of 7)."
+  },
+  {
+   "raw": "Fried Asian shallots",
+   "term": "Asian shallots",
+   "canon_item": "Fried Shallots",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 0,
+   "evidence": "Optional serving garnish, dropped rather than bridged onto the board's fresh shallots match, which is a raw bulb and not a deep-fried crispy topping - a different product, price class and gram basis."
+  }
+ ],
+ "absent_terms": [
+  "fresh egg noodles",
+  "chinese cooking wine",
+  "star anise"
+ ],
+ "db_entries_written": [
+  "Bok Choy",
+  "Bean Sprouts",
+  "Fresh Egg Noodles",
+  "Chinese Cooking Wine"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [
+  "foolproof-poached-chicken-noodle-soup: 'Green Onions' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 medium stalk = 15 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "fresh egg noodles",
+   "proposed_bid": "fresh-egg-noodles",
+   "evidence": "The vocabulary's Egg Noodles [egg-noodles] is a DRY shelf-stable product; this is the refrigerated Asian noodle (Twin Marquis style lo mein or wonton) from the cold case. It flips on both estate tests: a different price class (a 1 lb refrigerated pack runs roughly twice the per-pound price of dry egg noodles) and a different gram basis, 150 g fresh being about 75 g dry. rice-noodles and no-boil-lasagna-noodles are different foods; the board's only hit was `eggs`, a keyword collision.",
+   "declared": true
+  },
+  {
+   "term": "chinese cooking wine",
+   "proposed_bid": "shaoxing-wine",
+   "evidence": "Board ABSENT - no commodity and no capture match. Searched by food across Shaoxing, Shao Hsing and Chinese rice cooking wine. white-wine and red-wine price drinking wine at $6-12 a bottle; Shaoxing is a salted cooking wine in the Asian aisle at roughly $3-4 for 750 ml, so either bridge publishes a wrong price. Rice vinegar and mirin are different foods again.",
+   "declared": true
+  },
+  {
+   "term": "star anise",
+   "proposed_bid": "star-anise",
+   "evidence": "Board ABSENT. The dried pod of Illicium verum, sold whole in the spice or Asian aisle - NOT the anise seed the FDC shelf returned (Pimpinella anisum, a different plant). No existing spice id covers a whole-pod spice this could hide under.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "fresh-egg-noodles",
+   "verdict": "approve",
+   "bid": "fresh-egg-noodles",
+   "reason": "Same food as egg-noodles ($0.1088/oz dry, 7 stores) but a DIFFERENT PURCHASE: refrigerated cold-case pack at ~2x the per-lb price and a different gram basis (150 g fresh ~ 75 g dry), so pricing it under egg-noodles misprices every recipe line; verified no lo-mein/wonton/fresh-pasta id exists anywhere (the only 'lo mein' string in commodities is buckwheat-soba-noodles' OWN exclude, and the board's lo-mein hits are recipe names, not commodities). COLLISION IS LIVE: egg-noodles' include 'egg\\s+noodles?' matches fresh-pack product names today and its excludes (ramen, frozen, chow mein) do not fence fresh/refrigerated/lo mein/wonton - the companion edit below is mandatory or two ids claim one product.",
+   "term": "",
+   "mint": {
+    "unit": "oz",
+    "include": [
+     "fresh\\s+egg\\s+noodles?",
+     "refrigerated\\s+egg\\s+noodles?",
+     "lo\\s*mein\\s+(?:egg\\s+)?noodles?",
+     "wonton\\s+noodles?"
+    ],
+    "clone_exclude_from": "egg-noodles",
+    "extra_exclude": [
+     "\\b(?:bowl|meal\\s+kit|prepared|ready[- ]to[- ]eat|soup|sauce|seasoning|frozen)\\b",
+     "wonton\\s+(?:wraps?|wrappers?|skins?)"
+    ],
+    "namespace": "recipe-only",
+    "category": "Pasta, Rice & Grains",
+    "gpu": 28.35,
+    "buy_pkg_qty": 16,
+    "buy_pkg_unit": "oz"
+   }
+  },
+  {
+   "proposed_bid": "shaoxing-wine",
+   "verdict": "approve",
+   "bid": "shaoxing-wine",
+   "reason": "Estate genuinely absent: grepped shaoxing/shao hsing/sherry/cooking wine/rice wine across all three namespaces and the feed - zero hits except red-wine's exclude list, which fences sherry OUT (proof the wine ids are deliberately drinking-wine-only). white-wine ($0.1561/floz) prices drinking wine at $6-12/750ml; Shaoxing is a salted Asian-aisle cooking wine at ~$3-4/750ml, so an alias publishes a wrong price in either direction. mirin is a different food (sweet, near-syrup); rice-vinegar is vinegar. Same-form near rows exist but none is the same purchase.",
+   "term": "",
+   "mint": {
+    "unit": "floz",
+    "include": [
+     "shao\\s*-?\\s*(?:xing|hsing)",
+     "chinese\\s+(?:rice\\s+)?cooking\\s+wine",
+     "rice\\s+cooking\\s+wine"
+    ],
+    "clone_exclude_from": "mirin",
+    "extra_exclude": [
+     "vinegar",
+     "\\bmirin\\b",
+     "\\bsake\\b"
+    ],
+    "namespace": "recipe-only",
+    "category": "Sauces & Condiments",
+    "gpu": 29.6,
+    "pantry_pkg_qty": 25.4,
+    "pantry_pkg_unit": "floz"
+   }
+  },
+  {
+   "proposed_bid": "star-anise",
+   "verdict": "approve",
+   "bid": "star-anise",
+   "reason": "Grepped 'anise' across commodities, recipe-commodities, the recipe board and the live feed: zero hits - the food exists under no name and no price cell. The FDC shelf's anise seed is Pimpinella anisum, a different plant, and five-spice-powder ($4.75/oz, include 'five\\s*spice') is a BLEND that merely contains star anise - a different purchase, not a variant. Verified five-spice-powder's excludes carry no anise fence, so cloning its spice-aisle armour is safe.",
+   "term": "",
+   "mint": {
+    "unit": "oz",
+    "include": [
+     "star\\s+anise"
+    ],
+    "clone_exclude_from": "five-spice-powder",
+    "extra_exclude": [
+     "\\btea\\b",
+     "\\bextract\\b",
+     "\\bflavor(?:ing)?\\b",
+     "five\\s*spice",
+     "essential\\s+oil"
+    ],
+    "namespace": "recipe-only",
+    "category": "Baking & Spices",
+    "gpu": 28.35,
+    "pantry_pkg_qty": 1.5,
+    "pantry_pkg_unit": "oz"
+   }
+  }
+ ],
+ "macro_cross_check": "PASSES THE BAND, and only after a corrected each-weight. With chicken at the source's stated 300 g and the noodles on a hydrated basis, per serving at 2 servings: 365 cal, 43.7 g protein, 34.5 g carbs, against the source's published 357 / 41.6 / 33.8 - agreement within 2%, 5% and 2%. Band: 350-650 cal ok, protein >= 40 ok, carbs <= 35 ok but TIGHT at 34.5. Now the catch this check exists for: the settled 200 g on 'up to 300g/10 oz' gives 306 cal and 32.5 g protein per serving, a 22% protein gap against the source and a fail on BOTH the 350 cal floor and the 40 g protein floor - a good dish retired on an each-weight assumption about the main protein. The source's own published macros can only be reached at about 300 g, so I set grams_source 300 and flagged it on the line."
+}

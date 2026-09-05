@@ -1,0 +1,76 @@
+{
+    "slug":  "chicken-penne-arrabbiata",
+    "title":  "Chicken Penne Arrabbiata",
+    "source_url":  "https://skinnyspatula.com/chicken-penne-arrabbiata/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:59",
+    "updated":  "2026-09-04T05:17:31",
+    "terms":  [
+                  {
+                      "term":  "red pepper flakes",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "fresh basil",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "penne pasta",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  "macro gate (pre-write): 60.3g carbs above the 35 limit",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:59",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/chicken-penne-arrabbiata/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T04:51:59",
+                        "by":  "decider",
+                        "detail":  "Spicy tomato arrabbiata chicken penne is a specific recognizable Italian dish absent from the catalog (existing chicken-penne dishes are Italian-creamy and Cajun); clean 405-cal band and it adds a distinct spicy-tomato plate rather than another cream pasta."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T04:53:30",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-09-04T05:08:53",
+                        "by":  "mapper",
+                        "detail":  "5 residual lines ruled, 0 rejected, 4 DB rows, 2 ids proposed. LOUD: \u0027Salt and pepper to taste\u0027 carries a settled 20 g source basis (70 g at batch) against the estate\u0027s ~15 g precedent - about 4x. Not overridden, because a corrected number reads as a 5x disagreement with the qty engine and stops the recipe; cost impact is cents and macro impact zero, but the engine\u0027s \u0027to taste\u0027 default wants fixin"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-09-04T05:08:54",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-09-04T05:17:30",
+                        "by":  "derive",
+                        "detail":  "all 3 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-09-04T05:17:31",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 60.3g carbs above the 35 limit"
+                    }
+                ]
+}

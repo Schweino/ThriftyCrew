@@ -1,0 +1,31 @@
+{
+    "slug":  "flat-ground-beef-enchiladas",
+    "title":  "Flat Ground Beef Enchiladas",
+    "source_url":  "https://iwashyoudry.com/flat-ground-beef-enchiladas/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:54",
+    "updated":  "2026-09-04T04:51:55",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground beef + enchilada sauce + colby-jack in corn tortillas is the same dinner as in-flight easy-beef-enchiladas (hunt-2026-08-26-smoke); also the oversaturated Tex-Mex beef region flagged by the prior enchilada-pasta ruling.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:54",
+                        "by":  "harvest",
+                        "detail":  "https://iwashyoudry.com/flat-ground-beef-enchiladas/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:51:55",
+                        "by":  "decider",
+                        "detail":  "Ground beef + enchilada sauce + colby-jack in corn tortillas is the same dinner as in-flight easy-beef-enchiladas (hunt-2026-08-26-smoke); also the oversaturated Tex-Mex beef region flagged by the prior enchilada-pasta ruling."
+                    }
+                ]
+}

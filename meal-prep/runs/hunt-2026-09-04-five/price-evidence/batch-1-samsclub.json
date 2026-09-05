@@ -1,0 +1,404 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-09-04T05:14:12",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "coconut sugar",
+   "state": "MATCHES",
+   "term_used": "coconut sugar",
+   "attempts": [
+    {
+     "term": "coconut sugar",
+     "state": "MATCHES",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Unreal Dark Chocolate Coconut Minis, 11.13 oz",
+     "price": 10.48,
+     "size": "",
+     "unit_price": "$0.94/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1GYE80QX4THZ"
+    },
+    {
+     "item": "Bai Coconut Flavored Water Variety Pack 18 fl. oz., 15 pk.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "$0.06/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6TFEPLABDPI8"
+    },
+    {
+     "item": "Health Garden Organic Coconut Sugar, 3 lbs.",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1LERYN73QSCV"
+    },
+    {
+     "item": "So Delicious Unsweetened Organic Coconut Milk, 32 fl. oz., 6 pk.",
+     "price": 12.88,
+     "size": "",
+     "unit_price": "$2.15/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1628CVVG64JV"
+    },
+    {
+     "item": "Splenda Zero Calorie Sweetener Packets, 1,000 ct.",
+     "price": 18.98,
+     "size": "",
+     "unit_price": "$0.02/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5N9ZMB12LRD3"
+    },
+    {
+     "item": "Sugar in the Raw Turbinado Cane Sugar, 6 lbs.",
+     "price": 8.78,
+     "size": "",
+     "unit_price": "$1.46/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1T3VI5KGSVW2"
+    },
+    {
+     "item": "Wholesome Organic Cane Sugar, 6 lbs.",
+     "price": 8.88,
+     "size": "",
+     "unit_price": "$1.48/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4GE0187MRTW5"
+    },
+    {
+     "item": "C&H Pure Cane Sugar Packets, 2000 ct.",
+     "price": 15.98,
+     "size": "",
+     "unit_price": "$0.01/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3AH2QS49054W"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "red pepper flakes",
+   "state": "MATCHES",
+   "term_used": "red pepper flakes",
+   "attempts": [
+    {
+     "term": "red pepper flakes",
+     "state": "MATCHES",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Old trapper Hot & Spicy Beef Jerky, 18 oz.",
+     "price": 19.98,
+     "size": "",
+     "unit_price": "$1.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4QL2M49YI1SL"
+    },
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Member's Mark Crushed Red Pepper, 13.5 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6VIC6DIW1WTD"
+    },
+    {
+     "item": "Member's Mark Crushed Red Pepper, 3.75 lbs.",
+     "price": 20.98,
+     "size": "",
+     "unit_price": "$5.59/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2JJILIIX4EJO"
+    },
+    {
+     "item": "Member’s Mark Taco Seasoning, 23 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2Z6S0T7JV2I8"
+    },
+    {
+     "item": "Member's Mark Granulated Garlic, 26 oz.",
+     "price": 9.28,
+     "size": "",
+     "unit_price": "$0.36/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2O9B1XVL2QNZ"
+    },
+    {
+     "item": "Member's Mark Ground White Pepper, 18 oz.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "$0.83/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+    },
+    {
+     "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "fresh basil",
+   "state": "MATCHES",
+   "term_used": "fresh basil",
+   "attempts": [
+    {
+     "term": "fresh basil",
+     "state": "MATCHES",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Garlic Butter With Parmesan Cheese & Basil,10 oz.",
+     "price": 6.44,
+     "size": "",
+     "unit_price": "$0.64/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2JOIKPXKBZLL"
+    },
+    {
+     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+     "price": 2.97,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/51UHB4PTHYY8"
+    },
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+    },
+    {
+     "item": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.56/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4F1CFKBSTLFC"
+    },
+    {
+     "item": "Member's Mark Granulated Garlic, 7.25 lbs.",
+     "price": 36.98,
+     "size": "",
+     "unit_price": "$0.32/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2G6DT70TG92N"
+    },
+    {
+     "item": "Member's Mark Minced Garlic, 48 oz.",
+     "price": 5.68,
+     "size": "",
+     "unit_price": "$0.12/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/519FEIRI4HPG"
+    },
+    {
+     "item": "Kinder's Prime Steak with Black Garlic and Truffle Seasoning, 7.9 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.88/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6E2474NV9I5I"
+    },
+    {
+     "item": "Member's Mark Garlic Powder, 22.5 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4AO1496894LO"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "penne pasta",
+   "state": "MATCHES",
+   "term_used": "penne pasta",
+   "attempts": [
+    {
+     "term": "penne pasta",
+     "state": "MATCHES",
+     "hits": 17
+    }
+   ],
+   "hits": [
+    {
+     "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
+    },
+    {
+     "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+     "price": 8.52,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
+    },
+    {
+     "item": "Barilla Penne Pasta 16 oz., 6 pk.",
+     "price": 8.52,
+     "size": "",
+     "unit_price": "$1.42/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/701R3QYOQQ76"
+    },
+    {
+     "item": "Barilla Pasta Variety Pack 1 lb., 6 pk.",
+     "price": 8.52,
+     "size": "",
+     "unit_price": "$1.42/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1CTME0624C4X"
+    },
+    {
+     "item": "Barilla Gluten-Free Pasta, Variety Pack 12 oz., 4 pk.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$2.25/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0W72DRN01XTS"
+    },
+    {
+     "item": "Kraft Original Macaroni and Cheese Easy Microwavable Dinner, 2.05 oz., 12 pk.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.83/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7KC00Q25WV6T"
+    },
+    {
+     "item": "Member's Mark High Protein Penne Pasta with Italian Sausage, priced per pound",
+     "price": 17.15,
+     "size": "",
+     "unit_price": "$5.12/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4Y6URBC6J0MS"
+    },
+    {
+     "item": "Kraft Original Macaroni and Cheese Dinner 18 pk.",
+     "price": 10.96,
+     "size": "",
+     "unit_price": "$0.61/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6ZF9ZGIS7WAW"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "pine nuts",
+   "state": "MATCHES",
+   "term_used": "pine nuts",
+   "attempts": [
+    {
+     "term": "pine nuts",
+     "state": "MATCHES",
+     "hits": 18
+    }
+   ],
+   "hits": [
+    {
+     "item": "Nature's Eats Pine Nuts, 16 oz.",
+     "price": 19.48,
+     "size": "",
+     "unit_price": "$1.22/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3F2K5E72OBYE"
+    },
+    {
+     "item": "Nature's Eats Pecan Pieces, 24 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.42/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4GO3SKKWZ4WZ"
+    },
+    {
+     "item": "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$0.14/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2IG9803WDK0V"
+    },
+    {
+     "item": "Eagle Brand Sweetened Condensed Milk, 14 oz. cans, 4 pk.",
+     "price": 9.48,
+     "size": "",
+     "unit_price": "$0.17/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1C5CCB5R7AOP"
+    },
+    {
+     "item": "McCormick Imitation Vanilla Flavor, 32 fl. oz.",
+     "price": 6.22,
+     "size": "",
+     "unit_price": "$0.19/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4G1RT5GAGT7Q"
+    },
+    {
+     "item": "McCormick Pure Vanilla Extract, 8 fl. oz.",
+     "price": 10.48,
+     "size": "",
+     "unit_price": "$1.31/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2KRAUVCMWF1Z"
+    },
+    {
+     "item": "Nielsen-Massey Pure Lemon Paste, 8 fl. oz.",
+     "price": 16.98,
+     "size": "",
+     "unit_price": "$2.12/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6HWPNBDIGGYX"
+    },
+    {
+     "item": "Nielsen-Massey Pure Lemon Extract, 8 fl. oz.",
+     "price": 18.98,
+     "size": "",
+     "unit_price": "$2.37/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4JVH5EGCU6MR"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

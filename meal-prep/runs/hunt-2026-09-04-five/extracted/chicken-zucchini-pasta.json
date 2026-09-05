@@ -1,0 +1,141 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Zucchini Pasta",
+  "source_url": "https://skinnyspatula.com/chicken-zucchini-pasta/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "8 oz (250 g) short pasta",
+      "item": "short pasta",
+      "qty": "8 oz (250 g)",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon (20 g) butter",
+      "item": "butter",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "(20 g)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 lb (450 g) chicken breast",
+      "item": "chicken breast",
+      "qty": "1",
+      "unit": "lb",
+      "prep": "(450 g)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 lb (450 g) zucchini (about 2 medium ones)",
+      "item": "zucchini",
+      "qty": "1 lb (450 g)",
+      "unit": null,
+      "prep": "about 2 medium ones",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 small garlic cloves, crushed",
+      "item": "small garlic cloves",
+      "qty": "2",
+      "unit": null,
+      "prep": "crushed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon Italian seasoning",
+      "item": "Italian seasoning",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Juice of half a lemon",
+      "item": "Juice of half a lemon",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/3 cup (30 g) Parmesan, grated",
+      "item": "Parmesan",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": "(30 g), grated",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup fresh parsley, roughly chopped",
+      "item": "fresh parsley",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "roughly chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup (30 g) pine nuts, toasted",
+      "item": "pine nuts",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "(30 g), toasted",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt and freshly ground black pepper to taste",
+      "item": "Salt and freshly ground black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Bring a large pot of salted water to a boil. Cook the pasta according to the package instructions until al dente. Reserve a cup of pasta water before draining.",
+    "Meanwhile, cut the chicken breast into bite-sized pieces and slice the zucchini into half-moons or your preferred shape.",
+    "In a large pan, heat the olive oil and butter over medium heat. Season the chicken pieces with salt and ground black pepper and add them to the pan. Cook the chicken until golden brown and cooked through, then remove it from the pan and set aside.",
+    "In the same pan, add a bit more oil if needed and add the slice zucchini. Cook on low-medium heat until the zucchini is tender, stirring occasionally.",
+    "Stir in the crushed garlic, Italian seasoning and lemon juice and continue to cook for another minute.",
+    "Return the cooked chicken back to the pan with the zucchini. Add the cooked pasta and mix everything together, adding a bit of the reserved pasta water if it looks too dry.",
+    "Stir in the grated Parmesan cheese, pine nuts and fresh parsley. Adjust the seasoning to taste.",
+    "Serve the chicken zucchini pasta immediately with some extra freshly grated Parmesan on top if you like."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

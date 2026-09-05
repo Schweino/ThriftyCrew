@@ -1,0 +1,129 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Penne Arrabbiata",
+  "source_url": "https://skinnyspatula.com/chicken-penne-arrabbiata/",
+  "servings": 4,
+  "time_total": "19 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "300 g (10.5 oz) penne",
+      "item": "penne",
+      "qty": "300 g (10.5 oz)",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "450 g (1 lb) chicken breast, cut into bite-size pieces",
+      "item": "chicken breast",
+      "qty": "450 g (1 lb)",
+      "unit": null,
+      "prep": "cut into bite-size pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 medium onion, finely chopped",
+      "item": "medium onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "finely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 large garlic cloves, finely chopped",
+      "item": "large garlic cloves",
+      "qty": "2",
+      "unit": null,
+      "prep": "finely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon red chilli flakes",
+      "item": "red chilli flakes",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons tomato paste",
+      "item": "tomato paste",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 x 400 g (14 oz) can chopped tomatoes",
+      "item": "chopped tomatoes",
+      "qty": "1 x 400 g (14 oz)",
+      "unit": "can",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "30 g (1 ounce) freshly grated Parmesan",
+      "item": "freshly grated Parmesan",
+      "qty": "30 g (1 ounce)",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6-8 fresh basil leaves",
+      "item": "fresh basil leaves",
+      "qty": "6-8",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt and pepper to taste",
+      "item": "Salt and pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Bring a large pot of water to a boil, salt it generously and cook the pasta al dente according to the instructions on the package. Reserve a cup of pasta water before draining.",
+    "Meanwhile, heat the olive oil in a large deep pan or a Dutch oven and cook the chicken breast for 4-5 minutes over medium-high heat until no longer pink (or until slightly golden if you like).",
+    "Stir in the onion, garlic and red chilli flakes and continue to cook for another minute.",
+    "Add the tomato paste and chopped tomatoes and stir to combine. Add a bit of pasta water if it looks too thick. Season to taste and bring to a simmer. Lower the heat and simmer for 10 minutes until the sauce thickens.",
+    "Transfer the cooked pasta to the pot and stir in the Parmesan and basil. Serve immediately with extra grated Parmesan on top if you like."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 11,
+    "verified": 11,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,55 @@
+{
+    "slug":  "caprese-stuffed-chicken-breast",
+    "title":  "Caprese Stuffed Chicken Breast",
+    "source_url":  "https://thecleaneatingcouple.com/chicken-caprese/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-09-04T08:33:55",
+    "updated":  "2026-09-04T08:37:05",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:33:55",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/chicken-caprese/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T08:33:55",
+                        "by":  "decider",
+                        "detail":  "Baked chicken breast with pesto, fresh tomato, mozzarella and a balsamic reduction (caprese profile); distinct fresh-caprese flavor with no live match (stuffed-chicken-breast is a Tuscan spinach/sun-dried-tomato cream filling), verified low-carb 439cal/10c/43p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T08:34:23",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-09-04T08:37:04",
+                        "by":  "mapper",
+                        "detail":  "CORRECTION FROM THE PRIOR ANSWER: the fresh-tomato food-DB row was returned under the item name \u0027Roma Tomatoes\u0027 while the ruling\u0027s canon_item is \u0027Tomatoes\u0027, so the table\u0027s named gap read as unanswered. It is the same transcribed panel, now keyed on \u0027Tomatoes\u0027. No other field changed. Residual lines ruled: 2 (fresh black pepper -\u003e black-pepper, roma tomatoes -\u003e tomatoes). Rejected: 0. New food-DB r"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-09-04T08:37:04",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-09-04T08:37:05",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    }
+                ]
+}

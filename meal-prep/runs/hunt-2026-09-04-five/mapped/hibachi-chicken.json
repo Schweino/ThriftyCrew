@@ -1,0 +1,375 @@
+﻿{
+    "slug":  "hibachi-chicken",
+    "title":  "Hibachi Chicken",
+    "source_url":  "https://www.eatingbirdfood.com/hibachi-chicken/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-09-04",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 ½ lbs boneless skinless chicken breast (cut into small chunks)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb, cut into small chunks",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line, carried through.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 Tablespoon unsalted butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons, for the chicken",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027unsalted butter\u0027 -\u003e butter (by mapper on 2026-08-26T04:51:57); nearest vocabulary rows: Almond Butter [almond-butter] DIFFERENT FORM: unsalted | Peanut Butter [peanut-butter] DIFFERENT FORM: unsalted | Butter [butter] DIFFERENT FORM: unsalted",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cloves garlic (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "7 cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons grated ginger (I use the frozen ginger cubes)",
+                            "item":  "Ginger",
+                            "bid":  "fresh-ginger",
+                            "board":  null,
+                            "grams":  14,
+                            "buy":  "2 tablespoons plus 1 teaspoon, grated",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tsp grated fresh ginger weighs about 2 g. Grated is a knife/microplane instruction, not a form: this is fresh ginger root, deliberately NOT ground-ginger (dried powder, different price class and gram weight). Follows the 2026-08-26 \u0027fresh ginger\u0027 -\u003e fresh-ginger precedent; board 6 of 7. The parenthetical frozen cubes are a substitution note, not the ingredient.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 Tablespoons low sodium tamari or soy sauce",
+                            "item":  "Soy Sauce",
+                            "bid":  "soy-sauce",
+                            "board":  null,
+                            "grams":  112,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second occurrence of the identical source line, same per-line weight. Second identical occurrence of the same source line, ruled the same way; each occurrence is 2 tbsp = 32 g at source scale (64 g total across the recipe).",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 Tablespoons hoisin sauce",
+                            "item":  "Hoisin Sauce",
+                            "bid":  "hoisin-sauce",
+                            "board":  "recipe",
+                            "grams":  112,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: hoisin-sauce, 5 of 7 stores, cheapest 0.248 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ Tablespoon sesame oil",
+                            "item":  "Sesame Oil",
+                            "bid":  "sesame-oil",
+                            "board":  "recipe",
+                            "grams":  24,
+                            "buy":  "1 3/4 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: sesame-oil, 5 of 7 stores, cheapest 0.5276 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Black pepper (to taste)",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "to taste (14 g)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Unquantified line weighed by the pre-resolver at 4 g source basis; buy string states the target-scale weight so measure and grams agree.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 Tablespoons unsalted butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tablespoons, for the vegetables",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027unsalted butter\u0027 -\u003e butter (by mapper on 2026-08-26T04:51:57); nearest vocabulary rows: Almond Butter [almond-butter] DIFFERENT FORM: unsalted | Peanut Butter [peanut-butter] DIFFERENT FORM: unsalted | Butter [butter] DIFFERENT FORM: unsalted",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 cloves garlic (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "10 cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 medium/large zucchini (cut into half moons)",
+                            "item":  "Zucchini",
+                            "bid":  "zucchini",
+                            "board":  null,
+                            "grams":  700,
+                            "buy":  "1 1/2 lb (about 3 1/2 medium), cut into half moons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Each-weight from the label panel I read: 1 medium zucchini = 196 g; medium/large taken at 200 g. Vocabulary row Zucchini [zucchini] is exactly this food, same form; board 6 of 7. Each-weight from the panel I transcribed (1 medium = 196 g), taken at 200 g for medium/large.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 oz (1 ½ cups) baby bella mushrooms (sliced)",
+                            "item":  "White Mushrooms",
+                            "bid":  "mushrooms",
+                            "board":  "recipe",
+                            "grams":  397,
+                            "buy":  "14 oz (about 5 1/4 cups), sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: adjudicated alias -\u003e \u0027White Mushrooms\u0027; board MAPPED: mushrooms, 7 of 7 stores, cheapest 0.1862 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup carrots (about 2 large or 3 small, thinly sliced)",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  "recipe",
+                            "grams":  385,
+                            "buy":  "3 1/2 cups thinly sliced (about 7 large carrots)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: carrots, 7 of 7 stores, cheapest 0.87 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ medium/large yellow onion (sliced)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  298,
+                            "buy":  "10 1/2 oz (about 2 medium), sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Medium/large yellow onion taken at 170 g, half = 85 g. Vocabulary row Yellow Onion [onions] is same-food same-form; deliberately not red-onion, which is a separate variety price class. Board 7 of 7. Medium/large onion 170 g, half = 85 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 Tablespoons low sodium tamari or soy sauce",
+                            "item":  "Soy Sauce",
+                            "bid":  "soy-sauce",
+                            "board":  null,
+                            "grams":  112,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second occurrence of the identical source line, same per-line weight. Second identical occurrence of the same source line, ruled the same way; each occurrence is 2 tbsp = 32 g at source scale (64 g total across the recipe).",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¼ cup mayonnaise",
+                            "item":  "Mayonnaise",
+                            "bid":  "mayonnaise",
+                            "board":  null,
+                            "grams":  182,
+                            "buy":  "3/4 cup plus 2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: mayonnaise, 7 of 7 stores, cheapest 0.0936 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 Tablespoon water",
+                            "item":  "Water",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Tap water: no commodity claims it and no shopper buys it. Weighed at 15 g so it carries a defensible weight rather than none; food-macros-db already has a water row of zeroes."
+                        },
+                        {
+                            "source_raw":  "1 teaspoon tomato paste",
+                            "item":  "Tomato Paste",
+                            "bid":  "tomato-paste",
+                            "board":  "recipe",
+                            "grams":  19,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: tomato-paste, 7 of 7 stores, cheapest 0.1017 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon rice vinegar",
+                            "item":  "Rice Vinegar",
+                            "bid":  "rice-vinegar",
+                            "board":  "recipe",
+                            "grams":  18,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: rice-vinegar, 4 of 7 stores, cheapest 0.2433 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon coconut sugar",
+                            "item":  "Coconut Sugar",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "1 tsp coconut sugar = 4 g per the label panel read. Coconut palm sap sugar is a distinct specialty sweetener several times the price of cane [sugar] or [brown-sugar]; bridging it onto either would publish a wrong price, so null and pantry-static. Reported in absent_terms rather than proposed as a new id, because a full seven-store hunt for 2 g of source-scale sweetener is not worth holding the recipe on.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  3,
+                            "buy":  "scant 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.3173 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon paprika",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "scant 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon onion powder",
+                            "item":  "Onion Powder",
+                            "bid":  "onion-powder",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "scant 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onion-powder, 7 of 7 stores, cheapest 0.3323 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "scant 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "pinch of cayenne",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "3/4 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027cayenne\u0027 -\u003e cayenne-pepper (by mapper on 2026-08-27T18:58:27); no vocabulary row shares a core word with this name",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Black pepper (to taste)",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "to taste (14 g)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Unquantified line weighed by the pre-resolver at 4 g source basis; buy string states the target-scale weight so measure and grams agree.",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "coconut sugar"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Coconut Sugar"
+                           ],
+    "db_row_findings":  [
+                            "hibachi-chicken: the food DB already carries \u0027Ginger\u0027 and the mapper\u0027s row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 80.0 cal / 1.8 P / 18.0 C / 0.8 F  vs  mapper 62.0 / 1.2 / 11.5 / 1.0. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: calories 62 vs 80; protein_g 1.2 vs 1.8; carbs_g 11.5 vs 18. existing={\"calories\": 80, \"protein_g\": 1.8, \"carbs_g\": 18, \"fat_g\": 0.8} new={\"calories\": 62, \"protein_g\": 1.2, \"carbs_g\": 11.5, \"fat_g\": 1.0}",
+                            "hibachi-chicken: the food DB already carries \u0027Soy Sauce\u0027 and the mapper\u0027s row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 53.0 cal / 8.1 P / 4.9 C / 0.6 F  vs  mapper 57.0 / 9.1 / 5.6 / 0.3. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: protein_g 9.05 vs 8.1; carbs_g 5.59 vs 4.9. existing={\"calories\": 53, \"protein_g\": 8.1, \"carbs_g\": 4.9, \"fat_g\": 0.6} new={\"calories\": 57, \"protein_g\": 9.05, \"carbs_g\": 5.59, \"fat_g\": 0.3}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+                           "\u0027Black pepper (to taste)\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u00271 teaspoon tomato paste\u0027: the qty engine could not ground this weight (default tsp), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027Black pepper (to taste)\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  {
+                              "computed_by":  "this stage, over all 26 lines (the precheck covered only 19 and was marked partial)",
+                              "basis":  "source scale, 4 servings",
+                              "ours_per_serving":  {
+                                                       "calories":  454.7,
+                                                       "protein_g":  42.1,
+                                                       "carbs_g":  14.9,
+                                                       "fat_g":  25.5
+                                                   },
+                              "source_published_per_serving":  {
+                                                                   "calories":  432.0,
+                                                                   "protein_g":  40.0,
+                                                                   "carbs_g":  14.0
+                                                               },
+                              "gaps":  {
+                                           "calories_pct":  5.3,
+                                           "protein_pct":  5.2,
+                                           "carbs_pct":  6.4
+                                       },
+                              "verdict":  "PASS. Protein is the sharp instrument and it lands at +5.2%, far inside the 15% threshold, so no portion is misweighed. The main protein carries 151.9 g of the 168.2 g total, i.e. 38 g per serving from 170 g of raw chicken breast per serving, which sits comfortably in the catalog\u0027s own 167 g average and rules out an each-weight error of the Chicken Florentine kind. Band check at the 14-serving target (per-serving figures are scale-invariant): 455 cal within 350-650, 14.9 g carbs under the 35 g ceiling, 42.1 g protein over the 40 g floor. Passes all three gates, but protein clears the floor by only 2.1 g, so any later trim to the chicken line puts the recipe under it.",
+                              "self_consistency":  "Our own totals Atwater-check to 457 cal against the 454.7 summed from the DB rows."
+                          }
+}

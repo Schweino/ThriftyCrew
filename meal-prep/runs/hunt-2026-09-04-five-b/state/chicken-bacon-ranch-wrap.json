@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-bacon-ranch-wrap",
+    "title":  "Chicken Bacon Ranch Wrap",
+    "source_url":  "https://amandascookin.com/chicken-bacon-ranch-wrap/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T08:36:08",
+    "updated":  "2026-09-04T08:36:09",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cold chicken/bacon/ranch/cheddar in a flour tortilla is the same dinner as live chicken-bacon-ranch-burrito; also a no-cook cold wrap that doesn\u0027t hold for batch.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:36:08",
+                        "by":  "harvest",
+                        "detail":  "https://amandascookin.com/chicken-bacon-ranch-wrap/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T08:36:09",
+                        "by":  "decider",
+                        "detail":  "Cold chicken/bacon/ranch/cheddar in a flour tortilla is the same dinner as live chicken-bacon-ranch-burrito; also a no-cook cold wrap that doesn\u0027t hold for batch."
+                    }
+                ]
+}

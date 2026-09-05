@@ -1,0 +1,220 @@
+﻿{
+    "slug":  "chicken-zucchini-pasta",
+    "title":  "Chicken Zucchini Pasta",
+    "source_url":  "https://skinnyspatula.com/chicken-zucchini-pasta/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-09-04",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "8 oz (250 g) short pasta",
+                            "item":  "Ziti Pasta",
+                            "bid":  "pasta",
+                            "board":  "weekly",
+                            "grams":  875,
+                            "buy":  "1 lb 15 oz dry short pasta",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027short pasta\u0027 -\u003e pasta (by mapper on 2026-08-27T11:56:55); nearest vocabulary rows: Ziti Pasta [pasta] same form | High Protein Pasta [protein-pasta] same form | Rotini Pasta [rotini-pasta] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon (20 g) butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 lb (450 g) chicken breast",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken breast\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T13:26:47); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breast | Whole Chicken [whole-chicken] DIFFERENT FORM: breast/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: boneless/skinless",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 lb (450 g) zucchini (about 2 medium ones)",
+                            "item":  "Zucchini",
+                            "bid":  "zucchini",
+                            "board":  "recipe",
+                            "grams":  1575,
+                            "buy":  "3 1/2 lb (about 7 medium), sliced into half-moons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: zucchini, 6 of 7 stores, cheapest 1.19 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 small garlic cloves, crushed",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  null,
+                            "grams":  21,
+                            "buy":  "7 small cloves, crushed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "3 g per clove. Fresh bulb garlic, board 6 of 7; \u0027small\u0027 is a size word and \u0027crushed\u0027 a knife instruction, neither a form flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon Italian seasoning",
+                            "item":  "Italian Seasoning",
+                            "bid":  "italian-seasoning",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: italian-seasoning, 7 of 7 stores, cheapest 0.698 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Juice of half a lemon",
+                            "item":  "Fresh Lemon Juice",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  77,
+                            "buy":  "juice of 2 lemons (about 1/3 cup)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Half a lemon yields about 22 g juice. Follows the 2026-08-27 \u0027fresh lemon juice\u0027 -\u003e lemons ruling, which refused the bottled lemon-juice bridge as a different product and price class; lemons live 5 of 7, so a reuse.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/3 cup (30 g) Parmesan, grated",
+                            "item":  "Parmesan Cheese",
+                            "bid":  "parmesan",
+                            "board":  null,
+                            "grams":  105,
+                            "buy":  "scant 1 cup grated",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Source states its own weight. Same food as the vocabulary\u0027s Parmesan Cheese row per the 2026-08-27 precedent; grated is prep, not a price class. Board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup fresh parsley, roughly chopped",
+                            "item":  "Fresh Parsley",
+                            "bid":  "fresh-parsley",
+                            "board":  "recipe",
+                            "grams":  52,
+                            "buy":  "1 3/4 cups roughly chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line arrived with NO weight, which is an assembly refusal, so I weighed it: 1/2 cup roughly chopped is 15 g.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1/4 cup (30 g) pine nuts, toasted",
+                            "item":  "Pine Nuts",
+                            "bid":  "pine-nuts",
+                            "board":  null,
+                            "grams":  105,
+                            "buy":  "1 cup minus 2 tablespoons, toasted",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Source states its own weight. Board ABSENT and no existing nut id covers them; toasting is a cooking step, not a form.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Salt and freshly ground black pepper to taste",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  null,
+                            "grams":  14,
+                            "buy":  "to taste (about 2 1/2 teaspoons salt and 1 teaspoon black pepper)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "4 g source = ~14 g at batch, matching the 15 g salt precedent. Composite line, unsplit; ruled to the dominant food Salt (7 of 7). The Bell Pepper near-misses are keyword collisions on \u0027pepper\u0027.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "pine nuts"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Pine Nuts"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "pine nuts",
+                                        "proposed_bid":  "pine-nuts",
+                                        "evidence":  "Board ABSENT - no commodity and no capture match. Pine nuts (pignoli, pinon) are not covered by any existing nut id: a distinct product sold in 4-8 oz bags at roughly $25-30/lb, several times the price class of walnuts, almonds or pecans, so bridging them onto another nut would publish a badly wrong price. Searched by food across all three spellings.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "pine-nuts",
+                                  "verdict":  "approve",
+                                  "bid":  "pine-nuts",
+                                  "reason":  "Verified genuinely unpriced under any name: the only \u0027pine nut\u0027 strings in the whole live estate are inside couscous\u0027s EXCLUDE list (commodities.json lines 67739/67869 - couscous deliberately fences out \u0027pine nut couscous\u0027 flavor products, which confirms no id claims them), and \u0027pignoli\u0027/\u0027pinon\u0027/\u0027pinenut\u0027 appear nowhere in commodities.json, recipe-commodities.json, recipe-board-everyday.json, or smp-feed.json (swept per-file with -o context on the minified feed, not trusting one empty brace-glob). No nut sibling can carry it: mixed-nuts includes only \u0027mixed nuts\u0027/\u0027nut mix\u0027, walnuts only \u0027\\bwalnuts?\\b\u0027, peanuts only \u0027\\bpeanuts\\b\u0027 - none matches a \u0027Pine Nuts\u0027 product name, and bridging is ruled out on price class anyway (~$25-30/lb vs walnuts\u0027 live $0.265/oz = ~$4.24/lb; an alias would misprice by ~6x, the exact bread-crumbs failure). Same food different id nowhere; this is a new food to the estate, not a variant, so no allowlist pair is needed. Sole batch member - no sibling collision to read against. Separate vocabulary ruling: \u0027pine nuts\u0027 also needs a NEW ingredients.json row (no existing name resolves to it), macro source fdc:170591 \u0027Nuts, pine nuts, dried\u0027 (the generic retail pignoli; 170592 pinyon is a regional different nut - do not use), and a densities.json row or UNMEASURABLE-QTY will refuse volumetric lines.",
+                                  "term":  "",
+                                  "mint":  {
+                                               "unit":  "oz",
+                                               "include":  [
+                                                               "pine\\s?nuts?\\b",
+                                                               "\\bpignolia?s?\\b",
+                                                               "\\bpi[nñ]on\\s+nuts?\\b"
+                                                           ],
+                                               "extra_exclude":  [
+                                                                     "\\bcouscous\\b",
+                                                                     "\\bpesto\\b",
+                                                                     "\\bhummus\\b",
+                                                                     "\\bsalad\\b",
+                                                                     "\\bdressing\\b",
+                                                                     "\\bcrusted\\b",
+                                                                     "trail\\s+mix"
+                                                                 ],
+                                               "clone_exclude_from":  "walnuts",
+                                               "namespace":  "commodities",
+                                               "category":  "Coffee, Oils \u0026 Spreads",
+                                               "gpu":  28.35,
+                                               "pantry_pkg_oz":  4,
+                                               "companion_edits":  [
+
+                                                                   ]
+                                           }
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "FAILS THE CARB GATE AND SITS UNDER THE PROTEIN FLOOR. Per serving at 4 servings, all 12 lines: 514 cal, 38.4 g protein, 53 g carbs, against stated 481 / 44 / 33. Calories within 7% and protein 13% under, both inside tolerance, so the chicken portion is sound. Carbs 53 g against a 35 g ceiling (250 g dry pasta = 62 g per serving carrying 47 g carbohydrate alone), and protein 38.4 g is below the 40 g floor. Recommend rejected-macros."
+}

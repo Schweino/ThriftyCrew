@@ -1,0 +1,37 @@
+{
+    "slug":  "creamy-paprika-chicken-pasta",
+    "title":  "Creamy Paprika Chicken Pasta",
+    "source_url":  "https://skinnyspatula.com/creamy-paprika-chicken-pasta/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:50",
+    "updated":  "2026-09-04T04:53:16",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:50",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/creamy-paprika-chicken-pasta/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T04:51:51",
+                        "by":  "decider",
+                        "detail":  "Hungarian-paprika + white-wine cream chicken pasta reads as a paprikash-accented plate distinct from the catalog\u0027s tomato/tuscan chicken pastas, and it widens toward Central-European flavor; no direct catalog dupe."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T04:53:16",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 2, every line verified"
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "sheet-pan-lemon-chicken",
+    "title":  "Sheet Pan Lemon Chicken",
+    "source_url":  "https://www.wellplated.com/sheet-pan-lemon-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:56:28",
+    "updated":  "2026-09-04T04:56:29",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Lemon-rosemary-garlic chicken with baby potatoes and asparagus sheet pan is the same chicken+potato bake as live parmesan-garlic-sheet-pan-chicken-potatoes, a seasoning-only difference matching the prior easy-chicken-and-potatoes ruling.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:56:28",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/sheet-pan-lemon-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:56:29",
+                        "by":  "decider",
+                        "detail":  "Lemon-rosemary-garlic chicken with baby potatoes and asparagus sheet pan is the same chicken+potato bake as live parmesan-garlic-sheet-pan-chicken-potatoes, a seasoning-only difference matching the prior easy-chicken-and-potatoes ruling."
+                    }
+                ]
+}

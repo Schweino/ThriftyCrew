@@ -1,0 +1,42 @@
+hunt-daemon: band cal 350-650, carbs <= 35, protein >= 40
+hunt-daemon: conditions (read from the run dir) between 350 and 650 calories per serving AND 35 g carbohydrate or less per serving AND at least 40 g protein per serving; budget meal-prep dinner; scalable to 14 servings; no seafood
+hunt-daemon: CANNOT RUN - llama-server is down and the GPU belongs to the nightly chain (21:30-06:30) right now. Not starting one - competing for the card is how the 07:00 ad pull and the 08:00 capture go blind. Start it by hand if you mean to override that.
+HUNT-DAEMON-COMPLETE
+hunt-daemon: band cal 350-650, carbs <= 35, protein >= 40
+hunt-daemon: conditions (read from the run dir) between 350 and 650 calories per serving AND 35 g carbohydrate or less per serving AND at least 40 g protein per serving; budget meal-prep dinner; scalable to 14 servings; no seafood
+hunt-daemon: hunt-2026-09-04-five  lanes pool,decide,extract,map,price,write,qa  publish DRY RUN
+extract lane: llama-server reports 16384 tokens per slot; rung 2 needs ~11465 -> rung 2 available
+decide batch 1: 10 ruling(s), 4 accepted so far
+decide batch 2: 0 ruling(s), 4 accepted so far
+extract: released 4 settled recipe(s) to the map lane (nothing else queued for extraction)
+map: micro-batch of 4 (chicken-zucchini-pasta, foolproof-poached-chicken-noodle-soup, creamy-paprika-chicken-pasta, chicken-penne-arrabbiata)
+hunt-daemon: band cal 350-650, carbs <= 35, protein >= 40
+hunt-daemon: conditions (read from the run dir) between 350 and 650 calories per serving AND 35 g carbohydrate or less per serving AND at least 40 g protein per serving; budget meal-prep dinner; scalable to 14 servings; no seafood
+hunt-daemon: hunt-2026-09-04-five  lanes pool,decide,extract,map,price,write,qa  publish LIVE
+extract lane: llama-server reports 16384 tokens per slot; rung 2 needs ~11465 -> rung 2 available
+pool: no available candidate left in the backlog
+map: micro-batch of 4 (chicken-penne-arrabbiata, chicken-zucchini-pasta, creamy-paprika-chicken-pasta, foolproof-poached-chicken-noodle-soup)
+decide: chicken-parmesan-garlic-pasta is already taken by another run - dropped from the batch
+  map: prior-rulings shelf ok - 120 neighbour(s) over 24 term(s) from 282 past ruling(s)
+map shelf: 20 of 21 term(s) with no food-DB row carry FDC candidates; FDC lacks: scallion/shallot
+decide batch 1: 9 ruling(s), 5 accepted so far
+decide: the target of 5 acceptance(s) is met - 10 buffered dossier(s) left unruled and available (southwest-chicken-foil-packet-recipe, sheet-pan-chicken-and-potatoes-five-ingredients, chicken-stuffed-peppers, caprese-stuffed-chicken-breast, salsa-fresca-baked-chicken-breast-recipe, baked-cashew-chicken, grilled-avocado-chicken-salad, smash-burger-with-cheese-lettuce-and-tomato, healthy-taco-salad, high-protein-lavash-bread-pizza)
+decide: the target of 5 acceptance(s) is met - 8 buffered dossier(s) left unruled and available (chicken-bacon-ranch-wrap, turkey-stuffed-peppers, chicken-with-onion-thyme-sauce, southwest-chicken-salad-recipe, chicken-avocado-salad-wrap, grilled-chicken-caesar-salad, sheet-pan-cranberry-chicken-and-stuffing, chicken-caesar-cutlets)
+extract: released 1 settled recipe(s) to the map lane (nothing else queued for extraction)
+map: micro-batch of 1 (hibachi-chicken)
+  map: prior-rulings shelf ok - 35 neighbour(s) over 7 term(s) from 282 past ruling(s)
+map shelf: 3 of 5 term(s) with no food-DB row carry FDC candidates; FDC lacks: medium/large zucchini, medium/large yellow onion
+  map: hibachi-chicken learned 7 event(s) (5 projected, 2 held, 0 surprise)
+price lane: holding 1 term(s) for a fuller batch (cap 10) - map queued 0 / in flight 1, extract queued 0 / in flight 0
+  map: chicken-penne-arrabbiata learned 5 event(s) (5 projected, 0 held, 0 surprise)
+  map: chicken-zucchini-pasta learned 6 event(s) (5 projected, 0 held, 0 surprise)
+  map: creamy-paprika-chicken-pasta STUCK - the mapper's rulings do not assemble into a decision file: FINDING  '1 small shallot, diced': the ruling BIDS 'shallots' and its own evidence says it refused that id - 'One small shallot is about 30 g
+  vocab: Bok Choy -> bok-choy, basis inherited from the commodity row for 'bok-choy'
+  vocab: Bean Sprouts -> bean-sprouts, basis inherited from the commodity row for 'bean-sprouts'
+  map: foolproof-poached-chicken-noodle-soup learned 11 event(s) (6 projected, 2 held, 0 surprise)
+  map: foolproof-poached-chicken-noodle-soup STUCK - 1 food(s) the recipe needs still have NO food-macros-db row, so the intake skeleton cannot be completed and the macros would be computed WITHOUT them: 'Star Anise' (TWO label reads spent and no transc
+price lane: releasing 5 term(s) - upstream idle
+price lane [singleton] invocation 1: 5 term(s) across 3 recipe(s)
+  pre-pass batch 1: MATCHES 20, UNUSABLE 15
+macro gate (pre-write): chicken-zucchini-pasta at 53.2g carbs above the 35 limit - retiring
+macro gate (pre-write): chicken-penne-arrabbiata at 60.3g carbs above the 35 limit - retiring

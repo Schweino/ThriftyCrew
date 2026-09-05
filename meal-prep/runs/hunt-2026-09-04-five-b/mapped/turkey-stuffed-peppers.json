@@ -1,0 +1,265 @@
+﻿{
+    "slug":  "turkey-stuffed-peppers",
+    "title":  "Turkey Stuffed Peppers",
+    "source_url":  "https://feelgoodfoodie.net/recipe/turkey-stuffed-peppers/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "turkey",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-09-04",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "4 large bell peppers (halved lengthwise, stems and seeds discarded)",
+                            "item":  "Bell Peppers",
+                            "bid":  "bell-peppers",
+                            "board":  null,
+                            "grams":  1960,
+                            "buy":  "14 large peppers, halved lengthwise and seeded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Large pepper ~140 g trimmed after stem and seeds. REUSE of a live board id (6 of 7, cheapest 0.77 Fareway), matching the 2026-08-27 \u0027bell peppers\u0027 ruling; the line names no colour so the mixed id is right and green-bell-pepper is refused. \u0027Large\u0027 is a size word, not a form.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; buy string at 14-serving scale.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 onion (diced)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  385,
+                            "buy":  "3 1/2 medium onions, diced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "2 celery stalks (diced)",
+                            "item":  "Celery",
+                            "bid":  "celery",
+                            "board":  null,
+                            "grams":  280,
+                            "buy":  "7 stalks, diced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Medium stalk 40 g. celery is a live board id (6 of 7, 1.88 Hy-Vee) - a reuse; \u0027stalk\u0027 is the cut, not a different food, exactly as the 2026-08-26 \u0027celery stalk\u0027 ruling. Only a vocabulary name row is missing.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 carrot (diced)",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  "recipe",
+                            "grams":  214,
+                            "buy":  "3 1/2 medium carrots, diced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 pound lean ground turkey",
+                            "item":  "99/1 Ground Turkey",
+                            "bid":  "99-1-ground-turkey",
+                            "board":  null,
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb 99% lean ground turkey",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Lean grade set by the source\u0027s own macros (see cross-check). The source\u0027s published 401 cal / 40 g protein only reconciles at 99/1 (my recompute: 368 cal, 40.3 P); 93/7 gives 438 cal and 34.2 P, a 14.5% protein miss. 99% lean turkey breast is a different price class from generic ground-turkey, so the generic board id is refused and a new id is proposed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¾ teaspoon salt (plus more to taste)",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  16,
+                            "buy":  "2 1/2 teaspoons, plus more to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Settled.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon pepper (plus more to taste)",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons, plus more to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Settled.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "2 garlic cloves (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "7 cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon Italian seasoning",
+                            "item":  "Italian Seasoning",
+                            "bid":  "italian-seasoning",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon crushed red pepper",
+                            "item":  "Red Pepper Flakes",
+                            "bid":  "red-pepper-flakes",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "3/4 teaspoon crushed red pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 14.5 ounce fire roasted diced tomatoes",
+                            "item":  "Diced Tomatoes",
+                            "bid":  "diced-tomatoes",
+                            "board":  null,
+                            "grams":  1438,
+                            "buy":  "6 cups canned diced tomatoes with their juice",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "14.5 oz can = 411 g, undrained. Fire-roasting is a processing style of the same 14.5 oz can of diced tomatoes, same shelf and price class; the board\u0027s fallback to fresh `tomatoes` is refused as a fresh/canned form flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 ½ cups cooked quinoa",
+                            "item":  "Cooked Quinoa",
+                            "bid":  "quinoa-uncooked",
+                            "board":  null,
+                            "grams":  971,
+                            "buy":  "5 1/4 cups cooked (about 1 3/4 cups dry)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "185 g per cup cooked. Board ABSENT and no vocabulary row; the food is plain quinoa (bought dry, measured cooked here), so the grams and the macro row are both on the cooked basis. New id proposed and the term reported absent.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup shredded low-moisture mozzarella",
+                            "item":  "Shredded Mozzarella",
+                            "bid":  "mozzarella-cheese",
+                            "board":  null,
+                            "grams":  392,
+                            "buy":  "3 1/2 cups shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup shredded = 112 g. Board ABSENT. The three near vocabulary rows are all form flips: fresh-mozzarella is the brine-packed ball (different price and different water weight) and fat-free/reduced-fat are different products. The shredded low-moisture bag needs its own id.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "cooked quinoa",
+                                 "shredded low-moisture mozzarella",
+                                 "99/1 ground turkey"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Cooked Quinoa",
+                               "Shredded Mozzarella"
+                           ],
+    "db_row_findings":  [
+                            "turkey-stuffed-peppers: the food DB already carries \u002799/1 Ground Turkey\u0027 and the mapper\u0027s row DIFFERS on calories, protein_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 107.1 cal / 23.2 P / 0.0 C / 1.3 F  vs  mapper 89.3 / 24.1 / 0.0 / 0.4. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 4 oz = 112 g) they still disagree: calories 100 vs 120; protein_g 27 vs 26; fat_g 0.5 vs 1.5. existing={\"calories\": 120, \"protein_g\": 26, \"fat_g\": 1.5} new={\"calories\": 100, \"protein_g\": 27, \"fat_g\": 0.5}",
+                            "turkey-stuffed-peppers: the food DB already carries \u0027Diced Tomatoes\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 20.7 cal / 0.8 P / 4.1 C / 0.0 F  vs  mapper 18.0 / 0.8 / 3.3 / 0.5. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 0.5 cup = 121 g) they still disagree: carbs_g 4.017 vs 5; fat_g 0.605 vs 0. existing={\"serving_grams\": 121, \"serving_qty\": 0.5, \"serving_unit\": \"cup\", \"calories\": 25, \"protein_g\": 1, \"carbs_g\": 5, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 18, \"protein_g\": 0.84, \"carbs_g\": 3.32, \"fat_g\": 0.5}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "lean ground turkey",
+                                        "proposed_bid":  "99-1-ground-turkey",
+                                        "evidence":  "The source\u0027s published 401 cal / 40 g protein only reconciles at 99/1 (my recompute: 368 cal, 40.3 P); 93/7 gives 438 cal and 34.2 P, a 14.5% protein miss. 99% lean turkey breast is a different price class from generic ground-turkey, so the generic board id is refused and a new id is proposed.",
+                                        "declared":  false
+                                    },
+                                    {
+                                        "term":  "cooked quinoa",
+                                        "proposed_bid":  "quinoa",
+                                        "evidence":  "Board ABSENT and no vocabulary row; the food is plain quinoa (bought dry, measured cooked here), so the grams and the macro row are both on the cooked basis. New id proposed and the term reported absent.",
+                                        "declared":  false
+                                    },
+                                    {
+                                        "term":  "shredded low-moisture mozzarella",
+                                        "proposed_bid":  "shredded-mozzarella",
+                                        "evidence":  "Board ABSENT. The three near vocabulary rows are all form flips: fresh-mozzarella is the brine-packed ball (different price and different water weight) and fat-free/reduced-fat are different products. The shredded low-moisture bag needs its own id.",
+                                        "declared":  false
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "99-1-ground-turkey",
+                                  "verdict":  "approve",
+                                  "bid":  "99-1-ground-turkey",
+                                  "reason":  "Deliberate variant, and the estate has already carved out its space: 93-7-ground-turkey (recipe-commodities, $4.075/lb Aldi) explicitly EXCLUDES \u0027\\b99\\s*%?\\s*/?\\s*1\\s*%?\\b\u0027 and \u0027\\bbreast\\b\u0027, proving 99/1 was deliberately fenced OUT of the 93/7 id rather than folded into it; generic ground-turkey ($2.6633/lb) is a different price class (99% lean ground turkey breast retails ~2x generic) and the macro reconcile (40 g protein only at 99/1) confirms the recipe genuinely needs the variant, matching the sanctioned 93-7-vs-80-20 precedent. Not in the feed and no near row\u0027s crown is a 99/1 product. NOTE: clone_exclude_from is ground-turkey (commodities) rather than the same-namespace sibling 93-7-ground-turkey because that sibling\u0027s own excludes (\u002799/1\u0027, \u0027breast\u0027) would self-block this id\u0027s include — the exact trap new-commodity refuses.",
+                                  "term":  "",
+                                  "mint":  {
+                                               "unit":  "lb",
+                                               "include":  [
+                                                               "99\\s*/\\s*1",
+                                                               "99\\s*%?\\s*lean",
+                                                               "ground\\s+turkey\\s+breast"
+                                                           ],
+                                               "clone_exclude_from":  "ground-turkey",
+                                               "namespace":  "recipe-commodities + recipe-board-everyday (recipe-only, like its sibling 93-7-ground-turkey; not a weekly staple)",
+                                               "category":  "Meat \u0026 Poultry",
+                                               "gpu":  453.59,
+                                               "buy_pkg_qty":  1,
+                                               "buy_pkg_unit":  "lb"
+                                           }
+                              },
+                              {
+                                  "proposed_bid":  "quinoa",
+                                  "verdict":  "alias",
+                                  "bid":  "quinoa-uncooked",
+                                  "reason":  "The mapper\u0027s \u0027board ABSENT and no vocabulary row\u0027 is false: commodities.json carries BOTH quinoa-uncooked (label \u0027Uncooked Quinoa\u0027, include \u0027\\bquinoa\\b\u0027, PRICED at $0.1372/oz cheapest Sam\u0027s Club, 4 stores) and cooked-quinoa (the ready-to-eat pouch id, unpriced today). The mapper\u0027s own case says the food is \u0027bought dry, measured cooked\u0027, so the PURCHASE is the priced quinoa-uncooked row — the dry-white-wine seam (exists, and here even priced). CRITICAL follow-up for the caller: the recipe\u0027s grams are on the COOKED basis, and quinoa roughly triples in mass when cooked (~120 vs ~368 cal/100g per the dossier\u0027s own FDC rows), so the spec must convert cooked grams to dry (÷~2.9) before pricing at the dry per-oz price or the line overprices ~2.9x — a bread-crumbs-class error in the units seam, not the id seam. Separate name-vs-id answer per remit: the vocabulary needs a \u0027cooked quinoa\u0027 name row carrying the cooked basis (caller\u0027s name mint, gated separately); the ID question is settled — reuse quinoa-uncooked, add recipe-floor-id-map entry quinoa -\u003e quinoa-uncooked only alongside the basis conversion, never a new id.",
+                                  "term":  "",
+                                  "mint":  null
+                              },
+                              {
+                                  "proposed_bid":  "shredded-mozzarella",
+                                  "verdict":  "alias",
+                                  "bid":  "mozzarella-cheese",
+                                  "reason":  "Already priced under another name — the sun-dried-tomatoes seam exactly. The recipe board carries mozzarella-cheese, the mapper missed it (it only surfaced in the label grep, and its feed cell was absent from the dossier\u0027s feed table, so I pulled it myself): the feed prices mozzarella-cheese at $0.1521/oz cheapest at Sam\u0027s Club and the crowned product IS \u0027Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese\u0027 — the existing row\u0027s crown is literally the shredded low-moisture bag this proposal wants to mint. The feed also shows mozzarella-cheese carrying alias_of shredded-cheese ($0.1521/oz, 7 stores), so the pricing chain is already wired. The three rows the mapper DID find (fresh-mozzarella $0.2588/oz brine ball, fat-free-mozzarella, reduced-fat-mozzarella) are indeed different products, but the generic mozzarella-cheese row is the same food in the same form. SAME FOOD, SAME FORM -\u003e reuse; follow-up: recipe-floor-id-map entry shredded-mozzarella -\u003e mozzarella-cheese (units match, both oz).",
+                                  "term":  "",
+                                  "mint":  null
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Source (feelgoodfoodie, 4 servings) publishes 401 cal / 35 carbs / 40 protein. My recompute over all 14 lines with 99/1 ground turkey: 1470 cal total = 368 cal, 40.2 g protein, 32.2 g carbs per serving. Protein is within 0.5% and calories 8% under, so the portions are right. With 93/7 turkey instead, protein falls to 34.2 (14.5% miss) and calories rise to 438 - the lean grade is what the source\u0027s own label pins. Band check: 368 cal (in 350-650), 32.2 carbs (\u003c=35), 40.2 protein (\u003e=40). It PASSES but only barely on both protein and the calorie floor; any downward revision of the turkey line or the mozzarella will put it out of band."
+}

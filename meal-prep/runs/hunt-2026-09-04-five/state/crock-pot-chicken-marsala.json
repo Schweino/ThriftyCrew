@@ -1,0 +1,31 @@
+{
+    "slug":  "crock-pot-chicken-marsala",
+    "title":  "Crock Pot Chicken Marsala",
+    "source_url":  "https://www.wellplated.com/crock-pot-chicken-marsala/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:57",
+    "updated":  "2026-09-04T04:51:58",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken + marsala wine + cremini mushroom braise is the same dinner as in-flight chicken-marsala-skillet (hunt-2026-08-15-lowcarb-100, priced); crock-pot vs skillet vessel does not distinguish the plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:57",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/crock-pot-chicken-marsala/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:51:58",
+                        "by":  "decider",
+                        "detail":  "Chicken + marsala wine + cremini mushroom braise is the same dinner as in-flight chicken-marsala-skillet (hunt-2026-08-15-lowcarb-100, priced); crock-pot vs skillet vessel does not distinguish the plate."
+                    }
+                ]
+}

@@ -1,0 +1,66 @@
+{
+    "slug":  "hibachi-chicken",
+    "title":  "Hibachi Chicken",
+    "source_url":  "https://www.eatingbirdfood.com/hibachi-chicken/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-09-04T04:56:24",
+    "updated":  "2026-09-04T05:17:30",
+    "terms":  [
+                  {
+                      "term":  "coconut sugar",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Black Pepper",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:56:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.eatingbirdfood.com/hibachi-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T04:56:25",
+                        "by":  "decider",
+                        "detail":  "Japanese steakhouse hibachi chicken with tamari/hoisin/ginger, griddled zucchini-mushroom-carrot and a yum-yum mayo sauce over rice; distinct hibachi identity with no live Japanese-steakhouse dish (separate from kung pao/hainanese/lemongrass), widens cuisine, verified 432cal/14c/40p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T04:57:04",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-09-04T05:01:51",
+                        "by":  "mapper",
+                        "detail":  "COUNTS: 7 residual lines ruled - 5 mapped (fresh-ginger, soy-sauce x2, zucchini, onions), 1 mapped-null (coconut sugar), 1 not-purchased (water). 0 rejected. 5 new food-macros-db rows returned (Ginger, Soy Sauce, Zucchini, Yellow Onion, Coconut Sugar); none absent. 0 new commodity proposals - every mapped bid above is an existing priced id, so nothing here needs the registrar. 25 buy strings retur"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-09-04T05:01:52",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-09-04T05:17:30",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

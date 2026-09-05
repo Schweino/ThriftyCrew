@@ -1,0 +1,110 @@
+{
+ "slug": "caprese-stuffed-chicken-breast",
+ "lines": [
+  {
+   "raw": "1.5 lbs boneless, skinless chicken breasts (4 small breasts)",
+   "buy": "5 1/4 lb (about 14 small breasts), each sliced open into a pocket",
+   "notes": "Settled line; source basis 680.4 g carried through."
+  },
+  {
+   "raw": "¼ teaspoon kosher salt",
+   "buy": "scant 1 teaspoon kosher salt",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "½ teaspoon fresh black pepper",
+   "buy": "1 3/4 teaspoons, freshly ground",
+   "grams_source": 1.2,
+   "notes": "Ground black pepper; 1/2 tsp ground pepper is about 1.2 g at source scale."
+  },
+  {
+   "raw": "2 tablespoons olive oil",
+   "buy": "7 tablespoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "½ cup balsamic vinegar",
+   "buy": "1 3/4 cups",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "½ teaspoon minced garlic",
+   "buy": "1 3/4 teaspoons minced (about 2 cloves)",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 tablespoon brown sugar",
+   "buy": "3 1/2 tablespoons, packed",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "4 tablespoons basil pesto",
+   "buy": "14 tablespoons (about 3/4 cup plus 2 tablespoons)",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "4 slices fresh mozzarella (cut in half -about 3/4 cup)",
+   "buy": "14 slices (about 14 oz), each cut in half",
+   "grams_source": 112,
+   "notes": "Pre-resolve computed no weight; 4 slices at the food-DB row's own 1 oz / 28 g slice is 112 g at source scale."
+  },
+  {
+   "raw": "8 slices roma tomatoes (sliced thin-about 3/4 cup)",
+   "buy": "28 thin slices (about 7 roma tomatoes)",
+   "grams_source": 135,
+   "notes": "3/4 cup sliced tomato is about 135 g; 8 thin slices off a roma agrees at roughly 17 g a slice."
+  },
+  {
+   "raw": "1 bunch fresh basil leaves",
+   "buy": "3 1/2 bunches leaves (about 7 oz)",
+   "notes": "Settled line."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "½ teaspoon fresh black pepper",
+   "term": "fresh black pepper",
+   "canon_item": "Black Pepper",
+   "bid": "black-pepper",
+   "decision": "mapped",
+   "grams_source": 1.2,
+   "evidence": "\"Fresh\" here means freshly ground, a grinder instruction and not a form flip, exactly as 'freshly ground black pepper' -> black-pepper was ruled 2026-08-26; the Bell Pepper near-misses are keyword collisions on 'pepper'. Board carries black-pepper 7 of 7, so a REUSE."
+  },
+  {
+   "raw": "8 slices roma tomatoes (sliced thin-about 3/4 cup)",
+   "term": "roma tomatoes",
+   "canon_item": "Tomatoes",
+   "bid": "tomatoes",
+   "decision": "mapped",
+   "grams_source": 135,
+   "evidence": "Sliced fresh tomato, so the canned diced-tomatoes and dried near-misses are refused as form flips; roma is the standard whole-tomato shelf SKU and not a variety premium like cherry or romaine, so the board's fresh `tomatoes` id (7 of 7, 0.95 Aldi) is the same product and price class."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Tomatoes"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [
+  "caprese-stuffed-chicken-breast: 'Black Pepper' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 tsp = 2.3 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 439,
+   "protein_g": 43,
+   "carbs_g": 10
+  },
+  "computed_per_serving_source_scale": {
+   "calories": 437,
+   "protein_g": 44.1,
+   "carbs_g": 12.0
+  },
+  "servings": 4,
+  "verdict": "PASS - protein gap 2.6% (44.1 vs 43), calories within 0.5%. Chicken at 680.4 g gives 170 g per serving, right on the catalog's 167 g average for chicken-breast recipes, so no each-weight error on the main protein.",
+  "band_check": "At 14 servings the per-serving figures are unchanged: 437 cal (band 350-650 OK), 12 g carbs (<= 35 OK), 44 g protein (>= 40 OK)."
+ }
+}

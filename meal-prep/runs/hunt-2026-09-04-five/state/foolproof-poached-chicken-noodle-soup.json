@@ -1,0 +1,37 @@
+{
+    "slug":  "foolproof-poached-chicken-noodle-soup",
+    "title":  "Foolproof Poached Chicken Noodle Soup",
+    "source_url":  "https://www.recipetineats.com/foolproof-poached-chicken-noodle-soup/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:49",
+    "updated":  "2026-09-04T04:52:35",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:49",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/foolproof-poached-chicken-noodle-soup/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T04:51:49",
+                        "by":  "decider",
+                        "detail":  "Asian poached-chicken egg-noodle soup with bok choy, ginger and star anise; widens the American-skewed catalog and has no soy-based chicken noodle soup neighbour, with a clean 357-cal band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T04:52:35",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

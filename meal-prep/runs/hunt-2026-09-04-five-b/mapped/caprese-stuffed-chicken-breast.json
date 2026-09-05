@@ -1,0 +1,186 @@
+﻿{
+    "slug":  "caprese-stuffed-chicken-breast",
+    "title":  "Caprese Stuffed Chicken Breast",
+    "source_url":  "https://thecleaneatingcouple.com/chicken-caprese/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-09-04",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1.5 lbs boneless, skinless chicken breasts (4 small breasts)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb (about 14 small breasts), each sliced open into a pocket",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; source basis 680.4 g carried through.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "scant 1 teaspoon kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon fresh black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  null,
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons, freshly ground",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Ground black pepper; 1/2 tsp ground pepper is about 1.2 g at source scale. \"Fresh\" here means freshly ground, a grinder instruction and not a form flip, exactly as \u0027freshly ground black pepper\u0027 -\u003e black-pepper was ruled 2026-08-26; the Bell Pepper near-misses are keyword collisions on \u0027pepper\u0027. Board carries black-pepper 7 of 7, so a REUSE.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ cup balsamic vinegar",
+                            "item":  "Balsamic Vinegar",
+                            "bid":  "balsamic-vinegar",
+                            "board":  "recipe",
+                            "grams":  446,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon minced garlic",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 3/4 teaspoons minced (about 2 cloves)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon brown sugar",
+                            "item":  "Brown Sugar",
+                            "bid":  "brown-sugar",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tablespoons, packed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 tablespoons basil pesto",
+                            "item":  "Basil Pesto",
+                            "bid":  "pesto",
+                            "board":  null,
+                            "grams":  224,
+                            "buy":  "14 tablespoons (about 3/4 cup plus 2 tablespoons)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "8 slices roma tomatoes (sliced thin-about 3/4 cup)",
+                            "item":  "Tomatoes",
+                            "bid":  "tomatoes",
+                            "board":  null,
+                            "grams":  472,
+                            "buy":  "28 thin slices (about 7 roma tomatoes)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "3/4 cup sliced tomato is about 135 g; 8 thin slices off a roma agrees at roughly 17 g a slice. Sliced fresh tomato, so the canned diced-tomatoes and dried near-misses are refused as form flips; roma is the standard whole-tomato shelf SKU and not a variety premium like cherry or romaine, so the board\u0027s fresh `tomatoes` id (7 of 7, 0.95 Aldi) is the same product and price class.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 slices fresh mozzarella (cut in half -about 3/4 cup)",
+                            "item":  "Fresh Mozzarella",
+                            "bid":  "fresh-mozzarella",
+                            "board":  "recipe",
+                            "grams":  392,
+                            "buy":  "14 slices (about 14 oz), each cut in half",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Pre-resolve computed no weight; 4 slices at the food-DB row\u0027s own 1 oz / 28 g slice is 112 g at source scale.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 bunch fresh basil leaves",
+                            "item":  "Fresh Basil",
+                            "bid":  "fresh-basil",
+                            "board":  "weekly",
+                            "grams":  210,
+                            "buy":  "3 1/2 bunches leaves (about 7 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Tomatoes"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+                           "\u00274 tablespoons basil pesto\u0027: the qty engine could not ground this weight (default tbsp), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  439,
+                                                                   "protein_g":  43,
+                                                                   "carbs_g":  10
+                                                               },
+                              "computed_per_serving_source_scale":  {
+                                                                        "calories":  437,
+                                                                        "protein_g":  44.1,
+                                                                        "carbs_g":  12.0
+                                                                    },
+                              "servings":  4,
+                              "verdict":  "PASS - protein gap 2.6% (44.1 vs 43), calories within 0.5%. Chicken at 680.4 g gives 170 g per serving, right on the catalog\u0027s 167 g average for chicken-breast recipes, so no each-weight error on the main protein.",
+                              "band_check":  "At 14 servings the per-serving figures are unchanged: 437 cal (band 350-650 OK), 12 g carbs (\u003c= 35 OK), 44 g protein (\u003e= 40 OK)."
+                          }
+}

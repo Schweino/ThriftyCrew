@@ -1,0 +1,125 @@
+{
+ "name": "Caprese Stuffed Chicken Breast",
+ "slug": "caprese-stuffed-chicken-breast",
+ "protein": "chicken",
+ "cuisine": "Italian",
+ "source_url": "https://thecleaneatingcouple.com/chicken-caprese/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2381,
+   "buy": "5 1/4 lb (about 14 small breasts), each sliced open into a pocket"
+  },
+  {
+   "item": "Salt",
+   "grams": 5,
+   "buy": "scant 1 teaspoon kosher salt"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 4,
+   "buy": "1 3/4 teaspoons, freshly ground"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 94,
+   "buy": "7 tablespoons"
+  },
+  {
+   "item": "Balsamic Vinegar",
+   "grams": 446,
+   "buy": "1 3/4 cups"
+  },
+  {
+   "item": "Garlic",
+   "grams": 5,
+   "buy": "1 3/4 teaspoons minced (about 2 cloves)"
+  },
+  {
+   "item": "Brown Sugar",
+   "grams": 47,
+   "buy": "3 1/2 tablespoons, packed"
+  },
+  {
+   "item": "Basil Pesto",
+   "grams": 224,
+   "buy": "14 tablespoons (about 3/4 cup plus 2 tablespoons)"
+  },
+  {
+   "item": "Tomatoes",
+   "grams": 472,
+   "buy": "28 thin slices (about 7 roma tomatoes)"
+  },
+  {
+   "item": "Fresh Mozzarella",
+   "grams": 392,
+   "buy": "14 slices (about 14 oz), each cut in half"
+  },
+  {
+   "item": "Fresh Basil",
+   "grams": 210,
+   "buy": "3 1/2 bunches leaves (about 7 oz)"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 437,
+  "protein_g": 44,
+  "carbs_g": 11.9,
+  "fat_g": 22.1
+ },
+ "writer_notes": [
+  "Cook time PT20M is locked but reads tight: the source states about 15 minutes just for the reduction at small scale, this build reduces 1 3/4 cups, searing 14 breasts requires multiple batches, and the bake is 8 to 12 minutes. Flagged, not changed.",
+  "Prep PT10M for pocketing, seasoning and stuffing 14 breasts also reads optimistic. Flagged, not changed.",
+  "Fresh Basil buy is 3 1/2 bunches (about 7 oz), a faithful 3.5x scale of the source's 1 bunch, but actual consumption is roughly 14 to 28 leaves plus garnish; this line may be oversized relative to use and could dominate batch cost. Worth a repair-pass look.",
+  "Toothpicks appear in the method (source step 5) and are equipment, not a food line; deliberately not treated as an unbought ingredient.",
+  "No cost_lines were provided in this dispatch, so shop_smart intentionally contains no package-economy claims; every buying assertion quotes the locked buy strings only.",
+  "The balsamic glaze shortcut (store-bought glaze) is preserved from the source as an aside in make_it; it is a tip, not a substitution of the shopped list.",
+  "Portioning is by count (one breast per container), not weigh-the-pot; the dish is discrete units, with only the glaze divided."
+ ],
+ "forbidden_prose_terms": [
+  "guilt-free",
+  "skinny",
+  "clean eating",
+  "superfood",
+  "yummy",
+  "delish",
+  "cheap eats"
+ ],
+ "prose": {
+  "intro_html": "<p>Caprese is what happens when Italy decides three ingredients are enough, and I respect that kind of restraint. Here we take the tomato, fresh mozzarella and basil trio and tuck it inside a chicken breast with a swipe of pesto, then finish the whole thing with a balsamic glaze you make yourself from a bottle of vinegar and a spoonful of brown sugar. The numbers do the talking: {{protein}} grams of protein and {{cal}} calories per serving, 22.1 grams of fat, and it lands at ${{cost_ps}} a serving. That is steakhouse-menu flavor at a number that would make the steakhouse blush. Fourteen containers, thirty minutes of listed time, and not one ingredient you cannot pronounce.</p>",
+  "shop_smart": "<ul><li><strong>Chicken:</strong> You need 5 1/4 pounds of boneless skinless breasts, and the goal is about 14 small ones so each breast is its own serving. Dig through the case for the packs with more, smaller breasts rather than three monsters.</li><li><strong>Balsamic vinegar:</strong> Grab the plain everyday bottle. You are reducing 1 3/4 cups with garlic and brown sugar, so the fancy aged stuff would be paying twice for sweetness the brown sugar already brings.</li><li><strong>Fresh mozzarella:</strong> You want 14 slices, about 14 ounces total, so buy the log or ball style you can slice yourself rather than pearls or shreds. This dish needs slices that melt into the pocket.</li><li><strong>Pesto:</strong> Jarred basil pesto is the move here. You need 14 tablespoons, which is about 3/4 cup plus 2 tablespoons, so check the jar label and make sure one purchase covers it.</li><li><strong>Tomatoes:</strong> About 7 romas gets you the 28 thin slices. Pick firm ones; a soft tomato will not slice thin and will water out the pocket.</li><li><strong>Fresh basil:</strong> The build calls for 3 1/2 bunches of leaves. Bunches vary a lot by store, so eyeball for the fullest ones in the produce mist section.</li></ul>",
+  "make_it": "<p>First, the knife work. Trim the breasts and cut a wide pocket into the side of each one, going deep but never all the way through. Season them all over with the kosher salt and fresh black pepper. Line them up like soldiers; there are 14 of them and an assembly line is your friend.</p><p>Now the glaze, and here is where you save real money. In a saucepan over medium heat, whisk the balsamic vinegar with the minced garlic and brown sugar. Bring it to a boil and let it reduce by half, until it is just thick enough to coat the back of a spoon. The source calls it about 15 minutes at a small scale; at this volume give it longer and trust the spoon test, not the clock. Set it aside. If you want the shortcut, stores sell ready-made balsamic glaze in the vinegar aisle, but making it is mostly waiting.</p><p>Preheat the oven to 375°F. Spread 1 tablespoon of pesto inside each pocket, then stuff each breast with 2 mozzarella halves, 2 tomato slices and 1 to 2 basil leaves. Pin each pocket shut with toothpicks so the good stuff stays where you put it.</p><p>Film a large oven safe skillet with olive oil over medium heat and sear the breasts until golden on the outside, working in batches so you never crowd the pan. Then into the oven until the inside reaches 165°F, about 8 to 12 minutes depending on thickness. No oven safe skillet? Sear, then move everything to a sheet tray to finish. Rest 5 minutes, pull the toothpicks, drizzle with the balsamic glaze and scatter fresh basil over the top.</p>",
+  "portion_html": "<p>This one portions itself, which is a rare gift in meal prep. Fourteen breasts, fourteen containers, one stuffed breast per box. No scale gymnastics on the chicken. The only thing to divide is the balsamic glaze: pour it evenly across the containers, or better yet keep it in a small jar and drizzle at serving time so the crust on the chicken stays a crust. A basil leaf on top of each box costs you nothing extra and makes Thursday lunch look like a decision instead of a leftover.</p>",
+  "cost_closing_html": "<p>Here is the part I want you to sit with. A caprese chicken plate at an Italian restaurant is an entree-priced event, and this version runs ${{cost_ps}} a serving with {{protein}} grams of protein doing the heavy lifting at {{cal}} calories. The glaze is the trick: a bottle of ordinary balsamic and a spoon of brown sugar impersonate a boutique condiment, and nobody at your table files a complaint. Cook once, eat like this fourteen times, and let the restaurant keep its parking lot.</p>",
+  "upsell_html": "<p>If this is your first Thrifty Crew recipe, know that every card on this site works the same way: real grocery prices from Omaha shelves, macros straight off the labels, and portions that survive contact with a Tuesday. The full catalog and the weekly grocery deal board run $1 a month. That is the cheapest employee you will ever hire, and it never calls in sick.</p>"
+ },
+ "head": {
+  "description": "Caprese stuffed chicken breast for meal prep: 14 servings with 44 g protein and 437 calories each, filled with fresh mozzarella, tomato, basil and pesto, finished with homemade balsamic glaze.",
+  "keywords": "caprese stuffed chicken breast, stuffed chicken meal prep, high protein chicken recipe, balsamic glazed chicken, mozzarella stuffed chicken, budget meal prep dinner, caprese chicken",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "PT20M",
+  "totalTime": "PT30M",
+  "steps": [
+   "Trim the chicken breasts and cut a large pocket horizontally into the center of each, not cutting all the way through. Season all over with the kosher salt and black pepper.",
+   "In a saucepan over medium heat, whisk together the balsamic vinegar, minced garlic and brown sugar to start the glaze.",
+   "Bring the balsamic mixture to a boil and reduce by half, until just thick enough to coat the back of a spoon, about 15 minutes at small scale and longer at this volume. Set aside.",
+   "Preheat the oven to 375°F. Spread 1 tablespoon of pesto inside each pocket, then stuff each breast with 2 mozzarella halves, 2 tomato slices and 1 to 2 basil leaves.",
+   "Secure each pocket closed with toothpicks so the filling stays put.",
+   "Heat a thin coat of olive oil in a large oven safe skillet over medium heat and sear the breasts in batches until golden on the outside.",
+   "Bake the seared breasts at 375°F until the internal temperature reaches 165°F, about 8 to 12 minutes depending on thickness, using a baking dish or sheet tray if your skillet is not oven safe.",
+   "Rest 5 minutes, remove the toothpicks, drizzle with the balsamic glaze and garnish with fresh basil before portioning."
+  ],
+  "step_names": [
+   "Pocket and Season",
+   "Start the Glaze",
+   "Reduce the Glaze",
+   "Stuff the Breasts",
+   "Secure with Toothpicks",
+   "Sear",
+   "Bake to 165°F",
+   "Rest, Glaze and Garnish"
+  ]
+ }
+}

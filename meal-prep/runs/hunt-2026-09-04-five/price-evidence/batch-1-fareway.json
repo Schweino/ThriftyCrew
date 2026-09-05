@@ -1,0 +1,364 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-09-04T05:14:25",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "coconut sugar",
+   "state": "MATCHES",
+   "term_used": "coconut sugar",
+   "attempts": [
+    {
+     "term": "coconut sugar",
+     "state": "OK",
+     "hits": 53
+    }
+   ],
+   "hits": [
+    {
+     "item": "Sue Bee Honey Premium Pure Honey",
+     "price": 5.99,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/37094-suebee-clover-honey-12-0-oz"
+    },
+    {
+     "item": "Nature Nate's Honey, Raw & Unfiltered, 100% Pure",
+     "price": 14.44,
+     "size": "32 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/259793-nature-nates-honey-raw-unfiltered-32-oz"
+    },
+    {
+     "item": "Madhava Light Agave, Organic",
+     "price": 5.19,
+     "size": "11.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23937-madhava-light-agave-organic-11-75-oz"
+    },
+    {
+     "item": "Truvia Calorie-Free Sweetener Jar from the Stevia Leaf, 9.8 oz Jar",
+     "price": 6.99,
+     "size": "9.8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/34995-truvia-natural-sweetener-9-8-oz"
+    },
+    {
+     "item": "Truvia Calorie Free Sweetener",
+     "price": 3.69,
+     "size": "40 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18695793-truvia-calorie-free-sweetener-40-ct"
+    },
+    {
+     "item": "Truvia Sweet Complete Brown Sweetener With Stevia Leaf",
+     "price": 6.99,
+     "size": "14 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24496220-truvia-sweetener-brown-calorie-free-14-oz"
+    },
+    {
+     "item": "Nate's Organic Raw & Unfiltered Honey",
+     "price": 17.97,
+     "size": "32 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17393185-nature-nates-honey-organic-raw-unfiltered-32-oz"
+    },
+    {
+     "item": "Truvia Calorie-Free Sweetener",
+     "price": 6.48,
+     "size": "80 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18686346-truvia-calorie-free-sweetener-80-ct"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "red pepper flakes",
+   "state": "MATCHES",
+   "term_used": "red pepper flakes",
+   "attempts": [
+    {
+     "term": "red pepper flakes",
+     "state": "OK",
+     "hits": 39
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Crushed Red Pepper",
+     "price": 3.99,
+     "size": "1.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16848421-mccormick-crushed-red-pepper-1-5-oz"
+    },
+    {
+     "item": "Badia Spices Crushed Red Pepper",
+     "price": 3.99,
+     "size": "4.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458676-badia-spices-red-pepper-crushed-4-5-oz"
+    },
+    {
+     "item": "Simply Organic Red Pepper, Crushed",
+     "price": 6.99,
+     "size": "1.59 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56512-simply-organic-red-pepper-crushed-1-59-oz"
+    },
+    {
+     "item": "Mini Peppers",
+     "price": 3.88,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16703600-mini-peppers-1-lb"
+    },
+    {
+     "item": "Birds Eye Pepper Stir Fry Vegetables, Frozen Vegetables",
+     "price": 1.99,
+     "size": "14.4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/102166-birds-eye-pepper-stir-fry-14-4-oz"
+    },
+    {
+     "item": "Badia Spices Cayenne Pepper",
+     "price": 1.68,
+     "size": "1.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314328-badia-spices-cayenne-pepper-1-75-oz"
+    },
+    {
+     "item": "Green Serrano Pepper",
+     "price": 0.12,
+     "size": "$2.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb"
+    },
+    {
+     "item": "Red Bell Pepper",
+     "price": 1.5,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3259137-red-bell-pepper-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "fresh basil",
+   "state": "MATCHES",
+   "term_used": "fresh basil",
+   "attempts": [
+    {
+     "term": "fresh basil",
+     "state": "OK",
+     "hits": 25
+    }
+   ],
+   "hits": [
+    {
+     "item": "Crazy Fresh Organic Basil",
+     "price": 2.99,
+     "size": "0.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26483122-crazy-fresh-organic-basil-0-75-oz"
+    },
+    {
+     "item": "Truefood Basil",
+     "price": 5.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27842551-truefood-basil-1-each"
+    },
+    {
+     "item": "Crazy Fresh Mint",
+     "price": 2.99,
+     "size": "0.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26483251-crazy-fresh-mint-0-75-oz"
+    },
+    {
+     "item": "Cilantro",
+     "price": 1.49,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+    },
+    {
+     "item": "Gourmet Garden™ Basil Stir-In Paste",
+     "price": 5.99,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1454792-gourmet-garden-basil-stir-in-paste-4-oz"
+    },
+    {
+     "item": "Green Onions (Scallions)",
+     "price": 0.99,
+     "size": "1 bunch",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+    },
+    {
+     "item": "Fresh Limes",
+     "price": 2.99,
+     "size": "1 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71329922-capital-city-fruit-lime-1-lb"
+    },
+    {
+     "item": "Cucumber",
+     "price": 0.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3253345-cucumber-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "penne pasta",
+   "state": "MATCHES",
+   "term_used": "penne pasta",
+   "attempts": [
+    {
+     "term": "penne pasta",
+     "state": "OK",
+     "hits": 39
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Penne Rigate",
+     "price": 1.24,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24859003-fareway-penne-rigate-16-oz"
+    },
+    {
+     "item": "Barilla Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher Certified",
+     "price": 1.5,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/144046-barilla-classic-blue-box-pasta-penne-16-oz"
+    },
+    {
+     "item": "Barilla Mini Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher",
+     "price": 1.5,
+     "size": "1 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/153018-barilla-classic-blue-box-pasta-mini-penne-1-lb"
+    },
+    {
+     "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+     "price": 2.99,
+     "size": "14.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
+    },
+    {
+     "item": "Fareway Whole Wheat Penne Rigate",
+     "price": 0.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24881952-fareway-whole-wheat-macaroni-product-penne-rigate-16-oz"
+    },
+    {
+     "item": "Rao's Penne Rigate Macaroni Product",
+     "price": 3.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19373047-rao-s-homemade-penne-rigate-macaroni-product-1-0-lb"
+    },
+    {
+     "item": "Annie's Organic Penne Pasta and Four Cheese",
+     "price": 1.98,
+     "size": "5.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2751641-annie-s-penne-and-four-cheese-pasta-and-cheese-5-500-oz"
+    },
+    {
+     "item": "Rao's Made For Home Penne alla Vodka Frozen Meal",
+     "price": 6.29,
+     "size": "9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21305711-rao-s-homemade-made-for-home-penna-alla-vodka-9-0-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "pine nuts",
+   "state": "MATCHES",
+   "term_used": "pine nuts",
+   "attempts": [
+    {
+     "term": "pine nuts",
+     "state": "OK",
+     "hits": 46
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Pine Nuts",
+     "price": 7.49,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24187841-fareway-pine-nuts-4-oz"
+    },
+    {
+     "item": "Pineapple",
+     "price": 4.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/439841-pineapple-each"
+    },
+    {
+     "item": "Fareway Nut Topping",
+     "price": 2.49,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24213939-fareway-nut-topping-6-oz"
+    },
+    {
+     "item": "Fareway Chunk Pineapple in Heavy Syrup",
+     "price": 1.68,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25859516-fareway-pineapple-in-heavy-syrup-chunk-20-oz"
+    },
+    {
+     "item": "Fareway Sliced Pineapple in Natural Juice",
+     "price": 0.88,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388772-sliced-pineapple-in-juice"
+    },
+    {
+     "item": "Fareway Pineapple, Chunk",
+     "price": 0.88,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386647-chunk-pineapple-in-juice"
+    },
+    {
+     "item": "Fareway Sliced Pineapple",
+     "price": 1.68,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23958875-fareway-pineapple-sliced-20-oz"
+    },
+    {
+     "item": "Fareway Chunk Pineapple",
+     "price": 1.68,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24068568-fareway-pineapple-chunk-20-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

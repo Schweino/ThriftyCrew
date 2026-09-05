@@ -1,0 +1,31 @@
+{
+    "slug":  "meal-prep-greek-chicken-rice-bowls",
+    "title":  "Meal Prep Greek Chicken Rice Bowls",
+    "source_url":  "https://www.skinnytaste.com/greek-chicken-meal-prep-rice-bowls/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:56:20",
+    "updated":  "2026-09-04T04:56:20",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Lemon-oregano marinated chicken over rice with cucumber/tomato/kalamata/feta is the same Greek chicken rice bowl as live chicken-souvlaki-rice-bowls and slow-cooker-greek-chicken-bowls; Greek-chicken region already saturated.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:56:20",
+                        "by":  "harvest",
+                        "detail":  "https://www.skinnytaste.com/greek-chicken-meal-prep-rice-bowls/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:56:20",
+                        "by":  "decider",
+                        "detail":  "Lemon-oregano marinated chicken over rice with cucumber/tomato/kalamata/feta is the same Greek chicken rice bowl as live chicken-souvlaki-rice-bowls and slow-cooker-greek-chicken-bowls; Greek-chicken region already saturated."
+                    }
+                ]
+}

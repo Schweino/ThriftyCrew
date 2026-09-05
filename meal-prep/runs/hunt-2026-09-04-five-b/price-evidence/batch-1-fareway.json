@@ -1,0 +1,222 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-09-04T08:46:39",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "cooked quinoa",
+   "state": "MATCHES",
+   "term_used": "cooked quinoa",
+   "attempts": [
+    {
+     "term": "cooked quinoa",
+     "state": "OK",
+     "hits": 72
+    }
+   ],
+   "hits": [
+    {
+     "item": "SEEDS OF CHANGE Organic Quinoa & Brown Rice with Garlic Pouch",
+     "price": 2.99,
+     "size": "8.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24380-seeds-of-change-organic-quinoa-brown-rice-8-5-oz"
+    },
+    {
+     "item": "Ancient Harvest Traditional Quinoa",
+     "price": 7.79,
+     "size": "14.4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/288072-ancient-harvest-quinoa-traditional-12-oz"
+    },
+    {
+     "item": "Minute Rice Ready-To-Eat Brown Rice And Quinoa, Microwaveable Rice Cups",
+     "price": 1.99,
+     "size": "2 x 4.4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3377986-minute-rice-ready-to-serve-brown-rice-quinoa-8-8-oz"
+    },
+    {
+     "item": "SEEDS OF CHANGE Organic Quinoa, Brown & Red Rice with Flaxseed Pouch",
+     "price": 2.99,
+     "size": "8.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2780442-seeds-of-change-certified-organic-quinoa-brown-red-rice-with-flaxseed-8-5-oz"
+    },
+    {
+     "item": "Bob's Red Mill Tri-Color Quinoa Grain, Organic",
+     "price": 6.99,
+     "size": "13 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19057596-bob-s-red-mill-tri-color-quinoa-grain-organic-13-0-oz"
+    },
+    {
+     "item": "Bob's Red Mill Quinoa, Organic",
+     "price": 13.99,
+     "size": "26 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19032694-bob-s-red-mill-quinoa-organic-26-0-oz"
+    },
+    {
+     "item": "Ben's Original Rice Pilaf Flavored Rice Easy Dinner Side",
+     "price": 2.49,
+     "size": "8.8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24274677-ben-s-original-ready-rice-rice-pilaf-with-orzo-pasta-8-8-oz"
+    },
+    {
+     "item": "Ben's Original Spanish Style Rice with Tomatoes & Peppers Family Size Pouch",
+     "price": 4.49,
+     "size": "17.3 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29704828-ben-s-original-spanish-style-with-tomatoes-peppers-rice-17-30-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "shredded low-moisture mozzarella",
+   "state": "MATCHES",
+   "term_used": "shredded low-moisture mozzarella",
+   "attempts": [
+    {
+     "term": "shredded low-moisture mozzarella",
+     "state": "OK",
+     "hits": 69
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713408-fareway-cheese-mozzarella-shredded-8-oz"
+    },
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Fancy Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24474018-fareway-cheese-mozzarella-fancy-shredded-8-oz"
+    },
+    {
+     "item": "Crystal Farms Shredded Mozzarella Cheese",
+     "price": 2.5,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/301336-crystal-farms-shredded-mozzarella-cheese-8-0-oz"
+    },
+    {
+     "item": "Tillamook Farmstyle Mozzarella Shredded Cheese, 8oz",
+     "price": 3.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85414-tillamook-farmstyle-thick-cut-mozzarella-shredded-cheese-8-oz"
+    },
+    {
+     "item": "Fareway Shredded Mozzarella Cheese",
+     "price": 3.98,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712269-fareway-cheese-mozzarella-shredded-16-oz"
+    },
+    {
+     "item": "Fareway Mozzarella Shredded Cheese",
+     "price": 5.94,
+     "size": "32 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712164-fareway-cheese-mozzarella-shredded-32-oz"
+    },
+    {
+     "item": "Kraft Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+     "price": 2.99,
+     "size": "226 g",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73915762-kraft-mozzarella-finely-shredded-cheese-8-oz-bag"
+    },
+    {
+     "item": "Kraft Mozzarella Shredded Cheese",
+     "price": 2.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73762234-kraft-mozzarella-shredded-cheese-oz-bag-8-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "99/1 ground turkey",
+   "state": "MATCHES",
+   "term_used": "99/1 ground turkey",
+   "attempts": [
+    {
+     "term": "99/1 ground turkey",
+     "state": "OK",
+     "hits": 68
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Ground Turkey",
+     "price": 5.49,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24278214-fareway-turkey-ground-16-oz"
+    },
+    {
+     "item": "JENNIE-O TURKEY STORE 90% Lean 10% Fat Ground Turkey",
+     "price": 4.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2690041-jennie-o-fresh-all-natural-90-lean-10-fat-ground-turkey-16-oz"
+    },
+    {
+     "item": "Smart Ones Slow Roasted Turkey Breast with Gravy & Garlic-Herb Mashed Potatoes Frozen Meal",
+     "price": 2.98,
+     "size": "9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/42105-weight-watchers-smart-ones-slow-roasted-turkey-breast-9-oz"
+    },
+    {
+     "item": "Oscar Mayer Deli Fresh Mesquite Smoked Turkey Breast Sliced Sandwich Lunch Meat Family Size",
+     "price": 3.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/10776-oscar-mayer-mesquite-smoked-turkey-breast-sliced-lunch-meat-family-size-16-oz"
+    },
+    {
+     "item": "Kretschmar Hickory Smoked Peppered Turkey Breast",
+     "price": 8.99,
+     "size": "$0.56/oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97900142-kretschmar-hickory-smoked-peppered-turkey-breast-1-each"
+    },
+    {
+     "item": "Johnsonville Turkey Breakfast Links",
+     "price": 5.99,
+     "size": "12 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/372325-johnsonville-sausage-fully-cooked-turkey-breakfast-sausage-12-count-45-grm"
+    },
+    {
+     "item": "Jennie-O Sun-Dried Tomato Turkey Breast",
+     "price": 9.99,
+     "size": "$0.62/oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386546-sundried-tomato-turkey-breast"
+    },
+    {
+     "item": "Boneless Skinless Chicken Breast",
+     "price": 4.67,
+     "size": "$2.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387737-boneless-skinless-chicken-breast-1-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

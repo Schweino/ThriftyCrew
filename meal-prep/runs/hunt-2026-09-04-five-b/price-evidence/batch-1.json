@@ -1,0 +1,891 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-09-04-five-b",
+ "batch": 1,
+ "generated": "2026-09-04T08:46:40",
+ "batch_terms": [
+  "cooked quinoa",
+  "shredded low-moisture mozzarella",
+  "99/1 ground turkey"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "cooked quinoa",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "quinoa",
+     "attempts": [
+      {
+       "term": "cooked quinoa",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "cookedquinoa",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "quinoa",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Quinoa",
+       "price": 4.49,
+       "size": "16 oz",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0001111086099"
+      },
+      {
+       "item": "Kroger® Tri-Color Quinoa",
+       "price": 4.49,
+       "size": "16 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111086094"
+      },
+      {
+       "item": "Simple Truth Organic® Quinoa",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0001111091238"
+      },
+      {
+       "item": "Simple Truth Organic® Red Quinoa",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111086333"
+      },
+      {
+       "item": "Black Bean Quinoa Veggie Burger",
+       "price": 4.99,
+       "size": "10 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0008086806019"
+      },
+      {
+       "item": "Birds Eye Steamfresh Quinoa, Frozen Side",
+       "price": 2.29,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001450009087"
+      },
+      {
+       "item": "RiceSelect Gluten-Free Tri-Color Quinoa",
+       "price": 7.99,
+       "size": "22 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0007440173422"
+      },
+      {
+       "item": "truRoots™ Know Your Roots™ Organic Quinoa",
+       "price": 9.99,
+       "size": "32 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0018581400018"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "quinoa",
+     "attempts": [
+      {
+       "term": "cooked quinoa",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "cookedquinoa",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "quinoa",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Birds Eye Quinoa 8 Oz",
+       "price": 2.89,
+       "size": "8 oz",
+       "relevance": 135,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/mixed/birds_eye_quinoa_8_oz/p/1764405684715768972"
+      },
+      {
+       "item": "Full Circle Market Bulgur & Quinoa 8.8 Oz",
+       "price": 3.59,
+       "size": "8.8 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/quinoa/full_circle_market_bulgur_quinoa_8_8_oz/p/5155303"
+      },
+      {
+       "item": "Full Circle Market Brown Rice & Red Quinoa 8.8 Oz",
+       "price": 3.59,
+       "size": "8.8 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/full_circle_market_brown_rice_red_quinoa_8_8_oz/p/5155301"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "cooked quinoa",
+     "attempts": [
+      {
+       "term": "cooked quinoa",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "SEEDS OF CHANGE Organic Quinoa & Brown Rice with Garlic Pouch",
+       "price": 2.99,
+       "size": "8.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24380-seeds-of-change-organic-quinoa-brown-rice-8-5-oz"
+      },
+      {
+       "item": "Ancient Harvest Traditional Quinoa",
+       "price": 7.79,
+       "size": "14.4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/288072-ancient-harvest-quinoa-traditional-12-oz"
+      },
+      {
+       "item": "Minute Rice Ready-To-Eat Brown Rice And Quinoa, Microwaveable Rice Cups",
+       "price": 1.99,
+       "size": "2 x 4.4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3377986-minute-rice-ready-to-serve-brown-rice-quinoa-8-8-oz"
+      },
+      {
+       "item": "SEEDS OF CHANGE Organic Quinoa, Brown & Red Rice with Flaxseed Pouch",
+       "price": 2.99,
+       "size": "8.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2780442-seeds-of-change-certified-organic-quinoa-brown-red-rice-with-flaxseed-8-5-oz"
+      },
+      {
+       "item": "Bob's Red Mill Tri-Color Quinoa Grain, Organic",
+       "price": 6.99,
+       "size": "13 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19057596-bob-s-red-mill-tri-color-quinoa-grain-organic-13-0-oz"
+      },
+      {
+       "item": "Bob's Red Mill Quinoa, Organic",
+       "price": 13.99,
+       "size": "26 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19032694-bob-s-red-mill-quinoa-organic-26-0-oz"
+      },
+      {
+       "item": "Ben's Original Rice Pilaf Flavored Rice Easy Dinner Side",
+       "price": 2.49,
+       "size": "8.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24274677-ben-s-original-ready-rice-rice-pilaf-with-orzo-pasta-8-8-oz"
+      },
+      {
+       "item": "Ben's Original Spanish Style Rice with Tomatoes & Peppers Family Size Pouch",
+       "price": 4.49,
+       "size": "17.3 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29704828-ben-s-original-spanish-style-with-tomatoes-peppers-rice-17-30-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "cooked quinoa",
+     "attempts": [
+      {
+       "term": "cooked quinoa",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Minute Instant Light and Fluffy White Rice, 72oz.",
+       "price": 6.78,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4QZDV66H5Q0O"
+      },
+      {
+       "item": "Royal Basmati Rice, 20 lbs.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "$0.06/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/29YOIUKNH7VT"
+      },
+      {
+       "item": "Bibigo Cooked Sticky White Rice, 88.80 oz., 12 PK",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$1.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4ISNQP6CHKIA"
+      },
+      {
+       "item": "Members Mark Organic Quinoa, 64 oz.",
+       "price": 8.78,
+       "size": "",
+       "unit_price": "$0.14/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1YE0SJTTAC1W"
+      },
+      {
+       "item": "Mahatma Brown Rice, 5 lb.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.06/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5TMJI225WKXT"
+      },
+      {
+       "item": "KitchenAid Grain and Rice Cooker",
+       "price": 249.0,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4IIEXX7NSJ5W"
+      },
+      {
+       "item": "Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic 8.5 oz., 6 pk.",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$2.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6ZJH82PWAY5E"
+      },
+      {
+       "item": "Ben's Original Enriched Long Grain White Parboiled Rice, 12 lbs.",
+       "price": 10.98,
+       "size": "",
+       "unit_price": "$0.06/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7F1BNU9D46KI"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "shredded low-moisture mozzarella",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "shredded low-moisture mozzarella",
+     "attempts": [
+      {
+       "term": "shredded low-moisture mozzarella",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Low-Moisture Part Skim Mozzarella Shredded Cheese",
+       "price": 3.69,
+       "size": "16 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0001111015129"
+      },
+      {
+       "item": "Simple Truth Organic® Low Moisture Part Skim Mozzarella Shredded Cheese",
+       "price": 3.49,
+       "size": "6 oz",
+       "relevance": 49,
+       "url": "https://www.bakersplus.com/p/0001111013529"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "shredded low-moisture mozzarella",
+     "attempts": [
+      {
+       "term": "shredded low-moisture mozzarella",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Part Skim Low Moisture Mozzarella Shredded Cheese 8 Oz",
+       "price": 2.59,
+       "size": "8 oz",
+       "relevance": 51,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_part_skim_low_moisture_mozzarella_shredded_cheese_8_oz/p/6787444"
+      },
+      {
+       "item": "Kraft Natural Low Moisture Part Skim Mozzarella Shredded Cheese 16 Oz",
+       "price": 6.49,
+       "size": "16 oz",
+       "relevance": 50,
+       "url": "https://www.shopfamilyfare.com/shop/kraft_natural_low_moisture_part_skim_mozzarella_shredded_cheese_16_oz/p/1764405684715264346"
+      },
+      {
+       "item": "Sargento Shredded Cheese, Natural, Part Skim, Low Moisture, Mozzarella, Traditional Cut 8 Oz",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 44,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/sargento_shredded_cheese_natural_part_skim_low_moisture_mozzarella_traditional_cut_8_oz/p/551743"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "shredded low-moisture mozzarella",
+     "attempts": [
+      {
+       "term": "shredded low-moisture mozzarella",
+       "state": "OK",
+       "hits": 69
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713408-fareway-cheese-mozzarella-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Low-Moisture Part-Skim Mozzarella Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24474018-fareway-cheese-mozzarella-fancy-shredded-8-oz"
+      },
+      {
+       "item": "Crystal Farms Shredded Mozzarella Cheese",
+       "price": 2.5,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/301336-crystal-farms-shredded-mozzarella-cheese-8-0-oz"
+      },
+      {
+       "item": "Tillamook Farmstyle Mozzarella Shredded Cheese, 8oz",
+       "price": 3.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85414-tillamook-farmstyle-thick-cut-mozzarella-shredded-cheese-8-oz"
+      },
+      {
+       "item": "Fareway Shredded Mozzarella Cheese",
+       "price": 3.98,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712269-fareway-cheese-mozzarella-shredded-16-oz"
+      },
+      {
+       "item": "Fareway Mozzarella Shredded Cheese",
+       "price": 5.94,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712164-fareway-cheese-mozzarella-shredded-32-oz"
+      },
+      {
+       "item": "Kraft Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+       "price": 2.99,
+       "size": "226 g",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73915762-kraft-mozzarella-finely-shredded-cheese-8-oz-bag"
+      },
+      {
+       "item": "Kraft Mozzarella Shredded Cheese",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73762234-kraft-mozzarella-shredded-cheese-oz-bag-8-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "shredded low-moisture mozzarella",
+     "attempts": [
+      {
+       "term": "shredded low-moisture mozzarella",
+       "state": "MATCHES",
+       "hits": 16
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+       "price": 5.92,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+      },
+      {
+       "item": "Member's Mark Mexican Style 4 Cheese Blend Shredded, 5 lbs.",
+       "price": 12.32,
+       "size": "",
+       "unit_price": "$2.46/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4V2CHT6QYSKM"
+      },
+      {
+       "item": "Member's Mark Standard Shredded 3 Cheese Blend, 5 lbs.",
+       "price": 12.42,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4111AN1KZDDU"
+      },
+      {
+       "item": "Member's Mark Standard Shredded Mild Yellow Cheddar Cheese 5 lbs.",
+       "price": 12.28,
+       "size": "",
+       "unit_price": "$0.15/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/689E5H9361GH"
+      },
+      {
+       "item": "Member's Mark Mexican Style Finely Shredded Cheese 2 pk.",
+       "price": 5.97,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1K3GXOV3GHYK"
+      },
+      {
+       "item": "Member's Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+       "price": 5.87,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5WQ0CF5K41K3"
+      },
+      {
+       "item": "Member's Mark Colby and Monterey Jack Shredded Cheese 16 oz., 2 pk.",
+       "price": 5.97,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6WSZE44AG1FN"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "99/1 ground turkey",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "99/1turkey",
+     "attempts": [
+      {
+       "term": "99/1 ground turkey",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "99/1 turkey",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "99/1groundturkey",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "99/1turkey",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Jennie-O® All Natural* 85% Lean / 15% Fat Fresh Ground Turkey",
+       "price": null,
+       "size": "1 lb",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0004222231307"
+      },
+      {
+       "item": "Frick's™ Oven Roasted Sliced Turkey Breast",
+       "price": null,
+       "size": "24 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0004952116379"
+      },
+      {
+       "item": "Bowman & Landes Smoked Turkey Wings",
+       "price": 3.99,
+       "size": "1 lb",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0029554350000"
+      },
+      {
+       "item": "Wellshire® Smoked Turkey Breast",
+       "price": 3.99,
+       "size": "7 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0005190040078"
+      },
+      {
+       "item": "Bowman & Landes Fully Cooked Smoked Turkey Drumsticks",
+       "price": 4.49,
+       "size": "1 lb",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0029544650000"
+      },
+      {
+       "item": "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast Thin Sliced Lunchmeat",
+       "price": 4.49,
+       "size": "9 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0004470003050"
+      },
+      {
+       "item": "Hillshire Farm Ultra Thin Sliced Oven Roasted Turkey Breast Sandwich Meat",
+       "price": 4.49,
+       "size": "9 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0004450097650"
+      },
+      {
+       "item": "Land O'Frost Bistro Favorites® 100% Natural Rotisserie Seasoned Turkey Breast 8oz",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0005190080747"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "99/1turkey",
+     "attempts": [
+      {
+       "term": "99/1 ground turkey",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "99/1 turkey",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "99/1groundturkey",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "99/1turkey",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 4 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "99/1 ground turkey",
+     "attempts": [
+      {
+       "term": "99/1 ground turkey",
+       "state": "OK",
+       "hits": 68
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Ground Turkey",
+       "price": 5.49,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24278214-fareway-turkey-ground-16-oz"
+      },
+      {
+       "item": "JENNIE-O TURKEY STORE 90% Lean 10% Fat Ground Turkey",
+       "price": 4.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2690041-jennie-o-fresh-all-natural-90-lean-10-fat-ground-turkey-16-oz"
+      },
+      {
+       "item": "Smart Ones Slow Roasted Turkey Breast with Gravy & Garlic-Herb Mashed Potatoes Frozen Meal",
+       "price": 2.98,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/42105-weight-watchers-smart-ones-slow-roasted-turkey-breast-9-oz"
+      },
+      {
+       "item": "Oscar Mayer Deli Fresh Mesquite Smoked Turkey Breast Sliced Sandwich Lunch Meat Family Size",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/10776-oscar-mayer-mesquite-smoked-turkey-breast-sliced-lunch-meat-family-size-16-oz"
+      },
+      {
+       "item": "Kretschmar Hickory Smoked Peppered Turkey Breast",
+       "price": 8.99,
+       "size": "$0.56/oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97900142-kretschmar-hickory-smoked-peppered-turkey-breast-1-each"
+      },
+      {
+       "item": "Johnsonville Turkey Breakfast Links",
+       "price": 5.99,
+       "size": "12 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/372325-johnsonville-sausage-fully-cooked-turkey-breakfast-sausage-12-count-45-grm"
+      },
+      {
+       "item": "Jennie-O Sun-Dried Tomato Turkey Breast",
+       "price": 9.99,
+       "size": "$0.62/oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386546-sundried-tomato-turkey-breast"
+      },
+      {
+       "item": "Boneless Skinless Chicken Breast",
+       "price": 4.67,
+       "size": "$2.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387737-boneless-skinless-chicken-breast-1-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "99/1 ground turkey",
+     "attempts": [
+      {
+       "term": "99/1 ground turkey",
+       "state": "MATCHES",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Farmer Focus Organic Thin Sliced Boneless Skinless Chicken Breast, priced per pound",
+       "price": 27.08,
+       "size": "",
+       "unit_price": "$6.77/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1LQAM2NDZAC9"
+      },
+      {
+       "item": "Nature Raised Farms Fully Cooked Lightly Breaded Chicken Breast Strips, Frozen, 2.5 lbs.",
+       "price": 12.97,
+       "size": "",
+       "unit_price": "$5.19/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0Y3T1FF0O3IH"
+      },
+      {
+       "item": "Jennie-O 93/7 Ground Turkey, 2.5 lbs., 2 pk.",
+       "price": 20.77,
+       "size": "",
+       "unit_price": "$4.15/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2MZAM2CG1NYP"
+      },
+      {
+       "item": "Jennie-O 93/7 Ground Turkey, 2 lbs., 2 pk.",
+       "price": 20.77,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6QC91C9BBL7O"
+      },
+      {
+       "item": "Member's Mark Chicken Thighs, Case, priced per pound",
+       "price": 60.85,
+       "size": "",
+       "unit_price": "$1.28/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/68S6A0SC80AT"
+      },
+      {
+       "item": "Buena Mesa Authentically Seasoned Fajita Chicken, priced per pound",
+       "price": 19.04,
+       "size": "",
+       "unit_price": "$4.76/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3XL0EDZI1JJ5"
+      },
+      {
+       "item": "Member's Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
+       "price": 108.67,
+       "size": "",
+       "unit_price": "$2.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AAWMYQVP0K2"
+      },
+      {
+       "item": "Member's Mark Boneless and Skinless Chicken Thighs, priced per pound",
+       "price": 16.72,
+       "size": "",
+       "unit_price": "$2.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2E97BXRYJ868"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

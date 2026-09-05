@@ -1,0 +1,31 @@
+{
+    "slug":  "asparagus-stuffed-chicken",
+    "title":  "Asparagus Stuffed Chicken",
+    "source_url":  "https://www.lecremedelacrumb.com/asparagus-stuffed-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:56:30",
+    "updated":  "2026-09-04T04:56:31",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cheese-and-veg stuffed baked chicken breast (provolone/parmesan + asparagus) is the same stuffed-chicken-breast plate as the live stuffed-chicken-breast, differing only in the filling (asparagus-provolone vs spinach-sun-dried-tomato) across 3-4 of 4 axes.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:56:30",
+                        "by":  "harvest",
+                        "detail":  "https://www.lecremedelacrumb.com/asparagus-stuffed-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:56:31",
+                        "by":  "decider",
+                        "detail":  "Cheese-and-veg stuffed baked chicken breast (provolone/parmesan + asparagus) is the same stuffed-chicken-breast plate as the live stuffed-chicken-breast, differing only in the filling (asparagus-provolone vs spinach-sun-dried-tomato) across 3-4 of 4 axes."
+                    }
+                ]
+}

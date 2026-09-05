@@ -1,0 +1,159 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Foolproof Poached Chicken Noodle Soup",
+  "source_url": "https://www.recipetineats.com/foolproof-poached-chicken-noodle-soup/",
+  "servings": 2,
+  "time_total": "35 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "1 chicken breast ((up to 300g/10 oz))",
+      "item": "chicken breast",
+      "qty": "1",
+      "unit": null,
+      "prep": "(up to 300g/10 oz)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 bok choys ((or 4 small ones))",
+      "item": "bok choys",
+      "qty": "3",
+      "unit": null,
+      "prep": "(or 4 small ones)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup bean sprouts",
+      "item": "bean sprouts",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "5 oz / 150 g fresh egg noodles",
+      "item": "fresh egg noodles",
+      "qty": "5 oz / 150 g",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups / 16 oz / 500 mls chicken stock",
+      "item": "chicken stock",
+      "qty": "2 cups / 16 oz / 500 mls",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup water",
+      "item": "water",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 tbsp soy sauce",
+      "item": "soy sauce",
+      "qty": "1 1/2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tsp sugar",
+      "item": "sugar",
+      "qty": "2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 tbsp chinese cooking wine ((or sub with 2 tsp sherry or sake (rice wine)))",
+      "item": "chinese cooking wine",
+      "qty": "1 1/2",
+      "unit": "tbsp",
+      "prep": "(or sub with 2 tsp sherry or sake (rice wine))",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tsp ginger (, minced)",
+      "item": "ginger",
+      "qty": "2",
+      "unit": "tsp",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 garlic cloves (, minced)",
+      "item": "garlic cloves",
+      "qty": "2",
+      "unit": null,
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 star anise",
+      "item": "star anise",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 scallion/shallot (, light green and green part only, sliced)",
+      "item": "scallion/shallot",
+      "qty": "1",
+      "unit": null,
+      "prep": "light green and green part only, sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Fried Asian shallots",
+      "item": "Asian shallots",
+      "qty": null,
+      "unit": null,
+      "prep": "Fried",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Combine Soup Stock ingredients in a medium saucepan large enough to hold the 2 chicken breasts side by side (without being crammed in). Bring to boil, taste and adjust if necessary.",
+    "Add chicken to soup, bring back to boil. Remove from heat and put aside covered for 20 - 25 mins. Don't worry if you leave it for longer, it won't over cook.",
+    "When the chicken is poached, remove from the soup and slice into 1/4\" / 0.5cm slices.",
+    "Cook noodles according to the packet instructions - usually for fresh noodles soaking them in boiling water is sufficient.",
+    "Cut the bok choy leaves from the stems, cut the stems vertically into 1/3\" / 1cm wide sticks.",
+    "Bring the soup (without the poached chicken in it) back to boil, add the bok choy stems, boil for 30 seconds then remove from heat, add the bok choy leaves and bean sprouts.",
+    "To assemble place noodles in bowl, top with bok choy, chicken and spoon over soup.",
+    "Garnish with scallions/shallots and fried shallots."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

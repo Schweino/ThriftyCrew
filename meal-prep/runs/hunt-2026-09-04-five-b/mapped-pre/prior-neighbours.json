@@ -1,0 +1,741 @@
+{
+ "generated": "2026-09-04T08:37:48",
+ "model": "BAAI/bge-m3",
+ "device": "cpu",
+ "corpus": 306,
+ "cache_dir": "C:\\Codex\\ThriftyCrew\\sidecar\\out\\resolution-embed-cache",
+ "cache_misses": 12,
+ "elapsed_sec": 4.72,
+ "state": "ok",
+ "why": "",
+ "terms": [
+  {
+   "key": "large bell peppers",
+   "term": "large bell peppers",
+   "neighbours": [
+    {
+     "term": "bell peppers",
+     "key": "bell peppers",
+     "bid": "bell-peppers",
+     "decision": "mapped",
+     "evidence": "bell-peppers is a live board id at 5 of 7 stores, so this is a REUSE and only the vocabulary row is missing. Refused green-bell-pepper: the line is deliberately one red and one green, and green-only p",
+     "cos": 0.8775,
+     "at": "2026-08-27T11:54:18",
+     "slug": "one-pan-sloppy-joe-casserole"
+    },
+    {
+     "term": "bell pepper",
+     "key": "bell pepper",
+     "bid": "bell-peppers",
+     "decision": "mapped",
+     "evidence": "REUSE of a live board id at 5 of 7, cheapest 0.77 at Fareway, matching the 2026-08-27 'bell peppers' ruling at cosine 0.97; the line does not name a colour, so the mixed id is right and green-bell-pep",
+     "cos": 0.834,
+     "at": "2026-08-27T18:58:37",
+     "slug": "high-protein-chicken-enchilada-casserole"
+    },
+    {
+     "term": "green bell pepper",
+     "key": "green bell pepper",
+     "bid": "green-bell-pepper",
+     "decision": "mapped",
+     "evidence": "Standing rejection: green-pepper pricing is not red-bell-pepper (green is routinely the cheaper pepper). No commodity claims it, so a new id is proposed.",
+     "cos": 0.8039,
+     "at": "2026-08-26T04:46:11",
+     "slug": "italian-turkey-burgers"
+    },
+    {
+     "term": "large lemons",
+     "key": "large lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "lemons is a live board id (5 of 7 stores), so a REUSE and not a proposal; 'large' is a size word, not a form. The FDC shelf for this term returned cottage cheese and eggs, a pure keyword miss I ignore",
+     "cos": 0.7486,
+     "at": "2026-08-26T04:35:26",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "large red onion",
+     "key": "large red onion",
+     "bid": "red-onion",
+     "decision": "mapped",
+     "evidence": "Standing estate rejection binds: red onion is not `onions` (variety pricing), so the board's fallback to onions is refused. red-onion is the vocabulary's own id; listed as an absent term in case it ca",
+     "cos": 0.748,
+     "at": "2026-08-26T04:46:11",
+     "slug": "italian-turkey-burgers"
+    }
+   ]
+  },
+  {
+   "key": "celery stalks",
+   "term": "celery stalks",
+   "neighbours": [
+    {
+     "term": "celery stalk",
+     "key": "celery stalk",
+     "bid": "celery",
+     "decision": "mapped",
+     "evidence": "celery is a live board id (6 of 7, cheapest 1.88 Hy-Vee) - a reuse; 'stalk' is the cut, not a different food. Only a vocabulary name row is missing.",
+     "cos": 0.9594,
+     "at": "2026-08-26T05:07:23",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "red chilli flakes",
+     "key": "red chilli flakes",
+     "bid": "red-pepper-flakes",
+     "decision": "mapped",
+     "evidence": "Chilli flakes is the British name for crushed red pepper flakes, the exact same-form vocabulary row; board ABSENT, so the id is proposed.",
+     "cos": 0.612,
+     "at": "2026-09-04T05:08:52",
+     "slug": "chicken-penne-arrabbiata"
+    },
+    {
+     "term": "fresh red chilli",
+     "key": "fresh red chilli",
+     "bid": "jalapenos",
+     "decision": "mapped",
+     "evidence": "Refused the red-pepper-flakes bridge on the shelf: fresh chile is not the dried jar, a form flip in both price and gram weight. No estate id names a fresh chile, so a new one is proposed and the term ",
+     "cos": 0.5986,
+     "at": "2026-08-27T18:58:23",
+     "slug": "chicken-and-potato-curry"
+    },
+    {
+     "term": "red chili flakes",
+     "key": "red chili flakes",
+     "bid": "red-pepper-flakes",
+     "decision": "mapped",
+     "evidence": "Red chili flakes and red pepper flakes are one jar under two shelf names; same-form vocabulary row and a 2026-08-26 ruling already mapped 'crushed red pepper flakes' here. Board found no commodity or ",
+     "cos": 0.5907,
+     "at": "2026-08-26T13:26:54",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video"
+    },
+    {
+     "term": "yellow onions",
+     "key": "yellow onions",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "REUSE of onions, 7 of 7 at 0.7967, matching the 2026-08-26 'small yellow onion' ruling. Green-onions is a different vegetable and is refused; medium weighed at 110 g each.",
+     "cos": 0.5862,
+     "at": "2026-08-28T07:35:25",
+     "slug": "roasted-stuffed-pork-loin"
+    }
+   ]
+  },
+  {
+   "key": "lean ground turkey",
+   "term": "lean ground turkey",
+   "neighbours": [
+    {
+     "term": "lean ground beef",
+     "key": "lean ground beef",
+     "bid": "93-7-ground-beef",
+     "decision": "mapped",
+     "evidence": "The source states 'lean', a real price class apart from 80/20, so the 'ground beef' -> ground-beef-8020 precedent for an UNQUALIFIED line does not transfer; the vocabulary's own 93/7 Ground Beef row i",
+     "cos": 0.8625,
+     "at": "2026-08-27T11:56:09",
+     "slug": "healthy-hamburger-helper"
+    },
+    {
+     "term": "lean ground bison",
+     "key": "lean ground bison",
+     "bid": "ground-bison",
+     "decision": "mapped",
+     "evidence": "Board reports ABSENT (no commodity, no capture) and no vocabulary row shares a core word, so a new id goes to the registrar. Bison is a different species and price class from any beef or lamb id and m",
+     "cos": 0.7784,
+     "at": "2026-08-26T12:06:19",
+     "slug": "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut"
+    },
+    {
+     "term": "ground turkey or beef",
+     "key": "ground turkey or beef",
+     "bid": "ground-turkey",
+     "decision": "mapped",
+     "evidence": "Either-or line; took the first-named turkey, and ground-turkey is a live board id at 7 of 7 (cheapest 2.66 at Aldi) so this is a reuse, not a proposal. Not bridged to ground-beef-8020: different meat,",
+     "cos": 0.7675,
+     "at": "2026-08-27T11:54:19",
+     "slug": "one-pan-sloppy-joe-casserole"
+    },
+    {
+     "term": "ground beef",
+     "key": "ground beef",
+     "bid": "ground-beef-8020",
+     "decision": "mapped",
+     "evidence": "Unqualified ground beef in a patty recipe is the standard 80/20 grind, and ground-beef-8020 is the estate's existing id for it (the 2026-08-16 dupe record names it as the incumbent), so this is a reus",
+     "cos": 0.7079,
+     "at": "2026-08-26T10:11:22",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "turkey sausage",
+     "key": "turkey sausage",
+     "bid": "fresh-sweet-italian-turkey-sausage",
+     "decision": "mapped",
+     "evidence": "Fresh raw turkey sausage in casings: not smoked-turkey-sausage or kielbasa (smoked is a different product and price) and not italian-sausage, which is pork. I kept the 2026-08-26 ruling's id rather th",
+     "cos": 0.6526,
+     "at": "2026-08-27T05:13:11",
+     "slug": "italian-turkey-burgers"
+    }
+   ]
+  },
+  {
+   "key": "fire roasted diced tomatoes",
+   "term": "fire roasted diced tomatoes",
+   "neighbours": [
+    {
+     "term": "fire roasted tomatoes",
+     "key": "fire roasted tomatoes",
+     "bid": "diced-tomatoes",
+     "decision": "mapped",
+     "evidence": "Fire-roasted is a label variant of the same diced can at the same shelf price, the 'reduced sodium beef broth' -> beef-broth call. Deliberately REFUSED the board's `tomatoes` match, which is the fresh",
+     "cos": 0.9376,
+     "at": "2026-08-27T18:58:28",
+     "slug": "crack-chicken-chili"
+    },
+    {
+     "term": "roma tomatoes",
+     "key": "roma tomatoes",
+     "bid": "tomatoes",
+     "decision": "mapped",
+     "evidence": "Sliced fresh tomato, so the canned diced-tomatoes and dried near-misses are refused as form flips; roma is the standard whole-tomato shelf SKU and not a variety premium like cherry or romaine, so the ",
+     "cos": 0.6742,
+     "at": "2026-09-04T08:37:03",
+     "slug": "caprese-stuffed-chicken-breast"
+    },
+    {
+     "term": "chopped tomatoes",
+     "key": "chopped tomatoes",
+     "bid": "diced-tomatoes",
+     "decision": "mapped",
+     "evidence": "A can of chopped tomatoes is canned diced tomatoes, same product and price class; refused the board's fresh tomatoes match as a different food and gram basis.",
+     "cos": 0.6718,
+     "at": "2026-09-04T05:08:52",
+     "slug": "chicken-penne-arrabbiata"
+    },
+    {
+     "term": "grape tomatoes",
+     "key": "grape tomatoes",
+     "bid": "cherry-tomatoes",
+     "decision": "mapped",
+     "evidence": "Same ruling as the Mediterranean line: one pint clamshell of small tomatoes at the same price class as cherry; the board's `grapes` match is fruit.",
+     "cos": 0.6617,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "cooked bacon",
+     "key": "cooked bacon",
+     "bid": "bacon",
+     "decision": "mapped",
+     "evidence": "'Cooked' is a prep instruction, not a form flip - you buy raw bacon and fry it. Board 7 of 7. Weighed on the cooked basis (10 crisp slices, about 100 g) because the rendered fat is discarded rather th",
+     "cos": 0.6201,
+     "at": "2026-08-27T18:58:29",
+     "slug": "crack-chicken-chili"
+    }
+   ]
+  },
+  {
+   "key": "cooked quinoa",
+   "term": "cooked quinoa",
+   "neighbours": [
+    {
+     "term": "quinoa",
+     "key": "quinoa",
+     "bid": "quinoa-uncooked",
+     "decision": "mapped",
+     "evidence": "quinoa-uncooked is a LIVE board id (2 of 7 stores, cheapest 0.1372 at Sam's Club), so this is a REUSE and not a new id. The missing piece is a vocabulary ROW for the name, which is a naming question, ",
+     "cos": 0.8398,
+     "at": "2026-08-26T04:21:58",
+     "slug": "quinoa-casserole-with-chicken"
+    },
+    {
+     "term": "cooked corn",
+     "key": "cooked corn",
+     "bid": "canned-corn",
+     "decision": "mapped",
+     "evidence": "The source line itself says 'I used canned and drained', so the vocabulary's Sweet Whole Kernel Corn [canned-corn] is the same food and the 'cooked' form flag is spurious - canned corn is sold cooked.",
+     "cos": 0.7589,
+     "at": "2026-08-27T12:04:27",
+     "slug": "street-corn-chicken-rice-bowls"
+    },
+    {
+     "term": "cooked chicken",
+     "key": "cooked chicken",
+     "bid": "rotisserie-chicken",
+     "decision": "mapped",
+     "evidence": "The pre-resolver flagged rotisserie-chicken as DIFFERENT FORM 'cooked', but rotisserie chicken is SOLD cooked and this line calls for cooked shredded meat with skin discarded: same form, same price cl",
+     "cos": 0.7541,
+     "at": "2026-08-26T04:21:59",
+     "slug": "quinoa-casserole-with-chicken"
+    },
+    {
+     "term": "cooked bacon",
+     "key": "cooked bacon",
+     "bid": "bacon",
+     "decision": "mapped",
+     "evidence": "'Cooked' is a prep instruction, not a form flip - you buy raw bacon and fry it. Board 7 of 7. Weighed on the cooked basis (10 crisp slices, about 100 g) because the rendered fat is discarded rather th",
+     "cos": 0.7259,
+     "at": "2026-08-27T18:58:29",
+     "slug": "crack-chicken-chili"
+    },
+    {
+     "term": "cooked white rice",
+     "key": "cooked white rice",
+     "bid": "rice",
+     "decision": "mapped",
+     "evidence": "You buy the dry bag and cook it: `rice` is the same product and price class, and 'cooked' is a prep instruction as in the 'cooked bacon' ruling. Weighed cooked (158 g/cup) so grams and the cooked-rice",
+     "cos": 0.7188,
+     "at": "2026-08-28T07:50:48",
+     "slug": "bang-bang-chicken-bowls"
+    }
+   ]
+  },
+  {
+   "key": "shredded low moisture mozzarella",
+   "term": "shredded low-moisture mozzarella",
+   "neighbours": [
+    {
+     "term": "shredded mozzarella cheese",
+     "key": "shredded mozzarella cheese",
+     "bid": "shredded-cheese",
+     "decision": "mapped",
+     "evidence": "A bag of shredded cheese is the purchased product here, and shredded-cheese is the board's own 7 of 7 match for it; I did not use mozzarella-cheese because a block or ball is a different price class f",
+     "cos": 0.8678,
+     "at": "2026-08-26T13:26:55",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video"
+    },
+    {
+     "term": "shredded cheese",
+     "key": "shredded cheese",
+     "bid": "shredded-cheese",
+     "decision": "mapped",
+     "evidence": "A bag of shredded cheese is the purchased product, and shredded-cheese is the board's own 7 of 7 match - the same call as the 2026-08-26 'shredded mozzarella cheese' ruling. Kept as mapped rather than",
+     "cos": 0.7515,
+     "at": "2026-08-27T11:54:19",
+     "slug": "one-pan-sloppy-joe-casserole"
+    },
+    {
+     "term": "reduced fat shredded Mexican cheese",
+     "key": "reduced fat shredded mexican cheese",
+     "bid": "shredded-cheese",
+     "decision": "mapped",
+     "evidence": "REUSE of shredded-cheese, live at 7 of 7: reduced fat is a label variant of the same bag at the same shelf price, the 'reduced sodium beef broth' call. The macros differ, so the DB row is the reduced-",
+     "cos": 0.7488,
+     "at": "2026-08-27T18:58:37",
+     "slug": "high-protein-chicken-enchilada-casserole"
+    },
+    {
+     "term": "shredded cheddar cheese",
+     "key": "shredded cheddar cheese",
+     "bid": "cheddar-cheese-shredded",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row Cheddar Cheese, Shredded [cheddar-cheese-shredded], an existing id and therefore a reuse. Preferred over the board's generic `shredded-cheese`, which covers blends that ",
+     "cos": 0.7092,
+     "at": "2026-08-27T11:56:10",
+     "slug": "healthy-hamburger-helper"
+    },
+    {
+     "term": "part-skim mozzarella cheese",
+     "key": "part skim mozzarella cheese",
+     "bid": "mozzarella-cheese",
+     "decision": "mapped",
+     "evidence": "REFUSED the board's shredded-cheese bridge - that id prices bagged cheddar/blend, a different cheese. Vocabulary row Mozzarella Cheese [mozzarella-cheese] is same form; term reported absent for pricin",
+     "cos": 0.705,
+     "at": "2026-08-26T04:53:07",
+     "slug": "spaghetti-squash-boats-with-chicken"
+    }
+   ]
+  },
+  {
+   "key": "italian herb blend seasoning",
+   "term": "Italian herb blend seasoning",
+   "neighbours": [
+    {
+     "term": "blackened seasoning mix",
+     "key": "blackened seasoning mix",
+     "bid": "cajun-seasoning",
+     "decision": "mapped",
+     "evidence": "Board ABSENT for the phrase; a Cajun-style paprika/cayenne blend, not the `seasoned-salt` of the 2026-08-26 precedent (different blend, different jar). New id proposed - registrar should check cajun-s",
+     "cos": 0.6304,
+     "at": "2026-08-27T18:36:18",
+     "slug": "blackened-chicken-with-mango-salsa"
+    },
+    {
+     "term": "Moroccan spice mix",
+     "key": "moroccan spice mix",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "Board absent and no vocabulary row; a multi-spice blend has no single commodity I can prove, exactly as the 2026-08-26 'Moroccan Seven Spice Blend' -> no id ruling found. Pantry-static pricing on 7.5 ",
+     "cos": 0.5976,
+     "at": "2026-08-27T12:09:50",
+     "slug": "moroccan-chicken-couscous-bowl"
+    },
+    {
+     "term": "ranch seasoning",
+     "key": "ranch seasoning",
+     "bid": "ranch-seasoning-mix",
+     "decision": "mapped",
+     "evidence": "The DIFFERENT FORM 'mix' flag is a wording artefact - the vocabulary's own name is Ranch Seasoning Mix and this line is a packet of exactly that. Board 6 of 7, cheapest 0.53 at Walmart. One packet is ",
+     "cos": 0.593,
+     "at": "2026-08-27T18:58:27",
+     "slug": "crack-chicken-chili"
+    },
+    {
+     "term": "Moroccan Seven Spice Blend",
+     "key": "moroccan seven spice blend",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "Board ABSENT and no vocabulary row; the only near row (Mexican Cheese Blend) is not a food relation at all, it is a string collision. A multi-spice blend has no single commodity I can prove, so pantry",
+     "cos": 0.5903,
+     "at": "2026-08-26T04:35:25",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.5798,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    }
+   ]
+  },
+  {
+   "key": "cube stuffing",
+   "term": "cube stuffing",
+   "neighbours": [
+    {
+     "term": "cube steaks",
+     "key": "cube steaks",
+     "bid": "cube-steak",
+     "decision": "mapped",
+     "evidence": "Tenderized round steak sold on its own tray by the pound; board reports ABSENT (no commodity, no capture), so a new id is proposed. 4 x 1/3 lb = 604 g raw.",
+     "cos": 0.7369,
+     "at": "2026-08-26T04:46:57",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "bread cubes",
+     "key": "bread cubes",
+     "bid": "bread",
+     "decision": "mapped",
+     "evidence": "Plain sandwich bread cubed for a stuffing; `bread` is a live board id (4 of 7, cheapest 1.69 Fareway), so a reuse. Not the dry bouillon-cube foods the FDC shelf offered.",
+     "cos": 0.7082,
+     "at": "2026-08-26T05:07:23",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "cubed butternut squash",
+     "key": "cubed butternut squash",
+     "bid": "butternut-squash",
+     "decision": "mapped",
+     "evidence": "butternut-squash is a live board id at 5 of 7, so a reuse and not a proposal; only a vocabulary name row is missing, exactly like the spaghetti-squash ruling on the shelf. Cubed is a cut, not a form.",
+     "cos": 0.6531,
+     "at": "2026-08-26T12:06:19",
+     "slug": "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut"
+    },
+    {
+     "term": "chicken bouillon cube",
+     "key": "chicken bouillon cube",
+     "bid": "bouillon",
+     "decision": "mapped",
+     "evidence": "bouillon is a live board id at 6 of 7 (cheapest 0.1419 Sam's Club) - a reuse, not a proposal; only a vocabulary name row is missing.",
+     "cos": 0.6387,
+     "at": "2026-08-26T05:08:05",
+     "slug": "peach-chicken"
+    },
+    {
+     "term": "breadcrumbs",
+     "key": "breadcrumbs",
+     "bid": "bread-crumbs",
+     "decision": "mapped",
+     "evidence": "bread-crumbs is a live generic id at 7 of 7 and the same product concept and price class; the vocabulary just names it Panko Breadcrumbs, so a plain-form name row is wanted. Grams supplied for plain c",
+     "cos": 0.5448,
+     "at": "2026-08-26T12:06:19",
+     "slug": "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut"
+    }
+   ]
+  },
+  {
+   "key": "chicken or vegetable broth",
+   "term": "chicken or vegetable broth",
+   "neighbours": [
+    {
+     "term": "chicken bone broth",
+     "key": "chicken bone broth",
+     "bid": "bone-broth",
+     "decision": "mapped",
+     "evidence": "Follows the 2026-08-27 'bone broth' ruling and refuses the board's chicken-broth bridge for the same reason: bone broth is a 6-8 dollar quart against a 1.50-2.50 carton and carries 10 g protein per cu",
+     "cos": 0.8004,
+     "at": "2026-08-27T18:58:27",
+     "slug": "crack-chicken-chili"
+    },
+    {
+     "term": "Water or broth",
+     "key": "water or broth",
+     "bid": "chicken-broth",
+     "decision": "mapped",
+     "evidence": "Either-or line taken to broth, which this recipe already buys on another line (board 7 of 7) and which the DB already has a row for; that avoids a water row with no label behind it.",
+     "cos": 0.7663,
+     "at": "2026-08-27T12:09:51",
+     "slug": "moroccan-chicken-couscous-bowl"
+    },
+    {
+     "term": "bone broth",
+     "key": "bone broth",
+     "bid": "bone-broth",
+     "decision": "mapped",
+     "evidence": "No commodity claims it and captures carry matching products. Refused the chicken-broth bridge: bone broth is a 6-8 dollar quart against a 1.50-2.50 broth carton and carries 10 g protein per cup agains",
+     "cos": 0.719,
+     "at": "2026-08-27T11:55:48",
+     "slug": "high-protein-pesto-pasta-with-chicken"
+    },
+    {
+     "term": "chicken breast",
+     "key": "chicken breast",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "Diced breast for a skillet is plain boneless skinless breast; the vocabulary row simply carries those words in its name, so the form flag is a wording artefact. Board 7 of 7, and the source states 1.5",
+     "cos": 0.6918,
+     "at": "2026-08-26T13:26:47",
+     "slug": "chicken-and-rice-one-pot"
+    },
+    {
+     "term": "reduced sodium beef broth",
+     "key": "reduced sodium beef broth",
+     "bid": "beef-broth",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same carton at the same shelf price, the same call as 'less sodium soy sauce' -> soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change.",
+     "cos": 0.6899,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    }
+   ]
+  },
+  {
+   "key": "celery stalks",
+   "term": "celery stalks",
+   "neighbours": [
+    {
+     "term": "celery stalk",
+     "key": "celery stalk",
+     "bid": "celery",
+     "decision": "mapped",
+     "evidence": "celery is a live board id (6 of 7, cheapest 1.88 Hy-Vee) - a reuse; 'stalk' is the cut, not a different food. Only a vocabulary name row is missing.",
+     "cos": 0.9594,
+     "at": "2026-08-26T05:07:23",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "red chilli flakes",
+     "key": "red chilli flakes",
+     "bid": "red-pepper-flakes",
+     "decision": "mapped",
+     "evidence": "Chilli flakes is the British name for crushed red pepper flakes, the exact same-form vocabulary row; board ABSENT, so the id is proposed.",
+     "cos": 0.612,
+     "at": "2026-09-04T05:08:52",
+     "slug": "chicken-penne-arrabbiata"
+    },
+    {
+     "term": "fresh red chilli",
+     "key": "fresh red chilli",
+     "bid": "jalapenos",
+     "decision": "mapped",
+     "evidence": "Refused the red-pepper-flakes bridge on the shelf: fresh chile is not the dried jar, a form flip in both price and gram weight. No estate id names a fresh chile, so a new one is proposed and the term ",
+     "cos": 0.5986,
+     "at": "2026-08-27T18:58:23",
+     "slug": "chicken-and-potato-curry"
+    },
+    {
+     "term": "red chili flakes",
+     "key": "red chili flakes",
+     "bid": "red-pepper-flakes",
+     "decision": "mapped",
+     "evidence": "Red chili flakes and red pepper flakes are one jar under two shelf names; same-form vocabulary row and a 2026-08-26 ruling already mapped 'crushed red pepper flakes' here. Board found no commodity or ",
+     "cos": 0.5907,
+     "at": "2026-08-26T13:26:54",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video"
+    },
+    {
+     "term": "yellow onions",
+     "key": "yellow onions",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "REUSE of onions, 7 of 7 at 0.7967, matching the 2026-08-26 'small yellow onion' ruling. Green-onions is a different vegetable and is refused; medium weighed at 110 g each.",
+     "cos": 0.5862,
+     "at": "2026-08-28T07:35:25",
+     "slug": "roasted-stuffed-pork-loin"
+    }
+   ]
+  },
+  {
+   "key": "white onion",
+   "term": "white onion",
+   "neighbours": [
+    {
+     "term": "small white onion",
+     "key": "small white onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "White and yellow cooking onions sell from the same bulk bags at the same price class, unlike red (which the estate rejects on variety pricing); precedent 'small yellow onion' -> onions, board 7 of 7.",
+     "cos": 0.8774,
+     "at": "2026-08-26T05:07:22",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "onion",
+     "key": "onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "An unqualified onion in a savoury gravy is the yellow cooking onion, per the 'med onion' -> onions precedent; red is refused on variety pricing. Board 7 of 7.",
+     "cos": 0.8575,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "yellow onions",
+     "key": "yellow onions",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "REUSE of onions, 7 of 7 at 0.7967, matching the 2026-08-26 'small yellow onion' ruling. Green-onions is a different vegetable and is refused; medium weighed at 110 g each.",
+     "cos": 0.7705,
+     "at": "2026-08-28T07:35:25",
+     "slug": "roasted-stuffed-pork-loin"
+    },
+    {
+     "term": "white pepper",
+     "key": "white pepper",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "No commodity claims it (captures only), and black-pepper is a different spice at a different price, so I will not bridge it. Optional line at 1/8 tsp: pantry-static pricing is safe and the term is rep",
+     "cos": 0.7698,
+     "at": "2026-08-26T04:36:36",
+     "slug": "dill-pickle-chicken-wings"
+    },
+    {
+     "term": "white pepper",
+     "key": "white pepper",
+     "bid": "",
+     "decision": "mapped-optional",
+     "evidence": "No commodity claims it, and I will not bridge it onto black-pepper: different spice, different price class. Optional at 1/8 tsp, so pantry-static pricing is safe; enqueued in absent_terms since captur",
+     "cos": 0.7698,
+     "at": "2026-08-27T04:22:55",
+     "slug": "dill-pickle-chicken-wings"
+    }
+   ]
+  },
+  {
+   "key": "italian herb blend seasoning",
+   "term": "Italian herb blend seasoning",
+   "neighbours": [
+    {
+     "term": "blackened seasoning mix",
+     "key": "blackened seasoning mix",
+     "bid": "cajun-seasoning",
+     "decision": "mapped",
+     "evidence": "Board ABSENT for the phrase; a Cajun-style paprika/cayenne blend, not the `seasoned-salt` of the 2026-08-26 precedent (different blend, different jar). New id proposed - registrar should check cajun-s",
+     "cos": 0.6304,
+     "at": "2026-08-27T18:36:18",
+     "slug": "blackened-chicken-with-mango-salsa"
+    },
+    {
+     "term": "Moroccan spice mix",
+     "key": "moroccan spice mix",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "Board absent and no vocabulary row; a multi-spice blend has no single commodity I can prove, exactly as the 2026-08-26 'Moroccan Seven Spice Blend' -> no id ruling found. Pantry-static pricing on 7.5 ",
+     "cos": 0.5976,
+     "at": "2026-08-27T12:09:50",
+     "slug": "moroccan-chicken-couscous-bowl"
+    },
+    {
+     "term": "ranch seasoning",
+     "key": "ranch seasoning",
+     "bid": "ranch-seasoning-mix",
+     "decision": "mapped",
+     "evidence": "The DIFFERENT FORM 'mix' flag is a wording artefact - the vocabulary's own name is Ranch Seasoning Mix and this line is a packet of exactly that. Board 6 of 7, cheapest 0.53 at Walmart. One packet is ",
+     "cos": 0.593,
+     "at": "2026-08-27T18:58:27",
+     "slug": "crack-chicken-chili"
+    },
+    {
+     "term": "Moroccan Seven Spice Blend",
+     "key": "moroccan seven spice blend",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "Board ABSENT and no vocabulary row; the only near row (Mexican Cheese Blend) is not a food relation at all, it is a string collision. A multi-spice blend has no single commodity I can prove, so pantry",
+     "cos": 0.5903,
+     "at": "2026-08-26T04:35:25",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.5798,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    }
+   ]
+  },
+  {
+   "key": "dried cranberries",
+   "term": "dried cranberries",
+   "neighbours": [
+    {
+     "term": "cranberries",
+     "key": "cranberries",
+     "bid": "fresh-cranberries",
+     "decision": "mapped",
+     "evidence": "REUSE of a live board id (1 of 7 stores), not a new proposal - only the vocabulary row is missing. Fresh, not dried: the source's own 17 g carbs per serving cannot hold 50 g of dried cranberries (+9.8",
+     "cos": 0.8371,
+     "at": "2026-08-27T04:22:52",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "dried apricots",
+     "key": "dried apricots",
+     "bid": "dried-apricots",
+     "decision": "mapped",
+     "evidence": "REFUSED the board's 'apricots' bridge: fresh is not dried is a standing rejection, and dried fruit is a different price class (6-8 oz bags on the dried-fruit shelf) and a completely different gram wei",
+     "cos": 0.8025,
+     "at": "2026-08-26T04:35:26",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "Dry couscous",
+     "key": "dry couscous",
+     "bid": "couscous",
+     "decision": "mapped",
+     "evidence": "couscous is a live board id (2 of 7), so this is a REUSE and only a vocabulary name row is missing; dry is the only form the box is sold in. 1 cup dry = 173 g.",
+     "cos": 0.6478,
+     "at": "2026-08-27T12:09:51",
+     "slug": "moroccan-chicken-couscous-bowl"
+    },
+    {
+     "term": "dried thyme, dried basil, onion powder",
+     "key": "dried thyme dried basil onion powder",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "Three dried spices on one unsplittable line totalling about 2.3 g; the board's `onions` match is a fresh-for-dried form flip and is refused. Pantry-static pricing is safe at this quantity.",
+     "cos": 0.6313,
+     "at": "2026-08-26T05:08:05",
+     "slug": "peach-chicken"
+    },
+    {
+     "term": "Cranberry Sauce",
+     "key": "cranberry sauce",
+     "bid": "cranberry-sauce",
+     "decision": "mapped",
+     "evidence": "REUSE of a live board id at 6 of 7 stores, cheapest 0.1038 at Walmart; only the vocabulary row was missing. Deliberately NOT fresh-cranberries (the 2026-08-27 shelf ruling): a sweetened canned sauce c",
+     "cos": 0.6233,
+     "at": "2026-08-27T18:57:23",
+     "slug": "chicken-meatballs-in-cranberry-sauce"
+    }
+   ]
+  }
+ ]
+}

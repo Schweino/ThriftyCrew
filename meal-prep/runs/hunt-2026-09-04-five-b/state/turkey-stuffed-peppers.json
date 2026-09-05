@@ -1,0 +1,74 @@
+{
+    "slug":  "turkey-stuffed-peppers",
+    "title":  "Turkey Stuffed Peppers",
+    "source_url":  "https://feelgoodfoodie.net/recipe/turkey-stuffed-peppers/",
+    "protein":  "turkey",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-09-04T08:36:10",
+    "updated":  "2026-09-04T08:49:06",
+    "terms":  [
+                  {
+                      "term":  "cooked quinoa",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "shredded low-moisture mozzarella",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "99/1 ground turkey",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Black Pepper",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "99/1 ground turkey"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:36:10",
+                        "by":  "harvest",
+                        "detail":  "https://feelgoodfoodie.net/recipe/turkey-stuffed-peppers/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-09-04T08:36:11",
+                        "by":  "decider",
+                        "detail":  "Ground-turkey + quinoa Italian stuffed bell peppers with mozzarella; no turkey stuffed-pepper live (only a soup), and distinct in protein and starch from the in-flight sausage stuffed peppers and live pulled-pork version, verified 401/35/40 leaner main."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-09-04T08:36:44",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-09-04T08:45:54",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-09-04T08:45:55",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-09-04T08:49:06",
+                        "by":  "derive",
+                        "detail":  "waiting on: 99/1 ground turkey"
+                    }
+                ]
+}

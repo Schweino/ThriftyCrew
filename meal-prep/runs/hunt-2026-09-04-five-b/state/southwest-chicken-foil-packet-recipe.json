@@ -1,0 +1,31 @@
+{
+    "slug":  "southwest-chicken-foil-packet-recipe",
+    "title":  "Southwest Chicken Foil Packet Recipe",
+    "source_url":  "https://everydaydishes.com/simple-food-recipes/southwest-chicken-foil-packet/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T08:33:50",
+    "updated":  "2026-09-04T08:33:50",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken breast over black beans + corn + salsa + Mexican cheese is the same Tex-Mex baked-chicken-and-bean plate as accepted tex-mex-baked-chicken (cowboy-chicken and baked-santa-fe-chicken already rejected as the same); foil-packet vehicle is not distinguishing.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T08:33:50",
+                        "by":  "harvest",
+                        "detail":  "https://everydaydishes.com/simple-food-recipes/southwest-chicken-foil-packet/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T08:33:50",
+                        "by":  "decider",
+                        "detail":  "Chicken breast over black beans + corn + salsa + Mexican cheese is the same Tex-Mex baked-chicken-and-bean plate as accepted tex-mex-baked-chicken (cowboy-chicken and baked-santa-fe-chicken already rejected as the same); foil-packet vehicle is not distinguishing."
+                    }
+                ]
+}

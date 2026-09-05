@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-buffalo-chicken-pasta",
+    "title":  "Creamy Buffalo Chicken Pasta",
+    "source_url":  "https://skinnyspatula.com/buffalo-chicken-pasta/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:51:47",
+    "updated":  "2026-09-04T04:51:47",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Buffalo-wing-sauce + ranch + cheese chicken pasta is the same dinner as live buffalo-chicken-pasta-bake (shares buffalo sauce, chicken breast, pasta); bake-vs-skillet is not a distinguishing plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:51:47",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/buffalo-chicken-pasta/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:51:47",
+                        "by":  "decider",
+                        "detail":  "Buffalo-wing-sauce + ranch + cheese chicken pasta is the same dinner as live buffalo-chicken-pasta-bake (shares buffalo sauce, chicken breast, pasta); bake-vs-skillet is not a distinguishing plate."
+                    }
+                ]
+}

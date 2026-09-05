@@ -1,0 +1,31 @@
+{
+    "slug":  "peanut-butter-chicken-recipe",
+    "title":  "Peanut Butter Chicken Recipe",
+    "source_url":  "https://feelgoodfoodie.net/recipe/peanut-butter-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-09-04T04:56:26",
+    "updated":  "2026-09-04T04:56:26",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Peanut-butter/soy/honey/ginger chicken over rice is the same peanut-chicken-and-rice dinner as live slow-cooker-thai-peanut-chicken-bowls; peanut-chicken region already saturated and this exact identity was rejected before (peanut-butter-chicken).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-09-04T04:56:26",
+                        "by":  "harvest",
+                        "detail":  "https://feelgoodfoodie.net/recipe/peanut-butter-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-09-04T04:56:26",
+                        "by":  "decider",
+                        "detail":  "Peanut-butter/soy/honey/ginger chicken over rice is the same peanut-chicken-and-rice dinner as live slow-cooker-thai-peanut-chicken-bowls; peanut-chicken region already saturated and this exact identity was rejected before (peanut-butter-chicken)."
+                    }
+                ]
+}

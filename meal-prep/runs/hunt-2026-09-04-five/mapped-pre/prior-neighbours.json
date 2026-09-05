@@ -1,0 +1,405 @@
+{
+ "generated": "2026-09-04T04:57:28",
+ "model": "BAAI/bge-m3",
+ "device": "cpu",
+ "corpus": 282,
+ "cache_dir": "C:\\Codex\\ThriftyCrew\\sidecar\\out\\resolution-embed-cache",
+ "cache_misses": 6,
+ "elapsed_sec": 3.93,
+ "state": "ok",
+ "why": "",
+ "terms": [
+  {
+   "key": "grated ginger",
+   "term": "grated ginger",
+   "neighbours": [
+    {
+     "term": "fresh ginger",
+     "key": "fresh ginger",
+     "bid": "fresh-ginger",
+     "decision": "mapped",
+     "evidence": "Vocabulary row Ginger [fresh-ginger] is exactly this food; deliberately NOT ground-ginger, which is a different price class and gram weight. Board 6 of 7.",
+     "cos": 0.8011,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "grated Parmesan cheese",
+     "key": "grated parmesan cheese",
+     "bid": "parmesan",
+     "decision": "mapped",
+     "evidence": "Vocabulary row Parmesan Cheese [parmesan]; grated is the standard sold cut of parmesan. Board showed no commodity claim, so the term is reported absent for pricing.",
+     "cos": 0.7191,
+     "at": "2026-08-26T04:51:57",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    },
+    {
+     "term": "minced garlic",
+     "key": "minced garlic",
+     "bid": "garlic",
+     "decision": "mapped",
+     "evidence": "Minced is a knife instruction, not a form: fresh garlic minced by the cook, same as the 'cold butter' -> butter precedent. Reuses the live garlic id and the existing DB row.",
+     "cos": 0.6927,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "grape tomatoes",
+     "key": "grape tomatoes",
+     "bid": "cherry-tomatoes",
+     "decision": "mapped",
+     "evidence": "Same ruling as the Mediterranean line: one pint clamshell of small tomatoes at the same price class as cherry; the board's `grapes` match is fruit.",
+     "cos": 0.6688,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "freshly grated parmesan cheese",
+     "key": "freshly grated parmesan cheese",
+     "bid": "parmesan",
+     "decision": "mapped",
+     "evidence": "Same-food vocabulary row Parmesan Cheese [parmesan], board 7 of 7; 'freshly grated' is prep, not a price class. Weighed on the estate's own 1/4 cup = 28 g row.",
+     "cos": 0.6644,
+     "at": "2026-08-27T12:09:44",
+     "slug": "no-boil-chicken-pasta-casserole-with-artichokes-and-peas"
+    }
+   ]
+  },
+  {
+   "key": "low sodium tamari or soy sauce",
+   "term": "low sodium tamari or soy sauce",
+   "neighbours": [
+    {
+     "term": "low-sodium soy sauce",
+     "key": "low sodium soy sauce",
+     "bid": "soy-sauce",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same bottle at the same shelf price - the 2026-08-26 'less sodium soy sauce' -> soy-sauce precedent, cos 0.89. Board 7 of 7; no gram or price change, so not a ",
+     "cos": 0.8002,
+     "at": "2026-08-27T11:55:52",
+     "slug": "teriyaki-grilled-chicken-and-veggie-rice-bowls"
+    },
+    {
+     "term": "less sodium soy sauce",
+     "key": "less sodium soy sauce",
+     "bid": "soy-sauce",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same bottle at the same shelf price; vocabulary row Soy Sauce [soy-sauce] is same form, board 7 of 7.",
+     "cos": 0.7895,
+     "at": "2026-08-26T04:52:58",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "reduced sodium beef broth",
+     "key": "reduced sodium beef broth",
+     "bid": "beef-broth",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same carton at the same shelf price, the same call as 'less sodium soy sauce' -> soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change.",
+     "cos": 0.5538,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.5436,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "turkey sausage",
+     "key": "turkey sausage",
+     "bid": "fresh-sweet-italian-turkey-sausage",
+     "decision": "mapped",
+     "evidence": "Fresh raw turkey sausage in casings: not smoked-turkey-sausage or kielbasa (smoked is a different product and price) and not italian-sausage, which is pork. I kept the 2026-08-26 ruling's id rather th",
+     "cos": 0.53,
+     "at": "2026-08-27T05:13:11",
+     "slug": "italian-turkey-burgers"
+    }
+   ]
+  },
+  {
+   "key": "medium large zucchini",
+   "term": "medium/large zucchini",
+   "neighbours": [
+    {
+     "term": "medium zucchini",
+     "key": "medium zucchini",
+     "bid": "zucchini",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row, board 6 of 7. One medium zucchini is 196 g, which cross-checks against the source's own 1 1/2 cups diced.",
+     "cos": 0.8614,
+     "at": "2026-08-27T11:55:53",
+     "slug": "teriyaki-grilled-chicken-and-veggie-rice-bowls"
+    },
+    {
+     "term": "medium onion",
+     "key": "medium onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "'Medium' is a size word: the 'medium yellow onion' -> onions ruling of 2026-08-26 transfers directly, board 7 of 7. Medium onion weighed at 110 g, between the estate's 70 g small and a large.",
+     "cos": 0.6779,
+     "at": "2026-08-27T11:56:55",
+     "slug": "butter-chicken-pasta"
+    },
+    {
+     "term": "medium yellow onion",
+     "key": "medium yellow onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row Yellow Onion [onions], board 7 of 7; 'medium' is a size word. Follows the 'small yellow onion' ruling of 2026-08-26.",
+     "cos": 0.6463,
+     "at": "2026-08-26T04:53:02",
+     "slug": "rosemary-chicken-thighs"
+    },
+    {
+     "term": "large carrots",
+     "key": "large carrots",
+     "bid": "carrots",
+     "decision": "mapped",
+     "evidence": "REUSE of carrots, live 7 of 7 at 0.87. 'Large' is a size word and 'thinly sliced' a knife cut, neither a form flip; shredded-carrots is refused as a different bagged product, per the 2026-08-27 matchs",
+     "cos": 0.6384,
+     "at": "2026-08-28T07:34:34",
+     "slug": "apricot-chicken-sheet-pan-dinner-recipe-video"
+    },
+    {
+     "term": "large lemons",
+     "key": "large lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "lemons is a live board id (5 of 7 stores), so a REUSE and not a proposal; 'large' is a size word, not a form. The FDC shelf for this term returned cottage cheese and eggs, a pure keyword miss I ignore",
+     "cos": 0.6167,
+     "at": "2026-08-26T04:35:26",
+     "slug": "slow-roasted-pork-shoulder"
+    }
+   ]
+  },
+  {
+   "key": "medium large yellow onion",
+   "term": "medium/large yellow onion",
+   "neighbours": [
+    {
+     "term": "medium yellow onion",
+     "key": "medium yellow onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row Yellow Onion [onions], board 7 of 7; 'medium' is a size word. Follows the 'small yellow onion' ruling of 2026-08-26.",
+     "cos": 0.9262,
+     "at": "2026-08-26T04:53:02",
+     "slug": "rosemary-chicken-thighs"
+    },
+    {
+     "term": "medium onion",
+     "key": "medium onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "'Medium' is a size word: the 'medium yellow onion' -> onions ruling of 2026-08-26 transfers directly, board 7 of 7. Medium onion weighed at 110 g, between the estate's 70 g small and a large.",
+     "cos": 0.8399,
+     "at": "2026-08-27T11:56:55",
+     "slug": "butter-chicken-pasta"
+    },
+    {
+     "term": "small yellow onion",
+     "key": "small yellow onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row Yellow Onion [onions]; board 7 of 7. Small onion weighed at 70 g.",
+     "cos": 0.8223,
+     "at": "2026-08-26T04:34:46",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "yellow onions",
+     "key": "yellow onions",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "REUSE of onions, 7 of 7 at 0.7967, matching the 2026-08-26 'small yellow onion' ruling. Green-onions is a different vegetable and is refused; medium weighed at 110 g each.",
+     "cos": 0.8219,
+     "at": "2026-08-28T07:35:25",
+     "slug": "roasted-stuffed-pork-loin"
+    },
+    {
+     "term": "large red onion",
+     "key": "large red onion",
+     "bid": "red-onion",
+     "decision": "mapped",
+     "evidence": "Standing estate rejection binds: red onion is not `onions` (variety pricing), so the board's fallback to onions is refused. red-onion is the vocabulary's own id; listed as an absent term in case it ca",
+     "cos": 0.8025,
+     "at": "2026-08-26T04:46:11",
+     "slug": "italian-turkey-burgers"
+    }
+   ]
+  },
+  {
+   "key": "low sodium tamari or soy sauce",
+   "term": "low sodium tamari or soy sauce",
+   "neighbours": [
+    {
+     "term": "low-sodium soy sauce",
+     "key": "low sodium soy sauce",
+     "bid": "soy-sauce",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same bottle at the same shelf price - the 2026-08-26 'less sodium soy sauce' -> soy-sauce precedent, cos 0.89. Board 7 of 7; no gram or price change, so not a ",
+     "cos": 0.8002,
+     "at": "2026-08-27T11:55:52",
+     "slug": "teriyaki-grilled-chicken-and-veggie-rice-bowls"
+    },
+    {
+     "term": "less sodium soy sauce",
+     "key": "less sodium soy sauce",
+     "bid": "soy-sauce",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same bottle at the same shelf price; vocabulary row Soy Sauce [soy-sauce] is same form, board 7 of 7.",
+     "cos": 0.7895,
+     "at": "2026-08-26T04:52:58",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "reduced sodium beef broth",
+     "key": "reduced sodium beef broth",
+     "bid": "beef-broth",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same carton at the same shelf price, the same call as 'less sodium soy sauce' -> soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change.",
+     "cos": 0.5538,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.5436,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "turkey sausage",
+     "key": "turkey sausage",
+     "bid": "fresh-sweet-italian-turkey-sausage",
+     "decision": "mapped",
+     "evidence": "Fresh raw turkey sausage in casings: not smoked-turkey-sausage or kielbasa (smoked is a different product and price) and not italian-sausage, which is pork. I kept the 2026-08-26 ruling's id rather th",
+     "cos": 0.53,
+     "at": "2026-08-27T05:13:11",
+     "slug": "italian-turkey-burgers"
+    }
+   ]
+  },
+  {
+   "key": "water",
+   "term": "water",
+   "neighbours": [
+    {
+     "term": "cold water",
+     "key": "cold water",
+     "bid": "",
+     "decision": "not-purchased",
+     "evidence": "Tap water for the cornstarch slurry: nothing is bought and it contributes no macros. Kept on the line list so the method still reads.",
+     "cos": 0.7861,
+     "at": "2026-08-26T04:34:47",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "Water or broth",
+     "key": "water or broth",
+     "bid": "chicken-broth",
+     "decision": "mapped",
+     "evidence": "Either-or line taken to broth, which this recipe already buys on another line (board 7 of 7) and which the DB already has a row for; that avoids a water row with no label behind it.",
+     "cos": 0.7122,
+     "at": "2026-08-27T12:09:51",
+     "slug": "moroccan-chicken-couscous-bowl"
+    },
+    {
+     "term": "oil",
+     "key": "oil",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "No commodity claims a generic neutral oil and I will not bridge it onto olive-oil (different price class). 1 tbsp on the grates: pantry-static pricing is safe.",
+     "cos": 0.6513,
+     "at": "2026-08-26T04:51:57",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    },
+    {
+     "term": "oil",
+     "key": "oil",
+     "bid": "vegetable-oil",
+     "decision": "mapped",
+     "evidence": "Unqualified 'oil' for searing is neutral cooking oil; vegetable-oil is a live board id already used by a settled line in this same batch, so a reuse. Precedent 'vegetable or canola oil' -> vegetable-o",
+     "cos": 0.6513,
+     "at": "2026-08-26T13:26:54",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video"
+    },
+    {
+     "term": "lemons",
+     "key": "lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "REUSE of the live lemons id (5 of 7, cheapest 0.4533 at Walmart); the food DB already carries the row and only the vocabulary name is missing.",
+     "cos": 0.6455,
+     "at": "2026-08-27T05:14:09",
+     "slug": "mediterranean-chicken-w-marinade"
+    }
+   ]
+  },
+  {
+   "key": "coconut sugar",
+   "term": "coconut sugar",
+   "neighbours": [
+    {
+     "term": "coconut oil",
+     "key": "coconut oil",
+     "bid": "coconut-oil",
+     "decision": "mapped",
+     "evidence": "REUSE of a live board id at 7 of 7, cheapest 0.1952 at Sam's Club, and the DB already carries the row; only the vocabulary name was missing. Refused the shelf's 'oil' -> vegetable-oil precedent: cocon",
+     "cos": 0.817,
+     "at": "2026-08-27T18:58:23",
+     "slug": "chicken-and-potato-curry"
+    },
+    {
+     "term": "granulated sugar",
+     "key": "granulated sugar",
+     "bid": "sugar",
+     "decision": "mapped",
+     "evidence": "Vocabulary row Sugar [sugar] is same form ('granulated' is what plain sugar is); board carries sugar 7 of 7.",
+     "cos": 0.6683,
+     "at": "2026-08-26T04:51:56",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    },
+    {
+     "term": "light-brown sugar",
+     "key": "light brown sugar",
+     "bid": "brown-sugar",
+     "decision": "mapped",
+     "evidence": "Light vs dark is the same bagged product at the same price - the 2026-08-26 'dark brown sugar' ruling. Refused the board's plain sugar match: different food, different gram weight per Tbsp.",
+     "cos": 0.663,
+     "at": "2026-08-27T11:55:52",
+     "slug": "teriyaki-grilled-chicken-and-veggie-rice-bowls"
+    },
+    {
+     "term": "dark brown sugar",
+     "key": "dark brown sugar",
+     "bid": "brown-sugar",
+     "decision": "mapped",
+     "evidence": "Dark vs light brown sugar is the same bagged product at the same price; refused the board's plain 'sugar' match, which is a different food and gram weight.",
+     "cos": 0.6545,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "powdered peanut butter",
+     "key": "powdered peanut butter",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "REFUSED both near matches: the board's `butter` is dairy butter (wrong food) and `peanut-butter` is the jarred spread at roughly a fifth the price per ounce with 590 vs 400 cal/100 g. Pantry-static ra",
+     "cos": 0.6195,
+     "at": "2026-08-28T07:50:48",
+     "slug": "bang-bang-chicken-bowls"
+    }
+   ]
+  }
+ ]
+}

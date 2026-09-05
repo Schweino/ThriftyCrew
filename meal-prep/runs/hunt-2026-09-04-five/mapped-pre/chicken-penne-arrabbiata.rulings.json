@@ -1,0 +1,131 @@
+{
+ "slug": "chicken-penne-arrabbiata",
+ "lines": [
+  {
+   "raw": "300 g (10.5 oz) penne",
+   "buy": "2 lb 5 oz dry penne",
+   "grams_source": 300,
+   "notes": "Source states its own weight."
+  },
+  {
+   "raw": "1 tablespoon olive oil",
+   "buy": "3 1/2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "450 g (1 lb) chicken breast, cut into bite-size pieces",
+   "buy": "3 1/2 lb, cut into bite-size pieces",
+   "notes": ""
+  },
+  {
+   "raw": "1 medium onion, finely chopped",
+   "buy": "3 1/2 medium onions, finely chopped",
+   "notes": ""
+  },
+  {
+   "raw": "2 large garlic cloves, finely chopped",
+   "buy": "7 large cloves, finely chopped",
+   "grams_source": 6,
+   "notes": "3 g per clove, the DB each-weight."
+  },
+  {
+   "raw": "1 teaspoon red chilli flakes",
+   "buy": "3 1/2 teaspoons",
+   "grams_source": 2,
+   "notes": "McCormick label: 1 tsp = 2 g."
+  },
+  {
+   "raw": "1 x 400 g (14 oz) can chopped tomatoes",
+   "buy": "49 oz canned chopped tomatoes with their juice (about 6 cups)",
+   "grams_source": 400,
+   "notes": "Whole can, undrained."
+  },
+  {
+   "raw": "2 tablespoons tomato paste",
+   "buy": "7 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "30 g (1 ounce) freshly grated Parmesan",
+   "buy": "scant 1 cup freshly grated (3 3/4 oz)",
+   "notes": ""
+  },
+  {
+   "raw": "6-8 fresh basil leaves",
+   "buy": "24 fresh basil leaves, torn",
+   "grams_source": 4,
+   "notes": "About 0.5 g per leaf."
+  },
+  {
+   "raw": "Salt and pepper to taste",
+   "buy": "to taste (about 4 teaspoons salt)",
+   "notes": "Settled 20 g source (70 g at batch) is about 3x the printed measure; flagged in detail, not overridden."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "300 g (10.5 oz) penne",
+   "term": "penne",
+   "canon_item": "Penne Pasta",
+   "bid": "penne-pasta",
+   "decision": "mapped",
+   "grams_source": 300,
+   "evidence": "Follows the 2026-08-27 'uncooked penne pasta' -> penne-pasta ruling; an existing id, so a reuse, and listed in absent_terms because the board matched only generic pasta."
+  },
+  {
+   "raw": "2 large garlic cloves, finely chopped",
+   "term": "large garlic cloves",
+   "canon_item": "Garlic",
+   "bid": "garlic",
+   "decision": "mapped",
+   "grams_source": 6,
+   "evidence": "Fresh bulb garlic, board 6 of 7; the Ground Cloves near-miss is a keyword collision and 'large' is a size word."
+  },
+  {
+   "raw": "1 teaspoon red chilli flakes",
+   "term": "red chilli flakes",
+   "canon_item": "Red Pepper Flakes",
+   "bid": "red-pepper-flakes",
+   "decision": "mapped",
+   "grams_source": 2,
+   "evidence": "Chilli flakes is the British name for crushed red pepper flakes, the exact same-form vocabulary row; board ABSENT, so the id is proposed."
+  },
+  {
+   "raw": "1 x 400 g (14 oz) can chopped tomatoes",
+   "term": "chopped tomatoes",
+   "canon_item": "Diced Tomatoes",
+   "bid": "diced-tomatoes",
+   "decision": "mapped",
+   "grams_source": 400,
+   "evidence": "A can of chopped tomatoes is canned diced tomatoes, same product and price class; refused the board's fresh tomatoes match as a different food and gram basis."
+  },
+  {
+   "raw": "6-8 fresh basil leaves",
+   "term": "fresh basil leaves",
+   "canon_item": "Fresh Basil",
+   "bid": "fresh-basil",
+   "decision": "mapped",
+   "grams_source": 4,
+   "evidence": "Refused the board's dried-basil match under the standing fresh-is-not-dried rejection: different price class and 14 g fresh is not 2 g dried."
+  }
+ ],
+ "absent_terms": [
+  "red pepper flakes",
+  "fresh basil",
+  "penne pasta"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [
+  "chicken-penne-arrabbiata: the food DB already carries 'Penne Pasta' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 339.3 cal / 17.9 P / 67.9 C / 1.8 F  vs  mapper 371.0 / 13.0 / 74.7 / 1.5. On one basis (the mapper's row scaled onto the DB's 2 oz = 56 g) they still disagree: calories 207.8 vs 190; protein_g 7.28 vs 10; carbs_g 41.83 vs 38. existing={\"serving_grams\": 56, \"serving_qty\": 2, \"serving_unit\": \"oz\", \"calories\": 190, \"protein_g\": 10, \"carbs_g\": 38, \"fat_g\": 1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 371, \"protein_g\": 13.0, \"carbs_g\": 74.7, \"fat_g\": 1.51}",
+  "chicken-penne-arrabbiata: the food DB already carries 'Diced Tomatoes' and the mapper's row DIFFERS on calories, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 20.7 cal / 0.8 P / 4.1 C / 0.0 F  vs  mapper 24.8 / 0.8 / 5.0 / 0.0. On one basis (the mapper's row scaled onto the DB's 0.5 cup = 121 g) they still disagree: carbs_g 6 vs 5. existing={\"calories\": 25, \"carbs_g\": 5} new={\"calories\": 30, \"carbs_g\": 6}"
+ ],
+ "db_row_notes": [
+  "chicken-penne-arrabbiata: 'Red Pepper Flakes' arrived on a different serving basis (1 tsp = 2 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 tsp = 1.8 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule.",
+  "chicken-penne-arrabbiata: 'Fresh Basil' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 2 tbsp chopped = 5 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "FAILS THE CARB GATE. Per serving at the source's 4 servings, over all 11 lines: 515 cal, 39 g protein, 66 g carbs, against stated 405 / 43 / 33. Protein agrees within 9%, so the portions are right. Carbs are 2x the stated figure and nearly 2x the 35 g ceiling, and the arithmetic is blunt: 300 g dry penne over 4 servings is 75 g per serving, 56 g of carbohydrate before a single tomato. Nothing gets this under 35 g. Recommend rejected-macros; I left the permanent verdict to the gate that owns it."
+}

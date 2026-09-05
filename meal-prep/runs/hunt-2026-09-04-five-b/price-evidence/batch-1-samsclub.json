@@ -1,0 +1,246 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-09-04T08:46:33",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "cooked quinoa",
+   "state": "MATCHES",
+   "term_used": "cooked quinoa",
+   "attempts": [
+    {
+     "term": "cooked quinoa",
+     "state": "MATCHES",
+     "hits": 23
+    }
+   ],
+   "hits": [
+    {
+     "item": "Minute Instant Light and Fluffy White Rice, 72oz.",
+     "price": 6.78,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4QZDV66H5Q0O"
+    },
+    {
+     "item": "Royal Basmati Rice, 20 lbs.",
+     "price": 19.98,
+     "size": "",
+     "unit_price": "$0.06/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/29YOIUKNH7VT"
+    },
+    {
+     "item": "Bibigo Cooked Sticky White Rice, 88.80 oz., 12 PK",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$1.00/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4ISNQP6CHKIA"
+    },
+    {
+     "item": "Members Mark Organic Quinoa, 64 oz.",
+     "price": 8.78,
+     "size": "",
+     "unit_price": "$0.14/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1YE0SJTTAC1W"
+    },
+    {
+     "item": "Mahatma Brown Rice, 5 lb.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.06/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5TMJI225WKXT"
+    },
+    {
+     "item": "KitchenAid Grain and Rice Cooker",
+     "price": 249.0,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4IIEXX7NSJ5W"
+    },
+    {
+     "item": "Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic 8.5 oz., 6 pk.",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$2.00/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6ZJH82PWAY5E"
+    },
+    {
+     "item": "Ben's Original Enriched Long Grain White Parboiled Rice, 12 lbs.",
+     "price": 10.98,
+     "size": "",
+     "unit_price": "$0.06/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7F1BNU9D46KI"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "shredded low-moisture mozzarella",
+   "state": "MATCHES",
+   "term_used": "shredded low-moisture mozzarella",
+   "attempts": [
+    {
+     "term": "shredded low-moisture mozzarella",
+     "state": "MATCHES",
+     "hits": 16
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+     "price": 5.92,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+    },
+    {
+     "item": "Member's Mark Mexican Style 4 Cheese Blend Shredded, 5 lbs.",
+     "price": 12.32,
+     "size": "",
+     "unit_price": "$2.46/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4V2CHT6QYSKM"
+    },
+    {
+     "item": "Member's Mark Standard Shredded 3 Cheese Blend, 5 lbs.",
+     "price": 12.42,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4111AN1KZDDU"
+    },
+    {
+     "item": "Member's Mark Standard Shredded Mild Yellow Cheddar Cheese 5 lbs.",
+     "price": 12.28,
+     "size": "",
+     "unit_price": "$0.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/689E5H9361GH"
+    },
+    {
+     "item": "Member's Mark Mexican Style Finely Shredded Cheese 2 pk.",
+     "price": 5.97,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1K3GXOV3GHYK"
+    },
+    {
+     "item": "Member's Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+     "price": 5.87,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5WQ0CF5K41K3"
+    },
+    {
+     "item": "Member's Mark Colby and Monterey Jack Shredded Cheese 16 oz., 2 pk.",
+     "price": 5.97,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6WSZE44AG1FN"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "99/1 ground turkey",
+   "state": "MATCHES",
+   "term_used": "99/1 ground turkey",
+   "attempts": [
+    {
+     "term": "99/1 ground turkey",
+     "state": "MATCHES",
+     "hits": 19
+    }
+   ],
+   "hits": [
+    {
+     "item": "Farmer Focus Organic Thin Sliced Boneless Skinless Chicken Breast, priced per pound",
+     "price": 27.08,
+     "size": "",
+     "unit_price": "$6.77/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1LQAM2NDZAC9"
+    },
+    {
+     "item": "Nature Raised Farms Fully Cooked Lightly Breaded Chicken Breast Strips, Frozen, 2.5 lbs.",
+     "price": 12.97,
+     "size": "",
+     "unit_price": "$5.19/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0Y3T1FF0O3IH"
+    },
+    {
+     "item": "Jennie-O 93/7 Ground Turkey, 2.5 lbs., 2 pk.",
+     "price": 20.77,
+     "size": "",
+     "unit_price": "$4.15/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2MZAM2CG1NYP"
+    },
+    {
+     "item": "Jennie-O 93/7 Ground Turkey, 2 lbs., 2 pk.",
+     "price": 20.77,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6QC91C9BBL7O"
+    },
+    {
+     "item": "Member's Mark Chicken Thighs, Case, priced per pound",
+     "price": 60.85,
+     "size": "",
+     "unit_price": "$1.28/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/68S6A0SC80AT"
+    },
+    {
+     "item": "Buena Mesa Authentically Seasoned Fajita Chicken, priced per pound",
+     "price": 19.04,
+     "size": "",
+     "unit_price": "$4.76/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3XL0EDZI1JJ5"
+    },
+    {
+     "item": "Member's Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
+     "price": 108.67,
+     "size": "",
+     "unit_price": "$2.48/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5AAWMYQVP0K2"
+    },
+    {
+     "item": "Member's Mark Boneless and Skinless Chicken Thighs, priced per pound",
+     "price": 16.72,
+     "size": "",
+     "unit_price": "$2.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2E97BXRYJ868"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}
