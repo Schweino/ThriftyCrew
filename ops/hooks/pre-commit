@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# pre-commit - run ops\verify-bulk-edit.ps1 on the STAGED set, and refuse the commit if it finds anything.
+#
+# WHY THIS EXISTS (2026-09-05). A regex sweep over 608 call sites in 191 files introduced six defects, and
+# the estate already held a correct memo for every one of them. They did not fire, because a memo only works
+# if someone stops and looks - and nobody stops before an edit they believe is mechanical.
+#
+# So verify-bulk-edit.ps1 was written as the enumeration those memos should have been. Within the hour,
+# audit-guard-contract flagged it:
+#
+#     ! DEAD: verify-bulk-edit.ps1 is a detector that NOTHING in production calls
+#
+# A checker you have to remember to run has exactly the disease of the notes it replaced. This hook is the
+# repair lane: it fires on every commit in this repo whether anyone remembers it or not.
+#
+# IT ALSO CATCHES THE BOT. On the day this was written a scheduled job ran `git add -A` on the real working
+# tree and committed AND PUSHED an unverified 202-file sweep to main under the message "Local browser-store
+# refresh" - a tree in which 27 scripts threw at startup. That job does not read anyone's instructions, and
+# telling a spawned agent "never git add -A" does nothing about it. A hook is the only thing in the path of
+# BOTH a careless human and an automated one.
+#
+# BYPASS IS DELIBERATE BUT LOUD. `git commit --no-verify` skips this, which is correct for a genuine
+# emergency; ops\audit-hook-installed.ps1 asserts the hook is present so that skipping it is a choice
+# somebody made rather than a state nobody noticed.
+#
+# Install:  powershell -File ops\install-hooks.ps1
+set -u
+
+# Only the STAGED set matters: unstaged work in a shared tree belongs to another session, and failing a
+# commit over someone else's in-flight edit is how a gate gets uninstalled.
+staged="$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)"
+[ -z "$staged" ] && exit 0
+
+repo="$(git rev-parse --show-toplevel 2>/dev/null)"
+[ -z "$repo" ] && exit 0
+checker="$repo/ops/verify-bulk-edit.ps1"
+
+# A MISSING CHECKER MUST NOT READ AS A PASS. That is the fail-open-reads-as-empty class, and it is exactly
+# how a guard stops guarding without anyone editing it.
+if [ ! -f "$checker" ]; then
+  echo "pre-commit: REFUSING - ops/verify-bulk-edit.ps1 is missing, so nothing verified this commit." >&2
+  echo "            Restore it, or commit with --no-verify if you have decided that is right." >&2
+  exit 1
+fi
+
+out="$(powershell -NoProfile -ExecutionPolicy Bypass -File "$checker" -Staged 2>/dev/null)"
+rc=$?
+if [ "$rc" -ne 0 ]; then
+  echo "$out" >&2
+  echo "" >&2
+  echo "pre-commit: BLOCKED. The staged set fails a bulk-edit invariant (BOM state, line-ending style," >&2
+  echo "            a clean parse, or a call to a function the file cannot resolve)." >&2
+  echo "            Fix it, or use --no-verify if you have decided this is right." >&2
+  exit 1
+fi
+exit 0

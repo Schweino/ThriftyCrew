@@ -133,9 +133,12 @@ try {
     if (-not (Test-Path $tmp)) { continue }
     $beforeBytes = [IO.File]::ReadAllBytes($tmp)
     Remove-Item $tmp -Force -ErrorAction SilentlyContinue
-    if (-not $beforeBytes.Length) { continue }
+    # A NEWLY ADDED file has no HEAD version, so there is nothing to compare BOM or EOL against - but it
+    # still must parse and still must resolve what it calls. Skipping it entirely (the first version did)
+    # let a brand-new file with a broken dot-source walk straight through the hook.
+    $isNew = (-not $beforeBytes.Length)
     $checked++
-    if (-not (Test-BomUnchanged -Before $beforeBytes -After $after)) {
+    if ((-not $isNew) -and (-not (Test-BomUnchanged -Before $beforeBytes -After $after))) {
       [void]$findings.Add("BOM CHANGED   $n - a read/write pair stripped or added a byte-order mark")
     }
     if ($n -like '*.ps1') {
