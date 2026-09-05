@@ -4063,6 +4063,21 @@
                         "ruled_on":  "2026-09-02",
                         "ruled_by":  "triage-2026-09-02",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bouillon|Walmart|knorr-select-vegetable-base-shelf-stable-granula",
+                        "commodity":  "bouillon",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Knorr Select Vegetable Base, Shelf Stable Granulated Bouillo"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-size",
+                        "evidence":  "WRONG SIZE, not a wrong product - this really is bouillon, and this entry MUST BE REVERSED once the size parser is fixed. The product NAME states 1.82 pounds; the capture discarded that and back-derived 10.891 lb from Walmart own 1.65/lb unit price, and its qty_basis admits the conflict (\"no name quantity (1.82) reproduces Walmart 1.65\"). At the stated 1.82 lb the true per-unit is about 0.62/oz, in line with Baker 0.38 and Hy-Vee 0.63; the board published 0.0813/oz, 7.6x too cheap, and it took the crown. The 14.18 quoted is also a 2026-07-15 Bellevue row while the two most recent captures of item 198431752 both read 17.97. Blocked because the wrong size is baked into stored capture rows, so a parser fix alone cannot heal the 90-day union. Ruled 2026-09-05 on Brad instruction.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-05",
+                        "ruled_by":  "Brad via Opus 5 (2026-09-05)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
