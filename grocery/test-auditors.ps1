@@ -31,6 +31,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # silenced by the very thing it is testing is worth very little. $LASTEXITCODE still reads the
 # child's real code through the helper (verified), so the `$rc = $LASTEXITCODE` lines are unchanged.
 . (Join-Path $root 'native-lib.ps1')
+. (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage. Must load BEFORE any use - the estate-wide sweep converted 25 call sites in this file and the presence check that adds this line matched a MENTION of json-io in a fixture string rather than a real dot-source, so the file was converted and left without it.
 function PSChild {
   # TWO EXPLICIT PARAMETERS, NOT ONE CATCH-ALL. A single ValueFromRemainingArguments array
   # cannot carry `PSChild $script -SelfTest`: PowerShell tries to bind -SelfTest as a PARAMETER
@@ -782,6 +783,18 @@ else { Bad 'import-walmart-batch no longer lifts Build-Row - the second Walmart 
 function NewFxDir([string]$tag) {
   $d = Register-Fx (Join-Path $env:TEMP ($tag + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
   New-Item -ItemType Directory -Force $d | Out-Null
+  # EVERY FIXTURE NEEDS lib\json-io.ps1 WITHIN REACH (2026-09-05). A guard copied in here resolves its
+  # dependency as (Split-Path $PSScriptRoot -Parent)\lib\json-io.ps1, and $PSScriptRoot is this temp dir, so
+  # the parent is $env:TEMP. Without the copy the dot-source throws at STARTUP and the guard exits 1 before
+  # printing anything - indistinguishable from 'found nothing' to a caller reading only the exit code, and it
+  # turned 32 BLIND-path assertions red at once the first time the estate-wide reader sweep ran.
+  # Done here rather than in each fixture's own copy list because there are dozens of those lists, and a
+  # dependency that must be remembered in dozens of places is one that will be forgotten in one of them.
+  $fxLib = Join-Path $env:TEMP 'lib'
+  New-Item -ItemType Directory -Force $fxLib | Out-Null
+  $srcLib = Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1'
+  $dstLib = Join-Path $fxLib 'json-io.ps1'
+  if ((Test-Path $srcLib) -and ((-not (Test-Path $dstLib)) -or ((Get-Item $srcLib).LastWriteTimeUtc -gt (Get-Item $dstLib).LastWriteTimeUtc))) { Copy-Item $srcLib $dstLib -Force }
   return $d
 }
 function RunPSAt([string]$dir, [string]$script, $argList) {

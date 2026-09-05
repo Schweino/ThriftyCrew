@@ -98,7 +98,9 @@ param(
   [string]$NamesOut = '', [string]$NamesDiff = ''
 )
 $ErrorActionPreference = 'Stop'
-. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
+if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
+. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 
 # CAPTURE EVERY SWITCH BEFORE DOT-SOURCING ANYTHING. A dot-sourced script runs its own param() block in
 # THIS scope, so a lib declaring [switch]$SelfTest silently resets ours to $false - that PS 5.1 trap made

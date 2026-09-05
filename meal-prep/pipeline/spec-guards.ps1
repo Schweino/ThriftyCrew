@@ -73,7 +73,9 @@ if(Test-Path $runManifest){ foreach($s in (Get-Content $runManifest)){ if($s){ $
 
 $WEIGH = 'Weigh your empty mixing pot and write the number down for portioning later.'
 $fails=@{}; $ready=@()
-. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
+if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
+. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 
 function Fail($slug,$msg){ if(-not $fails.ContainsKey($slug)){ $fails[$slug]=@() }; $fails[$slug]+= $msg }
 

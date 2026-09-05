@@ -17,7 +17,9 @@
 # against the JS that actually prices the page - run it after any change to either side. Not daily: it
 # reads 544 built cards.
 param([string]$FeedPath = '', [switch]$SelfTest, [switch]$NoAlert, [switch]$CrossCheck)
-. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
+if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
+. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
