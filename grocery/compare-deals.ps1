@@ -1498,6 +1498,52 @@ if ($SelfTest) {
   $ambigRows = @(Select-FreshestCaptureRows $ambigPool)
   _Eq 'both captures are eligible, so the ambiguity is what is under test' $ambigRows.Count 7
   _Eq 'an ambiguous 60-char prefix is NOT superseded' @($ambigRows | Where-Object { $_.name -eq $ambigTrunc }).Count 1
+
+  # 32. MUST FIRE - DEPTH CHOSE THE PRODUCTS, RECENCY MUST PRICE THEM (2026-09-05). Frozen from lettuce at
+  #     Sam's Club, where the board published 1.0367 while the SAME product had been seen twelve days later
+  #     at 0.81. The depth rule is right to keep 07-17 (2 products) over the 1-row captures around it - that
+  #     is a coverage judgement. But it was also deciding the PRICE, and it has nothing to say about that.
+  #     The 09-01 row is the newest sighting and carries NO usable price (the sanity band refused it), so a
+  #     rule that only looks for a strictly NEWER price finds nothing and leaves the stale number standing.
+  $lettuce = @(Select-FreshestCaptureRows @(
+    (_Row 'Romaine Hearts, 6 ct.'    $null  '2026-09-01'),
+    (_Row 'Iceberg Lettuce, 2 heads' 1.23   '2026-08-23'),
+    (_Row 'Romaine Hearts, 6 ct.'    0.81   '2026-07-29'),
+    (_Row 'Romaine Hearts, 6 ct.'    1.0367 '2026-07-17'),
+    (_Row 'Iceberg Lettuce, 2 heads' 1.485  '2026-07-17')
+  ))
+  $romaine = @($lettuce | Where-Object { $_.name -eq 'Romaine Hearts, 6 ct.' })
+  _Eq 'the romaine row is priced from its most recent USABLE sighting, not the capture depth kept' $romaine[0].unit_price 0.81
+  _Eq 'and exactly one romaine row survives - this re-prices, it never duplicates' $romaine.Count 1
+
+  # 33. CLEAN TWIN - IT MUST NOT RESURRECT A THIN CAPTURE. This is the 2026-08-06 founding bug of the depth
+  #     rule itself (a 1-row Sam's capture evicting a 20-row one, +87% on baby formula). Re-pricing may
+  #     change what a kept row COSTS; it must never change WHICH products are eligible. The thin newer
+  #     capture holds a product the deep older one does not, and that product must stay out.
+  $thin = @(Select-FreshestCaptureRows @(
+    (_Row 'Bubs Goat Milk Infant Formula' 1.4445 '2026-08-05'),
+    (_Row "Member's Mark Infant Formula"  0.7704 '2026-07-29'),
+    (_Row 'Enfamil NeuroPro Infant Formula' 0.9100 '2026-07-29'),
+    (_Row 'Similac 360 Total Care Formula'  0.8800 '2026-07-29')
+  ))
+  # THE NEWEST CAPTURE IS ALWAYS ELIGIBLE - that was never the 2026-08-06 bug. The bug was the newest
+  # capture winning OUTRIGHT and discarding the deeper older one, so the fix kept BOTH. The invariant
+  # re-pricing must not break is therefore not 'the thin row is absent' (it is present, by design) but
+  # 'the thin row still cannot WIN, and re-pricing did not quietly change what it costs'.
+  # Written after the first cut of this fixture asserted the wrong thing and failed - the assertion was
+  # wrong about the design, not the code, and correcting a false expectation is not weakening a test.
+  $bubs = @($thin | Where-Object { $_.name -eq 'Bubs Goat Milk Infant Formula' })
+  _Eq 'the thin capture row is eligible, exactly as the depth rule has always allowed' $bubs.Count 1
+  _Eq 'and re-pricing left its price untouched - there is no newer sighting of it' $bubs[0].unit_price 1.4445
+  _Eq 'and the deep older capture still prices the cell' (@($thin | Sort-Object unit_price | Select-Object -First 1).unit_price) 0.7704
+
+  # 34. CLEAN TWIN - A NEWER SIGHTING WITH NO USABLE PRICE IS NOT A PRICE. If could-not-price were allowed
+  #     to win, a band-refused row would blank a real cell, which is strictly worse than a stale one.
+  $blank = @(Select-FreshestCaptureRows @(
+    (_Row 'Solo Product, 1 ct.' $null  '2026-09-01'),
+    (_Row 'Solo Product, 1 ct.' 0.5000 '2026-08-01')
+  ))
+  _Eq 'a priceless newest sighting falls back to the newest USABLE one' $blank[0].unit_price 0.5
   #     (b2) TRANSITIVITY. A three-capture chain - a truncated July name, its full-name twin carrying an id,
   #          and a later capture of that id under a re-worded name - is ONE product, and only the newest
   #          may price. If the grouping were pairwise rather than transitive, the July row would survive

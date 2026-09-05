@@ -75,6 +75,45 @@ function Get-CaptureDepth {
   return @($Rows | ForEach-Object { [string]$_.name } | Select-Object -Unique).Count
 }
 
+# ONE implementation of 'these two rows are the same product', because there are now TWO callers of it:
+# Remove-SupersededRows (drop the older row) and Update-PriceFromNewerSighting (keep the row, take the
+# newer PRICE). A second hand-copy of transitive id-or-name grouping is precisely the class this estate
+# keeps paying for - see the markdown stamp that lived as two pastes in the two builders until 2026-09-05.
+# Returns @{ labelOf = <dated-row index -> group label>; dated = <the dated rows, in order> }.
+function Get-ProductLabels {
+  param([object[]]$Dated)
+  $dated = @($Dated)
+  $names = @($dated | ForEach-Object { [string]$_.name } | Select-Object -Unique)
+  $canon = @{}
+  foreach ($n in $names) { $canon[$n] = $n }
+  foreach ($n in $names) {
+    if ($n.Length -ne 60) { continue }
+    $ext = @($names | Where-Object { $_.Length -gt 60 -and $_.StartsWith($n, [StringComparison]::Ordinal) })
+    if ($ext.Count -eq 1) { $canon[$n] = [string]$ext[0] }
+  }
+  $labelOf = @{}; $keyLabel = @{}; $next = 0
+  for ($i = 0; $i -lt $dated.Count; $i++) {
+    $r = $dated[$i]
+    $keys = @('nm:' + [string]$canon[[string]$r.name])
+    $pk = ('' + $r.prod_key).Trim()
+    if ($pk) { $keys += ('id:' + $pk) }
+    $found = @()
+    foreach ($k in $keys) { if ($keyLabel.ContainsKey($k)) { $found += $keyLabel[$k] } }
+    $found = @($found | Select-Object -Unique)
+    if (-not $found.Count) { $lab = $next; $next++ }
+    else {
+      $lab = $found[0]
+      foreach ($old in @($found | Where-Object { $_ -ne $lab })) {
+        foreach ($kk in @($keyLabel.Keys)) { if ($keyLabel[$kk] -eq $old) { $keyLabel[$kk] = $lab } }
+        foreach ($ri in @($labelOf.Keys)) { if ($labelOf[$ri] -eq $old) { $labelOf[$ri] = $lab } }
+      }
+    }
+    foreach ($k in $keys) { $keyLabel[$k] = $lab }
+    $labelOf[$i] = $lab
+  }
+  return @{ labelOf = $labelOf; dated = $dated }
+}
+
 function Remove-SupersededRows {
   <#
     .SYNOPSIS Drop a dated row when the SAME product has a newer dated row in the same set.
@@ -98,40 +137,8 @@ function Remove-SupersededRows {
   $dated = @($rows | Where-Object { $_.src_date })
   if ($dated.Count -lt 2) { return @($rows) }
 
-  # 60-char truncation -> its unique longer extension, when there is exactly one.
-  $names = @($dated | ForEach-Object { [string]$_.name } | Select-Object -Unique)
-  $canon = @{}
-  foreach ($n in $names) { $canon[$n] = $n }
-  foreach ($n in $names) {
-    if ($n.Length -ne 60) { continue }
-    $ext = @($names | Where-Object { $_.Length -gt 60 -and $_.StartsWith($n, [StringComparison]::Ordinal) })
-    if ($ext.Count -eq 1) { $canon[$n] = [string]$ext[0] }
-  }
-
-  # Group rows transitively over both keys. Row counts per commodity per store are in the tens, so the
-  # straightforward relabel is cheaper than a union-find and much easier to read.
-  $labelOf = @{}     # dated-row index -> group label
-  $keyLabel = @{}    # key string      -> group label
-  $next = 0
-  for ($i = 0; $i -lt $dated.Count; $i++) {
-    $r = $dated[$i]
-    $keys = @('nm:' + [string]$canon[[string]$r.name])
-    $pk = ('' + $r.prod_key).Trim()
-    if ($pk) { $keys += ('id:' + $pk) }
-    $found = @()
-    foreach ($k in $keys) { if ($keyLabel.ContainsKey($k)) { $found += $keyLabel[$k] } }
-    $found = @($found | Select-Object -Unique)
-    if (-not $found.Count) { $lab = $next; $next++ }
-    else {
-      $lab = $found[0]
-      foreach ($old in @($found | Where-Object { $_ -ne $lab })) {
-        foreach ($kk in @($keyLabel.Keys)) { if ($keyLabel[$kk] -eq $old) { $keyLabel[$kk] = $lab } }
-        foreach ($ri in @($labelOf.Keys)) { if ($labelOf[$ri] -eq $old) { $labelOf[$ri] = $lab } }
-      }
-    }
-    foreach ($k in $keys) { $keyLabel[$k] = $lab }
-    $labelOf[$i] = $lab
-  }
+  $g = Get-ProductLabels $dated
+  $labelOf = $g.labelOf
 
   $newestFor = @{}
   for ($i = 0; $i -lt $dated.Count; $i++) {
@@ -155,6 +162,68 @@ function Remove-SupersededRows {
   return $out.ToArray()
 }
 
+function Update-PriceFromNewerSighting {
+  <#
+    .SYNOPSIS For a row the depth rule kept, take the PRICE from that product's most recent sighting.
+    .DESCRIPTION DEPTH AND RECENCY ANSWER DIFFERENT QUESTIONS, and conflating them cost a real cell.
+      The depth rule decides which CAPTURE's product set represents a commodity at a store - that is a
+      coverage judgement, and it exists because a 1-row capture must not evict a 20-row one.
+      But once a product is eligible, WHICH PRICE it carries is a question about that product alone, and
+      the answer is simply its latest sighting. Depth has nothing to say about it.
+
+      MEASURED 2026-09-05, lettuce at Sam's Club:
+        2026-07-17  Romaine Hearts, 6 ct.  1.0367   <- 2 rows, so depth keeps this capture
+        2026-07-29  Romaine Hearts, 6 ct.  0.81     <- 1 row, so depth discards the capture entirely
+      The board published 1.0367 while the SAME PRODUCT had been seen twelve days later at 0.81, 22%
+      cheaper. Nothing was wrong with the depth rule; it was being asked a question it cannot answer.
+
+      IT CANNOT RESURRECT A THIN CAPTURE. This never adds a product to the eligible set and never changes
+      which products represent the commodity - it only re-prices a row that was ALREADY going to price.
+      A 1-row capture still cannot win a commodity it was not already winning.
+
+      A NEWER SIGHTING WITH NO USABLE PRICE IS NOT A PRICE. Sam's 2026-09-01 Romaine row is newer than
+      both of the above and carries unit_price $null (the sanity band refused it - see
+      audit-band-censorship). Taking it would blank a real cell, so rows with no unit_price are skipped
+      and the next newest usable sighting wins. Could-not-price is not a price.
+  #>
+  param([object[]]$Kept, [object[]]$All)
+  $kept = @($Kept)
+  $all  = @($All  | Where-Object { $_.src_date })
+  if ($all.Count -lt 2 -or -not $kept.Count) { return $kept }
+  $g = Get-ProductLabels $all
+  $labelOf = $g.labelOf
+  # newest USABLE row per product across every capture in the window, not just the kept ones
+  $best = @{}
+  for ($i = 0; $i -lt $all.Count; $i++) {
+    $r = $all[$i]
+    if ($null -eq $r.unit_price) { continue }
+    $lab = $labelOf[$i]; $d = [string]$r.src_date
+    if (-not $best.ContainsKey($lab) -or $d -gt [string]$best[$lab].src_date) { $best[$lab] = $r }
+  }
+  # index the kept rows into the same grouping by object identity
+  $idx = @{}
+  for ($i = 0; $i -lt $all.Count; $i++) { $idx[[System.Runtime.CompilerServices.RuntimeHelpers]::GetHashCode($all[$i])] = $i }
+  $out = New-Object System.Collections.Generic.List[object]
+  foreach ($r in $kept) {
+    if (-not $r.src_date) { [void]$out.Add($r); continue }
+    $h = [System.Runtime.CompilerServices.RuntimeHelpers]::GetHashCode($r)
+    if (-not $idx.ContainsKey($h)) { [void]$out.Add($r); continue }
+    $lab = $labelOf[$idx[$h]]
+    if (-not $best.ContainsKey($lab)) { [void]$out.Add($r); continue }
+    # TWO CASES, and the second is the one lettuce needed.
+    #  a. the kept row HAS a price - only a strictly NEWER sighting may replace it.
+    #  b. the kept row has NO usable price (the sanity band refused it, so unit_price is null) - it
+    #     cannot price the cell at all, so the newest usable sighting of the SAME PRODUCT wins
+    #     whatever its date. Sam's Romaine on 2026-09-01 is exactly this: newest, band-refused, and
+    #     the only alternatives are older. Requiring 'newer' there leaves a real product unpriced and
+    #     hands the cell to whatever else happens to be in the capture.
+    if ($null -eq $r.unit_price) { [void]$out.Add($best[$lab]); continue }
+    if ([string]$best[$lab].src_date -gt [string]$r.src_date) { [void]$out.Add($best[$lab]) }
+    else { [void]$out.Add($r) }
+  }
+  return $out.ToArray()
+}
+
 function Select-FreshestCaptureRows {
   <#
     .SYNOPSIS The rows eligible to price one commodity at one store.
@@ -175,5 +244,8 @@ function Select-FreshestCaptureRows {
     if ((Get-CaptureDepth @($g.Group)) -gt $newestCount) { $keepDates += [string]$g.Name }
   }
   # THE DEPTH DECISION IS COMPLETE HERE. Supersession runs on its output, never on its input.
-  return Remove-SupersededRows @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
+  $kept = Remove-SupersededRows @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
+  # Depth chose the products; recency prices them. See Update-PriceFromNewerSighting for why these are
+  # two questions and what conflating them cost.
+  return Update-PriceFromNewerSighting -Kept @($kept) -All @($rows)
 }
