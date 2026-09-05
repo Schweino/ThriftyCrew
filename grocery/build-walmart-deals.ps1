@@ -101,9 +101,24 @@ foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Tes
 # Sam's abbreviates FLUID OUNCE as "foz" ("$0.16/foz"). Missing that silently drops every liquid in the
 # catalog - ~190 rows in a full pull - so it is spelled out here rather than left to a generic oz match,
 # which would price a fluid ounce as a WEIGHT ounce.
-# Units we deliberately do NOT map: "sft" (square foot - Reynolds foil, paper towels). We track those
-# commodities per EACH/roll, and there is no honest conversion from square feet to rolls, so those rows are
-# rejected by name rather than guessed at.
+# Units we deliberately do NOT map: "sft"/"sq ft" (square foot - Reynolds foil, paper towels). There is no
+# honest conversion from square feet to a roll, so those rows are rejected by name rather than guessed at.
+#
+# STILL THE RIGHT ANSWER - BUT NOT FOR THE REASON THIS COMMENT USED TO GIVE (measured 2026-09-05).
+# It said "we track those commodities per EACH/roll". That is true of parchment-paper, plastic-wrap and
+# paper-towels: all three are unit=each and all three are priced at 5 to 7 stores on the live board, so
+# their sq-ft rows are a shape we do not need rather than a hole. It is NOT true of aluminum-foil, which
+# is declared unit=sq_ft - the ONLY sq_ft commodity in the catalog of 592.
+# AND ADDING THE UNIT HERE WOULD NOT PRICE IT. compare-deals' Convert-ToUnit has no sq_ft case either, so
+# for a sq_ft commodity EVERY size token converts to $null and no cell can ever be computed. Measured:
+# aluminum-foil is absent from comparison-2026-09-02 entirely, while 11 rows across the 8 newest
+# out\regular captures match its include - it is not "nobody carries it", it is a commodity the engine
+# cannot express. This function refusing "sq ft" is downstream of that, not the cause of it.
+# SO THE GAP IS A DECISION ABOUT THAT COMMODITY'S UNIT, NOT A MISSING LINE IN THIS FUNCTION: either
+# aluminum-foil becomes each/roll like its three siblings, or the engine grows a real square-foot
+# vocabulary for one commodity. A commodity's unit is Brad's call, so neither was done here.
+# It is not trivially each-able either: "Reynolds Wrap Aluminum Foil 200 sq. ft. Box" parses to size
+# "200 ct", which under unit=each reads as 200 boxes rather than one.
 function Resolve-Unit([string]$u) {
   switch -Regex (($u -replace '\.','').Trim().ToLower()) {
     '^(ea|each|ct|count)$'          { return @{ tok='ct';     unit='each'   } }
