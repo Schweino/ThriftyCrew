@@ -9891,6 +9891,213 @@
                                  },
                       "verdict":  "CARRIED",
                       "notes":  null
+                  },
+                  {
+                      "term":  "cooked quinoa",
+                      "recipes":  [
+                                      "turkey-stuffed-peppers"
+                                  ],
+                      "added":  "2026-09-04T08:45:55",
+                      "why":  "turkey-stuffed-peppers needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.44,
+                                                     "size":  "16 oz",
+                                                     "item":  "Great Value Organic Tri-Color Quinoa, 16 oz",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027quinoa\u0027 (commodity quinoa-uncooked) returns Walmart Great Value Organic Tri-Color Quinoa 16 oz at $0.215/oz = $3.44 for the bag. Plain dry quinoa.",
+                                                     "checked":  "2026-09-04T08:48:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  7.79,
+                                                     "size":  "14.4 oz",
+                                                     "item":  "Ancient Harvest Traditional Quinoa",
+                                                     "evidence":  "driver rung 1 \u0027cooked quinoa\u0027=72 rows. Ancient Harvest Traditional Quinoa 14.4 oz $7.79 is plain dry quinoa; Bob\u0027s Red Mill Organic Quinoa 26 oz $13.99 and Tri-Color 13 oz $6.99 also qualify. Seeds of Change and Minute rice-and-quinoa pouches ruled out as prepared blends.",
+                                                     "checked":  "2026-09-04T08:48:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "pre-pass FULL ladder, rung \u0027quinoa\u0027=3 hits, all adjudicated out: Birds Eye Quinoa 8 oz is a seasoned frozen side dish, Full Circle Bulgur \u0026 Quinoa 8.8 oz and Brown Rice \u0026 Red Quinoa 8.8 oz are grain blends, not quinoa. No bag of plain dry quinoa in the result set.",
+                                                         "checked":  "2026-09-04T08:48:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-09-04T08:48:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.78,
+                                                             "size":  "64 oz",
+                                                             "item":  "Member\u0027s Mark Organic Quinoa, 64 oz.",
+                                                             "evidence":  "driver rung 1 \u0027cooked quinoa\u0027=23 rows; Member\u0027s Mark Organic Quinoa 64 oz $8.78 ($0.14/oz) is plain dry quinoa. Confirmed on disk by price-ingredient.ps1 -Name \u0027quinoa\u0027 at $0.1372/oz, cheapest of 4 stores. Rice rows and the KitchenAid cooker ruled out.",
+                                                             "checked":  "2026-09-04T08:48:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.35,
+                                                  "size":  "16 oz",
+                                                  "item":  "Simply Nature Organic Quinoa 16 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027quinoa\u0027 (comparison-2026-09-02, commodity quinoa-uncooked) returns Aldi Simply Nature Organic Quinoa 16 OZ at $0.2094/oz = $3.35 for the 16 oz bag. Plain dry quinoa, the form this recipe cooks.",
+                                                  "checked":  "2026-09-04T08:48:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.49,
+                                                          "size":  "16 oz",
+                                                          "item":  "Kroger Quinoa",
+                                                          "evidence":  "pre-pass full ladder: \u0027cooked quinoa\u0027=0 -\u003e \u0027cookedquinoa\u0027=0 -\u003e rung \u0027quinoa\u0027=25 hits. Kroger Quinoa 16 oz $4.49 is plain dry quinoa (unit oz, quinoa-uncooked); recipe cooks it. Simple Truth Organic Quinoa 16 oz $3.99 also qualifies. Frozen Birds Eye side and Black Bean Quinoa Veggie Burger ruled out as prepared dishes.",
+                                                          "checked":  "2026-09-04T08:48:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "shredded low-moisture mozzarella",
+                      "recipes":  [
+                                      "turkey-stuffed-peppers"
+                                  ],
+                      "added":  "2026-09-04T08:45:56",
+                      "why":  "turkey-stuffed-peppers needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-09-04T08:48:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.48,
+                                                     "size":  "8 oz",
+                                                     "item":  "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+                                                     "evidence":  "driver rung 1 exact term = 69 rows. Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese 8 oz $2.48 names the ingredient exactly; Fareway Shredded Mozzarella 16 oz $3.98 and 32 oz $5.94 also qualify.",
+                                                     "checked":  "2026-09-04T08:48:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.59,
+                                                         "size":  "8 oz",
+                                                         "item":  "Our Family Part Skim Low Moisture Mozzarella Shredded Cheese 8 Oz",
+                                                         "evidence":  "pre-pass rung 1 exact term = 3 hits. Our Family Part Skim Low Moisture Mozzarella Shredded 8 oz $2.59 is the ingredient exactly; Kraft 16 oz $6.49 and Sargento 8 oz $3.99 also qualify.",
+                                                         "checked":  "2026-09-04T08:48:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-09-04T08:48:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  12.17,
+                                                             "size":  "5 lb",
+                                                             "item":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+                                                             "evidence":  "driver rung 1 exact term = 16 rows. Member\u0027s Mark Part-Skim Shredded Mozzarella 5 lbs $12.17 ($2.43/lb) is the ingredient; the 1 lb 2-pk at $5.92 is the household size. Cheddar/Mexican/3-cheese blends ruled out.",
+                                                             "checked":  "2026-09-04T08:48:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.29,
+                                                  "size":  "16 oz",
+                                                  "item":  "Happy Farms Shredded Mozzarella Cheese 16 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027shredded mozzarella\u0027 returns Aldi Happy Farms Shredded Mozzarella Cheese 16 OZ $3.29 (and Thick Shredded 11 OZ $2.79) in today\u0027s captures. Bagged shredded mozzarella is the low-moisture part-skim form; fresh mozzarella balls/logs in the same capture are the high-moisture product and were ruled out.",
+                                                  "checked":  "2026-09-04T08:48:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.69,
+                                                          "size":  "16 oz",
+                                                          "item":  "Kroger Low-Moisture Part Skim Mozzarella Shredded Cheese",
+                                                          "evidence":  "pre-pass rung 1 exact term = 2 hits. Kroger Low-Moisture Part Skim Mozzarella Shredded Cheese 16 oz $3.69 names the ingredient exactly, in the bagged shred a cook buys.",
+                                                          "checked":  "2026-09-04T08:48:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "99/1 ground turkey",
+                      "recipes":  [
+                                      "turkey-stuffed-peppers"
+                                  ],
+                      "added":  "2026-09-04T08:45:56",
+                      "why":  "turkey-stuffed-peppers needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  7.44,
+                                                     "size":  "16 oz",
+                                                     "item":  "JENNIE-O Ground Turkey Breast 99% Lean/1% Fat, Refrigerated, 16 oz Plastic Tray",
+                                                     "evidence":  "Brad\u0027s Chrome (extension), walmart.com/search?q=99% lean ground turkey. Page text shows store Omaha L St Supercenter. Results block \u0027Results for 99% lean ground turkey (2)\u0027: JENNIE-O Ground Turkey Breast 99% Lean/1% Fat 16 oz tray, current price $7.44 ($7.44/lb). Other row was Perdue 98/2 which is a different ratio and was not counted.",
+                                                     "checked":  "2026-09-04T08:54:52"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 only, 68 rows of which 8 were rendered to me. The ground-turkey rows present are Fareway Ground Turkey 16 oz $5.49 (lean grade unstated) and Jennie-O 90% Lean 10% Fat - neither is 99/1. I did not walk the ladder and could not see the other 60 rows, so this is unchecked for 99/1, not empty.",
+                                                     "checked":  "2026-09-04T08:48:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "TERM DEFECT, not an empty shelf. The reported EMPTY is off the same degenerate ladder (\u002799/1 ground turkey\u0027 -\u003e \u002799/1turkey\u0027), a term that at Baker\u0027s returned only lunchmeat - silence from a term that never names the food supports nothing. Family Fare\u0027s own disk row is Jennie-O 85/15 1 lb tray, a different product. Re-search \u0027ground turkey breast\u0027 attended.",
+                                                         "checked":  "2026-09-04T08:48:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  8.99,
+                                                    "size":  "16 oz",
+                                                    "item":  "JENNIE-O Ground Turkey Breast 99% Lean / 1% Fat - 1 lb. tray",
+                                                    "evidence":  "hy-vee.com/aisles-online/search?search=ground turkey, rendered page, store selector reads \u0027Omaha #01, NE\u0027. 17 results; JENNIE-O Ground Turkey Breast 99% Lean / 1% Fat 1 lb tray 16 OZ listed at $8.99 regular, showing promo $7.99. Recorded the regular price. Exact 99/1 lean ratio, fresh tray a cook would buy.",
+                                                    "checked":  "2026-09-04T08:54:52"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only, 19 rows of which 8 were rendered to me; the only ground turkey among them is Jennie-O 93/7 (2 x 2.5 lb $20.77), which is not 99/1. Disk row for Sam\u0027s is Jennie-O Lean Ground Turkey case, also not 99/1. Ladder not walked, remaining rows unseen - unchecked, not empty.",
+                                                             "checked":  "2026-09-04T08:48:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  5.49,
+                                                  "size":  "16 oz",
+                                                  "item":  "Kirkwood Fresh 99% Lean Ground Turkey",
+                                                  "evidence":  "Brad\u0027s Chrome (extension), aldi.us storefront, header verified \u0027In-Store open 9am - 8pm\u0027 and \u0027ALDI - OLA 42 - Omaha\u0027 AFTER switching out of the default Delivery mode (two-step: mode dropdown then In-Store row; first attempt silently did not take, header re-read to confirm). Searched \u0027ground turkey\u0027 via history push. No no-results banner. In the true \u0027Results for ground turkey\u0027 block (not the \u0027Related items\u0027 suggestion block below it): Kirkwood Fresh 99% Lean Ground Turkey, 16 oz, Fresh Poultry, current price $5.49. Other tiles were 93% and 85/15, not counted.",
+                                                  "checked":  "2026-09-04T08:54:52"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "blocked",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "TERM DEFECT, not an empty shelf. Ladder ran \u002799/1 ground turkey\u0027=1 -\u003e \u002799/1 turkey\u0027=1 -\u003e \u002799/1groundturkey\u0027=0 -\u003e \u002799/1turkey\u0027=25, and that last rung returned turkey wings, deli lunchmeat and rotisserie slices at rel 0 - the store\u0027s search never interrogated ground turkey lean grade at all. No rung asked plain \u0027ground turkey\u0027. Disk (price-ingredient.ps1 -Name \u002799% lean ground turkey\u0027) shows Baker\u0027s board row is Kroger 85/15, a different product, so nothing here proves or disproves 99/1. Needs an attended search on \u002799% lean\u0027 / \u0027ground turkey breast\u0027.",
+                                                          "checked":  "2026-09-04T08:48:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
                   }
               ]
 }

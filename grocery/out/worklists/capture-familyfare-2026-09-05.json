@@ -1,41 +1,41 @@
 ﻿{
     "store":  "Family Fare",
-    "date":  "2026-09-04",
+    "date":  "2026-09-05",
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  68,
-    "cursor_next":  75,
+    "cursor_start":  75,
+    "cursor_next":  82,
     "total_terms":  602,
     "rotation_terms":  [
-                           "broccolini",
-                           "brown gravy mix",
-                           "brownie mix",
-                           "brown lentils",
-                           "brown rice",
-                           "brown sugar",
-                           "brussels sprouts"
+                           "buckwheat soba noodles",
+                           "buffalo wing sauce",
+                           "bulgur",
+                           "butter",
+                           "buttermilk",
+                           "butternut squash",
+                           "green cabbage"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "broccolini",
-                  "brown gravy mix",
-                  "brownie mix",
-                  "brown lentils",
-                  "brown rice",
-                  "brown sugar",
-                  "brussels sprouts"
+                  "buckwheat soba noodles",
+                  "buffalo wing sauce",
+                  "bulgur",
+                  "butter",
+                  "buttermilk",
+                  "butternut squash",
+                  "green cabbage"
               ],
     "commodities":  [
-                        "broccolini",
-                        "brown-gravy-mix",
-                        "brownie-mix",
-                        "brown-lentils",
-                        "brown-rice",
-                        "brown-sugar",
-                        "brussels-sprouts"
+                        "buckwheat-soba-noodles",
+                        "buffalo-wing-sauce",
+                        "bulgur-wheat",
+                        "butter",
+                        "buttermilk",
+                        "butternut-squash",
+                        "cabbage"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

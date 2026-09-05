@@ -1295,7 +1295,27 @@
                                    "as_of":  "2026-09-04",
                                    "source":  "promoted from ingredient-queue term \u0027pine nuts\u0027",
                                    "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
-                               }
+                               },
+                 "quinoa-uncooked":  {
+                                         "verdict":  "CARRIED",
+                                         "store":  "Aldi",
+                                         "item":  "Simply Nature Organic Quinoa 16 OZ",
+                                         "size":  "16 oz",
+                                         "price":  3.35,
+                                         "as_of":  "2026-09-04",
+                                         "source":  "promoted from ingredient-queue term \u0027cooked quinoa\u0027",
+                                         "why":  "carried by Baker\u0027s, Aldi, Fareway, Sam\u0027s Club, Walmart"
+                                     },
+                 "mozzarella-cheese":  {
+                                           "verdict":  "CARRIED",
+                                           "store":  "Fareway",
+                                           "item":  "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+                                           "size":  "8 oz",
+                                           "price":  2.48,
+                                           "as_of":  "2026-09-04",
+                                           "source":  "promoted from ingredient-queue term \u0027shredded low-moisture mozzarella\u0027",
+                                           "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                       }
              },
     "_parked_doc":  "parked_recipes lists slugs held out of the catalogue by this ingredient. They were unpublished to DRAFT on Ghost, not deleted, precisely so a CARRIED verdict can bring them back. audit-carriage.ps1 -Revivable reads this field; without it, reviving a recipe means reconstructing from commit messages."
 }
