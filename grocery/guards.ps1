@@ -295,6 +295,7 @@ $null = Register-Kid 'pack-basis'           'audit-pack-basis.ps1'           @()
 $null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @()
 $null = Register-Kid 'json-readers'        'audit-json-readers.ps1'         @()
 $null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-Quiet')
+$null = Register-Kid 'capture-encoding'    'audit-capture-encoding.ps1'     @()
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
 $null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
 # The BROWSER-PULL JS LANE (2026-08-31). pull-agent-lib.js and the four store agents are the whole
@@ -521,7 +522,24 @@ foreach ($g in @(
     #                    name against the stored link name WORD BY WORD, so one side mangled and the
     #                    other not reads as a WRONG PRODUCT in a different guard.
     @{ f='audit-json-readers.ps1';      n='no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down)'; k='json-readers' },
-    @{ f='audit-board-mojibake.ps1';    n='no NEW mangled product name reaches the board (RATCHET at 0 - a clean name that is now corrupted means a reader is mangling input right now)'; k='board-mojibake' })) {
+    @{ f='audit-board-mojibake.ps1';    n='no NEW mangled product name reaches the board (RATCHET at 0 - a clean name that is now corrupted means a reader is mangling input right now)'; k='board-mojibake' },
+    #   capture-encoding = the INPUT, and the third side of the same triangle. json-readers polices our
+    #                    readers and board-mojibake catches the outcome, but neither can see a capture file
+    #                    that is ambiguous ON DISK - and a corruption is only manufactured when an
+    #                    ambiguous FILE meets a defaulting READER, so removing either half is enough.
+    #                    The invariant is deliberately NOT "has a BOM": audit-json-encoding.ps1 pins
+    #                    commodities.json to PURE ASCII WITH NO BOM on purpose, because pure ASCII decodes
+    #                    identically under UTF-8 and cp1252. Two guards demanding opposite things about the
+    #                    same property is how one of them gets switched off. So the property is "no two
+    #                    readers can disagree": a byte-order mark OR pure ASCII, either is fine, and only
+    #                    BOM-less-AND-non-ASCII is reported. 45 of 359 captures had no mark on 2026-09-05
+    #                    and 6 of those carried non-ASCII; all 45 were normalised, so this is green from
+    #                    day one and any red is a NEW file from a writer that has regressed. It names the
+    #                    FILE, and a dated capture filename identifies its writer faster than a code search:
+    #                    the bakers-deals and fareway-deals families come from a vision-read step that
+    #                    neither pull-bakers.ps1 nor pull-fareway-ads.ps1 performs, and nobody has yet
+    #                    found. This guard is the answer to that, rather than a hunt for it.
+    @{ f='audit-capture-encoding.ps1';  n='every capture file the engine prices from is unambiguous to any reader (a byte-order mark OR pure ASCII - never BOM-less non-ASCII)'; k='capture-encoding' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   # CAPTURE the output instead of discarding it: a delegated audit that says "nothing to check" was exiting 0,
