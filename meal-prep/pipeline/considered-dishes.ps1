@@ -20,6 +20,12 @@ param(
   [switch]$Record, [switch]$Query, [switch]$List, [switch]$SelfTest,
   [string]$Slug = '', [string]$Name = '', [string]$Protein = '', [string]$Method = '',
   [string]$Verdict = '', [string]$Reason = '', [string[]]$DupeOf = @(), [string]$Run = '', [string]$By = '',
+  # WHICH PRIOR RULINGS THE DECIDER ACTUALLY RELIED ON (2026-09-05, PLAN-precedent-window P3). The
+  # dossier now carries a WINDOW of the nearest past rulings rather than every ruling in the region,
+  # and the only honest way to keep checking that the window is wide enough is to know which rulings
+  # were used. Reading it out of the `reason` prose worked once, by regex, and found 23 citations in
+  # 215 dupe rulings - which is a floor, not a count. Absent is empty and never an error.
+  [string[]]$Precedents = @(),
   # BATCH QUERY (2026-08-23, v3 D3). harvest.py asks this ledger about hundreds of candidates on every
   # crawl. One process per question is ~1 s of start-up for ~2 ms of work, and the alternative - a
   # Python copy of the wildcard-matching rule below - would fork the rule that decides what counts as
@@ -219,6 +225,7 @@ if ($runRecord) {
   $row = [pscustomobject]@{
     key=$key; slug=$Slug; name=$Name; protein=$Protein; method=$Method; verdict=$Verdict
     reason=$Reason; dupe_of=@($DupeOf | Where-Object { $_ } | ForEach-Object { ([string]$_).Split(',') } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    precedents=@($Precedents | Where-Object { $_ } | ForEach-Object { ([string]$_).Split(',') } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
     run=$Run; by=$By; at=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss')
   }
   # Same slug ruled twice: keep the LATEST, so a re-ruling supersedes rather than accumulating.

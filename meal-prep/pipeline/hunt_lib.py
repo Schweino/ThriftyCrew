@@ -74,6 +74,14 @@ DECIDE = {
                                 "description": "accepted | rejected-dupe | rejected-not-fit | deferred"},
                     "reason": {"type": "string"},
                     "dupe_of": {"type": "array", "items": {"type": "string"}},
+                    # WHICH PRIOR RULINGS WERE RELIED ON (2026-09-05, PLAN-precedent-window P3).
+                    # `prior_rulings` is now a WINDOW - the nearest rulings, not every ruling in the
+                    # region - so "was the window wide enough" has to stay answerable. Naming the
+                    # rulings used makes it a measurement on every run instead of a regex over prose.
+                    # Optional: a decision that relied on none says nothing, and that is not an error.
+                    "precedents": {"type": "array", "items": {"type": "string"},
+                                   "description": "ledger slugs from prior_rulings that this "
+                                                  "verdict actually relied on"},
                     "record": {
                         "type": "object",
                         "description": "written to considered-dishes verbatim, -By decider",

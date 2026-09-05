@@ -172,6 +172,12 @@ def apply_verdict(payload, run_dir, run_id, pool_path, store_path, dry_run=False
             dupes = [x for x in (d.get("dupe_of") or []) if x]
             if dupes:
                 args += ["-DupeOf", dupes]      # a LIST - ps_invoke makes it a real PS array
+            # THE PRECEDENTS THE VERDICT RELIED ON, same marshalling and for the same B8 reason.
+            # `prior_rulings` is a window now (PLAN-precedent-window P1); this is how the estate
+            # keeps measuring whether the window was wide enough, on every run rather than by regex.
+            prec = [x for x in (d.get("precedents") or []) if x]
+            if prec:
+                args += ["-Precedents", prec]
             rc, out, _e = run_ps(CONSIDERED_PS, args)
             if rc != 0:
                 findings.append("%s: the ruling did not reach considered-dishes (%s)"
@@ -458,6 +464,7 @@ def cmd_selftest(a):
                         "verdict": "accepted", "reason": "novel region"}},
             {"slug": "drill-dupe", "verdict": "rejected-dupe", "reason": "same dinner as drill-accept",
              "dupe_of": ["drill-accept", "some-live-slug"],
+             "precedents": ["prior-ruling-one", "prior-ruling-two"],
              "record": {"name": "Drill Dupe", "protein": "beef", "method": "skillet",
                         "verdict": "rejected-dupe", "reason": "same dinner as drill-accept"}},
             {"slug": "drill-unfit", "verdict": "rejected-not-fit", "reason": "not batch-scalable",
@@ -529,6 +536,20 @@ def cmd_selftest(a):
         T("MUST FIRE  dupe_of arrives as DISTINCT terms, not one composite string (the B8 class)",
           list(rows["drill-dupe"].get("dupe_of") or []) == ["drill-accept", "some-live-slug"],
           json.dumps(rows["drill-dupe"].get("dupe_of")))
+
+        # ---- WHICH PRIOR RULINGS THE VERDICT RELIED ON (2026-09-05, PLAN-precedent-window P3) ----
+        # `prior_rulings` is a WINDOW now - the nearest rulings, not every ruling in the region - so
+        # "was the window wide enough" must stay answerable on every run. It was answerable once, by
+        # regex over the reason prose, and that found 23 citations in 215 dupe rulings: a floor, not
+        # a count. This is the same B8 marshalling as dupe_of, through the real -Record.
+        T("MUST FIRE  the precedents a verdict RELIED ON reach the ledger row, as distinct joinable "
+          "slugs - without them the window's own bar can only ever be re-measured by regex",
+          list(rows["drill-dupe"].get("precedents") or []) == ["prior-ruling-one", "prior-ruling-two"],
+          json.dumps(rows["drill-dupe"].get("precedents")))
+        T("CLEAN TWIN a decision that relied on no precedent records an EMPTY list and never an "
+          "error - relying on none is normal and says nothing",
+          list(rows["drill-accept"].get("precedents") or []) == [],
+          json.dumps(rows["drill-accept"].get("precedents")))
 
         after = {c["slug"]: c["status"] for c in harvest.read_pool(pool_path)["candidates"]}
         T("MUST FIRE  a ruled candidate is no longer available in the pool",

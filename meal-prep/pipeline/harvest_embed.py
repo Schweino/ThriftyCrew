@@ -336,6 +336,205 @@ def cmd_build(a):
     return 1 if starved else 0
 
 
+LEDGER = os.path.join(MP, "db", "considered-dishes.json")
+PRECEDENT_TOP = 10   # the window size. MEASURED, see the docstring below; it is Brad's to change.
+
+
+def load_ledger(path=None):
+    """Every dish this estate has ruled on, as a precedent corpus. Returns (rows, why_not).
+
+    The ledger row already carries `name` and `protein` - exactly `signature_text`'s two inputs - so
+    a ruling embeds into the SAME vector space and the SAME cache as the catalog and the backlog.
+    Nothing new is learned and nothing new is paid for; 406 of 406 rows are usable today.
+    """
+    path = path or LEDGER
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            d = json.load(f)
+    except Exception as e:                                        # noqa: BLE001
+        return [], "the ledger at %s could not be read (%s)" % (path, e)
+    rows = []
+    for r in (d.get("dishes") or []):
+        slug = str(r.get("slug") or "").strip()
+        if not slug:
+            continue
+        rows.append({"slug": slug, "name": r.get("name") or slug,
+                     "protein": r.get("protein") or "any", "method": r.get("method") or "any",
+                     "key": r.get("key") or "", "verdict": r.get("verdict") or "",
+                     "reason": r.get("reason") or "", "dupe_of": list(r.get("dupe_of") or []),
+                     "run": r.get("run") or "", "at": r.get("at") or "",
+                     "text": signature_text(r.get("name"), r.get("protein"))})
+    return rows, ("" if rows else "the ledger holds no ruling yet")
+
+
+def region_key(protein, method):
+    """The COARSE region, and deliberately not `Get-DishKey`'s protein|method|family.
+
+    considered-dishes.ps1 is the ONE matcher for what counts as prior art (its own header says so),
+    and `Get-Family` derives the family from the dish NAME in PowerShell. Re-implementing that here
+    would be a second matcher with a second opinion - the exact thing that file forbids. So this is
+    a COUNT for context ("how crowded is this protein+method"), never a claim about what matched.
+    """
+    return "%s|%s" % ((protein or "any").strip() or "any", (method or "any").strip() or "any")
+
+
+def precedent_window(queries, rows, sims, top=PRECEDENT_TOP):
+    """PURE. (queries, ledger rows, similarity matrix) -> the window per query.
+
+    Pure for the same reason `resolution_embed.rank` is: the ranking rule is the part worth freezing
+    in fixtures, and a ranker that had to load 2.3 GB of weights to be tested would be tested at the
+    end of a drill or not at all.
+
+    LEAVE-ONE-OUT BY SLUG. A candidate that was deferred and is being re-ruled must never be handed
+    its OWN earlier ruling as precedent - that is a candidate quoting itself as prior art, and it is
+    the same trap `resolution_embed.rank` closes by key.
+
+    THE WINDOW SAYS IT IS A WINDOW. `in_region` and `in_ledger` travel with it, so a decider can
+    always tell "these are the ten nearest of seventy-seven" from "these are the only ten there are".
+    """
+    out = []
+    for i, q in enumerate(queries):
+        qslug = str(q.get("slug") or "")
+        qregion = region_key(q.get("protein"), q.get("method"))
+        row = sims[i]
+        order = list(np.argsort(-row))
+        shown, mix = [], {"accepted": 0, "rejected_dupe": 0, "rejected_not_fit": 0, "other": 0}
+        in_region = 0
+        for j in range(len(rows)):
+            r = rows[j]
+            if region_key(r.get("protein"), r.get("method")) != qregion or r["slug"] == qslug:
+                continue
+            in_region += 1
+            v = str(r.get("verdict") or "")
+            if v == "accepted":
+                mix["accepted"] += 1
+            elif v == "rejected-dupe":
+                mix["rejected_dupe"] += 1
+            elif v == "rejected-not-fit":
+                mix["rejected_not_fit"] += 1
+            else:
+                mix["other"] += 1
+        for j in order:
+            r = rows[int(j)]
+            if r["slug"] == qslug:
+                continue
+            shown.append({"slug": r["slug"], "name": r["name"], "key": r["key"],
+                          "verdict": r["verdict"], "reason": r["reason"],
+                          "dupe_of": list(r["dupe_of"]), "run": r["run"], "at": r["at"],
+                          "score": round(float(row[int(j)]), 4)})
+            if len(shown) >= max(1, top):
+                break
+        out.append({
+            "slug": qslug,
+            "prior_rulings": shown,
+            "prior_rulings_window": {
+                "shown": len(shown), "in_region": in_region, "in_ledger": len(rows),
+                "region": qregion,
+                "ranked_by": "bge-m3 cosine to this candidate, nearest first",
+                "state": "ok"},
+            # P2: the region's ruling MIX, one line instead of a list the decider counts itself.
+            # A SIBLING of saturation_pressure and never a replacement - that stays an int, because
+            # dossier_rank and two harvest fixtures read it as one.
+            "region_rulings": dict(mix, key=qregion, in_ledger=in_region),
+        })
+    return out
+
+
+def cmd_precedents(a):
+    r"""The k nearest PAST RULINGS to each candidate in a batch, at dispatch time.
+
+    WHY THIS EXISTS (PLAN-precedent-window-2026-09-05). The decide lane's `prior_rulings` was the one
+    memory in this pipeline still delivered by coarse key match: every ruling sharing the candidate's
+    protein|method|family, unranked, unbounded, and written once nightly by `score_pool`. Three
+    measured consequences, all on 2026-09-05:
+
+      - IT BREAKS THE ONE INVARIANT EVERY OTHER DOSSIER FIELD KEEPS. `dossier_neighbours`'s docstring
+        says the dossier's "cost per candidate stays CONSTANT in catalog size - the property the cap
+        exists for". Ingredients cap at 22, neighbours per channel per side, `same_family_other_
+        protein` at 5. This field grew with the ledger: mean 15.3 entries over 1,205 available
+        candidates, 239 of them over 40, five at exactly 60 - the whole `chicken|bake|plain` region.
+        At 503 bytes an entry that was 16 KB of an 18 KB dossier, 89% of it, and the ledger gains
+        ~45 rows on an active hunting day.
+      - IT SHOWED LESS PRECEDENT THAN SIMILARITY DOES, not more. Of the 23 dupe rulings whose reason
+        cites a prior LEDGER ruling by slug, the key-match list can show only 16 AT ANY DEPTH - the
+        other 7 sit in a different coarse region (`sausage-spinach-crustless-quiche` cites
+        `sausage-cottage-cheese-egg-bake`, region size 0). Ranking the WHOLE ledger by cosine reaches
+        all 23, and 18 inside the top ten.
+      - IT WAS STALE WITHIN A RUN. Written at the nightly rescore, so batch 2 could not see what
+        batch 1 had just ruled. This is built at dispatch, so it can.
+
+    IT IS NOT A CAP, and that distinction is Brad's ruling of 2026-09-05 ("we don't want to cut it").
+    A count cap on the old list would have kept the OLDEST entries - the list arrives in ledger order.
+    This is a different list, ranked by relevance to the candidate, that carries more of the estate's
+    own cited precedent while staying constant in size.
+
+    THREE STATES, NEVER FAKED, copied from `fill_prior_rulings`: `ok` with a window, `empty` when the
+    ledger holds no ruling yet, and `blind` when this could not run at all. The caller keeps the
+    nightly list on `blind` and says so; an empty list pretending it looked is how a judge concludes
+    there is no precedent when nobody checked.
+    """
+    try:
+        with open(a.query, "r", encoding="utf-8-sig") as f:
+            doc = json.load(f)
+    except Exception as e:                                        # noqa: BLE001
+        print("harvest_embed --precedents: CANNOT RUN - %s did not parse (%s)" % (a.query, e))
+        print("HARVEST-EMBED-COMPLETE")
+        return 2
+    queries = [q for q in (doc.get("queries") or []) if isinstance(q, dict) and q.get("slug")]
+    if not queries:
+        print("harvest_embed --precedents: CANNOT RUN - the query names no candidates")
+        print("HARVEST-EMBED-COMPLETE")
+        return 2
+
+    rows, why = load_ledger(a.ledger or None)
+    payload = {"generated": now_stamp(), "model": lib_match.EMBED_MODEL, "device": a.device,
+               "ledger": len(rows), "top": a.top, "cache_dir": HARVEST_CACHE, "cache_misses": 0,
+               "elapsed_sec": 0.0, "state": "ok", "why": why,
+               "candidates": [{"slug": q["slug"], "prior_rulings": [],
+                               "prior_rulings_window": {"shown": 0, "in_region": 0, "in_ledger": 0,
+                                                        "region": region_key(q.get("protein"),
+                                                                             q.get("method")),
+                                                        "ranked_by": "", "state": "empty"},
+                               "region_rulings": {}} for q in queries]}
+    if not rows:
+        # EMPTY IS NOT ABSENT AND NOT BLIND. On day one the ledger holds nothing; the honest report
+        # is "we looked and there is no precedent yet", and the dossier says exactly that.
+        payload["state"] = "empty"
+        _write_json(a.out, payload)
+        print("harvest_embed --precedents: EMPTY - %s" % (why or "the ledger holds no ruling yet"))
+        print("HARVEST-EMBED-COMPLETE")
+        return 0
+
+    t0 = time.time()
+    em = Embedder(cache_dir=(getattr(a, "cache_dir", "") or HARVEST_CACHE), device=a.device)
+    qv, miss_q = em.embed([signature_text(q.get("name"), q.get("protein")) for q in queries])
+    cv, miss_c = em.embed([r["text"] for r in rows])
+    em.save()
+    sims = qv @ cv.T                     # cosine: lib_match normalises at encode time
+    payload["candidates"] = precedent_window(queries, rows, sims, top=a.top)
+    payload["cache_misses"] = miss_q + miss_c
+    payload["elapsed_sec"] = round(time.time() - t0, 2)
+    _write_json(a.out, payload)
+    shown = sum(len(c["prior_rulings"]) for c in payload["candidates"])
+    print("harvest_embed --precedents  [%s]" % a.device)
+    print("  %d candidate(s) against %d past ruling(s), %d precedent(s) shown, %d cache miss(es), "
+          "%.1f s" % (len(queries), len(rows), shown, payload["cache_misses"],
+                      payload["elapsed_sec"]))
+    print("  -> %s" % a.out)
+    print("HARVEST-EMBED-COMPLETE")
+    return 0
+
+
+def _write_json(path, payload):
+    d = os.path.dirname(path)
+    if d and not os.path.isdir(d):
+        os.makedirs(d, exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=1, ensure_ascii=False)
+    os.replace(tmp, path)
+
+
 def load_labelled(status, pool_path=POOL):
     """Candidates the estate has already RULED, for reading a floor off outcomes instead of a corpus.
 
@@ -703,6 +902,72 @@ def cmd_selftest(_a):
       (json.load(open(CALIBRATION_FILE, encoding="utf-8-sig")).get("n") or 0) > 0,
       "a blind run left a file behind")
 
+    # ================================================================================================
+    # THE PRECEDENT WINDOW (PLAN-precedent-window-2026-09-05 P1/P2).
+    #
+    # Driven by a hand-built similarity matrix, exactly like resolution_embed.rank's fixtures and for
+    # the same reason: the RANKING RULE is the part worth freezing, and a ranker that needed 2.3 GB
+    # of weights to be tested would be tested at the end of a drill or not at all.
+    # ================================================================================================
+    # LEDGER ORDER IS DELIBERATELY THE REVERSE OF SIMILARITY ORDER. A neuter on 2026-09-05 replaced
+    # the argsort with `range(len(rows))` and this suite stayed GREEN, because the first draft's
+    # nearest rows also happened to be its first rows - a ranking fixture that could not fail. The
+    # corpus below is ordered far, mid, near so ledger order and cosine order disagree on every row.
+    _rows = [
+        {"slug": "far", "name": "Far Dish", "protein": "beef", "method": "skillet",
+         "key": "beef|skillet|plain", "verdict": "rejected-not-fit", "reason": "r3", "dupe_of": [],
+         "run": "r", "at": "2026-09-03", "text": "t"},
+        {"slug": "mid", "name": "Mid Dish", "protein": "chicken", "method": "bake",
+         "key": "chicken|bake|plain", "verdict": "accepted", "reason": "r2", "dupe_of": [],
+         "run": "r", "at": "2026-09-02", "text": "t"},
+        {"slug": "near", "name": "Near Dish", "protein": "chicken", "method": "bake",
+         "key": "chicken|bake|plain", "verdict": "rejected-dupe", "reason": "r1", "dupe_of": ["x"],
+         "run": "r", "at": "2026-09-01", "text": "t"},
+        {"slug": "self", "name": "Self Dish", "protein": "chicken", "method": "bake",
+         "key": "chicken|bake|plain", "verdict": "accepted", "reason": "r4", "dupe_of": [],
+         "run": "r", "at": "2026-09-04", "text": "t"},
+    ]
+    _q = [{"slug": "self", "name": "Self Dish", "protein": "chicken", "method": "bake"}]
+    #                        far   mid   near  self
+    _sims = np.array([[0.60, 0.70, 0.80, 0.99]], dtype=np.float32)
+    _w = precedent_window(_q, _rows, _sims, top=2)[0]
+    _got = [x["slug"] for x in _w["prior_rulings"]]
+    T("MUST FIRE  the window is the NEAREST rulings, ranked by cosine descending - the whole reason "
+      "it carries more cited precedent than the unbounded key-match list did",
+      _got == ["near", "mid"], str(_got))
+    T("MUST FIRE  LEAVE-ONE-OUT: a candidate re-ruled after a deferral is never handed its OWN "
+      "earlier ruling as prior art, however close it scores",
+      "self" not in _got and _sims[0][3] > _sims[0][0], str(_got))
+    T("MUST FIRE  the window SAYS it is a window - shown, in_region and in_ledger travel with it, so "
+      "'the ten nearest of seventy-seven' cannot read as 'the only ten there are'",
+      _w["prior_rulings_window"]["shown"] == 2
+      and _w["prior_rulings_window"]["in_region"] == 2      # near + mid; self excluded, far is beef
+      and _w["prior_rulings_window"]["in_ledger"] == 4,
+      json.dumps(_w["prior_rulings_window"]))
+    T("MUST FIRE  the region's ruling MIX sums to its own in_ledger count - a summary that does not "
+      "add up is worse than the list it replaces",
+      (_w["region_rulings"]["accepted"] + _w["region_rulings"]["rejected_dupe"]
+       + _w["region_rulings"]["rejected_not_fit"] + _w["region_rulings"]["other"])
+      == _w["region_rulings"]["in_ledger"] == 2,
+      json.dumps(_w["region_rulings"]))
+    T("CLEAN TWIN a window larger than the corpus returns what exists and says so, rather than "
+      "padding to the cap",
+      len(precedent_window(_q, _rows, _sims, top=99)[0]["prior_rulings"]) == 3,
+      str(len(precedent_window(_q, _rows, _sims, top=99)[0]["prior_rulings"])))
+    T("the region COUNT is protein|method and is not a second copy of Get-DishKey - "
+      "considered-dishes.ps1 is the one matcher, and its family comes off the NAME in PowerShell",
+      region_key("chicken", "bake") == "chicken|bake" and region_key(None, "") == "any|any",
+      region_key(None, ""))
+    _led, _why = load_ledger(os.path.join(HERE, "definitely-not-a-ledger.json"))
+    T("MUST FIRE  an unreadable ledger is a REASON, never an empty corpus that reads as 'no precedent'",
+      _led == [] and "could not be read" in _why, _why)
+    if os.path.exists(LEDGER):
+        _live, _lw = load_ledger()
+        T("every live ledger row embeds on the SAME signature_text as the catalog - one vector space, "
+          "one cache, nothing new paid for",
+          len(_live) > 0 and all(r["text"].startswith("dish: ") for r in _live),
+          "%d rows, %s" % (len(_live), _lw))
+
     T("the recorded CPU latency exists before anything could schedule a GPU window",
       os.path.exists(LATENCY_FILE) or True, "")   # --measure writes it; --selftest only asserts shape
     if os.path.exists(LATENCY_FILE):
@@ -726,15 +991,34 @@ def main(argv=None):
     ap.add_argument("--measure", action="store_true")
     ap.add_argument("--build", action="store_true")
     ap.add_argument("--calibrate", action="store_true")
+    ap.add_argument("--precedents", action="store_true",
+                    help="the k nearest PAST RULINGS to each candidate in a batch, for the decide "
+                         "lane's dossier. Needs --query and --out.")
+    ap.add_argument("--query", default="", help="with --precedents: input JSON "
+                                                "{\"queries\": [{slug, name, protein, method}, ...]}")
+    ap.add_argument("--out", default="", help="with --precedents: where to write the window")
+    ap.add_argument("--ledger", default="", help="with --precedents: a scratch ledger, for a drill")
+    ap.add_argument("--cache-dir", dest="cache_dir", default="",
+                    help="with --precedents: a scratch embedding cache, for a drill")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--n", type=int, default=200)
-    ap.add_argument("--top", type=int, default=5)
+    # --top is the window size for --precedents and the per-side neighbour count for --build. They
+    # were separate numbers before this flag was shared; PRECEDENT_TOP is the default for the former.
+    ap.add_argument("--top", type=int, default=0)
     ap.add_argument("--device", default="cpu", choices=["cpu", "cuda"])
     a = ap.parse_args(argv)
+    if not a.top:
+        a.top = PRECEDENT_TOP if a.precedents else 5
     if _IMPORT_ERR is not None:
         return _need_venv(_IMPORT_ERR)
     if a.selftest:
         return cmd_selftest(a)
+    if a.precedents:
+        if not a.query or not a.out:
+            print("harvest_embed --precedents: CANNOT RUN - needs --query <in.json> --out <out.json>")
+            print("HARVEST-EMBED-COMPLETE")
+            return 2
+        return cmd_precedents(a)
     if a.measure:
         return cmd_measure(a)
     if a.build:

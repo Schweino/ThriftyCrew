@@ -1600,6 +1600,21 @@ def run(names_out=None, names_ref=None):
             HD.harvest.ledger_rulings = _saved_lr
 
     # =================================================================================================
+    H("2026-09-05 - the decider's memory is a precedent WINDOW (PLAN-precedent-window P1/P2/P4)")
+    # =================================================================================================
+    T("MUST FIRE  the window built at DISPATCH replaces the nightly key-match list, and the dossier "
+      "says `shown` of `in_region` of `in_ledger`", *_precedent_window_reaches_the_dossier())
+    T("MUST FIRE  the region's ruling MIX rides along as counts that sum to their own total",
+      *_precedent_region_mix_rides_along())
+    T("MUST FIRE  a BLIND window keeps the nightly list, says `blind` with a reason, and still "
+      "dispatches - a could-not-look is never an empty list",
+      *_precedent_blind_keeps_the_old_list_and_says_so())
+    T("MUST FIRE  the prompt TELLS the decider it is a window - one it is not told about is a cut",
+      *_precedent_prompt_says_it_is_a_window())
+    T("MUST FIRE  the window is asked for AFTER the take and BEFORE the prompt, in that order",
+      *_precedent_is_asked_after_the_take())
+
+    # =================================================================================================
     H("2026-09-04 - the pinned-reference gate is a tool, not a scratch script (PLAN-after-dedup P4)")
     # =================================================================================================
     _p4tmp = scratch_dir(prefix="daemon-names-")
@@ -2422,6 +2437,138 @@ def _prior_daemon(tmp, reply=None, rc=0, write=True):
     py = FakePy({"resolution_embed": handler})
     d = daemon(run_dir=tmp, ps=FakePS(), pyrun=py)
     return d, py
+
+
+_PRECEDENT_REPLY = {
+    "state": "ok", "why": "", "ledger": 406, "top": 10,
+    "candidates": [{
+        "slug": "s1",
+        "prior_rulings": [{"slug": "near-dish", "name": "Near Dish", "key": "chicken|bake|plain",
+                           "verdict": "rejected-dupe", "reason": "same dinner as live-x",
+                           "dupe_of": ["live-x"], "run": "r", "at": "2026-09-01", "score": 0.91}],
+        "prior_rulings_window": {"shown": 1, "in_region": 77, "in_ledger": 406,
+                                 "region": "chicken|bake",
+                                 "ranked_by": "bge-m3 cosine to this candidate, nearest first",
+                                 "state": "ok"},
+        "region_rulings": {"key": "chicken|bake", "in_ledger": 77, "accepted": 11,
+                           "rejected_dupe": 51, "rejected_not_fit": 15, "other": 0},
+    }]}
+
+
+def _precedent_daemon(tmp, reply=None, rc=0, write=True):
+    """A daemon whose python road answers harvest_embed --precedents with a scripted window."""
+    def handler(args):
+        if "--precedents" in args and write:
+            out = args[args.index("--out") + 1]
+            with io.open(out, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(reply if reply is not None else _PRECEDENT_REPLY, f)
+        return rc, "", ("the venv is not here" if rc else "")
+    py = FakePy({"harvest_embed": handler})
+    d = daemon(run_dir=tmp, ps=FakePS(), pyrun=py)
+    return d, py
+
+
+def _precedent_item():
+    return [{"slug": "s1", "dossier": {
+        "slug": "s1", "name": "Chicken Thing", "signature": {"protein": "chicken", "method": "bake"},
+        "neighbours": [], "prior_rulings": [{"slug": "stale-key-match", "verdict": "accepted"}],
+        "catalog_checked": {}}}]
+
+
+def _precedent_window_reaches_the_dossier():
+    """MUST FIRE. The window built at DISPATCH replaces the nightly key-match list, and the dossier
+    the decider is handed says `shown` of `in_region` of `in_ledger`."""
+    tmp = scratch_dir(prefix="daemon-prec-a-")
+    try:
+        items = _precedent_item()
+        d, _py = _precedent_daemon(tmp)
+        arun(d.fill_precedents(items))
+        text = d.decide_prompt(items, ["live-a"])
+        doc = json.loads(text.split("DOSSIERS:", 1)[1].rsplit("Return the DECIDE", 1)[0].strip())
+        one = doc[0]
+        return ((one["prior_rulings"][0]["slug"] == "near-dish"
+                 and "stale-key-match" not in json.dumps(one["prior_rulings"])
+                 and one["prior_rulings_window"]["shown"] == 1
+                 and one["prior_rulings_window"]["in_region"] == 77
+                 and one["prior_rulings_window"]["in_ledger"] == 406
+                 and one["prior_rulings_window"]["state"] == "ok"),
+                json.dumps(one.get("prior_rulings_window"))[:200])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _precedent_region_mix_rides_along():
+    """MUST FIRE (P2). The region's ruling mix reaches the dossier as counts, so a crowded
+    neighbourhood is a number the decider reads rather than a list it tallies."""
+    tmp = scratch_dir(prefix="daemon-prec-b-")
+    try:
+        items = _precedent_item()
+        d, _py = _precedent_daemon(tmp)
+        arun(d.fill_precedents(items))
+        text = d.decide_prompt(items, ["live-a"])
+        doc = json.loads(text.split("DOSSIERS:", 1)[1].rsplit("Return the DECIDE", 1)[0].strip())
+        rr = doc[0].get("region_rulings") or {}
+        return ((rr.get("accepted") + rr.get("rejected_dupe") + rr.get("rejected_not_fit")
+                 + rr.get("other")) == rr.get("in_ledger") == 77,
+                json.dumps(rr))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _precedent_blind_keeps_the_old_list_and_says_so():
+    """MUST FIRE. A window that could not be built is a could-not-look. The dossier keeps the nightly
+    key-match list, the window field says `blind` with the reason, and the batch still dispatches -
+    an empty list pretending it looked is how a judge concludes there is no precedent."""
+    tmp = scratch_dir(prefix="daemon-prec-c-")
+    try:
+        items = _precedent_item()
+        d, _py = _precedent_daemon(tmp, rc=2, write=False)
+        arun(d.fill_precedents(items))
+        text = d.decide_prompt(items, ["live-a"])
+        doc = json.loads(text.split("DOSSIERS:", 1)[1].rsplit("Return the DECIDE", 1)[0].strip())
+        one = doc[0]
+        said = any("BLIND" in f for f in d.findings)
+        # READ DEFENSIVELY, and the reason is a measurement: the first draft indexed
+        # `prior_rulings[0]` directly, and the neuter that empties the list on a could-not-look made
+        # this case CRASH instead of fail. A crashing fixture stops the suite, so every case after it
+        # never runs and never prints - which is exactly what the case-NAME diff cannot see through.
+        kept = ((one.get("prior_rulings") or [{}])[0] or {}).get("slug")
+        win = one.get("prior_rulings_window") or {}
+        return ((kept == "stale-key-match" and win.get("state") == "blind"
+                 and bool(win.get("why")) and said),
+                "kept=%s findings=%s window=%s" % (kept, json.dumps(d.findings)[:120],
+                                                   json.dumps(win)[:150]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _precedent_prompt_says_it_is_a_window():
+    """MUST FIRE (P4). A window the decider is not told is a window is a silent cut. Needles built by
+    concatenation - a grep that matches its own assertion text cannot fail."""
+    tmp = scratch_dir(prefix="daemon-prec-d-")
+    try:
+        items = _precedent_item()
+        d, _py = _precedent_daemon(tmp)
+        arun(d.fill_precedents(items))
+        text = d.decide_prompt(items, ["live-a"])
+        want = ["prior_rulings" + "_window", "is a WIN" + "DOW, not the whole ledger",
+                "in_region" + "` exceeds `" + "shown", "state: bl" + "ind"]
+        missing = [w for w in want if w not in text]
+        return not missing, "missing=%s" % json.dumps(missing)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _precedent_is_asked_after_the_take():
+    """MUST FIRE. The window is built for the batch actually being dispatched. Asking before the
+    take would spend the sidecar on candidates another run holds; asking after the prompt is built
+    would show the decider a window it never saw."""
+    src = io.open(os.path.join(HERE, "hunt-daemon.py"), encoding="utf-8-sig").read()
+    i_take = src.find("items, slugs = taken, [c[" + '"slug"' + "] for c in taken]")
+    i_fill = src.find("await self.fill_" + "precedents(items)")
+    i_disp = src.find("self.decide_" + "prompt(items, stop)", i_take if i_take > 0 else 0)
+    return (0 < i_take < i_fill < i_disp,
+            "take=%d fill=%d dispatch=%d" % (i_take, i_fill, i_disp))
 
 
 def _prior_table(tmp, terms):

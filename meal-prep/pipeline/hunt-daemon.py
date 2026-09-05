@@ -76,6 +76,7 @@ LOOKUP_TIMEOUT_MIN = 40
 LOOKUP_TIMEOUT = LOOKUP_TIMEOUT_MIN * 60 + 300
 MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
 RESOLUTION_EMBED_PY = os.path.join(HERE, "resolution_embed.py")
+HARVEST_EMBED_PY = os.path.join(HERE, "harvest_embed.py")
 # THE SIDECAR'S OWN INTERPRETER, and it is not a preference. torch and sentence-transformers live in
 # sidecar\.venv and nowhere else on this box; C:\Codex\Python312 has neither, and the graph's
 # interpreter has no numpy at all (graph\pipeline\resolve.py says so in its own header). Named here
@@ -1247,6 +1248,11 @@ class Daemon(object):
                 continue
             items, slugs = taken, [c["slug"] for c in taken]
 
+            # THE PRECEDENT WINDOW, for the batch that is actually about to be dispatched - after
+            # the take, so nothing is computed for a candidate another run holds, and before the
+            # prompt is built, so batch 2 sees what batch 1 just ruled.
+            await self.fill_precedents(items)
+
             payload = await self.with_retry(
                 lambda: self.dispatch("recipe-dedup-selector",
                                       self.decide_prompt(items, stop),
@@ -1297,6 +1303,75 @@ class Daemon(object):
             self.findings.append("%s: --mark-taken did not land (rc %d)" % (slug, p.returncode))
         return p.returncode == 0
 
+    PRECEDENT_TIMEOUT = 120
+
+    async def fill_precedents(self, items):
+        r"""Ask harvest_embed for the k nearest PAST RULINGS to each candidate in THIS batch.
+
+        WHY IT IS HERE AND NOT IN score_pool. `prior_rulings` was written once at the nightly
+        rescore, by coarse key match, unranked and unbounded. Three things that cost, all measured
+        2026-09-05 and recorded in `cmd_precedents`: it broke the constant-cost invariant every other
+        dossier field keeps (16 KB of an 18 KB dossier), it could not SHOW 7 of the 23 precedents the
+        decider has actually cited, and it was stale inside a run - batch 2 could not see what batch 1
+        had just ruled. Built here, at dispatch, it can.
+
+        WHY harvest_embed AND NOT resolution_embed. The map lane's `fill_prior_rulings` is the
+        template for the SHAPE, not the corpus: resolution_embed's corpus is the ingredient event log
+        keyed by term, a different text and a different cache. Dish rulings embed on
+        `signature_text(name, protein)` - the catalog's own vector space, the harvest's own cache.
+
+        NEVER BLOCKING, AND THREE STATES NEVER FAKED. `ok` with a window, `empty` when the ledger
+        holds no ruling yet, `blind` when this could not run at all. On `blind` the dossier keeps the
+        nightly key-match list the pool already carries and SAYS so - an empty list pretending it
+        looked is how a judge concludes there is no precedent when nobody checked.
+        """
+        self._precedents = getattr(self, "_precedents", {})
+        queries = []
+        for c in items:
+            d = c.get("dossier") or c
+            sig = d.get("signature") or {}
+            queries.append({"slug": c["slug"], "name": d.get("name") or c["slug"],
+                            "protein": sig.get("protein") or "any",
+                            "method": sig.get("method") or "any"})
+        if not queries:
+            return
+        d = os.path.join(self.run_dir, "candidates")
+        qin = os.path.join(d, "precedent-query.json")
+        qout = os.path.join(d, "precedent-window.json")
+        why = ""
+        doc = None
+        try:
+            os.makedirs(d, exist_ok=True)
+            with open(qin, "w", encoding="utf-8") as f:
+                json.dump({"queries": queries}, f, ensure_ascii=False)
+            args = ["--precedents", "--query", qin, "--out", qout]
+            rc, out, err = await self.py(HARVEST_EMBED_PY, args, timeout=self.PRECEDENT_TIMEOUT,
+                                         exe=SIDECAR_PY)
+            if rc != hunt_lib.EXIT_CLEAN:
+                why = "exit %s: %s" % (rc, ((out or "") + (err or "")).strip()[:160])
+            else:
+                with open(qout, "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f)
+        except Exception as e:                                    # noqa: BLE001
+            why = "the precedent window could not be built (%s)" % e
+        if doc is None:
+            for c in items:
+                self._precedents[c["slug"]] = {"state": "blind", "why": why}
+            self.findings.append("decide: the precedent window is BLIND for this batch of %d (%s) - "
+                                 "the dossier carries the nightly key-match list and says so"
+                                 % (len(items), why))
+            return
+        state = str(doc.get("state") or "ok")
+        for row in (doc.get("candidates") or []):
+            self._precedents[str(row.get("slug") or "")] = {
+                "state": state, "why": str(doc.get("why") or ""),
+                "prior_rulings": list(row.get("prior_rulings") or []),
+                "prior_rulings_window": dict(row.get("prior_rulings_window") or {}),
+                "region_rulings": dict(row.get("region_rulings") or {})}
+        shown = sum(len(r.get("prior_rulings") or []) for r in doc.get("candidates") or [])
+        self.log("  decide: precedent window %s - %d ruling(s) shown over %d candidate(s), nearest "
+                 "first, from %d past ruling(s)" % (state, shown, len(queries), doc.get("ledger", 0)))
+
     def decide_prompt(self, items, stop):
         """EVERY DISPATCH AFTER THE FIRST CARRIES THE RUN'S ACCEPTED-SO-FAR LIST (the gate run's own
         finding). Without it the single decider becomes N independent deciders wearing one name: it
@@ -1318,6 +1393,22 @@ class Daemon(object):
                                         "find-similar.ps1, so treat the in-flight side as unknown "
                                         "rather than empty")
             d["catalog_checked"] = cc
+            # THE PRECEDENT WINDOW replaces the nightly key-match list, and only when it was
+            # actually built. On `blind` the nightly list stays exactly as it was and the window
+            # field says `blind` with the reason: a decider that is shown ten rulings must be able
+            # to tell "the ten nearest of seventy-seven" from "the only ten there are", and a
+            # decider shown the old list must be able to tell that nobody ranked it.
+            p = (getattr(self, "_precedents", {}) or {}).get(d.get("slug")) or {}
+            if p.get("state") in ("ok", "empty") and "prior_rulings" in p:
+                d["prior_rulings"] = p["prior_rulings"]
+                d["prior_rulings_window"] = p["prior_rulings_window"]
+                d["region_rulings"] = p["region_rulings"]
+            else:
+                d["prior_rulings_window"] = {
+                    "shown": len(d.get("prior_rulings") or []), "in_region": None,
+                    "in_ledger": None, "ranked_by": "",
+                    "state": p.get("state") or "blind",
+                    "why": p.get("why") or "the precedent window was not built for this batch"}
             dossiers.append(d)
         acc = self.accepted_slugs
         return (
@@ -1329,6 +1420,13 @@ class Daemon(object):
             "to the pool alike, and the collision class that put a jalapeno popper chicken through\n"
             "twice. `catalog_checked` states that the search HAPPENED, so an empty match list is\n"
             "evidence of absence rather than evidence nobody looked.\n\n"
+            "`prior_rulings` is a WINDOW, not the whole ledger: the nearest past rulings to THIS\n"
+            "candidate by embedding similarity, and `prior_rulings_window` states `shown` of\n"
+            "`in_region` of `in_ledger`. When `in_region` exceeds `shown` the region is crowded\n"
+            "beyond what you can see - say so in your reason or defer; do not read the window as\n"
+            "the complete record. `state: blind` means the window could not be built and you are\n"
+            "looking at the older unranked key-match list instead. `region_rulings` is that\n"
+            "region's ruling mix as counts, so you never have to tally the list yourself.\n\n"
             "DOSSIERS:\n%s\n\n"
             "Return the DECIDE payload and nothing else. Write no file.\n"
             % (len(dossiers), self.run_id, len(acc), ", ".join(acc) or "(nothing yet)",
