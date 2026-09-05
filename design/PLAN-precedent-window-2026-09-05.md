@@ -1,8 +1,13 @@
 # PLAN: the decider's memory as a precedent WINDOW, not a history dump
 
 queue_id: precedent-window-2026-09-05
-shipped_commit: (none yet - if this field names a commit, the work is DONE: verify it and report,
-do not rebuild)
+shipped_commit: a5a589f8 (2026-09-05) - P1, P2, P3 and P4 are DONE: verify and report, do not
+rebuild. P5 was the fallback if P1 were refused and is deliberately NOT built. P6 is parked.
+MEASURED THROUGH THE SHIPPED ROAD: 18 of 23 cited precedents inside the k=10 window (bar >= 16);
+prior_rulings 16,158 -> 4,332 bytes per candidate, max/min 12564x -> 1.3x (bars <= 5,500, <= 1.5x);
+the sidecar call 4.2 s for a batch of 10 (bar <= 15 s).
+CORRECTION to section 5: harvest_embed.py and considered-dishes.ps1 do NOT carry --names-out;
+their case-name diffs were hand-rolled.
 author: Fable 5.1, 2026-09-05, PLAN ONLY. Written for a fresh session to build from. Every number
 below was measured today against the files; every claim about a file names the line it was read at.
 ruled by: Brad, 2026-09-05 - "we don't want to cut it" (a count cap on `prior_rulings` is refused),
