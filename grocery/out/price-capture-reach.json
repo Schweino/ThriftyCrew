@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-09-04T08:15:14",
+    "updated":  "2026-09-05T08:16:13",
     "price_table":  "price-table-2026-09-02.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
@@ -7,9 +7,9 @@
                        "file":  "ingredient-queue.json",
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
-                       "captured":  507,
+                       "captured":  520,
                        "reached":  20,
-                       "missing":  487,
+                       "missing":  500,
                        "missing_rows":  [
                                             {
                                                 "key":  "bean-sprouts",

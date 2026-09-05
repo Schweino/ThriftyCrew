@@ -286,6 +286,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "breakfast-sausage",
+        "store":  "Walmart",
+        "unit":  "lb",
+        "board":  2.87,
+        "link":  3.18,
+        "ratio":  1.11,
+        "price":  3.18,
+        "size":  "lb",
+        "boardItem":  "Farmland Original Pork Breakfast Sausage Roll, 16 oz",
+        "linkItem":  "Farmland Original Pork Breakfast Sausage Roll, 16 oz",
+        "board_src":  "main"
+    },
+    {
         "id":  "broccoli",
         "store":  "Aldi",
         "unit":  "lb",
@@ -663,6 +676,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "tomatoes-green-chilies",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0786,
+        "link":  0.0683,
+        "ratio":  0.87,
+        "price":  0.99,
+        "size":  "14.5 oz",
+        "boardItem":  "Fareway Mexican Style Diced Tomatoes with Green Chilies",
+        "linkItem":  "Fareway Mexican Style Diced Tomatoes with Green Chilies",
+        "board_src":  "main"
+    },
+    {
         "id":  "dijon-mustard",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -1014,19 +1040,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "limes",
-        "store":  "Family Fare",
-        "unit":  "each",
-        "board":  0.89,
-        "link":  0.79,
-        "ratio":  0.89,
-        "price":  0.79,
-        "size":  "1 ct",
-        "boardItem":  "Fresh Limes",
-        "linkItem":  "Fresh Limes",
-        "board_src":  "main"
-    },
-    {
         "id":  "milk",
         "store":  "Aldi",
         "unit":  "gallon",
@@ -1323,6 +1336,19 @@
         "size":  "32 oz",
         "boardItem":  "Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ",
         "linkItem":  "Fremont Fish Market Value Pack Wild Caught Salmon",
+        "board_src":  "main"
+    },
+    {
+        "id":  "salmon",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  6.392,
+        "link":  7.192,
+        "ratio":  1.13,
+        "price":  8.99,
+        "size":  "20 oz",
+        "boardItem":  "Trident Seafoods Alaska Salmon Fillet",
+        "linkItem":  "Trident Seafoods Alaska Salmon Fillet",
         "board_src":  "main"
     },
     {

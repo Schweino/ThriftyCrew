@@ -1,12 +1,12 @@
 {
-    "updated":  "2026-09-04T08:15:16",
+    "updated":  "2026-09-05T08:16:14",
     "board":  "comparison-2026-09-02.json",
     "week_of":  "2026-09-02",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  477,
-    "dated_by_the_store":  236,
-    "traced_to_an_ad":  61,
-    "untraceable":  180,
+    "sale_cells":  474,
+    "dated_by_the_store":  235,
+    "traced_to_an_ad":  60,
+    "untraceable":  179,
     "ad_rows_available":  "Aldi=103 Baker\u0027s=483 Family Fare=1400 Fareway=729 Hy-Vee=717",
     "items":  [
                   {
@@ -1869,19 +1869,6 @@
                       "days_unexplained":  12
                   },
                   {
-                      "key":  "Fareway|tomatoes-green-chilies",
-                      "id":  "tomatoes-green-chilies",
-                      "store":  "Fareway",
-                      "item":  "Fareway Mexican Style Diced Tomatoes with Green Chilies",
-                      "price":  "$0.99",
-                      "per_unit":  0.0683,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20582500-fareway-tomatoes-diced-mexican-style-145-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-09-02",
-                      "days_unexplained":  12
-                  },
-                  {
                       "key":  "Fareway|tomato-sauce",
                       "id":  "tomato-sauce",
                       "store":  "Fareway",
@@ -1937,11 +1924,11 @@
                       "key":  "Fareway|vegetable-soup",
                       "id":  "vegetable-soup",
                       "store":  "Fareway",
-                      "item":  "Campbell\u0027s Old Fashioned Vegetable Beef Soup",
-                      "price":  "$2.48",
-                      "per_unit":  0.1319,
+                      "item":  "Fareway Traditional Minestrone Soup",
+                      "price":  "$1.88",
+                      "per_unit":  0.0989,
                       "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/37442-campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23967539-fareway-soup-minestrone-traditional-19-oz",
                       "first_seen":  "2026-08-21",
                       "last_seen":  "2026-09-02",
                       "days_unexplained":  12
@@ -2207,19 +2194,6 @@
                       "days_unexplained":  2
                   },
                   {
-                      "key":  "Fareway|cereal",
-                      "id":  "cereal",
-                      "store":  "Fareway",
-                      "item":  "Fareway Bran Flakes Cereal",
-                      "price":  "$1.99",
-                      "per_unit":  0.1106,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26204312-fareway-honey-nut-tasteeos-sweetened-toasted-oat-cereal-1225-oz",
-                      "first_seen":  "2026-08-31",
-                      "last_seen":  "2026-09-02",
-                      "days_unexplained":  2
-                  },
-                  {
                       "key":  "Fareway|coffee",
                       "id":  "coffee",
                       "store":  "Fareway",
@@ -2345,6 +2319,19 @@
                       "per_unit":  0.0446,
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24300907-fareway-corn-whole-kernel-1525-oz",
+                      "first_seen":  "2026-09-02",
+                      "last_seen":  "2026-09-02",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|jarred-gravy",
+                      "id":  "jarred-gravy",
+                      "store":  "Fareway",
+                      "item":  "Fareway Sausage Gravy",
+                      "price":  "$1.58",
+                      "per_unit":  0.1053,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24220347-fareway-sausage-gravy-15-oz",
                       "first_seen":  "2026-09-02",
                       "last_seen":  "2026-09-02",
                       "days_unexplained":  0

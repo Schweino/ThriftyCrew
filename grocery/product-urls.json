@@ -2818,11 +2818,11 @@
                                                  "name":  "Christian Brothers VS Brandy"
                                              },
                                  "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/116999744",
-                                                 "name":  "Christian Brothers Vs Grape Brandy, 1.75 L Bottle, 40% ABV",
-                                                 "price":  "$20.88",
+                                                 "url":  "https://www.walmart.com/ip/119925337",
+                                                 "name":  "Korbel California Brandy, 1.75 L Bottle, 80 Proof",
+                                                 "price":  "$19.48",
                                                  "size":  "59.175 fl oz",
-                                                 "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
+                                                 "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
                                              }
                              },
                   "bratwurst":  {
@@ -2860,7 +2860,14 @@
                                                         "name":  "Bratwurst, Cheddar Our Family",
                                                         "price":  "$5.99",
                                                         "size":  "18 oz"
-                                                    }
+                                                    },
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/116565999",
+                                                    "name":  "Johnsonville Beer Brats Pork Bratwurst Links Party Pack, 2.85 lbs (12 Count) Refrigerated",
+                                                    "price":  "$13.12",
+                                                    "size":  "2.903 lb",
+                                                    "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
+                                                }
                                 },
                   "bread":  {
                                 "commodity":  "Bread (loaf)",
@@ -2948,13 +2955,6 @@
                                                             "size":  "18 oz",
                                                             "name":  "Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches"
                                                         },
-                                               "Family Fare":  {
-                                                                   "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/breakfast/jimmy_dean_croissant_breakfast_sandwiches_with_sausage_egg_and_cheese_frozen_8_ct/p/45711",
-                                                                   "name":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
-                                                                   "price":  "$13.99",
-                                                                   "size":  "8 ct",
-                                                                   "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                                               },
                                                "Hy-Vee":  {
                                                               "url":  "https://www.hy-vee.com/aisles-online/p/4234539/hy-vee-sausage-egg-and-cheese-muffin-breakfast-sandwiches",
                                                               "name":  "Hy-Vee Sausage, Egg, \u0026 Cheese Muffin Breakfast Sandwiches",
@@ -2983,7 +2983,14 @@
                                                                     "price":  "$10.99",
                                                                     "size":  "8 pk 3.5 oz",
                                                                     "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                                }
+                                                                },
+                                               "Family Fare":  {
+                                                                   "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/breakfast/jimmy_dean_biscuit_breakfast_sandwiches_with_sausage_egg_and_cheese_frozen_8_ct/p/45712",
+                                                                   "name":  "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
+                                                                   "price":  "$13.99",
+                                                                   "size":  "8 ct",
+                                                                   "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
+                                                               }
                                            },
                   "breakfast-sausage":  {
                                             "commodity":  "breakfast-sausage",
@@ -3027,7 +3034,14 @@
                                                                     "price":  "$7.34",
                                                                     "size":  "2 lb",
                                                                     "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                                }
+                                                                },
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/10403368",
+                                                            "name":  "Farmland Original Pork Breakfast Sausage Roll, 16 oz",
+                                                            "price":  "$3.18",
+                                                            "size":  "lb",
+                                                            "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
+                                                        }
                                         },
                   "broccoli":  {
                                    "commodity":  "broccoli",
@@ -14923,19 +14937,19 @@
                                                                "name":  "Chef-mate Country Sausage Gravy, 105 oz.",
                                                                "board_pu":  0.0912
                                                            },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23884100-fareway-chicken-gravy-12-oz",
-                                                       "name":  "Fareway Chicken Gravy",
-                                                       "price":  "$1.99",
-                                                       "size":  "12 oz",
-                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                   },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/757809014",
                                                        "name":  "Great Value Brown Gravy with Onion, 10.5 oz",
                                                        "price":  "$1.18",
                                                        "size":  "10.5 oz",
                                                        "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24220347-fareway-sausage-gravy-15-oz",
+                                                       "name":  "Fareway Sausage Gravy",
+                                                       "price":  "$1.58",
+                                                       "size":  "15 oz",
+                                                       "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "jasmine-rice":  {
@@ -15858,7 +15872,7 @@
                                                  },
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/citrus_fruits/fresh_limes/p/2311246",
-                                                    "price":  0.79,
+                                                    "price":  "$0.89",
                                                     "size":  "1 ct",
                                                     "name":  "Fresh Limes",
                                                     "board_pu":  0.79,
@@ -17315,13 +17329,6 @@
                                                        "board_pu":  1.1238,
                                                        "verified":  "2026-08-23"
                                                    },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/citrus_fruits/open_acres_oranges_navel/p/1564405684716065911",
-                                                      "name":  "Open Acres Oranges Navel",
-                                                      "price":  "$6.99",
-                                                      "size":  "3 lb",
-                                                      "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                  },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18809441-navel-orange-1-lb",
                                                   "price":  1.48,
@@ -17348,7 +17355,14 @@
                                                   "price":  "$4.52",
                                                   "size":  "4 lb",
                                                   "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                  "Family Fare":  {
+                                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/citrus_fruits/our_family_orange_navel_california/p/1564405684715706181",
+                                                      "name":  "Our Family Orange Navel California",
+                                                      "price":  "$5.79",
+                                                      "size":  "4 lb",
+                                                      "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
+                                                  }
                               },
                   "oven-cleaner":  {
                                        "commodity":  "Oven Cleaner",
@@ -24929,13 +24943,6 @@
                                                         "name":  "Hy-Vee Hearty Vegetable Soup",
                                                         "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                     },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/37442-campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz",
-                                                         "name":  "Campbell\u0027s Old Fashioned Vegetable Beef Soup",
-                                                         "price":  "$2.48",
-                                                         "size":  "18.8 oz",
-                                                         "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                     },
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/progresso-vegetable-classics-canned-minestrone-soup/0004119601012",
                                                               "name":  "Progresso Vegetable Classics Canned Minestrone Soup",
@@ -24949,6 +24956,13 @@
                                                          "price":  "$2.48",
                                                          "size":  "19 oz",
                                                          "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                     },
+                                         "Fareway":  {
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23967539-fareway-soup-minestrone-traditional-19-oz",
+                                                         "name":  "Fareway Traditional Minestrone Soup",
+                                                         "price":  "$1.88",
+                                                         "size":  "19 oz",
+                                                         "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
                                                      }
                                      },
                   "veggie-sausages":  {

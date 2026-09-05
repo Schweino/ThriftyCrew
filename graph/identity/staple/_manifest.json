@@ -3,47 +3,47 @@
     "namespace":  "staple",
     "rules_hash":  "2c4962476cc1dc76bdf3b064e94e6b51490d18c4413e8a77aa701fdda118635a",
     "board_date":  "2026-09-02",
-    "built_at":  "2026-09-04T11:31:15",
-    "rows_total":  42791,
-    "rows_reused_from_previous":  0,
-    "rows_rematched":  42791,
+    "built_at":  "2026-09-05T08:07:31",
+    "rows_total":  42798,
+    "rows_reused_from_previous":  42784,
+    "rows_rematched":  14,
     "rows_contested":  824,
     "key_collisions_demoted_to_name":  1005,
     "stores":  [
                    {
                        "store":  "Aldi",
                        "rows":  3236,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7380,
+                       "rows":  7381,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  5430,
+                       "rows":  5434,
                        "changed":  true
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  1037,
+                       "rows":  1039,
                        "changed":  true
                    },
                    {
                        "store":  "Hy-Vee",
                        "rows":  2260,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
                        "rows":  3677,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Walmart",
                        "rows":  19771,
-                       "changed":  true
+                       "changed":  false
                    }
                ]
 }

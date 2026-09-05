@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-09-04T08:02:18",
+    "updated":  "2026-09-05T08:07:15",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -1093,6 +1093,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Fareway|20627399",
+                        "store":  "Fareway",
+                        "item_id":  "20627399",
+                        "price":  1.99,
+                        "first_seen":  "2026-09-02",
+                        "last_seen":  "2026-09-02",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Fareway|20629096",
                         "store":  "Fareway",
                         "item_id":  "20629096",
@@ -1480,6 +1489,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Fareway|23967539",
+                        "store":  "Fareway",
+                        "item_id":  "23967539",
+                        "price":  1.88,
+                        "first_seen":  "2026-09-02",
+                        "last_seen":  "2026-09-02",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Fareway|23976254",
                         "store":  "Fareway",
                         "item_id":  "23976254",
@@ -1701,6 +1719,15 @@
                         "item_id":  "24215500",
                         "price":  2.39,
                         "first_seen":  "2026-08-23",
+                        "last_seen":  "2026-09-02",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|24220347",
+                        "store":  "Fareway",
+                        "item_id":  "24220347",
+                        "price":  1.58,
+                        "first_seen":  "2026-09-02",
                         "last_seen":  "2026-09-02",
                         "price_changed":  0
                     },
@@ -4639,6 +4666,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|1JLKB5QCW4TR",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "1JLKB5QCW4TR",
+                        "price":  7.48,
+                        "first_seen":  "2026-09-05",
+                        "last_seen":  "2026-09-05",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|1K1BCN0GEA0Y",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "1K1BCN0GEA0Y",
@@ -4734,7 +4770,7 @@
                         "item_id":  "1VPBRC1OVEPT",
                         "price":  9.98,
                         "first_seen":  "2026-08-24",
-                        "last_seen":  "2026-09-04",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -4743,7 +4779,7 @@
                         "item_id":  "1W2WH74E09V3",
                         "price":  9.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -5022,7 +5058,7 @@
                         "item_id":  "37XZDMNMJ03R",
                         "price":  7.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-04",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -5085,7 +5121,7 @@
                         "item_id":  "3PG07CPAQA0M",
                         "price":  8.44,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-04",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -5377,6 +5413,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|4WVM9A7JXQY8",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "4WVM9A7JXQY8",
+                        "price":  19.98,
+                        "first_seen":  "2026-09-05",
+                        "last_seen":  "2026-09-05",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|4XDU2M0V4HX0",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "4XDU2M0V4HX0",
@@ -5499,7 +5544,7 @@
                         "item_id":  "5EAP02QK9FJ7",
                         "price":  9.98,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -5517,7 +5562,7 @@
                         "item_id":  "5FUAUK2V218M",
                         "price":  9.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-04",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -5643,7 +5688,7 @@
                         "item_id":  "5X4U54DBN62O",
                         "price":  10.58,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-04",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -5985,7 +6030,7 @@
                         "item_id":  "75WHUM5M5OTK",
                         "price":  8.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-03",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {
@@ -6021,7 +6066,7 @@
                         "item_id":  "7BNH2BF10EO6",
                         "price":  7.98,
                         "first_seen":  "2026-09-03",
-                        "last_seen":  "2026-09-04",
+                        "last_seen":  "2026-09-05",
                         "price_changed":  0
                     },
                     {

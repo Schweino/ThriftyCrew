@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  75,
-    "cursor_next":  82,
+    "cursor_start":  82,
+    "cursor_next":  89,
     "total_terms":  602,
     "rotation_terms":  [
-                           "buckwheat soba noodles",
-                           "buffalo wing sauce",
-                           "bulgur",
-                           "butter",
-                           "buttermilk",
-                           "butternut squash",
-                           "green cabbage"
+                           "caesar dressing",
+                           "caesar salad kit",
+                           "cajun seasoning",
+                           "yellow cake mix",
+                           "canned beets",
+                           "black beans",
+                           "butter beans"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "buckwheat soba noodles",
-                  "buffalo wing sauce",
-                  "bulgur",
-                  "butter",
-                  "buttermilk",
-                  "butternut squash",
-                  "green cabbage"
+                  "caesar dressing",
+                  "caesar salad kit",
+                  "cajun seasoning",
+                  "yellow cake mix",
+                  "canned beets",
+                  "black beans",
+                  "butter beans"
               ],
     "commodities":  [
-                        "buckwheat-soba-noodles",
-                        "buffalo-wing-sauce",
-                        "bulgur-wheat",
-                        "butter",
-                        "buttermilk",
-                        "butternut-squash",
-                        "cabbage"
+                        "caesar-dressing",
+                        "caesar-salad-kit",
+                        "cajun-seasoning",
+                        "cake-mix",
+                        "canned-beets",
+                        "canned-black-beans",
+                        "canned-butter-beans"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

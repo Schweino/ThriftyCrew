@@ -1431,6 +1431,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "breakfast-sandwiches",
+        "store":  "Family Fare",
+        "product":  "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_meals_more",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
         "id":  "frozen-broccoli",
         "store":  "Family Fare",
         "product":  "Frozen Broccoli Florets Our Family Steamable",
@@ -2270,7 +2279,7 @@
     {
         "id":  "oranges",
         "store":  "Family Fare",
-        "product":  "Open Acres Oranges Navel",
+        "product":  "Our Family Orange Navel California",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/citrus_fruits",
         "verdict":  "ALLOW",

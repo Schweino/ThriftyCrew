@@ -27,7 +27,7 @@
                  "protein":  25,
                  "carbs":  55,
                  "fat":  29,
-                 "cost_ps":  "1.61"
+                 "cost_ps":  "2.15"
              },
     "intro_html":  "Four ingredients. One pan. Put them in the oven and walk away. Bratwurst, sauerkraut and potatoes is the plate you get at every German festival, and it turns out the festival version was never complicated. It lands at {{protein}} grams of protein for about ${{cost_ps}} a bowl (at everyday cost), and it stays one of the simplest dinners we have.",
     "ingredients_display":  [
@@ -135,7 +135,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT1H",
                  "totalTime":  "PT1H15M",
-                 "costPerServing":  1.61,
+                 "costPerServing":  2.15,
                  "recipeIngredient":  [
                                           "Potato, 18.4 potatoes (3909 g)",
                                           "Bratwurst, 3.5 lb (1543 g)",

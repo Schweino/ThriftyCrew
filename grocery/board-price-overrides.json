@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
-    "updated":  "2026-09-04",
+    "updated":  "2026-09-05",
     "tol":  0.3,
     "count":  10,
     "cells":  [
@@ -11,7 +11,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.458,
                       "link_name":  "Hy-Vee Plain Bagels 5 Count Pre-Split",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "celery",
@@ -20,7 +20,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  1.99,
                       "link_name":  "Organic Celery Heart Each",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "tomatoes",
@@ -29,7 +29,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.97,
                       "link_name":  "Roma Tomatoes",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "greek-yogurt",
@@ -38,7 +38,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.2278,
                       "link_name":  "Kroger Plain Nonfat Greek Yogurt Tub",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -47,7 +47,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  1.52,
                       "link_name":  "Fresh Red Bell Pepper, Each",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "reduced-fat-mozzarella",
@@ -56,7 +56,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3543,
                       "link_name":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "zero-sugar-soda-2l",
@@ -65,7 +65,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.01,
                       "link_name":  "Diet Big K Cola No Calorie Soda Bottle",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "au-jus-gravy-mix",
@@ -74,7 +74,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.99,
                       "link_name":  "Hy-Vee Au Jus Sauce Mix",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "sweet-chili-sauce",
@@ -83,7 +83,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.2752,
                       "link_name":  "Hy-Vee Thai Sweet Chili Sauce",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   },
                   {
                       "id":  "swiss-cheese",
@@ -92,7 +92,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3725,
                       "link_name":  "Hy-Vee Sliced Swiss Cheese 10Ct",
-                      "set":  "2026-09-04"
+                      "set":  "2026-09-05"
                   }
               ]
 }
