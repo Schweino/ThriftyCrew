@@ -350,12 +350,53 @@ wait, or `send_message` asking them to hold. If a task must touch the main tree,
 FIRST. And when a cert goes stale, diff the specs against HEAD before re-running anything: on the last
 occurrence only one of nine specs had actually changed, so the honest repair was one re-QA, not nine.
 
+## Browser pricing is handed OUT to a worker you spawn - the daemon cannot do it
+
+Some stores answer Brad's own Chrome and refuse an automated one, and that is structural rather than a
+preference: since Chrome 136 `--remote-debugging-port` is ignored unless `--user-data-dir` is
+non-default, and copying his session into a driver profile was measured and failed - same cookies,
+same fingerprint, same IP, still no prices. The extension reaches his browser through
+`chrome.debugger`, and only a Claude session can open that door.
+
+The daemon cannot. It is a Python process, so the only agent it can start is `claude -p` - headless,
+no MCP host, therefore no `mcp__claude-in-chrome__*` and no `mcp__Claude_Browser__*` however many of
+them `recipe-hunter-pricer.md` declares on its `tools:` line. A dispatched pricer proved it in its own
+evidence: "the in-app browser pane and list_connected_browsers were NOT present in this agent session
+toolset at all". So the daemon records those stores `blocked`, which keeps the term PENDING, and the
+BROWSER HALF IS YOURS.
+
+Brad ruled 2026-09-04: this must NOT become another scheduled task. You spawn workers ad hoc.
+
+**While a run is live, arm the watcher:**
+
+    C:\Codex\Python312\python.exe meal-prep\pipeline\browser_price_work.py --watch --interval 30
+
+It prints only when the work set CHANGES, so it wakes you on a real event and stays silent otherwise.
+On `BROWSER-WORK n term(s)`:
+
+ 1. `browser_price_work.py --claim --owner "<your session>"` - REFUSED means a worker is already out;
+    do not spawn a second one. "N concurrent pricers means N tabs per store domain" is the sweep shape
+    that walled Walmart at 55 of 526 terms and Sam's at 205.
+ 2. `browser_price_work.py --prompt` - the brief, built rather than typed, so the hard rules travel
+    with every spawn. Hand it verbatim to ONE spawned `recipe-hunter-pricer`.
+ 3. `browser_price_work.py --release` when it returns.
+
+The worker records through `ingredient-queue.ps1 -RecordBatch`, never by editing the queue. That IS
+the message back: the price lane runs `hunt-run.ps1 -Derive` after every batch, and derived counts are
+the only thing that moves a recipe out of `pricing`/`parked`. No second channel, and it survives a
+restart because a file does.
+
+Fareway and Sam's Club are NOT this work - the daemon's own pre-pass drives them through
+`pull-browser-stores.py`, which is why its `LOOKUP_STORES` is exactly those two. The browser stores
+are Walmart, Aldi and Hy-Vee.
+
 ## Do not
 
 - Do not publish any way except `wave-publish.ps1` after a GO. Never call `publish-recipe.ps1` or
   `engine\publish.ps1` directly from this flow.
 - Do not run `spec-guards.ps1` full mode against `db\recipes` specs.
-- Do not run more than one pricer at a time.
+- Do not run more than one pricer at a time. That includes a browser worker you spawn yourself: take the claim first, and a REFUSED claim means wait, not spawn anyway.
+- Do not let a browser-blocked term sit for a scheduled task to find. Brad ruled 2026-09-04 that there is no second routine - if a run is live and `browser_price_work.py --list` has work, spawning the worker is your job, not tomorrow's.
 - Do not make pricing a per-recipe pipeline stage. The price lane batches terms ACROSS recipes; the mapper
   batches 5 recipes per invocation. Build both from the plan's section 2.4 and S4, not from this card alone.
 - Do not dispatch a lane agent without recording it with `-Lane`, and do not hand-edit `lane-log.jsonl`.

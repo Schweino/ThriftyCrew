@@ -48,7 +48,12 @@ foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Tes
   Invoke-Expression $m.Value
 }
 $builderSrc = Get-Content (Join-Path $root 'build-walmart-deals.ps1') -Raw
-foreach ($fn in @('Resolve-Unit','Get-NameQtyCandidates','Get-NamePack','Format-Qty','Build-Row')) {
+# Get-NamePackMultipliers joined this list 2026-09-05, with Build-Row's refusal branch. It is a HAND-MAINTAINED
+# copy of Build-Row's dependency set, so adding a helper to the builder without adding it here leaves the lift
+# short and Build-Row throws CommandNotFound at run time. That is not a silent failure - the throw below and
+# guards' walmart-batch self-test both fired within the hour - but it is a copy, and the next helper will cost
+# the same trip.
+foreach ($fn in @('Resolve-Unit','Get-NameQtyCandidates','Get-NamePackMultipliers','Get-SameFamilyNameQty','Get-NamePack','Format-Qty','Build-Row')) {
   $m = [regex]::Match($builderSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
   if (-not $m.Success) { throw "import-walmart-batch: could not lift $fn from build-walmart-deals.ps1" }
   Invoke-Expression $m.Value
@@ -114,7 +119,20 @@ function Test-IwbSeller($fields, [bool]$trust) {
 # a row this returns is a row build-walmart-deals would have emitted, plus the fish-sauce name override.
 function Convert-BatchRow($raw, [System.Collections.ArrayList]$log) {
   $b = Build-Row $raw
-  if ($b.err) { return $b }
+  if ($b.err) {
+    # THE FISH-SAUCE CLASS NOW ARRIVES ONE LAYER EARLIER (2026-09-05). Build-Row itself refuses a row whose
+    # name states a quantity in the SAME physical family as the priced unit that neither reproduces Walmart's
+    # unit price nor is explained by a pack count. That is the same finding this function's own >10%
+    # divergence check makes, on the same evidence, so it is relabelled rather than re-derived: the row still
+    # goes to out\walmart-batch-rejects-<date>.json for a human, and the reject keeps the provenance the
+    # 2026-07-27 incident earned it. What changed is that build-walmart-deals now refuses it too, where
+    # before only this importer did.
+    if (([string]$b.err) -like 'REFUSED: name quantity disagrees with unit price*') {
+      return @{ err = ("name/unit-price divergence: " + ([string]$b.err -replace '^REFUSED: ', '') +
+                       " - the store contradicts itself, verify by hand (fish-sauce class 2026-07-27)") }
+    }
+    return $b
+  }
   $row = $b.row
   # fish-sauce rule: name single-size (same family) diverging >10% from the emitted quantity -> name wins
   $named = Parse-NameSize $row.item

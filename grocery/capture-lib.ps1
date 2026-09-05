@@ -54,8 +54,16 @@ function Repair-Mojibake([string]$s) {
   # two decodes, and a single pass left 8 of 29 link names still broken (29 -> 8 -> 0 over two runs). Each
   # iteration must independently pass the signature + clean-decode test, so this can only ever remove real
   # mojibake layers; the moment a pass would not help, it stops and returns what it has.
+  # THE CAP WAS FOUR AND THE CORRUPTION REACHED FIVE (2026-09-05). Hy-Vee's Campbell's turkey gravy row
+  # arrived 117 characters long and peeled 117 -> 73 -> 53 -> 43 -> 38, where the loop ran out of turns and
+  # returned "Campbell" + a still-mangled right single quote, so the name stayed wrong on the board and the
+  # healer reported success. A generation is added every time an encoding-blind read/write round-trips the
+  # file, so the depth is bounded by how many times that happened, not by anything we can name in advance.
+  # Raising the cap is safe for the same reason the loop is: every pass must independently carry the
+  # signature, decode as strict UTF-8 with no replacement character, and actually CHANGE the string, so a
+  # clean name cannot be peeled at any cap. The loop still terminates on the fixpoint break long before 8.
   $cur = $s
-  for ($i = 0; $i -lt 4; $i++) {
+  for ($i = 0; $i -lt 8; $i++) {
     if ($cur -notmatch $script:MOJI_SIGNATURE) { break }
     try {
       $bytes = [Text.Encoding]::GetEncoding(1252).GetBytes($cur)

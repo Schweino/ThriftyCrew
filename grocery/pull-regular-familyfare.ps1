@@ -120,7 +120,8 @@ function Get-FfExpiryClass([string]$foundByTerm, [string]$lastSuccess, [string]$
 # plan item 2026-08-02-91d877)
 # The old alert asked "did ONE run capture the whole store", comparing this run's raw collection against the
 # best deal_count of recent MERGED files. That was the right question at one pull per day. Under the 3-hourly
-# sharded sweep it is a question that can NEVER be answered yes - a run buys ~85 of 526 terms BY DESIGN - so
+# sharded sweep it is a question that can NEVER be answered yes - capture-policy buys ceil(602/90) = 7 terms
+# per window BY DESIGN, three windows a day, a full rotation in about 29 days - so
 # it paged every single day about an architecture that was working: catalog 1909 -> 3974 items across 8
 # sweeps, 0 expired, 358 board cells against a 256-cell pre-freeze baseline.
 # So ask about OUTCOMES instead, on the MERGED catalog, where "Family Fare stopped refreshing" is actually
@@ -148,20 +149,57 @@ function Get-FfExpiryClass([string]$foundByTerm, [string]$lastSuccess, [string]$
 # So ask the question that IS news: has a search term stopped buying? That is measured per term in
 # out\ff-term-ledger.json and attached to each row as found_by_term, so starvation stops being an inference
 # from row ages and becomes a fact with a name on it. Unknown-class rows never page; see Get-FfExpiryClass.
-function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedExpired, [int]$churnExpired, [int]$recentVerified) {
+#
+# THE "SWEEP IS NOT BUYING" ARM, RE-KEYED 2026-09-05 (queue 2026-09-05-12bd4a). It counted ROWS while the
+# policy budgets TERMS, and rows per term vary 0..25 with whichever seven terms sit at the cursor. Measured
+# on the five days after capture-policy landed, the per-window yield was 5, 63, 126, 68, 94, 73 rows - so a
+# 48-hour window can honestly land anywhere between about 30 and about 750, and no rows floor can be derived
+# from a term budget. On 2026-09-05 the SAME healthy store paged at 07:01 on 239 rows and read "catalog
+# healthy" at 08:01 on 310, one hour later, with nothing changed but the slice; the 09-02 re-derivation had
+# been calibrated against a produce-heavy day (strawberries 25, blueberries 25, avocado 20).
+# So count the number the policy actually sets: terms bought per LANDED window, from capture-cursor-log.jsonl.
+# The cursor only advances when a merged catalog was written, so it already encodes bought-and-written, and
+# 2 x RotationTerms means "fewer than two landed windows in two days". A frozen store is 0; one window in two
+# days is 7 against 14. There is no constant left to re-derive when the cadence changes.
+# The rows figure stays in the alert body as information. It is a fine thing to READ and a terrible thing to
+# threshold.
+#
+# UNKNOWN IS NOT ZERO. -1 means the cursor log could not be read, and the arm then says nothing rather than
+# paging about an absent log (the 09-01 logger swallows its own write errors by design). The caller falls
+# back to the capture-cursor.json delta before it resorts to -1, and says so in the sweep log.
+function Get-FfTermsBought48h {
+  <#
+    .SYNOPSIS Terms bought by Family Fare in landed windows over the last 48 hours.
+    .DESCRIPTION Pure over already-parsed log entries so the fixtures can freeze a cursor log. Each entry is
+                 one landed window and carries from/to; the rotation wraps, so a window that crosses the end
+                 of the term list shows to < from and its real advance is (to - from + TermCount).
+  #>
+  param([object[]]$LogEntries, [datetime]$Now, [int]$TermCount)
+  $n = 0
+  foreach ($e in @($LogEntries)) {
+    if (-not $e) { continue }
+    if ([string]$e.store -ne 'Family Fare') { continue }
+    $at = $null
+    try { $at = [datetime]([string]$e.at) } catch { continue }
+    if (($Now - $at).TotalHours -gt 48) { continue }
+    if (($Now - $at).TotalHours -lt 0) { continue }
+    $d = [int]$e.to - [int]$e.from
+    if ($d -lt 0 -and $TermCount -gt 0) { $d += $TermCount }
+    if ($d -gt 0) { $n += $d }
+  }
+  return $n
+}
+
+function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedExpired, [int]$churnExpired, [int]$recentVerified, [int]$termsBought48h = -1, [int]$rotationTerms = 7) {
   $reasons = @()
   $totalExpired = $starvedExpired + $churnExpired
   if ($starvedExpired -gt 0) { $reasons += ("$starvedExpired row(s) aged out past the capture-policy carry on a STARVED search term - that term has not returned a single product inside the carry window, so the sweep genuinely cannot replace those products") }
   if ($mergedCount -gt 0 -and $totalExpired -gt ($mergedCount * 0.02)) { $reasons += ("$totalExpired row(s) aged out in ONE run against a $mergedCount-item catalog - that is a mass loss (over 2%) whatever class the rows are") }
-  # THE FLOOR, RE-DERIVED FROM THE CADENCE 2026-09-02 (queue 2026-09-02-a4236e). 300 = 60% of the designed
-  # 48-hour yield: 3 windows a day x ~85 rows re-dated per window x 2 days = 510. The old 500 was set
-  # against the PRE-SHARDING sweep, where one run re-verified 1,259 rows, and was never re-derived for the
-  # cadence that replaced it - so it sat at 70-100% of the steady-state yield and any thin window read as a
-  # frozen store. Measured on 2026-09-02: a healthy day is 450 (379 dated today + 71 dated yesterday) across
-  # four windows in 19 hours, with 5,305 items and 0 expired, and it paged at 07:00 on 163. A genuinely
-  # frozen store is still caught: two days of nothing is 0, and ONE window in two days is ~85-126.
-  # IF CAPTURE-POLICY CHANGES THE WINDOW COUNT, RE-DERIVE THIS - do not nudge it to silence a page.
-  if ($recentVerified -lt 300) { $reasons += ("only $recentVerified row(s) re-verified against the store in the last 48h, under the floor of 300 (60% of the designed 3-windows-a-day x ~85-row x 2-day yield of 510) - the sweep is not buying terms") }
+  # Terms, not rows. See the note above the function for the five days of measurement that retired the
+  # rows floor. -1 is "not measured" and must stay silent; 0 is a frozen store and must page.
+  if ($termsBought48h -ge 0 -and $termsBought48h -lt (2 * $rotationTerms)) {
+    $reasons += ("only $termsBought48h term(s) bought in the last 48h against a policy of $rotationTerms per window - fewer than two landed windows in two days; the sweep is not buying")
+  }
   if ($prevMax -gt 100 -and $mergedCount -lt ($prevMax * 0.80)) { $reasons += ("merged catalog is $mergedCount items against a best-of-recent $prevMax - it shrank by more than 20%") }
   return @{ degraded = ($reasons.Count -gt 0); reasons = $reasons }
 }
@@ -251,9 +289,51 @@ if ($SelfTest) {
   # if they had been starvation. The re-key must not have cost us the ability to see the original bug.
   $m3 = Test-FfCatalogDegraded 4269 4269 24 0 1259
   _T 'MUST-FIRE m3: the founding 24-expiry case still fires when those rows are starved' ($m3.degraded -and ($m3.reasons -join ' ') -match 'STARVED')
-  # MUST-FIRE (kept verbatim): the sweep has stopped buying terms at all. A REAL freeze detector - do not soften.
-  $d2 = Test-FfCatalogDegraded 4269 4269 0 0 12
-  _T 'MUST-FIRE c5: FIRES when almost nothing was re-verified against the store (12 rows)' ($d2.degraded -and ($d2.reasons -join ' ') -match 're-verified')
+  # THE FREEZE DETECTOR, RE-KEYED 2026-09-05 ONTO TERMS. It used to be "12 rows re-verified" (case d2) and
+  # that number is no longer an arm, so the freeze detection moves here rather than being lost - which is the
+  # thing to check whenever a threshold is retired.
+  # MUST-FIRE m8: a completely frozen store. This is the 2026-08-20 shape (fresh=0, rejected=30,
+  # not_attempted=566): a cold shutout does not advance the cursor, so termsBought48h is 0 and it pages.
+  $m8 = Test-FfCatalogDegraded 5329 5325 0 0 0 0 7
+  _T 'MUST-FIRE m8: FIRES when ZERO terms were bought in 48h (a frozen store)' ($m8.degraded -and ($m8.reasons -join ' ') -match 'not buying')
+  # MUST-FIRE m9: exactly ONE landed window in two days. 7 terms against a policy of 7 per window is under
+  # the two-window floor of 14, and a store that lands once in 48 hours is not keeping its catalog current.
+  $m9 = Test-FfCatalogDegraded 5329 5325 0 0 239 7 7
+  _T 'MUST-FIRE m9: FIRES on one landed window in 48h (7 terms against a floor of 14)' ($m9.degraded -and ($m9.reasons -join ' ') -match 'not buying')
+  # CLEAN-TWIN c7 - TODAY'S FOUNDING FALSE POSITIVE, frozen (2026-09-05T07:01). 239 rows re-verified paged
+  # under the old 300-row floor while the SAME store, SAME cursor, read "catalog healthy - 310 re-verified"
+  # at 08:01 one hour later. Six landed windows in 48h is 42 terms against a floor of 14: healthy, and the
+  # rows figure is not consulted at all. If anyone re-introduces a rows threshold, this case goes red.
+  $c7 = Test-FfCatalogDegraded 5329 5325 0 0 239 42 7
+  _T 'CLEAN-TWIN c7: the 07:01 false page stays SILENT (239 rows, 42 terms bought across six windows)' (-not $c7.degraded)
+  # CLEAN-TWIN c8: the arm cannot be measured (no readable cursor log). Unknown must stay silent, or a
+  # logger that swallowed its own error becomes a nightly page about the store it could not see.
+  $c8 = Test-FfCatalogDegraded 5329 5325 0 0 0 -1 7
+  _T 'CLEAN-TWIN c8: an UNMEASURABLE cursor log (-1) says nothing, and 0 rows alone never pages' (-not $c8.degraded)
+  # THE COUNTER ITSELF, over a frozen cursor-log fixture copied from out\capture-cursor-log.jsonl.
+  $logFix = @(
+    [pscustomobject]@{ at = '2026-09-05T10:33:42'; store = 'Family Fare'; from = 89; to = 96 },
+    [pscustomobject]@{ at = '2026-09-05T08:01:18'; store = 'Family Fare'; from = 82; to = 89 },
+    [pscustomobject]@{ at = '2026-09-05T07:01:16'; store = 'Family Fare'; from = 75; to = 82 },
+    [pscustomobject]@{ at = '2026-09-04T10:33:59'; store = 'Family Fare'; from = 68; to = 75 },
+    [pscustomobject]@{ at = '2026-09-04T08:01:17'; store = 'Family Fare'; from = 61; to = 68 },
+    [pscustomobject]@{ at = '2026-09-04T07:01:12'; store = 'Family Fare'; from = 54; to = 61 },
+    [pscustomobject]@{ at = '2026-09-03T11:03:28'; store = 'Family Fare'; from = 47; to = 54 },
+    [pscustomobject]@{ at = '2026-09-05T09:00:00'; store = 'Walmart';     from = 0;  to = 40 }
+  )
+  # Seven Family Fare windows in this slice fall inside 48 hours of 10:40 (the 09-03 11:03 one sits at
+  # 47.6h, the near edge, and it is in). 7 x 7 = 49.
+  $tb = Get-FfTermsBought48h -LogEntries $logFix -Now ([datetime]'2026-09-05T10:40:00') -TermCount 602
+  _T 'counter: seven Family Fare windows inside 48h sum to 49 terms' ($tb -eq 49)
+  _T 'counter: another store''s advance is not counted as Family Fare''s' ($tb -lt 82)
+  # WRAP: the rotation runs off the end of the 602-term list and starts again, so to < from is a real
+  # 7-term window, not a negative one. Without the wrap a rotation boundary reads as a frozen store.
+  $wrapFix = @([pscustomobject]@{ at = '2026-09-05T08:00:00'; store = 'Family Fare'; from = 598; to = 3 })
+  _T 'counter: a wrapped window counts 7, not -595' (
+    (Get-FfTermsBought48h -LogEntries $wrapFix -Now ([datetime]'2026-09-05T10:40:00') -TermCount 602) -eq 7)
+  # ...and an entry older than the window is outside it.
+  _T 'counter: a window 3 days old is outside the 48h' (
+    (Get-FfTermsBought48h -LogEntries @([pscustomobject]@{ at = '2026-09-02T08:00:00'; store = 'Family Fare'; from = 12; to = 19 }) -Now ([datetime]'2026-09-05T10:40:00') -TermCount 602) -eq 0)
   # CLEAN TWIN c6 - TODAY'S REAL HEALTHY SHARDED DAY, frozen (2026-09-02T10:33): 5,305 merged items against
   # a best-of-recent 5,283, 0 expired, 450 rows re-verified across four windows in 19 hours. The old clean
   # twin c5 is frozen at 1,259 re-verified, a number the PRE-SHARDING sweep produced and no sharded day can
@@ -261,11 +341,14 @@ if ($SelfTest) {
   # This one can: raise the floor back over 450 and this case goes red.
   $c6 = Test-FfCatalogDegraded 5305 5283 0 0 450
   _T 'CLEAN-TWIN c6: a healthy SHARDED day does NOT page (5305 items, 0 expired, 450 re-verified in 4 windows)' (-not $c6.degraded)
-  # MUST-FIRE m4 - THIS MORNING'S REAL PAGE, frozen (2026-09-02T07:00, 163 re-verified). A two-window 48h IS
-  # thin and must still page under the lowered floor, or the change would have bought silence rather than
-  # accuracy. Keep this case and d2 (12 rows) together: they pin both ends of the arm.
-  $m4 = Test-FfCatalogDegraded 5305 5283 0 0 163
-  _T 'MUST-FIRE m4: still FIRES on a genuinely thin 48h (163 re-verified) under the 300 floor' ($m4.degraded -and ($m4.reasons -join ' ') -match 're-verified')
+  # c9 - WHAT USED TO BE MUST-FIRE m4, AND WHY IT IS NOW A CLEAN TWIN (2026-09-05). Frozen at 2026-09-02T07:00
+  # with 163 rows re-verified, m4 asserted that a thin ROW count must page. That assertion is the defect: rows
+  # per window depend on which seven terms the cursor is sitting on, and a niche slice of the 602-term list
+  # yields a handful of rows from a sweep that bought its full budget and wrote its catalog. Given the same
+  # 163 rows and six landed windows, the honest answer is healthy. The freeze detection m4 used to provide has
+  # not been dropped, it has moved to m6/m7 above, where it is measured in the unit the policy actually sets.
+  $c9 = Test-FfCatalogDegraded 5305 5283 0 0 163 42 7
+  _T 'CLEAN-TWIN c9: 163 rows across six landed windows is HEALTHY, not a page' (-not $c9.degraded)
   # MUST-FIRE (kept verbatim): the merged catalog itself collapsed - the original freeze, which bottomed at 207
   # board cells. Also a REAL freeze detector - do not soften.
   $d3 = Test-FfCatalogDegraded 1909 3974 0 0 1259
@@ -616,7 +699,7 @@ $termPairs = @(Get-SearchTermPairs $terms)
 $termList = @($termPairs | ForEach-Object { $_.term })
 $extraTerms = @($termPairs | Where-Object { -not $_.primary }).Count
 if ($extraTerms -gt 0) {
-  # The budget is the binding constraint (~85 of 526 terms bought per rotation), so say what the extra
+  # The budget is the binding constraint (capture-policy's RotationTerms per window, 7 today), so say what the extra
   # terms cost rather than letting a longer rotation be discovered later as an unexplained slowdown.
   Write-Output ("Family Fare: {0} search term(s) across {1} commodit(y/ies) - {2} are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation" -f $termList.Count, @($terms.PSObject.Properties).Count, $extraTerms)
 }
@@ -878,7 +961,8 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
   # THE ALERT USED TO LIVE HERE AND IT HAS MOVED (2026-07-31, plan item 30a1a8).
   # Writing the diagnostic is the GUARD and it stays exactly as it is. What was wrong was ALERTING off it:
   # this branch tests ONE RUN's raw collection against the best of recent MERGED files, and under the 3-hourly
-  # sharded sweep a run buys ~85 of 526 terms BY DESIGN, so the branch is now permanently true and paged every
+  # sharded sweep a run buys capture-policy's RotationTerms (7 today) of 602 BY DESIGN, so the branch is now
+  # permanently true and paged every
   # day about a pipeline that had taken the catalog from 1909 to 3974 items with 0 expired rows.
   # A trigger that can never be false is not a signal. The alert is re-keyed on the MERGED catalog's outcomes
   # and now sits after the carry-forward merge below, which is the first point those numbers exist.
@@ -1060,7 +1144,34 @@ try {
   foreach ($d in @($deals)) {
     try { if (([datetime][string]$d.as_of) -ge $cutoff) { $recentVerified++ } } catch {}
   }
-  $ffState = Test-FfCatalogDegraded @($deals).Count $prevMax $expStarved $expChurn $recentVerified
+  # TERMS BOUGHT IN LANDED WINDOWS, from the cursor log. The cursor advances only when a merged catalog was
+  # written, so this already means bought-and-written; see Test-FfCatalogDegraded for why rows cannot do it.
+  # Three sources in order, and the last one is deliberately SILENT rather than alarming: an unreadable log
+  # is a fact about the logger, not about the store.
+  $termsBought48h = -1
+  # RotationTerms comes from the same plan the sweep budgeted with (line ~810), never from a second copy of
+  # the number: a threshold derived from a hand-restated constant is the drift this re-key exists to end.
+  # 7 is only the fallback for a plan that did not load, matching the budget fallback above.
+  $ffRotation = 7
+  if ($plan -and [int]$plan.RotationTerms -gt 0) { $ffRotation = [int]$plan.RotationTerms }
+  try {
+    $curLogF = Join-Path $OutDir 'capture-cursor-log.jsonl'
+    if (Test-Path $curLogF) {
+      $entries = @()
+      foreach ($ln in [IO.File]::ReadAllLines($curLogF)) {
+        if (-not ([string]$ln).Trim()) { continue }
+        try { $entries += (ConvertFrom-Json $ln) } catch {}
+      }
+      $termsBought48h = Get-FfTermsBought48h -LogEntries $entries -Now (Get-Date) -TermCount $termList.Count
+      Write-Output ("Family Fare: {0} term(s) bought in landed windows over the last 48h (policy {1} per window, floor {2})" -f $termsBought48h, $ffRotation, (2 * $ffRotation))
+    } else {
+      Write-Output 'Family Fare: capture-cursor-log.jsonl is missing - the terms-bought arm cannot be measured this run and stays silent rather than paging about an absent log'
+    }
+  } catch {
+    $termsBought48h = -1
+    Write-Output ('Family Fare: capture-cursor-log.jsonl unreadable (' + $_.Exception.Message + ') - the terms-bought arm stays silent')
+  }
+  $ffState = Test-FfCatalogDegraded @($deals).Count $prevMax $expStarved $expChurn $recentVerified $termsBought48h $ffRotation
   if ($ffState.degraded) {
     $alertStamp = Join-Path $OutDir 'ff-throttle-alert.stamp'
     $sentToday = $false
@@ -1080,7 +1191,7 @@ try {
               "What tripped it:`n  - " + (($ffState.reasons) -join "`n  - ") + "`n`n" + $starvedLine +
               "Merged catalog: $(@($deals).Count) items ($(@($deals).Count - $carried) fresh this run, $carried carried forward, $expired expired past $MaxCarryDays days [$expStarved starved, $expChurn churn, $expUnknown unknown], $recentVerified re-verified in the last 48h) against a best-of-recent of $prevMax. File: $file`n`n" +
               "Expiry classes: STARVED means the row's own search term has returned nothing for the whole carry window and the sweep genuinely cannot replace that product. CHURN means the term is being bought fine and only the NAME left the store's top-25 (a rename, a ranking shift, a delisting, or the multi-buy skip) - the catalog is a name-keyed union, so a trickle of those is the healthy steady state and does NOT page on its own. UNKNOWN means the row predates the found_by_term field, so it cannot be classified yet; it never pages and the class empties itself within $MaxCarryDays days.`n`n" +
-              "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (a run buys ~85 of 526 terms by design) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
+              "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (capture-policy buys RotationTerms per window by design, 7 of 602 today) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
               "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
       Send-Alert -Subject ("Grocery: Family Fare catalog is degrading - " + $ffState.reasons.Count + " signal(s)") -Body $body | Out-Null
       # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient

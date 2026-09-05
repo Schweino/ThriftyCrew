@@ -26,6 +26,9 @@
        A flagged line is now widened to the smallest multi-line hashtable or array literal that
        ENCLOSES it before the verdict. Deliberately only literals: widening to the enclosing block or
        script would let any file that mentions all 7 stores anywhere excuse every hardcoded list in it.
+    6. ORPHANED EXEMPTIONS: every allowed_subsets entry must still resolve - its file must exist and its
+       `contains` needle must still appear in that file. The register that silences check 5 was itself
+       unaudited until 2026-09-05, and four of its thirty entries had already gone dead (queue 2026-09-05-17ebe3).
 
   Exit 0 = clean, 2 = drift found (advisory in the daily pipeline: alert, don't block).
   Params: -Alert (send-alert on drift, de-duped by signature), -SelfTest (frozen fixtures in %TEMP%)
@@ -186,6 +189,41 @@ function Get-StoreListDrift {
   return $found
 }
 
+# ---- 6. ORPHANED EXEMPTIONS (2026-09-05, queue 2026-09-05-17ebe3) --------------------------------------
+# allowed_subsets is a PERMANENT exemption register that nothing audited. An entry outlives the deletion of
+# the file it names and the rewrite of the literal it points at, and then it is one of two things: dead
+# weight, or - if a later edit makes its needle a substring of something broader - a blanket silencer over a
+# genuinely hardcoded roster. That is [[rules-that-silently-disarm]] aimed at the register instead of the rule.
+# MEASURED on 2026-09-05: FOUR of the thirty entries were already dead, two of them naming scripts that were
+# retired on 2026-08-22, and nothing anywhere said so. An exemption is a standing decision, and a standing
+# decision that no longer applies to anything has to be able to say so out loud.
+# The residual hazard this CANNOT see is the opposite one: a needle that still matches, but now matches a
+# broader literal than the one it was written for. That is what the 'reason' field is for - name the region
+# under test and why the subset is legitimate, so a reviewer can tell.
+function Get-OrphanedExemptions {
+  <#
+    .SYNOPSIS  allowed_subsets entries that can no longer match the thing they were written to exempt.
+    .DESCRIPTION Separated out so -SelfTest drives the real resolver rather than a paraphrase of it; this
+                 file is a guard, and a guard whose test exercises a copy of its logic tests the copy.
+  #>
+  param($Subsets, [string]$Dir)
+  $found = New-Object System.Collections.Generic.List[string]
+  foreach ($as in @($Subsets)) {
+    $file = [string]$as.file
+    $needle = [string]$as.contains
+    if (-not $file) { [void]$found.Add("allowed_subsets: an entry names no 'file' - it can never match and can never be reviewed"); continue }
+    $p = Join-Path $Dir $file
+    if (-not (Test-Path $p)) { [void]$found.Add("ORPHANED EXEMPTION (file gone): allowed_subsets exempts a line in '$file', which no longer exists - delete the entry"); continue }
+    # An EMPTY needle is worse than a dead one: IndexOf('') is 0, so the entry would silence every subset in
+    # that file forever. Refuse to treat it as a documented subset.
+    if (-not $needle) { [void]$found.Add("ORPHANED EXEMPTION (empty needle): the entry for '$file' has no 'contains', so it would silence EVERY store-list subset in that file"); continue }
+    if ([IO.File]::ReadAllText($p).IndexOf($needle, [StringComparison]::Ordinal) -lt 0) {
+      [void]$found.Add("ORPHANED EXEMPTION (needle absent): the allowed_subsets entry for '$file' matches nothing there any more - its 'contains' is: " + $needle)
+    }
+  }
+  return $found
+}
+
 if ($SelfTest) {
   # FROZEN FIXTURES, written from the real failing shape and its real clean twin. Never regenerated from
   # the live tree: the wrapped map this encodes would be reformatted one day and the test would pass by
@@ -232,6 +270,35 @@ if ($SelfTest) {
     $al = @(Get-StoreListDrift -Path $bad -FileLabel 'bad.ps1' -Names $fxNames -Subsets @(@{ file = 'bad.ps1'; contains = '$STORES = @(' }))
     if ($al.Count -ne 0) { Write-Output ("FAIL  an allowed_subsets entry did not silence its line: " + ($al -join ' | ')); $fail++ }
     else { Write-Output 'ok    allowed_subsets still silences a documented subset' }
+
+    # ---- ORPHANED EXEMPTIONS (2026-09-05, queue 2026-09-05-17ebe3) -------------------------------------
+    # FOUNDING BUG, frozen: on 2026-09-05 four of the thirty live allowed_subsets entries could not match
+    # anything - local-watchdog.ps1 and import-browser-batch.ps1 had been retired on 2026-08-22, and the
+    # needles '$EVERYDAY_ONLY_STORES' (compare-deals.ps1) and 'The weekly Wednesday grocery browser refresh
+    # did not run' (check-ad-cycles.ps1) had been edited out of the files they name. The register that
+    # silences this guard was never itself checked, so a permanent exemption could rot for months in silence.
+    # MUST FIRE on both shapes, because they fail for different reasons and only one of them is visible on disk.
+    $orphFile = Join-Path $fx 'real.ps1'
+    Set-Content $orphFile -Encoding UTF8 -Value "`$STORES = @('Hy-Vee', 'Aldi')   # the needle below lives here"
+    $orph = @(Get-OrphanedExemptions @(
+      @{ file = 'gone-forever.ps1'; contains = 'anything' },
+      @{ file = 'real.ps1'; contains = 'a needle that was edited out of the file' }
+    ) $fx)
+    if ($orph.Count -ne 2 -or ($orph -join ' | ') -notmatch 'file gone.*gone-forever\.ps1' -or ($orph -join ' | ') -notmatch 'needle absent.*real\.ps1') {
+      Write-Output ("FAIL  a deleted file and an absent needle were not both reported as orphaned exemptions: " + ($orph -join ' | ')); $fail++
+    } else { Write-Output 'ok    an exemption naming a deleted file, and one whose needle is gone, both fire' }
+
+    # CLEAN TWIN: an entry whose file exists AND whose needle is present must stay silent - otherwise the
+    # check would report every legitimate exemption in the register and be turned off within a day.
+    $orphOk = @(Get-OrphanedExemptions @(@{ file = 'real.ps1'; contains = "`$STORES = @('Hy-Vee'" }) $fx)
+    if ($orphOk.Count -ne 0) { Write-Output ("FAIL  a live exemption whose needle is present was reported orphaned: " + ($orphOk -join ' | ')); $fail++ }
+    else { Write-Output 'ok    an exemption whose file exists and whose needle is present stays silent' }
+
+    # An entry with an EMPTY needle would silence every store-list subset in its file (IndexOf('') is 0).
+    $orphEmpty = @(Get-OrphanedExemptions @(@{ file = 'real.ps1'; contains = '' }) $fx)
+    if ($orphEmpty.Count -ne 1 -or ($orphEmpty -join ' ') -notmatch 'empty needle') {
+      Write-Output ("FAIL  an empty 'contains' was not reported as a blanket silencer: " + ($orphEmpty -join ' | ')); $fail++
+    } else { Write-Output 'ok    an exemption with an empty needle is reported, not honoured' }
   } finally { Remove-Item $fx -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
@@ -242,6 +309,9 @@ $scanFiles = Get-ChildItem (Join-Path $root '*.ps1') | Where-Object { $_.Name -n
 foreach ($f in $scanFiles) {
   foreach ($finding in (Get-StoreListDrift -Path $f.FullName -FileLabel $f.Name -Names $names -Subsets $subsets)) { $issues.Add($finding) }
 }
+# The register that silences check 5 gets checked too. Run it AFTER the scan, so a reader sees the subsets
+# that fired first and the exemptions that can no longer fire at all second.
+foreach ($finding in (Get-OrphanedExemptions $subsets $root)) { $issues.Add($finding) }
 
 # ---- report ----
 if ($issues.Count -eq 0) { Write-Output ("store-registry: OK  " + $names.Count + " stores; board, files, schedule and live scripts all agree"); Write-GuardComplete -Name 'store-registry'; exit 0 }

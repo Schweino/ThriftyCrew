@@ -1008,6 +1008,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { Send-Alert -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
       }
 
+      # ---- BOARD NAMES: is the shopper reading a mangled product name? (2026-09-05, queue 2026-09-05-18d67c)
+      # Advisory, on purpose. Every other encoding defence in this estate watches an INPUT, and on
+      # comparison-2026-09-02 five live cells across three stores carried mangled names with all of them
+      # green - including one built by the ENGINE out of a file that is clean on disk (a BOM-less Sam's
+      # slice read as the ANSI codepage). It sits beside audit-board-consistency because it asks the same
+      # kind of question about the same artifact: is what the reader sees actually true?
+      # It alerts on its own; this wiring is what makes it RUN daily, and the BLIND arm is reported
+      # separately so "0 findings" and "I read nothing" never look the same in this log.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-mojibake.ps1') | Out-Null
+        if ($LASTEXITCODE -eq 2) { Log 'board-mojibake: the published board carries mangled product name(s) - see the alert'; $summary += 'REVIEW    audit-board-mojibake found mangled product name(s) on the board - fix the reader, heal, rebuild' }
+        elseif ($LASTEXITCODE -eq 3) { Log 'board-mojibake BLIND: no readable board with named store rows'; $summary += 'REVIEW    audit-board-mojibake could not read a board - board names went unchecked this cycle' }
+      } catch { Log ('audit-board-mojibake threw: ' + $_.Exception.Message) }
+
       # ---- CONSISTENCY GUARD: enforce "the price shown == the product the 'See item' link opens", every day.
       # audit-board-consistency.ps1 returns 2 when too many chips fall back to a name (a link was suppressed
       # because its price no longer matches - divergence or a stale board price). On breach we AUTO-REPAIR the

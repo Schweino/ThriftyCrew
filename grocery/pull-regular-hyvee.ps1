@@ -750,9 +750,20 @@ function Get-HyVeeStoreProduct([int]$productId) {
 
 # ---- what to refresh: our existing Hy-Vee rows (validated sizes) + any Hy-Vee product we hold a link for ----
 $units = @{}
-foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $units[[string]$c.id] = [string]$c.unit }
+# READ JSON WITHOUT INVENTING MOJIBAKE (2026-09-05).
+# `Get-Content -Raw | ConvertFrom-Json` with no -Encoding decodes as the system ANSI codepage in Windows
+# PowerShell 5.1. This pull READS ITS OWN PREVIOUS FILE and writes the result back as UTF-8, so the moment
+# any other tool rewrites hyvee-regular-*.json without a BOM, every non-ASCII name in it is re-encoded one
+# generation deeper on the NEXT run - and again the run after that. Measured: at commit 9f609468 the 08-29
+# file was 1,497,192 bytes beginning EF BB BF with 2 mangled names; at 5abe529d the same path was 836,171
+# bytes beginning 7B 0A 20 (a Python json.dump shape, no BOM) with the same content, and the 08-30 file that
+# read it has 8. The Campbell's turkey gravy row reached FIVE generations, 117 characters long, and it was
+# the Hy-Vee jarred-gravy cell the reader saw.
+# ReadAllText defaults to UTF-8 and honours a BOM when there is one, so both shapes decode correctly. Lines
+# 643 and 911 already read the cursor files this way; this is the same fix on the paths that carry names.
+foreach ($c in (ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodities.json'))))) { $units[[string]$c.id] = [string]$c.unit }
 
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$pd = (ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'product-urls.json')))).items
 $idByName = @{}   # product name -> {productId, commodityId}
 foreach ($p in $pd.PSObject.Properties) {
   $e = $p.Value.'Hy-Vee'
@@ -770,7 +781,7 @@ foreach ($p in $pd.PSObject.Properties) {
 $prevF = Get-ChildItem (Join-Path $regDir 'hyvee-regular-*.json') -EA SilentlyContinue |
   Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 $prevRows = @()
-if ($prevF) { $prevRows = @((Get-Content $prevF.FullName -Raw | ConvertFrom-Json).deals) }
+if ($prevF) { $prevRows = @((ConvertFrom-Json ([IO.File]::ReadAllText($prevF.FullName))).deals) }
 # The date the carried rows actually come from, for a row that has no as_of of its own. Read here rather
 # than inside the pass so the pass stays free of the filesystem and its fixtures can state the date.
 $prevDate = ''
@@ -1072,7 +1083,7 @@ foreach ($sc in $sizeConflicts) { Write-Warning ("  size conflict, refresh refus
 $prevMax = 0
 foreach ($pf in (Get-ChildItem (Join-Path $regDir 'hyvee-regular-*.json') -EA SilentlyContinue |
     Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 4)) {
-  try { $c = @((Get-Content $pf.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $prevMax) { $prevMax = $c } } catch {}
+  try { $c = @((ConvertFrom-Json ([IO.File]::ReadAllText($pf.FullName))).deals).Count; if ($c -gt $prevMax) { $prevMax = $c } } catch {}
 }
 if ((-not $Quick) -and (Test-HyVeeWipeout -RowCount $deals.Count -PrevMax $prevMax)) {
   $qDir = Join-Path $OutDir 'throttled'

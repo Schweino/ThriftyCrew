@@ -24,8 +24,10 @@
     2. NO REMOTE        - it has no push target, so it cannot leak to a public host
     3. NOT IN THIS REPO - no memory file is tracked by ThriftyCrew
     4. HISTORY CURRENT  - no uncommitted memory changes (-Sync commits them)
-    5. INDEX INTEGRITY  - MEMORY.md and the files on disk agree: no orphan links, no unindexed
-                          files, no duplicate links
+    5. INDEX INTEGRITY  - MEMORY.md and the files on disk agree: no links to files that are gone, no
+                          duplicate links, and every memo REACHABLE - named by MEMORY.md, or linked as
+                          [[slug]] by a memo MEMORY.md names. Reachability, not flat listing: hub routing
+                          is the store's documented convention (2026-09-05, queue 2026-09-05-e42efd)
     6. ENCODING INTACT  - no mojibake, the founding damage of this guard
   Exit 0 clean, 2 a real finding, 3 BLIND (nothing to check - a pass that proves nothing).
   -Sync commits pending memory changes, then re-checks. -SelfTest runs frozen fixtures.
@@ -108,11 +110,45 @@ function Test-MemoryStore {
   foreach ($l in $idx) { $m = [regex]::Match($l, '\]\(([^)]+\.md)\)'); if ($m.Success) { $linked += $m.Groups[1].Value } }
   $names = @($files | ForEach-Object { $_.Name })
   $orphans   = @($linked | Where-Object { $names -notcontains $_ })
-  $unindexed = @($names  | Where-Object { $linked -notcontains $_ })
   $dupes     = @($linked | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
-  if ($orphans.Count)   { $issues.Add("MEMORY.md links $($orphans.Count) file(s) that do not exist: " + (($orphans | Select-Object -First 5) -join ', ')) }
-  if ($unindexed.Count) { $issues.Add("$($unindexed.Count) memory file(s) are in no index line, so recall will never surface them: " + (($unindexed | Select-Object -First 5) -join ', ')) }
-  if ($dupes.Count)     { $issues.Add("MEMORY.md links the same file more than once: " + (($dupes | Select-Object -First 5) -join ', ')) }
+
+  # ---- THE CENSUS MEASURES REACHABILITY, NOT DIRECT LISTING (2026-09-05, queue 2026-09-05-e42efd) ------
+  # This arm used to ask "does MEMORY.md hold a line for this file", and report every file that did not.
+  # On 2026-09-05 it reported 64 files "recall will never surface" and ALL SIXTY-FOUR were wrong: every one
+  # of them is one [[wikilink]] hop from a memo MEMORY.md does index. True orphans: 0.
+  # The store deliberately stopped honouring the flat-listing contract when HUB memos were introduced, and
+  # MEMORY.md's own opening lines say so: "Hub memos carry a Routed from the index section listing sibling
+  # memos that no longer hold their own line here. Every memo is still its own file; follow the hub to reach
+  # it." The check was never taught the new convention, so it measured listing and called it reachability.
+  # The perverse part, and the reason this had to be fixed rather than muted: it got LOUDER the more
+  # correctly the store was consolidated. Every memo routed into a hub added one to its count, so keeping
+  # the store tidy guaranteed the alert fired forever. A guard that punishes the maintenance it exists to
+  # protect gets ignored, and then it is not a guard.
+  # ONE HOP ONLY, deliberately. A memo reachable only from a memo that is itself unindexed is still
+  # reported, and that is correct: two hops is not recall, it is a chain nobody follows.
+  # The counts are reported SEPARATELY (direct / via a hub) so a hub that stops routing its children is
+  # still visible - the number that would move is the hub count, and a reader can see it move.
+  $hubbed = @{}
+  foreach ($l in (@($linked | Sort-Object -Unique))) {
+    $p = Join-Path $Dir $l
+    if (-not (Test-Path $p)) { continue }
+    $t = [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)
+    # [[slug]], [[slug.md]] and [[slug|label]] all name the same memo. The alias and anchor forms are
+    # stripped rather than ignored, or a hub that labels its links would read as routing nothing.
+    foreach ($m in [regex]::Matches($t, '\[\[([^\]\|#]+?)(?:[|#][^\]]*)?\]\]')) {
+      $s = $m.Groups[1].Value.Trim()
+      if (-not $s) { continue }
+      if ($s -notmatch '(?i)\.md$') { $s = $s + '.md' }
+      $hubbed[$s] = $true
+    }
+  }
+  $directCount = @($names | Where-Object { $linked -contains $_ }).Count
+  $hubCount    = @($names | Where-Object { ($linked -notcontains $_) -and $hubbed.ContainsKey($_) }).Count
+  $unreachable = @($names | Where-Object { ($linked -notcontains $_) -and (-not $hubbed.ContainsKey($_)) })
+
+  if ($orphans.Count)     { $issues.Add("MEMORY.md links $($orphans.Count) file(s) that do not exist: " + (($orphans | Select-Object -First 5) -join ', ')) }
+  if ($unreachable.Count) { $issues.Add("$($unreachable.Count) memory file(s) are in no index line and are linked from no indexed memo either, so recall will never surface them: " + (($unreachable | Select-Object -First 5) -join ', ')) }
+  if ($dupes.Count)       { $issues.Add("MEMORY.md links the same file more than once: " + (($dupes | Select-Object -First 5) -join ', ')) }
 
   # 6. ENCODING INTACT - the founding damage
   $checked++
@@ -123,13 +159,18 @@ function Test-MemoryStore {
   }
   if ($bad.Count) { $issues.Add("$($bad.Count) memory file(s) carry mojibake (UTF-8 read as ANSI): " + (($bad | Select-Object -First 5) -join ', ')) }
 
-  return @{ rc = $(if ($issues.Count) { 2 } else { 0 }); issues = $issues; checked = $checked; files = $files.Count }
+  return @{ rc = $(if ($issues.Count) { 2 } else { 0 }); issues = $issues; checked = $checked; files = $files.Count
+            direct = $directCount; hub = $hubCount; unreachable = $unreachable.Count }
 }
 
 # ------------------------------------------------------------------ self-test
 if ($SelfTest) {
   $fail = 0
+  # Counted, not typed: a hand-maintained case tally is one more copy of a fact, and it is always the copy
+  # nobody re-derives that goes stale.
+  $cases = 0
   function T([string]$label, [bool]$cond, [string]$detail) {
+    $script:cases++
     if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label  - $detail"; $script:fail++ } }
 
   $fx = Join-Path $env:TEMP ('memaudit-selftest-' + $PID)
@@ -184,6 +225,41 @@ if ($SelfTest) {
   $r = Test-MemoryStore $fx
   T 'MUST-FIRE mojibake in a memory file is reported' (($r.rc -eq 2) -and (($r.issues -join ' ') -match 'mojibake')) ("rc=$($r.rc)")
 
+  # ---- HUB ROUTING (2026-09-05, queue 2026-09-05-e42efd) ----------------------------------------------
+  # FOUNDING BUG, frozen: the census asked whether MEMORY.md held a LINE for each file and called the answer
+  # reachability. On 2026-09-05 it named 64 files "recall will never surface" and every one of them was one
+  # [[wikilink]] hop from an indexed memo - the store's own documented hub convention. True orphans: 0.
+  # This fixture is that shape at minimum size: an indexed hub, a child the hub routes, and a memo nothing
+  # points at. The CLEAN TWIN is the same store with the lonely memo deleted - today's code reports 1 there,
+  # which is exactly the false positive, so that twin is the case that could not have passed before.
+  function NewHubStore([bool]$WithLonely) {
+    if (Test-Path $fx) { Remove-Item $fx -Recurse -Force }
+    New-Item -ItemType Directory -Force -Path $fx | Out-Null
+    Set-Content (Join-Path $fx 'MEMORY.md') "Hub memos route siblings that no longer hold their own line here.`n`n- [Hub](hub.md) - the family index" -Encoding UTF8
+    Set-Content (Join-Path $fx 'hub.md') "Routed from the index:`n`n- [[child]] - the routed sibling" -Encoding UTF8
+    Set-Content (Join-Path $fx 'child.md') 'holds no line in MEMORY.md; reached through its hub' -Encoding UTF8
+    if ($WithLonely) { Set-Content (Join-Path $fx 'lonely.md') 'nothing points at this one' -Encoding UTF8 }
+    $null = Get-GitOut $fx 'init'
+    $null = Get-GitOut $fx 'config user.name t'
+    $null = Get-GitOut $fx 'config user.email t@t'
+    $null = Get-GitOut $fx 'add -A'
+    $null = Get-GitOut $fx 'commit -m hub'
+  }
+
+  NewHubStore $true
+  $r = Test-MemoryStore $fx
+  T 'MUST-FIRE a memo that neither MEMORY.md nor any indexed memo links is reported, BY NAME' `
+    (($r.rc -eq 2) -and (($r.issues -join ' ') -match 'lonely\.md') -and ([int]$r.unreachable -eq 1)) `
+    ("rc=$($r.rc) unreachable=$($r.unreachable) " + ($r.issues -join '; '))
+  T '  ...and the hub-routed child is NOT reported - it is counted as reached in one hop' `
+    ((($r.issues -join ' ') -notmatch 'child\.md') -and ([int]$r.hub -eq 1) -and ([int]$r.direct -eq 1)) `
+    ("direct=$($r.direct) hub=$($r.hub) " + ($r.issues -join '; '))
+
+  NewHubStore $false
+  $r = Test-MemoryStore $fx
+  T 'CLEAN TWIN a store whose only unindexed memo is hub-routed reports ZERO findings (today it reports 1)' `
+    (($r.rc -eq 0) -and ([int]$r.unreachable -eq 0)) ("rc=$($r.rc) " + ($r.issues -join '; '))
+
   # BLIND: an empty store must never read as clean
   if (Test-Path $fx) { Remove-Item $fx -Recurse -Force }
   New-Item -ItemType Directory -Force -Path $fx | Out-Null
@@ -193,7 +269,7 @@ if ($SelfTest) {
 
   if (Test-Path $fx) { Remove-Item $fx -Recurse -Force -ErrorAction SilentlyContinue }
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (8 memory-store cases)'
+  Write-Output "SELF-TEST PASS ($cases memory-store cases)"
   exit 0
 }
 
@@ -212,6 +288,12 @@ if ($Sync) {
 
 $res = Test-MemoryStore $MemoryDir
 Write-Output ("memory-backup: {0} memory file(s), {1} check(s) run against {2}" -f [int]$res.files, [int]$res.checked, $MemoryDir)
+# THE TWO ROUTES ARE PRINTED SEPARATELY, CLEAN OR NOT (2026-09-05). Hub routing is the store's convention,
+# so "reached via a hub" is a normal, healthy number - but it is also the number that would fall if a hub
+# stopped routing its children, and a count nobody prints is a change nobody sees.
+if ($null -ne $res.direct) {
+  Write-Output ("  index: {0} memo(s) named directly in MEMORY.md, {1} reached in one hop from a hub memo it names, {2} reachable by neither" -f [int]$res.direct, [int]$res.hub, [int]$res.unreachable)
+}
 if ($res.rc -eq 3) {
   foreach ($i in $res.issues) { Write-Output ('  BLIND  ' + $i) }
   Write-GuardComplete -Name 'memory-backup' -Summary 'blind'

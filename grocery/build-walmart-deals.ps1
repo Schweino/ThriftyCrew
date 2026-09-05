@@ -1,4 +1,4 @@
-﻿<#
+<#
   build-walmart-deals.ps1 - turn a RAW Walmart capture into out\walmart-regular-<date>.json. (Header previously said build-sams-deals - copy-paste error, fixed 2026-07-26.)
 
   Input CSV (pipe-delimited, from the in-page pull): q|n|lp|up|id
@@ -167,6 +167,98 @@ function Get-NameQtyCandidates([string]$name, [string]$tok) {
   return $out
 }
 
+# EVERY PACK MULTIPLE A NAME STATES, including 1 (the package IS the total).
+#
+# Get-NameQtyCandidates already multiplies a stated size by counts written as "N ct / N count / N pk /
+# N pack", because those are the forms it needs to SNAP to Walmart's unit price. This function exists for
+# the weaker question the refusal branch asks: is a disagreement between the printed quantity and lp/up
+# EXPLAINED by a pack the name states, in any wording? A name that says "(Pack of 24) ... 16.9 fl oz" is
+# describing 405.6 fl oz and is perfectly publishable on the derived quantity; a name that says
+# "1.82 pounds" and nothing else, against a derived 10.891 lb, is not.
+# 1 is always in the list so that a name quantity within the tolerance of lp/up counts as agreement -
+# the strict test above wants the name to REPRODUCE Walmart's rounded unit price to the cent, which a
+# correct name can miss on rounding alone.
+function Get-NamePackMultipliers([string]$name) {
+  $out = New-Object System.Collections.Generic.List[double]
+  $out.Add(1.0)
+  if (-not $name) { return $out }
+  $n = $name.ToLower()
+  foreach ($pat in @(
+    '(\d+)\s*-?\s*(?:ct|count|pk|packs?)\b',   # "24 ct", "24-count", "12 pack"  (the existing forms)
+    '\bpacks?\s+of\s+(\d+)\b',                 # "(Pack of 24)"
+    '\bbox\s+of\s+(\d+)\b',
+    '\bcase\s+of\s+(\d+)\b',
+    '(\d+)\s*/\s*(?:carton|case|box)\b',       # "24/carton"
+    '\(\s*(\d+)\s*x\s*[\d.]+',                 # "(2 x 16 oz)"
+    '\b(\d+)\s*x\s*[\d.]+\s*(?:fl\.?\s*oz|floz|oz|lbs?|ml|g)\b'
+  )) {
+    foreach ($m in [regex]::Matches($n, $pat)) {
+      $v = [double]$m.Groups[1].Value
+      if ($v -gt 0 -and -not $out.Contains($v)) { $out.Add($v) }
+    }
+  }
+  if ($n -match '\btwin\s+pack\b' -and -not $out.Contains(2.0)) { $out.Add(2.0) }
+  # A name can state BOTH an inner count and an outer one ("3 boxes x 1750 ct"); their product is a real
+  # multiple too, and Get-NameQtyCandidates already treats it as one for the snap.
+  $counts = @($out | Where-Object { $_ -gt 1 })
+  if ($counts.Count -gt 1) {
+    $p = 1.0; foreach ($c in $counts) { $p *= $c }
+    if (-not $out.Contains($p)) { $out.Add($p) }
+  }
+  return $out
+}
+
+# THE QUANTITIES A NAME STATES IN THE SAME PHYSICAL FAMILY AS THE PRICED UNIT.
+#
+# Get-NameQtyCandidates is deliberately generous: UnitFamily maps a bare "oz" into the FL OZ family because a
+# bottle labelled "16 oz" holds sixteen FLUID ounces, and a generous candidate list is exactly right when the
+# caller only accepts a reading that REPRODUCES Walmart's own unit price. It is wrong for the refusal test,
+# which asks the opposite question - does the name CONTRADICT the unit price - because a weight on the label
+# beside a volume on the shelf tag is two different measurements, not a contradiction. import-walmart-batch
+# froze that ruling on 'Some Sauce, 32 oz Jar' at 10.0 cents per fl oz: cross-family, the name does not
+# override, and Walmart's derived 64 fl oz publishes.
+# So this returns only quantities whose unit sits in the same family the row was PRICED by. An empty result
+# means the name says nothing about the priced dimension, and there is nothing to refuse.
+function Get-SameFamilyNameQty([string]$name, [string]$tok) {
+  # The unit lists and the pattern live INSIDE the function on purpose. import-walmart-batch.ps1 lifts this
+  # file's functions by AST and separately lifts $script:UnitFamily by name, so any new script-scope variable
+  # a lifted function reads is a second thing to remember - and the failure is a function that quietly reads
+  # $null and returns an empty result rather than throwing. Keeping them local means the lift carries
+  # everything the function needs. .NET caches compiled patterns, so the literal costs nothing per call.
+  $VOL = @('fl oz','floz','gal','gallon','gallons','qt','quart','quarts','pt','pint','pints','l','liter','liters','ml')
+  $WT  = @('oz','ounce','ounces','lb','lbs','pound','pounds','g','gram','grams','kg')
+  $RX  = '(\d[\d.]*|\.\d+)\s*-?\s*(fl\.?\s*oz|floz|ounces?|oz|lbs?|pounds?|gallons?|gal|quarts?|qt|pints?|pt|liters?|l|ml|kg|grams?|g)\b'
+  # Returns a plain ARRAY, and the CALLER wraps the result in @(). A List[double] returned from a
+  # PowerShell function is unrolled by the pipeline: empty comes back as $null and one element comes back
+  # as a bare double, so the caller's $strict.Count read whatever the unroll happened to produce rather
+  # than the number of readings found. That cost a full board rebuild to find, because the refusal simply
+  # never fired and the row published exactly as it had before. Returning `, $out` instead is the other
+  # trap: @() around a comma-wrapped array yields a one-element array holding an array, and the ratio
+  # arithmetic below then divides an Object[].
+  $out = @()
+  if (-not $name) { return $out }
+  $want = ''
+  if ($tok -eq 'fl oz' -or $tok -eq 'gal') { $want = 'vol' }
+  elseif ($tok -eq 'oz' -or $tok -eq 'lb') { $want = 'wt' }
+  if ($want -eq '') { return $out }        # ct and dozen have no weight/volume family to contradict
+  $fam = $script:UnitFamily[$tok]
+  if (-not $fam) { return $out }
+  foreach ($mm in [regex]::Matches($name.ToLower(), $RX)) {
+    $qtxt = ($mm.Groups[1].Value).TrimEnd('.')
+    if ($qtxt -notmatch '^(\d+(\.\d+)?|\.\d+)$') { continue }
+    $nu = ($mm.Groups[2].Value -replace '\.', '' -replace '\s+', ' ')
+    $got = ''
+    if ($VOL -contains $nu) { $got = 'vol' }
+    elseif ($WT -contains $nu) { $got = 'wt' }
+    if ($got -ne $want) { continue }
+    if (-not $fam.ContainsKey($nu)) { continue }
+    $each = [double]$qtxt * [double]$fam[$nu]
+    if ($each -gt 0) { $out += $each }
+  }
+  return $out
+}
+
+
 # The PER-ITEM measure a name states IMMEDIATELY NEXT TO a count ("...3.2 oz., 32 ct." -> @{count=32;
 # measure='3.2 oz'}). Returns $null when no count/measure pair sits together.
 #
@@ -294,7 +386,52 @@ function Build-Row($raw) {
     if ($err -le 0.005001 -and $err -lt $bestErr) { $best = $c; $bestErr = $err }   # would display as Walmart's up
   }
   if ($best) { $qty = $best; $basis = 'name (reproduces Walmart''s unit price)' }
-  elseif ($cands.Count) { $basis = ('derived lp/up; no name quantity (' + (($cands | Select-Object -First 4) -join ', ') + ') reproduces Walmart''s ' + $up) }
+  elseif ($cands.Count) {
+    # A PRINTED WEIGHT OR VOLUME THE UNIT PRICE DENIES IS NOT PUBLISHABLE (2026-09-05).
+    # This branch used to keep lp/up and write the disagreement into qty_basis as prose. That is how
+    # 'Knorr Select Vegetable Base, Shelf Stable Granulated Bouillon, 1.82 pounds' shipped as 10.891 lb -
+    # $17.97 divided by Walmart's own "$1.65/lb" attribute - and held the bouillon CROWN at $0.0813/oz
+    # against a real $0.6169/oz. The memo grocery-method-walmart records that Walmart's unit price is
+    # provably wrong sometimes, so the attribute cannot be the tie-breaker against the printed quantity;
+    # and this file's own doctrine for the SHAPE question, five hundred lines down, is already
+    # "A row where neither shape does is rejected, never published".
+    # Census over walmart-regular 2026-08-22..09-05 (14,126 rows): 2,146 rows derive lp/up, 337 agree with
+    # the name, 1,134 state no quantity at all, 379 disagree by a multiple a pack token explains, and 176
+    # disagree with nothing to explain them (50 of those by more than 1.5x; the Knorr row by 5.98x).
+    #
+    # SCOPED TO WEIGHT AND VOLUME, DELIBERATELY. For a COUNT the two numbers are the same kind of thing and
+    # the estate has already ruled the other way: case 8 below ('Bogus Beans, 99 ct.' -> trust lp/up) is a
+    # frozen fixture for exactly that, and 8f already rejects the one count shape that is unprovable. For a
+    # weight or a volume the name states the CONTENTS and lp/up states an inference from an attribute we
+    # know can be wrong, so a disagreement neither a pack count nor a rounding explains has no defensible
+    # answer. Refusing loses the row; publishing loses the number, and a wrong number outranks a real one.
+    # SAME-FAMILY EVIDENCE ONLY. UnitFamily deliberately maps a bare "oz" into the FL OZ family, because a
+    # store prints "16 oz" on a bottle and means fluid ounces - that mapping is right for the SNAP, where a
+    # reading only wins if it reproduces Walmart's number. It is not evidence of a CONTRADICTION: "Some
+    # Sauce, 32 oz Jar" priced at 10.0 cents per FL OZ is a weight on the label and a volume on the shelf
+    # tag, and import-walmart-batch has a frozen fixture ruling exactly that cross-family pair must NOT
+    # override Walmart's arithmetic (it publishes at the derived 64 fl oz). A refusal built on the blended
+    # candidate list fires on that row, which is the fixture catching this rule being too broad.
+    $packMult = Get-NamePackMultipliers $raw.n
+    $strict = @(Get-SameFamilyNameQty $raw.n $u.tok)
+    $explained = $false
+    foreach ($c in $strict) {
+      if ($c -le 0) { continue }
+      foreach ($m in $packMult) {
+        if ($m -le 0) { continue }
+        $ratio = ($c * $m) / $derived
+        if ($ratio -ge 0.92 -and $ratio -le 1.08) { $explained = $true; break }
+      }
+      if ($explained) { break }
+    }
+    if ($u.tok -ne 'ct' -and $strict.Count -and -not $explained) {
+      return @{ err = ('REFUSED: name quantity disagrees with unit price, no pack count - the name states ' +
+                       (($strict | Select-Object -First 4) -join ', ') + ' ' + $u.tok + " but Walmart's " +
+                       $upm.Groups[0].Value.Trim() + ' derives ' + (Format-Qty $derived) + ' ' + $u.tok) }
+    }
+    $basis = ('derived lp/up; no name quantity (' + (($cands | Select-Object -First 4) -join ', ') + ') reproduces Walmart''s ' + $up)
+    if ($explained) { $basis = ($basis + '; a pack count in the name explains the multiple') }
+  }
   # A COUNT MUST BE A WHOLE NUMBER. You cannot buy 210.889 trash bags, and a fractional count is not merely
   # untidy - compare-deals' Get-PackCount regex reads the digits immediately before "ct", so size "210.889 ct"
   # is parsed as a pack of EIGHT HUNDRED EIGHTY-NINE and the price comes out 4x low. (The invariant check
@@ -583,6 +720,40 @@ if ($SelfTest) {
   $r8f = Build-Row (_R 'Almond Breeze Almondmilk, Unsweetened Original 32 oz (Pack of 12)' '$54.47' '$1.65/ea')
   if ($r8f.err -and $r8f.err -match 'name/unit-price divergence') { Write-Output "ok    rejects an unprovable pack denominator -> $($r8f.err)" }
   else { Write-Output "FAIL  almond breeze should have been rejected, got size='$($r8f.row.size)'"; $fail++ }
+
+  # 8g. MUST FIRE - A PRINTED WEIGHT THE UNIT PRICE DENIES (2026-09-05). FROZEN from walmart-regular-2026-08-31
+  #     (name / linePrice / unitPrice verbatim, item_id 198431752). The name says 1.82 pounds; $17.97 over
+  #     Walmart's own "$1.65/lb" derives 10.891 lb, 5.98x more, and nothing in the name is a pack. Published,
+  #     this row held the bouillon CROWN at $0.0813/oz against a real $0.6169/oz. It must be refused outright.
+  $r8g = Build-Row (_R 'Knorr Select Vegetable Base, Shelf Stable Granulated Bouillon, 1.82 pounds' '$17.97' '$1.65/lb')
+  if ($r8g.err -and $r8g.err -match 'REFUSED: name quantity disagrees with unit price, no pack count') {
+    Write-Output "ok    refuses a printed weight the unit price denies -> $($r8g.err)"
+  } else { Write-Output "FAIL  Knorr Select should have been REFUSED, got size='$($r8g.row.size)' basis='$($r8g.row.qty_basis)'"; $fail++ }
+  #     CLEAN TWIN 1: the disagreement IS explained by a pack the name states in a wording the snap parser
+  #     never had ("Pack of 24"). 24 x 16.9 = 405.6, which is the derived 405.5 to within rounding, so the
+  #     row publishes exactly as it did before. If the refusal were written without the pack test, every
+  #     multipack whose count is spelled this way would leave the board.
+  $r8h = (Build-Row (_R '(Pack of 24) Sample Spring Water, 16.9 fl oz' '$8.11' '$0.02/fl oz')).row
+  if ($r8h -and $r8h.qty_basis -match 'a pack count in the name explains the multiple') {
+    Write-Output "ok    clean twin: 'Pack of 24' explains the multiple -> size='$($r8h.size)'"
+  } else { Write-Output "FAIL  Pack-of-24 twin was refused or unexplained: size='$($r8h.size)' basis='$($r8h.qty_basis)' $($r8h.err)"; $fail++ }
+  #     CLEAN TWIN 2: the name is SILENT in the priced unit, so there is no disagreement to refuse and the
+  #     derived quantity is all we have. This is the 7e shape at a weight unit (Hefty's "13 Gallon" bags).
+  $r8i = (Build-Row (_R 'Great Value Boneless Skinless Chicken Thighs, Value Pack' '$10.00' '$2.00/lb')).row
+  if ($r8i -and $r8i.size -eq '5 lb') { Write-Output "ok    clean twin: a name silent in the priced unit still publishes on lp/up -> '5 lb'" }
+  else { Write-Output "FAIL  silent-name weight row: size='$($r8i.size)'"; $fail++ }
+  #     CLEAN TWIN 3: the name agrees to within Walmart's cent rounding but not to the strict snap. 10.5 vs
+  #     a derived 10.866 is 3.4% - rounding, not a contradiction - and must publish, or the refusal deletes
+  #     correct rows for being imprecise.
+  $r8j = (Build-Row (_R 'Sample Harissa Paste, 10.5 oz' '$8.91' '$0.82/oz')).row
+  if ($r8j -and $r8j.ad_price -eq '$8.91') { Write-Output "ok    clean twin: a name within rounding of lp/up still publishes -> size='$($r8j.size)'" }
+  else { Write-Output "FAIL  rounding twin refused: $($r8j.size)"; $fail++ }
+  #     CLEAN TWIN 4: THE COUNT PATH IS UNTOUCHED. Case 8 above ('Bogus Beans, 99 ct.') is a frozen fixture
+  #     ruling that a count the arithmetic denies falls back to lp/up. This scoping note is here so that a
+  #     later reader does not "finish the job" by extending the refusal to counts and silently retire it.
+  $r8k = Build-Row (_R 'Bogus Beans, 99 ct.' '$3.27' '$1.09/ea')
+  if ($r8k.row -and $r8k.row.size -eq '3 ct') { Write-Output 'ok    clean twin: the COUNT path still trusts lp/up (case 8 unchanged)' }
+  else { Write-Output "FAIL  the refusal leaked into the count path: $($r8k.err)"; $fail++ }
 
   # 9. rows the engine cannot price are REJECTED, not published
   foreach ($bad in @(@{r=(_R 'No Unit Price Item' '$5.00' ''); l='missing unitPrice'},

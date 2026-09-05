@@ -40,6 +40,21 @@
      Counting distinct names restores rule 2's original meaning exactly - where no capture holds a
      duplicate name the count is unchanged - so it can only ever affect captures the split inflated.
 
+  4. THE SAME PRODUCT, TWICE, AT TWO PRICES (2026-09-05) - the newer row of a product supersedes its own
+     older row. The union is name-keyed, so a product captured on 08-15 and again on 08-27 presents as two
+     independent candidates and the ranker takes the cheaper - which is the older one whenever the price
+     went up. Measured on comparison-2026-09-02: 18 cells (7 crowns) were priced from an older capture at
+     a price the SAME product's newer capture contradicted, e.g. Sam's bar soap at $0.4988 (08-15) against
+     the same Caress bar's $0.6862 on 08-27.
+     ORDER MATTERS, and getting it wrong resurrects bug 2. Superseding BEFORE the depth count thins the
+     older capture, which is precisely how a thinner newer capture gets to evict a deeper older one -
+     measured the day this shipped, that ordering moved 10 further cells nobody had measured (Walmart
+     clam-chowder 0.132 -> 0.2445, facial-tissues 0.0069 -> 0.0103, marshmallows 0.0731 -> 0.105 and
+     seven more), every one of them a whole-capture eviction rather than a stale twin. So the depth rule
+     runs FIRST, on the untouched row set, and supersession then runs over the rows it kept. A row is
+     therefore only ever dropped when the SAME product's newer row is itself eligible to price the cell:
+     the information is refreshed, never lost, and no cell can lose its store.
+
   WHAT IS NEVER FILTERED: a row with no src_date. That is a store whose out\regular file is its only
   everyday source; it carries no capture date to compare and must stay eligible beside the newest
   capture. Only Walmart and Sam's rows are dated (Get-RegularSrcDate says why).
@@ -60,12 +75,93 @@ function Get-CaptureDepth {
   return @($Rows | ForEach-Object { [string]$_.name } | Select-Object -Unique).Count
 }
 
+function Remove-SupersededRows {
+  <#
+    .SYNOPSIS Drop a dated row when the SAME product has a newer dated row in the same set.
+    .DESCRIPTION Undated rows are never touched (they carry no capture date to compare).
+
+    TWO ROWS ARE THE SAME PRODUCT IF EITHER SIGNAL SAYS SO, NOT IF THE PREFERRED ONE DOES.
+    The first cut of this preferred prod_key and fell back to the name, and it silently did nothing for
+    the case it was written for: Walmart's July batch rows carry NO item_id while their full-name twins in
+    a newer capture DO, so 'id:54258473' and 'nm:Great Value Gluten-Free Vegetable Broth, 32 oz Carton,
+    Shelf' landed in different groups and vegetable-broth kept pricing from 2026-07-18. A preference is
+    the wrong shape here; identity has to be the UNION of the two relations:
+      * same store product id (a store re-words a listing between captures and only the id survives), and
+      * same name, where a 60-character name is the same as the ONE longer name that starts with it
+        (that truncation is how the July batch was written; two candidate extensions means the truncation
+        cannot prove which product it was and we do not guess).
+    Rows are grouped transitively across both, so a three-capture chain id -> name -> truncated name is one
+    product. This runs over the rows the depth rule already kept; see note 4 in the header for why.
+  #>
+  param([object[]]$Rows)
+  $rows = @($Rows)
+  $dated = @($rows | Where-Object { $_.src_date })
+  if ($dated.Count -lt 2) { return @($rows) }
+
+  # 60-char truncation -> its unique longer extension, when there is exactly one.
+  $names = @($dated | ForEach-Object { [string]$_.name } | Select-Object -Unique)
+  $canon = @{}
+  foreach ($n in $names) { $canon[$n] = $n }
+  foreach ($n in $names) {
+    if ($n.Length -ne 60) { continue }
+    $ext = @($names | Where-Object { $_.Length -gt 60 -and $_.StartsWith($n, [StringComparison]::Ordinal) })
+    if ($ext.Count -eq 1) { $canon[$n] = [string]$ext[0] }
+  }
+
+  # Group rows transitively over both keys. Row counts per commodity per store are in the tens, so the
+  # straightforward relabel is cheaper than a union-find and much easier to read.
+  $labelOf = @{}     # dated-row index -> group label
+  $keyLabel = @{}    # key string      -> group label
+  $next = 0
+  for ($i = 0; $i -lt $dated.Count; $i++) {
+    $r = $dated[$i]
+    $keys = @('nm:' + [string]$canon[[string]$r.name])
+    $pk = ('' + $r.prod_key).Trim()
+    if ($pk) { $keys += ('id:' + $pk) }
+    $found = @()
+    foreach ($k in $keys) { if ($keyLabel.ContainsKey($k)) { $found += $keyLabel[$k] } }
+    $found = @($found | Select-Object -Unique)
+    if (-not $found.Count) { $lab = $next; $next++ }
+    else {
+      $lab = $found[0]
+      foreach ($old in @($found | Where-Object { $_ -ne $lab })) {
+        foreach ($kk in @($keyLabel.Keys)) { if ($keyLabel[$kk] -eq $old) { $keyLabel[$kk] = $lab } }
+        foreach ($ri in @($labelOf.Keys)) { if ($labelOf[$ri] -eq $old) { $labelOf[$ri] = $lab } }
+      }
+    }
+    foreach ($k in $keys) { $keyLabel[$k] = $lab }
+    $labelOf[$i] = $lab
+  }
+
+  $newestFor = @{}
+  for ($i = 0; $i -lt $dated.Count; $i++) {
+    $lab = $labelOf[$i]; $d = [string]$dated[$i].src_date
+    if (-not $newestFor.ContainsKey($lab) -or $d -gt [string]$newestFor[$lab]) { $newestFor[$lab] = $d }
+  }
+
+  # Rebuild in the ORIGINAL order. The ranker's tie-breaks rely on a stable sort, so reordering here would
+  # quietly change which of two equal-priced rows wins a cell.
+  $out = New-Object System.Collections.Generic.List[object]
+  $di = 0
+  foreach ($r in $rows) {
+    if (-not $r.src_date) { [void]$out.Add($r); continue }
+    if ([string]$r.src_date -eq [string]$newestFor[$labelOf[$di]]) { [void]$out.Add($r) }
+    $di++
+  }
+  # .ToArray(), NOT @($out). On this Windows PowerShell 5.1 build (5.1.26100.9168) the array-subexpression
+  # operator over a System.Collections.Generic.List[object] throws "Argument types do not match" - verified
+  # directly: .ToArray() and [object[]]$list both work, @($list) does not. It cost a whole rebuild to find,
+  # because the exception surfaced at the `return` line with no mention of the list.
+  return $out.ToArray()
+}
+
 function Select-FreshestCaptureRows {
   <#
     .SYNOPSIS The rows eligible to price one commodity at one store.
     .DESCRIPTION Undated rows always survive. Among dated rows the newest capture is always eligible,
                  and an older one joins it only when it holds MORE distinct products for this commodity
-                 than the newest does. Ties go to the newer capture.
+                 than the newest does. Ties go to the newer capture. Finally, among the captures that
+                 survived, a product's older row is dropped when its own newer row is also eligible.
   #>
   param([object[]]$Rows)
   $rows = @($Rows)
@@ -78,5 +174,6 @@ function Select-FreshestCaptureRows {
     if ([string]$g.Name -eq $newest) { continue }
     if ((Get-CaptureDepth @($g.Group)) -gt $newestCount) { $keepDates += [string]$g.Name }
   }
-  return @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
+  # THE DEPTH DECISION IS COMPLETE HERE. Supersession runs on its output, never on its input.
+  return Remove-SupersededRows @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
 }

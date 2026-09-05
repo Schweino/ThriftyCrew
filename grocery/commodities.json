@@ -12736,7 +12736,12 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bjerky\\b"
+                        "\\bjerky\\b",
+                        "honey\\s+boy",
+                        "\\bbuns\\b",
+                        "\\bseasoning\\b",
+                        "smoked\\s+salmon",
+                        "\\bcheese\\b"
                     ]
     },
     {
@@ -44456,7 +44461,10 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "steak\\s+tips",
+                        "\\bwith\\s+(?:\\w+\\s+){0,2}gravy\\b",
+                        "\\bpark\\s+street\\s+deli\\b"
                     ]
     },
     {

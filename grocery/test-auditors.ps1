@@ -762,7 +762,11 @@ $r = RunPS 'import-walmart-batch.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'SELF-TEST PASS') { Ok 'import-walmart-batch verifies every batch row through the builder invariants (founding-bug fixture fires)' }
 else { Bad ('import-walmart-batch -SelfTest failed or lost its founding-bug fixture: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
 $iwSrc = Get-Content (Join-Path $root 'import-walmart-batch.ps1') -Raw
-if ($iwSrc -match "'Resolve-Unit','Get-NameQtyCandidates','Get-NamePack','Format-Qty','Build-Row'") { Ok 'import-walmart-batch still lifts Build-Row from build-walmart-deals (one home, no fork)' }
+# The lift list gained Get-NamePackMultipliers and Get-SameFamilyNameQty on 2026-09-05 with Build-Row's
+# refusal branch. Matching the two ENDS of the list rather than the whole literal keeps this check pinned to
+# what it is actually about - Build-Row is lifted, not re-forked - without failing every time the builder
+# grows a helper. A missing helper is not silent either way: the lift throws by name at :53.
+if ($iwSrc -match "'Resolve-Unit','Get-NameQtyCandidates'" -and $iwSrc -match "'Format-Qty','Build-Row'\)") { Ok 'import-walmart-batch still lifts Build-Row from build-walmart-deals (one home, no fork)' }
 else { Bad 'import-walmart-batch no longer lifts Build-Row - the second Walmart writer has re-forked the size math (the 2026-07-25 class)' }
 
 # ---------------------------------------------------------------- N+5. delegated audits must say BLIND (exit 3), never a false OK
@@ -2026,6 +2030,34 @@ if ($mpuSrc -match 'replay bug is live again') { Ok 'the consume-once must-fire 
 else { Bad 'merge-product-urls lost the consume-once fixture - a stale capture could silently replay over corrected links again' }
 if ($mpuSrc -match 'url-inputs-archive') { Ok 'merge-product-urls still archives consumed inputs' }
 else { Bad 'merge-product-urls no longer archives consumed inputs - every past capture will replay on the next run' }
+
+# (bm) THE BOARD'S OWN NAMES (2026-09-05, queue 2026-09-05-18d67c). Every encoding defence in this estate
+# watched an INPUT - guards check 0d pins commodities.json, capture-lib repairs on ingest, heal-mojibake
+# backfills the store files - and none of them looked at what the shopper reads. comparison-2026-09-02
+# carried five mangled names across three stores with every guard green, and one of them (Sam's TRESemme)
+# came from a file that is CLEAN on disk: sams-deals-2026-07-29.json has no BOM, and Windows PowerShell 5.1
+# decodes a BOM-less UTF-8 file as the ANSI codepage, so the ENGINE manufactured the name while reading it.
+# An input-only guard is structurally incapable of finding that one. Its fixtures are the real 117-character
+# Campbell row and the real 148-character Craisins row stored as CODEPOINTS, so re-encoding that file cannot
+# alter them, plus the same five products spelled correctly as clean twins.
+$r = RunPS 'audit-board-mojibake.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS' -and $r.text -match 'MUST FIRE') { Ok 'audit-board-mojibake -SelfTest passes with its founding-bug fixtures armed' }
+else { Bad ('audit-board-mojibake -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$abmSrc = Get-Content (Join-Path $root 'audit-board-mojibake.ps1') -Raw
+if ($abmSrc -match '0x0043,0x0061,0x006D,0x0070,0x0062,0x0065,0x006C,0x006C') { Ok 'the frozen 5-generation Campbell row is still in audit-board-mojibake''s fixtures' }
+else { Bad 'audit-board-mojibake lost the frozen Campbell fixture - the bug it encodes is being healed out of the live board, so without the frozen copy a green run cannot be told from a blind one' }
+if ($abmSrc -match 'exit 3') { Ok 'audit-board-mojibake reports BLIND rather than clean on a board it could not read' }
+else { Bad 'audit-board-mojibake no longer has a BLIND path - a zero-row board would read as zero findings' }
+# ...and the healer it depends on must still reach the depth the board actually hit. These are two halves of
+# one loop: a healer that stops short leaves the audit permanently red, and the only way to make it green
+# again is to weaken the signature.
+$clSrc = Get-Content (Join-Path $root 'capture-lib.ps1') -Raw
+if ($clSrc -match '\$i -lt 8') { Ok 'Repair-Mojibake still peels deep enough for the 5-generation founding row' }
+else { Bad 'Repair-Mojibake''s peel cap has been lowered - the 117-character Campbell row needs five passes and the cap was 4 when it shipped mangled' }
+# THE READER THAT MANUFACTURED IT. compare-deals must not go back to reading store JSON without an encoding.
+$cdEnc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+if ($cdEnc -match 'function Read-JsonFile' -and $cdEnc -notmatch 'Get-Content \$extra -Raw \| ConvertFrom-Json') { Ok 'compare-deals reads its store inputs through Read-JsonFile (BOM-tolerant), not a codepage-dependent Get-Content' }
+else { Bad 'compare-deals is reading store JSON with a bare Get-Content again - a BOM-less input will be decoded as the ANSI codepage and the mangled name will be written onto the board' }
 if ($mpuSrc -match "size field corrupted") { Ok 'the size-field clean twin is armed (a URL-only diff cannot see a basis overwrite)' }
 else { Bad 'merge-product-urls lost the size-verbatim fixture - a replay could flip "100 ct" to "each" with the URL unchanged and every URL diff would call it clean' }
 
@@ -3361,13 +3393,36 @@ else { Bad 'ff-pull lost the atomic-write must-fire - the file-lock class that d
 # real page) must still FIRE, and c6 (450, the same day's healthy state) must stay silent. A future nudge
 # downward breaks m4; a nudge upward breaks c6. Change the number only by re-deriving it from the window
 # count in capture-policy, and move both fixtures with it.
-if ($ffpS -match '\$recentVerified -lt 300') { Ok 'the recent-verified freeze detector is present and pinned at the cadence-derived 300' }
-elseif ($ffpS -match '\$recentVerified -lt \d+') { Bad ('the recent-verified arm is no longer at 300: ' + ([regex]::Match($ffpS, '\$recentVerified -lt \d+').Value) + ' - it may only move by re-deriving it from the window count (3/day x ~85 rows x 2 days x 60%), never to quieten an alert') }
-else { Bad 'the recent-verified arm has been REMOVED - that is the detector for a sweep that has stopped buying terms entirely, and it must not be dropped to quieten an alert' }
+# RE-KEYED FROM ROWS TO TERMS ON 2026-09-05 (queue 2026-09-05-12bd4a), AND THE DETECTOR DID NOT GO AWAY.
+# The paragraph above is kept because it is the record of why a rows floor could not be made to work: it was
+# re-derived twice, from 500 to 300, and it still paged at 07:01 on 239 rows and read healthy at 08:01 on 310,
+# same store, same cursor, one hour apart. Rows per window depend on which seven terms the cursor is sitting
+# on (measured 5, 63, 126, 68, 94, 73 across six windows), so no rows constant can be right for both a
+# produce slice and a niche one. The arm now counts the number the policy actually SETS - terms bought per
+# landed window, from capture-cursor-log.jsonl - against 2 x RotationTerms, which is "fewer than two landed
+# windows in two days" and has no constant to nudge.
+# WHAT THIS CHECK NOW PROTECTS: (a) a freeze detector still EXISTS, (b) its threshold is DERIVED from the
+# capture plan rather than typed, and (c) a rows constant has not crept back in beside it.
+if ($ffpS -match '\$termsBought48h -lt \(2 \* \$rotationTerms\)') { Ok 'the freeze detector is present and its floor is derived from the capture plan (2 x RotationTerms), not typed' }
+elseif ($ffpS -match '\$termsBought48h -lt \d+') { Bad ('the terms-bought arm has been pinned to a typed constant: ' + ([regex]::Match($ffpS, '\$termsBought48h -lt \d+').Value) + ' - it must be derived from (Get-CapturePlan).RotationTerms so a cadence change cannot leave it stale, which is exactly how the rows floor rotted twice') }
+else { Bad 'the terms-bought arm has been REMOVED - that is the detector for a sweep that has stopped buying terms entirely, and it must not be dropped to quieten an alert' }
+if ($ffpS -match '\$recentVerified -lt \d+') { Bad 'a ROWS floor is back in Test-FfCatalogDegraded - rows per window vary 0..25 with the slice, so a rows threshold pages on every niche stretch of the 602-term list; the arm is keyed on terms bought per landed window and recentVerified is information only' }
+else { Ok 'no rows floor has crept back in beside the terms arm (recentVerified stays information, not a threshold)' }
 if ($r.text -match "a healthy SHARDED day does NOT page") { Ok 'the sharded-era clean twin c6 (5305 items, 450 re-verified) is armed - the floor cannot drift back above a normal day unnoticed' }
 else { Bad 'ff-pull lost the c6 sharded clean twin - the 1,259-row pre-sharding twin cannot catch a threshold set above what a sharded day can reach, which is the bug that paged on 2026-09-02' }
-if ($r.text -match 'still FIRES on a genuinely thin 48h') { Ok "the m4 must-fire (163 re-verified, this morning's real page) is armed under the 300 floor" }
-else { Bad 'ff-pull lost the m4 must-fire - nothing now proves the lowered floor still catches a genuinely thin two-window 48h' }
+# m4 (163 rows must page) was RETIRED on 2026-09-05, not lost: that assertion was the defect. Given six
+# landed windows, 163 rows is a niche slice of a healthy store, and it is now the c9 clean twin. The freeze
+# detection m4 provided moved to m8 (zero terms bought in 48h) and m9 (one landed window, 7 against a floor
+# of 14), and c7 pins the founding false positive silent. All four are asserted so no one of them can be
+# dropped to quieten the arm.
+if ($r.text -match 'FIRES when ZERO terms were bought in 48h') { Ok 'the m8 must-fire (a frozen store buys 0 terms) is armed' }
+else { Bad 'ff-pull lost the m8 must-fire - nothing now proves a completely frozen Family Fare still pages' }
+if ($r.text -match 'FIRES on one landed window in 48h') { Ok 'the m9 must-fire (one landed window, 7 terms against a floor of 14) is armed' }
+else { Bad 'ff-pull lost the m9 must-fire - nothing now proves a store landing once in two days still pages' }
+if ($r.text -match 'the 07:01 false page stays SILENT') { Ok "the c7 clean twin (today's 239-row false page, six landed windows) is armed - a rows floor cannot come back unnoticed" }
+else { Bad 'ff-pull lost the c7 clean twin - the 2026-09-05 07:01 false page is what retired the rows floor, and without it the floor can be reintroduced silently' }
+if ($r.text -match 'an UNMEASURABLE cursor log') { Ok 'the c8 clean twin is armed - an unreadable cursor log stays silent instead of paging about an absent log' }
+else { Bad 'ff-pull lost the c8 clean twin - a missing cursor log would page every night about the store it could not see' }
 if ($ffpS -match '\$mergedCount -lt \(\$prevMax \* 0\.80\)') { Ok 'the 20%-shrink freeze detector survives verbatim' }
 else { Bad 'the 20%-shrink arm has been changed or removed - that is the detector for the original Family Fare freeze (1909 vs 3974) and it must not be softened' }
 if ($ffpS -match 'Get-PolicyMaxCarryDays') { Ok 'the carry window is taken FROM capture-policy.ps1, so it cannot be widened locally to quieten expiry alerts' }
@@ -4508,7 +4563,9 @@ if ($cdlSrc -match 'Select-Object -Unique' -and $cdlSrc -match 'function\s+Get-C
 else { Bad 'capture-depth-lib no longer counts distinct products - the everyday/sale split makes one product emit two rows, so a 1-product capture presents as depth 2 and a stale-low price can evict today''s' }
 # The candidates artifact must keep carrying src_date, or this guard is permanently BLIND. It shipped
 # without that field for months, which is exactly why the eviction class went unseen.
-if ($cdSrc2 -match 'price_type,src_date\)') { Ok 'compare-deals still emits src_date into candidates (the field the per-store ranking turns on)' }
+# prod_key joined src_date in the projection on 2026-09-05 for the same reason: the supersession rule turns
+# on it, so an artifact without it cannot be audited against the rule the engine ran. Both are asserted.
+if ($cdSrc2 -match 'price_type,src_date' -and $cdSrc2 -match 'src_date,prod_key\)') { Ok 'compare-deals still emits src_date AND prod_key into candidates (the two fields the per-store ranking turns on)' }
 else { Bad 'compare-deals no longer emits src_date into candidates-*.json - audit-capture-eviction goes BLIND and an eviction becomes invisible again' }
 
 # ROSTER CURRENCY (2026-08-06, triage plan-2026-08-06-2). A guard nothing RUNS is not a guard. This one

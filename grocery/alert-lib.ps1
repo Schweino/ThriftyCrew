@@ -75,9 +75,22 @@ function Send-Alert {
       Set-Content -Path $tmp -Value $Body -Encoding UTF8
       $bf = $tmp
     }
+    # ---- WHO EMITTED THIS ALERT (2026-09-05, queue 2026-09-04-bf1642) -----------------------------------
+    # A queue item recorded WHAT broke and WHEN, never WHICH CODE SAID SO. On 2026-09-04 an alert fired at
+    # 14:57 and the commit that DELETED the arm which emitted it landed at 15:56 - 59 minutes later. Proving
+    # that item stale cost a git archaeology across three files, and every triage round would have paid it
+    # again for every same-day fix. The provenance is free right here: the call stack knows the caller.
+    # Frames belonging to this lib are skipped, so the emitter is the script that decided to page, not the
+    # helper it paged through. This is a diagnostic stamp: it must never be able to stop an alert, so the
+    # whole thing sits in its own try and an empty answer is a perfectly good answer.
+    $emitter = ''
+    try {
+      $frames = @(Get-PSCallStack | Where-Object { $_.ScriptName -and ($_.ScriptName -notmatch '[\\/]alert-lib\.ps1$') })
+      if ($frames.Count) { $emitter = [string]$frames[0].ScriptName }
+    } catch { $emitter = '' }
     $sa = Join-Path $script:ALERT_LIB_DIR 'send-alert.ps1'
-    if ($Force) { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Force | Out-Null }
-    else        { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf | Out-Null }
+    if ($Force) { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter -Force | Out-Null }
+    else        { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter | Out-Null }
     $rc = $LASTEXITCODE
     if ($rc -ne 0) {
       Write-AlertLog ('ALERT FAILED TO SEND [' + $tag + '] "' + $Subject + '" - send-alert.ps1 exited ' + $rc + '. See alert-log.txt. The condition it describes is real and UNPAGED.')

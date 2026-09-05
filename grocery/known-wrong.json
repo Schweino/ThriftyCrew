@@ -4078,6 +4078,51 @@
                         "ruled_on":  "2026-09-05",
                         "ruled_by":  "Brad via Opus 5 (2026-09-05)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bouillon|Walmart|knorr-select-vegetable-base-1-82-pounds-fullname",
+                        "commodity":  "bouillon",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Knorr Select Vegetable Base, Shelf Stable Granulated Bouillon, 1.82 pounds"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Same product as the already-ruled truncated July row (item_id 198431752), but the normalized key of the full name ends \u0027bouillon\u0027 where the 60-char July name ends \u0027bouillo\u0027, so the 2026-09-05 ruling does not reach it. Name states 1.82 pounds; size 10.891 lb was derived from Walmart\u0027s own unit-price attribute with no pack count in the name; at 1.82 lb the row is 0.6169/oz, not 0.0813/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-05",
+                        "ruled_by":  "triage-2026-09-05",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "shower-cleaner|Walmart|great-value-cleaner-with-bleach-32-fl-oz",
+                        "commodity":  "shower-cleaner",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Cleaner with Bleach, 32 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Name states no bathroom, shower, tub or tile use; Walmart\u0027s bathroom product is separately named \u0027Great Value Bathroom Cleaner with Bleach\u0027 and already prices the cell; semantic cos 0.6421 sits at the 0.55 floor; product page is bot-walled so identity as an all-purpose cleaner is unproven either way.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-05",
+                        "ruled_by":  "triage-2026-09-05",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cherries|SamsClub|verry-cherry-plums-2-lbs",
+                        "commodity":  "cherries",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Verry Cherry Plums, 2 lbs."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A cherry PLUM (Prunus cerasifera) is a plum, not a cherry. cherries\u0027 only include is a bare cherr(y|ies) with no plum release, so this row has always been eligible; it surfaced as the Sam\u0027s cell today because the 2026-09-05 same-product supersession retired the stale 2026-07-17 \u0027Sweet Red Cherries, 3 lbs.\u0027 row at 2.94 whose own newer capture says 3.74, and the plum at 3.43 undercut it. Ruling the plum out returns the cell to the real cherries at 3.74.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-05",
+                        "ruled_by":  "triage-2026-09-05",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

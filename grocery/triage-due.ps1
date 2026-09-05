@@ -3,10 +3,128 @@
   Prints IDLE (nothing open) or DUE with a compact list of open queue items. The agent runs hourly while
   the Claude app is open precisely so that a queue written while the app was CLOSED gets drained on the
   first tick after Brad opens it - the guard is what makes that cheap.
+  -SelfTest runs the RE-MEASURE FIRST fixtures against a temp git repo and exits, touching no live file.
 #>
+# [CmdletBinding()] so -SelfTest cannot fall into $args and run the LIVE report instead ([[arg-silently-ignored]]).
+[CmdletBinding()]
+param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $qFile = Join-Path $root 'triage-queue.json'
+
+# ---- DID THE EMITTING CODE CHANGE AFTER THE ALERT FIRED? (2026-09-05, queue 2026-09-04-bf1642) ----------
+# FOUNDING CASE: alert 2026-09-04-bf1642 fired at 14:57:31 saying the recipe pool's dedup evidence had gone
+# stale. Commit bb8de6a0 landed at 15:56:16 - 59 minutes later - and DELETED the arm that emitted that body.
+# The alert was stale by construction the moment the fix landed, and nothing said so: a queue item recorded
+# what broke and when, never which code said so. Proving it stale cost a git log across three files plus a
+# timestamp comparison, and every triage round would pay that again for every same-day fix in this estate.
+# So send-alert.ps1 now stamps `emitter` (a repo-relative path) on new items, and this prints one line.
+# ADVISORY, NEVER FATAL. Three ways this must stay quiet rather than break:
+#   - an item written before 2026-09-05 has no emitter field at all,
+#   - an emitter whose path was renamed or deleted has no commits under that name,
+#   - git may be missing, or the tree may not be a repo.
+# Each of those is "I cannot tell", and the correct output for "I cannot tell" is nothing. A triage guard
+# that throws is a triage tick that does not happen.
+function Get-EmitterCommitTime {
+  <# .SYNOPSIS Committer time of the newest commit touching RelPath, or $null. Pure, never throws. #>
+  param([string]$RepoDir, [string]$RelPath)
+  if (-not $RelPath -or -not $RepoDir) { return $null }
+  # NEVER 2>&1, AND NEVER A REDIRECT UNDER EAP=Stop. In PS 5.1 redirecting a native command's stderr wraps
+  # each line in a NativeCommandError, and with $ErrorActionPreference='Stop' the first one is a terminating
+  # throw - the exact shape that killed capture-run on 2026-08-22. Dropping to Continue first makes the
+  # redirect safe, and the redirect is what keeps git's "fatal: not a git repository" out of a triage report
+  # that has to stay readable. Restored in the finally either way.
+  $prev = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $out = @(& git -C $RepoDir log -1 --format=%cI -- $RelPath 2>$null) | Where-Object { $_ } | Select-Object -First 1
+    if (-not $out) { return $null }
+    return ([datetimeoffset]::Parse(([string]$out).Trim(), [Globalization.CultureInfo]::InvariantCulture)).LocalDateTime
+  } catch { return $null }
+  finally { $ErrorActionPreference = $prev }
+}
+function Get-RemeasureLines {
+  <# .SYNOPSIS One 'RE-MEASURE FIRST' line per open item whose emitter changed after the item's ts. #>
+  param($Items, [string]$RepoDir)
+  $lines = New-Object System.Collections.Generic.List[string]
+  foreach ($i in @($Items)) {
+    $em = ''
+    if ($i -and $i.PSObject.Properties['emitter']) { $em = ([string]$i.emitter).Trim() }
+    if (-not $em) { continue }
+    $ct = Get-EmitterCommitTime $RepoDir $em
+    if ($null -eq $ct) { continue }
+    $its = $null
+    try { $its = [datetime]([string]$i.ts) } catch { $its = $null }
+    if ($null -eq $its) { continue }
+    if ($ct -gt $its) {
+      [void]$lines.Add(('  RE-MEASURE FIRST: ' + [string]$i.id + ' - ' + $em + ' changed at ' + $ct.ToString('s') +
+                        ', AFTER this alert fired at ' + $its.ToString('s') + '. The behaviour it describes may already be gone.'))
+    }
+  }
+  return $lines
+}
+
+if ($SelfTest) {
+  $fail = 0; $cases = 0
+  function _T([string]$label, [bool]$cond, [string]$detail) {
+    $script:cases++
+    if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label  - $detail"; $script:fail++ } }
+  $fx = Join-Path $env:TEMP ('triagedue-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  # git writes progress and hints to stderr; under EAP=Stop one of those lines can end this run. The live
+  # path above never shells out under Stop for that reason, and the fixture builder below shells out a lot.
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    New-Item -ItemType Directory -Force (Join-Path $fx 'grocery') | Out-Null
+    Set-Content (Join-Path $fx 'grocery\emitter.ps1') '# the arm that emitted the alert' -Encoding UTF8
+    & git -C $fx init --quiet | Out-Null
+    & git -C $fx config user.name t | Out-Null
+    & git -C $fx config user.email t@t | Out-Null
+    & git -C $fx add -A | Out-Null
+    & git -C $fx commit -q -m 'the same-day fix that removed the emitting arm' | Out-Null
+    $ct = Get-EmitterCommitTime $fx 'grocery/emitter.ps1'
+    _T 'the resolver reads a real committer time out of git for a tracked emitter' ($null -ne $ct) 'got $null'
+
+    if ($null -ne $ct) {
+      # MUST FIRE: the founding shape. The alert fired an hour BEFORE the commit that changed its emitter.
+      $firedBefore = @([pscustomobject]@{ id = '2026-09-04-bf1642'; ts = $ct.AddHours(-1).ToString('s'); emitter = 'grocery/emitter.ps1' })
+      $l = @(Get-RemeasureLines $firedBefore $fx)
+      _T 'MUST-FIRE an emitter committed AFTER the alert fired prints RE-MEASURE FIRST, naming the item' `
+        ($l.Count -eq 1 -and ($l -join ' ') -match 'RE-MEASURE FIRST' -and ($l -join ' ') -match '2026-09-04-bf1642' -and ($l -join ' ') -match 'grocery/emitter\.ps1') `
+        (($l -join ' | '))
+      # CLEAN TWIN: the alert fired an hour AFTER the last commit, so it describes live behaviour.
+      $firedAfter = @([pscustomobject]@{ id = '2026-09-04-bf1642'; ts = $ct.AddHours(1).ToString('s'); emitter = 'grocery/emitter.ps1' })
+      _T 'CLEAN TWIN an emitter last committed BEFORE the alert fired prints nothing' `
+        ((@(Get-RemeasureLines $firedAfter $fx)).Count -eq 0) 'a line was printed'
+    }
+    # CLEAN TWIN: every item written before 2026-09-05 has no emitter field. Silence, never a failure.
+    $noEmitter = @([pscustomobject]@{ id = '2026-08-01-aaaaaa'; ts = '2026-08-01T09:00:00' })
+    _T 'CLEAN TWIN an item with no emitter field at all prints nothing and does not throw' `
+      ((@(Get-RemeasureLines $noEmitter $fx)).Count -eq 0) 'a line was printed'
+    # CLEAN TWIN: a renamed or deleted emitter has no commits under that name. Nothing to say, NOT an error.
+    $renamed = @([pscustomobject]@{ id = '2026-09-01-bbbbbb'; ts = '2026-09-01T09:00:00'; emitter = 'grocery/this-file-was-renamed.ps1' })
+    _T 'CLEAN TWIN a renamed or missing emitter path prints nothing and does not error' `
+      ((@(Get-RemeasureLines $renamed $fx)).Count -eq 0) 'a line was printed'
+    # CLEAN TWIN: not a git repository at all. "I cannot tell" is not "nothing changed", and neither is a crash.
+    $noRepo = Join-Path $env:TEMP ('triagedue-norepo-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    New-Item -ItemType Directory -Force $noRepo | Out-Null
+    try {
+      _T 'CLEAN TWIN a directory that is not a git repo prints nothing and does not throw' `
+        ((@(Get-RemeasureLines $renamed $noRepo)).Count -eq 0) 'a line was printed'
+    } finally { Remove-Item $noRepo -Recurse -Force -ErrorAction SilentlyContinue }
+    # An unparseable ts must not throw either - a queue item is data, and data can be wrong.
+    $badTs = @([pscustomobject]@{ id = '2026-09-01-cccccc'; ts = 'not a date'; emitter = 'grocery/emitter.ps1' })
+    _T 'CLEAN TWIN an unparseable item ts prints nothing rather than throwing' `
+      ((@(Get-RemeasureLines $badTs $fx)).Count -eq 0) 'a line was printed'
+  } finally {
+    $ErrorActionPreference = $prevEap
+    Remove-Item $fx -Recurse -Force -ErrorAction SilentlyContinue
+  }
+  Write-Output ''
+  if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
+  Write-Output "SELF-TEST PASS ($cases triage-due cases)"
+  exit 0
+}
 # EMAIL MUTED? (2026-08-14) Say so up front. With the inbox silenced, this guard and the agent behind it are
 # the ONLY thing that notices an alert, so the mute has to be visible exactly where the response happens -
 # an indefinite mute nobody is reminded of is how a rule silently outlives its reason.
@@ -54,6 +172,9 @@ if ($open.Count -eq 0) {
 }
 Write-Output ("DUE  " + $open.Count + " open alert(s) to triage:")
 foreach ($i in $open) { Write-Output ('  [' + $i.id + '] x' + $i.count + '  ' + $i.subject) }
+# An item whose emitter was committed after the alert fired may be describing code that no longer exists.
+# Wrapped: this is provenance, and provenance must never cost a triage tick.
+try { foreach ($l in (Get-RemeasureLines $open (Split-Path -Parent $root))) { Write-Output $l } } catch { }
 
 # ---------------------------------------------------------------- BOARD GENERATION, pinned for both stages
 # WHY (2026-08-06): the reviewer froze a 26,013-name routing corpus at 06:44 against comparison-2026-08-05, a

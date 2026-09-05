@@ -75,15 +75,38 @@ if (-not $AdsFile) { $AdsFile = (Get-ChildItem (Join-Path $OutDir 'ads-*.json') 
 . (Join-Path $PSScriptRoot 'input-usage-lib.ps1')
 $inputUsage = New-InputUsageTracker
 Add-InputUsed -Tracker $inputUsage -Path $AdsFile -Role 'ads'
+# READ JSON WITHOUT INVENTING MOJIBAKE (2026-09-05).
+# `Get-Content -Raw | ConvertFrom-Json` with no -Encoding decodes as the system ANSI codepage in Windows
+# PowerShell 5.1, so a BOM-LESS UTF-8 input arrives one generation mangled and the engine WRITES that
+# mangled name onto the board. Not hypothetical: sams-deals-2026-07-29.json begins 7B 0D 0A (no BOM) while
+# every other Sam's slice begins EF BB BF, and the board's shampoo/Sam's cell shipped as
+# "TRESemm" + A-tilde + copyright-sign from a file whose bytes on disk are perfectly clean - which is also
+# why heal-mojibake could never fix it: there was nothing wrong with the file.
+# Same shape as the Hy-Vee carry read (pull-regular-hyvee.ps1) and the same fix: ReadAllText defaults to
+# UTF-8 and honours a BOM when there is one, so both file shapes decode correctly.
+function Read-JsonFile([string]$Path) {
+  return ([IO.File]::ReadAllText($Path) | ConvertFrom-Json)
+}
+# THE STORE'S OWN PRODUCT ID as one string, for Select-FreshestCaptureRows' same-product supersession.
+# Written as an explicit loop rather than a Where-Object pipeline: an empty pipeline in a cast expression
+# is $null, not '', and .Trim() on it throws mid-build over 40,000 rows. Most rows have no id at all
+# (Walmart's July batch captures carry none), so the empty case is the COMMON path, not the edge.
+function Get-ProdKey($d) {
+  foreach ($f in @('item_id', 'product_id', 'sams_item_id')) {
+    $v = ('' + $d.$f).Trim()
+    if ($v) { return $v }
+  }
+  return ''
+}
 if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
-$cdoc = Get-Content $CommoditiesFile -Raw | ConvertFrom-Json
+$cdoc = Read-JsonFile $CommoditiesFile
 # a rule FILE may be a bare array (staples) or a wrapper { global_exclude:[...], commodities:[...] } (recipe
 # set, which relaxes sauce/canned/frozen since those items legitimately ARE those forms).
 if ($cdoc.PSObject.Properties['commodities']) { $commodities = $cdoc.commodities; $GEX_OVERRIDE = @($cdoc.global_exclude) } else { $commodities = $cdoc; $GEX_OVERRIDE = $null }
 # sanity price bands (magnitude/garbage net + health check)
 $BANDS = @{}
 $bandsFile = if ($BandsFile) { $BandsFile } else { Join-Path $root 'price-bands.json' }
-if (Test-Path $bandsFile) { $bDoc = Get-Content $bandsFile -Raw | ConvertFrom-Json; foreach ($p in $bDoc.bands.PSObject.Properties) { $BANDS[$p.Name] = $p.Value } }
+if (Test-Path $bandsFile) { $bDoc = Read-JsonFile $bandsFile; foreach ($p in $bDoc.bands.PSObject.Properties) { $BANDS[$p.Name] = $p.Value } }
 # rules may carry their own inline band_min/band_max (recipe set) - these OVERRIDE price-bands.json because a
 # recipe commodity that shares an id with a staple (butter/milk/peanut-butter) may use a DIFFERENT unit (oz vs
 # lb), so the staple's per-lb band would wrongly reject every per-oz match.
@@ -1383,6 +1406,127 @@ if ($SelfTest) {
     (_Row 'Fresh Red Cherries, 2.25 lb Bag'  6.9689 '2026-08-11')
   ) | Sort-Object unit_price | Select-Object -First 1)
   _Eq 'two REAL products still out-depth a newer single row' $twoRealProducts.name 'Fresh Red Cherries'
+
+  # --- 29-31: SAME PRODUCT, TWO CAPTURES. The older row of a product loses to its own newer row. --------
+  # FROZEN FOUNDING BUG (2026-09-05). The union is name-keyed, so one product captured twice presents as
+  # two independent candidates and cheapest-per-store takes the older one whenever the price went up.
+  # Measured on comparison-2026-09-02: 18 cells (7 crowns) priced from a capture the same product's newer
+  # capture contradicted. Rows below are copied verbatim from candidates-2026-09-02.json (name, per-unit,
+  # capture date); each capture is a real SUBSET chosen to preserve the depth relation that made both
+  # captures eligible, which is the whole point - if the depth rule had already evicted the older capture
+  # these cases would pass without the supersession running at all.
+  function _RowK($n,$up,$sd,$k) { [pscustomobject]@{ name=$n; unit_price=$up; src_date=$sd; prod_key=$k } }
+  # 29. MUST FIRE - THE 60-CHARACTER TRUNCATION. Walmart's July batch captures cut every name at exactly 60
+  #     chars and carry no item_id, so the full-name row of the SAME product can never supersede it by name.
+  #     Live cell: vegetable-broth/Walmart published $0.0399/floz from 2026-07-18 while the same Great Value
+  #     carton's 2026-08-31 row says $0.0469. 132 of the 152 distinct truncated July names have a full-name
+  #     twin in a newer capture.
+  $truncName = 'Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf'
+  _Eq 'the July batch name is exactly 60 characters' $truncName.Length 60
+  # THE item_id FIELDS ARE PART OF THE FIXTURE, and they are what makes this case bite. The July batch rows
+  # carry NO id and their newer full-name twins DO, so an identity that PREFERS the id and falls back to the
+  # name puts the pair in two different groups and supersedes nothing. That is exactly how the first cut of
+  # this rule shipped a no-op: the board rebuilt, every exact-name twin moved, and vegetable-broth quietly
+  # went on pricing from 2026-07-18. Identity has to be the union of both relations, not a preference.
+  $vbPool = @(
+    (_RowK 'Pacific Foods Low Sodium Organic Vegetable Broth, 32 oz Carton'                   0.1069 '2026-09-01' '15529703'),
+    (_RowK 'Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf-Stable, No Allergens' 0.0469 '2026-08-31' '54258473'),
+    (_RowK 'Great Value Organic Gluten-Free Vegetable Broth, 32 oz Carton (Shelf-Stable)'      0.0619 '2026-08-31' '396785612'),
+    (_RowK 'Swanson Vegetable Broth, 32 oz Carton'                                             0.0709 '2026-08-31' '21296165'),
+    (_RowK $truncName                                                                          0.0399 '2026-07-18' ''),
+    (_RowK 'Great Value Organic Gluten-Free Vegetable Broth, 32 oz Carto'                      0.0621 '2026-07-18' ''),
+    (_RowK 'Pacific Foods Low Sodium Organic Vegetable Broth, 32 oz Cart'                      0.1060 '2026-07-18' '')
+  )
+  $vbBefore = @($vbPool | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'before: the truncated July row is the cheapest row in the pool' $vbBefore.name $truncName
+  $vb = @(Select-FreshestCaptureRows $vbPool | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'a 60-char name is superseded by its unique longer twin' $vb.name 'Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf-Stable, No Allergens'
+  _Eq 'and the cell prices at the NEWER number' $vb.unit_price 0.0469
+  # 30. MUST FIRE - THE EXACT-NAME TWIN. shower-cleaner/Walmart published $0.0544/floz from 2026-08-11 while
+  #     the identical name in the 2026-08-31 capture says $0.0619. Real subset: 08-31 (depth 3) and 08-11
+  #     (depth 3) both out-depth the newest 09-03 capture (depth 2), so both are eligible and only the
+  #     supersession can decide this.
+  $scPool = @(
+    (_Row 'Scrubbing Bubbles Foaming Bleach Bathroom Shower & Tub Cleaner Spray, Mold & Mildew Stain Remover, 32 oz' 0.1241 '2026-09-03'),
+    (_Row 'Clorox Bleach Foamer Bathroom and Shower Cleaner Spray, Crisp Lemon, 30 fl oz'                            0.1760 '2026-09-03'),
+    (_Row 'Great Value Bathroom Cleaner with Bleach, 32 fl oz'                                                       0.0619 '2026-08-31'),
+    (_Row 'Comet Bathroom Cleaner Spray, Lemon, 32 oz'                                                               0.1241 '2026-08-31'),
+    (_Row 'Great Value Lemon Scent Foaming Bathroom Cleaner, 22 oz'                                                  0.1700 '2026-08-31'),
+    (_Row 'Great Value Bathroom Cleaner with Bleach, 32 fl oz'                                                       0.0544 '2026-08-11'),
+    (_Row 'Clorox Plus Tilex Daily Shower Cleaner and Bathroom Spray, 32 fl oz'                                      0.1303 '2026-08-11'),
+    (_Row 'Zep Foaming Tub and Tile Cleaner, Morning Rain Scent, 32 fl oz'                                           0.1325 '2026-08-11')
+  )
+  $scBefore = @($scPool | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'before: the 08-11 row is the cheapest row in the pool' $scBefore.unit_price 0.0544
+  $sc = @(Select-FreshestCaptureRows $scPool | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'the same exact name from an older capture is superseded' $sc.unit_price 0.0619
+  # 30b. MUST FIRE - A STORE ID BEATS A RENAME. Walmart re-words a listing between captures, so name equality
+  #      alone would leave the stale row standing. Same item_id, two names, two dates: only the newer prices.
+  $renamed = @(Select-FreshestCaptureRows @(
+    (_RowK 'Mina Harissa Mild Sauce, Homestyle Moroccan Red Pepper Haris' 0.845 '2026-07-18' '773599552'),
+    (_RowK 'Mina Harissa Mild Sauce, Homestyle Moroccan Red Pepper Harissa Paste, 10 oz' 0.891 '2026-08-31' '773599552'),
+    (_RowK 'Simply Organic Harissa, 3.2 Oz' 3.3200 '2026-08-31' '589728561')
+  ))
+  _Eq 'an item_id twin collapses to the newer row' $renamed.Count 2
+  _Eq 'and the surviving twin is the newer one' @($renamed | Where-Object { $_.prod_key -eq '773599552' })[0].unit_price 0.891
+  # 31. CLEAN TWINS. Nothing below may move, or the rule is deleting real prices rather than stale ones.
+  #     (a) two DIFFERENT products of the same brand across captures both stay, and the depth rule still
+  #         keeps the deeper older capture - cases 25-28 must survive this change untouched.
+  $knorr = @(Select-FreshestCaptureRows @(
+    (_Row 'Knorr Chicken Flavor Bouillon Cubes, 3.1 oz, 8 Pack Box' 0.3484 '2026-09-04'),
+    (_Row 'Knorr Shelf Stable Granulated Chicken Bouillon, 32 oz Jar' 0.1681 '2026-08-31'),
+    (_Row 'Knorr Beef Flavor Bouillon Cubes, 8 Count'                0.3481 '2026-08-31'),
+    (_Row 'Maggi Granulated Chicken Flavor Bouillon Powder, 16 oz'   0.2013 '2026-08-31')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'two different products across captures both stay eligible' $knorr.name 'Knorr Shelf Stable Granulated Chicken Bouillon, 32 oz Jar'
+  #     (b) AN AMBIGUOUS TRUNCATION IS NOT AN IDENTITY. When two longer names both start with the 60-char
+  #         one, the truncation cannot prove which product it was and the row must survive. Guessing here
+  #         would delete a real cheapest price on a coincidence of prefixes.
+  $ambigTrunc = 'Great Value Organic Gluten-Free Vegetable Broth, 32 oz Carto'
+  _Eq 'the ambiguous truncation is also exactly 60 characters' $ambigTrunc.Length 60
+  $ambigPool = @(
+    (_Row 'Great Value Organic Gluten-Free Vegetable Broth, 32 oz Carton (Shelf-Stable)' 0.0619 '2026-08-31'),
+    (_Row 'Great Value Organic Gluten-Free Vegetable Broth, 32 oz Cartons, 4 Pack'       0.0700 '2026-08-31'),
+    (_Row 'Swanson Vegetable Broth, 32 oz Carton'                                        0.0709 '2026-08-31'),
+    (_Row $ambigTrunc                                                                    0.0621 '2026-07-18'),
+    (_Row 'Pacific Foods Low Sodium Organic Vegetable Broth, 32 oz Cart'                 0.1060 '2026-07-18'),
+    (_Row 'Swanson Organic Vegetable Broth, 32 oz Carton'                                0.0890 '2026-07-18'),
+    (_Row 'Kitchen Basics Original Vegetable Stock, 32 oz Carton'                        0.0950 '2026-07-18')
+  )
+  # The older capture must be DEEPER (4 distinct vs 3), or the depth rule evicts it and this case passes
+  # without the ambiguity ever being tested. Asserting the survivor count pins that.
+  $ambigRows = @(Select-FreshestCaptureRows $ambigPool)
+  _Eq 'both captures are eligible, so the ambiguity is what is under test' $ambigRows.Count 7
+  _Eq 'an ambiguous 60-char prefix is NOT superseded' @($ambigRows | Where-Object { $_.name -eq $ambigTrunc }).Count 1
+  #     (b2) TRANSITIVITY. A three-capture chain - a truncated July name, its full-name twin carrying an id,
+  #          and a later capture of that id under a re-worded name - is ONE product, and only the newest
+  #          may price. If the grouping were pairwise rather than transitive, the July row would survive
+  #          behind the rename.
+  $chain = @(Select-FreshestCaptureRows @(
+    (_RowK 'Knorr Select Vegetable Base, Shelf Stable Granulated Bouillon Reformulated' 0.7000 '2026-09-01' '198431752'),
+    (_RowK 'Knorr Select Vegetable Base, Shelf Stable Granulated Bouillon, 1.82 pounds' 0.6169 '2026-08-31' '198431752'),
+    (_RowK 'Knorr Select Vegetable Base, Shelf Stable Granulated Bouillo'               0.0813 '2026-07-18' ''),
+    (_RowK 'Maggi Granulated Chicken Flavor Bouillon Powder, 16 oz'                     0.2013 '2026-07-18' '9911'),
+    (_RowK 'Knorr Beef Flavor Bouillon Cubes, 8 Count'                                  0.3481 '2026-07-18' '9912')
+  ))
+  _Eq 'a truncated name, its id-bearing twin and a rename collapse to ONE product' (
+    @($chain | Where-Object { $_.name -like 'Knorr Select*' }).Count) 1
+  _Eq 'and the survivor is the newest of the chain' (
+    @($chain | Where-Object { $_.name -like 'Knorr Select*' })[0].src_date) '2026-09-01'
+  #     (c) DIFFERENT ids, similar names: two real products, two rows. The id key must not fold them.
+  $twoIds = @(Select-FreshestCaptureRows @(
+    (_RowK 'Great Value Curry Powder, 2 oz'         1.06 '2026-08-11' '111'),
+    (_RowK 'Great Value Organic Curry Powder, 1.8 oz' 2.4222 '2026-08-11' '222')
+  ))
+  _Eq 'different ids stay two rows' $twoIds.Count 2
+  #     (d) A ROW WITH NO CAPTURE DATE IS NEVER SUPERSEDED. Every non-Walmart, non-Sam's store loads
+  #         date-less; folding those by name would let one store's ad row delete its own everyday row.
+  $undated = @(Select-FreshestCaptureRows @(
+    (_Row 'Fareway Sausage Gravy' 0.1053 ''),
+    (_Row 'Fareway Sausage Gravy' 0.1200 ''),
+    (_Row 'Chef-mate Country Sausage Gravy, 105 oz.' 0.0912 '2026-09-04')
+  ))
+  _Eq 'undated rows are never superseded by each other' $undated.Count 3
   # CLEAN TWIN: the direction that must NOT work. A row claiming to be FRESHER than the file it lives in is
   # the as_of laundering fixed in the Fareway builder the same day; taking its word would let a stale price
   # out-rank a live one, which is the exact failure this whole family of fixes exists to prevent.
@@ -1813,7 +1957,7 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   if ($srcRow) { $nup = Get-DisplayedUnitPrice $srcRow }
   $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful; src_file=[string]$srcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }) })
 }
-$ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
+$ads = Read-JsonFile $AdsFile
 $today = $ads.today
 # The board's own date, visible to Add-Norm so it can refuse an expired sale row. Script-scoped
 # because Add-Norm is a function and cannot see this scope otherwise; set from the ads file rather
@@ -1908,7 +2052,7 @@ foreach ($sfu in $samsFiles) { Add-InputUsed -Tracker $inputUsage -Path $sfu -Ro
 # and the frozen bakers-deals-2026-07-05 fixture declares no window at all.
 foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
   if ($extra -and (Test-Path $extra)) {
-    $ex = Get-Content $extra -Raw | ConvertFrom-Json
+    $ex = Read-JsonFile $extra
     # A WINDOW HAS TWO ENDS (2026-08-09). The ad_to half retires a sale after it closes; nothing stopped one
     # from going live BEFORE it opened, and a price the store will not honour yet is exactly as false as one
     # it will not honour any more. Found the day Fareway's flyer was downloaded on 08-09 and printed "Prices
@@ -1946,7 +2090,7 @@ $extraF = Get-ChildItem (Join-Path $exDir 'extra-deals-*.json') -ErrorAction Sil
 $exDate = ''
 if ($extraF -and $extraF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { $exDate = $Matches[1]; try { if ([math]::Abs(([datetime]$exDate - [datetime]$today).TotalDays) -gt 7) { $extraF = $null } } catch {} }
 if ($extraF) {
-  $ex = Get-Content $extraF.FullName -Raw | ConvertFrom-Json
+  $ex = Read-JsonFile $extraF.FullName
   $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
 
   # A DISCOUNT WE CANNOT DATE IS A DISCOUNT WE CANNOT PUBLISH.
@@ -2023,7 +2167,7 @@ if (Test-Path $regDir) {
   # ADMITTED is the whole question a cleanup has to answer; what is merely present on disk is not.
   foreach ($rfu in $regFiles) { Add-InputUsed -Tracker $inputUsage -Path $rfu.FullName -Role 'everyday' }
   foreach ($rf in $regFiles) {
-    $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
+    $ex = Read-JsonFile $rf.FullName
     # PRICE-MODE GATE (2026-07-15): Aldi/Fareway are Instacart storefronts whose DELIVERY catalog is marked up
     # ~10-50%. A file that does not MACHINE-PROVE it was captured in-store (price_mode='in-store' AND a
     # mode_verified date) is DROPPED here so its marked-up prices can never enter the board. Fareway shipped
@@ -2444,6 +2588,12 @@ foreach ($d in $deals) {
     # fields, which is why the tie-break silently did nothing the first time it was written - it was
     # reading link_url off a shape that never had it.
     has_identity=[bool]($d.link_url -or $d.item_id -or $d.product_id -or $d.sams_item_id)
+    # THE STORE'S OWN PRODUCT ID, carried as ONE string for Select-FreshestCaptureRows' same-product
+    # supersession (2026-09-05). Name equality alone leaves a stale row standing whenever a store re-words
+    # a listing between captures, and Walmart's July batch names are truncated at 60 chars so they cannot
+    # match their own full-name twin. Empty where the capture had no id - the lib then falls back to the
+    # exact name, which is what every non-Walmart, non-Sam's row has always used.
+    prod_key=(Get-ProdKey $d)
     # THE STORE'S OWN PER-UNIT NUMBER, still raw. Resolved against $f.unit at the emit below, because only
     # there is it known which commodity's unit this row is finally being compared in.
     native_up=$d.native_up; native_up_unit=$d.native_up_unit
@@ -2463,7 +2613,10 @@ foreach ($g in ($matched | Group-Object id)) {
   # no way to tell whether it lost on price or was filtered out before price was ever compared. That is how
   # Sam's baby-formula shipped at $1.4445/oz on 2026-08-06 with a real $0.7704/oz row sitting in this file.
   # audit-capture-eviction.ps1 reads it. An artifact that omits the deciding field cannot be audited.
-  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis,price_type,src_date) })
+  # prod_key added 2026-09-05, for the same reason src_date was added 2026-08-06: it is a field the
+  # per-store ranking turns on (Select-FreshestCaptureRows supersedes an older row by the same product's
+  # newer one), so an artifact without it cannot be audited against the rule the engine actually ran.
+  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis,price_type,src_date,prod_key) })
 }
 $candPfx = if ($OutName -eq 'comparison') { 'candidates' } else { "$OutName-candidates" }
 (@{ week_of=$today; commodities=$candList } | ConvertTo-Json -Depth 8) | Set-Content (Join-Path $OutDir ("$candPfx-"+$today+".json")) -Encoding UTF8

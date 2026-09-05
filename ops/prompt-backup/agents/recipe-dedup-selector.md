@@ -32,6 +32,19 @@ Everything you need is in the dispatch:
   (embedding cosine over the dish signature). Two different signals, deliberately shown separately.
 - `prior_rulings` - what this estate has already ruled about this dish identity, from the
   considered-dishes ledger. ADVISORY. You may accept a candidate with a prior rejection - say why.
+  **It is a WINDOW, not the whole ledger**: the nearest past rulings to THIS candidate by embedding
+  similarity, nearest first. `prior_rulings_window` states `shown` of `in_region` of `in_ledger`.
+  When `in_region` is larger than `shown` the region is more crowded than you can see - weigh that
+  in your reason, or defer; never read the window as the complete record. `state: blind` means the
+  window could not be built and you are looking at the older unranked key-match list instead.
+- `region_rulings` - that region's ruling mix as counts (accepted / rejected_dupe /
+  rejected_not_fit / other), so a crowded neighbourhood is a number rather than a list you tally.
+
+**When a prior ruling actually moves your verdict, name it.** Put its ledger slug(s) in the
+decision's `precedents` array. That is how the estate keeps checking the window is wide enough: if
+the rulings you rely on are consistently the nearest ones, the window holds; if you find yourself
+wanting one that was not shown, `precedents` is where that becomes visible. Relying on none is
+normal and says nothing - leave it out rather than inventing a citation.
 - `saturation_pressure` - how crowded this (protein x sauce-family) region already is in the catalog.
   Guidance, not a filter. A genuinely novel dish in a busy neighbourhood is still a good dish.
 

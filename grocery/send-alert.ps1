@@ -29,6 +29,11 @@ param(
   # that already do their own signature de-dup (the consistency-drift alert) pass this so their finer-grained
   # logic wins; everything else takes the daily gate.
   [switch]$Force,
+  # WHICH SCRIPT DECIDED TO PAGE (2026-09-05, queue 2026-09-04-bf1642). Passed by alert-lib.ps1's Send-Alert
+  # from its own call stack; stamped on a NEW queue item as `emitter` so triage-due.ps1 can ask git whether
+  # the emitting code changed after the alert fired. Absent is fine and always has been: an alert that
+  # cannot name its emitter is still an alert, and nothing downstream may require this field.
+  [string]$Emitter = "",
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
   [switch]$SelfTest
 )
@@ -93,6 +98,22 @@ function Get-QueueAction {
 # queue record had EMPTY item/ad/size fields, and the Family Fare throttle alert that compared one 3-hourly
 # slice against the whole catalogue and therefore paged forever. This does not block anything; it stamps
 # body_thin on the entry so triage treats the ALERT as the bug, not just the condition it describes.
+# ---- THE EMITTER, AS A REPO-RELATIVE PATH (2026-09-05, queue 2026-09-04-bf1642) -------------------------
+# triage-due.ps1 asks `git log -1 -- <emitter>`, so the stamp has to be something git can resolve: a path
+# relative to the repo root, forward slashes, exactly the shape git ls-files prints. An ABSOLUTE path would
+# work on this machine and nowhere else, and a path outside the repo has no repo-relative form at all - for
+# those the answer is the empty string, because inventing a path git cannot find would turn "I do not know"
+# into a silent "nothing changed", which is the same lie by a different route.
+function ConvertTo-RepoRelative([string]$Path, [string]$RepoRoot) {
+  if (-not $Path -or -not $RepoRoot) { return '' }
+  try {
+    $full = [IO.Path]::GetFullPath($Path)
+    $rr = [IO.Path]::GetFullPath($RepoRoot).TrimEnd('\', '/') + '\'
+    if ($full.StartsWith($rr, [StringComparison]::OrdinalIgnoreCase)) { return ($full.Substring($rr.Length) -replace '\\', '/') }
+  } catch { }
+  return ''
+}
+
 function Test-BodyThin([string]$Body) {
   $b = [string]$Body
   if ($b.Trim().Length -lt 120) { return $true }
@@ -142,6 +163,16 @@ if ($SelfTest) {
   _T 'a same-size repeat does NOT churn the stored body'      ([bool]($short.Length -gt ($short.Length * 1.5))) 'False'
   _T 'thin body flagged'  (Test-BodyThin 'MULTIBUY|Hy-Vee|Soda (12-pack)') 'True'
   _T 'rich body not flagged' (Test-BodyThin 'These commodity+store cells are on SALE with no everyday item to revert to: bell-peppers @ Family Fare; plums @ Family Fare; sandwich-cookies @ Family Fare. Browser stores are queued in grocery/out/research-worklist.json.') 'False'
+  # ---- THE EMITTER STAMP (2026-09-05, queue 2026-09-04-bf1642) ----
+  # triage-due.ps1 hands this string straight to `git log -- <path>`, so the only useful shape is repo-relative
+  # with forward slashes. Synthetic roots, so the case tests the transform and not this machine's layout.
+  _T 'an emitter inside the repo becomes a git-resolvable repo-relative path' (ConvertTo-RepoRelative 'C:\repo\grocery\harvest-crawl.ps1' 'C:\repo') 'grocery/harvest-crawl.ps1'
+  _T 'a trailing separator on the root does not eat the first path segment'   (ConvertTo-RepoRelative 'C:\repo\grocery\harvest-crawl.ps1' 'C:\repo\') 'grocery/harvest-crawl.ps1'
+  # A caller outside the repo (a scheduled-task script) has NO repo-relative path. Stamping a made-up one
+  # would make git answer "no commits" forever, which reads as "the emitter never changed" - a silent wrong
+  # answer dressed as a clean one. Empty is the honest stamp, and the field is simply omitted.
+  _T 'an emitter OUTSIDE the repo stamps nothing rather than a path git cannot find' (ConvertTo-RepoRelative 'C:\Users\Owner\.claude\scheduled-tasks\x\run.ps1' 'C:\repo') ''
+  _T 'no emitter at all stamps nothing'                                              (ConvertTo-RepoRelative '' 'C:\repo') ''
   # ---- mute switch, against real temp files (no live path touched) ----
   $mDir = Join-Path $env:TEMP ('smp-mute-selftest-' + [guid]::NewGuid().ToString('N').Substring(0,8))
   New-Item -ItemType Directory -Path $mDir -Force | Out-Null
@@ -167,7 +198,7 @@ if ($SelfTest) {
   } finally { Remove-Item $mDir -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ""
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (queue routing + body-thin + mute switch)'
+  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch)'
   exit 0
 }
 
@@ -257,6 +288,23 @@ try {
         body = $bodyStored
         status = 'open'; count = 1; resolved_ts = $null; notes = $null
       }
+      # WHICH CODE SAID SO (2026-09-05, queue 2026-09-04-bf1642). Stamped on NEW items only: an absorbed
+      # recurrence belongs to the incident the first occurrence opened, and re-stamping it would overwrite
+      # the provenance of the alert triage is actually working. -Emitter comes from alert-lib's call stack;
+      # the fallback below covers the in-process callers that invoke this script directly (notify-desktop.ps1
+      # does `& send-alert.ps1`), where the stack still holds the caller. Under `powershell -File` with no
+      # -Emitter there is no caller frame at all, and then nothing is stamped - which is correct and must
+      # stay harmless: every item written before today has no emitter and must keep reading fine forever.
+      $emitterRel = ''
+      try {
+        $emSrc = $Emitter
+        if (-not $emSrc) {
+          $f = @(Get-PSCallStack | Where-Object { $_.ScriptName -and ($_.ScriptName -ne $PSCommandPath) })
+          if ($f.Count) { $emSrc = [string]$f[0].ScriptName }
+        }
+        $emitterRel = ConvertTo-RepoRelative $emSrc (Split-Path -Parent $root)
+      } catch { $emitterRel = '' }
+      if ($emitterRel) { $newItem | Add-Member -NotePropertyName emitter -NotePropertyValue $emitterRel }
       # an alert nobody can classify from its own body is a bug in the ALERT - say so on the record
       if ($thin) {
         $newItem | Add-Member -NotePropertyName body_thin -NotePropertyValue $true

@@ -542,6 +542,45 @@ if ($runDownstream) {
   }
 }
 
+# ---- THE AGENT PROMPTS GET A REPAIR LANE (2026-09-05, queue 2026-09-05-5650ce) -------------------------
+# THE PLAN SAID run-daily-local.ps1; THAT FILE WAS RETIRED ON 2026-08-22 and its jobs moved here (see the
+# 1st-of-month housekeeping block above, which carries the same note). This is the daily runner now.
+#
+# ops\audit-prompt-backup.ps1 reported the SAME seven findings every morning for 13 days and nothing moved:
+# the recipe writer ran Opus-pinned at high effort in two of its three copies, the dedup selector carried no
+# precedents contract, and the recipe-hunter SKILL was missing Brad's 09-04 browser-pricing ruling - for
+# every session whose working directory sits outside the repo (this orchestrator's C:\Codex). An alarm whose
+# only follower is a human typing a command is an alarm with no repair lane. It stayed that way because the
+# audit's one remedy, -Sync, also mirrors files into a repo that loads without a login, so nothing was
+# allowed to run it unattended.
+# The audit now splits that write by risk, and only the two safe halves run here:
+#   -SyncScopes  project scope -> user scope. Local, publishes nothing, and it is the half that decides
+#                WHICH PROMPT ACTUALLY RUNS for a session outside the repo.
+#   -SyncMirror  refreshes ops\prompt-backup ONLY where a mirror already exists. Refreshing a copy of an
+#                already-public file publishes nothing new.
+# ADOPTING a never-mirrored file into the public mirror is deliberately NOT here: the audit keeps printing
+# NO BACKUP, which is the one finding that still needs a person.
+# ops\prompt-backup is NOT added to the staging list below, on purpose - that list is "the exact set real
+# bot commits have ever touched", and a bot that commits prompt files could sweep a live session's in-flight
+# prompt edit into main. The audit prints "commit ops\prompt-backup" when it rewrote a mirror; a human does.
+# Non-fatal by construction, like the housekeeping block: a prompt sync must never cost the day's prices.
+if ($Kind -eq 'daily' -and -not $WhatIf -and -not $NoDownstream) {
+  try {
+    $pba = Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1'
+    if (Test-Path $pba) {
+      Write-Output ''
+      Write-Output 'prompt-sync: audit-prompt-backup -SyncScopes -SyncMirror (scope follow + refresh of already-mirrored files)'
+      # NO 2>&1 ON THE CHILD. This script runs under $ErrorActionPreference='Stop', and in PS 5.1 redirecting
+      # a native child's stderr wraps each line in a NativeCommandError that becomes a terminating throw.
+      # Same rule, same reason as the downstream call above - one warning was enough to kill a whole run.
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $pba -SyncScopes -SyncMirror | ForEach-Object { Write-Output ("  " + $_) }
+      Write-Output ("prompt-sync rc=" + $LASTEXITCODE + " (2 here is normal: a NO BACKUP finding awaiting a human decision is not a failure)")
+    } else {
+      Write-Output 'prompt-sync: SKIPPED - ops\audit-prompt-backup.ps1 not found'
+    }
+  } catch { Write-Output ('prompt-sync threw (not fatal, no price depends on it): ' + $_.Exception.Message) }
+}
+
 # ---- COMMIT + PUSH + PROVE THE EDGE TOOK IT (re-homed 2026-08-22) --------------------------------------
 # THE LAST MILE WAS SEVERED AND NOTHING NOTICED. Cloudflare serves public\** from the git repo, so a price
 # only reaches a reader once it is COMMITTED AND PUSHED. That step lived in run-daily-local.ps1, and the

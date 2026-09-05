@@ -1,5 +1,5 @@
 {
-  "readme": "CANONICAL store registry (2026-07-26, estate-audit item #5). One row per store the board tracks. Scripts that need the full store list read THIS file (sorted by 'order'); audit-store-registry.ps1 scans live scripts daily and flags any hardcoded list that names >=3 stores but not all of them (the publish-store-guide/publish-deals-page Fareway-drift class). Add a new store HERE FIRST, then run audit-store-registry.ps1 to find every site the change must reach. 'allowed_subsets' documents lines that legitimately name only some stores. 'walled': true marks the four stores whose prices can only be captured through a human browser session behind a bot wall (Walmart, Sam's Club, Aldi, Fareway) - build-rescue-worklist.ps1 reads THIS FLAG to decide which stores get a rescue term list. It is an explicit flag and not a match on 'capture' on purpose: Aldi's capture string starts with 'server (Flipp flyerkit JSON)' because its AD is a server pull, while its shelf prices come off the Instacart storefront by hand, so any substring test for 'browser' silently drops it.",
+  "readme": "CANONICAL store registry (2026-07-26, estate-audit item #5). One row per store the board tracks. Scripts that need the full store list read THIS file (sorted by 'order'); audit-store-registry.ps1 scans live scripts daily and flags any hardcoded list that names >=3 stores but not all of them (the publish-store-guide/publish-deals-page Fareway-drift class). Add a new store HERE FIRST, then run audit-store-registry.ps1 to find every site the change must reach. 'allowed_subsets' documents lines that legitimately name only some stores; check 6 of that audit re-resolves every entry (the file must exist and its 'contains' needle must still be present in it), because an exemption is a standing decision and a standing decision nobody re-checks rots - four of the thirty entries had already gone dead when that check was added on 2026-09-05, two of them naming scripts retired on 2026-08-22. 'walled': true marks the four stores whose prices can only be captured through a human browser session behind a bot wall (Walmart, Sam's Club, Aldi, Fareway) - build-rescue-worklist.ps1 reads THIS FLAG to decide which stores get a rescue term list. It is an explicit flag and not a match on 'capture' on purpose: Aldi's capture string starts with 'server (Flipp flyerkit JSON)' because its AD is a server pull, while its shelf prices come off the Instacart storefront by hand, so any substring test for 'browser' silently drops it.",
   "stores": [
     {
       "name": "Hy-Vee",
@@ -226,34 +226,14 @@
       "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless"
     },
     {
-      "file": "compare-deals.ps1",
-      "contains": "$EVERYDAY_ONLY_STORES",
-      "reason": "walmart is the only store with no ad cycle whose partial pulls must union"
-    },
-    {
       "file": "check-ad-cycles.ps1",
       "contains": "The daily server-side grocery pull",
       "reason": "alert body names only the three server-pull stores"
     },
     {
-      "file": "local-watchdog.ps1",
-      "contains": "server stores Hy-Vee/Aldi/Family Fare",
-      "reason": "comment-in-string: names only the server-pull stores"
-    },
-    {
       "file": "build-deals-page.ps1",
       "contains": "neither posts everyday brand prices online",
       "reason": "site copy for the everyday-brand section, which by design excludes Aldi/Fareway"
-    },
-    {
-      "file": "check-ad-cycles.ps1",
-      "contains": "The weekly Wednesday grocery browser refresh did not run",
-      "reason": "alert body names only the browser-refresh stores"
-    },
-    {
-      "file": "import-browser-batch.ps1",
-      "contains": "switch ($Store)",
-      "reason": "store->prefix switch whose 'default' arm covers the unnamed stores"
     },
     {
       "file": "sync-browser-links.ps1",
@@ -299,6 +279,12 @@
       "file": "test-auditors.ps1",
       "contains": "\"id\":\"breakfast-sausage\",\"unit\":\"lb\",\"stores\":[{\"store\":\"Walmart\",\"per_unit\":2.89,\"item\":\"Johnsonville Original Breakfast Sausage, 14 Links, 12 oz (Fresh)\"}]",
       "reason": "frozen (afc) sausage_carrier CLEAN TWIN: three hand-written comparison rows proving that a sausage on a SAUSAGE commodity (breakfast-sausage at Walmart, kielbasa at Sam's Club) and a real Smoked Gruyere (Family Fare) all stay silent while the Aidells chicken-sausage-on-gruyere must-fire row hard-fails. The region under test, audit-food-category.ps1, never branches on store - it uses the store field only for the food-class-allowlist key (line 91) and the report text (lines 93 and 120) and decides the class on commodity id plus item name against the category-exclude library - so 3 stores prove the contract for all 7 and four more rows would add zero coverage while making the fixture read as a roster it is not. The fixture is frozen under the guard-fixture rule and must never be regenerated from the board. The needle is taken from INSIDE the string literal rather than from the assignment prefix, so it matches both the widened AST statement text and the raw line; if the fixture text is ever rewritten the needle stops matching and the guard speaks up again, which is the correct behaviour. SELF-REFERENTIAL like $asrFive and $cgQuiet above. Confirmed 2026-09-03 (queue 2026-09-03-494974)."
+    },
+    {
+      "file": "test-auditors.ps1",
+      "contains": "{\"commodity\":\"Bacon\",\"id\":\"bacon\",\"unit\":\"oz\",\"stores\":[{\"store\":\"Aldi\",\"per_unit\":0.3106,\"item\":\"Appleton Farms Lower Sodium Bacon 16 OZ\"}]}",
+      "reason": "frozen (d5) $ccTwin CLEAN TWIN for audit-food-category's cheese_carrier and cracker_carrier classes: a real bacon (Aldi), a real pita bread (Walmart), a real bagel (Baker's) and the live Sam's Club muffins crown, all of which must stay silent or a release token has started eating the products its commodity is for. The region under test decides class membership on the item NAME alone (audit-food-category.ps1:88, `$nm -imatch $pat`); $s.store is used at line 91 only to key the known-wrong allowlist, which can only SILENCE a finding, and at 93/120 only to print it - so no store absent from this fixture could turn its expected exit 0 into a failure, and the four named prove the contract for all seven. The fixture is frozen under the guard-fixture rule and test-auditors.ps1:995 says so four lines above it: NEVER REGENERATE THESE ROWS FROM THE BOARD. Registered rather than edited, which is the whole point. The needle is taken from INSIDE the string literal, not from the assignment prefix, so it matches both the widened AST statement text and the raw line; if the fixture is ever rewritten the needle stops matching, the guard speaks up again, and the orphaned-exemption check (check 6) reports this entry as dead - which is the correct behaviour in both directions. SELF-REFERENTIAL like $asrFive and $cgQuiet above. Confirmed 2026-09-05 (queue 2026-09-05-17ebe3).",
+      "reviewed": "2026-09-05"
     },
     {
       "file": "probe-ingredient.ps1",

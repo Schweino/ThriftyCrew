@@ -133,6 +133,25 @@ function Pick-Cheapest($items) {
   }
   return $best
 }
+# THE ROTATION DISTANCE, as a pure function so it can be tested (2026-09-05, queue 2026-09-05-18d67c).
+# Reading the cursor and the term list from script scope would make this untestable, which is how the
+# remedy sentence it replaces survived for as long as it did - nothing could assert on what the guard said.
+function Get-FfRotationDistance {
+  param([string]$Term, [string[]]$AllTerms, [int]$Cursor, [int]$RotationTerms, [int]$WindowsPerDay = 3, [datetime]$Now = (Get-Date))
+  if ($Cursor -lt 0 -or -not @($AllTerms).Count -or $RotationTerms -le 0) { return '' }
+  $idx = [Array]::IndexOf(@($AllTerms), $Term)
+  if ($idx -lt 0) { return '  (term not in the current rotation list)' }
+  $total = @($AllTerms).Count
+  $ahead = ($idx - $Cursor) % $total
+  if ($ahead -lt 0) { $ahead += $total }
+  $head = '  index ' + $idx + ' of ' + $total + ', cursor ' + $Cursor
+  if ($ahead -lt $RotationTerms) { return ($head + ' - DUE NEXT WINDOW') }
+  $w = [int][math]::Ceiling($ahead / [double]$RotationTerms)
+  $d = [int][math]::Ceiling($w / [double]$WindowsPerDay)
+  return ($head + ' - due in ' + $w + ' window(s) (~' + $Now.AddDays($d).ToString('yyyy-MM-dd') + ') at ' +
+          $RotationTerms + ' term(s) per window')
+}
+
 if ($SelfTest) {
   # FROZEN FIXTURES - never regenerate these from the live pull. Each pair is one MUST-FIRE (the real bug)
   # and one CLEAN-TWIN (the case that must stay silent), taken from the 2026-07-31 adjudication.
@@ -159,6 +178,21 @@ if ($SelfTest) {
   )
   $pk2 = Pick-Cheapest $mb
   if (-not $pk2 -or ([string]$pk2.name) -ne 'Spice Supreme Spice Ground Cloves') { $fails.Add('CLEAN-TWIN: the multi-buy row was read by stripping digits - "4 for $5.00" became 45 and the $6.49 row looked cheaper') }
+  # ---- ROTATION DISTANCE (2026-09-05). Frozen from the real case: 'turkey gravy jar' is index 346 of the
+  # 602-term rotation and the shared cursor stood at 89 after the 08:01 window, at 7 terms per window.
+  # These use the harness's own $fails list on purpose: three cases written below its gate would print FAIL
+  # and still exit 0, which is the shape of dead check this file's own header is about.
+  $rotFix = @(0..601 | ForEach-Object { 't' + $_ }); $rotFix[346] = 'turkey gravy jar'; $rotFix[89] = 'at the cursor'
+  # MUST-FIRE: (346-89)/7 = 36.7 -> 37 windows, about 13 days out.
+  $due = Get-FfRotationDistance -Term 'turkey gravy jar' -AllTerms $rotFix -Cursor 89 -RotationTerms 7 -WindowsPerDay 3 -Now ([datetime]'2026-09-05T10:00:00')
+  if ($due -notmatch 'due in 37 window' -or $due -notmatch '2026-09-18') { $fails.Add("MUST-FIRE: index 346 with the cursor at 89 must read 37 window(s) out, got '" + $due + "'") }
+  # CLEAN TWIN: a victim whose term is AT the cursor is due next window, not most of a rotation away.
+  $due2 = Get-FfRotationDistance -Term 'at the cursor' -AllTerms $rotFix -Cursor 89 -RotationTerms 7
+  if ($due2 -notmatch 'DUE NEXT WINDOW') { $fails.Add("CLEAN-TWIN: a term at the cursor must read DUE NEXT WINDOW, got '" + $due2 + "'") }
+  # CLEAN TWIN: the alert body must no longer carry the remedy that cannot reach a term 37 windows away.
+  # The needle is assembled here so this assertion does not match itself in the source it is reading.
+  $badRemedy = 'Re-run pull-regular-familyfare' + '.ps1 (recovery should catch them)'
+  if ([IO.File]::ReadAllText($PSCommandPath).Contains($badRemedy)) { $fails.Add('CLEAN-TWIN: the alert still tells the developer to re-run the sweep, which cannot buy a term far from the cursor') }
   if ($fails.Count) { foreach ($f in $fails) { Write-Output ('  SELF-TEST FAIL  ' + $f) }; Write-Output 'ff-carry SELF-TEST FAILED'; exit 2 }
   Write-Output 'ff-carry: own-feed-coverage and cheapest-pick fixtures both hold - SELF-TEST PASS'
   exit 0
@@ -244,15 +278,49 @@ if ($attempted -gt 0 -and $probed -eq 0) {
   exit 3
 }
 if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  no term is missing from the feed AND carried by FF" + $probeStat); Write-GuardComplete -Name 'ff-carry'; exit 0 }
+# HOW FAR AWAY IS THIS TERM, IN WINDOWS? (2026-09-05, queue 2026-09-05-18d67c)
+# This guard used to end by telling the reader to re-run the Family Fare pull and let recovery catch it. Under
+# capture-policy that advice cannot work and never could: a run buys the RotationTerms terms sitting at the
+# shared cursor and stops (pull-regular-familyfare.ps1's term-budget branch), and the recovery pass re-tries
+# only THIS window's empties. On 2026-09-05 the victim was jarred-gravy, whose term 'turkey gravy jar' sits
+# at rotation index 346 of 602 while the cursor stood at 89 - about 37 windows, roughly 2026-09-17. A
+# developer following the printed remedy would have re-run the sweep, bought terms 89..95 again, and learned
+# nothing. Printing the DISTANCE turns "why is this still missing" into a number instead of an investigation.
+$ffAllTerms = @(Get-SearchTermPairs $terms | ForEach-Object { [string]$_.term })
+$ffCursor = -1
+try {
+  $curDoc = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $OutDir 'capture-cursor.json')))
+  if ($curDoc.PSObject.Properties['FamilyFare']) { $ffCursor = [int]$curDoc.FamilyFare }
+} catch {}
+$ffRot = 7
+try {
+  . (Join-Path $root 'capture-policy-lib.ps1')
+  $ffPlan = Get-CapturePlan -Store 'Family Fare' -Today (Get-Date -Format 'yyyy-MM-dd')
+  if ($ffPlan -and [int]$ffPlan.RotationTerms -gt 0) { $ffRot = [int]$ffPlan.RotationTerms }
+} catch {}
+# Three landed windows a day is the current schedule (TC Grocery Ad Pulls 0700, Daily Capture 0800,
+# Capture Watchdog 0930/1030). Used only to turn windows into an approximate DATE, never into a threshold.
+$ffWindowsPerDay = 3
+function Get-FfTermDue([string]$Term) { return (Get-FfRotationDistance -Term $Term -AllTerms $ffAllTerms -Cursor $ffCursor -RotationTerms $ffRot -WindowsPerDay $ffWindowsPerDay) }
 Write-Output ("ff-carry: FOUND " + $victims.Count + " uncovered term(s) - FF carries these and this pull has no priced row for them" + $probeStat + ":")
-foreach ($v in $victims) { Write-Output ("  " + $v.commodity.PadRight(20) + " <- '" + $v.product + "' " + $v.size + " " + $v.price) }
+foreach ($v in $victims) {
+  Write-Output ("  " + $v.commodity.PadRight(20) + " <- '" + $v.product + "' " + $v.size + " " + $v.price)
+  $due = Get-FfTermDue ([string]$v.term)
+  if ($due) { Write-Output ('  ' + ''.PadRight(20) + " term '" + $v.term + "'" + $due) }
+}
 if ($Alert) {
   $sig = (@($victims | ForEach-Object { $_.commodity } | Sort-Object) -join ';')
   $sigHash = [BitConverter]::ToString((New-Object Security.Cryptography.SHA256Managed).ComputeHash([Text.Encoding]::UTF8.GetBytes($sig))).Replace('-', '').Substring(0, 16)
   $sigF = Join-Path $OutDir 'ff-carry-alert.sig'
   $last = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sigHash -ne $last) {
-    $body = "The Family Fare pull dropped item(s) FF actually carries (Freshop rate-limit survived the recovery passes). Board shows 'No price yet' for:`n" + (($victims | ForEach-Object { $_.commodity + ' <- ' + $_.product }) -join "`n") + "`nRe-run pull-regular-familyfare.ps1 (recovery should catch them) or investigate persistent throttling."
+    # NO RE-RUN SENTENCE. See the rotation-distance note above: under capture-policy a re-run buys the terms
+    # at the cursor and cannot reach a term 37 windows away, so telling a developer to re-run is telling
+    # them to do the one thing that cannot help. The distance is the actionable fact; print that instead.
+    $body = "The Family Fare pull has no priced row for item(s) FF actually carries. Board shows 'No price yet' for:`n" +
+            (($victims | ForEach-Object { $_.commodity + " <- " + $_.product + "`n    term '" + $_.term + "'" + (Get-FfTermDue ([string]$_.term)) }) -join "`n") +
+            "`n`nThe term budget is " + $ffRot + " term(s) per landed window (capture-policy), about " + ($ffRot * $ffWindowsPerDay) +
+            " a day, so a term far from the cursor cannot be bought by re-running the sweep. Confirmed victims lead the next window's slice automatically; anything longer than that is the rotation working as designed."
     try { Send-Alert -Subject "Grocery: Family Fare pull dropped a carried item - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
