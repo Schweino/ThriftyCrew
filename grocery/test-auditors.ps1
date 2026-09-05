@@ -2108,6 +2108,47 @@ else { Bad ("$copies caller(s) still stamp marked_down inline - a second impleme
 if ($iwbSrcRb -match 'wasPrice' -and $iwbSrcRb -match '\$f\[6\]') {
   Ok 'the Walmart batch raw format still carries a 7th was-price field (without it no markdown is knowable)'
 } else { Bad 'the Walmart batch raw format lost its was-price field - markdowns become indistinguishable from everyday prices again' }
+
+# ---- THE ENCODING PAIR (2026-09-05) ---------------------------------------------------------------------
+# PS 5.1's Get-Content decodes a BOM-less file with the ANSI codepage. A BOM-less UTF-8 capture plus a
+# reader that omits -Encoding mangles every non-ASCII byte, and the misdecoded string is written back, so
+# each round trip bakes in another generation. Five live board cells were corrupted this way while every
+# guard was green, and the worst offender's input file is CLEAN ON DISK - the engine did it at read time.
+# RunPS resolves against grocery\, so the lib is invoked directly rather than through it.
+$jioPath = Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1'
+$jioOut  = (& powershell -NoProfile -ExecutionPolicy Bypass -File $jioPath -SelfTest 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+if ($LASTEXITCODE -eq 0 -and $jioOut -match 'MUST FIRE' -and $jioOut -match 'SELF-TEST PASSED') {
+  Ok 'lib\json-io -SelfTest passes, and its FIRST case proves the PS 5.1 codepage bug still exists before claiming to fix it'
+} else { Bad ('lib\json-io -SelfTest failed: ' + ((($jioOut -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$jioSrc = Get-Content $jioPath -Raw
+# The must-fire asserts the BUG. If PowerShell ever changed this default the library would be decoration,
+# and a fixture that cannot fail is exactly the dead-guard shape this harness exists to find.
+if ($jioSrc -match 'still corrupts the name') { Ok 'json-io still asserts the founding PS 5.1 codepage bug is real, rather than assuming it' }
+else { Bad 'json-io lost the case that proves the bug it fixes still exists - it can now pass while being pointless' }
+if ($jioSrc -match 'ReadAllText') { Ok 'json-io reads through [IO.File]::ReadAllText (BOM-detecting, UTF-8 default), not -Encoding UTF8 which covers only one of the three shapes' }
+else { Bad 'json-io no longer uses ReadAllText - a narrower fix that looks like the same fix' }
+
+$r = RunPS 'audit-json-readers.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'MUST FIRE' -and $r.text -match 'SELF-TEST PASS') {
+  Ok 'audit-json-readers -SelfTest passes with its founding shape and four clean twins armed'
+} else { Bad ('audit-json-readers -SelfTest failed: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+# It must FAIL CLOSED on a file it could not scan. An undercount in a ratchet is worse than no ratchet: it
+# lowers the baseline, and the next real regression then reads as "at or below the known backlog". This
+# happened while the guard was being written - a Mandatory [string[]] rejected files with blank lines, the
+# loop carried on, and the count was silently short.
+$jrSrc = Get-Content (Join-Path $root 'audit-json-readers.ps1') -Raw
+if ($jrSrc -match 'AllowEmptyString' -and $jrSrc -match 'BLIND: ') {
+  Ok 'audit-json-readers fails CLOSED on a file it cannot scan, so its ratchet can never be built from a partial count'
+} else { Bad 'audit-json-readers can undercount silently - a ratchet built from a partial scan lowers its own baseline and hides the next regression' }
+
+$abmR = Get-Content (Join-Path $root 'audit-board-mojibake.ps1') -Raw
+if ($abmR -match 'RATCHET BROKEN' -and $abmR -match 'board-mojibake-baseline') {
+  Ok 'audit-board-mojibake is a RATCHET - a name that was clean and is now mangled hard-fails rather than being filed as backlog'
+} else { Bad 'audit-board-mojibake lost its ratchet - it is advisory again, and a live reader bug will publish' }
+$gSrcEnc = Get-Content (Join-Path $root 'guards.ps1') -Raw
+if ($gSrcEnc -match 'audit-json-readers' -and $gSrcEnc -match 'audit-board-mojibake') {
+  Ok 'guards.ps1 runs BOTH ends of the encoding pair - the cause (bare readers) and the outcome (mangled board names)'
+} else { Bad 'guards.ps1 is missing one end of the encoding pair - either half alone leaves the other unguarded' }
 # ...and the healer it depends on must still reach the depth the board actually hit. These are two halves of
 # one loop: a healer that stops short leaves the audit permanently red, and the only way to make it green
 # again is to weaken the signature.

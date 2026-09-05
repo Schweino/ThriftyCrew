@@ -31,6 +31,7 @@
 param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt', [switch]$SelfTest, [switch]$TrustNoSeller, [string]$OutRoot = '',
       [switch]$Reheal, [string]$Shape = '(?i)\bpacks?\s+of\s+\d+')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 $root = $PSScriptRoot
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $outRootDir = if ($OutRoot) { $OutRoot } else { $root }
@@ -513,7 +514,7 @@ if (Test-Path $idsFile) {
   # An unreadable existing map is NOT an empty one. Throwing here loses today's 22; silently starting fresh
   # loses the other 500. Keep the file, write nothing, and say so - the import's real output is the deals.
   try {
-    $prev = Get-Content $idsFile -Raw | ConvertFrom-Json
+    $prev = Read-JsonFile $idsFile
     foreach ($p in $prev.PSObject.Properties) { $idsOut[$p.Name] = $p.Value }
   } catch {
     Write-Warning ("Walmart: walmart-itemids.json exists but could not be parsed (" + $_.Exception.Message + "). REFUSING to overwrite it with this batch's " + $ids.Count + " entries - that would discard every entry it holds. The deals import above is unaffected; fix or delete the map by hand.")

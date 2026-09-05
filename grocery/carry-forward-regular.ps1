@@ -27,6 +27,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 # -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a
 # missing mandatory parameter, so `-SelfTest` alone could never be invoked: it died with
 # MissingMandatoryParameter on any non-interactive runner. This file's self-test therefore existed and had
@@ -77,7 +78,7 @@ function Invoke-CarryForward([string]$prefix, [string]$dir, [int]$maxDays) {
   if ($files.Count -lt 2) { return "carry-forward [$prefix]: fewer than 2 dated captures - nothing to carry from" }
   $newF = $files[0]
   $newDate = [datetime]([regex]::Match($newF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
-  $new = Get-Content $newF.FullName -Raw | ConvertFrom-Json
+  $new = Read-JsonFile $newF.FullName
   $have = @{}
   foreach ($d in @($new.deals)) { $have[(Get-CarryKey $d.item)] = $true }
 
@@ -137,7 +138,7 @@ function Invoke-CarryForward([string]$prefix, [string]$dir, [int]$maxDays) {
   foreach ($prevF in ($files | Select-Object -Skip 1)) {
     $prevDate = [datetime]([regex]::Match($prevF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
     if (($newDate - $prevDate).TotalDays -gt $maxDays) { break }   # files sorted newest-first; older = all out
-    $prev = Get-Content $prevF.FullName -Raw | ConvertFrom-Json
+    $prev = Read-JsonFile $prevF.FullName
     foreach ($d in @($prev.deals)) {
       $k = Get-CarryKey $d.item
       if (-not $k -or $have.ContainsKey($k)) { continue }
@@ -220,7 +221,7 @@ if ($SelfTest) {
     @{ store='Aldi'; price_type='everyday'; price_mode='in-store'; mode_verified=$d0; deals=@(@{ store='Aldi'; item='Milk'; ad_price='$3.45'; size='1 gal' }) } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T "aldi-regular-$d0.json") -Encoding UTF8
     $r = Invoke-CarryForward 'aldi' $T 14
     Write-Output $r
-    $out = Get-Content (Join-Path $T "aldi-regular-$d0.json") -Raw | ConvertFrom-Json
+    $out = Read-JsonFile (Join-Path $T "aldi-regular-$d0.json")
     $items = @($out.deals | ForEach-Object { $_.item })
     if ($items.Count -eq 2 -and ($items -contains 'Milk') -and ($items -contains 'Eggs')) { Write-Output 'ok    partial pull keeps its own row + carries the missing one' } else { Write-Output "FAIL  items = $($items -join ',') want Milk,Eggs"; $fail++ }
     if (-not ($items -contains 'Butter')) { Write-Output 'ok    20-day-old pre-carried row expired (14-day cap from ORIGINAL as_of)' } else { Write-Output 'FAIL  expired row was carried'; $fail++ }
@@ -231,7 +232,7 @@ if ($SelfTest) {
     if ($milk.ad_price -eq '$3.45') { Write-Output 'ok    fresh row NOT overwritten by the stale one' } else { Write-Output "FAIL  milk = $($milk.ad_price)"; $fail++ }
     # idempotency: run again -> nothing new
     $r2 = Invoke-CarryForward 'aldi' $T 14
-    $out2 = Get-Content (Join-Path $T "aldi-regular-$d0.json") -Raw | ConvertFrom-Json
+    $out2 = Read-JsonFile (Join-Path $T "aldi-regular-$d0.json")
     if (@($out2.deals).Count -eq 2) { Write-Output 'ok    idempotent (second run carries nothing new)' } else { Write-Output "FAIL  second run -> $(@($out2.deals).Count) rows"; $fail++ }
 
     # ---- RETIREMENT: a re-searched term whose product did not come back ------------------------
@@ -256,7 +257,7 @@ if ($SelfTest) {
       @{ store='Aldi'; price_type='everyday'; deals=$prev2 } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T2 "aldi-regular-$d1.json") -Encoding UTF8
       @{ store='Aldi'; price_type='everyday'; deals=$new2 }  | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T2 "aldi-regular-$d0.json") -Encoding UTF8
       $null = Invoke-CarryForward 'aldi' $T2 14
-      $o3 = Get-Content (Join-Path $T2 "aldi-regular-$d0.json") -Raw | ConvertFrom-Json
+      $o3 = Read-JsonFile (Join-Path $T2 "aldi-regular-$d0.json")
       $names = @($o3.deals | ForEach-Object { [string]$_.item })
       if ($names -notcontains 'Kirkwood Chicken Breast Fillets Family Pack') {
         Write-Output 'ok    MUST-FIRE: a product whose term was re-searched and did not return is RETIRED, not carried'
@@ -274,7 +275,7 @@ if ($SelfTest) {
         @{ store='Aldi'; price_type='everyday'; deals=@(@{ store='Aldi'; item='Something Else'; ad_price='$1.00'; size='1 ct'; found_by_term='unrelated term'; as_of=$d0 }) } |
           ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T3 "aldi-regular-$d0.json") -Encoding UTF8
         $null = Invoke-CarryForward 'aldi' $T3 14
-        $o4 = Get-Content (Join-Path $T3 "aldi-regular-$d0.json") -Raw | ConvertFrom-Json
+        $o4 = Read-JsonFile (Join-Path $T3 "aldi-regular-$d0.json")
         $n4 = @($o4.deals | ForEach-Object { [string]$_.item })
         if (($n4 -contains 'Kirkwood Chicken Breast Fillets Family Pack') -and ($n4 -contains 'Friendly Farms Whole Milk')) {
           Write-Output 'ok    a term that returned NOTHING is not "covered" - a wall cannot retire the catalogue'

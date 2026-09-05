@@ -23,6 +23,13 @@
 # rather than spaced so "Ken's" folds onto "Kens", and a stranded possessive "s" is re-joined so Aldi's
 # "Clancy S Original Potato Chips" folds onto "Clancy's Original Potato Chips".
 $KW_UNIT_TOKENS = @('oz','ozs','fl','lb','lbs','pound','pounds','ct','count','pk','pkg','pack','packs','pcs','pc','piece','pieces','g','gr','gram','grams','kg','ml','l','liter','liters','qt','quart','gal','gallon','each','ea','in','inch','sq','ft','roll','rolls','bag','bags','box','boxes','can','cans','bottle','bottles','jar','jars','pouch','pouches','tub','tubs','tray','trays','carton','cartons','case','cases','container','containers','sheet','sheets','load','loads','serving','servings','bar','bars','slice','slices','cup','cups','tbsp','tsp','pt','pint','pints')
+# Read-JsonFile, because PS 5.1's Get-Content decodes a BOM-less file as the ANSI codepage and this
+# lib reads a rule file that may or may not carry one. Dot-sourced defensively: a caller that has
+# already loaded it just redefines the same functions, which is harmless, whereas relying on the
+# caller to have done it makes this lib's correctness depend on who called it.
+$__kwLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1'
+if (Test-Path $__kwLib) { . $__kwLib }
+
 function KwNorm([string]$Raw) {
   $s = ($Raw + '')
   if ($s.Length -eq 0) { return '' }
@@ -61,7 +68,7 @@ function Get-KnownWrongBlocks {
   $out = @{}
   if (-not $Path -or -not (Test-Path $Path)) { return $out }
   $doc = $null
-  try { $doc = Get-Content $Path -Raw | ConvertFrom-Json } catch { return $out }
+  try { $doc = Read-JsonFile $Path } catch { return $out }
   if (-not $doc) { return $out }
   $entries = @()
   if ($doc.PSObject.Properties.Name -contains 'entries') { $entries = @($doc.entries) }

@@ -1,4 +1,4 @@
-﻿<#
+<#
   guards.ps1 - the BLOCKING invariant gate. Run before every publish; a hard failure means the board
   must NOT go live.
 
@@ -292,6 +292,8 @@ $null = Register-Kid 'cell-drops'           'audit-cell-drops.ps1'           @()
 $null = Register-Kid 'coverage-regression'  'audit-coverage-regression.ps1'  @()
 $null = Register-Kid 'pack-basis'           'audit-pack-basis.ps1'           @()
 $null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @()
+$null = Register-Kid 'json-readers'        'audit-json-readers.ps1'         @()
+$null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-Quiet')
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
 $null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
 # The BROWSER-PULL JS LANE (2026-08-31). pull-agent-lib.js and the four store agents are the whole
@@ -500,7 +502,25 @@ foreach ($g in @(
     # that gets switched off (same reasoning as tile-integrity above). It exits 0 with its findings listed;
     # only BLIND (exit 3) raises a warn. Promote it to hard once the backlog is worked and the band policy
     # is fixed - that is a one-line change to the exit code, and the fixtures are already frozen.
-    @{ f='audit-band-censorship.ps1';   n='no NEW cell publishes a dearer price because the band refused a near-floor row that was cheaper (RATCHET against out\band-censorship-baseline.json, may only go down)'; k='band-censorship' })) {
+    @{ f='audit-band-censorship.ps1';   n='no NEW cell publishes a dearer price because the band refused a near-floor row that was cheaper (RATCHET against out\band-censorship-baseline.json, may only go down)'; k='band-censorship' },
+    # encoding, BOTH ENDS (2026-09-05). PS 5.1's Get-Content decodes a file with NO byte-order mark
+    # using the system ANSI codepage, so a BOM-less UTF-8 capture plus a reader that omits -Encoding
+    # silently mangles every non-ASCII byte - and the misdecoded string is written back, so each round
+    # trip bakes in one more generation. Neither half of that pair looks wrong on its own. Five live
+    # board cells across three stores carried mangled names while every guard read green, and the worst
+    # offender's input file, sams-deals-2026-07-29.json, is CLEAN ON DISK: the engine created the
+    # corruption at READ TIME, which is why every input-watching defence this estate had was blind to it.
+    # TWO guards, because the ends fail differently and either alone leaves a hole:
+    #   json-readers   = the CAUSE. Counts bare `Get-Content | ConvertFrom-Json` sites; 553 on day one,
+    #                    so a ratchet, and a NEW one hard-fails. It cannot see a read split over two
+    #                    lines - a floor on what it proves, not a claim the rest is clean.
+    #   board-mojibake = the OUTCOME, where every variant converges regardless of which half failed, and
+    #                    the only one that can catch a reader nobody has enumerated. Baseline 0, so any
+    #                    newly mangled name blocks. Not cosmetic: audit-name-drift compares the board
+    #                    name against the stored link name WORD BY WORD, so one side mangled and the
+    #                    other not reads as a WRONG PRODUCT in a different guard.
+    @{ f='audit-json-readers.ps1';      n='no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down)'; k='json-readers' },
+    @{ f='audit-board-mojibake.ps1';    n='no NEW mangled product name reaches the board (RATCHET at 0 - a clean name that is now corrupted means a reader is mangling input right now)'; k='board-mojibake' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   # CAPTURE the output instead of discarding it: a delegated audit that says "nothing to check" was exiting 0,

@@ -19,6 +19,13 @@
                       refuses to emit them.
 #>
 
+# Read-JsonFile, because PS 5.1's Get-Content decodes a BOM-less file as the ANSI codepage and this
+# lib reads a rule file that may or may not carry one. Dot-sourced defensively: a caller that has
+# already loaded it just redefines the same functions, which is harmless, whereas relying on the
+# caller to have done it makes this lib's correctness depend on who called it.
+$__kwLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1'
+if (Test-Path $__kwLib) { . $__kwLib }
+
 function Test-MpSizeIsPackTotal([string]$name, [double]$sizeVal) {
   if ($sizeVal -le 0) { return $false }
   $n = $name.ToLower()
@@ -43,7 +50,7 @@ function Test-MpSizeIsPackTotal([string]$name, [double]$sizeVal) {
 function Get-MpAllowKeys([string]$root) {
   $f = Join-Path $root 'multipack-allowlist.json'
   if (-not (Test-Path $f)) { return @() }
-  return @((Get-Content $f -Raw | ConvertFrom-Json).allow | ForEach-Object { $_.store + '|' + $_.item })
+  return @((Read-JsonFile $f).allow | ForEach-Object { $_.store + '|' + $_.item })
 }
 
 function Test-MpClassify([string]$store, [string]$item, [string]$size, $allowKeys) {

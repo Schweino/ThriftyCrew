@@ -33,6 +33,7 @@ param([switch]$SelfTest, [string]$OutDir, [string]$Board, [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
+. (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: this guard must not itself read through the codepage bug it watches for
 
 # THE SIGNATURE, and why it is these three lead bytes and nothing else.
 # UTF-8 read as Windows-1252 turns every non-ASCII character into a sequence that STARTS with one of
@@ -210,6 +211,34 @@ if ($res.examined -eq 0) {
   Write-Output ('audit-board-mojibake: BLIND - ' + (Split-Path $Board -Leaf) + ' carries zero named store rows')
   exit 3
 }
+# ---- THE RATCHET (2026-09-05, Brad's call) ---------------------------------------------------------------
+# Advisory could not stay: audit-name-drift compares the board item name against the stored link name WORD
+# BY WORD, so one side mangled and the other not reads as a WRONG PRODUCT - a corrupted name manufactures
+# false findings in a different guard. And it compounds silently: the Campbell's row was five generations
+# deep, 117 characters for a 36-character name, before anyone looked.
+# Blocking outright could not ship either: on the day this was written there were five real findings, and a
+# board whose PRICES are all correct must not be held hostage to a bad apostrophe.
+# So it is a ratchet, the same shape as audit-tile-integrity and audit-band-censorship. The baseline is 0
+# today, which means both rules are currently identical and this costs nothing - and the moment a name that
+# was clean yesterday is mangled today, that is a LIVE reader bug and it blocks.
+$blF = Join-Path $OutDir 'board-mojibake-baseline.json'
+$base = $null
+if (Test-Path $blF) { try { $base = [int]((Read-JsonFile $blF).count) } catch { $base = $null } }
+$count = $res.findings.Count
+if ($null -eq $base) {
+  # A BLIND run never reaches here - every could-not-read path above exits 3 first - so a baseline written
+  # at this point is always taken from a board that was actually examined.
+  @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet, set 2026-09-05. May only go DOWN. A run above it is a NEW mangled name, i.e. a live reader bug, and hard-fails.' } |
+    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  Write-Output ("audit-board-mojibake: baseline written at $count. From here the number may only go DOWN.")
+  $base = $count
+}
+if ($count -lt $base) {
+  @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet. May only go DOWN.' } |
+    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  Write-Output ("audit-board-mojibake: ratchet tightened to $count (was $base).")
+  $base = $count
+}
 if (-not $res.findings.Count) {
   Write-Output ('audit-board-mojibake: clean - ' + $res.examined + ' board name(s) examined in ' + (Split-Path $Board -Leaf) + ', 0 mangled')
   exit 0
@@ -230,4 +259,12 @@ if (-not $Quiet) {
     Send-Alert -Subject ('Grocery: ' + $res.findings.Count + ' board product name(s) are mangled - encoding') -Body $body | Out-Null
   } catch {}
 }
-exit 2
+# AT OR BELOW the known backlog is exit 1 (findings, reported, does not block). ABOVE it is exit 2, which
+# guards.ps1 treats as a hard fail - a name that was clean on the last board and is mangled on this one is
+# a reader bug happening RIGHT NOW, and it will bake itself one generation deeper on every rebuild.
+if ($count -gt $base) {
+  Write-Output ("audit-board-mojibake: RATCHET BROKEN - $count mangled name(s) now, baseline $base. A name that was clean is now corrupted, so a reader is actively mangling input. Find it with audit-json-readers.ps1, fix it with Read-JsonFile (lib\json-io.ps1), then heal-mojibake.ps1 -Apply and rebuild.")
+  exit 2
+}
+Write-Output ("audit-board-mojibake: $count mangled name(s) against a baseline of $base - the known backlog, not a new regression.")
+exit 1

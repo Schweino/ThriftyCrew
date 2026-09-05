@@ -1,4 +1,4 @@
-﻿<#
+<#
   build-fareway-regular.ps1 - turns the Fareway STOREFRONT extracts (shop.fareway.com, no-markup in-store
   prices, Omaha) into an engine-ready everyday-price file: out\regular\fareway-regular-<date>.json.
   compare-deals.ps1 auto-discovers out\regular\<store>-regular-*.json (price_type=everyday) with NO code
@@ -31,6 +31,7 @@ param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$M
   # reach into the live board.
   [switch]$NoCarry)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $asofS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
@@ -187,7 +188,7 @@ if ($SelfTest) {
     ($fx | ConvertTo-Json -Depth 4) | Set-Content $fxF -Encoding UTF8
     $selfPath = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $root 'build-fareway-regular.ps1' }
     $out = (@((Invoke-NativeScript $selfPath '-In' $fxF '-OutDir' $T '-Today' '2026-07-31' '-ModeVerified' '2026-07-31' '-NoCarry').Lines) | Out-String)
-    $doc = Get-Content (Join-Path $T 'regular\fareway-regular-2026-07-31.json') -Raw | ConvertFrom-Json
+    $doc = Read-JsonFile (Join-Path $T 'regular\fareway-regular-2026-07-31.json')
     $byid = @{}; foreach ($d in @($doc.deals)) { $byid[[string]$d.item] = $d }
     function Chk([string]$label, [bool]$cond, [string]$got) {
       if ($cond) { Write-Output ("ok    " + $label) } else { Write-Output ("FAIL  " + $label + "   got: " + $got); $script:fail++ }
@@ -236,7 +237,7 @@ if ($SelfTest) {
     New-Item -ItemType Directory -Path (Join-Path $T 'twin') -Force | Out-Null
     ($fx2 | ConvertTo-Json -Depth 4) | Set-Content $fx2F -Encoding UTF8
     $null = (Invoke-NativeScript $selfPath '-In' $fx2F '-OutDir' (Join-Path $T 'twin') '-Today' '2026-07-31' '-ModeVerified' '2026-07-31' '-NoCarry').Lines
-    $doc2 = Get-Content (Join-Path $T 'twin\regular\fareway-regular-2026-07-31.json') -Raw | ConvertFrom-Json
+    $doc2 = Read-JsonFile (Join-Path $T 'twin\regular\fareway-regular-2026-07-31.json')
     $t1 = @($doc2.deals) | Where-Object { $_.item -eq 'Fareway Whole Milk' }
     $t2 = @($doc2.deals) | Where-Object { $_.item -eq 'Country Daybreak Large White Eggs' }
     Chk '(n twin) gallon row with no stated volume STILL relabelled "gallon"' ($t1 -and $t1.size -eq 'gallon' -and $t1.ad_price -eq '$5.75') ("$($t1.ad_price) / $($t1.size)")
@@ -272,7 +273,7 @@ if ($SelfTest) {
       @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '3.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = '' }
     ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir 'fareway-shop-2026-08-01.json') -Encoding UTF8
     $out3 = (@((Invoke-NativeScript $selfPath '-OutDir' (Join-Path $T 'multi') '-Today' '2026-08-01' '-ModeVerified' '2026-08-01' '-NoCarry').Lines) | Out-String)
-    $doc3 = Get-Content (Join-Path $T 'multi\regular\fareway-regular-2026-08-01.json') -Raw | ConvertFrom-Json
+    $doc3 = Read-JsonFile (Join-Path $T 'multi\regular\fareway-regular-2026-08-01.json')
     $b3 = @{}; foreach ($d in @($doc3.deals)) { $b3[[string]$d.item] = $d }
     $q1 = $b3['Fareway Ranch Dressing']
     Chk '(q) row from a 07-23 extract keeps as_of 2026-07-23, NOT the build date' ($q1 -and $q1.as_of -eq '2026-07-23') ("as_of=$($q1.as_of)")
@@ -286,7 +287,7 @@ if ($SelfTest) {
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
-$commod = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commod = Read-JsonFile (Join-Path $root 'commodities.json')
 $validSet = @{}; $unitMap = @{}; $pintMap = @{}; foreach ($c in $commod) { $validSet[[string]$c.id] = $true; $unitMap[[string]$c.id] = [string]$c.unit; if ($c.PSObject.Properties['pint_oz'] -and $c.pint_oz) { $pintMap[[string]$c.id] = [double]$c.pint_oz } }
 
 $byId = [ordered]@{}
@@ -574,7 +575,7 @@ New-Item -ItemType Directory -Force -Path $regDir | Out-Null
 # overwrote them). Replacing a bigger file with a smaller one is a partial-pull-as-overwrite bug, not a refresh.
 $regPath = Join-Path $regDir "fareway-regular-$asofS.json"
 if (Test-Path $regPath) {
-  $old = $null; try { $old = Get-Content $regPath -Raw | ConvertFrom-Json } catch {}
+  $old = $null; try { $old = Read-JsonFile $regPath } catch {}
   if ($old -and (@($old.deals).Count -gt ($deals.Count * 1.2)) -and -not $Force) {
     throw ("REFUSING to overwrite " + (Split-Path $regPath -Leaf) + ": it holds " + @($old.deals).Count + " rows, this rebuild produced only " + $deals.Count + ". That file accumulated verified rows a shop-file rebuild cannot reproduce. Pass -Force only if the shrink is intended.")
   }

@@ -8,6 +8,7 @@
 #>
 param([string]$CompareFile = "", [string]$OutDir = "", [string]$Out = "", [switch]$Embed)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $CompareFile) {
@@ -16,7 +17,7 @@ if (-not $CompareFile) {
   # Prefer the semantically-verified board (wrong-product winners dropped/de-crowned by the verify pass) when
   # it is at least as fresh as the raw comparison (i.e. re-applied after the latest re-compare); otherwise the
   # raw comparison (fresher prices) wins so a stale verified snapshot never overrides today's daily re-pricing.
-  try { $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
+  try { $wk = (Read-JsonFile $cmpF.FullName).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
 }
 if (-not $Out) { $Out = Join-Path $OutDir 'deals-page.html' }
 
@@ -29,8 +30,8 @@ if (-not $Out) { $Out = Join-Path $OutDir 'deals-page.html' }
 # lib\board-drops.ps1 was dot-sourced here for the masthead's biggest-drop chip. The chip went with the
 # masthead on 2026-08-09; the Friday email is now the ranking's only caller, so the lib stays and this
 # dot-source goes.
-$doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
-$cats = (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories | Sort-Object order
+$doc  = Read-JsonFile $CompareFile
+$cats = (Read-JsonFile (Join-Path $root 'categories.json')).categories | Sort-Object order
 $week = [string]$doc.week_of
 
 # ---- BOARD-PRICE OVERRIDES: pin the verified current per-unit for cells whose periodic source pull went
@@ -40,7 +41,7 @@ $week = [string]$doc.week_of
 # time and survive daily regeneration; audit-board-consistency re-checks it and boardmatch keeps it honest.
 $ovr = @{}
 $ovrFile = Join-Path $root 'board-price-overrides.json'
-if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
+if (Test-Path $ovrFile) { try { foreach ($c in (Read-JsonFile $ovrFile).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
 function Apply-Overrides($rows) {
   if (-not $rows -or $ovr.Count -eq 0) { return 0 }
   $n = 0
@@ -81,11 +82,11 @@ $verdict  = @{}   # id -> @{cls; label; title}   Buy-or-Wait layer (only when no
 # stock-up set: commodities that keep (freezer/pantry) - a record price on one of these earns a "Stock up" tag
 $stockup = @{}
 $suFile = Join-Path $root 'stockup-items.json'
-if (Test-Path $suFile) { try { $suDoc = Get-Content $suFile -Raw | ConvertFrom-Json; foreach ($p in $suDoc.items.PSObject.Properties) { $stockup[[string]$p.Name] = [string]$p.Value } } catch {} }
+if (Test-Path $suFile) { try { $suDoc = Read-JsonFile $suFile; foreach ($p in $suDoc.items.PSObject.Properties) { $stockup[[string]$p.Name] = [string]$p.Value } } catch {} }
 $histFile = Join-Path $root 'price-history.json'
 if (Test-Path $histFile) {
   try {
-    $histDoc = Get-Content $histFile -Raw | ConvertFrom-Json
+    $histDoc = Read-JsonFile $histFile
     $histById = @{}; foreach ($h in $histDoc.commodities) { $histById[[string]$h.id] = $h }
     foreach ($r in $doc.comparison) {
       $h = $histById[[string]$r.id]; if (-not $h) { continue }
@@ -125,7 +126,7 @@ if (Test-Path $histFile) {
 # optional: recipe-ingredient board (the 100 meal-prep recipes' ingredients, all 6 stores). Additive; renders below the weekly staples when present.
 $riDoc = $null; $riCats = @()
 $riFile = Join-Path $OutDir 'recipe-board.json'
-if (Test-Path $riFile) { $riDoc = Get-Content $riFile -Raw | ConvertFrom-Json; $riCats = @($riDoc.comparison | ForEach-Object { [string]$_.category } | Select-Object -Unique); $ovrN += (Apply-Overrides $riDoc.comparison) }
+if (Test-Path $riFile) { $riDoc = Read-JsonFile $riFile; $riCats = @($riDoc.comparison | ForEach-Object { [string]$_.category } | Select-Object -Unique); $ovrN += (Apply-Overrides $riDoc.comparison) }
 # MERGED SECTIONS (2026-08-15, Brad's call). Recipe rows used to render as their OWN sections below the
 # staples, one <h2> per distinct category string - so the page showed "Meat & Poultry" twice ("Dairy & Eggs"
 # twice, and before the vocabulary was canonicalized, THREE dairy spellings at once). One category = one
@@ -139,7 +140,7 @@ if ($riDoc) { foreach ($r in $riDoc.comparison) { $cl = [string]$r.category; if 
 $purls = @{}
 $purlFile = Join-Path $root 'product-urls.json'
 if (Test-Path $purlFile) {
-  $pd = Get-Content $purlFile -Raw | ConvertFrom-Json
+  $pd = Read-JsonFile $purlFile
   foreach ($p in $pd.items.PSObject.Properties) {
     $sm = @{}; foreach ($sp in $p.Value.PSObject.Properties) { if ($sp.Value -and $sp.Value.url) { $sm[[string]$sp.Name] = $sp.Value } }
     $purls[[string]$p.Name] = $sm
@@ -149,7 +150,7 @@ if (Test-Path $purlFile) {
 # with a "See it? Let us know!" link to the suggest-an-item form, so a genuine gap reads as intentional.
 $notCarry = @{}
 $ncFile = Join-Path $root 'not-carried.json'
-if (Test-Path $ncFile) { $ncd = Get-Content $ncFile -Raw | ConvertFrom-Json; foreach ($e in @($ncd.cells)) { $ncid = [string]$e.id; if (-not $notCarry.ContainsKey($ncid)) { $notCarry[$ncid] = @{} }; $notCarry[$ncid][[string]$e.store] = $true } }
+if (Test-Path $ncFile) { $ncd = Read-JsonFile $ncFile; foreach ($e in @($ncd.cells)) { $ncid = [string]$e.id; if (-not $notCarry.ContainsKey($ncid)) { $notCarry[$ncid] = @{} }; $notCarry[$ncid][[string]$e.store] = $true } }
 function IsNoneCarry([string]$id, [string]$store) { return ($notCarry.ContainsKey($id) -and $notCarry[$id].ContainsKey($store)) }
 function NoneCells([string]$id) {
   if (-not $notCarry.ContainsKey($id)) { return '' }
@@ -185,7 +186,7 @@ function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = ''
 # happens to be close. Run audit-name-drift.ps1 before build so this file is current.
 $formFlip = @{}
 $ndFile = Join-Path $OutDir 'name-drift.json'
-if (Test-Path $ndFile) { try { $nd = Get-Content $ndFile -Raw | ConvertFrom-Json; foreach ($f in $nd.flags) { if ($f.reason -eq 'form-flip') { $formFlip[([string]$f.id + '|' + [string]$f.store)] = $true } } } catch {} }
+if (Test-Path $ndFile) { try { $nd = Read-JsonFile $ndFile; foreach ($f in $nd.flags) { if ($f.reason -eq 'form-flip') { $formFlip[([string]$f.id + '|' + [string]$f.store)] = $true } } } catch {} }
 # Does the linked product's NAME describe the SAME product the board priced? Used to validate a SALE cell's
 # link (where the price gate can't, because a sale price legitimately differs from the everyday snapshot). We
 # require the board item's distinctive words (>3 chars, minus generic filler) to mostly appear in the link name,
@@ -206,7 +207,7 @@ function NameMatch([string]$boardItem, [string]$linkName) {
 # band-passing per-unit that's safe to show. Never used without the band (a generic include like "bread"
 # matches any brand, so identity-by-include alone could bless a wrong product).
 $cmIdent = @{}
-try { foreach ($cdef in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $cmIdent[[string]$cdef.id] = @{ inc = @($cdef.include); exc = @($cdef.exclude) } } } catch {}
+try { foreach ($cdef in (Read-JsonFile (Join-Path $root 'commodities.json'))) { $cmIdent[[string]$cdef.id] = @{ inc = @($cdef.include); exc = @($cdef.exclude) } } } catch {}
 function CommodityIdent([string]$id, [string]$linkName) {
   if (-not $cmIdent.ContainsKey($id) -or -not $linkName) { return $false }
   $inc = $false
@@ -231,7 +232,7 @@ function CleanItemName([string]$item) {
 # store weekly-ad landing pages (flyer-only pills link to them). Single source: ad-urls.json - the daily
 # reachability warn reads the same file, so the pill and the check can never disagree about the URL.
 $ADURLS = @{}
-try { $adDoc = Get-Content (Join-Path $root 'ad-urls.json') -Raw | ConvertFrom-Json; foreach ($p in $adDoc.urls.PSObject.Properties) { $ADURLS[[string]$p.Name] = [string]$p.Value } } catch {}
+try { $adDoc = Read-JsonFile (Join-Path $root 'ad-urls.json'); foreach ($p in $adDoc.urls.PSObject.Properties) { $ADURLS[[string]$p.Name] = [string]$p.Value } } catch {}
 
 # THE ALL-3 RULE (Brad, 2026-07-23): every tile that shows a price and a name MUST also carry a link -
 # no exceptions, ever. Exact product links stay the gold standard (price-verified, the gates above), but a
@@ -435,7 +436,7 @@ function SaleBadge($s, $store) {
 # ---- per-store status: current weekly-ad window (ad-schedule.json) + when the store's prices were last pulled ----
 $adWin = @{}
 $schedFile = Join-Path $root 'ad-schedule.json'
-if (Test-Path $schedFile) { $sc = Get-Content $schedFile -Raw | ConvertFrom-Json; foreach ($s in $sc.stores) { if ($s.current -and $s.current.from) { $adWin[[string]$s.store] = @{ from=[string]$s.current.from; to=[string]$s.current.to } } } }
+if (Test-Path $schedFile) { $sc = Read-JsonFile $schedFile; foreach ($s in $sc.stores) { if ($s.current -and $s.current.from) { $adWin[[string]$s.store] = @{ from=[string]$s.current.from; to=[string]$s.current.to } } } }
 $storeFiles = @{
   'Hy-Vee'      = @('ads-*.json','regular\hyvee-regular-*.json')
   'Aldi'        = @('ads-*.json','regular\aldi-regular-*.json')
@@ -643,7 +644,7 @@ function SummaryHtml($best, [string]$unit) {
 # a staple row below; a registered staple that has NO staple row (priced only as a recipe ingredient) must
 # instead pick up the 7-store guarantee on its recipe row (see the recipe section) so build and audit agree.
 $stapleIdSet = @{}
-try { foreach ($sc in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $stapleIdSet[[string]$sc.id] = $true } } catch {}
+try { foreach ($sc in (Read-JsonFile (Join-Path $root 'commodities.json'))) { $stapleIdSet[[string]$sc.id] = $true } } catch {}
 $stapleRendered = @{}
 $totalCommodities = 0; $totalPrices = 0
 # view counts, stamped into the segment above at the end of the build (see __SALE_N__)
