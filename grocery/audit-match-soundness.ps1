@@ -23,7 +23,10 @@ param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # and "Member's Mark Broccoli Normandy -> broccoli" AFTER the verify pass had already rejected both, which
   # made them permanently invisible to this audit - and they published as crowns. Forcing must be a loud,
   # deliberate act, never the default.
-  [switch]$ForceAccept)
+  [switch]$ForceAccept,
+  # -SelfTest: this guard had NONE until 2026-09-05, which is why the drift check could count seven
+  # disagreements and name none of them for a whole day without anything noticing.
+  [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -32,6 +35,65 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
 # consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
+
+function Get-DriftRows {
+  <#
+    WHERE THIS MATCHER AND THE ENGINE DISAGREE, BY NAME - not just how many.
+
+    Pure, and a parameter rather than a file read, so the rule can be driven by a fixture instead of
+    by whatever candidates-*.json happens to be on disk. It was inline and counted only: on
+    2026-09-05 it reported "matcher disagrees with the engine on 7 products - investigate" and gave
+    the reader nothing to investigate WITH, and naming them from outside would have meant a second
+    copy of Get-Eligible, which is the rule this estate keeps in exactly one file.
+
+    `<unmatched>` counts as a disagreement on purpose: a product the engine assigned to a commodity
+    and this matcher now assigns to nothing is precisely the rule improvement (or regression) worth
+    seeing - all seven on 2026-09-05 were that shape, and all seven were the matcher being RIGHT
+    against a candidates file from the previous board week.
+  #>
+  param($Names, $Commodities)
+  $out = New-Object System.Collections.Generic.List[object]
+  foreach ($cm in @($Commodities)) {
+    foreach ($cd in @($cm.candidates)) {
+      $nm = [string]$cd.name
+      if ($Names.ContainsKey($nm) -and [string]$Names[$nm] -ne [string]$cm.id) {
+        $out.Add([pscustomobject]@{ name = $nm; engine = [string]$cm.id; matcher = [string]$Names[$nm] })
+      }
+    }
+  }
+  return $out
+}
+
+if ($SelfTest) {
+  $bad = 0
+  function T([string]$n, [bool]$ok, [string]$got) {
+    if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }
+  }
+  $names = @{ 'Honey Boy Pink Salmon' = 'canned-salmon'; 'Sue Bee Honey' = 'honey'
+              'Steak Tips With Gravy' = '<unmatched>' }
+  $cands = @(
+    [pscustomobject]@{ id = 'honey'; candidates = @(
+      [pscustomobject]@{ name = 'Honey Boy Pink Salmon' }, [pscustomobject]@{ name = 'Sue Bee Honey' }) },
+    [pscustomobject]@{ id = 'jarred-gravy'; candidates = @(
+      [pscustomobject]@{ name = 'Steak Tips With Gravy' }) })
+  $rows = Get-DriftRows $names $cands
+  T 'MUST FIRE  a drift is NAMED, with both opinions - the count alone is what made 7 uninvestigable' `
+    (@($rows).Count -eq 2 -and (@($rows | Where-Object { $_.name -eq 'Honey Boy Pink Salmon' -and $_.engine -eq 'honey' -and $_.matcher -eq 'canned-salmon' }).Count -eq 1)) `
+    (($rows | ForEach-Object { $_.name + ':' + $_.engine + '->' + $_.matcher }) -join ' | ')
+  T 'MUST FIRE  a product the matcher now leaves UNMATCHED is a disagreement, not a pass - that is the rule-improvement shape, and all 7 on 2026-09-05 were it' `
+    (@($rows | Where-Object { $_.matcher -eq '<unmatched>' }).Count -eq 1) `
+    (($rows | ForEach-Object { $_.matcher }) -join ',')
+  T 'CLEAN TWIN a product both sides agree on is NOT reported' `
+    (@($rows | Where-Object { $_.name -eq 'Sue Bee Honey' }).Count -eq 0) 'agreed product was reported as drift'
+  T 'CLEAN TWIN a product the engine names that this matcher never saw is not a disagreement - it is silence, and silence is not evidence' `
+    ((Get-DriftRows @{} $cands).Count -eq 0) 'an unseen product counted as drift'
+  T 'MUST FIRE  the report and the console both carry the NAMES, not just the count' `
+    (((Get-Content $PSCommandPath -Raw) -match ('drift_' + 'products')) -and ((Get-Content $PSCommandPath -Raw) -match ('DRIFT    engine says'))) `
+    'the names are collected and then never rendered'
+  if ($bad -eq 0) { Write-Output 'match-soundness SELF-TEST PASS'; exit 0 }
+  Write-Output ("match-soundness SELF-TEST FAIL: $bad case(s)"); exit 2
+}
+
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $audDir = Join-Path $OutDir 'audit'
 if (-not (Test-Path $audDir)) { New-Item -ItemType Directory -Path $audDir | Out-Null }
@@ -148,9 +210,20 @@ if (-not $msHit) {
 
 # ---- SELF-CHECK: matcher vs the engine's candidates (must be 0 disagreements) ----
 $drift = 0
+# NAME THEM, DO NOT JUST COUNT THEM (2026-09-05). This check counted disagreements and then told the
+# reader to "investigate compare-deals vs commodities.json" without saying WHICH products - so the one
+# thing needed to investigate was the one thing it withheld. On 2026-09-05 it reported 7 and nobody
+# could act on it: naming them from outside would mean a second copy of Get-Eligible, which is the
+# rule this estate deliberately keeps in one file. The count is unchanged; only the legibility is.
+$driftRows = New-Object System.Collections.Generic.List[object]
 try {
   $candF = Get-ChildItem (Join-Path $OutDir 'candidates-*.json') | Sort-Object Name -Descending | Select-Object -First 1
-  if ($candF) { foreach ($cm in @((ConvertFrom-Json ([IO.File]::ReadAllText($candF.FullName))).commodities)) { foreach ($cd in @($cm.candidates)) { $nm = [string]$cd.name; if ($names.ContainsKey($nm) -and $names[$nm] -ne [string]$cm.id) { $drift++ } } } }
+  if ($candF) {
+    # WRAPPED AT THE CALL SITE. PowerShell unrolls a List returned from a function, so a single-row
+    # result arrives as a bare PSCustomObject and .Count/.ToArray() are gone. Assign then wrap.
+    $driftRows = @(Get-DriftRows $names @((ConvertFrom-Json ([IO.File]::ReadAllText($candF.FullName))).commodities))
+    $drift = $driftRows.Count
+  }
 } catch {}
 
 # ---- BLIND GUARD: a check that examined NOTHING must say so ----------------------------------------------
@@ -263,12 +336,16 @@ foreach ($nm in $baseNames.Keys) {
 }
 $newContest = @($contest.Keys | Where-Object { -not $baseContest.ContainsKey($_) } | Sort-Object)
 
-$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_vs_engine = $drift; moved = $moved; dropped = $dropped; new_contested = $newContest }
+$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_vs_engine = $drift; drift_products = $driftRows; moved = $moved; dropped = $dropped; new_contested = $newContest }
 Set-Content (Join-Path $audDir 'soundness-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
 
 $regr = $moved.Count + $dropped.Count
 Write-Output ("match-soundness: MOVED=$($moved.Count)  DROPPED=$($dropped.Count)  new-contested=$($newContest.Count)  drift-vs-engine=$drift")
-if ($drift -gt 0) { Write-Output ("  WARNING: matcher disagrees with the engine on $drift products - this guard may be stale; investigate compare-deals vs commodities.json.") }
+if ($drift -gt 0) {
+  Write-Output ("  WARNING: matcher disagrees with the engine on $drift products - this guard may be stale; investigate compare-deals vs commodities.json.")
+  foreach ($dr in ($driftRows | Select-Object -First 25)) { Write-Output ("  DRIFT    engine says $($dr.engine)  /  this matcher says $($dr.matcher)   '$($dr.name)'") }
+  if ($driftRows.Count -gt 25) { Write-Output ("  ...and $($driftRows.Count - 25) more, all of them in out\audit\soundness-report.json") }
+}
 foreach ($d in $dropped) { Write-Output ("  DROPPED  $($d.from)  ->  <unmatched>   '$($d.name)'") }
 foreach ($mv in $moved)  { Write-Output ("  MOVED    $($mv.from) -> $($mv.to)   '$($mv.name)'") }
 if ($newContest.Count) { Write-Output ("  new-contested (order-dependence to review): " + (($newContest | Select-Object -First 25) -join ' | ')) }
@@ -279,7 +356,7 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   $sigF = Join-Path $audDir 'soundness-alert-sig.txt'
   $last = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sigHash -ne $last) {
-    $body = "Matching soundness found changes:`nMOVED=$($moved.Count) DROPPED=$($dropped.Count) new-contested=$($newContest.Count) drift=$drift`n`n" + (($dropped | ForEach-Object { "DROPPED $($_.from): $($_.name)" }) -join "`n") + "`n" + (($moved | ForEach-Object { "MOVED $($_.from)->$($_.to): $($_.name)" }) -join "`n") + "`nReview, then accept with: audit-match-soundness.ps1 -Accept"
+    $body = "Matching soundness found changes:`nMOVED=$($moved.Count) DROPPED=$($dropped.Count) new-contested=$($newContest.Count) drift=$drift`n`n" + (($dropped | ForEach-Object { "DROPPED $($_.from): $($_.name)" }) -join "`n") + "`n" + (($moved | ForEach-Object { "MOVED $($_.from)->$($_.to): $($_.name)" }) -join "`n") + "`n" + (($driftRows | Select-Object -First 25 | ForEach-Object { "DRIFT engine=$($_.engine) matcher=$($_.matcher): $($_.name)" }) -join "`n") + "`nReview, then accept with: audit-match-soundness.ps1 -Accept"
     try { Send-Alert -Subject "Grocery matching soundness - review needed" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
