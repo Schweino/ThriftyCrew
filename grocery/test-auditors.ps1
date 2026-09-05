@@ -2078,6 +2078,18 @@ $gSrcBc = Get-Content (Join-Path $root 'guards.ps1') -Raw
 if ($gSrcBc -match 'no NEW cell publishes a dearer price' -and $gSrcBc -match 'band-censorship') {
   Ok 'guards.ps1 states the band-censorship invariant as the ratchet it is (NEW cells), not as an absolute it does not prove'
 } else { Bad 'guards.ps1 band-censorship invariant no longer says NEW - it now claims an absolute the ratchet does not check' }
+
+# import-walmart-batch's name->itemId map (2026-09-05). The deals file merges; this map used to be written
+# straight over with the current batch only. A 22-row staleness repair cut it from 508 entries to 22 and the
+# run reported "22 verified, 22 added, 0 rejected" - nothing reads the map during an import, so the loss was
+# invisible until someone needed a link to resolve. The file is untracked, so there is no restoring it.
+$iwbSrc = Get-Content (Join-Path $root 'import-walmart-batch.ps1') -Raw
+if ($iwbSrc -match 'merged not replaced' -and $iwbSrc -match '\$idsOut\[\$p\.Name\]') {
+  Ok 'import-walmart-batch MERGES walmart-itemids.json into the existing map instead of overwriting it with one batch'
+} else { Bad 'import-walmart-batch no longer merges walmart-itemids.json - a small batch will silently discard every entry it did not capture, and the file is untracked so it cannot be restored' }
+if ($iwbSrc -match 'REFUSING to overwrite it with this batch') {
+  Ok 'import-walmart-batch refuses to overwrite an UNREADABLE itemId map rather than reading it as empty'
+} else { Bad 'import-walmart-batch treats an unparseable itemId map as empty - the fail-open-reads-as-empty class, applied to the only copy of the map' }
 # ...and the healer it depends on must still reach the depth the board actually hit. These are two halves of
 # one loop: a healer that stops short leaves the audit permanently red, and the only way to make it green
 # again is to weaken the signature.

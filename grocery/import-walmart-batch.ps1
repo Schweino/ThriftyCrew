@@ -457,5 +457,32 @@ if ($quarantined.Count) {
 }
 $idsDir = Join-Path $outRootDir 'out\staples500'
 if (-not (Test-Path $idsDir)) { New-Item -ItemType Directory -Path $idsDir -Force | Out-Null }
-($ids | ConvertTo-Json) | Set-Content (Join-Path $idsDir 'walmart-itemids.json') -Encoding UTF8
+# MERGE, DO NOT OVERWRITE (2026-09-05). This line used to write $ids - THIS BATCH's map only - straight over
+# the file, while the deals file three lines above it merges into what is already there. Same function, two
+# artifacts, opposite behaviour, and only one of them said so. A 22-row staleness repair therefore cut the
+# accumulated name->itemId map from 508 entries to 22, silently: nothing reads this file during the import,
+# so the run reported "22 verified, 22 added, 0 rejected" and looked perfect. The map is what lets later
+# passes resolve a product to its Walmart item page, so 486 lost entries are 486 links that quietly stop
+# resolving, discovered whenever someone next needs one.
+# It is also NOT tracked by git, so there is no restoring it from HEAD - the only copy is the one on disk.
+# A file with no version history and no merge is one careless write away from gone.
+$idsFile = Join-Path $idsDir 'walmart-itemids.json'
+$idsOut = @{}
+if (Test-Path $idsFile) {
+  # An unreadable existing map is NOT an empty one. Throwing here loses today's 22; silently starting fresh
+  # loses the other 500. Keep the file, write nothing, and say so - the import's real output is the deals.
+  try {
+    $prev = Get-Content $idsFile -Raw | ConvertFrom-Json
+    foreach ($p in $prev.PSObject.Properties) { $idsOut[$p.Name] = $p.Value }
+  } catch {
+    Write-Warning ("Walmart: walmart-itemids.json exists but could not be parsed (" + $_.Exception.Message + "). REFUSING to overwrite it with this batch's " + $ids.Count + " entries - that would discard every entry it holds. The deals import above is unaffected; fix or delete the map by hand.")
+    $idsOut = $null
+  }
+}
+if ($null -ne $idsOut) {
+  $before = $idsOut.Count
+  foreach ($k in $ids.Keys) { $idsOut[$k] = $ids[$k] }   # this batch wins on a name it re-captured
+  ($idsOut | ConvertTo-Json) | Set-Content $idsFile -Encoding UTF8
+  Write-Output ("Walmart: name->itemId map $before -> $($idsOut.Count) entries ($($ids.Count) from this batch, merged not replaced)")
+}
 Write-Output ("Walmart: verified $($rows.Count) row(s) through the builder invariants ($added added, $replaced replaced, $($rejects.Count) rejected, $($quarantined.Count) quarantined), total $($merged.Count); name->itemId map: $($ids.Count) -> $(Split-Path $outFile -Leaf)")
