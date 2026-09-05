@@ -1,4 +1,4 @@
-﻿<#
+<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -2048,6 +2048,36 @@ if ($abmSrc -match '0x0043,0x0061,0x006D,0x0070,0x0062,0x0065,0x006C,0x006C') { 
 else { Bad 'audit-board-mojibake lost the frozen Campbell fixture - the bug it encodes is being healed out of the live board, so without the frozen copy a green run cannot be told from a blind one' }
 if ($abmSrc -match 'exit 3') { Ok 'audit-board-mojibake reports BLIND rather than clean on a board it could not read' }
 else { Bad 'audit-board-mojibake no longer has a BLIND path - a zero-row board would read as zero findings' }
+
+# audit-band-censorship (2026-09-05). The band floor cannot tell a parse error from a real price drop, and
+# nothing in the estate read what it threw away. The guard's whole value is the DISCRIMINATION - reporting
+# a row 2.7% under the floor while staying silent on one 99.7% under - because without that it is just a
+# second copy of the band with none of its judgement, and it would report 385 rows instead of 90.
+$r = RunPS 'audit-band-censorship.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS' -and $r.text -match 'MUST FIRE' -and $r.text -match 'DISCRIMINATION') {
+  Ok 'audit-band-censorship -SelfTest passes with its founding bug, three clean twins and the discrimination case armed'
+} else { Bad ('audit-band-censorship -SelfTest failed or lost a fixture: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$abcSrc = Get-Content (Join-Path $root 'audit-band-censorship.ps1') -Raw
+# The frozen founding numbers. If the lettuce row is ever regenerated from the board it will encode the FIX
+# and pass by finding nothing, which is the guard-fixture-rule failure this estate has hit repeatedly.
+if ($abcSrc -match '0\.7783' -and $abcSrc -match '1\.0367') { Ok 'the frozen lettuce row (0.7783 refused against a published 1.0367) is still in audit-band-censorship''s fixtures' }
+else { Bad 'audit-band-censorship lost its frozen lettuce fixture - regenerated from the board it would encode the fix and pass by finding nothing' }
+# The parse-bug twin is the half that keeps it honest. Without it the guard passes by flagging everything.
+if ($abcSrc -match '0\.0009') { Ok 'the per-sheet toilet-paper parse bug (0.0009 against a 0.30 floor) is still armed as the clean twin' }
+else { Bad 'audit-band-censorship lost its parse-bug clean twin - a guard that reports every below-floor row is a copy of the band, not a check on it' }
+if ($abcSrc -match 'exit 3') { Ok 'audit-band-censorship reports BLIND rather than clean when nothing can express the defect' }
+else { Bad 'audit-band-censorship no longer has a BLIND path - a flagged file with no banded rejection would read as a clean board' }
+# THE RATCHET, asserted at the SOURCE as well as through -SelfTest. The guard shipped for an hour exiting 0
+# with 50 real findings, so guards.ps1 printed "ok" on an invariant fifty cells were violating. If this
+# ever loses its exit 2 it is silently advisory again, and an advisory report is not in the publish path.
+if ($abcSrc -match 'Get-RatchetVerdict' -and $abcSrc -match "'break'" -and $abcSrc -match 'exit 2') {
+  Ok 'audit-band-censorship still HARD FAILS (exit 2) when the ratchet breaks - a new censored cell is not filed as backlog'
+} else { Bad 'audit-band-censorship lost its ratchet break - it is advisory again, and guards.ps1 will print ok over real findings' }
+# And the guards.ps1 invariant text must keep saying NEW, or the line claims more than the check proves.
+$gSrcBc = Get-Content (Join-Path $root 'guards.ps1') -Raw
+if ($gSrcBc -match 'no NEW cell publishes a dearer price' -and $gSrcBc -match 'band-censorship') {
+  Ok 'guards.ps1 states the band-censorship invariant as the ratchet it is (NEW cells), not as an absolute it does not prove'
+} else { Bad 'guards.ps1 band-censorship invariant no longer says NEW - it now claims an absolute the ratchet does not check' }
 # ...and the healer it depends on must still reach the depth the board actually hit. These are two halves of
 # one loop: a healer that stops short leaves the audit permanently red, and the only way to make it green
 # again is to weaken the signature.

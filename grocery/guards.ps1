@@ -291,6 +291,7 @@ $null = Register-Kid 'unit-basis-outlier'   'audit-unit-basis-outlier.ps1'   @()
 $null = Register-Kid 'cell-drops'           'audit-cell-drops.ps1'           @()
 $null = Register-Kid 'coverage-regression'  'audit-coverage-regression.ps1'  @()
 $null = Register-Kid 'pack-basis'           'audit-pack-basis.ps1'           @()
+$null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @()
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
 $null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
 # The BROWSER-PULL JS LANE (2026-08-31). pull-agent-lib.js and the four store agents are the whole
@@ -484,7 +485,22 @@ foreach ($g in @(
     # Every downstream freshness check is correct code reading an invented input, which is why this needs a
     # check of its own rather than trusting the builder to stay fixed.
     @{ f='audit-asof-evidence.ps1';     n='no published price claims a date newer than the capture it came from (as_of evidence)'; k='asof-evidence' },
-    @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)'; k='tile-integrity' })) {
+    @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)'; k='tile-integrity' },
+    # band censorship (2026-09-05) - "the board does not publish a dearer price because the sanity band
+    # threw away a cheaper one that was almost certainly real". Every other guard in this list asks whether
+    # the board matches the ENGINE'S OWN eligibility rule, which cannot by construction see a row the rule
+    # discarded before ranking. A band rejection is exactly that. flagged-*.json has recorded every one of
+    # them, with the engine's own computed unit price, on every run for months, and nothing read it.
+    # Found the day it was written: lettuce at Sam's published a 46-day-old $1.0367 while the SAME product
+    # captured four days earlier at $4.67/6ct = 0.7783 was refused for missing a 0.80 floor by 2.7%. Also
+    # Baker's soda publishing cans at 0.0312/floz while $1.00 2L bottles at 0.0148 were refused 1% under a
+    # 0.015 floor. The floors are round numbers and the best real deals cluster right at them, so a floor
+    # set at the bottom of the real distribution clips the WINNERS, not the outliers.
+    # ADVISORY ON PURPOSE, for now: 50 cells are affected today and a gate that fails from day one is a gate
+    # that gets switched off (same reasoning as tile-integrity above). It exits 0 with its findings listed;
+    # only BLIND (exit 3) raises a warn. Promote it to hard once the backlog is worked and the band policy
+    # is fixed - that is a one-line change to the exit code, and the fixtures are already frozen.
+    @{ f='audit-band-censorship.ps1';   n='no NEW cell publishes a dearer price because the band refused a near-floor row that was cheaper (RATCHET against out\band-censorship-baseline.json, may only go down)'; k='band-censorship' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   # CAPTURE the output instead of discarding it: a delegated audit that says "nothing to check" was exiting 0,

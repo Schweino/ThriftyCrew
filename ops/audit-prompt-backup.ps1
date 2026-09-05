@@ -189,7 +189,7 @@ function Invoke-PromptSync {
   )
   if ($null -eq $Exempt) { $Exempt = @{} }
   $log = New-Object System.Collections.Generic.List[string]
-  $mirrored = 0; $adopted = 0; $scoped = 0; $held = 0
+  $mirrored = 0; $adopted = 0; $scoped = 0; $held = 0; $scopeHeld = 0
   $agentBk = Join-Path $Backup 'agents'
   $taskBk  = Join-Path $Backup 'scheduled-tasks'
   $skillBk = Join-Path $Backup 'skills'
@@ -212,8 +212,20 @@ function Invoke-PromptSync {
     if ($DoScopes) {
       $u = Join-Path $UserDir $f.Name
       if ((Test-Path $u) -and ((FileHash1 $f.FullName) -ne (FileHash1 $u))) {
-        Copy-Item $f.FullName $u -Force; $scoped++
-        $log.Add("  scope-synced user copy of $($f.Name) from project scope")
+        # NEWER AT USER SCOPE MEANS A HUMAN EDITED THE WRONG COPY. Do not overwrite it (2026-09-05).
+        # This sync runs unattended every morning and there is no backup of what it clobbers, so a blind
+        # project -> user copy turns "you edited the file whose scope your session does not use" into
+        # SILENT DATA LOSS. Canonicality decides which copy WINS a tie, not whose work may be destroyed.
+        # Report it and leave both alone: a visible finding costs a minute, a lost prompt edit costs the
+        # edit plus the trust in the sync. The finding clears itself the moment the edit is carried into
+        # project scope, which is where it belonged.
+        if ((Get-Item $u).LastWriteTimeUtc -gt (Get-Item $f.FullName).LastWriteTimeUtc) {
+          $scopeHeld++
+          $log.Add("  HELD  $($f.Name) - the USER-scope copy is NEWER than project scope, so someone edited the copy this sync would overwrite. Not touched. Carry the edit into .claude\agents\$($f.Name) (project scope is canonical) and this clears itself.")
+        } else {
+          Copy-Item $f.FullName $u -Force; $scoped++
+          $log.Add("  scope-synced user copy of $($f.Name) from project scope")
+        }
       }
     }
   }
@@ -260,7 +272,7 @@ function Invoke-PromptSync {
       }
     }
   }
-  return @{ mirrored = $mirrored; adopted = $adopted; scoped = $scoped; held = $held; log = $log }
+  return @{ mirrored = $mirrored; adopted = $adopted; scoped = $scoped; held = $held; scope_held = $scopeHeld; log = $log }
 }
 
 if ($SelfTest) {
@@ -380,6 +392,13 @@ if ($SelfTest) {
     Set-Content (Join-Path $sp 'drifted.md') "project v2 - edited in the repo" -Encoding UTF8   # STALE BACKUP + SCOPE DRIFT
     Set-Content (Join-Path $su 'drifted.md') "project v1" -Encoding UTF8
     Set-Content (Join-Path $sb 'agents\drifted.md') "project v1" -Encoding UTF8
+    # MTIME IS LOAD-BEARING FROM 2026-09-05 and the write order above made it lie. The fixture's own content
+    # says which copy is newer - project is "v2 - edited in the repo", user is "v1" - but Set-Content ran
+    # last on the user copy, so on disk the STALE one was the newer one. That is not what this fixture
+    # asserts, and -SyncScopes now refuses to overwrite a newer user copy, so leaving the timestamps
+    # backwards would have made the sync cases below pass or fail on an accident of setup order rather than
+    # on the behaviour they name. Stamp it to agree with the content.
+    (Get-Item (Join-Path $su 'drifted.md')).LastWriteTimeUtc = (Get-Item (Join-Path $sp 'drifted.md')).LastWriteTimeUtc.AddMinutes(-5)
     Set-Content (Join-Path $sp 'fresh.md') "a prompt that has never been mirrored" -Encoding UTF8  # NO BACKUP
     Set-Content (Join-Path $st 'mirrored-task\SKILL.md') "task v1" -Encoding UTF8
     Set-Content (Join-Path $sb 'scheduled-tasks\mirrored-task\SKILL.md') "task v1" -Encoding UTF8
@@ -409,6 +428,29 @@ if ($SelfTest) {
     _C 'clean twin: SCOPE DRIFT reported before -SyncScopes is silent after it' (($r.issues -join ' ') -notmatch 'SCOPE DRIFT')
     $bkAfter = ((Get-ChildItem $sb -Recurse -File | Sort-Object FullName | ForEach-Object { $_.FullName + '|' + (FileHash1 $_.FullName) }) -join "`n")
     _C '  ...and -SyncScopes wrote NOTHING into the public mirror (identical file set and hashes)' ($bkBefore -eq $bkAfter)
+    # MUST-FIRE (2026-09-05): -SyncScopes runs UNATTENDED every morning and keeps no backup of what it
+    # overwrites, so a user-scope file that is NEWER than project scope is someone's edit and must survive.
+    # Canonicality decides which copy WINS A TIE; it does not license destroying work. Without this case the
+    # sync silently ate the edit and nothing anywhere recorded that a file had ever been different.
+    $heldName = Join-Path $sp 'heldback.md'
+    Set-Content $heldName "project version`n" -Encoding UTF8
+    $heldUser = Join-Path $su 'heldback.md'
+    Set-Content $heldUser "a HUMAN edited this at user scope`n" -Encoding UTF8
+    (Get-Item $heldUser).LastWriteTimeUtc = (Get-Item $heldName).LastWriteTimeUtc.AddMinutes(5)
+    $sr2 = Invoke-PromptSync $sp $su $st $sb '' @{} -DoScopes
+    _C 'must-fire: -SyncScopes REFUSES to overwrite a user-scope copy that is NEWER than project scope' `
+      ((Get-Content $heldUser -Raw) -match 'a HUMAN edited this')
+    _C '  ...and it says so, naming the file and where the edit belongs' `
+      ((($sr2.log -join ' ') -match 'HELD  heldback\.md') -and (($sr2.log -join ' ') -match 'project scope is canonical'))
+    _C '  ...and counts it separately from a mirror hold (scope_held is its own number, not folded into held)' `
+      ([int]$sr2.scope_held -eq 1)
+    # CLEAN TWIN: the same file with project scope NEWER is still synced. If this goes quiet the guard has
+    # stopped syncing anything and the 13-day drift is simply back under a different name.
+    (Get-Item $heldName).LastWriteTimeUtc = (Get-Item $heldUser).LastWriteTimeUtc.AddMinutes(5)
+    $sr3 = Invoke-PromptSync $sp $su $st $sb '' @{} -DoScopes
+    _C 'clean twin: when PROJECT scope is the newer copy, -SyncScopes still overwrites user scope as before' `
+      (((Get-Content $heldUser -Raw) -match 'project version') -and ([int]$sr3.scoped -ge 1))
+    Remove-Item $heldName, $heldUser -Force -ErrorAction SilentlyContinue
     # -Adopt is NAMED, so it adopts what was named and nothing else. A mode that quietly adopted its
     # neighbours would be -Sync again under a safer-sounding flag.
     $null = Invoke-PromptSync $sp $su $st $sb '' @{} -AdoptNames @('fresh.md')
