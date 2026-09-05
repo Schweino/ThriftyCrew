@@ -72,6 +72,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 # ---- the decision, isolated so it is testable without the network ------------------------------------
@@ -129,14 +130,14 @@ if ($SelfTest) {
 . (Join-Path $root 'discovery-lib.ps1')
 . (Join-Path $root 'search-terms-lib.ps1')
 $verdicts = Get-DiscoveryVerdicts (Join-Path $root 'discovery-verdicts.json')
-$coms = ConvertFrom-Json (Get-Content (Join-Path $root 'commodities.json') -Raw)
-$terms = (ConvertFrom-Json (Get-Content (Join-Path $root 'commodity-search.json') -Raw)).terms
+$coms = Read-JsonFile (Join-Path $root 'commodities.json')
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 $comById = @{}; foreach ($c in $coms) { $comById[[string]$c.id] = $c }
 
 $feedF = Get-ChildItem (Join-Path $OutDir 'regular\hyvee-regular-*.json') -EA SilentlyContinue |
 Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $feedF) { Write-Output 'BLIND: no hyvee-regular file - cannot tell new from held'; exit 3 }
-$feed = ConvertFrom-Json (Get-Content $feedF.FullName -Raw)
+$feed = Read-JsonFile $feedF.FullName
 $feedRows = @($feed.deals); if (-not $feedRows.Count) { $feedRows = @($feed) }
 $haveNames = @{}
 foreach ($fr in $feedRows) { if ($fr.item) { $haveNames[([string]$fr.item).Trim().ToLower()] = $true } }
@@ -146,9 +147,9 @@ $held = @{}
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue |
 Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 $boardRows = @()
-if ($cmpF) { $boardRows += @((ConvertFrom-Json (Get-Content $cmpF.FullName -Raw)).comparison) }
+if ($cmpF) { $boardRows += @((Read-JsonFile $cmpF.FullName).comparison) }
 $rbF = Join-Path $OutDir 'recipe-board.json'
-if (Test-Path $rbF) { $boardRows += @((ConvertFrom-Json (Get-Content $rbF -Raw)).comparison) }
+if (Test-Path $rbF) { $boardRows += @((Read-JsonFile $rbF).comparison) }
 foreach ($b in $boardRows) {
   foreach ($s in $b.stores) { if ([string]$s.store -eq 'Hy-Vee') { $held[[string]$b.id] = [double]$s.per_unit } }
 }

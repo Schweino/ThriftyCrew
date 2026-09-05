@@ -152,7 +152,7 @@ $cmp = $null
 $cmpById = @{}
 $cmpFiles = @(Get-ChildItem (Join-Path $here 'out') -Filter 'comparison-*.json' -ErrorAction SilentlyContinue | Sort-Object Name)
 if ($cmpFiles.Count -gt 0) {
-  $cmp = Get-Content $cmpFiles[-1].FullName -Raw | ConvertFrom-Json
+  $cmp = Read-JsonFile $cmpFiles[-1].FullName
   foreach ($row in $cmp.comparison) { $cmpById[$row.id] = $row }
   Write-Host ("Comparison file: {0} (week_of {1})" -f $cmpFiles[-1].Name, $cmp.week_of)
 } else {

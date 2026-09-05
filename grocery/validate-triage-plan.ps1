@@ -194,7 +194,7 @@ function Test-Plan {
       # against, and both runs reported a confident zero. Nothing in the artifact could have revealed it.
       # So the artifact must name a control - a row it KNOWS must move - and record that it actually moved.
       $doc2 = $null
-      try { $raw2 = Get-Content $p -Raw -ErrorAction Stop; if ($raw2 -and $raw2.Trim()) { $doc2 = $raw2 | ConvertFrom-Json } } catch { $doc2 = $null }
+      try { $raw2 = Read-TextFile $p; if ($raw2 -and $raw2.Trim()) { $doc2 = $raw2 | ConvertFrom-Json } } catch { $doc2 = $null }
       if (-not $doc2) { $problems.Add("routing_artifact '$art' is on disk but reads back empty or unparseable") }
       elseif ($null -eq $doc2.positive_control) {
         $problems.Add("routing_artifact '$art' has no positive_control - name one row the simulation MUST reclassify and record that it did, so a zero-change result cannot be a broken harness reporting success (2026-08-06 case-insensitive `$b/`$B)")

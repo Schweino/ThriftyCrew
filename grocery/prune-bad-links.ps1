@@ -40,7 +40,7 @@ $root = $PSScriptRoot
 $puFile = Join-Path $root 'product-urls.json'
 Copy-Item $puFile (Join-Path $root 'out\product-urls.backup-preprune.json') -Force
 $doc = Read-JsonFile $puFile
-$cmp = Get-Content (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName -Raw | ConvertFrom-Json
+$cmp = Read-JsonFile ((Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName)
 
 # A LINK THAT SHIPS MUST BE POSITIVELY VERIFIED - "not proven wrong" is not "proven right".
 # name-drift is the product-identity check: it compares the board's item to the link's product and flags a

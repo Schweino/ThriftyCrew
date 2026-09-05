@@ -39,6 +39,15 @@
 param([string]$Root = '', [string]$OutDir = '', [switch]$Baseline, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+# THIS GUARD READ ITS OWN BASELINE THROUGH A FUNCTION IT NEVER LOADED (found 2026-09-05). The baseline read
+# below is Read-JsonFile wrapped in a try/catch, and this file did not dot-source the lib that defines it -
+# so EVERY run threw, caught, set $base to $null, scored the verdict as 'first' and REWROTE the high-water
+# mark from the current count. A ratchet that re-baselines itself can never break: it would have accepted
+# any number of new bare readers in silence, which is exactly the [[guard-blindness-family]] shape this file
+# was written to catch elsewhere. The catch is kept, because a corrupt baseline file should still be a first
+# run rather than a crash, but it must no longer be able to swallow a missing dependency.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+if (-not (Get-Command Read-JsonFile -ErrorAction SilentlyContinue)) { throw 'audit-json-readers: Read-JsonFile is not loaded, so the baseline read would fail-open and re-baseline the ratchet.' }
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $Root)   { $Root = $here }
 if (-not $OutDir) { $OutDir = Join-Path $here 'out' }
@@ -92,7 +101,7 @@ if ($SelfTest) {
   # concatenation so no regex looking for the literal pattern can match it here.
   $badShape = '$doc = Get-Content $path -Raw ' + '|' + ' ConvertFrom' + '-Json'
   $r = @(Find-BareJsonReads -Lines @($badShape) -File 'fx.ps1')
-  if ($r.Count -eq 1) { Write-Output '  PASS  MUST FIRE: a bare `Get-Content -Raw | ConvertFrom-Json` is reported' }
+  if ($r.Count -eq 1) { Write-Output '  PASS  MUST FIRE: a bare `Get-Content -Raw | ConvertFrom-Json` is reported' }   # json-readers:allow the PASS message names the shape this guard hunts; it is output text, not a read
   else { Write-Output "  FAIL  MUST FIRE: the founding shape was not reported (got $($r.Count))"; $fail++ }
 
   # CLEAN TWIN - states an encoding. Narrower than the lib but correct, so it must not be flagged or the

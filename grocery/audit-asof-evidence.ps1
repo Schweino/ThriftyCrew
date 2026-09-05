@@ -112,7 +112,7 @@ function Invoke-AsOfEvidence([string]$base) {
               Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1)
     if ($regF.Count -eq 0) { $out.blind += ("{0}: no out\regular\{1}-regular-<date>.json to check" -f $s.store, $s.prefix); continue }
     $doc = $null
-    try { $doc = Get-Content $regF[0].FullName -Raw | ConvertFrom-Json } catch {
+    try { $doc = Read-JsonFile $regF[0].FullName } catch {
       $out.blind += ("{0}: {1} did not parse - {2}" -f $s.store, $regF[0].Name, $_.Exception.Message); continue
     }
     $rows = @($doc.deals)

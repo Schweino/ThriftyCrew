@@ -62,6 +62,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-TextFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 if (-not $OutDir) { $OutDir = Join-Path $Root 'out' }
 if (-not $ReportDir) { $ReportDir = $OutDir }
@@ -184,7 +185,7 @@ function Log($m) { if (-not $Quiet) { Write-Output $m } }
 $today = (Get-Date).ToString('yyyy-MM-dd')
 
 if (-not (Test-Path $MapFile)) { Write-Output ('taxonomy BLIND: no map file at ' + $MapFile + ' - nothing can be judged'); exit 3 }
-$map = ((Get-Content $MapFile -Raw) + '') | ConvertFrom-Json
+$map = ((Read-TextFile $MapFile) + '') | ConvertFrom-Json
 if (-not $map) { Write-Output ('taxonomy BLIND: ' + $MapFile + ' parsed to nothing'); exit 3 }
 $allow = @()
 if ($map.PSObject.Properties['commodity_department_allow']) { $allow = @($map.commodity_department_allow) }
@@ -192,7 +193,7 @@ if ($map.PSObject.Properties['commodity_department_allow']) { $allow = @($map.co
 # our own category per commodity. audit-food-category.ps1 uses exactly these four labels for "not edible".
 $NONFOOD_LABELS = @('Household','Personal Care','Baby','Pet')
 $isFood = @{}
-foreach ($c in (((Get-Content (Join-Path $Root 'categories.json') -Raw) + '') | ConvertFrom-Json).categories) {
+foreach ($c in (((Read-TextFile (Join-Path $Root 'categories.json')) + '') | ConvertFrom-Json).categories) {
   $lab = [string]$c.label
   foreach ($id in ([string]$c.commodities -split '\s+')) {
     if ($id) { $isFood[$id] = ($NONFOOD_LABELS -notcontains $lab) }
@@ -227,7 +228,7 @@ foreach ($f in $ffFiles) {
   $fd = $null; try { $fd = [datetime]::ParseExact($mm.Groups[1].Value, 'yyyy-MM-dd', $null) } catch { continue }
   if (((Get-Date).Date - $fd).TotalDays -gt $MaxTaxonomyAgeDays) { continue }
   $doc = $null
-  try { $doc = ((Get-Content $f.FullName -Raw) + '') | ConvertFrom-Json } catch { continue }
+  try { $doc = ((Read-TextFile $f.FullName) + '') | ConvertFrom-Json } catch { continue }
   if (-not $doc) { continue }
   $ffUsed++
   foreach ($r in @($doc.deals)) {
@@ -251,7 +252,7 @@ foreach ($sp in @(
   $n = Newest-Dated (Join-Path $OutDir $sp.glob) '(\d{4}-\d{2}-\d{2})$'
   if (-not $n) { $srcNote.Add(($sp.store + ': no dated regular file found - 0 product(s) with a department')); continue }
   $doc = $null
-  try { $doc = ((Get-Content $n.file -Raw) + '') | ConvertFrom-Json } catch { $doc = $null }
+  try { $doc = ((Read-TextFile $n.file) + '') | ConvertFrom-Json } catch { $doc = $null }
   $cnt = 0
   foreach ($r in @($doc.deals)) {
     $v = [string]$r.($sp.field)
@@ -291,7 +292,7 @@ function Judge($store, $name, $cid) {
 }
 
 if ($CompareFile -and (Test-Path $CompareFile)) {
-  foreach ($row in (((Get-Content $CompareFile -Raw) + '') | ConvertFrom-Json).comparison) {
+  foreach ($row in (((Read-TextFile $CompareFile) + '') | ConvertFrom-Json).comparison) {
     foreach ($s in @($row.stores)) {
       $j = Judge $s.store $s.item $row.id
       if (-not $j) { continue }
@@ -314,7 +315,7 @@ if ($CompareFile -and (Test-Path $CompareFile)) {
 }
 
 if ($CandidatesFile -and (Test-Path $CandidatesFile)) {
-  foreach ($cm in (((Get-Content $CandidatesFile -Raw) + '') | ConvertFrom-Json).commodities) {
+  foreach ($cm in (((Read-TextFile $CandidatesFile) + '') | ConvertFrom-Json).commodities) {
     foreach ($d in @($cm.candidates)) {
       $j = Judge $d.store $d.name $cm.id
       if (-not $j) { continue }

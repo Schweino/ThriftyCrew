@@ -109,7 +109,7 @@ $cmp = @(Get-ChildItem (Join-Path $outDir 'comparison-*.json') -ErrorAction Sile
          Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1)
 if (-not $cmp.Count) { Say 'SHELF-SIGNAL BLIND: no comparison-*.json to read - nothing was measured, which is not the same as nothing being wrong.'; exit 3 }
 $board = $null
-try { $board = Get-Content $cmp[0].FullName -Raw | ConvertFrom-Json } catch { $board = $null }
+try { $board = Read-JsonFile $cmp[0].FullName } catch { $board = $null }
 if (-not $board) { Say ("SHELF-SIGNAL BLIND: " + $cmp[0].Name + ' would not parse.'); exit 3 }
 
 # ---------------------------------------------------------------- the signal, by product name

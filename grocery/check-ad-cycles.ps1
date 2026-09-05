@@ -1697,7 +1697,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           } else {
             # ((Get-Content -Raw) + '') - [string]$null is $null so .Trim() THROWS on a zero-byte file, and
             # '' | ConvertFrom-Json returns $null WITHOUT throwing. Both have produced silent wrong answers here.
-            $adJ = ((Get-Content $adF -Raw) + '').Trim() | ConvertFrom-Json
+            $adJ = ((Read-TextFile $adF) + '').Trim() | ConvertFrom-Json
             if ($null -eq $adJ) { $summary += 'REVIEW    out\arrivals-docket.json is empty or unparseable - the day''s NEW products are unreviewed' }
             elseif ([int]$adJ.flagged_count -gt 0 -or [int]$adJ.blind_count -gt 0) {
               $summary += ('REVIEW    arrivals-docket: ' + [int]$adJ.flagged_count + ' of ' + [int]$adJ.arrivals + ' new product(s) diverge from their own cohort, ' + [int]$adJ.blind_count + ' unscorable - read out\arrivals-docket.json, CROWN rows first (review queue, ~1 in 7 is real)')

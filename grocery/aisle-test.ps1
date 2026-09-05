@@ -240,7 +240,7 @@ $COMMODITY_DEPT = @{
 }
 
 function Get-CategoryMap {
-  $cats = ConvertFrom-Json (Get-Content (Join-Path $root 'categories.json') -Raw)
+  $cats = Read-JsonFile (Join-Path $root 'categories.json')
   $m = @{}
   $keyByLabel = @{}
   foreach ($c in @($cats.categories)) {
@@ -259,7 +259,7 @@ function Get-CategoryMap {
   foreach ($rbn in @('out\recipe-board-everyday.json', 'out\recipe-board.json')) {
     $rbp = Join-Path $root $rbn
     if (-not (Test-Path $rbp)) { continue }
-    try { $rbd = ConvertFrom-Json (Get-Content $rbp -Raw) } catch { continue }
+    try { $rbd = Read-JsonFile $rbp } catch { continue }
     foreach ($r in @($rbd.comparison)) {
       $rid = [string]$r.id; $rlab = [string]$r.category
       if (-not $rid -or -not $rlab) { continue }
@@ -383,7 +383,7 @@ if ($SelfTest) {
   # returned a tidy BLIND and read as a clean run.
   $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ('aisle-fix-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.json')
   '[{"id":"watermelon","product":"A","canonical_url":"https://x/shop/household/trash/a/p/1"},{"id":"watermelon","product":"B","canonical_url":"https://x/shop/fresh_fruits_vegetables/melons/b/p/2"}]' | Set-Content $tmp -Encoding UTF8
-  $parsedFx = ConvertFrom-Json (Get-Content $tmp -Raw)
+  $parsedFx = Read-JsonFile $tmp
   $rowsFx = @($parsedFx)
   Remove-Item $tmp -Force -ErrorAction SilentlyContinue
   if ($rowsFx.Count -ne 2) { Write-Output ("  X ARRAY-UNROLL: a 2-row candidates file parsed to $($rowsFx.Count) row(s) - the PS 5.1 unroll bug is back"); $bad++ }
@@ -414,12 +414,12 @@ if ($LiveBoard) {
   $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -EA SilentlyContinue |
   Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
   if (-not $cmpF) { Write-Output 'BLIND: no comparison-*.json'; exit 3 }
-  $boardRows = @((ConvertFrom-Json (Get-Content $cmpF.FullName -Raw)).comparison)
+  $boardRows = @((Read-JsonFile $cmpF.FullName).comparison)
   $rbF2 = Join-Path $root 'out\recipe-board.json'
-  if (Test-Path $rbF2) { $boardRows += @((ConvertFrom-Json (Get-Content $rbF2 -Raw)).comparison) }
+  if (Test-Path $rbF2) { $boardRows += @((Read-JsonFile $rbF2).comparison) }
   $feedF = Get-ChildItem (Join-Path $root 'out\regular\family-fare-regular-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   if (-not $feedF) { Write-Output 'BLIND: no Family Fare feed - shelf paths come from it'; exit 3 }
-  $fd = ConvertFrom-Json (Get-Content $feedF.FullName -Raw)
+  $fd = Read-JsonFile $feedF.FullName
   $frows = @($fd.deals); if (-not $frows.Count) { $frows = @($fd) }
   $urlByName = @{}
   foreach ($fr in $frows) { if ($fr.item -and $fr.canonical_url) { $urlByName[([string]$fr.item).Trim()] = [string]$fr.canonical_url } }
@@ -440,7 +440,7 @@ if ($LiveBoard) {
 # 1-element array, and the foreach below then sees a single "row" whose .id is every id concatenated
 # ("watermelon watermelon milk milk coffee..."). It judges one nonexistent commodity, returns BLIND, and
 # looks like a clean run. Fixtured below.
-if ($Candidates) { $parsed = ConvertFrom-Json (Get-Content $Candidates -Raw); $rows = @($parsed) }
+if ($Candidates) { $parsed = Read-JsonFile $Candidates; $rows = @($parsed) }
 elseif ($Id) { $rows = @([pscustomobject]@{ id = $Id; product = $Product; canonical_url = $Url }) }
 elseif (-not $LiveBoard) { Write-Output 'nothing to judge (pass -Candidates, -Id/-Url, or -LiveBoard)'; exit 0 }
 

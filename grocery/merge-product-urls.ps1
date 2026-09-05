@@ -89,7 +89,7 @@ foreach($fn in $ordered){
   $path=Join-Path $dir $fn
   if(-not (Test-Path $path)){ continue }
   $store=$fileStore[$fn]
-  $parsed = ConvertFrom-Json (Get-Content $path -Raw)
+  $parsed = Read-JsonFile $path
   $rows=@($parsed)
   foreach($r in $rows){
     if(-not $r.url){ continue }

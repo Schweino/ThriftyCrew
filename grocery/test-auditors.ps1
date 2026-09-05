@@ -380,7 +380,7 @@ $skipSelf = @('test-auditors.ps1', 'test-gate-count.ps1')   # these quote the pa
 $scan = @(Get-ChildItem (Join-Path $root '*.ps1')) +
         @(Get-ChildItem (Join-Path (Split-Path $root -Parent) '.github\workflows\*.yml') -ErrorAction SilentlyContinue)
 $patterns = @(
-  '(?m)^.*@\(\s*Get-Content[^)\r\n]*\|\s*ConvertFrom-Json\s*\).*$',
+  '(?m)^.*@\(\s*Get-Content[^)\r\n]*\|\s*ConvertFrom-Json\s*\).*$',   # json-readers:allow the DETECTOR pattern - a frozen literal naming the shape this auditor hunts, not a read
   '(?m)^.*@\(\s*Invoke-(RestMethod|WebRequest)\b.*$'
 )
 $offenders = @()
@@ -2170,7 +2170,7 @@ if ($clSrc -match '\$i -lt 8') { Ok 'Repair-Mojibake still peels deep enough for
 else { Bad 'Repair-Mojibake''s peel cap has been lowered - the 117-character Campbell row needs five passes and the cap was 4 when it shipped mangled' }
 # THE READER THAT MANUFACTURED IT. compare-deals must not go back to reading store JSON without an encoding.
 $cdEnc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-if ($cdEnc -match 'function Read-JsonFile' -and $cdEnc -notmatch 'Get-Content \$extra -Raw \| ConvertFrom-Json') { Ok 'compare-deals reads its store inputs through Read-JsonFile (BOM-tolerant), not a codepage-dependent Get-Content' }
+if ($cdEnc -match 'function Read-JsonFile' -and $cdEnc -notmatch 'Get-Content \$extra -Raw \| ConvertFrom-Json') { Ok 'compare-deals reads its store inputs through Read-JsonFile (BOM-tolerant), not a codepage-dependent Get-Content' }   # json-readers:allow the frozen literal names the shape compare-deals must NOT contain; converting it would blind the check
 else { Bad 'compare-deals is reading store JSON with a bare Get-Content again - a BOM-less input will be decoded as the ANSI codepage and the mangled name will be written onto the board' }
 if ($mpuSrc -match "size field corrupted") { Ok 'the size-field clean twin is armed (a URL-only diff cannot see a basis overwrite)' }
 else { Bad 'merge-product-urls lost the size-verbatim fixture - a replay could flip "100 ct" to "each" with the URL unchanged and every URL diff would call it clean' }
@@ -3054,7 +3054,7 @@ New-Item -ItemType Directory -Path $fxRf -Force | Out-Null
 Copy-Item (Join-Path $fix 'recipe-floors\*.json') $fxRf -Force
 $r = RunPS 'derive-recipe-floors.ps1' @('-Root', $fxRf, '-OutDir', $fxRf)
 $rfProp = $null
-try { $rfProp = ((Get-Content (Join-Path $fxRf 'recipe-floors-proposed.json') -Raw) + '').Trim() | ConvertFrom-Json } catch {}
+try { $rfProp = ((Read-TextFile (Join-Path $fxRf 'recipe-floors-proposed.json')) + '').Trim() | ConvertFrom-Json } catch {}
 function RfCell($id, $store) {
   foreach ($row in @($rfProp.comparison)) { if ([string]$row.id -eq $id) { foreach ($s in @($row.stores)) { if ([string]$s.store -eq $store) { return $s } } } }
   return $null
@@ -3092,7 +3092,7 @@ if ($rp -and [double]$rp.per_unit -eq 3.996 -and [string]$rp.item -eq 'Tyson Bon
 # into the staples count. Measured before use: 7 of 10 diverging cells were WRONG PRODUCTS (Mt. OLIVE pickles
 # as olives, Oreo Zero Sugar COOKIES as zero-sugar-soda, apple JUICE and Gerber baby food as apple).
 $rfRep = $null
-try { $rfRep = ((Get-Content (Join-Path $fxRf 'recipe-floors-report.json') -Raw) + '').Trim() | ConvertFrom-Json } catch {}
+try { $rfRep = ((Read-TextFile (Join-Path $fxRf 'recipe-floors-report.json')) + '').Trim() | ConvertFrom-Json } catch {}
 if ($rfRep -and @($rfRep.recipe_pool_cells).Count -ge 1 -and (@($rfRep.recipe_pool_ids) -contains 'recipe-pool-only') -and $r.text -match 'RECIPE POOL') {
   Ok 'recipe floors: every cell priced from the recipe pool is reported separately for review, not blended in'
 } else { Bad 'the recipe pool is being used without being declared - a second-class source is passing as a staples-derived one' }
@@ -3176,7 +3176,7 @@ if ($rsSrc -match 'DROPPED ' -and $rsSrc -match 'RunScope' -and $rsSrc -match '\
 # and the live history must not contain a run with no scope recorded
 $vhP = Join-Path $root 'out\verification-history.json'
 if (Test-Path $vhP) {
-  $vh = $null; try { $vh = ((Get-Content $vhP -Raw) + '').Trim() | ConvertFrom-Json } catch {}
+  $vh = $null; try { $vh = ((Read-TextFile $vhP) + '').Trim() | ConvertFrom-Json } catch {}
   $noScope = @(@($vh.runs) | Where-Object { -not ($_.PSObject.Properties['store_scope']) })
   if ($noScope.Count -eq 0) { Ok 'every banked verification run declares the population it estimates' }
   else { Bad ('verification history holds ' + $noScope.Count + ' run(s) with no store_scope - they will pool with anything') }
@@ -3263,13 +3263,13 @@ else { Bad ('an undocumented tolerance override passed silently: ' + $r.text) }
 # MUST FIRE: -Accept must RAISE only. Lowering on one bad run makes the rows it stopped looking at
 # unguarded forever - it would have baked in audit-ff-carry at 40 against a 464 baseline (91% lost).
 $r2 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCl, '-BaselineFile', $clBase, '-Phase', 'all', '-Accept')
-$clAfter = ((Get-Content $clBase -Raw) + '').Trim() | ConvertFrom-Json
+$clAfter = ((Read-TextFile $clBase) + '').Trim() | ConvertFrom-Json
 if ([int]$clAfter.checks.'shrunk-check'.examined -eq 1000 -and $r2.text -match 'KEPT HIGH') {
   Ok '-Accept RAISES the coverage ratchet but refuses to lower it, and names the rows it kept high'
 } else { Bad ('-Accept silently lowered a high-water mark - the coverage it stopped watching is now unguarded forever: ' + [string]$clAfter.checks.'shrunk-check'.examined) }
 # ...and -AcceptLower is the explicit way to do it on purpose.
 $r3 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCl, '-BaselineFile', $clBase, '-Phase', 'all', '-Accept', '-AcceptLower')
-$clAfter2 = ((Get-Content $clBase -Raw) + '').Trim() | ConvertFrom-Json
+$clAfter2 = ((Read-TextFile $clBase) + '').Trim() | ConvertFrom-Json
 if ([int]$clAfter2.checks.'shrunk-check'.examined -eq 40 -and $r3.text -match 'LOWERED') { Ok '-AcceptLower lowers the ratchet deliberately and says which rows it moved down' }
 else { Bad '-AcceptLower did not lower the baseline, so a real permanent drop can never be accepted' }
 
@@ -3286,8 +3286,8 @@ Copy-Item (Join-Path $fix 'coverage-ledger\coverage-ledger.json') $fxCk -Force
 $ckBase = Join-Path $fxCk 'coverage-baseline.json'
 Copy-Item (Join-Path $fix 'coverage-ledger\coverage-baseline.json') $ckBase -Force
 $ckLed = Join-Path $fxCk 'coverage-ledger.json'
-$ckB = (Get-Content $ckBase -Raw) | ConvertFrom-Json
-$ckL = (Get-Content $ckLed  -Raw) | ConvertFrom-Json
+$ckB = Read-JsonFile $ckBase
+$ckL = Read-JsonFile $ckLed
 $ckB.checks | Add-Member -NotePropertyName 'other-shrunk' -NotePropertyValue ([pscustomobject]@{ examined = 800; tolerance = 0.10; max_age_days = 99; phase = 'all'; why = 'second dropped row, so the scope has something to spare' }) -Force
 $ckL.checks | Add-Member -NotePropertyName 'other-shrunk' -NotePropertyValue ([pscustomobject]@{ examined = 100; eligible = 100; skipped = 0; blind = $false; as_of = ([string]$ckL.checks.'shrunk-check'.as_of); detail = 'second dropped row' }) -Force
 $ckB | ConvertTo-Json -Depth 12 | Set-Content $ckBase -Encoding utf8
@@ -3298,7 +3298,7 @@ $ckL | ConvertTo-Json -Depth 12 | Set-Content $ckLed  -Encoding utf8
 # auditor means "findings, gated", and using it here also made audit-guard-contract report the file
 # HALF-COVERED, because a verdict exit must carry the completion marker and a refusal must not.
 $rc1 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCk, '-BaselineFile', $ckBase, '-Phase', 'all', '-Accept', '-AcceptLower', '-Check', 'shrunk-checkk')
-$ckT = (Get-Content $ckBase -Raw) | ConvertFrom-Json
+$ckT = Read-JsonFile $ckBase
 if ($rc1.rc -eq 3 -and $rc1.text -match 'does not carry' -and [int]$ckT.checks.'shrunk-check'.examined -eq 1000) {
   Ok '-Check refuses a name the baseline does not carry, and writes nothing'
 } else { Bad ('-Check accepted an unknown name (rc=' + $rc1.rc + '), so a typo reads as a scoped accept that silently moved no floor') }
@@ -3310,7 +3310,7 @@ else { Bad ('-Check without -AcceptLower was accepted (rc=' + $rc2.rc + '), so a
 
 # THE POINT OF THE WHOLE FEATURE: one row down, the other still defended.
 $rc3 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCk, '-BaselineFile', $ckBase, '-Phase', 'all', '-Accept', '-AcceptLower', '-Check', 'shrunk-check')
-$ckA = (Get-Content $ckBase -Raw) | ConvertFrom-Json
+$ckA = Read-JsonFile $ckBase
 if ([int]$ckA.checks.'shrunk-check'.examined -eq 40 -and [int]$ckA.checks.'other-shrunk'.examined -eq 800) {
   Ok '-Check lowers ONLY the named row and leaves every other dropped floor defended'
 } else { Bad ('-Check did not scope the lowering: shrunk-check=' + [string]$ckA.checks.'shrunk-check'.examined + ' other-shrunk=' + [string]$ckA.checks.'other-shrunk'.examined) }
@@ -4313,7 +4313,7 @@ else { Bad ('coverage-ledger accepted a 9-day-old coverage row as current (rc=' 
 $h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(18, 18); CovLedger $h
 $r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all', '-Accept')
 $covAfter = $null
-try { $covAfter = ((Get-Content (Join-Path $fxCov 'coverage-baseline.json') -Raw) + '').Trim() | ConvertFrom-Json } catch { }
+try { $covAfter = ((Read-TextFile (Join-Path $fxCov 'coverage-baseline.json')) + '').Trim() | ConvertFrom-Json } catch { }
 if ($covAfter -and [int]$covAfter.checks.'pull-regular-hyvee'.examined -eq 3 -and ([double]$covAfter.checks.'pull-regular-hyvee'.min_ratio -eq 0.9) -and $r.text -match 'PINNED') {
   Ok '-Accept keeps a budgeted lane pinned (examined 3, min_ratio 0.9) instead of ratcheting it to a dense day'
 } else {
@@ -4430,7 +4430,7 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
     # a non-crown block, and the crown share is documented in the sampler's own header - so ROW POSITION
     # alone would tell the verifier which cells the board calls cheapest. The column checks above cannot see
     # that, because no column is wrong. Assert the two strata are actually shuffled together.
-    $kyO = ((Get-Content $kyF -Raw) + '') | ConvertFrom-Json
+    $kyO = ((Read-TextFile $kyF) + '') | ConvertFrom-Json
     $seqStrat = @($kyO.cells | Sort-Object seq | ForEach-Object { [string]$_.stratum })
     $runsN = 0
     if ($seqStrat.Count -gt 0) { $runsN = 1; for ($si = 1; $si -lt $seqStrat.Count; $si++) { if ($seqStrat[$si] -ne $seqStrat[$si - 1]) { $runsN++ } } }
@@ -4707,7 +4707,7 @@ if ($ceCmps.Count -eq 0) {
   Bad 'a board exists but out\capture-evictions.json does not - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board'
 } else {
   $ceDoc = Read-JsonFile $ceStamp
-  $ceCmpDoc = Get-Content $ceCmps[0].FullName -Raw | ConvertFrom-Json
+  $ceCmpDoc = Read-JsonFile $ceCmps[0].FullName
   $ceGen = $null; $ceBuilt = $null
   try { $ceGen = [datetime]::Parse([string]$ceDoc.generated, [Globalization.CultureInfo]::InvariantCulture) } catch {}
   try { $ceBuilt = [datetime]::Parse([string]$ceCmpDoc.built_at, [Globalization.CultureInfo]::InvariantCulture) } catch {}

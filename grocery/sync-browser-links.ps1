@@ -25,7 +25,7 @@ $today = (Get-Date -Format 'yyyy-MM-dd')
 $hostOf = @{ "Walmart"='https://www.walmart.com/ip/'; "Sam's Club"='https://www.samsclub.com/ip/' }
 $regGlob = @{ "Walmart"='walmart-regular-*.json'; "Sam's Club"='sams-regular-*.json'; "Baker's"='bakers-regular-*.json' }
 
-$cmp = Get-Content (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName -Raw | ConvertFrom-Json
+$cmp = Read-JsonFile ((Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName)
 $units = @{}; foreach ($it in $cmp.comparison) { $units[[string]$it.id] = [string]$it.unit }
 $puF = Join-Path $root 'product-urls.json'
 $doc = Read-JsonFile $puF

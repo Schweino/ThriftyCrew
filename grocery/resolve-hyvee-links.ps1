@@ -85,7 +85,7 @@ $noLinkIds = @{}
 $crF = Join-Path $root 'out\consistency-report.json'
 $driftIds = @{}
 if (Test-Path $crF) {
-  $crDoc = ConvertFrom-Json (Get-Content $crF -Raw)
+  $crDoc = Read-JsonFile $crF
   foreach ($nl in @($crDoc.no_link)) { if (([string]$nl.store) -eq 'Hy-Vee') { $noLinkIds[[string]$nl.id] = $true } }
   # THE DRIFTED-LINK QUEUE (2026-08-01, F5). The two sources above cannot reach a cell whose link is
   # PRESENT but WRONG: $unver is keyed by name off the Hy-Vee feed, and no_link only lists cells rendering

@@ -132,7 +132,7 @@ function Test-ContentCurrency {
     return $r
   }
   $doc = $null
-  try { $doc = Get-Content $Path -Raw -ErrorAction Stop | ConvertFrom-Json } catch { $doc = $null }
+  try { $doc = Read-JsonFile $Path } catch { $doc = $null }
   if (-not $doc) { $r.detail = "could not be read as JSON, so its $field proves nothing (mtime ${ageH}h)"; return $r }
   $stamp = if ($doc.PSObject.Properties[$field]) { [string]$doc.$field } else { '' }
   if (-not $stamp) { $r.detail = "has no $field field, so nothing in it says which week it describes (mtime ${ageH}h)"; return $r }

@@ -138,7 +138,7 @@ function Invoke-SamsRefresh([string]$base, [string]$dateS, [bool]$whatIf) {
   $prev = @(Get-ChildItem (Join-Path $regDir 'sams-regular-*.json') -ErrorAction SilentlyContinue |
             Where-Object { $_.BaseName -match '^sams-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1)
   if ($prev.Count -eq 0) { return @{ text = 'sams-refresh: no out\regular\sams-regular-<date>.json to refresh'; refreshed = 0; refused = 0 } }
-  $doc = Get-Content $prev[0].FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $prev[0].FullName
   $cap = Read-SamsCaptures $base $dateS
   if ($cap.rows.Count -eq 0) {
     return @{ text = ("sams-refresh: NO capture file dated " + $dateS + " under out\sams or out\captures - nothing was re-verified, and this is a blind run rather than a clean one"); refreshed = 0; refused = 0; blind = $true }

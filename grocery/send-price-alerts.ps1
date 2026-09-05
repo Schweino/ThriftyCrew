@@ -54,7 +54,7 @@ if (Test-Path $stateFile) { try { foreach ($p in ((Read-JsonFile $stateFile).PSO
 
 # feed (for sale_end lines in the email)
 $saleEnd = @{}
-try { $feed = (Get-Content (Join-Path $OutDir 'smp-feed.json') -Raw).TrimStart([char]0xFEFF) | ConvertFrom-Json
+try { $feed = Read-JsonFile (Join-Path $OutDir 'smp-feed.json')
       foreach ($p in $feed.ingredients.PSObject.Properties) { if ($p.Value.sale_end) { $saleEnd[[string]$p.Name] = [string]$p.Value.sale_end } } } catch {}
 
 $today = (Get-Date).ToString('yyyy-MM-dd')
