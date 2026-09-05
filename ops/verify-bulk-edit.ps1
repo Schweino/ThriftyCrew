@@ -30,7 +30,7 @@
 #   ops\verify-bulk-edit.ps1                 check every modified tracked file against HEAD
 #   ops\verify-bulk-edit.ps1 -SelfTest       frozen must-fire fixtures + clean twins
 # Exit 0 = every invariant holds. 1 = findings. 2 = self-test regression. 3 = BLIND (nothing to compare).
-param([switch]$SelfTest)
+param([switch]$SelfTest, [switch]$Staged)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $repo = Split-Path $PSScriptRoot -Parent
@@ -63,7 +63,7 @@ function Get-DependencyGaps {
   # A file that CALLS a function must be able to resolve it: a real dot-source (not a mention of the lib in
   # a comment or a fixture string), a local definition, or a conditional load. Defect 3 was exactly this
   # distinction, and a substring check cannot make it.
-  param([string]$Text, [string]$FnName, [string]$LibLeaf)
+  param([string]$Text, [string]$FnName, [string]$LibLeaf, [string]$FilePath = '')
   $calls = 0
   foreach ($l in ($Text -split "`r?`n")) {
     $t = $l.TrimStart()
@@ -78,8 +78,24 @@ function Get-DependencyGaps {
     if ($t.StartsWith('#')) { continue }
     if (($t.StartsWith('. ') -or $t -match '\{\s*\.\s') -and $l -match [regex]::Escape($LibLeaf)) { $sourced = $true; break }
   }
-  if ($defines -or $sourced) { return $null }
-  return ("calls $FnName $calls time(s) but neither defines it nor dot-sources $LibLeaf")
+  if ($defines) { return $null }
+  if (-not $sourced) { return ("calls $FnName $calls time(s) but neither defines it nor dot-sources $LibLeaf") }
+  # A DOT-SOURCE THAT DOES NOT RESOLVE IS NOT WIRING (defect 5). 27 files hopped ONE level to the repo root
+  # from two levels down, so each dot-sourced a path that does not exist and threw at STARTUP. Checking only
+  # that the LINE is present calls all 27 correctly wired, so evaluate the path the file actually writes.
+  # The walk-up form resolves at any depth and needs no check.
+  if ($FilePath -and ($Text -notmatch 'while\s*\(')) {
+    foreach ($ln2 in ($Text -split "`r?`n")) {
+      $t2 = $ln2.TrimStart()
+      if ($t2.StartsWith('#') -or -not $t2.StartsWith('. ')) { continue }
+      if ($ln2 -notmatch [regex]::Escape($LibLeaf)) { continue }
+      if ($ln2 -match 'Split-Path\s+\$PSScriptRoot\s+-Parent') {
+        $probe = Join-Path (Join-Path (Split-Path (Split-Path $FilePath -Parent) -Parent) 'lib') $LibLeaf
+        if (-not (Test-Path $probe)) { return ("dot-sources $LibLeaf via a single -Parent hop, but nothing resolves at $probe - it will throw at startup") }
+      }
+    }
+  }
+  return $null
 }
 
 if ($SelfTest) {
@@ -115,7 +131,13 @@ try {
   # argument for the check existing rather than the habit.
   $prevEap = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
-  try { $names = @(& git diff --name-only) | Where-Object { $_ } } finally { $ErrorActionPreference = $prevEap }
+  try {
+    # -Staged is what the pre-commit hook passes: judge what is ABOUT TO BE COMMITTED, not another
+    # session's unstaged work in a shared tree. Blocking a commit over someone else's in-flight edit is
+    # how a gate gets uninstalled.
+    $raw = if ($Staged) { @(& git diff --cached --name-only --diff-filter=ACM) } else { @(& git diff --name-only) }
+    $names = @($raw) | Where-Object { $_ }
+  } finally { $ErrorActionPreference = $prevEap }
   if (-not $names.Count) { Write-Output 'BLIND: no modified tracked files to verify'; Write-GuardComplete -Name 'verify-bulk-edit' -Summary 'nothing to compare'; exit 3 }
   $findings = New-Object System.Collections.ArrayList
   $checked = 0; $parsed = 0
@@ -147,7 +169,7 @@ try {
       if ($err -and $err.Count) { [void]$findings.Add("PARSE FAIL    $n line $($err[0].Extent.StartLineNumber): $($err[0].Message)") }
       else { $parsed++ }
       $txt = [IO.File]::ReadAllText($full)
-      $gap = Get-DependencyGaps -Text $txt -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+      $gap = Get-DependencyGaps -Text $txt -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1' -FilePath $full
       if ($gap) { [void]$findings.Add("DEPENDENCY    $n - $gap") }
     }
   }
