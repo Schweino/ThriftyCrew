@@ -1,4 +1,4 @@
-﻿<#
+<#
   build-sams-deals.ps1 - turn a RAW Sam's browser capture into out\sams\sams-deals-<date>.json.
 
   Input CSV (pipe-delimited, from the in-page pull): q|n|lp|up|id
@@ -474,28 +474,9 @@ $rollbacks = 0
 foreach ($r in $raw) {
   $b = Build-Row $r
   if ($b.row) {
-    $wasV = 0.0; $curV = 0.0
-    [void][double]::TryParse((([string]$r.was) -replace '[^0-9.]',''), [ref]$wasV)
-    [void][double]::TryParse((([string]$b.row.ad_price) -replace '[^0-9.]',''), [ref]$curV)
-    if ($wasV -gt 0 -and $curV -gt 0 -and $wasV -gt $curV) {
-      # $script:CaptureDate IS NEVER ASSIGNED IN THIS FILE (fixed 2026-08-25). This line was copied from
-      # build-walmart-deals.ps1, which DOES set it (three times, from -Date or the capture filename). Here it
-      # read $null, so -Today bound to '' and Get-RollbackWindow fell through to its own
-      # "(Get-Date)" default - i.e. the day the BUILDER RAN, not the capture that showed the cut price.
-      # Harmless on a same-day build, which is why it survived; but rebuilding an older Sam's capture
-      # stamped first_seen = today and handed a weeks-old rollback a fresh 30 days, which is precisely the
-      # infinite-TTL failure rollback-ttl-lib exists to prevent. $Date is the variable this script actually
-      # sets and the one its rows carry as as_of, so it is both -Today and the honest -AsOf anchor.
-      $rw = Get-RollbackWindow -Store "Sam's Club" -ItemId ([string]$r.id) -Price $curV -Today $Date -AsOf $Date -Root $root
-      if ($rw) {
-        Add-Member -InputObject $b.row -NotePropertyName 'base_price'  -NotePropertyValue $wasV       -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'marked_down' -NotePropertyValue $true       -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'ad_from'     -NotePropertyValue $rw.ad_from -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'ad_to'       -NotePropertyValue $rw.ad_to   -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'ad_basis'    -NotePropertyValue $rw.basis   -Force
-        $rollbacks++
-      }
-    }
+    # ONE implementation, three callers (rollback-ttl-lib). The inline copy that used to live here read
+    # $script:CaptureDate, which this file never assigns - see that function's header for what it cost.
+    if (Set-RollbackFields -Row $b.row -Was $r.was -Store "Sam's Club" -ItemId ([string]$r.id) -Date $Date -Root $root) { $rollbacks++ }
     $rows.Add($b.row)
   } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
 }

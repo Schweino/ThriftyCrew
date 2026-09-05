@@ -843,20 +843,9 @@ $rollbacks = 0
 foreach ($r in $raw) {
   $b = Build-Row $r
   if ($b.row) {
-    $wasV = 0.0; $curV = 0.0
-    [void][double]::TryParse((([string]$r.was) -replace '[^0-9.]',''), [ref]$wasV)
-    [void][double]::TryParse((([string]$b.row.ad_price) -replace '[^0-9.]',''), [ref]$curV)
-    if ($wasV -gt 0 -and $curV -gt 0 -and $wasV -gt $curV) {
-      $rw = Get-RollbackWindow -Store 'Walmart' -ItemId ([string]$r.id) -Price $curV -Today $script:CaptureDate -Root $root
-      if ($rw) {
-        Add-Member -InputObject $b.row -NotePropertyName 'base_price'  -NotePropertyValue $wasV     -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'marked_down' -NotePropertyValue $true     -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'ad_from'     -NotePropertyValue $rw.ad_from -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'ad_to'       -NotePropertyValue $rw.ad_to   -Force
-        Add-Member -InputObject $b.row -NotePropertyName 'ad_basis'    -NotePropertyValue $rw.basis   -Force
-        $rollbacks++
-      }
-    }
+    # ONE implementation, three callers (rollback-ttl-lib). This was ten inline lines here and ten more in
+    # build-sams-deals; import-walmart-batch is the third caller and got none of it.
+    if (Set-RollbackFields -Row $b.row -Was $r.was -Store 'Walmart' -ItemId ([string]$r.id) -Date $script:CaptureDate -Root $root) { $rollbacks++ }
     $rows.Add($b.row)
   } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
 }

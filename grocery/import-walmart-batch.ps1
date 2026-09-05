@@ -109,7 +109,17 @@ function Test-IwbSeller($fields, [bool]$trust) {
     $firstParty = ($fulfill -eq 'STORE' -or $fulfill -eq 'FC' -or $fulfill -eq 'SHIP') -and
                   ($seller -eq '' -or $seller -match '(?i)^walmart(\.com)?$')
     if ($fulfill -eq 'MARKETPLACE' -or -not $firstParty) { return @{ drop3p = $true; seller = $seller; fulfill = $fulfill } }
-    return @{ take = $true; check = 'capture' }
+    # CARRY THE PROVEN FIELDS OUT, DO NOT JUST JUDGE ON THEM (2026-09-05). This returned the verdict and
+    # discarded the evidence, so every batch row reached out-backslash-regular with seller='' and fulfillment=''. That
+    # is not cosmetic: compare-deals' in-store channel gate refuses a blank-fielded row inside a capture
+    # whose other rows DO carry the fields (BLANK-IN-FIELD-BEARING-CAPTURE), which is exactly the shape a
+    # batch import creates when it merges into a browser-captured file. Measured today: 251 browser rows
+    # carried the fields, all 22 batch rows were blank, and every one of the 22 was refused - while the
+    # import printed "22 verified, 22 added, 0 rejected" and the board silently did not move.
+    # An import that reports complete success and changes nothing is the worst failure shape here, and it
+    # only became possible when the channel gate landed: older batch rows still price through the
+    # PRE-FIELD-ROW-OUTLIVING-A-REFUSAL grandfather clause, so nothing went red when this started.
+    return @{ take = $true; check = 'capture'; seller = $seller; fulfill = $fulfill }
   }
   if ($trust) { return @{ take = $true; check = 'manual-trust' } }
   return @{ quarantine = $true }
@@ -293,6 +303,19 @@ if ($SelfTest) {
   $s4 = Test-IwbSeller @('n','$1','$1/oz','1','','STORE') $false
   if ($s1.drop3p -and $s2.quarantine -and $s3.check -eq 'manual-trust' -and $s4.check -eq 'capture') { Write-Output 'ok    seller gate: 3P dropped, seller-less quarantined by default, -TrustNoSeller stamped, 6-field first-party passes' }
   else { Write-Output 'FAIL  seller gate'; $fail++ }
+  # MUST-FIRE (2026-09-05): the gate must CARRY the fields out, not just judge on them. It returned the
+  # verdict and dropped the evidence, so every batch row landed with seller='' and fulfillment='' and was
+  # refused by compare-deals' in-store channel gate as BLANK-IN-FIELD-BEARING-CAPTURE - while this importer
+  # printed "22 verified, 22 added, 0 rejected" and the board did not move. An import that reports complete
+  # success and changes nothing is the worst failure shape in this estate, and only a check on the OUTPUT
+  # can see it: every count this script prints was correct.
+  $s5 = Test-IwbSeller @('n','$1','$1/oz','1','Walmart.com','STORE') $false
+  if ($s5.take -and $s5.seller -eq 'Walmart.com' -and $s5.fulfill -eq 'STORE') { Write-Output 'ok    MUST-FIRE: the seller gate returns the PROVEN seller + fulfillment, not just a verdict' }
+  else { Write-Output ("FAIL  the seller gate dropped its evidence (seller='" + [string]$s5.seller + "' fulfill='" + [string]$s5.fulfill + "') - batch rows will land blank and the board will silently refuse every one"); $fail++ }
+  # CLEAN TWIN: a 4-field capture proves nothing, so it must carry nothing. Inventing 'Walmart.com' here
+  # would launder an unproven row past the very gate this evidence exists to satisfy.
+  if (-not $s2.seller -and -not $s2.fulfill -and -not $s3.seller) { Write-Output 'ok    CLEAN TWIN: a capture with no seller fields carries none out - an unproven row is not laundered as first-party' }
+  else { Write-Output 'FAIL  the seller gate invented seller/fulfillment for a capture that never carried them'; $fail++ }
   # merge: a corrective row must supersede EVERY stale sibling of its identity, not just the first slot
   # (must-fire for the post-batch-review stale-sibling hole; the no-correction dupe pair is the clean twin)
   $mPrev = @(
@@ -374,7 +397,14 @@ if ($Reheal) {
   exit 0
 }
 
-# Raw row format (~~-delimited): name~~linePrice~~unitPrice~~usItemId[~~sellerName~~fulfillmentType]
+# Raw row format (~~-delimited): name~~linePrice~~unitPrice~~usItemId[~~sellerName~~fulfillmentType[~~wasPrice]]
+# FIELD 7, wasPrice, added 2026-09-05 and OPTIONAL like the two before it. Walmart returns DISCOUNTED_PRICE
+# with a WAS_PRICE on a markdown, and the 6-field format had nowhere to put it - so a markdown arrived
+# indistinguishable from an everyday price, was stamped price_type=everyday with regular=null, and rode the
+# 90-day Walmart carry wearing a fresh as_of. Four of a 22-row produce refresh were markdowns that day, one
+# of them a crown. compare-deals already refuses to honour an undated discount past its capture day, but
+# that rule reads `regular`, so with no was-price it could never fire. Reducer:
+#   ...+'~~'+(p.sellerName||'')+'~~'+(((p.fulfillmentType)||'').toUpperCase())+'~~'+(wasPrice||'')
 # The last two fields are OPTIONAL (6-field reducer, 2026-07-26): a 3P MARKETPLACE listing is NOT a Bellevue
 # shelf price and violates the in-store rule. Present -> non-first-party rows are DROPPED. Absent -> the row
 # is QUARANTINED to out\walmart-batch-needs-seller-<date>.json (see Test-IwbSeller above for why warn-and-keep
@@ -390,6 +420,8 @@ if ($Reheal) {
 $lines = @(Get-Content (Join-Path $root $Raw) -Encoding UTF8) | ForEach-Object { Repair-Mojibake $_ }   # test-auditors.ps1 greps this exact read shape - keep it verbatim
 $rows = New-Object System.Collections.ArrayList
 $ids = @{}
+$markdowns = 0
+. (Join-Path $root 'rollback-ttl-lib.ps1')
 $dropped3P = New-Object System.Collections.ArrayList
 $droppedTest = New-Object System.Collections.ArrayList
 $quarantined = New-Object System.Collections.ArrayList
@@ -414,11 +446,20 @@ foreach ($ln in $lines) {
     $sv = Test-IwbSeller $f $TrustNoSeller.IsPresent
     if ($sv.drop3p) { [void]$dropped3P.Add(("{0}  [seller={1}, fulfill={2}]" -f $nm, $sv.seller, $sv.fulfill)); continue }
     if ($sv.quarantine) { [void]$quarantined.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; reason = 'no seller/fulfillment fields - marketplace filter cannot run; re-capture with the 6-field reducer, or hand-verify sellers and re-run with -TrustNoSeller' }); continue }
-    $res = Convert-BatchRow ([pscustomobject]@{ q = ''; n = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId }) $overrides
+    $wasPx = ''; if ($f.Count -ge 7) { $wasPx = ($f[6]).Trim() }
+    $res = Convert-BatchRow ([pscustomobject]@{ q = ''; n = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; was = $wasPx }) $overrides
     if ($res.err) { [void]$rejects.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; reason = $res.err }); continue }
     $row = $res.row
     $row | Add-Member -NotePropertyName as_of -NotePropertyValue $today -Force
     $row | Add-Member -NotePropertyName seller_check -NotePropertyValue $sv.check -Force
+    # The fields the gate above proved, written down where the board's channel gate can read them.
+    if ($sv.seller)  { $row | Add-Member -NotePropertyName seller      -NotePropertyValue ([string]$sv.seller)  -Force }
+    if ($sv.fulfill) { $row | Add-Member -NotePropertyName fulfillment -NotePropertyValue ([string]$sv.fulfill) -Force }
+    # THE MARKDOWN STAMP, which this path never had (2026-09-05). Convert-BatchRow calls Build-Row directly
+    # and so bypassed the loop in build-walmart-deals where both builders stamp base_price / marked_down /
+    # ad_from / ad_to. A batch-imported markdown therefore published as an everyday price with a fresh as_of
+    # and rode the 90-day Walmart carry with nothing able to expire it. Same function the builders call.
+    if (Set-RollbackFields -Row $row -Was $wasPx -Store 'Walmart' -ItemId $itemId -Date $today -Root $root) { $markdowns++ }
     [void]$rows.Add($row)
     if ($itemId) { $ids[$nm] = $itemId }
   }
@@ -484,5 +525,9 @@ if ($null -ne $idsOut) {
   foreach ($k in $ids.Keys) { $idsOut[$k] = $ids[$k] }   # this batch wins on a name it re-captured
   ($idsOut | ConvertTo-Json) | Set-Content $idsFile -Encoding UTF8
   Write-Output ("Walmart: name->itemId map $before -> $($idsOut.Count) entries ($($ids.Count) from this batch, merged not replaced)")
+}
+if ($markdowns -gt 0) {
+  [void](Save-RollbackLedger $root)
+  Write-Output ("Walmart: $markdowns row(s) stamped as MARKDOWNS off the store's own was-price, dated from first detection (" + (Get-RollbackTtlDays) + "-day TTL). These are NOT everyday prices and the board will stop honouring them when the window closes.")
 }
 Write-Output ("Walmart: verified $($rows.Count) row(s) through the builder invariants ($added added, $replaced replaced, $($rejects.Count) rejected, $($quarantined.Count) quarantined), total $($merged.Count); name->itemId map: $($ids.Count) -> $(Split-Path $outFile -Leaf)")

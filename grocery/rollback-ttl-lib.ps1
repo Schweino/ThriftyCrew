@@ -173,3 +173,45 @@ function Save-RollbackLedger([string]$Root = '') {
   $script:RbDirty = $false
   return $true
 }
+
+# ---- ONE HOME FOR "THIS ROW IS A MARKDOWN" (2026-09-05) -------------------------------------------------
+# THREE callers need this and it existed as TWO hand-copies. build-walmart-deals and build-sams-deals each
+# carried the same ten lines, and the copy already cost something: the Sam's paste referenced
+# $script:CaptureDate, which that file never assigns, so -Today bound to '' and Get-RollbackWindow fell back
+# to the day the BUILDER RAN. Rebuilding an older capture then handed a weeks-old rollback a fresh 30 days,
+# which is exactly the infinite-TTL failure this library exists to prevent (fixed 2026-08-25, in one copy).
+#
+# The third caller is why this is being extracted now. import-walmart-batch.ps1 calls Build-Row DIRECTLY and
+# never entered either loop, so a batch-imported markdown got no base_price, no marked_down and no TTL - it
+# published as an everyday price with a fresh as_of and rode the 90-day Walmart carry. Measured 2026-09-05:
+# 4 of a 22-row produce refresh were markdowns, one of them a CROWN (lemons $0.50, was $0.68).
+# Adding a third copy of ten lines to fix that would have been the same bet the first two lost.
+#
+# Returns $true when it stamped a markdown, $false otherwise. Inert when the capture carries no was-price,
+# so every caller behaves exactly as before on the older capture formats.
+function Set-RollbackFields {
+  param(
+    [Parameter(Mandatory=$true)]$Row,          # a built row; stamped in place
+    $Was,                                      # the store's was-price, any format, absent is normal
+    [Parameter(Mandatory=$true)][string]$Store,
+    [string]$ItemId = '',
+    # The CAPTURE's date, not the clock. Passing the build day is what re-dated Sam's anchors; the honest
+    # anchor is the day the store's feed showed the cut price, which is the row's own as_of.
+    [Parameter(Mandatory=$true)][string]$Date,
+    [string]$Root = ''
+  )
+  $wasV = 0.0; $curV = 0.0
+  [void][double]::TryParse((([string]$Was) -replace '[^0-9.]',''), [ref]$wasV)
+  [void][double]::TryParse((([string]$Row.ad_price) -replace '[^0-9.]',''), [ref]$curV)
+  # A was-price at or BELOW the current price is not a markdown. Stores emit one on a reverted rollback or a
+  # re-listing, and reading it as a discount would invent a promotion that is not there.
+  if (-not ($wasV -gt 0 -and $curV -gt 0 -and $wasV -gt $curV)) { return $false }
+  $rw = Get-RollbackWindow -Store $Store -ItemId $ItemId -Price $curV -Today $Date -AsOf $Date -Root $Root
+  if (-not $rw) { return $false }
+  Add-Member -InputObject $Row -NotePropertyName 'base_price'  -NotePropertyValue $wasV       -Force
+  Add-Member -InputObject $Row -NotePropertyName 'marked_down' -NotePropertyValue $true       -Force
+  Add-Member -InputObject $Row -NotePropertyName 'ad_from'     -NotePropertyValue $rw.ad_from -Force
+  Add-Member -InputObject $Row -NotePropertyName 'ad_to'       -NotePropertyValue $rw.ad_to   -Force
+  Add-Member -InputObject $Row -NotePropertyName 'ad_basis'    -NotePropertyValue $rw.basis   -Force
+  return $true
+}

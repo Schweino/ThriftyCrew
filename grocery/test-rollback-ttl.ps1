@@ -83,6 +83,42 @@ $d = Get-RollbackWindow -Store 'Walmart' -ItemId '10450114' -Price 3.99 -Today '
 if ($d.ad_from -eq '2026-09-05') { Ok 'anchor survived the round trip to disk' }
 else { Bad "anchor did not survive persistence (got $($d.ad_from))" }
 
+# 7-10. Set-RollbackFields (2026-09-05). ONE stamping implementation for three callers - the two builders
+# carried hand-copies, and import-walmart-batch had none at all, which is how 4 markdown rows (one of them
+# the lemons CROWN, $0.50 was $0.68) imported as everyday prices with a fresh as_of and rode the 90-day
+# Walmart carry with nothing able to expire them.
+$mkRow = { param($ad) [pscustomobject]@{ store='Walmart'; item='Fresh Bulk Yellow Lemons'; ad_price=$ad; regular=$null } }
+
+# MUST FIRE: the founding case, frozen off Walmart's own payload read 2026-09-05.
+$r7 = & $mkRow '$0.50'
+$did = Set-RollbackFields -Row $r7 -Was '$0.68' -Store 'Walmart' -ItemId '41752773' -Date '2026-09-05' -Root $tmp
+if ($did -and $r7.marked_down -eq $true -and [double]$r7.base_price -eq 0.68 -and $r7.ad_from -eq '2026-09-05' -and $r7.ad_to) {
+  Ok 'MUST FIRE: a was-price above the line price stamps marked_down + base_price + a dated window'
+} else { Bad "MUST FIRE: the frozen lemons markdown was not stamped (did=$did, marked_down=$($r7.marked_down), base=$($r7.base_price))" }
+
+# CLEAN TWIN: no was-price at all. Every capture written before 2026-09-05 looks like this, and they must
+# behave EXACTLY as they did before - inert, not stamped, not flagged.
+$r8 = & $mkRow '$0.50'
+$did = Set-RollbackFields -Row $r8 -Was '' -Store 'Walmart' -ItemId '41752773' -Date '2026-09-05' -Root $tmp
+if (-not $did -and -not $r8.PSObject.Properties['marked_down']) { Ok 'CLEAN TWIN: a row with no was-price is untouched, so older captures behave exactly as before' }
+else { Bad 'CLEAN TWIN: a row with no was-price got stamped - every legacy capture would be relabelled a markdown' }
+
+# CLEAN TWIN: a was-price at or BELOW the current price. Stores emit this on a reverted rollback or a
+# re-listing; reading it as a discount invents a promotion that is not there.
+$r9 = & $mkRow '$0.50'
+$did = Set-RollbackFields -Row $r9 -Was '$0.50' -Store 'Walmart' -ItemId '41752773' -Date '2026-09-05' -Root $tmp
+$r9b = & $mkRow '$0.50'
+$did2 = Set-RollbackFields -Row $r9b -Was '$0.40' -Store 'Walmart' -ItemId '41752773' -Date '2026-09-05' -Root $tmp
+if (-not $did -and -not $did2) { Ok 'CLEAN TWIN: a was-price equal to or below the current price is not read as a markdown' }
+else { Bad "CLEAN TWIN: a non-discount was-price was stamped as a markdown (equal=$did, lower=$did2)" }
+
+# THE ANCHOR MUST NOT ADVANCE through this wrapper either. The whole library exists because a re-stamped
+# anchor makes a 30-day TTL mean never; routing the stamp through a helper must not lose that.
+$r10 = & $mkRow '$0.50'
+[void](Set-RollbackFields -Row $r10 -Was '$0.68' -Store 'Walmart' -ItemId '41752773' -Date '2026-09-20' -Root $tmp)
+if ($r10.ad_from -eq '2026-09-05') { Ok 'the anchor does NOT advance on re-observation through Set-RollbackFields (a 30-day TTL that re-dates means never)' }
+else { Bad "the anchor advanced to $($r10.ad_from) on re-observation - the TTL is now infinite" }
+
 Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
 Write-Output ("ROLLBACK-TTL " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
 Write-GuardComplete -Name 'rollback-ttl' -Summary "failed=$fail"

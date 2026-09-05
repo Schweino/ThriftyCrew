@@ -2090,6 +2090,24 @@ if ($iwbSrc -match 'merged not replaced' -and $iwbSrc -match '\$idsOut\[\$p\.Nam
 if ($iwbSrc -match 'REFUSING to overwrite it with this batch') {
   Ok 'import-walmart-batch refuses to overwrite an UNREADABLE itemId map rather than reading it as empty'
 } else { Bad 'import-walmart-batch treats an unparseable itemId map as empty - the fail-open-reads-as-empty class, applied to the only copy of the map' }
+# THE MARKDOWN STAMP HAS ONE HOME (2026-09-05). build-walmart-deals and build-sams-deals each carried a
+# hand-copy of the same ten lines, and the copy had already cost a bug (the Sam's paste read a variable that
+# file never assigns, so an old capture got a fresh 30-day anchor). import-walmart-batch was the third
+# caller and had NO copy, so a batch-imported markdown published as an everyday price with a fresh as_of.
+# If any of the three grows its own Add-Member 'marked_down' again, the copies are back.
+$bwdSrcRb = Get-Content (Join-Path $root 'build-walmart-deals.ps1') -Raw
+$bsdSrcRb = Get-Content (Join-Path $root 'build-sams-deals.ps1') -Raw
+$iwbSrcRb = Get-Content (Join-Path $root 'import-walmart-batch.ps1') -Raw
+if (($bwdSrcRb -match 'Set-RollbackFields') -and ($bsdSrcRb -match 'Set-RollbackFields') -and ($iwbSrcRb -match 'Set-RollbackFields')) {
+  Ok 'all three markdown callers (walmart builder, sams builder, walmart batch importer) go through Set-RollbackFields'
+} else { Bad 'a markdown caller no longer routes through Set-RollbackFields - walmart=' + [bool]($bwdSrcRb -match 'Set-RollbackFields') + ' sams=' + [bool]($bsdSrcRb -match 'Set-RollbackFields') + ' importer=' + [bool]($iwbSrcRb -match 'Set-RollbackFields') }
+$copies = @(@($bwdSrcRb,$bsdSrcRb,$iwbSrcRb) | Where-Object { $_ -match "NotePropertyName 'marked_down'" }).Count
+if ($copies -eq 0) { Ok 'no caller carries its own inline marked_down stamp - the two hand-copies are gone, not just supplemented' }
+else { Bad ("$copies caller(s) still stamp marked_down inline - a second implementation of one fact, which is how the Sam's anchor bug shipped") }
+# And the capture format must still be able to CARRY a was-price, or the stamp above can never fire.
+if ($iwbSrcRb -match 'wasPrice' -and $iwbSrcRb -match '\$f\[6\]') {
+  Ok 'the Walmart batch raw format still carries a 7th was-price field (without it no markdown is knowable)'
+} else { Bad 'the Walmart batch raw format lost its was-price field - markdowns become indistinguishable from everyday prices again' }
 # ...and the healer it depends on must still reach the depth the board actually hit. These are two halves of
 # one loop: a healer that stops short leaves the audit permanently red, and the only way to make it green
 # again is to weaken the signature.
