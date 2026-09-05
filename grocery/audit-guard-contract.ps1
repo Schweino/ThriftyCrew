@@ -206,8 +206,16 @@ foreach ($n in $invoked) {
 }
 
 # ---- which detectors on disk have no PRODUCTION caller at all? -------------------------------------------
+# GIT HOOKS ARE PRODUCTION CALLERS AND HAVE NO FILE EXTENSION (2026-09-05). ops\hooks\pre-commit runs
+# verify-bulk-edit.ps1 on every commit in this repo, which is a stricter production path than most entries
+# in this list because it cannot be forgotten. It was reported DEAD purely because the include list below is
+# extension-based and a git hook is an extensionless shell script. Recording it in the manual allowlist would
+# have been the WRONG fix: that says 'nothing calls this, deliberately' about a detector that in fact runs
+# more often than the daily chain does.
+$hookFiles = @(Get-ChildItem (Join-Path $repo 'ops\hooks') -File -ErrorAction SilentlyContinue)
 $execFiles = @(Get-ChildItem $repo -Recurse -File -Include *.ps1,*.psm1,*.js,*.yml,*.yaml,*.vbs,*.bat,*.cmd -ErrorAction SilentlyContinue |
                Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv' })
+$execFiles = @($execFiles) + @($hookFiles)
 $execText = @{}
 foreach ($f in $execFiles) { try { $execText[$f.FullName] = [IO.File]::ReadAllText($f.FullName) } catch { } }
 

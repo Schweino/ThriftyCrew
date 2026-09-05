@@ -34,6 +34,7 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: this guard must not itself read through the codepage bug it watches for
+. (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')   # Write-GuardComplete: this guard joined the chain without it, so 'ran to the end' was unprovable
 
 # THE SIGNATURE, and why it is these three lead bytes and nothing else.
 # UTF-8 read as Windows-1252 turns every non-ASCII character into a sequence that STARTS with one of
@@ -198,17 +199,20 @@ if (-not $Board) {
 }
 if (-not $Board -or -not (Test-Path $Board)) {
   Write-Output 'audit-board-mojibake: BLIND - no comparison board found to examine'
+  Write-GuardComplete -Name 'board-mojibake' -Summary 'BLIND - no board to read'
   exit 3
 }
 $doc = $null
 try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($Board)) } catch { $doc = $null }
 if (-not $doc) {
   Write-Output ('audit-board-mojibake: BLIND - could not parse ' + (Split-Path $Board -Leaf))
+  Write-GuardComplete -Name 'board-mojibake' -Summary 'BLIND - board unreadable'
   exit 3
 }
 $res = Get-BoardMojibakeFindings -Doc $doc
 if ($res.examined -eq 0) {
   Write-Output ('audit-board-mojibake: BLIND - ' + (Split-Path $Board -Leaf) + ' carries zero named store rows')
+  Write-GuardComplete -Name 'board-mojibake' -Summary 'BLIND - zero rows examined'
   exit 3
 }
 # ---- THE RATCHET (2026-09-05, Brad's call) ---------------------------------------------------------------
@@ -241,6 +245,7 @@ if ($count -lt $base) {
 }
 if (-not $res.findings.Count) {
   Write-Output ('audit-board-mojibake: clean - ' + $res.examined + ' board name(s) examined in ' + (Split-Path $Board -Leaf) + ', 0 mangled')
+  Write-GuardComplete -Name 'board-mojibake' -Summary 'clean - 0 mangled'
   exit 0
 }
 $lines = @()
@@ -264,7 +269,9 @@ if (-not $Quiet) {
 # a reader bug happening RIGHT NOW, and it will bake itself one generation deeper on every rebuild.
 if ($count -gt $base) {
   Write-Output ("audit-board-mojibake: RATCHET BROKEN - $count mangled name(s) now, baseline $base. A name that was clean is now corrupted, so a reader is actively mangling input. Find it with audit-json-readers.ps1, fix it with Read-JsonFile (lib\json-io.ps1), then heal-mojibake.ps1 -Apply and rebuild.")
+  Write-GuardComplete -Name 'board-mojibake' -Summary ("RATCHET BROKEN - $count over baseline $base")
   exit 2
 }
 Write-Output ("audit-board-mojibake: $count mangled name(s) against a baseline of $base - the known backlog, not a new regression.")
+Write-GuardComplete -Name 'board-mojibake' -Summary ("$count mangled name(s), baseline $base")
 exit 1
