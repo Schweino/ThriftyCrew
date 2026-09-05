@@ -18,6 +18,7 @@
 #>
 param([switch]$WhatIf, [int]$StoreId = 0, [string[]]$Ids = @())   # 0 = ask hyvee-store-lib; see that file
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 # 0 means 'take the store the board speaks for'. One home for the identity - see hyvee-store-lib.ps1.
 . (Join-Path $root 'hyvee-store-lib.ps1')
@@ -45,11 +46,11 @@ function Qty([string]$size, [string]$unit, [string]$name) {
 }
 
 $units = @{}
-foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $units[[string]$c.id] = [string]$c.unit }
+foreach ($c in (Read-JsonFile (Join-Path $root 'commodities.json'))) { $units[[string]$c.id] = [string]$c.unit }
 
 $regF = (Get-ChildItem (Join-Path $root 'out\regular\hyvee-regular-*.json') |
   Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1)
-$rows = @((Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals)
+$rows = @((Read-JsonFile $regF.FullName).deals)
 $unver = @{}; $rowByName = @{}
 foreach ($r in $rows) { $rowByName[([string]$r.item).Trim()] = $r; if ($r.not_reverified) { $unver[([string]$r.item).Trim()] = $r } }
 
@@ -61,19 +62,19 @@ foreach ($r in $rows) { $rowByName[([string]$r.item).Trim()] = $r; if ($r.not_re
 # worklist this resolver never consulted. resolve-worklist.ps1 already reads recipe-board.json; this did
 # not, so the two halves of the same heal loop disagreed about which cells exist.
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
+$board = @((Read-JsonFile $cmpF).comparison)
 $rbF = Join-Path $root 'out\recipe-board.json'
 if (Test-Path $rbF) {
   $seenRow = @{}
   foreach ($b in $board) { $seenRow[[string]$b.id] = $true }
-  foreach ($b in @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) {
+  foreach ($b in @((Read-JsonFile $rbF).comparison)) {
     if (-not $seenRow.ContainsKey([string]$b.id)) { $board += $b }
   }
   Write-Output ("board rows to resolve against: {0} (main + recipe-board)" -f $board.Count)
 }
 
 $puF = Join-Path $root 'product-urls.json'
-$doc = Get-Content $puF -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $puF
 
 # A NO-LINK chip (from the consistency report) needs the SAME board-match resolution as a not_reverified row:
 # it has no product id to fetch a price with, exactly like a carried-forward row. The two lists only partly

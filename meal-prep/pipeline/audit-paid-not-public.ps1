@@ -43,6 +43,7 @@ param(
   [string]$Root = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
 $repo = Split-Path -Parent $mp
@@ -177,7 +178,7 @@ if (Test-Path $phPath) {
   foreach ($p in ((Get-Content $phPath -Raw -Encoding utf8 | ConvertFrom-Json).PSObject.Properties)) { $published[$p.Name] = $true }
 }
 $believed = @{}
-foreach ($r in ((Get-Content (Join-Path $mp 'recipes-db.json') -Raw | ConvertFrom-Json).recipes)) {
+foreach ($r in ((Read-JsonFile (Join-Path $mp 'recipes-db.json')).recipes)) {
   $slug = [string]$r.slug
   if (-not $published.ContainsKey($slug)) { continue }   # not live: Ghost has nothing to disagree with
   $v = [string]$r.visibility

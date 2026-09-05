@@ -11,6 +11,7 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $here
 $dest = if ($OutDir) { $OutDir } else { Join-Path $repo 'site-backups' }
@@ -55,7 +56,7 @@ try {
   $sw.WriteLine('] }')
 } finally { $sw.Dispose() }
 # prove the incremental assembly produced valid JSON before calling it a backup
-$null = Get-Content $outFile -Raw | ConvertFrom-Json
+$null = Read-JsonFile $outFile
 # then ZIP it: ~1,100 lexical docs is ~40 MB raw, which would grow the repo ~half a GB a year; the JSON
 # compresses ~90%. The zip is the committed artifact; the raw json is removed after a verified compress.
 $zipFile = $outFile -replace '\.json$', '.zip'

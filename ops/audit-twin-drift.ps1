@@ -31,6 +31,7 @@
 #>
 param([string]$Registry = '', [switch]$SelfTest, [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\guard-contract.ps1')
@@ -105,7 +106,7 @@ if ($SelfTest) {
     $liveReg = Join-Path $here 'twin-rules.json'
     $liveOk = $false
     if (Test-Path $liveReg) {
-      $rj = (Get-Content $liveReg -Raw | ConvertFrom-Json)
+      $rj = (Read-JsonFile $liveReg)
       $liveOk = (@($rj.twins).Count -ge 1)
     }
     T 'the live registry exists and names at least one twin' $liveOk 'registry missing or empty'
@@ -120,7 +121,7 @@ if (-not (Test-Path $Registry)) {
   Write-Output ("twin-drift: COULD NOT EVALUATE - no registry at '" + $Registry + "'. With no roster there is nothing to compare and nothing to notice missing.")
   exit 3
 }
-$reg = Get-Content $Registry -Raw | ConvertFrom-Json
+$reg = Read-JsonFile $Registry
 $twins = @($reg.twins)
 if ($twins.Count -eq 0) {
   Write-Output 'twin-drift: COULD NOT EVALUATE - the registry lists ZERO twins. An empty roster is a clean bill of health for a set nobody is watching.'

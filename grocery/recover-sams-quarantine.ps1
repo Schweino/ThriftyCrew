@@ -34,6 +34,7 @@ param(
   [string]$Out = ""
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $In)  { $In  = Join-Path $root 'out\sams\quarantine\sams-deals-2026-07-15.json' }
 if (-not $Out) { $Out = Join-Path $root ('out\sams\' + [IO.Path]::GetFileName($In)) }
@@ -47,7 +48,7 @@ function Get-PackCount($text) {
   return $null
 }
 
-$doc = Get-Content $In -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $In
 $outRows = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[object]
 $passThru = 0; $packed = 0; $single = 0

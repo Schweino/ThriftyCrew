@@ -45,17 +45,18 @@ param(
   [string]$OutDir = ""
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
-$searchDoc = Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json
+$searchDoc = Read-JsonFile (Join-Path $root 'commodity-search.json')
 $terms = @{}
 # Get-PrimarySearchTerm, not [string]$p.Value: a multi-term commodity would JOIN into one dead string.
 . (Join-Path $root 'search-terms-lib.ps1'); foreach ($p in $searchDoc.terms.PSObject.Properties) { $terms[$p.Name] = (Get-PrimarySearchTerm $searchDoc.terms $p.Name) }
 
 $cmpFile = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $cmpFile) { throw 'build-pull-order: no comparison-*.json - run compare-deals first' }
-$cmp = Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json
+$cmp = Read-JsonFile $cmpFile.FullName
 
 $storesSeen = @{}
 $onBoard = @{}
@@ -68,7 +69,7 @@ foreach ($r in @($cmp.comparison)) {
 $depth = @{}
 $hPath = Join-Path $root 'price-history.json'
 if (Test-Path $hPath) {
-  $hist = Get-Content $hPath -Raw | ConvertFrom-Json
+  $hist = Read-JsonFile $hPath
   foreach ($c in @($hist.commodities)) { $depth[[string]$c.id] = @($c.history).Count }
 }
 

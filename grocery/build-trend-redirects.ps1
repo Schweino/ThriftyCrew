@@ -19,10 +19,11 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $here '..\lib\trend-keep.ps1')
 
-$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json
+$data = Read-JsonFile $HistoryFile
 $live = @($data.commodities | ForEach-Object { [string]$_.id })
 
 # Drift guard: a keep id that no longer exists means someone renamed a commodity and the keep-list

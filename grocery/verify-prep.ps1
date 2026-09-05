@@ -6,11 +6,12 @@
 #>
 param([string]$CompareFile = "", [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
 
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 $commodities = New-Object System.Collections.Generic.List[object]
 foreach ($row in $doc.comparison) {

@@ -55,6 +55,7 @@ param(
   [switch]$Report
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 if (-not $ListFile) { $ListFile = Join-Path $Root 'known-wrong.json' }
 $outDir = Join-Path $Root 'out'
@@ -159,9 +160,9 @@ $boards = @()
 $boardErr = ''
 try {
   $cmpF = @(Get-ChildItem (Join-Path $outDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
-  foreach ($f in $cmpF) { $boards += ,@($f.Name, @((Get-Content $f.FullName -Raw | ConvertFrom-Json).comparison)) }
+  foreach ($f in $cmpF) { $boards += ,@($f.Name, @((Read-JsonFile $f.FullName).comparison)) }
   $rbF = Join-Path $outDir 'recipe-board.json'
-  if (Test-Path $rbF) { $boards += ,@('recipe-board.json', @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) }
+  if (Test-Path $rbF) { $boards += ,@('recipe-board.json', @((Read-JsonFile $rbF).comparison)) }
 } catch {
   $boardErr = $_.Exception.Message
   $boards = @()
@@ -211,7 +212,7 @@ $cmF = Join-Path $Root 'commodities.json'
 # the fix: commodity-retired fired on all 19 entries at once. Assign FIRST, then iterate the variable.
 if (Test-Path $cmF) {
   try {
-    $cmAll = Get-Content $cmF -Raw | ConvertFrom-Json
+    $cmAll = Read-JsonFile $cmF
     foreach ($c in $cmAll) { if ($c -and $c.id) { $liveCommodities[[string]$c.id] = $true } }
   } catch {
     $liveCommodities = @{}
@@ -222,7 +223,7 @@ $liveStores = @{}
 $stF = Join-Path $Root 'stores.json'
 if (Test-Path $stF) {
   try {
-    foreach ($s in @((Get-Content $stF -Raw | ConvertFrom-Json).stores)) { if ($s -and $s.name) { $liveStores[[string]$s.name] = [string]$s.regular_prefix } }
+    foreach ($s in @((Read-JsonFile $stF).stores)) { if ($s -and $s.name) { $liveStores[[string]$s.name] = [string]$s.regular_prefix } }
   } catch {
     $liveStores = @{}
     [void]$notes.Add('stores.json would not parse (' + $_.Exception.Message + '), so the store-retired trigger and the product-id key were NOT available this run. guards.ps1 reads stores.json nowhere else, so failing the board on it here would be a brand-new way for one small registry file to stop the publish.')
@@ -245,7 +246,7 @@ function KwFeedName([string]$store, [string]$prodId) {
     $rf = @(Get-ChildItem (Join-Path $outDir ('regular\' + $prefix + '-regular-*.json')) -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
     foreach ($f in $rf) {
       try {
-        foreach ($d in @((Get-Content $f.FullName -Raw | ConvertFrom-Json).deals)) {
+        foreach ($d in @((Read-JsonFile $f.FullName).deals)) {
           # ConvertFrom-Json rows are HETEROGENEOUS, so ask every row for its own id field
           $p = @($d.PSObject.Properties.Name)
           $v = ''
@@ -501,7 +502,7 @@ if (Test-Path $purlPath) {
     [void]$kwByCid[$ck].Add([pscustomobject]@{ nnames = $nn })
   }
   try {
-    $purlDoc = Get-Content $purlPath -Raw | ConvertFrom-Json
+    $purlDoc = Read-JsonFile $purlPath
     $purlItems = if ($purlDoc.PSObject.Properties.Name -contains 'items') { $purlDoc.items } else { $purlDoc }
     foreach ($cProp in $purlItems.PSObject.Properties) {
       $cid = $cProp.Name

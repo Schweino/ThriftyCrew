@@ -37,6 +37,7 @@
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (cannot see src_date).
 param([string]$CandidatesFile = '', [string]$CompareFile = '', [double]$Ratio = 1.25, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # ONE implementation of the ruling matcher, two callers (compare-deals enforces it, this audits against it).
@@ -200,7 +201,7 @@ if (-not $CompareFile) {
   if (-not $mf) { Write-Output 'BLIND: no comparison-*.json to audit'; exit 3 }
   $CompareFile = $mf.FullName
 }
-$doc = Get-Content $CandidatesFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CandidatesFile
 $cs = @($doc.commodities)
 if (-not $cs.Count) { Write-Output 'BLIND: candidates file has no commodities'; exit 3 }
 
@@ -216,7 +217,7 @@ if ($dated -eq 0) {
   exit 3
 }
 
-$cmp = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$cmp = Read-JsonFile $CompareFile
 $rows = @($cmp.comparison)
 if (-not $rows.Count) { Write-Output 'BLIND: comparison file has no rows'; exit 3 }
 $board = @{}

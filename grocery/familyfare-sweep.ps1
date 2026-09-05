@@ -21,6 +21,7 @@
 #>
 param([int]$MaxMinutes = 9)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native: the only safe native stderr redirect under EAP='Stop'
 $log = Join-Path $root 'ff-sweep-log.txt'
@@ -33,7 +34,7 @@ function Log([string]$m) {
 
 $cursorF = Join-Path $root 'out\ff-term-cursor.json'
 $before = ''
-if (Test-Path $cursorF) { try { $before = [string]((Get-Content $cursorF -Raw | ConvertFrom-Json).next_index) } catch {} }
+if (Test-Path $cursorF) { try { $before = [string]((Read-JsonFile $cursorF).next_index) } catch {} }
 
 Log ("sweep start (cursor before = " + ($(if ($before -ne '') { '#' + $before } else { 'unset' })) + ", MaxMinutes=$MaxMinutes)")
 $rc = 0
@@ -64,7 +65,7 @@ try {
 } catch { Log ('multipack-repair THREW: ' + $_.Exception.Message + ' - any pack-size defect in this window is unrepaired and guard 5 will block the next publish') }
 
 $after = ''
-if (Test-Path $cursorF) { try { $after = [string]((Get-Content $cursorF -Raw | ConvertFrom-Json).next_index) } catch {} }
+if (Test-Path $cursorF) { try { $after = [string]((Read-JsonFile $cursorF).next_index) } catch {} }
 # A cursor that did not move means the window bought NOTHING - the sweep is the one place that is visible.
 # TWO DIFFERENT REASONS THE CURSOR CAN SIT STILL, AND THEY ARE NOT THE SAME NEWS (2026-08-02).
 # Since the pull commits its cursor only behind a landed merged catalog, "cursor did not move" now covers a

@@ -13,6 +13,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if ([string]::IsNullOrWhiteSpace($HistoryFile)) { $HistoryFile = Join-Path $here 'price-history.json' }
 if ([string]::IsNullOrWhiteSpace($OutFile))     { $OutFile     = Join-Path $here 'out\trend\index.html' }
@@ -87,7 +88,7 @@ $catOf = @{
 $catOrder = @('Meat and protein', 'Dairy and eggs', 'Produce', 'Pantry and drinks', 'More staples')
 
 if (-not (Test-Path $HistoryFile)) { throw "History file not found: $HistoryFile" }
-$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json
+$data = Read-JsonFile $HistoryFile
 
 # bucket qualifying commodities by category
 $buckets = [ordered]@{}

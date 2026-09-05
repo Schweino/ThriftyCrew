@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-05; next_pull 2026-09-06",
-    "cursor_start":  82,
-    "cursor_next":  89,
+    "cursor_start":  103,
+    "cursor_next":  110,
     "total_terms":  602,
     "rotation_terms":  [
-                           "caesar dressing",
-                           "caesar salad kit",
-                           "cajun seasoning",
-                           "yellow cake mix",
-                           "canned beets",
-                           "black beans",
-                           "butter beans"
+                           "canned pumpkin",
+                           "canned pink salmon",
+                           "canned sweet whole kernel corn",
+                           "canned tuna",
+                           "great northern beans canned",
+                           "canned yams",
+                           "cantaloupe"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "caesar dressing",
-                  "caesar salad kit",
-                  "cajun seasoning",
-                  "yellow cake mix",
-                  "canned beets",
-                  "black beans",
-                  "butter beans"
+                  "canned pumpkin",
+                  "canned pink salmon",
+                  "canned sweet whole kernel corn",
+                  "canned tuna",
+                  "great northern beans canned",
+                  "canned yams",
+                  "cantaloupe"
               ],
     "commodities":  [
-                        "caesar-dressing",
-                        "caesar-salad-kit",
-                        "cajun-seasoning",
-                        "cake-mix",
-                        "canned-beets",
-                        "canned-black-beans",
-                        "canned-butter-beans"
+                        "canned-pumpkin",
+                        "canned-salmon",
+                        "canned-sweet-corn",
+                        "canned-tuna",
+                        "canned-white-beans",
+                        "canned-yams",
+                        "cantaloupe"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

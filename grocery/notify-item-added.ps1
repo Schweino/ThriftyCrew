@@ -18,6 +18,7 @@
 #>
 param([switch]$DryRun, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $stateFile = Join-Path $root 'notify-known-ids.json'
@@ -37,7 +38,7 @@ $notifyAuth = -join ($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($adminKey))
 # ---- today's board ids (only ids actually rendered: >=1 store) ----
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $cmpF) { Write-Output 'notify-item-added: SKIP (no comparison file)'; exit 0 }
-$cmp = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)
+$cmp = @((Read-JsonFile $cmpF.FullName).comparison)
 $boardIds = @{}; $rowById = @{}
 foreach ($r in $cmp) { if (@($r.stores).Count -ge 1) { $boardIds[[string]$r.id] = $true; $rowById[[string]$r.id] = $r } }
 
@@ -47,7 +48,7 @@ if (-not (Test-Path $stateFile)) {
   Write-Output ("notify-item-added: SEEDED state with " + $boardIds.Count + " current board ids - notifications start with the NEXT new commodity")
   exit 0
 }
-$known = @{}; foreach ($k in (Get-Content $stateFile -Raw | ConvertFrom-Json).ids) { $known[[string]$k] = $true }
+$known = @{}; foreach ($k in (Read-JsonFile $stateFile).ids) { $known[[string]$k] = $true }
 $newIds = @($boardIds.Keys | Where-Object { -not $known.ContainsKey($_) })
 
 # ---- read the queue (Ghost drafts tagged #item-request-queue) ----
@@ -80,7 +81,7 @@ foreach ($q in $queue) {
 }
 
 # ---- the if-condition: new commodity x queued request -> match by the commodity's OWN rules ----
-$commods = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commods = Read-JsonFile (Join-Path $root 'commodities.json')
 $sent = 0; $failed = 0
 foreach ($id in $newIds) {
   $cdef = $commods | Where-Object { [string]$_.id -eq $id } | Select-Object -First 1
@@ -113,6 +114,6 @@ foreach ($id in $newIds) {
 if (-not $DryRun) {
   $advance = @($boardIds.Keys)
   if ($failed -gt 0) { $advance = @($advance | Where-Object { $known.ContainsKey($_) -or ($newIds -notcontains $_) }) }
-  [ordered]@{ seeded = (Get-Content $stateFile -Raw | ConvertFrom-Json).seeded; updated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); ids = @($advance | Sort-Object) } | ConvertTo-Json -Depth 3 | Set-Content $stateFile -Encoding UTF8
+  [ordered]@{ seeded = (Read-JsonFile $stateFile).seeded; updated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); ids = @($advance | Sort-Object) } | ConvertTo-Json -Depth 3 | Set-Content $stateFile -Encoding UTF8
 }
 Write-Output ("notify-item-added: new-ids=" + $newIds.Count + " queue=" + $queue.Count + " sent=" + $sent + " failed=" + $failed + " expired=" + $expired + $(if ($DryRun) { ' (DRYRUN)' } else { '' }))

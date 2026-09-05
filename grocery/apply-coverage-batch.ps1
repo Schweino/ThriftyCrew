@@ -49,11 +49,12 @@ if (@($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Count -eq 0) {
 # batch. $TouchedIds is that list.
 $TouchedIds = @(@($Patterns.Keys) + @($Excludes.Keys) | Sort-Object -Unique)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 function Snapshot {
   $f = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  $d = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $d = Read-JsonFile $f.FullName
   $h = @{}
   foreach ($r in $d.comparison) { $h[[string]$r.id] = [pscustomobject]@{ store = [string]$r.cheapest_store; price = [double]$r.cheapest_price; cells = @($r.stores).Count } }
   return $h
@@ -199,7 +200,7 @@ if ($lostByInclude -gt 0) { Revert "the batch REMOVED $lostByInclude cell(s) at 
 $corpusFile = Join-Path (Split-Path $root -Parent) 'sidecar\data\corpus-current.json'
 $revealed = @{}; $blind = $false
 if (Test-Path $corpusFile) {
-  $corp = Get-Content $corpusFile -Raw | ConvertFrom-Json
+  $corp = Read-JsonFile $corpusFile
   $comsNow = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
   foreach ($id in $Patterns.Keys) {
     $cdef = @($comsNow | Where-Object { $_.id -eq $id })[0]
@@ -306,7 +307,7 @@ if ($tileRc -ne 0) {
   $tf = Join-Path $OutDir 'tile-integrity.json'
   $mine = @(); $theirs = @()
   if (Test-Path $tf) {
-    foreach ($rw in @((Get-Content $tf -Raw | ConvertFrom-Json).rows)) {
+    foreach ($rw in @((Read-JsonFile $tf).rows)) {
       if ([string]$rw.fault -eq 'NO-LINK') { continue }
       if ($TouchedIds -contains [string]$rw.id) { $mine += $rw } else { $theirs += $rw }
     }
@@ -342,7 +343,7 @@ if ($tileRc -ne 0) {
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') *>&1 | Out-Null
     $still = @()
     if (Test-Path $tf) {
-      foreach ($rw in @((Get-Content $tf -Raw | ConvertFrom-Json).rows)) {
+      foreach ($rw in @((Read-JsonFile $tf).rows)) {
         if ([string]$rw.fault -ne 'NO-LINK' -and $TouchedIds -contains [string]$rw.id) { $still += $rw }
       }
     }

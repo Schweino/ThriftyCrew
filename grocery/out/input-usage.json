@@ -1,8 +1,8 @@
 {
-    "updated":  "2026-09-05T08:07:31",
+    "updated":  "2026-09-05T13:37:05",
     "last_live_build":  "2026-09-02",
     "note":  "Which files the LIVE board actually opened, and when. The engine reads a UNION of dated captures (up to the 90-day capture-policy carry for every store (14 for Walmart until 2026-08-22)) because the rotation only re-prices ~7 items per store per day, so a weeks-old file can be the only place a store\u0027s price for a commodity exists - and a dated input is named exactly like a disposable output. last_used is what tells them apart. Recorded ONLY on live builds; a pinned regression run would stamp files the board has not touched. This is a ledger, not a delete list: judge last_used against the carry window before acting.",
-    "tracked_files":  150,
+    "tracked_files":  152,
     "files":  {
                   "ads-2026-08-21.json":  {
                                               "role":  "ads",
@@ -903,6 +903,18 @@
                                                                 "first_used":  "2026-09-02",
                                                                 "last_used":  "2026-09-02",
                                                                 "uses":  1
-                                                            }
+                                                            },
+                  "regular/aldi-regular-2026-09-05.json":  {
+                                                               "role":  "everyday",
+                                                               "first_used":  "2026-09-02",
+                                                               "last_used":  "2026-09-02",
+                                                               "uses":  1
+                                                           },
+                  "regular/walmart-regular-2026-09-05.json":  {
+                                                                  "role":  "everyday",
+                                                                  "first_used":  "2026-09-02",
+                                                                  "last_used":  "2026-09-02",
+                                                                  "uses":  1
+                                                              }
               }
 }

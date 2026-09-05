@@ -33,6 +33,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 
@@ -185,7 +186,7 @@ foreach ($sd in $dirs) {
   $d = [pscustomobject]@{ Name = $(if ($sd -eq $liveDir) { 'live' } else { Split-Path (Split-Path $sd -Parent) -Leaf }) }
   foreach ($f in @(Get-ChildItem (Join-Path $sd '*.json') | Where-Object { $_.Name -notmatch '^(run-|recipes-)' -and $_.Name -ne '_index.json' })) {
     $spec = $null
-    try { $spec = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+    try { $spec = Read-JsonFile $f.FullName } catch { continue }
     if (-not $spec.stat) { continue }
     $ch = @(Repair-Spec $spec)
     if ($ch.Count -eq 0) { continue }

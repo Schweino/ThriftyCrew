@@ -70,86 +70,6 @@
         "source":  "agent-1.json"
     },
     {
-        "id":  "nectarines",
-        "name":  "Nectarines",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Fruit",
-        "search_term":  "nectarines",
-        "notes":  "Fresh yellow or white nectarines per lb. Exclude peaches (existing item), canned or frozen fruit, fruit cups, juice.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "apricots",
-        "name":  "Apricots",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Fruit",
-        "search_term":  "fresh apricots",
-        "notes":  "Fresh apricots per lb (seasonal). Must NOT match dried apricots, canned apricots, apricot preserves/jam (existing jelly item), apricot nectar, or baby food.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "pomegranates",
-        "name":  "Pomegranate",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Fruit",
-        "search_term":  "pomegranate",
-        "notes":  "Whole fresh pomegranate sold by count. Exclude pomegranate juice (POM), aril cups, sparkling drinks, dried arils, and \u0027pomegranate flavored\u0027 anything.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "papaya",
-        "name":  "Papaya",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Fruit",
-        "search_term":  "papaya",
-        "notes":  "Whole fresh papaya (Red/Maradol or Solo) by count; if a store prices per lb, normalize. Exclude dried papaya spears, papaya juice/nectar, fruit cups.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-cranberries",
-        "name":  "Fresh Cranberries",
-        "unit":  "oz",
-        "typical_size":  "12 oz bag",
-        "category":  "Fruit",
-        "search_term":  "fresh cranberries",
-        "notes":  "Fresh whole cranberries in 12 oz bags (fall/holiday season). Must NOT match cranberry juice (existing item), dried cranberries/Craisins (separate candidate), canned cranberry sauce, or trail mixes.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "plantains",
-        "name":  "Plantains",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Fruit",
-        "search_term":  "plantains",
-        "notes":  "Fresh green or yellow plantains sold by count. Exclude bananas (existing item), plantain chips (snack aisle), frozen sweet plantains.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "coconut",
-        "name":  "Whole Coconut",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Fruit",
-        "search_term":  "whole coconut",
-        "notes":  "Whole fresh coconut in the produce section. Must NOT match coconut oil (existing item), coconut milk/cream/water, shredded or flaked baking coconut, coconut-flavored products.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "medjool-dates",
-        "name":  "Medjool Dates",
-        "unit":  "oz",
-        "typical_size":  "16 oz tub",
-        "category":  "Fruit",
-        "search_term":  "medjool dates",
-        "notes":  "Whole Medjool (or pitted) dates sold in produce-section tubs/bags, normalized per oz. Exclude date syrup, date-filled bars/rolls, chopped baking dates only if brand-flavored, and fig products.",
-        "source":  "agent-1.json"
-    },
-    {
         "id":  "cara-cara-oranges",
         "name":  "Cara Cara Oranges",
         "unit":  "lb",
@@ -200,66 +120,6 @@
         "source":  "agent-1.json"
     },
     {
-        "id":  "dried-cranberries",
-        "name":  "Dried Cranberries",
-        "unit":  "oz",
-        "typical_size":  "6 oz",
-        "category":  "Fruit",
-        "search_term":  "dried cranberries",
-        "notes":  "Sweetened dried cranberries (Craisins or store brand), plain original flavor, per oz. Exclude fresh cranberries (separate candidate), cranberry juice (existing), cranberry sauce, trail mix blends, flavored/infused varieties preferred out.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "prunes",
-        "name":  "Prunes / Dried Plums",
-        "unit":  "oz",
-        "typical_size":  "16 oz",
-        "category":  "Fruit",
-        "search_term":  "prunes",
-        "notes":  "Pitted prunes/dried plums (Sunsweet or store brand) per oz. Must NOT match fresh plums (existing item), prune juice, baby food prunes, or raisins (existing item).",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "red-onions",
-        "name":  "Red Onions",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "red onions",
-        "notes":  "Fresh red onions, loose or bagged, per lb. Existing \u0027onions\u0027 item covers only yellow/sweet. Exclude white onions (separate candidate), green onions (existing), pearl onions, pickled red onions, onion powder (existing).",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "white-onions",
-        "name":  "White Onions",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "white onions",
-        "notes":  "Fresh white onions per lb (Mexican-cooking staple SKU, priced separately from yellow). Exclude yellow/sweet onions (existing item), red onions, green onions, pearl onions, onion powder/dried minced onion.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "shallots",
-        "name":  "Shallots",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "shallots",
-        "notes":  "Fresh shallots, loose per lb or small net bag normalized. Exclude green onions/scallions (existing item), regular onions, dried/fried shallot toppings.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "yukon-gold-potatoes",
-        "name":  "Yellow / Yukon Gold Potatoes",
-        "unit":  "lb",
-        "typical_size":  "5 lb bag",
-        "category":  "Vegetables",
-        "search_term":  "yukon gold potatoes",
-        "notes":  "Fresh yellow/gold/Yukon Gold potatoes, loose or 5 lb bag normalized per lb. Russet and red potatoes are existing items. Exclude sweet potatoes (existing), baby/petite medley packs, instant mashed (existing), frozen potato products.",
-        "source":  "agent-1.json"
-    },
-    {
         "id":  "roma-tomatoes",
         "name":  "Roma Tomatoes",
         "unit":  "lb",
@@ -300,166 +160,6 @@
         "source":  "agent-1.json"
     },
     {
-        "id":  "mini-sweet-peppers",
-        "name":  "Mini Sweet Peppers",
-        "unit":  "oz",
-        "typical_size":  "16 oz bag",
-        "category":  "Vegetables",
-        "search_term":  "mini sweet peppers",
-        "notes":  "Bagged mini sweet snacking peppers (red/yellow/orange mix), typically 1 lb, per oz. Exclude full-size bell peppers, jalapenos (existing), pickled peppers, pepper-flavored snacks.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "poblano-peppers",
-        "name":  "Poblano Peppers",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "poblano peppers",
-        "notes":  "Fresh poblano peppers per lb (some stores label them pasilla). Exclude dried ancho/pasilla pods, canned diced green chiles, jalapenos (existing item), stuffed prepared peppers.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "serrano-peppers",
-        "name":  "Serrano Peppers",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "serrano peppers",
-        "notes":  "Fresh serrano chile peppers per lb. Exclude jalapenos (existing item), canned/pickled serranos, hot sauce (existing item), salsa.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "anaheim-peppers",
-        "name":  "Anaheim Peppers",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "anaheim peppers",
-        "notes":  "Fresh Anaheim/long green chiles per lb (includes fresh Hatch-type in season). Must NOT match canned diced green chiles, dried chile pods, jalapenos, poblanos.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "habanero-peppers",
-        "name":  "Habanero Peppers",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "habanero peppers",
-        "notes":  "Fresh habanero peppers per lb (some stores price per each or small clamshell; normalize). Exclude habanero hot sauce, salsa, cheese or snacks with \u0027habanero\u0027 flavoring.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "tomatillos",
-        "name":  "Tomatillos",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "tomatillos",
-        "notes":  "Fresh husked tomatillos per lb. Must NOT match salsa verde (existing salsa item), canned tomatillos, green enchilada sauce, or regular tomatoes.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "eggplant",
-        "name":  "Eggplant",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Vegetables",
-        "search_term":  "eggplant",
-        "notes":  "Fresh whole globe eggplant by count (per-lb stores normalized). Exclude frozen eggplant parmesan/entrees, baba ganoush, breaded eggplant cutlets, Chinese/graffiti specialty types optional but fine if cheapest.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "beets",
-        "name":  "Beets (fresh)",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "fresh beets",
-        "notes":  "Fresh red beets, loose or bunched with greens, per lb. Must NOT match canned or pickled beets, beet juice, cooked ready-to-eat vacuum-packed beets, or sugar beet products.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "turnips",
-        "name":  "Turnips",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "turnips",
-        "notes":  "Fresh purple-top turnip roots per lb. Exclude turnip greens (separate candidate), rutabagas (separate candidate), canned turnip greens.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "parsnips",
-        "name":  "Parsnips",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "parsnips",
-        "notes":  "Fresh parsnips, loose or 1 lb bag, per lb. Exclude carrots (existing item), turnips, frozen root vegetable medleys.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "rutabagas",
-        "name":  "Rutabagas",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "rutabaga",
-        "notes":  "Fresh waxed rutabagas per lb. Exclude turnips (separate candidate), frozen mashed root products.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "leeks",
-        "name":  "Leeks",
-        "unit":  "each",
-        "typical_size":  "1 bunch",
-        "category":  "Vegetables",
-        "search_term":  "leeks",
-        "notes":  "Fresh leeks sold per stalk or bunch. Exclude green onions/scallions (existing item), dried leek soup mix, frozen soup blends.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "collard-greens",
-        "name":  "Collard Greens (bunch)",
-        "unit":  "each",
-        "typical_size":  "1 bunch",
-        "category":  "Vegetables",
-        "search_term":  "collard greens",
-        "notes":  "Fresh collard greens by the bunch (bagged chopped fresh collards acceptable if cheapest, normalized). Must NOT match canned seasoned collards (Glory), frozen collards, kale (existing item).",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "mustard-greens",
-        "name":  "Mustard Greens (bunch)",
-        "unit":  "each",
-        "typical_size":  "1 bunch",
-        "category":  "Vegetables",
-        "search_term":  "mustard greens",
-        "notes":  "Fresh mustard greens by the bunch. CRITICAL: must NOT match yellow mustard condiment (existing \u0027mustard\u0027 item), Dijon/spicy brown mustard, mustard seed spice, or canned mustard greens.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "turnip-greens",
-        "name":  "Turnip Greens (bunch)",
-        "unit":  "each",
-        "typical_size":  "1 bunch",
-        "category":  "Vegetables",
-        "search_term":  "turnip greens",
-        "notes":  "Fresh turnip greens by the bunch. Exclude turnip roots (separate candidate), canned/frozen turnip greens, collard or mustard greens.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "swiss-chard",
-        "name":  "Swiss Chard (bunch)",
-        "unit":  "each",
-        "typical_size":  "1 bunch",
-        "category":  "Vegetables",
-        "search_term":  "swiss chard",
-        "notes":  "Fresh green or rainbow chard by the bunch. Exclude kale (existing), spinach (existing), spring mix blends.",
-        "source":  "agent-1.json"
-    },
-    {
         "id":  "red-cabbage",
         "name":  "Red Cabbage",
         "unit":  "lb",
@@ -477,76 +177,6 @@
         "category":  "Vegetables",
         "search_term":  "napa cabbage",
         "notes":  "Fresh napa (Chinese) cabbage per lb. Exclude green/red cabbage, kimchi (refrigerated jars), bok choy (separate candidate).",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "bok-choy",
-        "name":  "Bok Choy",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "bok choy",
-        "notes":  "Fresh bok choy or baby bok choy per lb (per-each stores normalized). Exclude napa cabbage (separate candidate), frozen stir-fry blends, prepared Asian salad kits.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "butternut-squash",
-        "name":  "Butternut Squash",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "butternut squash",
-        "notes":  "Whole fresh butternut squash per lb. Must NOT match pre-cut cubed butternut (pricier convenience SKU), frozen butternut, butternut squash soup, ravioli, or baby food.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "acorn-squash",
-        "name":  "Acorn Squash",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "acorn squash",
-        "notes":  "Whole fresh acorn squash per lb (per-each pricing normalized). Exclude butternut/spaghetti squash (separate candidates), zucchini/yellow squash (existing item), frozen squash.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "spaghetti-squash",
-        "name":  "Spaghetti Squash",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "spaghetti squash",
-        "notes":  "Whole fresh spaghetti squash per lb. CRITICAL: must NOT match spaghetti pasta (existing \u0027pasta\u0027 item), spaghetti sauce, canned spaghetti (SpaghettiOs), or other squash types.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "sugar-snap-peas",
-        "name":  "Sugar Snap Peas",
-        "unit":  "oz",
-        "typical_size":  "8 oz",
-        "category":  "Vegetables",
-        "search_term":  "sugar snap peas",
-        "notes":  "Fresh sugar snap peas in 8-16 oz packs, per oz. Exclude snow peas (separate candidate), frozen peas (existing), canned peas (existing), snap pea crisps snack, split peas.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "snow-peas",
-        "name":  "Snow Peas",
-        "unit":  "oz",
-        "typical_size":  "6 oz",
-        "category":  "Vegetables",
-        "search_term":  "snow peas",
-        "notes":  "Fresh snow pea pods in 6-8 oz packs, per oz. Exclude sugar snap peas (separate candidate), frozen/canned peas, stir-fry veggie blends.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "portobello-mushrooms",
-        "name":  "Portobello Mushroom Caps",
-        "unit":  "oz",
-        "typical_size":  "6 oz",
-        "category":  "Vegetables",
-        "search_term":  "portobello mushroom caps",
-        "notes":  "Large portabella/portobello caps (typically 2-ct, 6 oz), per oz. Existing \u0027mushrooms\u0027 item covers white button and baby bella/cremini. Exclude sliced baby bellas, canned mushrooms (existing), stuffed prepared mushrooms.",
         "source":  "agent-1.json"
     },
     {
@@ -590,66 +220,6 @@
         "source":  "agent-1.json"
     },
     {
-        "id":  "spring-mix",
-        "name":  "Spring Mix Salad Greens",
-        "unit":  "oz",
-        "typical_size":  "5 oz",
-        "category":  "Vegetables",
-        "search_term":  "spring mix",
-        "notes":  "Bagged/clamshell spring mix or 50/50 blend, per oz. Exclude spinach-only packs (existing \u0027spinach\u0027 item), arugula-only (separate candidate), salad kits with dressing, iceberg garden blends (separate candidate).",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "arugula",
-        "name":  "Arugula",
-        "unit":  "oz",
-        "typical_size":  "5 oz",
-        "category":  "Vegetables",
-        "search_term":  "arugula",
-        "notes":  "Bagged/clamshell baby arugula, per oz. Exclude spring mix blends that merely contain arugula, spinach, salad kits.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "garden-salad",
-        "name":  "Garden Salad Blend (bagged)",
-        "unit":  "oz",
-        "typical_size":  "12 oz bag",
-        "category":  "Vegetables",
-        "search_term":  "garden salad bag",
-        "notes":  "Classic iceberg-based garden salad bag (iceberg, carrots, red cabbage), per oz. Exclude salad kits with dressing/toppings (separate candidate), spring mix, coleslaw mix, shredded lettuce only.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "caesar-salad-kit",
-        "name":  "Caesar Salad Kit",
-        "unit":  "oz",
-        "typical_size":  "10 oz kit",
-        "category":  "Vegetables",
-        "search_term":  "caesar salad kit",
-        "notes":  "Complete caesar salad kit (greens + dressing + croutons), per oz. Exclude plain romaine hearts (separate candidate), bottled caesar dressing alone, crouton bags, chopped-salad kits of other flavors acceptable only if labeled caesar.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "coleslaw-mix",
-        "name":  "Coleslaw Mix",
-        "unit":  "oz",
-        "typical_size":  "14 oz bag",
-        "category":  "Vegetables",
-        "search_term":  "coleslaw mix",
-        "notes":  "Bagged shredded cabbage/carrot slaw mix (classic or tri-color), per oz. Must NOT match prepared deli coleslaw with dressing, coleslaw dressing bottles, broccoli slaw, whole cabbage.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-stir-fry-blend",
-        "name":  "Stir-Fry Vegetable Blend (fresh)",
-        "unit":  "oz",
-        "typical_size":  "12 oz bag",
-        "category":  "Vegetables",
-        "search_term":  "fresh stir fry vegetables",
-        "notes":  "Refrigerated fresh stir-fry vegetable mix (produce section), per oz. Must NOT match frozen stir-fry vegetables (existing \u0027frozen-vegetables\u0027 item), noodle/sauce meal kits, canned water chestnuts.",
-        "source":  "agent-1.json"
-    },
-    {
         "id":  "english-cucumbers",
         "name":  "English / Hothouse Cucumber",
         "unit":  "each",
@@ -677,166 +247,6 @@
         "category":  "Vegetables",
         "search_term":  "pickling cucumbers",
         "notes":  "Fresh pickling/Kirby cucumbers per lb (summer canning season staple). Must NOT match jarred dill pickles (existing \u0027pickles\u0027 item), relish (existing), slicing or mini cucumbers.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "bean-sprouts",
-        "name":  "Fresh Bean Sprouts",
-        "unit":  "oz",
-        "typical_size":  "12 oz",
-        "category":  "Vegetables",
-        "search_term":  "bean sprouts",
-        "notes":  "Fresh refrigerated mung bean sprouts, per oz. CRITICAL: must NOT match Brussels sprouts (existing item), canned bean sprouts (La Choy), alfalfa sprouts, sprouted grain bread.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "broccolini",
-        "name":  "Broccolini / Baby Broccoli",
-        "unit":  "each",
-        "typical_size":  "1 bunch",
-        "category":  "Vegetables",
-        "search_term":  "broccolini",
-        "notes":  "Fresh broccolini/baby broccoli bunches. Must NOT match regular broccoli crowns or bunches (existing \u0027broccoli\u0027 item), frozen broccoli (existing), broccoli slaw. Watch substring overlap: \u0027broccolini\u0027 contains \u0027broccoli\u0027.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fennel",
-        "name":  "Fennel Bulb",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Vegetables",
-        "search_term":  "fennel bulb",
-        "notes":  "Fresh fennel/anise bulb by count. Exclude fennel seed (spice aisle), fennel tea, sausage seasoned with fennel.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "chayote",
-        "name":  "Chayote Squash",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Vegetables",
-        "search_term":  "chayote",
-        "notes":  "Fresh chayote squash by count (standard at Omaha Walmart/Baker\u0027s/Family Fare). Exclude zucchini/yellow squash (existing item), winter squash candidates.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "yuca-root",
-        "name":  "Yuca / Cassava Root",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "yuca root",
-        "notes":  "Fresh waxed yuca (cassava) root per lb. Exclude frozen yuca, cassava flour, yuca/cassava chips, taro.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "jicama",
-        "name":  "Jicama",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "jicama",
-        "notes":  "Fresh whole jicama root per lb. Exclude pre-cut jicama sticks with chile/lime seasoning, jicama chips.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "okra",
-        "name":  "Fresh Okra",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "fresh okra",
-        "notes":  "Fresh whole okra pods per lb. Must NOT match frozen breaded okra, frozen cut okra, pickled okra jars, canned okra \u0026 tomatoes.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "artichokes",
-        "name":  "Artichokes",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Vegetables",
-        "search_term":  "artichokes",
-        "notes":  "Fresh whole globe artichokes by count. Must NOT match canned/jarred artichoke hearts, marinated artichokes, spinach-artichoke dip, frozen artichoke hearts.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "rhubarb",
-        "name":  "Fresh Rhubarb",
-        "unit":  "lb",
-        "typical_size":  "lb",
-        "category":  "Vegetables",
-        "search_term":  "fresh rhubarb",
-        "notes":  "Fresh rhubarb stalks per lb (spring/summer Midwest staple). Exclude frozen rhubarb, strawberry-rhubarb pie/jam/yogurt.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "pie-pumpkins",
-        "name":  "Pie Pumpkins",
-        "unit":  "each",
-        "typical_size":  "1 each",
-        "category":  "Vegetables",
-        "search_term":  "pie pumpkin",
-        "notes":  "Small sugar/pie pumpkins by count (fall seasonal). Must NOT match large carving/jack-o-lantern pumpkins, canned pumpkin, pumpkin pie (bakery), pumpkin spice flavored products.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-basil",
-        "name":  "Fresh Basil",
-        "unit":  "oz",
-        "typical_size":  "0.75 oz",
-        "category":  "Vegetables",
-        "search_term":  "fresh basil",
-        "notes":  "Fresh basil clamshell/pack (0.5-2 oz) or living basil plant if that is the store\u0027s standard SKU, per oz. Exclude dried basil (spice aisle), pesto sauce, basil seeds.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-parsley",
-        "name":  "Fresh Parsley (bunch)",
-        "unit":  "each",
-        "typical_size":  "1 bunch",
-        "category":  "Vegetables",
-        "search_term":  "fresh parsley",
-        "notes":  "Fresh curly or Italian flat-leaf parsley by the bunch. Must NOT match dried parsley (existing \u0027dried-parsley\u0027 item) or cilantro (existing item).",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-dill",
-        "name":  "Fresh Dill",
-        "unit":  "oz",
-        "typical_size":  "0.75 oz",
-        "category":  "Vegetables",
-        "search_term":  "fresh dill",
-        "notes":  "Fresh dill herb pack or bunch, per oz. CRITICAL: must NOT match dill pickles (existing \u0027pickles\u0027 item), dill dip, dried dill weed, ranch \u0027with dill\u0027 products.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-rosemary",
-        "name":  "Fresh Rosemary",
-        "unit":  "oz",
-        "typical_size":  "0.75 oz",
-        "category":  "Vegetables",
-        "search_term":  "fresh rosemary",
-        "notes":  "Fresh rosemary herb pack, per oz. Exclude dried rosemary (spice aisle), rosemary crackers/bread, rosemary-scented household items.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-thyme",
-        "name":  "Fresh Thyme",
-        "unit":  "oz",
-        "typical_size":  "0.75 oz",
-        "category":  "Vegetables",
-        "search_term":  "fresh thyme",
-        "notes":  "Fresh thyme herb pack, per oz. Exclude dried thyme (spice aisle) and seasoning blends.",
-        "source":  "agent-1.json"
-    },
-    {
-        "id":  "fresh-mint",
-        "name":  "Fresh Mint",
-        "unit":  "oz",
-        "typical_size":  "0.75 oz",
-        "category":  "Vegetables",
-        "search_term":  "fresh mint",
-        "notes":  "Fresh mint herb pack or bunch, per oz. Must NOT match mint candy/gum, mint chocolate, peppermint extract, mint tea, or toothpaste.",
         "source":  "agent-1.json"
     },
     {
@@ -930,16 +340,6 @@
         "source":  "agent-2.json"
     },
     {
-        "id":  "beef-short-ribs",
-        "name":  "Beef Short Ribs",
-        "unit":  "lb",
-        "typical_size":  "2 lb tray",
-        "category":  "Meat \u0026 Poultry",
-        "search_term":  "beef short ribs",
-        "notes":  "Bone-in or boneless beef short ribs / flanken style, raw. Must NOT match baby back or pork ribs (existing items), pre-cooked braised short rib entrees, or rib-flavored sauces.",
-        "source":  "agent-2.json"
-    },
-    {
         "id":  "cube-steak",
         "name":  "Cube Steak",
         "unit":  "lb",
@@ -987,16 +387,6 @@
         "category":  "Meat \u0026 Poultry",
         "search_term":  "shaved beef sandwich steaks",
         "notes":  "Thin-shaved beef for philly cheesesteaks: fresh shaved steak trays or frozen wafer sandwich steaks (Steak-umm type). Must NOT match cheesesteak frozen meals/hot pockets, deli roast beef, or beef jerky.",
-        "source":  "agent-2.json"
-    },
-    {
-        "id":  "corned-beef-brisket",
-        "name":  "Corned Beef Brisket",
-        "unit":  "lb",
-        "typical_size":  "3 lb flat cut",
-        "category":  "Meat \u0026 Poultry",
-        "search_term":  "corned beef brisket",
-        "notes":  "Raw cured corned beef brisket (point or flat, with spice packet). Must NOT match canned corned beef (separate candidate), corned beef hash, deli-sliced corned beef, or plain beef brisket.",
         "source":  "agent-2.json"
     },
     {
@@ -1207,16 +597,6 @@
         "category":  "Meat \u0026 Poultry",
         "search_term":  "chicken sausage links",
         "notes":  "Fully-cooked or fresh chicken sausage links (apple, spinach-feta, etc.). Existing kielbasa and breakfast-sausage matchers exclude \u0027chicken\u0027, so open. Must NOT match pork/turkey sausage, corn dogs, or frozen breakfast links labeled pork.",
-        "source":  "agent-2.json"
-    },
-    {
-        "id":  "chicken-livers",
-        "name":  "Chicken Livers",
-        "unit":  "lb",
-        "typical_size":  "1 lb tub",
-        "category":  "Meat \u0026 Poultry",
-        "search_term":  "chicken livers",
-        "notes":  "Raw chicken livers (tub/tray, fresh or frozen). Must NOT match beef liver (separate candidate), liverwurst, pate, gizzards (separate candidate), or liver-flavor cat/dog food.",
         "source":  "agent-2.json"
     },
     {
@@ -1730,16 +1110,6 @@
         "source":  "agent-3.json"
     },
     {
-        "id":  "ricotta",
-        "name":  "Ricotta Cheese",
-        "unit":  "oz",
-        "typical_size":  "15 oz tub",
-        "category":  "Dairy \u0026 Eggs",
-        "search_term":  "ricotta cheese",
-        "notes":  "Whole-milk or part-skim ricotta tubs (Galbani, store brand). No existing board pattern matches \u0027ricotta\u0027. Exclude ricotta-FILLED items (ravioli, manicotti, cannoli) and cheesecake.",
-        "source":  "agent-3.json"
-    },
-    {
         "id":  "velveeta-cheese-loaf",
         "name":  "Processed Cheese Loaf (Velveeta-style)",
         "unit":  "oz",
@@ -1880,26 +1250,6 @@
         "source":  "agent-3.json"
     },
     {
-        "id":  "frozen-cauliflower",
-        "name":  "Frozen Cauliflower Florets",
-        "unit":  "oz",
-        "typical_size":  "12 oz bag",
-        "category":  "Frozen",
-        "search_term":  "frozen cauliflower florets",
-        "notes":  "Plain frozen florets, steamable. COLLISION: fresh cauliflower item matches bare \u0027cauliflower\u0027; needs frozen exclude. EXCLUDE riced cauliflower (own item), cheese-sauce florets, cauliflower-crust pizza, veggie tots.",
-        "source":  "agent-3.json"
-    },
-    {
-        "id":  "frozen-cauliflower-rice",
-        "name":  "Frozen Riced Cauliflower",
-        "unit":  "oz",
-        "typical_size":  "12 oz bag",
-        "category":  "Frozen",
-        "search_term":  "cauliflower rice",
-        "notes":  "Plain riced cauliflower (Green Giant, Season\u0027s Choice, GV). COLLISION: verify white-rice item cannot match \u0027cauliflower rice\u0027; and keep separate from frozen-cauliflower florets item. Exclude seasoned rice-vegetable blends containing real rice.",
-        "source":  "agent-3.json"
-    },
-    {
         "id":  "frozen-stir-fry-vegetables",
         "name":  "Frozen Stir-Fry Vegetable Blend",
         "unit":  "oz",
@@ -1917,16 +1267,6 @@
         "category":  "Frozen",
         "search_term":  "frozen edamame",
         "notes":  "In-shell or shelled edamame (soybeans). No existing board pattern matches. Exclude dry-roasted edamame snacks (pantry) and edamame in stir-fry blends (own item).",
-        "source":  "agent-3.json"
-    },
-    {
-        "id":  "frozen-brussels-sprouts",
-        "name":  "Frozen Brussels Sprouts",
-        "unit":  "oz",
-        "typical_size":  "12 oz bag",
-        "category":  "Frozen",
-        "search_term":  "frozen brussels sprouts",
-        "notes":  "Plain frozen sprouts, steamable. COLLISION: fresh brussels-sprouts item matches bare \u0027brussels sprouts\u0027; needs frozen exclude. Exclude sauced/seasoned versions (balsamic glaze kits) and fresh produce (covered).",
         "source":  "agent-3.json"
     },
     {
@@ -2440,556 +1780,6 @@
         "source":  "agent-3.json"
     },
     {
-        "id":  "beef-stew",
-        "name":  "Canned Beef Stew",
-        "unit":  "oz",
-        "typical_size":  "20 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned beef stew",
-        "notes":  "Ready-to-eat canned stew (Dinty Moore style). Exclude canned chili (existing), canned soup, frozen dinners, dog food stew.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-pasta",
-        "name":  "Canned Pasta (Ravioli / SpaghettiOs)",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned ravioli",
-        "notes":  "Chef Boyardee / SpaghettiOs style canned pasta in sauce. Exclude dry pasta (existing), boxed mac \u0026 cheese (existing), ramen (existing), frozen ravioli.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "corned-beef-hash",
-        "name":  "Corned Beef Hash (canned)",
-        "unit":  "oz",
-        "typical_size":  "14 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "corned beef hash",
-        "notes":  "Canned hash (Hormel Mary Kitchen style). Exclude frozen hash browns (existing), fresh corned beef brisket, plain canned corned beef.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "vegetable-soup",
-        "name":  "Vegetable / Vegetable Beef Soup (canned)",
-        "unit":  "oz",
-        "typical_size":  "18.5 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned vegetable soup",
-        "notes":  "Vegetable or vegetable-beef canned soup, condensed or ready-to-serve. Exclude tomato soup (existing), chicken noodle (existing), cream-of soups (existing), broth (existing), V8 juice.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "clam-chowder",
-        "name":  "Clam Chowder (canned)",
-        "unit":  "oz",
-        "typical_size":  "18.5 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "clam chowder canned",
-        "notes":  "New England clam chowder, canned. Exclude fresh deli soup, other canned soups (existing), canned clams.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "chili-beans",
-        "name":  "Chili Beans (in sauce)",
-        "unit":  "oz",
-        "typical_size":  "15.5 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "chili beans",
-        "notes":  "Beans in mild chili sauce (Bush\u0027s Chili Beans style). Exclude prepared canned chili with meat (existing canned-chili), plain kidney/pinto beans (existing), baked beans (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-white-beans",
-        "name":  "Canned White Beans (Great Northern / Cannellini / Navy)",
-        "unit":  "oz",
-        "typical_size":  "15.5 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "great northern beans canned",
-        "notes":  "Canned white beans: great northern, cannellini, navy, butter beans. Exclude chickpeas/kidney/black/pinto (existing), baked beans (existing), dry bagged beans (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-mixed-vegetables",
-        "name":  "Canned Mixed Vegetables",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned mixed vegetables",
-        "notes":  "Veg-All style mixed vegetables in a can. Exclude frozen mixed vegetables (existing), single-vegetable cans (existing corn/peas/green beans).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-beets",
-        "name":  "Canned Beets",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned beets",
-        "notes":  "Sliced or pickled canned beets. Exclude fresh beets, beet juice.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "sauerkraut",
-        "name":  "Sauerkraut (canned/jarred)",
-        "unit":  "oz",
-        "typical_size":  "14 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "sauerkraut",
-        "notes":  "Canned or jarred sauerkraut. Exclude refrigerated bagged kraut, kimchi, coleslaw, fresh cabbage (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-yams",
-        "name":  "Canned Yams / Sweet Potatoes",
-        "unit":  "oz",
-        "typical_size":  "29 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned yams",
-        "notes":  "Cut yams/sweet potatoes in syrup. Exclude fresh sweet potatoes (existing), frozen fries, canned pumpkin (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "cranberry-sauce",
-        "name":  "Cranberry Sauce (canned)",
-        "unit":  "oz",
-        "typical_size":  "14 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "cranberry sauce",
-        "notes":  "Jellied or whole-berry canned cranberry sauce. Exclude cranberry juice (existing), fresh cranberries, dried cranberries.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-pumpkin",
-        "name":  "Canned Pumpkin (100% puree)",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned pumpkin",
-        "notes":  "100% pumpkin puree (Libby\u0027s style). Exclude pumpkin pie MIX (sweetened/spiced), pie filling (separate), pumpkin spice flavored products, fresh pumpkins.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "mandarin-oranges",
-        "name":  "Canned Mandarin Oranges",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned mandarin oranges",
-        "notes":  "Mandarin orange segments in juice/syrup, canned. Exclude fresh oranges/clementines (existing), single-serve fruit cups (existing), orange juice (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "fruit-cocktail",
-        "name":  "Canned Fruit Cocktail",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "fruit cocktail canned",
-        "notes":  "Mixed fruit cocktail in a can. Exclude single-serve fruit cups (existing), canned peaches/pineapple/pears (existing/separate), frozen fruit (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-pears",
-        "name":  "Canned Pears",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned pears",
-        "notes":  "Pear halves/slices in juice or syrup. Exclude fresh pears (existing), fruit cups (existing), fruit cocktail (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "tomatoes-green-chilies",
-        "name":  "Diced Tomatoes with Green Chilies (Ro-Tel style)",
-        "unit":  "oz",
-        "typical_size":  "10 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "rotel diced tomatoes green chilies",
-        "notes":  "Must contain green chilies (Ro-Tel style). Exclude plain diced tomatoes (existing), crushed tomatoes (existing), salsa (existing), plain green chilies (separate). Collision watch with existing diced-tomatoes matcher.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-green-chilies",
-        "name":  "Canned Diced Green Chilies",
-        "unit":  "oz",
-        "typical_size":  "4 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "diced green chiles",
-        "notes":  "Small can of mild diced green chiles (Old El Paso/Hatch style). Exclude pickled jalapenos (separate), Ro-Tel tomatoes (separate), fresh peppers (existing), chili powder (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "black-olives",
-        "name":  "Black Olives (canned, ripe)",
-        "unit":  "oz",
-        "typical_size":  "6 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "black olives canned",
-        "notes":  "Ripe/black olives, sliced or whole, canned. Exclude green/stuffed olives (separate), olive oil (existing), olive tapenade.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "artichoke-hearts",
-        "name":  "Artichoke Hearts (canned/jarred)",
-        "unit":  "oz",
-        "typical_size":  "14 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "artichoke hearts",
-        "notes":  "Canned or jarred artichoke hearts (quartered/whole/marinated). Exclude fresh or frozen artichokes, spinach-artichoke dip.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "vegetable-broth",
-        "name":  "Vegetable Broth / Stock",
-        "unit":  "floz",
-        "typical_size":  "32 floz carton",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "vegetable broth",
-        "notes":  "Vegetable broth or stock, carton or can. Exclude chicken/beef broth (existing), bouillon cubes (separate), canned vegetable soup (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "bouillon",
-        "name":  "Bouillon (cubes / granules / base)",
-        "unit":  "oz",
-        "typical_size":  "3.25 oz jar",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "chicken bouillon cubes",
-        "notes":  "Chicken or beef bouillon cubes, granules, or paste base (Knorr / Better Than Bouillon). Exclude liquid broth/stock (existing), ramen seasoning, gravy mix (separate). Collision watch with existing broth matchers.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "coconut-milk-canned",
-        "name":  "Canned Coconut Milk",
-        "unit":  "floz",
-        "typical_size":  "13.5 floz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "coconut milk canned",
-        "notes":  "Canned coconut milk for cooking. Exclude refrigerated/carton coconut milk beverage, cream of coconut (cocktail mixer), coconut water, coconut oil (existing), shredded coconut (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "canned-potatoes",
-        "name":  "Canned Potatoes",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned potatoes",
-        "notes":  "Whole or sliced white potatoes, canned. Exclude fresh potatoes (existing), instant mashed flakes (existing), frozen fries/hash browns (existing), potato chips (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "hominy",
-        "name":  "Canned Hominy",
-        "unit":  "oz",
-        "typical_size":  "25 oz can",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "canned hominy",
-        "notes":  "White or golden hominy, canned (pozole staple). Exclude canned corn (existing), grits (separate), masa harina (separate), popcorn (existing/separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "onion-soup-mix",
-        "name":  "Onion Soup Mix (dry packets)",
-        "unit":  "oz",
-        "typical_size":  "2 oz box (2 envelopes)",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "onion soup mix",
-        "notes":  "Lipton-style dry onion soup/dip mix packets. Exclude canned French onion soup, fresh onions (existing), onion powder (existing), ranch dip mix (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "jarred-gravy",
-        "name":  "Jarred / Canned Gravy",
-        "unit":  "oz",
-        "typical_size":  "12 oz jar",
-        "category":  "Canned \u0026 Soup",
-        "search_term":  "turkey gravy jar",
-        "notes":  "Ready-to-serve gravy in jar or can (turkey/chicken/beef). Exclude dry gravy mix packets (separate), broth/stock (existing), cream-of soups (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "dijon-mustard",
-        "name":  "Dijon Mustard",
-        "unit":  "oz",
-        "typical_size":  "12 oz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "dijon mustard",
-        "notes":  "Dijon or spicy brown mustard. Exclude yellow mustard (existing), honey mustard (separate), dry ground mustard spice.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "honey-mustard",
-        "name":  "Honey Mustard",
-        "unit":  "oz",
-        "typical_size":  "12 oz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "honey mustard",
-        "notes":  "Honey mustard condiment or dipping sauce. Exclude plain honey (existing), yellow mustard (existing), dijon (separate), honey mustard pretzels/snacks.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "miracle-whip",
-        "name":  "Salad Dressing Spread (Miracle Whip style)",
-        "unit":  "oz",
-        "typical_size":  "30 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "miracle whip",
-        "notes":  "Miracle Whip style sandwich/salad dressing spread. Exclude real mayonnaise (existing), pourable salad dressings (existing/separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "caesar-dressing",
-        "name":  "Caesar Dressing",
-        "unit":  "floz",
-        "typical_size":  "16 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "caesar dressing",
-        "notes":  "Caesar salad dressing, shelf bottle. Exclude ranch/italian (existing), blue cheese (separate), caesar salad kits, croutons.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "blue-cheese-dressing",
-        "name":  "Blue Cheese Dressing",
-        "unit":  "floz",
-        "typical_size":  "16 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "blue cheese dressing",
-        "notes":  "Blue cheese salad dressing/dip. Exclude blue cheese crumbles (cheese aisle), ranch (existing), refrigerated produce-case dips.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "balsamic-vinegar",
-        "name":  "Balsamic Vinegar",
-        "unit":  "floz",
-        "typical_size":  "16.9 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "balsamic vinegar",
-        "notes":  "Balsamic vinegar of Modena style. Exclude white/apple cider vinegar (existing), balsamic vinaigrette dressing, balsamic glaze/reduction.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "rice-vinegar",
-        "name":  "Rice Vinegar",
-        "unit":  "floz",
-        "typical_size":  "12 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "rice vinegar",
-        "notes":  "Rice vinegar, plain or seasoned. Exclude white vinegar (existing), mirin/cooking wine, rice (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "red-wine-vinegar",
-        "name":  "Red Wine Vinegar",
-        "unit":  "floz",
-        "typical_size":  "12 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "red wine vinegar",
-        "notes":  "Red wine vinegar. Exclude balsamic (separate), white/cider vinegar (existing), cooking wine, wine.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "teriyaki-sauce",
-        "name":  "Teriyaki Sauce / Marinade",
-        "unit":  "floz",
-        "typical_size":  "10 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "teriyaki sauce",
-        "notes":  "Teriyaki sauce or teriyaki marinade. Exclude soy sauce (existing), generic meat marinades (separate), frozen teriyaki meals.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "steak-sauce",
-        "name":  "Steak Sauce (A.1. style)",
-        "unit":  "floz",
-        "typical_size":  "10 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "a1 steak sauce",
-        "notes":  "A.1. / Heinz 57 style steak sauce. Exclude worcestershire (existing), BBQ sauce (existing), marinades (separate), steak seasoning rub (separate), fresh steak (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "cocktail-sauce",
-        "name":  "Cocktail Sauce",
-        "unit":  "oz",
-        "typical_size":  "12 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "cocktail sauce",
-        "notes":  "Seafood cocktail sauce. Exclude ketchup (existing), tartar sauce (separate), shrimp (existing), cocktail mixers.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "tartar-sauce",
-        "name":  "Tartar Sauce",
-        "unit":  "floz",
-        "typical_size":  "12 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "tartar sauce",
-        "notes":  "Tartar sauce. Exclude mayonnaise (existing), cocktail sauce (separate), cream of tartar (baking).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "horseradish",
-        "name":  "Prepared Horseradish",
-        "unit":  "oz",
-        "typical_size":  "5 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "prepared horseradish",
-        "notes":  "Prepared horseradish or creamy horseradish sauce. Exclude fresh horseradish root, wasabi, horseradish cheese.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "enchilada-sauce",
-        "name":  "Enchilada Sauce",
-        "unit":  "oz",
-        "typical_size":  "10 oz can",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "red enchilada sauce",
-        "notes":  "Red or green enchilada sauce, canned. Exclude taco sauce (separate), salsa (existing), hot sauce (existing), frozen enchiladas.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "taco-sauce",
-        "name":  "Taco Sauce",
-        "unit":  "oz",
-        "typical_size":  "8 oz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "taco sauce",
-        "notes":  "Mild/medium taco sauce bottle (Ortega/Taco Bell style). Exclude salsa (existing), hot sauce (existing), enchilada sauce (separate), taco seasoning packets (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "sloppy-joe-sauce",
-        "name":  "Sloppy Joe Sauce (Manwich style)",
-        "unit":  "oz",
-        "typical_size":  "15 oz can",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "sloppy joe sauce manwich",
-        "notes":  "Canned sloppy joe sauce. Exclude BBQ sauce (existing), pasta sauce (existing), ground beef (existing), sloppy joe seasoning packets.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "bottled-marinade",
-        "name":  "Bottled Meat Marinade",
-        "unit":  "floz",
-        "typical_size":  "12 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "steak marinade",
-        "notes":  "30-minute style bottled marinades (Lawry\u0027s/KC Masterpiece marinade). Exclude teriyaki (separate), italian dressing (existing), BBQ sauce (existing), dry rub seasonings (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "pesto",
-        "name":  "Pesto (jarred)",
-        "unit":  "oz",
-        "typical_size":  "8 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "basil pesto",
-        "notes":  "Shelf-stable jarred basil pesto. Exclude refrigerated fresh pesto, marinara/alfredo (existing), dried basil (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "minced-garlic",
-        "name":  "Minced Garlic (jarred)",
-        "unit":  "oz",
-        "typical_size":  "8 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "minced garlic jar",
-        "notes":  "Jarred minced/chopped garlic in water or oil. Exclude fresh garlic bulbs (existing), garlic powder (existing), garlic salt, garlic bread (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "pickled-jalapenos",
-        "name":  "Pickled Jalapenos (sliced, jar/can)",
-        "unit":  "oz",
-        "typical_size":  "12 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "pickled jalapeno slices",
-        "notes":  "Sliced pickled jalapenos, jarred or canned. Exclude fresh jalapenos (existing), diced green chilies (separate), banana peppers (separate), dill pickles (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "green-olives",
-        "name":  "Green Olives (stuffed manzanilla)",
-        "unit":  "oz",
-        "typical_size":  "5.75 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "green olives stuffed",
-        "notes":  "Pimento-stuffed manzanilla green olives, jarred. Exclude ripe black olives (separate), kalamata specialty olives, olive oil (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "banana-peppers",
-        "name":  "Banana Pepper Rings / Pepperoncini",
-        "unit":  "oz",
-        "typical_size":  "12 oz jar",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "banana pepper rings",
-        "notes":  "Jarred mild banana pepper rings or pepperoncini. Exclude pickled jalapenos (separate), fresh bell peppers (existing), dill pickles (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "lime-juice",
-        "name":  "Lime Juice (bottled)",
-        "unit":  "floz",
-        "typical_size":  "8 floz bottle",
-        "category":  "Sauces \u0026 Condiments",
-        "search_term":  "lime juice bottle",
-        "notes":  "Bottled 100% lime juice (ReaLime style). Exclude fresh limes (existing), lemon juice (existing), limeade/margarita mix (beverage).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "ground-ginger",
-        "name":  "Ground Ginger",
-        "unit":  "oz",
-        "typical_size":  "1.1 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "ground ginger",
-        "notes":  "Dried ground ginger spice. Exclude fresh ginger root (existing), ginger ale, candied ginger, gingersnap cookies.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "ground-nutmeg",
-        "name":  "Ground Nutmeg",
-        "unit":  "oz",
-        "typical_size":  "1.1 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "ground nutmeg",
-        "notes":  "Ground nutmeg spice. Exclude whole nutmeg ok to include; exclude eggnog, pumpkin pie spice blend (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "bay-leaves",
-        "name":  "Bay Leaves",
-        "unit":  "oz",
-        "typical_size":  "0.2 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "bay leaves",
-        "notes":  "Dried whole bay leaves. Tiny net weights, watch per-oz math. Exclude fresh herbs, tea leaves.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "dried-basil",
-        "name":  "Dried Basil",
-        "unit":  "oz",
-        "typical_size":  "0.75 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "dried basil leaves",
-        "notes":  "Dried basil leaves spice. Exclude fresh basil (produce), pesto (separate), italian seasoning blend (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "dried-thyme",
-        "name":  "Dried Thyme",
-        "unit":  "oz",
-        "typical_size":  "0.75 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "dried thyme",
-        "notes":  "Dried thyme leaves. Exclude fresh thyme (produce), poultry seasoning blend (separate).",
-        "source":  "agent-4.json"
-    },
-    {
         "id":  "dried-rosemary",
         "name":  "Dried Rosemary",
         "unit":  "oz",
@@ -2997,46 +1787,6 @@
         "category":  "Baking \u0026 Spices",
         "search_term":  "dried rosemary",
         "notes":  "Dried rosemary leaves. Exclude fresh rosemary (produce), rosemary bread/crackers.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "dried-dill",
-        "name":  "Dill Weed (dried)",
-        "unit":  "oz",
-        "typical_size":  "0.5 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "dried dill weed",
-        "notes":  "Dried dill weed spice. Exclude dill pickles (existing), fresh dill (produce), dill seed ok to include, ranch mix (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "cayenne-pepper",
-        "name":  "Cayenne Pepper (ground)",
-        "unit":  "oz",
-        "typical_size":  "2 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "ground cayenne pepper",
-        "notes":  "Ground cayenne / ground red pepper. Exclude red pepper flakes (existing), chili powder (existing), black pepper (existing), hot sauce (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "curry-powder",
-        "name":  "Curry Powder",
-        "unit":  "oz",
-        "typical_size":  "2 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "curry powder",
-        "notes":  "Yellow curry powder spice. Exclude curry paste, jarred curry simmer sauce, turmeric (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "ground-cloves",
-        "name":  "Ground Cloves",
-        "unit":  "oz",
-        "typical_size":  "1 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "ground cloves",
-        "notes":  "Ground cloves spice (whole cloves also count). Exclude garlic cloves (existing garlic), clove cigarettes obviously, pumpkin pie spice blend (separate).",
         "source":  "agent-4.json"
     },
     {
@@ -3050,16 +1800,6 @@
         "source":  "agent-4.json"
     },
     {
-        "id":  "taco-seasoning",
-        "name":  "Taco Seasoning (packet)",
-        "unit":  "oz",
-        "typical_size":  "1 oz packet",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "taco seasoning packet",
-        "notes":  "Dry taco seasoning mix packets. Exclude taco sauce (separate), salsa (existing), chili seasoning (separate), taco shells/kits.",
-        "source":  "agent-4.json"
-    },
-    {
         "id":  "chili-seasoning-mix",
         "name":  "Chili Seasoning Mix (packet)",
         "unit":  "oz",
@@ -3067,16 +1807,6 @@
         "category":  "Baking \u0026 Spices",
         "search_term":  "chili seasoning mix",
         "notes":  "Dry chili seasoning packets. Exclude plain chili powder spice (existing), canned chili (existing), taco seasoning (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "ranch-seasoning-mix",
-        "name":  "Ranch Seasoning / Dip Mix (packets)",
-        "unit":  "oz",
-        "typical_size":  "1 oz packet",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "ranch seasoning mix",
-        "notes":  "Hidden Valley style dry ranch dressing/dip mix packets. Exclude bottled ranch dressing (existing), onion soup/dip mix (separate).",
         "source":  "agent-4.json"
     },
     {
@@ -3090,16 +1820,6 @@
         "source":  "agent-4.json"
     },
     {
-        "id":  "lemon-pepper",
-        "name":  "Lemon Pepper Seasoning",
-        "unit":  "oz",
-        "typical_size":  "2.25 oz shaker",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "lemon pepper seasoning",
-        "notes":  "Lemon pepper blend. Exclude fresh lemons (existing), plain black pepper (existing), lemon juice (existing).",
-        "source":  "agent-4.json"
-    },
-    {
         "id":  "steak-seasoning",
         "name":  "Steak Seasoning (Montreal style)",
         "unit":  "oz",
@@ -3107,16 +1827,6 @@
         "category":  "Baking \u0026 Spices",
         "search_term":  "montreal steak seasoning",
         "notes":  "Montreal/steak grill seasoning rub. Exclude steak sauce (separate), marinades (separate), fresh steak (existing), seasoned salt (separate).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "poultry-seasoning",
-        "name":  "Poultry Seasoning",
-        "unit":  "oz",
-        "typical_size":  "0.65 oz jar",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "poultry seasoning",
-        "notes":  "Poultry seasoning blend (sage/thyme). Exclude fresh chicken (existing), stuffing mix (existing), rotisserie seasoning blends ok.",
         "source":  "agent-4.json"
     },
     {
@@ -3150,16 +1860,6 @@
         "source":  "agent-4.json"
     },
     {
-        "id":  "cornmeal",
-        "name":  "Yellow Cornmeal",
-        "unit":  "lb",
-        "typical_size":  "2 lb bag",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "yellow cornmeal",
-        "notes":  "Plain yellow/white cornmeal. Exclude cornstarch (existing), corn muffin mix (separate), masa harina (separate), grits (separate), corn flour blends.",
-        "source":  "agent-4.json"
-    },
-    {
         "id":  "masa-harina",
         "name":  "Masa Harina (corn flour for tortillas)",
         "unit":  "lb",
@@ -3167,16 +1867,6 @@
         "category":  "Baking \u0026 Spices",
         "search_term":  "masa harina maseca",
         "notes":  "Instant corn masa flour (Maseca style). Exclude cornmeal (separate), cornstarch (existing), ready-made tortillas (existing), all-purpose flour (existing).",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "corn-muffin-mix",
-        "name":  "Corn Muffin Mix (Jiffy style)",
-        "unit":  "oz",
-        "typical_size":  "8.5 oz box",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "jiffy corn muffin mix",
-        "notes":  "Corn muffin/cornbread boxed mix. Exclude plain cornmeal (separate), cake/brownie mix (existing), ready-made cornbread, blueberry muffin mixes.",
         "source":  "agent-4.json"
     },
     {
@@ -3237,16 +1927,6 @@
         "category":  "Baking \u0026 Spices",
         "search_term":  "pecan halves",
         "notes":  "Bagged pecan halves or pieces. Exclude mixed nuts (existing), candied/praline snack pecans, pecan pie.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "walnuts",
-        "name":  "Walnuts (halves/chopped, baking)",
-        "unit":  "oz",
-        "typical_size":  "8 oz bag",
-        "category":  "Baking \u0026 Spices",
-        "search_term":  "chopped walnuts",
-        "notes":  "Bagged walnut halves or pieces. Exclude mixed nuts (existing), almonds/peanuts (existing), trail mix, black walnut flavoring.",
         "source":  "agent-4.json"
     },
     {
@@ -3320,16 +2000,6 @@
         "source":  "agent-4.json"
     },
     {
-        "id":  "couscous",
-        "name":  "Couscous",
-        "unit":  "oz",
-        "typical_size":  "10 oz box",
-        "category":  "Pasta, Rice \u0026 Grains",
-        "search_term":  "couscous",
-        "notes":  "Regular or pearl couscous, plain or boxed seasoned. Exclude quinoa (separate), rice mixes (separate), orzo/pasta (existing).",
-        "source":  "agent-4.json"
-    },
-    {
         "id":  "dried-pinto-beans",
         "name":  "Dried Pinto Beans (bag)",
         "unit":  "lb",
@@ -3400,16 +2070,6 @@
         "source":  "agent-4.json"
     },
     {
-        "id":  "grits",
-        "name":  "Grits (corn, quick/old-fashioned)",
-        "unit":  "oz",
-        "typical_size":  "24 oz canister",
-        "category":  "Pasta, Rice \u0026 Grains",
-        "search_term":  "quick grits",
-        "notes":  "Corn grits, quick or old-fashioned (instant packets ok). Exclude cream of wheat (separate), cornmeal (separate), oatmeal (existing), hominy (separate), frozen shrimp-and-grits meals.",
-        "source":  "agent-4.json"
-    },
-    {
         "id":  "hot-wheat-cereal",
         "name":  "Hot Wheat Cereal (Cream of Wheat / Malt-O-Meal)",
         "unit":  "oz",
@@ -3417,16 +2077,6 @@
         "category":  "Pasta, Rice \u0026 Grains",
         "search_term":  "cream of wheat",
         "notes":  "Hot wheat farina cereal. Exclude cold boxed cereal (existing), oatmeal (existing), grits (separate), Malt-O-Meal bagged COLD cereals.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "rice-noodles",
-        "name":  "Rice Noodles (pad thai / vermicelli)",
-        "unit":  "oz",
-        "typical_size":  "8 oz box",
-        "category":  "Pasta, Rice \u0026 Grains",
-        "search_term":  "rice noodles",
-        "notes":  "Dry Asian rice noodles. Exclude ramen (existing), egg noodles (existing), Italian dry pasta (existing), rice (existing), frozen noodle meals.",
         "source":  "agent-4.json"
     },
     {
@@ -3467,36 +2117,6 @@
         "category":  "Pasta, Rice \u0026 Grains",
         "search_term":  "popcorn kernels",
         "notes":  "Jar/bag of unpopped popcorn kernels. Exclude microwave popcorn bags (existing), ready-popped bagged popcorn, caramel corn, popcorn seasoning.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "avocado-oil",
-        "name":  "Avocado Oil",
-        "unit":  "floz",
-        "typical_size":  "16.9 floz bottle",
-        "category":  "Coffee, Oils \u0026 Spreads",
-        "search_term":  "avocado oil",
-        "notes":  "Avocado cooking oil. Exclude fresh avocados (existing), olive oil (existing), avocado oil SPRAY (existing cooking-spray family), mayo made with avocado oil.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "sesame-oil",
-        "name":  "Sesame Oil (toasted)",
-        "unit":  "floz",
-        "typical_size":  "5 floz bottle",
-        "category":  "Coffee, Oils \u0026 Spreads",
-        "search_term":  "toasted sesame oil",
-        "notes":  "Sesame or toasted sesame oil. Exclude sesame seeds, tahini, soy sauce (existing), stir-fry sauces.",
-        "source":  "agent-4.json"
-    },
-    {
-        "id":  "peanut-oil",
-        "name":  "Peanut Oil",
-        "unit":  "floz",
-        "typical_size":  "24 floz bottle",
-        "category":  "Coffee, Oils \u0026 Spreads",
-        "search_term":  "peanut oil",
-        "notes":  "Peanut frying oil. Exclude peanut butter (existing), peanuts (existing), vegetable/canola oil (existing).",
         "source":  "agent-4.json"
     },
     {
@@ -3568,16 +2188,6 @@
         "search_term":  "sunflower seed butter",
         "notes":  "SunButter style sunflower seed spread. Exclude peanut/almond butter (existing/separate), sunflower seeds (snack), sunflower oil.",
         "source":  "agent-4.json"
-    },
-    {
-        "id":  "corn-chips",
-        "name":  "Corn Chips",
-        "unit":  "oz",
-        "typical_size":  "9.25 oz bag",
-        "category":  "Snacks \u0026 Drinks",
-        "search_term":  "corn chips",
-        "notes":  "Fritos-style fried corn chips (Fritos, store brand). Must NOT match tortilla chips (on board), corn nuts, popcorn, canned corn, or chip variety multipacks.",
-        "source":  "agent-5.json"
     },
     {
         "id":  "cheese-puffs",
@@ -3667,16 +2277,6 @@
         "category":  "Snacks \u0026 Drinks",
         "search_term":  "cashews",
         "notes":  "Plain roasted/salted cashews, whole or halves and pieces. Must NOT match mixed nuts (on board), trail mix, candied or chocolate cashews, cashew milk, or cashew butter.",
-        "source":  "agent-5.json"
-    },
-    {
-        "id":  "pistachios",
-        "name":  "Pistachios",
-        "unit":  "oz",
-        "typical_size":  "8-16 oz bag",
-        "category":  "Snacks \u0026 Drinks",
-        "search_term":  "pistachios",
-        "notes":  "In-shell or shelled roasted pistachios (Wonderful, store brand). Must NOT match mixed nuts (on board), trail mix, or pistachio flavored ice cream/pudding.",
         "source":  "agent-5.json"
     },
     {
@@ -3827,16 +2427,6 @@
         "category":  "Snacks \u0026 Drinks",
         "search_term":  "fig bars",
         "notes":  "Fig and fruit-filled soft cookie bars (Newtons, Nature\u0027s Bakery). Must NOT match granola bars (on board), protein bars (on board), cereal bars (separate candidate), or fresh figs.",
-        "source":  "agent-5.json"
-    },
-    {
-        "id":  "gingersnaps",
-        "name":  "Gingersnaps",
-        "unit":  "oz",
-        "typical_size":  "12-16 oz box or bag",
-        "category":  "Snacks \u0026 Drinks",
-        "search_term":  "ginger snaps",
-        "notes":  "Crisp gingersnap cookies (Nabisco, store brand). Must NOT match fresh ginger root (on board), gingerbread house kits (seasonal), or generic packaged cookies (on board); this is the specific gingersnap SKU.",
         "source":  "agent-5.json"
     },
     {
@@ -4157,16 +2747,6 @@
         "category":  "Bread \u0026 Bakery",
         "search_term":  "pizza crust",
         "notes":  "Ready-to-top pizza crusts (Boboli, Mama Mary\u0027s), refrigerated pizza dough tubes, fresh dough balls, and thin flatbread crusts. Must NOT match frozen topped pizza (on board), pizza sauce (on board), dry pizza crust mix boxes, or garlic bread (on board).",
-        "source":  "agent-5.json"
-    },
-    {
-        "id":  "biscuit-dough",
-        "name":  "Refrigerated Biscuit Dough",
-        "unit":  "oz",
-        "typical_size":  "16.3 oz can (8 ct)",
-        "category":  "Bread \u0026 Bakery",
-        "search_term":  "pillsbury biscuits",
-        "notes":  "Canned refrigerated biscuit dough (Grands, store brand); frozen biscuit dough bags count. Must NOT match ready-to-eat bakery biscuits, Belvita breakfast biscuits (snack candidate), or dog biscuits (pet).",
         "source":  "agent-5.json"
     },
     {

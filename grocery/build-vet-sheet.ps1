@@ -19,17 +19,18 @@
 #>
 param([string[]]$Ids = @(), [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
-$lib = Get-Content (Join-Path $root 'category-excludes.json') -Raw | ConvertFrom-Json
+$lib = Read-JsonFile (Join-Path $root 'category-excludes.json')
 $catOf = @{}
-foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories) {
+foreach ($c in (Read-JsonFile (Join-Path $root 'categories.json')).categories) {
   foreach ($id in @($c.commodities)) { $catOf[[string]$id] = [string]$c.label }
 }
 $labelOf = @{}
-foreach ($cm in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $labelOf[[string]$cm.id] = [string]$cm.label }
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+foreach ($cm in (Read-JsonFile (Join-Path $root 'commodities.json'))) { $labelOf[[string]$cm.id] = [string]$cm.label }
+$pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
 function ClassesFor([string]$label) {
   if (-not $label) { return @($lib.universal_for_unknown) }
@@ -41,7 +42,7 @@ $STOP = @('fresh','whole','large','small','organic','the','and','with','pack','b
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
 $rows = New-Object System.Collections.Generic.List[object]
 $flagCount = @{}
-foreach ($it in (Get-Content $cmpF -Raw | ConvertFrom-Json).comparison) {
+foreach ($it in (Read-JsonFile $cmpF).comparison) {
   $id = [string]$it.id
   if ($Ids.Count -and ($Ids -notcontains $id)) { continue }
   $pus = @($it.stores | Where-Object { [double]$_.per_unit -gt 0 } | ForEach-Object { [double]$_.per_unit } | Sort-Object)

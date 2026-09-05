@@ -10,12 +10,13 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 $specDir = Join-Path $mp 'db\recipes'
 . (Join-Path $mp 'lib\json-db-io.ps1')
 
-$dec = Get-Content (Join-Path $mp 'db\bid-decisions-2026-07-26.json') -Raw | ConvertFrom-Json
+$dec = Read-JsonFile (Join-Path $mp 'db\bid-decisions-2026-07-26.json')
 $byItem = @{}
 foreach ($d in $dec.decisions) { $byItem[[string]$d.item] = $d }
 
@@ -79,7 +80,7 @@ Write-Output ("specs: {0} scaler lines rewritten across {1} files (Rice: {2} jas
 # --- db\ingredients.json: product-accuracy rows move too (everyday cost) ---
 $dbF = Join-Path $mp 'db\ingredients.json'
 $dbRows = New-Object System.Collections.Generic.List[object]
-foreach ($row in (Get-Content $dbF -Raw | ConvertFrom-Json)) { $dbRows.Add($row) }
+foreach ($row in (Read-JsonFile $dbF)) { $dbRows.Add($row) }
 $dbChanged = 0
 foreach ($row in $dbRows) {
   $it = [string]$row.item
@@ -94,5 +95,5 @@ foreach ($row in $dbRows) {
 $hasGlass = @($dbRows | Where-Object { [string]$_.item -eq 'Korean glass noodles (dangmyeon)' }).Count -gt 0
 if (-not $hasGlass) { $dbRows.Add([pscustomobject]@{ item='Korean glass noodles (dangmyeon)'; bid='rice-noodles'; gpu=28.3495; unit='oz'; board='recipe' }); $dbChanged++ }
 Write-Output ("db\ingredients.json: {0} rows updated" -f $dbChanged)
-if (-not $WhatIf) { Save-JsonArray -Array $dbRows.ToArray() -Path $dbF -Depth 6 | Out-Null; $null = Get-Content $dbF -Raw | ConvertFrom-Json }
+if (-not $WhatIf) { Save-JsonArray -Array $dbRows.ToArray() -Path $dbF -Depth 6 | Out-Null; $null = Read-JsonFile $dbF }
 if ($WhatIf) { Write-Output 'WhatIf: nothing written' }

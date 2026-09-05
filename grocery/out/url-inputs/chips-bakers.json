@@ -1,18 +1,114 @@
 ﻿[
     {
-        "id":  "cherries",
-        "q":  "fresh cherries",
-        "match":  "Washington Red Cherries",
-        "size":  "lb",
-        "pu":  3.99,
+        "id":  "almond-flour",
+        "q":  "almond-flour",
+        "match":  "Simple Truth Gluten Free Superfine Almond Flour",
+        "size":  "16 oz",
+        "pu":  7.49,
         "unit":  "lb"
     },
     {
-        "id":  "tomatoes",
-        "q":  "tomatoes on the vine",
-        "match":  "Roma Tomatoes",
-        "size":  "lb",
-        "pu":  1.49,
+        "id":  "beef-short-ribs",
+        "q":  "beef-short-ribs",
+        "match":  "Boneless Short Beef Ribs (About 4 per Pack)",
+        "size":  "1 lb",
+        "pu":  11.99,
         "unit":  "lb"
+    },
+    {
+        "id":  "block-cheese",
+        "q":  "block cheese",
+        "match":  "Kroger Monterey Jack Block Cheese",
+        "size":  "16 oz",
+        "pu":  0.2306,
+        "unit":  "oz"
+    },
+    {
+        "id":  "brown-lentils",
+        "q":  "brown lentils",
+        "match":  "Goya Lentils",
+        "size":  "16 oz",
+        "pu":  1.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "chipotle-powder",
+        "q":  "chipotle powder",
+        "match":  "Spice Islands Ground Chipotle Chile",
+        "size":  "2.3 oz",
+        "pu":  6.3,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cumin-seeds",
+        "q":  "cumin seeds",
+        "match":  "Tampico Cumin Whole",
+        "size":  "1 oz",
+        "pu":  1.69,
+        "unit":  "oz"
+    },
+    {
+        "id":  "fennel",
+        "q":  "fennel bulb",
+        "match":  "Fresh Fennel",
+        "size":  "1 ct",
+        "pu":  3.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "bean-sprouts",
+        "q":  "fresh bean sprouts",
+        "match":  "La Choy Bean Sprouts",
+        "size":  "14 oz",
+        "pu":  0.1564,
+        "unit":  "oz"
+    },
+    {
+        "id":  "gruyere",
+        "q":  "gruyere cheese",
+        "match":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+        "size":  "8 oz",
+        "pu":  1.0612,
+        "unit":  "oz"
+    },
+    {
+        "id":  "mexican-chorizo-fresh",
+        "q":  "mexican chorizo",
+        "match":  "Cacique Chorizo",
+        "size":  "9 oz",
+        "pu":  2.6667,
+        "unit":  "lb"
+    },
+    {
+        "id":  "shaved-beef-steak",
+        "q":  "shaved beef steak",
+        "match":  "Kroger Beef Shaved Steak",
+        "size":  "14 oz",
+        "pu":  9.1314,
+        "unit":  "lb"
+    },
+    {
+        "id":  "sports-drinks",
+        "q":  "gatorade",
+        "match":  "Powerade, 28 fl oz or Body Armor, 16 fl oz",
+        "size":  "28 fl oz",
+        "pu":  0.0314,
+        "unit":  "floz"
+    },
+    {
+        "id":  "coconut",
+        "q":  "whole coconut",
+        "match":  "Fresh Brown Coconuts",
+        "size":  "1 ct",
+        "pu":  3.49,
+        "unit":  "each"
+    },
+    {
+        "id":  "yellow-bell-pepper",
+        "q":  "yellow bell pepper",
+        "match":  "Fresh Yellow Bell Pepper",
+        "size":  "1 ct",
+        "pu":  1.67,
+        "unit":  "each"
     }
 ]

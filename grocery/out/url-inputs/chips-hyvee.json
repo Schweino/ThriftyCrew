@@ -1,11 +1,59 @@
 ﻿[
     {
+        "id":  "apple-juice",
+        "q":  "apple juice",
+        "match":  "Motts 100 Apple Juice",
+        "size":  "64 oz",
+        "pu":  0.07,
+        "unit":  "floz"
+    },
+    {
         "id":  "avocados",
         "q":  "avocado",
-        "match":  "Avocados, from California, large each, 3/ $5.00",
+        "match":  "Avocados, each, $0.69",
         "size":  "",
-        "pu":  1.6667,
+        "pu":  0.69,
         "unit":  "each"
+    },
+    {
+        "id":  "baby-food",
+        "q":  "baby food pouches",
+        "match":  "Gerber toddler food, 3.5 oz., 5/ $5.00",
+        "size":  "",
+        "pu":  0.2857,
+        "unit":  "oz"
+    },
+    {
+        "id":  "baby-formula",
+        "q":  "infant formula",
+        "match":  "Dr. Brown\u0027s Good Start baby formula, 19.4 or 20 oz., $29.99",
+        "size":  "",
+        "pu":  1.4995,
+        "unit":  "oz"
+    },
+    {
+        "id":  "bacon",
+        "q":  "bacon",
+        "match":  "Hy Vee Double Smoked Thick Sliced Bacon",
+        "size":  "16 oz",
+        "pu":  4.89,
+        "unit":  "lb"
+    },
+    {
+        "id":  "bacon-bits",
+        "q":  "bacon-bits",
+        "match":  "Oscar Mayer Real Bacon Bits Mega Pack, 9 oz Bag",
+        "size":  "9 oz",
+        "pu":  1.0878,
+        "unit":  "oz"
+    },
+    {
+        "id":  "baked-beans",
+        "q":  "baked beans",
+        "match":  "Hy-Vee pork \u0026 beans, 16 oz., $0.88",
+        "size":  "",
+        "pu":  0.055,
+        "unit":  "oz"
     },
     {
         "id":  "black-pepper",
@@ -18,17 +66,41 @@
     {
         "id":  "blueberries",
         "q":  "blueberries",
-        "match":  "Fresh Blueberries, 1 Pint",
+        "match":  "Driscolls Blueberries",
         "size":  "1 pt",
         "pu":  0.4455,
         "unit":  "oz"
     },
     {
+        "id":  "bottled-water",
+        "q":  "purified water 24 pack",
+        "match":  "Hy-Vee purified drinking water, 40 pk. bottles 16.9 fl. oz., $5.49",
+        "size":  "",
+        "pu":  0.1372,
+        "unit":  "each"
+    },
+    {
+        "id":  "brandy",
+        "q":  "brandy",
+        "match":  "Christian Brothers Brandy",
+        "size":  "750 ml",
+        "pu":  0.5516,
+        "unit":  "floz"
+    },
+    {
+        "id":  "bratwurst",
+        "q":  "bratwurst",
+        "match":  "Johnsonville brats or grillers, 16 or 19 oz., $4.99",
+        "size":  "",
+        "pu":  4.2021,
+        "unit":  "lb"
+    },
+    {
         "id":  "cereal",
         "q":  "cereal",
-        "match":  "Hy Vee Whole Grain Raisin Bran",
-        "size":  "18 oz",
-        "pu":  0.1661,
+        "match":  "Hy-Vee cereal, 10 to 18 oz., $2.78",
+        "size":  "",
+        "pu":  0.1544,
         "unit":  "oz"
     },
     {
@@ -37,6 +109,38 @@
         "match":  "Hy Vee Premium Chunk Chicken Breast With Rib Meat",
         "size":  "12.5 oz",
         "pu":  0.1992,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-mixed-vegetables",
+        "q":  "canned mixed vegetables",
+        "match":  "That\u0027s Smart! Mixed Vegetables With Carrots, Potatoes, Peas, Corn, Green Beans, Celery \u0026 Lima Beans",
+        "size":  "15 oz",
+        "pu":  0.064,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-pumpkin",
+        "q":  "canned pumpkin",
+        "match":  "Libby\u0027s 100% pure pumpkin, 15 oz., $2.22",
+        "size":  "",
+        "pu":  0.148,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-yams",
+        "q":  "canned yams",
+        "match":  "Dunbar\u0027s Nature\u0027s Pride Cut Sweet Potatoes",
+        "size":  "40 oz",
+        "pu":  0.1248,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cardamom",
+        "q":  "cardamom",
+        "match":  "Morton \u0026 Bassett Cardamom",
+        "size":  "0.9 oz",
+        "pu":  15.5444,
         "unit":  "oz"
     },
     {
@@ -56,11 +160,27 @@
         "unit":  "lb"
     },
     {
-        "id":  "cotton-swabs",
-        "q":  "cotton swabs",
-        "match":  "Q-Tips cotton swabs, 500 ct., $4.99",
+        "id":  "cranberry-juice",
+        "q":  "cranberry juice",
+        "match":  "Hy-Vee Cranberry Juice Drink Zero Sugar",
+        "size":  "64 fl oz",
+        "pu":  0.0389,
+        "unit":  "floz"
+    },
+    {
+        "id":  "crushed-thai-chili",
+        "q":  "crushed-thai-chili",
+        "match":  "McCormick Crushed Thai Style Chili Pepper",
+        "size":  "1.37 oz",
+        "pu":  4.3723,
+        "unit":  "oz"
+    },
+    {
+        "id":  "diapers",
+        "q":  "diapers size 4",
+        "match":  "Pampers Swaddlers diapers, FUEL SAVER EARN 25¢ OFF PER GALLON -3.00 off with manufacturer\u0027s digital coupon, $24.97",
         "size":  "",
-        "pu":  0.01,
+        "pu":  0.25,
         "unit":  "each"
     },
     {
@@ -88,11 +208,11 @@
         "unit":  "each"
     },
     {
-        "id":  "disinfecting-wipes",
-        "q":  "disinfecting wipes",
-        "match":  "Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99",
+        "id":  "dryer-sheets",
+        "q":  "dryer sheets",
+        "match":  "Bounce dryer sheets, FUEL SAVED EARN 5¢ OFF PER GALLON -$1.00 off with manufacturer\u0027s digital coupon, $4.99",
         "size":  "",
-        "pu":  0.0749,
+        "pu":  0.05,
         "unit":  "each"
     },
     {
@@ -102,14 +222,6 @@
         "size":  "16 oz",
         "pu":  0.2056,
         "unit":  "oz"
-    },
-    {
-        "id":  "facial-tissues",
-        "q":  "facial tissues",
-        "match":  "Hy-Vee facial tissue, 70 or 144 ct., $2.29",
-        "size":  "",
-        "pu":  0.0159,
-        "unit":  "each"
     },
     {
         "id":  "feta",
@@ -122,42 +234,74 @@
     {
         "id":  "storage-bags",
         "q":  "gallon freezer bags",
-        "match":  "Ziploc storage bags, 105 or 108 ct., $4.49",
+        "match":  "Hy-Vee storage bags, 25 to 48 ct., $3.49",
         "size":  "",
-        "pu":  0.0416,
+        "pu":  0.0727,
+        "unit":  "each"
+    },
+    {
+        "id":  "fresh-oregano",
+        "q":  "fresh-oregano",
+        "match":  "Johnson Family Farm Fresh Oregano",
+        "size":  "0.75 oz",
+        "pu":  3.9867,
+        "unit":  "oz"
+    },
+    {
+        "id":  "frozen-burritos",
+        "q":  "frozen burritos",
+        "match":  "El Monterey burritos, 8 pk., $5.99",
+        "size":  "",
+        "pu":  0.7488,
         "unit":  "each"
     },
     {
         "id":  "chicken-nuggets",
         "q":  "frozen chicken nuggets",
-        "match":  "Hy Vee Chicken Nuggets",
-        "size":  "32 oz",
-        "pu":  0.2584,
+        "match":  "Tyson chicken nuggets, patties, tenders or popcorn chicken, 20 to 29 OZ., $6.49",
+        "size":  "",
+        "pu":  0.2238,
         "unit":  "oz"
     },
     {
-        "id":  "frozen-fries",
-        "q":  "frozen french fries",
-        "match":  "McCain fries or onion rings, 14 to 26 oz., 2/ $7.00",
+        "id":  "hash-browns",
+        "q":  "frozen hash browns",
+        "match":  "Hy-Vee hash browns, 28 to 32 oz., $3.48",
         "size":  "",
-        "pu":  0.1346,
+        "pu":  0.1088,
         "unit":  "oz"
     },
     {
         "id":  "frozen-pizza",
         "q":  "frozen pizza",
-        "match":  "Roma Original or Personal Size pizza, 5.67 to 11.05 oz., $2.22 ea. with purchase of 4",
+        "match":  "Roma Original 10.54 to 11.05 oz. or Personal Size Bellatoria pizza 5.67 to 7.8 oz., 4/ $10.00",
         "size":  "",
-        "pu":  2.22,
+        "pu":  2.5,
         "unit":  "each"
     },
     {
-        "id":  "garlic-powder",
-        "q":  "garlic powder",
-        "match":  "Thats Smart Garlic Powder",
-        "size":  "3 oz",
-        "pu":  0.4167,
-        "unit":  "oz"
+        "id":  "frozen-waffles",
+        "q":  "frozen waffles",
+        "match":  "Hy-Vee Buttermilk Waffles 10 Count",
+        "size":  "10 ct",
+        "pu":  0.279,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-cups",
+        "q":  "fruit cups",
+        "match":  "Hy-Vee fruit cups, Looking for a convenient and healthy on-the-go snack? Check these out for a portion controlled, fiber rich snack. 4 ct., $2.68",
+        "size":  "",
+        "pu":  0.67,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-snacks",
+        "q":  "fruit snacks",
+        "match":  "Hy-Vee Dinosaurs Fruit Snacks, 10-0.8 oz Pouches",
+        "size":  "10 ct",
+        "pu":  0.249,
+        "unit":  "each"
     },
     {
         "id":  "gelatin",
@@ -176,20 +320,12 @@
         "unit":  "each"
     },
     {
-        "id":  "ground-cinnamon",
-        "q":  "ground cinnamon",
-        "match":  "That\u0027s Smart Ground Cinnamon",
-        "size":  "2.5 oz",
-        "pu":  0.5,
+        "id":  "gruyere",
+        "q":  "gruyere cheese",
+        "match":  "Red Apple Cheese Gruyere Cheese",
+        "size":  "7 oz",
+        "pu":  0.7129,
         "unit":  "oz"
-    },
-    {
-        "id":  "ground-turkey",
-        "q":  "ground turkey",
-        "match":  "Butterball ground turkey roll, 85% lean, 15% fat 16 oz. roll, $3.99",
-        "size":  "",
-        "pu":  3.99,
-        "unit":  "lb"
     },
     {
         "id":  "jumbo-pasta-shells",
@@ -198,6 +334,22 @@
         "size":  "8 oz",
         "pu":  0.4238,
         "unit":  "oz"
+    },
+    {
+        "id":  "kidney-beans",
+        "q":  "kidney beans",
+        "match":  "Hy-Vee chili style or kidney beans, 15.5 oz., $0.88",
+        "size":  "",
+        "pu":  0.0568,
+        "unit":  "oz"
+    },
+    {
+        "id":  "eggs",
+        "q":  "large eggs",
+        "match":  "Hy Vee Grade A Large Eggs 18 Count",
+        "size":  "18 ct",
+        "pu":  1.5867,
+        "unit":  "dozen"
     },
     {
         "id":  "mangoes",
@@ -234,18 +386,10 @@
     {
         "id":  "paper-napkins",
         "q":  "paper napkins",
-        "match":  "Hy-Vee napkins, 250 ct., $2.88",
+        "match":  "Hy-Vee napkins, 200 ct., $3.19",
         "size":  "",
-        "pu":  0.0115,
+        "pu":  0.016,
         "unit":  "each"
-    },
-    {
-        "id":  "paprika",
-        "q":  "paprika",
-        "match":  "Thats Smart Paprika",
-        "size":  "2 oz",
-        "pu":  0.625,
-        "unit":  "oz"
     },
     {
         "id":  "peaches",
@@ -254,6 +398,30 @@
         "size":  "lb",
         "pu":  2.99,
         "unit":  "lb"
+    },
+    {
+        "id":  "pesto",
+        "q":  "basil pesto",
+        "match":  "Filippo Berio® Classic Pesto 6.7 oz. Jar",
+        "size":  "6.7 oz",
+        "pu":  0.5955,
+        "unit":  "oz"
+    },
+    {
+        "id":  "popsicles",
+        "q":  "popsicles ice pops",
+        "match":  "Bomb Pop Original Ice Pop, 12 Pack",
+        "size":  "12 ct",
+        "pu":  0.2483,
+        "unit":  "each"
+    },
+    {
+        "id":  "queso",
+        "q":  "salsa con queso",
+        "match":  "Pace salsa, picante or queso dip, 15 or 24 oz., $3.49",
+        "size":  "",
+        "pu":  0.1454,
+        "unit":  "oz"
     },
     {
         "id":  "ramen",
@@ -266,18 +434,58 @@
     {
         "id":  "rotisserie-chicken",
         "q":  "rotisserie chicken",
-        "match":  "Market Grille Whole Rotisserie Chicken, SAVE 4.00, $4.99 PERKS PRICE. NON-MEMBER PRICE $8.99",
-        "size":  "",
-        "pu":  4.99,
+        "match":  "Whole Savory Rotisserie Chicken",
+        "size":  "each",
+        "pu":  5.99,
         "unit":  "each"
+    },
+    {
+        "id":  "shredded-cheese",
+        "q":  "shredded cheese",
+        "match":  "Hy-Vee Pepper Jack Cheese",
+        "size":  "8 oz",
+        "pu":  0.2462,
+        "unit":  "oz"
     },
     {
         "id":  "soda",
         "q":  "cola 12 pack",
-        "match":  "Pepsi soda, 2 liter, $1.99",
+        "match":  "4 Hy-Vee gourmet steakhouse burgers \u0026 1 Coca-Cola soda 10 pk minis 7.5 fl. oz. 1 Gold Peak tea 6 pk. bottles 16.9 fl oz., $2.00 off regular price with purchase of 4 Hy-Vee gourmet steakhouse burgers \u0026 1 Coca-Cola soda 10 pk minis 7.5 fl. oz. 1 Gold Peak tea 6 pk. bottles 16.9 fl oz., $2.00",
         "size":  "",
-        "pu":  0.0294,
+        "pu":  0.0197,
         "unit":  "floz"
+    },
+    {
+        "id":  "spinach",
+        "q":  "fresh spinach",
+        "match":  "Dole Spinach",
+        "size":  "10 oz",
+        "pu":  0.299,
+        "unit":  "oz"
+    },
+    {
+        "id":  "steak-sauce",
+        "q":  "a1 steak sauce",
+        "match":  "Hy-Vee steak sauce, 10 oz., $1.99",
+        "size":  "",
+        "pu":  0.199,
+        "unit":  "floz"
+    },
+    {
+        "id":  "strawberries",
+        "q":  "strawberries",
+        "match":  "Wish Farms California Strawberries",
+        "size":  "16 oz",
+        "pu":  0.2494,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tandoori-seasoning",
+        "q":  "tandoori-seasoning",
+        "match":  "Patak\u0027s BBQ Tandoori Chicken Seasoning Rub 0.88 oz",
+        "size":  "0.88 oz",
+        "pu":  2.8295,
+        "unit":  "oz"
     },
     {
         "id":  "tea-bags",
@@ -288,11 +496,35 @@
         "unit":  "each"
     },
     {
-        "id":  "vegetable-oil",
-        "q":  "vegetable oil",
-        "match":  "Thats Smart Vegetable Oil",
-        "size":  "48 oz",
-        "pu":  0.0781,
-        "unit":  "floz"
+        "id":  "tortillas",
+        "q":  "flour tortillas",
+        "match":  "Hy Vee Flour Tortilla Great For Fajitas 10Ct",
+        "size":  "10 ct",
+        "pu":  0.199,
+        "unit":  "each"
+    },
+    {
+        "id":  "trash-bags",
+        "q":  "13 gallon trash bags",
+        "match":  "Hy-Vee trash bags, 40 ct., $7.99",
+        "size":  "",
+        "pu":  0.1998,
+        "unit":  "each"
+    },
+    {
+        "id":  "yellow-bell-pepper",
+        "q":  "yellow bell pepper",
+        "match":  "Yellow Bell Pepper",
+        "size":  "1 ct",
+        "pu":  1.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "yogurt",
+        "q":  "yogurt",
+        "match":  "Yoplait Original Strawberry Low Fat Yogurt",
+        "size":  "6 oz",
+        "pu":  0.0983,
+        "unit":  "oz"
     }
 ]

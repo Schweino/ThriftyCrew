@@ -21,6 +21,7 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $fz = Join-Path $root 'regression-inputs'
@@ -46,9 +47,9 @@ New-Item -ItemType Directory -Force -Path $scratch | Out-Null
     -OutDir $scratch -MinStores 2 | Out-Null
 if ($LASTEXITCODE -ne 0) { Write-Output 'REGRESSION FAIL  -  engine crashed on the frozen inputs'; exit 1 }
 
-$base = (Get-Content $baseFile -Raw | ConvertFrom-Json).commodities
+$base = (Read-JsonFile $baseFile).commodities
 $nowF = Get-ChildItem (Join-Path $scratch 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
-$now  = (Get-Content $nowF.FullName -Raw | ConvertFrom-Json).comparison
+$now  = (Read-JsonFile $nowF.FullName).comparison
 $nowById = @{}; foreach ($r in $now) { $nowById[[string]$r.id] = $r }
 
 function Near($a, $b) { if ($a -eq $null -or $b -eq $null) { return ($a -eq $b) }; $a=[double]$a; $b=[double]$b; if ($b -eq 0) { return ($a -eq 0) }; return ([math]::Abs($a-$b)/[math]::Max([math]::Abs($b),0.01) -le 0.01) }

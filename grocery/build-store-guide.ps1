@@ -14,6 +14,7 @@
 #>
 param([string]$CompareFile = "", [string]$OutDir = "", [string]$Out = "", [switch]$Embed)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $CompareFile) {
@@ -21,11 +22,11 @@ if (-not $CompareFile) {
   $CompareFile = $cmpF.FullName
   # Prefer the semantically-verified board (wrong-product winners dropped/de-crowned by the verify pass) when
   # it is at least as fresh as the raw comparison; otherwise the raw comparison (fresher prices) wins.
-  try { $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
+  try { $wk = (Read-JsonFile $cmpF.FullName).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
 }
 if (-not $Out) { $Out = Join-Path $OutDir 'store-guide.html' }
 
-$doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc  = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 
 # 2026-07-26 fix: Fareway was MISSING here since 2026-07-12 (the guide silently excluded a whole store).
@@ -56,7 +57,7 @@ function HtmlEnc([string]$s) { if ($null -eq $s) { return '' }; return ($s -repl
 $idCat = @{}
 $catFile = Join-Path $root 'categories.json'
 if (Test-Path $catFile) {
-  $cats = (Get-Content $catFile -Raw | ConvertFrom-Json).categories
+  $cats = (Read-JsonFile $catFile).categories
   foreach ($c in $cats) { foreach ($cid in $c.commodities) { $idCat[[string]$cid] = [string]$c.label } }
 }
 # friendly lowercase phrases for the verdict line ("mostly produce")
@@ -95,7 +96,7 @@ foreach ($r in $doc.comparison) {
 $riFile = Join-Path $OutDir 'recipe-board.json'
 $riCount = 0
 if (Test-Path $riFile) {
-  $riDoc = Get-Content $riFile -Raw | ConvertFrom-Json
+  $riDoc = Read-JsonFile $riFile
   foreach ($r in $riDoc.comparison) {
     if ($seen.ContainsKey([string]$r.id)) { continue }   # the weekly board (with sale prices) wins on overlap
     $pr = @{}

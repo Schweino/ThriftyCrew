@@ -6,6 +6,7 @@
   ALWAYS restore. Exit 0 = all pass, 1 = a failure.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $mp   = $PSScriptRoot
 $root = Split-Path $mp -Parent
 $pass = 0; $fail = 0
@@ -25,7 +26,7 @@ try {
   ) } | ConvertTo-Json -Depth 6
   [IO.File]::WriteAllText($fx, $fixture)
   $n = Set-RecipeVisibility -DbPath $fx -Map @{ alpha='public'; gamma='paid' }
-  $after = Get-Content $fx -Raw | ConvertFrom-Json
+  $after = Read-JsonFile $fx
   $va = ($after.recipes | Where-Object slug -eq 'alpha').visibility
   $vb = ($after.recipes | Where-Object slug -eq 'beta').visibility
   $vg = ($after.recipes | Where-Object slug -eq 'gamma').visibility

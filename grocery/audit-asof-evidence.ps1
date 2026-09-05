@@ -45,6 +45,7 @@
 #>
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 
 # The stores whose everyday prices come from DATED capture files. A store absent from this table is not
@@ -199,7 +200,7 @@ $res = Invoke-AsOfEvidence $root
 $basePath = Join-Path $root 'out\asof-evidence-baseline.json'
 $base = @{}
 if (Test-Path $basePath) {
-  try { $bd = Get-Content $basePath -Raw | ConvertFrom-Json; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {}
+  try { $bd = Read-JsonFile $basePath; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {}
 }
 
 $outPath = Join-Path $root 'out\asof-evidence.json'

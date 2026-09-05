@@ -8,7 +8,7 @@
 # JSON is built manually (PS5.1 ConvertTo-Json chokes on big graphs).
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$db=(Get-Content (Join-Path $here 'recipes-db.json') -Raw | ConvertFrom-Json).recipes
+$db=(Read-JsonFile (Join-Path $here 'recipes-db.json')).recipes
 
 # THE PER-SERVING PRICE COMES FROM THE MANIFEST, NOT THE INDEX (2026-08-04).
 # This script used to read $r.cost_per_serving straight off recipes-db, which was wrong twice over:
@@ -26,11 +26,11 @@ $db=(Get-Content (Join-Path $here 'recipes-db.json') -Raw | ConvertFrom-Json).re
 # build-stretcher-data, top5, the rotation), so the planner tile and the recipe card a reader clicks
 # through to now quote the same number on the same basis.
 $cheapPs=@{}
-foreach($m in (Get-Content (Join-Path $here 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json)){ $cheapPs[[string]$m.slug]=[double]$m.cheapest_ps }
+foreach($m in (Read-JsonFile (Join-Path $here 'pipeline\v2-perserving.json'))){ $cheapPs[[string]$m.slug]=[double]$m.cheapest_ps }
 Write-Output ("v2-perserving manifest: {0} priced recipes" -f $cheapPs.Count)
 
 # feed units per bid (what the tool queries live)
-$feed=(Get-Content (Join-Path $here '..\grocery\out\smp-feed.json') -Raw | ConvertFrom-Json).ingredients
+$feed=(Read-JsonFile (Join-Path $here '..\grocery\out\smp-feed.json')).ingredients
 $feedUnit=@{}
 foreach($p in $feed.PSObject.Properties){ $feedUnit[$p.Name]=[string]$p.Value.unit }
 
@@ -41,7 +41,7 @@ foreach($p in $feed.PSObject.Properties){ $feedUnit[$p.Name]=[string]$p.Value.un
 # own supplemental package list (fold-in candidate).
 $item=@{}
 $pkg=@{}
-foreach($row in (Get-Content (Join-Path $here 'db\ingredients.json') -Raw | ConvertFrom-Json)){
+foreach($row in (Read-JsonFile (Join-Path $here 'db\ingredients.json'))){
   $nm=[string]$row.item
   if($row.PSObject.Properties.Name -contains 'bid' -and $row.bid){
     $item[$nm]=@{bid=[string]$row.bid;gpu=[double]$row.gpu;unit=[string]$row.unit}
@@ -53,7 +53,7 @@ foreach($row in (Get-Content (Join-Path $here 'db\ingredients.json') -Raw | Conv
   if($pg){ $pkg[$nm]=@{ g=$pg; l=$pl } }
 }
 $UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
-foreach($p in ((Get-Content (Join-Path $here 'planner-extra-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){
+foreach($p in ((Read-JsonFile (Join-Path $here 'planner-extra-packages.json')).packages).PSObject.Properties){
   if(-not $pkg.ContainsKey($p.Name)){ $pkg[$p.Name]=@{ g=[double]$p.Value.g; l=[string]$p.Value.label } }
 }
 
@@ -76,7 +76,7 @@ $costedPkg=@{}
 # file never emitted pk 0. Measured before the fix: ZERO occurrences of "pk":0 in the whole of
 # planner-data.js, on a catalogue with exactly 2 covered lines. Skipping is not the same as saying no.
 $coveredLine=@{}
-foreach($c in (Get-Content (Join-Path $here 'db\costed.json') -Raw | ConvertFrom-Json)){
+foreach($c in (Read-JsonFile (Join-Path $here 'db\costed.json'))){
   foreach($l in $c.lines){
     if(($l.PSObject.Properties.Name -contains 'covered_by') -and $l.covered_by -and ([string]$l.covered_by).Trim() -ne ''){
       $coveredLine[([string]$c.slug)+'|'+([string]$l.item)]=$true
@@ -89,6 +89,8 @@ foreach($c in (Get-Content (Join-Path $here 'db\costed.json') -Raw | ConvertFrom
 Write-Output ("db\costed.json: {0} line(s) carry a buy package the planner can price against" -f $costedPkg.Count)
 # ONE resolution, used by the emit AND by the "items without a package def" report below, so the report
 # cannot name an item the emit actually priced.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Resolve-PlannerPkg([string]$slug,[string]$item){
   # A COVERED LINE BUYS NOTHING, AND MUST SAY SO. pk 0 is the signal the Builder's pkgN guard reads; the
   # ingredient-catalogue fallback below must not be reached for these lines, because it would hand back a

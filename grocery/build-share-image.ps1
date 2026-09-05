@@ -14,6 +14,7 @@
 #>
 param([string]$OutPath = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $pub = Join-Path (Split-Path $root -Parent) 'public'
 if (-not $OutPath) { $OutPath = Join-Path $pub 'share\omaha-drops.png' }
@@ -21,7 +22,7 @@ New-Item -ItemType Directory -Force -Path (Split-Path $OutPath -Parent) | Out-Nu
 
 Add-Type -AssemblyName System.Drawing
 
-$hist = Get-Content (Join-Path $pub 'price-history.json') -Raw | ConvertFrom-Json
+$hist = Read-JsonFile (Join-Path $pub 'price-history.json')
 $drops = New-Object System.Collections.Generic.List[object]
 foreach ($p in $hist.PSObject.Properties) {
   $it = $p.Value

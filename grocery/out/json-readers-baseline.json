@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-05T14:12:09",
-    "count":  525,
-    "note":  "High-water mark for the bare-JSON-reader ratchet. This number may only go DOWN."
+    "generated":  "2026-09-05T14:36:42",
+    "count":  45,
+    "note":  "High-water mark for the bare-JSON-reader ratchet, set 2026-09-05 when PS 5.1 codepage decoding was found corrupting live board names. This number may only go DOWN. A run above it is a NEW bare reader and hard-fails."
 }

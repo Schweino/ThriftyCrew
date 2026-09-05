@@ -13,11 +13,12 @@
 #>
 param([string]$OutDir = "", [string]$CompareFile = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'regular-fileset-lib.ps1')
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
-$commods = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commods = Read-JsonFile (Join-Path $root 'commodities.json')
 $byId = @{}; foreach ($c in $commods) { $byId[[string]$c.id] = $c }
 
 # THE BOARD FIRST, BECAUSE ITS NAME IS THE AS-OF. Resolved up here (it used to sit below the everyday pool)
@@ -63,7 +64,7 @@ $everydayNames["Sam's Club"] = New-Object System.Collections.Generic.HashSet[str
 $everydayFileCount = @{}
 function Add-EverydayFile([string]$store, $fileObj) {
   if (-not $everydayNames.ContainsKey($store)) { return }
-  try { $doc = Get-Content $fileObj.FullName -Raw | ConvertFrom-Json } catch { return }
+  try { $doc = Read-JsonFile $fileObj.FullName } catch { return }
   foreach ($d in @($doc.deals)) { [void]$everydayNames[$store].Add("" + $d.item + $d.name) }
   $everydayFileCount[$store] = 1 + [int]$everydayFileCount[$store]
 }
@@ -84,7 +85,7 @@ function HasEveryday([string]$store, $c) {
   return $false
 }
 
-$all = (Get-Content $CompareFile -Raw | ConvertFrom-Json).comparison
+$all = (Read-JsonFile $CompareFile).comparison
 $gaps = New-Object System.Collections.Generic.List[object]
 $work = New-Object System.Collections.Generic.List[object]
 foreach ($it in $all) {

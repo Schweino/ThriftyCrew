@@ -48,6 +48,8 @@ $script:CARRIAGE_CHECKED_STATES = @('carried', 'not-carried')
 # db\ingredients.json, and Korean Rice Cakes is one of the four recipes that got through. An ingredient
 # with no commodity id is precisely the one no board gate can see, so it needs a carriage key most.
 # ---------------------------------------------------------------------------------------------------
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Get-CarriageKey {
   param([string]$Bid, [string]$Item)
   if ($Bid) { return [string]$Bid }
@@ -98,7 +100,7 @@ function Import-CarriageLedger {
   param([string]$Path)
   $led = @{}
   if (-not $Path -or -not (Test-Path $Path)) { return $led }
-  $doc = Get-Content $Path -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $Path
   if (-not $doc -or -not ($doc.PSObject.Properties.Name -contains 'bids')) { return $led }
   foreach ($p in $doc.bids.PSObject.Properties) { $led[[string]$p.Name] = $p.Value }
   return $led

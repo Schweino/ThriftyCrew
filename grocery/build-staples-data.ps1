@@ -4,6 +4,7 @@
 # and bakes current feed prices as the offline fallback. Output: staples-data.js
 # Splice into my-staples-template.html at //__DATA__ -> C:\Codex\ThriftyCrew\site\tools\my-staples-tool.html
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = 'C:\Codex\ThriftyCrew\grocery'
 # prefer the freshly-exported local feed (has the newest schema, e.g. sale_end) over the edge-cached worker copy
 $localFeed = "$root\out\smp-feed.json"
@@ -13,14 +14,14 @@ $feed = $raw | ConvertFrom-Json
 $feedIng = @{}
 foreach ($p in $feed.ingredients.PSObject.Properties) { $feedIng[[string]$p.Name] = $p.Value }
 
-$cats = (Get-Content "$root\categories.json" -Raw | ConvertFrom-Json).categories
+$cats = (Read-JsonFile "$root\categories.json").categories
 $catOf = @{}
 foreach ($c in $cats) { foreach ($cid in $c.commodities) { $catOf[[string]$cid] = [string]$c.label } }
-$comms = Get-Content "$root\commodities.json" -Raw | ConvertFrom-Json
+$comms = Read-JsonFile "$root\commodities.json"
 
 # records (only the weekly commodities have history)
 $recOf = @{}
-try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom-Json).commodities)) { if ($h.record_low) { $recOf[[string]$h.id] = [double]$h.record_low.price } } } catch {}
+try { foreach ($h in ((Read-JsonFile "$root\price-history.json").commodities)) { if ($h.record_low) { $recOf[[string]$h.id] = [double]$h.record_low.price } } } catch {}
 
 # trend slugs = the keep-list, not a re-derived history rule. 2026-08-04: the old ">=3 weeks" copy here
 # emitted links to all 492 trend pages; 472 of those are being unpublished. Deliberately NOT wrapped in a
@@ -41,7 +42,7 @@ foreach ($c in $comms) {
   $items += ,@{ k=$id; l=[string]$c.label; u=[string]$f.unit; c=$cat; f=[double]$f.cheapest; fs=[string]$f.store; rec=$rec; t=$t; w=1; se=$se }
   $seen[$id] = $true
 }
-$ri = Get-Content "$root\out\recipe-board.json" -Raw | ConvertFrom-Json
+$ri = Read-JsonFile "$root\out\recipe-board.json"
 foreach ($r in $ri.comparison) {
   $id = [string]$r.id
   if ($seen.ContainsKey($id) -or -not $feedIng.ContainsKey($id)) { continue }

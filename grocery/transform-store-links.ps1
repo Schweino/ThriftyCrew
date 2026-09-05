@@ -6,7 +6,9 @@
 param([Parameter(Mandatory=$true)][string]$Key, [Parameter(Mandatory=$true)][string]$Src)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$raw = Get-Content $Src -Raw | ConvertFrom-Json
+$raw = Read-JsonFile $Src
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function QtyOf([string]$s){ $m=[regex]::Match([string]$s,'(\d+(?:\.\d+)?)'); if($m.Success){ return [double]$m.Groups[1].Value }; return 1.0 }
 $keep = New-Object System.Collections.Generic.List[object]
 $drop = New-Object System.Collections.Generic.List[string]

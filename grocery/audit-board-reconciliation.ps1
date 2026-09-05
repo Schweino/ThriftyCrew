@@ -37,6 +37,7 @@
 #>
 param([string]$OutDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 
@@ -61,12 +62,12 @@ function Get-ReconciliationFindings {
   $rbF  = Join-Path $Dir 'recipe-board.json'
   if (-not $cmpF -or -not (Test-Path $rbF)) { return $null }
 
-  $weeklyRows = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)
-  $recipeRows = @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)
+  $weeklyRows = @((Read-JsonFile $cmpF.FullName).comparison)
+  $recipeRows = @((Read-JsonFile $rbF).comparison)
 
   $idMap = @{}
   if ($MapFile -and (Test-Path $MapFile)) {
-    try { foreach ($p in ((Get-Content $MapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) { $idMap[[string]$p.Name] = [string]$p.Value } } catch { }
+    try { foreach ($p in ((Read-JsonFile $MapFile).map.PSObject.Properties)) { $idMap[[string]$p.Name] = [string]$p.Value } } catch { }
   }
   $weeklyById = @{}
   foreach ($r in $weeklyRows) { $weeklyById[[string]$r.id] = $r }

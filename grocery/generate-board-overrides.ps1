@@ -22,6 +22,7 @@
 #>
 param([double]$Tol = 0.30, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
@@ -34,11 +35,11 @@ function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = ''
 
 # boards
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$staple = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
+$staple = @((Read-JsonFile $cmpF).comparison)
 $recipe = @()
 $riF = Join-Path $OutDir 'recipe-board.json'
-if (Test-Path $riF) { $recipe = @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+if (Test-Path $riF) { $recipe = @((Read-JsonFile $riF).comparison) }
+$pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
 # ids that appear in BOTH boards = collision (one link can't be right for two per-units) -> skip
 $stapleIds = @{}; foreach ($r in $staple) { $stapleIds[[string]$r.id] = $true }
@@ -71,7 +72,7 @@ if (-not (Test-Path $ndF)) {
   Write-Error ("generate-board-overrides: REFUSING to run - name-drift data not found at $ndF. Pins beat the engine, so writing them without the wrong-product check is how a frozen-blueberry price gets published as fresh. Run audit-name-drift.ps1 first.")
   exit 2
 }
-foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = $true }
+foreach ($d in (Read-JsonFile $ndF).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = $true }
 if ($drift.Count -eq 0) { Write-Warning 'generate-board-overrides: name-drift flagged NOTHING - verify that is real before trusting these pins.' }
 
 $cells = New-Object System.Collections.Generic.List[object]
@@ -134,7 +135,7 @@ foreach ($it in ($staple + $recipe)) {
       foreach ($pf in $pinFiles) {
         try {
           if (-not $pf -or $pf.Length -lt 3) { continue }
-          $pdoc = Get-Content $pf.FullName -Raw | ConvertFrom-Json
+          $pdoc = Read-JsonFile $pf.FullName
           # EACH FILE'S OWN DATE AND ITS OWN -2d CARRY CUTOFF, applied here at load. The old code kept one date
           # per store because it only ever held one file per store; under a union the cutoff has to travel with
           # the file, or the oldest member of the union decides the freshness of rows from the newest.

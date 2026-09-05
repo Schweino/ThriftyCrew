@@ -38,13 +38,14 @@ param(
   [string]$VenvPython = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp
 if (-not $DbPath)  { $DbPath  = Join-Path $mp 'recipes-db.json' }
 if (-not $OutPath) { $OutPath = Join-Path $here 'catalog-digest.json' }
 
-$doc = Get-Content $DbPath -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $DbPath
 $byProt = [ordered]@{}
 foreach ($r in $doc.recipes) {
   $prot = ([string]$r.protein) -replace '^ground\s+',''

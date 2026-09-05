@@ -98,6 +98,7 @@ param(
   [string]$NamesOut = '', [string]$NamesDiff = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 # CAPTURE EVERY SWITCH BEFORE DOT-SOURCING ANYTHING. A dot-sourced script runs its own param() block in
 # THIS scope, so a lib declaring [switch]$SelfTest silently resets ours to $false - that PS 5.1 trap made
@@ -502,7 +503,7 @@ function Get-NonPurchasableSet {
   $set = @{}
   $p = Join-Path $RepoRoot 'grocery\non-purchasable-terms.json'
   if (-not (Test-Path $p)) { return $set }
-  try { $doc = Get-Content $p -Raw | ConvertFrom-Json } catch { return $set }
+  try { $doc = Read-JsonFile $p } catch { return $set }
   foreach ($t in @($doc.terms)) {
     $k = Get-NormTerm $t
     if ($k) { $set[$k] = $true }
@@ -563,13 +564,13 @@ function Get-CarriageBlockingTerms {
   $out = @(); $skipped = @()
   $mf = Join-Path $RunDir ("mapped\{0}.json" -f $Slug)
   if (-not (Test-Path $mf)) { return @{ terms = @(); skipped = @(); read = $false; why = "no mapped\$Slug.json" } }
-  try { $doc = Get-Content $mf -Raw | ConvertFrom-Json } catch { return @{ terms = @(); skipped = @(); read = $false; why = "mapped\$Slug.json unparseable" } }
+  try { $doc = Read-JsonFile $mf } catch { return @{ terms = @(); skipped = @(); read = $false; why = "mapped\$Slug.json unparseable" } }
   $carrLib = Join-Path $RepoRoot 'lib\carriage-lib.ps1'
   if (-not (Test-Path $carrLib)) { return @{ terms = @(); skipped = @(); read = $false; why = 'carriage-lib.ps1 missing' } }
   . $carrLib
   $feedFile = Join-Path $RepoRoot 'grocery\out\smp-feed.json'
   $fc = @{}
-  if (Test-Path $feedFile) { try { $fc = Get-FeedCarriedSet ((Get-Content $feedFile -Raw | ConvertFrom-Json).ingredients) } catch { $fc = @{} } }
+  if (Test-Path $feedFile) { try { $fc = Get-FeedCarriedSet ((Read-JsonFile $feedFile).ingredients) } catch { $fc = @{} } }
   $led = Import-CarriageLedger (Join-Path $RepoRoot 'grocery\carriage.json')
   $stop = Get-NonPurchasableSet -RepoRoot $RepoRoot
   foreach ($ing in @($doc.ingredients)) {

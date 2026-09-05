@@ -4433,3 +4433,5 @@
 [2026-09-05T08:29:16] coverage-cycle: coverage-ledger: ok - 16 check(s) still examine at least their baseline coverage (phase 'cycle', tolerance 10% unless overridden).
 [2026-09-05T08:29:16] coverage-cycle: COVERAGE-LEDGER-COMPLETE
 [2026-09-05T08:29:16] run complete; flips=0; pull=(no pull - -NoPull; latest ads file reused); ship=604s; total=1536s
+[2026-09-05T14:30:57] REFUSING to pull: check-ad-cycles does not own the store pulls. capture-run.ps1 runs them as parallel lanes and calls this file with -NoPull.
+[2026-09-05T14:33:33] REFUSING to pull: check-ad-cycles does not own the store pulls. capture-run.ps1 runs them as parallel lanes and calls this file with -NoPull.

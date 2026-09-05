@@ -34,6 +34,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $root -Parent
 
@@ -304,11 +305,11 @@ try {
   $costsPath = Join-Path $root 'out\recipe-costs.json'
   $dbPath = Join-Path $repo 'meal-prep\recipes-db.json'
   if ((Test-Path $v2Path) -and (Test-Path $costsPath) -and (Test-Path $dbPath)) {
-    $v2 = Get-Content $v2Path -Raw | ConvertFrom-Json
+    $v2 = Read-JsonFile $v2Path
     $v2Map = @{}; foreach ($r in $v2) { $v2Map[[string]$r.slug] = $r }
-    $costsDoc = Get-Content $costsPath -Raw | ConvertFrom-Json
+    $costsDoc = Read-JsonFile $costsPath
     $costMap = @{}; foreach ($c in $costsDoc.recipes) { $costMap[[string]$c.slug] = $c }
-    $dbDoc = Get-Content $dbPath -Raw | ConvertFrom-Json
+    $dbDoc = Read-JsonFile $dbPath
     $protMap = @{}; $servMap = @{}
     foreach ($r in $dbDoc.recipes) { $protMap[[string]$r.slug] = [string]$r.protein; $servMap[[string]$r.slug] = [int]$r.servings }
 

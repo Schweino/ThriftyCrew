@@ -37,6 +37,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $here 'cook-measure-lib.ps1')
@@ -166,7 +167,7 @@ function Repair-SpecCookMeasures {
 }
 
 function Invoke-CookMeasureRepair([string]$specDir, [string]$densPath, [bool]$apply) {
-  $dens = (Get-Content $densPath -Raw | ConvertFrom-Json).items
+  $dens = (Read-JsonFile $densPath).items
   $changed = 0; $lines = 0; $skippedNoDisp = New-Object System.Collections.Generic.List[string]
   $slugs = New-Object System.Collections.Generic.List[string]
   $samples = New-Object System.Collections.Generic.List[string]

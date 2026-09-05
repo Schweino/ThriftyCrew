@@ -49,6 +49,7 @@ param(
   [string]$Root = ""
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 
@@ -89,7 +90,7 @@ function Invoke-ProseSync([string]$specsDir, [bool]$whatIf) {
   $skelNames = New-Object System.Collections.Generic.List[string]
   foreach ($sf in $specs) {
     $slug = $sf.BaseName
-    $spec = Get-Content $sf.FullName -Raw | ConvertFrom-Json
+    $spec = Read-JsonFile $sf.FullName
     $pf = Join-Path $proseDir ("prose-$slug.json")
     # A SKELETON SPEC HAS NOTHING TO SYNC. The r10 run's 8 specs declare every prose field and leave them
     # all empty - their prose was never written to this surface. Creating a prose file from them would only
@@ -102,7 +103,7 @@ function Invoke-ProseSync([string]$specsDir, [bool]$whatIf) {
       if (-not $anyProse) { $skeleton++; if ($skelNames.Count -lt 8) { $skelNames.Add($slug) }; continue }
     }
     $isNew = -not (Test-Path $pf)
-    $pr = if ($isNew) { [pscustomobject]@{} } else { Get-Content $pf -Raw | ConvertFrom-Json }
+    $pr = if ($isNew) { [pscustomobject]@{} } else { Read-JsonFile $pf }
     $before = ($pr | ConvertTo-Json -Depth 8 -Compress)
 
     foreach ($k in $PROSE_STR) {
@@ -211,12 +212,12 @@ if ($SelfTest) {
     $insyncBefore = Get-Content (Join-Path $T 'specs\prose\prose-insync.json') -Raw
     $r = Invoke-ProseSync (Join-Path $T 'specs') $false
     Write-Output ('      ' + $r.text)
-    $d = Get-Content (Join-Path $T 'specs\prose\prose-drifted.json') -Raw | ConvertFrom-Json
+    $d = Read-JsonFile (Join-Path $T 'specs\prose\prose-drifted.json')
     Chk 'MUST FIRE  the drifted prose now carries the SPEC text ($3.06, not $1.13)' ($d.cost_closing_html -match '3\.06' -and $d.intro_html -match '3\.06' -and $d.head.description -match '3\.06') ("closing=" + $d.cost_closing_html)
     Chk 'MUST FIRE  the shop_smart dollar cleanup is preserved, not put back' ((@($d.shop_smart | Where-Object { $_ -match '\$\d' }).Count) -eq 0) (($d.shop_smart -join ' | '))
     Chk 'MUST FIRE  a run with no prose dir gets its file CREATED' ((Test-Path (Join-Path $T 'specs\prose\prose-noprose.json')) -and $r.created -eq 1) ("created=" + $r.created)
     Chk 'CLEAN TWIN an already-synced prose file is not rewritten' ((Get-Content (Join-Path $T 'specs\prose\prose-insync.json') -Raw) -eq $insyncBefore) 'file was rewritten'
-    $e = Get-Content (Join-Path $T 'specs\prose\prose-emptyfield.json') -Raw | ConvertFrom-Json
+    $e = Read-JsonFile (Join-Path $T 'specs\prose\prose-emptyfield.json')
     Chk 'CLEAN TWIN an EMPTY spec field never blanks the prose field' ($e.intro_html -match 'KEEP ME') ("intro=" + $e.intro_html)
     Chk 'the empty-in-both case is REPORTED, not silently skipped' ((@($r.issues | Where-Object { $_ -match 'emptyfield' }).Count) -eq 0) (($r.issues -join ' | '))
     Chk 'a spec field that DID move is written (cost_closing on emptyfield)' ($e.cost_closing_html -eq '<p>c2</p>') ("closing=" + $e.cost_closing_html)
@@ -224,19 +225,19 @@ if ($SelfTest) {
     $r2 = Invoke-ProseSync (Join-Path $T 'specs') $false
     Chk 'idempotent - a second run syncs nothing' ($r2.changed -eq 0) ("changed=" + $r2.changed)
     # DIRECTION: the SPEC must never be touched by this script.
-    $sp = Get-Content (Join-Path $T 'specs\drifted.json') -Raw | ConvertFrom-Json
+    $sp = Read-JsonFile (Join-Path $T 'specs\drifted.json')
     Chk 'the SPEC is never modified - this only ever writes spec -> prose' ($sp.intro_html -match '3\.06') ("spec intro=" + $sp.intro_html)
     # THE GUARD: -Check must FIRE on a re-drifted file and must NOT fire on a synced tree. Without the
     # must-fire half, a guard that always passes is indistinguishable from a guard that works.
     $selfPath = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $here 'sync-prose-from-spec.ps1' }
     $clean = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -SpecsDir (Join-Path $T 'specs') -Check 2>&1 | Out-String
     Chk 'CHECK on a synced tree exits clean' (($LASTEXITCODE -eq 0) -and ($clean -match 'CHECK OK')) ("rc=$LASTEXITCODE " + ($clean -replace "`r?`n", ' '))
-    $reDrift = Get-Content (Join-Path $T 'specs\prose\prose-drifted.json') -Raw | ConvertFrom-Json
+    $reDrift = Read-JsonFile (Join-Path $T 'specs\prose\prose-drifted.json')
     $reDrift.upsell_html = '<p>someone edited the prose file back to $1.13.</p>'
     $reDrift | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $T 'specs\prose\prose-drifted.json') -Encoding UTF8
     $dirty = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -SpecsDir (Join-Path $T 'specs') -Check 2>&1 | Out-String
     Chk 'MUST FIRE  CHECK exits 1 and NAMES the slug when prose drifts again' (($LASTEXITCODE -eq 1) -and ($dirty -match 'CHECK FAIL') -and ($dirty -match 'drifted')) ("rc=$LASTEXITCODE " + ($dirty -replace "`r?`n", ' '))
-    $stillDrift = Get-Content (Join-Path $T 'specs\prose\prose-drifted.json') -Raw | ConvertFrom-Json
+    $stillDrift = Read-JsonFile (Join-Path $T 'specs\prose\prose-drifted.json')
     Chk 'CHECK writes NOTHING - the drift it reports is still there afterwards' ($stillDrift.upsell_html -match '1\.13') ("upsell=" + $stillDrift.upsell_html)
   } finally { Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue }
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }

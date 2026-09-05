@@ -7,6 +7,7 @@
   refreshes the price in one step. Writes out\url-inputs\store-ff9-urls.json.
 #>
 param([string]$OutDir = "")
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -16,7 +17,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # was never in mismatch, so it was never repaired (the FF peaches/apples linkless chips Brad caught).
 $mmFile = Join-Path $OutDir 'consistency-report.json'
 if (Test-Path $mmFile) {
-  $rep = Get-Content $mmFile -Raw | ConvertFrom-Json
+  $rep = Read-JsonFile $mmFile
   $seen = @{}
   $mm = @(@($rep.mismatch) + @($rep.no_link) | Where-Object { $_ -and ([string]$_.store) -eq 'Family Fare' } | Where-Object { $k = [string]$_.id; if ($seen.ContainsKey($k)) { $false } else { $seen[$k] = $true; $true } })
 }
@@ -26,13 +27,13 @@ else {
   # Where-Object then tested .store on an ARRAY, which member-enumerates, so `-eq 'Family Fare'` was true
   # whenever ANY row was Family Fare and the entire 36-row array sailed through as one item. Assigning first
   # unrolls it. The branch above gets this right because $rep is assigned before its properties are read.
-  $mmRaw = Get-Content (Join-Path $OutDir 'link-price-mismatch.json') -Raw | ConvertFrom-Json
+  $mmRaw = Read-JsonFile (Join-Path $OutDir 'link-price-mismatch.json')
   $mm = @(@($mmRaw) | Where-Object { $_ -and ([string]$_.store) -eq 'Family Fare' })
 }
 # commodity label + include/exclude for the fallback search (a flyer-only board name like "Tree Ripened Yellow
 # Flesh Peaches, Small" won't exist verbatim in Freshop; the commodity LABEL - "Peaches" - will)
 $cmeta = @{}
-try { foreach ($cdef in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $cmeta[[string]$cdef.id] = @{ label=[string]$cdef.label; inc=@($cdef.include); exc=@($cdef.exclude) } } } catch {}
+try { foreach ($cdef in (Read-JsonFile (Join-Path $root 'commodities.json'))) { $cmeta[[string]$cdef.id] = @{ label=[string]$cdef.label; inc=@($cdef.include); exc=@($cdef.exclude) } } } catch {}
 # board item per (id) from recipe-board + comparison. ORDER MATTERS: recipe-board first, comparison LAST so
 # the STAPLE row's product wins when an id exists in both (product-urls holds ONE entry per id x store, and the
 # staple board is the primary surface; letting recipe-board overwrite repaired staple milk against a "Whole
@@ -41,7 +42,7 @@ $board = @{}
 foreach ($bf in @('recipe-board','comparison')) {
   $f = if ($bf -eq 'comparison') { (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName } else { Join-Path $OutDir 'recipe-board.json' }
   if (-not (Test-Path $f)) { continue }
-  foreach ($it in (Get-Content $f -Raw | ConvertFrom-Json).comparison) { $ff = $it.stores | Where-Object { $_.store -eq 'Family Fare' } | Select-Object -First 1; if ($ff) { $board[[string]$it.id] = @{ item=[string]$ff.item; size=[string]$ff.size } } }
+  foreach ($it in (Read-JsonFile $f).comparison) { $ff = $it.stores | Where-Object { $_.store -eq 'Family Fare' } | Select-Object -First 1; if ($ff) { $board[[string]$it.id] = @{ item=[string]$ff.item; size=[string]$ff.size } } }
 }
 function norm($s){ (([string]$s).ToLower() -replace '[^a-z0-9 ]',' ' -replace '\s+',' ').Trim() }
 # Freshop session token (same as pull-regular-familyfare): tokenless calls now 400, and a REUSED token gets

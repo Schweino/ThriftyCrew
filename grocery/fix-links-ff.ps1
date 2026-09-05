@@ -39,19 +39,20 @@
   Read-only unless -Apply.
 #>
 param([switch]$Apply, [double]$MinScore = 0.75, [string]$OutDir = "", [int]$MaxCalls = 35, [switch]$Fresh)
-$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage; $ProgressPreference = 'SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'pu-lib.ps1')
 
-$viol = @((Get-Content (Join-Path $OutDir 'tile-integrity.json') -Raw | ConvertFrom-Json).rows) | Where-Object { $_.store -eq 'Family Fare' }
+$viol = @((Read-JsonFile (Join-Path $OutDir 'tile-integrity.json')).rows) | Where-Object { $_.store -eq 'Family Fare' }
 Write-Output ("Family Fare violations to work: " + $viol.Count)
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1)
-$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison
+$cmp = (Read-JsonFile $cmpF.FullName).comparison
 $cell = @{}
 foreach ($r in $cmp) { foreach ($s in $r.stores) { if ($s.store -eq 'Family Fare') { $cell[[string]$r.id] = @{ item = [string]$s.item; pu = [double]$s.per_unit; unit = [string]$r.unit } } } }
 $puPath = Join-Path $root 'product-urls.json'
-$puDoc = Get-Content $puPath -Raw | ConvertFrom-Json
+$puDoc = Read-JsonFile $puPath
 
 function Score([string]$board, [string]$cand) {
   $n = { param($x) (($x.ToLower() -replace '[^a-z0-9 ]', ' ') -replace '\s{2,}', ' ').Trim() }
@@ -67,7 +68,7 @@ $planPath = Join-Path $OutDir 'ff-link-plan.json'
 # ---- APPLY MODE: consume the plan, touch no network. -------------------------------------------------------
 if ($Apply) {
   if (-not (Test-Path $planPath)) { Write-Output 'No plan at out\ff-link-plan.json. Run without -Apply first to resolve one.'; exit 2 }
-  $plan = Get-Content $planPath -Raw | ConvertFrom-Json
+  $plan = Read-JsonFile $planPath
   $rows = @($plan.resolved)
   Write-Output ("plan: " + $rows.Count + " resolution(s) written " + $plan.generated)
   $wrote = 0; $dropped = @()
@@ -95,7 +96,7 @@ $fixed = @(); $refused = @(); $n = 0
 # Carry forward what earlier batches already resolved, so 3 paced runs build ONE complete plan.
 $done = @{}
 if ((Test-Path $planPath) -and -not $Fresh) {
-  $prev = Get-Content $planPath -Raw | ConvertFrom-Json
+  $prev = Read-JsonFile $planPath
   foreach ($p in @($prev.resolved)) { $fixed += $p; $done[[string]$p.id] = $true }
   Write-Output ("carried forward from the existing plan: " + $fixed.Count + " resolution(s) (pass -Fresh to start over)")
 }

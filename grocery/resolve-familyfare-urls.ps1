@@ -8,14 +8,15 @@
   plus out\ff-notcarry.json for commodities with no valid match (candidates for the "Does not carry" cell).
 #>
 param([string]$OutDir = "")
-$ErrorActionPreference = 'Stop'; $ProgressPreference='SilentlyContinue'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage; $ProgressPreference='SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
-$wl = Get-Content (Join-Path $OutDir 'url-worklist.json') -Raw | ConvertFrom-Json
+$wl = Read-JsonFile (Join-Path $OutDir 'url-worklist.json')
 $ff = @($wl.stores.'Family Fare')
 . (Join-Path $root 'search-terms-lib.ps1')
-$terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 
 # The staple board's global exclude is hardcoded in compare-deals.ps1 (staples are never a beverage/candy/
 # prepared form); the recipe board relaxes juice/sauce/canned/frozen (recipe items legitimately are those)
@@ -23,10 +24,10 @@ $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFr
 $STAPLE_GEX = @('drink\s*mix','kool[\s-]?aid','probiotic','kombucha','\bdip\b','\bsauce\b','wrapped','\bbake\b','\bbaked\b','seasoned','marinated','stuffed','\bkit\b','flavored','\bsoup\b','helper','lunchable','smoothie','\bpudding\b','ice\s*cream','\bcreamer\b','\bfrozen\b','\bcanned\b','breaded','\bsnack\b','\bmeal\b','casserole','\bwrap\b','poppers','muffin','pretzel','filled','strudel','\bcake\b','drinkable','(?<!orange\s)\bjuice\b','\bsoda\b','sparkling','seltzer','\bwater\b','energy\s*drink','sports\s*drink','tonic','lemonade','cocktail','pop[\s-]?tart','pastr','toaster','\btart\b','cereal','granola\s*bar','fruit\s*snack','\bgum\b')
 # rules: id -> @{include;exclude;unit;gex}   gex = the global-exclude list for that id's board
 $rules = @{}
-$sdoc = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$sdoc = Read-JsonFile (Join-Path $root 'commodities.json')
 $slist = if ($sdoc.PSObject.Properties['commodities']) { $sdoc.commodities } else { $sdoc }
 foreach ($c in $slist) { $rules[[string]$c.id] = @{ include=@($c.include); exclude=@($c.exclude); unit=[string]$c.unit; gex=$STAPLE_GEX } }
-$rdoc = Get-Content (Join-Path $root 'recipe-commodities.json') -Raw | ConvertFrom-Json
+$rdoc = Read-JsonFile (Join-Path $root 'recipe-commodities.json')
 $rgex = @($rdoc.global_exclude)
 foreach ($c in $rdoc.commodities) { if (-not $rules.ContainsKey([string]$c.id)) { $rules[[string]$c.id] = @{ include=@($c.include); exclude=@($c.exclude); unit=[string]$c.unit; gex=$rgex } } }
 

@@ -36,6 +36,8 @@
 # The engine's unit vocabulary, lifted from Convert-ToUnit's own switch in compare-deals.ps1.
 # Returns $null when it cannot parse the switch - BLIND, which is not the same as clean, and the caller
 # must report it as a failure rather than as agreement (could-not-run-is-not-a-failure).
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Get-EngineUnitVocabulary([string]$Root) {
   $f = Join-Path $Root 'compare-deals.ps1'
   if (-not (Test-Path $f)) { return $null }
@@ -87,7 +89,7 @@ function Get-EngineRuleFiles([string]$Root) {
 # Reads one rule file and returns its commodity objects. `@(Get-Content | ConvertFrom-Json)` does NOT
 # unroll a bare top-level JSON array in PS 5.1 - it counts 1 - so the assignment happens first.
 function Read-RuleFileCommodities([string]$Path) {
-  $doc = Get-Content $Path -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $Path
   if ($null -eq $doc) { return ,@() }
   if ($doc.PSObject.Properties['commodities']) { return ,@($doc.commodities) }
   return ,@($doc)
@@ -109,7 +111,7 @@ function Read-RuleFileCommodities([string]$Path) {
 function Get-UnitVocabularyExceptions([string]$Root) {
   $p = Join-Path $Root 'unit-vocabulary-exceptions.json'
   if (-not (Test-Path $p)) { return ,@() }
-  $doc = Get-Content $p -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $p
   if ($null -eq $doc) { return ,@() }
   if ($doc.PSObject.Properties['exceptions']) { return ,@($doc.exceptions) }
   return ,@($doc)

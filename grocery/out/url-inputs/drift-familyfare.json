@@ -1,18 +1,18 @@
 ﻿[
     {
+        "id":  "cheddar-cheese-shredded",
+        "q":  "cheddar cheese shredded",
+        "match":  "Our Family Mild Cheddar Shredded Cheese 16 Oz",
+        "size":  "16 oz",
+        "reason":  "name-drift",
+        "was":  "Our Family Extra Sharp Cheddar Shredded Cheese 8 Oz"
+    },
+    {
         "id":  "mozzarella-cheese",
         "q":  "mozzarella cheese",
-        "match":  "Our Family Low Moisture Part Skim Mozzarella 16 Oz",
+        "match":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
         "size":  "16 oz",
         "reason":  "name-drift",
         "was":  "Our Family Natural Finely Cut Mozzarella Shredded Cheese 8 Oz"
-    },
-    {
-        "id":  "cheddar-cheese",
-        "q":  "cheddar cheese",
-        "match":  "Our Family Natural Medium Cheddar Cheese 8 Oz",
-        "size":  "8 oz",
-        "reason":  "name-drift",
-        "was":  "Our Family Mild Cheddar Shredded Cheese 8 Oz"
     }
 ]

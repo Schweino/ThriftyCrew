@@ -18,10 +18,11 @@
 #>
 param([switch]$Verify)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = 'C:\Codex\ThriftyCrew'
 $dbFile = Join-Path $root 'meal-prep\recipes-db.json'
 
-$mp = Get-Content (Join-Path $root 'meal-prep\ingredient-map.json') -Raw | ConvertFrom-Json
+$mp = Read-JsonFile (Join-Path $root 'meal-prep\ingredient-map.json')
 $map = @{}
 foreach ($e in $mp.mappings) { $map[([string]$e.item).ToLower().Trim()] = [string]$e.board_id }
 
@@ -41,7 +42,7 @@ function Get-ProteinClass([string]$id) {
   return $null
 }
 
-$db = Get-Content $dbFile -Raw | ConvertFrom-Json
+$db = Read-JsonFile $dbFile
 $stats = [ordered]@{ recipes=0; ing_rows=0; ing_mapped=0; ing_null=0 }
 $protCounts = [ordered]@{ chicken=0; turkey=0; seafood=0; beef=0; pork=0; other=0 }
 

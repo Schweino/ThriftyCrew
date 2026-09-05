@@ -21,6 +21,7 @@
 
 param([string]$OutDir = '', [int]$MinRows = 3, [switch]$Json, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out\regular' }
 
@@ -96,10 +97,10 @@ if ($SelfTest) {
 }
 
 # ---- live run ----
-$terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 $byTerm = @{}
 foreach ($f in (Get-ChildItem (Join-Path $OutDir '*-regular-*.json') -File -ErrorAction SilentlyContinue)) {
-  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+  try { $d = Read-JsonFile $f.FullName } catch { continue }
   foreach ($r in @($d.deals)) {
     $t = [string]$r.found_by_term
     if (-not $t) { continue }
@@ -115,7 +116,7 @@ foreach ($f in (Get-ChildItem (Join-Path $OutDir '*-regular-*.json') -File -Erro
 $allItems = New-Object System.Collections.Generic.List[string]
 foreach ($k in $byTerm.Keys) { $allItems.AddRange($byTerm[$k]) }
 foreach ($f in (Get-ChildItem (Join-Path $OutDir '*-regular-*.json') -File -ErrorAction SilentlyContinue)) {
-  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+  try { $d = Read-JsonFile $f.FullName } catch { continue }
   foreach ($r in @($d.deals)) { if (-not $r.found_by_term) { [void]$allItems.Add([string]$r.item) } }
 }
 $allBlob = @($allItems | ForEach-Object { Get-Collapsed $_ })

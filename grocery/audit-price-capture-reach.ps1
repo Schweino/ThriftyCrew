@@ -42,6 +42,7 @@
 #>
 param([string]$OutDir = '', [switch]$Quiet, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
@@ -150,7 +151,7 @@ if (-not $ptFile) {
   Write-GuardComplete -Name 'price-capture-reach' -Summary 'BLIND: no price table'
   exit 3
 }
-$pt = Get-Content $ptFile.FullName -Raw | ConvertFrom-Json
+$pt = Read-JsonFile $ptFile.FullName
 $keys = New-Object 'System.Collections.Generic.HashSet[string]'
 $ids = New-Object 'System.Collections.Generic.HashSet[string]'
 foreach ($r in @($pt.items)) {
@@ -163,7 +164,7 @@ foreach ($ss in $SIDE_STORES) {
   $path = Join-Path $root $ss.file
   if (-not (Test-Path $path)) { continue }
   $doc = $null
-  try { $doc = Get-Content $path -Raw | ConvertFrom-Json } catch { }
+  try { $doc = Read-JsonFile $path } catch { }
   if (-not $doc) { continue }
   $obs = @()
   if ($ss.file -eq 'ingredient-queue.json') { $obs = @(Get-QueueObservations -Doc $doc) }

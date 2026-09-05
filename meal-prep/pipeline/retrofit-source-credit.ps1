@@ -33,6 +33,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 
@@ -53,7 +54,7 @@ function New-CreditHtml([string]$site, [string]$url, $servings) {
 }
 
 function Invoke-Retrofit($specDir, $dbPath, [bool]$apply) {
-  $db = Get-Content $dbPath -Raw | ConvertFrom-Json
+  $db = Read-JsonFile $dbPath
   $bySlug = @{}
   foreach ($r in @($db.recipes)) { $bySlug[[string]$r.slug] = $r }
 
@@ -64,7 +65,7 @@ function Invoke-Retrofit($specDir, $dbPath, [bool]$apply) {
   foreach ($f in @(Get-ChildItem (Join-Path $specDir '*.json') | Where-Object { $_.Name -ne '_index.json' })) {
     $slug = $f.BaseName
     $spec = $null
-    try { $spec = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+    try { $spec = Read-JsonFile $f.FullName } catch { continue }
     if ([string]$spec.credit_html) { $skipHave++; continue }          # refusal 1
     $r = $bySlug[$slug]
     $site = if ($r) { [string]$r.source_site } else { '' }
@@ -117,16 +118,16 @@ if ($SelfTest) {
     ) } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T 'recipes-db.json') -Encoding UTF8
 
     $r = Invoke-Retrofit (Join-Path $T 'recipes') (Join-Path $T 'recipes-db.json') $true
-    $g = Get-Content (Join-Path $T 'recipes\slow-cooker-general-tso-chicken-bowls.json') -Raw | ConvertFrom-Json
+    $g = Read-JsonFile (Join-Path $T 'recipes\slow-cooker-general-tso-chicken-bowls.json')
     Chk 'MUST FIRE  the live case gets the 399-card sentence, verbatim' ($g.credit_html -eq 'Recipe adapted from <a href="https://www.foodfaithfitness.com/slow-cooker-general-tsos-chicken/" target="_blank" rel="noopener">Food Faith Fitness</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.') ("" + $g.credit_html)
     Chk 'MUST FIRE  source_site and source_url land on the spec too' ($g.source_site -eq 'Food Faith Fitness' -and $g.source_url -match 'foodfaithfitness') ("$($g.source_site) / $($g.source_url)")
-    $a = Get-Content (Join-Path $T 'recipes\already.json') -Raw | ConvertFrom-Json
+    $a = Read-JsonFile (Join-Path $T 'recipes\already.json')
     Chk 'MUST NOT FIRE  an existing credit is never re-attributed' ($a.credit_html -match 'keep\.me' -and $a.credit_html -notmatch 'other') ("" + $a.credit_html)
-    $b = Get-Content (Join-Path $T 'recipes\bbq-chicken-rice-bowls.json') -Raw | ConvertFrom-Json
+    $b = Read-JsonFile (Join-Path $T 'recipes\bbq-chicken-rice-bowls.json')
     Chk 'MUST NOT FIRE  no source recorded -> left silent, and NAMED' ((-not [string]$b.credit_html) -and ($r.noSource -contains 'bbq-chicken-rice-bowls')) ("credit=[$($b.credit_html)] named=$($r.noSource -join ',')")
-    $u = Get-Content (Join-Path $T 'recipes\badurl.json') -Raw | ConvertFrom-Json
+    $u = Read-JsonFile (Join-Path $T 'recipes\badurl.json')
     Chk 'MUST NOT FIRE  a non-http URL never reaches an href' ((-not [string]$u.credit_html) -and (@($r.badUrl | Where-Object { $_ -match 'badurl' }).Count -eq 1)) ("credit=[$($u.credit_html)]")
-    $m = Get-Content (Join-Path $T 'recipes\amp.json') -Raw | ConvertFrom-Json
+    $m = Read-JsonFile (Join-Path $T 'recipes\amp.json')
     Chk 'an ampersand in the site name is ESCAPED, not refused' ($m.credit_html -match 'Salt &amp; Lavender') ("" + $m.credit_html)
     $r2 = Invoke-Retrofit (Join-Path $T 'recipes') (Join-Path $T 'recipes-db.json') $true
     Chk 'idempotent - a second run credits nothing new' ($r2.done.Count -eq 0) ("done=" + $r2.done.Count)
@@ -136,14 +137,14 @@ if ($SelfTest) {
     @{ name = 'Db Servings'; credit_html = '' } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T 'recipes\dbserv.json') -Encoding UTF8
     @{ name = 'No Servings'; credit_html = '' } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T 'recipes\noserv.json') -Encoding UTF8
     $dbp = Join-Path $T 'recipes-db.json'
-    $d2 = Get-Content $dbp -Raw | ConvertFrom-Json
+    $d2 = Read-JsonFile $dbp
     $d2.recipes += @{ slug = 'dbserv'; source_site = 'S'; source_url = 'https://s.example/'; servings = 14 }
     $d2.recipes += @{ slug = 'noserv'; source_site = 'S'; source_url = 'https://s.example/' }
     $d2 | ConvertTo-Json -Depth 5 | Set-Content $dbp -Encoding UTF8
     $null = Invoke-Retrofit (Join-Path $T 'recipes') $dbp $true
-    $ds = Get-Content (Join-Path $T 'recipes\dbserv.json') -Raw | ConvertFrom-Json
+    $ds = Read-JsonFile (Join-Path $T 'recipes\dbserv.json')
     Chk 'MUST FIRE  a spec with no servings takes the DB row''s count (the 100-original case)' ($ds.credit_html -match 'rebuilt for 14-serving budget') ("" + $ds.credit_html)
-    $ns = Get-Content (Join-Path $T 'recipes\noserv.json') -Raw | ConvertFrom-Json
+    $ns = Read-JsonFile (Join-Path $T 'recipes\noserv.json')
     Chk 'a recipe NEITHER side has a count for is not told it has one' ($ns.credit_html -match 'rebuilt for budget meal prep') ("" + $ns.credit_html)
   } finally { Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue }
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }

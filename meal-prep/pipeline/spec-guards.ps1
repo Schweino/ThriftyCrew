@@ -59,9 +59,9 @@ if(Test-Path $ManifestFile){
 }
 $specDir = $SpecsDir
 $proseDir = $ProseDir
-$db = (Get-Content $FoodDbFile -Raw | ConvertFrom-Json).items
+$db = (Read-JsonFile $FoodDbFile).items
 $dbm=@{}; foreach($i in $db){ $dbm[$i.item]=$i }
-$computed = Get-Content $ComputedFile -Raw | ConvertFrom-Json
+$computed = Read-JsonFile $ComputedFile
 $compIdx=@{}; foreach($r in $computed){ $compIdx[[string]$r.slug]=$r }
 # the single recipe genuinely at protein rank #1 - the only one allowed an unscoped batch-primacy claim
 $rank1Slug = ($computed | Sort-Object { [double]$_.per_serving.protein_g } -Descending | Select-Object -First 1).slug
@@ -73,6 +73,8 @@ if(Test-Path $runManifest){ foreach($s in (Get-Content $runManifest)){ if($s){ $
 
 $WEIGH = 'Weigh your empty mixing pot and write the number down for portioning later.'
 $fails=@{}; $ready=@()
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Fail($slug,$msg){ if(-not $fails.ContainsKey($slug)){ $fails[$slug]=@() }; $fails[$slug]+= $msg }
 
 # every string inside an arbitrary spec object (for the dash sweep + forbidden-term sweep)
@@ -92,7 +94,7 @@ $specs = Get-ChildItem $specDir -Filter '*.json' | Where-Object { $_.Name -ne '_
 $slugSeen=@{}
 foreach($sf in $specs){
   $spec = $null
-  try { $spec = Get-Content $sf.FullName -Raw | ConvertFrom-Json } catch { Fail $sf.BaseName 'spec is not valid JSON'; continue }
+  try { $spec = Read-JsonFile $sf.FullName } catch { Fail $sf.BaseName 'spec is not valid JSON'; continue }
   $slug = [string]$spec.slug
 
   # ---------- identity ----------
@@ -125,7 +127,7 @@ foreach($sf in $specs){
     $pf = Join-Path $proseDir ("prose-$slug.json")
     if(-not (Test-Path $pf)){ Fail $slug 'missing prose file'; continue }
     $pr = $null
-    try { $pr = Get-Content $pf -Raw | ConvertFrom-Json } catch { Fail $slug 'prose not valid JSON'; continue }
+    try { $pr = Read-JsonFile $pf } catch { Fail $slug 'prose not valid JSON'; continue }
 
     # AUTO-NUMERIC-SYNC: prose is written against a spec generation that may predate a re-cost.
     # Contract: cost_closing/upsell reference ONLY cost_ps; intro/portion/description reference
@@ -321,7 +323,7 @@ foreach($sf in $specs){
     $acceptFile = Join-Path $RunDir 'guard-accepts.json'
     $accepted = $false
     if(Test-Path $acceptFile){
-      $acc = Get-Content $acceptFile -Raw | ConvertFrom-Json
+      $acc = Read-JsonFile $acceptFile
       if($acc.PSObject.Properties[$slug]){ $accepted = $true
         Write-Output ("  ACCEPTED-VERIFY $slug :: " + [string]$acc.$slug) }
     }

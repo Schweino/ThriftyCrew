@@ -13,17 +13,18 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 if (-not $OutDir) { $OutDir = Join-Path $root 'out\staples500' }
 $genDir = Join-Path $OutDir 'gen'
 
 $UNITS = @('lb','oz','floz','each','dozen','gallon')
 $catLabels = @()
-foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories) { $catLabels += [string]$c.label }
+foreach ($c in (Read-JsonFile (Join-Path $root 'categories.json')).categories) { $catLabels += [string]$c.label }
 function NormLabel([string]$s) { ((($s.ToLower() -replace '[^a-z0-9 ]',' ') -replace '\s+',' ').Trim() -replace 's\b','') }
 
 $existingIds = @{}; $existingLabels = @{}
-foreach ($cm in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) {
+foreach ($cm in (Read-JsonFile (Join-Path $root 'commodities.json'))) {
   $existingIds[[string]$cm.id] = $true
   $existingLabels[(NormLabel ([string]$cm.label))] = [string]$cm.id
 }
@@ -37,7 +38,7 @@ foreach ($f in (Get-ChildItem (Join-Path $genDir 'agent-*.json') -ErrorAction Si
   # that rejected all 542 candidates as one bad slug each on the first run). foreach unwraps a bare collection
   # correctly, so iterate the parse result directly.
   $parsed = $null
-  try { $parsed = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { $rejects.Add("$($f.Name): UNPARSEABLE JSON - entire file skipped"); continue }
+  try { $parsed = Read-JsonFile $f.FullName } catch { $rejects.Add("$($f.Name): UNPARSEABLE JSON - entire file skipped"); continue }
   foreach ($x in $parsed) {
     $id = ([string]$x.id).Trim().ToLower()
     $name = ([string]$x.name).Trim()

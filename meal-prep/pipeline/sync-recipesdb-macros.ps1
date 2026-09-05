@@ -38,6 +38,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 # $PSScriptRoot is meal-prep\pipeline, so meal-prep is one level up and the repo root is two.
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = Split-Path $here -Parent
@@ -56,7 +57,7 @@ $script:MACRO_PAIRS = @(
 
 function Get-FoodDb([string]$path) {
   $h = @{}
-  $fd = Get-Content $path -Raw | ConvertFrom-Json
+  $fd = Read-JsonFile $path
   foreach ($r in @($fd.items)) { if ($r.item) { $h[[string]$r.item] = $r } }
   return $h
 }
@@ -133,7 +134,7 @@ if ($foodDb.Count -eq 0) { Write-Output 'BLIND: the food DB loaded zero rows - n
 $want = @{}      # slug -> @{ cal; protein; carbs; fat }
 $refused = New-Object System.Collections.Generic.List[string]
 foreach ($sf in (Get-ChildItem (Join-Path $mp 'db\recipes\*.json'))) {
-  $spec = Get-Content $sf.FullName -Raw | ConvertFrom-Json
+  $spec = Read-JsonFile $sf.FullName
   if (-not $spec.stat) { continue }
   $why = Test-SpecStatEarnsTrust -Spec $spec -Db $foodDb
   if ($why) { $refused.Add(($sf.BaseName + ' : ' + $why)); continue }

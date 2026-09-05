@@ -45,6 +45,7 @@ param(
   [string]$ListFile
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 if (-not $ListFile) { $ListFile = Join-Path $Root 'known-wrong.json' }
 $outDir = Join-Path $Root 'out'
@@ -84,13 +85,13 @@ if ($Reverse) {
   $cmF = Join-Path $Root 'commodities.json'
   if (Test-Path $cmF) {
     # assign FIRST: `@(Get-Content | ConvertFrom-Json)` does not unroll a bare top-level JSON array in PS 5.1
-    $cmAll = Get-Content $cmF -Raw | ConvertFrom-Json
+    $cmAll = Read-JsonFile $cmF
     $ids = @{}; foreach ($c in $cmAll) { if ($c -and $c.id) { $ids[[string]$c.id] = $true } }
     if ($ids.Count -ge 2 -and -not $ids.ContainsKey($Commodity)) { Die ("'" + $Commodity + "' is not a commodity id in commodities.json. An entry on a non-existent commodity can never fire.") }
   }
   $stF = Join-Path $Root 'stores.json'
   if (Test-Path $stF) {
-    $names = @{}; foreach ($s in @((Get-Content $stF -Raw | ConvertFrom-Json).stores)) { if ($s -and $s.name) { $names[[string]$s.name] = [string]$s.regular_prefix } }
+    $names = @{}; foreach ($s in @((Read-JsonFile $stF).stores)) { if ($s -and $s.name) { $names[[string]$s.name] = [string]$s.regular_prefix } }
     if ($names.Count -ge 2 -and -not $names.ContainsKey($Store)) { Die ("'" + $Store + "' is not a store name in stores.json (" + (($names.Keys | Sort-Object) -join ', ') + ")") }
   }
 
@@ -101,7 +102,7 @@ if ($Reverse) {
   $cmpF = @(Get-ChildItem (Join-Path $outDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
   $boardItem = ''
   foreach ($f in $cmpF) {
-    foreach ($r in @((Get-Content $f.FullName -Raw | ConvertFrom-Json).comparison)) {
+    foreach ($r in @((Read-JsonFile $f.FullName).comparison)) {
       if ([string]$r.id -ne $Commodity) { continue }
       foreach ($s in $r.stores) {
         if ([string]$s.store -ne $Store) { continue }
@@ -119,12 +120,12 @@ if ($Reverse) {
   # pipeline mangles the name (it has shipped one product three ways in four days)
   if (-not $ProductId) {
     $prefix = ''
-    if (Test-Path $stF) { foreach ($s in @((Get-Content $stF -Raw | ConvertFrom-Json).stores)) { if ([string]$s.name -eq $Store) { $prefix = [string]$s.regular_prefix } } }
+    if (Test-Path $stF) { foreach ($s in @((Read-JsonFile $stF).stores)) { if ([string]$s.name -eq $Store) { $prefix = [string]$s.regular_prefix } } }
     if ($prefix) {
       $want = @{}; foreach ($n in $useNames) { $want[(($n + '') -replace '[^a-zA-Z0-9]', '').ToLower()] = $true }
       $rf = @(Get-ChildItem (Join-Path $outDir ('regular\' + $prefix + '-regular-*.json')) -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
       foreach ($f in $rf) {
-        foreach ($d in @((Get-Content $f.FullName -Raw | ConvertFrom-Json).deals)) {
+        foreach ($d in @((Read-JsonFile $f.FullName).deals)) {
           $k = (([string]$d.item) -replace '[^a-zA-Z0-9]', '').ToLower()
           if (-not $want.ContainsKey($k)) { continue }
           $p = @($d.PSObject.Properties.Name)

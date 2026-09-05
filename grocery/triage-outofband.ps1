@@ -17,12 +17,13 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
-$gapRows = @((Get-Content (Join-Path $OutDir 'gap-triage.json') -Raw | ConvertFrom-Json).rows) | Where-Object { $_.cause -eq 'OUT-OF-BAND' }
+$gapRows = @((Read-JsonFile (Join-Path $OutDir 'gap-triage.json')).rows) | Where-Object { $_.cause -eq 'OUT-OF-BAND' }
 $fF = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') | Sort-Object Name -Descending | Select-Object -First 1
-$fl = Get-Content $fF.FullName -Raw | ConvertFrom-Json
+$fl = Read-JsonFile $fF.FullName
 $rows = if ($fl.flagged) { @($fl.flagged) } elseif ($fl.rows) { @($fl.rows) } else { @($fl) }
 $idx = @{}
 foreach ($r in $rows) { $idx[([string]$r.id + '|' + [string]$r.store + '|' + [string]$r.name)] = $r }

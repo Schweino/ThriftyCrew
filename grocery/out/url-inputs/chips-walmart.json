@@ -1,203 +1,155 @@
 ﻿[
     {
-        "id":  "achiote-paste",
-        "q":  "achiote paste",
-        "match":  "Chef Merito Achiote Seasoning Paste, 3.5 Oz",
-        "size":  "3.5 oz",
-        "pu":  0.6486,
-        "unit":  "oz"
+        "id":  "artichokes",
+        "q":  "fresh artichokes",
+        "match":  "REESE ARTICHOKE HRTS 6-8 CT-14 OZ -Pack of 12",
+        "size":  "oz",
+        "pu":  8.9988,
+        "unit":  "each"
     },
     {
-        "id":  "ground-allspice",
-        "q":  "ground allspice",
-        "match":  "Great Value Ground Allspice, 2 oz",
-        "size":  "2 oz",
-        "pu":  1.06,
-        "unit":  "oz"
+        "id":  "bagels",
+        "q":  "plain bagels",
+        "match":  "Great Value Pre-Sliced Cinnamon Raisin Bagels, 20 oz, 6 Count",
+        "size":  "20 oz",
+        "pu":  0.3567,
+        "unit":  "each"
     },
     {
-        "id":  "dried-basil",
-        "q":  "dried basil",
-        "match":  "Soeos Dried Basil Leaves 5 oz (142g) Each, Pack of 2, Cut \u0026",
-        "size":  "5 oz",
-        "pu":  0.978,
-        "unit":  "oz"
+        "id":  "bar-soap",
+        "q":  "bar soap",
+        "match":  "Ivory Gentle Bar Soap, Original Scent 3.17 oz, 12 Count",
+        "size":  "38.04 oz",
+        "pu":  0.6642,
+        "unit":  "each"
     },
     {
-        "id":  "fresh-basil",
-        "q":  "fresh basil",
-        "match":  "Fresh Basil, 0.5 oz Clamshell",
-        "size":  "0.5 oz",
-        "pu":  3.56,
-        "unit":  "oz"
-    },
-    {
-        "id":  "bay-leaves",
-        "q":  "bay leaves",
-        "match":  "Soeos Whole Bay Leaves 2oz, Dried Laurel, Non-GMO Verified,",
-        "size":  "2 oz",
-        "pu":  3.995,
-        "unit":  "oz"
+        "id":  "bell-peppers",
+        "q":  "green bell pepper",
+        "match":  "Marketside Organic Green Bell Pepper, 8 oz, 2 Count",
+        "size":  "8 oz",
+        "pu":  1.48,
+        "unit":  "each"
     },
     {
         "id":  "berbere-seasoning",
         "q":  "berbere seasoning",
-        "match":  "NY SPICE SHOP Ethiopian Berbere Spice Seasoning - 1 Pound",
-        "size":  "16 oz",
-        "pu":  1.1044,
+        "match":  "Morton \u0026 Bassett Berbere Seasoning, 1.3 oz - Spice Blend",
+        "size":  "1.3 oz",
+        "pu":  4.9923,
         "unit":  "oz"
     },
     {
-        "id":  "brown-gravy-mix",
-        "q":  "brown gravy mix",
-        "match":  "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
-        "size":  "0.9 oz",
-        "pu":  0.5333,
+        "id":  "bouillon",
+        "q":  "chicken bouillon cubes",
+        "match":  "Knorr Granulated Beef Bouillon Ground Seasoning, 2.0 lb Jar",
+        "size":  "32 oz",
+        "pu":  0.1681,
         "unit":  "oz"
     },
     {
-        "id":  "cajun-seasoning",
-        "q":  "cajun seasoning",
-        "match":  "Tony Chachere\u0027s, Seasoning, Cajun, 8 oz",
-        "size":  "8 oz",
-        "pu":  0.3425,
-        "unit":  "oz"
+        "id":  "bread",
+        "q":  "white bread",
+        "match":  "(2 pack) Canyon Bakehouse Country White Gluten Free Bread, 100% Whole Grain Sandwich Bread, Fresh, 15 oz Loaf",
+        "size":  "30 oz",
+        "pu":  6.97,
+        "unit":  "each"
     },
     {
-        "id":  "beef-stew",
-        "q":  "canned beef stew",
-        "match":  "DINTY MOORE Beef Stew, Shelf-Stable, Steel Can 38 oz",
-        "size":  "38 oz",
-        "pu":  0.165,
-        "unit":  "oz"
+        "id":  "brownie-mix",
+        "q":  "brownie mix",
+        "match":  "(2 pack) Betty Crocker Favorites Milk Chocolate Brownie Mix,16.3 oz",
+        "size":  "32.6 oz",
+        "pu":  1.96,
+        "unit":  "each"
     },
     {
-        "id":  "canned-green-chilies",
-        "q":  "diced green chiles",
-        "match":  "Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Ca",
-        "size":  "7 oz",
-        "pu":  0.3671,
-        "unit":  "oz"
+        "id":  "cake-mix",
+        "q":  "yellow cake mix",
+        "match":  "(3 pack) \"JIFFY\" Golden Yellow Cake Mix, 9 oz Box",
+        "size":  "27 oz",
+        "pu":  0.98,
+        "unit":  "each"
     },
     {
-        "id":  "cayenne-pepper",
-        "q":  "cayenne pepper",
-        "match":  "Great Value Ground Cayenne Red Pepper, 5.2 oz",
-        "size":  "5.2 oz",
-        "pu":  0.8385,
-        "unit":  "oz"
+        "id":  "coffee-pods",
+        "q":  "coffee k cups",
+        "match":  "Great Value 100% Arabica Colombian Medium Dark Roast Ground Coffee Pods, 33.1 oz, 100 Count",
+        "size":  "33.1 oz",
+        "pu":  0.3347,
+        "unit":  "each"
     },
     {
-        "id":  "cheese-tortellini",
-        "q":  "cheese tortellini",
-        "match":  "Great Value Family Size Cheese Tortellini, Pasta, 36 oz Bag",
-        "size":  "36 oz",
-        "pu":  0.1881,
-        "unit":  "oz"
+        "id":  "corn-dogs",
+        "q":  "corn dogs",
+        "match":  "Bar-S Classic Corn Dogs, 16-Count",
+        "size":  "42.761 oz",
+        "pu":  0.4356,
+        "unit":  "each"
     },
     {
-        "id":  "chicken-livers",
-        "q":  "chicken livers",
-        "match":  "Tyson All Natural Chicken Livers, 1.25 lb",
-        "size":  "1.3 lb",
-        "pu":  1.5077,
-        "unit":  "lb"
+        "id":  "croissants",
+        "q":  "croissants",
+        "match":  "Marketside All Butter Baked Mini Croissants, 10.9 oz, 11 Count",
+        "size":  "10.9 oz",
+        "pu":  0.4527,
+        "unit":  "each"
     },
     {
-        "id":  "chili-crisp",
-        "q":  "chili crisp",
-        "match":  "Laoganma Spicy Chili Crisp Sauce, 7.41 Fl Oz",
-        "size":  "7.4 oz",
-        "pu":  0.6716,
-        "unit":  "oz"
-    },
-    {
-        "id":  "five-spice-powder",
-        "q":  "five spice powder",
-        "match":  "McCormick Gourmet Kosher Chinese Five Spice Blend, 1.75 oz B",
-        "size":  "1.7 oz",
-        "pu":  4.7824,
-        "unit":  "oz"
-    },
-    {
-        "id":  "chipotle-adobo",
-        "q":  "chipotle peppers in adobo",
-        "match":  "EMBASA Chipotle Peppers in Adobo Sauce, Shelf Stable, 7 oz S",
-        "size":  "7 oz",
-        "pu":  0.2343,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ground-cloves",
-        "q":  "ground cloves",
-        "match":  "Great Value Ground Cloves, 2 oz",
-        "size":  "2 oz",
-        "pu":  1.09,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ground-coriander",
-        "q":  "ground coriander",
-        "match":  "Badia Coriander Ground",
-        "size":  "14 oz",
-        "pu":  0.9964,
-        "unit":  "oz"
-    },
-    {
-        "id":  "corn-muffin-mix",
-        "q":  "corn muffin mix",
-        "match":  "\"JIFFY\" Corn Muffin Mix, 8.5 oz Box",
-        "size":  "8.5 oz",
-        "pu":  0.0847,
-        "unit":  "oz"
-    },
-    {
-        "id":  "corned-beef-brisket",
-        "q":  "corned beef brisket",
-        "match":  "Blarney Stone, No MSG, Gluten Free, Corned Beef Brisket Flat 1.75-3.75 lb",
-        "size":  "3.1 lb",
-        "pu":  4.9968,
-        "unit":  "lb"
+        "id":  "cucumbers",
+        "q":  "cucumber",
+        "match":  "Fresh Cucumber, Each",
+        "size":  "each",
+        "pu":  0.76,
+        "unit":  "each"
     },
     {
         "id":  "curry-powder",
         "q":  "curry powder",
-        "match":  "Great Value Curry Powder, 2 oz",
-        "size":  "2 oz",
-        "pu":  1.04,
+        "match":  "Badia Curry Powder, 16 Oz",
+        "size":  "16 oz",
+        "pu":  0.9144,
         "unit":  "oz"
     },
     {
-        "id":  "diced-ham",
-        "q":  "diced ham",
-        "match":  "Farmland Diced Ham 16oz",
-        "size":  "1 lb",
-        "pu":  0.31,
-        "unit":  "oz"
-    },
-    {
-        "id":  "dried-dill",
-        "q":  "dill weed",
-        "match":  "Frontier Co-op Certified Organic Dill Weed, 16 oz. Bag",
-        "size":  "15.9 oz",
-        "pu":  1.5145,
-        "unit":  "oz"
-    },
-    {
-        "id":  "eggplant",
-        "q":  "eggplant",
-        "match":  "Fresh Purple Eggplant, Each",
-        "size":  "1 lb",
-        "pu":  1.82,
+        "id":  "dinner-rolls",
+        "q":  "dinner rolls",
+        "match":  "Freshness Guaranteed Yeasty Dinner Rolls, 12 oz, 12 Count",
+        "size":  "12 oz",
+        "pu":  0.205,
         "unit":  "each"
     },
     {
-        "id":  "fish-sauce",
-        "q":  "fish sauce",
-        "match":  "Kikkoman Gluten‑Free Fish Sauce, 6.8 fl oz Glass Bottle",
-        "size":  "6.8 fl oz",
-        "pu":  0.4176,
-        "unit":  "floz"
+        "id":  "dishwasher-detergent",
+        "q":  "dishwasher detergent pacs",
+        "match":  "Great Value Original Dishwasher Pacs, Fresh Scent, 115 Count",
+        "size":  "54.667 oz",
+        "pu":  0.1212,
+        "unit":  "each"
+    },
+    {
+        "id":  "donuts",
+        "q":  "glazed donuts",
+        "match":  "Krispy Kreme® 12-Count Original Glazed® Doughnut Dots",
+        "size":  "4.509 oz",
+        "pu":  0.3983,
+        "unit":  "each"
+    },
+    {
+        "id":  "breakfast-sandwiches",
+        "q":  "frozen breakfast sandwiches",
+        "match":  "Great Value Sausage Egg and Cheese Croissant Sandwiches, 4.4 oz, 8 Count (Frozen)",
+        "size":  "35.2 oz",
+        "pu":  1.2462,
+        "unit":  "each"
+    },
+    {
+        "id":  "frozen-burritos",
+        "q":  "frozen burritos",
+        "match":  "Great Value Bean \u0026 Cheese Burritos, 32 oz, 8 Count (Frozen)",
+        "size":  "32 oz",
+        "pu":  0.4775,
+        "unit":  "each"
     },
     {
         "id":  "frozen-pizza",
@@ -208,292 +160,188 @@
         "unit":  "each"
     },
     {
+        "id":  "frozen-waffles",
+        "q":  "frozen waffles",
+        "match":  "Great Value Buttermilk Waffles, 29.6 oz, 24 Count (Frozen)",
+        "size":  "29.6 oz",
+        "pu":  0.1725,
+        "unit":  "each"
+    },
+    {
         "id":  "fruit-cups",
         "q":  "fruit cups",
-        "match":  "Dole Fruit Bowls No Sugar Added Variety Pack, 4 oz Cups (12 Pack)",
-        "size":  "48 oz",
-        "pu":  0.7783,
+        "match":  "Great Value Mandarin Oranges in 100% Juice, 4 oz, 4 Count",
+        "size":  "16 oz",
+        "pu":  0.5925,
         "unit":  "each"
     },
     {
         "id":  "fruit-snacks",
         "q":  "fruit snacks",
-        "match":  "Plum Organics® Teensy® Snacks Mixed Berry Soft Fruit Snacks .35oz Pouch/5-Count Box",
-        "size":  "1.747 oz",
-        "pu":  0.566,
+        "match":  "Great Value Fruit Smiles Snacks, Original Flavor, 40 Count",
+        "size":  "32.017 oz",
+        "pu":  0.1865,
         "unit":  "each"
     },
     {
-        "id":  "garam-masala",
-        "q":  "garam masala",
-        "match":  "24 Mantra Organic Garam Masala",
-        "size":  "10 oz",
-        "pu":  1.643,
-        "unit":  "oz"
+        "id":  "garlic-bread",
+        "q":  "frozen garlic bread",
+        "match":  "Great Value Garlic Texas Toast, 11.25 oz, 8 Count (Frozen)",
+        "size":  "11.25 oz",
+        "pu":  1.97,
+        "unit":  "each"
     },
     {
-        "id":  "ground-ginger",
-        "q":  "ground ginger",
-        "match":  "McCormick Ground Ginger, 1.5 oz Bottle",
-        "size":  "1.5 oz",
-        "pu":  3,
-        "unit":  "oz"
-    },
-    {
-        "id":  "gochujang",
-        "q":  "gochujang",
-        "match":  "bettergoods Gochujang Sauce, 12.5 oz",
-        "size":  "12.5 oz",
-        "pu":  0.2608,
-        "unit":  "oz"
-    },
-    {
-        "id":  "grits",
-        "q":  "quick grits",
-        "match":  "Quaker Old Fashioned Grits, 24 oz Canister",
-        "size":  "24 oz",
-        "pu":  0.1321,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ground-turmeric",
-        "q":  "ground turmeric",
-        "match":  "Badia Ground Turmeric, 16 oz",
-        "size":  "",
-        "pu":  0.815,
-        "unit":  "oz"
+        "id":  "granola-bars",
+        "q":  "chewy granola bars",
+        "match":  "Great Value Chocolate Chip Chewy Granola Bars, Family Size, 0.84 oz Paper Box, 48 Count",
+        "size":  "40.32 oz",
+        "pu":  0.1558,
+        "unit":  "each"
     },
     {
         "id":  "hamburger-buns",
         "q":  "hamburger buns",
-        "match":  "Nature\u0027s Own 100% Whole Wheat Hamburger Buns, Non-GMO Hamburger Buns, 28g Whole Grains per Bun, 8 Ct",
-        "size":  "14.981 oz",
-        "pu":  0.4962,
+        "match":  "Great Value White Hamburger Buns, 11 oz, 8 Count",
+        "size":  "11 oz",
+        "pu":  0.185,
         "unit":  "each"
     },
     {
         "id":  "harissa-paste",
         "q":  "harissa",
-        "match":  "Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz",
+        "match":  "Mina Harissa Mild Sauce, Homestyle Moroccan Red Pepper Haris",
         "size":  "10 oz",
-        "pu":  0.498,
+        "pu":  0.845,
         "unit":  "oz"
     },
     {
-        "id":  "hoisin-sauce",
-        "q":  "hoisin sauce",
-        "match":  "Lee Kum Kee Hoisin Sauce 20 oz.",
-        "size":  "20 oz",
-        "pu":  0.271,
-        "unit":  "floz"
+        "id":  "high-fiber-tortillas",
+        "q":  "carb balance burrito tortillas",
+        "match":  "Mission Carb Balance Flour Tortillas, Burrito Size, 6 Count",
+        "size":  "15 oz",
+        "pu":  0.745,
+        "unit":  "each"
     },
     {
-        "id":  "horseradish-sauce",
-        "q":  "horseradish sauce",
-        "match":  "Great Value Original Horseradish Sauce, 12 oz (Regular)",
-        "size":  "12 fl oz",
-        "pu":  0.1558,
-        "unit":  "oz"
+        "id":  "hot-cocoa",
+        "q":  "hot cocoa mix",
+        "match":  "Swiss Miss Chocolate Hot Cocoa Mix With Marshmallows, 1.38 oz., 30-Count Envelopes",
+        "size":  "41.4 oz",
+        "pu":  0.299,
+        "unit":  "each"
     },
     {
-        "id":  "italian-seasoning",
-        "q":  "italian seasoning",
-        "match":  "Great Value Italian Seasoning, 2 oz",
-        "size":  "2 oz",
-        "pu":  0.985,
-        "unit":  "oz"
+        "id":  "hot-dog-buns",
+        "q":  "hot dog buns",
+        "match":  "Great Value Hot Dog Buns, White, 11 oz, 8 Count",
+        "size":  "11 oz",
+        "pu":  0.185,
+        "unit":  "each"
     },
     {
-        "id":  "japanese-curry-roux",
-        "q":  "golden curry",
-        "match":  "S\u0026B Golden Curry Mild Japanese Curry Mix, 3.2 oz, 1 count Bo",
-        "size":  "3.2 oz",
-        "pu":  0.9125,
-        "unit":  "oz"
+        "id":  "keto-hamburger-buns",
+        "q":  "keto-hamburger-buns",
+        "match":  "bettergoods Keto Friendly Hamburger Buns, 14 oz, 8 Count",
+        "size":  "14 oz",
+        "pu":  0.5975,
+        "unit":  "each"
     },
     {
         "id":  "eggs",
         "q":  "large eggs",
         "match":  "Great Value Large White Eggs, 60 Count",
-        "size":  "120.847 oz",
-        "pu":  1.426,
+        "size":  "119.412 oz",
+        "pu":  1.624,
         "unit":  "dozen"
     },
     {
-        "id":  "fresh-mint",
-        "q":  "fresh mint",
-        "match":  "Fresh Mint, 0.5 oz Clamshell",
-        "size":  "0.5 oz",
-        "pu":  3.56,
-        "unit":  "oz"
+        "id":  "laundry-pods",
+        "q":  "laundry detergent pods",
+        "match":  "Great Value Ultimate Fresh Laundry Pacs, Original Clean, 60 Count",
+        "size":  "38.057 oz",
+        "pu":  0.1795,
+        "unit":  "each"
     },
     {
-        "id":  "mirin",
-        "q":  "mirin",
-        "match":  "Mizkan Mirin Sweet Cooking Seasoning, 12 fl oz",
-        "size":  "12 fl oz",
-        "pu":  0.26,
-        "unit":  "floz"
+        "id":  "lemons",
+        "q":  "lemons",
+        "match":  "Fresh Bulk Yellow Lemons",
+        "size":  "each",
+        "pu":  0.5,
+        "unit":  "each"
     },
     {
-        "id":  "ground-nutmeg",
-        "q":  "ground nutmeg",
-        "match":  "Great Value Ground Nutmeg, 1.5 oz",
-        "size":  "1.5 oz",
-        "pu":  1.64,
-        "unit":  "oz"
+        "id":  "mac-and-cheese",
+        "q":  "macaroni and cheese",
+        "match":  "Great Value Original Macaroni and Cheese, 2.05 oz, 8 Count",
+        "size":  "16.4 oz",
+        "pu":  0.8725,
+        "unit":  "each"
     },
     {
-        "id":  "oyster-sauce",
-        "q":  "oyster sauce",
-        "match":  "Heinz Golden Mark Oyster Sauce 9.2oz",
-        "size":  "9.2 oz",
-        "pu":  0.2587,
-        "unit":  "floz"
+        "id":  "mangoes",
+        "q":  "mango",
+        "match":  "Fresh Red Mango, Each",
+        "size":  "each",
+        "pu":  1,
+        "unit":  "each"
     },
     {
-        "id":  "dried-parsley",
-        "q":  "parsley flakes",
-        "match":  "Great Value Parsley Flakes, 2.7 oz",
-        "size":  "2.7 oz",
-        "pu":  2.2111,
-        "unit":  "oz"
-    },
-    {
-        "id":  "poblano-peppers",
-        "q":  "poblano peppers",
-        "match":  "Fresh Poblano Peppers, 16 oz",
-        "size":  "16 oz",
-        "pu":  3.26,
-        "unit":  "lb"
-    },
-    {
-        "id":  "pomegranate-molasses",
-        "q":  "pomegranate molasses",
-        "match":  "Sadaf brand Pomegranate Molasses, 10 Fl oz. in a bottle",
-        "size":  "10 fl oz",
-        "pu":  0.548,
-        "unit":  "floz"
-    },
-    {
-        "id":  "poppy-seeds",
-        "q":  "poppy seeds",
-        "match":  "McCormick Culinary Whole Dutch Poppy Seed, 20.0 oz Bottle",
-        "size":  "20 oz",
-        "pu":  0.9255,
-        "unit":  "oz"
-    },
-    {
-        "id":  "potato-gnocchi",
-        "q":  "gnocchi",
-        "match":  "Giovanni Rana Skillet Gnocchi 12 oz. Bag, Refrigerated",
-        "size":  "12 oz",
-        "pu":  0.1642,
-        "unit":  "oz"
-    },
-    {
-        "id":  "poultry-seasoning",
-        "q":  "poultry seasoning",
-        "match":  "Great Value Poultry Seasoning, 1.5 oz",
-        "size":  "1.5 oz",
-        "pu":  1.3133,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ranch-seasoning-mix",
-        "q":  "ranch seasoning mix",
-        "match":  "Great Value Classic Ranch Salad Dressing \u0026 Recipe Mix, 8 oz",
-        "size":  "8 oz",
-        "pu":  0.4975,
-        "unit":  "oz"
-    },
-    {
-        "id":  "red-pepper-flakes",
-        "q":  "crushed red pepper",
-        "match":  "Great Value Crushed Red Pepper, 12 oz",
-        "size":  "",
-        "pu":  0.595,
-        "unit":  "oz"
-    },
-    {
-        "id":  "refrigerated-biscuits",
-        "q":  "refrigerated biscuits",
-        "match":  "Great Value Butter Flavor Flaky Jumbo Biscuits, 16 oz, 8 Cou",
-        "size":  "15.9 oz",
-        "pu":  0.1233,
-        "unit":  "oz"
-    },
-    {
-        "id":  "rice-noodles",
-        "q":  "rice noodles",
-        "match":  "Thai Kitchen Gluten Free Gluten Free Stir Fry Rice Noodles,",
+        "id":  "muffins",
+        "q":  "blueberry muffins",
+        "match":  "Marketside Baked Blueberry Muffins, 14 oz, 9 Count (Shelf Stable)",
         "size":  "14 oz",
-        "pu":  0.34,
-        "unit":  "oz"
+        "pu":  0.5522,
+        "unit":  "each"
     },
     {
-        "id":  "rye-bread",
-        "q":  "rye bread",
-        "match":  "Great Value New York Style Rye Bread, 24 oz",
-        "size":  "24.1 oz",
-        "pu":  0.1029,
-        "unit":  "oz"
+        "id":  "pineapple",
+        "q":  "whole pineapple",
+        "match":  "Fresh Pineapple, Each",
+        "size":  "each",
+        "pu":  1.88,
+        "unit":  "each"
     },
     {
-        "id":  "sesame-oil",
-        "q":  "sesame oil",
-        "match":  "Oi! Toasted Pure Sesame Oil 250 ml",
-        "size":  "8.4 fl oz",
-        "pu":  0.6214,
-        "unit":  "floz"
-    },
-    {
-        "id":  "toasted-sesame-seeds",
-        "q":  "sesame seeds",
-        "match":  "Terrasoul Superfoods Organic Black Sesame Seeds, 2 Lbs - Raw",
-        "size":  "32 oz",
-        "pu":  0.5466,
-        "unit":  "oz"
-    },
-    {
-        "id":  "sugar-snap-peas",
-        "q":  "sugar snap peas",
-        "match":  "Marketside Fresh Sugar Snap Peas, 8 oz",
-        "size":  "8 oz",
-        "pu":  0.3162,
-        "unit":  "oz"
-    },
-    {
-        "id":  "sun-dried-tomatoes",
-        "q":  "sun dried tomatoes",
-        "match":  "Bella Sun Luci Sun Dried Tomatoes in Olive Oil with Italian",
-        "size":  "8.5 oz",
-        "pu":  0.6094,
-        "unit":  "oz"
-    },
-    {
-        "id":  "red-curry-paste",
-        "q":  "red curry paste",
-        "match":  "Mae Ploy Red Curry Paste, 14 oz",
+        "id":  "pita-bread",
+        "q":  "pita bread",
+        "match":  "Joseph\u0027s White Greek Style Pocketless Pita 4 Count 14 oz",
         "size":  "14 oz",
-        "pu":  0.4514,
-        "unit":  "oz"
+        "pu":  0.87,
+        "unit":  "each"
     },
     {
-        "id":  "dried-thyme",
-        "q":  "dried thyme",
-        "match":  "Great Value Ground Thyme, 1.4 oz",
-        "size":  "1.4 oz",
-        "pu":  1.9857,
-        "unit":  "oz"
+        "id":  "popsicles",
+        "q":  "popsicles ice pops",
+        "match":  "FunPops Freeze Pops, Variety Pack, Gluten Free, 2 oz, 36 Count Bag",
+        "size":  "72 oz",
+        "pu":  0.0825,
+        "unit":  "each"
     },
     {
-        "id":  "tomatillos",
-        "q":  "tomatillos",
-        "match":  "Fresh Tomatillos Milpero, 16 oz",
-        "size":  "16 oz",
-        "pu":  3.68,
-        "unit":  "lb"
+        "id":  "protein-bars",
+        "q":  "protein bars",
+        "match":  "Great Value Peanut Butter and Dark Chocolate Protein Bars, 21.1 oz, 15 Count",
+        "size":  "21.1 oz",
+        "pu":  0.528,
+        "unit":  "each"
+    },
+    {
+        "id":  "ramen",
+        "q":  "ramen noodles",
+        "match":  "Nissin Foods Cup Noodles Ramen Noodle Soup, Chicken Flavor, 2.25 oz Cup, Shelf-Stable, 6 Pack",
+        "size":  "13.5 oz",
+        "pu":  0.495,
+        "unit":  "each"
+    },
+    {
+        "id":  "taco-seasoning",
+        "q":  "taco seasoning",
+        "match":  "Great Value Mild Taco Seasoning Mix, 1 oz",
+        "size":  "oz",
+        "pu":  0.47,
+        "unit":  "oz"
     },
     {
         "id":  "tortillas",
@@ -504,19 +352,11 @@
         "unit":  "each"
     },
     {
-        "id":  "turkey-breast",
-        "q":  "turkey breast",
-        "match":  "Butterball All Natural Frozen Turkey Breast Roast, 3 lbs",
-        "size":  "3 lb",
-        "pu":  4.8133,
-        "unit":  "lb"
-    },
-    {
-        "id":  "walnuts",
-        "q":  "chopped walnuts",
-        "match":  "FISHER Chef\u0027s Naturals Chopped Walnuts, 16 oz, Naturally Glu",
-        "size":  "16 oz",
-        "pu":  0.5994,
-        "unit":  "oz"
+        "id":  "yellow-bell-pepper",
+        "q":  "yellow bell pepper",
+        "match":  "Fresh Yellow Bell Pepper, Each",
+        "size":  "1 each",
+        "pu":  1.46,
+        "unit":  "each"
     }
 ]

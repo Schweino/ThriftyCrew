@@ -32,6 +32,8 @@
 # Smaller than this and the "download" was an error page or a truncated write, not a flyer page.
 $script:AdPageMinBytes = 5000
 
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Get-AdPageMap {
   # Page number -> FileInfo for every <Prefix>-<N>.jpg in $Dir. Tolerates zero padding (Baker's writes
   # page-01.jpg, Fareway writes weekly-1.jpg) because the number is parsed, not string-matched.
@@ -87,7 +89,7 @@ function Read-AdWindowStamp {
   param([string]$Dir)
   $p = Join-Path $Dir 'ad-window.json'
   if (-not (Test-Path $p)) { return $null }
-  try { return (Get-Content $p -Raw | ConvertFrom-Json) } catch { return $null }
+  try { return (Read-JsonFile $p) } catch { return $null }
 }
 
 function Install-AdPages {

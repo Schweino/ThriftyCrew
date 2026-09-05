@@ -58,6 +58,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $mp 'lib\json-db-io.ps1')
@@ -293,7 +294,7 @@ if ($SelfTest) {
         Chk 'every repaired label scales to exactly one moving number' ($scBad.Count -eq 0) ($scBad -join ' | ')
 
         # ---- and the repair must not hand repair-cook-measures something it would undo ----------------
-        $dens = (Get-Content (Join-Path $mp 'db\densities.json') -Raw | ConvertFrom-Json).items
+        $dens = (Read-JsonFile (Join-Path $mp 'db\densities.json')).items
         $undo = @()
         foreach ($c in @(@('Garlic', '8 cloves, minced', 42), @('Chicken Broth', '1 cup', 240), @('Jalapeno', '2 1/2 jalapenos', 35))) {
             if (-not (Test-CmLabelTrue $dens ([string]$c[0]) ([string]$c[1]) ([double]$c[2]))) { $undo += ("{0}: '{1}' @ {2} g" -f $c[0], $c[1], $c[2]) }
@@ -305,7 +306,7 @@ if ($SelfTest) {
 
 $densPath = Join-Path $mp 'db\densities.json'
 if (-not (Test-Path $densPath)) { throw "no db\densities.json - this repair cannot weigh anything without it" }
-$dens = (Get-Content $densPath -Raw | ConvertFrom-Json).items
+$dens = (Read-JsonFile $densPath).items
 $res = Invoke-RangeBuyRepair (Join-Path $mp 'db\recipes') $dens ([bool]$Apply) $OVERRIDES
 Write-Output ("range-buy repair: {0} label(s) across {1} recipe(s){2}" -f $res.lines, $res.recipes, $(if ($Apply) { '' } else { '  [read-only - pass -Apply]' }))
 foreach ($s in $res.samples) { Write-Output ('    ' + $s) }

@@ -23,6 +23,7 @@
 param([switch]$SelfTest)
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # Keys that describe HOW to pull. Anything outside this set in a pull_profile is suspect; the
@@ -247,7 +248,7 @@ const r = await runPacedSweep(agent, wl);
   exit 0
 }
 
-$doc = Get-Content (Join-Path $here 'stores.json') -Raw | ConvertFrom-Json
+$doc = Read-JsonFile (Join-Path $here 'stores.json')
 $problems = Test-PullProfiles -Stores $doc.stores -Root $here
 
 if ($problems.Count) {

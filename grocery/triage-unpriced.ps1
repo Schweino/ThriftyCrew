@@ -20,16 +20,17 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
-$commods = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commods = Read-JsonFile (Join-Path $root 'commodities.json')
 if (@($commods).Count -lt 2) { throw 'ConvertFrom-Json array trap - see triage-coverage-gaps.ps1' }
 $unit = @{}; foreach ($c in $commods) { $unit[[string]$c.id] = [string]$c.unit }
 
-$gapRows = @((Get-Content (Join-Path $OutDir 'gap-triage.json') -Raw | ConvertFrom-Json).rows) | Where-Object { $_.cause -eq 'UNPRICED' }
+$gapRows = @((Read-JsonFile (Join-Path $OutDir 'gap-triage.json')).rows) | Where-Object { $_.cause -eq 'UNPRICED' }
 $candF = Get-ChildItem (Join-Path $OutDir 'candidates-*.json') | Sort-Object Name -Descending | Select-Object -First 1
 $cand = @{}
-foreach ($c in (Get-Content $candF.FullName -Raw | ConvertFrom-Json).commodities) {
+foreach ($c in (Read-JsonFile $candF.FullName).commodities) {
   foreach ($x in $c.candidates) { $cand[([string]$c.id + '|' + [string]$x.store + '|' + [string]$x.name)] = $x }
 }
 

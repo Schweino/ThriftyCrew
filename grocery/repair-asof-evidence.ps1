@@ -33,6 +33,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 # 0 = ask. Only build-fareway-regular passes -MaxAgeDays today, so this default was reachable
 # by any future caller and would have quietly re-dated rows against a window nothing else uses.
@@ -90,7 +91,7 @@ function Invoke-AsOfRepair([string]$store, [string]$base, [string]$regDir, [int]
   if ($files.Count -eq 0) { return "asof-repair [$store]: no dated regular file - nothing to repair" }
   $f = $files[0]
   $fileDate = [datetime]([regex]::Match($f.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
-  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $f.FullName
   $nameIx = if ($s.ContainsKey('nameIx')) { [int]$s.nameIx } else { 0 }
   $ev = Get-Evidence $s.glob $s.kind $nameIx $base
   # NO CAPTURES = NO EVIDENCE = NO REPAIR. Running with an empty evidence map would silently "find" nothing
@@ -162,7 +163,7 @@ if ($SelfTest) {
     (& $mk) | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json') -Encoding UTF8
     $msg = Invoke-AsOfRepair 'fareway' $T (Join-Path $T 'out\regular') 14
     Write-Output ("      " + ($msg -replace "`r?`n", ' '))
-    $d = Get-Content (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json') -Raw | ConvertFrom-Json
+    $d = Read-JsonFile (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json')
     $by = @{}; foreach ($x in @($d.deals)) { $by[[string]$x.item] = $x }
     Chk '(a) MUST FIRE laundered + past the window -> dropped' (-not $by.ContainsKey('Seedless Watermelon')) 'row survived'
     Chk '(a) the drop is NAMED with its real capture date' ($msg -match 'Seedless Watermelon' -and $msg -match '2026-07-15') ($msg -replace "`r?`n", ' ')
@@ -171,7 +172,7 @@ if ($SelfTest) {
     Chk '(d) CLEAN TWIN an UNBACKED row is never re-dated nor dropped' ($by.ContainsKey('Hand Verified Mystery Item') -and $by['Hand Verified Mystery Item'].as_of -eq '2026-07-02') ("present=" + $by.ContainsKey('Hand Verified Mystery Item'))
     Chk 'envelope survives (price_mode / mode_verified)' ($d.price_mode -eq 'in-store' -and $d.mode_verified -eq '2026-08-01') "price_mode=$($d.price_mode)"
     $msg2 = Invoke-AsOfRepair 'fareway' $T (Join-Path $T 'out\regular') 14
-    $d2 = Get-Content (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json') -Raw | ConvertFrom-Json
+    $d2 = Read-JsonFile (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json')
     Chk 'idempotent - a second run changes nothing' ((@($d2.deals).Count -eq 3) -and ($msg2 -match 'nothing to repair')) ("rows=$(@($d2.deals).Count) msg=$msg2")
     # NEVER FORWARD: a row dated BEFORE its newest sighting must keep its own older date. 2026-07-20 is
     # chosen deliberately - older than the 07-23 sighting (so a forward move would show) but still inside
@@ -182,7 +183,7 @@ if ($SelfTest) {
     $doc3.deals = @(@{ store = 'Fareway'; item = 'NatureSweet Cherubs Tomatoes'; ad_price = '$3.99'; size = '10 oz'; as_of = '2026-07-20' })
     $doc3 | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json') -Encoding UTF8
     $null = Invoke-AsOfRepair 'fareway' $T (Join-Path $T 'out\regular') 14
-    $d3 = Get-Content (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json') -Raw | ConvertFrom-Json
+    $d3 = Read-JsonFile (Join-Path $T 'out\regular\fareway-regular-2026-08-01.json')
     Chk 'dates move BACKWARD only - a re-sighting never re-verifies a row' ((@($d3.deals).Count -eq 1) -and (@($d3.deals)[0].as_of -eq '2026-07-20')) ("rows=$(@($d3.deals).Count) as_of=" + @($d3.deals)[0].as_of)
     # BLIND: no captures at all must NOT read as a clean run.
     Remove-Item (Join-Path $T 'out\fareway') -Recurse -Force

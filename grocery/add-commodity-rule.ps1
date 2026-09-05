@@ -56,6 +56,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $File) { $File = Join-Path $root 'commodities.json' }
 function Say([string]$s) { Write-Output $s }
@@ -100,7 +101,7 @@ if ($SelfTest) {
     [IO.File]::WriteAllText($f, (ConvertTo-Json $seed -Depth 8), (New-Object System.Text.UTF8Encoding($false)))
     $self = $PSCommandPath; if (-not $self) { $self = $MyInvocation.MyCommand.Path }
     function Run { param([object[]]$a) $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $self @a; return @{ rc = $LASTEXITCODE; out = ($o -join "`n") } }
-    function Doc { (Get-Content $f -Raw | ConvertFrom-Json) }
+    function Doc { (Read-JsonFile $f) }
     function Ent([string]$i) { @(Doc) | Where-Object { $_.id -eq $i } }
 
     # CREATE the key on an entry that has never had one - the frozen-cauliflower-rice case exactly.

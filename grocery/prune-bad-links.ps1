@@ -28,6 +28,7 @@
 #>
 param([double]$Tol = 0.32, [switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 
 # Per-unit math is shared with build-deals-page (the code that actually publishes the number) via
@@ -38,7 +39,7 @@ $root = $PSScriptRoot
 
 $puFile = Join-Path $root 'product-urls.json'
 Copy-Item $puFile (Join-Path $root 'out\product-urls.backup-preprune.json') -Force
-$doc = Get-Content $puFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $puFile
 $cmp = Get-Content (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName -Raw | ConvertFrom-Json
 
 # A LINK THAT SHIPS MUST BE POSITIVELY VERIFIED - "not proven wrong" is not "proven right".
@@ -47,7 +48,7 @@ $cmp = Get-Content (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | So
 # for.
 $drift = @{}
 $ndF = Join-Path $root 'out\name-drift.json'
-if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
+if (Test-Path $ndF) { foreach ($d in (Read-JsonFile $ndF).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
 
 $dropped = 0; $kept = 0; $sale = 0; $uncomputable = 0; $saleWrong = 0; $unverifiable = 0; $noPrice = 0
 foreach ($row in $cmp.comparison) {

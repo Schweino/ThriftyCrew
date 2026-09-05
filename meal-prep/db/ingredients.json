@@ -3327,5 +3327,13 @@
         "unit":  "oz",
         "board":  "recipe",
         "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from \"the commodity row for 'bean-sprouts'\", which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: REUSE of the live bean-sprouts id (2 of 7). Brussels Sprouts is a keyword collision on 'sprouts' and a different food entirely."
+    },
+    {
+        "item":  "Tomatoes",
+        "bid":  "tomatoes",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from \"the commodity row for 'tomatoes'\", which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Sliced fresh tomato, so the canned diced-tomatoes and dried near-misses are refused as form flips; roma is the standard whole-tomato shelf SKU and not a variety premium like cherry or romaine, so the board's fresh `tomatoes` id (7 of 7, 0.95 Aldi) is the same product and price class."
     }
 ]

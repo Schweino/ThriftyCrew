@@ -4,15 +4,16 @@
 # classification review table on stdout. Also cross-checks every slug against
 # the live feed so the tool's live-price lookups will actually hit.
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 # $PSScriptRoot, not a hard-coded path (2026-09-01): this now runs from the daily chain, and the cloud
 # runner's checkout is not C:\Codex.
 $dir  = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep' }
 $repo = Split-Path $dir -Parent
 $tool = Join-Path $repo 'site\tools\payday-stretcher-tool.html'
-$db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
+$db  = Read-JsonFile "$dir\recipes-db.json"
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}
-try { (Get-Content (Join-Path $dir 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
+try { (Read-JsonFile (Join-Path $dir 'pipeline\v2-perserving.json')) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
 
 # live feed check (BOM gotcha: TrimStart the FEFF before ConvertFrom-Json)
 $feedRec = @{}

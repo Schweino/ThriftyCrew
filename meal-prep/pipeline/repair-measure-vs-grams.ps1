@@ -69,6 +69,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [switch]$Report, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $mp 'lib\json-db-io.ps1')
@@ -413,7 +414,7 @@ if ($SelfTest) {
         Chk 'serving scaler: only the leading quantity moves' ($scBad.Count -eq 0) ($scBad -join ' | ')
 
         # ---- repair-cook-measures must not undo this work ------------------------------------------
-        $dens = (Get-Content (Join-Path $mp 'db\densities.json') -Raw | ConvertFrom-Json).items
+        $dens = (Read-JsonFile (Join-Path $mp 'db\densities.json')).items
         $survives = @( @('Black Pepper','1.75 tsp',4), @('Rice','5.5 cups dry',1000), @('Olive Oil','3 tbsp',42) )
         $bad = @()
         foreach ($c in $survives) {

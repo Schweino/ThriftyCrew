@@ -20,6 +20,7 @@
 #>
 param([switch]$ShowAll, [switch]$Baseline, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $root -Parent
 
@@ -212,7 +213,7 @@ foreach ($f in $execFiles) { try { $execText[$f.FullName] = [IO.File]::ReadAllTe
 
 $manualOk = @{}
 if (Test-Path $script:MANUAL_OK) {
-  try { foreach ($m in (Get-Content $script:MANUAL_OK -Raw | ConvertFrom-Json).manual) { $manualOk[[string]$m.name] = [string]$m.reason } } catch { }
+  try { foreach ($m in (Read-JsonFile $script:MANUAL_OK).manual) { $manualOk[[string]$m.name] = [string]$m.reason } } catch { }
 }
 
 $onDisk = @($execFiles | Where-Object { $_.Extension -eq '.ps1' -and (Test-IsDetector $_.Name) -and -not (Test-IsTesterFile $_.Name) })

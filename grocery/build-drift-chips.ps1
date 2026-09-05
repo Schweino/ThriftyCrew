@@ -21,16 +21,17 @@
 #>
 param([string]$Store = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $slug = @{ "Baker's" = 'bakers'; 'Aldi' = 'aldi'; 'Fareway' = 'fareway'; 'Hy-Vee' = 'hyvee'; 'Walmart' = 'walmart'; "Sam's Club" = 'sams'; 'Family Fare' = 'familyfare' }
 
-$drift = @((Get-Content (Join-Path $root 'out\name-drift.json') -Raw | ConvertFrom-Json).flags)
+$drift = @((Read-JsonFile (Join-Path $root 'out\name-drift.json')).flags)
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$cmp = (Get-Content $cmpF -Raw | ConvertFrom-Json).comparison
+$cmp = (Read-JsonFile $cmpF).comparison
 $terms = @{}
 $tf = Join-Path $root 'commodity-search.json'
 # Get-PrimarySearchTerm, not [string]$p.Value: a multi-term commodity would JOIN into one dead string.
-if (Test-Path $tf) { . (Join-Path $root 'search-terms-lib.ps1'); $tdoc = (Get-Content $tf -Raw | ConvertFrom-Json).terms; foreach ($p in $tdoc.PSObject.Properties) { $terms[$p.Name] = (Get-PrimarySearchTerm $tdoc $p.Name) } }
+if (Test-Path $tf) { . (Join-Path $root 'search-terms-lib.ps1'); $tdoc = (Read-JsonFile $tf).terms; foreach ($p in $tdoc.PSObject.Properties) { $terms[$p.Name] = (Get-PrimarySearchTerm $tdoc $p.Name) } }
 
 $cell = @{}
 # BOTH BOARDS, AND THE FLAG'S OWN RECORD IS THE SOURCE OF `match`. This map was built from the STAPLE
@@ -48,7 +49,7 @@ $cell = @{}
 foreach ($r in $cmp) { foreach ($s in $r.stores) { $cell[([string]$r.id + '|' + [string]$s.store)] = @{ item = [string]$s.item; size = $(if ([string]$s.size) { [string]$s.size } else { [string]$s.size_text }); unit = [string]$r.unit } } }
 $rbF = Join-Path $root 'out\recipe-board.json'
 if (Test-Path $rbF) {
-  foreach ($rr in @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) {
+  foreach ($rr in @((Read-JsonFile $rbF).comparison)) {
     foreach ($rs in $rr.stores) {
       $rk = [string]$rr.id + '|' + [string]$rs.store
       if ($cell.ContainsKey($rk)) { continue }   # the staple row owns a shared id - the same collision rule audit-name-drift applies

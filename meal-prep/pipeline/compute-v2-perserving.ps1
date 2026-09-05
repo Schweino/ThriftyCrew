@@ -17,6 +17,7 @@
 # against the JS that actually prices the page - run it after any change to either side. Not daily: it
 # reads 544 built cards.
 param([string]$FeedPath = '', [switch]$SelfTest, [switch]$NoAlert, [switch]$CrossCheck)
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
@@ -229,7 +230,7 @@ function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-'
 # 2026-07-26 engine consolidation: reads the canonical stores (db\recipes + db\costed) - run-agnostic,
 # any catalog size. db\costed.json is produced by engine\cost-recipes.ps1.
 $dbCosted = @{}
-foreach($c in (Get-Content (Join-Path $mp 'db\costed.json') -Raw | ConvertFrom-Json)){ $dbCosted[[string]$c.slug]=$c }
+foreach($c in (Read-JsonFile (Join-Path $mp 'db\costed.json'))){ $dbCosted[[string]$c.slug]=$c }
 # COLLECT-AND-REPORT (2026-07-26 scale hardening): a single malformed spec/costed line used to `throw`
 # and kill the WHOLE manifest (all 513, soon 1500), which then went stale while top5/rotation/surfaces
 # silently served yesterday's numbers. Now a bad recipe is skipped and named; the manifest is still
@@ -245,7 +246,7 @@ $blockExpect = @{}
 foreach($run in @('db')){
   foreach($sf in (Get-ChildItem (Join-Path $mp "db\recipes\*.json"))){
     try {
-      $spec = Get-Content $sf.FullName -Raw | ConvertFrom-Json
+      $spec = Read-JsonFile $sf.FullName
       $cr = $dbCosted[[string]$spec.slug]
       if(-not $cr){ throw "no db\costed entry" }
       $clines = @{}; foreach($l in $cr.lines){ $clines[$l.item] = $l }
@@ -373,7 +374,7 @@ if($CrossCheck){
   # in its data block and the Meal Plan Builder learns it as pk 0 in planner-data.js. Neither carries a
   # covered flag, so those two zeroes ARE the signal and a missing one is silent. Assert them by name.
   $coveredExpect = @{}
-  foreach($c in (Get-Content (Join-Path $mp 'db\costed.json') -Raw | ConvertFrom-Json)){
+  foreach($c in (Read-JsonFile (Join-Path $mp 'db\costed.json'))){
     foreach($l in $c.lines){
       if(($l.PSObject.Properties.Name -contains 'covered_by') -and $l.covered_by -and ([string]$l.covered_by).Trim() -ne ''){
         $coveredExpect[([string]$c.slug)+'|'+([string]$l.item)] = [string]$l.covered_by

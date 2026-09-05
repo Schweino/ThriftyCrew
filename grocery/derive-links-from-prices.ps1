@@ -40,6 +40,7 @@
 # store's links should move: a link layer this wide should never be rewritten wholesale to fix one store.
 param([switch]$Apply, [string]$OutDir = "", [string]$Store = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 $UNION_DAYS = Get-RegularUnionDays
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -145,9 +146,9 @@ function Get-RowUrl($store, $r) {
 }
 
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
-$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison
+$cmp = (Read-JsonFile $cmpF.FullName).comparison
 $puPath = Join-Path $root 'product-urls.json'
-$puDoc = Get-Content $puPath -Raw | ConvertFrom-Json
+$puDoc = Read-JsonFile $puPath
 
 # index each store's rows by name+SIZE. Never by name alone: stores sell one name in several sizes, and a
 # name-keyed map silently keeps the last - the bug family this repo has now hit six times.
@@ -155,7 +156,7 @@ $rowsByStore = @{}
 foreach ($sp in $STORES) {
   $ix = @{}
   foreach ($file in (Get-StoreFiles $sp.store)) {
-    foreach ($r in @((Get-Content $file -Raw | ConvertFrom-Json).deals)) {
+    foreach ($r in @((Read-JsonFile $file).deals)) {
       $key = (([string]$r.item).Trim() + '|' + ([string]$r.size).Trim())
       # duplicate name+size = same product; keep the copy that can actually be linked. A row carrying
       # identity beats one that doesn't; among carriers the freshest file (listed first) wins.

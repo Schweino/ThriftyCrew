@@ -16,6 +16,7 @@
   accepted gap - caught by the weekly Wednesday pull. Fails SAFE (DUE) if the logs are missing/unreadable.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
 $today = (Get-Date).Date
@@ -28,7 +29,7 @@ $fresh = ($reg -and $reg.LastWriteTime.Date -eq $today)
 $adflip = $false
 $sf = Join-Path $root 'ad-schedule.json'
 if (Test-Path $sf) {
-  $fw = @((Get-Content $sf -Raw | ConvertFrom-Json).stores) | Where-Object { $_.store -eq 'Fareway' } | Select-Object -First 1
+  $fw = @((Read-JsonFile $sf).stores) | Where-Object { $_.store -eq 'Fareway' } | Select-Object -First 1
   if ($fw) {
     if ($fw.next_pull) { try { if ($today -ge ([datetime]$fw.next_pull).Date) { $adflip = $true } } catch {} }
     if ($fw.monthly -and $fw.monthly.to) { try { if ($today -gt ([datetime]$fw.monthly.to).Date) { $adflip = $true } } catch {} }
@@ -42,7 +43,7 @@ $boundary = $false; $bReason = ''
 $logFile = Join-Path $root 'sale-windows.json'
 if (Test-Path $logFile) {
   try {
-    $log = Get-Content $logFile -Raw | ConvertFrom-Json
+    $log = Read-JsonFile $logFile
     foreach ($w in $log.windows) {
       if ([string]$w.store -ne 'Fareway') { continue }
       $ro = $null; $ss = $null

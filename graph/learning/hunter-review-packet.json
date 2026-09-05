@@ -3,6 +3,34 @@
   {
    "detail": "held with reason: decision not-purchased",
    "event": {
+    "at": "2026-09-04T05:13:26",
+    "bid": "",
+    "by": "mapper",
+    "decision": "not-purchased",
+    "event_id": "ie:9f5b4b07edb52465384d",
+    "evidence": "Optional serving garnish, dropped rather than bridged onto the board's fresh shallots match, which is a raw bulb and not a deep-fried crispy topping - a different product, price class and gram basis.",
+    "held_reason": "decision not-purchased",
+    "key": "asian shallots",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "Fried Asian shallots",
+    "run": "hunt-2026-09-04-five",
+    "slug": "foolproof-poached-chicken-noodle-soup",
+    "surprise": false,
+    "term": "Asian shallots"
+   },
+   "ids_seen": [],
+   "key": "asian shallots",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision not-purchased",
+   "event": {
     "at": "2026-08-27T18:36:18",
     "bid": "",
     "by": "mapper",
@@ -113,6 +141,34 @@
    },
    "ids_seen": [],
    "key": "charcoal",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision mapped-null",
+   "event": {
+    "at": "2026-09-04T05:01:51",
+    "bid": "",
+    "by": "mapper",
+    "decision": "mapped-null",
+    "event_id": "ie:e31ccb1f57f81a22825b",
+    "evidence": "Coconut palm sap sugar is a distinct specialty sweetener several times the price of cane [sugar] or [brown-sugar]; bridging it onto either would publish a wrong price, so null and pantry-static. Reported in absent_terms rather than proposed as a new id, because a full seven-store hunt for 2 g of source-scale sweetener is not worth holding the recipe on.",
+    "held_reason": "decision mapped-null",
+    "key": "coconut sugar",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "½ teaspoon coconut sugar",
+    "run": "hunt-2026-09-04-five",
+    "slug": "hibachi-chicken",
+    "surprise": false,
+    "term": "coconut sugar"
+   },
+   "ids_seen": [],
+   "key": "coconut sugar",
    "ledger_row": null,
    "why": "held"
   },
@@ -827,15 +883,15 @@
    "why": "held"
   },
   {
-   "detail": "held with reason: decision not-purchased",
+   "detail": "held with reason: decision mapped-null",
    "event": {
-    "at": "2026-08-28T09:15:50",
+    "at": "2026-09-04T05:13:25",
     "bid": "",
     "by": "mapper",
-    "decision": "not-purchased",
-    "event_id": "ie:52968a5506f58d5f8ba6",
-    "evidence": "Tap water for the brine: no shopper buys it and no commodity claims it, so no id and no cost. It is kept in the lines array with its weight so the brine still reads correctly, and its DB row is all zeroes.",
-    "held_reason": "decision not-purchased",
+    "decision": "mapped-null",
+    "event_id": "ie:f2bcea1077a85ebacb07",
+    "evidence": "Tap water: no commodity claims it and none should, so pantry-static at zero cost, per the 2026-08-28 water precedent. The DB already carries the zero row.",
+    "held_reason": "decision mapped-null",
     "key": "water",
     "kind": "ruling",
     "predicted": {
@@ -844,8 +900,8 @@
     },
     "projected": false,
     "raw": "1 cup water",
-    "run": "hunt-2026-08-27-highprotein",
-    "slug": "roasted-stuffed-pork-loin",
+    "run": "hunt-2026-09-04-five",
+    "slug": "foolproof-poached-chicken-noodle-soup",
     "surprise": false,
     "term": "water"
    },
@@ -939,6 +995,6 @@
    "why": "held"
   }
  ],
- "generated_at": "2026-08-31T21:30:05",
+ "generated_at": "2026-09-04T21:30:06",
  "instructions": "Each case is an identity the nightly ingest could not settle mechanically. Rule each one and write a verdicts file: {\"verdicts\": [{event_id, verdict: record|supersede|leave, item_id (required for record and supersede), evidence, by: \"adjudication\"}]}. Apply it with meal-prep\\pipeline\\learn_apply.py --apply-reviews <that file>. Nothing here has been applied: this stage promotes nothing, by design."
 }

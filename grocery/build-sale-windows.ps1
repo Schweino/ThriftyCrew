@@ -33,6 +33,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir)       { $OutDir       = Join-Path $root 'out' }
 if (-not $ScheduleFile) { $ScheduleFile = Join-Path $root 'ad-schedule.json' }
@@ -86,7 +87,7 @@ if ($SelfTest) {
 # ad-schedule.json 'current' is the live, feed-self-corrected window per store (Baker's == flyer cover dates).
 $adWin = @{}
 if (Test-Path $ScheduleFile) {
-  $sc = Get-Content $ScheduleFile -Raw | ConvertFrom-Json
+  $sc = Read-JsonFile $ScheduleFile
   foreach ($s in $sc.stores) { if ($s.current -and $s.current.from) { $adWin[[string]$s.store] = @{ from=[datetime]$s.current.from; to=[datetime]$s.current.to } } }
 }
 
@@ -96,11 +97,11 @@ if (-not $ComparisonFile) {
   if (-not $cf) { Write-Output 'No comparison-*.json found - nothing to log.'; exit 0 }
   $ComparisonFile = $cf.FullName
 }
-$board = Get-Content $ComparisonFile -Raw | ConvertFrom-Json
+$board = Read-JsonFile $ComparisonFile
 
 # ---------------------------------------------------------------- prior log (first_seen continuity + roll-off carry)
 $prior = @{}
-if (Test-Path $LogFile) { try { foreach ($w in (Get-Content $LogFile -Raw | ConvertFrom-Json).windows) { $prior[($w.id + '|' + $w.store)] = $w } } catch {} }
+if (Test-Path $LogFile) { try { foreach ($w in (Read-JsonFile $LogFile).windows) { $prior[($w.id + '|' + $w.store)] = $w } } catch {} }
 
 # ---------------------------------------------------------------- build TODAY's active sale windows from the board
 $active = @{}
@@ -129,7 +130,7 @@ foreach ($c in $board.comparison) {
             Sort-Object Name -Descending | Select-Object -First 1
       if ($mf) {
         try {
-          $mdoc = Get-Content $mf.FullName -Raw | ConvertFrom-Json
+          $mdoc = Read-JsonFile $mf.FullName
           if ($mdoc.monthly -and $mdoc.monthly.from -and $mdoc.monthly.to) {
             $mw = @{ from = [datetime]$mdoc.monthly.from; to = [datetime]$mdoc.monthly.to }
           }

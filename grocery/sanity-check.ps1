@@ -10,18 +10,19 @@
 #>
 param([string]$CompareFile = "", [string]$OutDir = "", [double]$OutlierFrac = 0.35, [double]$WowFrac = 0.40)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 
 # price history for WoW (prior week's cheapest per commodity)
 $prior = @{}
 $histFile = Join-Path $root 'price-history.json'
 if (Test-Path $histFile) {
-  $h = Get-Content $histFile -Raw | ConvertFrom-Json
+  $h = Read-JsonFile $histFile
   foreach ($c in $h.commodities) {
     $past = @($c.history | Where-Object { $_.week_of -ne $week } | Sort-Object week_of)
     if ($past.Count -gt 0) { $prior[[string]$c.id] = [double]$past[$past.Count-1].cheapest_price }

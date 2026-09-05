@@ -48,6 +48,8 @@ $script:AM_STOP = @('fresh','hyvee','fareway','with','from','each','pack','size'
                     'varieties','assorted','your','choice','when','more','less','spend','save',
                     'kroger','simply','great','value','only','sale','price','pkg','lb.','ea.')
 
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Get-AmTokens([string]$s) {
   $t = (($s -replace '[^A-Za-z0-9 ]', ' ').ToLower()) -split '\s+'
   return @($t | Where-Object { $_.Length -gt 3 -and $script:AM_STOP -notcontains $_ })
@@ -85,7 +87,7 @@ function Import-AdRows {
   $rows = New-Object System.Collections.Generic.List[object]
   $adsFile = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   if ($adsFile) {
-    foreach ($d in (Get-Content $adsFile.FullName -Raw | ConvertFrom-Json).deals) {
+    foreach ($d in (Read-JsonFile $adsFile.FullName).deals) {
       [void]$rows.Add([pscustomobject]@{ store=[string]$d.store; text=([string]$d.item + ' ' + [string]$d.ad_price); from=[string]$d.ad_from; to=[string]$d.ad_to })
     }
   }
@@ -93,7 +95,7 @@ function Import-AdRows {
     $dir = Join-Path $OutDir $lane
     if (-not (Test-Path $dir)) { continue }
     foreach ($f in (Get-ChildItem (Join-Path $dir '*-deals-*.json') -EA SilentlyContinue)) {
-      try { $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+      try { $doc = Read-JsonFile $f.FullName } catch { continue }
       foreach ($d in @($doc.deals)) {
         [void]$rows.Add([pscustomobject]@{
           store = [string]$(if ($d.store) { $d.store } else { $doc.store })

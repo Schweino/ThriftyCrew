@@ -76,7 +76,8 @@ param(
   [string]$ResponsesFile,
   [string]$BaselineFile
 )
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -121,7 +122,7 @@ function Get-SearchTemplates {
 }
 
 if ($TemplatesFile) {
-  $tj = Get-Content $TemplatesFile -Raw | ConvertFrom-Json
+  $tj = Read-JsonFile $TemplatesFile
   $templates = @{}
   # '_'-prefixed keys are fixture prose, not stores. Without this the fixtures' own _readme was probed as a
   # store, reported UNPROVABLE, and then failed the registry cross-check as an unregistered store - noise
@@ -140,9 +141,9 @@ if ($TemplatesFile) {
 
 # registry cross-check: a store with no template ships chips with no fallback link at all
 $regStores = @()
-try { $regStores = @((Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json).stores | ForEach-Object { [string]$_.name }) } catch {}
+try { $regStores = @((Read-JsonFile (Join-Path $root 'stores.json')).stores | ForEach-Object { [string]$_.name }) } catch {}
 $walled = @{}
-try { foreach ($s in (Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json).stores) { $walled[[string]$s.name] = [bool]$s.walled } } catch {}
+try { foreach ($s in (Read-JsonFile (Join-Path $root 'stores.json')).stores) { $walled[[string]$s.name] = [bool]$s.walled } } catch {}
 if ($regStores.Count -gt 0) {
   foreach ($s in $regStores) { if (-not $templates.ContainsKey($s)) { $issues.Add("registry: '$s' is in stores.json but has NO search template - its unlinked chips get no fallback link at all") } }
   foreach ($k in $templates.Keys) { if ($regStores -notcontains $k) { $issues.Add("registry: search template '$k' is not a registered store in stores.json") } }
@@ -159,7 +160,7 @@ if ($regStores.Count -gt 0) {
 $boardTerms = @()
 try {
   $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  if ($cmpF) { $boardTerms = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison | ForEach-Object { [string]$_.commodity }) }
+  if ($cmpF) { $boardTerms = @((Read-JsonFile $cmpF.FullName).comparison | ForEach-Object { [string]$_.commodity }) }
 } catch {}
 if ($boardTerms.Count -gt 0) {
   $hit = @($boardTerms | Where-Object { $_ -imatch [regex]::Escape($Query) })
@@ -171,7 +172,7 @@ if ($boardTerms.Count -gt 0) {
 $canned = $null
 if ($ResponsesFile) {
   $canned = @{}
-  $rj = Get-Content $ResponsesFile -Raw | ConvertFrom-Json
+  $rj = Read-JsonFile $ResponsesFile
   foreach ($p in $rj.PSObject.Properties) { $canned[[string]$p.Name] = $p.Value }
 }
 $client = $null
@@ -236,7 +237,7 @@ foreach ($store in @($templates.Keys | Sort-Object)) {
 $baseF = if ($BaselineFile) { $BaselineFile } else { Join-Path $root 'search-link-baseline.json' }
 $base = @{}
 if (Test-Path $baseF) {
-  try { $bj = Get-Content $baseF -Raw | ConvertFrom-Json; foreach ($p in $bj.stores.PSObject.Properties) { $base[[string]$p.Name] = [bool]$p.Value.echo } } catch {}
+  try { $bj = Read-JsonFile $baseF; foreach ($p in $bj.stores.PSObject.Properties) { $base[[string]$p.Name] = [bool]$p.Value.echo } } catch {}
 }
 $downgrades = @()
 foreach ($r in $rows) {

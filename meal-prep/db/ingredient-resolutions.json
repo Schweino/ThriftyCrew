@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-09-04T05:13:26",
-    "count":  275,
+    "updated":  "2026-09-04T08:45:54",
+    "count":  283,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -2478,6 +2478,78 @@
                             "evidence":  "RecipeTinEats is Australian, where \u0027shallot\u0027 means scallion - the slash and \u0027light green and green part only\u0027 confirm it. REUSE of the live green-onions id (5 of 7). [slug foolproof-poached-chicken-noodle-soup, run hunt-2026-09-04-five]",
                             "by":  "mapper",
                             "at":  "2026-09-04T05:13:26"
+                        },
+                        {
+                            "key":  "fresh black pepper",
+                            "term":  "fresh black pepper",
+                            "item_id":  "black-pepper",
+                            "bid_exists":  true,
+                            "evidence":  "\"Fresh\" here means freshly ground, a grinder instruction and not a form flip, exactly as \u0027freshly ground black pepper\u0027 -\u003e black-pepper was ruled 2026-08-26; the Bell Pepper near-misses are keyword collisions on \u0027pepper\u0027. Board carries black-pepper 7 of 7, so a REUSE. [slug caprese-stuffed-chicken-breast, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:37:03"
+                        },
+                        {
+                            "key":  "roma tomatoes",
+                            "term":  "roma tomatoes",
+                            "item_id":  "tomatoes",
+                            "bid_exists":  true,
+                            "evidence":  "Sliced fresh tomato, so the canned diced-tomatoes and dried near-misses are refused as form flips; roma is the standard whole-tomato shelf SKU and not a variety premium like cherry or romaine, so the board\u0027s fresh `tomatoes` id (7 of 7, 0.95 Aldi) is the same product and price class. [slug caprese-stuffed-chicken-breast, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:37:03"
+                        },
+                        {
+                            "key":  "large bell peppers",
+                            "term":  "large bell peppers",
+                            "item_id":  "bell-peppers",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of a live board id (6 of 7, cheapest 0.77 Fareway), matching the 2026-08-27 \u0027bell peppers\u0027 ruling; the line names no colour so the mixed id is right and green-bell-pepper is refused. \u0027Large\u0027 is a size word, not a form. [slug turkey-stuffed-peppers, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:45:53"
+                        },
+                        {
+                            "key":  "celery stalks",
+                            "term":  "celery stalks",
+                            "item_id":  "celery",
+                            "bid_exists":  true,
+                            "evidence":  "celery is a live board id (6 of 7, 1.88 Hy-Vee) - a reuse; \u0027stalk\u0027 is the cut, not a different food, exactly as the 2026-08-26 \u0027celery stalk\u0027 ruling. Only a vocabulary name row is missing. [slug turkey-stuffed-peppers, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:45:53"
+                        },
+                        {
+                            "key":  "lean ground turkey",
+                            "term":  "lean ground turkey",
+                            "item_id":  "99-1-ground-turkey",
+                            "bid_exists":  false,
+                            "evidence":  "The source\u0027s published 401 cal / 40 g protein only reconciles at 99/1 (my recompute: 368 cal, 40.3 P); 93/7 gives 438 cal and 34.2 P, a 14.5% protein miss. 99% lean turkey breast is a different price class from generic ground-turkey, so the generic board id is refused and a new id is proposed. [slug turkey-stuffed-peppers, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:45:53"
+                        },
+                        {
+                            "key":  "fire roasted diced tomatoes",
+                            "term":  "fire roasted diced tomatoes",
+                            "item_id":  "diced-tomatoes",
+                            "bid_exists":  true,
+                            "evidence":  "Fire-roasting is a processing style of the same 14.5 oz can of diced tomatoes, same shelf and price class; the board\u0027s fallback to fresh `tomatoes` is refused as a fresh/canned form flip. [slug turkey-stuffed-peppers, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:45:53"
+                        },
+                        {
+                            "key":  "cooked quinoa",
+                            "term":  "cooked quinoa",
+                            "item_id":  "quinoa-uncooked",
+                            "bid_exists":  false,
+                            "evidence":  "Board ABSENT and no vocabulary row; the food is plain quinoa (bought dry, measured cooked here), so the grams and the macro row are both on the cooked basis. New id proposed and the term reported absent. [slug turkey-stuffed-peppers, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:45:54"
+                        },
+                        {
+                            "key":  "shredded low moisture mozzarella",
+                            "term":  "shredded low-moisture mozzarella",
+                            "item_id":  "mozzarella-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "Board ABSENT. The three near vocabulary rows are all form flips: fresh-mozzarella is the brine-packed ball (different price and different water weight) and fat-free/reduced-fat are different products. The shredded low-moisture bag needs its own id. [slug turkey-stuffed-peppers, run hunt-2026-09-04-five-b]",
+                            "by":  "mapper",
+                            "at":  "2026-09-04T08:45:54"
                         }
                     ]
 }

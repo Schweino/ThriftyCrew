@@ -20,6 +20,7 @@ param(
   [string]$FillsFile = "$PSScriptRoot\out\newitem-candidates.json"
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 
 # --- pull the live GLOBAL_EXCLUDE straight out of compare-deals.ps1 (no copy = no drift)
@@ -28,7 +29,7 @@ $m = [regex]::Match($src, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
 if (-not $m.Success) { Write-Output 'FATAL: could not parse $GLOBAL_EXCLUDE from compare-deals.ps1'; exit 2 }
 $GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $m.Groups['body'].Value + ')')
 
-$commodities = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 
 function Match-Category($name) {
   $n = $name.ToLower()
@@ -51,7 +52,7 @@ function Match-Category($name) {
   return $null
 }
 
-$doc = Get-Content $FillsFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $FillsFile
 $ok = New-Object System.Collections.ArrayList
 $rej = New-Object System.Collections.ArrayList
 

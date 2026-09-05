@@ -3,16 +3,17 @@
 # + the live feed (to verify board_ids). Output: dinner-data.js (a JS const)
 # and a category review table on stdout.
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 # $PSScriptRoot, not a hard-coded path (2026-09-01), for the same reason build-hub-grid moved off one on
 # 2026-08-01: this now runs from the daily chain, and the cloud runner's checkout is not C:\Codex.
 $dir  = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep' }
 $repo = Split-Path $dir -Parent
 $tool = Join-Path $repo 'site\tools\dinner-tonight-tool.html'
-$db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
+$db  = Read-JsonFile "$dir\recipes-db.json"
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}
-try { (Get-Content (Join-Path $dir 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
-$map = Get-Content "$dir\ingredient-map.json" -Raw | ConvertFrom-Json
+try { (Read-JsonFile (Join-Path $dir 'pipeline\v2-perserving.json')) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
+$map = Read-JsonFile "$dir\ingredient-map.json"
 $raw = (Invoke-WebRequest -Uri "https://feed.thriftycrew.com/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
 $feed = $raw | ConvertFrom-Json
 $feedKeys = @{}

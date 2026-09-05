@@ -15,6 +15,7 @@
   Output: out\smp-feed.json  (committed by the workflow; served publicly via Cloudflare Pages).
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
 $mp   = Join-Path (Split-Path $root -Parent) 'meal-prep'
@@ -23,7 +24,7 @@ $mp   = Join-Path (Split-Path $root -Parent) 'meal-prep'
 # durable product links: id -> store -> url (so the feed can point at the exact cheapest item)
 $purl = @{}
 try {
-  $pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+  $pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
   foreach ($p in $pd.PSObject.Properties) {
     $m = @{}
     foreach ($sp in $p.Value.PSObject.Properties) { if ($sp.Name -ne 'commodity' -and $sp.Value -and $sp.Value.url) { $m[[string]$sp.Name] = [string]$sp.Value.url } }
@@ -35,7 +36,7 @@ try {
 # build-sale-windows BEFORE export-feed) - if it is missing we just emit no sale_end fields.
 $saleEnd = @{}
 try {
-  $sw = Get-Content (Join-Path $root 'sale-windows.json') -Raw | ConvertFrom-Json
+  $sw = Read-JsonFile (Join-Path $root 'sale-windows.json')
   $todayS = (Get-Date).ToString('yyyy-MM-dd')
   foreach ($w in $sw.windows) {
     if (-not $w.sale_end) { continue }
@@ -49,7 +50,7 @@ try {
 # board price either. Sales are never overridden.
 $ovr = @{}
 $ovrFile = Join-Path $root 'board-price-overrides.json'
-if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
+if (Test-Path $ovrFile) { try { foreach ($c in (Read-JsonFile $ovrFile).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
 
 $ing = [ordered]@{}
 
@@ -217,9 +218,9 @@ function AddBoard($rows) {
 }
 $cmpF = Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 $weekOf = ''
-if ($cmpF) { $cdoc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json; $weekOf = [string]$cdoc.week_of; AddBoard $cdoc.comparison }   # weekly first (wins ties)
+if ($cmpF) { $cdoc = Read-JsonFile $cmpF.FullName; $weekOf = [string]$cdoc.week_of; AddBoard $cdoc.comparison }   # weekly first (wins ties)
 $rbF = Join-Path $out 'recipe-board.json'
-if (Test-Path $rbF) { AddBoard (Get-Content $rbF -Raw | ConvertFrom-Json).comparison }
+if (Test-Path $rbF) { AddBoard (Read-JsonFile $rbF).comparison }
 
 # ---- recipe-namespace aliases: a de-duped commodity must still RESOLVE, even though its row is gone ----
 # THE PAGE DE-DUPS, THE FEED MUST NOT (2026-08-09). recipe-overlay drops a recipe row whose commodity also
@@ -242,9 +243,9 @@ if (Test-Path $idMapFile) {
   # the recipe row's OWN unit, read from the everyday baseline - it predates the drop, so it survives it
   $baseUnit = @{}
   $rbeF = Join-Path $out 'recipe-board-everyday.json'
-  if (Test-Path $rbeF) { try { foreach ($r in (Get-Content $rbeF -Raw | ConvertFrom-Json).comparison) { $baseUnit[[string]$r.id] = [string]$r.unit } } catch {} }
+  if (Test-Path $rbeF) { try { foreach ($r in (Read-JsonFile $rbeF).comparison) { $baseUnit[[string]$r.id] = [string]$r.unit } } catch {} }
   try {
-    foreach ($p in ((Get-Content $idMapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) {
+    foreach ($p in ((Read-JsonFile $idMapFile).map.PSObject.Properties)) {
       $rid = [string]$p.Name; $wid = [string]$p.Value
       if ($ing.Contains($rid)) { continue }                                                    # recipe row survived
       if (-not $ing.Contains($wid)) { $aliasSkipped.Add("$rid -> $wid (twin not priced either)"); continue }
@@ -269,11 +270,11 @@ Write-Output ("export-feed: {0} recipe-spelling key(s) re-pointed at their weekl
 
 # ---- recipes: this week's cost per slug (+ base servings for the scaler) ----
 $servings = @{}
-try { foreach ($r in (Get-Content (Join-Path $mp 'recipes-db.json') -Raw | ConvertFrom-Json).recipes) { $servings[[string]$r.slug] = [int]$r.servings } } catch {}
+try { foreach ($r in (Read-JsonFile (Join-Path $mp 'recipes-db.json')).recipes) { $servings[[string]$r.slug] = [int]$r.servings } } catch {}
 $rec = [ordered]@{}
 $rcF = Join-Path $out 'recipe-costs.json'
 if (Test-Path $rcF) {
-  foreach ($c in (Get-Content $rcF -Raw | ConvertFrom-Json).recipes) {
+  foreach ($c in (Read-JsonFile $rcF).recipes) {
     $slug = [string]$c.slug
     $rec[$slug] = [ordered]@{
       name        = [string]$c.name
@@ -291,7 +292,7 @@ if (Test-Path $rcF) {
 $boardItemCount = 0
 try {
   $cmpF = Get-ChildItem (Join-Path $PSScriptRoot 'out\comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  if($cmpF){ $boardItemCount = @(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)).Count }
+  if($cmpF){ $boardItemCount = @(((Read-JsonFile $cmpF.FullName).comparison)).Count }
 } catch {}
 $feed = [ordered]@{
   # SCHEMA MARKER (2026-08-15). The card's everyday tab picks the cheapest NON-SALE cell by scanning

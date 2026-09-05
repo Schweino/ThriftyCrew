@@ -20,16 +20,17 @@
   price, and that is the number a shopper pays. The restored row takes over when the ad ends.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
+$board = @((Read-JsonFile $cmpF).comparison)
 
 # every restored row currently sitting in a store catalogue, keyed by product name
 $restored = @{}
 foreach ($f in (Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json') | Where-Object { $_.BaseName -match '-regular-\d{4}-\d{2}-\d{2}$' })) {
-  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $f.FullName
   # newest file per store only
   $prefix = ($f.BaseName -replace '-regular-.*$','')
   $newest = Get-ChildItem (Join-Path $root ('out\regular\' + $prefix + '-regular-*.json')) |

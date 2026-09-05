@@ -50,6 +50,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 
 # count-ish units that mean the same thing on a Sam's pack. "2 pk" in our size and "2 rolls" in Sam's name
@@ -243,7 +244,7 @@ if ($SelfTest) {
 
     $r = Invoke-SamsRefresh $T '2026-08-01' $false
     Write-Output ("      " + $r.text)
-    $d = Get-Content (Join-Path $T 'out\regular\sams-regular-2026-08-01.json') -Raw | ConvertFrom-Json
+    $d = Read-JsonFile (Join-Path $T 'out\regular\sams-regular-2026-08-01.json')
     $by = @{}; foreach ($x in @($d.deals)) { $by[[string]$x.item] = $x }
     $ref = ($r.refused -join ' || ')
     Chk '(a) MUST FIRE  an "sft" row the builder can never publish IS re-priced' ($by["Member's Mark Unbleached Parchment Paper"].as_of -eq '2026-08-01' -and $by["Member's Mark Unbleached Parchment Paper"].size -eq '2 pk 205 sq ft') ("as_of=" + $by["Member's Mark Unbleached Parchment Paper"].as_of)

@@ -35,6 +35,7 @@
 #>
 param([switch]$ShowDiff, [switch]$Discover, [string]$Accept = '', [switch]$Recipes, [int]$Limit = 0, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
@@ -93,7 +94,7 @@ if ($SelfTest) {
     ((Split-Path $manifestPath -Leaf) -eq 'ghost-tool-manifest.json') $manifestPath
   T 'the shipped manifest parses and maps every local *-tool.html' `
     ($(if (Test-Path $manifestPath) {
-        $m = @((Get-Content $manifestPath -Raw | ConvertFrom-Json).tools)
+        $m = @((Read-JsonFile $manifestPath).tools)
         $localCount = @(Get-ChildItem (Join-Path $repo 'site\tools\*-tool.html') -File).Count
         ($m.Count -gt 0 -and $m.Count -eq $localCount)
       } else { $false })) 'manifest missing, unparseable, or out of step with the local sources'
@@ -152,7 +153,7 @@ if ($Recipes) {
     exit 3
   }
   $ledger = @{}
-  foreach ($p in ((Get-Content $hashPath -Raw | ConvertFrom-Json).PSObject.Properties)) { $ledger[$p.Name] = [string]$p.Value }
+  foreach ($p in ((Read-JsonFile $hashPath).PSObject.Properties)) { $ledger[$p.Name] = [string]$p.Value }
   if (-not $ledger.Count) {
     Write-Output 'ghost-drift/recipes: COULD NOT EVALUATE - the publish ledger records zero slugs, so a clean result would prove nothing'
     Write-GuardComplete -Name 'ghost-drift' -Summary 'recipes blind=empty-ledger'
@@ -270,13 +271,13 @@ if (-not (Test-Path $manifestPath)) {
   Write-Output ("ghost-drift: COULD NOT EVALUATE - no manifest at {0}. Run -Discover once to build it." -f $manifestPath)
   exit 3
 }
-$manifest = @((Get-Content $manifestPath -Raw | ConvertFrom-Json).tools)
+$manifest = @((Read-JsonFile $manifestPath).tools)
 if (-not $manifest.Count) {
   Write-Output 'ghost-drift: COULD NOT EVALUATE - the manifest maps zero tools, so a clean result would prove nothing'
   exit 3
 }
 $allow = @()
-if (Test-Path $allowPath) { try { $allow = @((Get-Content $allowPath -Raw | ConvertFrom-Json).allow) } catch { } }
+if (Test-Path $allowPath) { try { $allow = @((Read-JsonFile $allowPath).allow) } catch { } }
 
 $clean = @(); $drift = @(); $blind = @(); $unpublished = @()
 

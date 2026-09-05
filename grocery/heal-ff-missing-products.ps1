@@ -19,6 +19,7 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 
@@ -26,11 +27,11 @@ $regDir = Join-Path $root 'out\regular'
 $curF = (Get-ChildItem (Join-Path $regDir 'family-fare-regular-*.json') |
   Where-Object { $_.BaseName -match '^family-fare-regular-\d{4}-\d{2}-\d{2}$' } |
   Sort-Object Name -Descending | Select-Object -First 1)
-$doc = Get-Content $curF.FullName -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $curF.FullName
 
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$board = @((Read-JsonFile $cmpF).comparison)
+$pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
 $have = @{}
 foreach ($r in $doc.deals) { $have[([string]$r.item).ToLower().Trim()] = $true }

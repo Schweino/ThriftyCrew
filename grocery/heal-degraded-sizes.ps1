@@ -28,6 +28,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $MaxDays -and -not $SelfTest) {
   . (Join-Path $PSScriptRoot 'capture-policy-lib.ps1')
   $MaxDays = [int](Get-PolicyMaxCarryDays)
@@ -67,7 +68,7 @@ function Invoke-SizeHeal([string]$prefix, [string]$dir, [int]$maxDays) {
   if ($files.Count -lt 2) { return "size-heal [$prefix]: fewer than 2 dated captures - nothing to heal from" }
   $newF = $files[0]
   $newDate = [datetime]([regex]::Match($newF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
-  $new = Get-Content $newF.FullName -Raw | ConvertFrom-Json
+  $new = Read-JsonFile $newF.FullName
 
   # candidates: today's rows whose size carries no usable quantity, indexed by BOTH keys
   $needy = @{}      # exact item name -> row
@@ -88,7 +89,7 @@ function Invoke-SizeHeal([string]$prefix, [string]$dir, [int]$maxDays) {
     if ($needy.Count -eq 0) { break }
     $prevDate = [datetime]([regex]::Match($prevF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
     if (($newDate - $prevDate).TotalDays -gt $maxDays) { break }
-    $prev = Get-Content $prevF.FullName -Raw | ConvertFrom-Json
+    $prev = Read-JsonFile $prevF.FullName
     foreach ($p in @($prev.deals)) {
       $k = ([string]$p.item).Trim()
       $prevProdId = Get-CatalogProductId ([string]$p.link_url)
@@ -151,7 +152,7 @@ if ($SelfTest) {
       @{ store='Fareway'; item='Fareway Napkins';                 ad_price='$1.99'; size='each'; link_url=$puB }   # RENAMED but price changed -> do NOT heal
     ) } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $T "fareway-regular-$d0.json") -Encoding UTF8
     Write-Output (Invoke-SizeHeal 'fareway' $T 14)
-    $out = Get-Content (Join-Path $T "fareway-regular-$d0.json") -Raw | ConvertFrom-Json
+    $out = Read-JsonFile (Join-Path $T "fareway-regular-$d0.json")
     $pl = $out.deals | Where-Object { $_.item -eq 'Plates' }
     $bg = $out.deals | Where-Object { $_.item -eq 'Bags' }
     $sp = $out.deals | Where-Object { $_.item -eq 'Soap' }
@@ -163,7 +164,7 @@ if ($SelfTest) {
     if ($rn.size -eq '24 ct') { Write-Output 'ok    RENAMED row healed on the catalog product id (item+price alone could not)' } else { Write-Output "FAIL  renamed row size=$($rn.size) (expected 24 ct)"; $fail++ }
     if ($rn2.size -eq 'each') { Write-Output 'ok    CLEAN TWIN renamed row with a CHANGED price still not healed' } else { Write-Output "FAIL  renamed+repriced row size=$($rn2.size) (expected each)"; $fail++ }
     Write-Output (Invoke-SizeHeal 'fareway' $T 14)   # idempotency
-    $out2 = Get-Content (Join-Path $T "fareway-regular-$d0.json") -Raw | ConvertFrom-Json
+    $out2 = Read-JsonFile (Join-Path $T "fareway-regular-$d0.json")
     if (($out2.deals | Where-Object { $_.item -eq 'Plates' }).size -eq '48 ct') { Write-Output 'ok    idempotent' } else { Write-Output 'FAIL  second run changed data'; $fail++ }
   } finally { Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue }
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }

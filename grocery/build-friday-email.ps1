@@ -18,6 +18,7 @@
 param([string]$OutDir = '', [int]$TopDrops = 10)
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'fmt-lib.ps1')
@@ -30,16 +31,16 @@ $SITE = 'https://www.thriftycrew.com'
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $CompareFile = $cmpF.FullName
 try {
-  $wk0 = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of
+  $wk0 = (Read-JsonFile $cmpF.FullName).week_of
   $verF = Join-Path $OutDir ("verified-" + $wk0 + ".json")
   if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF }
 } catch {}
 
-$doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc  = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 $byId = @{}; foreach ($r in $doc.comparison) { $byId[[string]$r.id] = $r }
 
-$hist = Get-Content (Join-Path $root 'price-history.json') -Raw | ConvertFrom-Json
+$hist = Read-JsonFile (Join-Path $root 'price-history.json')
 $histById = @{}; foreach ($c in $hist.commodities) { $histById[[string]$c.id] = $c }
 
 function Esc { param([string]$t)
@@ -60,7 +61,7 @@ $nonFoodKeys = @('household','personal','baby','pet')
 $coreKeys = @('meat','dairy','fruit','veg','bakery','grains','frozen')
 $nonFood = @{}; $core = @{}
 try {
-  foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories) {
+  foreach ($c in (Read-JsonFile (Join-Path $root 'categories.json')).categories) {
     $k = [string]$c.key
     if ($nonFoodKeys -contains $k) { foreach ($cid in $c.commodities) { $nonFood[[string]$cid] = $true } }
     if ($coreKeys    -contains $k) { foreach ($cid in $c.commodities) { $core[[string]$cid]    = $true } }

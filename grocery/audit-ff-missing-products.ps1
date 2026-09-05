@@ -14,6 +14,7 @@
 #>
 param([string]$Store = 'Family Fare')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 
 # same quantity math as guards.ps1 / audit-everyday-mismatch.ps1 - a repair judged by different math than the
@@ -21,8 +22,8 @@ $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')   # the one true per-unit math
 
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$board = @((Read-JsonFile $cmpF).comparison)
+$pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
 # Store display name -> data-file prefix. Do NOT derive this by stripping punctuation: "Sam's Club" becomes
 # "samsclub", the file is "sams-regular-*.json", Get-ChildItem returns nothing, and the script dies on a null
@@ -33,7 +34,7 @@ $prefix = $PREFIX[$Store]
 $regF = (Get-ChildItem (Join-Path $root ('out\regular\' + $prefix + '-regular-*.json')) |
   Where-Object { $_.BaseName -match '-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1)
 $have = @{}
-foreach ($r in (Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals) { $have[([string]$r.item).ToLower().Trim()] = $true }
+foreach ($r in (Read-JsonFile $regF.FullName).deals) { $have[([string]$r.item).ToLower().Trim()] = $true }
 
 $rows = New-Object System.Collections.Generic.List[object]
 foreach ($it in $board) {

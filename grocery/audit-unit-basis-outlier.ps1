@@ -25,6 +25,7 @@
 # Exit 0 = clean or advisory findings only. Exit 2 = self-test regression. Exit 3 = BLIND (nothing seen).
 param([string]$CompareFile = '', [double]$Ratio = 4.0, [int]$MinStores = 4, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
@@ -343,7 +344,7 @@ if (-not $CompareFile) {
   if (-not $cmp) { Write-Output 'BLIND: no comparison-*.json to audit'; exit 3 }
   $CompareFile = $cmp.FullName
 }
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 $rows = @($doc.comparison)
 if (-not $rows.Count) { Write-Output 'BLIND: comparison file has no rows'; exit 3 }
 
@@ -368,7 +369,7 @@ if (@($ranked).Count -gt 25) { Write-Output ("  ... and " + (@($ranked).Count - 
 $kinds = Find-MeasureKindMismatch -Rows $rows
 $kindAllow = @()
 $allowPath = Join-Path $root 'basis-kind-allowlist.json'
-if (Test-Path $allowPath) { try { $kindAllow = @((Get-Content $allowPath -Raw | ConvertFrom-Json).allow) } catch { } }
+if (Test-Path $allowPath) { try { $kindAllow = @((Read-JsonFile $allowPath).allow) } catch { } }
 function Test-KindAllowed { param($F, $Allow)
   foreach ($a in @($Allow)) {
     if ($a.id -eq $F.id -and $a.store -eq $F.store -and [string]$a.size -eq [string]$F.size) { return $true }

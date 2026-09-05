@@ -20,14 +20,15 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 $slug = @{ "Baker's" = 'bakers'; 'Aldi' = 'aldi'; 'Fareway' = 'fareway'; 'Walmart' = 'walmart'; "Sam's Club" = 'sams'; 'Hy-Vee' = 'hyvee'; 'Family Fare' = 'familyfare' }
-$terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
-$cmp = (Get-Content $cmpF -Raw | ConvertFrom-Json).comparison
-$rows = @((Get-Content (Join-Path $OutDir 'tile-integrity.json') -Raw | ConvertFrom-Json).rows | Where-Object { $_.fault -eq 'NO-LINK' })
+$cmp = (Read-JsonFile $cmpF).comparison
+$rows = @((Read-JsonFile (Join-Path $OutDir 'tile-integrity.json')).rows | Where-Object { $_.fault -eq 'NO-LINK' })
 
 $byStore = @{}
 foreach ($r in $rows) {

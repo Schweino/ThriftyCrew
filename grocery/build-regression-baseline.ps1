@@ -21,6 +21,7 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $fz = Join-Path $root 'regression-inputs'
 if (-not (Test-Path (Join-Path $fz 'ads-2026-07-05.json'))) { Write-Output "regression-inputs\ missing - freeze the inputs first"; exit 2 }
@@ -39,7 +40,7 @@ New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 if ($LASTEXITCODE -ne 0) { Write-Output "engine FAILED on the frozen inputs - no baseline written"; exit 1 }
 
 $cmpF = Get-ChildItem (Join-Path $scratch 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
-$doc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $cmpF.FullName
 
 $rows = New-Object System.Collections.Generic.List[object]
 foreach ($r in $doc.comparison) {

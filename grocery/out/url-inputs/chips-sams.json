@@ -1,5 +1,21 @@
 ﻿[
     {
+        "id":  "adobo-seasoning",
+        "q":  "adobo seasoning",
+        "match":  "Goya Adobo All-Purpose Seasoning with Pepper, 28 oz.",
+        "size":  "28 oz",
+        "pu":  0.1332,
+        "unit":  "oz"
+    },
+    {
+        "id":  "apples",
+        "q":  "apples",
+        "match":  "Envy Apples, 4 lbs.",
+        "size":  "4 lb",
+        "pu":  1.555,
+        "unit":  "lb"
+    },
+    {
         "id":  "bagels",
         "q":  "plain bagels",
         "match":  "Thomas\u0027 Plain Bagels, 12 pk.",
@@ -24,6 +40,14 @@
         "unit":  "each"
     },
     {
+        "id":  "brandy",
+        "q":  "brandy",
+        "match":  "Christian Brothers VS Grape Brandy, 1.75 L",
+        "size":  "59.175 fl oz",
+        "pu":  0.3258,
+        "unit":  "floz"
+    },
+    {
         "id":  "bread",
         "q":  "white bread",
         "match":  "Bimbo Soft White Bread Family Pack 20 oz., 2 pk.",
@@ -32,11 +56,35 @@
         "unit":  "each"
     },
     {
+        "id":  "brown-gravy-mix",
+        "q":  "brown gravy mix",
+        "match":  "McCormick Brown Gravy Mix, 21 oz.",
+        "size":  "21 oz",
+        "pu":  0.2562,
+        "unit":  "oz"
+    },
+    {
+        "id":  "brown-lentils",
+        "q":  "brown lentils",
+        "match":  "Tasty Bite Madras Lentils 10 oz., 6 ct.",
+        "size":  "6 ct 10 oz",
+        "pu":  3.5947,
+        "unit":  "lb"
+    },
+    {
         "id":  "beef-stew",
         "q":  "canned beef stew",
         "match":  "Dinty Moore Beef Stew, 15 oz., 6 pk.",
         "size":  "6 ct 15 oz",
         "pu":  0.1538,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-black-beans",
+        "q":  "black beans",
+        "match":  "Bush\u0027s Black Beans 15 oz., 6 pk.",
+        "size":  "6 ct 15 oz",
+        "pu":  0.0738,
         "unit":  "oz"
     },
     {
@@ -60,7 +108,7 @@
         "q":  "diced tomatoes canned",
         "match":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice, 14.5 oz., 12 pk.",
         "size":  "12 ct 14.5 oz",
-        "pu":  0.0556,
+        "pu":  0.0574,
         "unit":  "oz"
     },
     {
@@ -74,9 +122,9 @@
     {
         "id":  "canned-pasta",
         "q":  "canned ravioli",
-        "match":  "Chef Boyardee Beef Ravioli 15 oz., 12 pk.",
-        "size":  "12 ct 15 oz",
-        "pu":  0.0708,
+        "match":  "Chef Boyardee Spaghetti and Meatballs, 14.5 oz., 8 pk.",
+        "size":  "8 ct 14.5 oz",
+        "pu":  0.0688,
         "unit":  "oz"
     },
     {
@@ -88,6 +136,14 @@
         "unit":  "oz"
     },
     {
+        "id":  "canned-pinto-beans",
+        "q":  "pinto beans can",
+        "match":  "Goya Pinto Beans, 15.5 oz., 8 pk.",
+        "size":  "8 ct 15.5 oz",
+        "pu":  0.0603,
+        "unit":  "oz"
+    },
+    {
         "id":  "canned-salmon",
         "q":  "canned pink salmon",
         "match":  "Black Top Premium Wild Alaska Pink Salmon 14.75 oz., 4 pk.",
@@ -96,11 +152,59 @@
         "unit":  "oz"
     },
     {
+        "id":  "cherries",
+        "q":  "fresh cherries",
+        "match":  "Sweet Red Cherries, 3 lbs.",
+        "size":  "3 lb",
+        "pu":  3.74,
+        "unit":  "lb"
+    },
+    {
         "id":  "chicken-noodle-soup",
         "q":  "chicken noodle soup",
         "match":  "Progresso Traditional Chicken Noodle Soup, 19 oz., 6 pk.",
         "size":  "6 ct 19 oz",
         "pu":  0.0919,
+        "unit":  "oz"
+    },
+    {
+        "id":  "chickpeas",
+        "q":  "garbanzo beans",
+        "match":  "Bush\u0027s Best Fancy Garbanzo Beans 16 oz., 6 pk.",
+        "size":  "6 ct 16 oz",
+        "pu":  0.0665,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cinnamon-stick",
+        "q":  "cinnamon sticks",
+        "match":  "Member\u0027s Mark Cinnamon Sticks, 7 oz.",
+        "size":  "7 oz",
+        "pu":  1.0457,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cooked-jasmine-rice",
+        "q":  "cooked jasmine rice",
+        "match":  "Ben\u0027s Original Ready Jasmine Rice, 8.5 oz., 6 pk.",
+        "size":  "6 ct 8.5 oz",
+        "pu":  0.1957,
+        "unit":  "oz"
+    },
+    {
+        "id":  "corned-beef-brisket",
+        "q":  "corned beef brisket",
+        "match":  "USDA Choice Corned Beef Brisket Multivac, Case, priced per pound",
+        "size":  "lb",
+        "pu":  8.14,
+        "unit":  "lb"
+    },
+    {
+        "id":  "cranberry-sauce",
+        "q":  "cranberry sauce",
+        "match":  "Ocean Spray Jellied Cranberry Sauce, 14 oz., 6 pk.",
+        "size":  "6 ct 14 oz",
+        "pu":  0.1426,
         "unit":  "oz"
     },
     {
@@ -120,6 +224,14 @@
         "unit":  "oz"
     },
     {
+        "id":  "crushed-tomatoes",
+        "q":  "crushed tomatoes",
+        "match":  "Tuttorosso Crushed Tomatoes with Basil, 28 oz., 8 pk.",
+        "size":  "8 ct 28 oz",
+        "pu":  0.0535,
+        "unit":  "oz"
+    },
+    {
         "id":  "tomatoes-green-chilies",
         "q":  "rotel diced tomatoes green chilies",
         "match":  "Ro-Tel Diced Tomatoes \u0026 Green Chilies 10 oz., 8 ct.",
@@ -130,9 +242,9 @@
     {
         "id":  "disinfectant-spray",
         "q":  "disinfectant spray",
-        "match":  "Clorox Anywhere Daily Disinfectant \u0026 Sanitizing Spray 32 fl. oz., 12 ct.",
-        "size":  "12 ct 32 fl oz",
-        "pu":  0.156,
+        "match":  "Scrubbing Bubbles Mega Shower Aerosol, Disinfectant Spray, Rainshower Scent, 20 oz., 3 ct.",
+        "size":  "3 ct 20 oz",
+        "pu":  0.178,
         "unit":  "oz"
     },
     {
@@ -141,6 +253,22 @@
         "match":  "Duchess Mini Frosted Donuts, 3 oz, 12 pk.",
         "size":  "36 oz",
         "pu":  0.6933,
+        "unit":  "each"
+    },
+    {
+        "id":  "dried-arbol-chiles",
+        "q":  "chile de arbol",
+        "match":  "Orale! Arbol Peppers, 8 oz.",
+        "size":  "8 oz",
+        "pu":  0.4975,
+        "unit":  "oz"
+    },
+    {
+        "id":  "feminine-pads",
+        "q":  "maxi pads",
+        "match":  "Always Maxi Long Pads, Unscented, Size 2, 90 ct.",
+        "size":  "90 ct",
+        "pu":  0.1216,
         "unit":  "each"
     },
     {
@@ -176,11 +304,19 @@
         "unit":  "each"
     },
     {
-        "id":  "italian-seasoning",
-        "q":  "italian seasoning",
-        "match":  "Member\u0027s Mark Italian Seasoning, 6 oz.",
-        "size":  "6 oz",
-        "pu":  1.1467,
+        "id":  "hummus",
+        "q":  "hummus",
+        "match":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.",
+        "size":  "16 ct 2.5 oz",
+        "pu":  0.1395,
+        "unit":  "oz"
+    },
+    {
+        "id":  "kidney-beans",
+        "q":  "kidney beans",
+        "match":  "Bush\u0027s Dark Red Kidney Beans 16 oz., 6 pk.",
+        "size":  "6 ct 16 oz",
+        "pu":  0.0665,
         "unit":  "oz"
     },
     {
@@ -188,16 +324,24 @@
         "q":  "large eggs",
         "match":  "Large Eggs 15 dozen",
         "size":  "15 dozen",
-        "pu":  1.9113,
+        "pu":  1.9647,
         "unit":  "dozen"
     },
     {
-        "id":  "lemons",
-        "q":  "lemons",
-        "match":  "Starry Mini Cans Lemon Lime, 7.5 fl. oz., 30 pk.",
-        "size":  "225 fl oz",
-        "pu":  0.5327,
-        "unit":  "each"
+        "id":  "lemon-juice",
+        "q":  "lemon juice",
+        "match":  "ReaLemon 100% Lemon Juice 48 fl. oz. bottles, 2 pk.",
+        "size":  "2 ct 48 fl oz",
+        "pu":  0.0675,
+        "unit":  "floz"
+    },
+    {
+        "id":  "lime-juice",
+        "q":  "lime juice bottle",
+        "match":  "ReaLime 100% Lime Juice, 32 fl. oz., 2 pk.",
+        "size":  "64 fl oz",
+        "pu":  0.1013,
+        "unit":  "floz"
     },
     {
         "id":  "egg-whites",
@@ -208,11 +352,11 @@
         "unit":  "floz"
     },
     {
-        "id":  "mangoes",
-        "q":  "mango",
-        "match":  "Monster Energy Mango Loco, 16 fl. oz., 24 pk.",
-        "size":  "384 fl oz",
-        "pu":  1.77,
+        "id":  "mac-and-cheese",
+        "q":  "macaroni and cheese",
+        "match":  "Kraft Original Macaroni and Cheese Dinner 18 pk.",
+        "size":  "18 ct",
+        "pu":  0.6089,
         "unit":  "each"
     },
     {
@@ -220,8 +364,40 @@
         "q":  "blueberry muffins",
         "match":  "Entenmann\u0027s Little Bites Chocolate Chip Muffins, 1.5 oz., 20 pk.",
         "size":  "30 oz",
-        "pu":  0.589,
+        "pu":  0.539,
         "unit":  "each"
+    },
+    {
+        "id":  "mushrooms",
+        "q":  "white mushrooms",
+        "match":  "Giorgio Organic Mushrooms, 4 oz., 12 pk.",
+        "size":  "12 ct 4 oz",
+        "pu":  0.2767,
+        "unit":  "oz"
+    },
+    {
+        "id":  "nectarines",
+        "q":  "nectarines",
+        "match":  "Family Tree White Nectarines, 4 lbs.",
+        "size":  "4 lb",
+        "pu":  2.1925,
+        "unit":  "lb"
+    },
+    {
+        "id":  "papaya",
+        "q":  "papaya",
+        "match":  "Papaya, 1 ct.",
+        "size":  "each",
+        "pu":  3.27,
+        "unit":  "each"
+    },
+    {
+        "id":  "peaches",
+        "q":  "peaches",
+        "match":  "Member\u0027s Mark Organic Diced Peach Bowls, 4 oz., 24 pk.",
+        "size":  "24 ct 4 oz",
+        "pu":  1.9967,
+        "unit":  "lb"
     },
     {
         "id":  "pita-bread",
@@ -232,12 +408,36 @@
         "unit":  "each"
     },
     {
+        "id":  "pomegranates",
+        "q":  "pomegranate",
+        "match":  "Sahale Snacks Naturally Pomegranate Vanilla Cashews, 1.5 oz., 15 pk.",
+        "size":  "22.5 oz",
+        "pu":  1.1987,
+        "unit":  "each"
+    },
+    {
+        "id":  "red-wine",
+        "q":  "red wine",
+        "match":  "Menage a Trois California Red Blend Wine, 750 ml",
+        "size":  "25.361 fl oz",
+        "pu":  0.2736,
+        "unit":  "floz"
+    },
+    {
         "id":  "refried-beans",
         "q":  "refried beans",
         "match":  "Old El Paso Traditional Refried Beans 16 oz., 6 pk.",
         "size":  "6 ct 16 oz",
         "pu":  0.0806,
         "unit":  "oz"
+    },
+    {
+        "id":  "shaved-beef-steak",
+        "q":  "shaved beef steak",
+        "match":  "Demakes Bros. Choice Beef Shaved Steak",
+        "size":  "16 oz x 2 pk (32 oz)",
+        "pu":  8.735,
+        "unit":  "lb"
     },
     {
         "id":  "sloppy-joe-sauce",
@@ -248,11 +448,51 @@
         "unit":  "oz"
     },
     {
+        "id":  "steak-sauce",
+        "q":  "a1 steak sauce",
+        "match":  "Heinz 57 Sauce, 20 oz., 2 pk.",
+        "size":  "40 oz",
+        "pu":  0.2145,
+        "unit":  "floz"
+    },
+    {
         "id":  "string-cheese",
         "q":  "mozzarella string cheese",
         "match":  "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
         "size":  "48 ct 1 oz",
         "pu":  0.1973,
+        "unit":  "oz"
+    },
+    {
+        "id":  "stuffing-mix",
+        "q":  "stuffing mix",
+        "match":  "Kraft Stove Top Chicken Stuffing Mix, 6 oz., 6 pk.",
+        "size":  "6 ct 6 oz",
+        "pu":  0.2706,
+        "unit":  "oz"
+    },
+    {
+        "id":  "taco-seasoning",
+        "q":  "taco seasoning",
+        "match":  "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
+        "size":  "12 ct 1 oz",
+        "pu":  0.6483,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tomato-paste",
+        "q":  "tomato paste",
+        "match":  "Member\u0027s Mark Tomato Paste, 12 pk",
+        "size":  "6 oz 12 pk",
+        "pu":  0.1108,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tomato-soup",
+        "q":  "tomato soup",
+        "match":  "Campbell\u0027s Condensed Tomato Soup 10.75 oz., 12 ct.",
+        "size":  "12 ct 10.75 oz",
+        "pu":  0.1006,
         "unit":  "oz"
     },
     {
@@ -264,6 +504,30 @@
         "unit":  "each"
     },
     {
+        "id":  "turkey-bacon",
+        "q":  "turkey bacon",
+        "match":  "Godshall\u0027s Uncured Turkey Bacon 40 oz.",
+        "size":  "2.5 lb",
+        "pu":  0.3465,
+        "unit":  "oz"
+    },
+    {
+        "id":  "quinoa-uncooked",
+        "q":  "quinoa",
+        "match":  "Members Mark Organic Quinoa, 64 oz.",
+        "size":  "64 oz",
+        "pu":  0.1372,
+        "unit":  "oz"
+    },
+    {
+        "id":  "vienna-sausage",
+        "q":  "vienna sausage",
+        "match":  "Armour Vienna Sausage, 4.6 oz., 18 ct.",
+        "size":  "18 ct 4.6 oz",
+        "pu":  0.1507,
+        "unit":  "oz"
+    },
+    {
         "id":  "whipped-cream",
         "q":  "whipped topping",
         "match":  "Member\u0027s Mark Original Dairy Whipped Topping 15 oz., 3 pk.",
@@ -272,12 +536,20 @@
         "unit":  "oz"
     },
     {
-        "id":  "whole-chicken",
-        "q":  "whole chicken",
-        "match":  "Member\u0027s Mark Organic Whole Chickens, Case, priced per pound",
-        "size":  "lb",
-        "pu":  2.38,
-        "unit":  "lb"
+        "id":  "white-wine",
+        "q":  "white wine",
+        "match":  "Member\u0027s Mark Sonoma County Chardonnay Wine, 750 ml",
+        "size":  "25.361 fl oz",
+        "pu":  0.2736,
+        "unit":  "floz"
+    },
+    {
+        "id":  "whole-cloves",
+        "q":  "whole cloves spice",
+        "match":  "Member\u0027s Mark Whole Cloves, 11 oz.",
+        "size":  "11 oz",
+        "pu":  1.0891,
+        "unit":  "oz"
     },
     {
         "id":  "yogurt",

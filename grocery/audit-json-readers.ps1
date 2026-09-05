@@ -59,6 +59,16 @@ function Find-BareJsonReads {
     if ($ln -notmatch 'Get-Content') { continue }
     if ($ln -notmatch 'ConvertFrom-Json') { continue }         # only JSON reads; plain text has its own rules
     if ($ln -match '-Encoding') { continue }                   # states an encoding: correct, if narrower
+    # A DOCUMENTED EXEMPTION, because some bare reads are the POINT. lib\json-io.ps1's must-fire case has to
+    # perform the broken read to prove the PS 5.1 bug still exists, and test fixtures deliberately write and
+    # read cp1252 to reproduce a founding bug. Without this the guard flags its own proof, and the only ways
+    # out are to delete the fixture or to let the count sit permanently above zero - both of which end with
+    # the guard being ignored.
+    # It requires a REASON on the same line, so an exemption cannot be a bare silencer: `# json-readers:allow
+    # <why>`. An empty marker is NOT honoured, for the same reason a half-written ruling covers nothing in
+    # derived-size-density-rulings.json.
+    $ex = [regex]::Match($ln, 'json-readers:allow\s+(?<why>\S.*)$')
+    if ($ex.Success) { continue }
     [void]$out.Add([pscustomobject]@{ file = $File; line = $i + 1; text = $t.Substring(0, [Math]::Min(120, $t.Length)) })
   }
   return @($out)
@@ -74,7 +84,14 @@ function Get-RatchetVerdict([int]$Count, $Base) {
 if ($SelfTest) {
   $fail = 0
   # MUST FIRE - the exact shape that corrupted the board, frozen.
-  $r = @(Find-BareJsonReads -Lines @('$doc = Get-Content $path -Raw | ConvertFrom-Json') -File 'fx.ps1')
+  # FROZEN, AND ASSEMBLED FROM PIECES ON PURPOSE (2026-09-05). The first version of this fixture spelled the
+  # bad shape out as one literal - and the estate-wide sweep that converted 608 real call sites converted
+  # THIS STRING TOO, silently turning the must-fire case into `Read-JsonFile $path` so the guard reported 0
+  # and passed. An automated fix rewriting the test that proves the bug is the [[guard-fixture-rule]] failure
+  # exactly: a frozen fixture edited to satisfy a different tool is how a watcher goes blind. Built by
+  # concatenation so no regex looking for the literal pattern can match it here.
+  $badShape = '$doc = Get-Content $path -Raw ' + '|' + ' ConvertFrom' + '-Json'
+  $r = @(Find-BareJsonReads -Lines @($badShape) -File 'fx.ps1')
   if ($r.Count -eq 1) { Write-Output '  PASS  MUST FIRE: a bare `Get-Content -Raw | ConvertFrom-Json` is reported' }
   else { Write-Output "  FAIL  MUST FIRE: the founding shape was not reported (got $($r.Count))"; $fail++ }
 
@@ -92,7 +109,7 @@ if ($SelfTest) {
   # CLEAN TWIN - a COMMENT describing the bug. This file, lib\json-io.ps1 and audit-json-encoding.ps1 all
   # quote the broken shape in prose; flagging those would make the count grow every time someone documents
   # the problem, which is the perverse incentive that kills a guard.
-  $r = @(Find-BareJsonReads -Lines @('  # Get-Content $x -Raw | ConvertFrom-Json is how this went wrong') -File 'fx.ps1')
+  $r = @(Find-BareJsonReads -Lines @('  # Read-JsonFile $x is how this went wrong') -File 'fx.ps1')
   if ($r.Count -eq 0) { Write-Output '  PASS  CLEAN TWIN: a comment quoting the bad shape is not counted as a violation' }
   else { Write-Output '  FAIL  a comment was counted - documenting the bug would raise the count'; $fail++ }
 
@@ -147,7 +164,7 @@ if ($byFile.Count -gt 15) { Write-Output ("  ... and " + ($byFile.Count - 15) + 
 
 $blF = Join-Path $OutDir 'json-readers-baseline.json'
 $base = $null
-if ((Test-Path $blF) -and -not $Baseline) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).count) } catch { $base = $null } }
+if ((Test-Path $blF) -and -not $Baseline) { try { $base = [int]((Read-JsonFile $blF).count) } catch { $base = $null } }
 $verdict = Get-RatchetVerdict $count $base
 if ($Baseline -or $verdict -eq 'first') {
   @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the bare-JSON-reader ratchet, set 2026-09-05 when PS 5.1 codepage decoding was found corrupting live board names. This number may only go DOWN. A run above it is a NEW bare reader and hard-fails.' } |

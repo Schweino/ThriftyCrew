@@ -399,8 +399,8 @@ else { Bad ("the PS 5.1 no-unroll trap is back in " + $offenders.Count + " place
 # and prove the trap is real, so nobody "fixes" the check by deleting it
 $probe = Register-Fx (Join-Path $env:TEMP ('arr-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.json'))
 '[{"a":1},{"a":2},{"a":3}]' | Set-Content $probe -Encoding UTF8
-$wrapped = @(Get-Content $probe -Raw | ConvertFrom-Json)
-$assigned = Get-Content $probe -Raw | ConvertFrom-Json
+$wrapped = @(Read-JsonFile $probe)
+$assigned = Read-JsonFile $probe
 Remove-Item $probe -Force -ErrorAction SilentlyContinue
 if ($wrapped.Count -eq 1 -and @($assigned).Count -eq 3) { Ok 'the no-unroll trap still behaves as documented (wrapped=1, assigned-then-wrapped=3)' }
 elseif ($wrapped.Count -eq 3) { Ok 'this PowerShell unrolls ConvertFrom-Json (newer host) - the class check above is belt-and-braces' }
@@ -636,7 +636,7 @@ foreach ($al in @('multipack-allowlist.json','coverage-gap-allowlist.json','basi
   $ap = Join-Path $root $al
   if (-not (Test-Path $ap)) { continue }
   try {
-    $ad = Get-Content $ap -Raw | ConvertFrom-Json
+    $ad = Read-JsonFile $ap
     if ($ad.PSObject.Properties['allow'] -or $ad.PSObject.Properties['gaps']) { Ok "$al still exposes a recognised entry list" }
     else { Bad "$al exposes neither .allow nor .gaps - guards' rot check is scanning ZERO entries from it" }
   } catch { Bad "$al does not parse: $($_.Exception.Message)" }
@@ -1035,7 +1035,7 @@ if ($r.rc -eq 0 -and $r.text -match 'library:\s*\+0 patterns') {
 }
 # MUST FIRE: the same check over a PRE-FIX library (the two new classes deleted) must report DRIFT, or the
 # case above would pass on a bake that can no longer detect anything.
-$bkLib = Get-Content (Join-Path $root 'category-excludes.json') -Raw | ConvertFrom-Json
+$bkLib = Read-JsonFile (Join-Path $root 'category-excludes.json')
 $bkLib.classes.PSObject.Properties.Remove('cheese_carrier')
 $bkLib.classes.PSObject.Properties.Remove('cracker_carrier')
 $bkApply = @()
@@ -1045,7 +1045,7 @@ foreach ($a in $bkLib.apply) {
 }
 $bkLib.apply = $bkApply
 # a commodities.json that predates the two classes: strip the two baked patterns back out
-$bkCom = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$bkCom = Read-JsonFile (Join-Path $root 'commodities.json')
 foreach ($c in $bkCom) { if ($c.exclude) { $c.exclude = @(@($c.exclude) | Where-Object { $_ -ne 'bread\s+cheese' }) } }
 Set-Content (Join-Path $fxBk 'commodities.json') ($bkCom | ConvertTo-Json -Depth 6) -Encoding UTF8
 # the LIBRARY still carries the classes; only the baked file was rolled back - that is what DRIFT means
@@ -1169,12 +1169,12 @@ Set-Content (Join-Path $fxNd 'commodities.json') '[{"id":"eggs","label":"Eggs"}]
 Set-Content (Join-Path $fxNd 'product-urls.json') '{"items":{}}' -Encoding UTF8
 Set-Content (Join-Path $fxNd 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","stores":[{"store":"Hy-Vee","item":"Grade A Eggs 12 ct"}]}]}' -Encoding UTF8
 $r = RunPSAt $fxNd 'audit-name-drift.ps1' @()
-$ndJson = try { Get-Content (Join-Path $fxNd 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+$ndJson = try { Read-JsonFile (Join-Path $fxNd 'out\name-drift.json') } catch { $null }
 if ($r.rc -eq 3 -and $r.text -match 'BLIND' -and $ndJson -and [int]$ndJson.examined -eq 0) { Ok 'name-drift goes BLIND (exit 3) at zero cells and its JSON carries examined=0' }
 else { Bad ('name-drift did NOT go blind with an empty product-urls (rc=' + $r.rc + ')') }
 Set-Content (Join-Path $fxNd 'product-urls.json') '{"items":{"eggs":{"Hy-Vee":{"url":"https://example.test/eggs","price":"$2.50","size":"12 ct","name":"Grade A Eggs 12 ct"}}}}' -Encoding UTF8
 $r = RunPSAt $fxNd 'audit-name-drift.ps1' @()
-$ndJson = try { Get-Content (Join-Path $fxNd 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+$ndJson = try { Read-JsonFile (Join-Path $fxNd 'out\name-drift.json') } catch { $null }
 if ($r.rc -eq 0 -and $r.text -match '0 of 1 cells tested' -and $ndJson -and [int]$ndJson.examined -eq 1) { Ok 'name-drift clean twin: one matching link is examined and reported' }
 else { Bad ('name-drift clean twin failed (rc=' + $r.rc + ')') }
 Remove-Item $fxNd -Recurse -Force -ErrorAction SilentlyContinue
@@ -1200,7 +1200,7 @@ Set-Content (Join-Path $fxNdU 'out\recipe-board.json') '{"comparison":[{"id":"pi
 $ndUPu = '{"items":{"eggs":{"Hy-Vee":{"url":"https://example.test/eggs","price":"$2.50","size":"12 ct","name":"Grade A Eggs 12 ct"}},"shared-oats":{"Hy-Vee":{"url":"https://example.test/oats","price":"$4.20","size":"42 oz","name":"Quaker Oats 42 oz"}},"pinned-paprika":{"Hy-Vee":{"url":"https://example.test/p","price":"$2.69","size":"2.72 oz","name":"{LINK}"}}}}'
 Set-Content (Join-Path $fxNdU 'product-urls.json') ($ndUPu -replace '\{LINK\}','Badia Garlic Powder') -Encoding UTF8
 $r = RunPSAt $fxNdU 'audit-name-drift.ps1' @()
-$ndU = try { Get-Content (Join-Path $fxNdU 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+$ndU = try { Read-JsonFile (Join-Path $fxNdU 'out\name-drift.json') } catch { $null }
 $ndUCells = @($ndU.examined_cells)
 if ($r.rc -eq 0 -and $ndU -and [int]$ndU.count -eq 1 -and @($ndU.flags)[0].id -eq 'pinned-paprika' -and ($ndUCells -contains 'pinned-paprika|Hy-Vee')) {
   Ok 'name-drift MUST-FIRE: a wrong-product link on a RECIPE-board-only id is flagged and recorded in examined_cells (guard 3 can arm)'
@@ -1211,7 +1211,7 @@ if (@($ndUCells | Where-Object { $_ -eq 'shared-oats|Hy-Vee' }).Count -eq 1) { O
 else { Bad ('name-drift recorded ' + @($ndUCells | Where-Object { $_ -eq 'shared-oats|Hy-Vee' }).Count + ' scans of the colliding id (expected 1) - either examined_cells is missing entirely, or one link is being judged against two different unit bases') }
 Set-Content (Join-Path $fxNdU 'product-urls.json') ($ndUPu -replace '\{LINK\}','Simply Organic Smoked Paprika 2.72 oz') -Encoding UTF8
 $r = RunPSAt $fxNdU 'audit-name-drift.ps1' @()
-$ndU = try { Get-Content (Join-Path $fxNdU 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+$ndU = try { Read-JsonFile (Join-Path $fxNdU 'out\name-drift.json') } catch { $null }
 if ($r.rc -eq 0 -and $ndU -and [int]$ndU.count -eq 0 -and (@($ndU.examined_cells) -contains 'pinned-paprika|Hy-Vee')) {
   Ok 'name-drift CLEAN TWIN: the recipe cell is in scope and a matching link stays unflagged (the union adds coverage, not noise)'
 } else {
@@ -1259,7 +1259,7 @@ Set-Content (Join-Path $fxNdP 'out\comparison-2026-01-01.json') '{"comparison":[
 $ndPPu = '{"items":{"frozen-fruit":{"Sam''s Club":{"url":"https://example.test/ff","price":"$10.46","size":"64 oz","name":"{LINK}"}}}}'
 Set-Content (Join-Path $fxNdP 'product-urls.json') ($ndPPu -replace '\{LINK\}',"Membrix's Marque Triple Berry Blend, Frozen, 64 oz.") -Encoding UTF8
 $r = RunPSAt $fxNdP 'audit-name-drift.ps1' @()
-$ndP = try { Get-Content (Join-Path $fxNdP 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+$ndP = try { Read-JsonFile (Join-Path $fxNdP 'out\name-drift.json') } catch { $null }
 if ($r.rc -eq 0 -and $ndP -and [int]$ndP.count -eq 1 -and @($ndP.flags)[0].reason -eq 'product-mismatch' -and @($ndP.flags)[0].id -eq 'frozen-fruit') {
   Ok 'name-drift MUST-FIRE: same brand, different product is flagged product-mismatch (the pin that published Triple Berry over Sliced Strawberries cannot be minted)'
 } else {
@@ -1267,7 +1267,7 @@ if ($r.rc -eq 0 -and $ndP -and [int]$ndP.count -eq 1 -and @($ndP.flags)[0].reaso
 }
 Set-Content (Join-Path $fxNdP 'product-urls.json') ($ndPPu -replace '\{LINK\}',"Membrix's Marque Natural Sliced Strawberries, Frozen, 4 lbs.") -Encoding UTF8
 $r = RunPSAt $fxNdP 'audit-name-drift.ps1' @()
-$ndP = try { Get-Content (Join-Path $fxNdP 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+$ndP = try { Read-JsonFile (Join-Path $fxNdP 'out\name-drift.json') } catch { $null }
 if ($r.rc -eq 0 -and $ndP -and [int]$ndP.count -eq 0 -and [int]$ndP.examined -eq 1) {
   Ok 'name-drift CLEAN TWIN: a link naming the SAME product stays unflagged (the identity rule adds coverage, not noise that would block good pins)'
 } else {
@@ -1302,7 +1302,7 @@ $gboBoardRow = '{"store":"Sam''s Club","item":"Members Mark Sliced Strawberries,
 $gboLinkRow  = '{"store":"Sam''s Club","item":"Members Mark Triple Berry Blend, Frozen, 64 oz.","ad_price":"$10.46","size":"64 oz","as_of":"2026-01-01"}'
 Set-Content (Join-Path $fxGbo 'out\sams\sams-deals-2026-01-01.json') ($gboSams -replace '\{\{ROWS\}\}',($gboBoardRow + ',' + $gboLinkRow)) -Encoding UTF8
 $r = RunPSAt $fxGbo 'generate-board-overrides.ps1' @()
-$gbo = try { Get-Content (Join-Path $fxGbo 'board-price-overrides.json') -Raw | ConvertFrom-Json } catch { $null }
+$gbo = try { Read-JsonFile (Join-Path $fxGbo 'board-price-overrides.json') } catch { $null }
 if ($gbo -and [int]$gbo.count -eq 0 -and $r.text -match 'board-CONFIRMED-FRESH, pin REFUSED' -and $r.text -match 'frozen-fruit') {
   Ok 'board-confirmed-fresh MUST-FIRE: the gate reads out\sams (the engine''s Sam''s input) and refuses to pin a different product over a price the store''s own pull confirms'
 } else {
@@ -1310,7 +1310,7 @@ if ($gbo -and [int]$gbo.count -eq 0 -and $r.text -match 'board-CONFIRMED-FRESH, 
 }
 Set-Content (Join-Path $fxGbo 'out\sams\sams-deals-2026-01-01.json') ($gboSams -replace '\{\{ROWS\}\}',$gboLinkRow) -Encoding UTF8
 $r = RunPSAt $fxGbo 'generate-board-overrides.ps1' @()
-$gbo = try { Get-Content (Join-Path $fxGbo 'board-price-overrides.json') -Raw | ConvertFrom-Json } catch { $null }
+$gbo = try { Read-JsonFile (Join-Path $fxGbo 'board-price-overrides.json') } catch { $null }
 if ($gbo -and [int]$gbo.count -eq 1 -and [math]::Abs([double](@($gbo.cells)[0].per_unit) - 0.1634) -lt 0.0005) {
   Ok 'board-confirmed-fresh CLEAN TWIN: a board number the store''s own pull does NOT carry is still corrected (the gate refuses, it does not veto)'
 } else {
@@ -1340,7 +1340,7 @@ $fxCg = NewFxDir 'cg-blind'
 $fxCgBoard = Join-Path $fxCg 'fix-board.json'
 Set-Content $fxCgBoard '{"comparison":[{"id":"bananas","stores":[]}]}' -Encoding UTF8
 $r = RunPS 'audit-coverage-gaps.ps1' @('-OutDir', $fxCg, '-CompareFile', $fxCgBoard)
-$cgJson = try { Get-Content (Join-Path $fxCg 'coverage-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+$cgJson = try { Read-JsonFile (Join-Path $fxCg 'coverage-gaps.json') } catch { $null }
 if ($r.rc -eq 3 -and $r.text -match 'BLIND - ZERO raw products' -and $cgJson -and @($cgJson.stores_not_scanned).Count -eq 7) { Ok 'coverage-gaps goes BLIND (exit 3) at total blindness and names all 7 unscanned stores in its JSON' }
 else { Bad ('coverage-gaps did NOT go blind with zero raw products (rc=' + $r.rc + ')') }
 Set-Content (Join-Path $fxCg 'ads-2026-01-01.json') '{"deals":[{"store":"Hy-Vee","item":"zzzz"},{"store":"Aldi","item":"zzzz"},{"store":"Family Fare","item":"zzzz"},{"store":"Fareway","item":"zzzz"},{"store":"Baker''s","item":"zzzz"},{"store":"Sam''s Club","item":"zzzz"},{"store":"Walmart","item":"zzzz"}]}' -Encoding UTF8
@@ -1973,21 +1973,21 @@ Set-Content (Join-Path $fxSf 'regular\walmart-regular-2026-08-31.json') '{"store
 # gap_count must still be 1 - the gap is reported and pre-publish still sees it; only the email is gated.
 Remove-Item $sfLedger -Force -ErrorAction SilentlyContinue
 $r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
-$sfg = try { Get-Content (Join-Path $fxSf 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+$sfg = try { Read-JsonFile (Join-Path $fxSf 'sale-fallback-gaps.json') } catch { $null }
 if ($sfg -and [int]$sfg.gap_count -eq 1 -and [int]$sfg.escalated_count -eq 0 -and [string]@($sfg.owned)[0].owner -eq 'weekly-browser-agent') { Ok 'sale-fallback clean twin: a first-seen browser gap is OWNED and does not escalate, while gap_count still reports it (b844ab noise gone, visibility kept)' }
 else { Bad ('sale-fallback did not route a fresh browser gap to its owner (gap_count=' + [int]$sfg.gap_count + ' escalated=' + [int]$sfg.escalated_count + ') - the b844ab alert is either back, or the gap has vanished from the report entirely: ' + ($r.text -replace "`n", ' ')) }
 # MUST-FIRE 1: the SAME gap, still unworked past the weekly agent's grace window, must escalate. This is the
 # whole reason the routing is safe. first_seen is 2026-07-01 against a 2026-09-02 board = 63d, grace 16d.
 '{"ground-beef-8020|Walmart":{"first_seen":"2026-07-01","owner":"weekly-browser-agent"}}' | Set-Content $sfLedger -Encoding UTF8
 $r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
-$sfg = try { Get-Content (Join-Path $fxSf 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+$sfg = try { Read-JsonFile (Join-Path $fxSf 'sale-fallback-gaps.json') } catch { $null }
 if ($sfg -and [int]$sfg.escalated_count -eq 1 -and [int]@($sfg.escalated)[0].age_days -gt 16) { Ok 'sale-fallback MUST-FIRE: a gap its owner has not cleared in 63d escalates past the 16d grace - ownership routing cannot become a permanent mute' }
 else { Bad ('sale-fallback did NOT escalate a gap abandoned for 63 days (escalated=' + [int]$sfg.escalated_count + ') - browser-store gaps can now sit forever with nobody looking, which is worse than the noise this replaced: ' + ($r.text -replace "`n", ' ')) }
 # MUST-FIRE 2: an unreadable ledger FAILS CLOSED. Resetting it to empty would restart every clock silently
 # and make the expiry above unreachable - the shape where a gate quietly stops being able to arm.
 '{ this is not json' | Set-Content $sfLedger -Encoding UTF8
 $r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
-$sfg = try { Get-Content (Join-Path $fxSf 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+$sfg = try { Read-JsonFile (Join-Path $fxSf 'sale-fallback-gaps.json') } catch { $null }
 if ($sfg -and [int]$sfg.escalated_count -eq 1 -and [bool]$sfg.ledger_unreadable) { Ok 'sale-fallback MUST-FIRE: a corrupt ownership ledger escalates every gap and says so, instead of silently restarting the clocks' }
 else { Bad ('sale-fallback did not fail closed on an unreadable ownership ledger (escalated=' + [int]$sfg.escalated_count + ' flag=' + [bool]$sfg.ledger_unreadable + ') - a deleted or corrupt ledger would now mute every gap forever: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSf -Recurse -Force -ErrorAction SilentlyContinue
@@ -2329,7 +2329,7 @@ Set-Content (Join-Path $fxSv 'comparison-2026-09-02.json') $svOats -Encoding UTF
 # then member-enumerates and stringifies to "outlier native-mismatch", and every -contains test silently
 # answers the wrong question. Same trap check-ad-cycles documents at the review-flag loader.
 # the comma keeps the array from unrolling on the way out, so a ONE-flag result is still an array
-function SvRead([string]$p) { $d = Get-Content $p -Raw | ConvertFrom-Json; return , @($d) }
+function SvRead([string]$p) { $d = Read-JsonFile $p; return , @($d) }
 $r = RunPS 'sanity-check.ps1' @('-CompareFile', (Join-Path $fxSv 'comparison-2026-09-02.json'), '-OutDir', $fxSv)
 $svJ = SvRead (Join-Path $fxSv 'guards-2026-09-02.json')
 $svOat = @($svJ | Where-Object { $_.commodity -eq 'Oats / Oatmeal' -and $_.type -eq 'outlier-verified' })
@@ -3224,7 +3224,7 @@ foreach ($sf in (Get-ChildItem (Join-Path $root '*.ps1') -File)) {
 if ($stOffenders.Count -eq 0) { Ok 'search terms: no consumer of commodity-search.json casts a term value to a string (an array would JOIN, not fail)' }
 else { Bad ('these readers of commodity-search.json still flatten a term value, so a multi-term commodity becomes one dead search: ' + ($stOffenders -join ', ')) }
 # the live file must stay usable by the lib
-$stLive = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$stLive = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 $stLiveFindings = @(Test-SearchTermShape $stLive)
 if ($stLiveFindings.Count -eq 0) { Ok 'search terms: the live commodity-search.json has no empty terms and no degenerate arrays' }
 else { Bad ('commodity-search.json shape findings: ' + ($stLiveFindings -join ' | ')) }
@@ -3810,7 +3810,7 @@ if ($rwCall.Success -and $rwCall.Value -notmatch '2>&1' -and $rwCall.Value -notm
 else { Bad 'the rescue-worklist child is captured with 2>&1 or 2>$null under EAP=Stop - its first stderr line becomes a throw that skips the exit-code read entirely' }
 # THE REGISTRY FLAG THE WHOLE TOOL SELECTS ON. Counted from the PARSED JSON, not a regex over the text: a
 # regex would count the word inside this file's own prose, or inside a readme sentence in stores.json.
-$rwReg = Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json
+$rwReg = Read-JsonFile (Join-Path $root 'stores.json')
 $rwWalled = @(@($rwReg.stores) | Where-Object { $_.PSObject.Properties['walled'] -and $_.walled })
 if ($rwWalled.Count -eq 4) { Ok 'stores.json still marks exactly 4 walled stores - the set build-rescue-worklist builds lists for' }
 else { Bad ('stores.json marks ' + $rwWalled.Count + ' walled store(s), not 4 - a dropped flag silently removes that store from every rescue list, and the tool exits 3 only when ALL of them are gone') }
@@ -3875,7 +3875,7 @@ else { Bad ('search-links now hard-fails on a title change (rc=' + $sl.rc + ') -
 $slRepF = Join-Path $slRep 'search-links-report.json'
 if (Test-Path $slRepF) {
   $slJson = $null
-  try { $slJson = Get-Content $slRepF -Raw | ConvertFrom-Json } catch {}
+  try { $slJson = Read-JsonFile $slRepF } catch {}
   if ($slJson -and @($slJson.rows).Count -ge 7 -and $slJson.query) { Ok 'search-links writes a report that parses and carries a row per store (the file its alert tells Brad to open)' }
   else { Bad 'search-links wrote a report that does not parse or has no per-store rows - the alert points at an unreadable file' }
 } else { Bad 'search-links wrote NO report file - its alert body names a path that does not exist, and every run still prints a healthy-looking summary' }
@@ -4693,7 +4693,7 @@ if ($ceCmps.Count -eq 0) {
 } elseif (-not (Test-Path $ceStamp)) {
   Bad 'a board exists but out\capture-evictions.json does not - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board'
 } else {
-  $ceDoc = Get-Content $ceStamp -Raw | ConvertFrom-Json
+  $ceDoc = Read-JsonFile $ceStamp
   $ceCmpDoc = Get-Content $ceCmps[0].FullName -Raw | ConvertFrom-Json
   $ceGen = $null; $ceBuilt = $null
   try { $ceGen = [datetime]::Parse([string]$ceDoc.generated, [Globalization.CultureInfo]::InvariantCulture) } catch {}
@@ -4868,7 +4868,7 @@ else { Bad ('refresh-sams-verified -SelfTest failed (rc=' + $r.rc + ") - Sam's h
 # from two commodities just moves it to the third. Adding \bcarrots?\b was not in the plan either - it came
 # from watching 'Birds Eye Shredded Carrots & Broccoli Florets' hop OFF carrots and ONTO broccoli in the
 # match-soundness report. So this pins the whole family at once, in both directions.
-$cmMed = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$cmMed = Read-JsonFile (Join-Path $root 'commodities.json')
 function Get-MatchingCommodities([string]$name, $catalog) {
   $hits = New-Object System.Collections.Generic.List[string]
   foreach ($cm in $catalog) {
@@ -5004,7 +5004,7 @@ else {
   # THE FROZEN FIXTURE FILES THEMSELVES. Same rule as every other fixture here: never regenerate them from
   # the live feed, or the staleness they encode disappears and the test passes by finding nothing.
   $ffMf = Join-Path $fix 'feedfresh-mustfire.json'
-  if ((Test-Path $ffMf) -and ((Get-Content $ffMf -Raw | ConvertFrom-Json).generated -eq '2026-07-27T07:13:44')) {
+  if ((Test-Path $ffMf) -and ((Read-JsonFile $ffMf).generated -eq '2026-07-27T07:13:44')) {
     Ok 'the frozen stale-feed fixture still carries the real 2026-07-27 snapshot stamp it was built from'
   } else { Bad 'guard-fixtures\feedfresh-mustfire.json is missing or has been regenerated - it must keep the July 27 stamp, which IS the bug' }
 
@@ -5552,7 +5552,7 @@ if ($null -eq $dcGexLive) {
 } else {
   # NOT @( ... | ConvertFrom-Json ): a top-level JSON array arrives as ONE pipeline object and @() around
   # it counts 1, so the sweep would examine a single commodity and report all clear. Measured here today.
-  $dcRaw = Get-Content (Join-Path $PSScriptRoot 'commodities.json') -Raw | ConvertFrom-Json
+  $dcRaw = Read-JsonFile (Join-Path $PSScriptRoot 'commodities.json')
   $dcComs = @($dcRaw)
   $dcDead = @(); $dcUndec = 0
   foreach ($dcC in $dcComs) {
@@ -5966,7 +5966,7 @@ if (-not $hbM.Success) {
   # ---- IT IS OPT-IN, AND THAT IS THE BLAST RADIUS. The other four output_files rows are rewritten on EVERY
   #      run and their mtime IS a real liveness signal; a default-on content check would silently disarm all
   #      four. This arm reads the LIVE registry, so adding currency_field to one of them fires here.
-  $ccCfg = Get-Content (Join-Path $root 'expected-automations.json') -Raw | ConvertFrom-Json
+  $ccCfg = Read-JsonFile (Join-Path $root 'expected-automations.json')
   $ccWrong = @()
   foreach ($ccP in @('grocery/out/smp-feed.json', 'public/smp-feed.json', 'meal-prep/pipeline/v2-perserving.json', 'meal-prep/ingredient-map.json')) {
     $ccR = @(@($ccCfg.output_files) | Where-Object { [string]$_.path -eq $ccP })

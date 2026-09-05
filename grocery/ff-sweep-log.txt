@@ -1,0 +1,50 @@
+[2026-09-05T14:31:19] sweep start (cursor before = #466, MaxMinutes=9)
+[2026-09-05T14:32:35]   Family Fare: 0 product(s) covered by an offer running today (from 9009 offer record(s))
+[2026-09-05T14:32:35]   Family Fare: 602 search term(s) across 601 commodit(y/ies) - 1 are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation
+[2026-09-05T14:32:35]   Family Fare: term cursor at #96 of 602 - this run's budget starts there and wraps
+[2026-09-05T14:32:35]   Family Fare: capture-policy budget = 7 term(s) today (7 rotation + 0 sale expiry, cap 40; quarter 90d)
+[2026-09-05T14:32:35]   Family Fare: term budget reached (7 bought) - stopping the main pass. This is the policy working, not a failure.
+[2026-09-05T14:32:35]   Family Fare: recovery pass 1 for 595 empty term(s)...
+[2026-09-05T14:32:35]   Family Fare: recovery pass 2 for 595 empty term(s)...
+[2026-09-05T14:32:35]   WARNING: Family Fare: 595 term(s) STILL empty after recovery (not carried, or persistent throttle): brown sugar,
+[2026-09-05T14:32:35]   vegetable oil, cereal, old fashioned oats, grape jelly, honey, black beans, whole kernel corn, ketchup, yellow mustard,
+[2026-09-05T14:32:35]   mayonnaise, ranch dressing, iodized salt, ground black pepper, tortilla chips, potato chips, cola 12 pack, purified
+[2026-09-05T14:32:35]   water 24 pack, frozen pizza, vanilla ice cream, frozen mixed vegetables, frozen french fries, frozen chicken nuggets,
+[2026-09-05T14:32:35]   paper towels, toilet paper, dish soap, dishwasher detergent pacs, 13 gallon trash bags, aluminum foil, gallon freezer
+[2026-09-05T14:32:35]   bags, quart freezer bags, all purpose cleaner, bleach, liquid hand soap, bartlett pears, mango, kiwi fruit, cantaloupe,
+[2026-09-05T14:32:35]   honeydew melon, whole pineapple
+[2026-09-05T14:32:35]   WARNING: Family Fare: throttled - got only 105 items vs 5335 in the last good file. Diagnostic copy:
+[2026-09-05T14:32:35]   C:\Codex\ThriftyCrew\grocery\out\throttled\family-fare-2026-09-05.throttled.json. These rows are REAL and are being
+[2026-09-05T14:32:35]   MERGED (today's prices win, everything else carries forward).
+[2026-09-05T14:32:35]   Family Fare everyday prices: 5337 catalog items (103 fresh, 5234 carried forward, 0 expired past 90 d [0 starved, 0 churn, 0 unknown]; 595 terms still empty) -> C:\Codex\ThriftyCrew\grocery\out\regular\family-fare-regular-2026-09-05.json
+[2026-09-05T14:32:35]   Family Fare: term cursor advanced to #103 (this run bought terms #96..#102, merged catalog landed)
+[2026-09-05T14:32:35]   Family Fare: 49 term(s) bought in landed windows over the last 48h (policy 7 per window, floor 14)
+[2026-09-05T14:32:35]   Family Fare: catalog healthy - 5337 items, 0 expired, 504 re-verified in 48h (no alert)
+[2026-09-05T14:32:43] multipack-repair: repair-multipack-sizes: examining 40 of 246 capture file(s) - the ones inside the engine union window
+[2026-09-05T14:32:43] multipack-repair: repair-multipack-sizes: 40 file(s), 0 guard-5 reject(s) examined, 0 repairable (0 via a reviewed unit-weight hint), 0 REFUSED (need a human) - APPLIED
+[2026-09-05T14:32:43] sweep bought no terms - cursor still at #466 (hard shutout this window; next sweep re-attempts the same slice, which is correct)
+[2026-09-05T14:33:55] sweep start (cursor before = #466, MaxMinutes=9)
+[2026-09-05T14:35:11]   Family Fare: 0 product(s) covered by an offer running today (from 9009 offer record(s))
+[2026-09-05T14:35:11]   Family Fare: 602 search term(s) across 601 commodit(y/ies) - 1 are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation
+[2026-09-05T14:35:11]   Family Fare: term cursor at #103 of 602 - this run's budget starts there and wraps
+[2026-09-05T14:35:11]   Family Fare: capture-policy budget = 7 term(s) today (7 rotation + 0 sale expiry, cap 40; quarter 90d)
+[2026-09-05T14:35:11]   Family Fare: term budget reached (7 bought) - stopping the main pass. This is the policy working, not a failure.
+[2026-09-05T14:35:11]   Family Fare: recovery pass 1 for 595 empty term(s)...
+[2026-09-05T14:35:11]   Family Fare: recovery pass 2 for 595 empty term(s)...
+[2026-09-05T14:35:11]   WARNING: Family Fare: 595 term(s) STILL empty after recovery (not carried, or persistent throttle): whole kernel corn,
+[2026-09-05T14:35:11]   ketchup, yellow mustard, mayonnaise, ranch dressing, iodized salt, ground black pepper, tortilla chips, potato chips,
+[2026-09-05T14:35:11]   cola 12 pack, purified water 24 pack, frozen pizza, vanilla ice cream, frozen mixed vegetables, frozen french fries,
+[2026-09-05T14:35:11]   frozen chicken nuggets, paper towels, toilet paper, dish soap, dishwasher detergent pacs, 13 gallon trash bags,
+[2026-09-05T14:35:11]   aluminum foil, gallon freezer bags, quart freezer bags, all purpose cleaner, bleach, liquid hand soap, bartlett pears,
+[2026-09-05T14:35:11]   mango, kiwi fruit, cantaloupe, honeydew melon, whole pineapple, fresh raspberries, fresh blackberries, fresh cherries,
+[2026-09-05T14:35:11]   plums, grapefruit, mandarins clementines, cauliflower head
+[2026-09-05T14:35:11]   WARNING: Family Fare: throttled - got only 146 items vs 5341 in the last good file. Diagnostic copy:
+[2026-09-05T14:35:11]   C:\Codex\ThriftyCrew\grocery\out\throttled\family-fare-2026-09-05.throttled.json. These rows are REAL and are being
+[2026-09-05T14:35:11]   MERGED (today's prices win, everything else carries forward).
+[2026-09-05T14:35:11]   Family Fare everyday prices: 5347 catalog items (143 fresh, 5204 carried forward, 0 expired past 90 d [0 starved, 0 churn, 0 unknown]; 595 terms still empty) -> C:\Codex\ThriftyCrew\grocery\out\regular\family-fare-regular-2026-09-05.json
+[2026-09-05T14:35:11]   Family Fare: term cursor advanced to #110 (this run bought terms #103..#109, merged catalog landed)
+[2026-09-05T14:35:11]   Family Fare: 56 term(s) bought in landed windows over the last 48h (policy 7 per window, floor 14)
+[2026-09-05T14:35:11]   Family Fare: catalog healthy - 5347 items, 0 expired, 647 re-verified in 48h (no alert)
+[2026-09-05T14:35:17] multipack-repair: repair-multipack-sizes: examining 40 of 246 capture file(s) - the ones inside the engine union window
+[2026-09-05T14:35:17] multipack-repair: repair-multipack-sizes: 40 file(s), 0 guard-5 reject(s) examined, 0 repairable (0 via a reviewed unit-weight hint), 0 REFUSED (need a human) - APPLIED
+[2026-09-05T14:35:17] sweep bought no terms - cursor still at #466 (hard shutout this window; next sweep re-attempts the same slice, which is correct)

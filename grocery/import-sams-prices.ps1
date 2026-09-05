@@ -32,6 +32,7 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 $today = (Get-Date -Format 'yyyy-MM-dd')
@@ -58,14 +59,14 @@ function Convert-UnitPrice([double]$val, [string]$basisStr, [string]$commodityUn
 
 $rawF = Join-Path $root 'out\sams-prices-raw.json'
 if (-not (Test-Path $rawF)) { throw "missing $rawF - run the browser capture first" }
-$raw = Get-Content $rawF -Raw | ConvertFrom-Json
+$raw = Read-JsonFile $rawF
 $price = @{}
 foreach ($p in $raw.PSObject.Properties) { if ($p.Value -and ($null -ne $p.Value.cur)) { $price[[string]$p.Name] = $p.Value } }
 Write-Output ("Sam's Club prices captured from the store : " + $price.Count)
 
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 $units = @{}
-foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $units[[string]$c.id] = [string]$c.unit }
+foreach ($c in (Read-JsonFile (Join-Path $root 'commodities.json'))) { $units[[string]$c.id] = [string]$c.unit }
 
 $idByName = @{}
 foreach ($p in $pd.PSObject.Properties) {
@@ -78,7 +79,7 @@ foreach ($p in $pd.PSObject.Properties) {
 
 $regF = (Get-ChildItem (Join-Path $root 'out\regular\sams-regular-*.json') |
   Where-Object { $_.BaseName -match '^sams-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1)
-$doc = Get-Content $regF.FullName -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $regF.FullName
 
 $rows = New-Object System.Collections.ArrayList
 $upd=0; $down=0; $noId=0; $noPrice=0; $noBasis=0; $packMismatch=0; $same=0

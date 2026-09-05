@@ -1,18 +1,42 @@
 ﻿[
     {
-        "id":  "hominy",
-        "q":  "canned hominy",
-        "match":  "Juanitaâ€™s Foods White Hominy, 110 oz, Can",
-        "size":  "",
+        "id":  "93-7-ground-turkey",
+        "q":  "93 7 ground turkey",
+        "match":  "Honeysuckle White 93% Lean / 7% Fat Ground Turkey Tray, Fresh, 1.2 lbs.",
+        "size":  "1.2 lb",
         "reason":  "name-drift",
-        "was":  "Great Value White Hominy, 110.4 oz"
+        "was":  "JENNIE-O Fresh Lean Ground Turkey 93/7, 3 lb"
     },
     {
-        "id":  "carrots",
-        "q":  "carrots",
-        "match":  "Fresh Whole Carrots 2-Pound Bag",
-        "size":  "",
+        "id":  "boneless-skinless-chicken-thigh",
+        "q":  "boneless skinless chicken thigh",
+        "match":  "Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.6 - 6.9 lb Tray",
+        "size":  "4.339 lb",
+        "reason":  "brand-mismatch",
+        "was":  "Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb"
+    },
+    {
+        "id":  "cashews",
+        "q":  "cashews",
+        "match":  "Planters Deluxe Lightly Salted Whole Cashews, 5g Protein (9% DV) per serving, Gluten Free Snacks for Adults, 18.25 oz Resealable Canister",
+        "size":  "18.25 oz",
+        "reason":  "brand-mismatch",
+        "was":  "Great Value Organic Raw Whole Cashews, 14 oz"
+    },
+    {
+        "id":  "greek-yogurt",
+        "q":  "greek yogurt",
+        "match":  "bettergoods Plain Whole Milk Greek Yogurt, 32 oz Tub",
+        "size":  "32 oz",
+        "reason":  "brand-mismatch",
+        "was":  "Great Value Greek Plain Nonfat Yogurt, 32 oz Tub"
+    },
+    {
+        "id":  "mozzarella-cheese",
+        "q":  "mozzarella cheese",
+        "match":  "Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese, 16 oz Bag",
+        "size":  "16 oz",
         "reason":  "name-drift",
-        "was":  "Fresh Whole Carrots, 2 lb Bag"
+        "was":  "Mozzarella Cheese (32 oz)"
     }
 ]

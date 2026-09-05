@@ -46,6 +46,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $BoardFile) { $BoardFile = Join-Path $root 'out\recipe-board-everyday.json' }
 function Say([string]$s) { Write-Output $s }
@@ -165,7 +166,7 @@ if ($SelfTest) {
     [IO.File]::WriteAllText($bf, (ConvertTo-Json @{ week_of = '2026-08-29'; comparison = $fill } -Depth 9), (New-Object System.Text.UTF8Encoding($false)))
     $pristine = Get-Content $bf -Raw
 
-    function Board { (Get-Content $bf -Raw | ConvertFrom-Json).comparison }
+    function Board { (Read-JsonFile $bf).comparison }
     function Row([string]$id) { @(Board) | Where-Object { $_.id -eq $id } }
     function Cell([string]$id, [string]$st) { @((Row $id).stores) | Where-Object { $_.store -eq $st } }
     # HASHTABLE SPLAT, NOT AN ARRAY ONE - an array splat binds POSITIONALLY, so '-Id' arrives as the VALUE

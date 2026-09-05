@@ -41,6 +41,8 @@
 #>
 
 # ---------------------------------------------------------------- where the table lives
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Get-IdentityRoot {
   <# repo\graph\identity - resolved from the GROCERY directory, which is what every caller has. #>
   param([Parameter(Mandatory)][string]$GroceryRoot)
@@ -312,7 +314,7 @@ function Save-IdentityManifest {
   $p = Join-Path $dir '_manifest.json'
   $tmp = $p + '.tmp'
   [IO.File]::WriteAllText($tmp, ($doc | ConvertTo-Json -Depth 6), $utf8)
-  $null = Get-Content $tmp -Raw | ConvertFrom-Json
+  $null = Read-JsonFile $tmp
   Move-Item -Path $tmp -Destination $p -Force
   return $p
 }

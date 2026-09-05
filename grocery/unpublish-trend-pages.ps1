@@ -25,6 +25,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $here '..\lib\ghost-lib.ps1')
 . (Join-Path $here '..\lib\trend-keep.ps1')
@@ -33,7 +34,7 @@ $apiUrl  = 'https://map-to-success.ghost.io'
 $siteUrl = 'https://www.thriftycrew.com'
 
 # ---------- work out which posts are retired ----------
-$data = Get-Content (Join-Path $here 'price-history.json') -Raw | ConvertFrom-Json
+$data = Read-JsonFile (Join-Path $here 'price-history.json')
 $live = @($data.commodities | ForEach-Object { [string]$_.id })
 $stale = Get-TrendKeepStale -LiveIds $live
 if ($stale.Count -gt 0) { throw ("trend-keep.json names {0} id(s) missing from price-history.json: {1}" -f $stale.Count, ($stale -join ', ')) }

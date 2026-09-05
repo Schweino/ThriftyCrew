@@ -143,6 +143,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "bacon",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  3.986,
+        "link":  3.784,
+        "ratio":  0.95,
+        "price":  37.84,
+        "size":  "10 lb",
+        "boardItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
+        "linkItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
+        "board_src":  "main"
+    },
+    {
         "id":  "bagels",
         "store":  "Hy-Vee",
         "unit":  "each",
@@ -248,6 +261,19 @@
     },
     {
         "id":  "blueberries",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.325,
+        "link":  0.3178,
+        "ratio":  0.98,
+        "price":  5.72,
+        "size":  "18 oz",
+        "boardItem":  "Fresh Blueberries, 1 Pint Container",
+        "linkItem":  "Fresh Blueberries, 18 oz. Container",
+        "board_src":  "main"
+    },
+    {
+        "id":  "blueberries",
         "store":  "Baker\u0027s",
         "unit":  "oz",
         "board":  0.3883,
@@ -283,19 +309,6 @@
         "size":  "40.5 oz",
         "boardItem":  "Knorr Granulated Chicken Bouillon, 40.5 oz.",
         "linkItem":  "Knorr Granulated Chicken Bouillon, 40.5 oz.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "breakfast-sausage",
-        "store":  "Walmart",
-        "unit":  "lb",
-        "board":  2.87,
-        "link":  3.18,
-        "ratio":  1.11,
-        "price":  3.18,
-        "size":  "lb",
-        "boardItem":  "Farmland Original Pork Breakfast Sausage Roll, 16 oz",
-        "linkItem":  "Farmland Original Pork Breakfast Sausage Roll, 16 oz",
         "board_src":  "main"
     },
     {
@@ -416,19 +429,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "carrots",
-        "store":  "Sam\u0027s Club",
-        "unit":  "lb",
-        "board":  0.87,
-        "link":  0.912,
-        "ratio":  1.05,
-        "price":  4.56,
-        "size":  "5 lb",
-        "boardItem":  "Organic Tender Sweet Carrots, 5 lbs.",
-        "linkItem":  "Organic Tender Sweet Carrots, 5 lbs.",
-        "board_src":  "main"
-    },
-    {
         "id":  "cauliflower",
         "store":  "Aldi",
         "unit":  "each",
@@ -442,6 +442,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cauliflower",
+        "store":  "Walmart",
+        "unit":  "each",
+        "board":  2.96,
+        "link":  3.97,
+        "ratio":  1.34,
+        "price":  3.97,
+        "size":  "each",
+        "boardItem":  "Fresh Whole White Cauliflower, 1 Each",
+        "linkItem":  "Fresh Whole White Cauliflower",
+        "board_src":  "main"
+    },
+    {
         "id":  "celery",
         "store":  "Aldi",
         "unit":  "each",
@@ -452,19 +465,6 @@
         "size":  "each",
         "boardItem":  "Celery, Each",
         "linkItem":  "Organic Celery Heart Each",
-        "board_src":  "main"
-    },
-    {
-        "id":  "cherries",
-        "store":  "Sam\u0027s Club",
-        "unit":  "lb",
-        "board":  2.94,
-        "link":  3.74,
-        "ratio":  1.27,
-        "price":  11.22,
-        "size":  "3 lb",
-        "boardItem":  "Sweet Red Cherries, 3 lbs.",
-        "linkItem":  "Sweet Red Cherries, 3 lbs.",
         "board_src":  "main"
     },
     {
@@ -572,6 +572,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "corn-muffin-mix",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.0906,
+        "link":  0.0847,
+        "ratio":  0.93,
+        "price":  0.72,
+        "size":  "8.5 oz",
+        "boardItem":  "JIFFY Corn Muffin Mix, 8.5 oz Box",
+        "linkItem":  "\"JIFFY\" Corn Muffin Mix, 8.5 oz Box",
+        "board_src":  "main"
+    },
+    {
         "id":  "corned-beef-hash",
         "store":  "Fareway",
         "unit":  "oz",
@@ -611,19 +624,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "cream-cheese",
-        "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.13,
-        "link":  0.1381,
-        "ratio":  1.06,
-        "price":  6.63,
-        "size":  "48 oz",
-        "boardItem":  "Member\u0027s Mark Cream Cheese Brick, 48 oz.",
-        "linkItem":  "Member\u0027s Mark Cream Cheese Brick, 48 oz.",
-        "board_src":  "main"
-    },
-    {
         "id":  "croissants",
         "store":  "Hy-Vee",
         "unit":  "each",
@@ -647,19 +647,6 @@
         "size":  "1 each",
         "boardItem":  "Cucumber Each",
         "linkItem":  "Cucumber",
-        "board_src":  "main"
-    },
-    {
-        "id":  "curry-powder",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.89,
-        "link":  1.06,
-        "ratio":  1.19,
-        "price":  2.12,
-        "size":  "2 oz",
-        "boardItem":  "Great Value Curry Powder, 2 oz",
-        "linkItem":  "Great Value Curry Powder, 2 oz",
         "board_src":  "main"
     },
     {
@@ -802,7 +789,7 @@
         "price":  12.86,
         "size":  "3.805 lb",
         "boardItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
-        "linkItem":  "GortonÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+        "linkItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
         "board_src":  "main"
     },
     {
@@ -923,6 +910,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "green-onions",
+        "store":  "Walmart",
+        "unit":  "each",
+        "board":  1.17,
+        "link":  1.07,
+        "ratio":  0.91,
+        "price":  1.07,
+        "size":  "each",
+        "boardItem":  "Fresh Whole Green Onion 1 Bunch, Fresh Produce",
+        "linkItem":  "Fresh Whole Green Onion Bunch",
+        "board_src":  "main"
+    },
+    {
         "id":  "conditioner",
         "store":  "Aldi",
         "unit":  "floz",
@@ -975,6 +975,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "kale",
+        "store":  "Walmart",
+        "unit":  "each",
+        "board":  1.62,
+        "link":  1.48,
+        "ratio":  0.91,
+        "price":  1.48,
+        "size":  "each",
+        "boardItem":  "Fresh Kale Greens, Bunch",
+        "linkItem":  "Fresh Kale Greens Bunch",
+        "board_src":  "main"
+    },
+    {
         "id":  "kielbasa",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
@@ -1023,7 +1036,7 @@
         "price":  8.78,
         "size":  "31 oz",
         "boardItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
-        "linkItem":  "MemberÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s Mark Lemon Pepper Seasoning, 31 oz.",
+        "linkItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
         "board_src":  "main"
     },
     {
@@ -1379,19 +1392,6 @@
     },
     {
         "id":  "shower-cleaner",
-        "store":  "Walmart",
-        "unit":  "floz",
-        "board":  0.0544,
-        "link":  0.0619,
-        "ratio":  1.14,
-        "price":  1.98,
-        "size":  "32 fl oz",
-        "boardItem":  "Great Value Bathroom Cleaner with Bleach, 32 fl oz",
-        "linkItem":  "Great Value Bathroom Cleaner with Bleach, 32 fl oz",
-        "board_src":  "main"
-    },
-    {
-        "id":  "shower-cleaner",
         "store":  "Sam\u0027s Club",
         "unit":  "floz",
         "board":  0.0832,
@@ -1587,15 +1587,15 @@
     },
     {
         "id":  "toaster-pastries",
-        "store":  "Walmart",
+        "store":  "Sam\u0027s Club",
         "unit":  "each",
-        "board":  0.1692,
-        "link":  0.1883,
-        "ratio":  1.11,
-        "price":  2.26,
-        "size":  "12 ct",
-        "boardItem":  "Great Value Frosted Brown Sugar Cinnamon Toaster Pastries, 20.3 oz, 12 Count",
-        "linkItem":  "Great Value Frosted Cherry Toaster Pastries",
+        "board":  0.2079,
+        "link":  0.1871,
+        "ratio":  0.9,
+        "price":  8.98,
+        "size":  "48 ct",
+        "boardItem":  "Pop-Tarts Chocolate Toaster Pastries, Variety Pack, 48 ct.",
+        "linkItem":  "Pop-Tarts Toaster Pastries, Variety Pack, 48 ct.",
         "board_src":  "main"
     },
     {
@@ -1651,19 +1651,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "vegetable-broth",
-        "store":  "Walmart",
-        "unit":  "floz",
-        "board":  0.0399,
-        "link":  0.0469,
-        "ratio":  1.17,
-        "price":  1.5,
-        "size":  "32 oz",
-        "boardItem":  "Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf",
-        "linkItem":  "Great Value Gluten-Free Vegetable Broth, 32 oz Carton, Shelf-Stable, No Allergens",
-        "board_src":  "main"
-    },
-    {
         "id":  "yeast",
         "store":  "Walmart",
         "unit":  "oz",
@@ -1672,7 +1659,7 @@
         "ratio":  1.09,
         "price":  5.43,
         "size":  "4 oz",
-        "boardItem":  "Red Star Active Dry Yeast, 4 oz (113.4 g) Multi-Use Jar, Baking and Breadmaking Essential",
+        "boardItem":  "Red Star Quick-Rise Instant Yeasts, 4 oz (113.4 g) Multi-Use Jar, Fast-Acting Baking Yeasts",
         "linkItem":  "Red Star Active Dry Yeast, 4 oz (113.4 g) Multi-Use Jar, Baking and Breadmaking Essential",
         "board_src":  "main"
     },
@@ -1906,7 +1893,7 @@
         "ratio":  1.1,
         "price":  5.49,
         "size":  "12 oz",
-        "boardItem":  "Sun-MaidÃƒâ€šÃ‚Â® California Golden Raisins Dried Fruit Snack",
+        "boardItem":  "Sun-Maid® California Golden Raisins Dried Fruit Snack",
         "linkItem":  "Sun-Maid California Golden Raisins Dried Fruit Snack",
         "board_src":  "recipe"
     },
@@ -2036,7 +2023,7 @@
         "ratio":  0.77,
         "price":  2.5,
         "size":  "12 fl oz",
-        "boardItem":  "KrogerÃƒâ€šÃ‚Â® Mild Buffalo Wing Sauce",
+        "boardItem":  "Kroger® Mild Buffalo Wing Sauce",
         "linkItem":  "Kroger Mild Buffalo Wing Sauce",
         "board_src":  "recipe"
     },
@@ -2049,7 +2036,7 @@
         "ratio":  1.12,
         "price":  5.49,
         "size":  "16 oz",
-        "boardItem":  "KrogerÃƒâ€šÃ‚Â® Hot Italian Sausage",
+        "boardItem":  "Kroger® Hot Italian Sausage",
         "linkItem":  "Johnsonville Hot Italian Ground Sausage",
         "board_src":  "recipe"
     },
@@ -2075,7 +2062,7 @@
         "ratio":  1.11,
         "price":  15.99,
         "size":  "10 lb",
-        "boardItem":  "KrogerÃƒâ€šÃ‚Â® Jasmine Rice",
+        "boardItem":  "Kroger® Jasmine Rice",
         "linkItem":  "Kroger Jasmine Rice",
         "board_src":  "recipe"
     },
@@ -2101,7 +2088,7 @@
         "ratio":  0.92,
         "price":  2.5,
         "size":  "16 oz",
-        "boardItem":  "HerdezÃƒâ€šÃ‚Â® Salsa Verde Mild",
+        "boardItem":  "Herdez® Salsa Verde Mild",
         "linkItem":  "Herdez Salsa Verde Mild",
         "board_src":  "recipe"
     },
@@ -2232,7 +2219,7 @@
         "price":  3.99,
         "size":  "12 oz",
         "boardItem":  "Kroger Swiss Block Cheese",
-        "linkItem":  "KrogerÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â® Swiss Sliced Cheese",
+        "linkItem":  "Kroger® Swiss Sliced Cheese",
         "board_src":  "recipe"
     },
     {

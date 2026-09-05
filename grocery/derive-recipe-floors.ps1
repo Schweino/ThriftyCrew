@@ -34,11 +34,12 @@
 #>
 param([switch]$Apply, [string]$Root = '', [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $outDir = if ($OutDir) { $OutDir } else { Join-Path $root 'out' }
 
 $floorF = Join-Path $outDir 'recipe-board-everyday.json'
-$doc = Get-Content $floorF -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $floorF
 $rows = @($doc.comparison)
 
 # optional curated mapping recipe-floor-id -> board-commodity-id, for the ~80 rows whose recipe-era id
@@ -49,12 +50,12 @@ $rows = @($doc.comparison)
 $idMapF = Join-Path $root 'recipe-floor-id-map.json'
 $idMap = @{}
 if (Test-Path $idMapF) {
-  foreach ($p in ((Get-Content $idMapF -Raw | ConvertFrom-Json).map).PSObject.Properties) { $idMap[$p.Name] = [string]$p.Value }
+  foreach ($p in ((Read-JsonFile $idMapF).map).PSObject.Properties) { $idMap[$p.Name] = [string]$p.Value }
 }
 
 $candF = Get-ChildItem (Join-Path $outDir 'candidates-*.json') | Where-Object { $_.BaseName -match '^candidates-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $candF) { throw 'no candidates-<date>.json found - run compare-deals first' }
-$cand = Get-Content $candF.FullName -Raw | ConvertFrom-Json
+$cand = Read-JsonFile $candF.FullName
 $candById = @{}
 foreach ($c in $cand.commodities) { $candById[$c.id] = $c }
 $hasType = $false

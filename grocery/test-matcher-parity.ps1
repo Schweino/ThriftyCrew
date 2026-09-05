@@ -34,6 +34,7 @@
 #>
 param([int]$Sample = 0)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 # COMPLETION MARKER CONTRACT (2026-08-21). This joined the daily chain in check-ad-cycles, and every
 # detector there must say it REACHED THE END - an exit code alone cannot tell a clean run from a crash
 # three checks in. audit-guard-contract flagged this the moment it was wired, which is the contract working.
@@ -75,7 +76,7 @@ if (-not $gm.Success) {
   exit 2
 }
 $GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $gm.Groups['body'].Value + ')')
-$commodities = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 
 Invoke-Expression $engineSrc
 Invoke-Expression $auditSrc
@@ -85,7 +86,7 @@ Invoke-Expression $auditSrc
 $names = New-Object System.Collections.Generic.HashSet[string]
 foreach ($g in @('out\regular\*.json','out\sams\*.json','out\bakers\*.json','out\fareway\*.json','out\extra\*.json','out\ads-*.json')) {
   foreach ($f in (Get-ChildItem (Join-Path $root $g) -ErrorAction SilentlyContinue)) {
-    try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+    try { $d = Read-JsonFile $f.FullName } catch { continue }
     $rows = if ($d -is [array]) { $d } elseif ($d.PSObject.Properties['deals']) { $d.deals } elseif ($d.PSObject.Properties['products']) { $d.products } else { @() }
     foreach ($r in $rows) {
       $n = if ($r.item) { [string]$r.item } elseif ($r.name) { [string]$r.name } else { '' }

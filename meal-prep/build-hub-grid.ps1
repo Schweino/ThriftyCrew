@@ -26,6 +26,7 @@
 #     -> leaderboard (navy) -> filters -> grid
 # so the two navy panels are always separated by white. Test-TcNavyAdjacency re-checks it before write.
 param([switch]$Validate,[switch]$Publish)
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ErrorActionPreference='Stop'
 # $PSScriptRoot, not a hard-coded path (2026-08-01): the rotation chain now calls this script wherever
 # check-ad-cycles runs, and the cloud runner's checkout is not C:\Codex. A hard-coded root here meant a
@@ -35,7 +36,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-p
 $scratch=Join-Path $env:TEMP 'tc-hub-work'
 New-Item -ItemType Directory -Force $scratch | Out-Null
 $apiUrl='https://map-to-success.ghost.io'
-$doc=Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json
+$doc=Read-JsonFile (Join-Path $root 'recipes-db.json')
 $recipes=$doc.recipes
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
 . (Join-Path $PSScriptRoot '..\lib\design-tokens.ps1')
@@ -173,12 +174,12 @@ if($Validate){
 # (same basis as the recipe pages + top5 + rotation). recipes-db.cost_per_serving is the legacy
 # utilization basis and only a fallback.
 $cheapPs=@{}
-try { (Get-Content (Join-Path $root 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $cheapPs[[string]$_.slug]=[double]$_.cheapest_ps } } catch { Write-Warning 'v2-perserving.json unreadable - falling back to legacy cost_per_serving' }
+try { (Read-JsonFile (Join-Path $root 'pipeline\v2-perserving.json')) | ForEach-Object { $cheapPs[[string]$_.slug]=[double]$_.cheapest_ps } } catch { Write-Warning 'v2-perserving.json unreadable - falling back to legacy cost_per_serving' }
 # free rotation: the five-per-protein weekly free dinners. This is the whole top of the funnel and it was
 # completely invisible in the 513-card grid until now.
 $freeSet=@{}; $freeList=@()
 try {
-  $fr=Get-Content (Join-Path $root 'free-rotation.json') -Raw | ConvertFrom-Json
+  $fr=Read-JsonFile (Join-Path $root 'free-rotation.json')
   # THE BADGE FOLLOWS GHOST, NOT THE ROTATION'S INTENT. free-rotation.json records what the rotation MEANT
   # to free; the paywall is what a visitor actually meets. On 2026-07-31 those disagreed on one recipe
   # (chicken-40-cloves-garlic: listed free, live paid), so the hub was showing a gold "Free this week"
@@ -827,7 +828,7 @@ $html=$html -replace '(Sorted cheapest first\.)( Every card shows real macros)',
 try {
   $storeWords=@{5='five';6='six';7='seven';8='eight';9='nine'}
   $cmpF = Get-ChildItem (Join-Path (Split-Path $root -Parent) 'grocery\out\comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  $rbCt=@(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison | ForEach-Object { $_.stores } | ForEach-Object { [string]$_.store }) | Sort-Object -Unique).Count
+  $rbCt=@(((Read-JsonFile $cmpF.FullName).comparison | ForEach-Object { $_.stores } | ForEach-Object { [string]$_.store }) | Sort-Object -Unique).Count
   if($rbCt -ge 5){
     $sw=$(if($storeWords.ContainsKey($rbCt)){ $storeWords[$rbCt] } else { [string]$rbCt })
     $html=$html -replace '\b(five|six|seven|eight|nine)( Omaha (?:grocery )?stores)', ($sw + '$2')

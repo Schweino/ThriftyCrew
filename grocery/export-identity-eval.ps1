@@ -40,6 +40,7 @@
 #>
 param([int]$TopK = 8, [switch]$SelfTest, [switch]$Label, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $sd = Join-Path (Split-Path $root -Parent) 'sidecar\data'
 
@@ -113,12 +114,12 @@ if ($Label) {
   if (-not (Test-Path $sd)) { throw "sidecar data dir not found: $sd" }
   $cp = Join-Path $sd 'mine-candidates.json'
   if (-not (Test-Path $cp)) { throw "no mine-candidates.json: run `python sidecar\hardeval.py --stage mine --defs sidecar\data\frozen\phase3-baseline\commodity-defs.json` first" }
-  $coms = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+  $coms = Read-JsonFile (Join-Path $root 'commodities.json')
   $idx = Get-RuleIndex $coms
   $labelOf = @{}
   foreach ($c in $coms) { $labelOf[[string]$c.id] = [string]$c.label }
 
-  $raw = Get-Content $cp -Raw | ConvertFrom-Json
+  $raw = Read-JsonFile $cp
   $cands = if ($raw.PSObject.Properties.Name -contains 'pairs') { @($raw.pairs) } else { @($raw) }
   Write-Output ("mine-candidates.json: {0} candidate pair(s), mined from {1}" -f $cands.Count, $(if ($raw.defs) { $raw.defs } else { 'an unrecorded def set' }))
 
@@ -169,13 +170,13 @@ if ($Label) {
 }
 
 if (-not (Test-Path $sd)) { throw "sidecar data dir not found: $sd (run audit-semantic-identity.ps1 -PrepareOnly first)" }
-$coms = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$coms = Read-JsonFile (Join-Path $root 'commodities.json')
 $idx = Get-RuleIndex $coms
 $labelOf = @{}
 foreach ($c in $coms) { $labelOf[[string]$c.id] = [string]$c.label }
 
 # ---- 1. GOLD negatives from the adjudicated blocklist
-$kw = Get-Content (Join-Path $root 'known-wrong.json') -Raw | ConvertFrom-Json
+$kw = Read-JsonFile (Join-Path $root 'known-wrong.json')
 $gold = New-Object System.Collections.Generic.List[object]
 $goldRuleAccepted = 0
 foreach ($e in @($kw.entries)) {
@@ -196,7 +197,7 @@ foreach ($e in @($kw.entries)) {
 Write-Output ("negatives-gold.json: {0} adjudicated wrong-product pair(s) from {1} ruling(s); {2} of them are STILL ACCEPTED by that commodity's rules (which is why they had to be blocklisted)" -f $gold.Count, @($kw.entries).Count, $goldRuleAccepted)
 
 # ---- 2. positives, unchanged
-$pos = Get-Content (Join-Path $sd 'positives.json') -Raw | ConvertFrom-Json
+$pos = Read-JsonFile (Join-Path $sd 'positives.json')
 ($pos | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $sd 'eval-positives.json') -Encoding UTF8
 Write-Output ("eval-positives.json: {0} accepted board pair(s)" -f @($pos).Count)
 

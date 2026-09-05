@@ -22,6 +22,7 @@
 # temporary 45 headroom for the Fareway launch is obsolete (all Fareway links resolved same-day).
 param([double]$Tol = 0.30, [int]$MaxNoLink = 0, [string]$OutDir = "", [string]$Embed = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -94,16 +95,16 @@ function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = ''
 
 # board cells (staples + recipe)
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$all = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
+$all = @((Read-JsonFile $cmpF).comparison)
 $riF = Join-Path $OutDir 'recipe-board.json'
-if (Test-Path $riF) { $all += @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+if (Test-Path $riF) { $all += @((Read-JsonFile $riF).comparison) }
+$pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
 # apply the SAME board-price overrides the page build applies, so this audit judges the numbers the page
 # actually renders (an overridden everyday cell is no longer "stale"). Sales are never overridden.
 $ovr = @{}
 $ovrFile = Join-Path $root 'board-price-overrides.json'
-if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
+if (Test-Path $ovrFile) { try { foreach ($c in (Read-JsonFile $ovrFile).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
 if ($ovr.Count) { foreach ($it in $all) { $id=[string]$it.id; if (-not $ovr.ContainsKey($id)) { continue }; foreach ($s in $it.stores) { if (([string]$s.type) -eq 'everyday' -and $ovr[$id].ContainsKey([string]$s.store)) { $nv=[double]$ovr[$id][[string]$s.store]; if ($nv -gt 0) { $s.per_unit=$nv } } } } }
 
 # mismatch = a stored link whose per-unit is >Tol off the board price. The build ALREADY hides these (strict
@@ -144,7 +145,7 @@ $boardFeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
 # the check consumes - never a second pass over the html, which would only re-state the same assumption.
 $chipsSeen = 0
 if (Test-Path $boardFeed) {
-  $bf = Get-Content $boardFeed -Raw | ConvertFrom-Json
+  $bf = Read-JsonFile $boardFeed
   foreach ($p in $bf.PSObject.Properties) {
     $rid = $p.Name -replace '::r$',''    # '<id>::r' is the recipe row of a shared id; report the plain id
     # TOLERATE ATTRIBUTES AFTER data-pu (2026-08-31). This regex required '>' immediately after data-pu, so

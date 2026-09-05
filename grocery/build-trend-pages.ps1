@@ -22,6 +22,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $tcChartJs = [IO.File]::ReadAllText((Join-Path $here 'tc-chart.js'), [Text.Encoding]::UTF8)
 if ([string]::IsNullOrWhiteSpace($HistoryFile)) { $HistoryFile = Join-Path $here 'price-history.json' }
@@ -145,7 +146,7 @@ $tpCss = @'
 # ---------- load data ----------
 
 if (-not (Test-Path $HistoryFile)) { throw "History file not found: $HistoryFile" }
-$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json
+$data = Read-JsonFile $HistoryFile
 
 $cmp = $null
 $cmpById = @{}

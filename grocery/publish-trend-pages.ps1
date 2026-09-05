@@ -20,6 +20,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 
@@ -64,7 +65,7 @@ function Get-UnitPhrase { param([string]$u)
 # ---------- load data + weekly gate ----------
 
 if (-not (Test-Path $HistoryFile)) { throw "History file not found: $HistoryFile" }
-$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json
+$data = Read-JsonFile $HistoryFile
 
 $allWeeks = @()
 foreach ($c in $data.commodities) { foreach ($e in $c.history) { $allWeeks += [string]$e.week_of } }

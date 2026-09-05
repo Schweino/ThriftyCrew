@@ -33,6 +33,7 @@ param(
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 function BoardFiles {
   Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
@@ -50,7 +51,7 @@ if (-not $Prev) {
 }
 
 function StoreCounts($path) {
-  $j = Get-Content $path -Raw | ConvertFrom-Json
+  $j = Read-JsonFile $path
   $h = @{}
   foreach ($r in $j.comparison) { foreach ($s in $r.stores) { $k = [string]$s.store; if (-not $h.ContainsKey($k)) { $h[$k] = 0 }; $h[$k]++ } }
   return @{ stores = $h; rows = @($j.comparison).Count }
@@ -74,7 +75,7 @@ if ($a.stores.Count -eq 0) { Write-Output 'coverage-regression: baseline board h
 $ackPath = Join-Path $OutDir 'coverage-ack.json'
 $acks = @{}
 if (Test-Path $ackPath) {
-  foreach ($e in @((Get-Content $ackPath -Raw | ConvertFrom-Json).acks)) {
+  foreach ($e in @((Read-JsonFile $ackPath).acks)) {
     $exp = [string]$e.expires
     if ($exp -and $newDate -and ([datetime]$exp -lt [datetime]$newDate)) { continue }   # expired -> guard re-arms
     $acks[[string]$e.store] = $e

@@ -20,6 +20,7 @@
   caught precisely. If the log is missing/unreadable we fail SAFE (DUE) so we never silently stop scanning.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
 $today = (Get-Date).Date
@@ -33,7 +34,7 @@ $fresh = ($reg -and $reg.LastWriteTime.Date -eq $today)
 $adflip = $false
 $sf = Join-Path $root 'ad-schedule.json'
 if (Test-Path $sf) {
-  $b = @((Get-Content $sf -Raw | ConvertFrom-Json).stores) | Where-Object { $_.store -eq "Baker's" } | Select-Object -First 1
+  $b = @((Read-JsonFile $sf).stores) | Where-Object { $_.store -eq "Baker's" } | Select-Object -First 1
   if ($b -and $b.next_pull) { try { if ($today -ge ([datetime]$b.next_pull).Date) { $adflip = $true } } catch {} }
   # a missing or >6-day-old flyer also needs a fresh ad pull (safety net if a weekly run was missed)
   if (-not $deals -or $deals.LastWriteTime.Date -lt $today.AddDays(-6)) { $adflip = $true }
@@ -45,7 +46,7 @@ $boundary = $false; $bReason = ''
 $logFile = Join-Path $root 'sale-windows.json'
 if (Test-Path $logFile) {
   try {
-    $log = Get-Content $logFile -Raw | ConvertFrom-Json
+    $log = Read-JsonFile $logFile
     foreach ($w in $log.windows) {
       if ([string]$w.store -ne "Baker's") { continue }
       $ro = $null; $ss = $null

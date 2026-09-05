@@ -39,6 +39,7 @@
 # real measure of collapse risk and is unchanged; this clock is the coarse backstop behind it.
 param([int]$WindowDays = 0, [int]$WarnAgeDays = 70, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 # THE UNION WINDOW IS NOT THIS FILE'S TO CHOOSE. This watch counts down to the day a capture leaves the
@@ -70,7 +71,7 @@ foreach ($st in $STORES) {
     if (-not $m.Success) { continue }
     $d = [datetime]$m.Groups[1].Value
     if (($today - $d).TotalDays -gt $WindowDays) { continue }
-    $j = Get-Content $f.FullName -Raw | ConvertFrom-Json
+    $j = Read-JsonFile $f.FullName
     $terms = $null
     if ($j.PSObject.Properties['pull_terms']) { $terms = [int]$j.pull_terms }
     $inWindow += [pscustomobject]@{ date = $d; terms = $terms; name = $f.Name }

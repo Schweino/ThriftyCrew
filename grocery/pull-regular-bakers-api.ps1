@@ -120,6 +120,7 @@ param(
   [string]$OutDir = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
@@ -172,7 +173,7 @@ $cid = $env:KROGER_CLIENT_ID; $csec = $env:KROGER_CLIENT_SECRET
 if (-not $SelfTest -and (-not $cid -or -not $csec)) {
   $kf = Join-Path $root '.krogerkey'
   if (-not (Test-Path $kf)) { throw "Kroger credentials missing: create grocery\.krogerkey (gitignored) or set KROGER_CLIENT_ID / KROGER_CLIENT_SECRET." }
-  $k = Get-Content $kf -Raw | ConvertFrom-Json
+  $k = Read-JsonFile $kf
   $cid = [string]$k.client_id; $csec = [string]$k.client_secret
 }
 
@@ -792,7 +793,7 @@ if ($SelfTest) {
 }
 
 # ---------------------------------------------------------------- pull
-$terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 # THE POLICY IS LOADED FIRST, NOT LAST. It answers three separate questions below - the promo-length
 # bound, today's slice, and the carry window - so it has to be in scope before any of them.
 $script:PolicyOk = $false
@@ -1075,7 +1076,7 @@ if ($refusals.Count -gt 0) {
 # ---------------------------------------------------------------- verify mode: compare, write nothing
 if ($Verify) {
   $cmpF = Get-ChildItem (Join-Path $out 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  $cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison
+  $cmp = (Read-JsonFile $cmpF.FullName).comparison
   Write-Output ''
   Write-Output ("VERIFY vs " + $cmpF.BaseName + " (Baker's cells only) - does the API agree with what the browser pull put on the board?")
   # Compare PER-UNIT to PER-UNIT using the engine's own per-unit math (pu-lib), never pack price vs per-unit -
@@ -1126,7 +1127,7 @@ if ($Commodities -and $Commodities.Count) {
     Write-Warning 'bakers-api: targeted re-price needs an existing capture to merge into; none found. Nothing written.'
     exit 1
   }
-  $base = Get-Content $prev.FullName -Raw | ConvertFrom-Json
+  $base = Read-JsonFile $prev.FullName
   $keep = @($base.deals | Where-Object { -not ($Commodities -contains [string]$_.found_by_term_id) -and
                                           -not ($Commodities -contains [string]$_.commodity_id) })
   # Older captures may not carry an id on the row; fall back to the search term.
@@ -1197,7 +1198,7 @@ $prevFile = Get-ChildItem (Join-Path $regDir 'bakers-regular-*.json') -EA Silent
 $prevDeals = @()
 $prevName = ''
 if ($prevFile) {
-  try { $prevDeals = @((Get-Content $prevFile.FullName -Raw | ConvertFrom-Json).deals); $prevName = $prevFile.Name }
+  try { $prevDeals = @((Read-JsonFile $prevFile.FullName).deals); $prevName = $prevFile.Name }
   catch { Write-Warning ("bakers-api: the previous capture " + $prevFile.Name + " could not be read (" + $_.Exception.Message + ") - NOTHING can be carried this run"); $prevDeals = @() }
 }
 # A ROTATION RUN WITH NOTHING TO CARRY IS A COLD START, AND IT MUST SAY SO. Today's ~7 terms are not a
@@ -1248,7 +1249,7 @@ if (($Full -or $rotationMode -eq 'full') -and $termTotal -gt 0 -and (($stats.fai
 $prevMax = 0
 foreach ($pf in (Get-ChildItem (Join-Path $regDir 'bakers-regular-*.json') -EA SilentlyContinue |
     Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 4)) {
-  try { $c = @((Get-Content $pf.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $prevMax) { $prevMax = $c } } catch {}
+  try { $c = @((Read-JsonFile $pf.FullName).deals).Count; if ($c -gt $prevMax) { $prevMax = $c } } catch {}
 }
 if (Test-BakersWipeout -RowCount $allRows.Count -PrevMax $prevMax) {
   $qDir = Join-Path $out 'throttled'

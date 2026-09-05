@@ -32,13 +32,14 @@
 #>
 param([switch]$Apply, [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 if (-not $cmpF) { Write-Output 'relink: no comparison file; nothing to check'; exit 0 }
-$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison
-$pu  = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$cmp = (Read-JsonFile $cmpF.FullName).comparison
+$pu  = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
 # Compare on a squashed form. A DERIVED link and its board row come from one capture row and are
 # character-identical, but a link resolved by an older browser pass carries the store's own rendering

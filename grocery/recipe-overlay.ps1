@@ -11,6 +11,7 @@
   the baseline ranking. Run it in the daily job after compare-deals; it is headless + non-fatal.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
 $today = (Get-Date).ToString('yyyy-MM-dd')
@@ -38,7 +39,7 @@ if ($LASTEXITCODE -ne 0) { Write-Output ("recipe-overlay: compare-deals(recipe) 
 $salesFile = Get-ChildItem (Join-Path $out 'recipe-sales-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^recipe-sales-\d{4}-\d{2}-\d{2}\.json$' } | Sort-Object Name -Descending | Select-Object -First 1
 $sales = @{}
 if ($salesFile) {
-  $sc = (Get-Content $salesFile.FullName -Raw | ConvertFrom-Json).comparison
+  $sc = (Read-JsonFile $salesFile.FullName).comparison
   foreach ($it in $sc) {
     $id = [string]$it.id
     foreach ($s in $it.stores) {
@@ -52,7 +53,7 @@ if ($salesFile) {
 }
 
 # 3. overlay sales onto the everyday baseline, re-rank, write the live board
-$base = Get-Content $baseFile -Raw | ConvertFrom-Json
+$base = Read-JsonFile $baseFile
 
 # THE STAPLES ROW OWNS ITS ID (2026-07-30). Any recipe row whose id also exists on the weekly staples board is
 # DROPPED here, dynamically, before the overlay. The recipe baseline is a frozen monthly snapshot (2026-07-12
@@ -69,7 +70,7 @@ $stapleIds = @{}
 $newestCmp = Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction SilentlyContinue |
   Where-Object { $_.Name -match '^comparison-\d{4}-\d{2}-\d{2}\.json$' } | Sort-Object Name -Descending | Select-Object -First 1
 if ($newestCmp) {
-  try { foreach ($sr in @((Get-Content $newestCmp.FullName -Raw | ConvertFrom-Json).comparison)) { $stapleIds[[string]$sr.id] = $true } } catch {}
+  try { foreach ($sr in @((Read-JsonFile $newestCmp.FullName).comparison)) { $stapleIds[[string]$sr.id] = $true } } catch {}
 }
 # THE SAME COMMODITY UNDER TWO ID SPELLINGS IS STILL THE SAME COMMODITY (2026-08-08). The filter above
 # compares RAW ids, and it works: exactly 0 recipe rows collide with the weekly board by literal id. But
@@ -86,7 +87,7 @@ $idMap = @{}
 $mapFile = Join-Path $root 'recipe-floor-id-map.json'
 if (Test-Path $mapFile) {
   try {
-    foreach ($p in ((Get-Content $mapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) { $idMap[[string]$p.Name] = [string]$p.Value }
+    foreach ($p in ((Read-JsonFile $mapFile).map.PSObject.Properties)) { $idMap[[string]$p.Name] = [string]$p.Value }
   } catch { Write-Output 'recipe-overlay: WARNING - recipe-floor-id-map.json unreadable; falling back to raw-id matching only' }
 } else {
   Write-Output 'recipe-overlay: WARNING - no recipe-floor-id-map.json, so shared commodities spelled differently on the two boards will NOT be de-duplicated'

@@ -8,6 +8,7 @@
   an auto-fix: eyeball each, and for a genuinely wrong product re-resolve it by the board item name.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
@@ -20,13 +21,13 @@ $cmp  = (Get-ChildItem (Join-Path $out 'comparison-*.json') | Sort-Object Name -
 # on a pinned cell, so no pin, page tile or pruned link changes today. Recipe rows whose id ALSO exists on the
 # staple board are dropped: the same id carries a different unit basis on the two boards and one link cannot be
 # right for both - the same collision rule generate-board-overrides.ps1 applies before it pins anything.
-$c    = @((Get-Content $cmp.FullName -Raw | ConvertFrom-Json).comparison)
+$c    = @((Read-JsonFile $cmp.FullName).comparison)
 $stapleIds = @{}; foreach ($sr in $c) { $stapleIds[[string]$sr.id] = $true }
 $rbF  = Join-Path $out 'recipe-board.json'
 if (Test-Path $rbF) {
-  $c = @($c) + @(@((Get-Content $rbF -Raw | ConvertFrom-Json).comparison) | Where-Object { -not $stapleIds.ContainsKey([string]$_.id) })
+  $c = @($c) + @(@((Read-JsonFile $rbF).comparison) | Where-Object { -not $stapleIds.ContainsKey([string]$_.id) })
 }
-$purls = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$purls = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 # commodity + generic words that appear in both names, so are NOT distinctive of the specific product
 $stop = 'boneless|skinless|chicken|breast|breasts|thigh|thighs|drumstick|drumsticks|ground|beef|turkey|pork|bacon|fresh|frozen|large|whole|family|pack|natural|all|lean|value|brand|each|lb|lbs|oz|count|ct|bag|tray|organic|cage|free|grade|sweet|original|classic|the|and|with|for|from|our|certified|the|of|per|shredded|cheese|milk|eggs|butter|sour|cream|juice|orange|apple|apples|banana|bananas|potato|potatoes|russet|onion|onions|bread|coffee|sugar|brown|tomato|tomatoes|sauce|paste|beans|kidney|garbanzo|cannellini|olives|pineapple|chunks|strawberries|blueberries|grapes|avocado|avocados|watermelon|corn|cabbage|carrots|ginger|honey|mustard|dijon|vinegar|balsamic|white|red|wine|soy|hoisin|sesame|oil|tahini|paprika|curry|powder|cornstarch|starch|rotini|pasta|marinara|spinach|peas|green|hominy|tomatillos|cashews|peanut|maple|syrup|yogurt|greek|cottage|provolone|cheddar|colby|jack|mozzarella|fries|crumbs|loin|chop|chops|thick|cut|roll|spread|soft|low|fat|pint|package|bowl'
 # ---------------------------------------------------------------- BRAND LEXICON (2026-08-21)
@@ -61,7 +62,7 @@ foreach ($grp in @('out\regular\*-regular-*.json','out\sams\sams-deals-*.json','
   foreach ($f in $byPrefix.Values) { $lexFiles.Add($f.FullName) }
 }
 foreach ($lf in $lexFiles) {
-  try { $d = Get-Content $lf -Raw | ConvertFrom-Json } catch { continue }
+  try { $d = Read-JsonFile $lf } catch { continue }
   $rows = if ($d -is [array]) { $d } elseif ($d.PSObject.Properties['deals']) { $d.deals } elseif ($d.PSObject.Properties['products']) { $d.products } else { @() }
   foreach ($r in $rows) { $n = if ($r.item) { [string]$r.item } elseif ($r.name) { [string]$r.name } else { '' }; if ($n) { [void]$lexNames.Add($n) } }
 }
@@ -118,7 +119,7 @@ if (-not (Test-Path $cmFile)) {
          'from the learned brand lexicon so a food word ("Carrot", "Paprika") is never mistaken for a ' +
          'manufacturer. A fixture that copies this script must copy a commodities.json beside it.')
 }
-foreach ($cm in (Get-Content $cmFile -Raw | ConvertFrom-Json)) {
+foreach ($cm in (Read-JsonFile $cmFile)) {
   foreach ($src in @([string]$cm.id, [string]$cm.label)) {
     foreach ($w in (Sig-Tokens ($src -replace '-', ' '))) { [void]$foodWords.Add($w) }
   }

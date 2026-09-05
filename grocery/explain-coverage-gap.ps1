@@ -19,12 +19,13 @@
 #>
 param([string]$Id = '', [string]$FindingsFile = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $FindingsFile) { $FindingsFile = Join-Path $root 'out\semantic-findings.json' }
 if (-not (Test-Path $FindingsFile)) { Write-Output 'BLIND: no findings file - run audit-semantic-identity.ps1 first'; exit 3 }
 
-$coms = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
-$find = Get-Content $FindingsFile -Raw | ConvertFrom-Json
+$coms = Read-JsonFile (Join-Path $root 'commodities.json')
+$find = Read-JsonFile $FindingsFile
 
 # compile once, in ENGINE ORDER, because first-match-wins is the whole point of the CLAIMED verdict
 $rx = New-Object System.Collections.Generic.List[object]

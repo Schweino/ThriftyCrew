@@ -48,6 +48,7 @@ param(
   [double]$MinBidCoverage = 0.70,
   [switch]$SelfTest
 )
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 # ONE COPY of the scaler-gpu basis rule and its outcome check, shared with compute-v2-perserving and
@@ -120,7 +121,7 @@ if($SelfTest){
 foreach($req in @('SpecFile','CostedFile','OutDir')){
   if(-not (Get-Variable $req -ValueOnly)){ throw ("build-card2.ps1: -{0} is required (or run with -SelfTest)" -f $req) }
 }
-$spec = Get-Content $SpecFile -Raw | ConvertFrom-Json
+$spec = Read-JsonFile $SpecFile
 # BULLET-FIELD SHAPE, BEFORE ANYTHING IS RENDERED (2026-09-02). Every field this script renders with
 # `foreach($li in $spec.<field>){ ... <li> ... }` has to be an array: PS 5.1 iterates a STRING once, so
 # a newline-joined string ships every one of its items inside a single <li> and the card builds clean.
@@ -148,7 +149,7 @@ $utf8 = New-Object Text.UTF8Encoding($false)
 # script 513x with the same 5MB file; parsing once cuts the full-catalog build time dramatically)
 if(-not $global:__tcCostedCache){ $global:__tcCostedCache=@{} }
 if($global:__tcCostedCache.ContainsKey($CostedFile)){ $costed = $global:__tcCostedCache[$CostedFile] }
-else { $costed = Get-Content $CostedFile -Raw | ConvertFrom-Json; $global:__tcCostedCache[$CostedFile] = $costed }
+else { $costed = Read-JsonFile $CostedFile; $global:__tcCostedCache[$CostedFile] = $costed }
 function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-')) }
 $cr = $costed | Where-Object { ($_.PSObject.Properties.Name -contains 'slug' -and $_.slug -eq $spec.slug) -or $_.proposed_name -eq $spec.name }
 # Fallback: display title can drift from the pipeline name (e.g. "...Bowls" vs "...Rice Bowl"); the slug
@@ -165,7 +166,7 @@ function Get-AuxJson([string]$path){
   if(-not $path -or -not (Test-Path $path)){ return $null }
   if($global:__tcAuxCache.ContainsKey($path)){ return $global:__tcAuxCache[$path] }
   $o = $null
-  try { $o = Get-Content $path -Raw | ConvertFrom-Json } catch { $o = $null }
+  try { $o = Read-JsonFile $path } catch { $o = $null }
   $global:__tcAuxCache[$path] = $o
   return $o
 }

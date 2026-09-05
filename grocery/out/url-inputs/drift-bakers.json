@@ -1,58 +1,18 @@
 ﻿[
     {
-        "id":  "balsamic-vinegar",
-        "q":  "balsamic vinegar",
-        "match":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz",
-        "size":  "",
-        "reason":  "name-drift",
-        "was":  "Kroger Balsamic Vinegar"
+        "id":  "boneless-skinless-chicken-thigh",
+        "q":  "boneless skinless chicken thigh",
+        "match":  "Kroger Frozen Raw Boneless Skinless Chicken Thighs",
+        "size":  "3 lb",
+        "reason":  "brand-mismatch",
+        "was":  "Heritage Farm Boneless Skinless Chicken Thighs"
     },
     {
-        "id":  "chicken-breast",
-        "q":  "boneless skinless chicken breast",
-        "match":  "Fresh Tyson Boneless Chicken Breasts",
-        "size":  "",
-        "reason":  "name-drift",
-        "was":  "Heritage Farm Boneless Skinless Chicken Breasts"
-    },
-    {
-        "id":  "coffee",
-        "q":  "ground coffee",
-        "match":  "Folgers Coffee",
-        "size":  "",
-        "reason":  "name-drift",
-        "was":  "Kroger Master Blend Medium Roast Ground Coffee"
-    },
-    {
-        "id":  "cornstarch",
-        "q":  "corn starch",
-        "match":  "Maizena Corn Starch 14.1 oz",
-        "size":  "",
-        "reason":  "name-drift",
-        "was":  "Kroger Pure Corn Starch"
-    },
-    {
-        "id":  "pineapple",
-        "q":  "whole pineapple",
-        "match":  "Dole Pineapple",
-        "size":  "",
-        "reason":  "name-drift",
-        "was":  "Private Selection Super Sweet Gold Island Pineapple"
-    },
-    {
-        "id":  "red-wine-vinegar",
-        "q":  "red wine vinegar",
-        "match":  "Pompeian® Gourmet Red Wine Vinegar 16 fl oz",
-        "size":  "",
-        "reason":  "name-drift",
-        "was":  "Kroger Red Wine Vinegar"
-    },
-    {
-        "id":  "yogurt",
-        "q":  "yogurt",
-        "match":  "Yoplait Yogurt",
-        "size":  "",
-        "reason":  "name-drift",
-        "was":  "Kroger Blended Vanilla Low Fat Yogurt"
+        "id":  "hot-italian-sausage",
+        "q":  "hot italian sausage",
+        "match":  "Kroger® Hot Italian Sausage",
+        "size":  "18 oz",
+        "reason":  "brand-mismatch",
+        "was":  "Johnsonville Hot Italian Ground Sausage"
     }
 ]

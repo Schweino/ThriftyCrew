@@ -20,6 +20,7 @@
 param([switch]$Send, [switch]$Force, [switch]$SkipBuild)
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $here '..\lib\ghost-lib.ps1')
 
@@ -36,7 +37,7 @@ if (-not $SkipBuild) {
 }
 if (-not (Test-Path $htmlFile)) { throw "missing $htmlFile" }
 
-$meta = Get-Content $metaFile -Raw | ConvertFrom-Json
+$meta = Read-JsonFile $metaFile
 $html = [IO.File]::ReadAllText($htmlFile, [Text.Encoding]::UTF8)
 if ($html.Length -lt 400) { throw "built email is only $($html.Length) chars - refusing to mail a stub." }
 

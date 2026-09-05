@@ -12,14 +12,15 @@
   Scope: every row of the NEWEST regular file per store (what compare-deals actually reads).
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 
 $src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
 $m = [regex]::Match($src, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
 if (-not $m.Success) { Write-Output 'FATAL: cannot parse $GLOBAL_EXCLUDE'; exit 2 }
 $GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $m.Groups['body'].Value + ')')
-$commodities = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
-$cats = (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories
+$commodities = Read-JsonFile (Join-Path $root 'commodities.json')
+$cats = (Read-JsonFile (Join-Path $root 'categories.json')).categories
 $catOf = @{}
 foreach ($c in $cats) { foreach ($id in $c.commodities) { $catOf[$id] = $c.label } }
 
@@ -56,7 +57,7 @@ foreach ($f in Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json')) {
             Sort-Object Name -Descending | Select-Object -First 1
   if ($f.FullName -ne $newest.FullName) { continue }
 
-  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $f.FullName
   foreach ($d in $doc.deals) {
     $name = [string]$d.item
     if (-not $name) { continue }

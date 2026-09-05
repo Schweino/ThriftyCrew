@@ -40,6 +40,7 @@ param([switch]$Quiet, [int]$MaxNames = 0, [int]$Workers = 0,
       # the shard takes every ChunkOf'th name from ChunkIx, and writes its verdicts to OutFile as JSON.
       [string]$ChunkFile = '', [int]$ChunkOf = 0, [int]$ChunkIx = -1, [string]$OutFile = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 $isShard = [bool]$ChunkFile
@@ -55,7 +56,7 @@ if ($a -lt 0 -or $b -lt 0 -or $b -le $a) {
 }
 $block = $src.Substring($a, $b - $a)
 $block = ($block -split "`n" | Where-Object { $_ -notmatch '\$GEX_OVERRIDE' }) -join "`n"
-$commodities = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 . ([scriptblock]::Create($block))      # defines $GLOBAL_EXCLUDE, Get-MatchTexts, Match-Category (original)
 $origMatch = ${function:Match-Category}
 $origTexts = ${function:Get-MatchTexts}
@@ -74,7 +75,7 @@ if (($t1 -join '|') -ne ($t2 -join '|')) { Write-Output "FAIL  Get-MatchTexts di
 # and unsound: the capture files underneath are live, so two shards started a second apart could enumerate
 # different name sets and the union of their answers would silently cover neither corpus.
 if ($isShard) {
-  $list = @([string[]](Get-Content $ChunkFile -Raw | ConvertFrom-Json))
+  $list = @([string[]](Read-JsonFile $ChunkFile))
 } else {
   . (Join-Path $root 'capture-depth-lib.ps1')
   . (Join-Path $root 'regular-fileset-lib.ps1')
@@ -82,15 +83,15 @@ if ($isShard) {
   $cmp = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
   $today = if ($cmp -and $cmp.BaseName -match '(\d{4}-\d{2}-\d{2})$') { [datetime]$Matches[1] } else { Get-Date }
   foreach ($rf in (Select-RegularFileSet (Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json')) $today (Get-RegularUnionDays))) {
-    $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
+    $ex = Read-JsonFile $rf.FullName
     foreach ($d in $ex.deals) { if ($d.item) { $names[[string]$d.item] = 1 } }
   }
   $adsF = Get-ChildItem (Join-Path $root 'out\ads-*.json') | Sort-Object Name -Descending | Select-Object -First 1
-  if ($adsF) { foreach ($d in (Get-Content $adsF.FullName -Raw | ConvertFrom-Json).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
-  foreach ($f in (Get-ChildItem (Join-Path $root 'out\sams\sams-deals-*.json') -EA SilentlyContinue)) { foreach ($d in (Get-Content $f.FullName -Raw | ConvertFrom-Json).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
+  if ($adsF) { foreach ($d in (Read-JsonFile $adsF.FullName).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
+  foreach ($f in (Get-ChildItem (Join-Path $root 'out\sams\sams-deals-*.json') -EA SilentlyContinue)) { foreach ($d in (Read-JsonFile $f.FullName).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
   foreach ($sub in @('bakers\bakers-deals-*.json', 'fareway\fareway-deals-*.json')) {
     $f = Get-ChildItem (Join-Path $root ('out\' + $sub)) -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-    if ($f) { foreach ($d in (Get-Content $f.FullName -Raw | ConvertFrom-Json).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
+    if ($f) { foreach ($d in (Read-JsonFile $f.FullName).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
   }
   # Adversarial names the corpus may not contain today: the shapes that broke matchers before.
   foreach ($x in @('Hy-Vee butter, 16 oz., $2.48', 'GO2snax Mild Cheddar Cheese & Salami Tray', 'Marketside Tandoori Style Garlic Naan Bites',
@@ -205,7 +206,7 @@ foreach ($j in $jobs) {
   if ($null -eq $shardErr) {
     if ($null -eq $res -or $res.rc -ne 0) { $shardErr = ("shard {0} exited {1}: {2}" -f $j.ix, $(if ($res) { $res.rc } else { -1 }), $(if ($res) { $res.text } else { '' })) }
     elseif (-not (Test-Path $j.out)) { $shardErr = ("shard {0} exited 0 but wrote no verdicts" -f $j.ix) }
-    else { $results += (Get-Content $j.out -Raw | ConvertFrom-Json) }
+    else { $results += (Read-JsonFile $j.out) }
   }
 }
 $pool.Close(); $pool.Dispose()

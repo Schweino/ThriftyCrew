@@ -35,6 +35,7 @@
 #>
 param([switch]$Alert, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -46,7 +47,7 @@ $OutDir = Join-Path $root 'out'
 $issues = New-Object System.Collections.Generic.List[string]
 
 # ---- 1. registry sanity ----
-$reg = Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json
+$reg = Read-JsonFile (Join-Path $root 'stores.json')
 $names = @($reg.stores | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
 foreach ($grp in @('name','order','regular_prefix')) {
   $dup = @($reg.stores | Group-Object $grp | Where-Object { $_.Count -gt 1 })
@@ -56,7 +57,7 @@ foreach ($grp in @('name','order','regular_prefix')) {
 # ---- 2. newest comparison vs registry ----
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if ($cmpF) {
-  $doc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $cmpF.FullName
   $seen = @{}
   foreach ($r in $doc.comparison) { foreach ($st in $r.stores) { $seen[[string]$st.store] = $true } }
   foreach ($s in $seen.Keys)  { if ($names -notcontains $s) { $issues.Add("board: store '$s' is on the board but NOT in stores.json") } }
@@ -80,7 +81,7 @@ foreach ($f in (Get-ChildItem (Join-Path $OutDir 'regular\*-regular-*.json') -EA
 # ---- 4. ad-schedule ----
 $schedF = Join-Path $root 'ad-schedule.json'
 if (Test-Path $schedF) {
-  $sched = Get-Content $schedF -Raw | ConvertFrom-Json
+  $sched = Read-JsonFile $schedF
   foreach ($s in $sched.stores) { $sn = [string]$s.store; if ($sn -and ($names -notcontains $sn)) { $issues.Add("ad-schedule.json: store '$sn' is not in stores.json") } }
 }
 

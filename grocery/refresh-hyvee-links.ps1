@@ -18,12 +18,13 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 
 $regF = (Get-ChildItem (Join-Path $root 'out\regular\hyvee-regular-*.json') |
   Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } |
   Sort-Object Name -Descending | Select-Object -First 1)
-$rows = @((Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals)
+$rows = @((Read-JsonFile $regF.FullName).deals)
 
 # only rows we actually re-verified today carry as_of = today AND a product_id
 $fresh = @{}
@@ -54,7 +55,7 @@ foreach ($n in $sizesOf.Keys) { if ($sizesOf[$n].Count -gt 1) { $ambiguous++ } }
 Write-Output ("freshly verified Hy-Vee products available: " + $sizesOf.Count + " name(s)" + $(if ($ambiguous) { " ($ambiguous sold in more than one size - matched by name+SIZE, never by name alone)" } else { '' }))
 
 $puF = Join-Path $root 'product-urls.json'
-$doc = Get-Content $puF -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $puF
 
 $upd = 0; $same = 0; $noFresh = 0; $ambigSkip = 0
 $changes = New-Object System.Collections.Generic.List[string]

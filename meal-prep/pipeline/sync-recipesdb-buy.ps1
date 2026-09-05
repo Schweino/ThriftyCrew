@@ -74,6 +74,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $mp 'lib\json-db-io.ps1')
@@ -640,7 +641,7 @@ $specBuy = Get-SpecBuyMap (Join-Path $mp 'db\recipes')
 $carry = $null
 if (Test-Path $carryPath) {
     $carry = @{}
-    foreach ($c in @((Get-Content $carryPath -Raw | ConvertFrom-Json))) {
+    foreach ($c in @((Read-JsonFile $carryPath))) {
         if (-not $c -or -not $c.slug) { continue }
         $carry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
     }
@@ -652,7 +653,7 @@ $rangeCarryPath = Join-Path $mp 'out\range-buy-carry.json'
 $rangeCarry = $null
 if (Test-Path $rangeCarryPath) {
     $rangeCarry = @{}
-    foreach ($c in @((Get-Content $rangeCarryPath -Raw | ConvertFrom-Json))) {
+    foreach ($c in @((Read-JsonFile $rangeCarryPath))) {
         if (-not $c -or -not $c.slug) { continue }
         $rangeCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
     }
@@ -665,7 +666,7 @@ $measureCarryPath = Join-Path $mp 'out\measure-vs-grams-carry.json'
 $measureCarry = $null
 if (Test-Path $measureCarryPath) {
     $measureCarry = @{}
-    foreach ($c in @((Get-Content $measureCarryPath -Raw | ConvertFrom-Json))) {
+    foreach ($c in @((Read-JsonFile $measureCarryPath))) {
         if (-not $c -or -not $c.slug) { continue }
         $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
     }
@@ -680,7 +681,7 @@ $absurdCarryPath = Join-Path $mp 'out\absurd-unit-carry.json'
 if (Test-Path $absurdCarryPath) {
     if (-not $measureCarry) { $measureCarry = @{} }
     $n = 0
-    foreach ($c in @((Get-Content $absurdCarryPath -Raw | ConvertFrom-Json))) {
+    foreach ($c in @((Read-JsonFile $absurdCarryPath))) {
         if (-not $c -or -not $c.slug) { continue }
         $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
         $n++
@@ -696,7 +697,7 @@ $zeroCarryPath = Join-Path $mp 'out\unmeasurable-qty-carry.json'
 if (Test-Path $zeroCarryPath) {
     if (-not $measureCarry) { $measureCarry = @{} }
     $n = 0
-    foreach ($c in @((Get-Content $zeroCarryPath -Raw | ConvertFrom-Json))) {
+    foreach ($c in @((Read-JsonFile $zeroCarryPath))) {
         if (-not $c -or -not $c.slug) { continue }
         $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
         $n++
@@ -715,7 +716,7 @@ $pluralCarryPath = Join-Path $mp 'out\plural-unit-carry.json'
 if (Test-Path $pluralCarryPath) {
     if (-not $measureCarry) { $measureCarry = @{} }
     $n = 0
-    foreach ($c in @((Get-Content $pluralCarryPath -Raw | ConvertFrom-Json))) {
+    foreach ($c in @((Read-JsonFile $pluralCarryPath))) {
         if (-not $c -or -not $c.slug) { continue }
         $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
         $n++
@@ -732,7 +733,7 @@ $basisCarryPath = Join-Path $mp 'out\basis-relabel-carry.json'
 if (Test-Path $basisCarryPath) {
     if (-not $measureCarry) { $measureCarry = @{} }
     $n = 0
-    foreach ($c in @((Get-Content $basisCarryPath -Raw | ConvertFrom-Json))) {
+    foreach ($c in @((Read-JsonFile $basisCarryPath))) {
         if (-not $c -or -not $c.slug) { continue }
         $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
         $n++
@@ -743,7 +744,7 @@ if (Test-Path $basisCarryPath) {
 # downgrade the run to the unitless class alone - say so, because a clean "0 labels" line off a run that
 # could not evaluate the class reads exactly like a clean "0 labels" off a run that found nothing.
 $dens = $null
-if (Test-Path $densPath) { $dens = (Get-Content $densPath -Raw | ConvertFrom-Json).items }
+if (Test-Path $densPath) { $dens = (Read-JsonFile $densPath).items }
 else { Write-Output "  WARNING: no db\densities.json - the cook-measure class cannot be evaluated this run" }
 $raw = [System.IO.File]::ReadAllText($dbPath)
 $res = Sync-RecipesDbBuy -Raw $raw -SpecBuy $specBuy -Dens $dens -Carry $carry -RangeCarry $rangeCarry -MeasureCarry $measureCarry

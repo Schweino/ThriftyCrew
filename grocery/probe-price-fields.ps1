@@ -36,6 +36,7 @@ param(
   [string]$Term = 'butter'
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $dir = Join-Path $OutDir 'audit\price-fields'
@@ -84,7 +85,7 @@ try {
   $cid = $env:KROGER_CLIENT_ID; $csec = $env:KROGER_CLIENT_SECRET
   if (-not $cid) {
     $kf = Join-Path $root '.krogerkey'
-    if (Test-Path $kf) { $k = Get-Content $kf -Raw | ConvertFrom-Json; $cid = [string]$k.client_id; $csec = [string]$k.client_secret }
+    if (Test-Path $kf) { $k = Read-JsonFile $kf; $cid = [string]$k.client_id; $csec = [string]$k.client_secret }
   }
   if (-not $cid) { throw 'no Kroger credentials (.krogerkey / KROGER_CLIENT_ID)' }
   $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($cid + ':' + $csec))
@@ -130,7 +131,7 @@ try {
   $hv = Get-ChildItem (Join-Path $OutDir 'regular\hyvee-regular-*.json') | Sort-Object Name -Descending | Select-Object -First 1
   $prodId = $null
   if ($hv) {
-    $doc = Get-Content $hv.FullName -Raw | ConvertFrom-Json
+    $doc = Read-JsonFile $hv.FullName
     $row = @($doc.deals) | Where-Object { $_.product_id -gt 0 } | Select-Object -First 1
     if ($row) { $prodId = [int]$row.product_id }
   }

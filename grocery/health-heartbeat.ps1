@@ -19,6 +19,7 @@
   from local-watchdog.ps1 (its own WakeToRun task), so a dead main pipeline cannot suppress its own alarm.
 #>
 param([switch]$Alert)
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ErrorActionPreference = 'Continue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -28,7 +29,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 . (Join-Path $root 'alert-lib.ps1')
 $repo = Split-Path $root -Parent
 $now  = Get-Date
-$cfg  = Get-Content (Join-Path $root 'expected-automations.json') -Raw | ConvertFrom-Json
+$cfg  = Read-JsonFile (Join-Path $root 'expected-automations.json')
 $issues = New-Object System.Collections.Generic.List[string]
 $okLines = New-Object System.Collections.Generic.List[string]
 $TASK_NOT_YET_RUN = 267011   # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN

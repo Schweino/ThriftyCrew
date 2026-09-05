@@ -12,13 +12,14 @@
   now have a Family Fare everyday cell whose per-unit equals the linked product's. Exit 1 if any does not.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 $expF = Join-Path $root 'out\ff-heal-expected.json'
 if (-not (Test-Path $expF)) { Write-Output 'no ff-heal-expected.json - nothing to verify'; exit 0 }
-$exp = Get-Content $expF -Raw | ConvertFrom-Json
+$exp = Read-JsonFile $expF
 
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
+$board = @((Read-JsonFile $cmpF).comparison)
 
 $ok = 0; $bad = 0; $sale = 0
 foreach ($p in $exp.PSObject.Properties) {

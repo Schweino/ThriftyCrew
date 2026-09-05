@@ -14,6 +14,7 @@
 #>
 param([switch]$NoPublish)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 $gout = Join-Path (Split-Path $PSScriptRoot -Parent) 'grocery\out'   # repo-relative (meal-prep and grocery are siblings)
 # Ghost admin key: env var (GitHub Actions secret) first, then a gitignored local .ghostkey file, never source.
@@ -22,17 +23,17 @@ $apiUrl   = "https://map-to-success.ghost.io"
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
-$mapDoc = Get-Content (Join-Path $root 'ingredient-map.json') -Raw | ConvertFrom-Json
-$db     = (Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json).recipes
+$mapDoc = Read-JsonFile (Join-Path $root 'ingredient-map.json')
+$db     = (Read-JsonFile (Join-Path $root 'recipes-db.json')).recipes
 # 2026-07-26 cost-redesign: per_serving is now the CURRENT-CHEAPEST WHOLE-PACKAGE number (matches the
 # recipe cards' headline + rectangle), read from the v2 manifest (pipeline\v2-perserving.json, regenerated
 # weekly by compute-v2-perserving.ps1 off the live feed). The old cost_batch_true+delta basis is retained
 # ONLY to detect this week's sale items for the badge. Recipes missing from the manifest fall back to the
 # old basis so nothing drops.
 $cheapestBySlug = @{}
-try { (Get-Content (Join-Path $root 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $cheapestBySlug[[string]$_.slug] = [double]$_.cheapest_ps } } catch { Write-Output 'WARN: v2-perserving.json unreadable - falling back to legacy per_serving basis' }
-$live   = (Get-Content (Join-Path $gout 'recipe-board.json') -Raw | ConvertFrom-Json).comparison
-$floor  = (Get-Content (Join-Path $gout 'recipe-board-everyday.json') -Raw | ConvertFrom-Json).comparison
+try { (Read-JsonFile (Join-Path $root 'pipeline\v2-perserving.json')) | ForEach-Object { $cheapestBySlug[[string]$_.slug] = [double]$_.cheapest_ps } } catch { Write-Output 'WARN: v2-perserving.json unreadable - falling back to legacy per_serving basis' }
+$live   = (Read-JsonFile (Join-Path $gout 'recipe-board.json')).comparison
+$floor  = (Read-JsonFile (Join-Path $gout 'recipe-board-everyday.json')).comparison
 
 # cheapest per_unit per board id, live vs floor (recipe-board mappings only; weekly-board mapped items
 # contribute no delta - their everyday level is already baked into cost_batch_true)
@@ -67,7 +68,7 @@ foreach ($r in $db) {
 }
 $ranked = @($costed | Sort-Object per_serving, week_cost, slug)   # final slug key = deterministic tie-break so the free rotation (same 3-key sort) picks the identical top-5 on true double-ties
 $wk = ''
-try { $wk = [string]((Get-Content (Join-Path $gout 'recipe-board.json') -Raw | ConvertFrom-Json).week_of) } catch {}
+try { $wk = [string]((Read-JsonFile (Join-Path $gout 'recipe-board.json')).week_of) } catch {}
 ([pscustomobject]@{ computed_at=(Get-Date).ToString('s'); week_of=$wk; recipes=$ranked } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $gout 'recipe-costs.json') -Encoding UTF8
 # DINNER filter (Brad 2026-07-08): rank only servings over 500 calories - small portions are always
 # cheapest per serving, but they are snacks, not dinners. The full costed list still lands in the json.
@@ -103,7 +104,7 @@ $storeWords=@{5='five';6='six';7='seven';8='eight';9='nine'}
 $storeCt=7
 try {
   $cmpF = Get-ChildItem (Join-Path $gout 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  $storeCt=@(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison | ForEach-Object { $_.stores } | ForEach-Object { [string]$_.store }) | Sort-Object -Unique).Count
+  $storeCt=@(((Read-JsonFile $cmpF.FullName).comparison | ForEach-Object { $_.stores } | ForEach-Object { [string]$_.store }) | Sort-Object -Unique).Count
 } catch {}
 $storeWord=$(if($storeWords.ContainsKey($storeCt)){ $storeWords[$storeCt] } else { [string]$storeCt })
 $sec += "<p style='color:#64748b;font-size:1.4rem;margin:0 0 1.2rem'>Pick your protein. Real dinner-sized servings only, re-costed from this week's verified grocery prices at $storeWord Omaha stores.</p>"
@@ -112,7 +113,7 @@ $sec += "<p style='color:#64748b;font-size:1.4rem;margin:0 0 1.2rem'>Pick your p
 # file confirms the sets actually match - if they ever drift, the line silently drops and we warn, because
 # a "free" promise that hits a paywall is worse than no promise.
 try {
-  $rotState = Get-Content (Join-Path $root 'free-rotation.json') -Raw | ConvertFrom-Json
+  $rotState = Read-JsonFile (Join-Path $root 'free-rotation.json')
   $freeSlugs = @($rotState.free | ForEach-Object { [string]$_.slug }) | Sort-Object
   $boxSlugs = @($tabs.Values | ForEach-Object { $_ } | ForEach-Object { [string]$_.slug }) | Sort-Object
   if (($freeSlugs -join ',') -eq ($boxSlugs -join ',')) {

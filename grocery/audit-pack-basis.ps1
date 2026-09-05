@@ -38,13 +38,14 @@
 # a fixture's clean result sitting exactly where a human (or the next audit) looks for the real board's.
 param([string]$CompareFile = "", [switch]$Strict, [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 if (-not $CompareFile) {
   $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
 }
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 
 # how far under the next-cheapest store counts as "an outlier this audit should explain"
 $OUTLIER = 0.35

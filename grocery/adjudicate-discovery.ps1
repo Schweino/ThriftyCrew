@@ -61,6 +61,7 @@ param(
   [string]$CatalogFile = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 $outDir = Join-Path $Root 'out'
 if (-not $DiscoveryFile) { $DiscoveryFile = Join-Path $outDir 'hyvee-discovery.json' }
@@ -148,7 +149,7 @@ if ($SelfTest) {
   # CLEAN TWIN: the real find goes through, and it writes a WORK LIST entry - not a price, not a board cell.
   $r = Run @('-Key', 'hyvee|peanut-butter|2970357', '-Accept', '-RuledBy', 'selftest', '-Evidence', "That's Smart! is Hy-Vee's own value label; 40 oz creamy peanut butter is the commodity.")
   T ($r.rc -eq 0) 'CLEAN TWIN: a real cheaper product is accepted'
-  $catDoc = Get-Content $cF -Raw | ConvertFrom-Json
+  $catDoc = Read-JsonFile $cF
   T (@($catDoc.items).Count -eq 1 -and [string]$catDoc.items[0].product_id -eq '2970357') 'the accept appended exactly one catalogue work-list entry, keyed by the store product id'
   T (-not ($catDoc.items[0].PSObject.Properties.Name -contains 'price')) 'the catalogue entry carries NO price - the puller fetches it from the store'
   T (-not ($catDoc.items[0].PSObject.Properties.Name -contains 'size')) 'the catalogue entry carries NO size - Hy-Vee''s own size field is not dependable, so the new-product path derives it'
@@ -162,7 +163,7 @@ if ($SelfTest) {
   # The basis refusal is OVERRIDABLE, on the record - a reviewer who has checked the size may still proceed.
   $r = Run @('-Key', 'hyvee|olive-oil|39221', '-Accept', '-AcceptDespiteBasis', '-RuledBy', 'selftest', '-Evidence', 'reviewer states they checked the size by hand and accept the basis risk knowingly')
   T ($r.rc -eq 0 -and $r.text -match 'BASIS OVERRIDDEN') 'the basis refusal can be overridden explicitly, and says so out loud'
-  $vDoc = Get-Content $vF -Raw | ConvertFrom-Json
+  $vDoc = Read-JsonFile $vF
   T (@($vDoc.entries | Where-Object { [string]$_.key -eq 'hyvee|olive-oil|39221' }).basis_overridden -eq $true) 'the override is recorded in the ledger, not just printed'
 
   Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue

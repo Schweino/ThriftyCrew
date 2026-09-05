@@ -82,6 +82,7 @@ param(
   [string]$OutFile = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
@@ -274,7 +275,7 @@ function Get-CategoryMap {
 # the pollution above.
 function Build-Profile {
   param([string]$FeedFile)
-  $coms = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+  $coms = Read-JsonFile (Join-Path $root 'commodities.json')
   $rx = New-Object System.Collections.Generic.List[object]
   $exc = @{}
   foreach ($c in $coms) {
@@ -283,7 +284,7 @@ function Build-Profile {
     foreach ($p in @($c.exclude)) { if ($p) { $l.Add([regex]::new([string]$p, 'IgnoreCase,Compiled')) } }
     $exc[[string]$c.id] = $l
   }
-  $d = Get-Content $FeedFile -Raw | ConvertFrom-Json
+  $d = Read-JsonFile $FeedFile
   $rows = @($d.deals); if (-not $rows.Count) { $rows = @($d) }
   $prof = @{}
   foreach ($row in $rows) {

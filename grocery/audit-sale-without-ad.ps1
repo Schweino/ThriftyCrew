@@ -33,13 +33,14 @@
 #>
 param([string]$OutDir = '', [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 
 $cmpFile = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $cmpFile) { Write-Output 'sale-without-ad: no comparison board found'; Write-GuardComplete -Name 'sale-without-ad' -Summary 'BLIND: no board'; exit 3 }
-$cmp = Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json
+$cmp = Read-JsonFile $cmpFile.FullName
 $today = [string]$cmp.week_of
 
 # ---- every ad row we hold, from every source, via the SHARED matcher -------------------------
@@ -60,7 +61,7 @@ $adIndex = Import-AdRows -OutDir $OutDir -BoardDate $today -IncludeExpired
 # ---- product links, so a finding is reviewable ------------------------------------------------
 $purl = @{}
 try {
-  $pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+  $pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
   foreach ($p in $pd.PSObject.Properties) {
     foreach ($sp in $p.Value.PSObject.Properties) {
       if ($sp.Name -eq 'commodity' -or -not $sp.Value.url) { continue }
@@ -73,7 +74,7 @@ try {
 $ledgerFile = Join-Path $root 'sale-without-ad.json'
 $prior = @{}
 if (Test-Path $ledgerFile) {
-  try { foreach ($e in (Get-Content $ledgerFile -Raw | ConvertFrom-Json).items) { $prior[[string]$e.key] = $e } } catch { }
+  try { foreach ($e in (Read-JsonFile $ledgerFile).items) { $prior[[string]$e.key] = $e } } catch { }
 }
 
 $found = New-Object System.Collections.Generic.List[object]

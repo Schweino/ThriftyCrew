@@ -18,6 +18,7 @@
 #>
 param([switch]$DryRun, [string]$ForceItem = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
@@ -35,21 +36,21 @@ function Fmt([double]$v){ if ($v -lt 1) { return ('$' + $v.ToString('0.000')) } 
 # ---- boards + history + state ----
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $CompareFile = $cmpF.FullName
-try { $wk0 = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir ("verified-" + $wk0 + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+try { $wk0 = (Read-JsonFile $cmpF.FullName).week_of; $verF = Join-Path $OutDir ("verified-" + $wk0 + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
+$doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 $rows = @($doc.comparison)
 $riF = Join-Path $OutDir 'recipe-board.json'
-if (Test-Path $riF) { $rows = $rows + @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }
+if (Test-Path $riF) { $rows = $rows + @((Read-JsonFile $riF).comparison) }
 
 $histFile = Join-Path $root 'price-history.json'
 if (-not (Test-Path $histFile)) { Write-Output 'no price-history.json - nothing to alert on'; exit 0 }
 $histById = @{}
-foreach ($h in ((Get-Content $histFile -Raw | ConvertFrom-Json).commodities)) { $histById[[string]$h.id] = $h }
+foreach ($h in ((Read-JsonFile $histFile).commodities)) { $histById[[string]$h.id] = $h }
 
 $stateFile = Join-Path $root 'alert-state.json'
 $state = @{}
-if (Test-Path $stateFile) { try { foreach ($p in ((Get-Content $stateFile -Raw | ConvertFrom-Json).PSObject.Properties)) { $state[[string]$p.Name] = $p.Value } } catch {} }
+if (Test-Path $stateFile) { try { foreach ($p in ((Read-JsonFile $stateFile).PSObject.Properties)) { $state[[string]$p.Name] = $p.Value } } catch {} }
 
 # feed (for sale_end lines in the email)
 $saleEnd = @{}

@@ -64,6 +64,7 @@ param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Py
       [string]$Helper = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\models\resolve-ce-v1'),
       [switch]$NoHelper)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
@@ -187,10 +188,10 @@ if ($SelfTest) {
 # ---------------------------------------------------------------- prepare the corpus (regex lives here)
 Write-Output 'preparing corpus (engine regex semantics: first-match-wins include, then exclude)'
 if (-not (Test-Path $sdData)) { New-Item -ItemType Directory -Force $sdData | Out-Null }
-$coms = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$coms = Read-JsonFile (Join-Path $root 'commodities.json')
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $cmpF) { Write-Output 'BLIND: no comparison board to audit'; exit 3 }
-$cmp = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
+$cmp = Read-JsonFile $cmpF.FullName
 
 # board pairs = what we currently ship and therefore stand behind in public
 $pairs = New-Object System.Collections.Generic.List[object]
@@ -225,7 +226,7 @@ foreach ($c in $coms) {
 $seen = @{}
 $corpus = New-Object System.Collections.Generic.List[object]
 foreach ($f in (Get-ChildItem (Join-Path $OutDir 'regular\*-regular-*.json') -ErrorAction SilentlyContinue)) {
-  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+  try { $d = Read-JsonFile $f.FullName } catch { continue }
   $st = [string]$d.store
   foreach ($x in @($d.deals)) {
     $n = [string]$x.item; if (-not $n) { continue }
@@ -277,7 +278,7 @@ if ($rc -ne 0 -or -not (Test-Path $findF)) {
   Write-Output ("BLIND: the sweep did not complete (exit $rc). The board is unaffected. Tail: " + (($swOut | Select-Object -Last 3) -join ' | '))
   exit 3
 }
-$find = Get-Content $findF -Raw | ConvertFrom-Json
+$find = Read-JsonFile $findF
 # freshness: a findings file older than the board it claims to describe is a stale answer wearing a
 # fresh label - the same trap as a stamp file older than the job that writes it.
 try {

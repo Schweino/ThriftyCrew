@@ -42,6 +42,7 @@
 #>
 param([switch]$SelfTest, [switch]$Quiet, [string]$CompareFile)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 # A detector that runs in the chain must be able to PROVE it ran to the end, or a crash halfway reads as a
 # pass. Same helper, same contract as opsudit-prompt-backup.ps1. Deliberately NOT emitted on the BLIND
@@ -252,11 +253,11 @@ if ($SelfTest) {
 # Live run
 # ---------------------------------------------------------------------------------------------------
 if (-not (Test-Path $declaredPath)) { Write-Output "BLIND: no declaration at $declaredPath"; exit 3 }
-$declared = Get-Content $declaredPath -Raw | ConvertFrom-Json
+$declared = Read-JsonFile $declaredPath
 
 if ($CompareFile) {
   if (-not (Test-Path $CompareFile)) { Write-Output "BLIND: snapshot not found at $CompareFile"; exit 3 }
-  $snap = Get-Content $CompareFile -Raw | ConvertFrom-Json
+  $snap = Read-JsonFile $CompareFile
   $live = @{}
   $snapD1 = $null
   foreach ($p in $snap.PSObject.Properties) {

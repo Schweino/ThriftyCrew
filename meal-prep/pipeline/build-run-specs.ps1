@@ -74,12 +74,12 @@ if(-not $RecipesDbFile){ $RecipesDbFile = Join-Path $mp 'recipes-db.json' }
 if(-not $SpecsDir){      $SpecsDir      = Join-Path $RunDir 'specs' }
 if(-not $GroceryOutDir){ $GroceryOutDir = Join-Path (Split-Path $mp -Parent) 'grocery\out' }
 if(-not $FeedFile){      $FeedFile      = Join-Path $GroceryOutDir 'smp-feed.json' }
-$computed = Get-Content $ComputedFile -Raw | ConvertFrom-Json
-$costed   = Get-Content $CostedFile -Raw | ConvertFrom-Json
-$selected = (Get-Content $SelectedFile -Raw | ConvertFrom-Json).selected
-$canon    = Get-Content $CanonFile -Raw | ConvertFrom-Json
-$mo       = Get-Content $OverridesFile -Raw | ConvertFrom-Json
-$db       = (Get-Content $FoodDbFile -Raw | ConvertFrom-Json).items
+$computed = Read-JsonFile $ComputedFile
+$costed   = Read-JsonFile $CostedFile
+$selected = (Read-JsonFile $SelectedFile).selected
+$canon    = Read-JsonFile $CanonFile
+$mo       = Read-JsonFile $OverridesFile
+$db       = (Read-JsonFile $FoodDbFile).items
 
 $dbm=@{}; foreach($i in $db){ $dbm[$i.item]=$i }
 # densities + each-nouns load INSIDE pipeline\friendly-amt-lib.ps1, which is also where the label logic
@@ -91,12 +91,14 @@ if(-not (Test-Path $EachNounsFile)){ $EachNounsFile = Join-Path (Split-Path $Den
 Initialize-FriendlyAmt -DensitiesFile $DensitiesFile -EachNounsFile $EachNounsFile -Root $mp
 
 # ---- MERGED ITEM -> BOARD MAP (cost-engine Load-Map pattern; later files win) --------------------
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Add-MapFile([hashtable]$acc,[string]$path,[string]$label,[switch]$Required){
   if(-not (Test-Path $path)){
     if($Required){ throw ('map file missing: ' + $path) }
     Write-Warning ('map not found (skipped): ' + $label); return 0
   }
-  $raw = Get-Content $path -Raw | ConvertFrom-Json
+  $raw = Read-JsonFile $path
   $n=0
   if($raw -is [System.Array]){
     # canonical db\ingredients.json shape: array of rows {item, bid, gpu, unit, ...} (rows w/o bid skipped)
@@ -126,14 +128,14 @@ Write-Output ("map: " + (($MapFiles | ForEach-Object { [IO.Path]::GetFileNameWit
 # The widget computes  cost = feed.cheapest * (grams / gpu), so gpu must be grams per the unit the
 # FEED quotes. Board unit is the fallback for ids the feed does not carry.
 $feedUnit=@{}
-$feed = (Get-Content $FeedFile -Raw | ConvertFrom-Json).ingredients
+$feed = (Read-JsonFile $FeedFile).ingredients
 if($feed){ foreach($p in $feed.PSObject.Properties){ if($p.Value.unit){ $feedUnit[$p.Name]=[string]$p.Value.unit } } }
 $boardUnit=@{}
 $cmpFile = Get-ChildItem (Join-Path $GroceryOutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-foreach($row in ((Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json).comparison)){ $boardUnit[$row.id]=[string]$row.unit }
+foreach($row in ((Read-JsonFile $cmpFile.FullName).comparison)){ $boardUnit[$row.id]=[string]$row.unit }
 $rbFile = Join-Path $GroceryOutDir 'recipe-board.json'
 if(Test-Path $rbFile){
-  foreach($row in ((Get-Content $rbFile -Raw | ConvertFrom-Json).comparison)){ if(-not $boardUnit.ContainsKey($row.id)){ $boardUnit[$row.id]=[string]$row.unit } }
+  foreach($row in ((Read-JsonFile $rbFile).comparison)){ if(-not $boardUnit.ContainsKey($row.id)){ $boardUnit[$row.id]=[string]$row.unit } }
 }
 $UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
 $gpuFixes=@(); $gpuFlags=@()
@@ -185,7 +187,7 @@ $NAME_OVERRIDES = @{}
 $DISPLAY_OVERRIDES = @{}
 $FORBIDDEN_PROSE = @{}
 if(Test-Path $DisplayOverridesFile){
-  $dof = Get-Content $DisplayOverridesFile -Raw | ConvertFrom-Json
+  $dof = Read-JsonFile $DisplayOverridesFile
   if($dof.PSObject.Properties.Name -contains 'name_overrides' -and $dof.name_overrides){
     foreach($p in $dof.name_overrides.PSObject.Properties){ $NAME_OVERRIDES[$p.Name]=[string]$p.Value }
   }

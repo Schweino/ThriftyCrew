@@ -6,9 +6,11 @@ $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $apiUrl = 'https://map-to-success.ghost.io'
 $adminKey = (Get-Content (Join-Path $here '.ghostkey') -Raw).Trim()
-$db = (Get-Content (Join-Path $here 'recipes-db.json') -Raw | ConvertFrom-Json).recipes
+$db = (Read-JsonFile (Join-Path $here 'recipes-db.json')).recipes
 $dbBySlug=@{}; foreach($r in $db){ if($r.slug){ $dbBySlug[$r.slug]=$r } }
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 foreach($slug in $Slugs){

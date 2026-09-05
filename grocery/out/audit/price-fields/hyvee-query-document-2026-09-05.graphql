@@ -1,0 +1,226 @@
+query getProductDetailsWithPrice($locationIds: [ID!] = [], $retailItemEnabled: Boolean = false, $productId: Int!, $storeId: Int, $pickupLocationHasLocker: Boolean!, $targeted: Boolean = false, $foodHealthScoreEnabled: Boolean = false) {
+  product(productId: $productId) {
+    productId
+    size
+    productLockers @include(if: $pickupLocationHasLocker) {
+      productLockerId
+      pickupLocationId
+      isLockerEligible
+      __typename
+    }
+    couponProductV4(targeted: $targeted) {
+      couponsV4 {
+        couponId
+        offerState
+        valueText
+        __typename
+      }
+      __typename
+    }
+    item {
+      ecommerceDefaultPrice
+      nutrition @include(if: $foodHealthScoreEnabled) {
+        score
+        activeBoosters {
+          code
+          title
+          value
+          description
+          __typename
+        }
+        activeDetractors {
+          code
+          title
+          value
+          description
+          __typename
+        }
+        __typename
+      }
+      ...IItemFragment
+      retailItems(locationIds: $locationIds) @include(if: $retailItemEnabled) {
+        ...IRetailItemFragment
+        __typename
+      }
+      madeToOrder {
+        mtoItems {
+          mtoModifiers {
+            mtoModifierId
+            options {
+              code
+              amount
+              __typename
+            }
+            __typename
+          }
+          fulfillmentBeginDate
+          fulfillmentEndDate
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+  storeProducts(where: {productId: $productId, storeId: $storeId, isActive: true}) {
+    storeProducts {
+      storeProductId
+      productId
+      storeId
+      onSale
+      onFuelSaver
+      isWeighted
+      isAlcohol
+      fuelSaver
+      price
+      priceMultiple
+      basePrice
+      basePriceMultiple
+      isTagPriceLower
+      department {
+        departmentId
+        __typename
+      }
+      storeProductDescriptions {
+        type
+        description
+        __typename
+      }
+      subcategoryId
+      departmentGroup {
+        departmentGroupId
+        linkPath
+        name
+        __typename
+      }
+      department {
+        departmentId
+        linkPath
+        name
+        __typename
+      }
+      category {
+        categoryId
+        departmentId
+        linkPath
+        name
+        subcategories {
+          subcategoryId
+          linkPath
+          name
+          __typename
+        }
+        __typename
+      }
+      variations {
+        name
+        variationsAttributes {
+          name
+          variationsProducts {
+            productId
+            product {
+              productId
+              name
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment IWicItemFragment on WicItem {
+  isCvb
+  isBroadbandAllowed
+  wicExchangeRate
+  wicItemId
+  wicSubcategory {
+    categoryCode
+    categoryDescription
+    subcategoryCode
+    subcategoryDescription
+    unitOfMeasure
+    isBroadbandSubcategory
+    __typename
+  }
+  upcHyVee
+  __typename
+}
+
+fragment IMadeToOrderItemFragment on MtoItem {
+  mtoItemId
+  prepTime
+  fulfillmentBeginDate
+  fulfillmentEndDate
+  messages {
+    name
+    __typename
+  }
+  mtoModifiers {
+    options {
+      amount
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment IItemFragment on Item {
+  itemId
+  description
+  ecommerceStatus
+  source
+  images {
+    imageId
+    url
+    isPrimaryImage
+    __typename
+  }
+  source
+  unitAverageWeight
+  WicItems(locationIds: $locationIds) {
+    ...IWicItemFragment
+    __typename
+  }
+  madeToOrder {
+    mtoItems {
+      ...IMadeToOrderItemFragment
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment IRetailItemFragment on RetailItem {
+  retailItemId
+  basePrice
+  basePriceQuantity
+  ecommerceStatus
+  item {
+    itemId
+    ean13
+    __typename
+  }
+  soldByUnitOfMeasure {
+    code
+    name
+    __typename
+  }
+  tagPrice
+  tagPriceQuantity
+  ecommerceTagPrice
+  ecommerceTagPriceQuantity
+  memberTagPrice
+  memberTagPriceQuantity
+  sellingRules
+  __typename
+}

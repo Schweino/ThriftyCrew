@@ -54,6 +54,7 @@
 #>
 param([switch]$Apply, [string[]]$Slugs = @(), [switch]$SelfTest, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
 $repo = Split-Path -Parent $mp
@@ -284,7 +285,7 @@ if ($SelfTest) {
 
 # ---- live sweep ------------------------------------------------------------------------------------
 $vocabMap = @{}
-foreach ($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | ConvertFrom-Json)) {
+foreach ($row in (Read-JsonFile (Join-Path $mp 'db\ingredients.json'))) {
   $vocabMap[[string]$row.item] = $row
   # Aliases resolve here too - the split that let one half of the pipeline see a name the other could not
   # is the exact bug cost-recipes.ps1 documents at its ALIASES block.
@@ -295,7 +296,7 @@ foreach ($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | Conve
 $feedUnits = @{}
 $feedPath = Join-Path $repo 'grocery\out\smp-feed.json'
 if (Test-Path $feedPath) {
-  $fj = (Get-Content $feedPath -Raw | ConvertFrom-Json).ingredients
+  $fj = (Read-JsonFile $feedPath).ingredients
   if ($fj) { foreach ($p in $fj.PSObject.Properties) { if ($p.Value.unit) { $feedUnits[$p.Name] = [string]$p.Value.unit } } }
 } else {
   Write-Output "  WARNING feed not found ($feedPath) - gpu reconciliation limited to the mapped unit"

@@ -7,13 +7,14 @@
 # C:\Codex\ThriftyCrew\site\tools\freezer-math-tool.html with the emitted block.
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = 'C:\Codex\ThriftyCrew\grocery'
 
 # The freezables. Things a chest freezer actually lets you stockpile.
 $freezables = @('chicken-breast','chicken-thighs','ground-beef-8020','ground-turkey','bacon','pork-chops','butter','shredded-cheese','bread')
 
 # ---------- Channel 1: stock-up spread from price history ----------
-$hist = Get-Content (Join-Path $root 'price-history.json') -Raw | ConvertFrom-Json
+$hist = Read-JsonFile (Join-Path $root 'price-history.json')
 $weeks = $hist.weeks_on_record
 $rows = @()
 foreach ($id in $freezables) {
@@ -39,7 +40,7 @@ $stockupBlend = [math]::Round((($rows | ForEach-Object { $_.spread }) | Measure-
 
 # ---------- Channel 2: bulk spread from the newest comparison file ----------
 $compFile = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name | Select-Object -Last 1
-$comp = Get-Content $compFile.FullName -Raw | ConvertFrom-Json
+$comp = Read-JsonFile $compFile.FullName
 $bulkRows = @()
 foreach ($id in $freezables) {
     $entry = $comp.comparison | Where-Object { $_.id -eq $id }

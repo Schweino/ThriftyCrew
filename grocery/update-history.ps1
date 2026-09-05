@@ -18,17 +18,18 @@ param(
   [string]$OutDir = ""
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir)      { $OutDir = Join-Path $root 'out' }
 if (-not $HistoryFile) { $HistoryFile = Join-Path $root 'price-history.json' }
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
 
-$cmpDoc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$cmpDoc = Read-JsonFile $CompareFile
 $week   = [string]$cmpDoc.week_of
 $rows   = @($cmpDoc.comparison)
 
 $existing = @()
-if (Test-Path $HistoryFile) { $existing = @((Get-Content $HistoryFile -Raw | ConvertFrom-Json).commodities) }
+if (Test-Path $HistoryFile) { $existing = @((Read-JsonFile $HistoryFile).commodities) }
 
 function Weeks-Between($a, $b) { try { return [math]::Round([math]::Abs((([datetime]$a) - ([datetime]$b)).Days) / 7.0) } catch { return $null } }
 
@@ -104,7 +105,7 @@ foreach ($row in $rows) {
 # exclude them until we choose to expand. NO badges for these (they'd flood records-<week>.json).
 $riFile = Join-Path $OutDir 'recipe-board.json'
 if (Test-Path $riFile) {
-  foreach ($row in @((Get-Content $riFile -Raw | ConvertFrom-Json).comparison)) {
+  foreach ($row in @((Read-JsonFile $riFile).comparison)) {
     $id = [string]$row.id
     if ($updatedIds.ContainsKey($id)) { continue }   # weekly board already recorded this id
     $P = $null; foreach ($s in $row.stores) { $sp = [double]$s.per_unit; if ($sp -gt 0 -and ($null -eq $P -or $sp -lt $P)) { $P = $sp } }

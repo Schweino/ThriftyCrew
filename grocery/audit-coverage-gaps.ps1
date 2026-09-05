@@ -27,6 +27,7 @@
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$CandidatesFile = "", [string]$ReportDir = "",
       [string]$CommoditiesFile = "", [string]$AllowFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 
@@ -115,7 +116,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $ReportDir) { $ReportDir = $OutDir }
 if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
-$commods = Get-Content $CommoditiesFile -Raw | ConvertFrom-Json
+$commods = Read-JsonFile $CommoditiesFile
 $stores = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
 # prepared/different-form words that legitimately are NOT the plain commodity (so a match on them is not a gap)
 $GLOBAL = @('seasoning','marinade','\bsauce\b','\brub\b','\bkit\b','bundle','\bmeal\b','wrapped','breaded','\bnugget','\bjerky\b','flavored','\bdip\b','helper','lunchable','\bsoup\b','gravy','stuffing')
@@ -138,7 +139,7 @@ $prod = @{}
 function AddP([string]$store,[string]$name) { if (-not $store -or -not $name) { return }; if (-not $prod.ContainsKey($store)) { $prod[$store] = New-Object System.Collections.Generic.List[string] }; $prod[$store].Add($name) }
 # weekly ads (flat .deals with {store,item})
 $adsF = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-if ($adsF) { foreach ($d in (Get-Content $adsF.FullName -Raw | ConvertFrom-Json).deals) { AddP ([string]$d.store) ([string]$d.item) } }
+if ($adsF) { foreach ($d in (Read-JsonFile $adsF.FullName).deals) { AddP ([string]$d.store) ([string]$d.item) } }
 # Everyday shelf files (per store; store on the doc or the deal). NEWEST PER STORE ONLY, and only
 # within the same 14-day window the engine itself honours (2026-07-27). Reading EVERY regular file
 # ever written - which this did - manufactures false gaps two ways: a product the store has since
@@ -162,7 +163,7 @@ $freshFloor = (Get-Date).AddDays(-(Get-RegularUnionDays)).ToString('yyyy-MM-dd')
 foreach ($k in $regNewest.Keys) {
   $entry = $regNewest[$k]
   if ($entry.stamp -lt $freshFloor) { continue }        # past the cliff: the engine would not price it either
-  try { $doc = Get-Content $entry.file.FullName -Raw | ConvertFrom-Json } catch { continue }
+  try { $doc = Read-JsonFile $entry.file.FullName } catch { continue }
   # ...and skip the rows the ENGINE's in-store gate refuses (2026-08-31). Same reasoning as the
   # $GLOBAL_EXCLUDE lift above: a ship-only or third-party listing can never win a cell, so reporting it as
   # "the store carries this but the board is missing it" is a gap nobody can ever close. Shared rule, not a
@@ -192,7 +193,7 @@ foreach ($k in $regNewest.Keys) {
 # browser-store deal files
 foreach ($glob in @('bakers\bakers-deals-*.json','sams\sams-deals-*.json','fareway\fareway-deals-*.json')) {
   $f = Get-ChildItem (Join-Path $OutDir $glob) -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-  if ($f) { foreach ($d in (Get-Content $f.FullName -Raw | ConvertFrom-Json).deals) { AddP ([string]$d.store) ([string]$d.item) } }
+  if ($f) { foreach ($d in (Read-JsonFile $f.FullName).deals) { AddP ([string]$d.store) ([string]$d.item) } }
 }
 
 # reviewed, legitimate exceptions (a store carries the item but it genuinely can't be priced like-for-like:
@@ -200,7 +201,7 @@ foreach ($glob in @('bakers\bakers-deals-*.json','sams\sams-deals-*.json','farew
 # the detector only alerts on NEW / unreviewed gaps, never re-cries a known one.
 $allow = @{}
 $allowF = if ($AllowFile) { $AllowFile } else { Join-Path $root 'coverage-gap-allowlist.json' }
-if (Test-Path $allowF) { try { foreach ($a in (Get-Content $allowF -Raw | ConvertFrom-Json).allow) { $allow[([string]$a.commodity + '|' + [string]$a.store)] = $true } } catch {} }
+if (Test-Path $allowF) { try { foreach ($a in (Read-JsonFile $allowF).allow) { $allow[([string]$a.commodity + '|' + [string]$a.store)] = $true } } catch {} }
 # NOT-CARRIED: the OTHER reason a cell is legitimately missing. The allowlist above says "the store sells
 # it and we cannot price it like-for-like"; not-carried.json says "the store does not sell it", derived
 # from the store's own capture evidence (see derive-not-carried.ps1). Both explain a gap; conflating them
@@ -213,7 +214,7 @@ $ncStale = 0; $ncFresh = 0; $ncDeclaredStale = 0
 $ncF = Join-Path $root 'not-carried.json'
 if (Test-Path $ncF) {
   try {
-    $ncDoc = Get-Content $ncF -Raw | ConvertFrom-Json
+    $ncDoc = Read-JsonFile $ncF
     $ncDays = if ($ncDoc.PSObject.Properties.Name -contains 'recheck_days') { [int]$ncDoc.recheck_days } else { 90 }
     $now = Get-Date
     foreach ($e in @(@($ncDoc.entries) | Where-Object { $_ })) {
@@ -237,7 +238,7 @@ if ($ncFresh -or $ncStale) {
 # ---- which stores are already on the board per commodity ----
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
 $present = @{}
-foreach ($r in (Get-Content $CompareFile -Raw | ConvertFrom-Json).comparison) { foreach ($s in $r.stores) { $present[([string]$r.id + '|' + [string]$s.store)] = $true } }
+foreach ($r in (Read-JsonFile $CompareFile).comparison) { foreach ($s in $r.stores) { $present[([string]$r.id + '|' + [string]$s.store)] = $true } }
 
 # ---- for each missing store, look for a loosened-include match in its raw products ----
 $gaps = New-Object System.Collections.Generic.List[object]
@@ -358,7 +359,7 @@ $engineOwner = @{}    # "store|name"    -> list of commodity ids the engine matc
 $classifiable = $false
 if ($CandidatesFile -and (Test-Path $CandidatesFile)) {
   try {
-    $cdoc = Get-Content $CandidatesFile -Raw | ConvertFrom-Json
+    $cdoc = Read-JsonFile $CandidatesFile
     foreach ($cc in @($cdoc.commodities)) {
       $cid = [string]$cc.id
       foreach ($cr in @($cc.candidates)) {

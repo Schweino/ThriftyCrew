@@ -7,14 +7,15 @@
   successful merge so freshly resolved links are marked current. Idempotent.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $outDir = Join-Path $root 'out'
 
 $cmpFile = (Get-ChildItem (Join-Path $outDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$cmp = (Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison
+$cmp = (Read-JsonFile $cmpFile).comparison
 $ri = @()
 $riFile = Join-Path $outDir 'recipe-board.json'
-if (Test-Path $riFile) { $ri = (Get-Content $riFile -Raw | ConvertFrom-Json).comparison }
+if (Test-Path $riFile) { $ri = (Read-JsonFile $riFile).comparison }
 
 # TWO separate snapshots: the weekly board and the recipe board can carry DIFFERENT figures for the same
 # id+store (butter: staple $/lb vs recipe $/oz; peanut-butter: staple ad-sale vs recipe everyday floor).
@@ -39,10 +40,10 @@ foreach ($it in $ri) {
 # links. (Run this AFTER a fresh resolve-worklist so the flag set reflects the post-merge state.)
 $flagged = @{}
 $wlFile = Join-Path $outDir 'url-worklist.json'
-if (Test-Path $wlFile) { try { $wl = Get-Content $wlFile -Raw | ConvertFrom-Json; foreach ($stN in $wl.stores.PSObject.Properties.Name) { foreach ($c in @($wl.stores.$stN)) { $flagged[([string]$c.id + '|' + $stN)] = $true } } } catch {} }
+if (Test-Path $wlFile) { try { $wl = Read-JsonFile $wlFile; foreach ($stN in $wl.stores.PSObject.Properties.Name) { foreach ($c in @($wl.stores.$stN)) { $flagged[([string]$c.id + '|' + $stN)] = $true } } } catch {} }
 
 $pf = Join-Path $root 'product-urls.json'
-$pd = Get-Content $pf -Raw | ConvertFrom-Json
+$pd = Read-JsonFile $pf
 $stamped = 0; $skipped = 0
 foreach ($p in $pd.items.PSObject.Properties) {
   $id = [string]$p.Name

@@ -55,6 +55,7 @@
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (nothing to judge).
 param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -198,7 +199,7 @@ if (-not $CompareFile) {
   if (-not $mf) { Write-Output 'BLIND: no comparison-*.json to audit'; exit 3 }
   $CompareFile = $mf.FullName
 }
-$fdoc = Get-Content $FlaggedFile -Raw | ConvertFrom-Json
+$fdoc = Read-JsonFile $FlaggedFile
 $flagged = @($fdoc.flagged)
 if (-not $flagged.Count) { Write-Output ('BLIND: ' + (Split-Path $FlaggedFile -Leaf) + ' carries no flagged rows'); exit 3 }
 # BLIND, LOUDLY. Without a min-max band on at least one row there is no floor to be below, and a confident
@@ -210,7 +211,7 @@ if ($banded -eq 0) {
   Write-Output '       band-floor censorship. A zero from this file is not a clean board.'
   exit 3
 }
-$cmp = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$cmp = Read-JsonFile $CompareFile
 $board = @{}
 foreach ($r in @($cmp.comparison)) {
   foreach ($s in @($r.stores)) {
@@ -251,7 +252,7 @@ Write-Output ("  -> $outFile")
 # the backlog is ruled the baseline tightens itself with no one remembering to tighten it.
 $blF = Join-Path $OutDir 'band-censorship-baseline.json'
 $base = $null
-if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).cells) } catch { $base = $null } }
+if (Test-Path $blF) { try { $base = [int]((Read-JsonFile $blF).cells) } catch { $base = $null } }
 $verdict = Get-RatchetVerdict -Cells $cells -Baseline $base
 if ($verdict -eq 'first') {
   # A BLIND run must never write the baseline: pinning a high-water mark from a run that saw nothing would

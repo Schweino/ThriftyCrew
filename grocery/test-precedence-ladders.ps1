@@ -45,6 +45,7 @@
 #>
 param([switch]$Quiet)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 # COMPLETION MARKER CONTRACT. Every detector the chain calls must say it REACHED THE END - an exit code
 # alone cannot tell a clean run from a crash three cases in. audit-guard-contract flagged this file the
 # moment it was wired into check-ad-cycles, which is the contract working.
@@ -114,8 +115,8 @@ function Invoke-Board([string]$tag, [string]$kwJson, [string]$adsJson) {
   $candFile = Join-Path $od 'prec-candidates-2026-08-21.json'
   $cells = @()
   $cands = @()
-  if (Test-Path $boardFile) { $cells = @((Get-Content $boardFile -Raw | ConvertFrom-Json).comparison) }
-  if (Test-Path $candFile) { $cands = @((Get-Content $candFile -Raw | ConvertFrom-Json).commodities) }
+  if (Test-Path $boardFile) { $cells = @((Read-JsonFile $boardFile).comparison) }
+  if (Test-Path $candFile) { $cands = @((Read-JsonFile $candFile).commodities) }
   return [pscustomobject]@{ rc = $rc; ids = @($cells | ForEach-Object { [string]$_.id }); candIds = @($cands | ForEach-Object { [string]$_.id }) }
 }
 

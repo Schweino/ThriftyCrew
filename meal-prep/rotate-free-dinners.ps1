@@ -21,6 +21,7 @@
 #>
 param([switch]$DryRun, [switch]$Force, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 $gout = Join-Path (Split-Path $root -Parent) 'grocery\out'
 $pubDir = Join-Path (Split-Path $root -Parent) 'public'
@@ -87,12 +88,12 @@ if ($SelfTest) {
 }
 
 # ---------------------------------------------------------------- compute this week's target set
-$costs = Get-Content (Join-Path $gout 'recipe-costs.json') -Raw | ConvertFrom-Json
+$costs = Read-JsonFile (Join-Path $gout 'recipe-costs.json')
 # WEEK KEY: recipe-costs.week_of is the MONTHLY floor-baseline label, not the pricing week. The rotation
 # rides the BOARD week - the newest comparison date, which flips with the Wednesday ad cycle.
 $wkFile = Get-ChildItem (Join-Path $gout 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 $boardWeek = [regex]::Match($wkFile.BaseName, '\d{4}-\d{2}-\d{2}').Value
-$dbDoc = Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json
+$dbDoc = Read-JsonFile (Join-Path $root 'recipes-db.json')
 $byProt = @{}
 foreach ($r in $dbDoc.recipes) {
   if ($r.protein -in @('chicken','turkey','beef','pork')) {
@@ -123,7 +124,7 @@ foreach ($prot in @('chicken','turkey','beef','pork')) {
 Write-Output ("rotation: board-week=" + $boardWeek + "  target free set = " + $target.Count + " recipe(s)")
 foreach ($t in $target) { Write-Output ('  ' + $t.protein.PadRight(8) + '#' + $t.rank + '  $' + $t.per_serving.ToString('0.00') + '/srv  ' + $t.slug) }
 
-$state = if (Test-Path $stateFile) { Get-Content $stateFile -Raw | ConvertFrom-Json } else { $null }
+$state = if (Test-Path $stateFile) { Read-JsonFile $stateFile } else { $null }
 $targetKey = (($target | ForEach-Object { $_.slug }) | Sort-Object) -join ','
 $stateKey = if ($state) { ((@($state.free) | ForEach-Object { $_.slug }) | Sort-Object) -join ',' } else { '' }
 if (-not $Force -and $state -and [string]$state.week_of -eq $boardWeek -and $targetKey -eq $stateKey) {

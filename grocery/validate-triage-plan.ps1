@@ -44,6 +44,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 # A [string[]] PARAM DOES NOT SURVIVE `powershell -File` (2026-08-01). Called as
@@ -353,7 +354,7 @@ if ($SelfTest) {
 if (-not $Plan) { Write-Output 'validate-triage-plan: BLIND - no -Plan given'; exit 3 }
 if (-not (Test-Path $Plan)) { Write-Output ("validate-triage-plan: BLIND - no plan file at " + $Plan); exit 3 }
 $doc = $null
-try { $doc = Get-Content $Plan -Raw | ConvertFrom-Json } catch { Write-Output ("validate-triage-plan: BLIND - plan does not parse: " + $_.Exception.Message); exit 3 }
+try { $doc = Read-JsonFile $Plan } catch { Write-Output ("validate-triage-plan: BLIND - plan does not parse: " + $_.Exception.Message); exit 3 }
 if (-not $doc) { Write-Output 'validate-triage-plan: BLIND - plan read back empty'; exit 3 }
 
 $res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent)

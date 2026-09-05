@@ -48,6 +48,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 if (-not $RegularDir) { $RegularDir = Join-Path $Root 'out\regular' }
 . (Join-Path $Root 'multipack-lib.ps1')
@@ -95,7 +96,7 @@ if ($SelfTest) {
   # fine and passes both - it is the FILE that has to exist, not any particular ruling in it.
   $hf = Join-Path $Root 'multipack-unit-hints.json'
   $hj = $null
-  if (Test-Path $hf) { try { $hj = (Get-Content $hf -Raw | ConvertFrom-Json) } catch { $hj = $null } }
+  if (Test-Path $hf) { try { $hj = (Read-JsonFile $hf) } catch { $hj = $null } }
   T ($null -ne $hj) 'multipack-unit-hints.json exists and parses'
   $bad = @(@($hj.hints) | Where-Object { $null -ne $_ } | Where-Object { -not $_.store -or -not $_.item -or -not $_.size -or -not $_.unit_size -or -not $_.reviewed -or -not $_.why })
   T ($null -ne $hj -and $bad.Count -eq 0) 'every hint carries store/item/size/unit_size/reviewed/why'
@@ -142,7 +143,7 @@ $hints = @{}
 $hintFile = Join-Path $Root 'multipack-unit-hints.json'
 if (Test-Path $hintFile) {
   try {
-    foreach ($h in @((Get-Content $hintFile -Raw | ConvertFrom-Json).hints)) {
+    foreach ($h in @((Read-JsonFile $hintFile).hints)) {
       if ($null -eq $h) { continue }
       $k = [string]$h.store + '|' + [string]$h.item + '|' + [string]$h.size
       if (-not $hints.ContainsKey($k)) { $hints[$k] = [string]$h.unit_size }

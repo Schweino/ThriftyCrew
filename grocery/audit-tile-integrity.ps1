@@ -40,14 +40,15 @@ param(
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'pu-lib.ps1')   # the SAME per-unit math the page publishes with
 
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
-$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison
-$pu = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$cmp = (Read-JsonFile $cmpF.FullName).comparison
+$pu = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 $drift = @{}
 $ndF = Join-Path $OutDir 'name-drift.json'
 # STALENESS ASSERTION (2026-08-21). The WRONG-PRODUCT half of this audit is not computed here - it is READ
@@ -87,7 +88,7 @@ if (Test-Path $ndF) {
     Write-GuardComplete -Name 'tile-integrity' -Summary 'HELD: name-drift.json is stale'
     exit 2
   }
-  foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason }
+  foreach ($d in (Read-JsonFile $ndF).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason }
 }
 
 $rows = New-Object System.Collections.Generic.List[object]
@@ -246,7 +247,7 @@ if ($Strict) {
   Write-GuardComplete -Name 'tile-integrity'; exit 0
 }
 if (Test-Path $blF) {
-  $bl = (Get-Content $blF -Raw | ConvertFrom-Json).by_store
+  $bl = (Read-JsonFile $blF).by_store
   $worse = @()
   # compare COVERAGE only. Accuracy is gated above, and pruning a bad link (the right fix) RAISES a store's
   # no-link count - the old combined ratchet would have failed the very act of removing a lie.

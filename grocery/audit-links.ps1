@@ -11,6 +11,7 @@
 #>
 param([double]$Tolerance = 0.15)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $outDir = Join-Path $root 'out'
 
@@ -20,9 +21,9 @@ $outDir = Join-Path $root 'out'
 # board: id -> store -> @( @{unit; pu}, ... )
 $board = @{}
 $cmpFile = (Get-ChildItem (Join-Path $outDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$srcs = @((Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison)
+$srcs = @((Read-JsonFile $cmpFile).comparison)
 $riFile = Join-Path $outDir 'recipe-board.json'
-if (Test-Path $riFile) { $srcs += @((Get-Content $riFile -Raw | ConvertFrom-Json).comparison) }
+if (Test-Path $riFile) { $srcs += @((Read-JsonFile $riFile).comparison) }
 foreach ($it in $srcs) {
   $id = [string]$it.id
   if (-not $board.ContainsKey($id)) { $board[$id] = @{} }
@@ -73,7 +74,7 @@ function LinkPerUnit([string]$size, [string]$unit, [double]$price) {
 }
 
 $pf = Join-Path $root 'product-urls.json'
-$pd = Get-Content $pf -Raw | ConvertFrom-Json
+$pd = Read-JsonFile $pf
 $flags = @(); $ok = 0; $tot = 0; $skipped = 0
 foreach ($p in $pd.items.PSObject.Properties) {
   $id = [string]$p.Name

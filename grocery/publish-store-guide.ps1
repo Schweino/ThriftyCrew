@@ -11,6 +11,7 @@
 #>
 param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 $slug   = 'shop-smart-at-your-store'
@@ -19,14 +20,14 @@ if (-not $CompareFile) {
   $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
   $CompareFile = $cmpF.FullName
   # prefer the semantically-verified board when it is at least as fresh as the raw comparison (see build-deals-page)
-  try { $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
+  try { $wk = (Read-JsonFile $cmpF.FullName).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
 }
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 
 # ---- COVERAGE GATE: never publish a degraded matrix (a store that dropped out, or a thin board) ----
 # registry-driven (2026-07-26): this gate never checked Fareway (the same drift that hid it from the
 # guide itself 07-12..07-26) - the list now comes from stores.json (audit-store-registry.ps1 verifies)
-$stores = @((Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json).stores | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
+$stores = @((Read-JsonFile (Join-Path $root 'stores.json')).stores | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
 $perStore = @{}; foreach ($s in $stores) { $perStore[$s] = 0 }
 foreach ($r in $doc.comparison) { foreach ($st in $r.stores) { $k = [string]$st.store; if ($perStore.ContainsKey($k)) { $perStore[$k]++ } } }
 $commCount = @($doc.comparison).Count

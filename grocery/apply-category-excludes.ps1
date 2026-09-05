@@ -14,14 +14,15 @@
 #>
 param([switch]$WhatIf, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 # -Root exists ONLY so test-auditors can point this script at a frozen fixture tree and prove the drift
 # detector still detects drift. Live behaviour is byte-identical: with no -Root it is $PSScriptRoot, as before.
 # PowerShell variable names are CASE-INSENSITIVE, so $Root and $root are the SAME variable - this one line
 # both honours an explicit -Root and defaults it. Do not "tidy" it into two names; they cannot be two names.
 if (-not $root) { $root = $PSScriptRoot }
-$lib = Get-Content (Join-Path $root 'category-excludes.json') -Raw | ConvertFrom-Json
+$lib = Read-JsonFile (Join-Path $root 'category-excludes.json')
 $cat = @{}
-foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories) {
+foreach ($c in (Read-JsonFile (Join-Path $root 'categories.json')).categories) {
   foreach ($id in @($c.commodities)) { $cat[[string]$id] = [string]$c.label }
 }
 $commods = Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding UTF8 | ConvertFrom-Json

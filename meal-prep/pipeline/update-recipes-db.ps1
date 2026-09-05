@@ -86,6 +86,8 @@ $have=@{}
 foreach($m in [regex]::Matches($raw, '"slug"\s*:\s*"([^"]+)"')){ $have[$m.Groups[1].Value]=1 }
 Write-Output ("live recipes-db slugs: " + $have.Count)
 
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function J([string]$s){
   if($null -eq $s){ return '""' }
   $sb=New-Object Text.StringBuilder
@@ -104,7 +106,7 @@ function N($v){ ([double]$v).ToString([Globalization.CultureInfo]::InvariantCult
 
 # item -> board id, the LIVE convention (ingredient-map.json). Keyed case-insensitively on the item name.
 $ingMap=@{}
-foreach($e in ((Get-Content $IngredientMapFile -Raw | ConvertFrom-Json).mappings)){
+foreach($e in ((Read-JsonFile $IngredientMapFile).mappings)){
   if($e.board_id){ $ingMap[([string]$e.item).ToLower().Trim()] = [string]$e.board_id }
 }
 Write-Output ("ingredient-map ids available: " + $ingMap.Count)

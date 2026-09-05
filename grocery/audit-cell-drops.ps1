@@ -13,6 +13,7 @@
 #>
 param([int]$CompareAgeDays = 5)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $outDir = Join-Path $root 'out'
 $boards = @(Get-ChildItem (Join-Path $outDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
@@ -23,8 +24,8 @@ $oldF = $boards | Where-Object { ([datetime]([regex]::Match($_.BaseName, '(\d{4}
 if (-not $oldF) { $oldF = $boards[$boards.Count - 1] }
 if ($oldF.FullName -eq $newF.FullName) { Write-Output 'cell-drops: no older board to diff against'; exit 0 }
 
-$new = (Get-Content $newF.FullName -Raw | ConvertFrom-Json).comparison
-$old = (Get-Content $oldF.FullName -Raw | ConvertFrom-Json).comparison
+$new = (Read-JsonFile $newF.FullName).comparison
+$old = (Read-JsonFile $oldF.FullName).comparison
 $nmap = @{}
 foreach ($r in $new) { $nmap[[string]$r.id] = @($r.stores | ForEach-Object { [string]$_.store }) }
 $drops = @(); $cells = 0

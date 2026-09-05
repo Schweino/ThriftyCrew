@@ -13,6 +13,7 @@
 #>
 param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 
@@ -101,14 +102,14 @@ if (-not $CompareFile) {
   $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
   $CompareFile = $cmpF.FullName
   # prefer the semantically-verified board when it is at least as fresh as the raw comparison (see build-deals-page)
-  try { $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
+  try { $wk = (Read-JsonFile $cmpF.FullName).week_of; $verF = Join-Path $OutDir ("verified-" + $wk + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
 }
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 
 # ---- COVERAGE GATE: never publish a degraded matrix (a store that dropped out, or a thin board) ----
 # registry-driven (2026-07-26): this gate silently omitted Fareway for two weeks - the store list now
 # comes from stores.json so a store added there is gated here automatically (audit-store-registry.ps1 verifies)
-$stores = @((Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json).stores | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
+$stores = @((Read-JsonFile (Join-Path $root 'stores.json')).stores | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
 $perStore = @{}; foreach ($s in $stores) { $perStore[$s] = 0 }
 foreach ($r in $doc.comparison) { foreach ($st in $r.stores) { $k = [string]$st.store; if ($perStore.ContainsKey($k)) { $perStore[$k]++ } } }
 $commCount = @($doc.comparison).Count
@@ -171,7 +172,7 @@ try {
   # doing this, so it now only pins the two attributes it actually reads.
   $chipRx = "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'[^>]*>(.*?)</div>"
   if (Test-Path $bfeed) {
-    $bj = Get-Content $bfeed -Raw | ConvertFrom-Json
+    $bj = Read-JsonFile $bfeed
     foreach ($bp in $bj.PSObject.Properties) {
       # __meta and __rows are the structured twin, not chip markup (see build-deals-page's RowStruct)
       if (([string]$bp.Name).StartsWith('__')) { continue }
@@ -189,7 +190,7 @@ try {
   # gate hid is a link-quality problem in this repo; a cell with nothing recorded needs a browser resolve.
   $nlStored = 0
   try {
-    $puDoc = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+    $puDoc = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
     foreach ($k in $nlCells) {
       $kp = $k -split '\|', 2
       $ce = $puDoc.PSObject.Properties[$kp[0]]; if (-not $ce) { continue }
@@ -344,7 +345,7 @@ try {
     # swallowed the error, $curWk stayed empty, `if($curWk -and ...)` was always false, and this gate has
     # therefore never fired once since it was added. A silent catch around a path is how a whole feature
     # stays dead for weeks. It now logs instead of swallowing.
-    $phd = Get-Content (Join-Path $root 'price-history.json') -Raw | ConvertFrom-Json
+    $phd = Read-JsonFile (Join-Path $root 'price-history.json')
     $wks=@(); foreach($c in $phd.commodities){ foreach($e in $c.history){ $wks += [string]$e.week_of } }
     if($wks.Count){ $curWk = (@($wks | Sort-Object))[-1] }
   } catch { Write-Output ("trend gate: could not derive the current week (" + $_.Exception.Message + ") - falling through to a full rebuild") }

@@ -15,11 +15,12 @@
 #>
 param([string]$RulesGlob = "out\staples500\rules\rules-*.json", [string]$CandidatesFile = "out\staples500\batch1.json", [switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 $UNITS = @('lb','oz','floz','each','dozen','gallon')
 
 $cand = @{}
-foreach ($x in (Get-Content (Join-Path $root $CandidatesFile) -Raw | ConvertFrom-Json)) { $cand[[string]$x.id] = $x }
+foreach ($x in (Read-JsonFile (Join-Path $root $CandidatesFile))) { $cand[[string]$x.id] = $x }
 
 # PS 5.1: [ArrayList]@(pipe | ConvertFrom-Json) NESTS the whole parsed array as ONE element (the trap that hit
 # merge-candidates too). Add each item via foreach so the ArrayList holds the 328 commodities individually - a
@@ -31,7 +32,7 @@ foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding 
 $existingIds = @{}; foreach ($c in $commods) { $existingIds[[string]$c.id] = $true }
 $catDoc = Get-Content (Join-Path $root 'categories.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $catByLabel = @{}; foreach ($c in $catDoc.categories) { $catByLabel[[string]$c.label] = $c }
-$searchDoc = Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json
+$searchDoc = Read-JsonFile (Join-Path $root 'commodity-search.json')
 
 function RxOk([string]$p) { try { [void][regex]::new($p); return $true } catch { return $false } }
 
@@ -40,7 +41,7 @@ $rej = New-Object System.Collections.Generic.List[string]
 $seen = @{}
 foreach ($rf in (Get-ChildItem (Join-Path $root $RulesGlob) -ErrorAction SilentlyContinue | Sort-Object Name)) {
   $parsed = $null
-  try { $parsed = Get-Content $rf.FullName -Raw | ConvertFrom-Json } catch { $rej.Add("$($rf.Name): UNPARSEABLE - whole file skipped"); continue }
+  try { $parsed = Read-JsonFile $rf.FullName } catch { $rej.Add("$($rf.Name): UNPARSEABLE - whole file skipped"); continue }
   foreach ($r in $parsed) {
     $id = ([string]$r.id).Trim()
     $why = $null
@@ -78,9 +79,9 @@ foreach ($r in $ok) {
 ($catDoc | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $root 'categories.json') -Encoding UTF8
 ($searchDoc | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $root 'commodity-search.json') -Encoding UTF8
 # validate all three round-trip as JSON
-$null = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
-$null = Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json
-$null = Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json
+$null = Read-JsonFile (Join-Path $root 'commodities.json')
+$null = Read-JsonFile (Join-Path $root 'categories.json')
+$null = Read-JsonFile (Join-Path $root 'commodity-search.json')
 Write-Output ''
 Write-Output ("registered " + $ok.Count + " commodities into commodities.json + categories.json + commodity-search.json (all JSON validated)")
 Write-Output "NEXT: apply-category-excludes.ps1 -> compare-deals.ps1 -> audit-food-category.ps1 -> build-vet-sheet.ps1 -Ids <batch ids>"

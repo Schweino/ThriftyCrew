@@ -33,6 +33,8 @@ $script:FA_USABLE = 0.25
 $script:FA_LB = 453.592
 $script:FA_OZ = 28.3495
 
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Initialize-FriendlyAmt {
     <# Load the two maps once. Pass paths to point at fixtures; defaults are the live db. #>
     param([string]$DensitiesFile, [string]$EachNounsFile, [string]$Root)
@@ -40,9 +42,9 @@ function Initialize-FriendlyAmt {
     if (-not $DensitiesFile) { $DensitiesFile = Join-Path $mp 'db\densities.json' }
     if (-not $EachNounsFile) { $EachNounsFile = Join-Path $mp 'db\each-nouns.json' }
     $script:FA_DN = @{}
-    foreach ($p in ((Get-Content $DensitiesFile -Raw | ConvertFrom-Json).items.PSObject.Properties)) { $script:FA_DN[$p.Name] = $p.Value }
+    foreach ($p in ((Read-JsonFile $DensitiesFile).items.PSObject.Properties)) { $script:FA_DN[$p.Name] = $p.Value }
     $script:FA_EN = @{}
-    $en = Get-Content $EachNounsFile -Raw | ConvertFrom-Json
+    $en = Read-JsonFile $EachNounsFile
     $src = if ($en.PSObject.Properties.Name -contains 'items') { $en.items } else { $en }
     foreach ($p in $src.PSObject.Properties) {
         if ($p.Value -and ($p.Value.PSObject.Properties.Name -contains 'one')) { $script:FA_EN[$p.Name] = $p.Value }
@@ -246,7 +248,7 @@ function Test-FriendlyAmtAgainstCatalog {
     $mp = if ($Root) { $Root } else { Split-Path -Parent (Split-Path -Parent $PSCommandPath) }
     $rows = 0; $exact = 0
     foreach ($f in @(Get-ChildItem (Join-Path $mp 'db\recipes\*.json') | Where-Object { $_.Name -ne '_index.json' })) {
-        $s = Get-Content $f.FullName -Raw | ConvertFrom-Json
+        $s = Read-JsonFile $f.FullName
         if (-not $s.scaler.ing) { continue }
         foreach ($i in @($s.scaler.ing)) {
             $buy = [string]$i.buy; $g = [double]$i.grams; $item = [string]$i.item

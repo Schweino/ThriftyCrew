@@ -43,6 +43,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$OutDir = '', [string]$QueueFile = '', [string]$MapFile = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $QueueFile) { $QueueFile = Join-Path $root 'ingredient-queue.json' }
@@ -116,8 +117,8 @@ if ($SelfTest) {
 
 if (-not (Test-Path $QueueFile)) { Write-Output 'promote-queue: no ingredient-queue.json'; Write-GuardComplete -Name 'promote-ingredient-queue' -Summary 'no queue'; exit 0 }
 if (-not (Test-Path $MapFile)) { Write-Output "promote-queue: no ruling file at $MapFile - refusing to guess at commodity identity"; Write-GuardComplete -Name 'promote-ingredient-queue' -Summary 'no ruling file'; exit 0 }
-$queue = Get-Content $QueueFile -Raw | ConvertFrom-Json
-$map = Get-Content $MapFile -Raw | ConvertFrom-Json
+$queue = Read-JsonFile $QueueFile
+$map = Read-JsonFile $MapFile
 $res = Get-QueuePromotions -Queue $queue -Map $map
 
 Write-Output ("promote-queue: {0} price(s) promotable across {1} commodit(ies); {2} term(s) held pending a new id; {3} banned by catalog policy" -f `

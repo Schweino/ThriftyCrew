@@ -28,6 +28,7 @@
 #>
 param([string]$OutDir = '', [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
@@ -39,7 +40,7 @@ if (-not $f) {
   Write-GuardComplete -Name 'hyvee-store-blend' -Summary 'BLIND: no file'
   exit 3
 }
-$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $f.FullName
 $rows = @($doc.deals)
 $want = Get-HyVeeStore -Root $root
 $wantId = [int]$want.store_id

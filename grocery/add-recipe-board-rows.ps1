@@ -62,6 +62,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir)    { $OutDir    = Join-Path $root 'out' }
 if (-not $BoardFile) { $BoardFile = Join-Path $OutDir 'recipe-board-everyday.json' }
@@ -170,7 +171,7 @@ if ($SelfTest) {
       [IO.File]::WriteAllText($f, (ConvertTo-Json $o -Depth 8), (New-Object System.Text.UTF8Encoding($false)))
       return $f
     }
-    function Board { (Get-Content $bf -Raw | ConvertFrom-Json).comparison }
+    function Board { (Read-JsonFile $bf).comparison }
     function Row([string]$id) { @(Board) | Where-Object { $_.id -eq $id } }
     # HASHTABLE SPLAT, NOT AN ARRAY ONE. `& $script @array` binds the elements POSITIONALLY, so
     # '-RowsFile' arrives as the VALUE of $RowsFile and every case dies on "rows file not found:
@@ -235,11 +236,11 @@ $haveIds = @{}; foreach ($r in $bList) { $haveIds[[string]$r.id] = $true }
 $stapleIds = @{}
 $cmp = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
   Where-Object { $_.Name -match '^comparison-\d{4}-\d{2}-\d{2}\.json$' } | Sort-Object Name -Descending | Select-Object -First 1
-if ($cmp) { foreach ($sr in @((Get-Content $cmp.FullName -Raw | ConvertFrom-Json).comparison)) { $stapleIds[[string]$sr.id] = $true } }
+if ($cmp) { foreach ($sr in @((Read-JsonFile $cmp.FullName).comparison)) { $stapleIds[[string]$sr.id] = $true } }
 
 $catLabels = @{}
 $catFile = Join-Path $root 'categories.json'
-if (Test-Path $catFile) { foreach ($c in (Get-Content $catFile -Raw | ConvertFrom-Json).categories) { $catLabels[[string]$c.label] = $true } }
+if (Test-Path $catFile) { foreach ($c in (Read-JsonFile $catFile).categories) { $catLabels[[string]$c.label] = $true } }
 
 # ---- validate + compute every row BEFORE touching the file. Partial-but-safe beats all-or-nothing only when
 # the parts are independent; here one bad row means the caller's evidence is wrong, so the batch is refused.

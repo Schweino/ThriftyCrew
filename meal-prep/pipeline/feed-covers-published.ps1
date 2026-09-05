@@ -47,6 +47,7 @@ param(
   [string]$Root = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
 $repo = Split-Path $mp -Parent
@@ -449,7 +450,7 @@ $costedFile = Join-Path $mp 'db\costed.json'
 $carriageKnown = $false
 if (Test-Path $costedFile) {
   try {
-    foreach ($c in (Get-Content $costedFile -Raw | ConvertFrom-Json)) {
+    foreach ($c in (Read-JsonFile $costedFile)) {
       if (($c.PSObject.Properties.Name -contains 'uncarried') -and @($c.uncarried).Count) { $uncarried[[string]$c.slug] = @($c.uncarried) }
     }
     $carriageKnown = $true

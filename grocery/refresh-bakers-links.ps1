@@ -22,6 +22,7 @@
 #>
 param([string]$CaptureFile = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $today = (Get-Date).ToString('yyyy-MM-dd')
 
@@ -32,7 +33,7 @@ if (-not $CaptureFile) {
   if (-not $cf) { throw 'no bakers-regular capture found' }
   $CaptureFile = $cf.FullName
 }
-$cap = Get-Content $CaptureFile -Raw | ConvertFrom-Json
+$cap = Read-JsonFile $CaptureFile
 if ([string]$cap.source -ne 'kroger-public-api') {
   Write-Output ("refresh-bakers-links: newest capture is not a kroger-api pull (source='" + [string]$cap.source + "') - nothing to refresh from. Skipping (browser-era snapshots stay as they are).")
   exit 0
@@ -48,7 +49,7 @@ Write-Output ("refresh-bakers-links: capture " + (Split-Path $CaptureFile -Leaf)
 
 $puFile = Join-Path $root 'product-urls.json'
 Copy-Item $puFile (Join-Path $root ('out\product-urls.backup-bakersrefresh-' + $today + '.json')) -Force
-$pu = Get-Content $puFile -Raw | ConvertFrom-Json
+$pu = Read-JsonFile $puFile
 
 $hit = 0; $miss = 0; $priceMoved = 0
 foreach ($ip in $pu.items.PSObject.Properties) {

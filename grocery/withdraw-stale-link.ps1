@@ -21,11 +21,12 @@
 #>
 param([Parameter(Mandatory=$true)][array]$Pairs, [string]$Reason = 'board cell moved to a different product; stored link no longer describes it')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $puFile = Join-Path $root 'product-urls.json'
 $bak = Join-Path $root 'out' | Join-Path -ChildPath ('_product-urls-bak-' + (Get-Date -Format 'HHmmss') + '.json')
 Copy-Item $puFile $bak -Force
-$pu = Get-Content $puFile -Raw | ConvertFrom-Json
+$pu = Read-JsonFile $puFile
 $n = 0
 foreach ($pair in $Pairs) {
   $id = [string]$pair[0]; $store = [string]$pair[1]

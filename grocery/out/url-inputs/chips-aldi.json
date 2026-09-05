@@ -1,138 +1,378 @@
 ﻿[
     {
-        "id":  "ground-beef-93-7",
-        "q":  "93 lean ground beef",
-        "match":  "Fresh 93/7 Ground Beef Burgers",
-        "size":  "",
-        "pu":  6.49,
+        "id":  "almond-flour",
+        "q":  "almond-flour",
+        "match":  "Baker S Corner Almond Flour 16 OZ",
+        "size":  "16 oz",
+        "pu":  6.65,
         "unit":  "lb"
+    },
+    {
+        "id":  "apple-juice",
+        "q":  "apple juice",
+        "match":  "Simply Nature 100 Apple Juice 64 FL OZ",
+        "size":  "64 fl oz",
+        "pu":  0.0467,
+        "unit":  "floz"
+    },
+    {
+        "id":  "baby-potatoes",
+        "q":  "baby-potatoes",
+        "match":  "MK Baby Potatoes Medley 1 5 LB",
+        "size":  "24 oz",
+        "pu":  2.1933,
+        "unit":  "lb"
+    },
+    {
+        "id":  "bagels",
+        "q":  "plain bagels",
+        "match":  "L\u0027oven Fresh Pre-sliced Plain Bagels, 6 Count",
+        "size":  "6 ct",
+        "pu":  0.3317,
+        "unit":  "each"
     },
     {
         "id":  "blueberries",
         "q":  "blueberries",
-        "match":  "Blueberries",
+        "match":  "Blueberries Package 1 PT",
         "size":  "1 pt",
         "pu":  0.2312,
         "unit":  "oz"
     },
     {
-        "id":  "cajun-seasoning",
-        "q":  "cajun seasoning",
-        "match":  "Stonemill Cajun Seasoning",
-        "size":  "3.5 oz",
-        "pu":  0.4829,
+        "id":  "chicken-breast",
+        "q":  "boneless skinless chicken breast",
+        "match":  "Kirkwood Boneless Skinless Chicken Breast Fillets Family Pack, Per LB",
+        "size":  "5.0 lb",
+        "pu":  2.19,
+        "unit":  "lb"
+    },
+    {
+        "id":  "bottled-water",
+        "q":  "purified water 24 pack",
+        "match":  "Ozarka Ozarka Natural Spring Water 24pk",
+        "size":  "24 ct",
+        "pu":  0.1996,
+        "unit":  "each"
+    },
+    {
+        "id":  "butternut-squash",
+        "q":  "butternut squash",
+        "match":  "Frey Farms Butternut Squash 1 Each",
+        "size":  "lb",
+        "pu":  1.29,
+        "unit":  "lb"
+    },
+    {
+        "id":  "canned-black-beans",
+        "q":  "black beans",
+        "match":  "Aldi Black Beans 15 OZ",
+        "size":  "15 oz",
+        "pu":  0.0567,
         "unit":  "oz"
     },
     {
-        "id":  "canned-green-chilies",
-        "q":  "diced green chiles",
-        "match":  "Pueblo Lindo Chopped Green Chiles",
-        "size":  "4 oz",
-        "pu":  0.2125,
+        "id":  "cantaloupe",
+        "q":  "cantaloupe",
+        "match":  "Kandy Plus Cantaloupe",
+        "size":  "",
+        "pu":  1.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "cheddar-cheese-curds",
+        "q":  "cheese curds",
+        "match":  "Happy Farms White Cheddar Cheese Curds 12 OZ",
+        "size":  "12 oz",
+        "pu":  0.3575,
         "unit":  "oz"
     },
     {
-        "id":  "cheese-tortellini",
-        "q":  "cheese tortellini",
-        "match":  "Priano Cheese Tortelloni",
-        "size":  "8.8 oz",
-        "pu":  0.1693,
-        "unit":  "oz"
+        "id":  "chicken-broth",
+        "q":  "chicken broth",
+        "match":  "Chef S Cupboard Chicken Broth 32 FL OZ",
+        "size":  "32 oz",
+        "pu":  0.0391,
+        "unit":  "floz"
     },
     {
         "id":  "chicken-thighs",
         "q":  "chicken thighs",
-        "match":  "Kirkwood Family Pack Bone-In Chicken Thighs, per lb",
-        "size":  "per lb",
-        "pu":  1.55,
+        "match":  "Kirkwood Family Pack Bone-In Skin-On Chicken Thighs, Per LB",
+        "size":  "5.15 lb",
+        "pu":  1.5495,
         "unit":  "lb"
     },
     {
-        "id":  "corn-muffin-mix",
-        "q":  "corn muffin mix",
-        "match":  "Jiffy Corn Muffin Mix",
-        "size":  "8.5 oz",
-        "pu":  0.0847,
-        "unit":  "oz"
-    },
-    {
-        "id":  "fruit-snacks",
-        "q":  "fruit snacks",
-        "match":  "Simply Nature Organic Fruit Snacks 12 CT",
-        "size":  "9.6 oz",
-        "pu":  0.4125,
-        "unit":  "each"
-    },
-    {
-        "id":  "fresh-green-beans",
-        "q":  "fresh green beans",
-        "match":  "French Green Beans, Package",
-        "size":  "1 lb",
-        "pu":  2.99,
+        "id":  "chicken-wings",
+        "q":  "chicken wings",
+        "match":  "Farmer Focus NAE FP Whole Chicken Wings",
+        "size":  "2.75 lb",
+        "pu":  1.6909,
         "unit":  "lb"
     },
     {
-        "id":  "hamburger-buns",
-        "q":  "hamburger buns",
-        "match":  "L\u0027oven Fresh Hamburger Buns",
-        "size":  "8 ct",
-        "pu":  0.1737,
+        "id":  "chickpeas",
+        "q":  "garbanzo beans",
+        "match":  "Aldi Garbanzo Beans 15.5 OZ",
+        "size":  "15.5 oz",
+        "pu":  0.0548,
+        "unit":  "oz"
+    },
+    {
+        "id":  "clementines",
+        "q":  "mandarins clementines",
+        "match":  "Mandarin Clementine 3 Lbs",
+        "size":  "3 lb",
+        "pu":  0.9633,
+        "unit":  "lb"
+    },
+    {
+        "id":  "coffee-creamer",
+        "q":  "coffee creamer",
+        "match":  "Friendly Farms Half \u0026 Half Creamer",
+        "size":  "32 fl oz",
+        "pu":  0.0747,
+        "unit":  "floz"
+    },
+    {
+        "id":  "coffee-pods",
+        "q":  "coffee k cups",
+        "match":  "Barissimo Maple Pecan Coffee Cups 12 CT",
+        "size":  "4.02 oz",
+        "pu":  0.3575,
         "unit":  "each"
     },
     {
-        "id":  "hot-dog-buns",
-        "q":  "hot dog buns",
-        "match":  "L\u0027oven Fresh Hot Dog Buns",
-        "size":  "8 ct",
-        "pu":  0.1737,
+        "id":  "coleslaw-mix",
+        "q":  "coleslaw mix",
+        "match":  "Little Salad Bar Classic Coleslaw 14 OZ",
+        "size":  "14 oz",
+        "pu":  0.135,
+        "unit":  "oz"
+    },
+    {
+        "id":  "corn-chips",
+        "q":  "corn chips",
+        "match":  "Clancy S Original Corn Chips 9.25 OZ",
+        "size":  "9.25 oz",
+        "pu":  0.2043,
+        "unit":  "oz"
+    },
+    {
+        "id":  "feta",
+        "q":  "feta cheese crumbled",
+        "match":  "Park Street Deli Greek Feta Salad 7 OZ",
+        "size":  "7 oz",
+        "pu":  0.37,
+        "unit":  "oz"
+    },
+    {
+        "id":  "firm-tofu",
+        "q":  "firm tofu",
+        "match":  "Earth Grown Extra Firm Organic Tofu 14 OZ",
+        "size":  "14 oz",
+        "pu":  0.1064,
+        "unit":  "oz"
+    },
+    {
+        "id":  "frozen-cauliflower-rice",
+        "q":  "frozen-cauliflower-rice",
+        "match":  "Season S Choice Plain Riced Cauliflower 12 OZ",
+        "size":  "12 oz",
+        "pu":  0.1492,
+        "unit":  "oz"
+    },
+    {
+        "id":  "frozen-pizza",
+        "q":  "frozen pizza",
+        "match":  "Mama Cozzi\u0027s Pizza Kitchen Deep Dish Pizza Singles Pepperoni, 4 Count",
+        "size":  "22.4 oz",
+        "pu":  1.7475,
         "unit":  "each"
     },
     {
-        "id":  "potato-gnocchi",
-        "q":  "gnocchi",
-        "match":  "Priano Gnocchi",
-        "size":  "17.6 oz",
-        "pu":  0.1074,
-        "unit":  "oz"
+        "id":  "grapes",
+        "q":  "grapes",
+        "match":  "Red Grapes, Per LB",
+        "size":  "2.25 lb",
+        "pu":  1.6889,
+        "unit":  "lb"
     },
     {
-        "id":  "ranch-seasoning-mix",
-        "q":  "ranch seasoning mix",
-        "match":  "Tuscan Garden Ranch Salad Dressing and Seasoning Mix",
-        "size":  "1 oz",
-        "pu":  0.55,
-        "unit":  "oz"
-    },
-    {
-        "id":  "refrigerated-biscuits",
-        "q":  "refrigerated biscuits",
-        "match":  "Bake House Creations Jumbo Flaky Biscuits",
-        "size":  "16 oz",
-        "pu":  0.1181,
-        "unit":  "oz"
-    },
-    {
-        "id":  "sun-dried-tomatoes",
-        "q":  "sun dried tomatoes",
-        "match":  "Tuscan Garden Sundried Tomatoes",
+        "id":  "gruyere",
+        "q":  "gruyere cheese",
+        "match":  "Happy Farms Preferred Specialty Shredded Swiss Gruyere Cheese 8 OZ",
         "size":  "8 oz",
-        "pu":  0.4988,
+        "pu":  0.3362,
         "unit":  "oz"
     },
     {
-        "id":  "sweet-potatoes",
-        "q":  "sweet potatoes",
-        "match":  "Sweet Potatoes",
-        "size":  "lb",
-        "pu":  1.05,
+        "id":  "laundry-detergent",
+        "q":  "arm and hammer detergent",
+        "match":  "Arm \u0026 Hammer A\u0026H Plus Oxi Deterg 130oz",
+        "size":  "130 oz",
+        "pu":  0.0884,
+        "unit":  "floz"
+    },
+    {
+        "id":  "mangoes",
+        "q":  "mango",
+        "match":  "Mango, Each",
+        "size":  "each",
+        "pu":  1.15,
+        "unit":  "each"
+    },
+    {
+        "id":  "bottled-marinade",
+        "q":  "steak marinade",
+        "match":  "Emporium Selection Fresh Mozzarella IN Marinade 8 OZ",
+        "size":  "8 oz",
+        "pu":  0.4362,
+        "unit":  "floz"
+    },
+    {
+        "id":  "muffins",
+        "q":  "blueberry muffins",
+        "match":  "Bake Shop Banana Nut Muffins 14 OZ",
+        "size":  "4 ct",
+        "pu":  0.9725,
+        "unit":  "each"
+    },
+    {
+        "id":  "oranges",
+        "q":  "navel oranges",
+        "match":  "Navel Orange Bag 3 Lbs",
+        "size":  "3 lb",
+        "pu":  1.13,
         "unit":  "lb"
     },
     {
-        "id":  "taco-seasoning",
-        "q":  "taco seasoning",
-        "match":  "Casa Mamita Taco Seasoning Mix",
-        "size":  "1 oz",
-        "pu":  0.46,
+        "id":  "pancake-mix",
+        "q":  "pancake mix",
+        "match":  "Aunt Maple S Buttermilk Pancake Mix 32 OZ",
+        "size":  "32 oz",
+        "pu":  0.0609,
         "unit":  "oz"
+    },
+    {
+        "id":  "peaches",
+        "q":  "peaches",
+        "match":  "Peach Bag 2 Lbs",
+        "size":  "2 lb",
+        "pu":  1.39,
+        "unit":  "lb"
+    },
+    {
+        "id":  "pickles",
+        "q":  "dill pickle spears",
+        "match":  "Aldi Hamburger Dill Pickle Chips",
+        "size":  "32 fl oz",
+        "pu":  0.0841,
+        "unit":  "oz"
+    },
+    {
+        "id":  "pineapple",
+        "q":  "whole pineapple",
+        "match":  "Del Monte Pineapples Per LB",
+        "size":  "1 ct",
+        "pu":  1.89,
+        "unit":  "each"
+    },
+    {
+        "id":  "protein-bars",
+        "q":  "protein bars",
+        "match":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bar 6 CT",
+        "size":  "5 oz",
+        "pu":  0.4817,
+        "unit":  "each"
+    },
+    {
+        "id":  "red-wine",
+        "q":  "red wine",
+        "match":  "Winking Owl Cabernet Sauvignon Red Wine 750 ML",
+        "size":  "750 ml",
+        "pu":  0.1558,
+        "unit":  "floz"
+    },
+    {
+        "id":  "sea-salt",
+        "q":  "sea salt",
+        "match":  "Moser Roth Dark Sea Salt 4.4 OZ",
+        "size":  "4.4 oz",
+        "pu":  0.6795,
+        "unit":  "oz"
+    },
+    {
+        "id":  "shrimp",
+        "q":  "frozen raw shrimp",
+        "match":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+        "size":  "11.5 oz",
+        "pu":  7.36,
+        "unit":  "lb"
+    },
+    {
+        "id":  "soda",
+        "q":  "cola 12 pack",
+        "match":  "Summit Citrus Twist Lemon Lime Soda, 12 Pack",
+        "size":  "12 pk 12 fl oz",
+        "pu":  0.0263,
+        "unit":  "floz"
+    },
+    {
+        "id":  "soy-sauce",
+        "q":  "soy sauce",
+        "match":  "Burman\u0027s Reduced Sodium Soy Sauce",
+        "size":  "15 fl oz",
+        "pu":  0.11,
+        "unit":  "floz"
+    },
+    {
+        "id":  "spaghetti-squash",
+        "q":  "spaghetti squash",
+        "match":  "Spaghetti Squash LB",
+        "size":  "lb",
+        "pu":  1.29,
+        "unit":  "lb"
+    },
+    {
+        "id":  "spinach",
+        "q":  "fresh spinach",
+        "match":  "L Oven Fresh Spinach Wraps 15 OZ",
+        "size":  "15 oz",
+        "pu":  0.2233,
+        "unit":  "oz"
+    },
+    {
+        "id":  "quinoa-uncooked",
+        "q":  "quinoa",
+        "match":  "Simply Nature Organic Quinoa 16 OZ",
+        "size":  "16 oz",
+        "pu":  0.2094,
+        "unit":  "oz"
+    },
+    {
+        "id":  "white-vinegar",
+        "q":  "distilled white vinegar",
+        "match":  "Woeber S White Vinegar Distilled 5 Acidity 1 GL",
+        "size":  "128 fl oz",
+        "pu":  0.0296,
+        "unit":  "floz"
+    },
+    {
+        "id":  "white-wine",
+        "q":  "white wine",
+        "match":  "Winking Owl Moscato White Wine 750 ML",
+        "size":  "750 ml",
+        "pu":  0.1558,
+        "unit":  "floz"
+    },
+    {
+        "id":  "onions",
+        "q":  "yellow onion",
+        "match":  "Vidalia Onions",
+        "size":  "3 lb",
+        "pu":  0.7967,
+        "unit":  "lb"
     }
 ]

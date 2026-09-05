@@ -40887,6 +40887,642 @@
      "portions": []
     }
    ]
+  },
+  "fresh black pepper": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 170931,
+     "description": "Spices, pepper, black",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 3.26,
+      "carbs_g": 64.0,
+      "calories": 251.0,
+      "protein_g": 10.4,
+      "fiber_g": 25.3
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172232,
+     "description": "Basil, fresh",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.64,
+      "carbs_g": 2.65,
+      "calories": 23.0,
+      "fiber_g": 1.6,
+      "protein_g": 3.15
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 170416,
+     "description": "Parsley, fresh",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "carbs_g": 6.33,
+      "calories": 36.0,
+      "fat_g": 0.79,
+      "protein_g": 2.97,
+      "fiber_g": 3.3
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 173474,
+     "description": "Peppermint, fresh",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 3.75,
+      "fiber_g": 8.0,
+      "fat_g": 0.94,
+      "carbs_g": 14.9,
+      "calories": 70.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "italian herb blend seasoning": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 174913,
+     "description": "Bread, Italian",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 9.49,
+      "fiber_g": 2.1,
+      "fat_g": 2.73,
+      "carbs_g": 48.1,
+      "calories": 259.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 174156,
+     "description": "Beverages, tea, herb, brewed, chamomile",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 0.0,
+      "protein_g": 0.0,
+      "fat_g": 0.0,
+      "carbs_g": 0.2,
+      "calories": 1.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 174603,
+     "description": "Salami, Italian, pork",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 37.0,
+      "carbs_g": 1.2,
+      "protein_g": 21.7,
+      "fiber_g": 0.0,
+      "calories": 425.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172752,
+     "description": "Croutons, seasoned",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 5.0,
+      "protein_g": 10.8,
+      "fat_g": 18.3,
+      "carbs_g": 63.5,
+      "calories": 465.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "cube stuffing": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 171561,
+     "description": "Soup, beef broth, cubed, dry",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 4.0,
+      "carbs_g": 16.1,
+      "calories": 170.0,
+      "protein_g": 17.3,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171563,
+     "description": "Soup, chicken broth cubes, dry",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 4.7,
+      "carbs_g": 23.5,
+      "calories": 198.0,
+      "protein_g": 14.6,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172923,
+     "description": "Soup, beef broth, cubed, prepared with water",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.08,
+      "carbs_g": 0.25,
+      "calories": 3.0,
+      "protein_g": 0.21,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171613,
+     "description": "Soup, bouillon cubes and granules, low sodium, dry",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "carbs_g": 64.9,
+      "calories": 438.0,
+      "protein_g": 16.7,
+      "fiber_g": 0.2,
+      "fat_g": 13.9
+     },
+     "portions": []
+    }
+   ]
+  },
+  "chicken or vegetable broth": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 171180,
+     "description": "Soup, SWANSON, vegetable broth",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.07,
+      "carbs_g": 1.02,
+      "calories": 6.0,
+      "protein_g": 0.23,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171110,
+     "description": "Chicken, canned, no broth",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 8.1,
+      "carbs_g": 0.9,
+      "calories": 185.0,
+      "protein_g": 25.3,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171583,
+     "description": "Soup, vegetable broth, ready to serve",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 0.24,
+      "fiber_g": 0.0,
+      "fat_g": 0.07,
+      "carbs_g": 0.93,
+      "calories": 5.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171164,
+     "description": "Soup, vegetable with beef broth, canned, condensed",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 1.56,
+      "carbs_g": 10.7,
+      "calories": 66.0,
+      "protein_g": 2.42,
+      "fiber_g": 1.3
+     },
+     "portions": []
+    }
+   ]
+  },
+  "celery stalks": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 169331,
+     "description": "Broccoli, stalks, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.35,
+      "carbs_g": 5.24,
+      "calories": 28.0,
+      "protein_g": 2.98
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169988,
+     "description": "Celery, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "calories": 14.0,
+      "carbs_g": 2.97,
+      "fat_g": 0.17,
+      "fiber_g": 1.6,
+      "protein_g": 0.69
+     },
+     "portions": []
+    }
+   ]
+  },
+  "dried cranberries": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 171723,
+     "description": "Cranberries, dried, sweetened (Includes foods for USDA's Food Distribution Program)",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "calories": 308.0,
+      "fiber_g": 5.3,
+      "protein_g": 0.17,
+      "fat_g": 1.09,
+      "carbs_g": 82.8
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169087,
+     "description": "Litchis, dried",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "calories": 277.0,
+      "protein_g": 3.8,
+      "fiber_g": 4.6,
+      "fat_g": 1.2,
+      "carbs_g": 70.7
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169907,
+     "description": "Longans, dried",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.4,
+      "carbs_g": 74.0,
+      "calories": 286.0,
+      "protein_g": 4.9
+     },
+     "portions": []
+    }
+   ]
+  },
+  "large bell peppers": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 2079108,
+     "description": "BELL PEPPERS",
+     "data_type": "Branded",
+     "brand": "Pero Family Farms Food Company LLC",
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 1.18,
+      "fat_g": 0.0,
+      "carbs_g": 4.71,
+      "calories": 18.0,
+      "fiber_g": 1.2
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 2590026,
+     "description": "BELL PEPPER & ONION SAUSAGE, BELL PEPPER & ONION",
+     "data_type": "Branded",
+     "brand": "Sunset Farm Foods Inc.",
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 16.1,
+      "fat_g": 26.8,
+      "carbs_g": 0.0,
+      "calories": 304.0,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 2020513,
+     "description": "BELL PEPPER ZESTY RELISH, BELL PEPPER ZESTY",
+     "data_type": "Branded",
+     "brand": "G L Mezzetta, Inc.",
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 0.0,
+      "fat_g": 0.0,
+      "carbs_g": 31.6,
+      "calories": 132.0,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 2654859,
+     "description": "BELL PEPPERS + CHIPOTLE GUACAMOLE, BELL PEPPERS + CHIPOTLE",
+     "data_type": "Branded",
+     "brand": "Lenovo (Beijing) Co., Ltd.",
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 3.33,
+      "fat_g": 20.0,
+      "carbs_g": 6.67,
+      "calories": 200.0,
+      "fiber_g": 3.3
+     },
+     "portions": []
+    }
+   ]
+  },
+  "lean ground turkey": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 174493,
+     "description": "Turkey, ground, 85% lean, 15% fat, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 12.5,
+      "protein_g": 16.9,
+      "fiber_g": 0.0,
+      "carbs_g": 0.0,
+      "calories": 180.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172850,
+     "description": "Turkey, ground, 93% lean, 7% fat, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 0.0,
+      "protein_g": 18.7,
+      "fat_g": 8.34,
+      "carbs_g": 0.0,
+      "calories": 150.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 174495,
+     "description": "Turkey, ground, 85% lean, 15% fat, patties, broiled",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 16.2,
+      "protein_g": 25.9,
+      "fiber_g": 0.0,
+      "carbs_g": 0.0,
+      "calories": 249.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "fire roasted diced tomatoes": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 170713,
+     "description": "SUBWAY, roast beef sub on white bread with lettuce and tomato",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 12.2,
+      "fiber_g": 0.7,
+      "fat_g": 2.73,
+      "carbs_g": 20.3,
+      "calories": 155.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 170314,
+     "description": "SUBWAY, oven roasted chicken sub on white bread with lettuce and tomato",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 10.8,
+      "fiber_g": 1.2,
+      "fat_g": 3.15,
+      "carbs_g": 21.4,
+      "calories": 157.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169777,
+     "description": "Spanish rice mix, dry mix, prepared (with canola/vegetable oil blend or diced tomatoes and margarine)",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 3.27,
+      "fiber_g": 1.5,
+      "fat_g": 2.38,
+      "carbs_g": 22.7,
+      "calories": 125.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 333281,
+     "description": "Tomatoes, canned, red, ripe, diced",
+     "data_type": "Foundation",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.5,
+      "protein_g": 0.84,
+      "carbs_g": 3.32,
+      "calories": 18.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "cooked quinoa": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 168917,
+     "description": "Quinoa, cooked",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 4.4,
+      "fiber_g": 2.8,
+      "fat_g": 1.92,
+      "carbs_g": 21.3,
+      "calories": 120.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168874,
+     "description": "Quinoa, uncooked",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 7.0,
+      "protein_g": 14.1,
+      "fat_g": 6.07,
+      "carbs_g": 64.2,
+      "calories": 368.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172027,
+     "description": "Pasta, gluten-free, corn flour and quinoa flour, cooked, ANCIENT HARVEST",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 3.23,
+      "fiber_g": 3.3,
+      "fat_g": 2.07,
+      "carbs_g": 31.1,
+      "calories": 152.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "shredded low-moisture mozzarella": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 170900,
+     "description": "Cheese, mozzarella, low moisture, part-skim, shredded",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 19.7,
+      "carbs_g": 8.06,
+      "calories": 304.0,
+      "protein_g": 23.6,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171244,
+     "description": "Cheese, mozzarella, low moisture, part-skim",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 0.0,
+      "protein_g": 23.8,
+      "fat_g": 19.8,
+      "carbs_g": 5.58,
+      "calories": 295.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 170846,
+     "description": "Cheese, mozzarella, whole milk, low moisture",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 0.0,
+      "protein_g": 21.6,
+      "fat_g": 24.6,
+      "carbs_g": 2.47,
+      "calories": 318.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 329370,
+     "description": "Cheese, mozzarella, low moisture, part-skim",
+     "data_type": "Foundation",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 23.7,
+      "fat_g": 20.4,
+      "carbs_g": 4.44,
+      "calories": 298.0
+     },
+     "portions": []
+    }
+   ]
   }
  }
 }

@@ -41,6 +41,8 @@ $script:TcRuleD     = '#ddd6c2'   # letterpress bottom rule
 # (grocery\stores.json, per the stores-registry rule) so adding an eighth store is one edit in one file.
 # The fallback map exists only so a builder outside the grocery tree still renders; it names ALL seven
 # stores on purpose (audit-store-registry.ps1 flags any list that names >=3 but not all of them).
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Get-TcStoreAccents {
   $fallback = [ordered]@{
     'Hy-Vee'='#c4342c'; 'Aldi'='#1b64b0'; 'Family Fare'='#2e7d43'; 'Fareway'='#7b3fa0';
@@ -49,7 +51,7 @@ function Get-TcStoreAccents {
   $f = Join-Path $PSScriptRoot '..\grocery\stores.json'
   if (-not (Test-Path $f)) { return $fallback }
   try {
-    $reg = Get-Content $f -Raw | ConvertFrom-Json
+    $reg = Read-JsonFile $f
     $out = [ordered]@{}
     foreach ($s in ($reg.stores | Sort-Object order)) {
       $n = [string]$s.name

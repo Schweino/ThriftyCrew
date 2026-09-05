@@ -51,6 +51,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
@@ -79,7 +80,7 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
   if ($WhatIf) { return }
   try {
     $doc = @{}
-    if (Test-Path $script:StatusFile) { try { (Get-Content $script:StatusFile -Raw | ConvertFrom-Json).PSObject.Properties | ForEach-Object { $doc[$_.Name] = $_.Value } } catch { } }
+    if (Test-Path $script:StatusFile) { try { (Read-JsonFile $script:StatusFile).PSObject.Properties | ForEach-Object { $doc[$_.Name] = $_.Value } } catch { } }
     $doc[$Kind] = [ordered]@{
       date = $todayS; pid = $PID; started = $script:RunStart.ToString('s'); updated = (Get-Date).ToString('s')
       stage = $Stage; exit_code = $ExitCode; log = [string]$runLog
@@ -689,7 +690,7 @@ $verdictSeen = $false
 try {
   $vf = Join-Path $OutDir 'chain-verdict.json'
   if (Test-Path $vf) {
-    $v = Get-Content $vf -Raw | ConvertFrom-Json
+    $v = Read-JsonFile $vf
     if ([string]$v.date -eq $todayS) { $verdictSeen = $true; $guardsBlocked = [bool]$v.guards_blocked }
   }
 } catch { Write-Output ('chain-verdict unreadable: ' + $_.Exception.Message) }
@@ -1060,7 +1061,7 @@ if ($shipServed -and $pushed) {
 # ask by NAME whether every published recipe is in it. Only meaningful after the chain ran.
 if ($runDownstream) {
   try {
-    $feed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw | ConvertFrom-Json
+    $feed = Read-JsonFile (Join-Path $repo 'public\smp-feed.json')
     $problems = New-Object System.Collections.Generic.List[string]
     $gen = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
     if ($gen -ne $today) { [void]$problems.Add("smp-feed.generated is $gen, expected $today") }

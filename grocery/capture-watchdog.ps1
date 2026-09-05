@@ -23,6 +23,7 @@
 param([switch]$Alert, [string]$OutDir = '', [string]$Today = '', [switch]$SelfTest)
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
@@ -411,7 +412,7 @@ foreach ($name in $TASKS) {
 $statusF = Join-Path $OutDir 'logs\capture-run-status.json'
 if (Test-Path $statusF) {
   try {
-    $st = Get-Content $statusF -Raw | ConvertFrom-Json
+    $st = Read-JsonFile $statusF
     foreach ($kind in @('ad', 'daily')) {
       $r = $st.$kind
       if (-not $r) { continue }

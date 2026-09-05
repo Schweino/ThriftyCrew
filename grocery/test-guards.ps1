@@ -5,6 +5,7 @@
 #>
 param([switch]$SelfTest, [switch]$AllowLiveTree)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = $PSScriptRoot
 $pass = 0; $failed = 0
@@ -700,7 +701,7 @@ if (Test-Path $of) {
     $ndFxBak = Backup $ndFx
     $ndFxScanned = @{}
     foreach ($k in @(($ndFxBak | ConvertFrom-Json).examined_cells)) { if ($k) { $ndFxScanned[[string]$k] = $true } }
-    $ndFxCand = @(@((Get-Content $of -Raw | ConvertFrom-Json).cells) | Where-Object { $ndFxScanned.ContainsKey([string]$_.id + '|' + [string]$_.store) })
+    $ndFxCand = @(@((Read-JsonFile $of).cells) | Where-Object { $ndFxScanned.ContainsKey([string]$_.id + '|' + [string]$_.store) })
     $ndFxFired = $false
     if ($ndFxCand.Count -gt 0) {
       $pfx = Join-Path $root 'product-urls.json'
@@ -711,7 +712,7 @@ if (Test-Path $of) {
         ($pfxDoc | ConvertTo-Json -Depth 8) | Set-Content $pfx -Encoding UTF8
         & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
         $ndFxKey = [string]$ndFxPin.id + '|' + [string]$ndFxPin.store
-        $ndFxNow = try { (Get-Content $ndFx -Raw | ConvertFrom-Json) } catch { $null }
+        $ndFxNow = try { (Read-JsonFile $ndFx) } catch { $null }
         $ndFxHit = @(@($ndFxNow.flags) | Where-Object { $_ -and ([string]$_.id + '|' + [string]$_.store) -eq $ndFxKey }).Count
         if ($ndFxHit -gt 0) {
           Check ('pin: ' + $ndFxKey + ' pinned to a link that is now a DIFFERENT product') 2 'pin derived from a WRONG-PRODUCT link'
@@ -746,7 +747,7 @@ foreach ($g6Grp in (@($g6All | Group-Object { ($_.BaseName -replace '-regular-.*
   if ($g6Ord.Count -lt 2) { continue }
   $g6Best = 0
   foreach ($g6Old in ($g6Ord | Select-Object -Skip 1 -First 4)) {
-    try { $g6N = @((Get-Content $g6Old.FullName -Raw | ConvertFrom-Json).deals).Count; if ($g6N -gt $g6Best) { $g6Best = $g6N } } catch {}
+    try { $g6N = @((Read-JsonFile $g6Old.FullName).deals).Count; if ($g6N -gt $g6Best) { $g6Best = $g6N } } catch {}
   }
   if ($g6Best -gt 100) { $g6Pick = $g6Ord[0]; break }
 }
@@ -826,7 +827,7 @@ $g18Rep = Join-Path $root 'out\coverage-regression.json'
 if (Test-Path $g18Rep) { $null = Backup $g18Rep }   # the audit rewrites its own report; put it back too
 $g18Acked = @{}
 $g18AckF = Join-Path $root 'out\coverage-ack.json'
-if (Test-Path $g18AckF) { foreach ($g18A in @((Get-Content $g18AckF -Raw | ConvertFrom-Json).acks)) { if ($g18A.store) { $g18Acked[[string]$g18A.store] = $true } } }
+if (Test-Path $g18AckF) { foreach ($g18A in @((Read-JsonFile $g18AckF).acks)) { if ($g18A.store) { $g18Acked[[string]$g18A.store] = $true } } }
 $g18Doc = $g18Bak | ConvertFrom-Json
 $g18Count = @{}
 foreach ($g18R in $g18Doc.comparison) { foreach ($g18S in $g18R.stores) { $g18K = [string]$g18S.store; $g18Count[$g18K] = 1 + [int]$g18Count[$g18K] } }
@@ -903,7 +904,7 @@ if (-not $g20F) {
   # The mutated row must be one the BOARD ACTUALLY PRICED, or the gate correctly says nothing and the
   # case passes vacuously - the "SKIP is a failure" rule this suite already enforces, applied to a join.
   $g20Cmp = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
-  $g20Board = Get-Content $g20Cmp.FullName -Raw | ConvertFrom-Json
+  $g20Board = Read-JsonFile $g20Cmp.FullName
   . (Join-Path $root 'match-lib.ps1')     # Get-MatchTexts - the same normalisation the gate joins on
   $g20Want = @{}
   foreach ($g20Row in @($g20Board.comparison)) {

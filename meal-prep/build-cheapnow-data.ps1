@@ -5,6 +5,7 @@
 # /*CN-DATA*/ ... /*CN-END*/ markers. Prints per-threshold counts at baked
 # (fallback) prices so you can sanity-check before publishing.
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 # $PSScriptRoot, not a hard-coded path (2026-09-01): this now runs from the daily chain, and the cloud
 # runner's checkout is not C:\Codex.
 $dir  = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep' }
@@ -12,7 +13,7 @@ $tool = Join-Path (Split-Path $dir -Parent) 'site\tools\cheap-dinners-tool.html'
 $db = (Get-Content "$dir\recipes-db.json" -Raw).TrimStart([char]0xFEFF) | ConvertFrom-Json
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}
-try { (Get-Content (Join-Path $dir 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
+try { (Read-JsonFile (Join-Path $dir 'pipeline\v2-perserving.json')) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
 
 # ---- recipes: compact constants (fallback costs baked in; live feed overrides at runtime) ----
 $recs = @()

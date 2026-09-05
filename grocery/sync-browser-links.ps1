@@ -17,6 +17,7 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 $today = (Get-Date -Format 'yyyy-MM-dd')
@@ -27,7 +28,7 @@ $regGlob = @{ "Walmart"='walmart-regular-*.json'; "Sam's Club"='sams-regular-*.j
 $cmp = Get-Content (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName -Raw | ConvertFrom-Json
 $units = @{}; foreach ($it in $cmp.comparison) { $units[[string]$it.id] = [string]$it.unit }
 $puF = Join-Path $root 'product-urls.json'
-$doc = Get-Content $puF -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $puF
 
 $set = 0; $healed = 0; $ambig = 0; $log = New-Object System.Collections.Generic.List[string]
 foreach ($store in @('Walmart', "Sam's Club", "Baker's")) {
@@ -42,7 +43,7 @@ foreach ($store in @('Walmart', "Sam's Club", "Baker's")) {
   # were the others, both fixed 2026-07-16). ALWAYS SUSPECT A DICTIONARY KEYED BY A PRODUCT NAME.
   $rowByName = @{}
   $rowSizes = @{}
-  foreach ($r in (Get-Content $rf.FullName -Raw | ConvertFrom-Json).deals) {
+  foreach ($r in (Read-JsonFile $rf.FullName).deals) {
     $rn = ([string]$r.item).Trim()
     $rowByName[$rn + '|' + ([string]$r.size).Trim()] = $r
     if (-not $rowSizes.ContainsKey($rn)) { $rowSizes[$rn] = @() }

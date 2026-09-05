@@ -59,6 +59,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
 $repo = Split-Path -Parent $mp
@@ -125,7 +126,7 @@ if ($SelfTest) {
       (ConvertTo-Json ([ordered]@{ 'keep-me' = 'h1'; 'drop-me' = 'h2'; 'keep-two' = 'h3' }) -Depth 4), $UTF8)
 
     function Run([hashtable]$p) { $o = & $PSCommandPath @p; return @{ rc = $LASTEXITCODE; out = ($o -join ' | ') } }
-    function Rdb { $d = (Get-Content (Join-Path $t 'recipes-db.json') -Raw | ConvertFrom-Json); return $d.recipes }
+    function Rdb { $d = (Read-JsonFile (Join-Path $t 'recipes-db.json')); return $d.recipes }
 
     # MUST FIRE: a dry run proves the whole thing and writes nothing.
     $b4 = Get-Content (Join-Path $t 'recipes-db.json') -Raw
@@ -150,12 +151,12 @@ if ($SelfTest) {
     T '  ...and the neighbours are byte-identical' (([string]($after | Where-Object { $_.slug -eq 'keep-me' }).name -eq 'Keep Me') -and ([string]($after | Where-Object { $_.slug -eq 'keep-two' }).visibility -eq 'public')) 'a surviving row changed'
     T '  ...and the spec file is gone' (-not (Test-Path (Join-Path $t 'db\recipes\drop-me.json'))) 'spec survived'
     T '  ...and the built card is gone' (-not (Test-Path (Join-Path $t 'db\built\drop-me.body.html'))) 'card survived'
-    T '  ...and the propagate stamp is gone' ($null -eq ((Get-Content (Join-Path $t 'pipeline\propagate-stamps.json') -Raw | ConvertFrom-Json).'drop-me')) 'stamp survived'
+    T '  ...and the propagate stamp is gone' ($null -eq ((Read-JsonFile (Join-Path $t 'pipeline\propagate-stamps.json')).'drop-me')) 'stamp survived'
     # THE RECORD THAT THE PAGE IS LIVE MUST GO TOO. Missed by the first cut: steps 1-5 removed
     # everything that DESCRIBED the recipe and left published-hashes saying it was live, so
     # feed-covers-published kept reporting the retired slug as SLUG_MISSING against a page that no
     # longer exists. Reproduced on two separate retirements before it was identified.
-    $phAfter = (Get-Content (Join-Path $t 'db\published-hashes.json') -Raw | ConvertFrom-Json)
+    $phAfter = (Read-JsonFile (Join-Path $t 'db\published-hashes.json'))
     T '  ...and the published-hashes entry is gone' ($null -eq $phAfter.'drop-me') 'the retired page still claims to be published'
     T '  ...and the OTHER published hashes survive' (([string]$phAfter.'keep-me' -eq 'h1') -and ([string]$phAfter.'keep-two' -eq 'h3')) 'took a neighbour down with it'
     T '  ...and the OTHER specs and cards are untouched' ((Test-Path (Join-Path $t 'db\recipes\keep-me.json')) -and (Test-Path (Join-Path $t 'db\built\keep-two.body.html'))) 'collateral damage'
@@ -175,7 +176,7 @@ if ($SelfTest) {
     [IO.File]::WriteAllText((Join-Path $t 'db\recipes\built-only.json'), '{"slug":"built-only"}', $UTF8)
     [IO.File]::WriteAllText((Join-Path $t 'db\built\built-only.body.html'), '<p>card</p>', $UTF8)
     [IO.File]::WriteAllText((Join-Path $t 'db\built\built-only.head.html'), '<meta>', $UTF8)
-    $st = (Get-Content (Join-Path $t 'pipeline\propagate-stamps.json') -Raw | ConvertFrom-Json)
+    $st = (Read-JsonFile (Join-Path $t 'pipeline\propagate-stamps.json'))
     $st | Add-Member -NotePropertyName 'built-only' -NotePropertyValue 'ddd' -Force
     [IO.File]::WriteAllText((Join-Path $t 'pipeline\propagate-stamps.json'), (ConvertTo-Json $st -Depth 4), $UTF8)
 
@@ -187,7 +188,7 @@ if ($SelfTest) {
     T '-NeverPublished removes the spec' ($r.rc -eq 0 -and -not (Test-Path (Join-Path $t 'db\recipes\built-only.json'))) $r.out
     T '  ...and BOTH built cards' (-not (Test-Path (Join-Path $t 'db\built\built-only.body.html')) -and -not (Test-Path (Join-Path $t 'db\built\built-only.head.html'))) $r.out
     T '  ...and the propagate stamp' `
-      (-not ((Get-Content (Join-Path $t 'pipeline\propagate-stamps.json') -Raw | ConvertFrom-Json).PSObject.Properties.Name -contains 'built-only')) $r.out
+      (-not ((Read-JsonFile (Join-Path $t 'pipeline\propagate-stamps.json')).PSObject.Properties.Name -contains 'built-only')) $r.out
     T '  ...and it does NOT touch recipes-db, which never mentioned it' ((Rdb).Count -eq 2) ([string](Rdb).Count)
     T '  ...and the OTHER specs and cards are untouched' `
       ((Test-Path (Join-Path $t 'db\recipes\keep-me.json')) -and (Test-Path (Join-Path $t 'db\built\keep-two.body.html'))) $r.out
@@ -199,7 +200,7 @@ if ($SelfTest) {
     T '  ...and it left that recipe entirely alone' ((Rdb).Count -eq 2 -and (Test-Path (Join-Path $t 'db\recipes\keep-me.json'))) ([string](Rdb).Count)
 
     [IO.File]::WriteAllText((Join-Path $t 'db\recipes\once-live.json'), '{"slug":"once-live"}', $UTF8)
-    $ph = (Get-Content (Join-Path $t 'db\published-hashes.json') -Raw | ConvertFrom-Json)
+    $ph = (Read-JsonFile (Join-Path $t 'db\published-hashes.json'))
     $ph | Add-Member -NotePropertyName 'once-live' -NotePropertyValue 'h9' -Force
     [IO.File]::WriteAllText((Join-Path $t 'db\published-hashes.json'), (ConvertTo-Json $ph -Depth 4), $UTF8)
     $r = Run @{ Slug = 'once-live'; Reason = 'wrong tool'; Root = $t; SkipGhost = $true; NeverPublished = $true; Apply = $true }
@@ -354,7 +355,7 @@ Say ("  reason: " + $Reason)
 Say ("  recipes-db row   : present (" + $rdbBefore.Count + " rows) - published " + [string]$row[0].published + ", visibility " + [string]$row[0].visibility)
 Say ("  spec file        : " + $(if (Test-Path $specPath) { 'present' } else { 'ABSENT' }))
 Say ("  built card(s)    : " + $cards.Count)
-Say ("  propagate stamp  : " + $(if ((Test-Path $stampPath) -and (($stampPath | ForEach-Object { (Get-Content $_ -Raw | ConvertFrom-Json) }).PSObject.Properties.Name -contains $Slug)) { 'present' } else { 'absent' }))
+Say ("  propagate stamp  : " + $(if ((Test-Path $stampPath) -and (($stampPath | ForEach-Object { (Read-JsonFile $_) }).PSObject.Properties.Name -contains $Slug)) { 'present' } else { 'absent' }))
 
 # prove the recipes-db edit BEFORE anything irreversible happens
 try { $rdbNew = Remove-JsonArrayRow -Raw $rdbRaw -KeyField 'slug' -KeyValue $Slug } catch { Die ('recipes-db edit could not be proved: ' + $_.Exception.Message) }

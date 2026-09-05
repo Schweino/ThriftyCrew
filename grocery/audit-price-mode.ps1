@@ -25,6 +25,7 @@
 param([string]$RegularDir = '')
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 if (-not $RegularDir) { $RegularDir = Join-Path $root 'out\regular' }
 
@@ -42,7 +43,7 @@ $files = Get-ChildItem (Join-Path $RegularDir '*-regular-*.json') |
   ForEach-Object { $_.Group | Sort-Object Name -Descending | Select-Object -First 1 }
 
 foreach ($f in $files) {
-  $d = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $d = Read-JsonFile $f.FullName
   $store = [string]$d.store
   $mode  = [string]$d.price_mode
   $ver   = [string]$d.mode_verified

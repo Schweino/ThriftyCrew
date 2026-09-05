@@ -56,6 +56,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 $outDir = Join-Path $Root 'out'
 
@@ -115,7 +116,7 @@ if (-not $board) { Say ("SHELF-SIGNAL BLIND: " + $cmp[0].Name + ' would not pars
 $sig = @{}
 $files = @(Get-ChildItem (Join-Path $outDir 'regular\walmart-regular-*.json') -ErrorAction SilentlyContinue | Sort-Object Name)
 foreach ($f in $files) {
-  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+  try { $d = Read-JsonFile $f.FullName } catch { continue }
   foreach ($r in @($d.deals)) {
     if (-not $r) { continue }
     $n = [string]$r.item

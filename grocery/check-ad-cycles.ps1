@@ -36,6 +36,7 @@ param(
   [switch]$Sequential
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 $script:CadenceRoot = Split-Path $root -Parent          # repo root, for input globs
@@ -297,26 +298,26 @@ function Invoke-Bounded([string]$Name, [string[]]$Arguments, [int]$TimeoutSec = 
 function BoardSignature() {
   $cf = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   if (-not $cf) { return '' }
-  $cmp = (Get-Content $cf.FullName -Raw | ConvertFrom-Json).comparison
+  $cmp = (Read-JsonFile $cf.FullName).comparison
   $parts = @()
   foreach ($it in $cmp) { foreach ($s in $it.stores) { $parts += ('{0}|{1}|{2}|{3}' -f $it.id, $s.store, $s.per_unit, $s.type) } }
   # Fold each store's CURRENT ad window into the signature so a same-price ad repost with a NEW window still
   # triggers a republish - otherwise a "Sale thru <date>" badge could show an expired date after the window
   # rolls (the badge is recomputed from the ad window at build time).
-  try { $sc = Get-Content $ScheduleFile -Raw | ConvertFrom-Json; foreach ($s in @($sc.stores)) { if ($s.current -and $s.current.to) { $parts += ('WIN|{0}|{1}|{2}' -f $s.store, $s.current.from, $s.current.to) } } } catch {}
+  try { $sc = Read-JsonFile $ScheduleFile; foreach ($s in @($sc.stores)) { if ($s.current -and $s.current.to) { $parts += ('WIN|{0}|{1}|{2}' -f $s.store, $s.current.from, $s.current.to) } } } catch {}
   # also hash the recipe board (everyday floors + any overlaid ad-sales) so a recipe-item sale starting or
   # ending triggers a republish too.
-  try { $rbf = Join-Path $OutDir 'recipe-board.json'; if (Test-Path $rbf) { $rb = (Get-Content $rbf -Raw | ConvertFrom-Json).comparison; foreach ($it in $rb) { foreach ($s in $it.stores) { $parts += ('R|{0}|{1}|{2}|{3}' -f $it.id, $s.store, $s.per_unit, $s.type) } } } } catch {}
+  try { $rbf = Join-Path $OutDir 'recipe-board.json'; if (Test-Path $rbf) { $rb = (Read-JsonFile $rbf).comparison; foreach ($it in $rb) { foreach ($s in $it.stores) { $parts += ('R|{0}|{1}|{2}|{3}' -f $it.id, $s.store, $s.per_unit, $s.type) } } } } catch {}
   # and the VERIFIED board when present - publish PREFERS it, so a verdicts-only change (a wrong-product
   # winner dropped mid-week with no raw price move) must also count as a board change or it never ships.
-  try { if ($cf) { $wkS = (Get-Content $cf.FullName -Raw | ConvertFrom-Json).week_of; $vf = Join-Path $OutDir ("verified-" + $wkS + ".json"); if (Test-Path $vf) { $vb = (Get-Content $vf -Raw | ConvertFrom-Json).comparison; foreach ($it in $vb) { foreach ($s in $it.stores) { $parts += ('V|{0}|{1}|{2}' -f $it.id, $s.store, $s.per_unit) } } } } } catch {}
+  try { if ($cf) { $wkS = (Read-JsonFile $cf.FullName).week_of; $vf = Join-Path $OutDir ("verified-" + $wkS + ".json"); if (Test-Path $vf) { $vb = (Read-JsonFile $vf).comparison; foreach ($it in $vb) { foreach ($s in $it.stores) { $parts += ('V|{0}|{1}|{2}' -f $it.id, $s.store, $s.per_unit) } } } } } catch {}
   $joined = ($parts | Sort-Object) -join ';'
   $md5 = [System.Security.Cryptography.MD5]::Create()
   $bytes = $md5.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($joined))
   return ([BitConverter]::ToString($bytes) -replace '-','')
 }
 
-$sched  = Get-Content $ScheduleFile -Raw | ConvertFrom-Json
+$sched  = Read-JsonFile $ScheduleFile
 $stores = @($sched.stores)
 $summary = @()
 $flips = @()
@@ -386,7 +387,7 @@ if ($serverDue) {
         $pullRan = $true   # the child was launched and returned; health is judged separately, just below
         # Assert a FRESH, today-dated ads file with >=1 PASS store. If the pull crashed before writing
         # today's file, this stays false (we do NOT trust yesterday's ads-*.json) -> retry -> HARD FAILURE.
-        if (Test-Path $adsToday) { $vv = @((Get-Content $adsToday -Raw | ConvertFrom-Json).verification); if (@($vv | Where-Object { $_.status -eq 'PASS' }).Count -gt 0) { $pullOk = $true } }
+        if (Test-Path $adsToday) { $vv = @((Read-JsonFile $adsToday).verification); if (@($vv | Where-Object { $_.status -eq 'PASS' }).Count -gt 0) { $pullOk = $true } }
         Log ("pull attempt $attempt ok=$pullOk")
       } catch { Log ("pull attempt $attempt FAILED: " + $_.Exception.Message) }
     }
@@ -494,8 +495,8 @@ if ($serverDue) {
     }
   } catch { Log ('ff-carry guard threw: ' + $_.Exception.Message) }
   # read verification from TODAY's file (real runs); in -NoPull test mode fall back to the newest ads file
-  if (Test-Path $adsToday) { $verif = @((Get-Content $adsToday -Raw | ConvertFrom-Json).verification) }
-  elseif ($NoPull) { $af = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($af) { $verif = @((Get-Content $af.FullName -Raw | ConvertFrom-Json).verification) } }
+  if (Test-Path $adsToday) { $verif = @((Read-JsonFile $adsToday).verification) }
+  elseif ($NoPull) { $af = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($af) { $verif = @((Read-JsonFile $af.FullName).verification) } }
 }
 
 # ---- rebuild each store record ----
@@ -667,7 +668,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       try {
         $cmpH = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
         if ($cmpH) {
-          $wkH = [string](Get-Content $cmpH.FullName -Raw | ConvertFrom-Json).week_of
+          $wkH = [string](Read-JsonFile $cmpH.FullName).week_of
           if ($wkH -and (Test-Path (Join-Path $OutDir ("verify-verdicts-" + $wkH + ".json")))) {
             # -MinStores 1 so the ~24 single-store long-tail commodities keep their history even though
             # MinStores 2 keeps them off the published page - same reasoning as weekly-post-capture.
@@ -707,7 +708,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # build/publish's verified-<week> board reflects both the fresh prices AND the wrong-product removals.
       # Deterministic PS (no LLM); only runs when this week's verdicts exist. Non-fatal.
       $cmpNow = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-      if ($cmpNow) { try { $wkNow = (Get-Content $cmpNow.FullName -Raw | ConvertFrom-Json).week_of; if (Test-Path (Join-Path $OutDir ("verify-verdicts-" + $wkNow + ".json"))) { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'verify-apply.ps1') | Out-Null; Log 'verify-apply re-applied verdicts to fresh board' } } catch { Log ('verify-apply threw: ' + $_.Exception.Message) } }
+      if ($cmpNow) { try { $wkNow = (Read-JsonFile $cmpNow.FullName).week_of; if (Test-Path (Join-Path $OutDir ("verify-verdicts-" + $wkNow + ".json"))) { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'verify-apply.ps1') | Out-Null; Log 'verify-apply re-applied verdicts to fresh board' } } catch { Log ('verify-apply threw: ' + $_.Exception.Message) } }
       # overlay this week's ad-sales onto the everyday recipe-ingredient board (catches recipe items on sale;
       # reverts automatically when a sale ends). MUST run BEFORE resolve-worklist so the link worklist reflects
       # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
@@ -1104,7 +1105,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             } catch { Log ('consistency auto-repair threw: ' + $_.Exception.Message) }
             & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
             if ($LASTEXITCODE -eq 2) {
-              $cr = try { Get-Content (Join-Path $OutDir 'consistency-report.json') -Raw | ConvertFrom-Json } catch { $null }
+              $cr = try { Read-JsonFile (Join-Path $OutDir 'consistency-report.json') } catch { $null }
               $nl = if ($cr) { [string]$cr.no_link_count } else { '?' }
               # signature covers BOTH failure kinds: price-drift mismatches AND no-link chips (a pure no-link
               # breach used to hash to '' and could never de-dup properly)
@@ -1362,7 +1363,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $summary += 'REVIEW    audit-coverage-gaps could not evaluate - the store-dropped-a-commodity check did not run this cycle'
           throw 'CG-BLIND'
         }
-        $cg = try { Get-Content (Join-Path $OutDir 'coverage-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+        $cg = try { Read-JsonFile (Join-Path $OutDir 'coverage-gaps.json') } catch { $null }
         # ---- ALERT ON THE ACTIONABLE SUBSET ONLY (2026-08-06, triage plan-2026-08-06 item 2026-08-03-f4fb91).
         # The audit already separates a gap it can act on (CLAIMED-BY / RULE-INVISIBLE / PRICED) from one the
         # ENGINE ITSELF explains and refuses on purpose (BASIS-NULL: an each-priced commodity whose only rows at
@@ -1423,7 +1424,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           Log 'semantic sweep BLIND (no sidecar/GPU available) - the board still ships; no coverage opinion today'
           $summary += 'REVIEW    semantic sweep could not run (BLIND) - no semantic coverage check on this board'
         } else {
-          $sf = try { Get-Content (Join-Path $OutDir 'semantic-findings.json') -Raw | ConvertFrom-Json } catch { $null }
+          $sf = try { Read-JsonFile (Join-Path $OutDir 'semantic-findings.json') } catch { $null }
           $semRows = @($sf.coverage)
           if ($semRows.Count -gt 0) {
             $semSig = (@($semRows | ForEach-Object { [string]$_.id + '|' + [string]$_.store + '|' + [string]$_.product } | Sort-Object) -join ';')
@@ -1462,7 +1463,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($atRc -eq 3) {
           Log 'aisle test BLIND (no board or no Family Fare feed) - no shelf opinion on this board'
         } else {
-          $atJ = try { Get-Content (Join-Path $OutDir 'aisle-test.json') -Raw | ConvertFrom-Json } catch { $null }
+          $atJ = try { Read-JsonFile (Join-Path $OutDir 'aisle-test.json') } catch { $null }
           $atBlocked = @($atJ | Where-Object { [string]$_.verdict -eq 'BLOCK' })
           if ($atBlocked.Count -gt 0) {
             $atSig = (@($atBlocked | ForEach-Object { [string]$_.id + '|' + [string]$_.product } | Sort-Object) -join ';')
@@ -1758,7 +1759,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # hidden from the daily summary; only the email is gated.
       try {
         $null = (Get-FanoutRecord 'sale-fallback' $fanRecs).ExitCode
-        $sf = try { Get-Content (Join-Path $OutDir 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+        $sf = try { Read-JsonFile (Join-Path $OutDir 'sale-fallback-gaps.json') } catch { $null }
         if ($sf -and [int]$sf.gap_count -gt 0) {
           $sfEsc  = @($sf.escalated)
           $sfList = (@($sf.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
@@ -2082,7 +2083,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       $SANITY_QUIET = @('outlier-verified')
       $sanityQuiet = 0
       if ($gf) {
-        $gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json
+        $gj = Read-JsonFile $gf.FullName
         foreach ($x in @($gj)) {
           if ($SANITY_QUIET -contains ([string]$x.type)) { $sanityQuiet++; continue }
           $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail); $flagKeys += ('SANITY|' + $x.commodity + '|' + $x.type)
@@ -2091,7 +2092,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # <<SANITY-PAGER-END>>
       if ($sanityQuiet -gt 0) { Log ("review flags: $sanityQuiet store-verified outlier(s) recorded in guards-*.json, not paged (the store's own published unit price reproduces ours)") }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-      if ($ff) { $mb = @((Get-Content $ff.FullName -Raw | ConvertFrom-Json).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }
+      if ($ff) { $mb = @((Read-JsonFile $ff.FullName).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }
       # ---- BASIS CHECKS (2026-07-28). Bands and freshness cannot see a basis error: the price is real and
       # only the arithmetic is wrong, which is precisely what wins a "cheapest store" verdict. Both audits
       # write their own report; their findings ride the same review-flag channel so they land in the triage
@@ -2113,7 +2114,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
         $brF = Join-Path $OutDir 'basis-reconcile.json'
         if (Test-Path $brF) {
-          $brJ = Get-Content $brF -Raw | ConvertFrom-Json
+          $brJ = Read-JsonFile $brF
           foreach ($b in @($brJ.findings)) { $flagKeys += ('BASIS|' + $b.id + '|' + $b.store); $flagParts += ('BASIS|' + $b.id + '|' + $b.store + '|ours ' + $b.ours + '/' + $b.unit + ' vs the store''s own ' + $b.store_says + ' (x' + $b.factor + ') - ' + $b.item) }
         }
       } catch { Log ('audit-basis-reconcile threw: ' + $_.Exception.Message) }
@@ -2130,7 +2131,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if ($ssRc -eq 3) {
             $summary += 'REVIEW    shelf-signal could not evaluate - whether the board prices a ship-only listing is UNKNOWN this cycle, not clean'
           } elseif (Test-Path $ssF) {
-            $ssJ = Get-Content $ssF -Raw | ConvertFrom-Json
+            $ssJ = Read-JsonFile $ssF
             $ssCov = [double]$ssJ.coverage_pct
             $ssShip = [int]$ssJ.counts.SHIP_ONLY; $ssTp = [int]$ssJ.counts.THIRD_PARTY
             if ($ssCov -le 0) {
@@ -2143,7 +2144,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $null = (Get-FanoutRecord 'pack-basis' $fanRecs).ExitCode
         $pbF = Join-Path $OutDir 'pack-basis-audit.json'
         if (Test-Path $pbF) {
-          $pbJ = Get-Content $pbF -Raw | ConvertFrom-Json
+          $pbJ = Read-JsonFile $pbF
           foreach ($p in @($pbJ.findings)) { $flagKeys += ('PACKBASIS|' + $p.id + '|' + $p.store); $flagParts += ('PACKBASIS|' + $p.id + '|' + $p.store + '|cheapest only because a ' + $p.count + '-pack count was multiplied into the size (' + $p.published + ' vs ' + $p.as_pack_total + ' as a pack total) - ' + $p.item) }
         }
       } catch { Log ('audit-pack-basis threw: ' + $_.Exception.Message) }
@@ -2159,7 +2160,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       $fstateFile = Join-Path $OutDir 'alerted-flags.json'
       $fstate = @{}
       if (Test-Path $fstateFile) {
-        try { foreach ($p in ((Get-Content $fstateFile -Raw | ConvertFrom-Json).PSObject.Properties)) { $fstate[[string]$p.Name] = $p.Value } } catch { $fstate = @{} }
+        try { foreach ($p in ((Read-JsonFile $fstateFile).PSObject.Properties)) { $fstate[[string]$p.Name] = $p.Value } } catch { $fstate = @{} }
       }
       # AN ACK IS HOW A REVIEWED FLAG GOES QUIET - not by being ignored long enough.
       # out\review-ack.json: { "acks": [ { "key": "...", "reason": "...", "expires": "yyyy-MM-dd" } ] }
@@ -2176,7 +2177,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       $ackFile = Join-Path $OutDir 'review-ack.json'
       if (Test-Path $ackFile) {
         try {
-          foreach ($a in @((Get-Content $ackFile -Raw | ConvertFrom-Json).acks)) {
+          foreach ($a in @((Read-JsonFile $ackFile).acks)) {
             if (-not $a.key) { continue }
             $exp = $null; try { $exp = [datetime]$a.expires } catch { $exp = $null }
             if ($null -ne $exp -and $exp.Date -ge (Get-Date).Date) { $ackOpen[[string]$a.key] = $true }
@@ -2306,7 +2307,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # lie class as a dead product link, so it gets said out loud the day it breaks. Baker's is skipped
       # headless (Akamai walls non-browser fetches; the Wednesday browser agent exercises that URL for real).
       try {
-        $adDoc = Get-Content (Join-Path $root 'ad-urls.json') -Raw | ConvertFrom-Json
+        $adDoc = Read-JsonFile (Join-Path $root 'ad-urls.json')
         $skip = @($adDoc.headless_check_skip)
         foreach ($p in $adDoc.urls.PSObject.Properties) {
           if ($skip -contains [string]$p.Name) { continue }
@@ -2399,7 +2400,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       if (-not $NoPublish) {
         try {
           if ((Get-FanoutRecord 'store-coverage' $fanRecs).ExitCode -eq 2) {
-            $sc = try { Get-Content (Join-Path $OutDir 'store-coverage-report.json') -Raw | ConvertFrom-Json } catch { $null }
+            $sc = try { Read-JsonFile (Join-Path $OutDir 'store-coverage-report.json') } catch { $null }
             $scList = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + ' [missing: ' + $_.missing + ']' }) -join '; ') } else { '?' }
             $scSig  = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + '|' + $_.missing } | Sort-Object) -join ';') } else { '' }
             $scF = Join-Path $OutDir 'store-coverage-alert.sig'

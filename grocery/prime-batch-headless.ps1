@@ -23,6 +23,7 @@
 #>
 param([string[]]$Ids, [ValidateSet('ff','hyvee','both')][string]$Store = 'both', [switch]$WhatIf, [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $regDir = Join-Path $OutDir 'regular'
@@ -31,7 +32,7 @@ $todayS = (Get-Date).ToString('yyyy-MM-dd')
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
 
 . (Join-Path $root 'search-terms-lib.ps1')
-$terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 $Ids = @($Ids | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
 if ($Ids.Count -eq 0) { throw 'no -Ids supplied' }
 Write-Output ("priming " + $Ids.Count + " commodities at: " + $Store)
@@ -44,7 +45,7 @@ Write-Output ("priming " + $Ids.Count + " commodities at: " + $Store)
 # items. (Same include/exclude the daily pull + compare-deals use, so a kept product is one the board would match
 # anyway; the diff still catches any residual on-target collision.)
 $rules = @{}
-foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) {
+foreach ($c in (Read-JsonFile (Join-Path $root 'commodities.json'))) {
   $rules[[string]$c.id] = [pscustomobject]@{ inc = @($c.include); exc = @($c.exclude) }
 }
 function Test-Match([string]$name, [string]$id) {
@@ -64,7 +65,7 @@ function Merge-Rows([string]$fileFor, $newRows, [string]$store) {
   $merged = New-Object System.Collections.ArrayList
   $seen = @{}
   if ($prev) {
-    $doc = Get-Content $prev.FullName -Raw | ConvertFrom-Json
+    $doc = Read-JsonFile $prev.FullName
     foreach ($r in @($doc.deals)) { [void]$merged.Add($r); $seen[(([string]$r.item) + '|' + ([string]$r.size)).ToLower()] = $true }
   }
   $added = 0

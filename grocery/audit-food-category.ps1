@@ -21,19 +21,20 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
-$lib = Get-Content (Join-Path $root 'category-excludes.json') -Raw | ConvertFrom-Json
+$lib = Read-JsonFile (Join-Path $root 'category-excludes.json')
 $cat = @{}
-foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories) {
+foreach ($c in (Read-JsonFile (Join-Path $root 'categories.json')).categories) {
   foreach ($id in @($c.commodities)) { $cat[[string]$id] = [string]$c.label }
 }
 $allow = @()
 $af = Join-Path $root 'food-class-allowlist.json'
 # NOTE: assign the parse result and let foreach unwrap it - @(pipe | ConvertFrom-Json) NESTS a JSON array in
 # PS 5.1 (one element = the whole array), which would make every allowlist entry invisible once populated.
-if (Test-Path $af) { $parsedAllow = Get-Content $af -Raw | ConvertFrom-Json; foreach ($a in $parsedAllow) { $allow += $a } }
+if (Test-Path $af) { $parsedAllow = Read-JsonFile $af; foreach ($a in $parsedAllow) { $allow += $a } }
 
 function ClassesFor([string]$label) {
   if (-not $label) { return @($lib.universal_for_unknown) }
@@ -57,7 +58,7 @@ $scanned = 0
 # reads exactly the same. Count the denominator BEFORE the scoping tests so that is visible.
 $eligible = 0; $skipNoClass = 0; $skipNoName = 0
 foreach ($f in $files) {
-  foreach ($it in (Get-Content $f -Raw | ConvertFrom-Json).comparison) {
+  foreach ($it in (Read-JsonFile $f).comparison) {
     $id = [string]$it.id
     $classes = ClassesFor $cat[$id]
     # WAS: if (-not $classes -or @($classes).Count -eq 0) { continue }  - a whole-COMMODITY skip that hid its

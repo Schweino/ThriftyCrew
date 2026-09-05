@@ -5951,6 +5951,48 @@
    "source": "fdc:169070",
    "notes": "USDA Alcoholic beverage, wine, cooking. Calories are partly from alcohol, so a 4/4/9 sum reads low, exactly as the existing Dry White Wine row does.",
    "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)"
+  },
+  {
+   "item": "Tomatoes",
+   "serving_qty": 1,
+   "serving_unit": "cup",
+   "serving_grams": 149,
+   "calories": 27,
+   "protein_g": 1,
+   "carbs_g": 6,
+   "fat_g": 0,
+   "fiber_g": 2,
+   "source": "https://www.recipal.com/ingredients/8697-nutrition-facts-calories-protein-carbs-fat-tomatoes-roma",
+   "notes": "Panel as printed for 1 cup (149 g) of fresh roma tomatoes, which is the canon item Tomatoes on this line. The FDC shelf for this term offered only tomato powder and canned sauce, both wrong foods, so this went to the open web per the shelf rule.",
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five-b)"
+  },
+  {
+   "item": "Cooked Quinoa",
+   "serving_qty": 100,
+   "serving_unit": "g",
+   "serving_grams": 100,
+   "calories": 120,
+   "protein_g": 4.4,
+   "carbs_g": 21.3,
+   "fat_g": 1.92,
+   "fiber_g": 2.8,
+   "source": "fdc:168917",
+   "notes": "Quinoa, cooked (SR Legacy), per 100 g. Cooked basis on purpose - the line measures cooked quinoa, and the canon_item name carries that basis. Atwater 17.6+85.2+17.3 = 120.1 against the stated 120.",
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five-b)"
+  },
+  {
+   "item": "Shredded Mozzarella",
+   "serving_qty": 100,
+   "serving_unit": "g",
+   "serving_grams": 100,
+   "calories": 304,
+   "protein_g": 23.6,
+   "carbs_g": 8.06,
+   "fat_g": 19.7,
+   "fiber_g": 0.0,
+   "source": "fdc:170900",
+   "notes": "Cheese, mozzarella, low moisture, part-skim, shredded (SR Legacy), per 100 g - the exact form of the line. Atwater 94.4+32.2+177.3 = 303.9 against the stated 304.",
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five-b)"
   }
  ]
 }

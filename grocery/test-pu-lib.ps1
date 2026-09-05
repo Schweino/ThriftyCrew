@@ -17,6 +17,7 @@
   Run: test-pu-lib.ps1        (exit 0 clean, 1 on any failure)
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 
@@ -78,8 +79,8 @@ Write-Output ''
 try {
   $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
   if ($cmpF) {
-    $all = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)
-    $pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+    $all = @((Read-JsonFile $cmpF.FullName).comparison)
+    $pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
     $res = 0; $unres = New-Object System.Collections.Generic.List[string]
     foreach ($it in $all) {
       $id = [string]$it.id; $unit = [string]$it.unit

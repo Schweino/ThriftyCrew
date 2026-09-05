@@ -37,6 +37,7 @@
 # -IdentityNamespace from check-ad-cycles is what makes step 1 revertible without a code revert.
 param([switch]$Quiet, [switch]$NoIdentityGate)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')   # Write-GuardComplete: proves this run reached the end
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')   # THE per-unit math - the same one build-deals-page publishes with
@@ -381,7 +382,7 @@ try {
   foreach ($alf in @('multipack-allowlist.json', 'coverage-gap-allowlist.json', 'basis-reconcile-allowlist.json')) {
     $p = Join-Path $root $alf
     if (-not (Test-Path $p)) { [void]$warn.Add("$alf is MISSING - the allowlist-rot check scanned ZERO entries from it, and its consumers just lost their exemptions too (a moved/renamed allowlist file, not a clean bill of health)"); continue }
-    $doc = Get-Content $p -Raw | ConvertFrom-Json
+    $doc = Read-JsonFile $p
     # SCHEMA DRIFT MUST NOT READ AS CLEAN. This extraction knows exactly two key names; a file that used a
     # third would yield @() and contribute ZERO stale entries, so the hygiene check would report a clean bill
     # of health for a list it never opened. That is the same "no findings" / "nothing examined" collapse the
@@ -555,8 +556,8 @@ foreach ($g in @(
 
 # ---------------------------------------------------------------- shared: the board + the links
 $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
-$cmp  = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
-$pu   = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$cmp  = Read-JsonFile $cmpF.FullName
+$pu   = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
 # ---------------------------------------------------------------- 13: BOARD vs PRODUCT IDENTITY TABLE
 <#
@@ -602,7 +603,7 @@ elseif (-not $NoIdentityGate) {
   $recF = Get-ChildItem (Join-Path $root 'out\recipe-sales-*.json') -ErrorAction SilentlyContinue |
             Where-Object { $_.BaseName -match '^recipe-sales-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
   if ($recF -and $recF.BaseName -match '(\d{4}-\d{2}-\d{2})$' -and $Matches[1] -eq [string]$cmp.week_of) {
-    $idBoards += [pscustomobject]@{ ns = 'recipe'; file = $recF; doc = (Get-Content $recF.FullName -Raw | ConvertFrom-Json) }
+    $idBoards += [pscustomobject]@{ ns = 'recipe'; file = $recF; doc = (Read-JsonFile $recF.FullName) }
   }
   foreach ($b in $idBoards) {
     $ix = Read-IdentityIndexByName -GroceryRoot $root -Namespace $b.ns -RulesHash $idHash
@@ -678,16 +679,16 @@ $rogue = 0; $pinChecked = 0; $pinSkipped = 0; $pinDriftScannable = 0   # declare
                                                                       # reads $pinDriftScannable even when the
                                                                       # overrides file does not exist
 if (Test-Path $ovrF) {
-  $ovr = Get-Content $ovrF -Raw | ConvertFrom-Json
+  $ovr = Read-JsonFile $ovrF
   # unit per id, from BOTH boards
   $unitById = @{}
   foreach ($r in $cmp.comparison) { $unitById[[string]$r.id] = [string]$r.unit }
   $rbF = Join-Path $root 'out\recipe-board.json'
-  if (Test-Path $rbF) { foreach ($r in (Get-Content $rbF -Raw | ConvertFrom-Json).comparison) { if (-not $unitById.ContainsKey([string]$r.id)) { $unitById[[string]$r.id] = [string]$r.unit } } }
+  if (Test-Path $rbF) { foreach ($r in (Read-JsonFile $rbF).comparison) { if (-not $unitById.ContainsKey([string]$r.id)) { $unitById[[string]$r.id] = [string]$r.unit } } }
   # name-drift: a pin must never be derived from a wrong-product link
   $pinDrift = @{}
   $ndF = Join-Path $root 'out\name-drift.json'
-  if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $pinDrift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
+  if (Test-Path $ndF) { foreach ($d in (Read-JsonFile $ndF).flags) { $pinDrift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
 
   foreach ($c in $ovr.cells) {
     $id = [string]$c.id; $st = [string]$c.store
@@ -731,7 +732,7 @@ if (Test-Path $ovrF) {
   # the audit did not run or predates the field: unknown, not covered, and the zero warn below says so.
   $ndCells = @{}
   if (Test-Path $ndF) {
-    $ndDoc = Get-Content $ndF -Raw | ConvertFrom-Json
+    $ndDoc = Read-JsonFile $ndF
     foreach ($k in @($ndDoc.examined_cells)) { if ($k) { $ndCells[[string]$k] = $true } }
   }
   $pinDriftScannable = @(@($ovr.cells) | Where-Object { $ndCells.ContainsKey([string]$_.id + '|' + [string]$_.store) }).Count
@@ -768,7 +769,7 @@ if ($pinSkipped -gt 0) { [void]$warn.Add("$pinSkipped pin(s) could NOT be re-der
 $pinF = Join-Path $root 'board-price-overrides.json'
 $pin = @{}
 if (Test-Path $pinF) {
-  foreach ($c in @((Get-Content $pinF -Raw | ConvertFrom-Json).cells)) { $pin[([string]$c.id + '|' + [string]$c.store)] = [double]$c.per_unit }
+  foreach ($c in @((Read-JsonFile $pinF).cells)) { $pin[([string]$c.id + '|' + [string]$c.store)] = [double]$c.per_unit }
 }
 $unpriceable = 0
 $factorBugs = 0; $drift = 0; $pinned = 0
@@ -859,7 +860,7 @@ foreach ($f in (RegFiles)) {
   # guard used to open only the newest file - leaving 332 live Walmart cells, about a third of the store,
   # structurally unreachable by guard 5 (multipack size). Shared definition: regular-fileset-lib.ps1.
   if (-not (InEngineSet $f.FullName)) { continue }
-  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $f.FullName
   foreach ($d in $doc.deals) {
     $name = [string]$d.item; $size = [string]$d.size
     $verdict = Test-MpClassify ([string]$doc.store) $name $size $allow
@@ -963,7 +964,7 @@ foreach ($p in $prefixes.Keys) {
   # THE SKIP IS NOW A REPORTED VERDICT, NOT A SILENT `continue`. Same threshold, same file reads.
   if ($p -like 'hunter-*') {
     $fr = 0
-    foreach ($hf in $files) { try { $fr += @((Get-Content $hf.FullName -Raw | ConvertFrom-Json).deals).Count } catch {} }
+    foreach ($hf in $files) { try { $fr += @((Read-JsonFile $hf.FullName).deals).Count } catch {} }
     if ($fr -le 0) {
       [void]$fail.Add(("HARD FAIL: a frozen Recipe Hunter snapshot is EMPTY  [{0}] - these files are the only source for long-tail ingredients the rotating pulls never search, and nothing rewrites them, so an empty one is lost coverage that no other check can see" -f $p))
     }
@@ -973,10 +974,10 @@ foreach ($p in $prefixes.Keys) {
   if ((Get-CollapseVerdict $files.Count 0 0) -eq 'no-history') { [void]$g6NoHistory.Add($p); continue }
   $newest = $files[0]
   $curr = 0
-  try { $curr = @((Get-Content $newest.FullName -Raw | ConvertFrom-Json).deals).Count } catch {}
+  try { $curr = @((Read-JsonFile $newest.FullName).deals).Count } catch {}
   $best = 0
   foreach ($old in ($files | Select-Object -Skip 1 -First 4)) {
-    try { $c = @((Get-Content $old.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $best) { $best = $c } } catch {}
+    try { $c = @((Read-JsonFile $old.FullName).deals).Count; if ($c -gt $best) { $best = $c } } catch {}
   }
 
   # A UNION STORE'S NEWEST FILE IS *SUPPOSED* TO BE SMALL (2026-08-22).
@@ -1000,7 +1001,7 @@ foreach ($p in $prefixes.Keys) {
     $unionItems = New-Object 'System.Collections.Generic.HashSet[string]'
     foreach ($uf in $files) {
       try {
-        foreach ($r in @((Get-Content $uf.FullName -Raw | ConvertFrom-Json).deals)) {
+        foreach ($r in @((Read-JsonFile $uf.FullName).deals)) {
           $nm = [string]$r.item
           if ($nm) { [void]$unionItems.Add($nm.ToLowerInvariant()) }
         }
@@ -1065,7 +1066,7 @@ if ($exF) {
   if ($exF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { $exDate = $Matches[1] }
   $todayReal = (Get-Date -Format 'yyyy-MM-dd')
   if ($exDate -and ($exDate -ne $todayReal)) {
-    $ex = Get-Content $exF.FullName -Raw | ConvertFrom-Json
+    $ex = Read-JsonFile $exF.FullName
     $suspect = @{}
     foreach ($d in @($ex.deals)) {
       if ($d.sale_end) { continue }
@@ -1133,7 +1134,7 @@ foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
   $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
   if ($f.FullName -ne $newest.FullName) { continue }
-  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $f.FullName
   $store = [string]$doc.store
   $rows = @($doc.deals)
   if (-not $rows.Count) {
@@ -1201,7 +1202,7 @@ foreach ($f in (RegFiles)) {
           # that file. A number that cannot change is not a measurement, and guard 9's own warn text calls
           # these percentages "the only thing standing between them and the basePrice bug".
           try {
-            $altDoc = Get-Content $alt.FullName -Raw | ConvertFrom-Json
+            $altDoc = Read-JsonFile $alt.FullName
             $altRows = @($altDoc.deals)
             if ($altRows.Count) {
               $rows  = $altRows
@@ -1298,7 +1299,7 @@ foreach ($f in (RegFiles)) {
   # guard used to open only the newest file - leaving 332 live Walmart cells, about a third of the store,
   # structurally unreachable by guard 10 (never publish the REGULAR price). Shared definition: regular-fileset-lib.ps1.
   if (-not (InEngineSet $f.FullName)) { continue }
-  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $f.FullName
   $store = [string]$doc.store
   $any = $false
   foreach ($d in $doc.deals) {
@@ -1380,7 +1381,7 @@ foreach ($st in $partial) {
 try {
   $bkNewest = RegFiles 'bakers-regular-*.json' | Sort-Object Name -Desc | Select-Object -First 1
   if ($bkNewest) {
-    $bkDoc = Get-Content $bkNewest.FullName -Raw | ConvertFrom-Json
+    $bkDoc = Read-JsonFile $bkNewest.FullName
     $bkRows = @($bkDoc.deals)
     $bkApi = @($bkRows | Where-Object { ([string]$_.source_ad) -eq 'kroger-api' }).Count
     $bkCur = @($bkRows | Where-Object { $null -ne $_.current_price }).Count
@@ -1453,7 +1454,7 @@ try {
     $covOut = Join-Path $root 'out'
     $pinTotal = 0
     $covOvrF = Join-Path $root 'board-price-overrides.json'
-    if (Test-Path $covOvrF) { try { $pinTotal = @((Get-Content $covOvrF -Raw | ConvertFrom-Json).cells).Count } catch { $pinTotal = 0 } }
+    if (Test-Path $covOvrF) { try { $pinTotal = @((Read-JsonFile $covOvrF).cells).Count } catch { $pinTotal = 0 } }
     $bkN = 0
     if ($null -ne $bkRows) { $bkN = @($bkRows).Count }
     $g6Skip = 0

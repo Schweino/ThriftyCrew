@@ -56,12 +56,12 @@ if(-not $DensitiesFile){ $DensitiesFile = Join-Path $mp 'db\densities.json' }
 if(-not $FoodDbFile){    $FoodDbFile    = Join-Path $mp 'food-macros-db.json' }
 if(-not $OutFile){       $OutFile       = Join-Path $RunDir 'recipes-computed.json' }
 if(-not $FlagsFile){     $FlagsFile     = Join-Path $RunDir 'flags-report.txt' }
-$rc  = Get-Content $CanonFile -Raw | ConvertFrom-Json
+$rc  = Read-JsonFile $CanonFile
 if($Slugs){ $rc = @($rc | Where-Object { $Slugs -contains [string]$_.slug }); if($rc.Count -eq 0){ throw "no canon recipes match -Slugs" } }
 $ovr = @{}
 $ovrPath = $OverridesFile
 if(Test-Path $ovrPath){
-  $ovrRaw = (Get-Content $ovrPath -Raw | ConvertFrom-Json).overrides
+  $ovrRaw = (Read-JsonFile $ovrPath).overrides
   # R300 TUNING: override values may be a plain number (grams at source scale, r100-compatible) OR an
   # object { grams, item?, why } where 'item' remaps the line to a different DB item (canon-mapper bugs
   # like sausages->Italian Seasoning, and title-protein swaps, fixed WITHOUT touching recipes-canon.json).
@@ -71,8 +71,8 @@ if(Test-Path $ovrPath){
     if($p.Value -is [pscustomobject]){ $ovr[$p.Name] = $p.Value } else { $ovr[$p.Name] = [double]$p.Value }
   } }
 }
-$dnRoot = Get-Content $DensitiesFile -Raw | ConvertFrom-Json
-$db  = (Get-Content $FoodDbFile -Raw | ConvertFrom-Json).items
+$dnRoot = Read-JsonFile $DensitiesFile
+$db  = (Read-JsonFile $FoodDbFile).items
 $dbMap=@{}; foreach($i in $db){ $dbMap[$i.item]=$i }
 $dn=@{}; foreach($p in $dnRoot.items.PSObject.Properties){ $dn[$p.Name]=$p.Value }
 
@@ -94,6 +94,8 @@ $SERVE_DEFAULTS = @{
 # numeric token used by the extended grammar: mixed number | fraction | decimal, optionally a range
 $NUMT = '(?:\d+\s+\d+/\d+|\d+/\d+|\d*\.?\d+)'
 $NUMR = "(?:$NUMT(?:\s*-\s*$NUMT)?)"
+
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 function NormalizeQty([string]$q){
   $q = $q -replace [char]0x00BD,' 1/2' -replace [char]0x00BC,' 1/4' -replace [char]0x00BE,' 3/4' -replace [char]0x2153,' 1/3' -replace [char]0x2154,' 2/3'
@@ -600,7 +602,7 @@ foreach($r in $rc){
 }
 if($Slugs){
   # splice the recomputed subset into the existing recipes-computed.json (keep the other recipes as-is)
-  $existing = Get-Content $OutFile -Raw | ConvertFrom-Json
+  $existing = Read-JsonFile $OutFile
   $newBySlug = @{}; foreach($r in $out){ $newBySlug[[string]$r.slug] = $r }
   $merged = @($existing | ForEach-Object { if($newBySlug.ContainsKey([string]$_.slug)){ $newBySlug[[string]$_.slug] } else { $_ } })
   $merged | ConvertTo-Json -Depth 8 | Out-File $OutFile -Encoding utf8

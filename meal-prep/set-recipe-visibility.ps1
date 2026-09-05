@@ -45,6 +45,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $apiUrl = 'https://map-to-success.ghost.io'
 
@@ -63,7 +64,7 @@ if ($SelfTest) {
   T ($src -match "posts\s*=\s*@\(@\{\s*visibility") 'the PUT body sets visibility only - content, tags and lexical ride along untouched'
   # A slug the database does not know is refused rather than guessed at.
   $db = $null
-  try { $db = Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json } catch { $db = $null }
+  try { $db = Read-JsonFile (Join-Path $root 'recipes-db.json') } catch { $db = $null }
   T ($null -ne $db) 'recipes-db.json parses'
   if ($null -ne $db) {
     $known = @($db.recipes | Where-Object { $_.slug }).Count
@@ -81,7 +82,7 @@ $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
             else { throw 'Ghost admin key missing (meal-prep\.ghostkey or $env:GHOST_ADMIN_KEY)' }
 . (Join-Path $root '..\lib\ghost-lib.ps1')
 
-$db = Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json
+$db = Read-JsonFile (Join-Path $root 'recipes-db.json')
 function Get-Recorded([string]$s) {
   $r = @($db.recipes | Where-Object { [string]$_.slug -eq $s })
   if ($r.Count -eq 0) { return $null }

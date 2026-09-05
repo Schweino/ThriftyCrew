@@ -57,6 +57,7 @@
 # harness run replaced the real board's reconciliation with a fixture's.
 param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [switch]$Strict, [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
@@ -119,7 +120,7 @@ $srcFiles += @(Get-ChildItem (Join-Path $RawRoot '*\*-deals-*.json') -ErrorActio
 # newest first, so the "first non-empty wins" rule below keeps the freshest reading of a product
 $srcFiles = @($srcFiles | Sort-Object Name -Descending)
 foreach ($f in $srcFiles) {
-  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+  try { $d = Read-JsonFile $f.FullName } catch { continue }
   foreach ($r in @(if ($d.deals) { $d.deals } else { $d })) {
     $st = [string]$r.store
     if (-not $fieldByStore.ContainsKey($st)) { continue }
@@ -150,7 +151,7 @@ foreach ($f in $srcFiles) {
 $bakersWeight = @{}
 foreach ($f in $srcFiles) {
   if ($f.Name -notmatch '^bakers-') { continue }
-  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+  try { $d = Read-JsonFile $f.FullName } catch { continue }
   foreach ($r in @(if ($d.deals) { $d.deals } else { $d })) {
     if (-not $r.PSObject.Properties['net_weight']) { continue }
     $nz = NetOz ([string]$r.net_weight)
@@ -166,7 +167,7 @@ foreach ($f in $srcFiles) {
 $allow = @{}
 $alf = Join-Path $root 'basis-reconcile-allowlist.json'
 if (Test-Path $alf) {
-  try { foreach ($a in (Get-Content $alf -Raw | ConvertFrom-Json).allow) { $allow[([string]$a.store + '|' + (NormName ([string]$a.item)))] = [string]$a.why } } catch {}
+  try { foreach ($a in (Read-JsonFile $alf).allow) { $allow[([string]$a.store + '|' + (NormName ([string]$a.item)))] = [string]$a.why } } catch {}
 }
 
 # Pick the ONE capture row that matches this board cell. Unique name -> use it. Several rows under one name
@@ -182,7 +183,7 @@ function PickRow($list, [string]$cellSize) {
   return $null
 }
 
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 $findings = @(); $checked = 0; $allowed = 0
 foreach ($r in $doc.comparison) {
   $unit = [string]$r.unit

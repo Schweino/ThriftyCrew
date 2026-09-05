@@ -108,6 +108,8 @@ $script:DENSITY_CEIL  = 1.65
 # Above this relative rounding error on the displayed unit price, the quotient is not a measurement.
 $script:MAX_ROUND_ERR = 0.25
 
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function Get-DensityBand {
   return [pscustomobject]@{ Floor = $script:DENSITY_FLOOR; Ceil = $script:DENSITY_CEIL; MaxRoundErr = $script:MAX_ROUND_ERR }
 }
@@ -368,7 +370,7 @@ function Test-DerivedSizeDensity($row, [string]$Marker) {
 function Get-DerivedSizeRulings([string]$Root) {
   $p = Join-Path $Root 'derived-size-density-rulings.json'
   if (-not (Test-Path $p)) { return ,@() }
-  $doc = Get-Content $p -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $p
   if ($null -eq $doc) { return ,@() }
   if ($doc.PSObject.Properties['rulings']) { return ,@($doc.rulings) }
   return ,@($doc)
@@ -422,7 +424,7 @@ function Get-DerivedCaptureFiles([string]$Root) {
 # both read; `@(Get-Content | ConvertFrom-Json)` does NOT unroll a top-level JSON array in PS 5.1 - it
 # counts 1 - so the assignment happens first.
 function Read-CaptureRows([string]$Path) {
-  $doc = Get-Content $Path -Raw | ConvertFrom-Json
+  $doc = Read-JsonFile $Path
   if ($null -eq $doc) { return ,@() }
   if ($doc.PSObject.Properties['deals']) { return ,@($doc.deals) }
   return ,@($doc)

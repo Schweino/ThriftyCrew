@@ -10,6 +10,7 @@
 #>
 param([double]$Tolerance = 0.15, [string]$OutDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
@@ -19,18 +20,18 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # error in LinkPerUnit sat behind 6 "mismatch" rows that looked like ordinary re-resolve work.
 if (-not $SelfTest) {
 $cmpFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$cmp = (Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison
+$cmp = (Read-JsonFile $cmpFile).comparison
 $ri  = @()
 $riFile = Join-Path $OutDir 'recipe-board.json'
-if (Test-Path $riFile) { $ri = (Get-Content $riFile -Raw | ConvertFrom-Json).comparison }
+if (Test-Path $riFile) { $ri = (Read-JsonFile $riFile).comparison }
 . (Join-Path $root 'search-terms-lib.ps1')
-$terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 
 # durable URLs: id -> store -> {url, price, size, name}
 $purls = @{}
 $pf = Join-Path $root 'product-urls.json'
 if (Test-Path $pf) {
-  $pd = Get-Content $pf -Raw | ConvertFrom-Json
+  $pd = Read-JsonFile $pf
   foreach ($p in $pd.items.PSObject.Properties) {
     $sm = @{}; foreach ($sp in $p.Value.PSObject.Properties) { if ($sp.Name -ne 'commodity') { $sm[[string]$sp.Name] = $sp.Value } }
     $purls[[string]$p.Name] = $sm

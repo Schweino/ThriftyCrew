@@ -7,9 +7,11 @@ $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $apiUrl='https://map-to-success.ghost.io'
 $adminKey=(Get-Content (Join-Path $here '.ghostkey') -Raw).Trim()
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 function JWT { $p=$adminKey -split ':'; $sb=New-Object byte[] ($p[1].Length/2); for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($p[1].Substring($i*2,2),16) }; $now=[DateTimeOffset]::UtcNow.ToUnixTimeSeconds(); $h='{"alg":"HS256","typ":"JWT","kid":"'+$p[0]+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'; $b={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}; $si=(& $b ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b ([Text.Encoding]::UTF8.GetBytes($pl))); $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); $si+'.'+(& $b ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si)))) }
 
-$fr = Get-Content (Join-Path $here 'free-rotation.json') -Raw | ConvertFrom-Json
+$fr = Read-JsonFile (Join-Path $here 'free-rotation.json')
 $flipped=@(); $already=@(); $failed=@()
 foreach($f in $fr.free){
   $slug=[string]$f.slug

@@ -13,6 +13,7 @@
 #>
 param([switch]$Apply, [int]$StoreId = 0)   # 0 = ask hyvee-store-lib; see that file
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 # 0 means 'take the store the board speaks for'. One home for the identity - see hyvee-store-lib.ps1.
 . (Join-Path $root 'hyvee-store-lib.ps1')
@@ -41,7 +42,7 @@ function WordOverlap([string]$a, [string]$b) {
   return $hit / $wa.Count
 }
 
-$chipsDoc = Get-Content (Join-Path $root 'out\url-inputs\chips-hyvee.json') -Raw | ConvertFrom-Json; $chips = @($chipsDoc)
+$chipsDoc = Read-JsonFile (Join-Path $root 'out\url-inputs\chips-hyvee.json'); $chips = @($chipsDoc)
 Write-Output ("chips to resolve: " + $chips.Count)
 
 # cell TYPE decides which write-gate applies. EVERYDAY cells: the stored price must re-derive the board
@@ -50,7 +51,7 @@ Write-Output ("chips to resolve: " + $chips.Count)
 # refuse every correct link. Identity (size-first + name) is still required for both.
 $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
 $cellType = @{}
-foreach ($row in ((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)) {
+foreach ($row in ((Read-JsonFile $cmpF.FullName).comparison)) {
   foreach ($s in $row.stores) { if ([string]$s.store -eq 'Hy-Vee') { $cellType[[string]$row.id] = [string]$s.type } }
 }
 

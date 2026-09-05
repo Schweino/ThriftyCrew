@@ -6,6 +6,7 @@
 #>
 param([string]$OutDir = "", [int]$MaxMinutes = 9, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -440,7 +441,7 @@ $regDir = Join-Path $OutDir 'regular'
 if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Force $regDir | Out-Null }
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
 $todayS = Get-OmahaDateKey
-$terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 
 $ak = 'family_fare'; $sid = '6401'; $b = 'https://api.freshop.ncrcloud.com/1'
 function Get-FreshToken {
@@ -763,7 +764,7 @@ $ledgerFile = Join-Path $OutDir 'ff-term-ledger.json'
 $ledger = @{}
 if (Test-Path $ledgerFile) {
   try {
-    $lj = Get-Content $ledgerFile -Raw | ConvertFrom-Json
+    $lj = Read-JsonFile $ledgerFile
     if ($lj -and $lj.terms) { foreach ($p in $lj.terms.PSObject.Properties) { if ($p.Value) { $ledger[[string]$p.Name] = [string]$p.Value } } }
   } catch { Write-Warning ('Family Fare: term ledger unreadable, starting a fresh one (expiries classify as unknown until it warms up): ' + $_.Exception.Message) }
 }
@@ -1020,7 +1021,7 @@ $have = @{}
 foreach ($d in $deals) { $k = ([string]$d.item).ToLower(); if ($have.ContainsKey($k)) { continue }; $have[$k] = $true; [void]$rows.Add((Norm-Row $d $todayS $false)) }
 
 if ($prevF) {
-  $pdoc = Get-Content $prevF.FullName -Raw | ConvertFrom-Json
+  $pdoc = Read-JsonFile $prevF.FullName
   foreach ($d in @($pdoc.deals)) {
     $k = ([string]$d.item).ToLower()
     if (-not $k -or $have.ContainsKey($k)) { continue }

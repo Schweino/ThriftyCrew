@@ -39,6 +39,7 @@
 #>
 param([switch]$Apply, [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
@@ -48,13 +49,13 @@ $STORE_PREFIX = [ordered]@{
 }
 
 $ncFile = Join-Path $root 'not-carried.json'
-$doc = Get-Content $ncFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $ncFile
 $recheck = if ($doc.PSObject.Properties['recheck_days']) { [int]$doc.recheck_days } else { 90 }
 
 # commodity id -> the term the pulls search for. Family Fare keys its capture_terms by the PHRASE, so the
 # reverse map is what lets its evidence be read at all (593 of 593 of its terms map back cleanly).
 $termOf = @{}; $cidOfTerm = @{}
-$cs = Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json
+$cs = Read-JsonFile (Join-Path $root 'commodity-search.json')
 foreach ($p in $cs.terms.PSObject.Properties) {
   $vals = @($p.Value)
   $termOf[$p.Name] = [string]$vals[0]
@@ -69,7 +70,7 @@ foreach ($st in $STORE_PREFIX.Keys) {
   $evidence[$st] = @{ file = $null; terms = @{} }
   if (-not $f) { $noEvidenceStores.Add("$st (no regular capture)"); continue }
   $evidence[$st].file = $f.Name
-  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { $noEvidenceStores.Add("$st (unreadable capture)"); continue }
+  try { $d = Read-JsonFile $f.FullName } catch { $noEvidenceStores.Add("$st (unreadable capture)"); continue }
   # @($d.capture_terms) on a MISSING property yields @($null) - an array of Count 1 - so a store that
   # records nothing looked populated, the blocker report stayed silent, and the null went on to throw
   # inside the loop below. Filter before counting; an array of nothing must count as nothing.
@@ -88,9 +89,9 @@ foreach ($st in $STORE_PREFIX.Keys) {
 }
 
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
-$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison
+$cmp = (Read-JsonFile $cmpF.FullName).comparison
 $allow = @{}
-foreach ($a in (Get-Content (Join-Path $root 'coverage-gap-allowlist.json') -Raw | ConvertFrom-Json).allow) {
+foreach ($a in (Read-JsonFile (Join-Path $root 'coverage-gap-allowlist.json')).allow) {
   $allow[([string]$a.commodity + '|' + [string]$a.store)] = $true
 }
 
@@ -141,6 +142,6 @@ if (-not $Apply) { Write-Output ''; Write-Output 'DRY RUN. Pass -Apply to write 
 
 $doc.entries = @($kept + $derived)
 $doc | ConvertTo-Json -Depth 6 | Set-Content $ncFile -Encoding UTF8
-$null = Get-Content $ncFile -Raw | ConvertFrom-Json      # validate round-trip
+$null = Read-JsonFile $ncFile      # validate round-trip
 Write-Output ''
 Write-Output ("WROTE not-carried.json - {0} entries ({1} derived, {2} declared), recheck_days={3}" -f @($doc.entries).Count, $derived.Count, $kept.Count, $recheck)

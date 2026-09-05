@@ -20,6 +20,7 @@
 #        nothing must never report ok.
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = $PSScriptRoot
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -36,10 +37,10 @@ if (-not $cmpF) { Write-Output 'everyday-mismatch: COULD NOT EVALUATE - no compa
 # from 19 to 1 once generate-board-overrides stopped minting a pin when a same-day pull confirms the
 # board. The pin argument is gone; the 80 unaudited cells are the real reason, and they are why this
 # still shipped.)
-$boards = @([pscustomobject]@{ name = $cmpF.Name; src = 'main'; data = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json) })
+$boards = @([pscustomobject]@{ name = $cmpF.Name; src = 'main'; data = (Read-JsonFile $cmpF.FullName) })
 $rbF = Join-Path $OutDir 'recipe-board.json'
 if (Test-Path $rbF) {
-  $boards += [pscustomobject]@{ name = 'recipe-board.json'; src = 'recipe'; data = (Get-Content $rbF -Raw | ConvertFrom-Json) }
+  $boards += [pscustomobject]@{ name = 'recipe-board.json'; src = 'recipe'; data = (Read-JsonFile $rbF) }
 } else {
   Write-Output 'everyday-mismatch: NOTE - no recipe-board.json in this OutDir; auditing the main board only'
 }
@@ -50,7 +51,7 @@ if (Test-Path $rbF) {
 $puF = Join-Path $OutDir 'product-urls.json'
 if (-not (Test-Path $puF)) { $puF = Join-Path $root 'product-urls.json' }
 if (-not (Test-Path $puF)) { Write-Output 'everyday-mismatch: COULD NOT EVALUATE - no product-urls.json to compare the board against'; exit 3 }
-$pu  = (Get-Content $puF -Raw | ConvertFrom-Json).items
+$pu  = (Read-JsonFile $puF).items
 
 # A multipack's total is packs x unit-size, and the pack count often lives in the NAME
 # ("Fareway 24 Pack Purified Drinking Water", size="each") rather than the size field. Missing that

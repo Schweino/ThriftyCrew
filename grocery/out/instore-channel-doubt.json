@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-05 08:21",
+    "generated":  "2026-09-05 14:29",
     "board":  "comparison-2026-09-02.json",
     "note":  "Cells whose winning row cannot prove it is an in-store shelf row. Since 2026-09-01 the engine REFUSES this shape (instore-lib.ps1), so a cell here is either a REVIEWED exception someone verified on the live product page, or a cell the refusal did not reach - which is a defect in the refusal, not a question for the store. Still advisory, still drops nothing.",
     "doubt_count":  2,
@@ -773,6 +773,13 @@
                            "field_bearing":  true
                        },
                        {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-09-05.json",
+                           "rows":  273,
+                           "with_field":  271,
+                           "field_bearing":  true
+                       },
+                       {
                            "store":  "Aldi",
                            "file":  "aldi-regular-2026-07-06.json",
                            "rows":  30,
@@ -909,6 +916,13 @@
                            "store":  "Aldi",
                            "file":  "aldi-regular-2026-09-04.json",
                            "rows":  3135,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-09-05.json",
+                           "rows":  3173,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -1272,7 +1286,7 @@
                        {
                            "store":  "Family Fare",
                            "file":  "family-fare-regular-2026-09-05.json",
-                           "rows":  5329,
+                           "rows":  5335,
                            "with_field":  0,
                            "field_bearing":  false
                        },

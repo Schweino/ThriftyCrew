@@ -5,15 +5,16 @@
 #>
 param([Parameter(Mandatory=$true)][string]$Base, [Parameter(Mandatory=$true)][string]$NewFile)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 $mapA = @{}
-foreach ($it in (Get-Content $Base -Raw | ConvertFrom-Json).comparison) {
+foreach ($it in (Read-JsonFile $Base).comparison) {
   foreach ($s in $it.stores) {
     if ([double]$s.per_unit -gt 0) { $mapA[($it.id + '|' + $s.store)] = [pscustomobject]@{ item=[string]$s.item; pu=[double]$s.per_unit } }
   }
 }
 $mapB = @{}
-foreach ($it in (Get-Content $NewFile -Raw | ConvertFrom-Json).comparison) {
+foreach ($it in (Read-JsonFile $NewFile).comparison) {
   foreach ($s in $it.stores) {
     if ([double]$s.per_unit -gt 0) { $mapB[($it.id + '|' + $s.store)] = [pscustomobject]@{ item=[string]$s.item; pu=[double]$s.per_unit } }
   }

@@ -1,10 +1,10 @@
 {
-    "updated":  "2026-09-05T08:16:14",
+    "updated":  "2026-09-05T14:31:33",
     "board":  "comparison-2026-09-02.json",
     "week_of":  "2026-09-02",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  474,
-    "dated_by_the_store":  235,
+    "sale_cells":  479,
+    "dated_by_the_store":  240,
     "traced_to_an_ad":  60,
     "untraceable":  179,
     "ad_rows_available":  "Aldi=103 Baker\u0027s=483 Family Fare=1400 Fareway=729 Hy-Vee=717",

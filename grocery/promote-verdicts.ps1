@@ -44,6 +44,7 @@ param(
   [string[]]$Ids = @()
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
@@ -155,11 +156,11 @@ if ($vFiles.Count -eq 0) { throw 'promote-verdicts: no verify-verdicts-*.json fo
 $drops = New-Object System.Collections.ArrayList     # {week,id,store,item,reason}
 $keptNames = @{}                                      # id -> ArrayList of names we did NOT drop
 foreach ($vf in $vFiles) {
-  $vj = Get-Content $vf.FullName -Raw | ConvertFrom-Json
+  $vj = Read-JsonFile $vf.FullName
   $week = [string]$vj.week_of
   $cmpPath = Join-Path $OutDir ("comparison-$week.json")
   if (-not (Test-Path $cmpPath)) { Write-Output ("  (skipping $($vf.Name) - no comparison-$week.json to resolve item names)"); continue }
-  $cj = Get-Content $cmpPath -Raw | ConvertFrom-Json
+  $cj = Read-JsonFile $cmpPath
 
   if (-not (Test-Path variable:script:staleSkipped)) { $script:staleSkipped = 0 }
   $dropSet = @{}
@@ -297,7 +298,7 @@ if (-not $Apply) { Write-Output ''; Write-Output 'DRY RUN. Pass -Apply to write 
 # ---------------- write ----------------
 Copy-Item $cPath (Join-Path $OutDir 'commodities.backup-before-promote.json') -Force
 $provPath = Join-Path $root 'exclude-provenance.json'
-if (Test-Path $provPath) { $prov = Get-Content $provPath -Raw | ConvertFrom-Json } else { $prov = [pscustomobject]@{ readme = ''; rules = @() } }
+if (Test-Path $provPath) { $prov = Read-JsonFile $provPath } else { $prov = [pscustomobject]@{ readme = ''; rules = @() } }
 $provRules = New-Object System.Collections.ArrayList
 foreach ($r in @($prov.rules)) { [void]$provRules.Add($r) }
 

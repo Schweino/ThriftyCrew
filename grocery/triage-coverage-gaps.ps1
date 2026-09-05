@@ -22,6 +22,7 @@
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # NB: do NOT write @(... | ConvertFrom-Json) on a bare JSON array. PowerShell 5.1 emits the deserialized array
@@ -30,9 +31,9 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # concatenated - so the target id never matches and EVERY gap reports NO-INCLUDE. That is exactly what this
 # script did on its first run, and acting on it would have meant ~96 rule edits chasing a fabricated diagnosis.
 # compare-deals.ps1 and audit-coverage-gaps.ps1 get this right by omitting the @().
-$commods = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commods = Read-JsonFile (Join-Path $root 'commodities.json')
 if (@($commods).Count -lt 2) { throw "commodities.json did not deserialize to a list (got $(@($commods).Count)) - the PS 5.1 ConvertFrom-Json array trap; every diagnosis would be wrong." }
-$gaps = @((Get-Content (Join-Path $OutDir 'coverage-gaps.json') -Raw | ConvertFrom-Json).gaps)
+$gaps = @((Read-JsonFile (Join-Path $OutDir 'coverage-gaps.json')).gaps)
 
 # --- mirror the engine EXACTLY (same list, same order, same normalization) -------------------------------
 $src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
@@ -76,7 +77,7 @@ function Explain([string]$name, [string]$targetId) {
 $candF = Get-ChildItem (Join-Path $OutDir 'candidates-*.json') | Sort-Object Name -Descending | Select-Object -First 1
 $cand = @{}
 if ($candF) {
-  foreach ($c in (Get-Content $candF.FullName -Raw | ConvertFrom-Json).commodities) {
+  foreach ($c in (Read-JsonFile $candF.FullName).commodities) {
     foreach ($x in $c.candidates) { $cand[([string]$c.id + '|' + [string]$x.store + '|' + [string]$x.name)] = $x }
   }
 }

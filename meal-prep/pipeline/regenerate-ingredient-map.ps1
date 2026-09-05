@@ -27,6 +27,7 @@
 #>
 param([string]$OutPath = '')
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp
@@ -35,12 +36,12 @@ if (-not $OutPath) { $OutPath = Join-Path $mp 'ingredient-map.json' }
 $feed = (Get-Content (Join-Path $repo 'grocery\out\smp-feed.json') -Raw -Encoding utf8 | ConvertFrom-Json).ingredients
 $fk = @{}; foreach ($p in $feed.PSObject.Properties) { $fk[$p.Name] = $p.Value }
 $recipeBoardIds = @{}
-try { foreach ($r in (Get-Content (Join-Path $repo 'grocery\out\recipe-board.json') -Raw | ConvertFrom-Json).comparison) { $recipeBoardIds[[string]$r.id] = 1 } } catch {}
+try { foreach ($r in (Read-JsonFile (Join-Path $repo 'grocery\out\recipe-board.json')).comparison) { $recipeBoardIds[[string]$r.id] = 1 } } catch {}
 
 # collect variants per item across all specs
 $byItem = @{}
 foreach ($sf in (Get-ChildItem (Join-Path $mp 'db\recipes\*.json'))) {
-  $s = Get-Content $sf.FullName -Raw | ConvertFrom-Json
+  $s = Read-JsonFile $sf.FullName
   foreach ($ing in $s.scaler.ing) {
     $it = [string]$ing.item
     $b = if ($ing.PSObject.Properties.Name -contains 'bid') { [string]$ing.bid } else { '' }
@@ -82,5 +83,5 @@ $doc = [ordered]@{
 }
 $json = $doc | ConvertTo-Json -Depth 6
 [IO.File]::WriteAllText($OutPath, $json, (New-Object System.Text.UTF8Encoding($false)))
-$null = Get-Content $OutPath -Raw | ConvertFrom-Json
+$null = Read-JsonFile $OutPath
 Write-Output ("ingredient-map.json REGENERATED: {0} mappings ({1} had cross-spec conflicts, majority-feed rule), {2} skipped off-feed: {3}" -f $mappings.Count, $conflicts.Count, $skipped.Count, (($skipped | Select-Object -First 6) -join ', '))

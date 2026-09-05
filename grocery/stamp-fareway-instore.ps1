@@ -28,12 +28,13 @@ param(
   [switch]$WhatIf
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $File) { $f = Get-ChildItem (Join-Path $root 'out\regular\fareway-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1; $File = $f.FullName }
 if (-not $ModeVerified) { throw "-ModeVerified <yyyy-MM-dd> is required. It asserts you PROVED the capture's fulfilment mode; do not pass it otherwise." }
 if (-not $Evidence) { throw "-Evidence '<what you checked>' is required. A stamp with no recorded evidence is how the guard got defeated the first time." }
 
-$doc = Get-Content $File -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $File
 $before = @($doc.deals).Count
 if ($before -lt 1) { throw "refusing: $File has no deals" }
 

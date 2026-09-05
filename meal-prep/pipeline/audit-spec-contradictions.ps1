@@ -68,6 +68,7 @@
 [CmdletBinding()]
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -681,7 +682,7 @@ $specs = Get-SpecSet $mp ([bool]$IncludeArchive)
 $parsed = New-Object System.Collections.Generic.List[object]
 foreach ($s in $specs) {
   $spec = $null
-  try { $spec = Get-Content $s.path -Raw | ConvertFrom-Json } catch { continue }
+  try { $spec = Read-JsonFile $s.path } catch { continue }
   if (-not $spec.stat) { continue }
   $parsed.Add([pscustomobject]@{ run = $s.run; slug = $s.slug; spec = $spec })
 }
@@ -693,7 +694,7 @@ $pkgMap = @{}
 $bidMap = @{}   # food name -> priced commodity id, for the PHANTOM same-commodity rule
 $ingDb = Join-Path $mp 'db\ingredients.json'
 if (Test-Path $ingDb) {
-  foreach ($r in (Get-Content $ingDb -Raw | ConvertFrom-Json)) {
+  foreach ($r in (Read-JsonFile $ingDb)) {
     $n = [string]$r.item
     if (-not $n -or $n -match '^_') { continue }
     $names.Add($n)
@@ -743,7 +744,7 @@ if ($Baseline) {
   Write-GuardComplete -Name 'spec-contradictions'; exit 0
 }
 $base = @{}
-if (Test-Path $basePath) { try { $bd = Get-Content $basePath -Raw | ConvertFrom-Json; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {} }
+if (Test-Path $basePath) { try { $bd = Read-JsonFile $basePath; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {} }
 $worse = @()
 foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM','BUY-COVERAGE')) {
   $now = [int]$byClass[$k]

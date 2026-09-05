@@ -1,8 +1,8 @@
 ﻿{
-    "id":  "bread",
-    "q":  "white bread",
-    "match":  "Bimbo Soft White Bread (2 pk)",
-    "size":  "",
-    "reason":  "name-drift",
-    "was":  "Rotella\u0027s Italian Vienna Bread"
+    "id":  "greek-yogurt",
+    "q":  "greek yogurt",
+    "match":  "Member\u0027s Mark Nonfat Plain Greek Yogurt, 48 oz.",
+    "size":  "48 oz",
+    "reason":  "brand-mismatch",
+    "was":  "Chobani Vanilla Zero Sugar Greek Yogurt, 40 oz."
 }

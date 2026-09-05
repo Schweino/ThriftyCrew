@@ -18,6 +18,7 @@
 #>
 param([string]$OutDir = "", [string]$Embed = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -29,14 +30,14 @@ $stores = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walm
 # here would vouch for a run that never started - the exact lie the contract exists to prevent.
 if (-not (Test-Path $Embed)) { Write-Output "store-coverage: SKIP (no built board at $Embed)"; exit 0 }
 $html = Get-Content $Embed -Raw
-$ids = @((Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json) | ForEach-Object { [string]$_.id })
+$ids = @((Read-JsonFile (Join-Path $root 'commodities.json')) | ForEach-Object { [string]$_.id })
 # CHIPS MOVED TO THE FEED (2026-07-16): the embed still carries every row (so row PRESENCE is still checked
 # against it) but .pg-stores is filled client-side from public/board.json, so the row html has no chips. Read
 # the chip html from the feed - it is byte-identical to what the browser injects. Without this the audit would
 # see zero chips per row and report every staple as missing all 7 stores.
 $boardFeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
 $bf = $null
-if (Test-Path $boardFeed) { $bf = Get-Content $boardFeed -Raw | ConvertFrom-Json }
+if (Test-Path $boardFeed) { $bf = Read-JsonFile $boardFeed }
 
 $violations = New-Object System.Collections.Generic.List[object]
 $absent = New-Object System.Collections.Generic.List[string]

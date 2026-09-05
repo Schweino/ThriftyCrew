@@ -63,6 +63,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $QueueFile) { $QueueFile = Join-Path $root 'ingredient-queue.json' }
 
@@ -438,7 +439,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $o = & powershell -NoProfile -File $PSCommandPath -Promote -Term 'fixture-saffron' -Bid 'fixture-saffron' -QueueFile $cq -CarriagePath $cl 2>&1
     $ErrorActionPreference = $prev
     $prc = $LASTEXITCODE
-    $got = Get-Content $cl -Raw | ConvertFrom-Json
+    $got = Read-JsonFile $cl
     $liveAfter = $(if (Test-Path $live) { (Get-Item $live).Length } else { -1 })
     if ($prc -ne 0 -or -not ($got.bids.PSObject.Properties.Name -contains 'fixture-saffron')) {
       Write-Output ("  X MUST FIRE -Promote must write the SCRATCH ledger -CarriagePath names; rc=$prc " + ($o -join ' | ')); $bad++
@@ -622,7 +623,7 @@ if ($Promote) {
   # carriage.json is ANOTHER single-file ledger, so its read-modify-write takes the same lock, keyed
   # on ITS path. The pricer is a singleton, but nothing about this script knows that, and a rule that
   # depends on the caller's cap is a rule the next cap change silently breaks.
-  $led = Get-Content $ledgerFile -Raw | ConvertFrom-Json
+  $led = Read-JsonFile $ledgerFile
   $stamp = (Get-Date -Format 'yyyy-MM-dd')
   if ($v.verdict -eq 'CARRIED') {
     # the cheapest carrying store's own row is the evidence
@@ -654,7 +655,7 @@ if ($Promote) {
   }
   Invoke-Locked -Path $ledgerFile -Body {
     # re-read inside the lock; $entry was computed from the queue, which is not the file under edit
-    $freshLed = Get-Content $ledgerFile -Raw | ConvertFrom-Json
+    $freshLed = Read-JsonFile $ledgerFile
     if ($freshLed.bids.PSObject.Properties.Name -contains $Bid) { $freshLed.bids.$Bid = $entry }
     else { $freshLed.bids | Add-Member -NotePropertyName $Bid -NotePropertyValue $entry }
     $t = $ledgerFile + '.tmp'

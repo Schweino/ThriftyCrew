@@ -26,6 +26,7 @@ param(
   [switch]$NoArchive,
   [switch]$SelfTest
 )
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ProgressPreference='SilentlyContinue'
 $g = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }   # repo-relative
 if ($SelfTest) {
@@ -37,7 +38,7 @@ if ($SelfTest) {
   '[{"id":"turkey-breast","url":"https://x/stale","price":"$9.99","size":"each","name":"Stale Row"}]' | Set-Content $stale -Encoding UTF8
   (Get-Item $stale).LastWriteTime = (Get-Date).AddDays(-40)
   & $PSCommandPath -Root $sb -MaxAgeDays 10 *>&1 | Out-Null
-  $res = Get-Content (Join-Path $sb 'product-urls.json') -Raw | ConvertFrom-Json
+  $res = Read-JsonFile (Join-Path $sb 'product-urls.json')
   $fail = @()
   $tb = $res.items.'turkey-breast'
   if (-not $tb -or [string]$tb.Fareway.url -ne 'https://x/fresh') { $fail += 'FRESH input was not merged' }
@@ -58,9 +59,9 @@ if(-not (Test-Path $dir)){ New-Item -ItemType Directory -Force -Path $dir | Out-
 # commodity labels (metadata only) from the current comparison + recipe board, if present
 $cmap=@{}
 $cmpF=(Get-ChildItem (Join-Path $g 'out\comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
-foreach($f in @($cmpF)){ if($f){ $c=(Get-Content $f.FullName -Raw|ConvertFrom-Json).comparison; foreach($it in $c){ $cmap[[string]$it.id]=[string]$it.commodity } } }
+foreach($f in @($cmpF)){ if($f){ $c=(Read-JsonFile $f.FullName).comparison; foreach($it in $c){ $cmap[[string]$it.id]=[string]$it.commodity } } }
 $riF=Join-Path $g 'out\recipe-board.json'
-if(Test-Path $riF){ $c=(Get-Content $riF -Raw|ConvertFrom-Json).comparison; foreach($it in $c){ if(-not $cmap.ContainsKey([string]$it.id)){ $cmap[[string]$it.id]=[string]$it.commodity } } }
+if(Test-Path $riF){ $c=(Read-JsonFile $riF).comparison; foreach($it in $c){ if(-not $cmap.ContainsKey([string]$it.id)){ $cmap[[string]$it.id]=[string]$it.commodity } } }
 # store inferred from filename: store-<key>-... or store-<key>N-...
 $storeKey=@{ walmart="Walmart"; sams="Sam's Club"; ff="Family Fare"; familyfare="Family Fare"; hyvee="Hy-Vee"; bakers="Baker's"; aldi="Aldi"; fareway="Fareway" }
 function StoreOf($fn){ $m=[regex]::Match($fn,'^store-([a-z]+?)[0-9]*-urls\.json$'); if($m.Success -and $storeKey.ContainsKey($m.Groups[1].Value)){ return $storeKey[$m.Groups[1].Value] }; return $null }
@@ -78,7 +79,7 @@ if($refused.Count){
 $outFile=Join-Path $g "product-urls.json"
 # load existing (accumulate)
 $items=@{}
-if(Test-Path $outFile){ $pd=Get-Content $outFile -Raw|ConvertFrom-Json; foreach($p in $pd.items.PSObject.Properties){ $h=@{}; foreach($sp in $p.Value.PSObject.Properties){ $h[[string]$sp.Name]=$sp.Value }; $items[[string]$p.Name]=$h } }
+if(Test-Path $outFile){ $pd=Read-JsonFile $outFile; foreach($p in $pd.items.PSObject.Properties){ $h=@{}; foreach($sp in $p.Value.PSObject.Properties){ $h[[string]$sp.Name]=$sp.Value }; $items[[string]$p.Name]=$h } }
 $added=0; $storesSeen=@{}
 # Process base file first, then numbered passes (store-hyvee -> store-hyvee2 -> store-hyvee3) so a later
 # correction file supersedes the original link for the same id+store. Sort by (store-key, numeric-suffix);

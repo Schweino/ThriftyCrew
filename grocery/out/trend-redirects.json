@@ -10,7 +10,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/adobo-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/air-freshener-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/aji-amarillo-paste-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -21,6 +31,11 @@
     },
     {
         "from":  "^/all-purpose-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/almond-flour-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -105,7 +120,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/baby-potatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/baby-wipes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bacon-bits-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -160,12 +185,22 @@
         "permanent":  true
     },
     {
+        "from":  "^/bean-sprouts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/beef-broth-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
     {
         "from":  "^/beef-jerky-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/beef-short-ribs-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -205,7 +240,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/black-peppercorns-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/bleach-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/block-cheese-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -241,6 +286,11 @@
     },
     {
         "from":  "^/bouillon-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/brandy-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -285,6 +335,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/brown-lentils-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/brown-rice-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -296,6 +351,11 @@
     },
     {
         "from":  "^/brussels-sprouts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bulgur-wheat-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -335,12 +395,22 @@
         "permanent":  true
     },
     {
+        "from":  "^/canned-asparagus-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/canned-beets-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
     {
         "from":  "^/canned-black-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-butter-beans-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -450,6 +520,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/cardamom-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/carrots-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -486,6 +561,11 @@
     },
     {
         "from":  "^/charcoal-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cheddar-cheese-curds-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -560,6 +640,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/chipotle-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/chocolate-chips-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -576,6 +661,11 @@
     },
     {
         "from":  "^/cilantro-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cinnamon-stick-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -650,6 +740,16 @@
         "permanent":  true
     },
     {
+        "from":  "^/cooked-jasmine-rice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cooked-shredded-chicken-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/cookies-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -700,6 +800,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/couscous-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/crackers-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -730,7 +835,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/creme-fraiche-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/croissants-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/crushed-thai-chili-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -741,6 +856,11 @@
     },
     {
         "from":  "^/cucumbers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cumin-seeds-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -875,6 +995,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/dry-green-lentils-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/egg-noodles-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -925,7 +1050,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/fennel-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/feta-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/firm-tofu-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -960,6 +1095,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/fresh-cranberries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/fresh-dill-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -980,6 +1120,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/fresh-oregano-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/fresh-parsley-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -990,7 +1135,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/fresh-sage-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/fresh-stir-fry-blend-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-sweet-italian-turkey-sausage-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1010,7 +1165,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/frozen-brussels-sprouts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/frozen-burritos-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-cauliflower-rice-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1105,6 +1270,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/garlic-herb-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/garlic-powder-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1160,6 +1330,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/green-chilli-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/green-olives-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1176,6 +1351,11 @@
     },
     {
         "from":  "^/ground-allspice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-beef-9010-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1230,6 +1410,16 @@
         "permanent":  true
     },
     {
+        "from":  "^/gruyere-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/habanero-peppers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/half-and-half-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1261,6 +1451,11 @@
     },
     {
         "from":  "^/heavy-cream-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/high-fiber-tortillas-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1316,6 +1511,11 @@
     },
     {
         "from":  "^/hot-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hulled-pumpkin-seeds-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1395,12 +1595,22 @@
         "permanent":  true
     },
     {
+        "from":  "^/kalamata-olives-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/kale-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
     {
         "from":  "^/ketchup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/keto-hamburger-buns-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1416,6 +1626,11 @@
     },
     {
         "from":  "^/kiwi-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/kosher-salt-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1451,6 +1666,11 @@
     },
     {
         "from":  "^/lemon-juice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lemon-pepper-seasoning-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1515,6 +1735,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/mexican-chorizo-fresh-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/microwave-popcorn-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1575,6 +1800,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/nutritional-yeast-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/oatmeal-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1626,6 +1856,11 @@
     },
     {
         "from":  "^/pancake-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/papaya-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1695,6 +1930,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/pecorino-romano-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/pepperoni-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1725,12 +1965,22 @@
         "permanent":  true
     },
     {
+        "from":  "^/pistachios-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/pita-bread-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
     {
         "from":  "^/pizza-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/plain-soy-tempeh-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1785,6 +2035,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/portobello-mushrooms-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/potato-chips-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1825,7 +2080,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/quart-storage-bags-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/queso-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/quinoa-uncooked-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1865,7 +2130,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/ready-to-serve-long-grain-wild-rice-pouch-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/red-curry-paste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/red-lentils-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1881,6 +2156,11 @@
     },
     {
         "from":  "^/red-potatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/red-wine-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1911,6 +2191,11 @@
     },
     {
         "from":  "^/ribeye-steak-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rice-arborio-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -1965,6 +2250,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/salt-pork-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/sandwich-bags-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -1981,6 +2271,11 @@
     },
     {
         "from":  "^/sazon-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sea-salt-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -2005,7 +2300,17 @@
         "permanent":  true
     },
     {
+        "from":  "^/shaved-beef-steak-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/shaving-cream-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/shelled-edamame-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -2165,6 +2470,11 @@
         "permanent":  true
     },
     {
+        "from":  "^/tandoori-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/tartar-sauce-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -2310,6 +2620,16 @@
         "permanent":  true
     },
     {
+        "from":  "^/veggie-sausages-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/vienna-sausage-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/walnuts-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
@@ -2325,7 +2645,32 @@
         "permanent":  true
     },
     {
+        "from":  "^/white-miso-paste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/white-onion-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
         "from":  "^/white-vinegar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/white-wine-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/whole-cloves-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/whole-wheat-flour-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },
@@ -2341,6 +2686,11 @@
     },
     {
         "from":  "^/yeast-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/yellow-bell-pepper-price-omaha/?$",
         "to":  "/omaha-grocery-prices/",
         "permanent":  true
     },

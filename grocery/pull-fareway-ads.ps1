@@ -26,7 +26,8 @@
   Exit 2 = an install or a post-install assertion FAILED - the images on disk are not what the ad says.
 #>
 param([string]$OutDir = "", [string]$Today = "", [switch]$SelfTest)
-$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage; $ProgressPreference = 'SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'adpages-lib.ps1')
 
@@ -35,7 +36,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if ($SelfTest) {
   $fxFile = Join-Path $root 'regression-inputs\guard-fixtures\adpages-shrink.json'
   if (-not (Test-Path $fxFile)) { Write-Output ("SELFTEST FAIL: missing frozen fixture " + $fxFile); exit 2 }
-  $fx = Get-Content $fxFile -Raw | ConvertFrom-Json
+  $fx = Read-JsonFile $fxFile
   $pfx = [string]$fx.prefix
   $priorN = [int]$fx.prior.pages; $curN = [int]$fx.current.pages
   $tp = 0; $tf = 0

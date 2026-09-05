@@ -34,14 +34,15 @@ param([string]$CompareFile = "", [string]$VerdictFile = "", [string]$OutDir = ""
       [string]$OutFile = "",
       [string]$SuppressionsFile = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 if (-not $VerdictFile) { $VerdictFile = Join-Path $OutDir ("verify-verdicts-"+$week+".json") }
-$verdicts = Get-Content $VerdictFile -Raw | ConvertFrom-Json
+$verdicts = Read-JsonFile $VerdictFile
 
 # flat lookup "<id>|<store>" -> verdict entry (avoids nested-hashtable indexing quirks)
 $vlook = @{}
@@ -53,7 +54,7 @@ if (-not $SuppressionsFile) { $SuppressionsFile = Join-Path $root 'verdict-suppr
 $supp = @{}          # "id|store|item_norm" -> entry object
 $suppDirty = $false
 if (Test-Path $SuppressionsFile) {
-  try { foreach ($se in @((Get-Content $SuppressionsFile -Raw | ConvertFrom-Json).suppressions)) {
+  try { foreach ($se in @((Read-JsonFile $SuppressionsFile).suppressions)) {
           $supp[(([string]$se.id) + '|' + ([string]$se.store) + '|' + ([string]$se.item_norm))] = $se } }
   catch { Write-Warning ("verdict-suppressions.json unreadable - persistence is OFF this run: " + $_.Exception.Message) }
 }

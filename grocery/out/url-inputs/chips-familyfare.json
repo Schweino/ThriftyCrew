@@ -1,18 +1,10 @@
 ﻿[
     {
-        "id":  "apples",
-        "q":  "apples",
-        "match":  "Lady Apples",
-        "size":  "lb",
-        "pu":  2.19,
-        "unit":  "lb"
-    },
-    {
-        "id":  "applesauce",
-        "q":  "applesauce",
-        "match":  "Mott\u0027s Apple Sauce 6 Ea",
-        "size":  "6/4 oz",
-        "pu":  0.1454,
+        "id":  "dried-basil",
+        "q":  "dried basil",
+        "match":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
+        "size":  "200 ml",
+        "pu":  21.3929,
         "unit":  "oz"
     },
     {
@@ -28,111 +20,79 @@
         "q":  "cherry tomatoes",
         "match":  "Grape Tomatoes Our Family",
         "size":  "1 pt",
-        "pu":  0.329,
+        "pu":  0.399,
         "unit":  "oz"
     },
     {
-        "id":  "ground-coriander",
-        "q":  "ground coriander",
-        "match":  "Sugar \u0027N Spice Coriander Ground Pp",
-        "size":  "2 oz",
-        "pu":  1.045,
-        "unit":  "oz"
+        "id":  "clementines",
+        "q":  "mandarins clementines",
+        "match":  "Halo Clementines",
+        "size":  "2 lb",
+        "pu":  1.995,
+        "unit":  "lb"
     },
     {
-        "id":  "ground-fennel",
-        "q":  "fennel seed",
-        "match":  "Sugar \u0027N Spice Fennel Seed Whole",
-        "size":  "5.6 oz",
-        "pu":  0.6232,
-        "unit":  "oz"
-    },
-    {
-        "id":  "gelatin",
-        "q":  "gelatin cups",
-        "match":  "Jell O Strawberry Gelatin Dessert 3 Oz",
-        "size":  "1 ct",
-        "pu":  1.99,
-        "unit":  "each"
-    },
-    {
-        "id":  "ground-cinnamon",
-        "q":  "ground cinnamon",
-        "match":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
-        "size":  "2.5 oz",
-        "pu":  0.272,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ground-cumin",
-        "q":  "ground cumin",
-        "match":  "Sugar \u0027N Spice Cumin Ground Pp",
-        "size":  "2 oz",
-        "pu":  1.145,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ground-turmeric",
-        "q":  "ground turmeric",
-        "match":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
-        "size":  "2 oz",
-        "pu":  0.675,
-        "unit":  "oz"
-    },
-    {
-        "id":  "deli-ham",
-        "q":  "sliced deli ham",
-        "match":  "Hillshire Farm Ultra Thin Sliced Brown Sugar Ham Sandwich Meat 9 Oz",
-        "size":  "9 oz",
-        "pu":  0.6656,
-        "unit":  "oz"
-    },
-    {
-        "id":  "hamburger-buns",
-        "q":  "hamburger buns",
-        "match":  "8 Ct Wheat Hamburger Buns",
-        "size":  "16 oz",
-        "pu":  0.5988,
-        "unit":  "each"
-    },
-    {
-        "id":  "muffins",
-        "q":  "blueberry muffins",
-        "match":  "4 Ct Blueberry Muffins",
-        "size":  "16 oz",
+        "id":  "croissants",
+        "q":  "croissants",
+        "match":  "4 Ct Butter Croissants",
+        "size":  "10 oz",
         "pu":  1.4975,
         "unit":  "each"
     },
     {
-        "id":  "paper-towels",
-        "q":  "paper towels",
-        "match":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
-        "size":  "1 rl",
-        "pu":  1.3738,
+        "id":  "dinner-rolls",
+        "q":  "dinner rolls",
+        "match":  "Fresh \u0026 Finest 12 Ct Golden Dinner Rolls",
+        "size":  "15 oz",
+        "pu":  0.3325,
         "unit":  "each"
     },
     {
-        "id":  "toasted-sesame-seeds",
-        "q":  "sesame seeds",
-        "match":  "Mc Cormick Sesame Seed 1 Oz",
-        "size":  "1 oz",
-        "pu":  2.69,
+        "id":  "donuts",
+        "q":  "glazed donuts",
+        "match":  "Little Debbie Glazed Donut Sticks 6 Ea",
+        "size":  "10 oz",
+        "pu":  0.5317,
+        "unit":  "each"
+    },
+    {
+        "id":  "dried-guajillo-chiles",
+        "q":  "guajillo chiles",
+        "match":  "Guajillo Chili",
+        "size":  "3 oz",
+        "pu":  0.83,
         "unit":  "oz"
     },
     {
-        "id":  "shower-cleaner",
-        "q":  "bathroom cleaner",
-        "match":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
-        "size":  "32 fl oz",
-        "pu":  0.1059,
+        "id":  "eggs",
+        "q":  "large eggs",
+        "match":  "Large Grade A Eggs Our Family (30 Ct)",
+        "size":  "60 oz",
+        "pu":  2.356,
+        "unit":  "dozen"
+    },
+    {
+        "id":  "orange-juice",
+        "q":  "orange juice",
+        "match":  "Kemps® 100% Pure Orange Juice From Concentrate .5 Gal. Jug",
+        "size":  "0.5 gll",
+        "pu":  0.0702,
         "unit":  "floz"
     },
     {
-        "id":  "tomatillos",
-        "q":  "tomatillos",
-        "match":  "Tomatillos",
-        "size":  "lb",
-        "pu":  1.99,
+        "id":  "queso",
+        "q":  "salsa con queso",
+        "match":  "Tostitos Medium Salsa Con Queso 23 Oz",
+        "size":  "23",
+        "pu":  0.2604,
+        "unit":  "oz"
+    },
+    {
+        "id":  "yukon-gold-potatoes",
+        "q":  "yukon gold potatoes",
+        "match":  "Our Family Yellow Potatoes",
+        "size":  "5 lb",
+        "pu":  0.598,
         "unit":  "lb"
     }
 ]

@@ -1,0 +1,95 @@
+{
+    "generated":  "2026-09-05T14:39:33",
+    "term":  "butter",
+    "question":  "Per source: does it say a discount is LIVE, does it say when it ENDS, and if not is the end date reachable from another first-party surface? A source that can date its own discount needs no TTL.",
+    "probed":  [
+                   {
+                       "source":  "Baker\u0027s (Kroger /v1/products)",
+                       "says_discount_is_live":  true,
+                       "says_when_it_ends":  true,
+                       "end_date_reachable_elsewhere":  "flyer lane (bakers-deals ad_from/ad_to)",
+                       "evidence":  "bakers-kroger-2026-09-05.json",
+                       "note":  "price exposes promo vs regular so LIVE is knowable; window keys found: 1"
+                   },
+                   {
+                       "source":  "Hy-Vee (persisted GraphQL)",
+                       "says_discount_is_live":  true,
+                       "says_when_it_ends":  false,
+                       "end_date_reachable_elsewhere":  "Flipp weekly-ad feed (ads-*.json, store-level window only)",
+                       "evidence":  "hyvee-query-document-2026-09-05.graphql + hyvee-response-2026-09-05.json",
+                       "note":  "onSale + basePrice give LIVE; document selects 1 promotion-ish field(s)"
+                   },
+                   {
+                       "source":  "Family Fare (Freshop)",
+                       "says_discount_is_live":  true,
+                       "says_when_it_ends":  true,
+                       "end_date_reachable_elsewhere":  "/offers carries start_date/finish_date/display_start_date/display_finish_date with product_ids; /circulars carries start_date/finish_date/visible_start_date/visible_finish_date/display_start_date/display_finish_date/start_finish_date/visible_start_finish_date",
+                       "evidence":  "familyfare-freshop-2026-09-05.json + familyfare-freshop-offers/circulars",
+                       "note":  "the PRODUCT record has no date field at all (74 keys, only last_updated_at), but /offers does - so this store CAN date a sale and needs no TTL"
+                   }
+               ],
+    "not_probed":  [
+                       "Walmart",
+                       "Sam\u0027s Club",
+                       "Aldi",
+                       "Fareway"
+                   ],
+    "findings":  [
+                     {
+                         "source":  "Baker\u0027s (Kroger /v1/products)",
+                         "says_discount_is_live":  true,
+                         "says_when_it_ends":  true,
+                         "end_date_reachable_elsewhere":  "flyer lane (bakers-deals ad_from/ad_to)",
+                         "evidence":  "bakers-kroger-2026-09-05.json",
+                         "note":  "price exposes promo vs regular so LIVE is knowable; window keys found: 1"
+                     },
+                     {
+                         "source":  "Hy-Vee (persisted GraphQL)",
+                         "says_discount_is_live":  true,
+                         "says_when_it_ends":  false,
+                         "end_date_reachable_elsewhere":  "Flipp weekly-ad feed (ads-*.json, store-level window only)",
+                         "evidence":  "hyvee-query-document-2026-09-05.graphql + hyvee-response-2026-09-05.json",
+                         "note":  "onSale + basePrice give LIVE; document selects 1 promotion-ish field(s)"
+                     },
+                     {
+                         "source":  "Family Fare (Freshop)",
+                         "says_discount_is_live":  true,
+                         "says_when_it_ends":  true,
+                         "end_date_reachable_elsewhere":  "/offers carries start_date/finish_date/display_start_date/display_finish_date with product_ids; /circulars carries start_date/finish_date/visible_start_date/visible_finish_date/display_start_date/display_finish_date/start_finish_date/visible_start_finish_date",
+                         "evidence":  "familyfare-freshop-2026-09-05.json + familyfare-freshop-offers/circulars",
+                         "note":  "the PRODUCT record has no date field at all (74 keys, only last_updated_at), but /offers does - so this store CAN date a sale and needs no TTL"
+                     },
+                     {
+                         "source":  "Walmart",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     },
+                     {
+                         "source":  "Sam\u0027s Club",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     },
+                     {
+                         "source":  "Aldi",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     },
+                     {
+                         "source":  "Fareway",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     }
+                 ]
+}

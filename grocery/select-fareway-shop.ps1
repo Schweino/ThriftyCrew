@@ -15,13 +15,14 @@ param(
   [string]$Today = ""
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $asof = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 $scratch = 'C:\Users\Owner\AppData\Local\Temp\claude\C--Codex\32c86fd5-620b-4a8f-a670-285987b7c2fb\scratchpad'
 if (-not $In)  { $In  = Join-Path $scratch "fareway-shop-$asof.jsonl" }
 if (-not $Out) { $Out = Join-Path $root "out\fareway\fareway-shop-$asof.json" }
 
-$commod = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$commod = Read-JsonFile (Join-Path $root 'commodities.json')
 $incMap = @{}; $excMap = @{}; $unitMap = @{}
 foreach ($c in $commod) {
   $incMap[[string]$c.id] = @($c.include)

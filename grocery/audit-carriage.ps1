@@ -21,6 +21,7 @@
 
 param([switch]$Live, [switch]$Revivable, [switch]$Thin, [switch]$Json, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $root
 $mp   = Join-Path $repo 'meal-prep'
@@ -117,14 +118,14 @@ if ($SelfTest) {
 # LIVE RUN
 # ---------------------------------------------------------------------------------------------------
 $all = -not ($Live -or $Revivable -or $Thin)
-$feed = (Get-Content (Join-Path $root 'out\smp-feed.json') -Raw | ConvertFrom-Json).ingredients
+$feed = (Read-JsonFile (Join-Path $root 'out\smp-feed.json')).ingredients
 $fc   = Get-FeedCarriedSet $feed
 $led  = Import-CarriageLedger (Join-Path $root 'carriage.json')
-$costed = Get-Content (Join-Path $mp 'db\costed.json') -Raw | ConvertFrom-Json
+$costed = Read-JsonFile (Join-Path $mp 'db\costed.json')
 
 $published = @{}
 $hashFile = Join-Path $mp 'db\published-hashes.json'
-if (Test-Path $hashFile) { foreach ($p in (Get-Content $hashFile -Raw | ConvertFrom-Json).PSObject.Properties) { $published[$p.Name] = $true } }
+if (Test-Path $hashFile) { foreach ($p in (Read-JsonFile $hashFile).PSObject.Properties) { $published[$p.Name] = $true } }
 
 $bidRecipes = @{}
 foreach ($r in $costed) {

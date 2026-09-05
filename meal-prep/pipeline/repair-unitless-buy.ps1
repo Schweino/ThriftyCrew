@@ -47,6 +47,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $mp 'lib\json-db-io.ps1')
@@ -245,7 +246,7 @@ if ($SelfTest) {
         # ---- repair-cook-measures must not undo this work ------------------------------------------
         # Its package-noun test is guilty-until-proven-innocent, so any noun we write that is ALSO a
         # package word (heads, boxes) has to prove itself against densities or it gets rewritten away.
-        $dens = (Get-Content (Join-Path $mp 'db\densities.json') -Raw | ConvertFrom-Json).items
+        $dens = (Read-JsonFile (Join-Path $mp 'db\densities.json')).items
         $pkgNouns = @(
             @('Green Cabbage', '1.7 heads', 1512),
             @('Green Cabbage', '2 heads', 2016),

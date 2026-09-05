@@ -13,6 +13,7 @@
 #>
 param([switch]$Force)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $pub = Join-Path (Split-Path $root -Parent) 'public'
 
@@ -23,7 +24,7 @@ $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Na
 if (-not $cmpF -or $cmpF.BaseName -notmatch '(\d{4}-\d{2}-\d{2})$') { Write-Output 'digest REFUSED: no comparison'; exit 1 }
 $cmpDate = [datetime]$Matches[1]
 if (((Get-Date) - $cmpDate).TotalDays -gt 2) { Write-Output ('digest REFUSED: comparison is ' + [int]((Get-Date) - $cmpDate).TotalDays + 'd old - not emailing stale prices'); exit 1 }
-$doc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $cmpF.FullName
 
 # ---- Ghost admin auth (key only from env or gitignored .ghostkey - never inline) ----
 $apiUrl = 'https://map-to-success.ghost.io'
@@ -53,7 +54,7 @@ foreach ($row in $doc.comparison) {
 $scoreRows = ($wins.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object {
   '<tr><td style="padding:6px 12px;border-bottom:1px solid #e5e5e5;"><b>' + $_.Key + '</b></td><td style="padding:6px 12px;border-bottom:1px solid #e5e5e5;text-align:right;">' + $_.Value + ' items</td></tr>' }) -join ''
 
-$hist = Get-Content (Join-Path $pub 'price-history.json') -Raw | ConvertFrom-Json
+$hist = Read-JsonFile (Join-Path $pub 'price-history.json')
 $drops = New-Object System.Collections.Generic.List[object]
 foreach ($p in $hist.PSObject.Properties) {
   $it = $p.Value; $weeks = @($it.w); if ($weeks.Count -lt 2) { continue }

@@ -1,0 +1,2631 @@
+﻿{
+    "findings":  [
+                     {
+                         "file":  "ad-match-lib.ps1",
+                         "line":  88,
+                         "text":  "foreach ($d in (Get-Content $adsFile.FullName -Raw | ConvertFrom-Json).deals) {"
+                     },
+                     {
+                         "file":  "ad-match-lib.ps1",
+                         "line":  96,
+                         "text":  "try { $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "add-commodity-rule.ps1",
+                         "line":  103,
+                         "text":  "function Doc { (Get-Content $f -Raw | ConvertFrom-Json) }"
+                     },
+                     {
+                         "file":  "add-known-wrong.ps1",
+                         "line":  87,
+                         "text":  "$cmAll = Get-Content $cmF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "add-known-wrong.ps1",
+                         "line":  93,
+                         "text":  "$names = @{}; foreach ($s in @((Get-Content $stF -Raw | ConvertFrom-Json).stores)) { if ($s -and $s.name) { $names[[stri"
+                     },
+                     {
+                         "file":  "add-known-wrong.ps1",
+                         "line":  104,
+                         "text":  "foreach ($r in @((Get-Content $f.FullName -Raw | ConvertFrom-Json).comparison)) {"
+                     },
+                     {
+                         "file":  "add-known-wrong.ps1",
+                         "line":  122,
+                         "text":  "if (Test-Path $stF) { foreach ($s in @((Get-Content $stF -Raw | ConvertFrom-Json).stores)) { if ([string]$s.name -eq $St"
+                     },
+                     {
+                         "file":  "add-known-wrong.ps1",
+                         "line":  127,
+                         "text":  "foreach ($d in @((Get-Content $f.FullName -Raw | ConvertFrom-Json).deals)) {"
+                     },
+                     {
+                         "file":  "add-recipe-board-rows.ps1",
+                         "line":  173,
+                         "text":  "function Board { (Get-Content $bf -Raw | ConvertFrom-Json).comparison }"
+                     },
+                     {
+                         "file":  "add-recipe-board-rows.ps1",
+                         "line":  238,
+                         "text":  "if ($cmp) { foreach ($sr in @((Get-Content $cmp.FullName -Raw | ConvertFrom-Json).comparison)) { $stapleIds[[string]$sr."
+                     },
+                     {
+                         "file":  "add-recipe-board-rows.ps1",
+                         "line":  242,
+                         "text":  "if (Test-Path $catFile) { foreach ($c in (Get-Content $catFile -Raw | ConvertFrom-Json).categories) { $catLabels[[string"
+                     },
+                     {
+                         "file":  "adjudicate-discovery.ps1",
+                         "line":  151,
+                         "text":  "$catDoc = Get-Content $cF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "adjudicate-discovery.ps1",
+                         "line":  165,
+                         "text":  "$vDoc = Get-Content $vF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "adpages-lib.ps1",
+                         "line":  90,
+                         "text":  "try { return (Get-Content $p -Raw | ConvertFrom-Json) } catch { return $null }"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  242,
+                         "text":  "$cats = ConvertFrom-Json (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw)"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  261,
+                         "text":  "try { $rbd = ConvertFrom-Json (Get-Content $rbp -Raw) } catch { continue }"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  277,
+                         "text":  "$coms = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  286,
+                         "text":  "$d = Get-Content $FeedFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  385,
+                         "text":  "$parsedFx = ConvertFrom-Json (Get-Content $tmp -Raw)"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  416,
+                         "text":  "$boardRows = @((ConvertFrom-Json (Get-Content $cmpF.FullName -Raw)).comparison)"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  418,
+                         "text":  "if (Test-Path $rbF2) { $boardRows += @((ConvertFrom-Json (Get-Content $rbF2 -Raw)).comparison) }"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  421,
+                         "text":  "$fd = ConvertFrom-Json (Get-Content $feedF.FullName -Raw)"
+                     },
+                     {
+                         "file":  "aisle-test.ps1",
+                         "line":  442,
+                         "text":  "if ($Candidates) { $parsed = ConvertFrom-Json (Get-Content $Candidates -Raw); $rows = @($parsed) }"
+                     },
+                     {
+                         "file":  "apply-category-excludes.ps1",
+                         "line":  22,
+                         "text":  "$lib = Get-Content (Join-Path $root \u0027category-excludes.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "apply-category-excludes.ps1",
+                         "line":  24,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories) {"
+                     },
+                     {
+                         "file":  "apply-coverage-batch.ps1",
+                         "line":  56,
+                         "text":  "$d = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "apply-coverage-batch.ps1",
+                         "line":  202,
+                         "text":  "$corp = Get-Content $corpusFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "apply-coverage-batch.ps1",
+                         "line":  309,
+                         "text":  "foreach ($rw in @((Get-Content $tf -Raw | ConvertFrom-Json).rows)) {"
+                     },
+                     {
+                         "file":  "apply-coverage-batch.ps1",
+                         "line":  345,
+                         "text":  "foreach ($rw in @((Get-Content $tf -Raw | ConvertFrom-Json).rows)) {"
+                     },
+                     {
+                         "file":  "audit-asof-evidence.ps1",
+                         "line":  114,
+                         "text":  "try { $doc = Get-Content $regF[0].FullName -Raw | ConvertFrom-Json } catch {"
+                     },
+                     {
+                         "file":  "audit-asof-evidence.ps1",
+                         "line":  202,
+                         "text":  "try { $bd = Get-Content $basePath -Raw | ConvertFrom-Json; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [i"
+                     },
+                     {
+                         "file":  "audit-band-censorship.ps1",
+                         "line":  201,
+                         "text":  "$fdoc = Get-Content $FlaggedFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-band-censorship.ps1",
+                         "line":  213,
+                         "text":  "$cmp = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-band-censorship.ps1",
+                         "line":  254,
+                         "text":  "if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).cells) } catch { $base = $null } }"
+                     },
+                     {
+                         "file":  "audit-basis-reconcile.ps1",
+                         "line":  122,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-basis-reconcile.ps1",
+                         "line":  153,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-basis-reconcile.ps1",
+                         "line":  169,
+                         "text":  "try { foreach ($a in (Get-Content $alf -Raw | ConvertFrom-Json).allow) { $allow[([string]$a.store + \u0027|\u0027 + (NormName ([st"
+                     },
+                     {
+                         "file":  "audit-basis-reconcile.ps1",
+                         "line":  185,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-board-consistency.ps1",
+                         "line":  97,
+                         "text":  "$all = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "audit-board-consistency.ps1",
+                         "line":  99,
+                         "text":  "if (Test-Path $riF) { $all += @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }"
+                     },
+                     {
+                         "file":  "audit-board-consistency.ps1",
+                         "line":  100,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "audit-board-consistency.ps1",
+                         "line":  106,
+                         "text":  "if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id;"
+                     },
+                     {
+                         "file":  "audit-board-consistency.ps1",
+                         "line":  147,
+                         "text":  "$bf = Get-Content $boardFeed -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-board-reconciliation.ps1",
+                         "line":  64,
+                         "text":  "$weeklyRows = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "audit-board-reconciliation.ps1",
+                         "line":  65,
+                         "text":  "$recipeRows = @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "audit-board-reconciliation.ps1",
+                         "line":  69,
+                         "text":  "try { foreach ($p in ((Get-Content $MapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) { $idMap[[string]$p.Name]"
+                     },
+                     {
+                         "file":  "audit-capture-eviction.ps1",
+                         "line":  203,
+                         "text":  "$doc = Get-Content $CandidatesFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-capture-eviction.ps1",
+                         "line":  219,
+                         "text":  "$cmp = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-carriage.ps1",
+                         "line":  120,
+                         "text":  "$feed = (Get-Content (Join-Path $root \u0027out\\smp-feed.json\u0027) -Raw | ConvertFrom-Json).ingredients"
+                     },
+                     {
+                         "file":  "audit-carriage.ps1",
+                         "line":  123,
+                         "text":  "$costed = Get-Content (Join-Path $mp \u0027db\\costed.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-carriage.ps1",
+                         "line":  127,
+                         "text":  "if (Test-Path $hashFile) { foreach ($p in (Get-Content $hashFile -Raw | ConvertFrom-Json).PSObject.Properties) { $publis"
+                     },
+                     {
+                         "file":  "audit-cell-drops.ps1",
+                         "line":  26,
+                         "text":  "$new = (Get-Content $newF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "audit-cell-drops.ps1",
+                         "line":  27,
+                         "text":  "$old = (Get-Content $oldF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  118,
+                         "text":  "$commods = Get-Content $CommoditiesFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  141,
+                         "text":  "if ($adsF) { foreach ($d in (Get-Content $adsF.FullName -Raw | ConvertFrom-Json).deals) { AddP ([string]$d.store) ([stri"
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  165,
+                         "text":  "try { $doc = Get-Content $entry.file.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  195,
+                         "text":  "if ($f) { foreach ($d in (Get-Content $f.FullName -Raw | ConvertFrom-Json).deals) { AddP ([string]$d.store) ([string]$d."
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  203,
+                         "text":  "if (Test-Path $allowF) { try { foreach ($a in (Get-Content $allowF -Raw | ConvertFrom-Json).allow) { $allow[([string]$a."
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  216,
+                         "text":  "$ncDoc = Get-Content $ncF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  240,
+                         "text":  "foreach ($r in (Get-Content $CompareFile -Raw | ConvertFrom-Json).comparison) { foreach ($s in $r.stores) { $present[([s"
+                     },
+                     {
+                         "file":  "audit-coverage-gaps.ps1",
+                         "line":  361,
+                         "text":  "$cdoc = Get-Content $CandidatesFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-coverage-regression.ps1",
+                         "line":  53,
+                         "text":  "$j = Get-Content $path -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-coverage-regression.ps1",
+                         "line":  77,
+                         "text":  "foreach ($e in @((Get-Content $ackPath -Raw | ConvertFrom-Json).acks)) {"
+                     },
+                     {
+                         "file":  "audit-everyday-mismatch.ps1",
+                         "line":  39,
+                         "text":  "$boards = @([pscustomobject]@{ name = $cmpF.Name; src = \u0027main\u0027; data = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Js"
+                     },
+                     {
+                         "file":  "audit-everyday-mismatch.ps1",
+                         "line":  42,
+                         "text":  "$boards += [pscustomobject]@{ name = \u0027recipe-board.json\u0027; src = \u0027recipe\u0027; data = (Get-Content $rbF -Raw | ConvertFrom-Js"
+                     },
+                     {
+                         "file":  "audit-everyday-mismatch.ps1",
+                         "line":  53,
+                         "text":  "$pu  = (Get-Content $puF -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "audit-ff-missing-products.ps1",
+                         "line":  24,
+                         "text":  "$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "audit-ff-missing-products.ps1",
+                         "line":  25,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "audit-ff-missing-products.ps1",
+                         "line":  36,
+                         "text":  "foreach ($r in (Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals) { $have[([string]$r.item).ToLower().Trim()] ="
+                     },
+                     {
+                         "file":  "audit-food-category.ps1",
+                         "line":  27,
+                         "text":  "$lib = Get-Content (Join-Path $root \u0027category-excludes.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-food-category.ps1",
+                         "line":  29,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories) {"
+                     },
+                     {
+                         "file":  "audit-food-category.ps1",
+                         "line":  36,
+                         "text":  "if (Test-Path $af) { $parsedAllow = Get-Content $af -Raw | ConvertFrom-Json; foreach ($a in $parsedAllow) { $allow += $a"
+                     },
+                     {
+                         "file":  "audit-food-category.ps1",
+                         "line":  60,
+                         "text":  "foreach ($it in (Get-Content $f -Raw | ConvertFrom-Json).comparison) {"
+                     },
+                     {
+                         "file":  "audit-ghost-drift.ps1",
+                         "line":  96,
+                         "text":  "$m = @((Get-Content $manifestPath -Raw | ConvertFrom-Json).tools)"
+                     },
+                     {
+                         "file":  "audit-ghost-drift.ps1",
+                         "line":  155,
+                         "text":  "foreach ($p in ((Get-Content $hashPath -Raw | ConvertFrom-Json).PSObject.Properties)) { $ledger[$p.Name] = [string]$p.Va"
+                     },
+                     {
+                         "file":  "audit-ghost-drift.ps1",
+                         "line":  273,
+                         "text":  "$manifest = @((Get-Content $manifestPath -Raw | ConvertFrom-Json).tools)"
+                     },
+                     {
+                         "file":  "audit-ghost-drift.ps1",
+                         "line":  279,
+                         "text":  "if (Test-Path $allowPath) { try { $allow = @((Get-Content $allowPath -Raw | ConvertFrom-Json).allow) } catch { } }"
+                     },
+                     {
+                         "file":  "audit-guard-contract.ps1",
+                         "line":  215,
+                         "text":  "try { foreach ($m in (Get-Content $script:MANUAL_OK -Raw | ConvertFrom-Json).manual) { $manualOk[[string]$m.name] = [str"
+                     },
+                     {
+                         "file":  "audit-household-in-food.ps1",
+                         "line":  18,
+                         "text":  "$commodities = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-household-in-food.ps1",
+                         "line":  19,
+                         "text":  "$cats = (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories"
+                     },
+                     {
+                         "file":  "audit-household-in-food.ps1",
+                         "line":  58,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-hyvee-store-blend.ps1",
+                         "line":  42,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-json-readers.ps1",
+                         "line":  77,
+                         "text":  "$r = @(Find-BareJsonReads -Lines @(\u0027$doc = Get-Content $path -Raw | ConvertFrom-Json\u0027) -File \u0027fx.ps1\u0027)"
+                     },
+                     {
+                         "file":  "audit-json-readers.ps1",
+                         "line":  78,
+                         "text":  "if ($r.Count -eq 1) { Write-Output \u0027  PASS  MUST FIRE: a bare `Get-Content -Raw | ConvertFrom-Json` is reported\u0027 }"
+                     },
+                     {
+                         "file":  "audit-json-readers.ps1",
+                         "line":  95,
+                         "text":  "$r = @(Find-BareJsonReads -Lines @(\u0027  # Get-Content $x -Raw | ConvertFrom-Json is how this went wrong\u0027) -File \u0027fx.ps1\u0027)"
+                     },
+                     {
+                         "file":  "audit-json-readers.ps1",
+                         "line":  150,
+                         "text":  "if ((Test-Path $blF) -and -not $Baseline) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).count) } catc"
+                     },
+                     {
+                         "file":  "audit-known-wrong.ps1",
+                         "line":  162,
+                         "text":  "foreach ($f in $cmpF) { $boards += ,@($f.Name, @((Get-Content $f.FullName -Raw | ConvertFrom-Json).comparison)) }"
+                     },
+                     {
+                         "file":  "audit-known-wrong.ps1",
+                         "line":  164,
+                         "text":  "if (Test-Path $rbF) { $boards += ,@(\u0027recipe-board.json\u0027, @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) }"
+                     },
+                     {
+                         "file":  "audit-known-wrong.ps1",
+                         "line":  214,
+                         "text":  "$cmAll = Get-Content $cmF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-known-wrong.ps1",
+                         "line":  225,
+                         "text":  "foreach ($s in @((Get-Content $stF -Raw | ConvertFrom-Json).stores)) { if ($s -and $s.name) { $liveStores[[string]$s.nam"
+                     },
+                     {
+                         "file":  "audit-known-wrong.ps1",
+                         "line":  248,
+                         "text":  "foreach ($d in @((Get-Content $f.FullName -Raw | ConvertFrom-Json).deals)) {"
+                     },
+                     {
+                         "file":  "audit-known-wrong.ps1",
+                         "line":  504,
+                         "text":  "$purlDoc = Get-Content $purlPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-links.ps1",
+                         "line":  23,
+                         "text":  "$srcs = @((Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "audit-links.ps1",
+                         "line":  25,
+                         "text":  "if (Test-Path $riFile) { $srcs += @((Get-Content $riFile -Raw | ConvertFrom-Json).comparison) }"
+                     },
+                     {
+                         "file":  "audit-links.ps1",
+                         "line":  76,
+                         "text":  "$pd = Get-Content $pf -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-match-contested.ps1",
+                         "line":  21,
+                         "text":  "$commodities = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-match-contested.ps1",
+                         "line":  22,
+                         "text":  "$cats = (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories"
+                     },
+                     {
+                         "file":  "audit-match-contested.ps1",
+                         "line":  59,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-name-drift.ps1",
+                         "line":  23,
+                         "text":  "$c    = @((Get-Content $cmp.FullName -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "audit-name-drift.ps1",
+                         "line":  27,
+                         "text":  "$c = @($c) + @(@((Get-Content $rbF -Raw | ConvertFrom-Json).comparison) | Where-Object { -not $stapleIds.ContainsKey([st"
+                     },
+                     {
+                         "file":  "audit-name-drift.ps1",
+                         "line":  29,
+                         "text":  "$purls = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "audit-name-drift.ps1",
+                         "line":  64,
+                         "text":  "try { $d = Get-Content $lf -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-name-drift.ps1",
+                         "line":  121,
+                         "text":  "foreach ($cm in (Get-Content $cmFile -Raw | ConvertFrom-Json)) {"
+                     },
+                     {
+                         "file":  "audit-pack-basis.ps1",
+                         "line":  47,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-price-capture-reach.ps1",
+                         "line":  153,
+                         "text":  "$pt = Get-Content $ptFile.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-price-capture-reach.ps1",
+                         "line":  166,
+                         "text":  "try { $doc = Get-Content $path -Raw | ConvertFrom-Json } catch { }"
+                     },
+                     {
+                         "file":  "audit-price-mode.ps1",
+                         "line":  45,
+                         "text":  "$d = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-pull-profiles.ps1",
+                         "line":  250,
+                         "text":  "$doc = Get-Content (Join-Path $here \u0027stores.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-sale-fallback.ps1",
+                         "line":  20,
+                         "text":  "$commods = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-sale-fallback.ps1",
+                         "line":  66,
+                         "text":  "try { $doc = Get-Content $fileObj.FullName -Raw | ConvertFrom-Json } catch { return }"
+                     },
+                     {
+                         "file":  "audit-sale-fallback.ps1",
+                         "line":  87,
+                         "text":  "$all = (Get-Content $CompareFile -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "audit-sale-without-ad.ps1",
+                         "line":  42,
+                         "text":  "$cmp = Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-sale-without-ad.ps1",
+                         "line":  63,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "audit-sale-without-ad.ps1",
+                         "line":  76,
+                         "text":  "try { foreach ($e in (Get-Content $ledgerFile -Raw | ConvertFrom-Json).items) { $prior[[string]$e.key] = $e } } catch { "
+                     },
+                     {
+                         "file":  "audit-search-links.ps1",
+                         "line":  125,
+                         "text":  "$tj = Get-Content $TemplatesFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-search-links.ps1",
+                         "line":  144,
+                         "text":  "try { $regStores = @((Get-Content (Join-Path $root \u0027stores.json\u0027) -Raw | ConvertFrom-Json).stores | ForEach-Object { [st"
+                     },
+                     {
+                         "file":  "audit-search-links.ps1",
+                         "line":  146,
+                         "text":  "try { foreach ($s in (Get-Content (Join-Path $root \u0027stores.json\u0027) -Raw | ConvertFrom-Json).stores) { $walled[[string]$s."
+                     },
+                     {
+                         "file":  "audit-search-links.ps1",
+                         "line":  163,
+                         "text":  "if ($cmpF) { $boardTerms = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison | ForEach-Object { [string]"
+                     },
+                     {
+                         "file":  "audit-search-links.ps1",
+                         "line":  175,
+                         "text":  "$rj = Get-Content $ResponsesFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-search-links.ps1",
+                         "line":  240,
+                         "text":  "try { $bj = Get-Content $baseF -Raw | ConvertFrom-Json; foreach ($p in $bj.stores.PSObject.Properties) { $base[[string]$"
+                     },
+                     {
+                         "file":  "audit-search-terms.ps1",
+                         "line":  99,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "audit-search-terms.ps1",
+                         "line":  102,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-search-terms.ps1",
+                         "line":  118,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-semantic-identity.ps1",
+                         "line":  190,
+                         "text":  "$coms = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-semantic-identity.ps1",
+                         "line":  193,
+                         "text":  "$cmp = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-semantic-identity.ps1",
+                         "line":  228,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-semantic-identity.ps1",
+                         "line":  280,
+                         "text":  "$find = Get-Content $findF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-shelf-signal.ps1",
+                         "line":  111,
+                         "text":  "try { $board = Get-Content $cmp[0].FullName -Raw | ConvertFrom-Json } catch { $board = $null }"
+                     },
+                     {
+                         "file":  "audit-shelf-signal.ps1",
+                         "line":  118,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-store-coverage.ps1",
+                         "line":  32,
+                         "text":  "$ids = @((Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json) | ForEach-Object { [string]$_.id })"
+                     },
+                     {
+                         "file":  "audit-store-coverage.ps1",
+                         "line":  39,
+                         "text":  "if (Test-Path $boardFeed) { $bf = Get-Content $boardFeed -Raw | ConvertFrom-Json }"
+                     },
+                     {
+                         "file":  "audit-store-registry.ps1",
+                         "line":  49,
+                         "text":  "$reg = Get-Content (Join-Path $root \u0027stores.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-store-registry.ps1",
+                         "line":  59,
+                         "text":  "$doc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-store-registry.ps1",
+                         "line":  83,
+                         "text":  "$sched = Get-Content $schedF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-store-taxonomy.ps1",
+                         "line":  187,
+                         "text":  "$map = ((Get-Content $MapFile -Raw) + \u0027\u0027) | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-store-taxonomy.ps1",
+                         "line":  195,
+                         "text":  "foreach ($c in (((Get-Content (Join-Path $Root \u0027categories.json\u0027) -Raw) + \u0027\u0027) | ConvertFrom-Json).categories) {"
+                     },
+                     {
+                         "file":  "audit-store-taxonomy.ps1",
+                         "line":  230,
+                         "text":  "try { $doc = ((Get-Content $f.FullName -Raw) + \u0027\u0027) | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "audit-store-taxonomy.ps1",
+                         "line":  254,
+                         "text":  "try { $doc = ((Get-Content $n.file -Raw) + \u0027\u0027) | ConvertFrom-Json } catch { $doc = $null }"
+                     },
+                     {
+                         "file":  "audit-store-taxonomy.ps1",
+                         "line":  294,
+                         "text":  "foreach ($row in (((Get-Content $CompareFile -Raw) + \u0027\u0027) | ConvertFrom-Json).comparison) {"
+                     },
+                     {
+                         "file":  "audit-store-taxonomy.ps1",
+                         "line":  317,
+                         "text":  "foreach ($cm in (((Get-Content $CandidatesFile -Raw) + \u0027\u0027) | ConvertFrom-Json).commodities) {"
+                     },
+                     {
+                         "file":  "audit-tile-integrity.ps1",
+                         "line":  49,
+                         "text":  "$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "audit-tile-integrity.ps1",
+                         "line":  50,
+                         "text":  "$pu = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "audit-tile-integrity.ps1",
+                         "line":  90,
+                         "text":  "foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + \u0027|\u0027 + [string]$d.store)] = [s"
+                     },
+                     {
+                         "file":  "audit-tile-integrity.ps1",
+                         "line":  249,
+                         "text":  "$bl = (Get-Content $blF -Raw | ConvertFrom-Json).by_store"
+                     },
+                     {
+                         "file":  "audit-unit-basis-outlier.ps1",
+                         "line":  346,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "audit-unit-basis-outlier.ps1",
+                         "line":  371,
+                         "text":  "if (Test-Path $allowPath) { try { $kindAllow = @((Get-Content $allowPath -Raw | ConvertFrom-Json).allow) } catch { } }"
+                     },
+                     {
+                         "file":  "audit-walmart-fullpull.ps1",
+                         "line":  73,
+                         "text":  "$j = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "bakers-daily-due.ps1",
+                         "line":  36,
+                         "text":  "$b = @((Get-Content $sf -Raw | ConvertFrom-Json).stores) | Where-Object { $_.store -eq \"Baker\u0027s\" } | Select-Object -Firs"
+                     },
+                     {
+                         "file":  "bakers-daily-due.ps1",
+                         "line":  48,
+                         "text":  "$log = Get-Content $logFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-chips-from-tileintegrity.ps1",
+                         "line":  27,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "build-chips-from-tileintegrity.ps1",
+                         "line":  29,
+                         "text":  "$cmp = (Get-Content $cmpF -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "build-chips-from-tileintegrity.ps1",
+                         "line":  30,
+                         "text":  "$rows = @((Get-Content (Join-Path $OutDir \u0027tile-integrity.json\u0027) -Raw | ConvertFrom-Json).rows | Where-Object { $_.fault"
+                     },
+                     {
+                         "file":  "build-drift-chips.ps1",
+                         "line":  27,
+                         "text":  "$drift = @((Get-Content (Join-Path $root \u0027out\\name-drift.json\u0027) -Raw | ConvertFrom-Json).flags)"
+                     },
+                     {
+                         "file":  "build-drift-chips.ps1",
+                         "line":  29,
+                         "text":  "$cmp = (Get-Content $cmpF -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "build-drift-chips.ps1",
+                         "line":  33,
+                         "text":  "if (Test-Path $tf) { . (Join-Path $root \u0027search-terms-lib.ps1\u0027); $tdoc = (Get-Content $tf -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "build-drift-chips.ps1",
+                         "line":  51,
+                         "text":  "foreach ($rr in @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) {"
+                     },
+                     {
+                         "file":  "build-freezer-data.ps1",
+                         "line":  16,
+                         "text":  "$hist = Get-Content (Join-Path $root \u0027price-history.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-freezer-data.ps1",
+                         "line":  42,
+                         "text":  "$comp = Get-Content $compFile.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-friday-email.ps1",
+                         "line":  33,
+                         "text":  "$wk0 = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of"
+                     },
+                     {
+                         "file":  "build-friday-email.ps1",
+                         "line":  38,
+                         "text":  "$doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-friday-email.ps1",
+                         "line":  42,
+                         "text":  "$hist = Get-Content (Join-Path $root \u0027price-history.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-friday-email.ps1",
+                         "line":  63,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories) {"
+                     },
+                     {
+                         "file":  "build-pull-order.ps1",
+                         "line":  51,
+                         "text":  "$searchDoc = Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-pull-order.ps1",
+                         "line":  58,
+                         "text":  "$cmp = Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-pull-order.ps1",
+                         "line":  71,
+                         "text":  "$hist = Get-Content $hPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-regression-baseline.ps1",
+                         "line":  42,
+                         "text":  "$doc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-sale-windows.ps1",
+                         "line":  89,
+                         "text":  "$sc = Get-Content $ScheduleFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-sale-windows.ps1",
+                         "line":  99,
+                         "text":  "$board = Get-Content $ComparisonFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-sale-windows.ps1",
+                         "line":  103,
+                         "text":  "if (Test-Path $LogFile) { try { foreach ($w in (Get-Content $LogFile -Raw | ConvertFrom-Json).windows) { $prior[($w.id +"
+                     },
+                     {
+                         "file":  "build-sale-windows.ps1",
+                         "line":  132,
+                         "text":  "$mdoc = Get-Content $mf.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-sams-data.ps1",
+                         "line":  17,
+                         "text":  "$wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of"
+                     },
+                     {
+                         "file":  "build-sams-data.ps1",
+                         "line":  22,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-sams-data.ps1",
+                         "line":  27,
+                         "text":  "foreach ($c in ((Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories)) {"
+                     },
+                     {
+                         "file":  "build-sams-data.ps1",
+                         "line":  55,
+                         "text":  "$rb = Get-Content (Join-Path $outDir \u0027recipe-board.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-share-image.ps1",
+                         "line":  24,
+                         "text":  "$hist = Get-Content (Join-Path $pub \u0027price-history.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-staples-data.ps1",
+                         "line":  16,
+                         "text":  "$cats = (Get-Content \"$root\\categories.json\" -Raw | ConvertFrom-Json).categories"
+                     },
+                     {
+                         "file":  "build-staples-data.ps1",
+                         "line":  19,
+                         "text":  "$comms = Get-Content \"$root\\commodities.json\" -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-staples-data.ps1",
+                         "line":  23,
+                         "text":  "try { foreach ($h in ((Get-Content \"$root\\price-history.json\" -Raw | ConvertFrom-Json).commodities)) { if ($h.record_low"
+                     },
+                     {
+                         "file":  "build-staples-data.ps1",
+                         "line":  44,
+                         "text":  "$ri = Get-Content \"$root\\out\\recipe-board.json\" -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-store-guide.ps1",
+                         "line":  24,
+                         "text":  "try { $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir (\"verified-\" + $wk +"
+                     },
+                     {
+                         "file":  "build-store-guide.ps1",
+                         "line":  28,
+                         "text":  "$doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-store-guide.ps1",
+                         "line":  59,
+                         "text":  "$cats = (Get-Content $catFile -Raw | ConvertFrom-Json).categories"
+                     },
+                     {
+                         "file":  "build-store-guide.ps1",
+                         "line":  98,
+                         "text":  "$riDoc = Get-Content $riFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-trend-index.ps1",
+                         "line":  90,
+                         "text":  "$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-trend-pages.ps1",
+                         "line":  148,
+                         "text":  "$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-trend-pages.ps1",
+                         "line":  154,
+                         "text":  "$cmp = Get-Content $cmpFiles[-1].FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-trend-redirects.ps1",
+                         "line":  25,
+                         "text":  "$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-vet-sheet.ps1",
+                         "line":  25,
+                         "text":  "$lib = Get-Content (Join-Path $root \u0027category-excludes.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "build-vet-sheet.ps1",
+                         "line":  27,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories) {"
+                     },
+                     {
+                         "file":  "build-vet-sheet.ps1",
+                         "line":  31,
+                         "text":  "foreach ($cm in (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json)) { $labelOf[[string]$cm.id] ="
+                     },
+                     {
+                         "file":  "build-vet-sheet.ps1",
+                         "line":  32,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "build-vet-sheet.ps1",
+                         "line":  44,
+                         "text":  "foreach ($it in (Get-Content $cmpF -Raw | ConvertFrom-Json).comparison) {"
+                     },
+                     {
+                         "file":  "capture-run.ps1",
+                         "line":  82,
+                         "text":  "if (Test-Path $script:StatusFile) { try { (Get-Content $script:StatusFile -Raw | ConvertFrom-Json).PSObject.Properties |"
+                     },
+                     {
+                         "file":  "capture-run.ps1",
+                         "line":  692,
+                         "text":  "$v = Get-Content $vf -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "capture-run.ps1",
+                         "line":  1063,
+                         "text":  "$feed = Get-Content (Join-Path $repo \u0027public\\smp-feed.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "capture-watchdog.ps1",
+                         "line":  414,
+                         "text":  "$st = Get-Content $statusF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  300,
+                         "text":  "$cmp = (Get-Content $cf.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  306,
+                         "text":  "try { $sc = Get-Content $ScheduleFile -Raw | ConvertFrom-Json; foreach ($s in @($sc.stores)) { if ($s.current -and $s.cu"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  309,
+                         "text":  "try { $rbf = Join-Path $OutDir \u0027recipe-board.json\u0027; if (Test-Path $rbf) { $rb = (Get-Content $rbf -Raw | ConvertFrom-Jso"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  312,
+                         "text":  "try { if ($cf) { $wkS = (Get-Content $cf.FullName -Raw | ConvertFrom-Json).week_of; $vf = Join-Path $OutDir (\"verified-\""
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  319,
+                         "text":  "$sched  = Get-Content $ScheduleFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  389,
+                         "text":  "if (Test-Path $adsToday) { $vv = @((Get-Content $adsToday -Raw | ConvertFrom-Json).verification); if (@($vv | Where-Obje"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  497,
+                         "text":  "if (Test-Path $adsToday) { $verif = @((Get-Content $adsToday -Raw | ConvertFrom-Json).verification) }"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  498,
+                         "text":  "elseif ($NoPull) { $af = Get-ChildItem (Join-Path $OutDir \u0027ads-*.json\u0027) -ErrorAction SilentlyContinue | Sort-Object Name"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  670,
+                         "text":  "$wkH = [string](Get-Content $cmpH.FullName -Raw | ConvertFrom-Json).week_of"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  710,
+                         "text":  "if ($cmpNow) { try { $wkNow = (Get-Content $cmpNow.FullName -Raw | ConvertFrom-Json).week_of; if (Test-Path (Join-Path $"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  1107,
+                         "text":  "$cr = try { Get-Content (Join-Path $OutDir \u0027consistency-report.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  1365,
+                         "text":  "$cg = try { Get-Content (Join-Path $OutDir \u0027coverage-gaps.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  1426,
+                         "text":  "$sf = try { Get-Content (Join-Path $OutDir \u0027semantic-findings.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  1465,
+                         "text":  "$atJ = try { Get-Content (Join-Path $OutDir \u0027aisle-test.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  1699,
+                         "text":  "$adJ = ((Get-Content $adF -Raw) + \u0027\u0027).Trim() | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  1761,
+                         "text":  "$sf = try { Get-Content (Join-Path $OutDir \u0027sale-fallback-gaps.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2085,
+                         "text":  "$gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2094,
+                         "text":  "if ($ff) { $mb = @((Get-Content $ff.FullName -Raw | ConvertFrom-Json).multibuy_unpriced); foreach ($m in $mb) { $flagPar"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2116,
+                         "text":  "$brJ = Get-Content $brF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2133,
+                         "text":  "$ssJ = Get-Content $ssF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2146,
+                         "text":  "$pbJ = Get-Content $pbF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2162,
+                         "text":  "try { foreach ($p in ((Get-Content $fstateFile -Raw | ConvertFrom-Json).PSObject.Properties)) { $fstate[[string]$p.Name]"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2179,
+                         "text":  "foreach ($a in @((Get-Content $ackFile -Raw | ConvertFrom-Json).acks)) {"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2309,
+                         "text":  "$adDoc = Get-Content (Join-Path $root \u0027ad-urls.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "check-ad-cycles.ps1",
+                         "line":  2402,
+                         "text":  "$sc = try { Get-Content (Join-Path $OutDir \u0027store-coverage-report.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "derive-links-from-prices.ps1",
+                         "line":  148,
+                         "text":  "$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "derive-links-from-prices.ps1",
+                         "line":  150,
+                         "text":  "$puDoc = Get-Content $puPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "derive-links-from-prices.ps1",
+                         "line":  158,
+                         "text":  "foreach ($r in @((Get-Content $file -Raw | ConvertFrom-Json).deals)) {"
+                     },
+                     {
+                         "file":  "derive-not-carried.ps1",
+                         "line":  51,
+                         "text":  "$doc = Get-Content $ncFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "derive-not-carried.ps1",
+                         "line":  57,
+                         "text":  "$cs = Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "derive-not-carried.ps1",
+                         "line":  72,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { $noEvidenceStores.Add(\"$st (unreadable capture)\"); "
+                     },
+                     {
+                         "file":  "derive-not-carried.ps1",
+                         "line":  91,
+                         "text":  "$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "derive-not-carried.ps1",
+                         "line":  93,
+                         "text":  "foreach ($a in (Get-Content (Join-Path $root \u0027coverage-gap-allowlist.json\u0027) -Raw | ConvertFrom-Json).allow) {"
+                     },
+                     {
+                         "file":  "derive-not-carried.ps1",
+                         "line":  144,
+                         "text":  "$null = Get-Content $ncFile -Raw | ConvertFrom-Json      # validate round-trip"
+                     },
+                     {
+                         "file":  "derive-recipe-floors.ps1",
+                         "line":  41,
+                         "text":  "$doc = Get-Content $floorF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "derive-recipe-floors.ps1",
+                         "line":  52,
+                         "text":  "foreach ($p in ((Get-Content $idMapF -Raw | ConvertFrom-Json).map).PSObject.Properties) { $idMap[$p.Name] = [string]$p.V"
+                     },
+                     {
+                         "file":  "derive-recipe-floors.ps1",
+                         "line":  57,
+                         "text":  "$cand = Get-Content $candF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "derived-size-density-lib.ps1",
+                         "line":  371,
+                         "text":  "$doc = Get-Content $p -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "derived-size-density-lib.ps1",
+                         "line":  425,
+                         "text":  "$doc = Get-Content $Path -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "diag-ff.ps1",
+                         "line":  8,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "diag-ff.ps1",
+                         "line":  9,
+                         "text":  "$comm = @{}; foreach($c in (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw|ConvertFrom-Json)){ $comm[[string]$c.i"
+                     },
+                     {
+                         "file":  "diff-board.ps1",
+                         "line":  10,
+                         "text":  "foreach ($it in (Get-Content $Base -Raw | ConvertFrom-Json).comparison) {"
+                     },
+                     {
+                         "file":  "diff-board.ps1",
+                         "line":  16,
+                         "text":  "foreach ($it in (Get-Content $NewFile -Raw | ConvertFrom-Json).comparison) {"
+                     },
+                     {
+                         "file":  "discover-hyvee.ps1",
+                         "line":  132,
+                         "text":  "$coms = ConvertFrom-Json (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw)"
+                     },
+                     {
+                         "file":  "discover-hyvee.ps1",
+                         "line":  133,
+                         "text":  "$terms = (ConvertFrom-Json (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw)).terms"
+                     },
+                     {
+                         "file":  "discover-hyvee.ps1",
+                         "line":  139,
+                         "text":  "$feed = ConvertFrom-Json (Get-Content $feedF.FullName -Raw)"
+                     },
+                     {
+                         "file":  "discover-hyvee.ps1",
+                         "line":  149,
+                         "text":  "if ($cmpF) { $boardRows += @((ConvertFrom-Json (Get-Content $cmpF.FullName -Raw)).comparison) }"
+                     },
+                     {
+                         "file":  "discover-hyvee.ps1",
+                         "line":  151,
+                         "text":  "if (Test-Path $rbF) { $boardRows += @((ConvertFrom-Json (Get-Content $rbF -Raw)).comparison) }"
+                     },
+                     {
+                         "file":  "explain-coverage-gap.ps1",
+                         "line":  26,
+                         "text":  "$coms = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "explain-coverage-gap.ps1",
+                         "line":  27,
+                         "text":  "$find = Get-Content $FindingsFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  26,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  38,
+                         "text":  "$sw = Get-Content (Join-Path $root \u0027sale-windows.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  52,
+                         "text":  "if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id;"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  220,
+                         "text":  "if ($cmpF) { $cdoc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json; $weekOf = [string]$cdoc.week_of; AddBoard $cdoc"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  222,
+                         "text":  "if (Test-Path $rbF) { AddBoard (Get-Content $rbF -Raw | ConvertFrom-Json).comparison }"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  245,
+                         "text":  "if (Test-Path $rbeF) { try { foreach ($r in (Get-Content $rbeF -Raw | ConvertFrom-Json).comparison) { $baseUnit[[string]"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  247,
+                         "text":  "foreach ($p in ((Get-Content $idMapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) {"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  272,
+                         "text":  "try { foreach ($r in (Get-Content (Join-Path $mp \u0027recipes-db.json\u0027) -Raw | ConvertFrom-Json).recipes) { $servings[[strin"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  276,
+                         "text":  "foreach ($c in (Get-Content $rcF -Raw | ConvertFrom-Json).recipes) {"
+                     },
+                     {
+                         "file":  "export-feed.ps1",
+                         "line":  294,
+                         "text":  "if($cmpF){ $boardItemCount = @(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)).Count }"
+                     },
+                     {
+                         "file":  "export-identity-eval.ps1",
+                         "line":  116,
+                         "text":  "$coms = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "export-identity-eval.ps1",
+                         "line":  121,
+                         "text":  "$raw = Get-Content $cp -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "export-identity-eval.ps1",
+                         "line":  172,
+                         "text":  "$coms = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "export-identity-eval.ps1",
+                         "line":  178,
+                         "text":  "$kw = Get-Content (Join-Path $root \u0027known-wrong.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "export-identity-eval.ps1",
+                         "line":  199,
+                         "text":  "$pos = Get-Content (Join-Path $sd \u0027positives.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "familyfare-sweep.ps1",
+                         "line":  36,
+                         "text":  "if (Test-Path $cursorF) { try { $before = [string]((Get-Content $cursorF -Raw | ConvertFrom-Json).next_index) } catch {}"
+                     },
+                     {
+                         "file":  "familyfare-sweep.ps1",
+                         "line":  67,
+                         "text":  "if (Test-Path $cursorF) { try { $after = [string]((Get-Content $cursorF -Raw | ConvertFrom-Json).next_index) } catch {} "
+                     },
+                     {
+                         "file":  "fareway-daily-due.ps1",
+                         "line":  31,
+                         "text":  "$fw = @((Get-Content $sf -Raw | ConvertFrom-Json).stores) | Where-Object { $_.store -eq \u0027Fareway\u0027 } | Select-Object -Fir"
+                     },
+                     {
+                         "file":  "fareway-daily-due.ps1",
+                         "line":  45,
+                         "text":  "$log = Get-Content $logFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "fix-links-ff.ps1",
+                         "line":  47,
+                         "text":  "$viol = @((Get-Content (Join-Path $OutDir \u0027tile-integrity.json\u0027) -Raw | ConvertFrom-Json).rows) | Where-Object { $_.stor"
+                     },
+                     {
+                         "file":  "fix-links-ff.ps1",
+                         "line":  50,
+                         "text":  "$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "fix-links-ff.ps1",
+                         "line":  54,
+                         "text":  "$puDoc = Get-Content $puPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "fix-links-ff.ps1",
+                         "line":  70,
+                         "text":  "$plan = Get-Content $planPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "fix-links-ff.ps1",
+                         "line":  98,
+                         "text":  "$prev = Get-Content $planPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "generate-board-overrides.ps1",
+                         "line":  37,
+                         "text":  "$staple = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "generate-board-overrides.ps1",
+                         "line":  40,
+                         "text":  "if (Test-Path $riF) { $recipe = @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }"
+                     },
+                     {
+                         "file":  "generate-board-overrides.ps1",
+                         "line":  41,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "generate-board-overrides.ps1",
+                         "line":  74,
+                         "text":  "foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + \u0027|\u0027 + [string]$d.store)] = $t"
+                     },
+                     {
+                         "file":  "generate-board-overrides.ps1",
+                         "line":  137,
+                         "text":  "$pdoc = Get-Content $pf.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "ghost-export.ps1",
+                         "line":  58,
+                         "text":  "$null = Get-Content $outFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  384,
+                         "text":  "$doc = Get-Content $p -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  558,
+                         "text":  "$cmp  = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  559,
+                         "text":  "$pu   = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  605,
+                         "text":  "$idBoards += [pscustomobject]@{ ns = \u0027recipe\u0027; file = $recF; doc = (Get-Content $recF.FullName -Raw | ConvertFrom-Json) "
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  681,
+                         "text":  "$ovr = Get-Content $ovrF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  686,
+                         "text":  "if (Test-Path $rbF) { foreach ($r in (Get-Content $rbF -Raw | ConvertFrom-Json).comparison) { if (-not $unitById.Contain"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  690,
+                         "text":  "if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $pinDrift[([string]$d.id + \u0027|\u0027 "
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  734,
+                         "text":  "$ndDoc = Get-Content $ndF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  771,
+                         "text":  "foreach ($c in @((Get-Content $pinF -Raw | ConvertFrom-Json).cells)) { $pin[([string]$c.id + \u0027|\u0027 + [string]$c.store)] = "
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  862,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  966,
+                         "text":  "foreach ($hf in $files) { try { $fr += @((Get-Content $hf.FullName -Raw | ConvertFrom-Json).deals).Count } catch {} }"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  976,
+                         "text":  "try { $curr = @((Get-Content $newest.FullName -Raw | ConvertFrom-Json).deals).Count } catch {}"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  979,
+                         "text":  "try { $c = @((Get-Content $old.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $best) { $best = $c } } catch "
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  1003,
+                         "text":  "foreach ($r in @((Get-Content $uf.FullName -Raw | ConvertFrom-Json).deals)) {"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  1068,
+                         "text":  "$ex = Get-Content $exF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  1136,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  1204,
+                         "text":  "$altDoc = Get-Content $alt.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  1301,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  1383,
+                         "text":  "$bkDoc = Get-Content $bkNewest.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "guards.ps1",
+                         "line":  1456,
+                         "text":  "if (Test-Path $covOvrF) { try { $pinTotal = @((Get-Content $covOvrF -Raw | ConvertFrom-Json).cells).Count } catch { $pin"
+                     },
+                     {
+                         "file":  "heal-degraded-sizes.ps1",
+                         "line":  70,
+                         "text":  "$new = Get-Content $newF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "heal-degraded-sizes.ps1",
+                         "line":  91,
+                         "text":  "$prev = Get-Content $prevF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "heal-degraded-sizes.ps1",
+                         "line":  154,
+                         "text":  "$out = Get-Content (Join-Path $T \"fareway-regular-$d0.json\") -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "heal-degraded-sizes.ps1",
+                         "line":  166,
+                         "text":  "$out2 = Get-Content (Join-Path $T \"fareway-regular-$d0.json\") -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "heal-ff-missing-products.ps1",
+                         "line":  29,
+                         "text":  "$doc = Get-Content $curF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "heal-ff-missing-products.ps1",
+                         "line":  32,
+                         "text":  "$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "heal-ff-missing-products.ps1",
+                         "line":  33,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "heal-missing-products.ps1",
+                         "line":  34,
+                         "text":  "$doc = Get-Content $curF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "heal-missing-products.ps1",
+                         "line":  37,
+                         "text":  "$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "heal-missing-products.ps1",
+                         "line":  38,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "heal-missing-products.ps1",
+                         "line":  153,
+                         "text":  "foreach ($x in @((Get-Content $expF -Raw | ConvertFrom-Json))) {"
+                     },
+                     {
+                         "file":  "health-heartbeat.ps1",
+                         "line":  31,
+                         "text":  "$cfg  = Get-Content (Join-Path $root \u0027expected-automations.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "health-heartbeat.ps1",
+                         "line":  134,
+                         "text":  "try { $doc = Get-Content $Path -Raw -ErrorAction Stop | ConvertFrom-Json } catch { $doc = $null }"
+                     },
+                     {
+                         "file":  "identity-lib.ps1",
+                         "line":  315,
+                         "text":  "$null = Get-Content $tmp -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "import-sams-prices.ps1",
+                         "line":  61,
+                         "text":  "$raw = Get-Content $rawF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "import-sams-prices.ps1",
+                         "line":  66,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "import-sams-prices.ps1",
+                         "line":  68,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json)) { $units[[string]$c.id] = [st"
+                     },
+                     {
+                         "file":  "import-sams-prices.ps1",
+                         "line":  81,
+                         "text":  "$doc = Get-Content $regF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "ingredient-queue.ps1",
+                         "line":  441,
+                         "text":  "$got = Get-Content $cl -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "ingredient-queue.ps1",
+                         "line":  625,
+                         "text":  "$led = Get-Content $ledgerFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "ingredient-queue.ps1",
+                         "line":  657,
+                         "text":  "$freshLed = Get-Content $ledgerFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "measure-cheapest-selection.ps1",
+                         "line":  307,
+                         "text":  "$v2 = Get-Content $v2Path -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "measure-cheapest-selection.ps1",
+                         "line":  309,
+                         "text":  "$costsDoc = Get-Content $costsPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "measure-cheapest-selection.ps1",
+                         "line":  311,
+                         "text":  "$dbDoc = Get-Content $dbPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "merge-candidates.ps1",
+                         "line":  22,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json).categories) { $catLabels += [st"
+                     },
+                     {
+                         "file":  "merge-candidates.ps1",
+                         "line":  26,
+                         "text":  "foreach ($cm in (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json)) {"
+                     },
+                     {
+                         "file":  "merge-candidates.ps1",
+                         "line":  40,
+                         "text":  "try { $parsed = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { $rejects.Add(\"$($f.Name): UNPARSEABLE JSON - e"
+                     },
+                     {
+                         "file":  "merge-product-urls.ps1",
+                         "line":  40,
+                         "text":  "$res = Get-Content (Join-Path $sb \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "merge-product-urls.ps1",
+                         "line":  61,
+                         "text":  "foreach($f in @($cmpF)){ if($f){ $c=(Get-Content $f.FullName -Raw|ConvertFrom-Json).comparison; foreach($it in $c){ $cma"
+                     },
+                     {
+                         "file":  "merge-product-urls.ps1",
+                         "line":  63,
+                         "text":  "if(Test-Path $riF){ $c=(Get-Content $riF -Raw|ConvertFrom-Json).comparison; foreach($it in $c){ if(-not $cmap.ContainsKe"
+                     },
+                     {
+                         "file":  "merge-product-urls.ps1",
+                         "line":  81,
+                         "text":  "if(Test-Path $outFile){ $pd=Get-Content $outFile -Raw|ConvertFrom-Json; foreach($p in $pd.items.PSObject.Properties){ $h"
+                     },
+                     {
+                         "file":  "merge-product-urls.ps1",
+                         "line":  91,
+                         "text":  "$parsed = ConvertFrom-Json (Get-Content $path -Raw)"
+                     },
+                     {
+                         "file":  "notify-item-added.ps1",
+                         "line":  40,
+                         "text":  "$cmp = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "notify-item-added.ps1",
+                         "line":  50,
+                         "text":  "$known = @{}; foreach ($k in (Get-Content $stateFile -Raw | ConvertFrom-Json).ids) { $known[[string]$k] = $true }"
+                     },
+                     {
+                         "file":  "notify-item-added.ps1",
+                         "line":  83,
+                         "text":  "$commods = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "prime-batch-headless.ps1",
+                         "line":  34,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "prime-batch-headless.ps1",
+                         "line":  47,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json)) {"
+                     },
+                     {
+                         "file":  "prime-batch-headless.ps1",
+                         "line":  67,
+                         "text":  "$doc = Get-Content $prev.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "probe-ingredient.ps1",
+                         "line":  121,
+                         "text":  "$k = Get-Content $kf -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "probe-price-fields.ps1",
+                         "line":  87,
+                         "text":  "if (Test-Path $kf) { $k = Get-Content $kf -Raw | ConvertFrom-Json; $cid = [string]$k.client_id; $csec = [string]$k.clien"
+                     },
+                     {
+                         "file":  "probe-price-fields.ps1",
+                         "line":  133,
+                         "text":  "$doc = Get-Content $hv.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "promote-ingredient-queue.ps1",
+                         "line":  119,
+                         "text":  "$queue = Get-Content $QueueFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "promote-ingredient-queue.ps1",
+                         "line":  120,
+                         "text":  "$map = Get-Content $MapFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "promote-verdicts.ps1",
+                         "line":  158,
+                         "text":  "$vj = Get-Content $vf.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "promote-verdicts.ps1",
+                         "line":  162,
+                         "text":  "$cj = Get-Content $cmpPath -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "promote-verdicts.ps1",
+                         "line":  300,
+                         "text":  "if (Test-Path $provPath) { $prov = Get-Content $provPath -Raw | ConvertFrom-Json } else { $prov = [pscustomobject]@{ rea"
+                     },
+                     {
+                         "file":  "prune-bad-links.ps1",
+                         "line":  41,
+                         "text":  "$doc = Get-Content $puFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "prune-bad-links.ps1",
+                         "line":  42,
+                         "text":  "$cmp = Get-Content (Get-ChildItem (Join-Path $root \u0027out\\comparison-*.json\u0027) | Sort-Object Name -Desc | Select-Object -Fi"
+                     },
+                     {
+                         "file":  "prune-bad-links.ps1",
+                         "line":  50,
+                         "text":  "if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + \u0027|\u0027 + ["
+                     },
+                     {
+                         "file":  "publish-deals-page.ps1",
+                         "line":  104,
+                         "text":  "try { $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir (\"verified-\" + $wk +"
+                     },
+                     {
+                         "file":  "publish-deals-page.ps1",
+                         "line":  106,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "publish-deals-page.ps1",
+                         "line":  111,
+                         "text":  "$stores = @((Get-Content (Join-Path $root \u0027stores.json\u0027) -Raw | ConvertFrom-Json).stores | Sort-Object { [int]$_.order }"
+                     },
+                     {
+                         "file":  "publish-deals-page.ps1",
+                         "line":  174,
+                         "text":  "$bj = Get-Content $bfeed -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "publish-deals-page.ps1",
+                         "line":  192,
+                         "text":  "$puDoc = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "publish-deals-page.ps1",
+                         "line":  347,
+                         "text":  "$phd = Get-Content (Join-Path $root \u0027price-history.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "publish-store-guide.ps1",
+                         "line":  22,
+                         "text":  "try { $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir (\"verified-\" + $wk +"
+                     },
+                     {
+                         "file":  "publish-store-guide.ps1",
+                         "line":  24,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "publish-store-guide.ps1",
+                         "line":  29,
+                         "text":  "$stores = @((Get-Content (Join-Path $root \u0027stores.json\u0027) -Raw | ConvertFrom-Json).stores | Sort-Object { [int]$_.order }"
+                     },
+                     {
+                         "file":  "publish-trend-pages.ps1",
+                         "line":  67,
+                         "text":  "$data = Get-Content $HistoryFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "pull-fareway-ads.ps1",
+                         "line":  38,
+                         "text":  "$fx = Get-Content $fxFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "pull-regular-bakers-api.ps1",
+                         "line":  175,
+                         "text":  "$k = Get-Content $kf -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "pull-regular-bakers-api.ps1",
+                         "line":  795,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "pull-regular-bakers-api.ps1",
+                         "line":  1078,
+                         "text":  "$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "pull-regular-bakers-api.ps1",
+                         "line":  1129,
+                         "text":  "$base = Get-Content $prev.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "pull-regular-bakers-api.ps1",
+                         "line":  1200,
+                         "text":  "try { $prevDeals = @((Get-Content $prevFile.FullName -Raw | ConvertFrom-Json).deals); $prevName = $prevFile.Name }"
+                     },
+                     {
+                         "file":  "pull-regular-bakers-api.ps1",
+                         "line":  1251,
+                         "text":  "try { $c = @((Get-Content $pf.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $prevMax) { $prevMax = $c } } c"
+                     },
+                     {
+                         "file":  "pull-regular-familyfare.ps1",
+                         "line":  443,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "pull-regular-familyfare.ps1",
+                         "line":  766,
+                         "text":  "$lj = Get-Content $ledgerFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "pull-regular-familyfare.ps1",
+                         "line":  1023,
+                         "text":  "$pdoc = Get-Content $prevF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "recipe-overlay.ps1",
+                         "line":  41,
+                         "text":  "$sc = (Get-Content $salesFile.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "recipe-overlay.ps1",
+                         "line":  55,
+                         "text":  "$base = Get-Content $baseFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "recipe-overlay.ps1",
+                         "line":  72,
+                         "text":  "try { foreach ($sr in @((Get-Content $newestCmp.FullName -Raw | ConvertFrom-Json).comparison)) { $stapleIds[[string]$sr."
+                     },
+                     {
+                         "file":  "recipe-overlay.ps1",
+                         "line":  89,
+                         "text":  "foreach ($p in ((Get-Content $mapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) { $idMap[[string]$p.Name] = [st"
+                     },
+                     {
+                         "file":  "recover-sams-quarantine.ps1",
+                         "line":  50,
+                         "text":  "$doc = Get-Content $In -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "refresh-bakers-links.ps1",
+                         "line":  35,
+                         "text":  "$cap = Get-Content $CaptureFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "refresh-bakers-links.ps1",
+                         "line":  51,
+                         "text":  "$pu = Get-Content $puFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "refresh-hyvee-links.ps1",
+                         "line":  26,
+                         "text":  "$rows = @((Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals)"
+                     },
+                     {
+                         "file":  "refresh-hyvee-links.ps1",
+                         "line":  57,
+                         "text":  "$doc = Get-Content $puF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "refresh-sams-verified.ps1",
+                         "line":  140,
+                         "text":  "$doc = Get-Content $prev[0].FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "refresh-sams-verified.ps1",
+                         "line":  246,
+                         "text":  "$d = Get-Content (Join-Path $T \u0027out\\regular\\sams-regular-2026-08-01.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "register-batch.ps1",
+                         "line":  22,
+                         "text":  "foreach ($x in (Get-Content (Join-Path $root $CandidatesFile) -Raw | ConvertFrom-Json)) { $cand[[string]$x.id] = $x }"
+                     },
+                     {
+                         "file":  "register-batch.ps1",
+                         "line":  34,
+                         "text":  "$searchDoc = Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "register-batch.ps1",
+                         "line":  43,
+                         "text":  "try { $parsed = Get-Content $rf.FullName -Raw | ConvertFrom-Json } catch { $rej.Add(\"$($rf.Name): UNPARSEABLE - whole fi"
+                     },
+                     {
+                         "file":  "register-batch.ps1",
+                         "line":  81,
+                         "text":  "$null = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "register-batch.ps1",
+                         "line":  82,
+                         "text":  "$null = Get-Content (Join-Path $root \u0027categories.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "register-batch.ps1",
+                         "line":  83,
+                         "text":  "$null = Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "regression-test.ps1",
+                         "line":  49,
+                         "text":  "$base = (Get-Content $baseFile -Raw | ConvertFrom-Json).commodities"
+                     },
+                     {
+                         "file":  "regression-test.ps1",
+                         "line":  51,
+                         "text":  "$now  = (Get-Content $nowF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "relink-drifted-cells.ps1",
+                         "line":  40,
+                         "text":  "$cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "relink-drifted-cells.ps1",
+                         "line":  41,
+                         "text":  "$pu  = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "repair-asof-evidence.ps1",
+                         "line":  93,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "repair-asof-evidence.ps1",
+                         "line":  165,
+                         "text":  "$d = Get-Content (Join-Path $T \u0027out\\regular\\fareway-regular-2026-08-01.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "repair-asof-evidence.ps1",
+                         "line":  174,
+                         "text":  "$d2 = Get-Content (Join-Path $T \u0027out\\regular\\fareway-regular-2026-08-01.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "repair-asof-evidence.ps1",
+                         "line":  185,
+                         "text":  "$d3 = Get-Content (Join-Path $T \u0027out\\regular\\fareway-regular-2026-08-01.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "repair-multipack-sizes.ps1",
+                         "line":  98,
+                         "text":  "if (Test-Path $hf) { try { $hj = (Get-Content $hf -Raw | ConvertFrom-Json) } catch { $hj = $null } }"
+                     },
+                     {
+                         "file":  "repair-multipack-sizes.ps1",
+                         "line":  145,
+                         "text":  "foreach ($h in @((Get-Content $hintFile -Raw | ConvertFrom-Json).hints)) {"
+                     },
+                     {
+                         "file":  "resolve-chips-hyvee.ps1",
+                         "line":  44,
+                         "text":  "$chipsDoc = Get-Content (Join-Path $root \u0027out\\url-inputs\\chips-hyvee.json\u0027) -Raw | ConvertFrom-Json; $chips = @($chipsDo"
+                     },
+                     {
+                         "file":  "resolve-chips-hyvee.ps1",
+                         "line":  53,
+                         "text":  "foreach ($row in ((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)) {"
+                     },
+                     {
+                         "file":  "resolve-familyfare-urls.ps1",
+                         "line":  15,
+                         "text":  "$wl = Get-Content (Join-Path $OutDir \u0027url-worklist.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "resolve-familyfare-urls.ps1",
+                         "line":  18,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "resolve-familyfare-urls.ps1",
+                         "line":  26,
+                         "text":  "$sdoc = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "resolve-familyfare-urls.ps1",
+                         "line":  29,
+                         "text":  "$rdoc = Get-Content (Join-Path $root \u0027recipe-commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "resolve-ff-boardmatch.ps1",
+                         "line":  19,
+                         "text":  "$rep = Get-Content $mmFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "resolve-ff-boardmatch.ps1",
+                         "line":  29,
+                         "text":  "$mmRaw = Get-Content (Join-Path $OutDir \u0027link-price-mismatch.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "resolve-ff-boardmatch.ps1",
+                         "line":  35,
+                         "text":  "try { foreach ($cdef in (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json)) { $cmeta[[string]$cd"
+                     },
+                     {
+                         "file":  "resolve-ff-boardmatch.ps1",
+                         "line":  44,
+                         "text":  "foreach ($it in (Get-Content $f -Raw | ConvertFrom-Json).comparison) { $ff = $it.stores | Where-Object { $_.store -eq \u0027F"
+                     },
+                     {
+                         "file":  "resolve-hyvee-links.ps1",
+                         "line":  48,
+                         "text":  "foreach ($c in (Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json)) { $units[[string]$c.id] = [st"
+                     },
+                     {
+                         "file":  "resolve-hyvee-links.ps1",
+                         "line":  52,
+                         "text":  "$rows = @((Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals)"
+                     },
+                     {
+                         "file":  "resolve-hyvee-links.ps1",
+                         "line":  64,
+                         "text":  "$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "resolve-hyvee-links.ps1",
+                         "line":  69,
+                         "text":  "foreach ($b in @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) {"
+                     },
+                     {
+                         "file":  "resolve-hyvee-links.ps1",
+                         "line":  76,
+                         "text":  "$doc = Get-Content $puF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "resolve-hyvee-links.ps1",
+                         "line":  87,
+                         "text":  "$crDoc = ConvertFrom-Json (Get-Content $crF -Raw)"
+                     },
+                     {
+                         "file":  "resolve-worklist.ps1",
+                         "line":  22,
+                         "text":  "$cmp = (Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "resolve-worklist.ps1",
+                         "line":  25,
+                         "text":  "if (Test-Path $riFile) { $ri = (Get-Content $riFile -Raw | ConvertFrom-Json).comparison }"
+                     },
+                     {
+                         "file":  "resolve-worklist.ps1",
+                         "line":  27,
+                         "text":  "$terms = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "resolve-worklist.ps1",
+                         "line":  33,
+                         "text":  "$pd = Get-Content $pf -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "sanity-check.ps1",
+                         "line":  17,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "sanity-check.ps1",
+                         "line":  24,
+                         "text":  "$h = Get-Content $histFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "select-fareway-shop.ps1",
+                         "line":  24,
+                         "text":  "$commod = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "send-friday-digest.ps1",
+                         "line":  26,
+                         "text":  "$doc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "send-friday-digest.ps1",
+                         "line":  56,
+                         "text":  "$hist = Get-Content (Join-Path $pub \u0027price-history.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "send-friday-email.ps1",
+                         "line":  39,
+                         "text":  "$meta = Get-Content $metaFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "send-price-alerts.ps1",
+                         "line":  38,
+                         "text":  "try { $wk0 = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of; $verF = Join-Path $OutDir (\"verified-\" + $wk0"
+                     },
+                     {
+                         "file":  "send-price-alerts.ps1",
+                         "line":  39,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "send-price-alerts.ps1",
+                         "line":  43,
+                         "text":  "if (Test-Path $riF) { $rows = $rows + @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }"
+                     },
+                     {
+                         "file":  "send-price-alerts.ps1",
+                         "line":  48,
+                         "text":  "foreach ($h in ((Get-Content $histFile -Raw | ConvertFrom-Json).commodities)) { $histById[[string]$h.id] = $h }"
+                     },
+                     {
+                         "file":  "send-price-alerts.ps1",
+                         "line":  52,
+                         "text":  "if (Test-Path $stateFile) { try { foreach ($p in ((Get-Content $stateFile -Raw | ConvertFrom-Json).PSObject.Properties))"
+                     },
+                     {
+                         "file":  "send-price-alerts.ps1",
+                         "line":  56,
+                         "text":  "try { $feed = (Get-Content (Join-Path $OutDir \u0027smp-feed.json\u0027) -Raw).TrimStart([char]0xFEFF) | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "set-board-cell.ps1",
+                         "line":  168,
+                         "text":  "function Board { (Get-Content $bf -Raw | ConvertFrom-Json).comparison }"
+                     },
+                     {
+                         "file":  "stamp-board-pu.ps1",
+                         "line":  14,
+                         "text":  "$cmp = (Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison"
+                     },
+                     {
+                         "file":  "stamp-board-pu.ps1",
+                         "line":  17,
+                         "text":  "if (Test-Path $riFile) { $ri = (Get-Content $riFile -Raw | ConvertFrom-Json).comparison }"
+                     },
+                     {
+                         "file":  "stamp-board-pu.ps1",
+                         "line":  42,
+                         "text":  "if (Test-Path $wlFile) { try { $wl = Get-Content $wlFile -Raw | ConvertFrom-Json; foreach ($stN in $wl.stores.PSObject.P"
+                     },
+                     {
+                         "file":  "stamp-board-pu.ps1",
+                         "line":  45,
+                         "text":  "$pd = Get-Content $pf -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "stamp-fareway-instore.ps1",
+                         "line":  36,
+                         "text":  "$doc = Get-Content $File -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "sync-browser-links.ps1",
+                         "line":  27,
+                         "text":  "$cmp = Get-Content (Get-ChildItem (Join-Path $root \u0027out\\comparison-*.json\u0027) | Sort-Object Name -Descending | Select-Obje"
+                     },
+                     {
+                         "file":  "sync-browser-links.ps1",
+                         "line":  30,
+                         "text":  "$doc = Get-Content $puF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "sync-browser-links.ps1",
+                         "line":  45,
+                         "text":  "foreach ($r in (Get-Content $rf.FullName -Raw | ConvertFrom-Json).deals) {"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  382,
+                         "text":  "\u0027(?m)^.*@\\(\\s*Get-Content[^)\\r\\n]*\\|\\s*ConvertFrom-Json\\s*\\).*$\u0027,"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  402,
+                         "text":  "$wrapped = @(Get-Content $probe -Raw | ConvertFrom-Json)"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  403,
+                         "text":  "$assigned = Get-Content $probe -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  639,
+                         "text":  "$ad = Get-Content $ap -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1038,
+                         "text":  "$bkLib = Get-Content (Join-Path $root \u0027category-excludes.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1048,
+                         "text":  "$bkCom = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1172,
+                         "text":  "$ndJson = try { Get-Content (Join-Path $fxNd \u0027out\\name-drift.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1177,
+                         "text":  "$ndJson = try { Get-Content (Join-Path $fxNd \u0027out\\name-drift.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1203,
+                         "text":  "$ndU = try { Get-Content (Join-Path $fxNdU \u0027out\\name-drift.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1214,
+                         "text":  "$ndU = try { Get-Content (Join-Path $fxNdU \u0027out\\name-drift.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1262,
+                         "text":  "$ndP = try { Get-Content (Join-Path $fxNdP \u0027out\\name-drift.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1270,
+                         "text":  "$ndP = try { Get-Content (Join-Path $fxNdP \u0027out\\name-drift.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1305,
+                         "text":  "$gbo = try { Get-Content (Join-Path $fxGbo \u0027board-price-overrides.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1313,
+                         "text":  "$gbo = try { Get-Content (Join-Path $fxGbo \u0027board-price-overrides.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1343,
+                         "text":  "$cgJson = try { Get-Content (Join-Path $fxCg \u0027coverage-gaps.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1976,
+                         "text":  "$sfg = try { Get-Content (Join-Path $fxSf \u0027sale-fallback-gaps.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1983,
+                         "text":  "$sfg = try { Get-Content (Join-Path $fxSf \u0027sale-fallback-gaps.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  1990,
+                         "text":  "$sfg = try { Get-Content (Join-Path $fxSf \u0027sale-fallback-gaps.json\u0027) -Raw | ConvertFrom-Json } catch { $null }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  2160,
+                         "text":  "if ($cdEnc -match \u0027function Read-JsonFile\u0027 -and $cdEnc -notmatch \u0027Get-Content \\$extra -Raw \\| ConvertFrom-Json\u0027) { Ok \u0027c"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  2332,
+                         "text":  "function SvRead([string]$p) { $d = Get-Content $p -Raw | ConvertFrom-Json; return , @($d) }"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3044,
+                         "text":  "try { $rfProp = ((Get-Content (Join-Path $fxRf \u0027recipe-floors-proposed.json\u0027) -Raw) + \u0027\u0027).Trim() | ConvertFrom-Json } ca"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3082,
+                         "text":  "try { $rfRep = ((Get-Content (Join-Path $fxRf \u0027recipe-floors-report.json\u0027) -Raw) + \u0027\u0027).Trim() | ConvertFrom-Json } catch"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3166,
+                         "text":  "$vh = $null; try { $vh = ((Get-Content $vhP -Raw) + \u0027\u0027).Trim() | ConvertFrom-Json } catch {}"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3227,
+                         "text":  "$stLive = (Get-Content (Join-Path $root \u0027commodity-search.json\u0027) -Raw | ConvertFrom-Json).terms"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3253,
+                         "text":  "$clAfter = ((Get-Content $clBase -Raw) + \u0027\u0027).Trim() | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3259,
+                         "text":  "$clAfter2 = ((Get-Content $clBase -Raw) + \u0027\u0027).Trim() | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3276,
+                         "text":  "$ckB = (Get-Content $ckBase -Raw) | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3277,
+                         "text":  "$ckL = (Get-Content $ckLed  -Raw) | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3288,
+                         "text":  "$ckT = (Get-Content $ckBase -Raw) | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3300,
+                         "text":  "$ckA = (Get-Content $ckBase -Raw) | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3813,
+                         "text":  "$rwReg = Get-Content (Join-Path $root \u0027stores.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  3878,
+                         "text":  "try { $slJson = Get-Content $slRepF -Raw | ConvertFrom-Json } catch {}"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  4303,
+                         "text":  "try { $covAfter = ((Get-Content (Join-Path $fxCov \u0027coverage-baseline.json\u0027) -Raw) + \u0027\u0027).Trim() | ConvertFrom-Json } catc"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  4420,
+                         "text":  "$kyO = ((Get-Content $kyF -Raw) + \u0027\u0027) | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  4696,
+                         "text":  "$ceDoc = Get-Content $ceStamp -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  4697,
+                         "text":  "$ceCmpDoc = Get-Content $ceCmps[0].FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  4871,
+                         "text":  "$cmMed = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  5007,
+                         "text":  "if ((Test-Path $ffMf) -and ((Get-Content $ffMf -Raw | ConvertFrom-Json).generated -eq \u00272026-07-27T07:13:44\u0027)) {"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  5555,
+                         "text":  "$dcRaw = Get-Content (Join-Path $PSScriptRoot \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-auditors.ps1",
+                         "line":  5969,
+                         "text":  "$ccCfg = Get-Content (Join-Path $root \u0027expected-automations.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-guards.ps1",
+                         "line":  703,
+                         "text":  "$ndFxCand = @(@((Get-Content $of -Raw | ConvertFrom-Json).cells) | Where-Object { $ndFxScanned.ContainsKey([string]$_.id"
+                     },
+                     {
+                         "file":  "test-guards.ps1",
+                         "line":  714,
+                         "text":  "$ndFxNow = try { (Get-Content $ndFx -Raw | ConvertFrom-Json) } catch { $null }"
+                     },
+                     {
+                         "file":  "test-guards.ps1",
+                         "line":  749,
+                         "text":  "try { $g6N = @((Get-Content $g6Old.FullName -Raw | ConvertFrom-Json).deals).Count; if ($g6N -gt $g6Best) { $g6Best = $g6"
+                     },
+                     {
+                         "file":  "test-guards.ps1",
+                         "line":  829,
+                         "text":  "if (Test-Path $g18AckF) { foreach ($g18A in @((Get-Content $g18AckF -Raw | ConvertFrom-Json).acks)) { if ($g18A.store) {"
+                     },
+                     {
+                         "file":  "test-guards.ps1",
+                         "line":  906,
+                         "text":  "$g20Board = Get-Content $g20Cmp.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-match-lib.ps1",
+                         "line":  58,
+                         "text":  "$commodities = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-match-lib.ps1",
+                         "line":  77,
+                         "text":  "$list = @([string[]](Get-Content $ChunkFile -Raw | ConvertFrom-Json))"
+                     },
+                     {
+                         "file":  "test-match-lib.ps1",
+                         "line":  85,
+                         "text":  "$ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-match-lib.ps1",
+                         "line":  89,
+                         "text":  "if ($adsF) { foreach ($d in (Get-Content $adsF.FullName -Raw | ConvertFrom-Json).deals) { if ($d.item) { $names[[string]"
+                     },
+                     {
+                         "file":  "test-match-lib.ps1",
+                         "line":  90,
+                         "text":  "foreach ($f in (Get-ChildItem (Join-Path $root \u0027out\\sams\\sams-deals-*.json\u0027) -EA SilentlyContinue)) { foreach ($d in (Ge"
+                     },
+                     {
+                         "file":  "test-match-lib.ps1",
+                         "line":  93,
+                         "text":  "if ($f) { foreach ($d in (Get-Content $f.FullName -Raw | ConvertFrom-Json).deals) { if ($d.item) { $names[[string]$d.ite"
+                     },
+                     {
+                         "file":  "test-match-lib.ps1",
+                         "line":  208,
+                         "text":  "else { $results += (Get-Content $j.out -Raw | ConvertFrom-Json) }"
+                     },
+                     {
+                         "file":  "test-matcher-parity.ps1",
+                         "line":  78,
+                         "text":  "$commodities = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "test-matcher-parity.ps1",
+                         "line":  88,
+                         "text":  "try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }"
+                     },
+                     {
+                         "file":  "test-precedence-ladders.ps1",
+                         "line":  117,
+                         "text":  "if (Test-Path $boardFile) { $cells = @((Get-Content $boardFile -Raw | ConvertFrom-Json).comparison) }"
+                     },
+                     {
+                         "file":  "test-precedence-ladders.ps1",
+                         "line":  118,
+                         "text":  "if (Test-Path $candFile) { $cands = @((Get-Content $candFile -Raw | ConvertFrom-Json).commodities) }"
+                     },
+                     {
+                         "file":  "test-pu-lib.ps1",
+                         "line":  81,
+                         "text":  "$all = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "test-pu-lib.ps1",
+                         "line":  82,
+                         "text":  "$pd = (Get-Content (Join-Path $root \u0027product-urls.json\u0027) -Raw | ConvertFrom-Json).items"
+                     },
+                     {
+                         "file":  "transform-store-links.ps1",
+                         "line":  9,
+                         "text":  "$raw = Get-Content $Src -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "triage-coverage-gaps.ps1",
+                         "line":  33,
+                         "text":  "$commods = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "triage-coverage-gaps.ps1",
+                         "line":  35,
+                         "text":  "$gaps = @((Get-Content (Join-Path $OutDir \u0027coverage-gaps.json\u0027) -Raw | ConvertFrom-Json).gaps)"
+                     },
+                     {
+                         "file":  "triage-coverage-gaps.ps1",
+                         "line":  79,
+                         "text":  "foreach ($c in (Get-Content $candF.FullName -Raw | ConvertFrom-Json).commodities) {"
+                     },
+                     {
+                         "file":  "triage-outofband.ps1",
+                         "line":  23,
+                         "text":  "$gapRows = @((Get-Content (Join-Path $OutDir \u0027gap-triage.json\u0027) -Raw | ConvertFrom-Json).rows) | Where-Object { $_.cause"
+                     },
+                     {
+                         "file":  "triage-outofband.ps1",
+                         "line":  25,
+                         "text":  "$fl = Get-Content $fF.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "triage-unpriced.ps1",
+                         "line":  25,
+                         "text":  "$commods = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "triage-unpriced.ps1",
+                         "line":  29,
+                         "text":  "$gapRows = @((Get-Content (Join-Path $OutDir \u0027gap-triage.json\u0027) -Raw | ConvertFrom-Json).rows) | Where-Object { $_.cause"
+                     },
+                     {
+                         "file":  "triage-unpriced.ps1",
+                         "line":  32,
+                         "text":  "foreach ($c in (Get-Content $candF.FullName -Raw | ConvertFrom-Json).commodities) {"
+                     },
+                     {
+                         "file":  "unit-vocabulary-lib.ps1",
+                         "line":  90,
+                         "text":  "$doc = Get-Content $Path -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "unit-vocabulary-lib.ps1",
+                         "line":  112,
+                         "text":  "$doc = Get-Content $p -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "unpublish-trend-pages.ps1",
+                         "line":  36,
+                         "text":  "$data = Get-Content (Join-Path $here \u0027price-history.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "update-history.ps1",
+                         "line":  26,
+                         "text":  "$cmpDoc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "update-history.ps1",
+                         "line":  31,
+                         "text":  "if (Test-Path $HistoryFile) { $existing = @((Get-Content $HistoryFile -Raw | ConvertFrom-Json).commodities) }"
+                     },
+                     {
+                         "file":  "update-history.ps1",
+                         "line":  107,
+                         "text":  "foreach ($row in @((Get-Content $riFile -Raw | ConvertFrom-Json).comparison)) {"
+                     },
+                     {
+                         "file":  "validate-fills.ps1",
+                         "line":  31,
+                         "text":  "$commodities = Get-Content (Join-Path $root \u0027commodities.json\u0027) -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "validate-fills.ps1",
+                         "line":  54,
+                         "text":  "$doc = Get-Content $FillsFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "validate-triage-plan.ps1",
+                         "line":  196,
+                         "text":  "try { $raw2 = Get-Content $p -Raw -ErrorAction Stop; if ($raw2 -and $raw2.Trim()) { $doc2 = $raw2 | ConvertFrom-Json } }"
+                     },
+                     {
+                         "file":  "validate-triage-plan.ps1",
+                         "line":  356,
+                         "text":  "try { $doc = Get-Content $Plan -Raw | ConvertFrom-Json } catch { Write-Output (\"validate-triage-plan: BLIND - plan does "
+                     },
+                     {
+                         "file":  "verify-apply.ps1",
+                         "line":  41,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "verify-apply.ps1",
+                         "line":  44,
+                         "text":  "$verdicts = Get-Content $VerdictFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "verify-apply.ps1",
+                         "line":  56,
+                         "text":  "try { foreach ($se in @((Get-Content $SuppressionsFile -Raw | ConvertFrom-Json).suppressions)) {"
+                     },
+                     {
+                         "file":  "verify-ff-heal.ps1",
+                         "line":  18,
+                         "text":  "$exp = Get-Content $expF -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "verify-ff-heal.ps1",
+                         "line":  21,
+                         "text":  "$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "verify-heal.ps1",
+                         "line":  27,
+                         "text":  "$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)"
+                     },
+                     {
+                         "file":  "verify-heal.ps1",
+                         "line":  32,
+                         "text":  "$doc = Get-Content $f.FullName -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "verify-no-regression.ps1",
+                         "line":  38,
+                         "text":  "$j = Get-Content $p -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "verify-prep.ps1",
+                         "line":  13,
+                         "text":  "$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "withdraw-stale-link.ps1",
+                         "line":  28,
+                         "text":  "$pu = Get-Content $puFile -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "carriage-lib.ps1",
+                         "line":  101,
+                         "text":  "$doc = Get-Content $Path -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "design-tokens.ps1",
+                         "line":  52,
+                         "text":  "$reg = Get-Content $f -Raw | ConvertFrom-Json"
+                     },
+                     {
+                         "file":  "json-io.ps1",
+                         "line":  106,
+                         "text":  "$bare = (Get-Content $noBom -Raw | ConvertFrom-Json).item"
+                     },
+                     {
+                         "file":  "json-io.ps1",
+                         "line":  115,
+                         "text":  "if ((Read-JsonFile $withBom).item -eq $name -and (Get-Content $withBom -Raw | ConvertFrom-Json).item -eq $name) {"
+                     },
+                     {
+                         "file":  "json-io.ps1",
+                         "line":  136,
+                         "text":  "if ($bomOk -and (Read-JsonFile $rt).item -eq $name -and (Get-Content $rt -Raw | ConvertFrom-Json).item -eq $name) {"
+                     }
+                 ],
+    "generated":  "2026-09-05T14:15:17",
+    "count":  525
+}

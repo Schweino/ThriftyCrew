@@ -68,6 +68,7 @@
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $mp 'lib\json-db-io.ps1')
@@ -386,7 +387,7 @@ if ($SelfTest) {
         # ---- repair-cook-measures must not undo this work ------------------------------------------
         # Its package-noun test is guilty-until-proven-innocent. None of our nouns are package words, so
         # all four must read as innocent measuring units and survive a later sweep untouched.
-        $dens = (Get-Content (Join-Path $mp 'db\densities.json') -Raw | ConvertFrom-Json).items
+        $dens = (Read-JsonFile (Join-Path $mp 'db\densities.json')).items
         $survives = @(
             @('Yellow Onion',       '3 onions',    330),
             @('Garlic',             '3 tbsp',      25),

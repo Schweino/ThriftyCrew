@@ -7,6 +7,7 @@
 # Output: sams-data.js  ->  splice into sams-tool-template.html at //__DATA__
 #         -> C:\Codex\ThriftyCrew\site\tools\sams-worth-it-tool.html
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = 'C:\Codex\ThriftyCrew\grocery'
 $outDir = Join-Path $root 'out'
 
@@ -14,17 +15,17 @@ $outDir = Join-Path $root 'out'
 $cmpF = (Get-ChildItem (Join-Path $outDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $CompareFile = $cmpF.FullName
 try {
-  $wk = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).week_of
+  $wk = (Read-JsonFile $cmpF.FullName).week_of
   $verF = Join-Path $outDir ("verified-" + $wk + ".json")
   if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF }
 } catch {}
 Write-Host "board: $CompareFile"
-$doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 
 # category labels for the 29 weekly commodities (recipe-board rows carry their own category)
 $catOf = @{}
-foreach ($c in ((Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories)) {
+foreach ($c in ((Read-JsonFile (Join-Path $root 'categories.json')).categories)) {
   foreach ($cid in $c.commodities) { $catOf[[string]$cid] = [string]$c.label }
 }
 
@@ -52,7 +53,7 @@ foreach ($r in $doc.comparison) {
   $it = Get-SpreadRow $r $cat
   if ($it -ne $null) { $items += ,$it; $seen[$id] = $true }
 }
-$rb = Get-Content (Join-Path $outDir 'recipe-board.json') -Raw | ConvertFrom-Json
+$rb = Read-JsonFile (Join-Path $outDir 'recipe-board.json')
 foreach ($r in $rb.comparison) {
   $id = [string]$r.id
   if ($seen.ContainsKey($id)) { continue }

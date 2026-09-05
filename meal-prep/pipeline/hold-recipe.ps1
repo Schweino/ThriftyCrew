@@ -50,6 +50,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
 $repo = Split-Path -Parent $mp
@@ -127,7 +128,7 @@ if ($SelfTest) {
       (ConvertTo-Json ([ordered]@{ 'keep-me' = 'h1'; 'hold-me' = 'h2'; 'keep-two' = 'h3' }) -Depth 4), $UTF8)
 
     function Run([hashtable]$p) { $o = & $PSCommandPath @p; return @{ rc = $LASTEXITCODE; out = ($o -join ' | ') } }
-    function Hashes { return (Get-Content (Join-Path $t 'db\published-hashes.json') -Raw | ConvertFrom-Json) }
+    function Hashes { return (Read-JsonFile (Join-Path $t 'db\published-hashes.json')) }
 
     $r = Run @{ Slug = 'hold-me'; Reason = 'drill'; Root = $t; SkipGhost = $true }
     T 'MUST FIRE  a dry run writes nothing' `
@@ -143,7 +144,7 @@ if ($SelfTest) {
 
     # THE ORDER IS THE SAFETY ARGUMENT: held is written BEFORE the hash is removed, so a crash in
     # between leaves the slug protected from republish rather than exposed to one.
-    $held = Get-Content (Join-Path $t 'db\held-recipes.json') -Raw | ConvertFrom-Json
+    $held = Read-JsonFile (Join-Path $t 'db\held-recipes.json')
     T '  ...and the hold carries a reason and a date' `
       ((@($held.held)[0].reason -eq 'drill') -and (@($held.held)[0].held -match '^\d{4}-\d{2}-\d{2}$')) (ConvertTo-Json @($held.held)[0] -Compress)
 

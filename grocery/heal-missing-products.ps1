@@ -20,6 +20,7 @@
 #>
 param([string]$Store = 'Family Fare', [switch]$WhatIf, [switch]$Force)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 
@@ -31,11 +32,11 @@ $curF = (Get-ChildItem (Join-Path $regDir ($PREFIX[$Store] + '-regular-*.json'))
   Where-Object { $_.BaseName -match '-regular-\d{4}-\d{2}-\d{2}$' } |
   Sort-Object Name -Descending | Select-Object -First 1)
 if (-not $curF) { throw ("no regular file for $Store") }
-$doc = Get-Content $curF.FullName -Raw | ConvertFrom-Json
+$doc = Read-JsonFile $curF.FullName
 
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+$board = @((Read-JsonFile $cmpF).comparison)
+$pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 $today = (Get-Date -Format 'yyyy-MM-dd')
 
 $have = @{}
@@ -150,7 +151,7 @@ if ($added -gt 0) {
 $expF = Join-Path $root 'out\heal-expected.json'
 $all = New-Object System.Collections.ArrayList
 if (Test-Path $expF) {
-  foreach ($x in @((Get-Content $expF -Raw | ConvertFrom-Json))) {
+  foreach ($x in @((Read-JsonFile $expF))) {
     if ($x.id -and $x.store -and ([string]$x.store -ne $Store)) { [void]$all.Add($x) }
   }
 }

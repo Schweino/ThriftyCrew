@@ -31,11 +31,12 @@ param(
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $New) { $New = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
 
 function Cells($p) {
-  $j = Get-Content $p -Raw | ConvertFrom-Json
+  $j = Read-JsonFile $p
   $h = @{}
   $ids = @{}
   foreach ($r in $j.comparison) {
