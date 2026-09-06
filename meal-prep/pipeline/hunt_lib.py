@@ -1247,19 +1247,31 @@ DERIVE = {"type": "object", "properties": {
 # session's re-ask when the model was right and the schema was wrong. head.steps and head.step_names
 # are the two that must be arrays, and they say so in their descriptions rather than in a `type` this
 # validator would refuse a good answer over.
+# `fact_claims` ADDED 2026-09-06 (backlog E6, the Fact Check List). Every NUMBER a card asserts is
+# already checked - costs reconcile, macros recompute, and since CHANGE W the writer cannot compute one
+# at all. What nothing checked is the prose's NON-NUMERIC assertions: "keeps 5 days", "Aldi carries it
+# year-round", "thighs are cheaper than breasts". Those are claims the writer makes on its own
+# authority on a live paid site, and two of the three classes route around a system of record - the
+# estate proves carriage from store evidence and refuses to publish without it, and prose asserting it
+# in words bypasses that entirely. Measured the day this shipped: 340 such assertions across 584 live
+# cards, none of them declared and none of them verified by anything.
 WRITER_FIELDS = ("prose.intro_html", "prose.shop_smart", "prose.make_it", "prose.portion_html",
                  "prose.cost_closing_html", "prose.upsell_html", "cuisine", "head.description",
                  "head.keywords", "head.steps", "head.step_names", "writer_notes",
-                 "forbidden_prose_terms")
+                 "forbidden_prose_terms", "fact_claims")
 
 WRITE = {"type": "object", "properties": {
     "slug": {"type": "string"}, "status": {"type": "string"}, "state": {"type": "string"},
     "detail": {"type": "string"},
     "fields": {"type": "object", "description":
                "your entire deliverable. The dotted names are literal keys: " +
-               ", ".join(WRITER_FIELDS) + ". head.steps, head.step_names, writer_notes and "
-               "forbidden_prose_terms are ARRAYS of strings; the rest are strings. The ORCHESTRATOR "
-               "patches the intake - you have no file to open and none to write."}},
+               ", ".join(WRITER_FIELDS) + ". head.steps, head.step_names, writer_notes, "
+               "forbidden_prose_terms and fact_claims are ARRAYS of strings; the rest are strings. "
+               "fact_claims lists every non-numeric assertion your prose makes on your OWN authority - "
+               "how long it keeps, whether a named store carries something, and any claim that one "
+               "thing is cheaper than another. Numbers from your dispatch are NOT claims; they are "
+               "already checked. If your prose asserts none of those three, send an empty array. The "
+               "ORCHESTRATOR patches the intake - you have no file to open and none to write."}},
     "required": ["slug", "status", "state"]}
 
 
@@ -1285,7 +1297,8 @@ def validate_writer_fields(payload):
             problems.append("`fields` carries %r, which is not writer-fillable. The writable set is "
                             "exactly: %s. Every other field is the skeleton's and is LOCKED."
                             % (k, ", ".join(WRITER_FIELDS)))
-    for k in ("head.steps", "head.step_names", "writer_notes", "forbidden_prose_terms"):
+    for k in ("head.steps", "head.step_names", "writer_notes", "forbidden_prose_terms",
+              "fact_claims"):
         if k in fields and not isinstance(fields[k], list):
             problems.append("`fields[%r]` must be an ARRAY of strings, got %s"
                             % (k, type(fields[k]).__name__))

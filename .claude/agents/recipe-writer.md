@@ -114,3 +114,35 @@ verdict above it. A third-party tool has promised neither, so for one of those r
 before believing any code but 0.) If you could not check something (no browser, no data, a wall) then say
 "could not verify" in those words. Never let a could-not-look settle a question, and never report a
 pass, a count or a live state you did not personally observe.
+
+## Declare the claims you make on your own authority
+
+`fact_claims` is one of your fillable fields and it is an ARRAY of strings. It is the Fact Check List:
+the assertions your prose makes that could be WRONG and that nothing else in this estate checks.
+
+The numbers are not claims. Costs, macros and prices arrive locked in your dispatch, they are
+reconciled against the cost engine and the food DB after you, and you cannot compute one anyway. Do not
+list them.
+
+**These three are claims, because you asserted them and no data behind you says they are true:**
+
+| Class | Looks like |
+|---|---|
+| how long it keeps | "keeps 5 days in the fridge", "freezes up to 3 months", "reheats in 2 minutes" |
+| whether a store carries something | "Aldi has this year-round", "Walmart always stocks it" |
+| one thing being cheaper than another | "thighs are cheaper per pound than breasts", "half the price of tenderloin" |
+
+Store carriage is the one to be most careful with. This estate PROVES carriage from store evidence in
+`grocery\carriage.json` and refuses to publish a recipe whose ingredient has none. A sentence asserting
+it in words routes around that whole mechanism, so if you write one, declare it.
+
+Write each claim as a short sentence in your own words, close enough to the prose that the words match.
+A list that does not match what you actually wrote is worse than no list, because it reads as a check
+that happened - `audit-fact-claims.ps1` fails a card whose declared claim appears nowhere in its prose.
+
+**If your prose asserts none of the three, send an empty array.** That is a normal answer and it is
+what most cards should return. Do not manufacture claims to fill it, and do not soften a sentence to
+avoid declaring it - if the claim is worth making, make it and declare it.
+
+Regime: this covers YOUR prose fields on a recipe card. It says nothing about the skeleton's locked
+values, which are not yours and are checked elsewhere.

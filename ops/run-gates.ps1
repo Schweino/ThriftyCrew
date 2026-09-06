@@ -134,6 +134,10 @@ $static = @(
   # around it entirely, ten of them in .claude\skills\lesson. A ratchet, so the number can only fall
   # (2026-09-06, backlog E1).
   @{ f = 'ops\audit-write-seam.ps1';           n = 'no NEW irreversible write bypasses the E1 safety layer' }
+  # THE FACT CHECK LIST, and the live half is the point: it reads the 584 real cards, which is where the
+  # undeclared claims actually are. Hermetic - specs are tracked, so it works on a bare checkout. A
+  # ratchet, because 340 assertions predate the field (2026-09-06, backlog E6).
+  @{ f = 'meal-prep\pipeline\audit-fact-claims.ps1'; n = 'no NEW prose claim ships that the writer did not declare' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test
