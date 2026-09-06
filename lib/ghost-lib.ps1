@@ -47,6 +47,70 @@ function Get-GhostLexical([Parameter(Mandatory)][string]$Html) {
 # a 4xx other than 429 (a 404/401/400 is not transient) - those rethrow immediately so callers can still
 # distinguish "genuinely new post" (404) from "transient error" (retried, then thrown). The delays are fixed
 # (no Get-Random - that is unavailable in workflow scripts and needless here) using the attempt index as jitter.
+# ---- E1 v1: STAGING. A mutating call queues for review instead of going out. ----------------------
+# OFF BY DEFAULT. Nothing changes until $env:TC_STAGE_WRITES names a queue file, so all 29 callers keep
+# their current behaviour until something deliberately arms this.
+#
+# WHY HERE AND NOWHERE ELSE. A PUT to the Ghost admin API is the only genuinely irreversible thing this
+# estate does: it is gone the moment it returns 200, nothing local reverses it, and a reader may already
+# have seen the page on a live paid site. Every named LOCAL target is tracked, so git is already the undo
+# log there (design\E1-safety-layer-brief.md section 1). And post-publish-reviewer, the last set of eyes,
+# runs AFTER the PUT - which is the wrong side of it.
+#
+# NO param() BLOCK IS ADDED TO THIS FILE, DELIBERATELY, and the reason is written down one directory
+# over: lib\guard-contract.ps1 shipped with param([switch]$SelfTest) and, because PS 5.1 runs a
+# dot-sourced script's param block in the CALLER's scope, silently disarmed the -SelfTest of every guard
+# that dot-sourced it. This file is dot-sourced by 29 scripts. The self-test lives in
+# ops\review-staged.ps1 and reaches these functions by dot-sourcing, never by running this file.
+
+function Test-TcMutatingMethod {
+  <# GET is a read and always executes immediately. Reads outnumbering writes is the design, not an
+     accident - so the staging gate deliberately only closes on the four verbs that change something. #>
+  param([string]$Method)
+  return (@('PUT', 'POST', 'DELETE', 'PATCH') -contains ([string]$Method).ToUpper())
+}
+
+function Get-TcStageQueue {
+  <# The arming switch, and it is an ENV VAR rather than a file in the tree on purpose: a sentinel file
+     can be committed by the ~07:00 bot's whole-tree sweep and arm staging for everybody. #>
+  if ($env:TC_STAGE_WRITES) { return $env:TC_STAGE_WRITES }
+  return $null
+}
+
+function Add-TcStagedCall {
+  <# Serialise the intended request and return WITHOUT sending it.
+
+     THE RETURN VALUE IS THE HONEST COST OF THIS DESIGN AND IS NOT DISGUISED. A staged write did not
+     happen, so there is no server response to hand back. A caller that reads fields off the response -
+     a new post id, an updated_at to send with the next PUT - gets an object that does not carry them,
+     and it should fail rather than proceed on invented data. So the marker is FIRST and obvious, and
+     nothing here fabricates an id. Compare against the v2 branch, where the call really executes and
+     the response is real. #>
+  param([string]$Queue, [string]$Method, [string]$Uri, [hashtable]$Headers, $Body)
+  $dir = Split-Path $Queue -Parent
+  if ($dir -and -not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+  $entry = [ordered]@{
+    id       = ([guid]::NewGuid().ToString('N').Substring(0, 12))
+    staged   = (Get-Date).ToString('o')
+    method   = ([string]$Method).ToUpper()
+    uri      = $Uri
+    # HEADERS ARE RECORDED BY NAME ONLY. The Authorization header carries a live admin JWT; writing it
+    # into a queue file would put a working credential on disk with a five-minute life and no owner.
+    # The reviewer re-mints one at apply time from the estate's own key.
+    header_names = @($Headers.Keys | Sort-Object)
+    body     = $(if ($null -eq $Body) { $null } elseif ($Body -is [byte[]]) { "(byte[] length $($Body.Length))" } else { [string]$Body })
+    caller   = $(try { (Get-PSCallStack | Where-Object { $_.ScriptName -and $_.ScriptName -notlike '*ghost-lib.ps1' } | Select-Object -Last 1).ScriptName } catch { '' })
+  }
+  # Append as JSON Lines. One line per call, so a crashed run leaves every call BEFORE the crash intact -
+  # a single JSON array rewritten per append loses the lot if the process dies mid-write.
+  $line = (ConvertTo-Json $entry -Depth 6 -Compress)
+  [IO.File]::AppendAllText($Queue, $line + "`n", (New-Object System.Text.UTF8Encoding($false)))
+  return ([pscustomobject]@{
+    __tc_staged = $true
+    __tc_id     = $entry.id
+    __tc_note   = 'STAGED, NOT SENT. This request is queued in ' + $Queue + '. There is no server response, so any field you were about to read off this object does not exist. Run ops\review-staged.ps1 to apply or discard.'
+  })
+}
 function Invoke-GhostApi {
   param(
     [string]$Method = 'GET',
@@ -58,6 +122,11 @@ function Invoke-GhostApi {
     [switch]$Web,                  # Invoke-WebRequest (raw response) instead of Invoke-RestMethod (parsed)
     [switch]$BasicParsing          # only meaningful with -Web
   )
+  # E1 v1 STAGING GATE. Reads fall straight through; a mutating call is queued and never sent.
+  $__tcQ = Get-TcStageQueue
+  if ($__tcQ -and (Test-TcMutatingMethod $Method)) {
+    return (Add-TcStagedCall -Queue $__tcQ -Method $Method -Uri $Uri -Headers $Headers -Body $Body)
+  }
   $attempt = 0
   while ($true) {
     try {
