@@ -477,6 +477,8 @@ if (-not $Date -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\d{2}'); if ($m
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
 $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
+if ($script:CapturePlaceholderCount -gt 0) { Write-Output ("  dropped $($script:CapturePlaceholderCount) vendor placeholder row(s) at ingest ($($script:CapturePlaceholderPct)% of what was read)") }
+if ($script:CaptureIngestWarning) { Write-Output ("  " + $script:CaptureIngestWarning) }
 $rows = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[object]
 # THE ROLLBACK / INSTANT-SAVINGS WINDOW (2026-08-21). Same rule and same reason as Walmart: Brad's

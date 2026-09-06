@@ -150,6 +150,10 @@ $static = @(
   # the script enforcing it does not notice. Founding case was already live and already written down -
   # Brad's 2026-09-04 no-hardcoded-bands ruling, unimplemented and gated by nothing (backlog E12).
   @{ f = 'ops\audit-ruling-drift.ps1';         n = 'no NEW ratified ruling goes unimplemented by the code' }
+  # Import-CaptureCsv dropped vendor TEST rows at ingest - the right place - and recorded the count in
+  # $script:CapturePlaceholderCount, which ZERO of its callers read. A drop nobody reads is a clean
+  # bill (2026-09-06, backlog E5).
+  @{ f = 'ops\audit-capture-ingest-reporting.ps1'; n = 'a row dropped at ingest is reported by whoever read it' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test

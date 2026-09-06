@@ -479,6 +479,8 @@ Set-Content -Path $tmp -Value $jr.lines -Encoding UTF8
 
 $raw = Import-CaptureCsv -Path $tmp -Delimiter '|'
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
+if ($script:CapturePlaceholderCount -gt 0) { Write-Output ("  dropped $($script:CapturePlaceholderCount) vendor placeholder row(s) at ingest ($($script:CapturePlaceholderPct)% of what was read)") }
+if ($script:CaptureIngestWarning) { Write-Output ("  " + $script:CaptureIngestWarning) }
 $res = Invoke-Build $raw $Date
 $rows = $res.rows
 if ($rows.Count -lt 1) { throw 'build-aldi-regular: capture produced ZERO priced rows - do not write an empty file over a good one' }

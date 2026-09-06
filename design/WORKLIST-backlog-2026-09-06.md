@@ -34,8 +34,8 @@ State: `TODO` · `WIP` · `DONE <sha>` · `BLOCKED-ON-BRAD` · `WONTFIX`
 | B6 | **E12** | `ops/audit-ruling-drift.ps1` - document-to-code drift; 3 violations baselined | `DONE 28151c39` |
 | B7 | **E9** | Split already existed; gate fails a missing model/effort pin, prints the matrix | `DONE 993ec7c6` |
 | B8 | **E10** | `--status-every` heartbeat that names a STALL | `DONE 9301d154` |
-| B9 | **E11+E18** | `validate_tool_path` in the executor + first-ever gate on `graph/agentic` | WIP |
-| B10 | **E5** | Validate at source; low confidence to review, not rejection | TODO |
+| B9 | **E11+E18** | `validate_tool_path` + first-ever gate on `graph/agentic` | `DONE d2dc0cd5` |
+| B10 | **E5** | 2 of 3 already correct; capture drop count was read by nobody + gate | WIP |
 | B11 | **E4** | BM25 + RRF alongside embeddings. **Gated on confirming the premise still holds.** | TODO |
 
 ## C. Loose ends found during the run

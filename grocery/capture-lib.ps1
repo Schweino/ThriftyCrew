@@ -159,6 +159,23 @@ function Import-CaptureCsv {
   # `Select-Object -ExpandProperty q`. The count goes in a script-scope variable for the caller to report.
   $script:CaptureRepairCount = $repaired
   $script:CapturePlaceholderCount = $placeholders
+  # E5 (2026-09-06): A DROP THAT NOBODY READS IS A CLEAN BILL. $CapturePlaceholderCount has been set
+  # here since the guard was written and was read by NOTHING - measured across all four callers of this
+  # function. So every vendor TEST listing dropped at ingest was invisible, and a feed that started
+  # returning 80% placeholders would have produced a small, confident board and a success line.
+  #
+  # The fraction is what carries the signal, not the count. A handful of TEST rows is normal vendor
+  # noise; a fifth of the file is a shape change, a bad pull or a wrong endpoint, and that is a row for
+  # REVIEW rather than a silent drop - which is E5's whole point. The threshold is deliberately loose:
+  # this is a "come and look" signal, not a gate, and a gate here would stop boards over vendor noise.
+  $script:CaptureRowsRead = $placeholders + $kept.Count
+  $script:CapturePlaceholderPct = if ($script:CaptureRowsRead -gt 0) {
+    [math]::Round(100.0 * $placeholders / $script:CaptureRowsRead, 1) } else { 0 }
+  # NEVER Write-Output here, for the reason given above - the caller reports it.
+  $script:CaptureIngestWarning = ''
+  if ($script:CaptureRowsRead -ge 20 -and $script:CapturePlaceholderPct -ge 20) {
+    $script:CaptureIngestWarning = ("REVIEW: {0} of {1} captured row(s) ({2}%) were vendor placeholders and were DROPPED at ingest. That is a shape change rather than normal noise - check the pull before trusting the board built from what is left." -f $placeholders, $script:CaptureRowsRead, $script:CapturePlaceholderPct)
+  }
   return @($kept.ToArray())
 }
 

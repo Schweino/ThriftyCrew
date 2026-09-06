@@ -844,6 +844,8 @@ if (-not $In -or -not (Test-Path $In)) { throw "${Me}: -In not found: $In" }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
 $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
+if ($script:CapturePlaceholderCount -gt 0) { Write-Output ("  dropped $($script:CapturePlaceholderCount) vendor placeholder row(s) at ingest ($($script:CapturePlaceholderPct)% of what was read)") }
+if ($script:CaptureIngestWarning) { Write-Output ("  " + $script:CaptureIngestWarning) }
 $rows = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[object]
 # THE ROLLBACK WINDOW (2026-08-21). Brad: a rollback gets "a 30 day TTL from when we first detect".
