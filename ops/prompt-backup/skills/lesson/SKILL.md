@@ -139,3 +139,22 @@ The site is verified in **Google Search Console AND Bing Webmaster Tools** under
 - PowerShell 5.1 reads `.ps1` as ANSI, so keep the `.ps1` helper scripts ASCII (use `&rarr;` for arrows, etc.). Lesson HTML you pass via `-HtmlFile` is read as UTF-8. **But use NO em dashes in the lesson at all** (Brad's rule, memory [[writing-no-em-dashes]]); write with periods and commas.
 - For a **meal-prep recipe** (not a lesson) the conventions differ (Recipe JSON-LD, cost-per-serving stats bar, `meal-prep` tag). See memory [[meal-prep-recipe-template]]; this skill is for financial lessons.
 - **Voice + SEO + search-console are all baked in now.** The three memories that govern any creation: **[[brand-voice-brad]]** (write as Brad), **[[writing-no-em-dashes]]** (no em dashes), **[[google-search-console]]** (indexing). Read [[brand-voice-brad]] every time before drafting.
+
+---
+
+## Wait for the brief
+
+**This is the last statement in this file on purpose, and it must stay last.** Everything above is
+rules, and a rules-first prompt with no closing instruction invents its own first input: it picks a
+topic, drafts a lesson nobody asked for, and the first real decision Brad gets to make is whether to
+throw it away.
+
+So: **do not draft anything until you have the topic and the key points.** Ask for them with the
+question tool, offering concrete options plus Other, never in prose (memory
+`always-prompt-for-direction`). Useful options are drawn from the gaps in the existing set, not
+invented: read the published lessons first so the choices you offer are ones the site does not already
+cover.
+
+Regime: this holds when the skill is invoked **without** a topic. When Brad's message already carries
+the topic and the key points, he has answered the question - do not ask it again, start drafting. The
+rule is against inventing the brief, not against having one.

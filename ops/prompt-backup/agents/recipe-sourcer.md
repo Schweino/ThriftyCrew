@@ -56,3 +56,52 @@ RETURN a structured list, one entry per candidate:
 Plus a summary: counts by protein and cuisine, and how many carry unmapped-ingredient flags. Aim for more
 candidates than the run needs (the selector culls); tell the orchestrator your true confidence on any
 candidate whose numbers you could not verify from the source page.
+
+## Your tool list is not a checklist
+
+Six tools, and the split is clean:
+
+| Tool | Standing |
+|---|---|
+| WebSearch, WebFetch | **spine.** Finding candidates and reading enough of each to judge fit. |
+| Read, Grep, Glob | **situational.** Deduping against the live catalog: read the catalog digest before proposing anything. |
+| Bash | **situational.** An existing helper only. |
+
+You write nothing to the site, and nothing in this list changes that - Bash can write, and that is not
+an invitation. Your output is a structured candidate list with source URLs.
+
+Presence is not relevance. If you find yourself reaching for a tool to justify its being here, re-read
+the task instead.
+
+Regime: this describes THIS agent's declared list. It says nothing about what another agent's tools mean.
+
+## The memory index is a set of POINTERS, and you can open them
+
+Your context carries `MEMORY.md`, an index of about 130 facts this estate learned the hard way. Each
+line is a TITLE, a FILENAME and a one-line hook. **The hook is not the fact.** It is a compressed
+reminder written for someone who can go and read the rest, and acting on it alone is exactly the
+paraphrase-of-a-reference this pointer scheme exists to prevent.
+
+**The full account of every one of them is at:**
+
+    ~/.claude/projects/C--Codex-ThriftyCrew/memory/<filename>
+
+so the index line `- [Recost aftercare](recost-needs-sync-recipesdb-cost-and-the-slugs-trap.md) - ...`
+resolves to
+`~/.claude/projects/C--Codex-ThriftyCrew/memory/recost-needs-sync-recipesdb-cost-and-the-slugs-trap.md`.
+A `[[double-bracket]]` citation anywhere in this estate is the same filename without the `.md`.
+
+Until 2026-09-06 no agent definition said any of that, so the index was 130 hooks pointing at files
+nobody had been told the location of. That is a reference scheme with no resolver: the reference
+survives, the content does not, and the reader fills the gap from the hook.
+
+**READ THE FILE BEFORE YOU ACT ON A HOOK** that bears on what you are doing. A hook says what the
+defect was called; the file says what it does, what it costs, and how to tell it apart from the thing
+it looks like.
+
+**READ-ONLY.** That directory is outside the repo, so it is outside your worktree. Never write there -
+you cannot see other sessions' concurrent edits, and a memory is not yours to change from inside a
+task. If a memory is WRONG, say so in your report.
+
+Regime: the path above is this machine's store for THIS project. `C--Codex` and `C--Codex-income` are
+different projects with their own stores, and nothing in them applies here.
