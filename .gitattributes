@@ -13,7 +13,22 @@
 # in one commit touching hundreds of files - and would collide with the daily pipeline bot, which commits and
 # rebases onto main on its own schedule. Files normalize as they are touched instead. The big diff never
 # needs to happen; it just stops getting worse.
-* text=auto
+# eol=lf ADDED 2026-09-06 (backlog E19, ruled by Brad). `text=auto` alone normalises the
+# REPOSITORY to LF and leaves core.autocrlf to decide the working copy - which on this box is
+# true, so every fresh worktree and clone got CRLF while the main checkout sat at LF. Two gates
+# compared bytes and went red in every new checkout over line endings rather than drift:
+# grocery\audit-ghost-drift.ps1 and meal-prep\engine\golden-test.ps1.
+#
+# MEASURED BEFORE CHOOSING THIS. `git add --renormalize` over the whole tree changed ZERO
+# files - the repository already stores LF throughout - so there was nothing to renormalise
+# and the tree-side fix had to be about what a CHECKOUT writes, not about what is stored.
+#
+# eol=lf makes that uniform on every platform and every clone. The cost, paid once here: the
+# golden fixture inputs were CRLF ON DISK in the main checkout (densities.json was 20,188
+# bytes with 429 CRs against a 19,759-byte stored blob) and MANIFEST.json had recorded their
+# hashes from those CRLF bytes. Forcing LF invalidated all 23. They are re-recorded in the
+# same commit - line endings only, no input regenerated, no expected output moved.
+* text=auto eol=lf
 
 # Binary: never touch these, and never try to diff them as text.
 *.png  binary
