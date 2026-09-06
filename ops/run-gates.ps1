@@ -123,6 +123,12 @@ $static = @(
   # A must-fire that BREAKS turns its own line red and everybody sees it. One that is DELETED leaves a
   # green suite with one fewer case, and nobody counts tallies ([[exit-code-first-tally-second]]).
   @{ f = 'ops\audit-mustfire-census.ps1';      n = 'no self-test has quietly lost a must-fire assertion' }
+  # BOTH HALVES AGAIN, and here the live half is the whole point. The discovery pass above runs this
+  # file's -SelfTest and proves the enumeration works against a frozen root; THIS entry runs it against
+  # the REAL root, which is the only place the debris actually lands. .gitignore line 3 is `/*`, so the
+  # root is ignored by default and nothing else in this estate can see a stray there - two artifacts sat
+  # for days, and writing the detector turned up two more nobody had recorded (2026-09-06, backlog I2).
+  @{ f = 'ops\audit-stray-root-artifacts.ps1'; n = 'no debris at the repo root - the one directory nothing else can see' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test
