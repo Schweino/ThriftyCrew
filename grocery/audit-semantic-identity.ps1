@@ -62,7 +62,12 @@ param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Py
       # so ANY future candidate must be compared over >= 3 seeds before it reaches this line.
       # v1 stands because it is the model phase 3 documents and the one that has actually run.
       [string]$Helper = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\models\resolve-ce-v1'),
-      [switch]$NoHelper)
+      [switch]$NoHelper,
+      # PIN THE RULINGS THE HARNESS JUDGES AGAINST (2026-09-06, PLAN-top5 area 4). Empty = the live
+      # known-wrong.json on the production path, and the FROZEN fixture under -SelfTest. The self-test's
+      # own header promised "no data files" while loading the live ledger; a reversal of the coconut-oil
+      # ruling would have turned this watcher red for a correct adjudication.
+      [string]$LedgerFile = '')
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -131,12 +136,28 @@ function Get-GpuRoom {
 }
 
 if ($SelfTest) {
-  # FROZEN FIXTURES (guard-fixture rule). No GPU, no network, no data files - so this runs in
-  # test-auditors every day and proves the plumbing still discriminates.
+  # FROZEN FIXTURES (guard-fixture rule). No GPU, no network - so this runs in test-auditors every day
+  # and proves the plumbing still discriminates.
+  #
+  # AND, SINCE 2026-09-06 (PLAN-top5 area 4), NO LIVE DATA FILE EITHER. The header above claimed exactly
+  # that and the next line then loaded the LIVE known-wrong.json: the clean twin below rests on the
+  # coconut-oil ruling still being in the live ledger, so a reversal - an ordinary, correct adjudication -
+  # would have turned this watcher red, and a ledger edit could have changed what the twin was proving
+  # without anyone touching this file. A verdict that depends on two inputs must have both of them frozen.
+  # -LedgerFile is the pinning; the LIVE-TWIN case at the end still reads the shipped ledger on purpose.
   . (Join-Path $root 'known-wrong-lib.ps1')
-  $blocks = @{ 'coconut-oil|Bakers' = @{} }
-  $blocks = Get-KnownWrongBlocks -Path (Join-Path $root 'known-wrong.json')
+  $fixLedger = if ($LedgerFile) { $LedgerFile } else { Join-Path $root 'regression-inputs\guard-fixtures\known-wrong-fixture.json' }
+  $blocks = Get-KnownWrongBlocks -Path $fixLedger
   $bad = 0
+  # The fixture must actually have loaded, or every "not actionable" case below passes by finding nothing -
+  # a block set that reads as empty makes the clean twin the only case that can fail, and it fails wrongly.
+  if (-not $blocks.ContainsKey("coconut-oil|Baker's")) {
+    Write-Output ('  X the frozen ledger fixture did not load (' + $fixLedger + ') - every block case below would be judged against an EMPTY ruling set'); $bad++
+  }
+  # A REVERSED ruling is history, not a gate. Frozen here so the distinction cannot be lost silently.
+  if ($blocks.ContainsKey('fixture-reversed|Fareway')) {
+    Write-Output '  X a REVERSED ruling was loaded as a live block - reversed entries are a record, not a gate'; $bad++
+  }
   # MUST-FIRE: an ordinary finding is actionable
   if (-not (Test-Actionable -Kind 'coverage' -Id 'ground-cloves' -Store 'Family Fare' -Product 'Our Family Cloves, Ground 2 Oz' -Blocks $blocks)) {
     Write-Output '  X MUST-FIRE: a fresh coverage finding must be actionable'; $bad++
@@ -179,7 +200,13 @@ if ($SelfTest) {
   if (Test-SweepBlocked -FreeMiB 13600 -LlamaRunning $true) { Write-Output '  X CLEAN TWIN: llama-server with 13.6 GB free must not block'; $bad++ }
   # CLEAN TWIN 3: no nvidia-smi reading at all -> never invent a block.
   if (Test-SweepBlocked -FreeMiB $null -LlamaRunning $true) { Write-Output '  X CLEAN TWIN: no GPU reading must not block'; $bad++ }
-  if ($bad -eq 0) { Write-Output 'audit-semantic-identity SELF-TEST PASS (10 frozen cases)'; exit 0 }
+  # LIVE-TWIN, LABELLED. The shipped ledger is still parsed, because a ledger that quietly stops loading
+  # makes this audit re-report every cell the estate has already adjudicated. It asserts only that the file
+  # LOADS and carries rulings - never that any particular ruling is still in it, which is a reviewer's call.
+  # A red here means the LIVE FILE is broken, not that this watcher went blind.
+  $liveBlocks = Get-KnownWrongBlocks -Path (Join-Path $root 'known-wrong.json')
+  if ($liveBlocks.Count -lt 1) { Write-Output '  X LIVE-TWIN: the shipped known-wrong.json loaded ZERO blocks - every adjudicated cell will be re-reported as a fresh finding'; $bad++ }
+  if ($bad -eq 0) { Write-Output ('audit-semantic-identity SELF-TEST PASS (frozen cases + a labelled LIVE-TWIN; live ledger carries ' + $liveBlocks.Count + ' block set(s))'); exit 0 }
   Write-Output ("audit-semantic-identity SELF-TEST FAIL ($bad)"); exit 2
 }
 
@@ -288,7 +315,7 @@ try {
 } catch {}
 
 # ---------------------------------------------------------------- filter to what a human can act on
-$blocks = Get-KnownWrongBlocks -Path (Join-Path $root 'known-wrong.json')
+$blocks = Get-KnownWrongBlocks -Path $(if ($LedgerFile) { $LedgerFile } else { Join-Path $root 'known-wrong.json' })
 # what the board already prices, keyed commodity|store, so the truncation test above has something to
 # compare a cut-off corpus name against. Read from BOTH boards - anything reading only comparison-*.json
 # is blind to 80 live recipe-board cells.

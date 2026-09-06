@@ -95,7 +95,29 @@ foreach ($g in @('out\regular\*.json','out\sams\*.json','out\bakers\*.json','out
   }
 }
 $all = @($names)
-if ($Sample -gt 0 -and $all.Count -gt $Sample) { $all = $all[0..($Sample-1)] }
+# A DETERMINISTIC, SPREAD SAMPLE (2026-09-06, PLAN-top5-2026-09-06 area 4). This was `$all[0..($Sample-1)]`
+# over a HashSet, so the 400 names examined were whichever 400 the hash happened to enumerate first. Two
+# things follow, and both are bad for a gate that runs daily:
+#   - a divergence is INTERMITTENT. The same defect is inside the sample today and outside it tomorrow,
+#     because the corpus changes with every capture. A red nobody can reproduce is a red people learn to
+#     re-run rather than read.
+#   - the coverage is unknown. Hash order is not store order, but it is not spread either, and the very
+#     bug this file was written for was a SAMPLE that missed Sam's Club almost entirely (#10 above).
+# Sorting makes the sample a reproducible function of the corpus, and striding across the sorted list
+# reaches every region of it - every store prefix, every brand cluster - instead of one end.
+$total = $all.Count
+if ($Sample -gt 0 -and $total -gt $Sample) {
+  $sorted = @($all | Sort-Object)
+  $stride = [double]$total / [double]$Sample
+  $picked = New-Object System.Collections.Generic.List[string]
+  for ($si = 0; $si -lt $Sample; $si++) {
+    $idx = [int][math]::Floor($si * $stride)
+    if ($idx -ge $total) { $idx = $total - 1 }
+    $picked.Add($sorted[$idx])
+  }
+  $all = @($picked)
+  Write-Output ("sample: {0} of {1} name(s), sorted and strided (deterministic - the same corpus always yields the same sample)" -f $all.Count, $total)
+}
 if ($all.Count -eq 0) {
   Write-Output 'FATAL: zero product names loaded - a parity test over nothing would report agreement it never checked.'
   Write-GuardComplete -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=" + $n)

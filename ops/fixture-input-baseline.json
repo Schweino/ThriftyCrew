@@ -1,0 +1,7 @@
+﻿{
+    "readme":  "Baseline for ops\\audit-fixture-inputs.ps1: the -SelfTest blocks that still read a LIVE rulings file. Written by -Update, which is a deliberate act after a real repair. The ratchet is BY NAME: a new entry fails the audit, and an entry that disappears is reported so this file can be trimmed. It may only ever get shorter.",
+    "written":  "2026-09-06",
+    "entries":  [
+
+                ]
+}

@@ -814,9 +814,12 @@ $fxApm = NewFxDir 'apm-blind'
 $r = RunPS 'audit-price-mode.ps1' @('-RegularDir', $fxApm)
 if ($r.rc -eq 3 -and $r.text -match 'BLIND' -and $r.text -match 'Aldi, Fareway') { Ok 'price-mode goes BLIND (exit 3) when zero mode-sensitive files reach it' }
 else { Bad ('price-mode did NOT go blind on an empty regular dir (rc=' + $r.rc + ') - "OK" from zero examination is back') }
+# LIVE-TWIN, DELIBERATELY (labelled 2026-09-06, PLAN-top5 area 4 §4.4). No -RegularDir, so this reads the
+# real out\regular. That is what its author wanted - a machine whose live price modes are broken should go
+# red here - and the label is so a red is read as "live data" rather than "this watcher went blind".
 $r = RunPS 'audit-price-mode.ps1' @()
-if ($r.rc -eq 0 -and $r.text -match 'PRICE-MODE AUDIT OK') { Ok 'price-mode clean twin: live out\regular still passes with the counted OK line' }
-else { Bad ('price-mode clean twin failed (rc=' + $r.rc + ') - either live data is broken (page-worthy) or the edit broke the healthy path') }
+if ($r.rc -eq 0 -and $r.text -match 'PRICE-MODE AUDIT OK') { Ok 'LIVE-TWIN price-mode: live out\regular still passes with the counted OK line' }
+else { Bad ('LIVE-TWIN price-mode failed (rc=' + $r.rc + ') - this case reads LIVE data, so check out\regular before the code: either the live price modes are broken (page-worthy) or the edit broke the healthy path') }
 $fxApmT = NewFxDir 'apm-twin'
 Set-Content (Join-Path $fxApmT 'aldi-regular-2026-01-01.json') '{"store":"Aldi","price_mode":"in-store","mode_verified":"2026-01-01","items":[]}' -Encoding UTF8
 Set-Content (Join-Path $fxApmT 'fareway-regular-2026-01-01.json') '{"store":"Fareway","price_mode":"in-store","mode_verified":"2026-01-01","items":[]}' -Encoding UTF8
@@ -918,9 +921,11 @@ else { Bad ('food-category did NOT go blind on an empty OutDir (rc=' + $r.rc + '
 # blind audit on a machine that HAS a board is exactly the failure this harness exists to catch.
 if (-not $HasBoard) { Skip 'food-category clean twin: NO live board in grocery\out - the healthy-path case proved nothing here' }
 else {
+  # LIVE-TWIN, DELIBERATELY (labelled 2026-09-06, PLAN-top5 area 4 §4.4): no -OutDir, so this is the real
+  # board. A red here is about the board, not about this harness.
   $r = RunPS 'audit-food-category.ps1' @()
-  if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'food-category clean twin: the live board still scans and passes' }
-  else { Bad ('food-category clean twin failed (rc=' + $r.rc + ') - either live data is broken (page-worthy) or the edit broke the healthy path') }
+  if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'LIVE-TWIN food-category: the live board still scans and passes' }
+  else { Bad ('LIVE-TWIN food-category failed (rc=' + $r.rc + ') - this case reads the LIVE board, so open the board before the code: either a live cell is miscategorised (page-worthy) or the edit broke the healthy path') }
 }
 Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -1042,9 +1047,13 @@ $fxBk = NewFxDir 'catex-currency'
 Copy-Item (Join-Path $root 'commodities.json')      (Join-Path $fxBk 'commodities.json')
 Copy-Item (Join-Path $root 'categories.json')       (Join-Path $fxBk 'categories.json')
 Copy-Item (Join-Path $root 'category-excludes.json') (Join-Path $fxBk 'category-excludes.json')
+# LIVE-TWIN, DELIBERATELY (labelled 2026-09-06, PLAN-top5 area 4 §4.4). The three files copied above are
+# the LIVE rule files, and that is the question: is production's commodities.json currently baked from
+# production's category-excludes.json? A frozen trio would prove the baker works and say nothing about the
+# board. The MUST-FIRE beneath it mutates these same copies, so the drift arm is not resting on live state.
 $r = RunPS 'apply-category-excludes.ps1' @('-Root', $fxBk, '-WhatIf')
 if ($r.rc -eq 0 -and $r.text -match 'library:\s*\+0 patterns') {
-  Ok 'category-exclude bake is CURRENT: a bake over the live rule files would add 0 patterns, so every library class the guard checks is actually in the engine''s rules'
+  Ok 'LIVE-TWIN category-exclude bake is CURRENT: a bake over the live rule files would add 0 patterns, so every library class the guard checks is actually in the engine''s rules'
 } else {
   Bad ('category-exclude bake is STALE (' + (($r.text -split "`n")[0]) + ') - a library class is not baked into commodities.json, so audit-food-category can name it while the engine still lets the product win the cell. Run grocery\apply-category-excludes.ps1 and re-run the board.')
 }
@@ -1533,6 +1542,17 @@ if (-not (Test-Path $foLib)) {
 # out late is a rewrite of published history plus a credential rotation.
 $giSrc = Get-Content (Join-Path (Split-Path $root -Parent) '.gitignore') -Raw
 $crSrc2 = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
+# THE OWNERSHIP LIST MOVED OUT OF capture-run ON 2026-09-06 (PLAN-top5 area 3). It lived inline here, where
+# push-data.ps1 could not reach it - and push-data therefore ran `git add -A` and put 325 files on main.
+# The list is now lib\bot-paths.ps1, read by capture-run, by push-data and by the pre-commit hook's scope
+# check. The staging cases below follow it there; the size-gate cases stay on capture-run, which is where
+# that block still lives.
+$bpSrc = Get-Content (Join-Path (Split-Path $root -Parent) 'lib\bot-paths.ps1') -Raw
+# A LIST NOBODY READS IS NOT A LIST. Moving it is only safe if capture-run actually consumes it - the
+# same file could hold a perfect declaration and stage from a stale inline copy.
+if ($crSrc2 -match "lib\\bot-paths\.ps1" -and $crSrc2 -match '\$inputPaths\s+=\s+Get-BotInputPaths' -and $crSrc2 -match '\$servedPaths\s+=\s+Get-BotServedPaths') {
+  Ok 'capture-run stages from lib\bot-paths.ps1 (one declaration, read by the chain, by push-data and by the hook)'
+} else { Bad 'capture-run no longer takes its staging list from lib\bot-paths.ps1 - a second hand-copied list is exactly how push-data ended up sweeping the whole tree on 2026-09-05' }
 
 # 1. THE IGNORE LIST COVERS THE KNOWN-VOLATILE SHAPES. Each of these has either already cost us something
 #    or is one `git add -A` from doing so. Named individually so a failure says WHICH rule went.
@@ -1576,8 +1596,8 @@ elseif ($csgRc -eq 0 -and $rTxt -match 'COMMIT-SIZE-GATE-COMPLETE cases=\d+ fail
 # 4. THE AUDIT RECORD IS STAGED. .gitignore says provenance JSONL ARE tracked ("the evaluation record and
 #    the audit") and $inputPaths did not list them, so 08-22 and 08-23 were never committed while 191 MB of
 #    cookies were. Clean means the RIGHT things are tracked, not only that the wrong things are not.
-if ($crSrc2 -match "'graph/provenance'") { Ok 'capture-run stages graph/provenance (the audit record leaves this PC)' }
-else { Bad 'capture-run no longer stages graph/provenance - the evaluation record .gitignore promises is tracked never leaves this machine, and the cloud clone has none of it' }
+if ($bpSrc -match "'graph/provenance'") { Ok 'the bot ownership list stages graph/provenance (the audit record leaves this PC)' }
+else { Bad 'lib\bot-paths.ps1 no longer stages graph/provenance - the evaluation record .gitignore promises is tracked never leaves this machine, and the cloud clone has none of it' }
 
 # 4b. THE CARRIAGE LEDGERS ARE STAGED (Brad's ruling, 2026-08-27): "if we find a price for an ingredient,
 #     it should always be merged after discovery on the seven stores." Same lesson as graph/provenance one
@@ -1591,10 +1611,10 @@ else { Bad 'capture-run no longer stages graph/provenance - the evaluation recor
 foreach ($ledger in @('grocery/carriage.json', 'grocery/ingredient-queue.json',
                       'grocery/board-price-overrides.json', 'grocery/sale-without-ad.json',
                       'grocery/notify-log.txt', 'meal-prep/db/source-domains.json')) {
-  if ($crSrc2 -match [regex]::Escape("'" + $ledger + "'")) {
-    Ok ("capture-run stages {0} (a discovered price is merged, never left in the working tree)" -f $ledger)
+  if ($bpSrc -match [regex]::Escape("'" + $ledger + "'")) {
+    Ok ("the bot ownership list stages {0} (a discovered price is merged, never left in the working tree)" -f $ledger)
   } else {
-    Bad ("capture-run no longer stages {0} - a carriage verdict found across the seven stores would live on ONE machine, unrecoverable by re-running anything, and a clean clone would price from a different world" -f $ledger)
+    Bad ("lib\bot-paths.ps1 no longer stages {0} - a carriage verdict found across the seven stores would live on ONE machine, unrecoverable by re-running anything, and a clean clone would price from a different world" -f $ledger)
   }
 }
 # ...AND IN INPUTS, NOT SERVED. $servedPaths is gated on $shipServed, which a capture-only ad run never
@@ -1604,9 +1624,9 @@ foreach ($ledger in @('grocery/carriage.json', 'grocery/ingredient-queue.json',
 # and matched the explanatory COMMENT that sits above both arrays, which put "served" before "inputs"
 # and failed on a correct file. A guard that fires on where a comment happens to sit is worse than no
 # guard: it teaches the next person to ignore it.
-$idxInputs = $crSrc2.IndexOf('$inputPaths = @(')
-$idxServed = $crSrc2.IndexOf('$servedPaths = @(')
-$idxCarriage = $crSrc2.IndexOf("'grocery/carriage.json'")
+$idxInputs = $bpSrc.IndexOf('function Get-BotInputPaths')
+$idxServed = $bpSrc.IndexOf('function Get-BotServedPaths')
+$idxCarriage = $bpSrc.IndexOf("'grocery/carriage.json'")
 if ($idxInputs -ge 0 -and $idxServed -gt $idxInputs -and $idxCarriage -gt $idxInputs -and $idxCarriage -lt $idxServed) {
   Ok 'the carriage ledgers sit in INPUTS, so they ship on a capture-only ad run that builds no board'
 } else {
@@ -3483,18 +3503,18 @@ if ($ffcBs -lt 0 -or $ffcBe -lt $ffcBs -or $ffcReach.close -lt 0 -or $ffcReach.c
 # and spliced three tool pages, all after guards - and 536 of those files sat dirty until a human swept them
 # by hand as 26c2b0e0 while the bot commit 91f895ef shipped graph/, grocery/ and out/ only. The runtime
 # served-dirty check lives in test-commit-size-gate; this is the cheap structural half: the paths are named.
-$crSrc = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
-$spI = $crSrc.IndexOf('$servedPaths = @(')
-$spJ = $crSrc.IndexOf("# the gate's own verdict", [Math]::Max($spI, 0))
-if ($spI -lt 0 -or $spJ -le $spI) { Bad 'could not locate the $servedPaths array in capture-run.ps1 - this case is blind' }
+$crSrc = Get-Content (Join-Path (Split-Path $root -Parent) 'lib\bot-paths.ps1') -Raw
+$spI = $crSrc.IndexOf('function Get-BotServedPaths')
+$spJ = $crSrc.IndexOf('function Get-BotGlobPaths', [Math]::Max($spI, 0))
+if ($spI -lt 0 -or $spJ -le $spI) { Bad 'could not locate Get-BotServedPaths in lib\bot-paths.ps1 - this case is blind' }
 else {
   $spBlock = $crSrc.Substring($spI, $spJ - $spI)
   $spMissing = @()
   foreach ($spNeed in @('meal-prep/db/recipes', 'meal-prep/cheapnow-data.js', 'meal-prep/dinner-data.js', 'meal-prep/stretcher-data.js')) {
     if ($spBlock -notmatch [regex]::Escape("'" + $spNeed + "'")) { $spMissing += $spNeed }
   }
-  if ($spMissing.Count -eq 0) { Ok 'capture-run $servedPaths stages the specs and the three data files the chain rewrites after guards' }
-  else { Bad ('capture-run $servedPaths no longer names: ' + ($spMissing -join ', ') + ' - the chain rewrites them after guards and the bot commit will leave them dirty on the tree again (2026-09-02, 536 files)') }
+  if ($spMissing.Count -eq 0) { Ok 'Get-BotServedPaths stages the specs and the three data files the chain rewrites after guards' }
+  else { Bad ('Get-BotServedPaths no longer names: ' + ($spMissing -join ', ') + ' - the chain rewrites them after guards and the bot commit will leave them dirty on the tree again (2026-09-02, 536 files)') }
 }
 
 # ------------------------------------------- (u3) ff-pull: the alert that could never be false, and the write that could
@@ -5438,9 +5458,12 @@ if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'all self-te
 } else {
   Bad ('audit-pull-profiles -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | '))
 }
+# LIVE-TWIN, DELIBERATELY (labelled 2026-09-06, PLAN-top5 area 4 §4.4): this compares the SHIPPED
+# pull-profile registry against the SHIPPED agent modules. Freezing either half would prove the comparison
+# works and prove nothing about production, which is the one thing this case is for.
 $r = RunPS 'audit-pull-profiles.ps1' @()
-if ($r.rc -eq 0) { Ok 'every store pull_profile agrees with its agent module' }
-else { Bad ('pull_profile drift or a profile encoding carriage: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
+if ($r.rc -eq 0) { Ok 'LIVE-TWIN pull-profiles: every store pull_profile agrees with its agent module' }
+else { Bad ('LIVE-TWIN pull-profiles: drift, or a profile encoding carriage - this reads the LIVE registry and the LIVE modules: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
 
 # ---------------------------------------------------------------- rollback TTL ledger (2026-08-21)
 # Brad: "for walmart and sams, a rollback price we just stick with a 30 day TTL from when we first
@@ -5949,6 +5972,17 @@ if (-not $dsMkLive) {
 # The two cases below are opposites and both are frozen. Do NOT regenerate them from public\free-dinners.json:
 # the next time the rotation flips, the shape they encode disappears and both would pass by finding nothing.
 $hbSrc = Get-Content (Join-Path $root 'health-heartbeat.ps1') -Raw
+# AN EMPTY REGISTRY MUST READ AS BLIND, NOT AS HEALTHY (2026-09-06, PLAN-top5 area 5 §5.2.4).
+# health-heartbeat sets EAP='Continue', so before the reader sweep an unreadable expected-automations.json
+# left $cfg NULL and every loop iterated nothing: $issues stayed at 0 and the run printed
+# "HEALTHY: 0 automation(s)/output(s) all fresh" and exited 0. The one check whose whole job is to notice
+# things that died silently would have died silently and said everything was fine. Read-JsonFile throwing
+# closes the unreadable half; this closes the other half - a file that PARSES and declares nothing.
+if ($hbSrc -match '\$declared\s*=' -and $hbSrc -match 'BLIND - expected-automations\.json declares no tasks' -and $hbSrc -match '(?s)\$declared -eq 0\s*\)\s*\{[^}]*exit 3') {
+  Ok 'health-heartbeat refuses to grade an EMPTY registry - zero declared automations is BLIND (exit 3), never HEALTHY (exit 0)'
+} else {
+  Bad 'health-heartbeat LOST its empty-registry guard - an expected-automations.json that parses but declares nothing makes the silent-death detector print HEALTHY over zero automations and exit 0'
+}
 $hbM = [regex]::Match($hbSrc, '(?s)# >>> CONTENT-CURRENCY[^\r\n]*\r?\n(.*?)\r?\n# <<< CONTENT-CURRENCY')
 if (-not $hbM.Success) {
   Bad 'CONTENT-CURRENCY region is GONE from health-heartbeat.ps1 - this check EXAMINED NOTHING, so an output whose writer legitimately no-ops is back to being judged on an mtime that proves nothing about it'

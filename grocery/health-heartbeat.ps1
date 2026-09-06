@@ -30,6 +30,20 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path $root -Parent
 $now  = Get-Date
 $cfg  = Read-JsonFile (Join-Path $root 'expected-automations.json')
+# AN EMPTY REGISTRY IS BLIND, NOT HEALTHY (2026-09-06, PLAN-top5 area 5 §5.2.4). This file sets
+# EAP='Continue', so before the 2026-09-05 reader sweep an unreadable expected-automations.json left $cfg
+# NULL and the run carried on: all four loops below iterate `@($cfg.windows_tasks)` and friends, every one
+# of them empty, $issues stays at 0, and the last lines print "HEALTHY: 0 automation(s)/output(s) all
+# fresh" and exit 0. The one check whose entire job is to notice things that died SILENTLY would have
+# died silently and said everything was fine.
+# Read-JsonFile now THROWS on a missing or unreadable file, which closes half of it. The other half is a
+# file that parses and declares nothing - a truncated edit, a merge that lost the arrays - and no throw
+# can catch that. So count what was declared, and refuse to grade an empty exam.
+$declared = @($cfg.windows_tasks).Count + @($cfg.output_files).Count + @($cfg.output_globs).Count
+if ($declared -eq 0) {
+  Write-Output 'health-heartbeat: BLIND - expected-automations.json declares no tasks, files or globs, so a clean report here would mean nothing. Exit 3 (could-not-evaluate), never 0.'
+  exit 3
+}
 $issues = New-Object System.Collections.Generic.List[string]
 $okLines = New-Object System.Collections.Generic.List[string]
 $TASK_NOT_YET_RUN = 267011   # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN

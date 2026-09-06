@@ -111,6 +111,18 @@ $static = @(
   @{ f = 'grocery\audit-script-census.ps1';    n = 'no script is unreachable and unrecorded' }
   @{ f = 'grocery\audit-json-encoding.ps1';    n = 'the matching rules are still in the encoding they were written in' }
   @{ f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }
+  # BOTH HALVES, for the reason spelled out under audit-twin-drift below: the discovery pass proves the
+  # matcher can still tell a sweep from an ownership list, and THIS entry runs it over the real tree,
+  # which is what catches the next script to be written with a bare `git add`. Four incidents in seven
+  # weeks, every one of them fixed only in the file that caused it (2026-09-06, PLAN-top5 area 3).
+  @{ f = 'ops\audit-git-sweepers.ps1';         n = 'no tracked script stages by sweep - every git add names what it owns' }
+  # Same both-halves reason again: the discovery pass proves the scanner can still tell a frozen fixture
+  # from a live ruling; this entry runs it over the real tree, which is what catches the NEXT self-test
+  # written to read its own live allowlist (2026-09-06, PLAN-top5 area 4).
+  @{ f = 'ops\audit-fixture-inputs.ps1';       n = 'no self-test rests its verdict on a live rulings file the harness never froze' }
+  # A must-fire that BREAKS turns its own line red and everybody sees it. One that is DELETED leaves a
+  # green suite with one fewer case, and nobody counts tallies ([[exit-code-first-tally-second]]).
+  @{ f = 'ops\audit-mustfire-census.ps1';      n = 'no self-test has quietly lost a must-fire assertion' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test

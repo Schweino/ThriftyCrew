@@ -38,6 +38,12 @@ param(
   # frozen or it is not hermetic: it froze the data, then read the LIVE rule + band files, so every ordinary
   # rule edit tripped it and it sat red for weeks until nobody read it. See regression-test.ps1.
   [string]$BandsFile = "",
+  # PIN THE REVIEWED-EXCEPTION FILE THE SAME WAY (2026-09-06, PLAN-top5 area 4). The self-test read the
+  # SHIPPED instore-channel-allowlist.json and asserted two specific ids were still in it, so a reviewer
+  # retiring either exception would have turned the PRICE ENGINE's own self-test red - a verdict resting on
+  # two inputs where the harness had frozen only one. That is the same class as the bands note above.
+  # Defaults to the live file, so every production caller is unchanged.
+  [string]$ChannelAllowlistFile = "",
   [switch]$SelfTest,
   # -Explain <commodity-id>: read-only ownership dump for ONE cell, then exit. See the block near
   # Match-Category. Writes no board, so it is safe to run against a live tree mid-pipeline.
@@ -1145,12 +1151,25 @@ if ($SelfTest) {
   $v = Get-ChannelVerdict -Index $null -Store 'Walmart' -SrcFile 'walmart-regular-2026-08-31' -ItemId '15706413058' -Fulfillment '' -ItemName 'x'
   if ($v.in_store) { Write-Output 'ok    channel gate with no capture context degrades to Test-InStore rather than refusing blind' }
   else { Write-Output 'FAIL  channel gate refuses rows when it has no index to reason from - a could-not-run reported as a failure'; $script:fail++ }
-  # THE SHIPPED EXCEPTION LIST ITSELF. A gate whose data file quietly stops loading is a gate that quietly
-  # starts dropping two correct cells, so the real file is parsed here and its two probe-verified ids are
-  # named. If a later reviewer retires one of them, update this line - that edit IS the record of the call.
-  $cShip = Get-ChannelAllowlist -Path (Join-Path $PSScriptRoot 'instore-channel-allowlist.json')
-  if ($cShip.ContainsKey('Walmart|id|30919180') -and $cShip.ContainsKey('Walmart|id|8886020987')) { Write-Output 'ok    the shipped instore-channel-allowlist.json parses and still carries both cells the 2026-09-01 probe verified in store' }
-  else { Write-Output 'FAIL  instore-channel-allowlist.json does not load or lost a reviewed exception - two correct cells are being refused'; $script:fail++ }
+  # THE LOADER, AGAINST A FROZEN FILE (2026-09-06, PLAN-top5 area 4). This case used to read the SHIPPED
+  # allowlist and assert two specific ids were still in it - so a reviewer retiring either exception would
+  # have turned the PRICE ENGINE's own self-test red, for a correct edit. The verdict rested on two inputs
+  # and the harness had frozen only one. It is frozen now: the fixture carries the id-keyed shape, the
+  # name-keyed fallback, and one entry with no store that must be SKIPPED, and none of them is a ruling
+  # anybody can retire. -ChannelAllowlistFile is the same pinning -CommoditiesFile and -BandsFile already do.
+  $cFix = Get-ChannelAllowlist -Path (Join-Path $PSScriptRoot 'regression-inputs\guard-fixtures\instore-channel-allowlist-fixture.json')
+  # Three keys exactly: entry 1 yields BOTH an id key and a name key, entry 2 a name key, entry 3 nothing.
+  if ($cFix.ContainsKey('Walmart|id|30919180') -and $cFix.ContainsKey('Fareway|nm|a store that publishes no id, 12 oz') -and
+      (-not $cFix.ContainsKey('|id|99999999')) -and $cFix.Count -eq 3) {
+    Write-Output 'ok    the allowlist loader reads the id-keyed shape, the name-keyed fallback, and SKIPS an entry with no store (frozen fixture)'
+  } else { Write-Output ('FAIL  the allowlist loader lost a key shape (count=' + $cFix.Count + ' keys: ' + (($cFix.Keys | Sort-Object) -join ' | ') + ')'); $script:fail++ }
+  # LIVE-TWIN, LABELLED AS SUCH. The shipped file is still parsed and its two probe-verified ids named,
+  # because a data file that quietly stops loading silently drops two correct cells. A red here means the
+  # LIVE FILE changed or broke - a reviewer's decision or a real defect - not that this watcher went blind.
+  # If a reviewer retires one of these on purpose, update this line: that edit IS the record of the call.
+  $cShip = Get-ChannelAllowlist -Path $(if ($ChannelAllowlistFile) { $ChannelAllowlistFile } else { Join-Path $PSScriptRoot 'instore-channel-allowlist.json' })
+  if ($cShip.ContainsKey('Walmart|id|30919180') -and $cShip.ContainsKey('Walmart|id|8886020987')) { Write-Output 'ok    LIVE-TWIN: the shipped instore-channel-allowlist.json parses and still carries both cells the 2026-09-01 probe verified in store' }
+  else { Write-Output 'FAIL  LIVE-TWIN: instore-channel-allowlist.json does not load or lost a reviewed exception - two correct cells are being refused (this reads LIVE data, so check the file before the code)'; $script:fail++ }
 
   # --- 11h: Select-StoreWinner - the case-pack tie-break (2026-08-31 harissa ruling) -----------------------
   # The live rows: Walmart listed Mina Harissa as a single 10 oz jar at $4.98 AND as a (12 pack) at $59.76.
@@ -2553,7 +2572,7 @@ $fastMatcher = New-CommodityMatcher -Commodities $commodities -GlobalExclude $GL
 # See instore-lib.ps1 for the rule and for the 21-cell browser probe that promoted it from a watcher to a
 # refusal. Built HERE and not at load time because it has to see EVERY capture in the union before it can
 # say which sighting is the newest one.
-$CHANNEL_ALLOW = Get-ChannelAllowlist -Path (Join-Path $PSScriptRoot 'instore-channel-allowlist.json')
+$CHANNEL_ALLOW = Get-ChannelAllowlist -Path $(if ($ChannelAllowlistFile) { $ChannelAllowlistFile } else { Join-Path $PSScriptRoot 'instore-channel-allowlist.json' })
 $CHANNEL_INDEX = New-ChannelIndex -Rows $deals -Allowlist $CHANNEL_ALLOW
 $channelRefused = @{}
 $channelAllowed = 0

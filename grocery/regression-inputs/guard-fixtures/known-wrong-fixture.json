@@ -1,0 +1,35 @@
+{
+    "readme": "FROZEN FIXTURE for audit-semantic-identity.ps1 -SelfTest (2026-09-06, PLAN-top5 area 4). NOT a live ledger - nothing reads it but the self-test. Its header claimed 'no GPU, no network, no data files' and then loaded the LIVE known-wrong.json, so any adjudication - a new ruling, or a reversal of the coconut-oil one - could turn this watcher red or, worse, quietly change what its clean twin was proving. Frozen here: the coconut-oil entry is copied verbatim from the 2026-07-30 ruling because it IS the founding case (an Epsom-salt bath soap held the coconut-oil crown 46% under the real cheapest), and one reversed entry is added so the history arm - a reversed ruling is a record, not a gate - is exercised too. Do not regenerate from the live ledger.",
+    "entries": [
+        {
+            "key": "coconut-oil|Bakers|dr-teals-foaming-bath",
+            "commodity": "coconut-oil",
+            "store": "Baker's",
+            "names": [
+                "Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil"
+            ],
+            "product_id": "0081106801501",
+            "verdict": "wrong-product",
+            "evidence": "Epsom-salt bath soap, not an edible oil. Held the coconut-oil CROWN on comparison-2026-07-28 at $5.99 / 34 fl oz = $0.1762/oz, 46% under the real cheapest. Frozen copy of the live 2026-07-30 ruling.",
+            "seen_on_board": "2026-07-28",
+            "ruled_on": "2026-07-30",
+            "ruled_by": "accuracy-audit-2026-07-30",
+            "retire_when": "ruling-reversed"
+        },
+        {
+            "key": "fixture-reversed|Fareway|a-ruling-that-was-reversed",
+            "commodity": "fixture-reversed",
+            "store": "Fareway",
+            "names": [
+                "A Product Whose Ruling Was Reversed, 12 oz"
+            ],
+            "verdict": "wrong-product",
+            "evidence": "frozen fixture: a REVERSED entry is history, not a gate, and must not block anything.",
+            "ruled_on": "2026-01-01",
+            "ruled_by": "fixture",
+            "retire_when": "ruling-reversed",
+            "reversed_on": "2026-02-01",
+            "reversed_by": "fixture"
+        }
+    ]
+}

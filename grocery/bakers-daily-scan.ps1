@@ -95,8 +95,18 @@ try {
   $rc = RunChild (Join-Path $root 'check-ad-cycles.ps1') @('-NoPull') 3 'cycle'
   if ($rc -ne 0) { throw "check-ad-cycles -NoPull exited $rc" }
 
-  # ---- D: push raw inputs ----
-  $rc = RunChild (Join-Path $root 'push-data.ps1') @() 1 'push'
+  # ---- D: push pipeline-owned data ----
+  # THE EXIT CODE WAS ASSIGNED AND NEVER READ (fixed 2026-09-06, PLAN-top5 area 3). push-data can now
+  # FAIL - the pre-commit hook refuses a bot commit that stages a path it does not own, and push-data
+  # stops instead of pushing whatever was already on main. A refused commit means today's Baker's prices
+  # never left this machine, which is precisely the shape that must not pass silently. Not a throw: the
+  # capture succeeded and the newest board still serves; it is a page, and the run's own exit code.
+  $rc = RunChild (Join-Path $root 'push-data.ps1') @() 2 'push'
+  $pushFailed = ($rc -ne 0)
+  if ($pushFailed) {
+    Log ("push-data exited $rc - today's Baker's data is NOT on main")
+    Alert "Baker's daily scan: push-data FAILED (rc=$rc)" ("push-data.ps1 exited $rc after the Baker's refresh, so today's prices were NOT committed or NOT pushed and the cloud will recompute from stale data. Log: " + $log + " . Most likely the pre-commit hook refused the commit: it refuses a commit authored as smp-pipeline-bot that stages any path outside lib\bot-paths.ps1, and it refuses a staged .ps1 that fails a bulk-edit invariant. Read the 'push:' lines in the log - they name the offending paths.")
+  }
 
   # ---- ADFLIP: flyer needs eyes (vision). Weekly Wed agent covers Wednesdays 6:15; anything else -> triage.
   if ($adflip) {
@@ -108,6 +118,8 @@ try {
       Log 'ADFLIP on Wednesday: weekly 6:15 agent will capture the flyer.'
     }
   }
+  # THE ADFLIP BLOCK RUNS EITHER WAY - a flyer that needs eyes still needs eyes on a day the push failed.
+  if ($pushFailed) { Log 'bakers-daily-scan: capture and compare OK, PUSH FAILED - the prices are on this box only'; exit 1 }
   Log 'bakers-daily-scan OK'
   exit 0
 } catch {

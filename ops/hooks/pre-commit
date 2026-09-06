@@ -13,11 +13,20 @@
 # A checker you have to remember to run has exactly the disease of the notes it replaced. This hook is the
 # repair lane: it fires on every commit in this repo whether anyone remembers it or not.
 #
-# IT ALSO CATCHES THE BOT. On the day this was written a scheduled job ran `git add -A` on the real working
-# tree and committed AND PUSHED an unverified 202-file sweep to main under the message "Local browser-store
-# refresh" - a tree in which 27 scripts threw at startup. That job does not read anyone's instructions, and
-# telling a spawned agent "never git add -A" does nothing about it. A hook is the only thing in the path of
-# BOTH a careless human and an automated one.
+# IT ALSO CATCHES THE BOT. On the day this was written push-data.ps1 ran `git add -A` on the real working
+# tree and committed AND PUSHED an unverified sweep to main under the message "Local browser-store refresh"
+# - a tree in which 27 scripts threw at startup. That job does not read anyone's instructions, and telling a
+# spawned agent "never git add -A" does nothing about it. A hook is the only thing in the path of BOTH a
+# careless human and an automated one.
+#
+# THE SWEEP WAS 325 FILES, NOT 202 (measured 2026-09-06 from `git show --stat 3c44d0c1`): 192 .ps1 plus 133
+# others - 95 under grocery\out, 9 source files under grocery\, 4 under meal-prep\db, site\tools and
+# public\. The "202" written here on 2026-09-05 undercounted by the data half of the sweep.
+#
+# SECOND CHECK, ADDED 2026-09-06 (PLAN-top5 area 3). verify-bulk-edit judges the SHAPE of what is staged
+# (BOM, line endings, a clean parse, resolvable calls) and would have passed all 192 of those files if they
+# had merely been finished. verify-bot-commit-scope judges the SCOPE: a commit that identifies itself as
+# the pipeline may only stage what lib\bot-paths.ps1 declares it owns. Sessions are untouched by it.
 #
 # BYPASS IS DELIBERATE BUT LOUD. `git commit --no-verify` skips this, which is correct for a genuine
 # emergency; ops\audit-hook-installed.ps1 asserts the hook is present so that skipping it is a choice
@@ -51,6 +60,27 @@ if [ "$rc" -ne 0 ]; then
   echo "pre-commit: BLOCKED. The staged set fails a bulk-edit invariant (BOM state, line-ending style," >&2
   echo "            a clean parse, or a call to a function the file cannot resolve)." >&2
   echo "            Fix it, or use --no-verify if you have decided this is right." >&2
+  exit 1
+fi
+
+# ---- SCOPE: an AUTOMATED commit may only stage what it owns -------------------------------------------
+# A MISSING CHECKER MUST NOT READ AS A PASS - same rule as above, same reason.
+scope="$repo/ops/verify-bot-commit-scope.ps1"
+if [ ! -f "$scope" ]; then
+  echo "pre-commit: REFUSING - ops/verify-bot-commit-scope.ps1 is missing, so a bot commit's scope was never checked." >&2
+  echo "            Restore it, or commit with --no-verify if you have decided that is right." >&2
+  exit 1
+fi
+sout="$(powershell -NoProfile -ExecutionPolicy Bypass -File "$scope" 2>/dev/null)"
+src=$?
+# 3 is BLIND (a bot commit with an empty staged set) - git has nothing to commit there anyway, and a
+# could-not-evaluate must not read as a refusal on a commit that carries nothing.
+if [ "$src" -eq 1 ]; then
+  echo "$sout" >&2
+  echo "" >&2
+  echo "pre-commit: BLOCKED. This commit identifies as the pipeline but stages paths outside" >&2
+  echo "            lib\\bot-paths.ps1. An automated commit stages its OWN outputs and nothing else." >&2
+  echo "            Fix the staging, declare the path in lib\\bot-paths.ps1, or use --no-verify." >&2
   exit 1
 fi
 exit 0

@@ -62,15 +62,22 @@ if ($SelfTest) {
   T ($src -notmatch '(?m)^\s*\[string\]\$Visibility') 'there is no -Visibility parameter: the target can only come from recipes-db'
   T ($src -match 'updated_at') 'the PUT carries updated_at (Ghost optimistic concurrency), so a concurrent edit is not clobbered'
   T ($src -match "posts\s*=\s*@\(@\{\s*visibility") 'the PUT body sets visibility only - content, tags and lexical ride along untouched'
-  # A slug the database does not know is refused rather than guessed at.
+  # LIVE-TWIN, AND DELIBERATELY SO (labelled 2026-09-06, PLAN-top5 area 4). The three cases below read the
+  # SHIPPED recipes-db.json, which makes this self-test's verdict depend on live data. That is the point
+  # here rather than an oversight: this tool cannot be TOLD a visibility, it can only converge on the
+  # RECORDED one, so a database that will not parse or that carries a visibility outside the closed
+  # vocabulary is a real fault in the thing this tool trusts - and the paywall is what it moves.
+  # A red here means the LIVE DATABASE is wrong, not that this watcher has gone blind. Do not "fix" it by
+  # freezing a fixture: a frozen copy would prove the parser works and prove nothing about the catalogue.
+  # ops\audit-fixture-inputs.ps1 reads the label above and leaves this alone.
   $db = $null
-  try { $db = Read-JsonFile (Join-Path $root 'recipes-db.json') } catch { $db = $null }
-  T ($null -ne $db) 'recipes-db.json parses'
+  try { $db = Read-JsonFile (Join-Path $root 'recipes-db.json') } catch { $db = $null }   # LIVE-TWIN by design, see above
+  T ($null -ne $db) 'LIVE-TWIN: the shipped recipes-db.json parses'
   if ($null -ne $db) {
     $known = @($db.recipes | Where-Object { $_.slug }).Count
-    T ($known -gt 0) ("recipes-db carries $known slug(s) to check against")
+    T ($known -gt 0) ("LIVE-TWIN: recipes-db carries $known slug(s) to check against")
     $vis = @($db.recipes | ForEach-Object { [string]$_.visibility } | Where-Object { $_ } | Sort-Object -Unique)
-    T (@($vis | Where-Object { $_ -notin @('public','paid','members') }).Count -eq 0) ('every recorded visibility is in the closed vocabulary (found: ' + ($vis -join ', ') + ')')
+    T (@($vis | Where-Object { $_ -notin @('public','paid','members') }).Count -eq 0) ('LIVE-TWIN: every recorded visibility is in the closed vocabulary (found: ' + ($vis -join ', ') + ')')
   }
   if ($f -gt 0) { Say ("set-recipe-visibility SELFTEST: $f FAILED"); exit 2 }
   Say ("set-recipe-visibility SELFTEST: all $p passed"); exit 0

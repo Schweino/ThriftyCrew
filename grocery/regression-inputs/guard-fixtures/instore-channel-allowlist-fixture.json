@@ -1,0 +1,25 @@
+{
+    "readme": "FROZEN FIXTURE for compare-deals.ps1 -SelfTest (2026-09-06, PLAN-top5 area 4). NOT a live ruling, and the engine never reads it. The self-test used to assert against the SHIPPED instore-channel-allowlist.json, so a reviewer retiring either exception would have turned the PRICE ENGINE's own self-test red: a verdict that depends on two inputs, only one of which the harness had frozen. This file is the frozen half. It carries one id-keyed entry and one name-keyed entry so both of the loader's key shapes are exercised, and one entry with no store so the skip arm is exercised too. Do not regenerate it from the live file - the shapes it encodes are the point, not the rulings.",
+    "allow": [
+        {
+            "commodity": "fixture-id-keyed",
+            "store": "Walmart",
+            "item_id": "30919180",
+            "item": "El Guapo Mexican Bay Leaves, 0.5 oz Bag",
+            "why": "frozen fixture: the id-keyed shape",
+            "reviewed": "2026-09-01"
+        },
+        {
+            "commodity": "fixture-name-keyed",
+            "store": "Fareway",
+            "item": "A Store That Publishes No Id, 12 oz",
+            "why": "frozen fixture: the name-keyed fallback for a store that publishes no item ids",
+            "reviewed": "2026-09-01"
+        },
+        {
+            "commodity": "fixture-malformed",
+            "item_id": "99999999",
+            "why": "frozen fixture: no store, so this entry must be skipped entirely"
+        }
+    ]
+}

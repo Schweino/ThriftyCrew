@@ -52,6 +52,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\bot-paths.ps1') # Get-BotInputPaths/-BotServedPaths: the ONE ownership list, also read by push-data and the pre-commit hook
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
@@ -626,87 +627,16 @@ $today = $todayS
 $repo = Split-Path -Parent $root
 if ($NoDownstream) { Write-Output 'publish: SKIPPED (-NoDownstream is a testing flag - no commit, no push)' }
 else {
-# TWO SETS, BECAUSE THEY CARRY DIFFERENT PROOF (2026-08-22).
-# INPUTS are what a store told us: raw captures, the schedules and ledgers derived from them, the logs.
-# They are evidence and are always worth committing - a capture-only ad run has nothing else to say.
-# SERVED are what a READER gets: public\** (Cloudflare deploys it from the repo) and the meal-prep files
-# the recipe cards price from. Those may be staged ONLY by a run that actually built them AND passed the
-# gate. Two ways that was wrong before this split:
-#   - the 07:00 ad run runs no chain at all, yet staged public\ and nine meal-prep paths - so whatever an
-#     overnight session had left mid-edit in them would be committed as smp-pipeline-bot and pushed;
-#   - export-feed writes public\smp-feed.json BEFORE guards run, so a board guards REJECTED still shipped
-#     its feed to the edge while the board post correctly stayed at last-good. Every recipe card prices
-#     off that feed: the one path where this system could publish confidently wrong numbers.
-$inputPaths = @('grocery/out',
-                'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/ff-sweep-log.txt',
-                'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
-                'grocery/sale-windows.json', 'grocery/rollback-first-seen.json',
-                # THE CARRIAGE LEDGERS (Brad's ruling, 2026-08-27): "if we find a price for an
-                # ingredient, it should always be merged after discovery on the seven stores."
-                #
-                # These five were on NO staging list - not this one, not $servedPaths, not
-                # push-data.ps1's sweep - so every carriage verdict since 2026-08-25 sat in the
-                # working tree only. Measured the day this line was added: carriage.json held 20 bids
-                # at HEAD and 59 in the tree. THIRTY-NINE CARRIED verdicts, from three sessions across
-                # three days, one `git checkout -- .` from gone and invisible in `git log` because the
-                # tracked file had not moved since 08-25.
-                #
-                # A CARRIAGE VERDICT IS AN OBSERVATION, NOT A COMPUTATION. Rule B turns on what a
-                # store carried at a moment; re-creating one means re-driving seven stores, and the
-                # moment itself cannot be re-visited. Six scripts read carriage.json - including
-                # engine\cost-recipes.ps1 and engine\publish.ps1 - so an unmerged verdict also means a
-                # clean clone prices from a different world than this box does.
-                #
-                # They belong in INPUTS, not SERVED: they are evidence of what a store told us, which
-                # is exactly what this list is for, and they must ship on a capture-only ad run that
-                # builds no board. On a quiet day these write identical bytes and stage nothing.
-                'grocery/carriage.json', 'grocery/ingredient-queue.json',
-                'grocery/board-price-overrides.json', 'grocery/sale-without-ad.json',
-                'grocery/notify-log.txt',
-                # THE PUBLISHER LEDGER (2026-08-27). harvest and the sourcing agents learn which
-                # domains serve robots.txt, allow us, and carry a usable nutrition panel - and that
-                # knowledge was on no staging list. One probe added THIRTEEN new publishers
-                # (masonfit, eatingbirdfood, feelgoodfoodie and ten more) and every one of them
-                # existed only in this working tree. Re-earning it means re-probing the open web,
-                # so it is evidence in exactly the sense this list means.
-                'meal-prep/db/source-domains.json',
-                # THE PRODUCT IDENTITY TABLE. It is regenerated every morning, so if it is not staged here
-                # it never leaves this PC - which is exactly the last-mile failure found on 2026-08-22
-                # (public\board.json rebuilt daily, last bot commit four days old). It also has to be
-                # tracked for the table to exist in the cloud at all: daily.yml clones clean and rebuilds
-                # graph.db from tracked JSON, so an untracked table means an empty index there.
-                # On a quiet day the emitter writes identical bytes and this stages nothing.
-                'graph/identity',
-                # THE AUDIT RECORD, WHICH WE WERE DROPPING WHILE KEEPING 191 MB OF COOKIES (2026-08-23).
-                # .gitignore:106 states the rule outright - "provenance JSONL ARE tracked: they are the
-                # evaluation record and the audit" - and then this list never staged them, so
-                # graph\provenance\2026-08-22.jsonl and -23 sat untracked and 08-21 sat modified and
-                # uncommitted. Exactly the last-mile failure the graph/identity note above describes,
-                # on the one family whose whole purpose is to be the durable record of what was decided
-                # and why. Same reason, same fix, one line later than it should have been.
-                'graph/provenance')
-$servedPaths = @('public',
-                 'meal-prep/db/costed.json', 'meal-prep/db/cost-flags.txt',
-                 'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
-                 'meal-prep/pipeline/v2-inversions.json',
-                 'meal-prep/free-rotation.json', 'meal-prep/ingredient-map.json',
-                 'meal-prep/recipes-db.json',
-                 # WHAT THE CHAIN REWRITES AFTER GUARDS, ADDED 2026-09-02 (queue 2026-09-02-reanch1).
-                 # This list was enumerated from "the exact set real bot commits have ever touched"
-                 # (its own comment, 2026-08-22) at a time when reanchor-all and the three surface
-                 # builders had not yet joined the chain. A staging allowlist cannot see a new writer.
-                 # The writers, by name: check-ad-cycles:774 reanchor-all ("re-anchored cost_ps +
-                 # costPerServing on 584 specs", 08:05:50 on 2026-09-02) and check-ad-cycles:1162
-                 # build-cheapnow/dinner/stretcher-data + the tool splice (08:12:50-53). The incident:
-                 # the bot commit 91f895ef touched graph/, grocery/ and out/ only, and 536 rewritten
-                 # files then had to be swept by hand, unlabelled, as 26c2b0e0.
-                 # These are MODIFIED tracked files, so the commit-size gate's ADDED-file caps do not
-                 # see them; and they are gated on $shipServed like the rest, which is exactly the
-                 # condition under which their writers ran (both sit after guards).
-                 'meal-prep/db/recipes',
-                 'meal-prep/cheapnow-data.js', 'meal-prep/dinner-data.js', 'meal-prep/stretcher-data.js',
-                 'site/tools/cheap-dinners-tool.html', 'site/tools/dinner-tonight-tool.html',
-                 'site/tools/payday-stretcher-tool.html')
+# TWO SETS, BECAUSE THEY CARRY DIFFERENT PROOF (2026-08-22), AND THEY NO LONGER LIVE HERE (2026-09-06).
+# INPUTS are what a store told us; SERVED are what a READER gets. Both lists, and every reason each path
+# is on one of them, moved verbatim to lib\bot-paths.ps1 - because a list that lives inside ONE consumer
+# cannot be enforced against another. push-data.ps1 never had this list and swept the whole tree onto main
+# on 2026-09-05 (3c44d0c1, 325 files, 192 of them .ps1 mid-edit). Now push-data reads the same declaration,
+# and ops\verify-bot-commit-scope.ps1 - which the pre-commit hook runs - REFUSES a bot commit that stages
+# anything outside it. Three readers, one list, no hand copies.
+# *** STILL: STAGE PIPELINE-OWNED PATHS ONLY - NEVER git add -A. *** (see the 2026-08-22 note above)
+$inputPaths  = Get-BotInputPaths
+$servedPaths = Get-BotServedPaths
 # the gate's own verdict, written by check-ad-cycles right after guards ran (never inferred from a log)
 $guardsBlocked = $false
 $verdictSeen = $false
@@ -726,7 +656,20 @@ if ($runDownstream -and -not $shipServed) {
 $paths = @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) | Where-Object { Test-Path (Join-Path $repo $_) }
 Write-RunStatus 'publishing'
 $pushed = $false
+$tmpIndex = $null; $prevIndex = $null; $indexHeld = $false
 try {
+  # ---- A PRIVATE INDEX FOR THE BOT COMMIT (2026-09-06, PLAN-top5 area 3) ---------------------------
+  # STAGING EXPLICITLY IS NOT ENOUGH, and this is the half that was still open. `git commit` with no
+  # pathspec commits the whole INDEX, so a bot that adds exactly its own paths still ships whatever a
+  # session left staged in the same shared tree - that is 2026-08-25 (0c47012c), where an unrelated unit
+  # rode out under the pipeline's name. Seeding a temp index from HEAD makes this commit exactly its own
+  # add set, and leaves the session's index untouched. Released the moment the commit is decided, because
+  # rebase and push must run against the REAL index.
+  $tmpIndex = Join-Path $env:TEMP ('bot-index-' + [guid]::NewGuid().ToString('N'))
+  $prevIndex = $env:GIT_INDEX_FILE
+  $env:GIT_INDEX_FILE = $tmpIndex
+  $indexHeld = $true
+  & git -C $repo read-tree HEAD | ForEach-Object { Write-Output ("read-tree: " + $_) }
   # alert-sent-*.txt rotate (created+deleted daily). Two traps in one line, both hit on 2026-08-22, the
   # first real run of this stage: git EXITS NONZERO on a pathspec that matches nothing, and `2>$null` on a
   # native child under EAP=Stop makes its first stderr line a TERMINATING error - the exact class
@@ -881,6 +824,35 @@ try {
     $msg = "Daily pipeline: refresh prices + feed ($today) [$Kind]"
     & git -C $repo -c user.name="smp-pipeline-bot" -c user.email="actions@users.noreply.github.com" commit -m $msg |
       ForEach-Object { Write-Output ("commit: " + $_) }
+    # THE COMMIT'S EXIT CODE IS NOT A DECORATION (2026-09-06, PLAN-top5 area 3). The pre-commit hook
+    # installed on 2026-09-05 can REFUSE this commit, and until today nothing here read the code: the run
+    # would go straight on to fetch, rebase and push, ship whatever was already on main, and report a
+    # successful publish. push-data.ps1 had the identical defect and it is what made the 09-05 sweep look
+    # like a clean run. A refused commit is a failed lane and it must not be followed by a push.
+    $botCommitted = ($LASTEXITCODE -eq 0)
+    if (-not $botCommitted) {
+      Write-Output ("commit: REFUSED (git exit " + $LASTEXITCODE + ") - a hook or git itself rejected this commit. NOT pushing; the working tree is untouched.")
+      $failed += 'commit-refused'
+      try { Send-Alert -Subject "Daily pipeline commit REFUSED - $today" -Body ("capture-run.ps1 [$Kind] staged today's refresh and the commit was REFUSED (see grocery\out\logs\capture-run-$Kind-$today.log). Nothing was pushed, so the live board and feed are STALE. The pre-commit hook refuses a bot commit that stages a path outside lib\bot-paths.ps1, or a staged file that fails a bulk-edit invariant.") | Out-Null } catch {}
+    }
+    # ---- RELEASE THE PRIVATE INDEX BEFORE ANY REBASE. rebase and push must run against the REAL index;
+    # a rebase under a temp index would resolve conflicts against a tree nobody is looking at.
+    if ($indexHeld) {
+      if ($null -eq $prevIndex) { Remove-Item Env:\GIT_INDEX_FILE -ErrorAction SilentlyContinue } else { $env:GIT_INDEX_FILE = $prevIndex }
+      Remove-Item -LiteralPath $tmpIndex -Force -ErrorAction SilentlyContinue
+      $indexHeld = $false
+      # RESYNC THE SESSION'S INDEX FOR WHAT WE JUST COMMITTED, AND ONLY THAT. A private-index commit moves
+      # HEAD while the real index still holds the OLD blobs, so `git status` would show the just-committed
+      # files as a staged REVERT - one careless `git commit` from undoing the run. This never touches the
+      # working tree and never touches a path outside the commit.
+      if ($botCommitted) {
+        foreach ($cf in @(& git -C $repo show --name-only --pretty=format: HEAD | Where-Object { $_ })) {
+          & git -C $repo reset -q -- $cf | Out-Null
+        }
+      }
+    }
+    if (-not $botCommitted) { $pushed = $false }
+    else {
     # PUSH with the conflict-survival the cloud learned on 2026-07-16: -X theirs prefers the freshly
     # regenerated derived files; abort on unresolvable so we NEVER strand a detached HEAD; autoStash
     # carries any human WIP across the rebase untouched.
@@ -907,8 +879,21 @@ try {
       $failed += 'push'
       try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 rebase attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. Check for a rebase conflict in $repo (see grocery\out\logs\capture-run-$Kind-$today.log).") | Out-Null } catch {}
     }
+    }
   }
 } catch { Write-Output ("commit/push threw: " + $_.Exception.Message); $failed += 'push' }
+finally {
+  # A THROW MUST NOT LEAVE GIT_INDEX_FILE SET. It is process-wide, so every git command AFTER this stage -
+  # the served-dirty check, the edge verification, anything a later lane runs - would read a temp index
+  # that is about to be deleted. PowerShell.Exiting does not fire under -File, so this is the only place
+  # the release is guaranteed ([[powershell-exiting-event-does-not-fire]]).
+  if ($indexHeld) {
+    if ($null -eq $prevIndex) { Remove-Item Env:\GIT_INDEX_FILE -ErrorAction SilentlyContinue } else { $env:GIT_INDEX_FILE = $prevIndex }
+    Remove-Item -LiteralPath $tmpIndex -Force -ErrorAction SilentlyContinue
+    $indexHeld = $false
+    Write-Output 'commit: private index released by the failure path'
+  }
+}
 
 # >>> SERVED-DIRTY BLOCK (2026-09-02, queue 2026-09-02-reanch1) - lifted verbatim by test-commit-size-gate >>>
 # WHAT THE CHAIN WROTE MUST EQUAL WHAT THE CHAIN STAGED, AND NOTHING USED TO COMPARE THE TWO.

@@ -59,6 +59,40 @@ function Test-EolUnchanged {
   if ($bc -eq 0 -and $ac -gt 0 -and $bl -gt 0) { return $false }
   return $true
 }
+function Get-FrozenLiteralBreaks {
+  <# A line the author MARKED as frozen may not change. Returns the marked BEFORE lines that no longer
+     appear verbatim in AFTER.
+
+     WHY (2026-09-06, PLAN-top5-2026-09-06 area 4, defect 2 of the 2026-09-05 sweep). A regex sweep
+     converted a guard's frozen MUST-FIRE literal - a bare `Get-Content | ConvertFrom-Json` sitting inside
+     a fixture STRING, there precisely because it is the bug the guard detects - into the fixed shape. The
+     guard then found 0 findings and PASSED. It had stopped being able to fail and nothing said so.
+
+     The estate already marks such lines: `json-readers:allow` tells the READER audit to skip them. What it
+     told no TRANSFORM was to leave them alone, because nothing compared them across an edit. This does.
+
+     THE ESCAPE IS AN ENVIRONMENT VARIABLE, NOT THE COMMIT MESSAGE, and that is a measurement rather than a
+     preference: a pre-commit hook cannot see the message it is about to commit. Measured on this box -
+     .git\COMMIT_EDITMSG holds the PREVIOUS commit's text when pre-commit runs, so reading it would let
+     yesterday's wording authorise today's edit. TC_FROZEN_LITERAL must instead NAME what is being changed
+     and why, so the escape appears in the run's own transcript. #>
+  param([string]$BeforeText, [string]$AfterText)
+  $breaks = New-Object System.Collections.ArrayList
+  if (-not $BeforeText) { return ,@() }
+  $afterLines = @{}
+  foreach ($a in ($AfterText -split "`r?`n")) { $afterLines[$a.TrimEnd()] = $true }
+  $n = 0
+  foreach ($b in ($BeforeText -split "`r?`n")) {
+    $n++
+    if ($b -notmatch 'frozen-literal|json-readers:allow') { continue }
+    # A COMMENT ABOUT the marker is not a marked line. The header of this very file names both markers in
+    # prose, and so does audit-json-readers' own documentation.
+    if ($b.TrimStart().StartsWith('#')) { continue }
+    if (-not $afterLines.ContainsKey($b.TrimEnd())) { [void]$breaks.Add("line $n : " + $b.Trim()) }
+  }
+  return ,@($breaks.ToArray())
+}
+
 function Get-DependencyGaps {
   # A file that CALLS a function must be able to resolve it: a real dot-source (not a mention of the lib in
   # a comment or a fixture string), a local definition, or a conditional load. Defect 3 was exactly this
@@ -116,8 +150,33 @@ if ($SelfTest) {
   if (-not $g) { Write-Output '  PASS  CLEAN TWIN: a local definition resolves the call' } else { Write-Output '  FAIL  a self-defining file was reported'; $fail++ }
   $g = Get-DependencyGaps -Text "# Read-JsonFile is what you should use" -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
   if (-not $g) { Write-Output '  PASS  CLEAN TWIN: a comment recommending the function is not a call' } else { Write-Output '  FAIL  a comment was counted as a call'; $fail++ }
+
+  # ---- FROZEN LITERALS (defect 2, added 2026-09-06) ------------------------------------------------------
+  # The needle is BUILT rather than written out, or these fixture lines would be frozen literals themselves
+  # and this file could never be edited again ([[selftest-greps-its-own-source]]).
+  $mk = 'json-readers' + ':' + 'allow'
+  $frozenBefore = "  `$bare = (Get-Content `$p -Raw | ConvertFrom-Json).item   # $mk this IS the founding bug`n  `$other = 1"
+  $frozenAfter  = "  `$bare = (Read-JsonFile `$p).item   # $mk this IS the founding bug`n  `$other = 1"
+  $fb = Get-FrozenLiteralBreaks -BeforeText $frozenBefore -AfterText $frozenAfter
+  if ($fb.Count -eq 1) { Write-Output '  PASS  MUST FIRE: a sweep that converted a MARKED frozen literal is reported (defect 2 - the guard that stopped being able to fail)' }
+  else { Write-Output "  FAIL  a converted frozen literal went unreported ($($fb.Count))"; $fail++ }
+  $fb = Get-FrozenLiteralBreaks -BeforeText $frozenBefore -AfterText ($frozenBefore + "`n  `$added = 2")
+  if ($fb.Count -eq 0) { Write-Output '  PASS  CLEAN TWIN: the marked line unchanged while its neighbours change is not a finding' }
+  else { Write-Output '  FAIL  an untouched frozen literal was reported'; $fail++ }
+  $fb = Get-FrozenLiteralBreaks -BeforeText $frozenBefore -AfterText "  `$other = 1"
+  if ($fb.Count -eq 1) { Write-Output '  PASS  MUST FIRE: DELETING a marked line is the same loss as changing it' }
+  else { Write-Output '  FAIL  a deleted frozen literal went unreported'; $fail++ }
+  # THE MARKER NAMED IN PROSE IS NOT A MARKED LINE. This file's own header names both markers, and so does
+  # audit-json-readers' documentation; a guard that freezes its own explanation cannot be edited.
+  $fb = Get-FrozenLiteralBreaks -BeforeText "# lines carrying $mk are skipped by the reader audit" -AfterText '# rewritten prose'
+  if ($fb.Count -eq 0) { Write-Output '  PASS  CLEAN TWIN: the marker named in a COMMENT is documentation, not a frozen line' }
+  else { Write-Output '  FAIL  a comment about the marker was frozen - the documentation could never be edited'; $fail++ }
+  # Trailing whitespace is not a change of the literal.
+  $fb = Get-FrozenLiteralBreaks -BeforeText $frozenBefore -AfterText ($frozenBefore -replace '(?m)$', '  ')
+  if ($fb.Count -eq 0) { Write-Output '  PASS  CLEAN TWIN: trailing whitespace is not a change to the literal' }
+  else { Write-Output '  FAIL  trailing whitespace was called a frozen-literal break'; $fail++ }
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - four founding defects armed, five clean twins hold'
+  Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal) and every clean twin holds'
   exit 0
 }
 
@@ -163,6 +222,18 @@ try {
     if ((-not $isNew) -and (-not (Test-BomUnchanged -Before $beforeBytes -After $after))) {
       [void]$findings.Add("BOM CHANGED   $n - a read/write pair stripped or added a byte-order mark")
     }
+    # A MARKED FROZEN LITERAL MAY NOT CHANGE (2026-09-06). Decoded on both sides with the SAME decoder, so
+    # a difference is a real difference - the estate's compare-bytes-not-decodings rule applies to the BOM
+    # and EOL checks above, and to a text comparison it means "one decoder, both sides".
+    if ((-not $isNew) -and (-not $env:TC_FROZEN_LITERAL)) {
+      $bStart = if ($beforeBytes.Length -ge 3 -and $beforeBytes[0] -eq 0xEF -and $beforeBytes[1] -eq 0xBB -and $beforeBytes[2] -eq 0xBF) { 3 } else { 0 }
+      $beforeText = [Text.Encoding]::UTF8.GetString($beforeBytes, $bStart, $beforeBytes.Length - $bStart)
+      $aStart = if ($after.Length -ge 3 -and $after[0] -eq 0xEF -and $after[1] -eq 0xBB -and $after[2] -eq 0xBF) { 3 } else { 0 }
+      $afterText = [Text.Encoding]::UTF8.GetString($after, $aStart, $after.Length - $aStart)
+      foreach ($fbk in (Get-FrozenLiteralBreaks -BeforeText $beforeText -AfterText $afterText)) {
+        [void]$findings.Add("FROZEN LITERAL $n - $fbk")
+      }
+    }
     if ($n -like '*.ps1') {
       $err = $null
       [void][System.Management.Automation.Language.Parser]::ParseFile($full, [ref]$null, [ref]$err)
@@ -175,6 +246,13 @@ try {
   }
   Write-Output ("verify-bulk-edit: $checked modified tracked file(s) compared against HEAD; $parsed .ps1 parsed clean; $($findings.Count) finding(s)")
   $findings | ForEach-Object { Write-Output ("  " + $_) }
+  if (@($findings | Where-Object { $_ -like 'FROZEN LITERAL*' }).Count) {
+    Write-Output '  A line marked `json-readers:allow` or `frozen-literal` is a fixture, not code: it is the BUG a'
+    Write-Output '  guard detects, written out on purpose. Converting one makes the guard report 0 findings and PASS'
+    Write-Output '  while no longer able to fail (2026-09-05, defect 2). If the change is deliberate, say what it is:'
+    Write-Output '    $env:TC_FROZEN_LITERAL = ''<file>: why this fixture is being retired''   (then commit, then clear it)'
+    Write-Output '  The commit MESSAGE cannot carry this - a pre-commit hook sees the PREVIOUS commit''s message.'
+  }
   Write-GuardComplete -Name 'verify-bulk-edit' -Summary "$($findings.Count) finding(s) over $checked file(s)"
   if ($findings.Count) { exit 1 }
   exit 0
