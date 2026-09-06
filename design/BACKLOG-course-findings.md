@@ -257,6 +257,37 @@ undermine its own output, then diff that list against the prose. Cheap pre-publi
 spirit to what `post-publish-reviewer` does afterwards - and on the correct side of the publish,
 which is E1's whole point.
 
+### E27 - The reranker fine-tuner ships the LAST epoch, not the best one `OPEN`
+*Source: Fine-Tuning Transformers with Hugging Face (queue 2, course 5).* `sidecar/finetune_reranker.py`
+scores holdout AUC after every epoch and appends it to `history`, then calls `model.save_pretrained(out)`
+**after** the loop finishes. So the weights that reach disk are whichever epoch happened to be last,
+and the per-epoch AUC it just measured is used for nothing. If epoch 2 is the peak and epoch 4 has
+started to overfit, epoch 4 is what gets published, and the card records the whole history so the
+regression is visible in the artifact we shipped.
+
+Two fixes, and they are independent:
+1. **Keep the best.** Track the best holdout AUC, snapshot the state dict at that epoch, restore it
+   before `save_pretrained`. Roughly ten lines, no new dependency.
+2. **Stop early.** There is no patience at all - the loop always runs `--epochs` to the end. A
+   plateau costs full training time and buys a worse checkpoint.
+
+The course's Trainer-API equivalents are `metric_for_best_model` + `load_best_model_at_end` +
+`EarlyStoppingCallback`. We do not use the Trainer here and should not switch to it for this; the
+hand-rolled loop is more capable than the course's (OneCycleLR warmup, grad clipping, bf16 autocast,
+`pos_weight` for class imbalance, seeded, and it writes a real card). It simply has this one hole,
+and the hole is invisible because the training log looks correct either way.
+
+Touches: `sidecar/finetune_reranker.py` only. The gate downstream (`hardeval.py --stage score`)
+would show the improvement, so the change is measurable before it is trusted.
+
+### E28 - No held-out overfitting gap is computed for the reranker `OPEN`
+*Source: same course.* `finetune_reranker.py` reports holdout AUC against a stock baseline, which
+answers "did fine-tuning help" but not "did it memorise". The train-versus-holdout gap is the cheap
+second number, and the course's own demo is the argument for it: its diagnosis flipped between
+"good generalization" and "moderate gap" on identical code because the dataset was too small to
+test anything. Same exposure here if the pair corpus is small in some band. Would touch the same
+file and the card schema. Smaller than E27 and best done with it.
+
 ---
 
 ## Efficiency and ergonomics
