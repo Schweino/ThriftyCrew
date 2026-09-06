@@ -4123,6 +4123,126 @@
                         "ruled_on":  "2026-09-05",
                         "ruled_by":  "triage-2026-09-05",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pomegranates|SamsClub|sahale-snacks-naturally-pomegranate-vanilla-cash",
+                        "commodity":  "pomegranates",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Sahale Snacks Naturally Pomegranate Vanilla Cashews, 1.5 oz., 15 pk."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Sahale Snacks Naturally Pomegranate Vanilla Cashews, 1.5 oz., 15 pk. is a bag of flavoured CASHEWS, not fruit. It held the pomegranates cell at Sam\u0027s Club at 1.1987 per-15-pack against Baker\u0027s real 4.99 each, so the board read Sam\u0027s as 4x cheaper for a food it does not stock here. Found by PLAN-top5-2026-09-06 section 1.2 on the comparison-2026-09-05 board; ruled after opening the row.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 1 / section 4a)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "peaches|Walmart|floridas-natural-peach-mango-59-oz",
+                        "commodity":  "peaches",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Florida\u0027s Natural Peach Mango 59 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 59 fl oz carton of peach-mango JUICE holding the fresh-peaches cell at 0.5885 against a 1.835 board price. T1: the commodity is fresh peaches; juice is a different food with its own ids. It was held off the cell only by the 0.6 band floor, which is the band doing the ledger\u0027s job.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|Walmart|ocean-spray-berry-splash-strawberry-raspberry-50",
+                        "commodity":  "strawberries",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Ocean Spray Berry Splash  Strawberry \u0026 Raspberry 50.7 fl oz Bottle"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 50.7 fl oz bottle of Ocean Spray JUICE DRINK holding the fresh-strawberries cell at 0.045 against a 0.147 board price. T1: fresh berries, not juice. Ocean Spray Zero Sugar is already ledgered under cranberry-juice but had no entry here, so only the 0.06 floor was holding it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pineapple|Walmart|dole-fruit-bowls-pineapple-and-mango-in-tropical",
+                        "commodity":  "pineapple",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Dole Fruit Bowls Pineapple and Mango in Tropical Gel, 4.3 oz cups, 4 Count"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Four 4.3 oz plastic cups of fruit in GEL, holding the fresh-pineapple cell at 0.8675 against a 1.88 board price. T1: fresh pineapple is the commodity; a gel fruit cup is a different food and canned-pineapple already exists for the shelf-stable form.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "half-and-half|Walmart|arizona-arnold-palmer-half-and-half-16-fl-oz-pac",
+                        "commodity":  "half-and-half",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "AriZona Arnold Palmer Half and Half - 16 fl oz (pack of 12)"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "AriZona Arnold Palmer \u0027Half and Half\u0027 is an ICED TEA AND LEMONADE drink, not dairy half-and-half. It matched on the product name alone and sat at 0.039 against a 0.0775 board price. The plan\u0027s own example of a row the band floor was silently refusing with no ledger entry anywhere (section 2.3 class 3).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baby-formula|Walmart|nutramigen-hypoallergenic-liquid-baby-formula-co",
+                        "commodity":  "baby-formula",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Nutramigen Hypoallergenic Liquid Baby Formula, Colic Relief from Cow\u0027s Milk Allergy, Ready to Use Liquid, 32 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-form",
+                        "evidence":  "A ready-to-use LIQUID formula priced per fl oz against a cell that compares POWDER, which reconstitutes to many times its own volume. Comparing them per ounce understates the liquid by roughly the dilution ratio. wrong-form is the existing ledger verdict for exactly this.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baby-formula|Walmart|similac-advance-concentrated-liquid-baby-formula",
+                        "commodity":  "baby-formula",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Similac Advance Concentrated Liquid Baby Formula With Iron, Has Key Ingredients Found in Breast Milk, 13 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-form",
+                        "evidence":  "A CONCENTRATED liquid formula on a powder cell, same defect as the Nutramigen row: per-fl-oz against a powder basis is not a comparison a shopper can act on. wrong-form.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "tortillas|HyVee|la-banderita-yellow-corn-tortilla-30-ct",
+                        "commodity":  "tortillas",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "La Banderita Yellow Corn Tortilla 30 Ct"
+                                  ],
+                        "product_id":  "301255",
+                        "verdict":  "wrong-product",
+                        "evidence":  "The commodity is labelled \u0027Tortillas (flour)\u0027 and the catalog already splits tortillas by kind (high-fiber-tortillas is its own id). A 30 ct CORN tortilla at 0.0997 would halve the cell against a 0.199 flour board price on a different grain. T1: a sibling id is the right home, not this one.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

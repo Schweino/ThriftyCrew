@@ -91,7 +91,7 @@ $engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UT
 # Test-NameOffersTwoSizes was added to refuse either/or ad rows. The guard caught it (the walmart-deals
 # self-test is a hard invariant), so nothing shipped, but the trap is worth naming: if you add a function
 # to compare-deals.ps1 and any lifted function calls it, it belongs in this list too.
-foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
+foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit','Get-TcEachCountTokens','Get-TcWholePurchaseTokens')) {
   $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
   if (-not $m.Success) { throw "${Me}: could not lift $fn from compare-deals.ps1" }
   Invoke-Expression $m.Value

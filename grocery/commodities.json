@@ -4995,6 +4995,7 @@
         "id":  "bread",
         "label":  "Bread (loaf)",
         "unit":  "each",
+        "weight_is_one_unit":  true,
         "band_min":  0.5,
         "band_max":  8,
         "include":  [
@@ -5004,6 +5005,7 @@
                         "wheat\\s+loaf"
                     ],
         "exclude":  [
+                        "bread\\s*(?:&|and)\\s*butter",
                         "breadstick",
                         "cornbread",
                         "crumb",
@@ -7909,7 +7911,8 @@
         "id":  "lettuce",
         "label":  "Lettuce (head)",
         "unit":  "each",
-        "band_min":  0.8,
+        "band_min":  0.2,
+        "band_min_set_under":  "Romaine Hearts 6 ct. Sam's Club $4.67 = 0.7783 per each 2026-09-06 (held clear of two 24 ct wholesale-case parse errors at 0.1038-0.1246)",
         "band_max":  4.5,
         "include":  [
                         "\\blettuce\\b",
@@ -14421,7 +14424,8 @@
         "id":  "soda",
         "label":  "Soda (12-pack)",
         "unit":  "floz",
-        "band_min":  0.015,
+        "band_min":  0.007,
+        "band_min_set_under":  "Summit Cola 2 L Aldi $0.99/67.6 fl oz = 0.0146 per floz 2026-09-06 (17 store-brand 2-litre rows sit at 0.0146-0.0148; held clear of two Fareway 8x288 fl oz parse errors at 0.003-0.0039)",
         "band_max":  0.2,
         "relax_global":  [
                              "\\bsoda\\b"
@@ -14661,6 +14665,8 @@
         "id":  "frozen-pizza",
         "label":  "Frozen Pizza",
         "unit":  "each",
+        "min_piece_oz":  12,
+        "weight_is_one_unit":  true,
         "band_min":  1.5,
         "band_max":  14,
         "relax_global":  [
@@ -15480,8 +15486,9 @@
         "id":  "aluminum-foil",
         "label":  "Aluminum Foil",
         "unit":  "sq_ft",
-        "band_min":  1,
-        "band_max":  15,
+        "band_min":  0.015,
+        "band_min_set_under":  "Hy Vee Aluminum Foil Hy-Vee $4.98/75 sq ft = 0.0664 per sq_ft 2026-09-06",
+        "band_max":  0.6,
         "include":  [
                         "aluminum\\s+foil",
                         "aluminum\\b.{0,20}\\bfoil",
@@ -15489,6 +15496,10 @@
                         "\\bfoil\\b.{0,15}(?:roll|sq)"
                     ],
         "exclude":  [
+                        "pre[\\s-]?cut",
+                        "pop[\\s-]?up",
+                        "\\bsheets?\\b",
+                        "bucket\\s+liners?",
                         "\\bpans?\\b",
                         "baking\\s+cups",
                         "balloon"
@@ -15501,7 +15512,8 @@
         "id":  "storage-bags",
         "label":  "Food Storage Bags (gallon)",
         "unit":  "each",
-        "band_min":  0.03,
+        "band_min":  0.008,
+        "band_min_set_under":  "Hy-Vee storage bags 75 to 100 ct. Hy-Vee $2.99 = 0.0299 per each 2026-09-06",
         "band_max":  0.6,
         "include":  [
                         "(?:storage|freezer)\\s+bags?",
@@ -22601,6 +22613,8 @@
         "id":  "rotisserie-chicken",
         "label":  "Rotisserie Chicken",
         "unit":  "each",
+        "min_pack_oz":  32,
+        "weight_is_one_unit":  true,
         "band_min":  4,
         "band_max":  12,
         "include":  [
@@ -22609,6 +22623,8 @@
                         "hot\\s+whole\\s+chicken"
                     ],
         "exclude":  [
+                        "\\bbites\\b",
+                        "\\bturkey\\b",
                         "\\bshredded\\b",
                         "seasoning",
                         "\\bsalad\\b",
@@ -25765,7 +25781,8 @@
         "id":  "donuts",
         "label":  "Donuts",
         "unit":  "each",
-        "band_min":  0.25,
+        "band_min":  0.08,
+        "band_min_set_under":  "Clyde's Donuts Glazed Cherry Lil' Smiles 12 ct Fareway $2.88 = 0.24 per each 2026-09-06 (the SAME product the cell already published at 0.3325 from a $3.99 capture)",
         "band_max":  2,
         "include":  [
                         "donuts?",
@@ -25881,6 +25898,8 @@
         "id":  "french-bread",
         "label":  "French Bread / Baguette",
         "unit":  "each",
+        "min_pack_oz":  12,
+        "weight_is_one_unit":  true,
         "band_min":  1,
         "band_max":  5,
         "include":  [
@@ -26228,7 +26247,8 @@
         "id":  "maple-syrup",
         "label":  "Syrup (pancake / maple)",
         "unit":  "floz",
-        "band_min":  0.08,
+        "band_min":  0.02,
+        "band_min_set_under":  "Country Kitchen Original Pancake Syrup 36 fl oz Walmart $2.92 = 0.0811 per floz 2026-09-06, Walmart's own unit price 8.1 c/fl oz agreeing. The 0.08 floor was a typed one-sig-fig number sitting 1.4% under the cheapest real row, so it is moved as a net - but it censors NOTHING today. PLAN-top5-2026-09-06 section 2.3 lists this as its headline pure-floor-error 'costing the reader money today'; that did not survive measurement. The refused 0.0789 row is the 2026-08-06/08-11 capture of the same product at $2.84, and Walmart RAISED the price to $2.92 on 08-31 (its own unit price reads 7.9 c/fl oz then, 8.1 c/fl oz now). The board is publishing today's shelf price; the cheaper number is a 26-day-old price nobody can pay. The plan's positive control for this cell was never achievable.",
         "band_max":  1.2,
         "include":  [
                         "maple\\s+syrup",
@@ -27144,6 +27164,7 @@
         "id":  "cake-mix",
         "label":  "Cake Mix",
         "unit":  "each",
+        "weight_is_one_unit":  true,
         "band_min":  0.8,
         "band_max":  4,
         "relax_global":  [
@@ -27259,6 +27280,7 @@
         "id":  "brownie-mix",
         "label":  "Brownie Mix",
         "unit":  "each",
+        "weight_is_one_unit":  true,
         "band_min":  0.8,
         "band_max":  4,
         "relax_global":  [
@@ -34063,6 +34085,7 @@
         "id":  "gelatin",
         "label":  "Gelatin (Jell-O)",
         "unit":  "each",
+        "weight_is_one_unit":  true,
         "band_min":  0.2,
         "band_max":  2.5,
         "include":  [
@@ -37171,6 +37194,8 @@
         "id":  "garlic-bread",
         "label":  "Garlic Bread (frozen)",
         "unit":  "each",
+        "min_piece_oz":  10,
+        "weight_is_one_unit":  true,
         "pack_is_package":  true,
         "band_min":  1,
         "band_max":  6,
@@ -37531,7 +37556,8 @@
         "id":  "dryer-sheets",
         "label":  "Dryer Sheets",
         "unit":  "each",
-        "band_min":  0.02,
+        "band_min":  0.005,
+        "band_min_set_under":  "all Fabric Softener Dryer Sheets Free Clear 250 ct. Sam's Club $4.98 = 0.0199 per each 2026-09-06",
         "band_max":  0.2,
         "include":  [
                         "dryer\\s+sheets?",
@@ -37785,7 +37811,12 @@
                         "antibacterial\\s+spray"
                     ],
         "exclude":  [
-                        "\\bwipes\\b"
+                        "\\bwipes\\b",
+                        "bathroom\\s+cleaner",
+                        "scrubbing\\s+bubbles",
+                        "shower\\s*(?:\u0026|and)?\\s*tub",
+                        "tub\\s*(?:\u0026|and)?\\s*tile",
+                        "shower\\s+aerosol"
                     ]
     },
     {

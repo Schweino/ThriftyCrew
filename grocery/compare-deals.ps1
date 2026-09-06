@@ -137,6 +137,45 @@ function Test-Floor($unit, $up) { $u=[string]$unit; if (-not $FLOOR.ContainsKey(
 # commodity, in the same shape as pack_is_package. A commodity without the field is completely unaffected.
 $MAXPACK = @{}
 foreach ($c in $commodities) { if ($c.PSObject.Properties['max_pack_oz']) { $MAXPACK[[string]$c.id] = [double]$c.max_pack_oz } }
+# min_pack_oz - THE PACK FORM FLOOR, the mirror of max_pack_oz above (2026-09-06).
+# The founding rows are rotisserie-chicken's, and they are the reason this is a SIZE rule and not a list of
+# excludes. That commodity means a whole bird, its include is the bare word `rotisserie`, and the aisle is
+# full of other things wearing it: Land O'Frost Rotisserie Seasoned Turkey Breast 8 oz, Aldi's Lunch Mate
+# Rotisserie Chicken 16 oz (deli slices), Tyson Rotisserie Seasoned Crispy Wings 20 oz, Smithfield 7 oz,
+# Soules Kitchen 8 oz. Every one was invisible while the rows were unpriceable; weight_is_one_unit prices
+# them, and Land O'Frost's 8 oz lunch meat took Family Fare's cell off a real $7.99 whole chicken.
+# WHY NOT EXCLUDES: "Lunch Mate Rotisserie Chicken 16 OZ" says nothing but the brand - there is no word in
+# it to exclude on. Blocking the brand hands the cell to the next deli packer, which is the wrong-product
+# class this estate has paid for repeatedly. What separates them is not who sells it but HOW BIG IT IS: a
+# whole rotisserie chicken is at least 2 lb, and a resealable tub of pulled meat never is.
+# THE THREE RULES max_pack_oz ALREADY SETTLED, kept identical here: an UNREADABLE size is not a violation
+# (or every store that omits sizes loses the cell - and the real whole-bird rows are exactly the ones that
+# say only "each"), an undeclared commodity is untouched, and the bound is inclusive.
+$MINPACK = @{}
+foreach ($c in $commodities) { if ($c.PSObject.Properties['min_pack_oz']) { $MINPACK[[string]$c.id] = [double]$c.min_pack_oz } }
+# min_piece_oz - HOW BIG ONE PIECE HAS TO BE (2026-09-06, Brad's T2 ruling).
+# THE RULE BRAD RATIFIED: for a commodity compared per EACH, the word "each" silently asserts the pieces
+# are interchangeable, so a mini / single-serve / snack format is a DIFFERENT PRODUCT, not a cheaper one.
+# For a commodity compared by weight or volume the format is irrelevant and this never applies (bacon ends
+# at $2.398/lb really is cheaper bacon). This is that rule as a MEASUREMENT rather than as taste, which is
+# the whole point: it can be checked, it applies to rows nobody has looked at yet, and it says what it means.
+#
+# THE PIECE, NOT THE PACKAGE - and that distinction is the entire mechanism. min_pack_oz above asks how
+# heavy the BOX is; this divides by the count the engine actually priced on, so Totino's "42 oz, 4 Count"
+# is measured as four 10.5 oz party pizzas and not as one 42 oz pizza. That is why Get-UnitPrice reports
+# `pieces` back: a rule that could only see the box would admit every multipack of minis ever made.
+#
+# WHY THIS AND NOT 26 LEDGER ENTRIES: the frozen-pizza rows alone are 26, across 5 stores and 8 brands.
+# A ledger list of them is brand-shaped, and blocking Totino's simply hands the cell to the next maker of
+# snack pizzas - the wrong-product class this estate has paid for repeatedly. What is actually wrong with
+# those rows is not who made them, it is that a 10.2 oz party pizza is not the 21 oz pizza the cell claims.
+#
+# UNREADABLE SIZE IS NOT A VIOLATION, same as both pack rules. That twin is load-bearing here, not a
+# formality: most real frozen-pizza rows state only "each" (Fareway's whole column, Walmart's Red Baron,
+# Aldi's Mama Cozzi thin crust), so a floor that condemned a sizeless row would empty the commodity it
+# was written to protect and leave only the minis it was written to refuse.
+$MINPIECE = @{}
+foreach ($c in $commodities) { if ($c.PSObject.Properties['min_piece_oz']) { $MINPIECE[[string]$c.id] = [double]$c.min_piece_oz } }
 function Get-PackOz([string]$size, [string]$name) {
   # Total package weight in ounces, ONLY when the size string states one plainly. Returns $null otherwise -
   # an unknown size must never be treated as a violation, or every store that omits sizes loses the cell.
@@ -152,6 +191,38 @@ function Test-PackSize($id, $size, $name) {
   $oz = Get-PackOz $size $name
   if ($null -eq $oz -or $oz -le 0) { return $true }
   return ($oz -le $MAXPACK[[string]$id])
+}
+function Test-PieceSize($id, $size, $name, $pieces) {
+  if (-not $MINPIECE.ContainsKey([string]$id)) { return $true }
+  # WHEN THE SIZE ALREADY STATES THE PIECE, DO NOT DIVIDE IT AGAIN. Several feeds write the count-first
+  # idiom "<count> pk <per-item size>" - Baker's "16 pk 2.63 oz" is sixteen 2.63 oz corn dogs, NOT a 2.63 oz
+  # box. Get-PackOz is deliberately naive (it takes the first oz number, which is right for the cap it was
+  # written for), so dividing its answer by 16 here would call a real 2.63 oz corn dog a 0.16 oz crumb and
+  # refuse the cell. Same grammar Get-SizeAmount's multipack branch reads; this is the third reader of it and
+  # the parity is what keeps them honest.
+  $ps = (('' + $size + ' ' + $name)).ToLower()
+  $mm = [regex]::Match($ps, '(\d+)\s*[- ]?\s*(?:pk|packs?|ct|count)\b\D{0,4}?(\d+(?:\.\d+)?|\.\d+)\s*(?:fl\s*)?oz\b')
+  if ($mm.Success) { return ([double]$mm.Groups[2].Value -ge $MINPIECE[[string]$id]) }
+  # A SIZE RANGE MEANS CHOOSE-YOUR-SIZE, AND THE LARGER ONE IS REAL. Get-SizeAmount has read grocery-ad
+  # ranges that way since the frozen regression ("in grocery ads this means CHOOSE YOUR SIZE at one price,
+  # so the LARGER size is genuinely purchasable"), but Get-PackOz below is deliberately naive and takes the
+  # FIRST number - so Hy-Vee's "garlic bread, 8 to 11.25 oz., $2.48" would be measured as an 8 oz piece and
+  # refused, losing a real cell to a disagreement between two readers of one string. Read here rather than
+  # in Get-PackOz so the max_pack_oz CAP, which has always read the first number, is not silently retuned.
+  $rg = [regex]::Match($ps, '(\d+(?:\.\d+)?)\s*(?:to|or|-|thru)\s*(\d+(?:\.\d+)?)\s*(?:fl\s*)?oz\b')
+  if ($rg.Success -and ([double]$rg.Groups[2].Value -gt [double]$rg.Groups[1].Value)) {
+    return ([double]$rg.Groups[2].Value -ge $MINPIECE[[string]$id])
+  }
+  $oz = Get-PackOz $size $name
+  if ($null -eq $oz -or $oz -le 0) { return $true }
+  $n = if ($pieces -and [double]$pieces -ge 1) { [double]$pieces } else { 1 }
+  return (($oz / $n) -ge $MINPIECE[[string]$id])
+}
+function Test-PackSizeFloor($id, $size, $name) {
+  if (-not $MINPACK.ContainsKey([string]$id)) { return $true }
+  $oz = Get-PackOz $size $name
+  if ($null -eq $oz -or $oz -le 0) { return $true }
+  return ($oz -ge $MINPACK[[string]$id])
 }
 # IN-STORE PRICE MODE, ENFORCED PER ROW (2026-08-31). See instore-lib.ps1 for the rule and the founding
 # achiote bug. It is shared with audit-coverage-gaps.ps1, which would otherwise report every row this gate
@@ -193,6 +264,38 @@ function Test-Bulk([string]$size, [string]$name) {
 function Test-Membership([string]$store) { return ($store -eq "Sam's Club") }
 
 # ---------------------------------------------------------------- unit conversion
+# THE COUNT VOCABULARY, ONCE (2026-09-06). Three lists had drifted apart: Convert-ToUnit's 'each' arm
+# accepted head|loaf, Get-SizeAmount's bare-token list did not, and the each-branch's own bare-size regex
+# accepted bunch(es) only (patched 2026-08-31 for green onions). Hy-Vee's "Bud Iceberg Lettuce | head |
+# $1.97" was unpriced for exactly that reason: the branch that decides it never learned the word. Each list
+# was edited alone on the day it bit, which is how three copies of one rule become three different rules.
+#
+# THERE ARE TWO VOCABULARIES HERE, NOT ONE, and collapsing them is the mistake this comment exists to stop.
+#   WHOLE-PURCHASE tokens name the thing a shopper carries out: a head of lettuce, a loaf, a bunch, "1 ct".
+#     A size that is ONLY one of these words means the ad prices ONE item, so the row prices per-each.
+#   CONTAINER tokens (pk/pack/pkg/package) name a box with an UNKNOWN number inside. "6 pk" is a real count
+#     and still divides; a bare "pkg" is not a count at all and must keep dropping - the mystery-tray fixture
+#     in the self-test pins it. Putting pkg in the whole-purchase list prices a package as one item.
+# Convert-ToUnit's 'each' arm takes BOTH, because there it is always converting a STATED number ("2 pkg" is
+# two packages); the two bare-size gates take the whole-purchase list only.
+# THESE ARE FUNCTIONS, NOT $script: VARIABLES, AND THAT IS LOAD-BEARING. build-walmart-deals.ps1,
+# build-sams-deals.ps1 and import-walmart-batch.ps1 do not dot-source this file - they lift individual
+# FUNCTION BODIES out of it by regex and Invoke-Expression them. A top-level constant is not a function, so
+# it would not travel with the lift, and the regex interpolating it would become an empty alternation in
+# the lifter: a bare "each" would match nothing and every each-row would price null. Measured, not feared -
+# the first cut of this change used variables and turned both build-*-deals suites red on
+# "watermelon each -> engine returned null (size='each')". Written as functions they are CALLS, so the
+# lift-closure check (section 30 of the self-test) already requires every lifter to carry them.
+# WRITTEN IN THE SHAPE THE LIFTERS' REGEX MATCHES: a parameter list, and the closing brace at column 0.
+# Their lift is `^function\s+NAME\s*\(.*?^\}`, so a one-line `function F { ... }` is invisible to it and
+# throws "could not lift" at load. Do not compact these onto one line.
+function Get-TcEachCountTokens() {
+  return 'ct|count|ea|each|pk|pack|pkg|package|bunch|bunches|head|loaf'
+}
+function Get-TcWholePurchaseTokens() {
+  return 'ct|count|ea|each|bunch|bunches|head|loaf'
+}
+
 # canonical amount = how many <category unit> are in "$num $token"
 function Convert-ToUnit([double]$num, [string]$token, [string]$unit) {
   $t = $token.ToLower().Trim().TrimEnd('.')
@@ -227,13 +330,28 @@ function Convert-ToUnit([double]$num, [string]$token, [string]$unit) {
       return $null
     }
     'each' {
-      if ($t -match '^(ct|count|ea|each|pk|pack|pkg|package|bunch|head|loaf)$') { return $num }
+      if ($t -match ('^(' + (Get-TcEachCountTokens) + ')$')) { return $num }
       if ($t -match '^(dozen|doz)$') { return $num * 12.0 }
       return $null
     }
     'dozen' {
       if ($t -match '^(dozen|doz)$')          { return $num }
       if ($t -match '^(ct|count|ea|each)$')   { return $num / 12.0 }
+      return $null
+    }
+    # AREA (2026-09-06, Brad's ruling). aluminum-foil is the catalog's only sq_ft commodity and had NO arm
+    # here at all, so all 47 of its matched rows returned null and the commodity was absent from the board
+    # entirely - indistinguishable, from outside, from a foil Omaha does not sell. unit-vocabulary-lib.ps1
+    # measured exactly this on 2026-08-30 and deliberately changed nothing, pending the ruling.
+    # WHY sq_ft AND NOT each: the rolls run 25 to 223 sq ft at $1.79 to $20.99, so a per-each cell ranks by
+    # roll SIZE rather than value - Family Fare's $1.79 25 sq ft roll would beat its own $12.99 200 sq ft
+    # roll, which is false by 22%.
+    # NO CROSS-UNIT LEAKAGE, IN EITHER DIRECTION. A count is not an area: that is what keeps the "50 ct"
+    # pre-cut pop-up SHEETS and the "6 ct" bucket liners unpriced instead of crowning them, and it is why no
+    # weight or volume arm above learned an area token. 'square fee' is not a typo - Baker's truncates its
+    # product names at 60 characters and its foil rows land mid-word.
+    'sq_ft' {
+      if ($t -match '^(sq\s*\.?\s*ft|sqft|sq\s*feet|square\s*fee|square\s*feet)$') { return $num }
       return $null
     }
   }
@@ -247,7 +365,7 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   $s = ($sizeText -replace "`n", ' ').ToLower()
   # bare unit token (e.g. size just "lb" or "each") => the ad is priced PER that unit => amount = 1 unit
   $st = $s.Trim().TrimEnd('.')
-  if ($st -match '^(lb|lbs|pound|pounds|#|oz|ounce|ounces|fl\s*oz|floz|each|ea|ct|count|dozen|doz|gal|gallon|qt|quart|pt|pint|liter|litre|l|ml)$') {
+  if ($st -match ('^(lb|lbs|pound|pounds|#|oz|ounce|ounces|fl\s*oz|floz|dozen|doz|gal|gallon|qt|quart|pt|pint|liter|litre|l|ml|' + (Get-TcWholePurchaseTokens) + ')$')) {
     $one = Convert-ToUnit 1 $st $unit
     if ($one -ne $null) { return $one }
   }
@@ -357,7 +475,9 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     $rc = Convert-ToUnit $hi $tok $unit; if ($rc -ne $null) { return $rc }
   }
   # first "<number> <unit-token>" occurrence
-  $m = [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|#|gal|gallon|qt|quart|pt|pint|liters|litres|liter|litre|ltr|\bl\b|ml|g|gram|grams|dozen|doz|ct|count|ea|each|pk|pack|pkg|bunch|head|loaf)\b')
+  # The AREA tokens lead the alternation, longest form first, so "200 square feet" cannot be clipped to the
+  # 60-char-truncation spelling "square fee" and "sq. ft." cannot be read as a bare "ft".
+  $m = [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(square\s*feet|square\s*fee|sq\s*feet|sq\s*\.?\s*ft|sqft|fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|#|gal|gallon|qt|quart|pt|pint|liters|litres|liter|litre|ltr|\bl\b|ml|g|gram|grams|dozen|doz|ct|count|ea|each|pk|pack|pkg|bunch|head|loaf)\b')
   if ($m.Success) {
     $num = [double]$m.Groups[1].Value; $tok = $m.Groups[2].Value
     $conv = Convert-ToUnit $num $tok $unit
@@ -666,7 +786,7 @@ function Get-UnitPrice($deal, $cat) {
       }
     }
   }
-  if ($unit -in @('lb','oz','floz','gallon','dozen')) {
+  if ($unit -in @('lb','oz','floz','gallon','dozen','sq_ft')) {
     # By-VOLUME container with a commodity-declared dry weight: fresh berries sold by the "pint" are a dry-volume
     # clamshell, not a liquid pint, so their label carries no weight and Convert-ToUnit (which reads pint as 16
     # fl oz) can't rank them against the weight-labeled 18-oz clamshells. When commodities.json declares pint_oz
@@ -718,9 +838,46 @@ function Get-UnitPrice($deal, $cat) {
     # A commodity whose stores cannot all express the portion count must be compared on the coarser basis they
     # ALL share: the package. Declared per commodity (same pattern as pint_oz above) so nothing else changes.
     if ($pk -and $cat.PSObject.Properties['pack_is_package'] -and $cat.pack_is_package) {
-      return @{ unit_price=$pr.per_item; basis="per-package ($pk ct inside)"; note=$pr.note }
+      # pieces=1: the declaration says the PACKAGE is the unit being compared, so the package is the piece.
+      return @{ unit_price=$pr.per_item; basis="per-package ($pk ct inside)"; note=$pr.note; pieces=1 }
     }
-    if ($plain -and $pk)  { return @{ unit_price=($pr.per_item/$pk); basis="per-$pk-pack"; note=$pr.note } }
+    if ($plain -and $pk)  { return @{ unit_price=($pr.per_item/$pk); basis="per-$pk-pack"; note=$pr.note; pieces=$pk } }
+    # A PACKAGED GOOD'S WEIGHT IS ITS COUNT (2026-09-06, Brad's ruling; PLAN-top5-2026-09-06 section 1).
+    # The drop on the last line of this branch refuses any each-row whose only stated size is a weight. That
+    # refusal is RIGHT for produce - a 2 lb bag of kiwi is an unknown number of kiwis - and WRONG for a
+    # packaged good, where a 14 oz loaf is one loaf. Nothing in commodities.json said which kind an id was,
+    # so the engine could not tell them apart and refused both.
+    #
+    # THE FOUNDING CASE IS A STALE CELL, NOT A MISSING ONE. french-bread|Walmart published $1.25 from a
+    # 07-18 capture whose size was the word "each"; Walmart's current capture writes the real weight
+    # ("Freshness Guaranteed French Bakery Bread Loaf, 14 oz, 1 Loaf | $1.47 | 14 oz"), which was unpriceable,
+    # so Update-PriceFromNewerSighting correctly refused it and the July number outlived its own product's
+    # newer sighting. Three more cells sat in that state (gelatin, rotisserie-chicken, frozen-pizza at
+    # Walmart). The fix is to make the newer row PRICEABLE - letting an unpriced newer sighting retire an
+    # older price instead would blank all four.
+    #
+    # WHICH COMMODITIES MAY DECLARE IT, and the test that decides: the commodity's OWN existing cells say so.
+    # `basis` reads per-each at some store for bread, brownie-mix, cake-mix, french-bread, gelatin,
+    # frozen-pizza and rotisserie-chicken - a package there IS one unit. It reads per-8-pack / per-6-pack /
+    # per-20-pack for hamburger-buns, english-muffins, bar-soap, donuts, corn-dogs, pita-bread, hot-dog-buns,
+    # breakfast-sandwiches and microwave-popcorn, where a package is MANY units, and the flag would publish
+    # Aldi's "$1.39 | 12 oz" buns as $1.39 A BUN against a real $0.174. Those nine are NOT declared; they are
+    # reported as a basis gap instead. (band_max happens to block all nine on today's prices, which is the
+    # accidental-duty problem PLAN section 2 exists to end - it is not a reason to lean on it.)
+    #
+    # A REAL PACK COUNT STILL WINS: this sits AFTER the per-$pk-pack line, so a declaring commodity handed
+    # "2 pack ... 30 oz" still prices per-2-pack. garlic-bread declares both this and pack_is_package, and
+    # they do not collide - pack_is_package answers a row that HAS a count, this one answers a row that
+    # has none.
+    if ($plain -and (-not $pk) -and $cat.PSObject.Properties['weight_is_one_unit'] -and $cat.weight_is_one_unit) {
+      # size_text is the store's own statement about the priced unit and is read first. The NAME is a last
+      # resort under the same either/or refusal the weight branch above uses: an ad naming two sizes is not
+      # a statement about one package.
+      $wRx = '(?i)(\d+(?:\.\d+)?|\.\d+)\s*(oz|ounce|ounces|lb|lbs|pound|pounds|g|gram|grams)\b'
+      $wHit = ([string]$deal.size_text -match $wRx)
+      if ((-not $wHit) -and $deal.name -and -not (Test-NameOffersTwoSizes $deal.name)) { $wHit = ([string]$deal.name -match $wRx) }
+      if ($wHit) { return @{ unit_price=$pr.per_item; basis='per-each (weight is one unit)'; note=$pr.note; pieces=1 } }
+    }
     # A Hy-Vee PERKS ad price is a single retail unit; with no pack count it prices per-each (a pack count above
     # still divides). Scoped to the Perks pattern so the general "bare package, unknown count -> drop" guard holds.
     # 'BUNCH' IS A WHOLE PURCHASE (2026-08-31), and its absence here cost a live cell. Hy-Vee prices green
@@ -733,7 +890,12 @@ function Get-UnitPrice($deal, $cat) {
     # scoped to lb/oz/floz/gallon/dozen. That edit was reverted rather than left in looking useful.
     # Scoped to the size being ONLY the word, so "3 bunches" still falls through to the count logic above,
     # and it says nothing about weight - a weight commodity never reaches this branch at all.
-    if ((-not $plain) -or ($deal.size_text -match '(?i)^\s*(1\s*)?(ct|count|ea|each|bunch(es)?)\.?\s*$') -or ([string]$deal.price_text -match '(?i)perks\s*price')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note } }
+    # THE WHOLE-PURCHASE LIST, NOT A HAND COPY (2026-09-06). This line used to spell its own tokens, and it
+    # had drifted to bunch(es) only - so Hy-Vee's "Bud Iceberg Lettuce | head | $1.97" fell through to the
+    # drop below and Hy-Vee simply had no lettuce cell. It now reads $script:TC_WholePurchaseTokens, the same
+    # list Get-SizeAmount's bare-token gate reads, so the two cannot drift again. What it must NOT gain is
+    # pk/pkg/package: those name a container of unknown count, and the mystery-tray fixture pins the drop.
+    if ((-not $plain) -or ($deal.size_text -match ('(?i)^\s*(1\s*)?(' + (Get-TcWholePurchaseTokens) + ')\.?\s*$')) -or ([string]$deal.price_text -match '(?i)perks\s*price')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note; pieces=1 } }
     return $null   # bare package price with unknown count -> not confident, drop
   }
   return $null
@@ -900,6 +1062,8 @@ if ($SelfTest) {
   function _C($unit) { [pscustomobject]@{ unit=$unit } }
   # a commodity carrying the pack_is_package declaration (see the 'each' branch of Get-UnitPrice)
   function _CP($unit) { [pscustomobject]@{ unit=$unit; pack_is_package=$true } }
+  # a commodity carrying the weight_is_one_unit declaration (see the 'each' branch of Get-UnitPrice)
+  function _CW($unit) { [pscustomobject]@{ unit=$unit; weight_is_one_unit=$true } }
 
   # 1. soda-style Buy 2 Get 3 Free, regular $11.99/pack, 12-pack x 12 fl oz = 144 fl oz -> (2*11.99/5)/144
   _Near 'B2G3 soda /floz'        (Get-UnitPrice (_D 'Buy 2 Get 3 Free' 'Coca-Cola 12 pk' 11.99 '12 pk 12 fl oz') (_C 'floz')).unit_price 0.0333 0.0005
@@ -1040,6 +1204,61 @@ if ($SelfTest) {
   # the declaration must not invent a basis where there is no count at all - a bare loaf is still per-each
   _Near 'pack_is_package: no count -> per-each'   (Get-UnitPrice (_D '$3.99' 'Fareway Garlic Bread' $null 'each') (_CP 'each')).unit_price 3.99 0.001
 
+  # --- 11e2: weight_is_one_unit - A PACKAGED GOOD'S WEIGHT IS ITS COUNT (2026-09-06) ----------------------
+  # The live row, frozen from walmart-regular-2026-09-05 and the reason this declaration exists: Walmart's
+  # CURRENT french-bread capture states the loaf's weight, was therefore unpriceable, and so the board went
+  # on publishing $1.25 from a 07-18 capture whose size was the word "each" - a stale cell, not a missing
+  # one. MUST-FIRE: the declaring commodity reads the shelf price as the price of one loaf.
+  _Near 'weight_is_one_unit: 14 oz loaf is one loaf' (Get-UnitPrice (_D '$1.47' 'Freshness Guaranteed French Bakery Bread Loaf, 14 oz, 1 Loaf' $null '14 oz') (_CW 'each')).unit_price 1.47 0.001
+  # CLEAN TWIN 1 - THE PRODUCE GUARD, and the whole reason this is a per-commodity declaration rather than a
+  # blanket rule. The identical row on an UNDECLARED commodity must still be refused, because for produce a
+  # weight really is an unknown number of items.
+  _Null 'weight_is_one_unit: undeclared commodity still refuses a weight-only row' (Get-UnitPrice (_D '$1.47' 'Freshness Guaranteed French Bakery Bread Loaf, 14 oz, 1 Loaf' $null '14 oz') (_C 'each'))
+  # CLEAN TWIN 2 - the produce row itself, on an undeclared commodity, still refused. Written this way on
+  # purpose: "a kiwi commodity carrying the flag" is not a behaviour to pin, it is a RULE ERROR, and the
+  # thing that must never happen is the flag reaching produce at all. audit-weight-is-one-unit.ps1 is the
+  # test for that half; this is the engine half.
+  _Null 'weight_is_one_unit: a 2 lb produce bag on an undeclared commodity still refuses' (Get-UnitPrice (_D '$7.57' 'Organic Green Kiwi, 2 lbs.' $null '2 lb') (_C 'each'))
+  # CLEAN TWIN 3 - a REAL pack count still divides. The declaration answers a row with NO count; it must not
+  # outrank one that has a count, or a 2-pack of loaves would publish as one loaf at twice the price.
+  _Near 'weight_is_one_unit: a real pack count still divides' (Get-UnitPrice (_D '$5.98' 'Nature Own Butterbread, 2 pack, 30 oz' $null '2 pack 30 oz') (_CW 'each')).unit_price 2.99 0.001
+  # CLEAN TWIN 4 - the declaration must not invent a basis out of nothing. No count and no weight anywhere
+  # is still an unknown package, and it still drops.
+  _Null 'weight_is_one_unit: no count and no weight is still a drop' (Get-UnitPrice (_D '$4.99' 'Bakery Mystery Tray' $null 'pkg') (_CW 'each'))
+
+  # --- 11e3: sq_ft - THE AREA UNIT (2026-09-06 foil ruling) ----------------------------------------------
+  # aluminum-foil had no board row at ALL: Convert-ToUnit had no sq_ft arm, so all 47 matched rows returned
+  # null and the commodity read, from outside, like a foil Omaha does not sell.
+  # MUST-FIRE 1 - the store states the area in size_text.
+  _Near 'sq_ft: 75 sq ft from size_text' (Get-UnitPrice (_D '$4.98' 'Hy Vee Aluminum Foil' $null '75 sq ft') (_C 'sq_ft')).unit_price 0.0664 0.0001
+  # MUST-FIRE 2 - the store states a COUNT in size_text and the area only in the NAME. "200 ct" is not an
+  # area, so it must convert to nothing and let the name fallback answer.
+  _Near 'sq_ft: 200 sq. ft. read from the NAME when size says 200 ct' (Get-UnitPrice (_D '$20.99' 'Reynolds Wrap Aluminum Foil 200 sq. ft. Box' $null '200 ct') (_C 'sq_ft')).unit_price 0.10495 0.0001
+  # MUST-FIRE 3 - Baker's truncates product names at 60 characters, mid-word.
+  _Near 'sq_ft: the 60-char truncation "Square Fee" still reads' (Get-UnitPrice (_D '$6.99' 'Reynolds Wrap Heavy Duty Aluminum Foil Food Wrap 12 INCH 50 Square Fee' $null 'each') (_C 'sq_ft')).unit_price 0.1398 0.0001
+  # CLEAN TWIN 1 - A COUNT IS NOT AN AREA. Pre-cut pop-up sheets state "50 ct" and give an area nowhere;
+  # crowning them at $0.0896 "per sq ft" would be a fabricated basis on a product that is not roll foil.
+  _Null 'sq_ft: pre-cut pop-up SHEETS (50 ct, no area) stay unpriced' (Get-UnitPrice (_D '$4.48' 'Reynolds Wrap Pre-Cut Pop-Up Aluminum Foil Sheets, 14 x 10.25 inches, 50 Sheets' $null '50 ct') (_C 'sq_ft'))
+  # CLEAN TWIN 2 - and no leakage the other way: a weight commodity handed an area token gets nothing.
+  _Null 'sq_ft: a lb commodity handed "75 sq ft" returns null (no cross-unit leakage)' (Get-UnitPrice (_D '$4.98' 'Hy Vee Aluminum Foil' $null '75 sq ft') (_C 'lb'))
+
+  # --- 11e4: the count vocabulary, shared (2026-09-06) ----------------------------------------------------
+  # MUST-FIRE: Hy-Vee prices iceberg lettuce by the HEAD. lettuce is an each-commodity, "head" was in
+  # Convert-ToUnit's each arm but in NEITHER bare-size gate, and Hy-Vee simply had no lettuce cell.
+  _Near 'count vocabulary: a bare "head" is one lettuce' (Get-UnitPrice (_D '$1.97' 'Bud Iceberg Lettuce' $null 'head') (_C 'each')).unit_price 1.97 0.001
+  _Near 'count vocabulary: a bare "loaf" is one loaf'    (Get-UnitPrice (_D '$2.49' 'Bakery Fresh French Bread' $null 'loaf') (_C 'each')).unit_price 2.49 0.001
+  # CLEAN TWIN - and the container words stay OUT of it. A "pkg" is a box with an unknown number inside;
+  # this is the drop the 2026-07-30 garlic-bread ruling turns on, and the case below it has guarded since.
+  _Null 'count vocabulary: a bare "pkg" is still an unknown package' (Get-UnitPrice (_D '$4.99' 'mystery tray' $null 'pkg') (_C 'each'))
+  # PARITY: the two bare-size gates must accept the SAME words. Testing them through behaviour rather than
+  # through the constant, so a future hand-typed list in either place is caught by what it DOES.
+  foreach ($tok in @('ct','count','ea','each','bunch','bunches','head','loaf')) {
+    $viaEach = (Get-UnitPrice (_D '$3.00' 'parity probe' $null $tok) (_C 'each')).unit_price
+    $viaSize = Get-SizeAmount $tok 'each'
+    if ($viaEach -eq 3.00 -and $viaSize -eq 1) { Write-Output "ok    count vocabulary parity: '$tok' is one whole purchase in BOTH gates" }
+    else { Write-Output "FAIL  count vocabulary parity: '$tok' disagrees between the gates (each-branch=$viaEach size-parser=$viaSize) - the three lists have drifted again"; $script:fail++ }
+  }
+
   # --- 11f: max_pack_oz - the PACK FORM cap (2026-08-08 packet-vs-canister ruling) -------------------------
   # The live rows: "Taco Seasoning (packet)" was filled with McCormick Mild Taco Seasoning Mix 8.5 Oz, and
   # "Ranch Seasoning Mix (packet)" with Great Value Classic Ranch 8 oz Canister. Both are the bulk form of the
@@ -1054,6 +1273,62 @@ if ($SelfTest) {
   if (Test-PackSize '_selftest-packet' '' 'Taco Seasoning Mix') { Write-Output 'ok    max_pack_oz: unreadable size is NOT a violation' } else { Write-Output 'FAIL  max_pack_oz rejected an item whose size it could not read'; $script:fail++ }
   if (Test-PackSize 'undeclared-commodity' '8.5 oz' 'Mc Cormick Mild Taco Seasoning Mix 8.5 Oz') { Write-Output 'ok    max_pack_oz: undeclared commodity untouched' } else { Write-Output 'FAIL  max_pack_oz fired on a commodity that never declared it'; $script:fail++ }
   $MAXPACK.Remove('_selftest-packet')
+
+  # --- 11f2: min_pack_oz - the PACK FORM FLOOR (2026-09-06 rotisserie ruling) -----------------------------
+  # The live rows, all of which weight_is_one_unit made priceable on the same day, on a commodity whose
+  # include is the bare word `rotisserie`: Land O'Frost Rotisserie Seasoned Turkey Breast 8 oz TOOK Family
+  # Fare's cell off a real $7.99 whole chicken, and Aldi's "Lunch Mate Rotisserie Chicken 16 OZ" - deli
+  # slices whose name contains no word to exclude on - would have opened a cell Aldi has no whole bird in.
+  # MUST-FIRE: both are refused. CLEAN TWINS: the real whole birds pass, and the two that carry NO readable
+  # size (the shape most whole-chicken rows actually have - "each", "1 ea") pass, because an unknown size
+  # is not a violation. That last twin is the one that matters: get it wrong and this gate empties the
+  # commodity it was written to protect.
+  $MINPACK['_selftest-whole-bird'] = 32
+  if (-not (Test-PackSizeFloor '_selftest-whole-bird' '8 oz' "Land O'Frost Bistro Favorites 100% Natural Rotisserie Seasoned Turkey Breast 8oz")) { Write-Output 'ok    min_pack_oz refuses the 8 oz turkey breast' } else { Write-Output 'FAIL  min_pack_oz let the deli turkey breast hold a rotisserie-chicken cell'; $script:fail++ }
+  if (-not (Test-PackSizeFloor '_selftest-whole-bird' '16 oz' 'Lunch Mate Rotisserie Chicken 16 OZ')) { Write-Output 'ok    min_pack_oz refuses the 16 oz deli pack (no word in it to exclude on)' } else { Write-Output 'FAIL  min_pack_oz admitted a 16 oz deli pack as a whole chicken'; $script:fail++ }
+  if (Test-PackSizeFloor '_selftest-whole-bird' '2.25 lb' '(Hot) Freshness Guaranteed Traditional Rotisserie Whole Chicken, 2.25 lb') { Write-Output 'ok    min_pack_oz keeps the 2.25 lb whole bird' } else { Write-Output 'FAIL  min_pack_oz rejected a real whole rotisserie chicken'; $script:fail++ }
+  if (Test-PackSizeFloor '_selftest-whole-bird' '2 lb' 'Simple Truth Cold Deli Fresh Whole Rotisserie Chicken') { Write-Output 'ok    min_pack_oz is INCLUSIVE at the bound (2 lb = 32 oz passes)' } else { Write-Output 'FAIL  min_pack_oz is exclusive at the bound and drops the 2 lb birds'; $script:fail++ }
+  if (Test-PackSizeFloor '_selftest-whole-bird' 'each' "Member's Mark Seasoned Rotisserie Chicken") { Write-Output 'ok    min_pack_oz: unreadable size is NOT a violation (this is most whole-bird rows)' } else { Write-Output 'FAIL  min_pack_oz treated a sizeless row as a violation - this empties the commodity'; $script:fail++ }
+  if (Test-PackSizeFloor 'undeclared-commodity' '8 oz' "Land O'Frost Rotisserie Seasoned Turkey Breast 8 Oz") { Write-Output 'ok    min_pack_oz: undeclared commodity untouched' } else { Write-Output 'FAIL  min_pack_oz fired on a commodity that never declared it'; $script:fail++ }
+  # and the two caps do not interfere: a commodity may declare either, both, or neither
+  if (Test-PackSize '_selftest-whole-bird' '8 oz' 'anything') { Write-Output 'ok    min_pack_oz and max_pack_oz are independent declarations' } else { Write-Output 'FAIL  declaring min_pack_oz silently applied a max_pack_oz cap'; $script:fail++ }
+  $MINPACK.Remove('_selftest-whole-bird')
+
+  # --- 11f3: min_piece_oz - HOW BIG ONE PIECE HAS TO BE (2026-09-06, Brad's T2 ruling) --------------------
+  # All rows frozen from the 2026-09-05 board. THE CASE THIS RULE EXISTS FOR is the third one: Totino's is
+  # sold BOTH as a single 10.2 oz party pizza and as a 42 oz box of four, and a rule that could only see the
+  # box would refuse the single while admitting the four-pack of the identical pizza. So the test divides by
+  # the count the engine actually priced on, which is why Get-UnitPrice reports `pieces` back.
+  $MINPIECE['_selftest-pizza'] = 12
+  if (Test-PieceSize '_selftest-pizza' '27.3 oz' 'Di Giorno Frozen Pizza, Rising Crust Sausage & Pepperoni Pizza, 27.3oz' 1) { Write-Output 'ok    min_piece_oz keeps a 27.3 oz whole pizza' } else { Write-Output 'FAIL  min_piece_oz rejected a real full-size pizza'; $script:fail++ }
+  if (-not (Test-PieceSize '_selftest-pizza' '10.2 oz' "Totino's Party Pizza, Pepperoni and Cheese, Thin Crust, 10.2 oz" 1)) { Write-Output 'ok    min_piece_oz refuses the single 10.2 oz party pizza' } else { Write-Output 'FAIL  min_piece_oz admitted a party pizza as a pizza'; $script:fail++ }
+  if (-not (Test-PieceSize '_selftest-pizza' '42 oz' "Totino's Party Pizza, Triple Meat, Thin Crust, 42 oz, 4 Count" 4)) { Write-Output 'ok    min_piece_oz refuses the 4-COUNT box of the same party pizza (42 oz / 4 = 10.5)' } else { Write-Output 'FAIL  min_piece_oz saw only the box: a multipack of minis is admitted while the single is refused'; $script:fail++ }
+  if (-not (Test-PieceSize '_selftest-pizza' '9 ct 5.40 oz' 'Red Baron Pepperoni French Bread Frozen Personal Pizza, 5.40 oz., 9 pk.' 9)) { Write-Output 'ok    min_piece_oz refuses a 9-pack of 5.40 oz personal pizzas' } else { Write-Output 'FAIL  min_piece_oz admitted single-serve pizzas'; $script:fail++ }
+  # CLEAN TWIN, and the load-bearing one: MOST real frozen-pizza rows state only "each" (Fareway's whole
+  # column, Walmart's Red Baron, Aldi's Mama Cozzi thin crust). A floor that condemned a sizeless row would
+  # empty the commodity it was written to protect and leave only the minis it was written to refuse.
+  if (Test-PieceSize '_selftest-pizza' 'each' 'Red Baron Four Cheese Classic Crust Frozen Pizza' 1) { Write-Output 'ok    min_piece_oz: unreadable size is NOT a violation (most real pizza rows say only "each")' } else { Write-Output 'FAIL  min_piece_oz condemned a sizeless row - this empties the commodity'; $script:fail++ }
+  # a pack_is_package commodity compares PACKAGES, so its package IS its piece and must not be divided
+  if (Test-PieceSize '_selftest-pizza' '8 ct 12.5 oz' 'a declared-package commodity, 12.5 oz total' 1) { Write-Output 'ok    min_piece_oz honours pieces=1 for a pack_is_package commodity' } else { Write-Output 'FAIL  min_piece_oz divided a package the board compares whole'; $script:fail++ }
+  if (Test-PieceSize 'undeclared-commodity' '4.2 oz' 'Great Value Pepperoni Pizza Snack Builders, 4.20 oz' 1) { Write-Output 'ok    min_piece_oz: undeclared commodity untouched' } else { Write-Output 'FAIL  min_piece_oz fired on a commodity that never declared it'; $script:fail++ }
+  # a missing/zero pieces count must degrade to 1, never to a divide-by-zero or a silent pass
+  if (-not (Test-PieceSize '_selftest-pizza' '4.2 oz' 'Great Value Pepperoni Pizza Snack Builders, 4.20 oz' $null)) { Write-Output 'ok    min_piece_oz treats an absent piece count as 1 rather than passing blind' } else { Write-Output 'FAIL  min_piece_oz passed a row whose piece count it could not read'; $script:fail++ }
+  # THE COUNT-FIRST IDIOM, both directions. "16 pk 2.63 oz" is sixteen 2.63 oz corn dogs and must be read as
+  # a 2.63 oz piece; halve the per-item size and the same grammar must refuse it. Without this the naive
+  # Get-PackOz reading (2.63 total / 16 pieces = 0.16 oz) would refuse every real Baker's corn dog.
+  $MINPIECE['_selftest-corndog'] = 1.5
+  if (Test-PieceSize '_selftest-corndog' '16 pk 2.63 oz' 'Kroger Classic Corn Dogs' 16) { Write-Output 'ok    min_piece_oz reads "16 pk 2.63 oz" as a 2.63 oz PIECE, not a 2.63 oz box' } else { Write-Output 'FAIL  min_piece_oz divided a per-item size again - every real Baker''s corn dog is refused'; $script:fail++ }
+  if (-not (Test-PieceSize '_selftest-corndog' '46 pk 0.66 oz' 'State Fair Classic Mini Corn Dogs' 46)) { Write-Output 'ok    min_piece_oz still refuses a 0.66 oz mini stated the same way' } else { Write-Output 'FAIL  min_piece_oz stopped refusing minis stated in the count-first idiom'; $script:fail++ }
+  if (Test-PieceSize '_selftest-corndog' '42.761 oz' 'Bar-S Classic Corn Dogs, 16-Count' 16) { Write-Output 'ok    min_piece_oz still divides a genuine PACK TOTAL (42.761 oz / 16 = 2.67)' } else { Write-Output 'FAIL  min_piece_oz stopped dividing a real pack total'; $script:fail++ }
+  if (Test-PieceSize '_selftest-corndog' '3 to 4 oz' 'a choose-your-size ad' 1) { Write-Output 'ok    min_piece_oz reads an ascending range as the LARGER size (choose-your-size)' } else { Write-Output 'FAIL  min_piece_oz read a size range as its smaller end - Get-SizeAmount reads the larger and the two must agree'; $script:fail++ }
+  if (-not (Test-PieceSize '_selftest-corndog' '0.5 to 1 oz' 'a range that is small at BOTH ends' 1)) { Write-Output 'ok    min_piece_oz still refuses a range whose LARGER end is under the floor' } else { Write-Output 'FAIL  min_piece_oz let a size range pass on its mere presence'; $script:fail++ }
+  $MINPIECE.Remove('_selftest-corndog')
+  $MINPIECE.Remove('_selftest-pizza')
+
+  # AND THE OTHER HALF OF BRAD'S RULE: for a commodity compared by WEIGHT, format is irrelevant and none of
+  # this applies. Bacon ends at $2.398/lb really are cheaper bacon. Pinned because the tempting next edit is
+  # to "also check piece size on weight commodities", which would refuse them.
+  if (Test-PieceSize 'bacon' '80 oz' 'Webster City Bacon Ends' 1) { Write-Output 'ok    min_piece_oz: a weight-unit commodity declares nothing and is never piece-tested' } else { Write-Output 'FAIL  min_piece_oz reached a by-weight commodity - bacon ends are cheaper bacon, not a smaller piece'; $script:fail++ }
 
   # --- 11g: Test-InStore - the IN-STORE PRICE MODE gate (2026-08-31 achiote ruling) ------------------------
   # The live rows, both from walmart-regular-2026-08-30, both the same 3.5 oz Chef Merito jar:
@@ -2611,6 +2886,20 @@ foreach ($d in $deals) {
       # quietly emptier board.
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("max_pack_oz<=$($MAXPACK[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'WRONG-PACK-FORM'   # drop from ranking; board still ships via runner-up
+    }
+    elseif (-not (Test-PackSizeFloor $c.id $d.size_text $d.name)) {
+      # The same rule from below: a package too SMALL to be the thing the commodity names. FLAGGED, not
+      # silently dropped, for the same reason the cap is - a floor set too high must show up as findings
+      # rather than as a quietly emptier board.
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("min_pack_oz>=$($MINPACK[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'WRONG-PACK-FORM'   # drop from ranking; board still ships via runner-up
+    }
+    elseif (-not (Test-PieceSize $c.id $d.size_text $d.name $(if ($up) { $up.pieces } else { $null }))) {
+      # ONE PIECE is too small to be the thing the commodity names - a mini, a single-serve, a snack format.
+      # Flagged rather than silently dropped, for the same reason as the two pack rules: a floor set too
+      # high has to read as findings, not as a quietly emptier board.
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("min_piece_oz>=$($MINPIECE[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'WRONG-PIECE-FORM'   # drop from ranking; board still ships via runner-up
     }
     else {
       # RIGHT PRODUCT, NOT ON THE SHELF (see the channel block in instore-lib.ps1). A ship-only or

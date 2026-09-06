@@ -65,7 +65,7 @@ $engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UT
 # cmdlet". That is exactly what happened when Test-NameOffersTwoSizes was added to compare-deals.ps1 and
 # only the walmart list was updated. compare-deals.ps1 -SelfTest now proves every one of these three lists
 # is closed under the calls its own lifted functions make.
-foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
+foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit','Get-TcEachCountTokens','Get-TcWholePurchaseTokens')) {
   $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
   if (-not $m.Success) { throw "build-sams-deals: could not lift $fn from compare-deals.ps1" }
   Invoke-Expression $m.Value
