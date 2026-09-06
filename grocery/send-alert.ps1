@@ -42,7 +42,12 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $logFile = Join-Path $root 'alert-log.txt'
 if ($BodyFile) {
   if (-not (Test-Path $BodyFile)) { throw "send-alert: -BodyFile not found: $BodyFile" }
-  $Body = ((Get-Content $BodyFile -Raw) + '')   # ((...) + '') because [string]$null is $null in PS 5.1
+  # -Encoding utf8 (2026-09-06, worklist C5). PS 5.1's Get-Content decodes a file with NO byte-order
+  # mark using the system ANSI codepage, not UTF-8, and every writer that emits BOM-less UTF-8 - Python's
+  # json.dump, .NET's UTF8Encoding($false) - produces exactly that. So an alert body naming a real
+  # product came in mangled: "Hurst's Hambeens(R) 15 Bean Soup Mix" arrived with the registered sign
+  # doubled. lib\json-io.ps1's header documents the mechanism in full; this file never dot-sourced it.
+  $Body = ((Get-Content $BodyFile -Raw -Encoding UTF8) + '')   # ((...) + '') because [string]$null is $null in PS 5.1
 }
 # a locked log file must never kill the alerter - see the note in check-ad-cycles.ps1 (2026-07-28). This one
 # matters twice over: Log() runs inside the catch that handles a failed queue write, so a locked log here
@@ -225,13 +230,18 @@ $qHeld = $false
 try { $qHeld = $qMutex.WaitOne(10000) } catch [System.Threading.AbandonedMutexException] { $qHeld = $true }
 try {
   $qFile = Join-Path $root 'triage-queue.json'
-  $qRaw = if (Test-Path $qFile) { Get-Content $qFile -Raw } else { $null }
+  # THIS ONE IS THE GENERATIONAL HALF AND IT IS THE WORSE OF THE TWO. This read feeds a
+  # read-modify-WRITE of the whole queue, so without -Encoding utf8 every alert appended re-decoded and
+  # re-encoded every entry already in the file - one more generation of damage per alert, to rows that
+  # had nothing to do with the new one. The estate has measured this shape before: commodities.json once
+  # carried 61,542 mojibake characters eight to ten generations deep.
+  $qRaw = if (Test-Path $qFile) { Get-Content $qFile -Raw -Encoding UTF8 } else { $null }
   $q = $null
   if ($qRaw -and $qRaw.Trim()) { $q = $qRaw | ConvertFrom-Json }
   # An empty/blank/garbled read is NOT "no queue yet" - overwriting on that assumption is how the whole
   # backlog would disappear. Only build a fresh queue when the file genuinely does not exist.
   if (-not $q) {
-    if (Test-Path $qFile) { throw ('triage-queue.json exists but read back empty/unparseable - refusing to overwrite ' + @(Get-Content $qFile -Raw).Length + ' bytes') }
+    if (Test-Path $qFile) { throw ('triage-queue.json exists but read back empty/unparseable - refusing to overwrite ' + @(Get-Content $qFile -Raw -Encoding UTF8).Length + ' bytes') }
     $q = [pscustomobject]@{ readme = 'Durable ops-alert queue. Written by send-alert.ps1 on EVERY alert (even inbox-suppressed dupes). Drained by the grocery-alert-triage scheduled agent: investigate -> fix -> fix the ROOT cause -> status=resolved + notes. Do not hand-edit except to force a re-triage (set status back to open).'; items = @() }
   }
   $items = @($q.items)
@@ -369,7 +379,7 @@ try { $sHeld = $sMutex.WaitOne(90000) } catch [System.Threading.AbandonedMutexEx
 if (-not $sHeld) { Log ("alert-sent lock not acquired in 90 s - sending anyway rather than risking a suppressed alert [type: $typeKey]") }
 try {
 
-if (-not $Force -and (Test-Path $sentFile) -and ((Get-Content $sentFile) -contains $typeKey)) {
+if (-not $Force -and (Test-Path $sentFile) -and ((Get-Content $sentFile -Encoding UTF8) -contains $typeKey)) {
   Log ("SUPPRESSED (already sent this type today) '$Subject' [type: $typeKey]")
   Write-Output ("alert suppressed - '$typeKey' already emailed today (use -Force to override)")
   exit 0

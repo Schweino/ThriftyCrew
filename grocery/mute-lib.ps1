@@ -33,7 +33,9 @@ function Get-MuteState {
   param([string]$Path, [string]$Today)
   if (-not (Test-Path $Path)) { return @{ muted = $false; why = 'no mute file' } }
   $raw = ''
-  try { $raw = ((Get-Content $Path -Raw -ErrorAction Stop) + '') } catch {
+  # -Encoding utf8 (worklist C5): same class as send-alert's reads. This file is ASCII today; the
+  # rule is about the READER, not about what the file happens to contain now.
+  try { $raw = ((Get-Content $Path -Raw -Encoding UTF8 -ErrorAction Stop) + '') } catch {
     # FAIL MUTED, deliberately. Someone put this file here to stop the mail; an unreadable copy of that
     # instruction is still that instruction, and re-flooding the inbox is not the safe default here.
     return @{ muted = $true; why = 'mute file present but unreadable - honouring it as a mute' }

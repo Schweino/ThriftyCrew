@@ -149,7 +149,9 @@ if (-not (Test-Path $qFile)) { Write-Output 'IDLE  no triage queue file - no ale
 $q = $null
 for ($try = 1; $try -le 4; $try++) {
   try {
-    $raw = Get-Content $qFile -Raw -ErrorAction Stop
+    # -Encoding utf8 (worklist C5): PS 5.1 decodes a BOM-less file as ANSI, so the triage agent
+    # was shown mangled product names even though this reader never writes the file back.
+    $raw = Get-Content $qFile -Raw -Encoding UTF8 -ErrorAction Stop
     if ($raw -and $raw.Trim()) { $q = $raw | ConvertFrom-Json }
   } catch { $q = $null }
   if ($q -and $q.PSObject.Properties['items']) { break }

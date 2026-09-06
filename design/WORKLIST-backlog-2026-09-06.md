@@ -47,8 +47,8 @@ Written down as instructed, worked after section B.
 | C1 | `ops/prompt-backup/` was stale for 15 files | it is the backup, and it did not have the current prompts | `DONE 182a4152` |
 | C2 | Fresh-checkout CRLF: 2 gates red in ANY worktree over bytes | diagnosed, precedent named; fixing it is a semantic ruling | `OPENED as E19` |
 | C3 | Scope drift WAS already detected - but `audit-prompt-backup.ps1` was not in run-gates | a check that works and is not run is not protection | `DONE` - registered |
-| C4 | I2b: 3 of 4 stray-root writers unfound (7 MB scaler TSV, collapsed capture-sink path, probe-candidates) | the gate catches recurrence, not the cause | TODO |
-| C5 | Mojibake writer in `grocery/triage-queue.json` unfound | if `audit-json-encoding` reddens again it is live | TODO |
+| C4 | I2b: the 7 MB stray is a full-catalogue scaler sweep (583 slugs x 16 steps); writer is an ad-hoc command, not a script | gate catches recurrence | `CHARACTERISED` |
+| C5 | Mojibake writer FOUND: `send-alert.ps1` had 3 bare `Get-Content` reads; queue read-modify-write corrupted a generation per alert | fixed as a class across 4 files | `DONE` |
 | C6 | E15 behavioural check owed on next real invocation of each of the three skills | structural check shipped; behaviour unobserved | TODO - carry |
 | C7 | `projects/C--Codex/memory` is its own repo, 16 commits, **no remote** | same disk exposure as I1 | BLOCKED-ON-BRAD |
 
