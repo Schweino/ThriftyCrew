@@ -802,7 +802,8 @@
                         "\\bsalad\\b",
                         "\\bsausages?\\b",
                         "bread\\s+cheese",
-                        "\\bbrats\\b"
+                        "\\bbrats\\b",
+                        "bacon\\s+jam"
                     ]
     },
     {
@@ -1534,7 +1535,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "butter\\s+chickpea"
                     ]
     },
     {
@@ -12574,7 +12576,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "bacon\\s+jam"
                     ]
     },
     {
@@ -17568,7 +17571,8 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bbrats?\\b"
                     ]
     },
     {

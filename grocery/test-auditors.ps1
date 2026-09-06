@@ -288,7 +288,9 @@ else { Bad ("pack-basis did not block its own founding bug (rc=$($r.rc)): " + $r
 # hummus singles really are 2.5 oz EACH, so 16 x 2.5 = 40 oz is correct and the cell is right. The
 # fingerprint must stay silent because 2.5/16 = 0.156 oz is a size nobody sells (peers are 8, 10, 17 oz).
 # The row still shows up as an ADVISORY finding - that is intended - but it must not fail the publish.
-$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-hummus-clean-board.json'), '-ReportDir', $fixRep)
+# -AllowFile points at nothing on purpose: this case is about the FINGERPRINT, and a live ruling on the
+# real hummus row must not be able to silence the drill that proves the fingerprint is not over-broad.
+$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-hummus-clean-board.json'), '-ReportDir', $fixRep, '-AllowFile', (Join-Path $fix 'no-such-allowlist.json'))
 if ($r.rc -eq 0 -and $r.text -match 'hummus' -and $r.text -notmatch 'CONFIRMED PACK TOTAL') { Ok 'pack-basis fingerprint stays SILENT on a real per-item pack (hummus clean twin, still advisory)' }
 else { Bad ("pack-basis fingerprint condemned a CORRECT per-item pack (rc=$($r.rc)): " + $r.text) }
 
@@ -2162,6 +2164,26 @@ $gSrcEnc = Get-Content (Join-Path $root 'guards.ps1') -Raw
 if ($gSrcEnc -match 'audit-json-readers' -and $gSrcEnc -match 'audit-board-mojibake') {
   Ok 'guards.ps1 runs BOTH ends of the encoding pair - the cause (bare readers) and the outcome (mangled board names)'
 } else { Bad 'guards.ps1 is missing one end of the encoding pair - either half alone leaves the other unguarded' }
+
+# audit-pack-basis could not be quieted by a ruling (2026-09-05). It reported every ambiguous pack on every
+# run with no way to mark one reviewed, so the hummus row sat unruled for weeks and a genuine
+# CONFIRMED-PACK-TOTAL would eventually have been lost in standing noise. The ruling now lives in
+# multipack-allowlist.json - the SAME file guard 5 reads, because a pack this audit has cleared and a pack
+# the publish gate has cleared must never be two different lists.
+$apbSrc = Get-Content (Join-Path $root 'audit-pack-basis.ps1') -Raw
+if ($apbSrc -match 'multipack-allowlist\.json') {
+  Ok 'audit-pack-basis reads its rulings from multipack-allowlist.json, the same list guard 5 uses'
+} else { Bad 'audit-pack-basis has no ruling path again - an advisory nobody can close is an advisory nobody reads' }
+# THE LOAD-BEARING HALF: a ruling must never silence the arithmetic fingerprint. That is a hard fail by
+# design, and an allowlist that could quiet it would become a way to publish a known-bad number.
+if ($apbSrc -match '-and\s+-not\s+\$fpConfirmed') {
+  Ok 'a pack-basis ruling CANNOT silence a CONFIRMED-PACK-TOTAL - only the undecidable ones go quiet'
+} else { Bad 'a pack-basis ruling can now silence the arithmetic fingerprint - the allowlist has become a way to publish a known-bad pack multiply' }
+# A silenced row must still be VISIBLE as a count. Disappearing entirely is how a suppression list grows
+# without anyone noticing what is in it.
+if ($apbSrc -match 'ruled in multipack-allowlist') {
+  Ok 'a ruled pack is still reported as a COUNT, never simply absent'
+} else { Bad 'audit-pack-basis suppresses ruled rows silently - the list can grow unnoticed' }
 # ...and the healer it depends on must still reach the depth the board actually hit. These are two halves of
 # one loop: a healer that stops short leaves the audit permanently red, and the only way to make it green
 # again is to weaken the signature.

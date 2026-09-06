@@ -36,7 +36,13 @@
 # live one: test-auditors passes fixture boards via -CompareFile but the report path was hardcoded, so every
 # harness run left out\pack-basis-audit.json describing 'packbasis-legit-bulk-board.json' with 0 findings -
 # a fixture's clean result sitting exactly where a human (or the next audit) looks for the real board's.
-param([string]$CompareFile = "", [switch]$Strict, [string]$ReportDir = "")
+# -AllowFile parameterises the RULINGS list so a FIXTURE is never at the mercy of a live ruling
+# (2026-09-05). Adding suppression immediately broke the hummus clean-twin case: that drill proves the
+# arithmetic FINGERPRINT does not condemn a correct per-item pack, and it identifies the row by finding it
+# in the output - so a real ruling on the real hummus row silenced the test that proves the fingerprint is
+# not over-broad. A fixture whose outcome depends on production data is not a fixture. Default is the live
+# list; the drill passes its own path.
+param([string]$CompareFile = "", [switch]$Strict, [string]$ReportDir = "", [string]$AllowFile = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -55,7 +61,28 @@ $SIZE_TOL = 0.15
 # pack total. Tighter than $SIZE_TOL on purpose: corroboration only has to be plausible, but this one
 # hard-fails a publish, so it has to be an arithmetic identity rather than a resemblance.
 $FP_TOL = 0.05
+# A RULED ROW MUST BE ABLE TO GO QUIET (2026-09-05). This audit reported every ambiguous pack on every run
+# with no way to mark one reviewed, so a ruling could never close anything and the same lines scrolled past
+# forever. That is the estate's own complaint about an alarm with no repair lane, aimed at itself: an
+# advisory nobody can act on is an advisory nobody reads, and the genuine CONFIRMED-PACK-TOTAL finding
+# would eventually be lost in the standing noise.
+# The ruling lives in multipack-allowlist.json - the SAME file guard 5 reads - because a pack this audit
+# has cleared and a pack the publish gate has cleared must never be two different lists.
+# A CONFIRMED-PACK-TOTAL finding is NOT suppressible. That is the arithmetic fingerprint, it is a hard
+# fail by design, and letting a ruling silence it would turn the allowlist into a way to publish a known
+# bad number.
+$ruled = @{}
+try {
+  $alf = if ($AllowFile) { $AllowFile } else { Join-Path $root 'multipack-allowlist.json' }
+  if (Test-Path $alf) {
+    foreach ($e in @((Read-JsonFile $alf).allow)) {
+      $k = (('' + $e.store).Trim() + '|' + ('' + $e.item).Trim()).ToLower()
+      if ($k -ne '|') { $ruled[$k] = ('' + $e.why) }
+    }
+  }
+} catch { $ruled = @{} }   # an unreadable allowlist must not silence anything
 $findings = @()
+$ruledQuiet = 0
 $confirmedCount = 0
 
 function ToUnit([double]$num, [string]$token, [string]$unit) {
@@ -141,7 +168,11 @@ foreach ($r in $doc.comparison) {
     }
     # published reading is a big outlier, the pack-total reading is not, and nothing on the market sells
     # the each-size the multiply assumes -> the multiply is what created the outlier
-    if ($true) {
+    # A ruled pack goes quiet - UNLESS the fingerprint condemned it, which no ruling may silence.
+    $rk = (([string]$s.store).Trim() + '|' + ([string]$s.item).Trim()).ToLower()
+    $isRuled = ($ruled.ContainsKey($rk) -and -not $fpConfirmed)
+    if ($isRuled) { $ruledQuiet++ }
+    if (-not $isRuled) {
       $findings += [pscustomobject]@{
         id = [string]$r.id; commodity = [string]$r.commodity; store = [string]$s.store
         unit = [string]$r.unit; published = [math]::Round($published,4)
@@ -160,7 +191,8 @@ $rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'pack-basis-
 ([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf); finding_count = $findings.Count; confirmed_count = $confirmedCount; findings = $findings } |
   ConvertTo-Json -Depth 5) | Set-Content $rep -Encoding UTF8
 
-if ($findings.Count -eq 0) { Write-Output 'pack-basis: ok - no multipack cell owes its cheapest-in-Omaha rank to the count multiply'; Write-GuardComplete -Name 'pack-basis'; exit 0 }
+$ruledNote = $(if ($ruledQuiet) { " ($ruledQuiet ruled in multipack-allowlist.json, not re-reported)" } else { '' })
+if ($findings.Count -eq 0) { Write-Output ('pack-basis: ok - no multipack cell owes its cheapest-in-Omaha rank to the count multiply' + $ruledNote); Write-GuardComplete -Name 'pack-basis' -Summary $ruledNote.Trim(); exit 0 }
 Write-Output ("pack-basis: " + $findings.Count + " cell(s) are cheapest ONLY because a pack count was multiplied into the size - verify the size is per-item, not the pack total:")
 foreach ($f in $findings) {
   Write-Output ("  {0,-24} {1,-12} published {2}/{3} vs {4} as a pack total (peer {5}) | size '{6}' | {7}" -f `
