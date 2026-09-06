@@ -287,10 +287,10 @@
                        "method":  "browser",
                        "cadence_days":  7,
                        "current":  {
-                                       "from":  "2026-08-31",
-                                       "to":  "2026-09-05"
+                                       "from":  "2026-09-07",
+                                       "to":  "2026-09-12"
                                    },
-                       "next_pull":  "2026-09-06",
+                       "next_pull":  "2026-09-13",
                        "history":  [
                                        {
                                            "from":  "2026-07-12",
@@ -331,6 +331,11 @@
                                            "from":  "2026-08-31",
                                            "to":  "2026-09-05",
                                            "detected":  "2026-08-30"
+                                       },
+                                       {
+                                           "from":  "2026-09-07",
+                                           "to":  "2026-09-12",
+                                           "detected":  "2026-09-06"
                                        }
                                    ],
                        "note":  "Fareway Omaha (store 043). Board data = shop.fareway.com storefront (Instacart Storefront platform but NO markup - in-store prices, Omaha; browser-only) pulled by the Wednesday agent -\u003e build-fareway-regular.ps1 -\u003e out/regular/fareway-regular-*.json. Weekly ad = Sun-Sat image flyer (server-downloadable via pull-fareway-ads.ps1) + a monthly ad; ad SALE supplement -\u003e out/fareway/fareway-deals-*.json via -FarewayFile."
