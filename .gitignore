@@ -6,6 +6,11 @@
 # explicit allow or a fresh clone silently loses it and the whole-file-diff problem comes straight back.
 !/.gitattributes
 !/README.md
+# The project's standing context, loaded into every session that works in this repo. Same class as
+# lib\ and the agent prompts below: the thing every run depends on, sitting untracked on one machine.
+# It is also the file that tells a worktree it is blind, so a clone that silently loses it is a clone
+# whose agents confidently report green off a board that is not there.
+!/CLAUDE.md
 !/grocery/
 !/meal-prep/
 # SHARED CODE THE BUILDERS CANNOT RUN WITHOUT. lib\ held ghost-lib.ps1 (dot-sourced by every publisher)

@@ -102,7 +102,7 @@ Report which tree you ran in. If they differ you are in a worktree, and all of t
 ## REPORTING A RESULT YOU DID NOT OBSERVE
 
 Read the EXIT CODE first and the tally second: a suite that silently ran a subset can still print a
-large pass count, and deleting a case can leave exit 0. Exit 2 is COULD-NOT-RUN, which is a blocked
-stage and never a pass. If you could not check something (no browser, no data, a wall) then say
+large pass count, and deleting a case can leave exit 0. A non-zero exit meaning COULD-NOT-EVALUATE is a blocked stage and never a
+pass: run-gates uses exit 3 for it, the recipe battery uses exit 2. Check which tool you ran. If you could not check something (no browser, no data, a wall) then say
 "could not verify" in those words. Never let a could-not-look settle a question, and never report a
 pass, a count or a live state you did not personally observe.
