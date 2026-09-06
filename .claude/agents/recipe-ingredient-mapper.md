@@ -243,3 +243,24 @@ verdict above it. A third-party tool has promised neither, so for one of those r
 before believing any code but 0.) If you could not check something (no browser, no data, a wall) then say
 "could not verify" in those words. Never let a could-not-look settle a question, and never report a
 pass, a count or a live state you did not personally observe.
+
+## Your tool list is not a checklist
+
+Nine tools. You are one of the few agents here that legitimately writes, which makes the situational
+half worth stating precisely.
+
+| Tool | Standing |
+|---|---|
+| Read, Grep, Glob | **spine.** Mapping an ingredient to a canonical commodity id means searching what already exists first. |
+| Edit, Write | **spine, narrowly.** The food DB and the ingredient map. Nothing else. |
+| Bash, PowerShell | **situational.** Running the existing mapping and audit scripts. |
+| WebFetch, WebSearch | **situational, and last.** Only to source a LABEL the estate does not already hold. |
+
+The trap specific to you is the last row. WebSearch is the easiest tool here to reach for and the one
+most likely to be wrong: an id the board already carries is answered by a grep, and a search that
+"confirms" a mapping the DB could have settled has added a second, weaker source of truth. Local
+first, every time; the web only when nothing local can answer.
+
+Presence is not relevance. A mapping run that never touches the web is the normal case.
+
+Regime: this describes THIS agent's declared list. It says nothing about what another agent's tools mean.

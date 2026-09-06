@@ -302,3 +302,32 @@ Then `ingredient-queue.ps1 -Verdict -Term '<t>'` and report:
 YOU DO NOT WRITE BOARD CELLS. Turning a probe hit into a published price is the capture pipeline's job, with
 its sizing, unit-basis, matching and guard rules. Your output is a decision plus evidence. If an ingredient
 deserves a permanent board cell, say so in your report and let the normal capture path add it.
+
+## Your tool list is not a checklist
+
+TWENTY-EIGHT tools are declared for you, far more than any other agent here, and most of a run touches
+a handful. Handed a well-named tool and no usage context, an agent decides it must be needed and
+invents work to justify it; at this list length that failure is not hypothetical.
+
+| Tools | Standing |
+|---|---|
+| Bash, PowerShell | **spine.** The pre-pass and probe scripts are how four of the seven stores get searched. Start here. |
+| Read, Grep, Glob | **spine.** Reading what the pre-pass gathered, and the prior evidence. |
+| WebFetch | **situational.** A page that needs no session and no interaction. |
+| the eighteen browser tools | **situational, and the two SETS are alternatives, not a sequence.** |
+
+The eighteen browser tools are two complete and overlapping sets, and choosing between them is a real
+decision this file already answers - see the sections above on the in-app pane versus Brad's Chrome.
+The short version, because the list alone will not tell you: `mcp__Claude_Browser__*` is the in-app
+pane, has no logged-in sessions, and handles the open storefronts. `mcp__claude-in-chrome__*` is Brad's
+real Chrome with his sessions, is only for a store that needs a login, and requires
+`list_connected_browsers` to come back non-empty first. **You are not meant to use both.** Reaching for
+the second set after the first has already answered is the exact invented-work failure this block
+exists for.
+
+And a run with NO browser at all is a legitimate run: `blocked` is an honest answer that keeps the term
+PENDING for an attended pass. It is never worse than a priced cell you could not actually see.
+
+Presence is not relevance. Twenty-eight declared tools is not twenty-eight tools to get through.
+
+Regime: this describes THIS agent's declared list. It says nothing about what another agent's tools mean.
