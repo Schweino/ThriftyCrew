@@ -505,6 +505,29 @@ if ((-not $NoDownstream) -and (-not $runDownstream)) {
   Write-Output ''
   Write-Output 'downstream: SKIPPED - the ad run captures only; the 08:00 daily run builds and publishes (pass -Downstream to override)'
 }
+# NORMALISE CAPTURE ENCODING BEFORE ANYTHING READS IT (2026-09-05). The bakers-deals and fareway-deals
+# files are not written by any script - pull-bakers.ps1 downloads the flyer pages and writes meta.json,
+# and the DEALS file is produced by a vision-reading agent. That is why no code search ever found the
+# writer, and why those two families kept arriving BOM-less: an agent's Write does not add one.
+# PS 5.1 decodes a BOM-less file as the ANSI codepage, so a bare reader downstream manufactures mojibake
+# out of a perfectly good file (see lib\json-io.ps1).
+# audit-capture-encoding already NAMES such a file at the publish gate - but naming it there means a hard
+# fail that waits for a human to run -Fix, which is an alarm with no repair lane. The repair belongs at
+# INGEST, before compare-deals reads anything, so the guard downstream becomes the proof it worked rather
+# than the thing that blocks. -Fix rewrites content-identical bytes with a BOM and touches nothing that is
+# already unambiguous, so a clean tree is a no-op.
+# Non-fatal by construction: an encoding repair must never cost the day's prices.
+if ($runDownstream -and -not $WhatIf) {
+  try {
+    $ace = Join-Path $root 'audit-capture-encoding.ps1'
+    if (Test-Path $ace) {
+      Write-Output ''
+      Write-Output 'capture-encoding: normalising any BOM-less non-ASCII capture before the engine reads it'
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $ace -Fix | ForEach-Object { Write-Output ('  ' + $_) }
+    }
+  } catch { Write-Output ('capture-encoding normalise threw (not fatal, no price depends on it): ' + $_.Exception.Message) }
+}
+
 if ($runDownstream) {
   Write-RunStatus 'downstream'
   Write-Output ''

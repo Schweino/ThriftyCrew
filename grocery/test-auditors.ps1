@@ -2184,6 +2184,24 @@ if ($apbSrc -match '-and\s+-not\s+\$fpConfirmed') {
 if ($apbSrc -match 'ruled in multipack-allowlist') {
   Ok 'a ruled pack is still reported as a COUNT, never simply absent'
 } else { Bad 'audit-pack-basis suppresses ruled rows silently - the list can grow unnoticed' }
+
+# THE ENCODING REPAIR MUST RUN AT INGEST, NOT ONLY AT THE GATE (2026-09-05). bakers-deals and
+# fareway-deals are written by a VISION-READING AGENT, not by any script - pull-bakers.ps1 only downloads
+# the flyer pages and writes meta.json - which is why no code search ever found the writer and why those
+# two families kept arriving BOM-less. Naming such a file at the publish gate means a hard fail waiting on
+# a human to run -Fix, which is an alarm with no repair lane. capture-run normalises at ingest so the gate
+# becomes the proof it worked.
+$crSrc = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
+if ($crSrc -match 'audit-capture-encoding' -and $crSrc -match "-Fix") {
+  Ok 'capture-run normalises capture encoding at INGEST, so an agent-written BOM-less file never reaches the engine'
+} else { Bad 'capture-run no longer normalises capture encoding - a vision-agent capture will reach the engine BOM-less and a bare reader will mangle it' }
+$aceSrc = Get-Content (Join-Path $root 'audit-capture-encoding.ps1') -Raw
+# The invariant must stay 'BOM or pure ASCII'. Demanding a BOM outright would fight audit-json-encoding's
+# deliberate ASCII-no-BOM pin on commodities.json, and two guards demanding opposite things is how one
+# gets switched off.
+if ($aceSrc -match 'pure ASCII') {
+  Ok 'capture-encoding still accepts pure ASCII as unambiguous - it does not fight the commodities.json ASCII pin'
+} else { Bad 'capture-encoding now demands a BOM outright, which contradicts audit-json-encoding pinning commodities.json to ASCII with no BOM' }
 # ...and the healer it depends on must still reach the depth the board actually hit. These are two halves of
 # one loop: a healer that stops short leaves the audit permanently red, and the only way to make it green
 # again is to weaken the signature.
