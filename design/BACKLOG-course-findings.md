@@ -302,7 +302,7 @@ undermine its own output, then diff that list against the prose. Cheap pre-publi
 spirit to what `post-publish-reviewer` does afterwards - and on the correct side of the publish,
 which is E1's whole point.
 
-### E27 - The reranker fine-tuner ships the LAST epoch, not the best one `OPEN`
+### E27 - The reranker fine-tuner ships the LAST epoch, not the best one `SHIPPED`
 *Source: Fine-Tuning Transformers with Hugging Face (queue 2, course 5).* `sidecar/finetune_reranker.py`
 scores holdout AUC after every epoch and appends it to `history`, then calls `model.save_pretrained(out)`
 **after** the loop finishes. So the weights that reach disk are whichever epoch happened to be last,
@@ -325,7 +325,31 @@ and the hole is invisible because the training log looks correct either way.
 Touches: `sidecar/finetune_reranker.py` only. The gate downstream (`hardeval.py --stage score`)
 would show the improvement, so the change is measurable before it is trusted.
 
-### E28 - No held-out overfitting gap is computed for the reranker `OPEN`
+**SHIPPED 2026-09-06, and fix 1 above was wrong as written.** "Keep the best epoch" is an argmax over
+k noisy draws, and this file's own docstring already measured that noise: four runs of the same
+recipe differing only by seed produced holdout AUC from 0.9641 to 0.9674. Restoring an earlier epoch
+because it led by 0.002 is selecting on a shuffle while believing you corrected for one, which is
+E21 committed inside the fix for E27.
+
+What shipped instead keeps the LAST epoch unless an earlier one leads by more than a stated margin,
+defaulting to that measured 0.0033 spread. `--best-margin 0` restores the plain argmax for a caller
+who has a reason to trust smaller differences; nothing has produced that reason yet. The rule lives
+in `sidecar/checkpoint_selection.py` rather than in the trainer for a practical reason: the trainer
+imports torch at module scope and runs on the sidecar venv, so a rule left inside it could never run
+in `run-gates`, which uses the pinned interpreter. It is registered there now with thirteen cases,
+including the clean twin that separates a real mid-run peak from seed noise.
+
+**The first real run vindicated the correction.** A two-epoch verification train, output to a scratch
+directory so the live model was untouched: epoch 1 scored 0.9671 and epoch 2 scored 0.9663, so epoch
+1 "won" by 0.0008 - a quarter of the noise floor. The version this item originally proposed would
+have restored epoch 1 and recorded it as a correction. The margin rule shipped epoch 2 and wrote the
+reason into the card.
+
+E28 shipped with it: `train_auc` and `overfit_gap` are now recorded per epoch, and the same run shows
+the gap widening from 0.0299 to 0.0331 while holdout AUC fell, with train AUC reaching 0.9994. That
+is early memorisation, and until this change nothing in the estate could see it.
+
+### E28 - No held-out overfitting gap is computed for the reranker `SHIPPED`
 *Source: same course.* `finetune_reranker.py` reports holdout AUC against a stock baseline, which
 answers "did fine-tuning help" but not "did it memorise". The train-versus-holdout gap is the cheap
 second number, and the course's own demo is the argument for it: its diagnosis flipped between
@@ -353,7 +377,6 @@ scheduled tasks and the daemon better than what they use now.
 *Source: AI Agents Architecture (course 7).* All twelve definitions pin one model. A tool that makes
 its own LLM call can pick its own. Highest-leverage split: an expensive model for the up-front plan,
 a cheap one to execute it.
-
 ### E10 - Long-running lanes have no progress tracking `OPEN`
 *Source: AI Agents Architecture (course 7).* The Recipe Hunter daemon runs far past the point where
 its initial plan is still near the front of context. Fix is a cheap end-of-iteration progress report
@@ -499,6 +522,42 @@ so the decision is visible rather than accidental, not because it needs doing.
 where a rules-first prompt invents its own first input instead of waiting.
 
 ---
+
+### E29 - `run-log-lib.ps1` calls itself the one copy of the run-record rule, and covers two of five hidden tasks `OPEN`
+*Source: `apply-powershell-scripting-for-automation-and-projects` (course 6), and it is a criticism
+of that course rather than a lesson from it.* The course spends a full lecture arriving at a hidden
+console window for a scheduled PowerShell job and never once mentions what hiding it costs. This
+estate already paid that cost and wrote it down: `grocery/run-log-lib.ps1`'s header records that on
+2026-08-22 all three `TC Grocery` tasks reported `LastTaskResult=1` for the previous day with no way
+at all to learn why, because "the exit code was the entire diagnostic surface". Reading that file
+against the rest of the tree is what turned up the gap.
+
+**Measured 2026-09-06.** Five scheduled tasks are registered with `-WindowStyle Hidden`, across four
+registering scripts, and they use **three different hand-rolled diagnostic conventions**:
+
+| Task(s) | Registered by | Diagnostic surface |
+|---|---|---|
+| `TC Grocery` ad 07:00, daily 08:00, watchdog 09:30 | (existing registration) | `run-log-lib.ps1`, dot-sourced by `capture-run.ps1` and `capture-watchdog.ps1` |
+| nightly matching chain | `graph/pipeline/install-nightly-task.ps1:84` | its own `grocery/out/logs/graph-nightly-status.json` |
+| `TC Recipe Harvest Crawl` | `meal-prep/pipeline/install-harvest-task.ps1:94` | ad-hoc `Out-File -Append -Encoding utf8` at four sites in `harvest-crawl.ps1` |
+
+**Nothing is unlogged**, which is why this is ergonomics and not correctness - do not read it as a
+blind task. The defect is narrower and it is in the header comment: `run-log-lib.ps1` opens "ONE
+copy of the 'write this run down' rule", and it is one of three. A file that claims to be the single
+copy of a rule and is not is worse than no claim, because the next person to add a hidden task reads
+that line, sees a library, and has no way to know two other tasks route around it. It also means the
+two rules that file obeys and states explicitly - logging must never kill the run, and every
+`Add-Content`/`Start-Transcript` under `$ErrorActionPreference = 'Stop'` must be guarded - are
+enforced for two tasks and merely hoped for in the other three.
+
+**The fix is cheap and has two halves, and the second is the one that lasts.** Either bring the
+graph and harvest wrappers onto `run-log-lib`, or correct its header to say what it actually covers
+and name the other two conventions. Then the durable half: a hidden-window task with no route to
+`run-log-lib` is exactly the shape a static-analysis detector catches - grep for
+`-WindowStyle Hidden` in any `Register-ScheduledTask` argument line and require the target script to
+dot-source the lib. That is a `run-gates` detector reading source rather than data, so it is
+hermetic and belongs there. **Ratchet it**, per the standing rule about gates that are red on day
+one: high-water mark 3, may only go down.
 
 ## Infrastructure and hygiene
 

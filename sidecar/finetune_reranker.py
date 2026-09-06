@@ -44,6 +44,8 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lib_match import DEVICE, RERANK_MODEL                                     # noqa: E402
 from hardeval import auc                                                       # noqa: E402
+from checkpoint_selection import (NOISE_MARGIN, overfit_gap,                  # noqa: E402
+                                  pick_shipping_epoch, should_stop)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
@@ -114,6 +116,19 @@ def main() -> int:
     ap.add_argument("--warmup", type=float, default=0.1, help="fraction of steps spent warming up")
     ap.add_argument("--max-len", type=int, default=160, help="lib_match loads the CrossEncoder at 160")
     ap.add_argument("--seed", type=int, default=20260823)
+    ap.add_argument("--best-margin", type=float, default=NOISE_MARGIN,
+                    help="how far an earlier epoch must beat the LAST one before its weights are "
+                         "the ones that ship. Defaults to the within-arm holdout-AUC spread this "
+                         "file's docstring records from 2026-08-23 (0.9641-0.9674 across four "
+                         "same-recipe seeds), so the default refuses to select on a difference "
+                         "already known to be noise. 0 restores plain argmax.")
+    ap.add_argument("--patience", type=int, default=0,
+                    help="stop after N epochs with no new best holdout AUC. 0 disables it. At the "
+                         "default --epochs 2 it cannot fire; it is here for longer runs.")
+    ap.add_argument("--gap-sample", type=int, default=0,
+                    help="rows of the TRAIN split to score each epoch for the train-versus-holdout "
+                         "overfit gap. 0 matches the holdout size. The gap answers whether the "
+                         "model memorised, which the stock-baseline comparison does not.")
     ap.add_argument("--grad-checkpointing", action="store_true",
                     help="trade ~30%% speed for activation memory if the card is short")
     ap.add_argument("--dry-run", action="store_true", help="report the plan, load nothing, write nothing")
@@ -171,7 +186,17 @@ def main() -> int:
         opt, max_lr=a.lr, total_steps=steps, pct_start=a.warmup, anneal_strategy="linear")
     lossf = torch.nn.BCEWithLogitsLoss(pos_weight=torch.tensor(pos_weight, device=DEVICE))
 
+    # THE OVERFIT GAP NEEDS A FIXED TRAIN SAMPLE (backlog E28). Scoring the whole train split every
+    # epoch would roughly double the run for a diagnostic, and a sample that moved between epochs
+    # would make the gap's own drift unreadable. Its own Random leaves the global stream - and so the
+    # shuffle order and therefore the trained weights - byte-identical to a run before this change.
+    gap_n = a.gap_sample or len(test)
+    gap_probe = (train if len(train) <= gap_n
+                 else random.Random(a.seed).sample(train, gap_n))
+    log(f"overfit-gap probe: {len(gap_probe)} train row(s), fixed for the whole run")
+
     history = []
+    best_state, best_ep, best_auc = None, None, float("-inf")
     t0 = time.time()
     for ep in range(1, a.epochs + 1):
         model.train()
@@ -192,10 +217,38 @@ def main() -> int:
             if i % 50 == 0:
                 log(f"  epoch {ep} step {i}/{len(dl)}  loss {run / max(1, n):.4f}")
         ep_auc, ep_mined = holdout_auc(model, tok, test, a.max_len, a.eval_batch)
+        tr_auc, _ = holdout_auc(model, tok, gap_probe, a.max_len, a.eval_batch)
+        row = {"epoch": ep, "train_loss": run / max(1, n),
+               "holdout_auc": ep_auc, "holdout_auc_mined_only": ep_mined,
+               "train_auc": tr_auc}
+        row["overfit_gap"] = overfit_gap(row)
+        history.append(row)
         log(f"EPOCH {ep}: train loss {run / max(1, n):.4f}  holdout AUC {ep_auc:.4f} "
-            f"(stock {base_auc:.4f})  mined-only {ep_mined:.4f} (stock {base_mined:.4f})")
-        history.append({"epoch": ep, "train_loss": run / max(1, n),
-                        "holdout_auc": ep_auc, "holdout_auc_mined_only": ep_mined})
+            f"(stock {base_auc:.4f})  mined-only {ep_mined:.4f} (stock {base_mined:.4f})  "
+            f"train AUC {tr_auc:.4f}  gap {row['overfit_gap']:+.4f}")
+
+        # SNAPSHOT EVERY NEW BEST, DECIDE LATER. Held on the CPU so it costs host memory rather than
+        # the card, which this box has to share with llama-server and the sweep. Whether this
+        # snapshot is the one that ships is pick_shipping_epoch's call, not this line's.
+        if best_ep is None or ep_auc > best_auc:
+            best_ep, best_auc = ep, ep_auc
+            best_state = {k: v.detach().to("cpu").clone() for k, v in model.state_dict().items()}
+
+        if should_stop(history, a.patience, a.best_margin):
+            log(f"EARLY STOP: {a.patience} epoch(s) since the best (epoch {best_ep}). "
+                f"Stopping is cheap and rerunnable; shipping the wrong weights is not.")
+            break
+
+    # WHICH EPOCH ACTUALLY SHIPS (backlog E27). Until 2026-09-06 this line saved whatever epoch ran
+    # last and the per-epoch scores above decided nothing at all.
+    ship_ep, ship_why = pick_shipping_epoch(history, a.best_margin)
+    log(f"SHIPPING epoch {ship_ep}: {ship_why}")
+    if ship_ep is not None and ship_ep != history[-1]["epoch"]:
+        if best_state is None or ship_ep != best_ep:
+            log(f"REFUSED: epoch {ship_ep} should ship but no snapshot of it exists. Writing "
+                f"nothing rather than writing weights that are not the ones just chosen.")
+            return 2
+        model.load_state_dict({k: v.to(DEVICE) for k, v in best_state.items()})
 
     os.makedirs(out, exist_ok=True)
     model.save_pretrained(out)
@@ -206,7 +259,18 @@ def main() -> int:
         "corpus": a.corpus, "corpus_manifest": manifest,
         "hyper": {"epochs": a.epochs, "batch": a.batch, "lr": a.lr, "warmup": a.warmup,
                   "max_len": a.max_len, "seed": a.seed, "pos_weight": pos_weight,
+                  "best_margin": a.best_margin, "patience": a.patience,
                   "precision": "bf16 autocast, fp32 master weights"},
+        "shipped_epoch": ship_ep,
+        "shipped_because": ship_why,
+        "epochs_actually_run": history[-1]["epoch"] if history else 0,
+        "overfit_gap_at_shipped_epoch": next(
+            (overfit_gap(h) for h in history if h["epoch"] == ship_ep), None),
+        "WHAT_THE_GAP_MEANS": "train AUC minus holdout AUC at the epoch that shipped. The "
+                              "stock-baseline comparison says whether fine-tuning helped; this "
+                              "says whether it memorised. A gap that grows across epochs while "
+                              "holdout AUC stalls is overfitting, and is the reason the weights "
+                              "on disk are no longer just whichever epoch ran last.",
         "train_rows": len(train), "test_rows": len(test),
         "stock_holdout_auc": base_auc, "stock_holdout_auc_mined_only": base_mined,
         "history": history,

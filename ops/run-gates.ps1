@@ -215,6 +215,14 @@ $pySuites = @(
   # The BM25 probe's ARITHMETIC, not its verdict. A scorer nobody checked, reporting a recall that a
   # build decision rests on, is the shape this estate keeps writing guards about (backlog E4).
   @{ f = 'meal-prep\pipeline\bm25_dedup_probe.py'; a = '--selftest'; n = 'the E4 lexical probe still scores rare terms above common ones' }
+  # finetune_reranker.py scored holdout AUC every epoch and then saved whichever epoch ran
+  # LAST, so the scores decided nothing and an overfit final epoch shipped over a better one
+  # (2026-09-06, backlog E27). The rule that fixes it is split into its own module for one
+  # reason: the trainer imports torch at module scope and runs on the sidecar venv, which the
+  # interpreter above does not have, so a decision rule left inside it could never run HERE.
+  # Its clean twin is the load-bearing case - a plain 'keep the best epoch' would select the
+  # maximum of k noisy draws, and this file's own docstring measures that noise at 0.0033.
+  @{ f = 'sidecar\checkpoint_selection.py'; a = '--selftest'; n = 'the trainer ships a mid-run peak but refuses to chase a lead inside measured seed noise' }
 )
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly
