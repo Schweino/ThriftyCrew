@@ -75,6 +75,43 @@ function Test-AdWindowExpired { param($Header,[datetime]$Today)
   try { return ([datetime]$Header.ad_to -lt $Today) } catch { return $false }
 }
 
+# ---- AN AD IN HAND IS NOT A FAILED PULL (2026-09-06, queue 2026-09-06-6e08ed) --------------------------
+# AD COVERAGE GONE named a remedy - "until a fresh pull lands" - that had ALREADY BEEN PERFORMED. Fareway's
+# ad runs Sun-Sat, the 2026-08-31..2026-09-05 flyer closed on the 5th and the next opens on the 7th, so
+# 2026-09-06 is a genuine one-day gap in the store's OWN cycle. The 09-06 pull landed at 09:18 with 238
+# deals for 2026-09-07..2026-09-12 and ad-schedule.json recorded it, 53 minutes after the 08:25 alert asked
+# for exactly that. A reader following the alert goes hunting for work that is done.
+#
+# There are TWO shapes of "this store has no live ad today" and they must not read alike:
+#   NOT-YET-OPEN  the newest file's window starts in the FUTURE. The store is mid-cycle with next week's ad
+#                 already in hand. Nothing to do. Reported as INFO so the state is visible rather than
+#                 silent - today the newest Fareway file is the future one, so the expired branch below
+#                 never even runs and the store's total absence of ad coverage said NOTHING at all.
+#   GONE          the newest window has closed and NO file anywhere holds a future one. That is a failed or
+#                 missing pull and it stays a hard finding.
+function Test-AdWindowNotYetOpen { param($Header,[datetime]$Today)
+  if(-not $Header.ad_from){ return $false }
+  try { return ([datetime]$Header.ad_from -gt $Today) } catch { return $false }
+}
+
+# Does ANY dated ad file under these globs hold a window that opens after today? Read separately from the
+# newest-by-name selection on purpose: a future ad is normally the newest file, but a store whose capture
+# names run out of step must not be told to re-pull an ad it is already holding.
+function Get-FutureDatedAd { param([string]$OutDir,[string[]]$Globs,[datetime]$Today)
+  foreach($g in $Globs){
+    foreach($f in @(Get-ChildItem (Join-Path $OutDir $g) -ErrorAction SilentlyContinue |
+                    Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)){
+      $h = $null
+      try { $h = Get-Content $f.FullName -Raw -Encoding UTF8 | ConvertFrom-Json } catch { continue }
+      if($null -eq $h){ continue }
+      if(Test-AdWindowNotYetOpen $h $Today){
+        return [pscustomobject]@{ file=$f.Name; from=[string]$h.ad_from; to=[string]$h.ad_to; rows=@($h.deals).Count }
+      }
+    }
+  }
+  return $null
+}
+
 # A row is WINDOW-DATED when its own ad_to, or its file header's ad_to, says when it expires. That is a real
 # date the row earned, just not a per-row capture stamp, and it is the ONLY honest one an ad row can carry
 # (see the block above and audit-asof-evidence).
@@ -140,6 +177,34 @@ if($SelfTest){
   T 'CLEAN TWIN an ad still inside its window (Baker''s 2026-08-05..08-11)' `
     (-not (Test-AdWindowExpired ([pscustomobject]@{ ad_from='2026-08-05'; ad_to='2026-08-11' }) $today)) 'spurious finding'
   T 'CLEAN TWIN a non-ad file with no window is never called expired'             (-not (Test-AdWindowExpired ([pscustomobject]@{ store='Walmart' }) $today)) 'spurious finding'
+  # ---- AN AD IN HAND IS NOT A FAILED PULL (2026-09-06, queue 2026-09-06-6e08ed) ---------------------
+  # FROZEN from today's real Fareway state, read on 2026-09-06: the 08-30 capture holds 2026-08-31..09-05
+  # (closed yesterday) and the 09-06 capture holds 2026-09-07..2026-09-12 with 238 deals (opens tomorrow).
+  # The alert asked for a pull that had already landed 53 minutes earlier.
+  $sep6 = [datetime]'2026-09-06'
+  $farewayClosed = [pscustomobject]@{ store='Fareway'; ad_from='2026-08-31'; ad_to='2026-09-05' }
+  $farewayNext   = [pscustomobject]@{ store='Fareway'; ad_from='2026-09-07'; ad_to='2026-09-12' }
+  # the fixture must really be the state it claims, or it proves nothing about either branch
+  T 'MUST FIRE  the closed Fareway flyer really is expired on 2026-09-06' `
+    (Test-AdWindowExpired $farewayClosed $sep6) 'the frozen expired window did not read as expired'
+  T 'MUST FIRE  the in-hand Fareway ad really does open in the future on 2026-09-06' `
+    (Test-AdWindowNotYetOpen $farewayNext $sep6) 'the frozen future window did not read as not-yet-open'
+  # ...and it is NOT expired, so the two states are genuinely distinct rather than one test twice
+  T 'CLEAN TWIN a not-yet-open ad is not ALSO reported expired (the two states are distinct)' `
+    (-not (Test-AdWindowExpired $farewayNext $sep6)) 'a future ad read as expired'
+  # THE REAL FAILURE MUST SURVIVE THE FIX: a store with a closed window and no future ad anywhere
+  T 'CLEAN TWIN a closed window is not mistaken for a future one (AD COVERAGE GONE survives)' `
+    (-not (Test-AdWindowNotYetOpen $farewayClosed $sep6)) 'an expired ad read as in-hand'
+  # a live window is neither, which is what every other store looks like on an ordinary day
+  T 'CLEAN TWIN a live ad window (Baker''s 2026-09-02..09-08 on 09-06) is neither expired nor not-yet-open' `
+    ((-not (Test-AdWindowExpired ([pscustomobject]@{ ad_from='2026-09-02'; ad_to='2026-09-08' }) $sep6)) -and `
+     (-not (Test-AdWindowNotYetOpen ([pscustomobject]@{ ad_from='2026-09-02'; ad_to='2026-09-08' }) $sep6))) 'a live ad was classified'
+  # absent evidence is not evidence, the same rule compare-deals states: no ad_from is never "not yet open"
+  T 'CLEAN TWIN a file with no ad_from is never called not-yet-open' `
+    (-not (Test-AdWindowNotYetOpen ([pscustomobject]@{ store='Walmart' }) $sep6)) 'spurious finding'
+  # the day the ad OPENS it is live, not future - an off-by-one here re-arms the alert on the wrong day
+  T 'CLEAN TWIN on 2026-09-07 the same ad is live, not not-yet-open (boundary is > not >=)' `
+    (-not (Test-AdWindowNotYetOpen $farewayNext ([datetime]'2026-09-07'))) 'the opening day read as future'
   # ---- WINDOW-DATED ROWS (2026-08-30, queue 2026-08-30-fec3dc) --------------------------------------
   # MUST FIRE, unchanged: the founding Walmart shape above still reports 5 undated. Re-asserted here
   # explicitly because it is the case the new WindowDated parameter could most easily break.
@@ -215,6 +280,7 @@ $today = (Get-Date).Date
 $profiles = @{}
 $sources  = @{}
 $expired  = @()
+$inHand   = @()
 foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
   $rows = New-Object System.Collections.Generic.List[object]
   $used = @()
@@ -240,8 +306,21 @@ foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
     }
     # an ad file past its window is stale WHOLESALE - every row in it, regardless of as_of
     if(Test-AdWindowExpired $j $today){
-      $expired += [pscustomobject]@{ store=$store; file=$fl[0].Name; to=[string]$j.ad_to; rows=@($j.deals).Count
-                                     days=[int]($today - [datetime]$j.ad_to).TotalDays }
+      # ...unless the next window's ad is already on disk, in which case there is no pull to ask for
+      $fut = Get-FutureDatedAd $OutDir @($g) $today
+      if($fut){
+        $inHand += [pscustomobject]@{ store=$store; file=$fut.file; from=$fut.from; to=$fut.to; rows=$fut.rows
+                                      closed=[string]$j.ad_to; closedFile=$fl[0].Name }
+      } else {
+        $expired += [pscustomobject]@{ store=$store; file=$fl[0].Name; to=[string]$j.ad_to; rows=@($j.deals).Count
+                                       days=[int]($today - [datetime]$j.ad_to).TotalDays }
+      }
+    }
+    elseif(Test-AdWindowNotYetOpen $j $today){
+      # the newest file IS the future one, so the expired branch above never sees this store. Without this
+      # arm the store's complete absence of ad coverage today is reported as nothing at all.
+      $inHand += [pscustomobject]@{ store=$store; file=$fl[0].Name; from=[string]$j.ad_from; to=[string]$j.ad_to
+                                    rows=@($j.deals).Count; closed=''; closedFile='' }
     }
     $used += $fl[0].Name
   }
@@ -306,6 +385,16 @@ foreach($x in $expired){
   # everyday prices or to other stores, and the store looks less competitive than it is. Overstating the
   # risk would be its own defect, because a guard that cries louder than the facts is one people stop reading.
   $hard.Add(("AD COVERAGE GONE: {0}'s newest ad file {1} closed {2} ({3} day(s) ago), so its {4} sale row(s) are now excluded from the board (compare-deals refuses expired ads). Its ad cells fall back to everyday prices until a fresh pull lands." -f $x.store,$x.file,$x.to,$x.days,$x.rows))
+}
+foreach($x in $inHand){
+  # NOT a hard finding and NOT silence. The store has no live ad window today and there is nothing to pull:
+  # the next one is already on disk. Naming the state is the whole point - "ask for a pull" was the wrong
+  # remedy, but saying nothing at all makes a store mid-cycle look identical to one with a healthy live ad.
+  if($x.closed){
+    $info.Add(("  AD WINDOW BETWEEN CYCLES: {0}'s ad {1} closed {2} and the NEXT window's ad is already in hand - {3} holds {4} row(s) for {5}..{6}. Its ad rows are correctly excluded until then. No pull to request." -f $x.store,$x.closedFile,$x.closed,$x.file,$x.rows,$x.from,$x.to))
+  } else {
+    $info.Add(("  AD WINDOW NOT YET OPEN: {0}'s newest ad file {1} holds {2} row(s) for {3}..{4}, which starts in the future, so the store has NO live ad window today and its ad rows are correctly excluded. No pull to request." -f $x.store,$x.file,$x.rows,$x.from,$x.to))
+  }
 }
 Write-Output ("row-age: {0} hard finding(s) across {1} store(s)" -f $hard.Count, $profiles.Count)
 $info | ForEach-Object { Write-Output $_ }

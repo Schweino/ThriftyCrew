@@ -66,7 +66,17 @@ foreach ($row in $rows) {
 
   # ---- this week's record + upsert ----
   $ps = [ordered]@{}; foreach ($s in $row.stores) { $ps[[string]$s.store] = $s.per_unit }
-  $thisWeek = [ordered]@{ week_of=$week; cheapest_price=$P; cheapest_store=$row.cheapest_store; per_store=$ps }
+  # ---- BANK THE UNIT, NOT JUST THE NUMBER (2026-09-06, queue 2026-09-06-24ac66) -------------------
+  # A history entry carried week_of, cheapest_price, cheapest_store and per_store - and never the UNIT
+  # those prices were measured in. So a deliberate RE-BASING of a commodity reads as a price move to the
+  # week-over-week detector downstream. Measured 2026-09-06: aluminum-foil went each -> sq_ft, the band
+  # was refitted, the cells came back, and sanity-check paged 'cheapest moved down 97% ($1.79 -> $0.06)'
+  # comparing 1.79 PER EACH against 0.0624 PER SQUARE FOOT. Nothing was wrong with either number.
+  # saffron was re-based gram -> oz on 2026-08-30 and will produce the identical false crash the day it
+  # has two weeks of history, unless the unit travels with the price.
+  # This is the estate's two-facts-published-without-the-fact-that-binds-them shape, and the binding fact
+  # is one field. Old entries simply have no unit and the reader downstream says so out loud.
+  $thisWeek = [ordered]@{ week_of=$week; cheapest_price=$P; cheapest_store=$row.cheapest_store; unit=([string]$row.unit); per_store=$ps }
   $newHistory = @()
   foreach ($h in $prior) { $newHistory += ,$h }
   $newHistory += ,$thisWeek

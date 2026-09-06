@@ -190,10 +190,48 @@ foreach ($k in $regNewest.Keys) {
     AddP $s ([string]$d.item); if ($d.name) { AddP $s ([string]$d.name) }
   }
 }
+$script:cgToday = (Get-Date).Date
+$script:cgAdDoc = $null
 # browser-store deal files
+# ---- DO NOT SCAN AN AD THE ENGINE REFUSED (2026-09-06, queue 2026-09-06-39933e) ---------------------
+# This took the NEWEST file by name regardless of its window, so an EXPIRED ad's products entered the
+# candidate list while compare-deals had correctly refused every one of its rows. Classify() then looked
+# each name up in the engine's candidates file, did not find it (because the engine never ingested it),
+# and fell through to RULE-INVISIBLE - the PAGING verdict, meaning 'no include can see this name'.
+# MEASURED 2026-09-06: 2 of the 3 RULE-INVISIBLE gaps were this. 'Red Potatoes and Goldust Potatoes' and
+# 'Ambriola Pecorino Romano Wedge' both come from fareway-deals-2026-08-30.json, whose window closed
+# 2026-09-05, and BOTH match their commodity's live include today (red-potatoes index 135 via
+# red\s+potato(?:es)?, pecorino-romano index 533 via \bpecorino\s+romano(?:\s+cheese)?\b). A developer
+# following the alert would have widened a rule that already matches. Fareway's ad runs Sun-Sat, so its
+# one-day rollover gap can manufacture these every week.
+# The file is SKIPPED and SAID SO, and the newest file still inside its window is used instead: going
+# silently narrower is how an audit reads its own missing input as the engine's blindness.
+$script:cgNameSource = @{}   # 'store|normalised name' -> the file the name was read from, for NOT-INGESTED
 foreach ($glob in @('bakers\bakers-deals-*.json','sams\sams-deals-*.json','fareway\fareway-deals-*.json')) {
-  $f = Get-ChildItem (Join-Path $OutDir $glob) -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-  if ($f) { foreach ($d in (Read-JsonFile $f.FullName).deals) { AddP ([string]$d.store) ([string]$d.item) } }
+  $cands = @(Get-ChildItem (Join-Path $OutDir $glob) -ErrorAction SilentlyContinue |
+             Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
+  $f = $null
+  foreach ($cf2 in $cands) {
+    $doc2 = $null
+    try { $doc2 = Read-JsonFile $cf2.FullName } catch { continue }
+    $adTo = $null
+    if ($doc2.ad_to) { try { $adTo = [datetime]$doc2.ad_to } catch { $adTo = $null } }
+    if ($adTo -and $adTo -lt $script:cgToday) {
+      Write-Output ("coverage-gaps: SKIPPED expired ad {0} closed {1} - the engine refused its rows, so scanning them would manufacture rule findings" -f $cf2.Name, $doc2.ad_to)
+      continue
+    }
+    $f = $cf2; $script:cgAdDoc = $doc2; break
+  }
+  if ($f) {
+    foreach ($d in $script:cgAdDoc.deals) {
+      $st2 = [string]$d.store; $nm2 = [string]$d.item
+      AddP $st2 $nm2
+      $sk = $st2 + '|' + (($nm2 -replace '\s+', ' ').Trim().ToLower())
+      if (-not $script:cgNameSource.ContainsKey($sk)) {
+        $script:cgNameSource[$sk] = ('{0} (ad window {1}..{2})' -f $f.Name, [string]$script:cgAdDoc.ad_from, [string]$script:cgAdDoc.ad_to)
+      }
+    }
+  }
 }
 
 # reviewed, legitimate exceptions (a store carries the item but it genuinely can't be priced like-for-like:
@@ -357,9 +395,20 @@ function CgNorm([string]$s) { return ((($s + '') -replace '\s+', ' ').Trim().ToL
 $engineRow = @{}      # "id|store|name" -> the engine's candidate row
 $engineOwner = @{}    # "store|name"    -> list of commodity ids the engine matched it to
 $classifiable = $false
+$script:cgCurrentCandidates = $false
 if ($CandidatesFile -and (Test-Path $CandidatesFile)) {
   try {
     $cdoc = Read-JsonFile $CandidatesFile
+    # THE CANDIDATES MUST BE THIS BOARD'S OWN (see the note above Classify). A file built from an older
+    # rule set makes 'the strict include matches but the engine never ingested it' indistinguishable from a
+    # genuine rule gap, so the NOT-INGESTED verdict is armed only when the two weeks agree.
+    $cgBoardWeek = ''
+    $mBW = [regex]::Match((Split-Path $CompareFile -Leaf), '(\d{4}-\d{2}-\d{2})')
+    if ($mBW.Success) { $cgBoardWeek = $mBW.Groups[1].Value }
+    $script:cgCurrentCandidates = ($cgBoardWeek -and ([string]$cdoc.week_of -eq $cgBoardWeek))
+    if (-not $script:cgCurrentCandidates) {
+      Write-Output ("coverage-gaps: candidates file week_of '{0}' is not this board's week '{1}' - the NOT-INGESTED verdict is WITHHELD and those gaps keep paging as RULE-INVISIBLE" -f [string]$cdoc.week_of, $cgBoardWeek)
+    }
     foreach ($cc in @($cdoc.commodities)) {
       $cid = [string]$cc.id
       foreach ($cr in @($cc.candidates)) {
@@ -373,6 +422,21 @@ if ($CandidatesFile -and (Test-Path $CandidatesFile)) {
     $classifiable = ($engineRow.Count -gt 0)
   } catch { Write-Output ('WARN could not read ' + $CandidatesFile + ' (' + $_.Exception.Message + ') - gaps cannot be classified this run') }
 }
+# The commodity's STRICT includes, compiled once per id through New-Probe so they carry the same ReDoS
+# timeout and quarantine as every other pattern here. These are the engine's own patterns VERBATIM - not
+# the loosened probes - which is the whole point: the question is whether the REAL rule can see the name.
+$script:cgStrict = @{}
+function Get-StrictProbes([string]$id) {
+  if (-not $script:cgStrict.ContainsKey($id)) {
+    $cc = @($commods | Where-Object { [string]$_.id -eq $id })[0]
+    $script:cgStrict[$id] = @(if ($cc) { @($cc.include | Where-Object { $_ } | ForEach-Object { New-Probe ([string]$_) }) } else { @() })
+  }
+  return $script:cgStrict[$id]
+}
+# NOT-INGESTED IS ONLY HONEST AGAINST A CURRENT CANDIDATES FILE. If the candidates were built from an
+# older rule set, 'the strict include matches but the engine did not ingest it' is exactly what a genuine
+# rule gap looks like too, and this verdict would go quiet on it. When the candidates file is not the
+# board's own week the verdict is withheld and the gap keeps paging as RULE-INVISIBLE - the loud answer.
 function Classify([string]$id, [string]$store, [string]$name) {
   if (-not $classifiable) { return [pscustomobject]@{ reason = 'UNCLASSIFIED'; detail = 'no engine candidates file to read'; actionable = $true } }
   $k = $id + '|' + $store + '|' + (CgNorm $name)
@@ -386,6 +450,20 @@ function Classify([string]$id, [string]$store, [string]$name) {
   if ($engineOwner.ContainsKey($ok)) {
     $others = @($engineOwner[$ok] | Where-Object { $_ -ne $id })
     if ($others.Count) { return [pscustomobject]@{ reason='CLAIMED-BY'; detail=("first-match-wins gave this name to '" + ($others -join "', '") + "'"); actionable=$true } }
+  }
+  # ---- NOT-INGESTED: the rule DOES match, the engine simply never saw the row -----------------------
+  # Classify had no verdict for 'not ingested' and fell through to RULE-INVISIBLE by elimination, so
+  # absence from the candidates file was read as absence of a rule. Before blaming the include, ASK IT.
+  # Only reached when the strict include really matches; a name no include matches is still the founding
+  # pork-chops bug and still pages.
+  if ($script:cgCurrentCandidates) {
+    foreach ($sp in (Get-StrictProbes $id)) {
+      if (Test-Probe $sp $name ($id + '|strict')) {
+        $src = [string]$script:cgNameSource[$store + '|' + (CgNorm $name)]
+        if (-not $src) { $src = 'a capture the engine did not price from' }
+        return [pscustomobject]@{ reason='NOT-INGESTED'; detail=("the strict include matches this name, but the engine never ingested the row (source " + $src + ") - nothing here is a rule problem"); actionable=$false }
+      }
+    }
   }
   return [pscustomobject]@{ reason='RULE-INVISIBLE'; detail='no include of any commodity matched this name (only the loosened probe did)'; actionable=$true }
 }

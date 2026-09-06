@@ -8,7 +8,7 @@
   Also cross-checks any entry that carries a store-published native_unit_price (>3% disagreement -> flag).
   Flags are ROUTED TO REVIEW (never auto-deleted) -> guards-<date>.json + console. Exit 1 if anything flags.
 #>
-param([string]$CompareFile = "", [string]$OutDir = "", [double]$OutlierFrac = 0.35, [double]$WowFrac = 0.40)
+param([string]$CompareFile = "", [string]$OutDir = "", [double]$OutlierFrac = 0.35, [double]$WowFrac = 0.40, [string]$HistoryFile = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -18,14 +18,40 @@ if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'compa
 $doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 
+# ---- THE UNIT TRAVELS WITH THE PRICE (2026-09-06, queue 2026-09-06-24ac66) ----------------------
+# This read $root\price-history.json unconditionally, so NO fixture could ever feed it a history and the
+# week-over-week branch below was untestable. -HistoryFile is what lets a frozen fixture reach it.
+# Two numbers from different UNITS are not comparable, and comparing them anyway pages a human to verify
+# a parse that is correct: aluminum-foil each -> sq_ft read as a 97 percent crash on 2026-09-06.
+function Get-UnitKey([string]$u) {
+  # fl_oz, fl oz and floz are the same unit spelled three ways. The 2026-08-30 commit renamed five
+  # commodities' unit from fl_oz to floz, and without this every one of them would read as a re-basing
+  # the first week it has two entries - a fix that manufactures five false alarms is not a fix.
+  $k = (($u + '') -replace '[\s_-]', '').Trim().ToLower()
+  if ($k -eq 'flu' -or $k -eq 'floz' -or $k -eq 'fluidoz' -or $k -eq 'fluidounce' -or $k -eq 'fluidounces') { return 'floz' }
+  if ($k -eq 'ounce' -or $k -eq 'ounces') { return 'oz' }
+  if ($k -eq 'pound' -or $k -eq 'pounds' -or $k -eq 'lbs') { return 'lb' }
+  if ($k -eq 'ea' -or $k -eq 'ct' -or $k -eq 'count') { return 'each' }
+  return $k
+}
 # price history for WoW (prior week's cheapest per commodity)
 $prior = @{}
-$histFile = Join-Path $root 'price-history.json'
+$priorUnit = @{}
+if (-not $HistoryFile) { $HistoryFile = Join-Path $root 'price-history.json' }
+$histFile = $HistoryFile
 if (Test-Path $histFile) {
   $h = Read-JsonFile $histFile
   foreach ($c in $h.commodities) {
     $past = @($c.history | Where-Object { $_.week_of -ne $week } | Sort-Object week_of)
-    if ($past.Count -gt 0) { $prior[[string]$c.id] = [double]$past[$past.Count-1].cheapest_price }
+    if ($past.Count -gt 0) {
+      $last = $past[$past.Count-1]
+      $prior[[string]$c.id] = [double]$last.cheapest_price
+      # LEGACY ENTRIES HAVE NO UNIT AND MUST NOT BE BLESSED. An absent unit is recorded as empty, and the
+      # wow verdict below still fires while SAYING the prior unit was unrecorded.
+      $pu = ''
+      if ($last.PSObject.Properties['unit']) { $pu = [string]$last.unit }
+      $priorUnit[[string]$c.id] = $pu
+    }
   }
 }
 
@@ -83,9 +109,20 @@ foreach ($r in $doc.comparison) {
   # week-over-week
   if ($prior.ContainsKey([string]$r.id)) {
     $p = $prior[[string]$r.id]; $cur = [double]$r.cheapest_price
-    if ($p -gt 0 -and ([math]::Abs($cur - $p)/$p -gt $WowFrac)) {
+    $puRaw = [string]$priorUnit[[string]$r.id]
+    $pu = Get-UnitKey $puRaw
+    $nu = Get-UnitKey ([string]$r.unit)
+    if ($pu -and $nu -and $pu -ne $nu) {
+      # NOT COMPARABLE. Recorded in guards-<week>.json so the re-basing is on the record, and listed in
+      # check-ad-cycles' $SANITY_QUIET so it does not page a human to verify arithmetic that is correct.
+      # The OUTLIER detector still runs on the same row and is unit-free, so a genuine crash on the same
+      # day is still caught by the peer comparison - this cannot buy a week of silence on a real move.
+      $flags.Add([ordered]@{ commodity=$r.commodity; type='unit-changed'; detail=("unit changed " + $puRaw + " -> " + [string]$r.unit + "; not comparable (last week `$$('{0:N4}' -f $p) per " + $puRaw + ", this week `$$('{0:N4}' -f $cur) per " + [string]$r.unit + ")") })
+    }
+    elseif ($p -gt 0 -and ([math]::Abs($cur - $p)/$p -gt $WowFrac)) {
       $dir = if ($cur -lt $p) { 'down' } else { 'up' }
-      $flags.Add([ordered]@{ commodity=$r.commodity; type='wow'; detail=("cheapest moved $dir " + [math]::Round([math]::Abs($cur-$p)/$p*100) + "% vs last week (`$$('{0:N2}' -f $p) -> `$$('{0:N2}' -f $cur))") })
+      $unk = if ($pu) { '' } else { ' (prior unit unrecorded)' }
+      $flags.Add([ordered]@{ commodity=$r.commodity; type='wow'; detail=("cheapest moved $dir " + [math]::Round([math]::Abs($cur-$p)/$p*100) + "% vs last week (`$$('{0:N2}' -f $p) -> `$$('{0:N2}' -f $cur))" + $unk) })
     }
   }
   # native unit-price cross-check (activates when a pull captures the store's own per-unit number)

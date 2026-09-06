@@ -11,13 +11,16 @@
   written to research-worklist.json for the weekly agent to research the next-cheapest everyday item, and the
   daily job alerts. Output: out\sale-fallback-gaps.json + out\research-worklist.json; exit 2 if any gaps.
 #>
-param([string]$OutDir = "", [string]$CompareFile = "")
+param([string]$OutDir = "", [string]$CompareFile = "", [string]$AutomationsFile = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'regular-fileset-lib.ps1')
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
+# Pinnable like -OutDir so a fixture can drive BOTH branches (a registered owner and an unregistered one)
+# without touching the estate's own registry. Defaults to the live file, so production callers are unchanged.
+if (-not $AutomationsFile) { $AutomationsFile = Join-Path $root 'expected-automations.json' }
 $commods = Read-JsonFile (Join-Path $root 'commodities.json')
 $byId = @{}; foreach ($c in $commods) { $byId[[string]$c.id] = $c }
 
@@ -125,6 +128,46 @@ Write-Output ("sale-fallback: everyday pool from the engine fileset (as-of {0:yy
 # can never arm. Fixture runs (any -OutDir other than the real out\) keep their ledger beside the
 # fixture so a test can never write the estate's.
 $OWNER_GRACE = @{ 'weekly-browser-agent' = 16; 'daily-ff-selfheal' = 3 }
+
+# ---- AN OWNER MUST BE A JOB THAT EXISTS (2026-09-06, queue 2026-09-06-22b4dd) ----------------------
+# The 2026-09-03 fix above gave ownership an EXPIRY but not PROOF. Ownership was ASSERTED from a
+# hardcoded store -> string map, so a gap could be silenced as "owned" by a job that does not exist:
+# 'daily-ff-selfheal' appears NOWHERE in this estate except line 133 above, its grace entry, the
+# ownership ledger and the alert body. No script, no scheduled task, no registry row. It bought
+# yukon-gold-potatoes|Family Fare three silent days, and only the expiry ever escalated it - a cell
+# nobody was ever going to work.
+#
+# THE ROLE NAMES ARE NOT TASK NAMES, and that is the trap in the obvious version of this fix.
+# 'weekly-browser-agent' names no Windows task either: it is a ROLE, performed by a registered task.
+# A literal owner-string lookup against expected-automations.json would therefore collapse all three
+# rows to NONE and page the two HEALTHY ones (canned-pumpkin|Hy-Vee and cantaloupe|Aldi, both proven
+# by worklist membership and both correctly silent at age 4 of grace 16). So the mapping is declared
+# here, explicitly, and an owner is registry-backed only when the task it names is in the registry.
+# 'daily-ff-selfheal' is deliberately absent from this map: there is nothing to map it to.
+$OWNER_TASK = @{ 'weekly-browser-agent' = 'TC Grocery Daily Capture 0800' }
+
+# FAILS CLOSED, like the ledger read below: a registry we cannot read leaves every owner unregistered
+# and every gap escalating. Reading an unreadable registry as "everything is registered" would restore
+# exactly the silence this item exists to remove.
+function Get-RegisteredAutomationNames([string]$Path) {
+  $names = @{}
+  $doc = Read-JsonFile $Path          # let an IO or parse error throw: unreadable is not empty
+  foreach ($t in @($doc.windows_tasks)) { $n = ([string]$t.name).Trim(); if ($n) { $names[$n] = $true } }
+  if ($names.Count -eq 0) { throw ('expected-automations.json registered no windows_tasks at all: ' + $Path) }
+  return $names
+}
+$registered = @{}; $registryBroken = $false
+try { $registered = Get-RegisteredAutomationNames $AutomationsFile }
+catch { $registryBroken = $true; Write-Output ("sale-fallback: AUTOMATION REGISTRY UNREADABLE ($AutomationsFile) - no owner can be proven, every gap escalates: " + $_.Exception.Message) }
+$ownerRegistered = @{}
+foreach ($o in @($OWNER_GRACE.Keys)) {
+  $task = [string]$OWNER_TASK[$o]
+  $ownerRegistered[$o] = ((-not $registryBroken) -and $task -and $registered.ContainsKey($task))
+  if (-not $ownerRegistered[$o]) {
+    Write-Output ("sale-fallback: OWNER NOT REGISTERED - '{0}' names {1}, so it grants NO grace and any gap it claims escalates on day 0" -f $o, $(if ($task) { "the automation '$task', which is not in expected-automations.json" } else { 'no automation at all' }))
+  }
+}
+
 function Get-NormPath([string]$p) { try { [System.IO.Path]::GetFullPath($p).TrimEnd('\') } catch { return $p } }
 $ledgerPath = if ((Get-NormPath $OutDir) -ieq (Get-NormPath (Join-Path $root 'out'))) { Join-Path $root 'sale-fallback-ownership.json' } else { Join-Path $OutDir 'sale-fallback-ownership.json' }
 $script:workKeys = New-Object System.Collections.Generic.HashSet[string]
@@ -147,7 +190,9 @@ $today = $asof.Date
 $nextLedger = [ordered]@{}
 foreach ($gp in $gaps) {
   $key   = $gp.commodity + '|' + $gp.store
-  $owner = Get-GapOwner $gp.commodity $gp.store
+  $claimed = Get-GapOwner $gp.commodity $gp.store
+  # an owner naming no registered automation is NOT an owner: it collapses to NONE, grace 0, day-0 escalation
+  $owner = if ($claimed -eq 'NONE' -or $ownerRegistered[$claimed]) { $claimed } else { 'NONE' }
   $grace = if ($OWNER_GRACE.ContainsKey($owner)) { [int]$OWNER_GRACE[$owner] } else { 0 }
   # first_seen survives only while the OWNER is unchanged; a gap that changes hands restarts its clock
   $first = $null
@@ -156,6 +201,7 @@ foreach ($gp in $gaps) {
   $age = 0; try { $age = [int]([datetime]$today - [datetime]$first).TotalDays } catch { $age = 0 }
   $escalate = $ledgerBroken -or ($owner -eq 'NONE') -or ($age -gt $grace)
   $gp | Add-Member -NotePropertyName owner       -NotePropertyValue $owner
+  $gp | Add-Member -NotePropertyName claimed_owner -NotePropertyValue $claimed
   $gp | Add-Member -NotePropertyName first_seen  -NotePropertyValue $first
   $gp | Add-Member -NotePropertyName age_days    -NotePropertyValue $age
   $gp | Add-Member -NotePropertyName grace_days  -NotePropertyValue $grace

@@ -2080,7 +2080,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # - a new check, a typo, a producer change - pages, by construction. The one thing a triage channel
       # must never do is go quiet about something it does not understand.
       # <<SANITY-PAGER-BEGIN>> test-auditors.ps1 extracts this region and runs it against a frozen guards file.
-      $SANITY_QUIET = @('outlier-verified')
+      # 'unit-changed' (2026-09-06, queue 2026-09-06-24ac66): a commodity re-based from one unit to
+      # another is NOT a price move, and last week's number is not comparable to this week's. It is
+      # recorded in guards-<week>.json like every other flag; it just does not page a human to verify
+      # arithmetic that is already correct. The unit-free OUTLIER detector still runs on the same row.
+      $SANITY_QUIET = @('outlier-verified','unit-changed')
       $sanityQuiet = 0
       if ($gf) {
         $gj = Read-JsonFile $gf.FullName

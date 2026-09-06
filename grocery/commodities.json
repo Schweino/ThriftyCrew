@@ -25907,7 +25907,8 @@
                         "baguette",
                         "italian\\s+bread",
                         "french\\s+bakery\\s+bread",
-                        "bakery\\s+bread\\s+loaf"
+                        "bakery\\s+bread\\s+loaf",
+                        "french\\s+loaf"
                     ],
         "exclude":  [
                         "\\bpizza\\b",
@@ -37798,6 +37799,8 @@
         "id":  "disinfectant-spray",
         "label":  "Disinfectant Spray",
         "unit":  "oz",
+        "kind_equivalent":  "near-water",
+        "kind_equivalent_why":  "This commodity is priced per WEIGHT oz because most of its population is net-weight aerosols (Lysol 12.5/19 oz, Great Value 19 oz, OdoBan 14.6 oz), but it legitimately also sells water-based trigger sprays labelled in FL OZ (Scrubbing Bubbles 32 fl oz, Seventh Generation 26 fl oz). For those products the density is within a few percent of water, so the two units are interchangeable at the precision this board publishes, and the error runs about 4 percent in the OVERSTATING direction - a cell cannot win a crown it has not earned. Without this, the kind guard re-armed every time a price move or a rule change swapped the crown product, and stopped the board until a human wrote the same paragraph against a new size string (2026-08-08 for 1 pk 32 fl oz, 2026-09-06 for 26 fl oz). SCOPED TO THIS COMMODITY ON PURPOSE: baby-formula powder against ready-to-feed liquid is exactly the case where volume and weight are NOT interchangeable and must keep firing.",
         "band_min":  0.15,
         "band_max":  0.8,
         "relax_global":  [
@@ -46074,11 +46077,12 @@
         "unit":  "oz",
         "include":  [
                         "taco\\s+sauce",
-                        "taco\\s+bell\\s+(mild|hot|fire|diablo|verde|salsa\\s+verde)?\\s*sauce"
+                        "taco\\s+bell\\s+(mild|hot|fire|diablo|verde|salsa\\s+verde)?\\s*sauce",
+                        "taco\\s+(?:and|\u0026)\\s+enchilada\\s+(?:chili\\s+)?sauce"
                     ],
         "exclude":  [
                         "\\bsalsa\\b",
-                        "enchilada",
+                        "\\benchilada\\s+sauce\\b",
                         "seasoning",
                         "\\bshells?\\b",
                         "\\bkit\\b",

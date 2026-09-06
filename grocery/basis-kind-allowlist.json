@@ -27,22 +27,6 @@
       "reason": "The product name states its own arithmetic: 'Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.' - 6 x 14 oz = 84, by WEIGHT, which is the unit condensed-milk is priced in. The size field carries the right number under the wrong label ('84 fl oz'). $11.98 / 84 oz = 0.1426, which is the published per-unit, so the conversion was done correctly and only the label is volume-shaped. Same shape as the clam-chowder and horseradish-sauce entries above: the NUMBER is right. Not an exclude, because the product IS sweetened condensed milk; had 84 been a genuine fluid measure the weight would be about 95 oz and the cell would have OVERSTATED the price, which is the safe direction and still not worth publishing."
     },
     {
-      "id": "disinfectant-spray",
-      "store": "Baker's",
-      "size": "1 pk 32 fl oz",
-      "reviewed": "2026-08-08",
-      "reviewed_by": "claude",
-      "reason": "A 32 fl oz water-based spray on a commodity priced per oz. Density is within a few percent of water, so fl oz and oz are interchangeable here at the precision the board publishes."
-    },
-    {
-      "id": "disinfectant-spray",
-      "store": "Baker's",
-      "size": "26 fl oz",
-      "reviewed": "2026-09-06",
-      "reviewed_by": "claude (grocery triage, plan-2026-09-06)",
-      "reason": "A 26 fl oz water-based trigger spray (Seventh Generation Disinfecting Spray) on a row priced per weight oz whose peers are net-weight aerosols (Lysol 12.5/19 oz, Great Value 19 oz, OdoBan 14.6 oz). Density is within a few percent of water, so 26 fl oz is about 27 oz and 5.19/26 = 0.1996 OVERSTATES the per-weight-oz price by about 4 percent, which is the safe direction for a crown-holder: an overstated cell cannot win a crown it has not earned. It beats the runner-up (Walmart 0.2511) by 20 percent, so the crown holds at any plausible density. Same shape and same argument as the 2026-08-08 entry for the same commodity at Baker's (Scrubbing Bubbles, 1 pk 32 fl oz), whose product commit b28788fa moved to shower-cleaner on 2026-09-06, which is what put this previously unreviewed size string on the crown. NOT an exclude: the product IS a disinfectant spray and its number is exact."
-    },
-    {
       "id": "horseradish-sauce",
       "store": "Walmart",
       "size": "12 fl oz",

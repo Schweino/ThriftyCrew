@@ -57,7 +57,40 @@ $TASKS  = 'C:\Users\Owner\.claude\scheduled-tasks'
 # coverage check enumerating three known directories can only ever be as complete as that list.
 $SKILLS = 'C:\Codex\ThriftyCrew\.claude\skills'
 
-function FileHash1([string]$p) { if (Test-Path $p) { return (Get-FileHash $p -Algorithm MD5).Hash } return $null }
+# ---- HASH WHAT GIT HASHES (2026-09-06, queue 2026-09-06-fdc73a) ---------------------------------------
+# This hashed RAW ON-DISK BYTES to compare two paths that git deliberately holds identical only AFTER
+# line-ending normalization. core.autocrlf is true here and .gitattributes carries '* text=auto', so the
+# same committed content legitimately sits on disk as LF in one path and CRLF in another - and it did:
+# on 2026-09-06 all six STALE BACKUP findings were line-ending noise, with the live/mirror MD5 EQUAL for
+# every one of them after stripping CR (triage-developer.md was 11261 bytes live and 11413 in the mirror,
+# a delta of exactly 152 bytes over exactly 152 lines, one CR per line). The two pairs that read CLEAN
+# were the ones whose line endings already agreed, which is the discriminator that names the cause.
+#
+# WHY IT COULD NEVER CONVERGE, which is what makes it worse than a false positive: -SyncMirror's
+# Copy-Item makes the two byte-equal for a moment and the next checkout or stash-restore re-splits them.
+# A check that cannot be satisfied reports daily on a mirror that is already correct, and a daily finding
+# nobody can clear is how a reader learns to skip the whole report.
+#
+# The normalization is CRLF -> LF specifically, not "strip every CR": git rewrites the pair, and a lone CR
+# is content. A file holding a NUL byte is treated as genuinely binary and compared raw, because dropping
+# a 0x0D out of binary content would be a change, not a normalization.
+function FileHash1([string]$p) {
+  if (-not (Test-Path $p)) { return $null }
+  $bytes = [IO.File]::ReadAllBytes($p)
+  if (-not ($bytes -contains [byte]0)) {
+    $n = $bytes.Length
+    $buf = New-Object byte[] $n
+    $j = 0
+    for ($i = 0; $i -lt $n; $i++) {
+      if ($bytes[$i] -eq 13 -and ($i + 1) -lt $n -and $bytes[$i + 1] -eq 10) { continue }
+      $buf[$j] = $bytes[$i]; $j++
+    }
+    if ($j -ne $n) { $trim = New-Object byte[] $j; if ($j -gt 0) { [Array]::Copy($buf, 0, $trim, 0, $j) }; $bytes = $trim }
+  }
+  $md5 = [Security.Cryptography.MD5]::Create()
+  try { return (([BitConverter]::ToString($md5.ComputeHash($bytes))) -replace '-', '') }
+  finally { $md5.Dispose() }
+}
 
 # ---- THE EXEMPTION LIST (2026-09-04, queue 2026-09-04-0b63d3) -------------------------------------------
 # ops\prompt-backup is TRACKED IN A PUBLIC REPOSITORY. "NO BACKUP" is therefore not always a defect to fix
@@ -328,6 +361,38 @@ if ($SelfTest) {
     Set-Content (Join-Path $b 'skills\demo-skill\SKILL.md') "project skill v1" -Encoding UTF8
     $r = Compare-Prompts $p $u $t $b $sk
     _C 'clean twin: a backed-up project-scope SKILL reports no issue' (($r.issues -join ' ') -notmatch 'skills\\demo-skill')
+
+    # ---- LINE-ENDING NOISE (2026-09-06, queue 2026-09-06-fdc73a) --------------------------------------
+    # FROZEN from the real founding pair. On 2026-09-06 six agent prompts reported STALE BACKUP with the
+    # live file LF and its mirror CRLF and the content IDENTICAL - the delta on triage-developer.md was
+    # exactly 152 bytes over exactly 152 lines. The bytes below are written here, never read from the
+    # live tree: regenerating this fixture from .claude\agents would let the bug vanish under it and the
+    # test would then pass by finding nothing.
+    $lfBytes  = [Text.Encoding]::UTF8.GetBytes("- - - `nname: frozen-fixture`ndescription: the 2026-09-06 pair`n- - - `n`nBody line one.`nBody line two.`n")
+    $crlfSame = [Text.Encoding]::UTF8.GetBytes("- - - `r`nname: frozen-fixture`r`ndescription: the 2026-09-06 pair`r`n- - - `r`n`r`nBody line one.`r`nBody line two.`r`n")
+    $crlfDiff = [Text.Encoding]::UTF8.GetBytes("- - - `r`nname: frozen-fixture`r`ndescription: the 2026-09-06 pair`r`n- - - `r`n`r`nBody line one.`r`nBody line two, GENUINELY EDITED.`r`n")
+    # the fixture must really be the shape it claims: one CR per line, and equal only after normalization
+    _C 'line-endings: the frozen pair really differs by exactly one CR per line (7 lines, 7 bytes)' (($crlfSame.Length - $lfBytes.Length) -eq 7)
+    [IO.File]::WriteAllBytes((Join-Path $p 'crlf.md'), $lfBytes)
+    [IO.File]::WriteAllBytes((Join-Path $u 'crlf.md'), $lfBytes)
+    [IO.File]::WriteAllBytes((Join-Path $b 'agents\crlf.md'), $crlfSame)
+    $r = Compare-Prompts $p $u $t $b $sk
+    # CLEAN TWIN: this is the case that must go SILENT, and if it does not the fix did not land
+    _C 'line-endings CLEAN TWIN: an LF live prompt and a CRLF mirror with identical text report CLEAN' (($r.issues -join ' ') -notmatch 'agents\\crlf\.md')
+    # MUST-FIRE: normalization must not swallow a REAL edit that also happens to arrive CRLF
+    [IO.File]::WriteAllBytes((Join-Path $b 'agents\crlf.md'), $crlfDiff)
+    $r = Compare-Prompts $p $u $t $b $sk
+    _C 'line-endings MUST-FIRE: a CRLF mirror whose TEXT differs is still STALE BACKUP' (($r.issues -join ' ') -match 'STALE BACKUP  agents\\crlf\.md')
+    # MUST-FIRE: a NUL byte means binary, and binary is still compared raw - a 0x0D there is content
+    $binA = [byte[]](0x00,0x0D,0x0A,0x41)
+    $binB = [byte[]](0x00,0x0A,0x41)
+    [IO.File]::WriteAllBytes((Join-Path $p 'bin.md'), $binA)
+    [IO.File]::WriteAllBytes((Join-Path $u 'bin.md'), $binA)
+    [IO.File]::WriteAllBytes((Join-Path $b 'agents\bin.md'), $binB)
+    $r = Compare-Prompts $p $u $t $b $sk
+    _C 'line-endings MUST-FIRE: a file carrying a NUL byte is compared raw, so a dropped CR still fires' (($r.issues -join ' ') -match 'STALE BACKUP  agents\\bin\.md')
+    Remove-Item (Join-Path $p 'crlf.md'),(Join-Path $u 'crlf.md'),(Join-Path $b 'agents\crlf.md') -Force
+    Remove-Item (Join-Path $p 'bin.md'),(Join-Path $u 'bin.md'),(Join-Path $b 'agents\bin.md') -Force
     Set-Content (Join-Path $sk 'demo-skill\SKILL.md') "project skill v2 - edited live" -Encoding UTF8
     $r = Compare-Prompts $p $u $t $b $sk
     _C 'must-fire: an edited project-scope SKILL with a stale backup is caught' (($r.issues -join ' ') -match 'STALE BACKUP  skills\\demo-skill')

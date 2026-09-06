@@ -78,8 +78,33 @@ function Get-UnitKind([string]$unit) {
   return 'unknown'
 }
 
+# ---- A COMMODITY MAY DECLARE ITS UNITS INTERCHANGEABLE (2026-09-06, queue 2026-09-06-79fe01) --------
+# -KindEquivalent maps a commodity id to a physics declaration. The only value understood is 'near-water',
+# meaning: for THIS commodity's products, fluid ounces and weight ounces are the same number at the
+# precision the board publishes, because the products are water-density liquids.
+# WHY IT EXISTS. disinfectant-spray is priced per weight oz (its population is net-weight aerosols) and
+# legitimately also sells fl-oz-labelled trigger sprays. Every time a price move or a rule change put one
+# of those on the crown, this gate fired and STOPPED THE BOARD until a human wrote the same 'density is
+# water' paragraph against a new size string - 2026-08-08 for '1 pk 32 fl oz', and again 2026-09-06 for
+# '26 fl oz' after commit b28788fa moved the first one to shower-cleaner. That is a human-in-the-loop
+# moment manufactured by a product swap, not by a defect.
+# IT SKIPS WEIGHT<->VOLUME ONLY, and only for declared ids. 'count' and 'unknown' kinds are untouched:
+# a 6 ct pack among ounces is a real basis error whatever the density. And the declaration is per
+# commodity, never global - baby-formula powder against ready-to-feed liquid is the case where these
+# units are NOT interchangeable, and its fixture must keep firing.
+$script:KIND_PAIR_WEIGHT_VOLUME = @('weight','volume')
+function Test-KindEquivalentSkip {
+  param([hashtable]$Map, [string]$Id, [string]$CellKind, [string]$RowKind)
+  if (-not $Map) { return $false }
+  if (-not $Map.ContainsKey($Id)) { return $false }
+  if ([string]$Map[$Id] -ne 'near-water') { return $false }
+  # both sides must be the weight/volume pair; anything involving count or unknown still fires
+  if ($script:KIND_PAIR_WEIGHT_VOLUME -notcontains $CellKind) { return $false }
+  if ($script:KIND_PAIR_WEIGHT_VOLUME -notcontains $RowKind) { return $false }
+  return $true
+}
 function Find-MeasureKindMismatch {
-  param([object[]]$Rows, [int]$MinStores = 3)
+  param([object[]]$Rows, [int]$MinStores = 3, [hashtable]$KindEquivalent = $null)
   $out = @()
   foreach ($r in $Rows) {
     $unit = [string]$r.unit
@@ -104,6 +129,8 @@ function Find-MeasureKindMismatch {
     foreach ($s in $priced) {
       $k = Get-MeasureKind ([string]$s.size)
       if ($k -eq 'unknown' -or $k -eq $major) { continue }
+      # the commodity has declared this particular pair of kinds interchangeable for its products
+      if (Test-KindEquivalentSkip $KindEquivalent ([string]$r.id) $k $major) { continue }
       $out += [pscustomobject]@{
         id = [string]$r.id; commodity = [string]$r.commodity; unit = $unit
         store = [string]$s.store; per_unit = [double]$s.per_unit
@@ -243,6 +270,64 @@ if ($SelfTest) {
     if ($kh[0].agrees_with_engine_divisor) { Write-Output '  X MUST-FIRE: baby-formula ready-to-feed liquid must NOT agree with its engine divisor - the new field has inverted the founding class'; $bad++ }
   }
 
+  # ---- kind_equivalent: A COMMODITY MAY DECLARE ITS UNITS INTERCHANGEABLE ------------------------
+  # (2026-09-06, queue 2026-09-06-79fe01) FROZEN BY HAND from the real comparison-2026-09-06 row that
+  # hard-failed guards at 08:15:51 and kept the board unpublished all morning. NEVER regenerated from the
+  # board: today's fix is an allowlist entry plus this declaration, so a regenerated fixture would encode
+  # the silence and pass by finding nothing.
+  # Baker's crown is a 26 fl oz water-based trigger spray on a row priced per WEIGHT oz whose five peers
+  # are all net-weight aerosols. 5.19 / 26 = 0.1996, which OVERSTATES the per-weight-oz price by about 4
+  # percent - the safe direction - and still beats the runner-up by 20 percent.
+  $kindNearWater = @(
+    [pscustomobject]@{ id='disinfectant-spray'; commodity='Disinfectant Spray'; unit='oz'; stores=@(
+      [pscustomobject]@{ store="Baker's";     per_unit=0.1996; size='26 fl oz'; item='Seventh Generation Lemongrass Citrus Disinfecting Spray' }
+      [pscustomobject]@{ store='Walmart';     per_unit=0.2511; size='19 oz';    item='Great Value Disinfectant Spray, Crisp Linen Scent, 19 oz' }
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.2737; size='14.6 oz';  item='OdoBan Disinfectant Spray, 14.6 oz./can, 6 pk.' }
+      [pscustomobject]@{ store='Family Fare'; per_unit=0.5784; size='19 oz';    item='Lysol Crisp Linen Scent Disinfectant Spray 19 Oz' }
+      [pscustomobject]@{ store='Hy-Vee';      per_unit=0.6152; size='12.5 oz';  item='Lysol Crisp Linen Scent Disinfectant Spray' }
+      [pscustomobject]@{ store='Fareway';     per_unit=0.7192; size='12.5 oz';  item='Lysol Disinfectant, Sanitizing and Antibacterial Spray, Crisp Linen' }
+    )}
+  )
+  # MUST-FIRE: with NO declaration this is exactly the gate that stopped the board, and it must still stop it.
+  $k5 = Find-MeasureKindMismatch -Rows $kindNearWater
+  $kn = @($k5 | Where-Object { $_.id -eq 'disinfectant-spray' -and $_.store -eq "Baker's" })
+  if (@($kn).Count -ne 1) { Write-Output ('  X MUST-FIRE: disinfectant-spray did not flag the 26 fl oz crown with NO kind_equivalent (found ' + @($kn).Count + ')'); $bad++ }
+  else {
+    if (-not $kn[0].holds_crown) { Write-Output '  X MUST-FIRE: the 26 fl oz Seventh Generation cell holds the crown and was not marked as such'; $bad++ }
+    if ($kn[0].kind -ne 'volume' -or $kn[0].row_kind -ne 'weight') { Write-Output ('  X MUST-FIRE: disinfectant-spray kinds wrong (' + $kn[0].kind + ' vs row ' + $kn[0].row_kind + ')'); $bad++ }
+    if ($kn[0].agrees_with_engine_divisor) { Write-Output '  X MUST-FIRE: a fl oz label on a weight-oz row must NOT agree with its engine divisor'; $bad++ }
+  }
+  # CLEAN TWIN: the SAME frozen row with the declaration passed in must produce ZERO findings for it.
+  # This assertion is unsatisfiable before the 2026-09-06 change, so the case genuinely reaches the new
+  # code instead of passing by finding nothing.
+  $k6 = Find-MeasureKindMismatch -Rows $kindNearWater -KindEquivalent @{ 'disinfectant-spray' = 'near-water' }
+  if (@($k6).Count -ne 0) { Write-Output ('  X CLEAN TWIN: kind_equivalent near-water did not silence the declared commodity (' + @($k6).Count + ' finding(s) remain)'); $bad++ }
+  # ...and the declaration is SCOPED. The same call with the declaration on a DIFFERENT commodity must
+  # leave this row firing - otherwise the map is being read as a global switch.
+  $k7 = Find-MeasureKindMismatch -Rows $kindNearWater -KindEquivalent @{ 'insect-spray' = 'near-water' }
+  if (@($k7 | Where-Object { $_.store -eq "Baker's" }).Count -ne 1) { Write-Output '  X MUST-FIRE: a declaration on ANOTHER commodity silenced disinfectant-spray - kind_equivalent is not scoped'; $bad++ }
+  # ...and an unrecognised value is NOT a silence. Only 'near-water' is understood; anything else fires.
+  $k8 = Find-MeasureKindMismatch -Rows $kindNearWater -KindEquivalent @{ 'disinfectant-spray' = 'yes' }
+  if (@($k8 | Where-Object { $_.store -eq "Baker's" }).Count -ne 1) { Write-Output '  X MUST-FIRE: an unrecognised kind_equivalent value was treated as a silence - the map must be an allowlist of understood declarations'; $bad++ }
+  # THE CASE THAT MUST NEVER GO QUIET: baby-formula is the commodity where volume and weight are NOT
+  # interchangeable - powder against ready-to-feed liquid is a real 2x error. Even if somebody declared it,
+  # this run proves the declaration is per-commodity by re-running the founding fixture with the
+  # disinfectant-spray declaration in the map: formula must still fire.
+  $k9 = Find-MeasureKindMismatch -Rows $kindFire -KindEquivalent @{ 'disinfectant-spray' = 'near-water' }
+  if (@($k9 | Where-Object { $_.id -eq 'baby-formula' -and $_.store -eq 'Walmart' }).Count -ne 1) { Write-Output '  X MUST-FIRE: the baby-formula ready-to-feed fixture stopped firing once a kind_equivalent map was passed'; $bad++ }
+  # A COUNT kind is never covered by a density declaration, whatever the commodity says.
+  $kindCountEquiv = @(
+    [pscustomobject]@{ id='disinfectant-spray'; commodity='Disinfectant Spray'; unit='oz'; stores=@(
+      [pscustomobject]@{ store="Baker's";     per_unit=0.1100; size='3 ct';    item='a three-count pack priced as though it were ounces' }
+      [pscustomobject]@{ store='Walmart';     per_unit=0.2511; size='19 oz';   item='Great Value Disinfectant Spray, Crisp Linen Scent, 19 oz' }
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.2737; size='14.6 oz'; item='OdoBan Disinfectant Spray, 14.6 oz./can, 6 pk.' }
+      [pscustomobject]@{ store='Family Fare'; per_unit=0.5784; size='19 oz';   item='Lysol Crisp Linen Scent Disinfectant Spray 19 Oz' }
+      [pscustomobject]@{ store='Hy-Vee';      per_unit=0.6152; size='12.5 oz'; item='Lysol Crisp Linen Scent Disinfectant Spray' }
+    )}
+  )
+  $k10 = Find-MeasureKindMismatch -Rows $kindCountEquiv -KindEquivalent @{ 'disinfectant-spray' = 'near-water' }
+  if (@($k10 | Where-Object { $_.store -eq "Baker's" }).Count -ne 1) { Write-Output '  X MUST-FIRE: near-water silenced a COUNT-vs-weight mismatch - the declaration must cover the weight/volume pair only'; $bad++ }
+
   # ---- THE INVERTED REFERENCE (2026-09-03, queue 2026-09-03-83b57e) ----
   # FROZEN BY HAND from the real comparison-2026-09-02 teriyaki-sauce row and NEVER regenerated from the
   # board: the fix is an allowlist entry, so a regenerated fixture would encode the silence and pass by
@@ -333,7 +418,7 @@ if ($SelfTest) {
   $f3 = [pscustomobject]@{ id='ranch-dressing'; store="Sam's Club"; size='126.8 oz' }
   if (TKA $f3 $al) { Write-Output '  X MUST-FIRE: the same size on another commodity was silenced'; $bad++ }
 
-  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (4 must-fire, 6 clean twins, both tails, both references, allowlist keyed to the size)'; exit 0 }
+  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (9 must-fire, 7 clean twins, both tails, both references, allowlist keyed to the size, kind_equivalent scoped)'; exit 0 }
   Write-Output ("audit-unit-basis-outlier SELF-TEST FAIL ($bad)"); exit 2
 }
 
@@ -366,7 +451,26 @@ if (@($ranked).Count -gt 25) { Write-Output ("  ... and " + (@($ranked).Count - 
 # The allowlist is keyed on commodity + store + the exact SIZE STRING reviewed, not on the store or the
 # commodity alone. A per-store silence would switch the check off for that cell permanently, so the next,
 # different mismatch there would never be seen - the same contested-flag rule the rest of the estate runs on.
-$kinds = Find-MeasureKindMismatch -Rows $rows
+# THE DECLARATION IS READ FROM commodities.json, not hardcoded here. A constant in this file would be a
+# second copy of a rule whose authority is the commodity catalog, and the copy nobody re-derives is the
+# one that goes stale. An unreadable catalog leaves the map EMPTY, which is the loud direction: every
+# mismatch fires exactly as it did before this existed.
+$kindEquiv = @{}
+try {
+  # NO @() AROUND THE READ. Read-JsonFile hands back the commodity ARRAY, and in PS 5.1 @() does not
+  # unroll a nested array - it wraps it. The first live run of this hunk therefore looped ONCE with $c
+  # bound to the whole catalog and built a single key out of all 592 ids joined together: the map read
+  # 'kind_equivalent declared by 1 commodity', silenced nothing, and the root fix was decorative while
+  # looking shipped. Caught only because the plan's clean twin demanded a SECOND live run proving
+  # crown=0 with the allowlist entries REMOVED. Estate class: ps51-json-array-traps.
+  $catalog = Read-JsonFile (Join-Path $root 'commodities.json')
+  foreach ($c in $catalog) {
+    $ke = [string]$c.kind_equivalent
+    if ($ke) { $kindEquiv[[string]$c.id] = $ke }
+  }
+} catch { Write-Output ('audit-unit-basis-outlier: could not read commodities.json for kind_equivalent (' + $_.Exception.Message + ') - every kind mismatch fires') }
+if ($kindEquiv.Count) { Write-Output ("  kind_equivalent declared by {0} commodit(y/ies): {1}" -f $kindEquiv.Count, ((@($kindEquiv.Keys) | Sort-Object | Select-Object -First 12 | ForEach-Object { $_ + '=' + $kindEquiv[$_] }) -join ', ')) }
+$kinds = Find-MeasureKindMismatch -Rows $rows -KindEquivalent $kindEquiv
 $kindAllow = @()
 $allowPath = Join-Path $root 'basis-kind-allowlist.json'
 if (Test-Path $allowPath) { try { $kindAllow = @((Read-JsonFile $allowPath).allow) } catch { } }

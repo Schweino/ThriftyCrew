@@ -82,3 +82,27 @@ data that smells wrong - implausible quantities for a 14-serving batch, title in
 the build, note-vs-build contradictions, cost lines that dominate a batch absurdly, cultural mismatches
 (wrong herb/cut/paste for the named dish). Flag with the specific number and where it came from; never
 fix silently. Your flags feed a mandatory repair pass BEFORE the audit gate.
+
+## WHICH TREE ARE YOU IN
+
+Spawned work often runs in a git worktree, not the main checkout. Before you trust ANY gate,
+build or pricing result, run `git rev-parse --show-toplevel` and compare it to C:\Codex\ThriftyCrew.
+Report which tree you ran in. If they differ you are in a worktree, and all of the following are true:
+
+- run-gates and the ops audits are BLIND here. They read data that is gitignored in main and
+  therefore absent from your worktree. A green run proves nothing until it is re-run in the main
+  checkout, and a red one may be an artifact of the missing data rather than your change.
+- the pricing engines read the newest COMMITTED board. A worktree has none of main's local boards,
+  so cost-recipes will exit 0 having priced nothing. Exit 0 is not evidence here.
+- a fresh checkout is CRLF where main is LF. golden-test and ghost-drift go red over BYTES, not
+  over drift. Check the bytes before calling it a regression.
+- write only through repo-relative paths so your output stays in your own worktree. Never write to
+  an absolute C:\Codex\ThriftyCrew path, which corrupts the main tree under a concurrent session.
+
+## REPORTING A RESULT YOU DID NOT OBSERVE
+
+Read the EXIT CODE first and the tally second: a suite that silently ran a subset can still print a
+large pass count, and deleting a case can leave exit 0. A non-zero exit meaning COULD-NOT-EVALUATE is a blocked stage and never a
+pass: run-gates uses exit 3 for it, the recipe battery uses exit 2. Check which tool you ran. If you could not check something (no browser, no data, a wall) then say
+"could not verify" in those words. Never let a could-not-look settle a question, and never report a
+pass, a count or a live state you did not personally observe.

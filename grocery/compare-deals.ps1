@@ -1290,6 +1290,17 @@ if ($SelfTest) {
   if (Test-PackSizeFloor '_selftest-whole-bird' '2 lb' 'Simple Truth Cold Deli Fresh Whole Rotisserie Chicken') { Write-Output 'ok    min_pack_oz is INCLUSIVE at the bound (2 lb = 32 oz passes)' } else { Write-Output 'FAIL  min_pack_oz is exclusive at the bound and drops the 2 lb birds'; $script:fail++ }
   if (Test-PackSizeFloor '_selftest-whole-bird' 'each' "Member's Mark Seasoned Rotisserie Chicken") { Write-Output 'ok    min_pack_oz: unreadable size is NOT a violation (this is most whole-bird rows)' } else { Write-Output 'FAIL  min_pack_oz treated a sizeless row as a violation - this empties the commodity'; $script:fail++ }
   if (Test-PackSizeFloor 'undeclared-commodity' '8 oz' "Land O'Frost Rotisserie Seasoned Turkey Breast 8 Oz") { Write-Output 'ok    min_pack_oz: undeclared commodity untouched' } else { Write-Output 'FAIL  min_pack_oz fired on a commodity that never declared it'; $script:fail++ }
+  # THE MINI LOAF (2026-09-06, queue 2026-09-06-796030). Widening french-bread to admit Kroger's shelf name
+  # 'French Loaf' also admits Fareway's 'Mini French Loaf' $1.49 / 8 oz, which is not a loaf of French bread
+  # and would undercut every real one. It could not be observed on the 2026-09-06 board because that row
+  # lives in fareway-deals-2026-09-06.json, whose ad window does not open until 2026-09-07 - so the board
+  # could not answer the question and this fixture does. french-bread declares min_pack_oz 12 (b28788fa),
+  # and 8 oz must lose to it. Frozen here rather than left to tomorrow's unattended build.
+  $MINPACK['_selftest-loaf'] = 12
+  if (-not (Test-PackSizeFloor '_selftest-loaf' '8 oz' 'Mini French Loaf')) { Write-Output 'ok    min_pack_oz refuses the 8 oz Fareway Mini French Loaf' } else { Write-Output 'FAIL  min_pack_oz admitted an 8 oz mini loaf - the french-bread widening will undercut every real loaf when the 09-07 Fareway ad opens'; $script:fail++ }
+  if (Test-PackSizeFloor '_selftest-loaf' '16 oz' 'Private Selection French Loaf') { Write-Output 'ok    min_pack_oz keeps the real 16 oz French Loaf the widening was written for' } else { Write-Output 'FAIL  min_pack_oz rejected the 16 oz loaf the 2026-09-06 widening exists to admit'; $script:fail++ }
+  if (Test-PackSizeFloor '_selftest-loaf' '12 oz' 'a loaf exactly at the floor') { Write-Output 'ok    min_pack_oz is INCLUSIVE at 12 oz for french-bread too' } else { Write-Output 'FAIL  min_pack_oz is exclusive at the bound and drops 12 oz loaves'; $script:fail++ }
+  $MINPACK.Remove('_selftest-loaf')
   # and the two caps do not interfere: a commodity may declare either, both, or neither
   if (Test-PackSize '_selftest-whole-bird' '8 oz' 'anything') { Write-Output 'ok    min_pack_oz and max_pack_oz are independent declarations' } else { Write-Output 'FAIL  declaring min_pack_oz silently applied a max_pack_oz cap'; $script:fail++ }
   $MINPACK.Remove('_selftest-whole-bird')
@@ -1924,6 +1935,22 @@ if ($SelfTest) {
     _Route 'R4 whipped DAIRY topping is admitted'      'Friendly Farms Whipped Dairy Topping 13 FL OZ' 'whipped-cream'
     _Route 'R5 Stouffers Party Size Pasta (Frozen)'    "Stouffer's Classic Lasagna with Meat and Sauce, Party Size Pasta, Frozen Meals, 90 oz (Frozen)" 'frozen-lasagna'
     _Route 'R6 store slash-naming acorn squash'        'Acorn/Table Queen Squash' 'acorn-squash'
+    # R19 (2026-09-06, queue 2026-09-06-796030): a store's own SHELF NAME for a product the board already
+    # prices. Kroger calls its 16 oz French bread a 'French Loaf' and the include library could not say so;
+    # Walmart lists Ortega's taco sauce as 'Taco and Enchilada Chili Sauce', which the include could not see
+    # AND which the bare 'enchilada' exclude would have killed even after a widening - the 2026-07-31
+    # hot-sauce lesson from the exclude side. Both route to <unmatched> on the pre-2026-09-06 rules, so
+    # neither case can pass until the tokens land.
+    _Route 'R19 Kroger French Loaf reaches french-bread'  'Private Selection French Loaf Sliced' 'french-bread'
+    _Route 'R19 the unsliced loaf routes the same way'    'Private Selection French Loaf' 'french-bread'
+    _Route 'R19 Ortega taco-and-enchilada is taco sauce'  'Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz' 'taco-sauce'
+    _Route 'R19 ...and the 16 oz jar of the same'         'Ortega Original Thick and Smooth Mild Taco and Enchilada Chili Sauce, Kosher, 16 oz' 'taco-sauce'
+    # CLEAN TWINS for R19: the narrowed exclude must still refuse a REAL enchilada sauce, and the two names
+    # that already worked must not move. If the enchilada twin ever routes to taco-sauce the narrowing went
+    # too far and the board is pricing enchilada sauce as taco sauce.
+    _Route 'R19 twin: a real enchilada sauce is NOT taco sauce' 'Ortega Mild Red Enchilada Sauce 10 oz' 'enchilada-sauce'
+    _Route 'R19 twin: plain taco sauce unchanged'         'Great Value Taco Sauce Mild Gluten Free Paleo Keto Bottle, 16 oz' 'taco-sauce'
+    _Route 'R19 twin: plain french bread unchanged'       'Fresh & Finest French Bread' 'french-bread'
     # R7's quart case expected '<unmatched>' when it shipped, because quart bags had NO home - being
     # excluded from the gallon commodity meant falling off the board entirely. R14 below gives them one,
     # so the expectation moves from "nowhere" to "the quart commodity". The ASSERTION is unchanged and is

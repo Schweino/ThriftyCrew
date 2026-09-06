@@ -2027,6 +2027,55 @@ if ($sfg -and [int]$sfg.escalated_count -eq 1 -and [bool]$sfg.ledger_unreadable)
 else { Bad ('sale-fallback did not fail closed on an unreadable ownership ledger (escalated=' + [int]$sfg.escalated_count + ' flag=' + [bool]$sfg.ledger_unreadable + ') - a deleted or corrupt ledger would now mute every gap forever: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSf -Recurse -Force -ErrorAction SilentlyContinue
 
+# ---------------------------------------------------------------- (k3c) an OWNER must be a job that EXISTS
+# (2026-09-06, queue 2026-09-06-22b4dd). The 09-03 fix above gave ownership an EXPIRY but not PROOF:
+# ownership was asserted from a hardcoded store -> string map, so yukon-gold-potatoes|Family Fare was
+# silenced for three days as owned by 'daily-ff-selfheal' - a name that appears nowhere in this estate
+# except the map, its grace entry, the ledger and the alert body. No script, no scheduled task, no row in
+# expected-automations.json. Only the expiry ever escalated it.
+# THE OVER-BROAD FIX IS THE REAL HAZARD, so the clean twin below is the load-bearing case: role names are
+# NOT task names. 'weekly-browser-agent' is also absent from the registry, and a literal owner-string
+# lookup would collapse the two HEALTHY rows to NONE and page them too.
+$fxOwn = Join-Path $env:TEMP ('tafxown-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+New-Item -ItemType Directory -Force (Join-Path $fxOwn 'regular') | Out-Null
+# FROZEN registry: the five task names really registered on 2026-09-06. Written here, never read from the
+# live file - a fixture that re-reads the registry would go green the day someone registers a task called
+# daily-ff-selfheal, which is the one change that must make these cases FAIL.
+$ownReg = '{"windows_tasks":[{"name":"TC Grocery Ad Pulls 0700"},{"name":"TC Grocery Daily Capture 0800"},{"name":"TC Grocery Capture Watchdog 0930"},{"name":"TC Graph Nightly Matching"},{"name":"TC Recipe Harvest Crawl"}]}'
+$ownRegF = Join-Path $fxOwn 'expected-automations.json'
+Set-Content $ownRegF $ownReg -Encoding UTF8
+# FROZEN board: today's two real shapes side by side - the Family Fare gap with the phantom owner, and the
+# Hy-Vee gap with the real one. Both on sale, neither with an everyday twin in the pool below.
+$ownBoard = '{"week_of":"2026-09-06","comparison":[{"commodity":"Yukon Gold Potatoes","id":"yukon-gold-potatoes","unit":"lb","stores":[{"store":"Family Fare","type":"sale","per_unit":0.99,"item":"Yukon Gold Potatoes 5 Lb"}]},{"commodity":"Canned Pumpkin","id":"canned-pumpkin","unit":"oz","stores":[{"store":"Hy-Vee","type":"sale","per_unit":0.12,"item":"Hy-Vee Pumpkin 15 oz"}]}]}'
+Set-Content (Join-Path $fxOwn 'comparison-2026-09-06.json') $ownBoard -Encoding UTF8
+Set-Content (Join-Path $fxOwn 'regular\family-fare-regular-2026-09-06.json') '{"store":"Family Fare","deals":[{"name":"Our Family Whole Milk, 1 Gallon"}]}' -Encoding UTF8
+Set-Content (Join-Path $fxOwn 'regular\hyvee-regular-2026-09-06.json') '{"store":"Hy-Vee","deals":[{"name":"Hy-Vee Whole Milk, 1 Gallon"}]}' -Encoding UTF8
+$ownLedger = Join-Path $fxOwn 'sale-fallback-ownership.json'
+# MUST-FIRE: the phantom owner escalates on DAY 0. first_seen is the board's own date, so age is 0 - under
+# the old rule that is 0 of 3 days' grace and silent. It must be loud anyway, because the owner is fiction.
+'{"yukon-gold-potatoes|Family Fare":{"first_seen":"2026-09-06","owner":"daily-ff-selfheal"},"canned-pumpkin|Hy-Vee":{"first_seen":"2026-09-02","owner":"weekly-browser-agent"}}' | Set-Content $ownLedger -Encoding UTF8
+$r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxOwn, '-CompareFile', (Join-Path $fxOwn 'comparison-2026-09-06.json'), '-AutomationsFile', $ownRegF)
+$ofg = try { Read-JsonFile (Join-Path $fxOwn 'sale-fallback-gaps.json') } catch { $null }
+$ffRow = @($ofg.gaps | Where-Object { $_.commodity -eq 'yukon-gold-potatoes' })[0]
+$hvRow = @($ofg.gaps | Where-Object { $_.commodity -eq 'canned-pumpkin' })[0]
+if ($ffRow -and [bool]$ffRow.escalated -and [int]$ffRow.age_days -eq 0 -and [int]$ffRow.grace_days -eq 0 -and [string]$ffRow.owner -eq 'NONE' -and [string]$ffRow.claimed_owner -eq 'daily-ff-selfheal') { Ok 'sale-fallback MUST-FIRE: an owner naming no registered automation escalates on DAY 0, and the report still names who claimed it' }
+else { Bad ('sale-fallback still granted grace to an unregistered owner (owner=' + [string]$ffRow.owner + ' claimed=' + [string]$ffRow.claimed_owner + ' age=' + [int]$ffRow.age_days + ' grace=' + [int]$ffRow.grace_days + ' escalated=' + [bool]$ffRow.escalated + ') - a gap can again be silenced by a job that does not exist: ' + ($r.text -replace "`n", ' ')) }
+# CLEAN TWIN: the ROLE name is not a task name either, so this is the case that catches an over-broad fix.
+# canned-pumpkin|Hy-Vee is owned by weekly-browser-agent at age 4 of grace 16 and must stay SILENT.
+if ($hvRow -and -not [bool]$hvRow.escalated -and [string]$hvRow.owner -eq 'weekly-browser-agent' -and [int]$hvRow.grace_days -eq 16) { Ok 'sale-fallback CLEAN TWIN: a role mapped to a REGISTERED task keeps its grace, so validating owners did not page every owned gap' }
+else { Bad ('sale-fallback escalated a healthy owned gap (owner=' + [string]$hvRow.owner + ' grace=' + [int]$hvRow.grace_days + ' escalated=' + [bool]$hvRow.escalated + ') - the registry check is too broad and every owned gap now pages, which is worse than the assertion it replaced: ' + ($r.text -replace "`n", ' ')) }
+# ...and it says so out loud, naming the unregistered owner rather than silently downgrading it
+if ($r.text -match 'OWNER NOT REGISTERED' -and $r.text -match 'daily-ff-selfheal') { Ok 'sale-fallback names the unregistered owner on the run that demotes it' }
+else { Bad ('sale-fallback demoted an unregistered owner without saying which one - the next reader cannot tell why a gap escalated: ' + ($r.text -replace "`n", ' ')) }
+# MUST-FIRE: a registry it cannot read FAILS CLOSED, exactly like the ledger above. Reading it as
+# "everything is registered" would restore the silence this whole item exists to remove.
+'{ not json at all' | Set-Content $ownRegF -Encoding UTF8
+$r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxOwn, '-CompareFile', (Join-Path $fxOwn 'comparison-2026-09-06.json'), '-AutomationsFile', $ownRegF)
+$ofg = try { Read-JsonFile (Join-Path $fxOwn 'sale-fallback-gaps.json') } catch { $null }
+if ($ofg -and [int]$ofg.escalated_count -eq 2 -and $r.text -match 'AUTOMATION REGISTRY UNREADABLE') { Ok 'sale-fallback MUST-FIRE: an unreadable automation registry proves no owner, so every gap escalates and says why' }
+else { Bad ('sale-fallback did not fail closed on an unreadable automation registry (escalated=' + [int]$ofg.escalated_count + ') - a deleted or corrupt registry would silently re-grant grace to every owner: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxOwn -Recurse -Force -ErrorAction SilentlyContinue
+
 # ---------------------------------------------------------------- N+6. the verdict-driven record-low purge
 # 2026-07-30: purge-bad-lows.ps1 is a RATIO test (>=2x under the next-lowest week) and structurally cannot
 # reach a wrong-product low. Two reasons, both measured: the pork-loin filet crowning bacon was 1.02x under,
@@ -2449,6 +2498,58 @@ foreach ($e in $svEdges) {
 }
 if ($svEdgeBad -eq 0) { Ok 'sanity native: CLEAN TWIN - all three cent-rounding edges read as agreement and a real 20% gap still does not' }
 Remove-Item $fxSv -Recurse -Force -ErrorAction SilentlyContinue
+
+# ---- the week-over-week detector must not compare across a UNIT CHANGE ---------------------------
+# (2026-09-06, queue 2026-09-06-24ac66) THE FOUNDING ROW, frozen: aluminum-foil was priced per EACH
+# until the commodity was re-based to sq_ft. price-history carried week_of, cheapest_price,
+# cheapest_store and per_store - and never the unit - so on 2026-09-06 sanity-check compared 1.79 PER
+# EACH against 0.0624 PER SQUARE FOOT and paged 'cheapest moved down 97%'. Both numbers were right.
+# Until this change sanity-check read $root\price-history.json unconditionally, so NO fixture could
+# reach this branch at all - that is why -HistoryFile exists and why these cases can exist.
+$fxU = NewFxDir 'sanity-unit'
+$uHistPath = Join-Path $fxU 'price-history.json'
+function UWrite($boardJson, $histJson) {
+  Set-Content (Join-Path $fxU 'comparison-2026-09-06.json') $boardJson -Encoding UTF8
+  Set-Content $uHistPath $histJson -Encoding UTF8
+}
+function URun {
+  $null = RunPS 'sanity-check.ps1' @('-CompareFile', (Join-Path $fxU 'comparison-2026-09-06.json'), '-OutDir', $fxU, '-HistoryFile', $uHistPath)
+  $d = Read-JsonFile (Join-Path $fxU 'guards-2026-09-06.json'); return , @($d)
+}
+# MUST-FIRE: the real 2026-09-06 foil row. each -> sq_ft must produce 'unit-changed' and NEVER 'wow'.
+$uFoilBoard = '{"week_of":"2026-09-06","comparison":[{"commodity":"Aluminum Foil","id":"aluminum-foil","unit":"sq_ft","cheapest_price":0.0624,"stores":[{"store":"Hy-Vee","per_unit":0.0624,"unit":"sq_ft","item":"Hy-Vee aluminum foil, 50 or 75 sq. ft."},{"store":"Walmart","per_unit":0.0644,"unit":"sq_ft","item":"Great Value Aluminum Foil 75 sq ft Roll"}]}]}'
+UWrite $uFoilBoard '{"commodities":[{"id":"aluminum-foil","history":[{"week_of":"2026-08-10","cheapest_price":1.79,"cheapest_store":"Family Fare","unit":"each"}]}]}'
+$uJ = URun
+$uT = @($uJ | ForEach-Object { [string]$_.type })
+if (($uT -contains 'unit-changed') -and ($uT -notcontains 'wow')) { Ok 'sanity wow: MUST FIRE - aluminum-foil each -> sq_ft is reported as unit-changed and NOT as a 97% crash' }
+else { Bad ('sanity wow: a re-based commodity produced ' + ($uT -join ',') + ' - 1.79 per each is still being compared against 0.0624 per sq ft, which pages a human to verify a correct parse') }
+if (@($uJ | Where-Object { $_.type -eq 'unit-changed' })[0].detail -match 'each' -and @($uJ | Where-Object { $_.type -eq 'unit-changed' })[0].detail -match 'sq_ft') { Ok 'sanity wow: the unit-changed detail names BOTH units, so the reader can see what was re-based' }
+else { Bad 'sanity wow: unit-changed did not name the old and new units - the finding is unactionable without them' }
+# CLEAN TWIN 1: the real frozen-pizza row. SAME unit both weeks, so a 70% move must still page as wow.
+$uPizzaBoard = '{"week_of":"2026-09-06","comparison":[{"commodity":"Frozen Pizza","id":"frozen-pizza","unit":"each","cheapest_price":2.96,"stores":[{"store":"Walmart","per_unit":2.96,"unit":"each","item":"Tony''s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz"},{"store":"Sam''s Club","per_unit":2.97,"unit":"each","item":"Jack''s Original Thin Pepperoni Frozen Pizza 4 pk."}]}]}'
+UWrite $uPizzaBoard '{"commodities":[{"id":"frozen-pizza","history":[{"week_of":"2026-09-02","cheapest_price":1.745,"cheapest_store":"Baker''s","unit":"each"}]}]}'
+$uT = @(URun | ForEach-Object { [string]$_.type })
+if (($uT -contains 'wow') -and ($uT -notcontains 'unit-changed')) { Ok 'sanity wow: CLEAN TWIN - a real 70% move within the SAME unit still pages as wow (the fix did not mute the detector)' }
+else { Bad ('sanity wow: a genuine same-unit price move produced ' + ($uT -join ',') + ' - the unit test has silenced the week-over-week detector itself') }
+# CLEAN TWIN 2: the fl_oz -> floz SPELLING normalisation of 2026-08-30 renamed five commodities' unit.
+# Those must NOT read as re-basings, and with an unchanged price they must produce nothing at all.
+$uSpellBoard = '{"week_of":"2026-09-06","comparison":[{"commodity":"Avocado Oil","id":"avocado-oil","unit":"floz","cheapest_price":0.32,"stores":[{"store":"Walmart","per_unit":0.32,"unit":"floz","item":"Great Value Avocado Oil"},{"store":"Aldi","per_unit":0.35,"unit":"floz","item":"Simply Nature Avocado Oil"}]}]}'
+UWrite $uSpellBoard '{"commodities":[{"id":"avocado-oil","history":[{"week_of":"2026-09-02","cheapest_price":0.32,"cheapest_store":"Walmart","unit":"fl_oz"}]}]}'
+$uT = @(URun | ForEach-Object { [string]$_.type })
+if (($uT -notcontains 'unit-changed') -and ($uT -notcontains 'wow')) { Ok 'sanity wow: CLEAN TWIN - fl_oz and floz are the SAME unit, so the 2026-08-30 spelling rename produces no finding' }
+else { Bad ('sanity wow: the fl_oz -> floz spelling rename produced ' + ($uT -join ',') + ' - this fix would have manufactured five false alarms of its own') }
+# CLEAN TWIN 3: a LEGACY entry with no unit at all must NOT be silently blessed. The wow verdict stands
+# and says the prior unit was unrecorded, so a reader knows the comparison is unproven rather than proven.
+UWrite $uFoilBoard '{"commodities":[{"id":"aluminum-foil","history":[{"week_of":"2026-08-10","cheapest_price":1.79,"cheapest_store":"Family Fare"}]}]}'
+$uJ = URun
+$uW = @($uJ | Where-Object { $_.type -eq 'wow' })
+if ($uW.Count -eq 1 -and $uW[0].detail -match 'prior unit unrecorded') { Ok 'sanity wow: CLEAN TWIN - a legacy history entry with NO unit still pages, and says the prior unit was unrecorded rather than claiming agreement' }
+else { Bad ('sanity wow: a unit-less legacy history entry produced ' + (@($uJ | ForEach-Object { [string]$_.type }) -join ',') + ' - either the whole legacy history has gone quiet, or it is being reported as if the units were known') }
+Remove-Item $fxU -Recurse -Force -ErrorAction SilentlyContinue
+# and the WRITER must actually bank the unit, or every case above tests a field nothing produces
+$uhSrc = Get-Content (Join-Path $root 'update-history.ps1') -Raw
+if ($uhSrc -match '\$thisWeek\s*=\s*\[ordered\]@\{[^}]*unit\s*=') { Ok 'sanity wow: update-history banks the commodity unit into every new history entry (the reader above has something to read)' }
+else { Bad 'sanity wow: update-history no longer writes a unit into the history entry - the unit-changed detector will read every future week as legacy and never fire again' }
 
 # ---- and the PAGER: a verified outlier is recorded but not paged, while an UNKNOWN type still pages ----
 # Extracted and run, never transcribed. FAIL CLOSED is the property under test: the quiet list is an

@@ -124,7 +124,6 @@ payload; no verdict in it is never a pass, and it writes no file at all in that 
 ```json
 {
   "slug": "...",
-  "verdict": "pass" | "fail",
   "anchors": ["extraction", "live-page"],
   "findings": [
     { "check": "ingredient-coverage" | "scaling" | "method" | "title" | "credit" | "prose-numbers",
@@ -132,9 +131,16 @@ payload; no verdict in it is never a pass, and it writes no file at all in that 
       "detail": "what disagrees, with both values",
       "owner": "writer" | "extractor" | "mapper" }
   ],
+  "verdict": "pass" | "fail",
   "notes": "anything a reviewer should know, including which anchors you could not reach and why"
 }
 ```
+
+**`findings` comes BEFORE `verdict` on purpose. Do not reorder it.** The verdict is DERIVED from the
+findings - any blocking finding means `fail` - so emitting it first forces you to predict your own
+conclusion before you have enumerated the evidence for it, and the findings then get written to match
+a ruling already made. List what you found, then read your own list and rule on it. Key order is
+irrelevant to every parser downstream, so this costs nothing.
 
 `owner` routes the repair, so choose it deliberately: **extractor** when the transcription itself is wrong
 or incomplete, **mapper** when the ingredient identity or its grams are wrong, **writer** when the card,
