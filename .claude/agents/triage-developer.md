@@ -85,6 +85,19 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   (a .ps1, commodities.json, categories.json, commodity-search.json, an allowlist/config json, a SKILL,
   the plan). Regenerated pipeline output (out\*, board.json, feed, logs) is the pipeline's to commit, not
   yours. Confirm HEAD == origin/main.
+- **IF YOU REPUBLISHED THE BOARD, THE FEED IS YOURS TOO.** The line above holds on an ordinary day and is
+  wrong on the day you unblock a guards hard fail, because the pipeline's publish stage then staged INPUTS
+  ONLY: its log says `publish: staging INPUTS only - guards BLOCKED this board, so public\** and the recipe
+  files are NOT shipped`. So nobody shipped the feed, and republishing the board does not regenerate it.
+  The repair is ASYMMETRIC and this is how it failed on 2026-09-06: the board was republished twice and
+  went live at week_of 2026-09-06 while `feed.thriftycrew.com/smp-feed.json` still served week_of
+  2026-09-02, four days stale, and 583 recipe pages price off that feed. After any republish, re-run
+  `grocery\export-feed.ps1` against the CURRENT comparison (never commit the artifact the blocked run left
+  behind, which was built from the board you replaced), commit `public\smp-feed.json` and
+  `public\free-dinners.json` by explicit path, and read `week_of` and `generated` back off
+  **feed.thriftycrew.com** with a cache-busting query parameter. www 301s, and the Worker deploy lags the
+  push by roughly 90 seconds, so a fetch straight after the push can still serve `cf-cache-status: HIT` on
+  the old bytes. The board and the feed must name the SAME week before you report done.
 - A genuinely new failure CLASS gets recorded in `C:\Users\Owner\.claude\projects\C--Codex\memory\` per
   the memory conventions.
 

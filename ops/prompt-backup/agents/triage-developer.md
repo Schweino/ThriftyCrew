@@ -85,6 +85,19 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   (a .ps1, commodities.json, categories.json, commodity-search.json, an allowlist/config json, a SKILL,
   the plan). Regenerated pipeline output (out\*, board.json, feed, logs) is the pipeline's to commit, not
   yours. Confirm HEAD == origin/main.
+- **IF YOU REPUBLISHED THE BOARD, THE FEED IS YOURS TOO.** The line above holds on an ordinary day and is
+  wrong on the day you unblock a guards hard fail, because the pipeline's publish stage then staged INPUTS
+  ONLY: its log says `publish: staging INPUTS only - guards BLOCKED this board, so public\** and the recipe
+  files are NOT shipped`. So nobody shipped the feed, and republishing the board does not regenerate it.
+  The repair is ASYMMETRIC and this is how it failed on 2026-09-06: the board was republished twice and
+  went live at week_of 2026-09-06 while `feed.thriftycrew.com/smp-feed.json` still served week_of
+  2026-09-02, four days stale, and 583 recipe pages price off that feed. After any republish, re-run
+  `grocery\export-feed.ps1` against the CURRENT comparison (never commit the artifact the blocked run left
+  behind, which was built from the board you replaced), commit `public\smp-feed.json` and
+  `public\free-dinners.json` by explicit path, and read `week_of` and `generated` back off
+  **feed.thriftycrew.com** with a cache-busting query parameter. www 301s, and the Worker deploy lags the
+  push by roughly 90 seconds, so a fetch straight after the push can still serve `cf-cache-status: HIT` on
+  the old bytes. The board and the feed must name the SAME week before you report done.
 - A genuinely new failure CLASS gets recorded in `C:\Users\Owner\.claude\projects\C--Codex\memory\` per
   the memory conventions.
 
@@ -146,7 +159,15 @@ Report which tree you ran in. If they differ you are in a worktree, and all of t
 ## REPORTING A RESULT YOU DID NOT OBSERVE
 
 Read the EXIT CODE first and the tally second: a suite that silently ran a subset can still print a
-large pass count, and deleting a case can leave exit 0. A non-zero exit meaning COULD-NOT-EVALUATE is a blocked stage and never a
-pass: run-gates uses exit 3 for it, the recipe battery uses exit 2. Check which tool you ran. If you could not check something (no browser, no data, a wall) then say
+large pass count, and deleting a case can leave exit 0. But DO NOT DECODE THE NUMBER: a bare exit code has
+no fixed meaning across the tools in this estate. Three vocabularies are live at once - the guard-contract
+audits use 2 for a hard finding and 3 for could-not-evaluate, the PLAN v3 batteries use 2 for
+COULD-NOT-RUN, and run-gates uses 1 for failed and 3 for could-not-evaluate - so the same 2 means "found a
+real defect" in one tool and "never ran at all" in another. READ THE VERDICT LINE THE TOOL PRINTED, in
+words, and act on that. A run that printed no verdict line is COULD-NOT-EVALUATE whatever it exited with,
+and could-not-evaluate is never a pass. (Regime: this holds for scripts in THIS repo, where the
+guard-contract requires a <NAME>-COMPLETE marker as the last line and every gate prints a words-level
+verdict above it. A third-party tool has promised neither, so for one of those read its own documentation
+before believing any code but 0.) If you could not check something (no browser, no data, a wall) then say
 "could not verify" in those words. Never let a could-not-look settle a question, and never report a
 pass, a count or a live state you did not personally observe.
