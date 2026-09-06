@@ -129,6 +129,11 @@ $static = @(
   # root is ignored by default and nothing else in this estate can see a stray there - two artifacts sat
   # for days, and writing the detector turned up two more nobody had recorded (2026-09-06, backlog I2).
   @{ f = 'ops\audit-stray-root-artifacts.ps1'; n = 'no debris at the repo root - the one directory nothing else can see' }
+  # THE E1 SAFETY LAYER IS ONLY AS GOOD AS ITS CHOKEPOINT BEING THE ONLY DOOR. The staging gate and the
+  # journal hook Invoke-GhostApi; 17 mutating calls to Ghost, thriftycrew.com and the Cloudflare API go
+  # around it entirely, ten of them in .claude\skills\lesson. A ratchet, so the number can only fall
+  # (2026-09-06, backlog E1).
+  @{ f = 'ops\audit-write-seam.ps1';           n = 'no NEW irreversible write bypasses the E1 safety layer' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test

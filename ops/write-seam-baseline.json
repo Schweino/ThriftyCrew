@@ -1,0 +1,5 @@
+﻿{
+    "generated":  "2026-09-06T15:15:40",
+    "sites":  17,
+    "note":  "HIGH-WATER MARK for mutating calls to our own surfaces that bypass Invoke-GhostApi. This number may only go DOWN. A run above it is a NEW bypass and hard-fails."
+}

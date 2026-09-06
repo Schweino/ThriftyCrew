@@ -108,7 +108,7 @@ if(Test-Path $costedFile){
 }
 if(-not $carriageKnown){ Write-Output 'PUBLISH: WARNING - db\costed.json unreadable, so carriage could not be checked. Recost before publishing.' }
 
-$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $refusedHeld=@(); $orphaned=@()
+$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $refusedHeld=@(); $orphaned=@(); $staged=@()
 foreach($slug in $Slugs){
   # THE HOLD, checked first and not overridable by -Force. -Force exists to overwrite a live body that
   # drifted; it has nothing to say about whether a page should be live at all, and letting it end a
@@ -266,17 +266,35 @@ foreach($slug in $Slugs){
       og_title=$spec.name
       twitter_title=$spec.name
     }
+    # THE RESPONSE IS CAPTURED NOW, WHERE IT USED TO BE | Out-Null (2026-09-06, backlog E1). Nothing
+    # reads its CONTENT - the two calls below still care only about throwing or not. It is captured
+    # solely so the staging marker can be seen.
+    $wrote = $null
     try {
       if($existing){
         $postObj.updated_at = $existing.updated_at
         $bodyJson = @{ posts=@($postObj) } | ConvertTo-Json -Depth 14
-        Invoke-GhostApi -Method PUT -Uri "$apiUrl/ghost/api/admin/posts/$($existing.id)/" -Headers $hdr -Body ([Text.Encoding]::UTF8.GetBytes($bodyJson)) -TimeoutSec 60 | Out-Null
+        $wrote = Invoke-GhostApi -Method PUT -Uri "$apiUrl/ghost/api/admin/posts/$($existing.id)/" -Headers $hdr -Body ([Text.Encoding]::UTF8.GetBytes($bodyJson)) -TimeoutSec 60
       } else {
         $bodyJson = @{ posts=@($postObj) } | ConvertTo-Json -Depth 14
-        Invoke-GhostApi -Method POST -Uri "$apiUrl/ghost/api/admin/posts/" -Headers $hdr -Body ([Text.Encoding]::UTF8.GetBytes($bodyJson)) -TimeoutSec 60 | Out-Null
+        $wrote = Invoke-GhostApi -Method POST -Uri "$apiUrl/ghost/api/admin/posts/" -Headers $hdr -Body ([Text.Encoding]::UTF8.GetBytes($bodyJson)) -TimeoutSec 60
       }
     } catch {
       $failed += $slug; Write-Output ("PUBLISH FAIL  $slug :: " + $_.Exception.Message); continue
+    }
+    # E1 STAGING. With TC_STAGE_WRITES armed the write was QUEUED, not sent, so the live page is
+    # unchanged ON PURPOSE. Without this the verify below fetches that unchanged page, fails the title
+    # check and reports VERIFY FAIL - a false failure on a run that did exactly what was asked.
+    #
+    # A STAGED SLUG IS NEITHER $ok NOR $failed, AND ABOVE ALL IT MUST NOT STAMP $pubHashes. Stamping
+    # would write "these local bytes are live" about bytes that were never sent, and the next real
+    # publish would skip them as UNCHANGED. That is precisely the -VerifyOnly defect documented forty
+    # lines below, which cost 14 of 15 rebuilt cards on 2026-09-01: a watermark may only be written by
+    # the code path that did the work. `continue` here is what keeps that true.
+    if($wrote -and $wrote.PSObject.Properties['__tc_staged'] -and $wrote.__tc_staged){
+      $staged += $slug
+      Write-Output ("STAGED  $slug :: queued for review, NOT sent. The live page is unchanged on purpose; run ops\review-staged.ps1 to apply or discard.")
+      continue
     }
   }
   # live verify (public page: title present; paid gate = content NOT fully public)
@@ -308,6 +326,12 @@ foreach($slug in $Slugs){
 # persist the change-gate/resume journal (only verified-good slugs advanced their hash above)
 if(-not $VerifyOnly){ Save-PubHashes }
 Write-Output ("published+verified OK: $ok / $($Slugs.Count)   (skipped-unchanged: $skipped)")
+# STAGED IS ITS OWN OUTCOME AND IS REPORTED, NEVER FOLDED INTO OK OR FAILED. A run whose writes were all
+# queued published nothing, and a summary that did not say so would read as a clean publish.
+if($staged){
+  Write-Output ("STAGED (" + $staged.Count + " slug(s) queued by the E1 staging gate and NOT sent): " + ($staged -join ', '))
+  Write-Output ("  Nothing reached the live site. Run ops\review-staged.ps1 to apply or discard, then re-run this publish.")
+}
 # Orphans are named in the summary, not just logged per-slug: a stale card is a cleanup job somebody has
 # to see, and 333 unpublished recipes is what it cost the one time it was only a thrown exception.
 if($orphaned){
@@ -334,5 +358,8 @@ if($refusedCreate){
 # OK" line, which this script prints unconditionally, and then stamped EVERY dirty slug clean - including
 # the 21 it had just refused. The refusal would have fired exactly once and then those specs would have
 # been propagate-clean forever: the silent skip reborn one layer up, with three rejected recipes in it.
-$unstampable = @(@($failed) + @($refusedCreate) | Sort-Object -Unique)
+# STAGED SLUGS ARE UNSTAMPABLE. They did not publish, so a caller must withhold their stamps exactly as
+# it does for a failure or a refused create - otherwise propagate marks them clean and they are never
+# published at all, which is the silent-skip failure this line already exists to prevent.
+$unstampable = @(@($failed) + @($refusedCreate) + @($staged) | Sort-Object -Unique)
 Write-Output ("PUBLISH-UNSTAMPABLE: " + ($unstampable -join ','))
