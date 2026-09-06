@@ -54,30 +54,11 @@ function Read-TcQueue {
   return ,([pscustomobject]@{ Entries = @($ok); Bad = @($bad) })
 }
 
-function Get-TcQueueConcerns {
-  <# The whole argument for staging over an undo log lives in this function: it looks at the SET.
-     An undo log sees one call at a time and cannot ask any of these questions.
-
-     CALLERS MUST ASSIGN THE RESULT BEFORE WRAPPING IT. `,@($c)` is required so a SINGLE concern comes
-     back as an array rather than unrolling to a bare string - but the same comma makes `@(callsite)`
-     read an EMPTY result as ONE element (the empty array), so an inline
-     `@(Get-TcQueueConcerns ...).Count` returns 1 when there are no concerns at all. Measured here
-     2026-09-06: `$r = Get-TcQueueConcerns ...; @($r).Count` gives 0 and `@(Get-TcQueueConcerns ...).Count`
-     gives 1, same input. That is [[ps-json-array-collapse]] in a third guise, and in the live path it
-     would have printed a CONCERNS header over an empty list and exited 2 on a clean queue. #>
-  param([object[]]$Entries)
-  $c = @()
-  $mutating = @($Entries | Where-Object { Test-TcMutatingMethod $_.method })
-  $dupes = @($mutating | Group-Object -Property uri | Where-Object { $_.Count -gt 1 })
-  foreach ($d in $dupes) {
-    $c += ("{0} calls target the same uri ({1}) - the later one wins and the earlier is wasted, or they disagree" -f $d.Count, $d.Name)
-  }
-  $deletes = @($mutating | Where-Object { $_.method -eq 'DELETE' })
-  if ($deletes.Count) { $c += ("{0} DELETE call(s) queued - a delete has no restore in this design, only a re-create" -f $deletes.Count) }
-  $callers = @($Entries | ForEach-Object { $_.caller } | Where-Object { $_ } | Sort-Object -Unique)
-  if ($callers.Count -gt 1) { $c += ("{0} different scripts contributed to this queue - confirm they were meant to run together" -f $callers.Count) }
-  return ,@($c)
-}
+# Get-TcQueueConcerns LIVES IN lib\ghost-lib.ps1, which this file already dot-sources.
+# It moved there 2026-09-06 when ops\drain-staged.ps1 needed it too: that script cannot
+# dot-source THIS one, because review-staged declares a param() block and PS 5.1 runs a
+# dot-sourced param block in the caller's scope (lib\guard-contract.ps1 documents the
+# damage). Two callers, one implementation - do not add a local copy back.
 
 # ------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {

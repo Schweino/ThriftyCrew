@@ -28,6 +28,7 @@ param(
   [string]$Journal = '',
   [string]$Id = '',
   [switch]$WhatIf,
+  [switch]$Force,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -59,6 +60,52 @@ function Get-TcInverse {
     return ([pscustomobject]@{ Action = 'DELETE'; Method = 'DELETE'; Body = $null; Why = 'the GET before the write returned 404, so the resource did not exist and the inverse of creating it is deleting it' })
   }
   return ([pscustomobject]@{ Action = 'REFUSE'; Method = ''; Body = $null; Why = ("before_state is '" + $st + "', so the prior state was never read. There is no inverse and no safe default - a PUT here would overwrite live content with a guess.") })
+}
+
+function Get-TcUpdatedAt {
+  <# Ghost returns a post as { posts: [ { ... updated_at ... } ] }. Reach for that, and return '' when
+     it is not there rather than throwing - a resource shape with no updated_at is a real case and it is
+     handled by the CALLER, which refuses, not by pretending it matched. #>
+  param($Doc)
+  if ($null -eq $Doc) { return '' }
+  try {
+    if ($Doc.PSObject.Properties['posts']) {
+      $p = @($Doc.posts)
+      if ($p.Count -and $p[0].PSObject.Properties['updated_at']) { return [string]$p[0].updated_at }
+    }
+    if ($Doc.PSObject.Properties['updated_at']) { return [string]$Doc.updated_at }
+  } catch { return '' }
+  return ''
+}
+
+function Test-TcRevertSafe {
+  <# THE CHECK THIS DESIGN SHIPPED WITHOUT, and the reason it could not be armed.
+
+     A before-image is captured at WRITE time. If anything changes the resource between then and the
+     revert - another publish, the free-dinner rotation, a human in the Ghost admin UI - replaying that
+     image silently overwrites the newer content. On a live paid site that is the undo log causing the
+     incident it exists to fix.
+
+     Ghost's own concurrency model is the answer and the publish chain already uses it: every PUT sends
+     the updated_at it read, and Ghost rejects a stale one. So compare the before-image's updated_at
+     against the resource NOW.
+
+     THREE OUTCOMES, and the third is the one that matters:
+       unchanged   -> safe, replay it
+       moved       -> REFUSE. Something wrote after the image was taken.
+       unknowable  -> REFUSE. Neither side carries an updated_at, so "unchanged" cannot be established,
+                      and a could-not-look must never settle the question. -Force exists for a human
+                      who has looked and decided; nothing else may override it. #>
+  param($Before, $Now)
+  $b = Get-TcUpdatedAt $Before
+  $n = Get-TcUpdatedAt $Now
+  if (-not $b -or -not $n) {
+    return ([pscustomobject]@{ Safe = $false; Reason = 'cannot establish that the resource is unchanged - no updated_at on the before-image and/or on the live copy, so replaying it would be a guess about what is currently there' })
+  }
+  if ($b -ne $n) {
+    return ([pscustomobject]@{ Safe = $false; Reason = ("the resource MOVED after the before-image was captured (image " + $b + ", live " + $n + ") - replaying would overwrite whatever wrote it") })
+  }
+  return ([pscustomobject]@{ Safe = $true; Reason = 'unchanged since the before-image was captured' })
 }
 
 function Read-TcJournal {
@@ -118,11 +165,29 @@ if ($SelfTest) {
     T 'MUST FIRE  the journal records NO headers, so no credential reaches disk' (-not ($raw -match 'Authorization')) 'a header block was journalled'
   } finally { if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Force } }
 
+  # --- THE STALENESS CHECK. Without this the journal can cause the incident it exists to fix.
+  $img = [pscustomobject]@{ posts = @([pscustomobject]@{ updated_at = '2026-09-06T10:00:00.000Z' }) }
+  $same = [pscustomobject]@{ posts = @([pscustomobject]@{ updated_at = '2026-09-06T10:00:00.000Z' }) }
+  $moved = [pscustomobject]@{ posts = @([pscustomobject]@{ updated_at = '2026-09-06T11:30:00.000Z' }) }
+
+  $s1 = Test-TcRevertSafe -Before $img -Now $same
+  T 'CLEAN TWIN an unchanged resource is safe to revert' ($s1.Safe -eq $true) $s1.Reason
+  $s2 = Test-TcRevertSafe -Before $img -Now $moved
+  T 'MUST FIRE  a resource that MOVED after the image was captured REFUSES - replaying would overwrite whatever wrote it' `
+    ($s2.Safe -eq $false -and $s2.Reason -like '*MOVED*') $s2.Reason
+  $s3 = Test-TcRevertSafe -Before $img -Now $null
+  T 'MUST FIRE  a live copy that could not be read REFUSES rather than assuming unchanged' ($s3.Safe -eq $false) $s3.Reason
+  $s4 = Test-TcRevertSafe -Before ([pscustomobject]@{ posts = @([pscustomobject]@{ title = 'x' }) }) -Now $same
+  T 'MUST FIRE  a before-image with NO updated_at REFUSES - unchanged cannot be established, and a could-not-look must not settle it' `
+    ($s4.Safe -eq $false -and $s4.Reason -like '*cannot establish*') $s4.Reason
+  T 'the reader reaches updated_at through Ghost''s posts[] envelope' `
+    ((Get-TcUpdatedAt $img) -eq '2026-09-06T10:00:00.000Z') (Get-TcUpdatedAt $img)
+
   $j2 = Read-TcJournal -Lines @('{"method":"PUT"}', 'not json', '')
   T 'MUST FIRE  an unparseable journal line is REPORTED, not skipped' ($j2.Bad.Count -eq 1) ("Bad=" + $j2.Bad.Count)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: the journal gate, off-by-default, all four before-state inversions including both refusals, round-trip with the before-image, credential redaction, and a half-parsing journal'
+  Write-Output 'SELF-TEST PASS: the journal gate, off-by-default, all four before-state inversions, the STALENESS check with its three outcomes, round-trip with the before-image, credential redaction, and a half-parsing journal'
   exit 0
 }
 
@@ -183,6 +248,23 @@ if ($WhatIf) {
 }
 # The journal stores no credential, so the token is minted here.
 $h = @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key (Get-GhostKey -Root $repo))); 'Content-Type' = 'application/json' }
+
+# STALENESS GATE. Read the resource as it is NOW and refuse if it moved after the before-image was
+# taken. Skipped for a DELETE, which does not replay an image and cannot overwrite newer content.
+if ($inv.Method -ne 'DELETE') {
+  $nowDoc = $null
+  try { $nowDoc = Invoke-GhostApi -Method 'GET' -Uri $entry.uri -Headers $h -MaxRetries 1 } catch { $nowDoc = $null }
+  $safe = Test-TcRevertSafe -Before $entry.before -Now $nowDoc
+  if (-not $safe.Safe) {
+    if (-not $Force) {
+      Write-Output ("revert-ghost-write: REFUSED - {0}." -f $safe.Reason)
+      Write-Output '  Nothing was sent. Re-run with -Force ONLY if you have looked at the live page and decided the before-image is still the right content.'
+      Write-GuardComplete -Name 'revert-ghost-write' -Summary 'refused=stale'
+      exit 2
+    }
+    Write-Output ("revert-ghost-write: -Force OVERRIDE - {0}. Sending anyway on your say-so." -f $safe.Reason)
+  }
+}
 # The revert must not itself be journalled into the same file - that would make the journal a record of
 # undos as well as writes, and a second revert of the revert would restore the mistake.
 $savedJ = $env:TC_WRITE_JOURNAL

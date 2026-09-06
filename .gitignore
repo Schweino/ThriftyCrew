@@ -442,3 +442,10 @@ meal-prep/db/fdc-api-key.txt
 # SOURCES and are tracked; this is the ~2.5 MB single-file render Claude Code publishes from
 # them, regenerated on every publish and never edited by hand.
 design/canvas-*/thrifty-crew-redesign.html
+
+# THE E1 RUNTIME FILES. The journal carries a before-image of every Ghost write - i.e. the live content
+# of paid posts - and the staging queue carries requests that have not been sent. Neither belongs in a
+# repo: one is a copy of the product, the other is a spool. Both are per-machine runtime state, which is
+# also why the two switches are env vars rather than files in the tree (2026-09-06, backlog E1).
+/ops/ghost-journal.jsonl
+/ops/staged-writes.jsonl

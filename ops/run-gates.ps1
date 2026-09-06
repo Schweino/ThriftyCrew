@@ -163,6 +163,10 @@ $static = @(
   # .claude\skills are tracked, so `checked` is non-zero, and the hardcoded user-scope paths simply
   # skip when absent.
   @{ f = 'ops\audit-prompt-backup.ps1';        n = 'the only versioned copy of the agent prompts is current, and the scopes agree' }
+  # The agent that drains the staging queue BEFORE a publish. Its verdict reader is deliberately
+  # asymmetric - anything that is not an explicit GO holds - so this self-test is what stands between an
+  # unreadable reviewer reply and a live page (2026-09-06, backlog E1).
+  @{ f = 'ops\drain-staged.ps1';               n = 'anything that is not an explicit GO holds the queue' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test
