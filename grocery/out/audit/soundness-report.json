@@ -1,16 +1,23 @@
 ﻿{
-    "generated":  "2026-09-05 14:40",
+    "generated":  "2026-09-05 18:56",
     "drift_vs_engine":  0,
     "drift_products":  [
 
                        ],
     "moved":  [
-
+                  {
+                      "name":  "Earth Grown Butter Chickpea 10.05 OZ",
+                      "from":  "butter",
+                      "to":  "chickpeas"
+                  }
               ],
     "dropped":  [
-
+                    {
+                        "name":  "The Bacon Jam Classic Bacon Jam 9oz",
+                        "from":  "bacon"
+                    }
                 ],
     "new_contested":  [
-                          "Sweet Cherry Brats (4 Ct.)"
+
                       ]
 }

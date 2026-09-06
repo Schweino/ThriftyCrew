@@ -9,12 +9,12 @@
                   "log":  "--- run-log: capture-run-daily | 2026-09-05T08:00:02 | pid 48132 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-05.log"
               },
     "ad":  {
-               "date":  "2026-09-05",
-               "pid":  49624,
-               "started":  "2026-09-05T07:00:02",
-               "updated":  "2026-09-05T07:01:32",
-               "stage":  "complete",
-               "exit_code":  0,
-               "log":  "--- run-log: capture-run-ad | 2026-09-05T07:00:02 | pid 49624 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-05.log"
+               "date":  "2026-09-06",
+               "pid":  45448,
+               "started":  "2026-09-06T07:00:02",
+               "updated":  "2026-09-06T07:02:37",
+               "stage":  "publishing",
+               "exit_code":  null,
+               "log":  "--- run-log: capture-run-ad | 2026-09-06T07:00:02 | pid 45448 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-06.log"
            }
 }

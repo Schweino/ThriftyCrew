@@ -228,20 +228,6 @@
                               "id":  "blueberries",
                               "commodity":  "Blueberries",
                               "unit":  "oz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.3563,
-                              "size":  "1 pt",
-                              "item":  "Fresh Blueberries",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "blueberries",
-                              "commodity":  "Blueberries",
-                              "unit":  "oz",
                               "store":  "Hy-Vee",
                               "per_unit":  0.4455,
                               "size":  "1 pt",
@@ -453,9 +439,9 @@
                               "commodity":  "Disinfectant Spray",
                               "unit":  "oz",
                               "store":  "Baker\u0027s",
-                              "per_unit":  0.1559,
-                              "size":  "1 pk 32 fl oz",
-                              "item":  "Scrubbing Bubbles Disinfectant Bathroom Grime Fighter Spray, Petal Paradise, 32 fl oz",
+                              "per_unit":  0.1996,
+                              "size":  "26 fl oz",
+                              "item":  "Seventh Generation Lemongrass Citrus Disinfecting Spray",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  true,
@@ -830,20 +816,6 @@
                               "id":  "stain-remover",
                               "commodity":  "Laundry Stain Remover",
                               "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.14,
-                              "size":  "82.071 oz",
-                              "item":  "Shout Advanced Action Gel Laundry Stain Remover, 22 oz. Trigger \u0026 60 oz. refill",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "stain-remover",
-                              "commodity":  "Laundry Stain Remover",
-                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.1432,
                               "size":  "60 oz",
@@ -901,7 +873,7 @@
                               "commodity":  "Miracle Whip (Salad Dressing Spread)",
                               "unit":  "oz",
                               "store":  "Family Fare",
-                              "per_unit":  0.1667,
+                              "per_unit":  0.1997,
                               "size":  "30 oz",
                               "item":  "Miracle Whip Dressing 30 Fl Oz",
                               "kind":  "weight",
@@ -1359,7 +1331,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-02.json",
+    "compare_file":  "comparison-2026-09-05.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -1395,9 +1367,9 @@
                                                      "commodity":  "Disinfectant Spray",
                                                      "unit":  "oz",
                                                      "store":  "Baker\u0027s",
-                                                     "per_unit":  0.1559,
-                                                     "size":  "1 pk 32 fl oz",
-                                                     "item":  "Scrubbing Bubbles Disinfectant Bathroom Grime Fighter Spray, Petal Paradise, 32 fl oz",
+                                                     "per_unit":  0.1996,
+                                                     "size":  "26 fl oz",
+                                                     "item":  "Seventh Generation Lemongrass Citrus Disinfecting Spray",
                                                      "kind":  "volume",
                                                      "row_kind":  "weight",
                                                      "holds_crown":  true,
@@ -1654,20 +1626,6 @@
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
                                                      "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "blueberries",
-                                                     "commodity":  "Blueberries",
-                                                     "unit":  "oz",
-                                                     "store":  "Family Fare",
-                                                     "per_unit":  0.3563,
-                                                     "size":  "1 pt",
-                                                     "item":  "Fresh Blueberries",
-                                                     "kind":  "volume",
-                                                     "row_kind":  "weight",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "weight",
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
@@ -2077,20 +2035,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "stain-remover",
-                                                     "commodity":  "Laundry Stain Remover",
-                                                     "unit":  "floz",
-                                                     "store":  "Sam\u0027s Club",
-                                                     "per_unit":  0.14,
-                                                     "size":  "82.071 oz",
-                                                     "item":  "Shout Advanced Action Gel Laundry Stain Remover, 22 oz. Trigger \u0026 60 oz. refill",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "lemonade",
                                                      "commodity":  "Lemonade",
                                                      "unit":  "floz",
@@ -2455,6 +2399,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "soda",
+                         "commodity":  "Soda (12-pack)",
+                         "unit":  "floz",
+                         "store":  "Fareway",
+                         "per_unit":  0.1395,
+                         "median":  0.0197,
+                         "mult":  7.08,
+                         "size":  "20 fl oz",
+                         "item":  "Coca-Cola Soda Bottle",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "razors",
                          "commodity":  "Razors (disposable)",
                          "unit":  "each",
@@ -2533,19 +2490,6 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "soda",
-                         "commodity":  "Soda (12-pack)",
-                         "unit":  "floz",
-                         "store":  "Fareway",
-                         "per_unit":  0.1395,
-                         "median":  0.0312,
-                         "mult":  4.47,
-                         "size":  "20 fl oz",
-                         "item":  "Coca-Cola Soda Bottle",
-                         "peers_packed":  "2 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -2573,10 +2517,23 @@
                      }
                  ],
     "kind_mismatch_crown":  [
-
+                                {
+                                    "id":  "disinfectant-spray",
+                                    "commodity":  "Disinfectant Spray",
+                                    "unit":  "oz",
+                                    "store":  "Baker\u0027s",
+                                    "per_unit":  0.1996,
+                                    "size":  "26 fl oz",
+                                    "item":  "Seventh Generation Lemongrass Citrus Disinfecting Spray",
+                                    "kind":  "volume",
+                                    "row_kind":  "weight",
+                                    "holds_crown":  true,
+                                    "unit_kind":  "weight",
+                                    "agrees_with_engine_divisor":  false
+                                }
                             ],
     "ratio":  4,
-    "generated":  "2026-09-05T14:36:42",
+    "generated":  "2026-09-06T05:43:01",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",
@@ -2793,7 +2750,7 @@
                                                        "commodity":  "Miracle Whip (Salad Dressing Spread)",
                                                        "unit":  "oz",
                                                        "store":  "Family Fare",
-                                                       "per_unit":  0.1667,
+                                                       "per_unit":  0.1997,
                                                        "size":  "30 oz",
                                                        "item":  "Miracle Whip Dressing 30 Fl Oz",
                                                        "kind":  "weight",

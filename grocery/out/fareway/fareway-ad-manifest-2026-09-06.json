@@ -1,0 +1,41 @@
+﻿{
+    "generated":  "2026-09-06",
+    "store":  "Fareway",
+    "ad_group":  "OmahaGroup (043)",
+    "weekly":  {
+                   "from":  "2026-09-06",
+                   "to":  "2026-09-12",
+                   "pages":  24,
+                   "dir":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\fareway\\weekly",
+                   "blocked":  false,
+                   "reason":  "OK (24 pages)",
+                   "ad_pages":  24,
+                   "page_gaps":  [
+
+                                 ],
+                   "on_disk":  24,
+                   "on_disk_from":  "2026-09-06",
+                   "on_disk_to":  "2026-09-12",
+                   "install_failed":  false,
+                   "to_raw":  "09122026",
+                   "to_repaired":  false
+               },
+    "monthly":  {
+                    "from":  "2026-08-30",
+                    "to":  "2026-09-26",
+                    "pages":  42,
+                    "dir":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\fareway\\monthly",
+                    "blocked":  false,
+                    "reason":  "OK (42 pages)",
+                    "ad_pages":  42,
+                    "page_gaps":  [
+
+                                  ],
+                    "on_disk":  42,
+                    "on_disk_from":  "2026-08-30",
+                    "on_disk_to":  "2026-09-26",
+                    "install_failed":  false,
+                    "to_raw":  "09262026",
+                    "to_repaired":  false
+                }
+}

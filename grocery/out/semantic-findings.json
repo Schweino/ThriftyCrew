@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-05 08:19",
-    "board":  "comparison-2026-09-02.json",
-    "sidecar_generated":  "2026-09-05 08:19:14",
+    "generated":  "2026-09-05 21:32",
+    "board":  "comparison-2026-09-05.json",
+    "sidecar_generated":  "2026-09-05 21:32:54",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,25 +9,16 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3143,
-                     "corpus":  41264,
-                     "rule_invisible":  7685
+                     "board_pairs":  3144,
+                     "corpus":  41130,
+                     "rule_invisible":  7690
                  },
     "identity_count":  0,
-    "coverage_count":  1,
+    "coverage_count":  0,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "shower-cleaner",
-                         "commodity":  "Shower / Bathroom Cleaner",
-                         "store":  "Walmart",
-                         "product":  "Great Value Cleaner with Bleach, 32 fl oz",
-                         "cos":  0.6421,
-                         "score":  0.941207,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     }
+
                  ]
 }
