@@ -111,6 +111,95 @@ four-layer stack is format -> business rules -> self-prompted semantic -> human 
 confidence routed to review rather than rejection**. Applies to the ingredient queue and the
 capture readers.
 
+### E19 - No matcher in the estate has a scored test set `OPEN`
+*Source: Recommender Systems: Evaluation and Metrics (queue 2, course 1).* Every retrieval-shaped
+component here - the commodity matcher, the dedup pipeline, `sidecar/`'s recall-then-rerank pair,
+`knowledge-search` - is changed on the strength of "it fixed the case I was looking at". None has a
+held-out set of query-to-correct-answer pairs scored the same way before and after, so no change has
+ever been shown to help in general rather than on the one row that prompted it. Well-defined and
+cheap: a frozen file of pairs, `recall@k` for a recall stage and `MRR` for a rerank stage, rerun as
+a script. **The two-stage point is the load-bearing one:** one end-to-end number cannot say whether
+the right answer was never retrieved or was retrieved and buried, and those need opposite fixes.
+Method in `rag-craft/evaluating-retrieval.md` sections 12 and 18. Sits directly under E4, which
+proposes a retrieval change with nothing to score it with.
+
+### E20 - Match rates are reported without their abstention rate `OPEN`
+*Source: same course, section 14 of the file above.* A matcher that returns `UNUSABLE`, `PENDING`
+or nothing on the rows it finds hard, and is then scored only on the rows it answered, **outscores
+one that attempts everything** - and neither number looks wrong. Any accuracy or match-rate figure
+computed over non-null output has this in it. The fix is small: report coverage beside every such
+figure, or substitute a documented fallback for the declines and score that too. Worth an audit of
+where the estate already quotes a bare rate, starting with the pricing pre-pass and the ingredient
+mapper. Cheap, and it changes how existing numbers should be read rather than requiring new code.
+
+### E21 - Nothing in the estate states how far a number has to move to count `OPEN`
+*Source: Improving your statistical inferences (queue 2, course 2).* Every "did this change help"
+read here is a comparison of two single numbers with no interval, no case count and no record of how
+many variants were tried: a seed sweep, a threshold tune, a detector tweak, a prompt or agent
+revision, a match-rate before-and-after. **The maximum of `k` noisy draws is optimistic by
+construction even when all `k` settings are identical**, so the winner of a sweep is inflated by an
+amount that grows with the sweep, and a change reverted because one seed of five disagreed was
+probably reverted on noise: at 80% power, four runs on a real effect disagree with each other about
+59% of the time. Three fixes, in ascending cost, none needing new infrastructure:
+1. **Score both versions on the same frozen cases and compare paired, per case.** The largest free
+   power gain available, and it also removes case selection as a source of difference.
+2. **Write the acceptance threshold before the run** - the smallest move worth acting on, in the
+   units of the metric. Currently always implicit and therefore always zero.
+3. **Hold out a slice the sweep never sees** and quote the winner's score on that, which is the only
+   clean answer to (1) above and is the same third-split fix `rag-craft` already prescribes for
+   parameter sweeps.
+Method in `experiment-craft` (`errors-and-inflation.md` 4 and 5, `effect-size-and-power.md` 9 and
+11). Sits directly on top of E19: a scored test set with no threshold for "it moved" answers half
+the question. Cheapest first step is (2), which is a convention rather than code.
+
+### E22 - Rare-target rules are judged on fixtures with a 50% base rate `OPEN`
+*Source: same course, and it sharpens `green-fixture-is-not-production-coverage` rather than
+repeating it.* **Precision is not a property of a detector; it is a property of a detector and the
+rate at which the thing it detects actually occurs.** A rule with 80% recall and a 13% false-alarm
+rate, run against a population where the target is present in 3% of rows, is right **18%** of the
+time it fires - with nothing mis-scored and no rows dropped. Every `-SelfTest` in the gate drives one
+must-fire fixture and its clean twin: a 50% base rate by construction, which measures recall
+honestly and overstates precision enormously. The consequences are estate-specific and concrete: a
+detector moved to a rarer corpus loses precision with **no code change and no metric change on the
+old corpus**, and comparing two detectors' precision across two different corpora compares the
+corpora. Two things worth doing: state the live prevalence beside any precision or hit-rate figure we
+quote, and for the rules that scan a whole board for a rare defect, track the **confirmed-hit rate on
+live output** rather than the fixture verdict. Detail in
+`rag-craft/evaluating-retrieval.md` 11.1 and `experiment-craft/errors-and-inflation.md` 3. Does not
+weaken any gate; it changes how the gate's own numbers should be read.
+
+### E23 - Our test sets are built out of successes `OPEN`
+*Source: same course, section 12, and it is publication bias wearing our clothes.* Fixtures and
+golden files here are assembled from bugs we found and cases we already handle correctly. Cases that
+failed silently were never written down, so they are absent from the evidence and **their absence is
+invisible in the score** - the literature's version of this at least leaves a detectable cliff in the
+p-value distribution, and ours leaves nothing. Same root as the "one failing query per step" habit
+E19 flags. The mitigation is a work habit rather than a build: **record the case at the moment it
+fails**, including the ones fixed by hand and moved on from, so the corpus is not exclusively
+successes. `known-wrong.json` and `research-worklist.json` are already the right shape for this and
+are populated by rulings rather than by failures. Small, ongoing, and it compounds.
+
+### E24 - Every A/B here logs counts, and counts cannot be un-aggregated `OPEN`
+*Source: `evaluate-llms-test-and-prove-significance` (course 18), and it is a correction of that
+course rather than a lesson from it.* When we compare two versions of anything on the same case set
+- two matcher builds over the identical board, two prompt variants over one frozen record set, a
+detector before and after a threshold change - the natural log is a pair of totals: `old: 50 wrong,
+new: 38 wrong`. **That summary has already destroyed the comparison's evidence.** The right test for
+two systems on one shared set is McNemar's, which needs the *discordant* counts: how many cases the
+new build **fixed**, and how many it **broke**. `50 vs 38` pins down only `fixed - broke = 12`, and
+that is compatible with 50 fixed and 38 broken (88 verdicts churned, split nearly even, weak and
+unactionable) and with 12 fixed and 0 broken (overwhelming) alike. Same headline, opposite
+decisions, and nothing recovers the difference after the fact. It also silently discards the free power that running both arms on one
+frozen set was supposed to buy - see `experiment-craft/effect-size-and-power.md` section 9.
+
+**The fix is a logging convention, not a statistics build**: any run that scores two arms over one
+case set writes **one row per case per arm, keyed by case id**, and the totals are derived from that
+file rather than being the file. Cheap to adopt going forward, impossible to backfill, which is the
+argument for doing it before the next comparison rather than after. Overlaps E21 (nothing states how
+far a number must move) and E20: those two say what to compare against, this one says keep the
+evidence that lets you compare at all. **Worth pointing at `sidecar/` and the recipe-dedup RESCORE
+lane first** - both already re-score a fixed corpus, so both are one column away from compliant.
+
 ### E6 - Fact Check List before we publish `OPEN`
 *Source: Prompt Engineering (course 4).* Ask the generator for the fundamental claims that would
 undermine its own output, then diff that list against the prose. Cheap pre-publish check, close in
@@ -181,7 +270,12 @@ plus a hierarchical context walk is a cheaper shape for the estate's per-directo
 the current front-loading.
 
 **Course 8 supplied the actual mechanism: `.claude/rules/`, one topic per file, with YAML front
-matter carrying a `paths` glob so the file loads ONLY when Claude touches a matching file.** That is
+matter carrying a `paths` glob so the file loads ONLY when Claude touches a matching file.**
+
+> **Verify the mechanism before building on it.** That account is **single-sourced from one course**
+> and nothing on this machine corroborates it - no `.claude/rules/` directory, no `paths` key on any
+> file. Registered as C3 in `~/.claude/skills/course/CLAIMS-REGISTER.md`. First step of this item is
+> a two-file test proving a rule file actually loads conditionally, not a restructure. That is
 conditional loading, which we had written down nowhere - `claude-code-craft` had been posing the
 attention-budget problem since course 2 without an answer to it.
 
@@ -211,6 +305,41 @@ checking from a terminal gives the wrong answer. No plugin is installed on this 
 durable half was the regime note, which is now in `claude-code-automation` 8.3 as a three-row table;
 the rule to carry is the conclusion (never let a plugin hook invoke a bare interpreter name), not the
 WSL story that only holds on a different machine.
+
+### E19 - A fresh checkout starts two gates red, over bytes rather than drift `OPEN`
+*Found 2026-09-06 while working E7; not course-derived.* Every worktree, clone and CI checkout of this
+repo begins with `run-gates` at 2 failed, and neither failure is a defect in the thing it names:
+
+    meal-prep\engine\golden-test.ps1   "the FROZEN inputs changed - the fixture, not the engine, moved"
+    grocery\audit-ghost-drift.ps1       budget-tracker-tool.html, 28,965 bytes committed vs 29,358
+
+Measured: `db\label-folds.json` is 383 bytes in the main checkout and 390 in a fresh worktree over the
+same 8 lines. That is 7 CR bytes, not an edit. `git diff` shows nothing
+([[crlf-flip-is-invisible-in-git-diff]]).
+
+**The mechanism, and it is working as designed.** `core.autocrlf` is true and `.gitattributes` carries
+`* text=auto`, so the repository stores LF and a checkout writes CRLF. The main checkout's files are LF
+only because they were written LF and never re-checked-out. A fresh one gets CRLF and the two
+byte-comparing checks go red.
+
+**A bulk `git add --renormalize` is already ruled out**, in `.gitattributes`' own header: it would touch
+hundreds of files in one commit and collide with the daily bot's rebase. Files normalize as they are
+touched instead. So the fix belongs in the two CHECKS, not in the tree.
+
+**The fix has a precedent in this repo, shipped the same day.** `ops\audit-prompt-backup.ps1` had the
+identical defect - it hashed raw on-disk bytes to compare two paths git deliberately holds identical
+only after line-ending normalization, and reported six STALE BACKUP findings that were all CR noise.
+It now hashes what git hashes. `golden-test` and `ghost-drift` need the same treatment.
+
+**Why it matters more than two red lines.** `run-gates` is the change-time gate and a worktree is where
+spawned agents work. A gate that is red on arrival in every worktree is a gate people learn to read
+past, which is the exact failure `run-gates`' own header gives as its reason for excluding
+`test-auditors`. It also means a genuine golden-test failure in a worktree is indistinguishable from
+the standing noise.
+
+**Not fixed here** because changing what a GOLDEN test compares is a semantic decision - byte-exactness
+is arguably the point of a frozen fixture - and it deserves a ruling rather than a late edit at the end
+of a long run.
 
 ### E17 - Skill invocation flags are a matrix, and ours are all set the same `OPEN` `LOW`
 *Source: Building Apps and AI Agents (course 9).* Invocation control is two independent flags, not

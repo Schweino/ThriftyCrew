@@ -44,9 +44,9 @@ Written down as instructed, worked after section B.
 
 | # | What | Why it matters | State |
 |---|---|---|---|
-| C1 | `ops/prompt-backup/` was stale for 15 files | it is the backup, and it did not have the current prompts | WIP |
-| C2 | Fresh-checkout CRLF: `golden-test` + `ghost-drift` red in ANY worktree over bytes | every worktree gate starts 2 red; trains people to ignore red | TODO - open as **E19** |
-| C3 | `~/.claude/agents/` duplicates `.claude/agents/`; drifted during E2, re-synced by hand | no gate watches it; silent divergence | TODO - open as **E20** |
+| C1 | `ops/prompt-backup/` was stale for 15 files | it is the backup, and it did not have the current prompts | `DONE 182a4152` |
+| C2 | Fresh-checkout CRLF: 2 gates red in ANY worktree over bytes | diagnosed, precedent named; fixing it is a semantic ruling | `OPENED as E19` |
+| C3 | Scope drift WAS already detected - but `audit-prompt-backup.ps1` was not in run-gates | a check that works and is not run is not protection | `DONE` - registered |
 | C4 | I2b: 3 of 4 stray-root writers unfound (7 MB scaler TSV, collapsed capture-sink path, probe-candidates) | the gate catches recurrence, not the cause | TODO |
 | C5 | Mojibake writer in `grocery/triage-queue.json` unfound | if `audit-json-encoding` reddens again it is live | TODO |
 | C6 | E15 behavioural check owed on next real invocation of each of the three skills | structural check shipped; behaviour unobserved | TODO - carry |

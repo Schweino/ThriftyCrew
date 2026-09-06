@@ -154,6 +154,15 @@ $static = @(
   # $script:CapturePlaceholderCount, which ZERO of its callers read. A drop nobody reads is a clean
   # bill (2026-09-06, backlog E5).
   @{ f = 'ops\audit-capture-ingest-reporting.ps1'; n = 'a row dropped at ingest is reported by whoever read it' }
+  # THE CHECK EXISTED AND NOTHING RAN IT (2026-09-06, worklist C3). It detects SCOPE DRIFT - the
+  # user-scope copy of an agent differing from the project-scope one, so which prompt runs depends on
+  # the session's working directory - and it detects a stale backup of the only versioned copy of the
+  # prompts. Both fired this session and both were found by hand. audit-twin-drift's own header records
+  # the same lesson from the other side: a lockstep assertion caught a real drift correctly and sat red
+  # for weeks because nothing ran that suite. Safe on a bare checkout: .claude\agents and
+  # .claude\skills are tracked, so `checked` is non-zero, and the hardcoded user-scope paths simply
+  # skip when absent.
+  @{ f = 'ops\audit-prompt-backup.ps1';        n = 'the only versioned copy of the agent prompts is current, and the scopes agree' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test
