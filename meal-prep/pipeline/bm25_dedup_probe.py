@@ -38,6 +38,7 @@ from collections import Counter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MP = os.path.normpath(os.path.join(HERE, ".."))
+REPO = os.path.normpath(os.path.join(MP, ".."))
 
 STOP = set("""a an the and or of for with without in on to from by at as is are was were be been
 this that these those it its into over under more most less least new fresh easy quick best good
@@ -87,6 +88,131 @@ class BM25(object):
                 continue
             s += self.idf(w) * (f * (self.k1 + 1)) / (f + self.k1 * (1 - self.b + self.b * dl / (self.avg or 1)))
         return s
+
+
+def head_to_head():
+    r"""BM25 versus COSINE on the same labelled pairs, over the same population.
+
+    THIS IS THE MEASUREMENT THAT DECIDES THE BUILD, and the recall number alone could not. A lexical
+    index earns its place beside a vector one by finding what the vector one MISSES - not by
+    independently finding what it already catches. Ranking BM25 well on pairs cosine also ranks well
+    argues for nothing.
+
+    NO MODEL IS LOADED AND THE GPU IS NOT TOUCHED. sidecar\out\harvest-embed-cache holds the bge-m3
+    vectors the harvest lane already computed, L2-normalised, so cosine is a dot product. That matters
+    beyond speed: harvest-crawl.ps1 carries three MUST-FIRE assertions that it never reaches for the
+    card, because section 4.4 gives the GPU to the nightly chain.
+
+    Run it under the SIDECAR interpreter (it has numpy); the pinned one does not.
+    """
+    import numpy as np                                        # noqa: PLC0415
+
+    cache_idx = os.path.join(REPO, "sidecar", "out", "harvest-embed-cache", "BAAI_bge-m3.index.json")
+    cache_vec = os.path.join(REPO, "sidecar", "out", "harvest-embed-cache", "BAAI_bge-m3.npy")
+    if not (os.path.isfile(cache_idx) and os.path.isfile(cache_vec)):
+        print("HEAD-TO-HEAD COULD NOT EVALUATE: no embedding cache at %s" % cache_idx)
+        print("Nothing was compared, so nothing is proven either way.")
+        return 3
+
+    keys = rj(cache_idx)
+    vecs = np.load(cache_vec)
+    at = {}
+    for i, k in enumerate(keys):
+        at.setdefault(k, i)
+
+    pool = rj(os.path.join(MP, "db", "candidate-pool.json"))
+    cands = pool.get("candidates") or []
+
+    def cache_key(c):
+        """The harvest lane's signature text. Reconstructed, and VERIFIED by hit rate below rather than
+        assumed - a key format that silently stopped matching would leave this reporting on two pairs
+        and calling it a result."""
+        prot = ""
+        s = c.get("signature")
+        if isinstance(s, dict) and s.get("protein"):
+            prot = str(s["protein"])
+        return "dish: %s. protein: %s" % (c.get("name") or "", prot)
+
+    by_slug = {}
+    for c in cands:
+        if c.get("slug"):
+            by_slug.setdefault(c["slug"], c)
+
+    twin = {}
+    try:
+        ledger = rj(os.path.join(MP, "db", "considered-dishes.json"))
+        for r in (ledger.get("dishes") or []):
+            if r.get("verdict") == "rejected-dupe" and r.get("dupe_of"):
+                twin[r.get("slug")] = list(r["dupe_of"])
+    except Exception:                                          # noqa: BLE001
+        pass
+
+    pairs = []
+    for c in cands:
+        if c.get("status") != "ruled:rejected-dupe":
+            continue
+        tw = c.get("dupe_of") or twin.get(c.get("slug")) or []
+        for s in tw:
+            b = by_slug.get(s)
+            if b is None:
+                continue
+            ka, kb = cache_key(c), cache_key(b)
+            if ka in at and kb in at and at[ka] != at[kb]:
+                pairs.append((c, b, at[ka], at[kb]))
+                break
+
+    print("cached vectors      : %d" % len(keys))
+    print("labelled pairs BOTH sides of which are in the cache: %d" % len(pairs))
+    if not pairs:
+        print("")
+        print("HEAD-TO-HEAD COULD NOT EVALUATE: no labelled pair has both sides in the embedding cache.")
+        print("That is a KEY-FORMAT or COVERAGE failure, not evidence about either index.")
+        return 3
+
+    # BM25 over the same population the cosine ranking sees, so the two ranks are comparable.
+    texts = [toks(k) for k in keys]
+    bm = BM25(texts)
+
+    rows = []
+    for c, b, ia, ib in pairs:
+        q = texts[ia]
+        cos = vecs @ vecs[ia]
+        cos[ia] = -2.0
+        cr = int((cos > cos[ib]).sum()) + 1
+        bs = np.array([bm.score(q, i) for i in range(len(texts))])
+        bs[ia] = -1.0
+        br = int((bs > bs[ib]).sum()) + 1
+        rows.append((c.get("slug"), b.get("slug"), cr, br))
+
+    n = len(rows)
+    def hits(idx, k):
+        return sum(1 for r in rows if r[idx] <= k)
+
+    print("")
+    print("rank of the TRUE twin, same %d pairs, same population:" % n)
+    print("             cosine      BM25")
+    for k in (1, 5, 10, 25):
+        print("  recall@%-3d %4d       %4d" % (k, hits(2, k), hits(3, k)))
+    print("  MRR       %6.3f     %6.3f"
+          % (sum(1.0 / r[2] for r in rows) / n, sum(1.0 / r[3] for r in rows) / n))
+
+    # THE QUESTION. A pair cosine buries and BM25 surfaces is the case FOR a hybrid; the reverse is the
+    # case against. Both are counted, because reporting only the flattering direction is how a
+    # measurement becomes an argument.
+    bm_saves = [r for r in rows if r[2] > 10 and r[3] <= 10]
+    cos_saves = [r for r in rows if r[3] > 10 and r[2] <= 10]
+    both_miss = [r for r in rows if r[2] > 10 and r[3] > 10]
+    print("")
+    print("  BM25 finds in top-10 what cosine does NOT : %d   <- the case FOR a hybrid" % len(bm_saves))
+    print("  cosine finds what BM25 does not           : %d" % len(cos_saves))
+    print("  neither finds in top-10                   : %d" % len(both_miss))
+    for s in bm_saves[:8]:
+        print("      %-44s cosine #%-5d BM25 #%d" % (s[0][:44], s[2], s[3]))
+    print("")
+    print("READ IT THIS WAY. The left column is what the estate has today. A hybrid is worth building")
+    print("only if the first count is meaningfully above zero - that is BM25 catching duplicates the")
+    print("current evidence buries. If it is zero, BM25 adds a second index and no new information.")
+    return 0
 
 
 def main():
@@ -226,4 +352,6 @@ def selftest():
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
+    if "--head-to-head" in sys.argv:
+        sys.exit(head_to_head())
     sys.exit(main())
