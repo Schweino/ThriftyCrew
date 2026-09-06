@@ -728,6 +728,24 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # export-feed reads the comparison, the recipe board, sale-windows, product-urls and recipe-costs -
       # all final by this point - and reads NOTHING compute-v2 writes, so there is no cycle to create.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed exported' } catch { Log ('export-feed threw: ' + $_.Exception.Message) }
+      # WEEK PARITY, CHECKED RIGHT HERE because this is the line whose ABSENCE caused the incident
+      # (2026-09-06, backlog E1). On 2026-09-06 guards hard-failed at 08:15, the publish stage shipped
+      # inputs only, triage unblocked the guard and republished the BOARD twice - and never re-ran the
+      # line above. The board went live at week_of 2026-09-06 while the feed still served 2026-09-02,
+      # and 583 recipe pages price off that feed. The board page and the recipe pages quoted different
+      # weeks for four and a half hours and nothing said so.
+      #
+      # ALERTS, DOES NOT BLOCK. A stale feed is a real defect and it is not a reason to withhold a
+      # correct board - withholding would leave the recipe pages on the OLD week too, which is the same
+      # divergence with fewer people looking at it. So it pages and lets the board ship.
+      try {
+        $fwp = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-feed-week-parity.ps1') 2>&1
+        $fwpRc = $LASTEXITCODE
+        foreach ($l in @($fwp)) { Log ('feed-week-parity: ' + [string]$l) }
+        if ($fwpRc -eq 2) {
+          try { Send-Alert -Subject "Grocery: BOARD AND FEED ON DIFFERENT WEEKS - $asofS" -Body (@($fwp) -join "`n") | Out-Null } catch {}
+        }
+      } catch { Log ('feed-week-parity threw: ' + $_.Exception.Message) }
       # compute-v2 now SKIPS bad recipes and exits 1 with the list (was: throw -> whole manifest stale,
       # and a child exit-1 does NOT raise in this parent, so the old code logged success falsely). Check
       # the exit code explicitly and alert on any skipped recipe.

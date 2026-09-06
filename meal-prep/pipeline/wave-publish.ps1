@@ -906,6 +906,53 @@ try {
   Write-Output ("  E4  NOTE the publish-attempt stamp could not be written ({0}) - a retry after a failure here will re-audit" -f $_.Exception.Message)
 }
 Write-Output ("  E4  create authority: {0} wave slug(s) may be created; any other new slug is refused" -f $slugs.Count)
+
+# ---- E4a. THE PRE-PUBLISH REVIEW (2026-09-06, backlog E1, ruled by Brad) --------------------------
+# E1's complaint is that post-publish-reviewer runs AFTER the irreversible step. This runs the same
+# reviewer on the same work, before it, by making one pass with the staging gate armed: every Ghost
+# write queues instead of going out, and the reviewer is handed exactly what would have shipped -
+# including the set-level concerns no per-call check can see.
+#
+# THE REVIEW PASS IS A REHEARSAL, NOT THE DELIVERY. On GO the queue is DISCARDED and propagate runs
+# again for real. That is deliberate: publish.ps1 stamps published-hashes and verifies the live page as
+# it publishes, and applying from a queue would separate the write from its own verification and its
+# own watermark - which is the -VerifyOnly defect that cost 14 of 15 cards on 2026-09-01. A staged run
+# reports every wave slug as UNSTAMPABLE precisely because nothing shipped, so the real pass must be
+# the one that stamps.
+#
+# Skipped entirely under -DryRun (nothing would be sent anyway) and when the drainer is absent.
+$drainer = Join-Path $repo 'ops\drain-staged.ps1'
+if (-not $DryRun -and (Test-Path $drainer)) {
+  $rvQueue = Join-Path $RunDir ("waves\wave-{0}.prepublish-queue.jsonl" -f $Wave)
+  if (Test-Path $rvQueue) { Remove-Item $rvQueue -Force }
+  $savedStage = $env:TC_STAGE_WRITES
+  # The JOURNAL is un-armed for the rehearsal too: a call that never goes out has no inverse, and
+  # journalling one would fill the log with before-images of writes that did not happen.
+  $savedJournal = $env:TC_WRITE_JOURNAL
+  try {
+    $env:TC_STAGE_WRITES = $rvQueue
+    $env:TC_WRITE_JOURNAL = $null
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1
+  } finally {
+    $env:TC_STAGE_WRITES = $savedStage
+    $env:TC_WRITE_JOURNAL = $savedJournal
+  }
+  if (-not (Test-Path $rvQueue)) {
+    Write-Output '  E4a pre-publish review    nothing queued - no Ghost write was attempted, so there is nothing to review'
+  } else {
+    $rvOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $drainer -Queue $rvQueue -WhatIf 2>&1
+    $rvRc = $LASTEXITCODE
+    @($rvOut | ForEach-Object { Write-Output ("    " + [string]$_) })
+    if ($rvRc -ne 0) {
+      # HELD or could-not-run. The queue file is left on disk beside the wave's other artifacts so the
+      # exact set that was refused is readable afterwards.
+      Fail ("the pre-publish reviewer did not return GO (exit {0}) - NOTHING was published. The reviewed set is at {1}" -f $rvRc, $rvQueue)
+    }
+    Remove-Item $rvQueue -Force -ErrorAction SilentlyContinue
+    Write-Output '  E4a pre-publish review    GO'
+  }
+}
+
 $prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1
 $propRc = $LASTEXITCODE
 @($prop | ForEach-Object { Write-Output ("    " + [string]$_) })
