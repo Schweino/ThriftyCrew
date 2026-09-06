@@ -47,6 +47,75 @@ function Get-GhostLexical([Parameter(Mandatory)][string]$Html) {
 # a 4xx other than 429 (a 404/401/400 is not transient) - those rethrow immediately so callers can still
 # distinguish "genuinely new post" (404) from "transient error" (retried, then thrown). The delays are fixed
 # (no Get-Random - that is unavailable in workflow scripts and needless here) using the attempt index as jitter.
+# ---- E1 v2: UNDO LOG. The call goes out as it always did, and its inverse is captured first. --------
+# OFF BY DEFAULT. Nothing changes until $env:TC_WRITE_JOURNAL names a journal file, so all 29 callers
+# keep their current behaviour until something deliberately arms this.
+#
+# WHY HERE AND NOWHERE ELSE. A PUT to the Ghost admin API is the only genuinely irreversible thing this
+# estate does; every named LOCAL target is tracked, so git is already the undo log there
+# (design\E1-safety-layer-brief.md section 1).
+#
+# THE BET, AND IT IS THE OPPOSITE OF THE e1-staging BRANCH: an agent that can undo its own mistake
+# recovers in seconds, and one that cannot needs a human who may be asleep. Nothing about control flow
+# changes - the call really executes and the caller gets the real response - so this can be switched on
+# for a chain that round-trips a response, which staging cannot.
+#
+# WHAT IT BUYS AND WHAT IT DOES NOT: it RECOVERS, it does not PREVENT. The wrong page was live for the
+# interval, and on a live paid site a reader may have seen it. There is no honest way to make an undo
+# log fix that, and this file does not pretend otherwise.
+#
+# NO param() BLOCK IS ADDED TO THIS FILE, DELIBERATELY - lib\guard-contract.ps1 documents what happens
+# when a dot-sourced file declares one (PS 5.1 runs it in the CALLER's scope, silently disarming their
+# switches). The self-test lives in ops\revert-ghost-write.ps1.
+
+function Test-TcMutatingMethod {
+  <# GET is a read: it needs no before-image and gets no journal entry. #>
+  param([string]$Method)
+  return (@('PUT', 'POST', 'DELETE', 'PATCH') -contains ([string]$Method).ToUpper())
+}
+
+function Get-TcWriteJournal {
+  <# ENV VAR, not a sentinel file: the ~07:00 bot commits the whole tree, and a committed sentinel
+     would arm journalling for everybody. #>
+  if ($env:TC_WRITE_JOURNAL) { return $env:TC_WRITE_JOURNAL }
+  return $null
+}
+
+function New-TcJournalEntry {
+  <# Build one journal record. Pure and separate from the I/O so the self-test can drive it.
+
+     `before` IS THE WHOLE VALUE OF THIS DESIGN AND IT IS ALSO ITS WEAK POINT. It is the state the
+     resource was in immediately before the call, fetched with a GET. Three ways it can be absent, and
+     they are NOT interchangeable - a reverter that treats them alike will cheerfully "restore" a
+     resource to nothing:
+       created  - the GET 404'd, so the resource did not exist and the inverse is a DELETE, not a PUT
+       unknown  - the GET failed for some other reason, so the inverse is UNKNOWN and must not be run
+       n/a      - a method with no meaningful inverse
+     Compare with the e1-staging branch, which never needs a before-image because nothing has happened
+     yet - it pays a review pass instead of a GET, and it cannot be wrong about prior state. #>
+  param([string]$Method, [string]$Uri, $Body, [string]$BeforeState, $Before)
+  return ([ordered]@{
+    id      = ([guid]::NewGuid().ToString('N').Substring(0, 12))
+    at      = (Get-Date).ToString('o')
+    method  = ([string]$Method).ToUpper()
+    uri     = $Uri
+    # NO HEADERS. The Authorization header carries a live admin JWT and a journal is a file that sits
+    # on disk far longer than the five minutes that token lives.
+    request = $(if ($null -eq $Body) { $null } elseif ($Body -is [byte[]]) { "(byte[] length $($Body.Length))" } else { [string]$Body })
+    before_state = $BeforeState
+    before  = $Before
+    caller  = $(try { (Get-PSCallStack | Where-Object { $_.ScriptName -and $_.ScriptName -notlike '*ghost-lib.ps1' } | Select-Object -Last 1).ScriptName } catch { '' })
+  })
+}
+
+function Write-TcJournalEntry {
+  param([string]$Journal, $Entry)
+  $dir = Split-Path $Journal -Parent
+  if ($dir -and -not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+  # JSON Lines, and the entry is written BEFORE the call goes out. If the process dies mid-call the
+  # journal still names what was attempted, which is the case an after-the-fact log cannot cover.
+  [IO.File]::AppendAllText($Journal, (ConvertTo-Json $Entry -Depth 12 -Compress) + "`n", (New-Object System.Text.UTF8Encoding($false)))
+}
 function Invoke-GhostApi {
   param(
     [string]$Method = 'GET',
@@ -58,6 +127,25 @@ function Invoke-GhostApi {
     [switch]$Web,                  # Invoke-WebRequest (raw response) instead of Invoke-RestMethod (parsed)
     [switch]$BasicParsing          # only meaningful with -Web
   )
+  # E1 v2 JOURNAL. Capture the inverse BEFORE the call goes out, then execute exactly as before.
+  $__tcJ = Get-TcWriteJournal
+  if ($__tcJ -and (Test-TcMutatingMethod $Method)) {
+    $__before = $null; $__state = 'unknown'
+    try {
+      # A GET is not mutating, so this re-entry cannot recurse into this branch.
+      $__before = Invoke-GhostApi -Method 'GET' -Uri $Uri -Headers $Headers -TimeoutSec $TimeoutSec -MaxRetries 1
+      $__state = 'captured'
+    } catch {
+      $__code = 0
+      $__r = $_.Exception.Response
+      if ($__r -and ($__r.PSObject.Properties['StatusCode'])) { try { $__code = [int]$__r.StatusCode } catch { $__code = 0 } }
+      # A 404 is not a failure to read prior state, it IS the prior state: the resource did not exist,
+      # so the inverse of this call is a DELETE and never a PUT. Conflating the two is how an undo log
+      # restores a resource to nothing.
+      if ($__code -eq 404) { $__state = 'created' } else { $__state = 'unknown' }
+    }
+    Write-TcJournalEntry -Journal $__tcJ -Entry (New-TcJournalEntry -Method $Method -Uri $Uri -Body $Body -BeforeState $__state -Before $__before)
+  }
   $attempt = 0
   while ($true) {
     try {
