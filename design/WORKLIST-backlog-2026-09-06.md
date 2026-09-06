@@ -28,8 +28,8 @@ State: `TODO` · `WIP` · `DONE <sha>` · `BLOCKED-ON-BRAD` · `WONTFIX`
 |---|---|---|---|
 | B1 | **E1 rest** | R2 seam (nothing to hook - measured); `publish.ps1` staging-aware; write-seam ratchet | `DONE b30d4e54` |
 | B2 | **E6** | Fact Check List before publish | `DONE a90b2081` |
-| B3 | **E3b** | Explicit `tools:` on all four + `ops/audit-agent-tools.ps1` gate | WIP |
-| B4 | **E14** | Split root CLAUDE.md into path-scoped `.claude/rules/` | TODO |
+| B3 | **E3b** | Explicit `tools:` on all four + `ops/audit-agent-tools.ps1` gate | `DONE 9c42bd8e` |
+| B4 | **E14** | 5 scoped `.claude/rules/` files (CLAUDE.md left alone - 61 lines, already right-sized) | WIP |
 | B5 | **E13** | Briefs name memory PATHS, not restated content | TODO |
 | B6 | **E12** | Document-as-implementation, scoped past `audit-twin-drift` | TODO |
 | B7 | **E9** | Model per call, not per agent. Verify `claude-opus-4-8` is real first. | TODO |
