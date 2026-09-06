@@ -99,7 +99,7 @@ twenty, and eighteen of those are two complete and overlapping browser sets.
 
 ## Accuracy
 
-### E4 - The dedup pipeline is embeddings-only `OPEN`
+### E4 - The dedup pipeline is embeddings-only `MEASURED - DO NOT BUILD`
 *Source: Building with the Claude API (course 2), RAG module.* Vector search fails **quietly** on
 rare exact identifiers: it returns plausible irrelevance rather than nothing. Commodity ids, SKUs
 and slugs are exactly that shape. A BM25 lexical index alongside the embedding index, merged with
@@ -117,6 +117,51 @@ a second index. It is recorded as a direction, not a measurement: nothing here w
 `CLAIMS-REGISTER` C18 names the cheap check, which is to embed a handful of the estate's own
 opposite pairs and read the scores against a same-meaning control. Do that before trusting any
 embedding-only verdict about whether two products are the same product.
+
+**MEASURED 2026-09-06, and the answer is do not build it.** `meal-prep/pipeline/bm25_dedup_probe.py
+--head-to-head` scores BM25 and cosine on the same 31 labelled duplicate pairs over the same 14,448
+rows, using the bge-m3 vectors the harvest lane already cached, so no model loads and the card is
+never touched. Ranking the true twin:
+
+| | cosine | BM25 |
+|---|---|---|
+| recall@10 | 20 / 31 | 15 / 31 |
+| MRR | 0.336 | 0.230 |
+| finds in top-10 what the other buries | 3 | **1** |
+
+**One pair.** A lexical index earns its place beside a vector one only by finding what the vector
+one misses, and it misses in the same direction. The reciprocal-rank-fusion build is not worth its
+second index.
+
+Two further levers were measured on the same frozen pairs, because the first result raises the
+question of what *would* move the **11 pairs both indexes bury**:
+
+- **Index the whole signature.** The harvest lane computes `{protein, method, sauce_family, starch}`
+  and embeds only `dish: <name>. protein: <p>` - three of the four fields are computed and thrown
+  away. Adding them: MRR 0.230 to 0.284, 3 pairs rescued into top-10 and **2 lost out of it**. Net
+  one pair.
+- **Block on the exact signature tuple** - a dictionary lookup rather than a ranking. Ceiling is 3
+  of the 11 buried pairs, at a cost of blocks running to 2,394 rows, which is 2.8M pairs to judge.
+
+**Read all three against E21, which this item is now a worked instance of.** Three variants were
+tried and the best of them moves one pair out of 31. No acceptance threshold was written before the
+run, the sample is 31 cases, and the maximum of three noisy draws is optimistic by construction - so
+"+1" is not evidence that anything helped. The defensible conclusion is the negative one: **no cheap
+retrieval change moves these pairs**, and that holds across a lexical index, a richer key and a
+structural block.
+
+**Why they are buried is visible in the data and is not a retrieval problem.** Several of the 11
+have *identical* signature tuples and genuinely different names - "Cowboy Chicken Recipe" against
+"Tex Mex Baked Chicken", both `chicken/bake/tomato/bean`, ranked #252 by cosine. They are the same
+dish only under a judgement that no index over these strings encodes. Others carry *contradictory*
+signature fields despite a human ruling them duplicates (`bake` against `braised`, `null` against
+`cheese`), which is a signature-quality defect and the more useful thread to pull.
+
+Two incidental data defects found while looking: one pool name carries an unescaped `&amp;`, and the
+signature's own fields disagree on rows a human called identical.
+
+**This discharges the E19 concern for this one component:** the 31 pairs and the scoring script are
+now a frozen, re-runnable test set, which is what E19 asks every retrieval-shaped component to have.
 
 ### E5 - Validate at source `OPEN`
 *Source: MCP (course 3).* A direct criticism of any tooling that hands a model raw rows to sift. The
