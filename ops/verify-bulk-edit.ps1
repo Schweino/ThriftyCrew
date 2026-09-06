@@ -129,6 +129,38 @@ function Get-DependencyGaps {
       }
     }
   }
+  # A DOT-SOURCE BELOW THE CODE THAT USES IT IS NOT WIRING EITHER (defect 6, found 2026-09-06).
+  # PowerShell executes top-level statements IN ORDER, so a file that reads its inputs at line 59 and
+  # dot-sources the reader at line 100 throws CommandNotFoundException at startup - on every run, not
+  # on some edge case. That is what shipped in parse-compute.ps1 and five siblings: the sweep that
+  # converted the call sites appended the dot-source down beside the FUNCTIONS, and the depth fix that
+  # followed corrected where it POINTED without moving where it SAT. Presence passed. Resolvability
+  # passed. Only order was ever wrong, and nothing in this file was looking at order - so the estate's
+  # macro cross-check ran `unavailable` for a day with two must-fires reading as a settled verdict.
+  # A call inside a FUNCTION BODY is exempt: the body does not run until something calls it, which is
+  # after the load. So the test is brace depth 0, which is the only depth that runs at load time.
+  $depth = 0; $dsLine = -1; $firstTop = -1; $i = 0
+  foreach ($l in ($Text -split "`r?`n")) {
+    $i++
+    $t = $l.TrimStart()
+    # STRINGS FIRST, THEN THE COMMENT: a `#` inside a quoted string is not a comment, and stripping
+    # comments first would eat the rest of a line like `-replace '#',''` and unbalance the count.
+    $bare = $l -replace "'[^']*'", '' -replace '"[^"]*"', '' -replace '#.*$', ''
+    if (-not $t.StartsWith('#')) {
+      # THE DOT-SOURCE IS FOUND ON THE RAW LINE (its path IS a quoted string), THE CALL ON THE STRIPPED
+      # ONE. The estate's own walk-up preamble throws a message containing the words "Read-JsonFile is
+      # unavailable", one line above the dot-source it guards - so matching a call on the raw line calls
+      # every correctly wired walk-up file a defect, which is a check nobody would keep.
+      if ($dsLine -lt 0 -and ($t.StartsWith('. ') -or $t -match '\{\s*\.\s') -and $l -match [regex]::Escape($LibLeaf)) { $dsLine = $i }
+      if ($depth -eq 0 -and $firstTop -lt 0 -and
+          $bare -match ("(?<![\w-])" + [regex]::Escape($FnName) + "\s") -and $bare -notmatch 'function\s') { $firstTop = $i }
+    }
+    $depth += ([regex]::Matches($bare, '\{').Count - [regex]::Matches($bare, '\}').Count)
+    if ($depth -lt 0) { $depth = 0 }
+  }
+  if ($dsLine -gt 0 -and $firstTop -gt 0 -and $firstTop -lt $dsLine) {
+    return ("calls $FnName at top level on line $firstTop but does not dot-source $LibLeaf until line $dsLine - it will throw at startup")
+  }
   return $null
 }
 
@@ -175,8 +207,30 @@ if ($SelfTest) {
   $fb = Get-FrozenLiteralBreaks -BeforeText $frozenBefore -AfterText ($frozenBefore -replace '(?m)$', '  ')
   if ($fb.Count -eq 0) { Write-Output '  PASS  CLEAN TWIN: trailing whitespace is not a change to the literal' }
   else { Write-Output '  FAIL  trailing whitespace was called a frozen-literal break'; $fail++ }
+  # ---- DEFECT 6: ORDER. The founding shape, reduced - parse-compute.ps1 read its canon file at line 59
+  # and dot-sourced the reader at line 100. Present, resolvable, and dead on every run.
+  $g = Get-DependencyGaps -Text "`$rc = Read-JsonFile `$p`n. (Join-Path `$root 'lib\json-io.ps1')" -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+  if ($g -and $g -match 'top level') { Write-Output '  PASS  MUST FIRE: a top-level call ABOVE the dot-source is reported (defect 6, 6 files)' } else { Write-Output "  FAIL  a dot-source below the code that uses it went unreported - defect 6 can recur ($g)"; $fail++ }
+  # CLEAN TWIN. The exemption that keeps this from flagging most of the estate: a call inside a FUNCTION
+  # BODY sitting above the dot-source is fine, because the body does not run until after the load. Losing
+  # this twin would make the check fire on every correctly wired file that defines helpers up top.
+  $g = Get-DependencyGaps -Text "function Get-Doc(`$p) {`n  return Read-JsonFile `$p`n}`n. (Join-Path `$root 'lib\json-io.ps1')`nGet-Doc `$x" -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+  if (-not $g) { Write-Output '  PASS  CLEAN TWIN: a call inside a function body above the dot-source is not a finding - the body runs after the load' } else { Write-Output "  FAIL  a correctly wired file was reported over a deferred call ($g)"; $fail++ }
+  # CLEAN TWIN. A `#` inside a quoted string is not a comment, and stripping comments before strings
+  # would eat the closing brace on this line, unbalance the depth and hide every later top-level call.
+  $g = Get-DependencyGaps -Text "function F {`n  `$x = `$y -replace '#',''`n}`n`$z = Read-JsonFile `$p`n. (Join-Path `$root 'lib\json-io.ps1')" -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+  if ($g -and $g -match 'top level') { Write-Output '  PASS  MUST FIRE: a hash inside a STRING does not unbalance the depth count, so the call after it is still seen' } else { Write-Output "  FAIL  a quoted hash blinded the order check ($g)"; $fail++ }
+  # CLEAN TWIN, and it is the estate's OWN preamble verbatim. The walk-up guard throws a message that
+  # NAMES Read-JsonFile one line above the dot-source it protects. Matching the call on the raw line
+  # reported all three walk-up files as defects while they were correctly wired - a check that fires on
+  # the fix is a check that gets deleted, so the call is matched on string-stripped text.
+  $pre = "`$__jioRoot = `$PSScriptRoot; while (`$__jioRoot) { `$__jioRoot = Split-Path `$__jioRoot -Parent }`n" +
+         "if (-not `$__jioRoot) { throw 'nope' + `$PSScriptRoot + `" - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252`" }`n" +
+         ". (Join-Path `$__jioRoot 'lib\json-io.ps1')`n`$rc = Read-JsonFile `$p"
+  $g = Get-DependencyGaps -Text $pre -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+  if (-not $g) { Write-Output '  PASS  CLEAN TWIN: the walk-up preamble NAMING the function in its throw message is not a call above the dot-source' } else { Write-Output "  FAIL  the estate's own correct preamble was reported as a defect ($g)"; $fail++ }
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal) and every clean twin holds'
+  Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal, dot-source below its callers) and every clean twin holds'
   exit 0
 }
 

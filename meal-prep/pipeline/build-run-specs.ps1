@@ -53,6 +53,9 @@ param(
   [string]$GroceryOutDir          # default <estate>\grocery\out (comparison-*.json + recipe-board.json)
 )
 $ErrorActionPreference='Stop'
+$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
+if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
+. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipeline
 $mp = Split-Path -Parent $here
 . (Join-Path $here 'friendly-amt-lib.ps1')                  # THE buy-label deriver (see the note where FriendlyAmt used to be)
@@ -91,9 +94,6 @@ if(-not (Test-Path $EachNounsFile)){ $EachNounsFile = Join-Path (Split-Path $Den
 Initialize-FriendlyAmt -DensitiesFile $DensitiesFile -EachNounsFile $EachNounsFile -Root $mp
 
 # ---- MERGED ITEM -> BOARD MAP (cost-engine Load-Map pattern; later files win) --------------------
-$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
-if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
-. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 
 function Add-MapFile([hashtable]$acc,[string]$path,[string]$label,[switch]$Required){
   if(-not (Test-Path $path)){

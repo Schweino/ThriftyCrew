@@ -36,6 +36,9 @@ param([Parameter(Mandatory=$true)][string]$RunDir,
       [string]$ManifestFile,   # default <meal-prep>\pipeline\v2-perserving.json (everyday_ps basis)
       [switch]$Skeleton,[switch]$WriteReady)
 $ErrorActionPreference='Stop'
+$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
+if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
+. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipeline
 $mp = Split-Path -Parent $here
 if(-not (Test-Path $RunDir)){ throw ("RunDir not found: $RunDir") }
@@ -73,9 +76,6 @@ if(Test-Path $runManifest){ foreach($s in (Get-Content $runManifest)){ if($s){ $
 
 $WEIGH = 'Weigh your empty mixing pot and write the number down for portioning later.'
 $fails=@{}; $ready=@()
-$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
-if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
-. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 
 function Fail($slug,$msg){ if(-not $fails.ContainsKey($slug)){ $fails[$slug]=@() }; $fails[$slug]+= $msg }
 

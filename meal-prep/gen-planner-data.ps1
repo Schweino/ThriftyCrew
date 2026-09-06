@@ -7,6 +7,7 @@
 #        (the brown-sugar 16x lesson: a map gpu is calibrated to its era's board unit, never trust blindly)
 # JSON is built manually (PS5.1 ConvertTo-Json chokes on big graphs).
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $db=(Read-JsonFile (Join-Path $here 'recipes-db.json')).recipes
 
@@ -89,7 +90,6 @@ foreach($c in (Read-JsonFile (Join-Path $here 'db\costed.json'))){
 Write-Output ("db\costed.json: {0} line(s) carry a buy package the planner can price against" -f $costedPkg.Count)
 # ONE resolution, used by the emit AND by the "items without a package def" report below, so the report
 # cannot name an item the emit actually priced.
-. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 function Resolve-PlannerPkg([string]$slug,[string]$item){
   # A COVERED LINE BUYS NOTHING, AND MUST SAY SO. pk 0 is the signal the Builder's pkgN guard reads; the

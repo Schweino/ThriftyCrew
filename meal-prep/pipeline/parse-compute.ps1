@@ -47,6 +47,9 @@ param([Parameter(Mandatory=$true)][string]$RunDir,   # the run's working folder
       [switch]$StrictItems,   # r100 default was: missing DB items are fatal. r300 flags and keeps going.
       [string[]]$Slugs)       # targeted recompute: compute only these, splice into existing outputs (macros are per-recipe, no cross-recipe dependency, so a subset is valid). Default (no -Slugs) is unchanged.
 $ErrorActionPreference='Stop'
+$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
+if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
+. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipeline
 $mp = Split-Path -Parent $here
 if(-not (Test-Path $RunDir)){ throw ("RunDir not found: $RunDir") }
@@ -94,10 +97,6 @@ $SERVE_DEFAULTS = @{
 # numeric token used by the extended grammar: mixed number | fraction | decimal, optionally a range
 $NUMT = '(?:\d+\s+\d+/\d+|\d+/\d+|\d*\.?\d+)'
 $NUMR = "(?:$NUMT(?:\s*-\s*$NUMT)?)"
-
-$__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
-if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
-. (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 
 function NormalizeQty([string]$q){
   $q = $q -replace [char]0x00BD,' 1/2' -replace [char]0x00BC,' 1/4' -replace [char]0x00BE,' 3/4' -replace [char]0x2153,' 1/3' -replace [char]0x2154,' 2/3'

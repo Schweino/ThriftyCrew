@@ -3,13 +3,13 @@
 # grouped "Pantry seasonings (...)" cost line. Read-only. Usage: inspect-live-card.ps1 slug1 slug2 ...
 param([Parameter(ValueFromRemainingArguments=$true)][string[]]$Slugs)
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $apiUrl = 'https://map-to-success.ghost.io'
 $adminKey = (Get-Content (Join-Path $here '.ghostkey') -Raw).Trim()
 $db = (Read-JsonFile (Join-Path $here 'recipes-db.json')).recipes
 $dbBySlug=@{}; foreach($r in $db){ if($r.slug){ $dbBySlug[$r.slug]=$r } }
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
-. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
