@@ -1,0 +1,1716 @@
+﻿{
+ "plan": "plan-2026-09-06.json",
+ "generated": "2026-09-06T10:17:24",
+ "board_week": "comparison-2026-09-06",
+ "board_state": "comparison-2026-09-06 built 08:10:54, UNPUBLISHED (guards.ps1 hard=1 at 08:15:51). Two captures landed AFTER the pin and are NOT in it: out/fareway/fareway-deals-2026-09-06.json (09:18:14, ad 2026-09-07..2026-09-12, 238 deals) and out/regular/walmart-regular-2026-09-06.json (09:11). Both ARE in this corpus.",
+ "simulator": "scratch route-sim.py: Python re-implementation of compare-deals.ps1 Match-Category (Get-MatchTexts two texts, GLOBAL_EXCLUDE + relax_global, excludes on the raw lowercased name, first-match-wins by array index). Verified against .NET on the 5 candidate names with PowerShell -imatch before trusting it. Candidate set = every corpus name whose verdict at a CHANGED commodity flips between the live rules and the proposed rules; each candidate was then fully routed before and after.",
+ "corpus": {
+  "distinct_names": 46376,
+  "files": [
+   {
+    "file": "out/comparison-2026-09-06.json",
+    "rows": 3164
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-07-06.json",
+    "rows": 30
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-07-08.json",
+    "rows": 29
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-07-12.json",
+    "rows": 278
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-07-14.json",
+    "rows": 347
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-07-15.json",
+    "rows": 403
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-07-18.json",
+    "rows": 438
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-07-29.json",
+    "rows": 1664
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-01.json",
+    "rows": 1675
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-05.json",
+    "rows": 1772
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-15.json",
+    "rows": 2217
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-22.json",
+    "rows": 2248
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-25.json",
+    "rows": 2474
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-26.json",
+    "rows": 2720
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-27.json",
+    "rows": 2780
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-28.json",
+    "rows": 2841
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-08-29.json",
+    "rows": 2846
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-09-01.json",
+    "rows": 2953
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-09-02.json",
+    "rows": 2982
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-09-03.json",
+    "rows": 3115
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-09-04.json",
+    "rows": 3135
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-09-05.json",
+    "rows": 3173
+   },
+   {
+    "file": "out/regular/aldi-regular-2026-09-06.json",
+    "rows": 3221
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-05.json",
+    "rows": 19
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-06.json",
+    "rows": 24
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-07.json",
+    "rows": 29
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-08.json",
+    "rows": 29
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-12.json",
+    "rows": 145
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-14.json",
+    "rows": 187
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-15.json",
+    "rows": 508
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-18.json",
+    "rows": 577
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-24.json",
+    "rows": 6491
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-25.json",
+    "rows": 6705
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-26.json",
+    "rows": 6728
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-27.json",
+    "rows": 6938
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-28.json",
+    "rows": 6857
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-29.json",
+    "rows": 6960
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-30.json",
+    "rows": 6936
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-07-31.json",
+    "rows": 6928
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-01.json",
+    "rows": 6947
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-02.json",
+    "rows": 6945
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-03.json",
+    "rows": 6937
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-04.json",
+    "rows": 6949
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-05.json",
+    "rows": 6929
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-06.json",
+    "rows": 6934
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-07.json",
+    "rows": 6944
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-08.json",
+    "rows": 6950
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-09.json",
+    "rows": 6961
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-10.json",
+    "rows": 6948
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-11.json",
+    "rows": 6946
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-12.json",
+    "rows": 6963
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-13.json",
+    "rows": 7012
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-14.json",
+    "rows": 7269
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-15.json",
+    "rows": 7266
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-16.json",
+    "rows": 7286
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-17.json",
+    "rows": 7295
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-18.json",
+    "rows": 7286
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-19.json",
+    "rows": 7281
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-20.json",
+    "rows": 7313
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-21.json",
+    "rows": 7279
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-22.json",
+    "rows": 7289
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-23.json",
+    "rows": 7291
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-24.json",
+    "rows": 7291
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-25.json",
+    "rows": 7291
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-26.json",
+    "rows": 7296
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-27.json",
+    "rows": 7287
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-28.json",
+    "rows": 7292
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-29.json",
+    "rows": 7292
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-30.json",
+    "rows": 7292
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-08-31.json",
+    "rows": 7292
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-09-01.json",
+    "rows": 7293
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-09-02.json",
+    "rows": 7295
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-09-03.json",
+    "rows": 7295
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-09-04.json",
+    "rows": 7298
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-09-05.json",
+    "rows": 7299
+   },
+   {
+    "file": "out/regular/bakers-regular-2026-09-06.json",
+    "rows": 7299
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-05.json",
+    "rows": 321
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-06.json",
+    "rows": 325
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-08.json",
+    "rows": 235
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-09.json",
+    "rows": 373
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-10.json",
+    "rows": 377
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-11.json",
+    "rows": 471
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-12.json",
+    "rows": 533
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-13.json",
+    "rows": 590
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-14.json",
+    "rows": 1019
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-15.json",
+    "rows": 1670
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-16.json",
+    "rows": 1820
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-18.json",
+    "rows": 1937
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-25.json",
+    "rows": 1983
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-26.json",
+    "rows": 2011
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-30.json",
+    "rows": 3787
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-07-31.json",
+    "rows": 4331
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-01.json",
+    "rows": 4706
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-02.json",
+    "rows": 4691
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-03.json",
+    "rows": 4720
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-04.json",
+    "rows": 4756
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-05.json",
+    "rows": 4807
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-06.json",
+    "rows": 4848
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-07.json",
+    "rows": 4861
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-08.json",
+    "rows": 4869
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-09.json",
+    "rows": 4879
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-10.json",
+    "rows": 4894
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-11.json",
+    "rows": 4919
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-12.json",
+    "rows": 4945
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-13.json",
+    "rows": 5021
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-14.json",
+    "rows": 5091
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-15.json",
+    "rows": 5124
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-16.json",
+    "rows": 5144
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-17.json",
+    "rows": 5167
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-18.json",
+    "rows": 5175
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-19.json",
+    "rows": 5221
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-20.json",
+    "rows": 5222
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-21.json",
+    "rows": 5222
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-22.json",
+    "rows": 5224
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-23.json",
+    "rows": 5231
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-24.json",
+    "rows": 5236
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-25.json",
+    "rows": 5238
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-26.json",
+    "rows": 5242
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-27.json",
+    "rows": 5243
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-28.json",
+    "rows": 5243
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-29.json",
+    "rows": 5250
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-30.json",
+    "rows": 5258
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-08-31.json",
+    "rows": 5258
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-09-01.json",
+    "rows": 5283
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-09-02.json",
+    "rows": 5305
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-09-03.json",
+    "rows": 5317
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-09-04.json",
+    "rows": 5325
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-09-05.json",
+    "rows": 5347
+   },
+   {
+    "file": "out/regular/family-fare-regular-2026-09-06.json",
+    "rows": 5351
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-12.json",
+    "rows": 100
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-13.json",
+    "rows": 299
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-14.json",
+    "rows": 326
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-15.json",
+    "rows": 382
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-18.json",
+    "rows": 419
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-23.json",
+    "rows": 677
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-27.json",
+    "rows": 743
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-07-31.json",
+    "rows": 554
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-01.json",
+    "rows": 576
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-03.json",
+    "rows": 611
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-05.json",
+    "rows": 625
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-09.json",
+    "rows": 615
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-11.json",
+    "rows": 617
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-15.json",
+    "rows": 590
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-20.json",
+    "rows": 902
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-21.json",
+    "rows": 908
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-22.json",
+    "rows": 912
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-23.json",
+    "rows": 732
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-24.json",
+    "rows": 746
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-25.json",
+    "rows": 749
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-26.json",
+    "rows": 750
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-27.json",
+    "rows": 751
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-28.json",
+    "rows": 757
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-29.json",
+    "rows": 758
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-30.json",
+    "rows": 758
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-08-31.json",
+    "rows": 771
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-09-01.json",
+    "rows": 794
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-09-02.json",
+    "rows": 795
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-09-03.json",
+    "rows": 794
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-09-04.json",
+    "rows": 792
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-09-05.json",
+    "rows": 794
+   },
+   {
+    "file": "out/regular/fareway-regular-2026-09-06.json",
+    "rows": 783
+   },
+   {
+    "file": "out/regular/hunter-aldi-regular-2026-08-16.json",
+    "rows": 8
+   },
+   {
+    "file": "out/regular/hunter-bakers-regular-2026-08-16.json",
+    "rows": 25
+   },
+   {
+    "file": "out/regular/hunter-familyfare-regular-2026-08-16.json",
+    "rows": 10
+   },
+   {
+    "file": "out/regular/hunter-fareway-regular-2026-08-16.json",
+    "rows": 10
+   },
+   {
+    "file": "out/regular/hunter-hyvee-regular-2026-08-16.json",
+    "rows": 14
+   },
+   {
+    "file": "out/regular/hunter-samsclub-regular-2026-08-16.json",
+    "rows": 7
+   },
+   {
+    "file": "out/regular/hunter-walmart-regular-2026-08-16.json",
+    "rows": 9
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-05.json",
+    "rows": 15
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-06.json",
+    "rows": 23
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-08.json",
+    "rows": 29
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-12.json",
+    "rows": 306
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-14.json",
+    "rows": 448
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-15.json",
+    "rows": 1127
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-16.json",
+    "rows": 1128
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-17.json",
+    "rows": 1128
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-18.json",
+    "rows": 1367
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-19.json",
+    "rows": 1367
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-20.json",
+    "rows": 1367
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-21.json",
+    "rows": 1367
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-22.json",
+    "rows": 1367
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-23.json",
+    "rows": 1367
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-24.json",
+    "rows": 1367
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-25.json",
+    "rows": 1446
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-26.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-27.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-28.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-29.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-30.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-07-31.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-01.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-02.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-03.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-04.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-05.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-07.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-08.json",
+    "rows": 1538
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-09.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-10.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-11.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-12.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-13.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-14.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-15.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-17.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-18.json",
+    "rows": 1552
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-21.json",
+    "rows": 1554
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-22.json",
+    "rows": 1554
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-23.json",
+    "rows": 1554
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-24.json",
+    "rows": 1550
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-25.json",
+    "rows": 1550
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-26.json",
+    "rows": 1550
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-27.json",
+    "rows": 1550
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-28.json",
+    "rows": 1550
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-29.json",
+    "rows": 1551
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-30.json",
+    "rows": 1551
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-08-31.json",
+    "rows": 1549
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-09-01.json",
+    "rows": 1549
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-09-02.json",
+    "rows": 1549
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-09-03.json",
+    "rows": 1549
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-09-04.json",
+    "rows": 1549
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-09-05.json",
+    "rows": 1549
+   },
+   {
+    "file": "out/regular/hyvee-regular-2026-09-06.json",
+    "rows": 1546
+   },
+   {
+    "file": "out/regular/sams-regular-2026-07-14.json",
+    "rows": 60
+   },
+   {
+    "file": "out/regular/sams-regular-2026-08-01.json",
+    "rows": 60
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-05.json",
+    "rows": 27
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-06.json",
+    "rows": 30
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-08.json",
+    "rows": 29
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-12.json",
+    "rows": 301
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-14.json",
+    "rows": 337
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-15.json",
+    "rows": 711
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-18.json",
+    "rows": 886
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-23.json",
+    "rows": 1328
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-25.json",
+    "rows": 1351
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-29.json",
+    "rows": 2784
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-30.json",
+    "rows": 4244
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-07-31.json",
+    "rows": 4863
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-01.json",
+    "rows": 4881
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-05.json",
+    "rows": 1209
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-06.json",
+    "rows": 11092
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-11.json",
+    "rows": 11256
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-22.json",
+    "rows": 136
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-25.json",
+    "rows": 193
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-26.json",
+    "rows": 219
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-29.json",
+    "rows": 234
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-30.json",
+    "rows": 525
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-08-31.json",
+    "rows": 11694
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-09-01.json",
+    "rows": 275
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-09-02.json",
+    "rows": 162
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-09-03.json",
+    "rows": 237
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-09-04.json",
+    "rows": 200
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-09-05.json",
+    "rows": 273
+   },
+   {
+    "file": "out/regular/walmart-regular-2026-09-06.json",
+    "rows": 220
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-05.json",
+    "rows": 19
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-06.json",
+    "rows": 30
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-08.json",
+    "rows": 263
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-15.json",
+    "rows": 428
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-17.json",
+    "rows": 1296
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-18.json",
+    "rows": 27
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-23.json",
+    "rows": 173
+   },
+   {
+    "file": "out/sams/sams-deals-2026-07-29.json",
+    "rows": 2475
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-01.json",
+    "rows": 40
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-05.json",
+    "rows": 1808
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-15.json",
+    "rows": 2999
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-22.json",
+    "rows": 122
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-23.json",
+    "rows": 120
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-24.json",
+    "rows": 120
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-25.json",
+    "rows": 122
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-26.json",
+    "rows": 109
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-27.json",
+    "rows": 135
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-28.json",
+    "rows": 133
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-29.json",
+    "rows": 130
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-30.json",
+    "rows": 138
+   },
+   {
+    "file": "out/sams/sams-deals-2026-08-31.json",
+    "rows": 118
+   },
+   {
+    "file": "out/sams/sams-deals-2026-09-01.json",
+    "rows": 141
+   },
+   {
+    "file": "out/sams/sams-deals-2026-09-02.json",
+    "rows": 95
+   },
+   {
+    "file": "out/sams/sams-deals-2026-09-03.json",
+    "rows": 134
+   },
+   {
+    "file": "out/sams/sams-deals-2026-09-04.json",
+    "rows": 54
+   },
+   {
+    "file": "out/sams/sams-deals-2026-09-05.json",
+    "rows": 61
+   },
+   {
+    "file": "out/sams/sams-deals-2026-09-06.json",
+    "rows": 103
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-07-17.json",
+    "rows": 111
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-07-18.json",
+    "rows": 0
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-07-29.json",
+    "rows": 625
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-01.json",
+    "rows": 74
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-05.json",
+    "rows": 255
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-15.json",
+    "rows": 669
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-22.json",
+    "rows": 32
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-23.json",
+    "rows": 31
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-24.json",
+    "rows": 7
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-25.json",
+    "rows": 18
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-26.json",
+    "rows": 4
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-27.json",
+    "rows": 7
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-28.json",
+    "rows": 6
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-29.json",
+    "rows": 15
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-30.json",
+    "rows": 9
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-08-31.json",
+    "rows": 8
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-09-01.json",
+    "rows": 3
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-09-02.json",
+    "rows": 11
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-09-03.json",
+    "rows": 4
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-09-06.json",
+    "rows": 11
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-07-05.json",
+    "rows": 14
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-07-08.json",
+    "rows": 14
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-07-15.json",
+    "rows": 89
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-07-23.json",
+    "rows": 47
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-07-29.json",
+    "rows": 29
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-08-05.json",
+    "rows": 39
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-08-20.json",
+    "rows": 60
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-08-26.json",
+    "rows": 108
+   },
+   {
+    "file": "out/bakers/bakers-deals-2026-09-02.json",
+    "rows": 83
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-07-12.json",
+    "rows": 3
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-07-23.json",
+    "rows": 7
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-07-27.json",
+    "rows": 11
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-08-03.json",
+    "rows": 31
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-08-10.json",
+    "rows": 183
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-08-20.json",
+    "rows": 32
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-08-25.json",
+    "rows": 218
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-08-30.json",
+    "rows": 244
+   },
+   {
+    "file": "out/fareway/fareway-deals-2026-09-06.json",
+    "rows": 238
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-07-15.json",
+    "rows": 89
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-07-23.json",
+    "rows": 408
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-07-27.json",
+    "rows": 450
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-07-31.json",
+    "rows": 448
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-01.json",
+    "rows": 211
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-03.json",
+    "rows": 449
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-05.json",
+    "rows": 452
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-09.json",
+    "rows": 454
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-11.json",
+    "rows": 261
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-15.json",
+    "rows": 143
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-20.json",
+    "rows": 23
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-21.json",
+    "rows": 99
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-22.json",
+    "rows": 7
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-23.json",
+    "rows": 45
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-24.json",
+    "rows": 7
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-25.json",
+    "rows": 7
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-26.json",
+    "rows": 4
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-27.json",
+    "rows": 12
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-28.json",
+    "rows": 6
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-29.json",
+    "rows": 6
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-30.json",
+    "rows": 41
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-08-31.json",
+    "rows": 45
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-09-01.json",
+    "rows": 8
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-09-02.json",
+    "rows": 7
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-09-03.json",
+    "rows": 9
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-09-04.json",
+    "rows": 5
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-09-05.json",
+    "rows": 17
+   },
+   {
+    "file": "out/fareway/fareway-shop-2026-09-06.json",
+    "rows": 41
+   }
+  ],
+  "skipped": [
+   {
+    "file": "out/sams/sams-rejects-2026-07-23.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-09-04.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/sams/sams-rejects-2026-09-05.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/bakers/ad-window.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/bakers/meta.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-07-12.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-07-15.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-07-23.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-07-27.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-07-29.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-03.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-05.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-09.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-14.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-20.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-21.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-23.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-24.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-25.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-08-30.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-09-01.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-09-04.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/fareway-ad-manifest-2026-09-06.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/recapture-terms.json",
+    "why": "not a capture file (no item/name rows)"
+   },
+   {
+    "file": "out/fareway/reprice-chips.json",
+    "why": "not a capture file (no item/name rows)"
+   }
+  ]
+ },
+ "one_corpus_note": "Every section of this artifact (routing rows, item-4 proof, cell_effects) reads the same file list above. No section fell back to an older file. The 25 skipped files are listed with the reason (they carry no item/name rows: rejects, meta, url lists, verify sidecars).",
+ "changes": [
+  {
+   "id": "french-bread",
+   "include_add": [
+    "french\\s+loaf"
+   ]
+  },
+  {
+   "id": "taco-sauce",
+   "include_add": [
+    "taco\\s+(?:and|&)\\s+enchilada\\s+(?:chili\\s+)?sauce"
+   ],
+   "exclude_replace": [
+    [
+     "enchilada",
+     "\\benchilada\\s+sauce\\b"
+    ]
+   ]
+  }
+ ],
+ "positive_control": {
+  "name": "Private Selection French Loaf Sliced",
+  "expected": "french-bread",
+  "observed": "french-bread",
+  "before": "<unmatched>",
+  "why_this_row": "the semantic finding itself; it MUST move from <unmatched> to french-bread or the simulation did not run"
+ },
+ "verdict_flips": 12,
+ "routing_changes": 12,
+ "rows": [
+  {
+   "name": "(5 pack) Ortega Hot Thick & Smooth Original Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+   "stores": [
+    "Walmart"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "taco-sauce",
+   "after_index": 387,
+   "changed": true
+  },
+  {
+   "name": "Kroger French Loaf Sliced",
+   "stores": [
+    "Baker's"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "french-bread",
+   "after_index": 174,
+   "changed": true
+  },
+  {
+   "name": "La Brea Bakery French Loaf",
+   "stores": [
+    "Baker's"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "french-bread",
+   "after_index": 174,
+   "changed": true
+  },
+  {
+   "name": "Mini French Loaf",
+   "stores": [
+    "Fareway"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "french-bread",
+   "after_index": 174,
+   "changed": true
+  },
+  {
+   "name": "Ortega Hot Thick & Smooth Original Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+   "stores": [
+    "Walmart"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "taco-sauce",
+   "after_index": 387,
+   "changed": true
+  },
+  {
+   "name": "Ortega Original Thick and Smooth Hot Taco and Enchilada Chili Sauce, Kosher, 16 oz Bottle",
+   "stores": [
+    "Walmart"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "taco-sauce",
+   "after_index": 387,
+   "changed": true
+  },
+  {
+   "name": "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 16 oz Jar",
+   "stores": [
+    "Walmart"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "taco-sauce",
+   "after_index": 387,
+   "changed": true
+  },
+  {
+   "name": "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+   "stores": [
+    "Walmart"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "taco-sauce",
+   "after_index": 387,
+   "changed": true
+  },
+  {
+   "name": "Ortega Original Thick and Smooth Mild Taco and Enchilada Chili Sauce, Kosher, 16 oz",
+   "stores": [
+    "Walmart"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "taco-sauce",
+   "after_index": 387,
+   "changed": true
+  },
+  {
+   "name": "Ortega Original Thick and Smooth Mild Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+   "stores": [
+    "Walmart"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "taco-sauce",
+   "after_index": 387,
+   "changed": true
+  },
+  {
+   "name": "Private Selection French Loaf",
+   "stores": [
+    "Baker's"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "french-bread",
+   "after_index": 174,
+   "changed": true
+  },
+  {
+   "name": "Private Selection French Loaf Sliced",
+   "stores": [
+    "Baker's"
+   ],
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "french-bread",
+   "after_index": 174,
+   "changed": true
+  }
+ ],
+ "claimed_by_earlier": [],
+ "claimed_by_earlier_note": "all 12 admitted names route from <unmatched>; no earlier commodity owns any of them, so no release exclude is needed. Measured, not assumed: before_index is -1 on every changed row.",
+ "item_39933e_no_widening_proof": [
+  {
+   "name": "Red Potatoes and Goldust Potatoes",
+   "store": "Fareway",
+   "expected": "red-potatoes",
+   "before": "red-potatoes",
+   "before_index": 135,
+   "after": "red-potatoes",
+   "after_index": 135
+  },
+  {
+   "name": "Ambriola Pecorino Romano Wedge",
+   "store": "Fareway",
+   "expected": "pecorino-romano",
+   "before": "pecorino-romano",
+   "before_index": 533,
+   "after": "pecorino-romano",
+   "after_index": 533
+  },
+  {
+   "name": "Breakfast Best Cinnamon Flavor French Toast Sticks 16 OZ",
+   "store": "Aldi",
+   "expected": "<unmatched>",
+   "before": "<unmatched>",
+   "before_index": -1,
+   "after": "<unmatched>",
+   "after_index": -1
+  }
+ ],
+ "cell_effects": [
+  {
+   "commodity": "taco-sauce",
+   "store": "Walmart",
+   "before": 0.1112,
+   "after": 0.1112,
+   "why": "Great Value Taco Sauce 16 oz $1.78 (walmart-regular-2026-08-31, fulfillment STORE) stays cheapest; the 6 admitted Ortega rows sit in the SAME 08-31 capture at $1.98/8 oz = 0.2475 and $3.52/16 oz = 0.22, and the (5 pack) row is in the older 08-11 capture at $10.90/40 oz = 0.2725. No newer Walmart daily capture (09-01..09-06) holds any taco-sauce row, so no capture eviction is possible."
+  },
+  {
+   "commodity": "french-bread",
+   "store": "Baker's",
+   "before": 1.99,
+   "after": 1.99,
+   "why": "Private Selection French Baguette Sliced $1.99 (1 ct) stays cheapest; the 4 admitted French Loaf rows are $4.99 each (16 oz or 1 ct) and live in the same bakers-regular-2026-09-06.json (as_of 2026-08-22), so no eviction."
+  },
+  {
+   "commodity": "french-bread",
+   "store": "Fareway",
+   "before": 2.49,
+   "after": 2.49,
+   "why": "The only other admitted name, Mini French Loaf $1.49 / 8 oz, is in fareway-deals-2026-09-06.json (ad opens 2026-09-07, NOT in the pinned board). french-bread carries min_pack_oz 12 since b28788fa, so an 8 oz mini loaf is refused by Test-PackSizeFloor. UNPROVEN BY A DRY RUN: if the rebuild prices Fareway french-bread at 1.49 the floor did not apply and this row must be excluded (mini\\s+french\\s+loaf) before publish."
+  }
+ ]
+}

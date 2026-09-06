@@ -1,0 +1,521 @@
+{
+ "generated": "2026-09-06T10:28:43",
+ "round": 1,
+ "board_week": "comparison-2026-09-06",
+ "board_state": "comparison-2026-09-06 built 08:10:54, NOT PUBLISHED (guards.ps1 hard=1 at 08:15:51; live page is at its last good state, the 09-05 publish). fareway-deals-2026-09-06.json (09:18:14) and walmart-regular-2026-09-06.json (09:11) landed after the pin and are not in it.",
+ "queue_ids_seen": [
+  "2026-09-06-79fe01",
+  "2026-09-06-24ac66",
+  "2026-09-06-4025dc",
+  "2026-09-06-39933e",
+  "2026-09-06-796030",
+  "2026-09-06-fdc73a",
+  "2026-09-06-22b4dd",
+  "2026-09-06-6e08ed",
+  "2026-09-06-e5a9c9"
+ ],
+ "routing_artifact": "plan-2026-09-06.routing.json",
+ "one_defect_or_three": "Items 79fe01 (guard fail), 24ac66 (foil crash, storage bags, frozen pizza) and 4025dc (soundness diff) are ONE EVENT with three consequences, not one defect and not three unrelated ones. The event is commit b28788fa at 05:45 today, which changed disinfectant-spray, aluminum-foil, bread, rotisserie-chicken, frozen-pizza and storage-bags rules and was committed without -Accept or guards.ps1 on its own result. Consequence 1: the disinfectant-spray exclude swapped Baker's crown product onto a size string the kind allowlist had never reviewed -> hard fail. Consequence 2: the aluminum-foil band fix re-admitted sq_ft cells against a price-history whose last entry was per each -> a false 97 percent crash; the storage-bags floor drop admitted a range-priced ad row -> an unproven outlier; the frozen-pizza piece floor removed two singles -> a real 70 percent rise. Consequence 3: the excludes themselves -> the soundness MOVED/DROPPED list. The dispatch's suspicion that foil is a sq-ft/count/roll KIND collision was tested and does not hold: every foil cell on the pinned board is sq_ft with correct arithmetic, the two dropped sheet products never held a cell, and the unit-basis hard fail is disinfectant-spray, not foil.",
+ "foreign_uncommitted_files": "Another session is mid-flight. Do not diagnose from, revert or commit: design/BACKLOG-course-findings.md; graph/learning/hunter-review-packet.json; graph/state/hunter-ingest-cursor.json; grocery/notify-known-ids.json; grocery/out/capture-cursor-log.jsonl; grocery/out/capture-cursor.json; grocery/out/logs/capture-run-status.json; grocery/sale-fallback-ownership.json; meal-prep/** (cheapnow-data.js, dinner-data.js, free-rotation.json, ingredient-map.json, recipes-db.json, db/**, pipeline/**, ~100 recipe json files); public/free-dinners.json; public/share/omaha-drops.png; public/smp-feed.json; site/tools/cheap-dinners-tool.html; site/tools/dinner-tonight-tool.html; untracked grocery/out/aldi-rejects-2026-09-06.json and grocery/out/walmart-rejects-2026-09-06.json. EXCEPTION: ops/prompt-backup/agents/*.md (7 files) are item fdc73a's subject and the developer commits them with explicit paths.",
+ "items": [
+  {
+   "queue_id": "2026-09-06-79fe01",
+   "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-06",
+   "classification": "real-economics",
+   "evidence": [
+    "ad-cycle-log.txt:4527 HARD FAIL: no cell wins a row while measured in a different KIND of quantity than the row (volume among weights) (see audit-unit-basis-outlier.ps1); GUARDS-COMPLETE hard=1 warn=20. The other 20 lines are warns; this is the ONLY hard fail.",
+    "out/basis-outliers.json (generated 08:14:55 against comparison-2026-09-06): kind_mismatch_crown has exactly ONE entry: disinfectant-spray | Baker's | 'Seventh Generation Lemongrass Citrus Disinfecting Spray' | size '26 fl oz' | per_unit 0.1996 /oz | kind volume on a weight row | holds_crown true | agrees_with_engine_divisor false. 92 kind findings across 65 commodities, 11 crown-holders reviewed and allowed, 1 unreviewed.",
+    "Raw row, out/regular/bakers-regular-2026-09-06.json: item 'Seventh Generation Lemongrass Citrus Disinfecting Spray', size '26 fl oz', current_price 5.19, base_price 5.69, marked_down true, as_of 2026-08-22 (kroger-api). 5.19 / 26 = 0.19962 -> published 0.1996. The arithmetic is exact; only the LABEL is volume-shaped.",
+    "Row peers on the pinned board (all net-weight aerosols, all 'oz'): Walmart Great Value Disinfectant Spray 19 oz $4.77 = 0.2511; Sam's Club OdoBan 14.6 oz x 6 $23.98 = 0.2737; Family Fare Lysol 19 oz $10.99 = 0.5784; Hy-Vee Lysol 12.5 oz $7.69 = 0.6152; Fareway Lysol 12.5 oz $8.99 = 0.7192. Seventh Generation is a water-based trigger spray (density within a few percent of water), so 26 fl oz weighs about 27 oz and the published 0.1996/oz OVERSTATES the true per-weight-oz price by roughly 4 percent: the safe direction, it cannot hand this cell a crown it has not earned. It beats the runner-up (Walmart 0.2511) by 20 percent, so the crown holds at any plausible density.",
+    "WHY THE GATE FIRED TODAY AND NOT YESTERDAY: comparison-2026-09-02 (built 09-05 13:36) had Baker's disinfectant-spray = 'Scrubbing Bubbles Disinfectant Bathroom Grime Fighter Spray, Petal Paradise, 32 fl oz' $4.99 size '1 pk 32 fl oz' = 0.1559, which basis-kind-allowlist.json has held since 2026-08-08 (entry keyed to size '1 pk 32 fl oz'). Commit b28788fa (2026-09-06 05:45:28, 'The engine could not read a loaf...') added disinfectant-spray.exclude += bathroom cleaner / scrubbing bubbles / shower & tub / tub & tile / shower aerosol. That moved the three Scrubbing Bubbles rows to shower-cleaner (item 2026-09-06-4025dc's MOVED lines), Baker's cell fell to the next product, Seventh Generation at a size string ('26 fl oz') no reviewer has seen, and the size-keyed allowlist correctly refused to cover it.",
+    "PROVEN IN A SCRATCH FIXTURE (copy of audit-unit-basis-outlier.ps1 + lib/json-io.ps1 + lib/guard-contract.ps1 + the pinned comparison + the live allowlist): baseline exit 2, 'crown=1 reviewed=11'; with ONE added allowlist entry {id disinfectant-spray, store Baker's, size '26 fl oz'} exit 0, 'crown=0 reviewed=12', kind=92 and ratio=11 unchanged; -SelfTest of the same copy PASS (4 must-fire, 6 clean twins). Nothing else in guards.ps1 hard-failed, so this entry alone takes hard=1 to hard=0 on the pinned board."
+   ],
+   "surface_fix": {
+    "what": "add the reviewed entry for the new Baker's crown product to basis-kind-allowlist.json (the designed valve: a written reason that the NUMBER is right, keyed to the exact size string) so guards.ps1 reaches hard=0 and the board can publish",
+    "files": [
+     "grocery/basis-kind-allowlist.json"
+    ],
+    "exact_change": "allow += { id: 'disinfectant-spray', store: \"Baker's\", size: '26 fl oz', reviewed: '2026-09-06', reviewed_by: 'claude (grocery triage, plan-2026-09-06)', reason: 'A 26 fl oz water-based trigger spray (Seventh Generation Disinfecting Spray) on a row priced per weight oz whose peers are net-weight aerosols. Density within a few percent of water, so 26 fl oz is about 27 oz and 5.19/26 = 0.1996 OVERSTATES the per-weight-oz price by about 4 percent, the safe direction for a crown-holder; it beats the runner-up (Walmart 0.2511) by 20 percent at any density. Same shape and same argument as the 2026-08-08 entry for the same commodity at Baker''s (Scrubbing Bubbles, 1 pk 32 fl oz), which b28788fa moved to shower-cleaner on 2026-09-06. NOT an exclude: the product IS a disinfectant spray and its number is exact.' }"
+   },
+   "root_cause": "disinfectant-spray is priced per weight oz because its population is mostly net-weight aerosols (Lysol 12.5/19 oz, Great Value 19 oz, OdoBan 14.6 oz), but the same commodity legitimately also sells water-based trigger sprays labelled in fl oz (Scrubbing Bubbles 32 fl oz, Seventh Generation 26 fl oz). For every such product the kind guard fires the moment it holds the crown, and the allowlist is keyed to the exact size string BY DESIGN (so a per-store silence can never hide the next, different mismatch). The consequence is structural: any rule change or price move that swaps the crown product on this commodity re-arms the gate and stops the board until a human writes the same 'density is water' paragraph again. Today that human-in-the-loop moment was manufactured by a same-morning commit (b28788fa) that changed the crown product without re-running the guard on the result.",
+   "root_fix": {
+    "what": "let a commodity declare that weight-oz and fl-oz are interchangeable for its products at board precision, so the kind guard stops re-arming on every product swap in a water-density commodity while staying fully armed everywhere else (baby-formula powder vs ready-to-feed is exactly the case that must keep firing)",
+    "files": [
+     "grocery/commodities.json",
+     "grocery/audit-unit-basis-outlier.ps1",
+     "grocery/basis-kind-allowlist.json"
+    ],
+    "exact_change": "commodities.json: disinfectant-spray += \"kind_equivalent\": \"near-water\" with a one-line note field. audit-unit-basis-outlier.ps1 Find-MeasureKindMismatch: accept an optional -KindEquivalent map (id -> 'near-water') and, for ids in it, skip weight<->volume findings only (count and unknown kinds untouched). The live run builds the map from commodities.json; the SelfTest passes it explicitly. Then RETIRE the two disinfectant-spray size entries from basis-kind-allowlist.json (2026-08-08 '1 pk 32 fl oz' and today's '26 fl oz') so the declaration is load-bearing and not decorative. Do NOT apply the declaration to any other commodity in this plan: the six other density-reasoned allowlist entries (insect-spray, pickles, ranch-dressing, red-wine-vinegar, teriyaki-sauce, and the clam-chowder same-number family) are per-product judgments and stay as they are."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "kind_equivalent is not a matching field, so routing was measured only to prove it: 0 of 46,376 corpus names change commodity (see plan-2026-09-06.routing.json; the positive control there is item 796030's french-loaf row). The guard-side blast radius is out/basis-outliers.json: of 92 kind findings, exactly 1 is on disinfectant-spray (this Baker's cell); the other 91 across 64 commodities are untouched by a disinfectant-spray-only declaration. kind=92 -> 91, crown stays 0 after the surface entry.",
+    "affected_now": 1,
+    "names": [
+     "Seventh Generation Lemongrass Citrus Disinfecting Spray"
+    ],
+    "risk": "a near-water declaration on a commodity that later admits a concentrate or a powder would hide a real kind error there. Bounded by scoping it to disinfectant-spray only and by the must-fire twin (baby-formula ready-to-feed on a commodity WITHOUT the declaration must still fire).",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured against comparison-2026-09-06 (built 08:10:54, UNPUBLISHED: guards hard=1 at 08:15:51) and the capture files as of ~10:00. Two captures landed AFTER the pin: fareway-deals-2026-09-06.json (09:18, ad 2026-09-07..09-12) and walmart-regular-2026-09-06.json (09:11). The developer's rebuild WILL include them, so re-run audit-unit-basis-outlier.ps1 on the rebuilt board before reading any crown from this plan as still true. The scratch proof used the pinned comparison; a rebuilt board that includes the 09-07 Fareway ad may change OTHER crowns, so the guard must be read again on the rebuild, not assumed green from this proof.",
+   "proof": {
+    "guard_or_fixture": "audit-unit-basis-outlier.ps1 -SelfTest (frozen fixtures at lines 163-338) plus guards.ps1 on the rebuilt board; test-guards.ps1 for the hard-fail wiring",
+    "must_fire_case": "FROZEN from today's real row: a disinfectant-spray fixture with Baker's 'Seventh Generation ... Disinfecting Spray' 26 fl oz at 0.1996 holding the crown over five 'oz' aerosol peers MUST produce a crown finding (kind volume, row weight, agrees_with_engine_divisor false) when the commodity carries NO kind_equivalent and the allowlist has no '26 fl oz' entry; the existing baby-formula ready-to-feed fixture (line 220) must keep firing unchanged, because formula is the commodity where volume and weight are NOT interchangeable",
+    "clean_twin": "the same frozen disinfectant-spray fixture with kind_equivalent 'near-water' passed in MUST produce zero crown findings and zero kind findings for that row; the ketchup and paper-towels clean twins (line 305) stay silent; and the live run on the pinned comparison must report crown=0 with the '26 fl oz' entry present (surface) and ALSO crown=0 with both disinfectant-spray entries removed and the declaration present (root) - if the second run is not 0 the declaration is decorative",
+    "commands": [
+     "powershell -File grocery\\audit-unit-basis-outlier.ps1 -SelfTest",
+     "powershell -File grocery\\audit-unit-basis-outlier.ps1",
+     "powershell -File grocery\\guards.ps1",
+     "powershell -File grocery\\test-guards.ps1"
+    ]
+   },
+   "rollback": "surface: delete the one allowlist entry (the gate returns to exit 2 on this board, which is the honest state). root: remove kind_equivalent from disinfectant-spray, revert the audit hunk, restore the two retired allowlist entries. No data migration.",
+   "do_not_touch": [
+    "the exit expression of audit-unit-basis-outlier.ps1 (crown findings stay a hard fail)",
+    "the peer-majority vs declared-unit reference (deferred in plan-2026-09-03, still deferred)",
+    "any guard threshold",
+    "the disinfectant-spray excludes b28788fa added (they are correct; see item 4025dc)"
+   ],
+   "resolution_note": "The one hard fail was the disinfectant-spray crown at Baker's: Seventh Generation Disinfecting Spray, 26 fl oz at $5.19 = 0.1996/oz on a weight-oz row. The number is exact and overstated in the safe direction (water-density liquid); the gate fired because commit b28788fa moved the previously reviewed Scrubbing Bubbles crown to shower-cleaner the same morning and the size-keyed allowlist had never seen '26 fl oz'. Reviewed entry added (proved exit 2 -> exit 0 in a scratch fixture), board rebuilt, guards 0, published. Root: disinfectant-spray now declares kind_equivalent near-water so the next product swap on this commodity does not stop the board.",
+   "publish_batch": 1,
+   "status": "planned",
+   "premise_verified": "TRUE, verified 2026-09-06 against the live tree and then re-verified on the rebuilt board. out/basis-outliers.json (generated 08:14:55) carries exactly ONE kind_mismatch_crown entry and it is the one the plan names: disinfectant-spray | Baker's | 'Seventh Generation Lemongrass Citrus Disinfecting Spray' | size '26 fl oz' | per_unit 0.1996 | kind volume | row_kind weight | holds_crown true | agrees_with_engine_divisor false; kind_mismatch = 92 rows across 65 commodities with exactly 1 on disinfectant-spray. THE SCRATCH PROOF REPRODUCED ON THE LIVE TREE, not just in the reviewer's copy: with the one allowlist entry added, audit-unit-basis-outlier.ps1 against the PINNED comparison-2026-09-06 printed 'UNIT-BASIS-OUTLIER-COMPLETE ratio=11 kind=92 crown=0 reviewed=12' and exited 0, where the plan's baseline was exit 2 / crown=1 reviewed=11. FRESHNESS RE-READ AS THE PLAN DEMANDED: on the REBUILT board (built 10:38:15, which does include the two post-pin captures) the same guard prints ratio=11 kind=93 crown=0 reviewed=12, exit 0, and the crown is still Baker's Seventh Generation at 0.1996/oz over Walmart 0.2511, so the plan's crown reading survived the rebuild. kind rose 92 -> 93 because the rebuilt board carries one more kind row, not because a crown moved.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-24ac66",
+   "subject": "Grocery: 8 NEW price flag(s) - 2026-09-06",
+   "classification": "infra",
+   "evidence": [
+    "COUNT VERIFIED, AND '8 NEW' IS HALF TRUE. ad-cycle-log.txt:5001 'review-flag alert sent (8 new of 45)'. out/alerted-flags.json first_seen dates: Aluminum Foil|wow 2026-09-06, Blueberries|outlier 2026-09-06, Food Storage Bags (gallon)|outlier 2026-09-06, Frozen Pizza|wow 2026-09-06 = 4 genuinely new today. Anaheim Peppers|outlier first_seen 2026-08-06 (31 days), Crushed Thai Chili|outlier 2026-08-22 (15 days), Pomegranate|wow 2026-08-16 (21 days) = 3 RE-ARMED by the 14-day clock, continuously open, same detail text. Cheddar cheese curds|outlier first_seen 2026-08-27 (10 days) re-paged by a path I could not pin from the overwritten state (cleared-and-returned >7 days, or ack expiry); its detail is byte-identical to 08-27. So: 4 new conditions, 4 old ones re-shown.",
+    "Aluminum Foil | wow 97% ($1.79 -> $0.06): NOT a price event, a UNIT event. price-history.json aluminum-foil: 2026-08-10 cheapest 1.79 Family Fare (per EACH, the unit at the time); 2026-09-06 cheapest 0.0624 Hy-Vee (per SQ_FT). git: aluminum-foil unit was 'each' at 9eb37827 (08-01), 'sq_ft' at c4fa4b2a (08-14), 'each' at 04f9ec78 (08-30), 'sq_ft' at 34909efb (08-30). The band [1, 15] left over from each-days refused every sq_ft row (0.06-0.14), so the commodity had NO cells on comparison-2026-09-02 and no history entries 08-11..09-05; b28788fa (05:45 today) set band [0.015, 0.6] and the cells came back. sanity-check.ps1:21-30 keeps only cheapest_price per week and no unit, so 1.79/each vs 0.0624/sq ft reads as a 97% crash. Board row is right: Hy-Vee 'Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.68' (Weekly Ad 08-31..09-06) basis 'size 75 sq_ft' = 0.0624, and Hy-Vee's own everyday capture holds 'Hy Vee Aluminum Foil' 75 sq ft $4.98 (hyvee-regular-2026-09-06), so the 75 sq ft variant is proven for THIS commodity. Runner-up Walmart Great Value 75 sq ft $4.83 = 0.0644, 3 percent apart. REAL. The two sheet products item 4025dc drops (Kroger Pre-cut Foil Sheets, Our Family Foil Sheets 50 Ea) never held a sq_ft cell (BASIS-NULL on a sq_ft commodity), so the dispatch's suspected KIND collision on foil does not exist on this board: every foil cell is sq_ft with correct arithmetic.",
+    "Anaheim Peppers | outlier: Baker's 'Fresh Anaheim Peppers' $1.49 size 'lb' (bakers-regular-2026-09-06, kroger-api, as_of 2026-08-24) = 1.49/lb vs Walmart 'Fresh Anaheim Peppers, 16 oz' $2.94 = 2.94/lb, Family Fare $4.99/lb, Hy-Vee $1.25 per 0.25 lb ($4.99/lb). Store-brand produce at Kroger pricing. REAL ECONOMICS; open since 08-06.",
+    "Blueberries | outlier: Aldi 'Blueberries Package 1 PT' $2.59 (aldi-regular-2026-09-06, as_of 2026-08-05) basis 'size 11.2 oz' = 0.2312/oz vs Baker's 'Fresh Blueberries - 18 OZ - Clamshell' $6.99 = 0.3883 and Family Fare 'Flavor Ripe Blueberries 18 Oz' $6.99 = 0.3883. The 1 pt -> 11.2 oz conversion is the reviewed 2026-08-20 basis-kind-allowlist entry (Hy-Vee's Driscolls 1 pt $4.99 = 0.4455 on the same board uses the same conversion). New today only because the runner-up moved: Family Fare's cell changed product to the 18 oz clamshell, pushing the gap from under 35 percent to 40 percent. REAL ECONOMICS. Note the Aldi as_of is 32 days old (inside the 90-day carry).",
+    "Cheddar cheese curds | outlier: Aldi 'Happy Farms White Cheddar Cheese Curds 12 OZ' $4.29 (aldi-regular-2026-09-06, as_of 2026-08-26) = 0.3575/oz vs Family Fare 'Arthur Bay Mixed Cheese Curd' 12 oz $7.49 = 0.6242; Walmart/Baker's/Fareway 5 oz at $3.94-3.99 = 0.788-0.798. Same size, store brand vs regional brand. REAL ECONOMICS; open since 08-27.",
+    "Crushed Thai Chili | outlier: Walmart 'McCormick Crushed Thai Style Chili Pepper, 1.37 oz Bottle' $3.38 (Recipe Hunter in-store verified; walmart-regular-2026-08-31 shows $3.43 online) = 2.4672/oz vs Hy-Vee same McCormick 1.37 oz $5.99 = 4.3723. Two-store row, identical product, Walmart vs Hy-Vee spice pricing. REAL ECONOMICS; open since 08-22.",
+    "Food Storage Bags (gallon) | outlier: Hy-Vee 'Hy-Vee storage bags, 75 to 100 ct., $2.99' (Weekly Ad 08-31..09-06) basis 'per-100-pack' = 0.0299/each vs Aldi 'Boulder Twin Lock Storage Bags 40 CT' $1.85 = 0.0462. compare-deals.ps1:465-476 reads an ascending size range as choose-your-size and prices the LARGER end, deliberately and with a written reason. The ad line does not say gallon or quart; the storage-bags rule routes any bag line without 'quart' to the gallon commodity (index 107, quart is 108 and needs the word). Hy-Vee's own everyday capture holds NO Hy-Vee-brand storage bag row with a count (only That's Smart 1 Gallon 12 ct $1.19 and Glad 'box'), so whether 100 ct is the gallon variant is UNPROVEN either way; if 100 ct is the quart and the gallon is 75 ct, the true gallon figure is 2.99/75 = 0.0399. The crown does not depend on it (0.0399 < Aldi 0.0462 too) and the ad row expires 2026-09-06, so the cell is gone on tomorrow's board regardless. b28788fa lowered storage-bags band_min 0.03 -> 0.008 specifically to admit this row (band_min_set_under says so), which is why it is new today. UNPROVEN, crown-safe, self-expiring; the class question goes to Brad (open_questions).",
+    "Frozen Pizza | wow up 70% ($1.75 -> $2.96): the previous cheapest was Baker's 'Kroger Pepperoni French Bread Frozen Pizza' $3.49 / 2 pk 5 oz = 1.745 each, with Aldi 'Deep Dish Pizza Singles Pepperoni, 4 Count' 22.4 oz $6.99 = 1.7475 behind it. b28788fa added frozen-pizza min_piece_oz 12, so 5 oz and 5.6 oz single-serve pieces are refused as not-a-pizza-for-this-commodity. New cheapest Walmart 'Tony's Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz' $2.96 (walmart-regular-2026-08-31, marked down from 3.84, fulfillment STORE) = 2.96 each. The flag is the footprint of a deliberate ruling made the same morning. REAL.",
+    "Pomegranate | wow up 316% ($1.20 -> $4.99): the previous cheapest was Sam's Club 'Sahale Snacks Naturally Pomegranate Vanilla Cashews, 1.5 oz., 15 pk.' $17.98 = 1.1987 per-each, a bag of CASHEWS holding the pomegranates cell from 08-16 to 09-05. known-wrong.json now carries the ruling (key pomegranates|SamsClub|sahale-snacks-naturally-pomegranate-vanilla-cash, from PLAN-top5-2026-09-06 section 1.2). Remaining cell Baker's 'Pomegranates' $4.99 / 1 ct (bakers-regular-2026-09-06, as_of 2026-08-22) is the real fruit. The wow flag is the footprint of a wrong product LEAVING. Worth writing down: the matching outlier flag (Sam's $1.20 76% below Baker's) paged on 08-16 and re-paged 08-30 and the cashews stayed on the board for 21 days."
+   ],
+   "surface_fix": {
+    "what": "no board cell changes: all eight numbers are either real (4), the footprint of a same-morning ruling (2), a unit change misread by the comparator (1), or unproven-but-crown-safe and expiring tonight (1). Quiet the four reviewed-real outliers through the designed valve, review-ack.json, with SHORT expiries and reasons, so the 14-day clock stops re-showing them as NEW",
+    "files": [
+     "grocery/out/review-ack.json"
+    ],
+    "exact_change": "acks += SANITY|Anaheim Peppers|outlier (expires 2026-10-04, 'Baker's store produce $1.49/lb vs Walmart $2.94/lb, verified against bakers-regular as_of 2026-08-24; renew only if the Baker's row is re-read at the same price'); SANITY|Cheddar cheese curds|outlier (expires 2026-10-04, 'Aldi Happy Farms 12 oz $4.29 vs Family Fare Arthur Bay 12 oz $7.49, same size'); SANITY|Crushed Thai Chili|outlier (expires 2026-10-04, 'same McCormick 1.37 oz bottle, Walmart in-store $3.38 vs Hy-Vee $5.99'); SANITY|Blueberries|outlier (expires 2026-09-20, 'Aldi 1 pt = 11.2 oz reviewed 08-20; runner-up moved, Aldi did not; short expiry because the Aldi row is 32 days old'). No ack for Aluminum Foil, Frozen Pizza, Pomegranate (they clear themselves next week) or Food Storage Bags (row expires 2026-09-06)."
+   },
+   "root_cause": "sanity-check.ps1's week-over-week detector compares cheapest_price across weeks with no record of the UNIT each number was in: price-history.json entries carry week_of, cheapest_price, cheapest_store and per_store, never a unit. A deliberate commodity re-basing (aluminum-foil each -> sq_ft, and saffron gram -> oz on 2026-08-30 which has not yet had two weeks of history to compare) therefore reads as a 97 percent price crash and pages a human to verify a parse that is correct. The same detector cannot tell a fix (a wrong product removed, a piece-size floor ruled) from a drift, but that half is by design: it pages once and the flag ages out. The unit blindness is not by design, and it is the same 'two facts published without the fact that binds them' shape the estate keeps meeting.",
+   "root_fix": {
+    "what": "bank the commodity unit into every price-history entry from now on, and make the week-over-week comparison refuse to compare across a unit change: same unit -> wow as today; different unit -> a quiet 'unit-changed' flag that is recorded in guards-<week>.json but not paged; legacy entries with no unit -> compare as today but say 'unit unverified' in the detail",
+    "files": [
+     "grocery/check-ad-cycles.ps1",
+     "grocery/sanity-check.ps1",
+     "grocery/test-auditors.ps1"
+    ],
+    "exact_change": "check-ad-cycles.ps1 (the 'history banked from the raw board' step): each new history entry += unit: <row.unit>. sanity-check.ps1: (a) add -HistoryFile <path> (default: <root>\\price-history.json) so a fixture can reach the new branch - today it reads $root\\price-history.json unconditionally (line 23) and NO test can feed it a history; (b) load the prior entry's unit alongside its cheapest_price; (c) normalise spelling before comparing (fl_oz == floz; the 08-30 commit renamed five commodities' unit that way and they must NOT read as changes); (d) if both units are known and differ, emit type 'unit-changed' with detail 'unit changed <old> -> <new>; not comparable' and add 'unit-changed' to check-ad-cycles' $SANITY_QUIET list so it is recorded, not paged; (e) if the prior unit is unknown, keep the wow verdict and append '(prior unit unrecorded)'."
+   },
+   "blast_radius": {
+    "measured_as": "history entries",
+    "measured_by": "commodities.json at main@{2026-08-10} and main@{2026-08-30} diffed against the live file for the unit field, and price-history.json read for every commodity flagged today. Unit changes since 08-10: 1 (aluminum-foil each -> sq_ft, the flag today). Since 08-30: 6, of which 5 are the fl_oz -> floz spelling normalisation (garlic-infused-olive-oil, coconut-aminos, avocado-oil, peanut-oil, creamy-cilantro-lime-dressing) that the fix must treat as equal, and 1 is a real re-basing (saffron gram -> oz, factor 28.35) that will produce the same false crash the day saffron has two history weeks unless this ships. Today's flag set: 8 shown; the fix changes exactly 1 verdict (Aluminum Foil wow -> unit-changed, quiet). The other 44 flags on the board are untouched.",
+    "affected_now": 1,
+    "names": [
+     "Aluminum Foil"
+    ],
+    "risk": "a unit change that hides a REAL price crash on the same day would be quiet for one week. Bounded: the outlier detector (runner-up comparison, unit-free) still runs on the same row, and the change is recorded in guards-<week>.json."
+   },
+   "freshness": "measured against comparison-2026-09-06 (built 08:10:54, UNPUBLISHED: guards hard=1 at 08:15:51) and the capture files as of ~10:00. Two captures landed AFTER the pin: fareway-deals-2026-09-06.json (09:18, ad 2026-09-07..09-12) and walmart-regular-2026-09-06.json (09:11). The developer's rebuild WILL include them, so re-run audit-unit-basis-outlier.ps1 on the rebuilt board before reading any crown from this plan as still true. The alerted-flags.json first_seen dates were read at ~09:50; the file is rewritten every cycle.",
+   "proof": {
+    "guard_or_fixture": "test-auditors.ps1 sanity-check block (lines ~2388-2460 already run sanity-check.ps1 against a frozen comparison in $fxSv via RunPS) - add a frozen price-history fixture beside it and pass it with -HistoryFile; the SANITY-PAGER region extraction at line 2457 already tests the quiet-type list",
+    "must_fire_case": "FROZEN from today: history aluminum-foil {week_of 2026-08-10, cheapest_price 1.79, unit 'each'} against a board row aluminum-foil unit 'sq_ft' cheapest 0.0624 MUST produce type 'unit-changed' and MUST NOT produce 'wow'; and check-ad-cycles' pager must count it as quiet (sanityQuiet) rather than as a NEW flag",
+    "clean_twin": "FROZEN from today: history frozen-pizza {2026-09-02, 1.745, unit 'each'} against board frozen-pizza unit 'each' cheapest 2.96 MUST still produce 'wow' (70 percent); history entry with unit 'fl_oz' against a board unit 'floz' MUST produce neither 'wow' (price equal) nor 'unit-changed'; a history entry with NO unit against sq_ft 0.0624 keeps producing 'wow' with '(prior unit unrecorded)' so legacy history is not silently blessed",
+    "commands": [
+     "powershell -File grocery\\test-auditors.ps1",
+     "powershell -File grocery\\sanity-check.ps1"
+    ]
+   },
+   "rollback": "revert the three hunks; price-history entries written with a unit field are harmless to the old reader (it ignores unknown fields). Remove the four acks or let them expire.",
+   "do_not_touch": [
+    "the 35 percent outlier threshold and the 40 percent wow threshold",
+    "the range-max rule at compare-deals.ps1:465-476 (Brad's call, see open_questions)",
+    "the 14-day re-arm clock in check-ad-cycles"
+   ],
+   "resolution_note": "8 flags: 4 real (Anaheim, blueberries, curds, Thai chili; acked with short expiries), 2 footprints of this morning's b28788fa rulings (frozen pizza min_piece_oz 12; pomegranate cashews ruled known-wrong), 1 unit-change artifact (aluminum foil went each -> sq_ft; the 97 percent crash is 1.79/each vs 0.0624/sq ft), 1 unproven-but-crown-safe range row expiring tonight (Hy-Vee storage bags 75 to 100 ct priced at 100). Only 4 of the 8 were new today; 4 were 14-day re-arms. Code: price-history now banks the unit and the wow detector no longer compares across a unit change. No board cell moved.",
+   "publish_batch": 2,
+   "status": "planned",
+   "premise_verified": "TRUE, including the plan's own correction that '8 NEW' is half true. Read out/alerted-flags.json (228 keys) on 2026-09-06. Genuinely new today, all first_seen 2026-09-06T08:25:44: Aluminum Foil|wow, Blueberries|outlier, Food Storage Bags (gallon)|outlier, Frozen Pizza|wow. Re-shown, not new: Anaheim Peppers|outlier first_seen 2026-08-06T11:31:48 (31d), Crushed Thai Chili|outlier 2026-08-22T08:27:23 (15d), Pomegranate|wow 2026-08-16T06:22:31 (21d), Cheddar cheese curds|outlier 2026-08-27T08:19:52 (10d) - all four carry last_seen 2026-09-06T08:25:44. So 4 new conditions and 4 old ones re-shown, exactly as the plan says. EVERY ACKED PRICE RE-DERIVED FROM SOURCE BEFORE SILENCING IT: Baker's 'Fresh Anaheim Peppers' 1.49 size 'lb' as_of 2026-08-24 vs Walmart 'Fresh Anaheim Peppers, 16 oz' 2.94 (bakers/walmart regular captures); Aldi 'Happy Farms White Cheddar Cheese Curds 12 OZ' 4.29 as_of 2026-08-26; Aldi 'Blueberries Package 1 PT' 2.59 as_of 2026-08-05, which is the 32-day age the plan flags and the reason its ack expires 2026-09-20 rather than 10-04; and the board's own crushed-thai-chili row = Walmart 'McCormick Crushed Thai Style Chili Pepper, 1.37 oz Bottle' 3.38 = 2.4672/oz vs Hy-Vee 'McCormick Crushed Thai Style Chili Pepper' 1.37 oz 5.99 = 4.3723/oz, the identical bottle. The aluminum-foil UNIT event is confirmed on the rebuilt board: unit sq_ft, Hy-Vee 0.0624 crown, Walmart Great Value 75 sq ft 0.0644 runner-up, 3 percent apart - a real row, not a 97 percent crash.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-4025dc",
+   "subject": "Grocery matching soundness - review needed",
+   "classification": "no-code-change",
+   "evidence": [
+    "All 10 rows are the footprint of ONE commit, b28788fa (2026-09-06 05:45:28), whose commodities.json diff (9eff9cff -> b28788fa, measured by diffing the two JSON versions per id) is exactly: rotisserie-chicken exclude += \\bbites\\b, \\bturkey\\b, min_pack_oz 32; aluminum-foil exclude += pre-cut, pop-up, \\bsheets?\\b, bucket liners (and band 1..15 -> 0.015..0.6); bread exclude += bread & butter; disinfectant-spray exclude += bathroom cleaner, scrubbing bubbles, shower & tub, tub & tile, shower aerosol. Verdict per row: DROPPED rotisserie-chicken x2 Land O'Frost Rotisserie Seasoned Turkey Breast 8 oz = sliced lunch meat, not a rotisserie chicken, CORRECT. DROPPED aluminum-foil x2 Kroger Pre-cut Foil Sheets / Our Family Foil Sheets Pop Up 50 Ea = count-sold sheets that cannot express sq_ft (they were BASIS-NULL and held no cell on any board since the sq_ft re-basing), CORRECT and cell-neutral. DROPPED bread Great Gherkins Sweet Heat Bread & Butter Pickle Chips and MOVED bread -> pickles Mt. Olive Bread & Butter Chips / Sweet Heat Petites = pickles, CORRECT. MOVED disinfectant-spray -> shower-cleaner x3 Scrubbing Bubbles Bathroom Grime Fighter (Rainshower aerosol, Citrus 20 oz, Petal Paradise 32 fl oz) = bathroom cleaners that carry the word disinfectant; shower-cleaner is the commodity a reader means, CORRECT. Cell effect already on the pinned board: disinfectant-spray Baker's 0.1559 -> 0.1996 (Seventh Generation) and Sam's 0.178 -> 0.2737 (OdoBan 6 pk); crown stays Baker's; shower-cleaner cells unchanged (Sam's already held Scrubbing Bubbles 3 pk at 0.0832, Baker's Clean Shower 0.1184 beats Scrubbing Bubbles 32 fl oz $4.99 = 0.156). Items 79fe01, 24ac66 and this one are ONE EVENT (that commit) with three different consequences, not one defect: the guard fail is a size-keyed review gap on the new Baker's crown, the foil crash is a unit-history artifact, and these drops are the rule change itself."
+   ],
+   "root_cause": "an intended rule change (b28788fa) was committed at 05:45 without running audit-match-soundness.ps1 -Accept afterwards, so the 08:21 daily run diffed the new mapping against the old blessed baseline and paged. The diff is complete and every row is right; there is nothing to fix except the baseline. The same commit also did not run guards.ps1 on its own result, which is how item 79fe01 happened.",
+   "resolution_note": "Reviewed all 10 rows against the b28788fa diff and the product names: 5 correct drops (2 turkey lunch meat, 2 count-sold foil sheets that never held a sq_ft cell, 1 pickle chips) and 5 correct moves (2 Mt. Olive pickles to pickles, 3 Scrubbing Bubbles bathroom cleaners to shower-cleaner). Baseline accepted with audit-match-soundness.ps1 -Accept after guards reached 0 (never -ForceAccept; if the verdict gate blocks, stop and report which verdict). Note for the rule-change habit: a commodities.json commit should end with -Accept and guards.ps1, not with a page three hours later.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "TRUE and reproduced. audit-match-soundness.ps1 on the rebuilt board printed 'MOVED=5 DROPPED=5 drift-vs-engine=0' and the ten rows are EXACTLY the ten the plan lists, in the plan's own verdicts: DROPPED rotisserie-chicken x2 (both Land O'Frost rotisserie-seasoned TURKEY breast 8 oz, sliced lunch meat); DROPPED aluminum-foil x2 (Kroger Aluminum Pre-cut Foil Sheets, Our Family Foil Sheets Pop Up Pre Cut Single 50 Ea, both count-sold sheets that cannot express sq_ft); DROPPED bread x1 (Great Gherkins Sweet Heat Bread & Butter Pickle Chips, pickles); MOVED bread -> pickles x2 (Mt. Olive Bread & Butter Chips, Mt. Olive Sweet Heat Petites); MOVED disinfectant-spray -> shower-cleaner x3 (Scrubbing Bubbles Bathroom Grime Fighter Rainshower, Citrus 20 oz, Petal Paradise 32 fl oz). Every row is correct and every row traces to b28788fa. Nothing else appeared in the MOVED/DROPPED report. See the deviation field for the one line the plan did not predict (new-contested=4), which is measured, explained, and not a move.",
+   "deviation": "NEW DETAIL, NOT A NEW CLASS, and not a MOVE. Alongside the expected MOVED=5 DROPPED=5, the run also printed 'new-contested=4': '(4 pack) SEEDS OF CHANGE Organic Quinoa, Brown & Red Rice, 8.5oz', 'Anaheim, Serrano or Poblano Peppers', 'Oscar Mayer Chopped Ham or Turkey' and 'Slicing Cucumbers or Green Bell Peppers'. MEASURED before accepting: all four are ABSENT from out/audit/match-baseline.json entirely (18,935 names, 358 contested, generated 2026-09-05 18:59), so they are NEW NAMES entering the corpus and not names that moved. Three come from out/fareway/fareway-deals-2026-09-06.json (the ad that landed 09:18) and the fourth from out/regular/walmart-regular-2026-09-06.json (09:11) - the two post-pin captures the plan's own freshness line names. All four are 'or'-joined multi-product ad names, which is the known order-dependence shape, and ZERO of them holds a cell on the rebuilt board. The script's own contract calls new-contested 'Advisory' (audit-match-soundness.ps1:12). Reviewed and accepted; no MOVE was left unexplained, so nothing is parked as needs-brad. Baseline accepted with -Accept (never -ForceAccept): '19013 product names, 354 contested, drift-vs-engine=0', exit 0.",
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-39933e",
+   "subject": "Grocery: 3 store(s) dropped from a commodity they carry - 2026-09-06",
+   "classification": "infra",
+   "evidence": [
+    "PREMISE FALSIFIED FOR 2 OF 3. out/coverage-gaps.json (08:19, classified_against candidates-2026-09-06.json): red-potatoes @ Fareway candidate 'Red Potatoes and Goldust Potatoes' reason RULE-INVISIBLE 'no include of any commodity matched this name'; pecorino-romano @ Fareway 'Ambriola Pecorino Romano Wedge' RULE-INVISIBLE; cinnamon-stick @ Aldi 'Breakfast Best Cinnamon Flavor French Toast Sticks 16 OZ' RULE-INVISIBLE.",
+    "Both Fareway names DO match their live rule, tested with .NET regex (PowerShell -imatch) and by the routing simulator: 'Red Potatoes and Goldust Potatoes' -imatch red\\s+potato(?:es)? -> TRUE, routes to red-potatoes (index 135) before AND after any change; 'Ambriola Pecorino Romano Wedge' -imatch \\bpecorino\\s+romano(?:\\s+cheese)?\\b -> TRUE, routes to pecorino-romano (index 533). Frozen in plan-2026-09-06.routing.json item_39933e_no_widening_proof. No rule is too strict here.",
+    "WHY THE AUDIT SAID OTHERWISE: both names come from out/fareway/fareway-deals-2026-08-30.json ('Red Potatoes and Goldust Potatoes' $3.88 5 lb; 'Ambriola Pecorino Romano Wedge' $8.99 7 oz; as_of 2026-08-30), an ad whose window closed 2026-09-05. ad-cycle-log.txt:4996 (row-age, 08:24): 'Fareway's newest ad file fareway-deals-2026-08-30.json closed 2026-09-05, so its 244 sale row(s) are now excluded from the board (compare-deals refuses expired ads)'. The engine never ingested the rows, so candidates-2026-09-06.json has no Fareway row for either name (checked: pecorino-romano has 1 candidate total and no Fareway entry; red-potatoes' only Fareway candidates are the Green Giant Steamers OUT-OF-BAND rows). audit-coverage-gaps.ps1:194-196 scans the NEWEST fareway-deals file regardless of its window, and Classify (lines 376-391) reaches RULE-INVISIBLE by elimination: not in the engine's candidates and not owned by another commodity, therefore 'no include matched'. Absence from the candidates file was read as absence of a rule. The fresh Fareway ad (fareway-deals-2026-09-06.json, opens 2026-09-07) carries neither product, so these two gaps close by themselves on the next build and no widening would admit anything.",
+    "cinnamon-stick @ Aldi is a true non-match and correctly so: 'Breakfast Best Cinnamon Flavor French Toast Sticks 16 OZ' $2.95 is frozen French toast; the strict rule ^(?=.*\\bcinnamon\\s+sticks?\\b).*$ requires the two words adjacent and only the loosened probe (cinnamon.{0,25}sticks) saw it. aldi-regular-2026-09-06.json holds 30 'cinnamon' rows and exactly one with 'stick', this one. Aldi genuinely carries no cinnamon sticks in the capture; the board's cinnamon-stick row (Sam's 7 oz $7.32 = 1.0457 crown, Family Fare, Walmart, Baker's) is unaffected. Designed valve: coverage-gap-allowlist.json entry.",
+    "Also in the report: match_timeouts 3, all on the LOOSENED baby-potatoes probe (?:baby|petite|creamer).{0,25}(?:\\w+.{0,25}){0,5}potato(?:es)? against 'Sweet Baby Ray's wing sauce or marinade...' - the circuit breaker quarantined it. Not part of this alert; recorded so nobody re-derives it."
+   ],
+   "surface_fix": {
+    "what": "reviewed exception for the one true non-match, and NO rule widening for the two Fareway names (they already match; the products left with the 08-30 ad)",
+    "files": [
+     "grocery/coverage-gap-allowlist.json"
+    ],
+    "exact_change": "allow += { commodity: 'cinnamon-stick', store: 'Aldi', why: 'NOT-A-PRODUCT (reviewed 2026-09-06): the only Aldi candidate is \"Breakfast Best Cinnamon Flavor French Toast Sticks 16 OZ\" $2.95, frozen French toast; only the loosened probe cinnamon.{0,25}sticks sees it, the strict rule correctly does not. aldi-regular-2026-09-06 holds no cinnamon sticks at all. Re-check if an Aldi row containing the adjacent words cinnamon sticks ever appears.' }"
+   },
+   "root_cause": "audit-coverage-gaps.ps1 builds its product list from files the engine may legitimately refuse (an expired browser-store ad) and then classifies a gap by looking the name up in the engine's candidates file. A name the engine never ingested is absent from that file for a reason that has nothing to do with rules, but Classify has no verdict for 'not ingested' and falls through to RULE-INVISIBLE, the paging verdict. So every Fareway ad rollover day (the store's own Sun-Sat cycle leaves a one-day gap) can manufacture actionable rule pages out of an expired ad, and a developer following the alert would widen a rule that already matches. This is the fail-open-reads-as-empty class from the other side: the audit reads its own input gap as the engine's blindness.",
+   "root_fix": {
+    "what": "give the classifier the missing verdict and stop feeding it rows the engine cannot see: before RULE-INVISIBLE, test the commodity's STRICT include against the name (the compiled strict probes already exist in the script); a strict match that is absent from the candidates is NOT-INGESTED (listed, non-paging, with the source file and its ad window named). And skip a browser-store deals file whose ad_to is before today when scanning products, saying so in the report",
+    "files": [
+     "grocery/audit-coverage-gaps.ps1"
+    ],
+    "exact_change": "Classify(): after the CLAIMED-BY test and before returning RULE-INVISIBLE, if any strict include probe of $id matches $name -> return reason 'NOT-INGESTED', detail 'the strict include matches but the engine never ingested this row (source <file>, ad window <from>..<to>)', actionable=false. Product scan (lines 194-196): for bakers/sams/fareway deals files read ad_from/ad_to (or the row-level ad_to) and skip the file with a printed 'SKIPPED expired ad <file> closed <date>' line when ad_to < today; fall back to the newest in-window file if one exists. by_reason gains NOT-INGESTED. Exit code unchanged: still 2 only for CLAIMED-BY / RULE-INVISIBLE / PRICED / unclassifiable."
+   },
+   "blast_radius": {
+    "measured_as": "gaps",
+    "measured_by": "today's out/coverage-gaps.json, 27 gaps, re-classified by hand with the proposed rule: RULE-INVISIBLE 3 -> 1 (cinnamon-stick, then allowlisted), NOT-INGESTED 0 -> 2 (the two Fareway 08-30 rows), BASIS-NULL 13 and BAND-DROPPED 11 unchanged. Actionable count 3 -> 0 after the allowlist entry. Routing measured too, to prove no rule moves: both Fareway names route identically before and after (routing artifact).",
+    "affected_now": 2,
+    "names": [
+     "Red Potatoes and Goldust Potatoes",
+     "Ambriola Pecorino Romano Wedge"
+    ],
+    "risk": "a strict include that matches AND a candidates file that is stale (built from an older rule set) would now read NOT-INGESTED instead of paging. Bounded by the existing rules_hash check the board-vs-identity guard already performs on the candidates file; the developer should have Classify refuse NOT-INGESTED when the candidates file's week_of is not the board's."
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured against comparison-2026-09-06 (built 08:10:54, UNPUBLISHED: guards hard=1 at 08:15:51) and the capture files as of ~10:00. Two captures landed AFTER the pin: fareway-deals-2026-09-06.json (09:18, ad 2026-09-07..09-12) and walmart-regular-2026-09-06.json (09:11). The developer's rebuild WILL include them, so re-run audit-unit-basis-outlier.ps1 on the rebuilt board before reading any crown from this plan as still true. coverage-gaps.json was generated 08:19 against candidates-2026-09-06.json (08:10) and the 08-30 Fareway ad; the 09-06 Fareway ad landed at 09:18, after the audit ran.",
+   "proof": {
+    "guard_or_fixture": "audit-coverage-gaps.ps1 -SelfTest (it already carries the ReDoS must-fire at lines ~89-111; add a classification fixture beside it) and test-auditors.ps1",
+    "must_fire_case": "FROZEN from today: name 'Ambriola Pecorino Romano Wedge', store Fareway, commodity pecorino-romano, a candidates set with NO Fareway pecorino row, source file with ad_to 2026-09-05 -> Classify returns NOT-INGESTED, actionable false, and the run exit is 0 for that gap; a deals file fixture with ad_to yesterday is SKIPPED by the product scan and the skip line is printed",
+    "clean_twin": "the founding pork-chops shape: a name that matches NO strict include of its commodity, absent from candidates -> still RULE-INVISIBLE, actionable true, exit 2 (if this goes quiet the fix has disarmed the audit); and today's cinnamon-stick row without its allowlist entry must still read RULE-INVISIBLE (strict rule does not match), then CLEAN with the entry",
+    "commands": [
+     "powershell -File grocery\\audit-coverage-gaps.ps1 -SelfTest",
+     "powershell -File grocery\\audit-coverage-gaps.ps1",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the audit hunk (the two Fareway gaps return as RULE-INVISIBLE pages until the next Fareway ad rollover clears them) and delete the one allowlist entry.",
+   "do_not_touch": [
+    "red-potatoes and pecorino-romano rules (they already match; widening them admits nothing and is the change the false verdict was inviting)",
+    "the loosened-probe construction and its timeout breaker",
+    "the 250 ms match timeout"
+   ],
+   "resolution_note": "Two of three 'too-strict include' verdicts were false: 'Red Potatoes and Goldust Potatoes' and 'Ambriola Pecorino Romano Wedge' match their rules today and came from Fareway's 08-30 ad, which expired 09-05 and which the engine correctly refused; the audit read 'not ingested' as 'no rule can see it'. Taught it the NOT-INGESTED verdict and to skip expired deals files. The third (Aldi cinnamon-stick) is frozen French toast sticks seen only by the loosened probe; allowlisted with the reason. No rule widened.",
+   "publish_batch": 2,
+   "status": "planned",
+   "premise_verified": "TRUE, and the plan's falsification of 2 of the 3 verdicts is confirmed by direct measurement rather than by trusting the artifact alone. out/coverage-gaps.json (generated 08:19, classified_against candidates-2026-09-06) holds 27 gaps split BAND-DROPPED 11 / BASIS-NULL 13 / RULE-INVISIBLE 3, and the three RULE-INVISIBLE rows are red-potatoes @ Fareway, pecorino-romano @ Fareway and cinnamon-stick @ Aldi, exactly as the plan says. I then tested the three names against the LIVE commodities.json rules with PowerShell -imatch: 'Red Potatoes and Goldust Potatoes' MATCHES red-potatoes (array index 135) via red\\s+potato(?:es)?; 'Ambriola Pecorino Romano Wedge' MATCHES pecorino-romano (index 533) via \\bpecorino\\s+romano(?:\\s+cheese)?\\b; 'Breakfast Best Cinnamon Flavor French Toast Sticks 16 OZ' does NOT match cinnamon-stick (index 567, ^(?=.*\\bcinnamon\\s+sticks?\\b).*$). So two of the three 'no include of any commodity matched this name' verdicts are FALSE - the rules see those names today - and the third is a true non-match on frozen French toast. This agrees with the frozen item_39933e_no_widening_proof rows in plan-2026-09-06.routing.json (before_index 135 and 533, unchanged after). No rule was widened.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-796030",
+   "subject": "Grocery: semantic sweep found 4 product(s) no rule can see - 2026-09-06",
+   "classification": "wrong-product",
+   "evidence": [
+    "explain-coverage-gap.ps1 (read-only, writes out/coverage-gap-explained.json): all 4 findings are NO-INCLUDE (no include pattern matches). None is EXCLUDED or CLAIMED.",
+    "cod x2, Walmart: 'Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen)' $13.92 / 32 oz and 'Great Value Frozen Catfish Skinless Fillets, 2 lb Bag' $14.72 / 32 oz (walmart-regular-2026-08-11.json, as_of 2026-08-11). Flounder and catfish are different fish; 'Cod Fillets' must not price them. The cod include \\bcod\\b is right to miss them. Rulings via add-known-wrong.ps1, not rules. UNRELATED to today's everyday-mismatch line cod @ Fareway board 11.99 vs link 11.49 (x0.96): that is 'Supreme Choice Cod, Boneless, Fillets' 16 oz, current_price 11.99 in fareway-regular-2026-09-06 (as_of 09-06) against a link read of 11.49, a 4 percent browser-store drift under the 50 percent line that the Wednesday browser agent owns; no crown involved (Baker's 6.99/lb holds it).",
+    "french-bread, Baker's: 'Private Selection French Loaf Sliced' $4.99 size '1 ct' (bakers-regular-2026-09-06, as_of 2026-08-22). Sibling rows in the same capture: 'Private Selection French Loaf' $4.99 16 oz, 'Kroger French Loaf Sliced' $4.99 16 oz, 'La Brea Bakery French Loaf' $4.99 16 oz. The rule has french\\s+bread, baguette, italian\\s+bread and two bakery phrases but no 'french loaf', which is Kroger's shelf name for the same 16 oz product. GENUINE MISS. Current Baker's cell: 'Private Selection French Baguette Sliced' $1.99 (1 ct) = 1.99 each; unchanged by the admit (4.99 > 1.99).",
+    "taco-sauce, Walmart: 'Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz' $1.98 (walmart-regular-2026-08-31, fulfillment STORE, wm_unit_price 24.8 c/oz). This is Ortega's taco sauce under Walmart's listing name (the Fareway and Baker's cells already price 'Ortega Taco Sauce, Original, Mild' 16 oz $3.48 and 'Ortega Original Thick and Smooth Medium Taco Sauce' 16 oz $3.49). The include taco\\s+sauce cannot see 'Taco and Enchilada Chili Sauce', and even a matching include would be killed by the exclude 'enchilada'. GENUINE MISS with a two-part fix. Current Walmart cell: 'Great Value Taco Sauce Mild ... 16 oz' $1.78 = 0.1112, in the SAME 08-31 capture; unchanged by the admit (Ortega 0.22 and 0.2475).",
+    "ROUTING, MEASURED (plan-2026-09-06.routing.json): 46,376 distinct names from 346 files (comparison-2026-09-06 + out/regular + out/sams + out/bakers + out/fareway; 25 non-capture files skipped and listed). Proposed changes flip 12 names, all from <unmatched>: french-bread gains 5 (Private Selection French Loaf, Private Selection French Loaf Sliced, Kroger French Loaf Sliced, La Brea Bakery French Loaf at Baker's; Mini French Loaf at Fareway) and taco-sauce gains 7 (six Ortega Taco and Enchilada Chili Sauce listings 8/16 oz at Walmart plus one '(5 pack) ... 8 oz' $10.90/40 oz marketplace-shaped row from the 08-11 capture). No name leaves any commodity; narrowing 'enchilada' to \\benchilada\\s+sauce\\b changes no other verdict (the flip set covers both edits). Positive control: 'Private Selection French Loaf Sliced' expected french-bread, observed french-bread."
+   ],
+   "surface_fix": {
+    "what": "two rulings and two rule widenings",
+    "files": [
+     "grocery/known-wrong.json",
+     "grocery/commodities.json"
+    ],
+    "exact_change": "add-known-wrong.ps1 -Commodity cod -Store Walmart -Name 'Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen)' -RuledBy 'claude (grocery triage, plan-2026-09-06)' -Evidence 'Flounder, not cod; semantic sweep 2026-09-06 cos 0.6886'. Same for 'Great Value Frozen Catfish Skinless Fillets, 2 lb Bag' (catfish, cos 0.6399). commodities.json: french-bread.include += 'french\\\\s+loaf'; taco-sauce.include += 'taco\\\\s+(?:and|&)\\\\s+enchilada\\\\s+(?:chili\\\\s+)?sauce' AND taco-sauce.exclude: replace 'enchilada' with '\\\\benchilada\\\\s+sauce\\\\b' (the bare token is what would kill the admitted name; the narrowed one still refuses an actual enchilada sauce)."
+   },
+   "root_cause": "two of the four are the include library unable to express a store's shelf name for the same product (Kroger says 'French Loaf' for its 16 oz French bread; Walmart says 'Taco and Enchilada Chili Sauce' for Ortega taco sauce), and in the taco case an exclude written as a bare word ('enchilada') blocks the fix from working at all, the same shape as the 2026-07-31 hot-sauce/taco-sauce lesson but from the exclude side. The other two are the sweep doing its job: an embedding sees 'skinless fillets 2 lb bag' and cannot know flounder is not cod; the ruling file exists exactly so those stop re-appearing.",
+   "root_fix_none_because": "the widened tokens and the narrowed exclude ARE the class fix for these two names (there is no library above commodities.json for shelf-name synonyms), and the two fish get rulings so the sweep stops re-finding them; nothing structural is left unexpressed.",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "before/after first-match-wins routing of 46,376 distinct names across comparison-2026-09-06 + out/regular (250 files) + out/sams + out/bakers + out/fareway, frozen in plan-2026-09-06.routing.json with the file list and the positive control",
+    "affected_now": 12,
+    "names": [
+     "Private Selection French Loaf Sliced",
+     "Private Selection French Loaf",
+     "Kroger French Loaf Sliced",
+     "La Brea Bakery French Loaf",
+     "Mini French Loaf",
+     "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+     "Ortega Original Thick and Smooth Mild Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+     "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 16 oz Jar",
+     "Ortega Original Thick and Smooth Mild Taco and Enchilada Chili Sauce, Kosher, 16 oz",
+     "Ortega Original Thick and Smooth Hot Taco and Enchilada Chili Sauce, Kosher, 16 oz Bottle",
+     "Ortega Hot Thick & Smooth Original Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+     "(5 pack) Ortega Hot Thick & Smooth Original Taco and Enchilada Chili Sauce, Kosher, 8 oz"
+    ],
+    "risk": "Fareway 'Mini French Loaf' $1.49 / 8 oz (fareway-deals-2026-09-06, ad opens 09-07) is admitted by the token and is NOT a full loaf; french-bread's min_pack_oz 12 (b28788fa) should refuse it. That floor was NOT exercised in a dry run here. If the rebuilt board shows Fareway french-bread at 1.49, add french-bread.exclude += 'mini\\\\s+french\\\\s+loaf' before publishing. The Walmart '(5 pack)' row (08-11 capture, $10.90 / 40 oz = 0.2725) is dearer than every other Walmart row and cannot take a cell.",
+    "cell_effects": [
+     {
+      "commodity": "taco-sauce",
+      "store": "Walmart",
+      "before": 0.1112,
+      "after": 0.1112
+     },
+     {
+      "commodity": "french-bread",
+      "store": "Baker's",
+      "before": 1.99,
+      "after": 1.99
+     },
+     {
+      "commodity": "french-bread",
+      "store": "Fareway",
+      "before": 2.49,
+      "after": 2.49
+     }
+    ]
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured against comparison-2026-09-06 (built 08:10:54, UNPUBLISHED: guards hard=1 at 08:15:51) and the capture files as of ~10:00. Two captures landed AFTER the pin: fareway-deals-2026-09-06.json (09:18, ad 2026-09-07..09-12) and walmart-regular-2026-09-06.json (09:11). The developer's rebuild WILL include them, so re-run audit-unit-basis-outlier.ps1 on the rebuilt board before reading any crown from this plan as still true. The corpus INCLUDES the two post-pin captures (fareway-deals-2026-09-06, walmart-regular-2026-09-06), which is where 'Mini French Loaf' comes from. cell_effects were derived by reading the capture files and the Select-FreshestCaptureRows depth rule (all admitted rows sit in the same capture as the current cell's row, so no eviction is possible); they were not produced by a compare-deals dry run.",
+   "proof": {
+    "guard_or_fixture": "compare-deals.ps1 -SelfTest routing fixtures (the _Route table at lines ~1913-1931 runs Match-Category verbatim from this file) plus audit-match-soundness.ps1 on the rebuild plus audit-known-wrong.ps1 via guards.ps1",
+    "must_fire_case": "_Route 'Private Selection French Loaf Sliced' -> 'french-bread' and _Route 'Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz' -> 'taco-sauce' (both route to <unmatched> on the live rules, so the cases cannot pass until the tokens land); audit-known-wrong must refuse the flounder and catfish rows for cod",
+    "clean_twin": "_Route 'Ortega Mild Red Enchilada Sauce 10 oz' -> NOT taco-sauce (the narrowed exclude must still refuse a real enchilada sauce; it routes to enchilada-sauce today via red\\s+chile|enchilada\\s+sauce and must keep doing so) and _Route 'Great Value Taco Sauce Mild Gluten Free Paleo Keto Bottle, 16 oz' -> 'taco-sauce' unchanged; _Route 'Fresh & Finest French Bread' -> 'french-bread' unchanged",
+    "commands": [
+     "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+     "powershell -File grocery\\audit-match-soundness.ps1",
+     "powershell -File grocery\\guards.ps1"
+    ]
+   },
+   "rollback": "revert the two commodities.json hunks and -Reverse the two known-wrong keys with a reason; re-run -Accept on the soundness baseline.",
+   "do_not_touch": [
+    "the cod include (\\bcod\\b is right)",
+    "enchilada-sauce's rule (index 386, unchanged; it does not claim any admitted name)",
+    "hot-sauce (index 194) - it claims none of these names, measured"
+   ],
+   "resolution_note": "4 findings: flounder and catfish at Walmart are not cod (ruled known-wrong so the sweep stops proposing them); 'Private Selection French Loaf' (Kroger's name for its 16 oz French bread, 4 Baker's rows) and Ortega's 'Taco and Enchilada Chili Sauce' (6 Walmart rows) were genuine misses, admitted with one token each plus a narrowed 'enchilada' exclude that was blocking the admit. 12 names re-route, all from unmatched; no cell moves (measured: the current Baker's baguette $1.99 and Walmart Great Value $1.78 stay cheapest in their own captures).",
+   "publish_batch": 2,
+   "status": "planned",
+   "premise_verified": "TRUE. out/coverage-gap-explained.json holds exactly 4 findings and all 4 are verdict NO-INCLUDE ('no include pattern matches'), none EXCLUDED and none CLAIMED, exactly as the plan says: cod @ Walmart 'Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen)'; cod @ Walmart 'Great Value Frozen Catfish Skinless Fillets, 2 lb Bag'; french-bread @ Baker's 'Private Selection French Loaf Sliced'; taco-sauce @ Walmart 'Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz'. BLAST RADIUS TAKEN FROM THE ARTIFACT, NOT RE-DERIVED: plan-2026-09-06.routing.json is measured_as routing over 46,376 distinct names from 346 files, its corpus file list DOES include both post-pin captures (out/fareway/fareway-deals-2026-09-06.json and out/regular/walmart-regular-2026-09-06.json), its positive control 'Private Selection French Loaf Sliced' reads expected french-bread / observed french-bread, and all 12 changed rows carry before_index -1, so claimed_by_earlier is empty as a MEASURED fact and not an assumption. The artifact's freshness therefore still holds and the corpus was not rebuilt.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-fdc73a",
+   "subject": "Grocery: test-auditors hygiene finding(s) - watchers intact",
+   "classification": "infra",
+   "evidence": [
+    "test-auditors 2026-09-06: pass=668 failed=0 hygiene=1 skipped=0 - every watcher still fires on its own founding bug; the board is NOT in doubt",
+    ".claude/agents/triage-developer.md is 11261 bytes and begins '- - - \\n'; ops/prompt-backup/agents/triage-developer.md is 11413 bytes and begins '- - - \\r \\n'. Delta is exactly 152 bytes over exactly 152 lines - one CR per line",
+    "After stripping CR, the MD5 of live and mirror is EQUAL for all 6 files reported STALE BACKUP (post-publish-reviewer, recipe-batch-auditor, recipe-dedup-selector, recipe-ingredient-mapper, recipe-writer, triage-developer). Zero of the 6 has a real content difference",
+    "The discriminator: recipe-source-qa.md (CRLF live, CRLF mirror) and triage-reviewer.md (LF live, LF mirror) both read CLEAN. Only the LF-live / CRLF-mirror pairs fire",
+    "git config core.autocrlf = true; .gitattributes carries '* text=auto'; both .claude/agents and ops/prompt-backup are tracked, and git reports the LIVE files unmodified"
+   ],
+   "surface_fix": {
+    "what": "none separate from the root fix; the mirrors are already correct",
+    "files": [],
+    "exact_change": "n/a"
+   },
+   "root_cause": "audit-prompt-backup.ps1:60 FileHash1 MD5s RAW ON-DISK BYTES to compare two paths that git deliberately holds identical only after line-ending normalization. Under core.autocrlf=true + '* text=auto' the same committed content legitimately sits on disk as LF in one path and CRLF in another, so STALE BACKUP fires on line-ending noise. -SyncMirror's Copy-Item makes them byte-equal for a moment and the next checkout or stash-restore re-splits them, so the finding can never converge - it is a check that cannot be satisfied, reporting daily on a mirror that is already correct.",
+   "root_fix": {
+    "what": "FileHash1 must hash line-ending-NORMALIZED content for these text prompts (strip CR before hashing), so the audit compares what git compares",
+    "files": [
+     "ops/audit-prompt-backup.ps1"
+    ],
+    "exact_change": "FileHash1: read the file, normalize CRLF->LF, hash the normalized bytes; keep raw-byte comparison only for anything genuinely binary"
+   },
+   "blast_radius": {
+    "measured_as": "files",
+    "measured_by": "the orchestrator's inline check: all 8 mirrored agent prompts hashed raw and after CR-strip (6 STALE BACKUP pairs become equal after CR-strip; the 2 CLEAN pairs, recipe-source-qa.md and triage-reviewer.md, are equal both ways)",
+    "affected_now": 6,
+    "names": [
+     "post-publish-reviewer.md",
+     "recipe-batch-auditor.md",
+     "recipe-dedup-selector.md",
+     "recipe-ingredient-mapper.md",
+     "recipe-writer.md",
+     "triage-developer.md"
+    ],
+    "risk": "a mirror that differs ONLY in line endings from a live prompt would now read CLEAN; that is the intended behaviour, since git already treats them as identical"
+   },
+   "freshness": "measured by the orchestrator against the working tree at ~09:30 on 2026-09-06 (the ops/prompt-backup files carry uncommitted content written by capture-run's daily -SyncMirror; see the developer note)",
+   "proof": {
+    "guard_or_fixture": "audit-prompt-backup.ps1 -SelfTest (it already carries must-fire fixtures at lines ~289-348)",
+    "must_fire_case": "a mirror whose TEXT genuinely differs from the live prompt still reports STALE BACKUP, and a live prompt with no mirror still reports NO BACKUP",
+    "clean_twin": "an LF live file and a CRLF mirror that are identical after CR-strip report CLEAN - freeze today's 6 files as that fixture; if this twin does not go silent the fix did not land",
+    "commands": [
+     "powershell -File ops\\audit-prompt-backup.ps1 -SelfTest",
+     "powershell -File ops\\audit-prompt-backup.ps1",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the FileHash1 hunk; the finding returns as daily line-ending noise, nothing else changes.",
+   "do_not_touch": [
+    "do NOT run -Sync (it mirrors scheduled-task SKILLs into a PUBLIC repo); -SyncMirror and -SyncScopes only"
+   ],
+   "developer_note": "the mirror content is genuinely AHEAD of HEAD by real new sections (git diff ops/prompt-backup = 7 files, +136/-3), written by capture-run's daily -SyncMirror. Commit those with explicit paths as part of this item. The 7 ops/prompt-backup/agents/*.md files are this item's subject and are NOT foreign.",
+   "resolution_note": "False alarm, and a permanent one. All 6 STALE BACKUP findings were line-ending noise: the mirrors' content is identical to the live prompts after CR-strip. FileHash1 compared raw bytes across a core.autocrlf=true checkout, so the finding could never converge. Normalized the comparison and committed the genuinely-refreshed mirror content.",
+   "publish_batch": 2,
+   "status": "planned",
+   "premise_verified": "TRUE - all 6 STALE BACKUP findings are line-ending noise, measured rather than assumed. I hashed all 12 mirrored agent prompts under .claude/agents against ops/prompt-backup/agents twice, raw bytes and after stripping CR: post-publish-reviewer.md (5142 vs 5210), recipe-batch-auditor.md (8570 vs 8594), recipe-dedup-selector.md (9065 vs 9190), recipe-ingredient-mapper.md (20654 vs 20678), recipe-writer.md (8593 vs 8617) and triage-developer.md (11261 vs 11413) are RAW-DIFF but NORM-EQ - zero of the six has a real content difference. The plan's discriminators behave as it says: recipe-source-qa.md and triage-reviewer.md are RAW-EQ and NORM-EQ both ways, and only the LF-live / CRLF-mirror pairs fire. test-auditors.ps1 on this tree reports 'pass=668 failed=0 hygiene=1 skipped=0' with the single hygiene finding being exactly those six files, so no watcher is blind and the board is not in doubt.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-22b4dd",
+   "subject": "Grocery: 1 on-sale item(s) have no everyday fallback and NO ONE IS WORKING THEM - 2026-09-06",
+   "classification": "infra",
+   "evidence": [
+    "audit-sale-fallback.ps1:133 - `if ($store -eq 'Family Fare') { return 'daily-ff-selfheal' }` - ownership is a hardcoded store->string map",
+    "audit-sale-fallback.ps1:127 - `$OWNER_GRACE = @{ 'weekly-browser-agent' = 16; 'daily-ff-selfheal' = 3 }`",
+    "grep -rn 'daily-ff-selfheal' across every .ps1, .json and .md in the repo returns ONLY those two lines, the ownership ledger entry, and the alert body itself. No script, no scheduled task, no registry row",
+    "expected-automations.json registers five Windows tasks - TC Grocery Ad Pulls 0700, TC Grocery Daily Capture 0800, TC Grocery Capture Watchdog 0930, TC Graph Nightly Matching, TC Recipe Harvest Crawl - and none of them is a Family Fare sale-fallback self-heal",
+    "sale-fallback-ownership.json: yukon-gold-potatoes|Family Fare first_seen 2026-09-02, owner daily-ff-selfheal. Two sibling rows (canned-pumpkin|Hy-Vee, cantaloupe|Aldi) are owned by weekly-browser-agent, which IS real, at grace 16 and age 4 - correctly silent"
+   ],
+   "surface_fix": {
+    "what": "none separate from the root fix; the cell itself is a decision for Brad (open_questions)",
+    "files": [],
+    "exact_change": "n/a"
+   },
+   "root_cause": "Ownership is ASSERTED from a hardcoded store->owner string and never PROVEN against the automation registry, so a gap can be silenced as 'owned' by a job that does not exist. The 2026-09-03 fix gave ownership an EXPIRY but not PROOF; the expiry is the only reason this ever escalated, and it bought 3 silent days for a cell nobody was ever going to work. This is the same alert family the 2026-09-03 ruling was written for, one layer down.",
+   "root_fix": {
+    "what": "validate every owner string against expected-automations.json at run time; an owner naming no registered automation is NONE - grace 0, escalate on day 0, never granted a silent window",
+    "files": [
+     "grocery/audit-sale-fallback.ps1"
+    ],
+    "exact_change": "resolve owner -> lookup in expected-automations.json -> unregistered owner collapses to NONE with grace 0; $OWNER_GRACE keys must be registry-backed or the audit fails closed"
+   },
+   "blast_radius": {
+    "measured_as": "ownership rows",
+    "measured_by": "the orchestrator's inline read of sale-fallback-ownership.json (3 rows) against expected-automations.json (5 registered tasks): 1 row names an unregistered owner (yukon-gold-potatoes|Family Fare -> daily-ff-selfheal), 2 rows name the registered weekly-browser-agent",
+    "affected_now": 1,
+    "names": [
+     "yukon-gold-potatoes|Family Fare"
+    ],
+    "risk": "if weekly-browser-agent is itself not a registry-backed name (it is a role, not a Windows task), the fix as written would collapse the 2 healthy rows to NONE and page them too; the developer must map role names to their registered task (TC Grocery Daily Capture 0800 drives the browser stores) or register the role explicitly before shipping. The clean twin below catches the over-broad case."
+   },
+   "freshness": "measured by the orchestrator against grocery/sale-fallback-ownership.json (uncommitted, written by today's run) and expected-automations.json at ~09:30 on 2026-09-06",
+   "proof": {
+    "guard_or_fixture": "audit-sale-fallback.ps1 -SelfTest (extend) and test-auditors.ps1",
+    "must_fire_case": "an ownership row whose owner names no registered automation escalates on day 0 - freeze today's yukon-gold-potatoes|Family Fare row as the fixture; it must escalate immediately, not after 3 days",
+    "clean_twin": "canned-pumpkin|Hy-Vee owned by weekly-browser-agent (which IS registered) at age 4 of grace 16 stays SILENT - if the twin also escalates the fix is too broad and every owned gap now pages",
+    "commands": [
+     "powershell -File grocery\\audit-sale-fallback.ps1 -SelfTest",
+     "powershell -File grocery\\audit-sale-fallback.ps1",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the hunk; ownership returns to the asserted map and the yukon-gold row goes quiet for another grace window, which is the failure this item exists to remove.",
+   "do_not_touch": [
+    "sale-fallback-ownership.json is being rewritten by the daily run (foreign uncommitted); do not hand-edit or revert it"
+   ],
+   "resolution_note": "The 'owner' of the yukon-gold-potatoes @ Family Fare gap was a string naming a job that does not exist anywhere in the estate; ownership is now validated against expected-automations.json and an unregistered owner escalates on day 0. Whether that cell needs a real owner or a real everyday fallback is Brad's call (open_questions).",
+   "publish_batch": 2,
+   "status": "planned",
+   "premise_verified": "TRUE, AND THE PLAN'S OWN RISK NOTE IS ALSO TRUE AND IS THE LOAD-BEARING PART. grocery/sale-fallback-ownership.json holds exactly 3 rows: canned-pumpkin|Hy-Vee and cantaloupe|Aldi owned by 'weekly-browser-agent', yukon-gold-potatoes|Family Fare owned by 'daily-ff-selfheal', all first_seen 2026-09-02. grocery/expected-automations.json registers exactly 5 windows_tasks - TC Grocery Ad Pulls 0700, TC Grocery Daily Capture 0800, TC Grocery Capture Watchdog 0930, TC Graph Nightly Matching, TC Recipe Harvest Crawl - and 'daily-ff-selfheal' names none of them, so the plan's premise holds. BUT 'weekly-browser-agent' names none of them either: it is a ROLE, not a Windows task. A literal owner-string lookup against the registry would therefore collapse all 3 rows to NONE and page the 2 healthy ones, which is precisely the over-broad failure the plan's risk field predicted. Implemented with an explicit role -> registered-task map so the must-fire and the clean twin both hold.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-6e08ed",
+   "subject": "Board prices aging inside a fresh file",
+   "classification": "infra",
+   "evidence": [
+    "out/fareway/fareway-deals-2026-09-06.json EXISTS, written 09:18:14, ad_from/ad_to covering 2026-09-07 to 2026-09-12, deal_count 238. It landed 53 minutes AFTER the alert asked for it",
+    "ad-schedule.json Fareway: current {from 2026-09-07, to 2026-09-12}, detected 2026-09-06, next_pull 2026-09-13 - the pull the alert asks for has already happened and is recorded",
+    "Fareway ads run Sun-Sat. The prior ad (fareway-deals-2026-08-30.json) closed 2026-09-05 and the next opens 2026-09-07, so 2026-09-06 is a genuine one-day gap in Fareway's OWN cycle. Excluding its 244 expired sale rows today is compare-deals refusing an expired ad, which is correct behaviour"
+   ],
+   "surface_fix": {
+    "what": "none: the premise is false and the remedy it asks for has already run",
+    "files": [],
+    "exact_change": "n/a"
+   },
+   "root_cause": "audit-row-age's AD COVERAGE GONE line reads only the ad file whose window covers TODAY, so a pulled-but-future-dated ad is invisible to it. A store sitting in the normal one-day gap of its own weekly cycle with next week's ad already in hand reads IDENTICALLY to a store whose pull failed - and the alert then names a remedy ('until a fresh pull lands') that has already been performed, sending a reader hunting for work that is done.",
+   "root_fix": {
+    "what": "the ad-coverage line must look for an ad file whose window STARTS in the future and report that state instead of asking for a pull",
+    "files": [
+     "grocery/audit-row-age.ps1"
+    ],
+    "exact_change": "when the newest ad has expired, check for an ad file with ad_from > today; if one exists report 'next window's ad already in hand, opens <ad_from>' and do not ask for a pull; only a store with NO future-dated ad reports AD COVERAGE GONE"
+   },
+   "blast_radius": {
+    "measured_as": "stores",
+    "measured_by": "the orchestrator's inline read of ad-schedule.json and the per-store ad files for the 7 board stores on 2026-09-06: 1 store (Fareway) is in the expired-with-future-ad state today; the other 6 are inside a current window and are untouched by the new branch",
+    "affected_now": 1,
+    "names": [
+     "Fareway"
+    ],
+    "risk": "a future-dated ad file that is itself wrong (mis-parsed window) would silence the pull request; bounded by the must-fire case below and by ad-schedule's own detected/next_pull record"
+   },
+   "freshness": "measured by the orchestrator at ~09:30 on 2026-09-06 against out/fareway/fareway-deals-2026-09-06.json (09:18:14) and grocery/ad-schedule.json; the alert itself fired at 08:25 off the 08:10 board, before that file existed",
+   "proof": {
+    "guard_or_fixture": "audit-row-age.ps1 -SelfTest (extend with the two frozen Fareway states) and test-auditors.ps1",
+    "must_fire_case": "a store whose newest ad has closed and which has NO future-dated ad file still reports AD COVERAGE GONE - the real failure must survive the fix",
+    "clean_twin": "today's exact Fareway state - expired fareway-deals-2026-08-30.json plus present fareway-deals-2026-09-06.json opening 2026-09-07 - reports the in-hand form and does not ask for a pull",
+    "commands": [
+     "powershell -File grocery\\audit-row-age.ps1 -SelfTest",
+     "powershell -File grocery\\audit-row-age.ps1",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the hunk; the line returns to asking for a pull on every Fareway rollover day.",
+   "do_not_touch": [
+    "compare-deals' refusal of expired ads (correct)",
+    "ad-schedule.json (already records the pull)"
+   ],
+   "resolution_note": "Premise falsified. The fresh Fareway ad (238 deals, 2026-09-07 to 2026-09-12) landed at 09:18, 53 min after the alert. 2026-09-06 is the normal one-day gap in Fareway's Sun-Sat cycle and excluding the expired 244 sale rows is correct. Taught audit-row-age to see a future-dated ad so a store mid-cycle stops reading as a failed pull.",
+   "publish_batch": 2,
+   "status": "planned",
+   "premise_verified": "TRUE - premise falsified, remedy already performed, confirmed against the files. out/fareway/fareway-deals-2026-09-06.json EXISTS, written 2026-09-06 09:18:14, ad_from 2026-09-07, ad_to 2026-09-12, deal_count 238 (238 rows present), i.e. it landed 53 minutes after the 08:25 alert asked for a pull. grocery/ad-schedule.json Fareway now reads current {from 2026-09-07, to 2026-09-12}, detected 2026-09-06, next_pull 2026-09-13, and its history carries the 2026-08-31..2026-09-05 window that closed. So 2026-09-06 is the genuine one-day gap in Fareway's own Sun-Sat cycle. INDEPENDENTLY CONFIRMED ON MY REBUILD: compare-deals refuses both ends of an ad window (it names 'its ad window does not open until <date>'), and the rebuilt board carries ZERO Fareway cells with ad_from 2026-09-07 - every Fareway cell on it comes from the shop.fareway.com storefront capture or the Recipe Hunter. The not-yet-open ad did not become today's sale data.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-06-e5a9c9",
+   "subject": "Grocery: Family Fare pull dropped a carried item - review",
+   "classification": "no-code-change",
+   "evidence": [
+    "ad-cycle-log 2026-09-06T08:08:56 - ff-carry FOUND 2 uncovered term(s): jarred-gravy (term 'turkey gravy jar', index 383 of 602, cursor 117, due ~2026-09-19) and quinoa-uncooked (term 'quinoa', index 535, due ~2026-09-26); 40 of 595 empty terms re-probed, 465 skipped because this pull already prices that commodity, 90 RATE-LIMITED by Freshop (HTTP 400 carrying error_code 429). The 90 rate-limited terms are counted separately and produce no finding, so no false absence is manufactured.",
+    "Checked and NOT a defect, recorded so nobody re-opens it: audit-ff-carry's coverage row 'examined 40 of 595 eligible (baseline 464, tol 100%)' looks like a ratchet that can never fire; coverage-baseline.json documents that tolerance 1 is DELIBERATE because the denominator is INVERSE (it counts EMPTY terms re-probed, so it FALLS when the pull gets BETTER, and a ratchet there would fire at whoever fixed it). BLIND still covers the case that matters (examining nothing at all)."
+   ],
+   "root_cause": "The 7-terms-per-landed-window budget is a deliberate Freshop rate-limit accommodation, so a term 266 positions ahead of the cursor cannot be bought by re-running the sweep. Confirmed victims lead the next window's slice automatically. This is the rotation reporting its own schedule.",
+   "root_fix_none_because": "the budget is the documented accommodation for Freshop's own 429s and the rotation already self-heals; changing it trades a slow refresh for a rate-limited one.",
+   "resolution_note": "Rotation reporting its own schedule: jarred-gravy and quinoa-uncooked are 266 and 418 terms ahead of the Family Fare cursor under the deliberate 7-per-window Freshop budget and lead the next window automatically (due ~09-19 and ~09-26). The 90 rate-limited terms produced no false absence. The 'tol 100%' coverage row is the documented inverse-denominator design, not a dead ratchet. No change.",
+   "publish_batch": "next-round",
+   "status": "done",
+   "premise_verified": "TRUE. ad-cycle-log.txt lines 4439-4443 at 2026-09-06T08:08:56 read exactly what the plan quotes: ff-carry found jarred-gravy <- 'Heinz Home Style Turkey Gravy, 12 Oz Jar', term 'turkey gravy jar', index 383 of 602, cursor 117, due in 38 windows (~2026-09-19) at 7 terms per window; and quinoa-uncooked <- 'Birds Eye Quinoa 8 Oz', term 'quinoa', index 535 of 602, cursor 117, due in 60 windows (~2026-09-26). Both are ahead of the cursor under the deliberate 7-terms-per-window Freshop budget and lead their windows automatically. The 'tol 100%' coverage row is also confirmed non-defective: coverage-baseline.json's audit-ff-carry row records 'RATCHET DELIBERATELY OFF - this denominator is INVERSE... a ratchet here would fire at whoever fixed the thing it watches', with BLIND still covering the case that matters. No change needed, exactly as the plan concluded.",
+   "deviation": null,
+   "shipped_commit": null
+  }
+ ],
+ "ship_sequence": [
+  "BATCH 1 (unblock today's publish; data files only): basis-kind-allowlist.json += the disinfectant-spray | Baker's | '26 fl oz' entry (item 79fe01 surface); coverage-gap-allowlist.json += cinnamon-stick | Aldi (item 39933e surface); out/review-ack.json += the four SANITY acks (item 24ac66 surface); add-known-wrong.ps1 x2 for cod @ Walmart flounder/catfish (item 796030 rulings, no rule change yet)",
+  "audit-unit-basis-outlier.ps1 on the PINNED comparison-2026-09-06 -> expect 'crown=0 reviewed=12' exit 0 (this reproduces the scratch proof on the live tree)",
+  "Rebuild through the standard daily chain (compare-deals.ps1 -MinStores 1 with the newest Baker's/Fareway files, then audit-name-drift / prune-bad-links / generate-board-overrides / build-deals-page) - the rebuild WILL pick up fareway-deals-2026-09-06 (opens 09-07) and walmart-regular-2026-09-06; re-read the guard on the REBUILT board, do not assume the pinned proof carries",
+  "audit-match-soundness.ps1 -> review the diff (it should be exactly the 10 rows of item 4025dc plus nothing) -> -Accept (never -ForceAccept; a blocked verdict stops the batch and is reported)",
+  "guards.ps1 (MUST be hard=0) + audit-basis-reconcile + audit-pack-basis + audit-capture-eviction",
+  "publish-deals-page.ps1, then verify LIVE with a cache-busting query (?v=<epoch>): disinfectant-spray shows Baker's $0.1996/oz Seventh Generation; aluminum-foil shows Hy-Vee $0.0624/sq ft; pomegranates shows only Baker's $4.99",
+  "test-auditors.ps1 (MUST be 0) -> commit batch 1 with explicit paths (allowlists, review-ack, known-wrong, the plan + routing artifact) -> push",
+  "BATCH 2 (code + rule changes): commodities.json french-bread += french\\s+loaf, taco-sauce += the taco-and-enchilada token and exclude 'enchilada' -> '\\benchilada\\s+sauce\\b' (item 796030); commodities.json disinfectant-spray += kind_equivalent near-water AND audit-unit-basis-outlier.ps1 honours it AND retire the two disinfectant-spray allowlist entries (item 79fe01 root); check-ad-cycles.ps1 banks unit into price-history + sanity-check.ps1 -HistoryFile + unit-changed quiet type (item 24ac66 root); audit-coverage-gaps.ps1 NOT-INGESTED + expired-deals skip (item 39933e root); ops/audit-prompt-backup.ps1 CR-normalized hash (fdc73a); audit-sale-fallback.ps1 registry-validated owners (22b4dd); audit-row-age.ps1 future-dated ad (6e08ed)",
+  "compare-deals.ps1 -SelfTest (with the two new _Route must-fire cases and the enchilada clean twin), audit-unit-basis-outlier.ps1 -SelfTest, audit-coverage-gaps.ps1 -SelfTest, audit-prompt-backup.ps1 -SelfTest, audit-sale-fallback.ps1 -SelfTest, audit-row-age.ps1 -SelfTest, then ops/run-gates.ps1 (read the EXIT CODE: 0 only)",
+  "Rebuild -> audit-match-soundness.ps1 should show exactly the 12 MOVED names of the routing artifact (5 French Loaf, 7 Ortega) and nothing else; diff against plan-2026-09-06.routing.json rows; if Fareway french-bread prices 'Mini French Loaf' at 1.49, add french-bread.exclude += mini\\s+french\\s+loaf and rebuild before continuing -> -Accept",
+  "guards.ps1 (hard=0; audit-unit-basis-outlier must be crown=0 with the disinfectant-spray entries REMOVED, proving the declaration is load-bearing) -> publish -> live check of one cell (taco-sauce Walmart still $0.1112/oz; french-bread Baker's still $1.99)",
+  "test-auditors.ps1 (0) -> commit batch 2 with explicit paths, including the 7 ops/prompt-backup/agents/*.md mirrors (fdc73a) -> push -> update triage-queue.json with each item's resolution_note"
+ ],
+ "open_questions_for_brad": [
+  "RANGE-PRICED AD ROWS (from item 24ac66, storage bags): compare-deals prices 'Hy-Vee storage bags, 75 to 100 ct., $2.99' at the 100 ct end (0.0299/bag) by the deliberate choose-your-size rule. If the 100 ct is the quart variant and the gallon is 75 ct, the gallon cell understates by 25 percent (true 0.0399). The crown does not change (Aldi 0.0462) and the row expires 2026-09-06. Twenty cells on today's board come from range rows and four hold crowns; only 6 of the 20 can be PROVEN at the max size from the store's own everyday capture, and at least one unprovable one (rice-cakes 6.56 oz) is real. Options: (a) keep max, accept that a range spanning two commodities' variants (gallon/quart, ravioli/tortellini) can misprice a cell; (b) require same-store everyday proof of the max size for that commodity, else use the min end and label it - which would wrongly move rice-cakes; (c) refuse range rows that name two products with 'or'. I did not ship any of these; (a) is the status quo.",
+  "yukon-gold-potatoes @ Family Fare (item 22b4dd): once ownership validation lands this gap escalates on day 0. Does it need a real owner (a registered job that works Family Fare sale-only cells) or a real everyday fallback, or is a Family Fare sale-only cell acceptable to publish as-is?",
+  "kind_equivalent near-water on disinfectant-spray (item 79fe01 root): this replaces per-size allowlist reviews with one commodity-level physics declaration for water-based sprays. It is scoped to that one commodity here. Say if you would rather keep the per-size entries (today's entry alone unblocks the board either way).",
+  "Habit, not code: b28788fa changed six commodities' rules at 05:45 and was committed without audit-match-soundness -Accept or guards.ps1 on its result; the board stopped three hours later and three of today's nine alerts are its footprint. Do you want a pre-commit check that refuses a commodities.json commit unless the soundness baseline was accepted against the same rules_hash?"
+ ]
+}

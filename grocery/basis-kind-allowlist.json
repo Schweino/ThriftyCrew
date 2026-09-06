@@ -35,6 +35,14 @@
       "reason": "A 32 fl oz water-based spray on a commodity priced per oz. Density is within a few percent of water, so fl oz and oz are interchangeable here at the precision the board publishes."
     },
     {
+      "id": "disinfectant-spray",
+      "store": "Baker's",
+      "size": "26 fl oz",
+      "reviewed": "2026-09-06",
+      "reviewed_by": "claude (grocery triage, plan-2026-09-06)",
+      "reason": "A 26 fl oz water-based trigger spray (Seventh Generation Disinfecting Spray) on a row priced per weight oz whose peers are net-weight aerosols (Lysol 12.5/19 oz, Great Value 19 oz, OdoBan 14.6 oz). Density is within a few percent of water, so 26 fl oz is about 27 oz and 5.19/26 = 0.1996 OVERSTATES the per-weight-oz price by about 4 percent, which is the safe direction for a crown-holder: an overstated cell cannot win a crown it has not earned. It beats the runner-up (Walmart 0.2511) by 20 percent, so the crown holds at any plausible density. Same shape and same argument as the 2026-08-08 entry for the same commodity at Baker's (Scrubbing Bubbles, 1 pk 32 fl oz), whose product commit b28788fa moved to shower-cleaner on 2026-09-06, which is what put this previously unreviewed size string on the crown. NOT an exclude: the product IS a disinfectant spray and its number is exact."
+    },
+    {
       "id": "horseradish-sauce",
       "store": "Walmart",
       "size": "12 fl oz",

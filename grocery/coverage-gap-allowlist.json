@@ -1518,6 +1518,13 @@
             "why":  "PROBE NOISE / SCENT NAME (reviewed 2026-09-01, queue 2026-09-01-4a481e): every candidate the loosened probe returned is a non-food product NAMED for the fragrance, and each is already correctly claimed by the commodity it really is. 'Great Value Soft & Smooth Ultra Dish Liquid, Pomegranate, 28 fl oz' routes to dish-soap; 'eos Shea Better Women's Shave Cream - Pomegranate Raspberry 7 fl oz', the 2.5oz travel size and its (3 pack) all route to shaving-cream. Verified against walmart-regular-2026-08-31.json (the capture that fed comparison-2026-08-31): NO fresh pomegranate exists in any Walmart capture on file - seasonal absence, not a rule gap. An include widening here would be a scent word admitting soap. Ruled known-wrong for the same four names so the semantic sweep stops re-finding them. DELETE-TRIGGER: delete when a Walmart capture carries a whole fresh pomegranate sold by the each.",
             "reviewed":  "2026-09-01",
             "reviewed_by":  "claude (opus5 triage-developer) - triage 2026-09-01-4a481e, plan-2026-09-01.json"
+        },
+        {
+            "commodity":  "cinnamon-stick",
+            "store":  "Aldi",
+            "why":  "NOT-A-PRODUCT (reviewed 2026-09-06, queue 2026-09-06-39933e, plan-2026-09-06.json): the only Aldi candidate is 'Breakfast Best Cinnamon Flavor French Toast Sticks 16 OZ' $2.95, which is frozen French toast, not a cinnamon stick. Only the LOOSENED probe (cinnamon.{0,25}sticks) sees it; the strict rule ^(?=.*\\bcinnamon\\s+sticks?\\b).*$ requires the two words adjacent and correctly does not match. aldi-regular-2026-09-06.json holds 30 rows containing 'cinnamon' and exactly one containing 'stick', this one, so Aldi genuinely carries no cinnamon sticks in the capture. The board's cinnamon-stick row (Sam's 7 oz $7.32 = 1.0457 crown, plus Family Fare, Walmart and Baker's) is unaffected. NOT a rule widening: widening to admit this name would price French toast as a spice. DELETE-TRIGGER: delete when an Aldi capture carries a row with the adjacent words 'cinnamon stick'.",
+            "reviewed":  "2026-09-06",
+            "reviewed_by":  "claude (grocery triage-developer) - triage 2026-09-06-39933e, plan-2026-09-06.json"
         }
     ]
 }

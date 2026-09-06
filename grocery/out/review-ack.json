@@ -451,6 +451,30 @@
       "key": "SANITY|Jalapeno Peppers|wow",
       "reason": "REAL as the store states it: two CANNED products left. The $0.877 prior was '(3 pack) El Mexicano Whole Jalapeno Peppers, 27 oz Can' $4.44 / 81 oz, refused by the jalapenos fence shipped 2026-09-01 (\\bcans?\\b, escabeche); the 08-26 crown was the EMBASA escabeche can at $1.4277/lb, same class. Today's crown is Walmart 'Fresh Jalapenos, Each' $0.44 published at Walmart's own stated $1.76/lb, inside 12% of three stores' explicit per-lb prices (Aldi $1.98, Baker's $1.99, Family Fare $2.49). CAVEAT, recorded and open for Brad: the 0.25 lb size is DERIVED from Walmart's own line price over its own unit price (qty_basis 'derived lp/up'), and 0.25 lb is 4-8x a real medium jalapeno (roughly 14-25 g). Walmart's product page could not be read to check it (bot wall, not bypassed), so this is the store's arithmetic reproduced, not a weight verified on the page.",
       "expires": "2026-09-16"
+    },
+    {
+      "key": "SANITY|Anaheim Peppers|outlier",
+      "reason": "REAL ECONOMICS, store-brand produce at Kroger pricing. Baker's 'Fresh Anaheim Peppers' $1.49 size 'lb' (bakers-regular-2026-09-06, kroger-api, as_of 2026-08-24) against Walmart 'Fresh Anaheim Peppers, 16 oz' $2.94 = 2.94/lb, Family Fare $4.99/lb and Hy-Vee $1.25 per 0.25 lb = 4.99/lb. Every peer is 2x or more and the Baker's number reproduces from its own row. Verified 2026-09-06 against the capture file, not against the store shelf. This flag has been open since 2026-08-06 and was re-shown today by the 14-day re-arm clock, not by anything new. Renew only if the Baker's row is re-read at the same price; if the as_of ever drifts past the 90-day carry, let it page.",
+      "acked_by": "claude (grocery triage-developer) - triage 2026-09-06-24ac66, plan-2026-09-06.json",
+      "expires": "2026-10-04"
+    },
+    {
+      "key": "SANITY|Cheddar cheese curds|outlier",
+      "reason": "REAL ECONOMICS, store brand against a regional brand at the SAME size. Aldi 'Happy Farms White Cheddar Cheese Curds 12 OZ' $4.29 (aldi-regular-2026-09-06, as_of 2026-08-26) = 0.3575/oz against Family Fare 'Arthur Bay Mixed Cheese Curd' 12 oz $7.49 = 0.6242. The 5 oz packs at Walmart, Baker's and Fareway run $3.94-3.99 = 0.788-0.798/oz, so the whole row is ordered by pack size and brand exactly as it should be. No parse to fix: 4.29/12 = 0.3575 reproduces. Open since 2026-08-27 and re-shown today, not new.",
+      "acked_by": "claude (grocery triage-developer) - triage 2026-09-06-24ac66, plan-2026-09-06.json",
+      "expires": "2026-10-04"
+    },
+    {
+      "key": "SANITY|Crushed Thai Chili|outlier",
+      "reason": "REAL ECONOMICS, and the two cells are the IDENTICAL product. Walmart 'McCormick Crushed Thai Style Chili Pepper, 1.37 oz Bottle' $3.38 = 2.4672/oz against Hy-Vee 'McCormick Crushed Thai Style Chili Pepper' 1.37 oz $5.99 = 4.3723/oz, read off comparison-2026-09-06 on 2026-09-06. Same brand, same size, same bottle; this is Walmart spice pricing against Hy-Vee spice pricing on a two-store row, which is the thing the board exists to show. The Walmart price is Recipe Hunter in-store verified (the 08-31 online capture reads $3.43). Open since 2026-08-22 and re-shown today by the 14-day clock.",
+      "acked_by": "claude (grocery triage-developer) - triage 2026-09-06-24ac66, plan-2026-09-06.json",
+      "expires": "2026-10-04"
+    },
+    {
+      "key": "SANITY|Blueberries|outlier",
+      "reason": "REAL ECONOMICS, and the runner-up moved rather than the crown. Aldi 'Blueberries Package 1 PT' $2.59 (aldi-regular-2026-09-06, as_of 2026-08-05) prices through the reviewed 2026-08-20 basis-kind-allowlist conversion 1 pt = 11.2 oz = 0.2312/oz; Baker's 'Fresh Blueberries - 18 OZ - Clamshell' $6.99 = 0.3883 and Family Fare 'Flavor Ripe Blueberries 18 Oz' $6.99 = 0.3883. The same 1 pt conversion prices Hy-Vee's Driscolls 1 pt $4.99 = 0.4455 on this very board, so it is not special-cased for the crown. It is new today only because Family Fare's cell changed product to the 18 oz clamshell, pushing the gap from under 35 percent to 40 percent. SHORT EXPIRY ON PURPOSE: the Aldi row's as_of is 2026-08-05, 32 days old and inside the 90-day carry but ageing, so this must be looked at again in two weeks rather than a month.",
+      "acked_by": "claude (grocery triage-developer) - triage 2026-09-06-24ac66, plan-2026-09-06.json",
+      "expires": "2026-09-20"
     }
   ]
 }

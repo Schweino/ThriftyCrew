@@ -4243,6 +4243,36 @@
                         "ruled_on":  "2026-09-06",
                         "ruled_by":  "Claude (session 2026-09-06, PLAN-top5 area 2, Brad\u0027s T1/T2/T3 ruling)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cod|Walmart|great-value-wild-caught-flounder-skinless-fillet",
+                        "commodity":  "cod",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen)"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Flounder, not cod. Semantic sweep 2026-09-06 (queue 2026-09-06-796030) proposed it at cos 0.6886 because the embedding sees a skinless-fillets 2 lb bag and cannot know the species. Flounder is a different fish and must not price a Cod Fillets cell; the cod include \\bcod\\b is right to miss it. Ruled rather than rule-widened so the sweep stops re-proposing it. Source row walmart-regular-2026-08-11.json, 13.92 for 32 oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "claude (grocery triage-developer, plan-2026-09-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cod|Walmart|great-value-frozen-catfish-skinless-fillets-2-lb",
+                        "commodity":  "cod",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Frozen Catfish Skinless Fillets, 2 lb Bag"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Catfish, not cod. Semantic sweep 2026-09-06 (queue 2026-09-06-796030) proposed it at cos 0.6399 on the same shape as the flounder row: the embedding reads a skinless-fillets 2 lb bag and cannot know the species. Catfish is a different fish and must not price a Cod Fillets cell; the cod include \\bcod\\b is right to miss it. Ruled rather than rule-widened. Source row walmart-regular-2026-08-11.json, 14.72 for 32 oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-06",
+                        "ruled_by":  "claude (grocery triage-developer, plan-2026-09-06)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
