@@ -22,6 +22,7 @@ Status: `OPEN` proposed, not started · `DONE` shipped, commit named · `WONTFIX
 | E15 | Ask-for-Input closing statement on `lesson`, `meal-macro`, `recipe-hunter` | `8e3de6d9` |
 | E7 | `.worktreeinclude` + `ops/seed-worktree.ps1`; a bare worktree went 183/6 to 187/2 | `4e8102c2` |
 | E3a | Situational-tools block on the eight agents that declare a `tools:` list | `803af3d2` |
+| E1 | Safety layer on the Ghost seam: staging (queue for approval) AND a journal (capture the inverse), staging first. **Partial** - no R2. | `723be4ad` |
 
 Plan for the rest: `design/PLAN-backlog-2026-09-06.md`, which also records seven re-buckets and the
 items nobody had bucketed (E8, I3, I4).
@@ -30,13 +31,43 @@ items nobody had bucketed (E8, I3, I4).
 
 ## Safety and correctness
 
-### E1 - The estate takes irreversible actions with no safety layer `OPEN`
+### E1 - The estate takes irreversible actions with no safety layer `PARTLY DONE` `723be4ad`
 *Source: AI Agents Architecture (course 7).* Board cells, `known-wrong` rulings, Ghost publishes
 and R2 writes are all irreversible from an agent's side, and **`post-publish-reviewer` runs after
 the irreversible step**, which is the wrong side of it. Two cheap patterns: **staging** (reads
 execute, writes queue for a review pass) and an **action log that doubles as an undo log**, with a
 `revert` tool the agent may choose itself. Touches every writing agent and the publish chain.
 Biggest item on this list.
+
+**Shipped 2026-09-06, and the premise was corrected first.** Every named LOCAL target is TRACKED
+(`known-wrong.json`, `commodities.json`, `costed.json`, `public/board.json`), so git is already the
+undo log there and a second one would only have obscured it. The surviving exposure is the remote
+write, which is also the one `post-publish-reviewer` runs after.
+
+Brad ruled BOTH mechanisms rather than one, and he was right that they solve different problems - the
+two branches were built as rivals and scored as rivals, which was the wrong frame. Both hook
+`lib/ghost-lib.ps1`'s `Invoke-GhostApi`, both are off by default, armed independently:
+
+- **staging** (`TC_STAGE_WRITES`) queues a mutating call for approval instead of sending it. The
+  approver can be `post-publish-reviewer` moved to run BEFORE the publish, which is literally what this
+  item asked for.
+- **journal** (`TC_WRITE_JOURNAL`) sends it as normal with the inverse captured first, so
+  `ops/revert-ghost-write.ps1` can put it back - and an agent may call that itself.
+
+Staging is checked FIRST, so a call that never went out leaves no journal entry. That ordering is the
+only thing combining them can get wrong and it is a must-fire with both switches armed, plus a clean
+twin proving the journal still records when staging is off.
+
+**STILL OPEN, and the item is not closed:**
+
+1. **R2 is not covered.** Both hook `Invoke-GhostApi` and R2 does not go through it. Separate seam,
+   separate work.
+2. **Neither would have caught the 2026-08-29 paywall leak** (22 paid recipes served free): that PUT
+   reported success without taking effect. A downstream audit caught it, and still would.
+3. **Nothing is armed yet.** Both switches are off, so today this changes nothing - it is capability,
+   not protection, until someone turns one on.
+4. **`publish.ps1:285` needs teaching before staging can be armed on the publish chain** - it GETs the
+   public page after the PUT to confirm it shipped, and would report a failure when nothing shipped.
 
 ### E2 - Bare numeric codes cross agent boundaries `DONE` `5a7fccf0`
 *Source: AI Agents in Python (course 6).* "An agent that receives error 32 is finished." Our gate
