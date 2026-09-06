@@ -1,6 +1,6 @@
 {
-    "updated":  "2026-09-05T08:16:13",
-    "price_table":  "price-table-2026-09-02.json",
+    "updated":  "2026-09-06T08:19:08",
+    "price_table":  "price-table-2026-09-06.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
                    {

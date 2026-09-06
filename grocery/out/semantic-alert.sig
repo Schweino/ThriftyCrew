@@ -1,1 +1,1 @@
-﻿shower-cleaner|Walmart|Great Value Cleaner with Bleach, 32 fl oz
+﻿cod|Walmart|Great Value Frozen Catfish Skinless Fillets, 2 lb Bag;cod|Walmart|Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen);french-bread|Baker's|Private Selection French Loaf Sliced;taco-sauce|Walmart|Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz

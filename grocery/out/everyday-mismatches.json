@@ -94,9 +94,9 @@
         "id":  "asparagus",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  4.61,
+        "board":  4.675,
         "link":  4.43,
-        "ratio":  0.96,
+        "ratio":  0.95,
         "price":  8.86,
         "size":  "2 lb",
         "boardItem":  "Asparagus, 2 lbs.",
@@ -133,9 +133,9 @@
         "id":  "avocados",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
-        "board":  1.328,
+        "board":  1.314,
         "link":  1.046,
-        "ratio":  0.79,
+        "ratio":  0.8,
         "price":  5.23,
         "size":  "5 ct",
         "boardItem":  "Avocados, 5 ct.",
@@ -153,19 +153,6 @@
         "size":  "10 lb",
         "boardItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
         "linkItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "bagels",
-        "store":  "Hy-Vee",
-        "unit":  "each",
-        "board":  0.458,
-        "link":  0.316,
-        "ratio":  0.69,
-        "price":  1.58,
-        "size":  "5 ct",
-        "boardItem":  "Hy-Vee Plain Bagels 5 Count Pre-Split",
-        "linkItem":  "Hy-Vee Plain Bagels 5 Count Pre-Split",
         "board_src":  "main"
     },
     {
@@ -261,19 +248,6 @@
     },
     {
         "id":  "blueberries",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.325,
-        "link":  0.3178,
-        "ratio":  0.98,
-        "price":  5.72,
-        "size":  "18 oz",
-        "boardItem":  "Fresh Blueberries, 1 Pint Container",
-        "linkItem":  "Fresh Blueberries, 18 oz. Container",
-        "board_src":  "main"
-    },
-    {
-        "id":  "blueberries",
         "store":  "Baker\u0027s",
         "unit":  "oz",
         "board":  0.3883,
@@ -283,19 +257,6 @@
         "size":  "18 oz",
         "boardItem":  "Fresh Blueberries - 18 OZ - Clamshell",
         "linkItem":  "Fresh Blueberries - 18 OZ - Clamshell",
-        "board_src":  "main"
-    },
-    {
-        "id":  "blueberries",
-        "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.4011,
-        "link":  0.3289,
-        "ratio":  0.82,
-        "price":  5.92,
-        "size":  "18 oz",
-        "boardItem":  "Organic Blueberries, 18 oz.",
-        "linkItem":  "Organic Blueberries, 18 oz.",
         "board_src":  "main"
     },
     {
@@ -309,6 +270,19 @@
         "size":  "40.5 oz",
         "boardItem":  "Knorr Granulated Chicken Bouillon, 40.5 oz.",
         "linkItem":  "Knorr Granulated Chicken Bouillon, 40.5 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "breakfast-sausage",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  3.9867,
+        "link":  3.3333,
+        "ratio":  0.84,
+        "price":  2.5,
+        "size":  "12 oz",
+        "boardItem":  "Farmland Original Pork Sausage",
+        "linkItem":  "Farmland Original Pork Sausage",
         "board_src":  "main"
     },
     {
@@ -377,6 +351,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "canned-asparagus",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3993,
+        "link":  0.3653,
+        "ratio":  0.91,
+        "price":  5.48,
+        "size":  "15 oz",
+        "boardItem":  "Green Giant Extra Long Asparagus Spears",
+        "linkItem":  "Green Giant Extra Long Asparagus Spears",
+        "board_src":  "main"
+    },
+    {
+        "id":  "beef-stew",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.246,
+        "link":  0.198,
+        "ratio":  0.8,
+        "price":  2.97,
+        "size":  "15 oz",
+        "boardItem":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots",
+        "linkItem":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots",
+        "board_src":  "main"
+    },
+    {
         "id":  "canned-chicken",
         "store":  "Aldi",
         "unit":  "oz",
@@ -387,6 +387,19 @@
         "size":  "12.5 oz",
         "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
         "linkItem":  "Brookdale Chunk Chicken Breast",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-chili",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1876,
+        "link":  0.1592,
+        "ratio":  0.85,
+        "price":  3.98,
+        "size":  "25 oz",
+        "boardItem":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
+        "linkItem":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
         "board_src":  "main"
     },
     {
@@ -439,19 +452,6 @@
         "size":  "each",
         "boardItem":  "Cauliflower Each",
         "linkItem":  "Cauliflower",
-        "board_src":  "main"
-    },
-    {
-        "id":  "cauliflower",
-        "store":  "Walmart",
-        "unit":  "each",
-        "board":  2.96,
-        "link":  3.97,
-        "ratio":  1.34,
-        "price":  3.97,
-        "size":  "each",
-        "boardItem":  "Fresh Whole White Cauliflower, 1 Each",
-        "linkItem":  "Fresh Whole White Cauliflower",
         "board_src":  "main"
     },
     {
@@ -523,9 +523,9 @@
         "id":  "clementines",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  1.534,
+        "board":  1.524,
         "link":  1.572,
-        "ratio":  1.02,
+        "ratio":  1.03,
         "price":  7.86,
         "size":  "5 lb",
         "boardItem":  "Clementine Mandarins, 5 lbs.",
@@ -559,6 +559,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cod",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  11.99,
+        "link":  11.49,
+        "ratio":  0.96,
+        "price":  11.49,
+        "size":  "16 oz",
+        "boardItem":  "Supreme Choice Cod, Boneless, Fillets",
+        "linkItem":  "Supreme Choice Cod, Boneless, Fillets",
+        "board_src":  "main"
+    },
+    {
         "id":  "coffee",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -572,16 +585,16 @@
         "board_src":  "main"
     },
     {
-        "id":  "corn-muffin-mix",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.0906,
-        "link":  0.0847,
-        "ratio":  0.93,
-        "price":  0.72,
-        "size":  "8.5 oz",
-        "boardItem":  "JIFFY Corn Muffin Mix, 8.5 oz Box",
-        "linkItem":  "\"JIFFY\" Corn Muffin Mix, 8.5 oz Box",
+        "id":  "corn-dogs",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  1.3725,
+        "link":  1.245,
+        "ratio":  0.91,
+        "price":  4.98,
+        "size":  "4 ct",
+        "boardItem":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
+        "linkItem":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
         "board_src":  "main"
     },
     {
@@ -728,19 +741,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "donuts",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  0.3325,
-        "link":  0.24,
-        "ratio":  0.72,
-        "price":  2.88,
-        "size":  "12 ct",
-        "boardItem":  "Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles",
-        "linkItem":  "Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles",
-        "board_src":  "main"
-    },
-    {
         "id":  "energy-drinks",
         "store":  "Hy-Vee",
         "unit":  "floz",
@@ -790,6 +790,19 @@
         "size":  "3.805 lb",
         "boardItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
         "linkItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "french-bread",
+        "store":  "Walmart",
+        "unit":  "each",
+        "board":  1.47,
+        "link":  1.25,
+        "ratio":  0.85,
+        "price":  1.25,
+        "size":  "each",
+        "boardItem":  "Freshness Guaranteed Wheat Bakery French Bread Loaf, 13 oz, 1 Loaf",
+        "linkItem":  "Freshness Guaranteed French Bakery Bread Loaf",
         "board_src":  "main"
     },
     {
@@ -858,6 +871,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "frozen-fruit",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3431,
+        "link":  0.2806,
+        "ratio":  0.82,
+        "price":  4.49,
+        "size":  "16 oz",
+        "boardItem":  "Fareway Unsweetened Sliced Strawberries",
+        "linkItem":  "Fareway Unsweetened Sliced Strawberries",
+        "board_src":  "main"
+    },
+    {
         "id":  "frozen-waffles",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -868,6 +894,19 @@
         "size":  "72 ct",
         "boardItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
         "linkItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "furniture-polish",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2792,
+        "link":  0.2392,
+        "ratio":  0.86,
+        "price":  2.99,
+        "size":  "12.5 oz",
+        "boardItem":  "Behold Furniture Polish, Lemon",
+        "linkItem":  "Behold Furniture Polish, Lemon",
         "board_src":  "main"
     },
     {
@@ -907,19 +946,6 @@
         "size":  "3 lb",
         "boardItem":  "Green Seedless Grapes, 3 lbs.",
         "linkItem":  "Green Seedless Grapes, 3 lbs.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "green-onions",
-        "store":  "Walmart",
-        "unit":  "each",
-        "board":  1.17,
-        "link":  1.07,
-        "ratio":  0.91,
-        "price":  1.07,
-        "size":  "each",
-        "boardItem":  "Fresh Whole Green Onion 1 Bunch, Fresh Produce",
-        "linkItem":  "Fresh Whole Green Onion Bunch",
         "board_src":  "main"
     },
     {
@@ -975,19 +1001,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "kale",
-        "store":  "Walmart",
-        "unit":  "each",
-        "board":  1.62,
-        "link":  1.48,
-        "ratio":  0.91,
-        "price":  1.48,
-        "size":  "each",
-        "boardItem":  "Fresh Kale Greens, Bunch",
-        "linkItem":  "Fresh Kale Greens Bunch",
-        "board_src":  "main"
-    },
-    {
         "id":  "kielbasa",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
@@ -1037,19 +1050,6 @@
         "size":  "31 oz",
         "boardItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
         "linkItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "lettuce",
-        "store":  "Sam\u0027s Club",
-        "unit":  "each",
-        "board":  1.0367,
-        "link":  0.7867,
-        "ratio":  0.76,
-        "price":  4.72,
-        "size":  "6 ct",
-        "boardItem":  "Romaine Hearts, 6 ct.",
-        "linkItem":  "Romaine Hearts, 6 ct.",
         "board_src":  "main"
     },
     {
@@ -1128,6 +1128,19 @@
         "size":  "6 lb",
         "boardItem":  "Cara Cara Oranges, 6 lbs.",
         "linkItem":  "Navel Oranges, 6 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "paper-towels",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  2.2475,
+        "link":  1.745,
+        "ratio":  0.78,
+        "price":  6.98,
+        "size":  "4 ct",
+        "boardItem":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
+        "linkItem":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
         "board_src":  "main"
     },
     {
@@ -1219,6 +1232,19 @@
         "size":  "2 lb",
         "boardItem":  "Plum Bag 2 Lbs",
         "linkItem":  "Plums, Bag",
+        "board_src":  "main"
+    },
+    {
+        "id":  "popsicles",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.4067,
+        "link":  0.3325,
+        "ratio":  0.82,
+        "price":  3.99,
+        "size":  "12 ct",
+        "boardItem":  "Bomb Pop Original Ice Pops",
+        "linkItem":  "Bomb Pop Original Ice Pops",
         "board_src":  "main"
     },
     {
@@ -1378,6 +1404,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "toasted-sesame-seeds",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.6244,
+        "link":  0.4994,
+        "ratio":  0.8,
+        "price":  7.99,
+        "size":  "16 oz",
+        "boardItem":  "Badia Spices Toasted Sesame Seed",
+        "linkItem":  "Badia Spices Toasted Sesame Seed",
+        "board_src":  "main"
+    },
+    {
         "id":  "shaving-cream",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -1443,6 +1482,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "sports-drinks",
+        "store":  "Family Fare",
+        "unit":  "floz",
+        "board":  0.0624,
+        "link":  0.0782,
+        "ratio":  1.25,
+        "price":  2.19,
+        "size":  "28 fl oz",
+        "boardItem":  "Gatorade Thirst Quencher, Fruit Punch 8 Ea",
+        "linkItem":  "Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz",
+        "board_src":  "main"
+    },
+    {
         "id":  "strawberries",
         "store":  "Aldi",
         "unit":  "oz",
@@ -1453,19 +1505,6 @@
         "size":  "1 lb",
         "boardItem":  "Strawberries",
         "linkItem":  "Whole Strawberries 1 LB",
-        "board_src":  "main"
-    },
-    {
-        "id":  "strawberries",
-        "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.1553,
-        "link":  0.1225,
-        "ratio":  0.79,
-        "price":  3.92,
-        "size":  "2 lb",
-        "boardItem":  "Strawberries, 2 lbs.",
-        "linkItem":  "Strawberries, 2 lbs.",
         "board_src":  "main"
     },
     {
@@ -1522,19 +1561,6 @@
     },
     {
         "id":  "condensed-milk",
-        "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.1605,
-        "link":  0.1426,
-        "ratio":  0.89,
-        "price":  11.98,
-        "size":  "84 fl oz",
-        "boardItem":  "Nestle La Lechera Sweetened Condensed Milk, 14 oz., 6 pk.",
-        "linkItem":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "condensed-milk",
         "store":  "Aldi",
         "unit":  "oz",
         "board":  0.1636,
@@ -1586,19 +1612,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "toaster-pastries",
-        "store":  "Sam\u0027s Club",
-        "unit":  "each",
-        "board":  0.2079,
-        "link":  0.1871,
-        "ratio":  0.9,
-        "price":  8.98,
-        "size":  "48 ct",
-        "boardItem":  "Pop-Tarts Chocolate Toaster Pastries, Variety Pack, 48 ct.",
-        "linkItem":  "Pop-Tarts Toaster Pastries, Variety Pack, 48 ct.",
-        "board_src":  "main"
-    },
-    {
         "id":  "tomatoes",
         "store":  "Hy-Vee",
         "unit":  "lb",
@@ -1625,6 +1638,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "tortillas",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.279,
+        "link":  0.199,
+        "ratio":  0.71,
+        "price":  1.99,
+        "size":  "each",
+        "boardItem":  "Mission Super Soft Flour Tortillas, Fajita Size, 10 Count",
+        "linkItem":  "Mission Super Soft Flour Tortillas, Fajita Size, 10 Count",
+        "board_src":  "main"
+    },
+    {
         "id":  "turkey-bacon",
         "store":  "Aldi",
         "unit":  "oz",
@@ -1648,19 +1674,6 @@
         "size":  "2 oz",
         "boardItem":  "Hy Vee Pure Vanilla Extract",
         "linkItem":  "Hy Vee Pure Vanilla Extract",
-        "board_src":  "main"
-    },
-    {
-        "id":  "yeast",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  1.2425,
-        "link":  1.3575,
-        "ratio":  1.09,
-        "price":  5.43,
-        "size":  "4 oz",
-        "boardItem":  "Red Star Quick-Rise Instant Yeasts, 4 oz (113.4 g) Multi-Use Jar, Fast-Acting Baking Yeasts",
-        "linkItem":  "Red Star Active Dry Yeast, 4 oz (113.4 g) Multi-Use Jar, Baking and Breadmaking Essential",
         "board_src":  "main"
     },
     {

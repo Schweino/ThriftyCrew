@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-09-05T08:17:20",
-    "board":  "comparison-2026-09-02",
-    "cells":  529,
-    "coverage_pct":  86.6,
+    "generated":  "2026-09-06T08:20:35",
+    "board":  "comparison-2026-09-06",
+    "cells":  530,
+    "coverage_pct":  90.6,
     "counts":  {
-                   "SHELF":  457,
+                   "SHELF":  479,
                    "SHIP_ONLY":  0,
                    "THIRD_PARTY":  1,
-                   "UNKNOWN":  71
+                   "UNKNOWN":  50
                },
     "flagged":  [
                     {

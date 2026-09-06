@@ -1,20 +1,56 @@
 ﻿{
-    "generated":  "2026-09-05 18:56",
+    "generated":  "2026-09-06 08:21",
     "drift_vs_engine":  0,
     "drift_products":  [
 
                        ],
     "moved":  [
                   {
-                      "name":  "Earth Grown Butter Chickpea 10.05 OZ",
-                      "from":  "butter",
-                      "to":  "chickpeas"
+                      "name":  "Scrubbing Bubbles Bathroom Grime Fighter Bathroom Cleaner, Aerosol Disinfectant Spray, Rainshower",
+                      "from":  "disinfectant-spray",
+                      "to":  "shower-cleaner"
+                  },
+                  {
+                      "name":  "Mt. Olive Bread \u0026 Butter Chips Old-Fashioned Sweet Pickles",
+                      "from":  "bread",
+                      "to":  "pickles"
+                  },
+                  {
+                      "name":  "Scrubbing Bubbles Bathroom Grime Fighter Bathroom Cleaner, Aerosol Disinfectant Spray, Citrus, 20 oz",
+                      "from":  "disinfectant-spray",
+                      "to":  "shower-cleaner"
+                  },
+                  {
+                      "name":  "Scrubbing Bubbles Disinfectant Bathroom Grime Fighter Spray, Petal Paradise, 32 fl oz",
+                      "from":  "disinfectant-spray",
+                      "to":  "shower-cleaner"
+                  },
+                  {
+                      "name":  "Mt. Olive Sweet Heat Petites Bread \u0026 Butter Pickles",
+                      "from":  "bread",
+                      "to":  "pickles"
                   }
               ],
     "dropped":  [
                     {
-                        "name":  "The Bacon Jam Classic Bacon Jam 9oz",
-                        "from":  "bacon"
+                        "name":  "Land O\u0027Frost Bistro Favorites 100% Natural Rotisserie Seasoned Turkey Breast 8oz",
+                        "from":  "rotisserie-chicken"
+                    },
+                    {
+                        "name":  "Kroger Aluminum Pre-cut Foil Sheets",
+                        "from":  "aluminum-foil"
+                    },
+                    {
+                        "name":  "Land O\u0027frost Rotisserie Seasoned Turkey Breast 8 Oz",
+                        "from":  "rotisserie-chicken"
+                    },
+                    {
+                        "name":  "Great Gherkins Sweet Heat Bread \u0026 Butter Pickle Chips",
+                        "from":  "bread"
+                    },
+                    {
+                        "name":  "Our Family Foil Sheets, Aluminum, Pop Up, Pre Cut, Single 50 Ea",
+                        "from":  "aluminum-foil"
                     }
                 ],
     "new_contested":  [

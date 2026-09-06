@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-05 21:32",
-    "board":  "comparison-2026-09-05.json",
-    "sidecar_generated":  "2026-09-05 21:32:54",
+    "generated":  "2026-09-06 08:22",
+    "board":  "comparison-2026-09-06.json",
+    "sidecar_generated":  "2026-09-06 08:22:31",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,55 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3144,
-                     "corpus":  41130,
-                     "rule_invisible":  7690
+                     "board_pairs":  3164,
+                     "corpus":  41139,
+                     "rule_invisible":  7700
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  4,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "cod",
+                         "commodity":  "Cod Fillets",
+                         "store":  "Walmart",
+                         "product":  "Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen)",
+                         "cos":  0.6886,
+                         "score":  0.961241,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "french-bread",
+                         "commodity":  "French Bread / Baguette",
+                         "store":  "Baker\u0027s",
+                         "product":  "Private Selection French Loaf Sliced",
+                         "cos":  0.6677,
+                         "score":  0.924464,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "cod",
+                         "commodity":  "Cod Fillets",
+                         "store":  "Walmart",
+                         "product":  "Great Value Frozen Catfish Skinless Fillets, 2 lb Bag",
+                         "cos":  0.6399,
+                         "score":  0.917677,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "taco-sauce",
+                         "commodity":  "Taco Sauce",
+                         "store":  "Walmart",
+                         "product":  "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+                         "cos":  0.6854,
+                         "score":  0.905211,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ]
 }

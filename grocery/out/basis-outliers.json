@@ -242,20 +242,6 @@
                               "id":  "cherry-tomatoes",
                               "commodity":  "Cherry / Grape Tomatoes",
                               "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.248,
-                              "size":  "pint",
-                              "item":  "Grape Tomatoes",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "cherry-tomatoes",
-                              "commodity":  "Cherry / Grape Tomatoes",
-                              "unit":  "oz",
                               "store":  "Family Fare",
                               "per_unit":  0.399,
                               "size":  "1 pt",
@@ -509,7 +495,7 @@
                               "commodity":  "Fruit Punch",
                               "unit":  "floz",
                               "store":  "Family Fare",
-                              "per_unit":  0.0422,
+                              "per_unit":  0.0339,
                               "size":  "59 oz",
                               "item":  "Minute Maid Fruit Punch Juice Drink Carton 59 Fl Oz",
                               "kind":  "weight",
@@ -827,20 +813,6 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
-                              "id":  "lemonade",
-                              "commodity":  "Lemonade",
-                              "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.0422,
-                              "size":  "59 oz",
-                              "item":  "Minute Maid Lemonade 59 Oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
                               "id":  "egg-whites",
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
@@ -873,7 +845,7 @@
                               "commodity":  "Miracle Whip (Salad Dressing Spread)",
                               "unit":  "oz",
                               "store":  "Family Fare",
-                              "per_unit":  0.1997,
+                              "per_unit":  0.233,
                               "size":  "30 oz",
                               "item":  "Miracle Whip Dressing 30 Fl Oz",
                               "kind":  "weight",
@@ -1121,34 +1093,6 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
-                              "id":  "sparkling-water",
-                              "commodity":  "Sparkling Water",
-                              "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.0818,
-                              "size":  "17 oz",
-                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "sports-drinks",
-                              "commodity":  "Sports Drinks",
-                              "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.0368,
-                              "size":  "8 pk 20 oz btls",
-                              "item":  "Powerade",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
                               "id":  "relish",
                               "commodity":  "Sweet Relish",
                               "unit":  "oz",
@@ -1161,6 +1105,20 @@
                               "holds_crown":  false,
                               "unit_kind":  "weight",
                               "agrees_with_engine_divisor":  true
+                          },
+                          {
+                              "id":  "condensed-milk",
+                              "commodity":  "Sweetened Condensed Milk",
+                              "unit":  "oz",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.1426,
+                              "size":  "84 fl oz",
+                              "item":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  true,
+                              "unit_kind":  "weight",
+                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "maple-syrup",
@@ -1331,7 +1289,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-05.json",
+    "compare_file":  "comparison-2026-09-06.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -1458,6 +1416,20 @@
                                                      "row_kind":  "volume",
                                                      "holds_crown":  true,
                                                      "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "condensed-milk",
+                                                     "commodity":  "Sweetened Condensed Milk",
+                                                     "unit":  "oz",
+                                                     "store":  "Sam\u0027s Club",
+                                                     "per_unit":  0.1426,
+                                                     "size":  "84 fl oz",
+                                                     "item":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
+                                                     "kind":  "volume",
+                                                     "row_kind":  "weight",
+                                                     "holds_crown":  true,
+                                                     "unit_kind":  "weight",
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
@@ -1657,20 +1629,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "cherry-tomatoes",
-                                                     "commodity":  "Cherry / Grape Tomatoes",
-                                                     "unit":  "oz",
-                                                     "store":  "Fareway",
-                                                     "per_unit":  0.248,
-                                                     "size":  "pint",
-                                                     "item":  "Grape Tomatoes",
-                                                     "kind":  "volume",
-                                                     "row_kind":  "weight",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "weight",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "chocolate-milk",
                                                      "commodity":  "Chocolate Milk",
                                                      "unit":  "floz",
@@ -1801,7 +1759,7 @@
                                                      "commodity":  "Fruit Punch",
                                                      "unit":  "floz",
                                                      "store":  "Family Fare",
-                                                     "per_unit":  0.0422,
+                                                     "per_unit":  0.0339,
                                                      "size":  "59 oz",
                                                      "item":  "Minute Maid Fruit Punch Juice Drink Carton 59 Fl Oz",
                                                      "kind":  "weight",
@@ -2035,20 +1993,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "lemonade",
-                                                     "commodity":  "Lemonade",
-                                                     "unit":  "floz",
-                                                     "store":  "Family Fare",
-                                                     "per_unit":  0.0422,
-                                                     "size":  "59 oz",
-                                                     "item":  "Minute Maid Lemonade 59 Oz",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "bottled-marinade",
                                                      "commodity":  "Meat Marinade (bottled)",
                                                      "unit":  "floz",
@@ -2224,34 +2168,6 @@
                                                      "per_unit":  0.1153,
                                                      "size":  "64 oz",
                                                      "item":  "Kikkoman Traditionally Brewed Soy Sauce, 64 oz.",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "sparkling-water",
-                                                     "commodity":  "Sparkling Water",
-                                                     "unit":  "floz",
-                                                     "store":  "Family Fare",
-                                                     "per_unit":  0.0818,
-                                                     "size":  "17 oz",
-                                                     "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "sports-drinks",
-                                                     "commodity":  "Sports Drinks",
-                                                     "unit":  "floz",
-                                                     "store":  "Fareway",
-                                                     "per_unit":  0.0368,
-                                                     "size":  "8 pk 20 oz btls",
-                                                     "item":  "Powerade",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -2533,7 +2449,7 @@
                                 }
                             ],
     "ratio":  4,
-    "generated":  "2026-09-06T05:43:01",
+    "generated":  "2026-09-06T08:14:55",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",
@@ -2750,7 +2666,7 @@
                                                        "commodity":  "Miracle Whip (Salad Dressing Spread)",
                                                        "unit":  "oz",
                                                        "store":  "Family Fare",
-                                                       "per_unit":  0.1997,
+                                                       "per_unit":  0.233,
                                                        "size":  "30 oz",
                                                        "item":  "Miracle Whip Dressing 30 Fl Oz",
                                                        "kind":  "weight",

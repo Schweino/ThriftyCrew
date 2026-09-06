@@ -1,5 +1,5 @@
 ﻿{
-    "compare_file":  "comparison-2026-09-05.json",
+    "compare_file":  "comparison-2026-09-06.json",
     "near_floor":  0.75,
     "findings":  [
                      {
@@ -193,9 +193,9 @@
                          "band_min":  0.01,
                          "floor_ratio":  0.98,
                          "save_pct":  2,
-                         "name":  "Great Value Sandwich Bags, Fold Top, 200 Count",
-                         "price_text":  "$1.97",
-                         "size_text":  "200 ct"
+                         "name":  "(3 pack) Great Value Sandwich Bags, Fold Top, 200 Count",
+                         "price_text":  "$5.91",
+                         "size_text":  "600 ct"
                      },
                      {
                          "commodity":  "sandwich-bags",
@@ -208,9 +208,9 @@
                          "band_min":  0.01,
                          "floor_ratio":  0.98,
                          "save_pct":  2,
-                         "name":  "(3 pack) Great Value Sandwich Bags, Fold Top, 200 Count",
-                         "price_text":  "$5.91",
-                         "size_text":  "600 ct"
+                         "name":  "Great Value Sandwich Bags, Fold Top, 200 Count",
+                         "price_text":  "$1.97",
+                         "size_text":  "200 ct"
                      },
                      {
                          "commodity":  "toothpaste",
@@ -277,12 +277,12 @@
                          "label":  "Bacon",
                          "store":  "Fareway",
                          "unit":  "lb",
-                         "board_price":  3.988,
-                         "board_item":  "Fareway Hickory Smoked Bacon",
+                         "board_price":  4.99,
+                         "board_item":  "Farmland Hickory Smoked Classic Cut Bacon",
                          "rejected":  2.398,
                          "band_min":  2.5,
                          "floor_ratio":  0.9592,
-                         "save_pct":  39.9,
+                         "save_pct":  51.9,
                          "name":  "Webster City Bacon Ends",
                          "price_text":  "$11.99",
                          "size_text":  "80 oz"
@@ -433,9 +433,9 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.9173,
                          "save_pct":  67.6,
-                         "name":  "Febreze Air Freshener Linen Sky 0 25 OZ",
+                         "name":  "Febreze Odor Eliminating Air Freshener Gain Original Scent 0 25 OZ",
                          "price_text":  "$3.44",
-                         "size_text":  "7.5 ml"
+                         "size_text":  "1 ct"
                      },
                      {
                          "commodity":  "air-freshener",
@@ -448,9 +448,9 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.9173,
                          "save_pct":  67.6,
-                         "name":  "Febreze Odor Eliminating Air Freshener Gain Original Scent 0 25 OZ",
+                         "name":  "Febreze Air Freshener Linen Sky 0 25 OZ",
                          "price_text":  "$3.44",
-                         "size_text":  "1 ct"
+                         "size_text":  "7.5 ml"
                      },
                      {
                          "commodity":  "toothpaste",
@@ -500,6 +500,21 @@
                      {
                          "commodity":  "corn-dogs",
                          "label":  "Corn Dogs (frozen)",
+                         "store":  "Fareway",
+                         "unit":  "each",
+                         "board_price":  1.3725,
+                         "board_item":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
+                         "rejected":  0.2607,
+                         "band_min":  0.3,
+                         "floor_ratio":  0.869,
+                         "save_pct":  81,
+                         "name":  "State Fair Classic Mini Corn Dogs, Frozen",
+                         "price_text":  "$11.99",
+                         "size_text":  "46 ct"
+                     },
+                     {
+                         "commodity":  "corn-dogs",
+                         "label":  "Corn Dogs (frozen)",
                          "store":  "Family Fare",
                          "unit":  "each",
                          "board_price":  0.6244,
@@ -511,21 +526,6 @@
                          "name":  "State Fair Classic Mini Corn Dogs, Frozen 46 Ct",
                          "price_text":  "$11.99",
                          "size_text":  "30.36 oz"
-                     },
-                     {
-                         "commodity":  "corn-dogs",
-                         "label":  "Corn Dogs (frozen)",
-                         "store":  "Fareway",
-                         "unit":  "each",
-                         "board_price":  0.4369,
-                         "board_item":  "Bar S Classic Corn Dogs",
-                         "rejected":  0.2607,
-                         "band_min":  0.3,
-                         "floor_ratio":  0.869,
-                         "save_pct":  40.3,
-                         "name":  "State Fair Classic Mini Corn Dogs, Frozen",
-                         "price_text":  "$11.99",
-                         "size_text":  "46 ct"
                      },
                      {
                          "commodity":  "dish-soap",
@@ -733,21 +733,6 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
-                         "name":  "Great Value Aerosol Air Freshener Linen Fresh",
-                         "price_text":  "$0.97",
-                         "size_text":  "8 oz"
-                     },
-                     {
-                         "commodity":  "air-freshener",
-                         "label":  "Air Freshener",
-                         "store":  "Walmart",
-                         "unit":  "oz",
-                         "board_price":  0.2027,
-                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
-                         "rejected":  0.1212,
-                         "band_min":  0.15,
-                         "floor_ratio":  0.808,
-                         "save_pct":  40.2,
                          "name":  "Great Value Aerosol Air Freshener, Twilight Woods, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
@@ -763,7 +748,7 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
-                         "name":  "Great Value Twilight Woods Aerosol Air Freshener, 8 oz",
+                         "name":  "Great Value Aerosol Air Freshener Linen Fresh",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -778,22 +763,7 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
-                         "name":  "Great Value Blooming Lavender Aerosol Air Freshener, 8 oz",
-                         "price_text":  "$0.97",
-                         "size_text":  "8 oz"
-                     },
-                     {
-                         "commodity":  "air-freshener",
-                         "label":  "Air Freshener",
-                         "store":  "Walmart",
-                         "unit":  "oz",
-                         "board_price":  0.2027,
-                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
-                         "rejected":  0.1212,
-                         "band_min":  0.15,
-                         "floor_ratio":  0.808,
-                         "save_pct":  40.2,
-                         "name":  "Great Value Aerosol Air Freshener, Tranquil Ocean Waves, 8 oz",
+                         "name":  "Great Value Aerosol Air Freshener, Linen Fresh, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -823,7 +793,37 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
-                         "name":  "Great Value Aerosol Air Freshener, Linen Fresh, 8 oz",
+                         "name":  "Great Value Aerosol Air Freshener, Tranquil Ocean Waves, 8 oz",
+                         "price_text":  "$0.97",
+                         "size_text":  "8 oz"
+                     },
+                     {
+                         "commodity":  "air-freshener",
+                         "label":  "Air Freshener",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board_price":  0.2027,
+                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
+                         "rejected":  0.1212,
+                         "band_min":  0.15,
+                         "floor_ratio":  0.808,
+                         "save_pct":  40.2,
+                         "name":  "Great Value Blooming Lavender Aerosol Air Freshener, 8 oz",
+                         "price_text":  "$0.97",
+                         "size_text":  "8 oz"
+                     },
+                     {
+                         "commodity":  "air-freshener",
+                         "label":  "Air Freshener",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board_price":  0.2027,
+                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
+                         "rejected":  0.1212,
+                         "band_min":  0.15,
+                         "floor_ratio":  0.808,
+                         "save_pct":  40.2,
+                         "name":  "Great Value Twilight Woods Aerosol Air Freshener, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -862,12 +862,12 @@
                          "label":  "Corn Dogs (frozen)",
                          "store":  "Fareway",
                          "unit":  "each",
-                         "board_price":  0.4369,
-                         "board_item":  "Bar S Classic Corn Dogs",
+                         "board_price":  1.3725,
+                         "board_item":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
                          "rejected":  0.2389,
                          "band_min":  0.3,
                          "floor_ratio":  0.7963,
-                         "save_pct":  45.3,
+                         "save_pct":  82.6,
                          "name":  "State Fair Classic Mini Corn Dogs, Frozen",
                          "price_text":  "$10.99",
                          "size_text":  "46 ct"
@@ -903,19 +903,19 @@
                          "size_text":  "7.2 oz"
                      },
                      {
-                         "commodity":  "fruit-punch",
-                         "label":  "Fruit Punch",
-                         "store":  "Fareway",
-                         "unit":  "floz",
-                         "board_price":  0.0554,
-                         "board_item":  "Minute Maid Zero Sugar Fruit Punch",
-                         "rejected":  0.0078,
-                         "band_min":  0.01,
+                         "commodity":  "frozen-pizza",
+                         "label":  "Frozen Pizza",
+                         "store":  "Walmart",
+                         "unit":  "each",
+                         "board_price":  2.96,
+                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
+                         "rejected":  1.17,
+                         "band_min":  1.5,
                          "floor_ratio":  0.78,
-                         "save_pct":  85.9,
-                         "name":  "Hawaiian Punch Multi-serve Polar Blast Juice Drink",
-                         "price_text":  "$3.99",
-                         "size_text":  "512 fl oz"
+                         "save_pct":  60.5,
+                         "name":  "Great Value Microwavable Thin Crust Cheese Pizza, 7.2 oz (Frozen)",
+                         "price_text":  "$1.17",
+                         "size_text":  "7.2 oz"
                      },
                      {
                          "commodity":  "frozen-pizza",
@@ -933,19 +933,19 @@
                          "size_text":  "7.2 oz"
                      },
                      {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
+                         "commodity":  "facial-tissues",
+                         "label":  "Facial Tissues",
                          "store":  "Walmart",
                          "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.17,
-                         "band_min":  1.5,
+                         "board_price":  0.0069,
+                         "board_item":  "(16 pack) Kleenex Ultra Soft 3-Ply Cube Box Facial Tissues, 4 Pack (240 Total Tissues)",
+                         "rejected":  0.0039,
+                         "band_min":  0.005,
                          "floor_ratio":  0.78,
-                         "save_pct":  60.5,
-                         "name":  "Great Value Microwavable Thin Crust Cheese Pizza, 7.2 oz (Frozen)",
-                         "price_text":  "$1.17",
-                         "size_text":  "7.2 oz"
+                         "save_pct":  43.5,
+                         "name":  "(32 pack) Kleenex On-The-Go 3-Ply Travel Tissues, 8 Pack (80 Total Tissues), Facial Tissues",
+                         "price_text":  "$9.92",
+                         "size_text":  "2557 ct"
                      },
                      {
                          "commodity":  "facial-tissues",
@@ -963,21 +963,6 @@
                          "size_text":  "2557 ct"
                      },
                      {
-                         "commodity":  "facial-tissues",
-                         "label":  "Facial Tissues",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  0.0069,
-                         "board_item":  "(16 pack) Kleenex Ultra Soft 3-Ply Cube Box Facial Tissues, 4 Pack (240 Total Tissues)",
-                         "rejected":  0.0039,
-                         "band_min":  0.005,
-                         "floor_ratio":  0.78,
-                         "save_pct":  43.5,
-                         "name":  "(32 pack) Kleenex On-The-Go 3-Ply Travel Tissues, 8 Pack (80 Total Tissues), Facial Tissues",
-                         "price_text":  "$9.92",
-                         "size_text":  "2557 ct"
-                     },
-                     {
                          "commodity":  "half-and-half",
                          "label":  "Half \u0026 Half",
                          "store":  "Walmart",
@@ -991,6 +976,21 @@
                          "name":  "AriZona Arnold Palmer Half and Half - 16 fl oz (pack of 12)",
                          "price_text":  "$7.48",
                          "size_text":  "191.795 fl oz"
+                     },
+                     {
+                         "commodity":  "fruit-punch",
+                         "label":  "Fruit Punch",
+                         "store":  "Fareway",
+                         "unit":  "floz",
+                         "board_price":  0.0554,
+                         "board_item":  "Minute Maid Zero Sugar Fruit Punch",
+                         "rejected":  0.0078,
+                         "band_min":  0.01,
+                         "floor_ratio":  0.78,
+                         "save_pct":  85.9,
+                         "name":  "Hawaiian Punch Multi-serve Polar Blast Juice Drink",
+                         "price_text":  "$3.99",
+                         "size_text":  "512 fl oz"
                      },
                      {
                          "commodity":  "dinner-rolls",
@@ -1038,21 +1038,6 @@
                          "size_text":  "13.007 fl oz"
                      },
                      {
-                         "commodity":  "coffee",
-                         "label":  "Coffee (ground/beans)",
-                         "store":  "Fareway",
-                         "unit":  "oz",
-                         "board_price":  0.4184,
-                         "board_item":  "Fareway Coffee, Ground, Medium Roast Style, Classic Roast",
-                         "rejected":  0.0763,
-                         "band_min":  0.1,
-                         "floor_ratio":  0.763,
-                         "save_pct":  81.8,
-                         "name":  "Scooter\u0027s Coffee French Vanilla Ground Coffee",
-                         "price_text":  "$10.99",
-                         "size_text":  "12 x 12 oz"
-                     },
-                     {
                          "commodity":  "bread",
                          "label":  "Bread (loaf)",
                          "store":  "Walmart",
@@ -1083,7 +1068,7 @@
                          "size_text":  "50.7 fl oz"
                      }
                  ],
-    "cells":  42,
-    "generated":  "2026-09-06T05:43:01",
-    "flagged_file":  "flagged-2026-09-05.json"
+    "cells":  41,
+    "generated":  "2026-09-06T08:14:55",
+    "flagged_file":  "flagged-2026-09-06.json"
 }

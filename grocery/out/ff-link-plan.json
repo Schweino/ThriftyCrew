@@ -1,6 +1,50 @@
 ﻿{
     "resolved":  [
                      {
+                         "id":  "blueberries",
+                         "fault":  "WRONG-PRODUCT",
+                         "board":  "Flavor Ripe Blueberries 18 Oz",
+                         "board_pu":  0.3883,
+                         "name":  "Flavor Ripe Blueberries 18 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/flavor_ripe_blueberries_18_oz/p/2341070",
+                         "price":  "$6.99",
+                         "size":  "18 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "canned-pasta",
+                         "fault":  "NO-LINK",
+                         "board":  "Chef Boyardee Spaghetti \u0026 Meatballs 14.5 Oz",
+                         "board_pu":  0.1082,
+                         "name":  "Chef Boyardee Spaghetti \u0026 Meatballs 14.5 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/chef_boyardee_spaghetti_meatballs_14_5_oz/p/36007",
+                         "price":  "$1.59",
+                         "size":  "14.7 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "frozen-corn",
+                         "fault":  "WRONG-PRODUCT",
+                         "board":  "Our Family Sweet Corn, Super, Steamable 10 Oz",
+                         "board_pu":  0.139,
+                         "name":  "Our Family Sweet Corn, Super, Steamable 10 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/corn/our_family_sweet_corn_super_steamable_10_oz/p/1564405684703626578",
+                         "price":  "$1.39",
+                         "size":  "10 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "sugar",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Our Family Sugar, Pure Granulated 64 Oz",
+                         "board_pu":  0.8975,
+                         "name":  "Our Family Sugar, Pure Granulated 64 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/sweeteners/our_family_sugar_pure_granulated_64_oz/p/7081534",
+                         "price":  "$3.59",
+                         "size":  "64 oz",
+                         "score":  1
+                     },
+                     {
                          "id":  "eggs",
                          "fault":  "NO-LINK",
                          "board":  "Large Grade A Eggs Our Family (30 Ct)",
@@ -10,35 +54,36 @@
                          "price":  "$2.39",
                          "size":  "12 ct",
                          "score":  1
-                     },
-                     {
-                         "id":  "limes",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Fresh Limes",
-                         "board_pu":  0.89,
-                         "name":  "Fresh Limes",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/citrus_fruits/fresh_limes/p/2311246",
-                         "price":  "$0.89",
-                         "size":  "1 ct",
-                         "score":  1
                      }
                  ],
     "refused":  [
                     {
+                        "id":  "aluminum-foil",
+                        "why":  "match found but its size \"1 ea\" gives no per-unit in sq_ft"
+                    },
+                    {
                         "id":  "dried-basil",
                         "why":  "no confident match (best 0)"
+                    },
+                    {
+                        "id":  "bread",
+                        "why":  "match found but its size \"20 oz\" gives no per-unit in each"
+                    },
+                    {
+                        "id":  "brownie-mix",
+                        "why":  "match found but its size \"10.25 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "caesar-salad-kit",
                         "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
                     },
                     {
-                        "id":  "cherry-tomatoes",
-                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
+                        "id":  "cake-mix",
+                        "why":  "match found but its size \"9 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "clementines",
-                        "why":  "match found but per-unit disagrees: board $1.995 vs link $2.895 (31.1%)"
+                        "id":  "cherry-tomatoes",
+                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
                     },
                     {
                         "id":  "croissants",
@@ -57,23 +102,47 @@
                         "why":  "match found but per-unit disagrees: board $0.83 vs link $0.4994 (66.2%)"
                     },
                     {
+                        "id":  "french-bread",
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
+                    },
+                    {
+                        "id":  "frozen-pizza",
+                        "why":  "match found but its size \"19.41 oz\" gives no per-unit in each"
+                    },
+                    {
+                        "id":  "garlic-bread",
+                        "why":  "match found but per-unit disagrees: board $2.89 vs link $0.3612 (700%)"
+                    },
+                    {
+                        "id":  "mac-and-cheese",
+                        "why":  "match found but its size \"6 oz\" gives no per-unit in each"
+                    },
+                    {
+                        "id":  "miracle-whip",
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
                         "id":  "orange-juice",
-                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "queso",
-                        "why":  "match found but its size \"23\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
+                        "id":  "shredded-cheese",
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
+                        "id":  "sports-drinks",
+                        "why":  "match found but its size \"8pk/20oz\" gives no per-unit in floz"
                     },
                     {
                         "id":  "strawberries",
                         "why":  "match found but per-unit disagrees: board $0.3119 vs link $0.4369 (28.6%)"
-                    },
-                    {
-                        "id":  "yukon-gold-potatoes",
-                        "why":  "match found but per-unit disagrees: board $0.598 vs link $1.398 (57.2%)"
                     }
                 ],
-    "worked":  13,
-    "generated":  "2026-09-05 14:35",
-    "board":  "comparison-2026-09-02.json"
+    "worked":  26,
+    "generated":  "2026-09-06 08:14",
+    "board":  "comparison-2026-09-06.json"
 }
