@@ -29,8 +29,8 @@ State: `TODO` · `WIP` · `DONE <sha>` · `BLOCKED-ON-BRAD` · `WONTFIX`
 | B1 | **E1 rest** | R2 seam (nothing to hook - measured); `publish.ps1` staging-aware; write-seam ratchet | `DONE b30d4e54` |
 | B2 | **E6** | Fact Check List before publish | `DONE a90b2081` |
 | B3 | **E3b** | Explicit `tools:` on all four + `ops/audit-agent-tools.ps1` gate | `DONE 9c42bd8e` |
-| B4 | **E14** | 5 scoped `.claude/rules/` files (CLAUDE.md left alone - 61 lines, already right-sized) | WIP |
-| B5 | **E13** | Briefs name memory PATHS, not restated content | TODO |
+| B4 | **E14** | 5 scoped `.claude/rules/` files; field is `globs` not `paths` | `DONE a8b17d05` |
+| B5 | **E13** | Resolver block on all 12 agents + `ops/audit-memory-citations.ps1`; 2 dangling found | WIP |
 | B6 | **E12** | Document-as-implementation, scoped past `audit-twin-drift` | TODO |
 | B7 | **E9** | Model per call, not per agent. Verify `claude-opus-4-8` is real first. | TODO |
 | B8 | **E10** | End-of-iteration progress tracking in the hunt daemon; calibrate N | TODO |

@@ -4,6 +4,13 @@ globs: "meal-prep/**"
 alwaysApply: false
 ---
 
+> **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
+> `~/.claude/projects/C--Codex-ThriftyCrew/memory/`. So `[[propagate-has-no-slugs]]` is
+> `~/.claude/projects/C--Codex-ThriftyCrew/memory/propagate-has-no-slugs.md`. The line here is a
+> pointer; the file is the account. Read it before acting on the pointer, and never write to that
+> directory - it is outside the repo and outside your worktree.
+
+
 # Working in `meal-prep/`
 
 Loaded only when you touch a file under `meal-prep/`. Pointers, not copies - the full account lives in

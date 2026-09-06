@@ -142,6 +142,10 @@ $static = @(
   # twelve declared none until today and inherited Write and Edit, two of them on agents whose job is a
   # verdict. An absent tools: line does not look wrong in a diff (2026-09-06, backlog E3).
   @{ f = 'ops\audit-agent-tools.ps1';          n = 'no agent silently inherits every tool, and no block claims one it lacks' }
+  # A citation that does not resolve reads as AUTHORITY: the reader believes an account exists, cannot
+  # reach it, and proceeds on the one-line hook with more confidence than if nothing had been cited.
+  # Found two on its first run, both pointing at memories that no longer exist (2026-09-06, backlog E13).
+  @{ f = 'ops\audit-memory-citations.ps1';     n = 'every cited memory resolves, and every agent can find the store' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test

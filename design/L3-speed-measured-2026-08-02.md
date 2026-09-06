@@ -21,7 +21,7 @@ account for **39.1 of those 41.8 minutes**, and the top three account for 29.2 m
 **All three are waiting on somebody else's server.** They are network-bound and rate-limited by the
 stores; no local cache, no faster JSON reader and no consolidated runner moves them by a second. The only
 levers that would are fewer calls or concurrent ones, and both are accuracy decisions about pull depth
-rather than speed work. See [[pull-depth-findings]] for why "fetch less" is not free here.
+rather than speed work. See the pull-depth findings for why "fetch less" is not free here. **The memory that held them is GONE** - cited here as `pull-depth-findings`, no file and no near match in the store as of 2026-09-06, found by `ops/audit-memory-citations.ps1` on its first run. Treat the sentence above as the whole of what survives.
 
 ## What the two proposed optimisations are actually worth
 
@@ -45,7 +45,7 @@ processes** (93 `RunPS` plus 21 direct). A no-op PowerShell child costs **96 ms*
 **≈11 s — about 10% of the suite**, once a day. Consolidating it means rewriting 114 call sites, each of
 which is currently isolated from the others by process boundaries. That isolation is not incidental: the
 suite's whole job is to keep running after one watcher dies, and this estate has already been bitten by a
-single child's stderr killing a parent under `$ErrorActionPreference='Stop'` (see [[logger-kills-pipeline]]).
+single child's stderr killing a parent under `$ErrorActionPreference='Stop'`. **The memory that held this is GONE** (cited here as `logger-kills-pipeline`, no file as of 2026-09-06), but unlike the one above THE FACT SURVIVED elsewhere: `C:\Codex\CLAUDE.md` carries "avoid `2>&1` on native exes - it fakes a failure at exit 0", and `ops/run-gates.ps1` carries the long-form version at both of its child-process calls, naming the three guards it has already bitten. Read those rather than trusting this pointer.
 Trading that isolation for 11 s a day is a bad trade.
 
 ## The honest total
