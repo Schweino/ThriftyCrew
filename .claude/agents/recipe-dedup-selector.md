@@ -87,12 +87,19 @@ you do not mention is a candidate lost:
 
 ```
 {"decisions": [
-   {"slug": "...", "verdict": "accepted" | "rejected-dupe" | "rejected-not-fit" | "deferred",
+   {"slug": "...",
     "reason": "one sentence, concrete",
+    "verdict": "accepted" | "rejected-dupe" | "rejected-not-fit" | "deferred",
     "dupe_of": ["slug", ...],
-    "record": {"name": "...", "protein": "...", "method": "...", "verdict": "...", "reason": "..."}}
+    "record": {"name": "...", "protein": "...", "method": "...", "reason": "...", "verdict": "..."}}
  ], "note": "batch-level observations, shortfalls, anything you overruled"}
 ```
+
+**`reason` comes BEFORE `verdict` on purpose. Do not reorder it.** A model predicts the next token,
+so a committed verdict is a far likelier continuation of committed reasoning than of nothing. Written
+verdict-first, the reason becomes a rationalisation of a ruling already made; written reason-first,
+the reason is what produces the ruling. Key order is irrelevant to every parser downstream, so this
+costs nothing and is purely a quality lever.
 
 - `accepted` - it becomes a recipe. `rejected-dupe` - it is the same dinner as something named in
   `dupe_of`. `rejected-not-fit` - readable, not a duplicate, but wrong for the run (out of band on any
