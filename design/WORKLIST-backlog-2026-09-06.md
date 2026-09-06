@@ -35,8 +35,8 @@ State: `TODO` · `WIP` · `DONE <sha>` · `BLOCKED-ON-BRAD` · `WONTFIX`
 | B7 | **E9** | Split already existed; gate fails a missing model/effort pin, prints the matrix | `DONE 993ec7c6` |
 | B8 | **E10** | `--status-every` heartbeat that names a STALL | `DONE 9301d154` |
 | B9 | **E11+E18** | `validate_tool_path` + first-ever gate on `graph/agentic` | `DONE d2dc0cd5` |
-| B10 | **E5** | 2 of 3 already correct; capture drop count was read by nobody + gate | WIP |
-| B11 | **E4** | BM25 + RRF alongside embeddings. **Gated on confirming the premise still holds.** | TODO |
+| B10 | **E5** | 2 of 3 already correct; capture drop count read by nobody + gate | `DONE ec7071c6` |
+| B11 | **E4** | Premise holds. Probe run: BM25 recall@10 = 16/31. Head-to-head vs cosine NOT run. | WIP |
 
 ## C. Loose ends found during the run
 

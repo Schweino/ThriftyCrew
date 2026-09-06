@@ -199,6 +199,9 @@ $pySuites = @(
   # plan-hash check above it proves the plan was not MUTATED, which is a different question
   # (2026-09-06, backlog E11+E18).
   @{ f = 'graph\agentic\executor_selftest.py'; a = '--selftest'; n = 'the executor refuses a tool path that escapes the repo, and records why' }
+  # The BM25 probe's ARITHMETIC, not its verdict. A scorer nobody checked, reporting a recall that a
+  # build decision rests on, is the shape this estate keeps writing guards about (backlog E4).
+  @{ f = 'meal-prep\pipeline\bm25_dedup_probe.py'; a = '--selftest'; n = 'the E4 lexical probe still scores rare terms above common ones' }
 )
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly
