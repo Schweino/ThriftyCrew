@@ -223,6 +223,11 @@ $pySuites = @(
   # Its clean twin is the load-bearing case - a plain 'keep the best epoch' would select the
   # maximum of k noisy draws, and this file's own docstring measures that noise at 0.0033.
   @{ f = 'sidecar\checkpoint_selection.py'; a = '--selftest'; n = 'the trainer ships a mid-run peak but refuses to chase a lead inside measured seed noise' }
+  # The E9 probe's COMPARATOR, not its verdict. Its whole job is to notice that one
+  # transcription differs from another, so a comparator that has quietly gone lenient reports
+  # agreement and retires a question that was never asked. Its must-fire is the unit rewrite
+  # ('ounces' to 'oz') the extractor is forbidden to make.
+  @{ f = 'meal-prep\pipeline\extractor_model_probe.py'; a = '--selftest'; n = 'the E9 transcription comparator still calls a rewritten unit a difference' }
 )
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly

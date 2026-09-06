@@ -373,10 +373,50 @@ files.
 batches: pre-approved tools only, everything else auto-denied with no prompt to hang on. May fit the
 scheduled tasks and the daemon better than what they use now.
 
-### E9 - Model choice is pinned per agent, but MATE's M is per call `OPEN`
+### E9 - Model choice is pinned per agent, but MATE's M is per call `MEASURED - NO SWAP, DEFECT FOUND`
 *Source: AI Agents Architecture (course 7).* All twelve definitions pin one model. A tool that makes
 its own LLM call can pick its own. Highest-leverage split: an expensive model for the up-front plan,
 a cheap one to execute it.
+
+**MEASURED 2026-09-06, and it answered a different question than it asked.**
+`meal-prep/pipeline/extractor_model_probe.py --n 4` compares the pinned extractor (fable/medium)
+against Haiku 4.5 on the same four live pages. Transcription has a right answer, so this asks whether
+two models produce the SAME transcription rather than which output is nicer, and it compares them to
+each other rather than to the August files, which may be stale against pages that have since changed.
+
+**They agreed on 1 of 4 pages, so the swap is not licensed.** That is the answer to the question as
+asked, and it would be the whole result if the disagreements had run one way. They did not.
+
+**The disagreements say the incumbent is not doing verbatim transcription.** Checked against the
+pages' own bytes, not inferred from the shape of the diff:
+
+| the page's bytes | pinned (fable) | Haiku 4.5 |
+|---|---|---|
+| `"½ cup finely chopped onion"` | `1/2 cup finely chopped onion` | `½ cup finely chopped onion` |
+| `"15.5 oz artichoke hearts (drained)"` | `15.5 oz artichoke hearts drained` | `15.5 oz artichoke hearts, drained` |
+| `"chicken breasts ((See Note 1))"` | kept | **dropped** |
+
+So **neither model produces a verbatim `raw`**, and they corrupt it differently: the incumbent
+converts vulgar fractions to ASCII and deletes parentheses, the challenger keeps the fraction but
+rewrites parentheses as commas and dropped a parenthetical note outright. `raw` is defined as the
+page's own line, and the extractor is told in as many words to convert no units and rewrite no prose.
+
+**The blast radius is provenance, not prices, and that was checked rather than assumed.**
+`coverage_check.py` already reads both fraction forms - `_VULGAR` maps the glyphs and `parse_amount`
+has a passing case for `½ cup` - and `stated_mass_grams` takes the first mass in the line through a
+regex that never treats a parenthesis as a delimiter, so stripping one moves no mass. No cost, macro
+or scaling figure changes either way. This is a fidelity defect in the record of what we found, not a
+wrong number on a page.
+
+**The gap worth acting on is that nothing compares a transcription to the page.** `recipe-source-qa`
+rules whether the built recipe matches the transcription, which is one link downstream of where this
+drift happens, so a transcription that quietly normalised its source passes every check we run. That
+is the same shape as E19's complaint and is where the cheap fix goes.
+
+Three things this does NOT establish. Four pages is four pages. Haiku's fraction fidelity here is not
+a general claim about Haiku. And nothing was measured about cost or latency, so even a clean
+agreement would not by itself have argued for the swap.
+
 ### E10 - Long-running lanes have no progress tracking `OPEN`
 *Source: AI Agents Architecture (course 7).* The Recipe Hunter daemon runs far past the point where
 its initial plan is still near the front of context. Fix is a cheap end-of-iteration progress report
