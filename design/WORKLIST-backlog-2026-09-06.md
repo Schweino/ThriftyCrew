@@ -49,7 +49,7 @@ Written down as instructed, worked after section B.
 | C3 | Scope drift WAS already detected - but `audit-prompt-backup.ps1` was not in run-gates | a check that works and is not run is not protection | `DONE` - registered |
 | C4 | I2b: the 7 MB stray is a full-catalogue scaler sweep (583 slugs x 16 steps); writer is an ad-hoc command, not a script | gate catches recurrence | `CHARACTERISED` |
 | C5 | Mojibake writer FOUND: `send-alert.ps1` had 3 bare `Get-Content` reads; queue read-modify-write corrupted a generation per alert | fixed as a class across 4 files | `DONE` |
-| C6 | E15 behavioural check owed on next real invocation of each of the three skills | structural check shipped; behaviour unobserved | TODO - carry |
+| C6 | E15 behavioural check owed on next real invocation of each of the three skills | structural check shipped; behaviour unobserved | `CARRIED` - cannot be run safely here |
 | C7 | `projects/C--Codex/memory` is its own repo, 16 commits, **no remote** | same disk exposure as I1 | BLOCKED-ON-BRAD |
 
 ## D. Brad's bucket
@@ -57,8 +57,8 @@ Written down as instructed, worked after section B.
 | ID | What | State |
 |---|---|---|
 | I1 remote | private repo URL, or approve installing `gh` | BLOCKED-ON-BRAD |
-| I3 | back up `C:\Codex\CLAUDE.md` and `Fantasy\CLAUDE.md` | TODO - doable by me |
-| I4 | `git init` Fantasy (212 py files, no VCS) | TODO - doable by me |
+| I3 | backed up to `~/.claude/workspace-context/` | `DONE ff40c8d` (~/.claude repo) |
+| I4 | Fantasy under git: 313 files, 5.4 MB of 1.2 GB | `DONE 19473ed` (Fantasy repo) |
 | I5 | Coursera re-enroll on `building-with-the-claude-api` | BLOCKED-ON-BRAD - needs his click |
 | I6 / E8 | permission modes: bypass-with-no-sandbox, and "don't ask" for unattended runs | BLOCKED-ON-BRAD - **I will not alter permission settings**; the backlog's own ruling |
 
@@ -73,3 +73,39 @@ Written down as instructed, worked after section B.
 - A sibling session works the same checkout and pushes to main. Fetch before merging; if a rebase
   renumbers commits, re-point any sha this file or a ledger cites.
 - Every rule written into any file names the regime it holds in.
+
+
+---
+
+## E. What is left, and who it belongs to
+
+Written 2026-09-06 at the end of the run. Sections A, B and C are closed; D is not, and none of what
+remains is blocked on more work by me.
+
+### Needs Brad, and cannot be done without him
+
+| | What is needed | Why it cannot be done here |
+|---|---|---|
+| **I1 remote** | an empty PRIVATE repo URL, or approval to install `gh` | `gh` is not installed on this machine. The local repo is committed and clean (175 files); it protects against a bad edit and NOT against the disk, which is what I1 is about. |
+| **C7** | a second private repo, or a ruling to flatten | `projects/C--Codex/memory` is already its own repo, 16 commits, no remote. Nesting it would make it a broken gitlink and lose that history. |
+| **I4 remote** | a third private repo URL | Fantasy now has history and no remote, same exposure as I1. |
+| **I5** | click enroll on `building-with-the-claude-api` | Coursera will not reinstate it by any route I have. |
+| **I6 / E8** | a ruling on permission modes | Permission settings are not mine to alter, per the backlog's own ruling. "Complete everything" does not override a rule about who may change a security setting. |
+
+### Ruled, not built - each needs a decision rather than an implementation
+
+| | The decision |
+|---|---|
+| **E19** | Should `golden-test` compare NORMALISED content rather than bytes? Byte-exactness is arguably the point of a frozen fixture. Diagnosis, measurement and the in-repo precedent are in the backlog entry. |
+| **E1 arming** | Both mechanisms are off. Turning either on is a live-site change. |
+| **E1 R2** | Not covered, and there is nothing to hook - no R2 write path exists in this repo. |
+| **E4 build** | BM25 recall@10 was 16/31. The decisive head-to-head against cosine needs the sidecar venv. |
+| **E9 downgrade** | `recipe-hunter-extractor` is the MATE candidate. Needs a fidelity run, not a guess. |
+| **E17** | Deliberately won't-fix, unchanged. |
+
+### Carried, not closable in this session
+
+**C6.** The three ask-for-input skills were verified structurally - the statement is last, it names the
+question tool, it carries its regime. The behavioural check is owed on the next real invocation of
+each. For `recipe-hunter` it cannot be bought here at any price: a failed guard publishes to a live
+paid site, and that is not a measurement worth taking that way.
