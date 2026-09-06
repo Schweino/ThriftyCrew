@@ -194,5 +194,16 @@ foreach ($g in $pySuites) {
 Write-Output ''
 Write-Output ("run-gates: {0} passed, {1} failed" -f $pass, $fail.Count)
 foreach ($f in $fail) { Write-Output ("  failed: " + $f) }
+# A WORDS-LEVEL VERDICT ON EVERY EXIT PATH, NOT ONLY ON 3 (2026-09-06, backlog E2). The could-not-evaluate
+# path above has said "COULD NOT EVALUATE" in words since it was written; these two said only "186 passed,
+# 1 failed", which is a TALLY and not a verdict - a reader still has to know that this tool's 1 means
+# failed, when the same 1 means "findings, report written" in the PLAN v3 batteries and the guard-contract
+# audits reserve 2 for a hard finding and 3 for could-not-evaluate. Three live vocabularies, so the number
+# is not a channel an agent can decode without knowing which tool it ran. The words are.
+if ($fail.Count) {
+  Write-Output ("run-gates: FAILED - {0} gate(s) did not pass. This tree must not be pushed until they do; fix the cause, never the gate." -f $fail.Count)
+} else {
+  Write-Output ("run-gates: PASSED - all {0} gate(s) passed." -f $pass)
+}
 Write-GuardComplete -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count)
 exit $(if ($fail.Count) { 1 } else { 0 })
