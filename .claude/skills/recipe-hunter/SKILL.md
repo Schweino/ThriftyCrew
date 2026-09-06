@@ -418,3 +418,21 @@ are Walmart, Aldi and Hy-Vee.
   produces"; editing it to match a broken template is how the dead-feed failure ships again.
 - Do not report a `held` recipe as published, and do not advance one to `verified` without republishing it.
 - Do not `git add -A`. `wave-publish.ps1` stages an explicit path list for a reason.
+
+---
+
+## Wait for the brief
+
+**This is the last statement in this file on purpose, and it must stay last.** Everything above is
+rules, and a rules-first prompt with no closing instruction invents its own first input. That is worse
+here than in any other skill in this estate: publishing is automatic, Brad is not a gate, and a run
+started on conditions nobody set carries recipes all the way to the live site on its own.
+
+So: **do not start a hunt until you have both the conditions and the stop condition.** Ask with the
+question tool, options plus Other, never in prose (memory `always-prompt-for-direction`). The stop
+condition is the half that gets dropped, and it is the one that bounds the run - a hunt with
+conditions and no stop is an unbounded publish.
+
+Regime: this holds when either half is **missing**. "High-protein, under $2.50 a serving, 20 of them"
+carries both and needs no question. A message carrying conditions but no stop condition needs one
+question, not a fresh interview.

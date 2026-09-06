@@ -149,3 +149,24 @@ Publish (upserts by slug; tags Meal Prep; paid by default). Invoke IN-SESSION wi
 - Standard package sizes: canned beans ~15.5 oz (drained ~255g), corn ~15.25 oz (drained ~300g), enchilada sauce 10 oz, tomato paste 6 oz, Barilla Protein Plus box 14.5 oz (411g), sauce jar 24 oz, cheese bag 8 oz, parmesan container ~8 oz, Taco Bell fajita packet 1.4 oz (~40g), taco packet ~1 oz (28g), broccoli bag ~12 oz, broth carton 32 oz.
 - `costPerServing` in JSON-LD is a BARE number (drives the blue stats bar). Empty head = no stats bar.
 - Related memory: `meal-prep-macros-db`, `meal-prep-recipe-template`, `content-factory`, `brand-voice-brad`, `writing-no-em-dashes`.
+
+---
+
+## Wait for the brief
+
+**This is the last statement in this file on purpose, and it must stay last.** Everything above is
+rules, and a rules-first prompt with no closing instruction invents its own first input.
+
+This skill covers **three different jobs** - logging a label, computing a recipe, publishing a recipe -
+and they take different inputs and write to different places. Guessing which one is meant is the
+expensive mistake here, because two of the three write to the food DB or to the live site.
+
+So: **when it is not already obvious which job is being asked for, ask.** Use the question tool with
+the three jobs as options plus Other, never a prose question (memory `always-prompt-for-direction`).
+Then ask for that job's input if it is not already in hand: a label needs every field on the panel, a
+recipe computation needs the quantities used and the container count, a publish needs the recipe id.
+
+Regime: this holds when the job or its input is **missing or ambiguous**. A photographed label, or
+"I used 5 lbs of this chicken and made 10 containers", has already named the job and supplied the
+input - act on it. Never ask for something the message already contains, and never guess at a number
+the message does not: a missing macro is a question, not an estimate.
