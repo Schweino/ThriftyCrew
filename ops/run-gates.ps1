@@ -189,6 +189,12 @@ foreach ($g in $static) {
 # suite that rots.
 $pySuites = @(
   @{ f = 'meal-prep\pipeline\coverage_check.py'; a = '--selftest'; n = 'the recipe QA battery: coverage, scaling, prose numbers, the mass reader' }
+  # graph\agentic WAS COVERED BY NOTHING - not in this list, no -SelfTest, imported by no other suite -
+  # and it holds the Executor that shells out on a plan's tool string. os.path.join discards the repo
+  # root when the tool name is absolute, so an absolute or traversing name escaped entirely, and the
+  # plan-hash check above it proves the plan was not MUTATED, which is a different question
+  # (2026-09-06, backlog E11+E18).
+  @{ f = 'graph\agentic\executor_selftest.py'; a = '--selftest'; n = 'the executor refuses a tool path that escapes the repo, and records why' }
 )
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly

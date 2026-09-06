@@ -40,6 +40,60 @@ TRIAGE_QUEUE = os.path.join(REPO_ROOT, "grocery", "triage-queue.json")
 LEARNING_QUEUE = os.path.join(REPO_ROOT, "grocery", "learning-queue.json")
 
 
+
+# ---------------------------------------------------------------------------
+# E11 + E18 (2026-09-06): the tool boundary.
+#
+# E18's rule is that a tool ARGUMENT is untrusted input and must be validated before the tool body
+# runs, and E11's is that "which tools can this thing run?" should be a grep rather than an audit.
+# They ship together on purpose: adopting a tool registry without argument validation inherits exactly
+# the gap E18 names.
+#
+# WHAT WAS WRONG. _run_tool took step.tool - a bare string - did os.path.join(REPO_ROOT, step.tool),
+# and handed the result to subprocess.run. os.path.join DISCARDS the left operand when the right one is
+# absolute, so "C:\Windows\System32\x.ps1" as a tool name escapes REPO_ROOT entirely and runs. A
+# "../../.." also walks straight out. Neither is caught by the plan-hash check above, which proves the
+# plan has not been MUTATED and says nothing about whether its values were sane to begin with.
+#
+# HOW BAD IS IT TODAY: not bad, and that is the point of fixing it now. Plans are built in Python by
+# daily_pipeline_plan() with repo-relative literals, so nothing model-supplied currently reaches here.
+# But Plan.save() writes plans to JSON, this package is called `agentic`, and the whole design is a
+# planner feeding an executor. The boundary is latent rather than absent, and a latent boundary is
+# cheapest to close while it is still latent.
+TOOL_SUFFIXES = (".ps1", ".py")
+
+
+def validate_tool_path(tool, repo_root):
+    """Is `tool` a runnable, in-repo script? Returns (ok, resolved_path_or_None, reason).
+
+    Pure and side-effect free so the self-test can drive it without a filesystem full of fixtures.
+    Refuses with a REASON rather than a bare False - an executor that says "unrunnable tool" and
+    nothing else leaves the operator to guess which of six rules bit.
+    """
+    if not tool or not str(tool).strip():
+        return False, None, "no tool named"
+    tool = str(tool)
+    if "\x00" in tool:
+        return False, None, "tool name contains a null byte"
+    # ABSOLUTE PATHS FIRST, because this is the one that silently defeats the join.
+    if os.path.isabs(tool) or (len(tool) > 1 and tool[1] == ":"):
+        return False, None, ("tool path is ABSOLUTE (%r) - os.path.join would discard the repo root "
+                             "and run it from wherever it points" % tool)
+    if tool.startswith("\\\\") or tool.startswith("//"):
+        return False, None, "tool path is a UNC/network path"
+    resolved = os.path.normpath(os.path.join(repo_root, tool))
+    root = os.path.normpath(repo_root)
+    # normpath collapses ".." AFTER the join, so this catches traversal however it was spelled.
+    if not (resolved == root or resolved.startswith(root + os.sep)):
+        return False, None, ("tool path escapes the repo root (%r resolves to %r)" % (tool, resolved))
+    if not resolved.lower().endswith(TOOL_SUFFIXES):
+        return False, None, ("tool is not a runnable script - expected one of %s"
+                             % ", ".join(TOOL_SUFFIXES))
+    if not os.path.isfile(resolved):
+        return False, None, "tool does not exist at %r" % resolved
+    return True, resolved, ""
+
+
 class StepFailure(Exception):
     def __init__(self, step_id: str, detail: str):
         super().__init__(f"{step_id}: {detail}")
@@ -77,14 +131,17 @@ class Executor:
                     "would_run": step.tool, "args": step.args}
         if not step.tool:
             return {"ok": True, "noop": True}
-        path = os.path.join(REPO_ROOT, step.tool)
-        if step.tool.endswith(".ps1"):
+        # E18: VALIDATE BEFORE SHELLING OUT. The refusal is recorded with its reason so the decision
+        # log answers "why did the run not do that?" as well as "why did it?".
+        ok, path, why = validate_tool_path(step.tool, REPO_ROOT)
+        if not ok:
+            return {"ok": False, "error": "REFUSED unvalidated tool path: %s" % why,
+                    "tool": step.tool, "refused": True}
+        if path.lower().endswith(".ps1"):
             cmd = ["powershell", "-NonInteractive", "-ExecutionPolicy", "Bypass",
                    "-File", path]
-        elif step.tool.endswith(".py"):
-            cmd = [sys.executable, path]
         else:
-            return {"ok": False, "error": f"unrunnable tool {step.tool!r}"}
+            cmd = [sys.executable, path]
         proc = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
         return {"ok": proc.returncode == 0, "returncode": proc.returncode,
                 "stdout": proc.stdout[-2000:], "stderr": proc.stderr[-2000:]}
