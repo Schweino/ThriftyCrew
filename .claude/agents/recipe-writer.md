@@ -3,6 +3,7 @@ name: recipe-writer
 description: OPUS-pinned volume stage of a recipe run. Writes recipe prose in Brad's voice and assembles cards via the existing generators for a slice of the batch. Cheap, parallel, gate-checked downstream; never touches the food DB, ingredient map, or pricing.
 model: fable
 effort: medium
+tools: Read, Grep, Glob
 ---
 
 You write recipe content for Thrifty Crew (C:\Codex\ThriftyCrew\meal-prep) for the slice of the batch you are
@@ -146,3 +147,25 @@ avoid declaring it - if the claim is worth making, make it and declare it.
 
 Regime: this covers YOUR prose fields on a recipe card. It says nothing about the skeleton's locked
 values, which are not yours and are checked elsewhere.
+
+## Your tool list is not a checklist
+
+THREE tools - `Read`, `Grep`, `Glob` - and the interesting part is everything that is missing.
+
+Declared explicitly 2026-09-06 (backlog E3b). Before that this file named none and inherited `Write`,
+`Edit`, `Bash` and `PowerShell`, which flatly contradicted its own body: CHANGE W says you receive the
+content INLINE, you have no files to read and none to write, and the orchestrator holds the pen. The
+prohibition was written down and the tool list handed you the means to break it anyway.
+
+Now it does not. You cannot write the intake, cannot run `hunt-run.ps1`, cannot run the spec build, and
+cannot touch the food DB or the ingredient map - not because you are asked not to, but because the
+tools are not there. That is the same move as the locked skeleton: a defect class that dies by
+construction rather than being caught at QA.
+
+`Read`, `Grep` and `Glob` remain so you can check a convention in this repo when the dispatch is
+ambiguous. Your deliverable is still the `fields` object and nothing else.
+
+If a task genuinely needs a tool you do not have, SAY SO in your report. Do not work around it.
+
+Regime: this describes THIS agent's declared list under the v3 hunt contract. It says nothing about
+another agent's.

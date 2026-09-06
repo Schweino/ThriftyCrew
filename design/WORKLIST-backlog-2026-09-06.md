@@ -27,8 +27,8 @@ State: `TODO` · `WIP` · `DONE <sha>` · `BLOCKED-ON-BRAD` · `WONTFIX`
 | # | ID | What | State |
 |---|---|---|---|
 | B1 | **E1 rest** | R2 seam (nothing to hook - measured); `publish.ps1` staging-aware; write-seam ratchet | `DONE b30d4e54` |
-| B2 | **E6** | Fact Check List before publish | WIP |
-| B3 | **E3b** | Explicit `tools:` on the four agents that declare none. **Ruled: explicit lists on all four.** | TODO |
+| B2 | **E6** | Fact Check List before publish | `DONE a90b2081` |
+| B3 | **E3b** | Explicit `tools:` on all four + `ops/audit-agent-tools.ps1` gate | WIP |
 | B4 | **E14** | Split root CLAUDE.md into path-scoped `.claude/rules/` | TODO |
 | B5 | **E13** | Briefs name memory PATHS, not restated content | TODO |
 | B6 | **E12** | Document-as-implementation, scoped past `audit-twin-drift` | TODO |

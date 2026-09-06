@@ -138,6 +138,10 @@ $static = @(
   # undeclared claims actually are. Hermetic - specs are tracked, so it works on a bare checkout. A
   # ratchet, because 340 assertions predate the field (2026-09-06, backlog E6).
   @{ f = 'meal-prep\pipeline\audit-fact-claims.ps1'; n = 'no NEW prose claim ships that the writer did not declare' }
+  # Every agent declares its tools, and what a definition SAYS about them matches what it HAS. Four of
+  # twelve declared none until today and inherited Write and Edit, two of them on agents whose job is a
+  # verdict. An absent tools: line does not look wrong in a diff (2026-09-06, backlog E3).
+  @{ f = 'ops\audit-agent-tools.ps1';          n = 'no agent silently inherits every tool, and no block claims one it lacks' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test
