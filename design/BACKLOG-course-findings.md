@@ -105,6 +105,19 @@ rare exact identifiers: it returns plausible irrelevance rather than nothing. Co
 and slugs are exactly that shape. A BM25 lexical index alongside the embedding index, merged with
 reciprocal rank fusion, is a cheap and well-defined experiment. See `rag-craft`.
 
+**Extended 2026-09-06 by NLP with Classification and Vector Spaces (queue 2, course 4): there is a
+second quiet failure, and BM25 does not fix it.** A distributional word vector summarises the
+company a word keeps, and a word and its opposite keep near-identical company because they are
+interchangeable in a sentence. So an embedding scores **antonyms as near-identical**, and the pairs
+that matters for are exactly ours: `unsalted` against `salted`, `boneless` against `bone-in`,
+`low sodium` against `regular`, `no sugar added` against `sweetened`. A lexical index does not help
+here either, because the two strings differ by one token that BM25 will treat as low-weight. This
+needs an **explicit negation rule or a reranker asked the negation question**, not a better model or
+a second index. It is recorded as a direction, not a measurement: nothing here was scored, and
+`CLAIMS-REGISTER` C18 names the cheap check, which is to embed a handful of the estate's own
+opposite pairs and read the scores against a same-meaning control. Do that before trusting any
+embedding-only verdict about whether two products are the same product.
+
 ### E5 - Validate at source `OPEN`
 *Source: MCP (course 3).* A direct criticism of any tooling that hands a model raw rows to sift. The
 four-layer stack is format -> business rules -> self-prompted semantic -> human review, with **low
@@ -199,6 +212,44 @@ argument for doing it before the next comparison rather than after. Overlaps E21
 far a number must move) and E20: those two say what to compare against, this one says keep the
 evidence that lets you compare at all. **Worth pointing at `sidecar/` and the recipe-dedup RESCORE
 lane first** - both already re-score a fixed corpus, so both are one column away from compliant.
+
+### E25 - No similarity threshold here records which kind of space it was tuned on `OPEN`
+*Source: NLP with Classification and Vector Spaces (queue 2, course 4), and it sharpens what
+`rag-craft` section 3 already said about reading a distance metric the right way round.* Two
+distinct traps sit under every similarity number the estate computes, and neither is visible in the
+code:
+
+1. **Cosine and Euclidean answer different questions.** Euclidean distance is sensitive to
+   magnitude, cosine is not. Comparing two texts of unequal length - a short ingredient string
+   against a long product title, a query against a chunk - Euclidean will call the two long ones
+   similar *because they are both long*. Cosine is the correct metric there. Where the magnitude
+   genuinely carries meaning, Euclidean is the one that keeps it. Nothing in the estate states which
+   it picked or why.
+2. **Cosine's range depends on the space.** On a signed embedding it runs -1 to 1, so 0 is the
+   middle. On anything built by counting (term frequencies, tf-idf, a BM25-shaped feature) every
+   component is non-negative, so cosine is bounded 0 to 1 and 0 is the floor. **A threshold carried
+   from one to the other is silently wrong by half the range**, and it fails by admitting or
+   refusing rows rather than by erroring.
+
+The work is an audit, not a build: find every hard-coded similarity threshold in `sidecar/`, the
+dedup rescore and the near-name shelf scorer, and record beside each one which metric it reads and
+which kind of space that metric came from. Cheap, and it is a precondition for E19's scored test
+set meaning anything. Detail in `rag-craft/vector-space-foundations.md` sections 21 and 22.
+
+### E26 - A term that is identically zero on our fixtures is untested, not correct `OPEN`
+*Source: same course, its naive Bayes module, and it is a different mechanism from E22.* E22 is
+about a **metric** being misread because the fixture's base rate is unrealistic. This is about a
+**code path never running**. The course's worked case: the log-prior term of a naive Bayes scorer is
+`log(D_pos / D_neg)`, which is exactly 0 on a balanced corpus, so a scorer that omits the term
+entirely passes every test on a balanced fixture and is wrong the moment it meets real traffic. The
+tidy annotated corpora are artificially balanced; reality is not.
+
+The estate shape to look for is any correction, weight or prior that evaluates to 0, 1 or the
+identity on a `-SelfTest` fixture: a per-store adjustment where the fixture uses one store, a
+pack-size normaliser where the fixture is already 1 unit, a prevalence weight where the fixture is
+50/50. **Nothing has been checked yet** - this is a proposed sweep, not an observed defect, and it
+is recorded so it has an id rather than living in a report. The check is mechanical: for each such
+term, assert the fixture actually exercises a non-identity value, or add a second fixture that does.
 
 ### E6 - Fact Check List before we publish `OPEN`
 *Source: Prompt Engineering (course 4).* Ask the generator for the fundamental claims that would
@@ -306,7 +357,7 @@ durable half was the regime note, which is now in `claude-code-automation` 8.3 a
 the rule to carry is the conclusion (never let a plugin hook invoke a bare interpreter name), not the
 WSL story that only holds on a different machine.
 
-### E19 - A fresh checkout starts two gates red, over bytes rather than drift `OPEN`
+### E19 - A fresh checkout starts two gates red, over bytes rather than drift `DONE` `39ad18d3`
 *Found 2026-09-06 while working E7; not course-derived.* Every worktree, clone and CI checkout of this
 repo begins with `run-gates` at 2 failed, and neither failure is a defect in the thing it names:
 
@@ -340,6 +391,22 @@ the standing noise.
 **Not fixed here** because changing what a GOLDEN test compares is a semantic decision - byte-exactness
 is arguably the point of a frozen fixture - and it deserves a ruling rather than a late edit at the end
 of a long run.
+
+**Fixed 2026-09-06, ruled by Brad: fix the tree, not the checks.** Two measurements, and the first
+answer was wrong. `git add --renormalize` over every clean tracked file changed ZERO files - the repo
+already stores LF - so the tree-side fix had to be about what a CHECKOUT writes. `* text=auto eol=lf`
+makes the working copy LF on every platform and clone.
+
+Tested on a throwaway branch first, and it broke golden-test before it fixed it: ghost-drift went green
+and golden-test went from 3 drifted fixtures to TWENTY, because the golden fixture inputs were CRLF ON
+DISK in the main checkout and MANIFEST.json had recorded their hashes from those bytes. The tree was
+never uniformly one thing. The 20 inputs are now LF with their hashes re-recorded - line endings only,
+no input regenerated, no expected output moved, and the engine's output stayed byte-identical
+throughout because JSON parsing ignores line endings.
+
+**Byte-exactness is preserved**, which was the argument against teaching the checks to normalise.
+
+**A FRESH WORKTREE NOW PASSES 207/0.** It was 183/6 when first measured this morning.
 
 ### E17 - Skill invocation flags are a matrix, and ours are all set the same `OPEN` `LOW`
 *Source: Building Apps and AI Agents (course 9).* Invocation control is two independent flags, not
