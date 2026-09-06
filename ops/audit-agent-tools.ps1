@@ -80,9 +80,35 @@ function Get-TcNamedTools {
   return ,@($named | Sort-Object -Unique)
 }
 
+function Get-TcFrontmatterValue {
+  param([string[]]$Lines, [string]$Key)
+  $hit = @($Lines | Where-Object { $_ -match ('^' + [regex]::Escape($Key) + ':\s') } | Select-Object -First 1)
+  if (-not $hit.Count) { return '' }
+  return ($hit[0] -replace ('^' + [regex]::Escape($Key) + ':\s*'), '').Trim()
+}
+
 function Get-TcAgentProblems {
   param([string]$Name, [string[]]$Lines, [string[]]$Known, [string[]]$AbsentMarkers)
   $p = @()
+
+  # MATE's M and E, made non-silent (2026-09-06, backlog E9). Model choice is the highest-leverage
+  # per-call decision available, and in this estate it is made in exactly one place: the frontmatter.
+  # meal-prep\pipeline\hunt_dispatch.py routes every judgment call through `claude -p --agent <name>`
+  # SPECIFICALLY so the CLI reads this file and the adapter cannot disagree with it - "two readers of
+  # one authority is how the estate's forked-taxonomy defects start" - and it then CHECKS that the
+  # model which actually ran is the model pinned here.
+  #
+  # All of which rests on the pin EXISTING. An agent with no `model:` line does not fail; it silently
+  # runs on whatever the calling session happens to be, so a mechanical stage could quietly cost Opus
+  # rates forever and the only symptom is the bill. Same shape as the missing tools: line above: it
+  # does not look wrong in a diff, it looks like a file that does not mention models.
+  foreach ($k in @('model', 'effort')) {
+    if (-not (Get-TcFrontmatterValue -Lines $Lines -Key $k)) {
+      $p += [pscustomobject]@{ Agent = $Name; Kind = ('no-' + $k + '-pin')
+                               Detail = ('declares no ' + $k + ': line, so it silently inherits the calling session''s ' + $k) }
+    }
+  }
+
   $declared = Get-TcDeclaredTools -Lines $Lines
   if (-not @($declared).Count) {
     $p += [pscustomobject]@{ Agent = $Name; Kind = 'no-tools-line'
@@ -115,43 +141,53 @@ if ($SelfTest) {
   $K = $KNOWN; $A = $ABSENT_MARKERS
 
   # MUST FIRE 1 - the founding defect: four agents declared no tools line at all.
-  $r1 = Get-TcAgentProblems -Name 'x' -Lines @('---', 'name: x', 'model: fable', '---', 'body') -Known $K -AbsentMarkers $A
+  $r1 = Get-TcAgentProblems -Name 'x' -Lines @('---', 'name: x', 'model: fable', 'effort: high', '---', 'body') -Known $K -AbsentMarkers $A
   T 'MUST FIRE  an agent with NO tools: line is a finding' (@($r1).Count -eq 1 -and $r1[0].Kind -eq 'no-tools-line') (($r1 | ForEach-Object { $_.Kind }) -join ',')
+
+  # MATE's M and E. A missing pin costs money silently and looks like a file that does not mention models.
+  $m1 = Get-TcAgentProblems -Name 'x' -Lines @('---', 'name: x', 'effort: high', 'tools: Read', '---') -Known $K -AbsentMarkers $A
+  T 'MUST FIRE  an agent with NO model: pin silently inherits the session model' `
+    (@($m1 | Where-Object { $_.Kind -eq 'no-model-pin' }).Count -eq 1) (($m1 | ForEach-Object { $_.Kind }) -join ',')
+  $m2 = Get-TcAgentProblems -Name 'x' -Lines @('---', 'name: x', 'model: fable', 'tools: Read', '---') -Known $K -AbsentMarkers $A
+  T 'MUST FIRE  an agent with NO effort: pin is a finding too' `
+    (@($m2 | Where-Object { $_.Kind -eq 'no-effort-pin' }).Count -eq 1) (($m2 | ForEach-Object { $_.Kind }) -join ',')
+  $m3 = Get-TcAgentProblems -Name 'x' -Lines @('---', 'name: x', 'model: fable', 'effort: medium', 'tools: Read', '---') -Known $K -AbsentMarkers $A
+  T 'CLEAN TWIN both pins present raises nothing' (@($m3).Count -eq 0) (($m3 | ForEach-Object { $_.Kind }) -join ',')
 
   # MUST FIRE 2 - the drift E3 is actually about.
   $r2 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
-    '---', 'tools: Read, Grep', '---', '## Your tool list is not a checklist', '| Tool | Standing |', '| `Read` | spine |', '| `WebSearch` | situational |')
+    '---', 'model: fable', 'effort: medium', 'tools: Read, Grep', '---', '## Your tool list is not a checklist', '| Tool | Standing |', '| `Read` | spine |', '| `WebSearch` | situational |')
   T 'MUST FIRE  a block claiming a tool the agent does NOT declare is a finding' `
     (@($r2).Count -eq 1 -and $r2[0].Detail -like '*WebSearch*') (($r2 | ForEach-Object { $_.Detail }) -join ' | ')
 
   # CLEAN TWIN - THE ONE THAT MADE THIS FILE NECESSARY. Saying a tool is deliberately absent is the most
   # useful line such a block carries, and the first version of this check failed three agents over it.
   $r3 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
-    '---', 'tools: Read, Grep', '---', '## Your tool list is not a checklist', '| `Read` | spine |',
+    '---', 'model: fable', 'effort: medium', 'tools: Read, Grep', '---', '## Your tool list is not a checklist', '| `Read` | spine |',
     '`Edit` is deliberately absent and that is the point of this list.')
   T 'CLEAN TWIN naming a tool to say it is DELIBERATELY ABSENT is documentation, not a claim' `
     (@($r3).Count -eq 0) (($r3 | ForEach-Object { $_.Detail }) -join ' | ')
 
   # CLEAN TWIN - prose verbs are not tool names. -match would score all three of these.
   $r4 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
-    '---', 'tools: Read', '---', '## Your tool list is not a checklist', '| `Read` | spine |',
+    '---', 'model: fable', 'effort: medium', 'tools: Read', '---', '## Your tool list is not a checklist', '| `Read` | spine |',
     'You can write nothing, do not edit the catalog, and re-read the task.')
   T 'CLEAN TWIN lower-case verbs (write, edit, task) are not tool names' (@($r4).Count -eq 0) (($r4 | ForEach-Object { $_.Detail }) -join ' | ')
 
   # CLEAN TWIN - an agent with a tools line and no capability block is legal.
-  $r5 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @('---', 'tools: Read, Grep', '---', 'body with no block')
+  $r5 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @('---', 'model: fable', 'effort: medium', 'tools: Read, Grep', '---', 'body with no block')
   T 'CLEAN TWIN a declared agent with no capability block raises nothing' (@($r5).Count -eq 0) (($r5 | ForEach-Object { $_.Kind }) -join ',')
 
   # CLEAN TWIN - a fully consistent agent.
   $r6 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
-    '---', 'tools: Read, Grep, Glob', '---', '## Your tool list is not a checklist', '| `Read`, `Grep`, `Glob` | spine |')
+    '---', 'model: fable', 'effort: medium', 'tools: Read, Grep, Glob', '---', '## Your tool list is not a checklist', '| `Read`, `Grep`, `Glob` | spine |')
   T 'CLEAN TWIN a block naming exactly its declared tools raises nothing' (@($r6).Count -eq 0) (($r6 | ForEach-Object { $_.Detail }) -join ' | ')
 
   # CLEAN TWIN - the absence marker and the names on DIFFERENT lines, because prose wraps. Found live:
   # a per-line exemption passed `Write` on the marker's line and flagged the three that wrapped onto the
   # next one. If this ever fails again, someone has narrowed the exemption back to a single line.
   $r7 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
-    '---', 'tools: Read', '---', '## Your tool list is not a checklist', '| `Read` | spine |',
+    '---', 'model: fable', 'effort: medium', 'tools: Read', '---', '## Your tool list is not a checklist', '| `Read` | spine |',
     'Before that this file named none and inherited `Write`,', '`Edit`, `Bash` and `PowerShell`, which contradicted its body.')
   T 'CLEAN TWIN an absence marker still exempts names that WRAPPED onto the next line' `
     (@($r7).Count -eq 0) (($r7 | ForEach-Object { $_.Detail }) -join ' | ')
@@ -159,7 +195,7 @@ if ($SelfTest) {
   # MUST FIRE - and the look-back must not become a blanket amnesty: a genuine claim three lines after
   # an unrelated absence sentence is still a claim.
   $r8 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
-    '---', 'tools: Read', '---', '## Your tool list is not a checklist',
+    '---', 'model: fable', 'effort: medium', 'tools: Read', '---', '## Your tool list is not a checklist',
     '`Edit` is deliberately absent.', '', 'A paragraph about something else entirely.', 'Another one here.',
     '| `WebSearch` | situational |')
   T 'MUST FIRE  the look-back does not amnesty a real claim further down' `
@@ -200,6 +236,18 @@ $writers = @($files | Where-Object {
   $d = Get-TcDeclaredTools -Lines ([IO.File]::ReadAllLines($_.FullName))
   @($d) -contains 'Write' -or @($d) -contains 'Edit'
 })
+$matrix = @{}
+foreach ($fl in $files) {
+  $ln = [IO.File]::ReadAllLines($fl.FullName)
+  $k = (Get-TcFrontmatterValue -Lines $ln -Key 'model') + ' / ' + (Get-TcFrontmatterValue -Lines $ln -Key 'effort')
+  if (-not $matrix.ContainsKey($k)) { $matrix[$k] = 0 }
+  $matrix[$k]++
+}
 Write-Output ("agent-tools: PASSED - all {0} agent(s) declare a tools: line and every tool their blocks claim is declared. {1} can write." -f $files.Count, $writers.Count)
+# The model/effort matrix is PRINTED, not judged. MATE says use the least capable model that finishes
+# the job, and nothing here can know which that is - that is a measurement per stage, not a rule. What
+# this does is make the spend visible on every gate run, so an upgrade is noticed rather than billed.
+Write-Output '  model / effort pins:'
+foreach ($k in ($matrix.Keys | Sort-Object)) { Write-Output ("    {0,-28} {1} agent(s)" -f $k, $matrix[$k]) }
 Write-GuardComplete -Name 'agent-tools' -Summary ("agents={0} writers={1}" -f $files.Count, $writers.Count)
 exit 0

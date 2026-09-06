@@ -31,8 +31,8 @@ State: `TODO` · `WIP` · `DONE <sha>` · `BLOCKED-ON-BRAD` · `WONTFIX`
 | B3 | **E3b** | Explicit `tools:` on all four + `ops/audit-agent-tools.ps1` gate | `DONE 9c42bd8e` |
 | B4 | **E14** | 5 scoped `.claude/rules/` files; field is `globs` not `paths` | `DONE a8b17d05` |
 | B5 | **E13** | Resolver block on all 12 agents + citation gate; 2 dangling found | `DONE 6f3b6fd5` |
-| B6 | **E12** | `ops/audit-ruling-drift.ps1` - document-to-code drift; 3 live violations baselined | WIP |
-| B7 | **E9** | Model per call, not per agent. Verify `claude-opus-4-8` is real first. | TODO |
+| B6 | **E12** | `ops/audit-ruling-drift.ps1` - document-to-code drift; 3 violations baselined | `DONE 28151c39` |
+| B7 | **E9** | Split already existed; gate now fails a missing model/effort pin and prints the matrix | WIP |
 | B8 | **E10** | End-of-iteration progress tracking in the hunt daemon; calibrate N | TODO |
 | B9 | **E11+E18** | Tool decorators **with** argument validation. Together or not at all. | TODO |
 | B10 | **E5** | Validate at source; low confidence to review, not rejection | TODO |
