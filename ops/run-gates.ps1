@@ -146,6 +146,10 @@ $static = @(
   # reach it, and proceeds on the one-line hook with more confidence than if nothing had been cited.
   # Found two on its first run, both pointing at memories that no longer exist (2026-09-06, backlog E13).
   @{ f = 'ops\audit-memory-citations.ps1';     n = 'every cited memory resolves, and every agent can find the store' }
+  # twin-drift covers CODE-to-CODE. This covers DOCUMENT-to-CODE: a ruling changes without a deploy and
+  # the script enforcing it does not notice. Founding case was already live and already written down -
+  # Brad's 2026-09-04 no-hardcoded-bands ruling, unimplemented and gated by nothing (backlog E12).
+  @{ f = 'ops\audit-ruling-drift.ps1';         n = 'no NEW ratified ruling goes unimplemented by the code' }
   # BOTH HALVES OF THIS FILE MATTER AND ONLY ONE IS DISCOVERED. The discovery pass above picks up its
   # self-test and proves the comparison logic works; THIS entry runs it against the real tree, which
   # is what actually catches a rule whose two copies have stopped agreeing. Registering the self-test

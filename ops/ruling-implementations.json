@@ -1,0 +1,44 @@
+{
+  "_comment": [
+    "DECLARED RULING/CODE PAIRS. A ruling document says what the estate does; a script does it. This",
+    "registry names the pairs so ops\\audit-ruling-drift.ps1 can check that the code still agrees with",
+    "the document, which nothing did before 2026-09-06 (backlog E12).",
+    "",
+    "ops\\audit-twin-drift.ps1 covers CODE-to-CODE duplication - one rule implemented in two files. This",
+    "covers DOCUMENT-to-CODE: a ruling that changes without a deploy, and a script that does not notice.",
+    "Different failure, different registry, deliberately not merged.",
+    "",
+    "EVERY ENTRY IS A DECISION SOMEONE DEFENDS IN A DIFF. `absent` means the symbol must NOT appear in",
+    "the file; `present` means it must. `why` is not decoration - an entry whose reason nobody can state",
+    "is an entry nobody can retire."
+  ],
+  "rulings": [
+    {
+      "id": "no-hardcoded-bands-DEFAULT_COND",
+      "document": "design/BRIEF-no-hardcoded-bands-2026-09-04.md",
+      "ruled": "Brad, 2026-09-04: remove ALL hardcoded bands. The bands are specified per-run and could fluctuate, so should never be hard coded.",
+      "file": "meal-prep/pipeline/hunt-daemon.py",
+      "symbol": "DEFAULT_COND",
+      "must": "absent",
+      "why": "Section 3.3 of the brief: delete DEFAULT_COND once nothing reads them - a constant that exists is a constant something will use. It still states 350-650 cal in PROSE and resolve_conditions still falls back to it, so a run that states no conditions tells its machine gate one band and every agent a different one, silently. That exact defect already fired on hunt-2026-08-27-ten."
+    },
+    {
+      "id": "no-hardcoded-bands-DEFAULT_BAND",
+      "document": "design/BRIEF-no-hardcoded-bands-2026-09-04.md",
+      "ruled": "Brad, 2026-09-04, same ruling.",
+      "file": "meal-prep/pipeline/hunt-daemon.py",
+      "symbol": "DEFAULT_BAND",
+      "must": "absent",
+      "why": "Section 3.2: `self.band = dict(band or DEFAULT_BAND)` must become a refusal. A band nobody typed is a band nobody agreed to, and two gates would enforce it silently for a whole run."
+    },
+    {
+      "id": "no-hardcoded-bands-harvest-cal-max",
+      "document": "design/BRIEF-no-hardcoded-bands-2026-09-04.md",
+      "ruled": "Brad, 2026-09-04, same ruling.",
+      "file": "meal-prep/pipeline/harvest.py",
+      "symbol": "BAND_CAL_MAX",
+      "must": "absent",
+      "why": "Section 3.3 names the harvest.py trio. A hard-coded 650 here once buried 1,556 candidates - 64% of the pool - against a band nobody had stated for that run."
+    }
+  ]
+}
