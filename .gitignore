@@ -5,6 +5,12 @@
 # Line-ending normalization. Root files are ignored by default by the /* rule above, so this needs an
 # explicit allow or a fresh clone silently loses it and the whole-file-diff problem comes straight back.
 !/.gitattributes
+# Same trap as .gitattributes directly above, and it caught this file too on the day it was written
+# (2026-09-06, backlog E7): the /* rule swallows any new root file, so a .worktreeinclude that is not
+# allow-listed here is never committed, never reaches a fresh clone, and does nothing anywhere except
+# the one machine it was typed on. A worktree-seeding file that only works in the tree that already has
+# the data is worth less than no file at all, because it reads as solved.
+!/.worktreeinclude
 !/README.md
 # The project's standing context, loaded into every session that works in this repo. Same class as
 # lib\ and the agent prompts below: the thing every run depends on, sitting untracked on one machine.

@@ -1,0 +1,63 @@
+# .worktreeinclude - gitignored files copied into every new worktree Claude Code creates.
+#
+# WHY (2026-09-06, backlog E7). A fresh worktree is BLIND, and blind here does not mean loud. The
+# gitignored data never arrives, the checks that need it cannot express their finding, and several of
+# them return a clean-looking result anyway. Two standing memories exist about this
+# ([[run-gates-blind-in-worktrees]], [[worktrees-lack-the-boards-the-engines-price-on]]) and the fix
+# was a manual copy nobody remembered to do.
+#
+# EVERY LINE HERE WAS MEASURED, NOT GUESSED. A worktree at 2fdb99cf ran ops\run-gates.ps1 and failed
+# SIX self-tests that pass in the main checkout. Each entry below names the ones it fixed:
+#
+#   183 passed, 6 failed   bare worktree
+#   +db\built              feed-covers-published, wave-preaudit      -> 185 passed
+#   +catalog-digest.json   find-similar, make-saturation             -> 187 passed
+#
+# Syntax is gitignore-style patterns, matched against `git ls-files --others --ignored
+# --exclude-standard --directory`. So ONLY IGNORED FILES ARE ELIGIBLE - a tracked file is already in
+# the worktree and cannot be listed here. That matters for the two failures this file does NOT fix;
+# see the note at the bottom.
+
+# ---- the gate's missing inputs (measured above) -------------------------------------------------
+# 115 KB. find-similar and make-saturation both carry a MUST FIRE asserting the digest exists where the
+# sourcer prompts will point. Without it the dedup shortlist has nothing to score against.
+meal-prep/pipeline/catalog-digest.json
+
+# meal-prep/db/built/ IS DELIBERATELY NOT LISTED HERE, and this is the sharpest limit of the mechanism.
+# The candidate list is built with `--directory`, which COLLAPSES a fully-ignored directory to a single
+# entry - `meal-prep/db/built/` arrives as one line, not as its 1,168 files. The copier then calls
+# copyFile on it, which cannot take a directory, so it logs "Failed to copy ... to worktree" and moves
+# on. Measured, not assumed: grocery/out/ enumerates file by file (something tracked lives under it) and
+# meal-prep/db/built/ collapses. A pattern here would look right and copy nothing, which is the worst
+# available outcome. ops\seed-worktree.ps1 carries that directory instead.
+
+# ---- the boards the pricing engines read --------------------------------------------------------
+# NOT a run-gates failure, and on the list anyway, because this is the failure that is silent. run-gates
+# deliberately runs only what is hermetic, so it never touches a board and never notices one missing.
+# cost-recipes does: with no board it prices nothing and EXITS 0, which reads as success
+# ([[worktrees-lack-the-boards-the-engines-price-on]]). A worktree that cannot fail loudly is worse than
+# one that fails.
+#
+# THE COST IS VISIBLE ON PURPOSE: 39 files, 127 MB, because gitignore patterns cannot express "the newest
+# one" and the engines want the newest. If per-worktree disk ever becomes the binding constraint, the
+# narrowing is a dated pattern (comparison-2026-09-*.json) and the price of that is remembering to move
+# it - which is the kind of maintenance this estate has already proven it does not do.
+grocery/out/comparison-*.json
+
+# ---- WHAT THIS FILE CANNOT FIX ------------------------------------------------------------------
+# Two of the six worktree failures are not missing data and no entry here will help, because both are
+# TRACKED files and only ignored files are eligible:
+#
+#   meal-prep\engine\golden-test.ps1   FAIL "the FROZEN inputs changed - the fixture, not the engine,
+#                                      moved". Measured: db\label-folds.json is 383 bytes in the main
+#                                      checkout and 390 in the worktree, same 8 lines. That is 7 CR
+#                                      bytes, not an edit.
+#   grocery\audit-ghost-drift.ps1      FAIL on budget-tracker-tool.html, 28,965 bytes committed vs
+#                                      29,358 in the working tree.
+#
+# Both are the standing condition in [[fresh-checkout-is-crlf-main-is-lf]]: .gitattributes carries
+# `* text=auto` and core.autocrlf is true, so a fresh checkout normalises to CRLF while main's working
+# tree still sits at LF from when those files were written. The two go red over BYTES, not drift, and
+# `git diff` shows nothing ([[crlf-flip-is-invisible-in-git-diff]]). Fixing it is a .gitattributes
+# question and a separate piece of work - recorded here so the next person to read a red worktree gate
+# does not spend the afternoon hunting for a data file that was never the problem.
