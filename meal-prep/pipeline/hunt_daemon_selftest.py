@@ -1520,6 +1520,10 @@ def run(names_out=None, names_ref=None):
     # =================================================================================================
     H("2026-09-04 - the repeat-work fixes (design\\EVAL-hunter-repeat-work-2026-09-04.md)")
     # =================================================================================================
+    H("2026-09-06 - the progress heartbeat (backlog E10)")
+    for fn in HB_SECTIONS:
+        for name, ok, got in fn():
+            T(name, ok, got)
     for fn in RW_SECTIONS:
         for name, ok, got in fn():
             T(name, ok, got)
@@ -12631,7 +12635,82 @@ P5_SECTIONS = (_p5_repair_clears_the_gate, _p5_hold_when_the_repair_does_not_cle
                _p5_status_report_names_held_waves)
 
 
+def _hb_heartbeat_reports_and_names_a_stall():
+    """E10. The progress heartbeat: it emits, it CANCELS, and an unchanged run is called out.
+
+    The stall case is the one that matters. A hung lane and a slow lane look identical from outside -
+    the process sits there and says nothing - so the heartbeat deliberately does NOT suppress an
+    unchanged report as noise. Standing counters ARE the signal.
+    """
+    res = []
+    tmp = _wave_scratch()
+    try:
+        d = daemon(run_dir=tmp)
+        d.quiet = False
+        said = []
+        d.log = lambda m: said.append(str(m))
+
+        # THE REPORT IS STUBBED, AND THAT IS THE POINT OF THE CASE. The real status_report() does file
+        # I/O (pool_health reads the candidate pool), which on the first run of this fixture took longer
+        # than the 10 ms interval - so only ONE tick ever landed, `prev` was set and never compared, and
+        # the stall assertion failed for a timing reason rather than a behavioural one. A test whose
+        # verdict depends on how fast a disk answers is worse than no test. Stubbing it makes the tick
+        # cheap and the counters genuinely constant, which is exactly the condition being asserted.
+        d.status_report = lambda: "hunt-daemon status: drill-run\n  accepted        0"
+
+        # A short interval so the case runs in milliseconds; the shipped default is 600s.
+        async def drive():
+            hb = asyncio.ensure_future(d.status_heartbeat(0.01))
+            await asyncio.sleep(0.25)
+            hb.cancel()
+            try:
+                await hb
+            except asyncio.CancelledError:
+                pass
+            return hb
+        hb = arun(drive())
+
+        joined = "\n".join(said)
+        res.append(("MUST FIRE  the heartbeat emits a status report while the lanes drain",
+                    "hunt-daemon status:" in joined, joined[:200] or "(said nothing)"))
+        res.append(("MUST FIRE  counters that never move are called out as NO PROGRESS, because a hung "
+                    "lane looks exactly like a slow one",
+                    "NO PROGRESS" in joined, joined[-260:] or "(said nothing)"))
+        res.append(("MUST FIRE  the heartbeat is cancellable - a reporting task that outlives the run "
+                    "would hold the event loop open",
+                    hb.cancelled() or hb.done(), "still running"))
+
+        # CLEAN TWIN: a status_report that raises must not take the run down with it.
+        d2 = daemon(run_dir=tmp)
+        d2.quiet = False
+        said2 = []
+        d2.log = lambda m: said2.append(str(m))
+        def boom():
+            raise RuntimeError("deliberate")
+        d2.status_report = boom
+
+        async def drive2():
+            hb2 = asyncio.ensure_future(d2.status_heartbeat(0.01))
+            await asyncio.sleep(0.04)
+            hb2.cancel()
+            try:
+                await hb2
+            except asyncio.CancelledError:
+                pass
+        arun(drive2())
+        res.append(("MUST FIRE  a status_report that raises is REPORTED and the heartbeat survives - a "
+                    "heartbeat must never kill the run it reports on",
+                    any("could not be rendered" in s for s in said2),
+                    "\n".join(said2)[:200] or "(said nothing)"))
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 RW_SECTIONS = (_rw_write_lane, _rw_price_hold, _rw_remap_road, _rw_dossiers)
+
+
+HB_SECTIONS = (_hb_heartbeat_reports_and_names_a_stall,)
 
 
 # The entry point MUST be the LAST thing in this file. It used to sit at old line 4509 with ~2,300

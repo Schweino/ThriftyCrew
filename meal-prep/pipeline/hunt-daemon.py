@@ -8180,6 +8180,55 @@ class Daemon(object):
             for ch in self.CLOSES.get(name, ()):                  # or the next lane waits forever
                 self.ch[ch].close()
 
+    async def status_heartbeat(self, every_sec):
+        """Emit the status report every `every_sec` while the lanes drain.
+
+        WHY (2026-09-06, backlog E10). status_report() was rendered ONLY at the end of a run, or as a
+        one-shot under --status. A hunt run lasts hours, so for the whole of it the only output was
+        per-lane chatter and nobody could answer "where is it" without stopping it.
+
+        THE ENTRY'S PREMISE DOES NOT APPLY HERE AND THE FIX STILL DOES. E10 says the daemon "runs far
+        past the point where its initial plan is still near the front of context" - that is the
+        plan-sinking failure of a long LLM agent loop, and this daemon is a Python process. It has no
+        context to sink. Its agents are single-turn `claude -p` dispatches, each with a fresh one. So
+        nothing here re-injects a plan; what a long CODE run needs instead is to be OBSERVABLE.
+
+        AND THE REAL PRIZE IS THE STALL. A hung lane looks exactly like a slow one today: the process
+        sits there and says nothing. So an unchanged report is not suppressed as noise, it is called
+        out - the counters standing still for two intervals is the signal, and printing it is the only
+        way anyone sees it before the run ends.
+        """
+        prev = None
+        still = 0
+        try:
+            while True:
+                await asyncio.sleep(every_sec)
+                try:
+                    report = self.status_report()
+                except Exception as e:                            # noqa: BLE001
+                    # A heartbeat must never be able to kill the run it is reporting on.
+                    self.log("hunt-daemon heartbeat: status could not be rendered (%s)" % e)
+                    continue
+                # Compare the COUNTERS, not the whole report: pool-health prose and timings move on
+                # their own and would mask a genuine stall behind a cosmetic difference.
+                key = (len(self.accepted_slugs), len(self.outcomes), len(self.qa_passed),
+                       self.lane_lines, self.breaker.calls)
+                if key == prev:
+                    still += 1
+                    self.log("")
+                    self.log("hunt-daemon heartbeat: NO PROGRESS for %d interval(s) (%d min) - "
+                             "accepted/resolved/qa-passed/lane-lines/agent-calls all unchanged. A "
+                             "hung lane looks exactly like a slow one; if this repeats, look."
+                             % (still, int(still * every_sec / 60)))
+                else:
+                    still = 0
+                    prev = key
+                    self.log("")
+                    for line in report.splitlines():
+                        self.log(line)
+        except asyncio.CancelledError:
+            raise
+
     async def run(self, lanes=None):
         lanes = tuple(lanes or self.LANE_ORDER)
         tasks = []
@@ -8191,8 +8240,21 @@ class Daemon(object):
                     self.ch[ch].close()
         # return_exceptions as a BACKSTOP, not as the mechanism: `contained` already catches, so a
         # raise reaching here means the containment itself failed and that must be visible, not fatal.
-        for name, res in zip([n for n in self.LANE_ORDER if n in lanes],
-                             await asyncio.gather(*tasks, return_exceptions=True)):
+        # E10: the heartbeat runs BESIDE the lanes and is always cancelled, including on a raise -
+        # a reporting task that outlives what it reports on would hold the event loop open.
+        hb = None
+        if getattr(self, "status_every", 0) and not self.quiet:
+            hb = asyncio.ensure_future(self.status_heartbeat(self.status_every))
+        try:
+            gathered = await asyncio.gather(*tasks, return_exceptions=True)
+        finally:
+            if hb is not None:
+                hb.cancel()
+                try:
+                    await hb
+                except (asyncio.CancelledError, Exception):       # noqa: BLE001
+                    pass
+        for name, res in zip([n for n in self.LANE_ORDER if n in lanes], gathered):
             if isinstance(res, BaseException) and not isinstance(res, asyncio.CancelledError):
                 self.findings.append("LANE DIED OUTSIDE CONTAINMENT: %s raised %s past its own "
                                      "guard - the guard has a hole in it"
@@ -8568,6 +8630,11 @@ def main(argv=None):
                     help="preflight llama-server but never START one - refuse instead. For when you "
                          "want to own the card yourself.")
     ap.add_argument("--status", action="store_true")
+    # 600s: a hunt run lasts hours, so ten minutes gives a handful of reports over a short
+    # run and a few dozen over a long one - often enough to see a stall, rare enough not to
+    # bury the lane log. 0 switches it off.
+    ap.add_argument("--status-every", dest="status_every", type=int, default=600,
+                    help="seconds between progress reports while the lanes drain (0 = off)")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--names-out", dest="names_out", default="",
                     help="with --selftest: write the case NAMES this run executed, one per line, "
@@ -8603,6 +8670,11 @@ def main(argv=None):
                food_db_path=a.food_db, queue_path=a.queue, carriage_path=a.carriage,
                considered_path=a.considered, events_path=a.events,
                resolutions_path=a.resolutions)
+    # E10. Set AFTER construction rather than threaded through the constructor: every fixture in
+    # hunt_daemon_selftest.py builds a Daemon, and adding a required argument would have meant editing
+    # all of them to buy nothing. getattr(self, "status_every", 0) in run() means a daemon nobody set
+    # this on simply has no heartbeat, which is what a test wants.
+    d.status_every = max(0, int(getattr(a, "status_every", 0) or 0))
     # SAID OUT LOUD, beside the band, for the same reason the band is: these two are rendered side by
     # side into every agent prompt, and they disagreed silently for a whole run.
     say("hunt-daemon: conditions (%s) %s" % (d.conditions_why, d.conditions))
