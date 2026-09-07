@@ -35,7 +35,17 @@
 
   Self-test: powershell -File meal-prep\pipeline\audit-fact-claims.ps1 -SelfTest
 #>
-param([switch]$SelfTest, [switch]$AcceptDrop)
+param(
+  [switch]$SelfTest,
+  [switch]$AcceptDrop,
+  # PRINT THEM ALL (2026-09-07, backlog E6). The gate line shows 15 and says "and 325 more", which is
+  # right for a gate and useless for clearing the backlog: "each one declared or removed lowers the
+  # mark" is advice nobody can follow against a list they cannot see.
+  [switch]$All,
+  # Emit the findings as JSON so they can be counted by class and checked against the systems of
+  # record - carriage.json for a carriage claim, the board for a price comparison.
+  [switch]$Json
+)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep\pipeline' }
 $repo = Split-Path (Split-Path $here -Parent) -Parent
@@ -69,7 +79,24 @@ function Get-TcRiskAssertions {
     $l = $sent.ToLower()
 
     # 1. STORAGE / FOOD SAFETY: a duration attached to keeping, freezing or reheating.
-    if ($l -match '\b(keeps?|keep|last[s]?|fridge|refrigerat\w*|freez\w*|thaw\w*|reheat\w*)\b' -and
+    #
+    # AN UPPER BOUND, NOT A LOWER ONE (2026-09-07, backlog E6, measured). This fired 8 times on the
+    # live corpus and was right 0 times: every hit was a marinating or cooking step - "refrigerate at
+    # least 4 hours", "toss in the marinade and refrigerate at least 2 hours", and one sentence where
+    # 'keeps' meant maintain ("the lowest heat that KEEPS IT MOVING") next to "3.5 to 4 hours".
+    #
+    # The rule that separates them is not a patch for those eight. A food-safety claim is an UPPER
+    # bound - how long the finished food is still good for. A marinating instruction is a LOWER bound
+    # - how long to leave it before cooking. A floor says nothing about when food stops being safe, so
+    # it cannot be the claim this class exists to catch.
+    #
+    # This is E22 in the flesh: green on its fixture, precision ZERO on the class its own header calls
+    # the most serious. A detector that is only ever wrong about food safety trains people to skim the
+    # one class that matters.
+    $isPrep = ($l -match '\bmarinat\w*') -or ($l -match '\b(at least|minimum of|minimum|or longer|or overnight)\b')
+    $keepsAsMaintain = ($l -match '\bkeeps?\s+(it|them|the\s+\w+)\s+\w+ing\b')
+    if ((-not $isPrep) -and (-not $keepsAsMaintain) -and
+        $l -match '\b(keeps?|keep|last[s]?|fridge|refrigerat\w*|freez\w*|thaw\w*|reheat\w*)\b' -and
         $l -match '\b\d+\s*(day|days|week|weeks|month|months|hour|hours)\b') {
       $out += [pscustomobject]@{ Class = 'storage'; Sentence = $sent }; continue
     }
@@ -132,6 +159,19 @@ if ($SelfTest) {
   # --- the three risk classes must fire
   $r1 = Get-TcRiskAssertions -Prose '<p>Portion it out. It keeps 5 days in the fridge.</p>'
   T 'MUST FIRE  a storage duration is a risk assertion' (@($r1).Count -eq 1 -and $r1[0].Class -eq 'storage') (($r1 | ForEach-Object { $_.Class }) -join ',')
+  $rUp = Get-TcRiskAssertions -Prose 'Sealed in the fridge it freezes up to 3 months without going grainy.'
+  T 'MUST FIRE  an UPPER-bound shelf life is still a food-safety claim' `
+    (@($rUp).Count -eq 1 -and $rUp[0].Class -eq 'storage') (($rUp | ForEach-Object { $_.Class }) -join ',')
+  # THE THREE LIVE SHAPES THIS FIRED ON AND SHOULD NOT HAVE, taken verbatim from the corpus
+  # 2026-09-07. Single-quoted literals; built by concatenation these would be three positional
+  # arguments and the case would run on a fragment.
+  $n1 = Get-TcRiskAssertions -Prose 'Refrigerate at least 4 hours and preferably overnight.'
+  T 'MUST NOT FIRE  THE ONE THAT MADE THIS RULE - at least N hours is a FLOOR, and a floor says nothing about when food stops being safe' `
+    (@($n1).Count -eq 0) (($n1 | ForEach-Object { $_.Sentence }) -join ' | ')
+  $n2 = Get-TcRiskAssertions -Prose 'Toss the chicken thighs in the marinade and refrigerate at least 2 hours.'
+  T 'MUST NOT FIRE  a marinade instruction is not a food-safety claim' (@($n2).Count -eq 0) (($n2 | ForEach-Object { $_.Sentence }) -join ' | ')
+  $n3 = Get-TcRiskAssertions -Prose 'Cover and cook 3.5 to 4 hours on the lowest heat that keeps it moving.'
+  T 'MUST NOT FIRE  "keeps it moving" is keep-as-maintain, not keep-as-stays-good' (@($n3).Count -eq 0) (($n3 | ForEach-Object { $_.Sentence }) -join ' | ')
   $r2 = Get-TcRiskAssertions -Prose 'Aldi carries this cut year-round, so you will not be hunting.'
   T 'MUST FIRE  a store carriage assertion is a risk assertion' (@($r2).Count -eq 1 -and $r2[0].Class -eq 'carriage') (($r2 | ForEach-Object { $_.Class }) -join ',')
   $r3 = Get-TcRiskAssertions -Prose 'Thighs are cheaper than breasts and taste better.'
@@ -219,11 +259,18 @@ $undeclared = @($problems | Where-Object { $_.Kind -like 'undeclared-*' })
 $decorative = @($problems | Where-Object { $_.Kind -eq 'declared-not-said' })
 $count = $undeclared.Count
 
-Write-Output ("fact-claims: {0} spec(s), {1} carrying fact_claims, {2} unreadable" -f $specs.Count, $withClaims, $unreadable)
-foreach ($p in ($undeclared | Sort-Object Slug | Select-Object -First 15)) {
+# -Json emits ONLY the findings. A narration line above the payload is how a machine-readable mode
+# stops being machine-readable, and the first attempt at this one did exactly that.
+if (-not $Json) { Write-Output ("fact-claims: {0} spec(s), {1} carrying fact_claims, {2} unreadable" -f $specs.Count, $withClaims, $unreadable) }
+if ($Json) {
+  ($undeclared | Sort-Object Slug, Kind | ForEach-Object { [ordered]@{ slug = $_.Slug; kind = $_.Kind; sentence = $_.Detail } }) | ConvertTo-Json -Depth 4
+  exit 0
+}
+$show = if ($All) { @($undeclared | Sort-Object Slug) } else { @($undeclared | Sort-Object Slug | Select-Object -First 15) }
+foreach ($p in $show) {
   Write-Output ("  {0,-22} {1,-22} {2}" -f $p.Slug, $p.Kind, $(if ($p.Detail.Length -gt 90) { $p.Detail.Substring(0, 90) + '...' } else { $p.Detail }))
 }
-if ($undeclared.Count -gt 15) { Write-Output ("  ... and {0} more" -f ($undeclared.Count - 15)) }
+if (-not $All -and $undeclared.Count -gt 15) { Write-Output ("  ... and {0} more - run with -All to see every one, or -Json to check them against the board and carriage.json" -f ($undeclared.Count - 15)) }
 
 if ($decorative.Count) {
   Write-Output ("FACT-CLAIMS AUDIT FAILED: {0} declared claim(s) appear nowhere in their card's prose. A fact_claims list that does not match the prose is decoration, and it is worse than none - it reads as a check that happened." -f $decorative.Count)
