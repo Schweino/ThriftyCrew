@@ -854,14 +854,32 @@ git repo - **16 commits, 190 files, 4.0 MB, no remote** - deliberately excluded 
 because adding it would turn it into a gitlink with nothing behind it and lose that history. It
 needs its own private repo, by the same route. Tracked as I7.
 
-### I7 - `projects/C--Codex/memory/` has 16 commits and no remote `OPEN`
-*Split out of I1, 2026-09-06.* The C--Codex workspace memory store is a separate git repo on the
-same disk as its working copy, with no remote and no backup. Same exposure I1 just closed, same fix:
-a private GitHub repo, created in the browser since `gh` will not authenticate here, then
-`git remote add` and push - git's stored credentials cover it. Scan the tracked set for
-credential-shaped strings first, and prove the scanner fires before believing a clean result.
-Check whether it needs a `.gitattributes` too; `core.autocrlf=true` is system-wide on this machine,
-so it almost certainly does.
+### I7 - `projects/C--Codex/memory/` is backed up to a private remote `DONE` `4041025`
+*Split out of I1, 2026-09-06, and closed the same day.* The C--Codex workspace memory store was its
+own git repo - 16 commits, 190 files - on the same disk as its working copy, with no remote. It was
+deliberately kept out of `claude-store` because folding it in would have made it a gitlink with
+nothing behind it and lost that history.
+
+**Remote:** `github.com/Schweino/codex-memory`, **private**, 17 commits, 192 files. Private badge
+read off the live page, not inferred from the creation form. Contents are 190 markdown memos plus
+`.gitignore` and `.gitattributes`, verified against the remote tree.
+
+Three things were fixed on the way, and the second is the one worth remembering:
+
+1. **No `.gitignore` at all.** Fine for a local store, not fine for one with a remote: anything a
+   tool drops in that directory joins the next `git add` and gets published. Now an allow-list -
+   markdown and the two dotfiles - matching `~/.claude`'s design and for the same reason.
+2. **The tree stored MIXED line endings, which `~/.claude` did not.** 15 of 190 blobs actually
+   held CRLF while the other 175 held LF, so this needed a renormalise and not just an attribute.
+   Several of the 15 lost a single byte, meaning one stray CRLF inside an otherwise LF file. All 15
+   content-verified identical by sha256 with line endings normalised. **Measured on worktrees of the
+   commits either side: 190 of 190 checked out CRLF before, 0 of 192 after.**
+3. **`.gitattributes` negated explicitly** in the new allow-list, because `/*` would otherwise
+   swallow it - the silent failure hit in `claude-store` hours earlier, where the fix applied
+   locally, would never have been committed, and every clone would still have come out CRLF.
+
+Both stores are now on private remotes. **The allow-list has now swallowed a root dotfile three
+times across this estate**, which is the argument for a gate rather than a fourth memory entry.
 
 ### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `OPEN` `BRAD'S CALL`
 *Surfaced by the Claude Cowork run (course 11), then verified directly rather than taken on its
