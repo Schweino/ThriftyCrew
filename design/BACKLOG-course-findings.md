@@ -125,9 +125,14 @@ never touched. Ranking the true twin:
 
 | | cosine | BM25 |
 |---|---|---|
-| recall@10 | 20 / 31 | 15 / 31 |
-| MRR | 0.336 | 0.230 |
+| recall@10 | 19 / 31 | 17 / 31 |
+| MRR | 0.216 | 0.241 |
 | finds in top-10 what the other buries | 3 | **1** |
+
+*(Figures re-taken 2026-09-06 after E24's fix; an earlier run of the same script reported 20/31 and
+MRR 0.336 for cosine. Nothing in the code changed between them - `candidate-pool.json` was rewritten
+at 18:09 and the embedding cache at 18:08, and the probe recorded nothing about what it had read. See
+the coverage and reproducibility notes below, which are the more important half of this item.)*
 
 **One pair.** A lexical index earns its place beside a vector one only by finding what the vector
 one misses, and it misses in the same direction. The reciprocal-rank-fusion build is not worth its
@@ -162,6 +167,30 @@ signature's own fields disagree on rows a human called identical.
 
 **This discharges the E19 concern for this one component:** the 31 pairs and the scoring script are
 now a frozen, re-runnable test set, which is what E19 asks every retrieval-shaped component to have.
+
+**Then E24's fix was applied to this very probe, and it changed how the numbers above should be
+read.** Two things came out of it that the original run could not have shown.
+
+**Coverage is 18%, not 100%.** The ledger holds **168** ruled duplicates. Thirty-one are scoreable;
+**135 decline because the twin is not in the candidate pool** and 2 because both sides collapse onto
+one cache row. That is E20 in this item's own measurement - a figure computed over the rows that
+resolved, presented as though it were the whole labelled set. Worse, the missing 82% are almost
+certainly **not** missing at random: a twin leaves the pool when its recipe is accepted and built, so
+the drop-outs are weighted toward the cases the pipeline handled well, which is E23's publication
+bias in the same breath. The direction of the result survives this. The precision of it does not.
+
+**The run was not reproducible and nothing said so.** The probe reads mutable state and recorded
+nothing about what it read, so two runs hours apart disagreed with no code change between them. It
+now prints and stores an input fingerprint - size and mtime for the pool, the ledger and the cache -
+so a moved input is visible as a different measurement rather than looking like a change in the
+answer. Size carries the weight and mtime is only the tie-breaker, because this estate already has a
+scar about mtime moving on byte-identical files after a reanchor.
+
+**The bar is now written before the run, not after.** Build the hybrid only if BM25's fixed count
+exceeds its broke count by at least 5 of the 31. It scores **fixed 1, broke 3, difference -2**, so
+the verdict stands and is now stated against something rather than against nothing. One row per case
+per arm is written to `meal-prep/db/dedup-headtohead-cases.jsonl`, with the discordant counts derived
+from that file rather than being it.
 
 ### E5 - Validate at source `OPEN`
 *Source: MCP (course 3).* A direct criticism of any tooling that hands a model raw rows to sift. The

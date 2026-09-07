@@ -34,6 +34,7 @@ import math
 import os
 import re
 import sys
+import time
 from collections import Counter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -88,6 +89,26 @@ class BM25(object):
                 continue
             s += self.idf(w) * (f * (self.k1 + 1)) / (f + self.k1 * (1 - self.b + self.b * dl / (self.avg or 1)))
         return s
+
+
+def input_fingerprint(paths):
+    """What this run actually read, so a later run can tell whether it read the same thing.
+
+    Size and mtime, NOT a content hash: these files run to tens of megabytes and the question is only
+    "did this move", which size-and-mtime answers for a fraction of the cost. It is deliberately not
+    mtime alone - this estate has a standing scar about mtime moving on byte-identical files after a
+    reanchor (memory: spec-mtime-is-not-evidence-of-a-recost), so the size is what carries the weight
+    and the mtime is the tie-breaker.
+    """
+    out = {}
+    for label, p in paths.items():
+        try:
+            st = os.stat(p)
+            out[label] = {"bytes": st.st_size,
+                          "mtime": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(st.st_mtime))}
+        except OSError:
+            out[label] = None
+    return out
 
 
 def head_to_head():
@@ -147,22 +168,61 @@ def head_to_head():
     except Exception:                                          # noqa: BLE001
         pass
 
+    # WHY THE DENOMINATOR IS COUNTED HERE (backlog E20). A recall figure computed only over the rows
+    # that RESOLVED is the same trick as a matcher scored only on the rows it chose to answer: it
+    # outscores one that attempts everything, and neither number looks wrong. So every duplicate the
+    # ledger knows about is counted, and each one that drops out is counted BY REASON, because "31
+    # pairs" is not interpretable without knowing what the 31 came out of.
     pairs = []
+    declined = {"no twin recorded": 0, "twin not in the pool": 0,
+                "one or both sides not in the embedding cache": 0,
+                "both sides share one cache row": 0}
+    ruled = 0
     for c in cands:
         if c.get("status") != "ruled:rejected-dupe":
             continue
+        ruled += 1
         tw = c.get("dupe_of") or twin.get(c.get("slug")) or []
+        if not tw:
+            declined["no twin recorded"] += 1
+            continue
+        why = None
         for s in tw:
             b = by_slug.get(s)
             if b is None:
+                why = "twin not in the pool"
                 continue
             ka, kb = cache_key(c), cache_key(b)
-            if ka in at and kb in at and at[ka] != at[kb]:
-                pairs.append((c, b, at[ka], at[kb]))
-                break
+            if ka not in at or kb not in at:
+                why = "one or both sides not in the embedding cache"
+                continue
+            if at[ka] == at[kb]:
+                why = "both sides share one cache row"
+                continue
+            pairs.append((c, b, at[ka], at[kb]))
+            why = None
+            break
+        if why:
+            declined[why] += 1
 
+    fp = input_fingerprint({
+        "candidate_pool": os.path.join(MP, "db", "candidate-pool.json"),
+        "considered_dishes": os.path.join(MP, "db", "considered-dishes.json"),
+        "embed_cache_index": cache_idx,
+    })
+    print("INPUTS THIS RUN READ (a different fingerprint means a different measurement, not a change):")
+    for k in sorted(fp):
+        v = fp[k]
+        print("   %-20s %s" % (k, ("MISSING" if v is None else "%d bytes, %s" % (v["bytes"], v["mtime"]))))
     print("cached vectors      : %d" % len(keys))
+    print("ruled duplicates in the ledger                    : %d" % ruled)
     print("labelled pairs BOTH sides of which are in the cache: %d" % len(pairs))
+    for k, v in sorted(declined.items(), key=lambda kv: -kv[1]):
+        if v:
+            print("   declined: %-46s %d" % (k, v))
+    if ruled:
+        print("COVERAGE: %.0f%% of ruled duplicates are scoreable. Read every number below against "
+              "that, not against 100%%." % (100.0 * len(pairs) / ruled))
     if not pairs:
         print("")
         print("HEAD-TO-HEAD COULD NOT EVALUATE: no labelled pair has both sides in the embedding cache.")
@@ -183,6 +243,29 @@ def head_to_head():
         bs[ia] = -1.0
         br = int((bs > bs[ib]).sum()) + 1
         rows.append((c.get("slug"), b.get("slug"), cr, br))
+
+    # ONE ROW PER CASE PER ARM, AND THE TOTALS ARE DERIVED FROM IT (backlog E24). A pair of totals -
+    # "cosine 20, BM25 15" - has already destroyed the comparison: it pins down only the DIFFERENCE,
+    # and 20-vs-15 is equally compatible with "BM25 fixed 15 and broke 20" (churn, weak, unactionable)
+    # and with "BM25 fixed 0 and broke 5" (clear). Same headline, opposite decisions, and nothing
+    # recovers it afterwards. Writing the file is what makes the discordant counts below possible.
+    out_path = os.path.join(MP, "db", "dedup-headtohead-cases.jsonl")
+    try:
+        with io.open(out_path, "w", encoding="utf-8", newline="\n") as f:
+            # The header row is the run's identity. Without it two case files cannot be compared,
+            # which is the whole reason the case file exists.
+            f.write(json.dumps({"_run": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                                "_inputs": fp, "_cases": len(rows),
+                                "_ruled_in_ledger": ruled, "_declined": declined},
+                               ensure_ascii=False) + "\n")
+            for slug, twin_slug, cr, br in rows:
+                for arm, rank in (("cosine", cr), ("bm25", br)):
+                    f.write(json.dumps({"case": slug, "twin": twin_slug,
+                                        "arm": arm, "rank": rank}, ensure_ascii=False) + "\n")
+        print("per-case rows: %s (%d case(s) x 2 arm(s))" % (out_path, len(rows)))
+    except Exception as e:                                     # noqa: BLE001
+        print("per-case rows NOT written (%s) - the totals below stand, but this run left no evidence "
+              "a later comparison could reuse." % e)
 
     n = len(rows)
     def hits(idx, k):
@@ -208,10 +291,27 @@ def head_to_head():
     print("  neither finds in top-10                   : %d" % len(both_miss))
     for s in bm_saves[:8]:
         print("      %-44s cosine #%-5d BM25 #%d" % (s[0][:44], s[2], s[3]))
+    # THE DISCORDANT COUNTS, WHICH ARE THE COMPARISON (backlog E24). McNemar's test asks how many
+    # cases one arm FIXED and how many it BROKE, because those are the only cases carrying information
+    # about a difference; the ones both arms get right, or both get wrong, say nothing.
     print("")
-    print("READ IT THIS WAY. The left column is what the estate has today. A hybrid is worth building")
-    print("only if the first count is meaningfully above zero - that is BM25 catching duplicates the")
-    print("current evidence buries. If it is zero, BM25 adds a second index and no new information.")
+    print("DISCORDANT CASES at top-10, derived from the per-case file above:")
+    print("  BM25 right where cosine is wrong (fixed) : %d" % len(bm_saves))
+    print("  cosine right where BM25 is wrong (broke) : %d" % len(cos_saves))
+    print("  both right                               : %d"
+          % len([r for r in rows if r[2] <= 10 and r[3] <= 10]))
+    print("  both wrong                               : %d" % len(both_miss))
+
+    # THE ACCEPTANCE THRESHOLD, STATED (backlog E21). Written here rather than decided after seeing
+    # the number, because a threshold chosen afterwards is not a threshold. n is small, so this is
+    # deliberately a bar about the DIRECTION of the discordant pairs and not a p-value.
+    print("")
+    print("ACCEPTANCE BAR, fixed before the run: build the hybrid only if BM25's fixed count exceeds")
+    print("its broke count by at least 5 cases. Below that the two indexes are trading errors on a")
+    print("31-case set, which is churn and not an improvement.")
+    verdict = ("BUILD" if (len(bm_saves) - len(cos_saves)) >= 5 else "DO NOT BUILD")
+    print("VERDICT: %s (fixed %d - broke %d = %d)"
+          % (verdict, len(bm_saves), len(cos_saves), len(bm_saves) - len(cos_saves)))
     return 0
 
 
