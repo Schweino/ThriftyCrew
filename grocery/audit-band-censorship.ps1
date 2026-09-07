@@ -116,6 +116,10 @@ function Find-BandCensorship {
     }
   }
   $out = New-Object System.Collections.ArrayList
+  # Script-scoped so the live path can report it after the call. A $script: variable does NOT travel with
+  # a lifted function ([[compare-deals-lifters-need-functions-not-variables]]), and nothing lifts this
+  # one - it is called in-process by this file and by its own fixtures.
+  $script:bcRetired = New-Object System.Collections.ArrayList
   foreach ($r in @($Flagged)) {
     $band = [string]$r.band
     # Only a MIN-MAX band can express "below the floor". The other shape flagged writes is "floor>=0.005",
@@ -143,7 +147,22 @@ function Find-BandCensorship {
     if ($medianOf.ContainsKey([string]$r.id)) { $med = [double]$medianOf[[string]$r.id] }
     if ($med -le 0) { continue }
     $medRatio = $up / $med
-    if ($medRatio -lt $MedianFloor) { continue }          # a different ORDER of magnitude from the going rate: a parse error
+    if ($medRatio -lt $MedianFloor) {
+      # RULED 0.4 BY BRAD, 2026-09-07, AND THE COST OF THAT RULING IS RECORDED RATHER THAN DISCARDED.
+      # 0.3 keeps four arguable-real rows (a 2-pack couscous at 0.36 of median, mini muffins 0.383, four
+      # 7.2 oz personal pizzas 0.391, a 25 lb pepperoni case 0.395) but does NOT clear the 1/16 deli row
+      # at 0.318, so it leaves a known false positive standing in a RATCHET - and a ratchet with a known
+      # false positive is one people learn to scroll past, which costs more than four maybes.
+      # But "retired by the discriminator" and "never existed" must not look the same. Anything the floor
+      # drops is counted and named on every run, so the trade stays visible and reversible: if this list
+      # grows, the threshold is wrong and the number itself says so.
+      [void]$script:bcRetired.Add([pscustomobject]@{
+        commodity = [string]$r.id; store = [string]$r.store; name = [string]$r.name
+        rejected = [math]::Round($up, 4); median_price = [math]::Round($med, 4)
+        median_ratio = [math]::Round($medRatio, 4); floor = $MedianFloor
+      })
+      continue
+    }
     [void]$out.Add([pscustomobject]@{
       commodity   = [string]$r.id
       label       = [string]$r.label
@@ -337,6 +356,15 @@ foreach ($f in ($findings | Select-Object -First 25)) {
   Write-Output ("                refused: {0}  [{1} {2}]" -f $f.name, $f.price_text, $f.size_text)
 }
 if ($findings.Count -gt 25) { Write-Output ("  ... and " + ($findings.Count - 25) + " more (nothing truncated silently: rerun with -NearFloor to widen or narrow)") }
+# WHAT THE MEDIAN FLOOR RETIRED, NAMED. Brad ruled the discriminator at 0.4 on 2026-09-07 knowing it
+# drops four arguable-real rows. A trade nobody can see is a trade nobody can revisit, so the rows it
+# drops are counted and listed on every run - and the count is the evidence for or against 0.4.
+$retired = @($script:bcRetired)
+Write-Output ("  median floor {0}: {1} further rejected row(s) were retired as a different ORDER of magnitude from the going rate (a parse error, not censorship)" -f $MedianFloor, $retired.Count)
+foreach ($rr in ($retired | Sort-Object -Property median_ratio -Descending | Select-Object -Last 200 | Sort-Object -Property median_ratio -Descending | Select-Object -First 12)) {
+  Write-Output ("    retired  {0,-22} {1,-12} {2} at {3} of a {4} median" -f $rr.commodity, $rr.store, $rr.rejected, $rr.median_ratio, $rr.median_price)
+}
+if ($retired.Count -gt 12) { Write-Output ("    ... and " + ($retired.Count - 12) + " more retired (nothing is dropped silently)") }
 $outFile = Join-Path $OutDir 'band-censorship.json'
 @{ generated = (Get-Date).ToString('s'); flagged_file = (Split-Path $FlaggedFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); near_floor = $NearFloor; median_floor = $MedianFloor; cells = $cells; findings = $findings } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8

@@ -1,0 +1,16 @@
+{
+  "note": "REVIEWED REMOTES FOR THE AGENT MEMORY STORE. Brad's ruling 2, 2026-09-07. Being on this list is NOT sufficient: audit-memory-backup.ps1 re-proves each entry PRIVATE on every run by fetching its info/refs with no credentials. A listed remote that answers 200 anonymously is a HARD FAIL, and a listed remote that cannot be probed is UNVERIFIED, never a pass. The list decides which remotes are allowed to exist at all; the probe decides whether they are still safe.",
+  "why_not_simply_forbid_remotes": "The store is one directory on one machine. Its own founding incident was a single bad write destroying 2,035 characters, and the recovery needed a history that did not exist. Forbidding the offsite copy trades a measured, recurring durability risk for an exposure risk this check can actually measure. What the guard is FOR is 'memory must not become public'; 'memory must not be backed up' was a proxy for that, and the proxy is now unnecessary.",
+  "remotes": [
+    {
+      "url": "https://github.com/Schweino/codex-memory.git",
+      "host": "github.com",
+      "owner": "Schweino",
+      "approved_by": "Brad",
+      "approved_on": "2026-09-07",
+      "purpose": "Offsite backup of the agent memory store. The store carries cost, revenue and account notes, so this repository must remain private for the life of the entry.",
+      "evidence_when_approved": "Anonymous GET https://github.com/Schweino/codex-memory.git/info/refs?service=git-upload-pack returned HTTP 401. Anonymous GET https://api.github.com/repos/Schweino/codex-memory returned HTTP 404, which is how GitHub answers for a private repository. Control, run in the same session against a repository known to be public: https://github.com/Schweino/ThriftyCrew.git/info/refs returned HTTP 200 - so the probe can distinguish, and the 401 is a measurement rather than a probe that always says no.",
+      "retire_when": "the repository is made public, or the backup is abandoned"
+    }
+  ]
+}

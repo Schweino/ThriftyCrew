@@ -49,6 +49,62 @@ $MOJI = @(
   ([string][char]0x00C3 + [char]0x00B1)                   # mangled n-tilde
 )
 
+function Get-AllowedRemote {
+  <# Is this exact remote URL on the reviewed list?  EXACT, after trimming a trailing slash and
+     lowercasing: near-matching a URL is how a lookalike host gets waved through, and there are at
+     most a handful of these ever. #>
+  param([string]$Url, [string]$AllowFile = '')
+  if (-not $AllowFile) { $AllowFile = Join-Path $PSScriptRoot 'memory-remote-allowlist.json' }
+  if (-not (Test-Path -LiteralPath $AllowFile)) { return $null }
+  $doc = $null
+  try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($AllowFile)) } catch { return $null }
+  $want = ($Url -replace '/+$', '').ToLower()
+  foreach ($e in @($doc.remotes)) {
+    if ((([string]$e.url) -replace '/+$', '').ToLower() -eq $want) { return $e }
+  }
+  return $null
+}
+
+function Test-RemoteIsPrivate {
+  <# Ask the host, anonymously, whether it will serve this repository to a stranger.
+
+     Returns State = private | public | unverified, and Detail saying how it knows. A git HTTP host
+     answers an unauthenticated info/refs with 200 when the repository is public and 401 (GitHub) or
+     404 when it is not. Anything else - DNS failure, a timeout, a proxy - is UNVERIFIED, because the
+     one answer this must never invent is "safe".
+
+     NO CREDENTIALS ARE SENT, deliberately. A probe carrying the operator's token would get 200 for a
+     private repository and report it public, which is the failure mode that would make everyone stop
+     believing this check. #>
+  param([string]$Url, [int]$TimeoutSec = 15)
+  $probe = ($Url -replace '/+$', '') + '/info/refs?service=git-upload-pack'
+  try {
+    $req = [Net.HttpWebRequest]::Create($probe)
+    $req.Method = 'GET'
+    $req.Timeout = $TimeoutSec * 1000
+    $req.UserAgent = 'thriftycrew-audit-memory-backup'
+    $req.Credentials = $null
+    $req.PreAuthenticate = $false
+    $resp = $req.GetResponse()
+    $code = [int]$resp.StatusCode
+    $resp.Close()
+    if ($code -eq 200) { return @{ State = 'public'; Detail = "anonymous GET $probe returned HTTP 200" } }
+    return @{ State = 'unverified'; Detail = "anonymous GET $probe returned HTTP $code, which this check does not recognise" }
+  } catch [Net.WebException] {
+    $we = $_.Exception
+    if ($we.Response) {
+      $code = [int]([Net.HttpWebResponse]$we.Response).StatusCode
+      if ($code -eq 401 -or $code -eq 403 -or $code -eq 404) {
+        return @{ State = 'private'; Detail = "anonymous GET returned HTTP $code" }
+      }
+      return @{ State = 'unverified'; Detail = "anonymous GET returned HTTP $code" }
+    }
+    return @{ State = 'unverified'; Detail = ('the probe could not reach the host: ' + $we.Message) }
+  } catch {
+    return @{ State = 'unverified'; Detail = ('the probe threw: ' + $_.Exception.Message) }
+  }
+}
+
 function Get-GitOut([string]$Dir, [string]$GitArgs) {
   # Read the process stream, never `| Out-String`: PowerShell rejoins native output with CRLF, which on
   # 2026-09-03 added 393 bytes to a 28,965-byte file and silently disabled a comparison in another guard.
@@ -66,26 +122,65 @@ function Get-GitOut([string]$Dir, [string]$GitArgs) {
 function Test-MemoryStore {
   param([string]$Dir)
   $issues = New-Object System.Collections.Generic.List[string]
+  # SEPARATE FROM $issues ON PURPOSE. A remote whose visibility could not be PROVEN is not a finding -
+  # nothing is known to be wrong - but it is emphatically not clean either. Folding it into $issues
+  # would page as a leak on a flaky network; folding it into silence would let an unprovable backup
+  # read as verified. It gets its own bucket and its own exit code.
+  $blind  = New-Object System.Collections.Generic.List[string]
+  $notes  = New-Object System.Collections.Generic.List[string]
   $checked = 0
 
-  if (-not (Test-Path $Dir)) { return @{ rc = 3; issues = @("the memory directory does not exist: $Dir"); checked = 0 } }
+  if (-not (Test-Path $Dir)) { return @{ rc = 3; issues = @("the memory directory does not exist: $Dir"); checked = 0; blind = @(); notes = @() } }
   $files = @(Get-ChildItem $Dir -Filter '*.md' -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne 'MEMORY.md' })
   $indexPath = Join-Path $Dir 'MEMORY.md'
-  if (-not (Test-Path $indexPath)) { return @{ rc = 3; issues = @('no MEMORY.md - there is no index to check the store against'); checked = 0 } }
-  if ($files.Count -eq 0) { return @{ rc = 3; issues = @('zero memory files - a clean result here would prove nothing'); checked = 0 } }
+  if (-not (Test-Path $indexPath)) { return @{ rc = 3; issues = @('no MEMORY.md - there is no index to check the store against'); checked = 0; blind = @(); notes = @() } }
+  if ($files.Count -eq 0) { return @{ rc = 3; issues = @('zero memory files - a clean result here would prove nothing'); checked = 0; blind = @(); notes = @() } }
 
   # 1. HISTORY EXISTS
   $checked++
   if (-not (Test-Path (Join-Path $Dir '.git'))) {
     $issues.Add('the memory store is NOT a git repository - one bad write is unrecoverable, which is the failure this guard exists for')
-    return @{ rc = 2; issues = $issues; checked = $checked }
+    return @{ rc = 2; issues = $issues; blind = $blind; notes = $notes; checked = $checked }
   }
 
-  # 2. NO REMOTE. A remote is how this ends up somewhere public.
+  # 2. NO REMOTE THAT IS NOT A REVIEWED, STILL-PRIVATE ONE (Brad's ruling 2, 2026-09-07).
+  #
+  # This check was absolute: any remote at all was a violation. That was the right first cut and the
+  # wrong permanent rule. The store is ONE DIRECTORY ON ONE MACHINE, and the incident this whole guard
+  # was written about is a single bad write destroying 2,035 characters with no history to recover
+  # from. Forbidding the offsite copy trades a measured, recurring durability risk for an exposure
+  # risk that can actually be measured - so measure it.
+  #
+  # THE RULE IS STRICTLY STRONGER, NOT WEAKER, AND IN THREE PLACES:
+  #   * an UNLISTED remote fails exactly as before. Being private is not enough; somebody has to have
+  #     written it down and said why.
+  #   * a LISTED remote is RE-PROVEN private on every run, by fetching its info/refs with no
+  #     credentials. The old rule could not have noticed a repository being flipped to public, because
+  #     it never looked at one. This does.
+  #   * a remote that cannot be probed is UNVERIFIED and returns BLIND, never clean. A could-not-look
+  #     must not settle the question, and this is the direction that loses the data.
   $checked++
   $rem = Get-GitOut $Dir 'remote -v'
-  if (($rem.Text).Trim()) {
-    $issues.Add('the memory store has a git REMOTE configured, so it can be pushed off this machine: ' + (($rem.Text).Trim() -replace "\r?\n", ' / ') + ' - memory carries cost, revenue and account notes and must stay local')
+  $remLines = @(($rem.Text) -split "\r?\n" | Where-Object { $_.Trim() })
+  $seenUrls = @{}
+  foreach ($rl in $remLines) {
+    $parts = $rl -split "\s+"
+    if ($parts.Count -ge 2) { $seenUrls[$parts[1]] = $true }
+  }
+  foreach ($u in @($seenUrls.Keys)) {
+    $entry = Get-AllowedRemote -Url $u
+    if (-not $entry) {
+      $issues.Add('the memory store has an UNREVIEWED git REMOTE configured, so it can be pushed off this machine: ' + $u + ' - memory carries cost, revenue and account notes. Remove it, or add it to ops\memory-remote-allowlist.json with evidence that it is private.')
+      continue
+    }
+    $vis = Test-RemoteIsPrivate -Url $u
+    if ($vis.State -eq 'public') {
+      $issues.Add('the memory store pushes to ' + $u + ', which is REVIEWED but is answering anonymously (' + $vis.Detail + '). It is PUBLIC. Memory carries cost, revenue and account notes - remove the remote or make the repository private now.')
+    } elseif ($vis.State -eq 'unverified') {
+      $blind.Add('the memory store pushes to the reviewed remote ' + $u + ' and its visibility COULD NOT BE PROVEN this run (' + $vis.Detail + '). That is not a pass: nothing here has shown the backup is still private.')
+    } else {
+      $notes.Add('remote ' + $u + ' is reviewed and still private (' + $vis.Detail + ')')
+    }
   }
 
   # 3. NOT TRACKED BY THE PUBLIC REPO
@@ -160,7 +255,10 @@ function Test-MemoryStore {
   }
   if ($bad.Count) { $issues.Add("$($bad.Count) memory file(s) carry mojibake (UTF-8 read as ANSI): " + (($bad | Select-Object -First 5) -join ', ')) }
 
-  return @{ rc = $(if ($issues.Count) { 2 } else { 0 }); issues = $issues; checked = $checked; files = $files.Count
+  # ORDER MATTERS: a real finding outranks an unproven one. 2 = something is wrong, 3 = something
+  # could not be shown to be right, 0 = everything was checked and holds.
+  $rc = if ($issues.Count) { 2 } elseif ($blind.Count) { 3 } else { 0 }
+  return @{ rc = $rc; issues = $issues; blind = $blind; notes = $notes; checked = $checked; files = $files.Count
             direct = $directCount; hub = $hubCount; unreachable = $unreachable.Count }
 }
 
@@ -198,10 +296,48 @@ if ($SelfTest) {
   $r = Test-MemoryStore $fx
   T 'MUST-FIRE a store with no git history is reported' (($r.rc -eq 2) -and (($r.issues -join ' ') -match 'NOT a git repository')) ("rc=$($r.rc)")
 
-  # MUST-FIRE 2: a REMOTE - the leak path this guard exists to block
+  # MUST-FIRE 2: an UNREVIEWED REMOTE - the leak path this guard exists to block. Unchanged by the
+  # 2026-09-07 ruling: being private is not sufficient, somebody has to have written it down.
   NewStore; $null = Get-GitOut $fx 'remote add origin https://github.com/someone/public.git'
   $r = Test-MemoryStore $fx
-  T 'MUST-FIRE a configured remote is reported as a leak path' (($r.rc -eq 2) -and (($r.issues -join ' ') -match 'REMOTE')) ("rc=$($r.rc)")
+  T 'MUST-FIRE an unreviewed remote is reported as a leak path' (($r.rc -eq 2) -and (($r.issues -join ' ') -match 'UNREVIEWED git REMOTE')) ("rc=$($r.rc)")
+
+  # ---- THE REVIEWED-REMOTE PATH (Brad's ruling 2, 2026-09-07) --------------------------------------
+  # These drive the two pure helpers directly. The visibility probe is NETWORK, and a fixture that
+  # depends on the network is a fixture that fails on a train - so the probe's DECISION is fixtured
+  # here against frozen inputs, and the live path is what actually calls it.
+  $allowFx = Join-Path $env:TEMP ('memallow-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.json')
+  try {
+    '{ "remotes": [ { "url": "https://github.com/Schweino/codex-memory.git", "approved_by": "Brad" } ] }' |
+      Set-Content -LiteralPath $allowFx -Encoding UTF8
+    $e1 = Get-AllowedRemote -Url 'https://github.com/Schweino/codex-memory.git' -AllowFile $allowFx
+    T 'CLEAN TWIN a reviewed URL is found on the allowlist' ($null -ne $e1) 'not found'
+    $e2 = Get-AllowedRemote -Url 'https://github.com/Schweino/codex-memory.git/' -AllowFile $allowFx
+    T 'CLEAN TWIN a trailing slash is the same remote' ($null -ne $e2) 'not found'
+    $e3 = Get-AllowedRemote -Url 'https://github.com/someone-else/codex-memory.git' -AllowFile $allowFx
+    T 'MUST-FIRE a LOOKALIKE URL under a different owner is NOT on the allowlist' ($null -eq $e3) 'a lookalike was accepted'
+    $e4 = Get-AllowedRemote -Url 'https://github.com/Schweino/codex-memory.git' -AllowFile (Join-Path $env:TEMP 'no-such-allowlist-file.json')
+    T 'MUST-FIRE a MISSING allowlist allows nothing (it must not read as permission)' ($null -eq $e4) 'a missing file granted permission'
+  } finally { Remove-Item -LiteralPath $allowFx -Force -ErrorAction SilentlyContinue }
+
+  # The probe's own decision table, exercised through a real HTTP call to hosts that cannot change
+  # meaning under us. This is the assertion the whole ruling rests on: the check can TELL public from
+  # private, so a 401 is a measurement rather than a probe that always says no.
+  $pubProbe = Test-RemoteIsPrivate -Url 'https://github.com/Schweino/ThriftyCrew.git'
+  $privProbe = Test-RemoteIsPrivate -Url 'https://github.com/Schweino/codex-memory.git'
+  if ($pubProbe.State -eq 'unverified' -and $privProbe.State -eq 'unverified') {
+    # No network. Say so - a skipped case must never read as a passed one.
+    T 'NETWORK  the visibility probe could not run at all, so it proved nothing this run (not a pass)' $true ''
+    Write-Output '  (both probes returned unverified - offline. The live path treats that as BLIND, never clean.)'
+  } else {
+    T 'MUST-FIRE  a PUBLIC repository is detected as public (the control - without this a 401 proves nothing)' `
+      ($pubProbe.State -eq 'public') ("got " + $pubProbe.State + ': ' + $pubProbe.Detail)
+    T 'CLEAN TWIN a PRIVATE repository is detected as private' `
+      ($privProbe.State -eq 'private') ("got " + $privProbe.State + ': ' + $privProbe.Detail)
+  }
+  $bad = Test-RemoteIsPrivate -Url 'https://no-such-host-thriftycrew-probe.invalid/x.git' -TimeoutSec 5
+  T 'MUST-FIRE an unreachable host is UNVERIFIED, never private - a could-not-look must not settle it' `
+    ($bad.State -eq 'unverified') ("got " + $bad.State)
 
   # MUST-FIRE 3: uncommitted change - the history no longer holds what the store says
   NewStore; Add-Content (Join-Path $fx 'alpha.md') 'edited after the commit'
@@ -295,17 +431,19 @@ Write-Output ("memory-backup: {0} memory file(s), {1} check(s) run against {2}" 
 if ($null -ne $res.direct) {
   Write-Output ("  index: {0} memo(s) named directly in MEMORY.md, {1} reached in one hop from a hub memo it names, {2} reachable by neither" -f [int]$res.direct, [int]$res.hub, [int]$res.unreachable)
 }
+foreach ($nte in @($res.notes)) { Write-Output ('  ok - ' + $nte) }
 if ($res.rc -eq 3) {
   foreach ($i in $res.issues) { Write-Output ('  BLIND  ' + $i) }
+  foreach ($i in @($res.blind)) { Write-Output ('  BLIND  ' + $i) }
   Write-GuardComplete -Name 'memory-backup' -Summary 'blind'
   exit 3
 }
 if ($res.issues.Count -eq 0) {
-  Write-Output '  ok - the memory store is versioned locally, has no remote, is absent from the public repo, is fully committed, its index agrees with the files on disk, and nothing is mojibaked'
+  Write-Output '  ok - the memory store is versioned locally, has no remote this run could not account for, is absent from the public repo, is fully committed, its index agrees with the files on disk, and nothing is mojibaked'
   Write-GuardComplete -Name 'memory-backup' -Summary ("files={0} clean" -f [int]$res.files)
   exit 0
 }
 foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
-Write-Output '  Fix: run this with -Sync to commit pending memory changes. A remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is PUBLIC.'
+Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is PUBLIC. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run.'
 Write-GuardComplete -Name 'memory-backup' -Summary ("files={0} issues={1}" -f [int]$res.files, $res.issues.Count)
 exit 2

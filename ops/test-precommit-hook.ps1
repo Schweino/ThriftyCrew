@@ -26,6 +26,7 @@ $hookSrc = Join-Path $PSScriptRoot 'hooks\pre-commit'
 # THE CHECKERS THE HOOK SHELLS OUT TO, copied in so the fixture repo is self-contained. A fixture that
 # reached back into the real tree for them would pass on a tree where the hook could never find them.
 $needed = @('ops\hooks\pre-commit', 'ops\verify-bulk-edit.ps1', 'ops\verify-bot-commit-scope.ps1',
+            'ops\verify-commodities-gate.ps1', 'grocery\identity-lib.ps1',
             'lib\bot-paths.ps1', 'lib\guard-contract.ps1')
 foreach ($f in $needed) {
   if (-not (Test-Path -LiteralPath (Join-Path $repo $f))) {
@@ -48,7 +49,7 @@ function New-HookRepo {
   & git -C $w config user.email t@t
   & git -C $w config user.name  Session
   & git -C $w config commit.gpgsign false
-  foreach ($d in @('ops\hooks', 'lib', 'grocery\out\regular', 'design')) {
+  foreach ($d in @('ops\hooks', 'lib', 'grocery\out\audit', 'grocery\out\regular', 'design')) {
     New-Item -ItemType Directory -Force (Join-Path $w $d) | Out-Null
   }
   foreach ($f in $needed) { Copy-Item (Join-Path $repo $f) (Join-Path $w $f) -Force }
@@ -120,6 +121,34 @@ try {
   $c5 = Try-Commit -Work $w5
   T 'MUST FIRE  a MISSING scope checker refuses the commit rather than reading as clean' `
     ((-not $c5.Landed) -and ($c5.Text -match 'verify-bot-commit-scope')) $c5.Text
+
+  # ---- THE THIRD ARM: A MATCHING-RULE CHANGE MUST BE REVIEWED (2026-09-07, Brad ruling 8) -------------
+  # The founding case is 2026-09-06 commit b28788fa: six commodities' rules changed at 05:45, committed
+  # with no soundness accept and no guards, and the board stopped by 08:14.
+  $w7 = New-HookRepo
+  '[{"id":"x","include":["x"],"exclude":[]}]' | Set-Content (Join-Path $w7 'grocery\commodities.json')
+  & git -C $w7 add -A -- 'grocery/commodities.json' | Out-Null
+  $c7 = Try-Commit -Work $w7
+  T 'MUST FIRE  a staged commodities.json with no reviewed baseline is REFUSED (the b28788fa shape)' `
+    ((-not $c7.Landed) -and ($c7.Text -match 'commodities-gate')) $c7.Text
+
+  # MUST NOT FIRE: the checker being GONE must refuse too, never read as clean - the same rule the two
+  # arms above already carry, and the reason this file exists at all.
+  $w8 = New-HookRepo
+  Remove-Item (Join-Path $w8 'ops\verify-commodities-gate.ps1') -Force
+  'x' | Set-Content (Join-Path $w8 'grocery\out\regular\day2.json')
+  & git -C $w8 add -A -- 'grocery/out/regular/day2.json' | Out-Null
+  $c8 = Try-Commit -Work $w8
+  T 'MUST FIRE  a MISSING commodities gate refuses the commit rather than reading as clean' `
+    ((-not $c8.Landed) -and ($c8.Text -match 'verify-commodities-gate')) $c8.Text
+
+  # CLEAN TWIN: a commit that stages NO rule input is untouched by the new arm. Without this the gate
+  # would be indistinguishable from one that simply refuses everything.
+  $w9 = New-HookRepo
+  'x' | Set-Content (Join-Path $w9 'design\PLAN-y.md')
+  & git -C $w9 add -A -- 'design/PLAN-y.md' | Out-Null
+  $c9 = Try-Commit -Work $w9
+  T 'CLEAN TWIN a commit staging no matching-rule input still commits normally' $c9.Landed $c9.Text
 
   # ---- --no-verify IS STILL THE LOUD BYPASS ----------------------------------------------------------
   # It is deliberate, and audit-hook-installed asserts the hook is present so skipping it is a choice.

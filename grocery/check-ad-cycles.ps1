@@ -1618,6 +1618,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $msJ = Get-FanoutRecord 'match-soundness' $fanRecs
         $msJ.Output | ForEach-Object { Log ('match-soundness: ' + $_) }
         if ($msJ.ExitCode -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
+        # RULED ADVISORY BY BRAD, 2026-09-07 - and an advisory nobody prints is a synonym for silence.
+        # CROWN-BY-CONTEST exits 1, and until today this branch handled 2 and 3 only, so a NEW contested
+        # name holding a crown produced no summary line at all. The choice between hard and advisory is
+        # a real choice only if the advisory reaches a reader; blocking a live paid board on a matcher
+        # TIE would stop every card over an ambiguity that array order usually resolves correctly.
+        elseif ($msJ.ExitCode -eq 1) { $summary += 'REVIEW    a NEW contested product name is holding a CROWN (advisory - the board still ships): two rules both admit the name and array order picked the winner. If the winner is the wrong product this is the cheapest price in Omaha for a week. See the CROWN-BY-CONTEST lines in the log.' }
         elseif ($msJ.ExitCode -eq 3) { $summary += 'REVIEW    audit-match-soundness could not evaluate - commodity matching is UNGUARDED this run'; Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
       } catch { Log ('match-soundness guard threw: ' + $_.Exception.Message) }
       # ---- SALE WITHOUT AN AD (wired 2026-08-21, Brad: "Items that we show on 'sale' but no

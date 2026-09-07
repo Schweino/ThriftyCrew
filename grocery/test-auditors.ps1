@@ -1803,6 +1803,13 @@ if ($crSrc -notmatch "git -C \$repo add -A -- '?public") {
 if ($crSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\tc-capture-run'\)") {
   Ok 'capture-run holds a machine-wide lock (overlapping scheduled + manual runs cannot share a git index)'
 } else { Bad 'capture-run LOST its mutex - two runs can rebase the same tree at once' }
+# CROWN-BY-CONTEST IS ADVISORY, AND AN ADVISORY NOBODY PRINTS IS SILENCE (Brad ruling 5, 2026-09-07).
+# audit-match-soundness exits 1 for it; check-ad-cycles handled only 2 and 3, so a NEW contested name
+# holding a crown produced no summary line at all and 'advisory' meant 'discarded'. Pin the branch.
+if ($cacSrc -match 'msJ\.ExitCode\s+-eq\s+1' -and $cacSrc -match 'CROWN-BY-CONTEST') {
+  Ok 'a CROWN-BY-CONTEST advisory (rc 1) reaches the daily summary - advisory means reported, not dropped'
+} else { Bad 'check-ad-cycles no longer reports audit-match-soundness rc=1 - a new contested name holding a crown would ship with nothing said' }
+
 # the verdict must be WRITTEN by the chain, or the reader above silently degrades to "no verdict, no ship".
 # ASSERT THE CALL, NOT A MENTION. Until 2026-09-07 this matched the strings 'chain-verdict.json' and
 # 'guards_blocked' anywhere in the file - and after the writer moved into the shared library, the ONLY

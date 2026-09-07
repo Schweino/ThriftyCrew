@@ -376,9 +376,24 @@ if ($Accept -or $ForceAccept) {
     Write-Output ("match-soundness: FORCE-ACCEPT overriding $($blocked.Count) outstanding DROP verdict(s):")
     foreach ($b in ($blocked | Sort-Object commodity)) { Write-Output ("  [{0}] '{1}'  (dropped {2}, {3})" -f $b.commodity, $b.item, $b.week, $b.store) }
   }
-  $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); names = $names; contested = @($contest.Keys | Sort-Object) }
+  # RECORD WHICH RULES THIS BASELINE WAS ACCEPTED AGAINST (2026-09-07, Brad ruling 8). Until today the
+  # baseline carried only a timestamp, so 'was this reviewed against the rules that are about to ship?'
+  # was unanswerable and nobody could gate on it. On 2026-09-06 commit b28788fa changed six commodities'
+  # rules at 05:45 with no -Accept and no guards; the board stopped three hours later and three of that
+  # day's nine alerts were its footprint. Get-IdentityRulesHash is the SAME hash the identity table and
+  # guard 13 key on, so one number answers it for all three.
+  # DEFENSIVELY, because this file is COPIED into a temp directory by two test-auditors fixtures and a
+  # copied script does not keep its dependencies (verify-bulk-edit's defect 4, and it fired here on the
+  # first cut of this line). A missing lib records an EMPTY hash, which the commit gate then refuses -
+  # fail-closed - rather than throwing halfway through writing the baseline.
+  $rulesHash = ''
+  $idLib = Join-Path $root 'identity-lib.ps1'
+  if (Test-Path -LiteralPath $idLib) {
+    try { . $idLib; $rulesHash = Get-IdentityRulesHash -GroceryRoot $root } catch { $rulesHash = '' }
+  }
+  $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); rules_hash = $rulesHash; names = $names; contested = @($contest.Keys | Sort-Object) }
   Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
-  Write-Output ("match-soundness: baseline ACCEPTED ($($names.Count) product names, $($contest.Count) contested). drift-vs-engine=$drift")
+  Write-Output ("match-soundness: baseline ACCEPTED ($($names.Count) product names, $($contest.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
   Write-GuardComplete -Name 'match-soundness'; exit 0
 }
 

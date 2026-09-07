@@ -28988,8 +28988,7 @@
                              "\\bsauce\\b"
                          ],
         "include":  [
-                        "baked\\s+beans?",
-                        "pork\\s*(?:\u0026|and)\\s*beans"
+                        "baked\\s+beans?"
                     ],
         "exclude":  [
                         "beech\\s*nut",

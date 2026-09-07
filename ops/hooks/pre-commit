@@ -83,4 +83,24 @@ if [ "$src" -eq 1 ]; then
   echo "            Fix the staging, declare the path in lib\\bot-paths.ps1, or use --no-verify." >&2
   exit 1
 fi
+
+# ---- THIRD CHECK, ADDED 2026-09-07 (Brad's ruling 8) --------------------------------------------------
+# A MATCHING-RULE change may not be committed unless the soundness baseline was accepted against THOSE
+# rules. On 2026-09-06 commit b28788fa changed six commodities' rules at 05:45 with no -Accept and no
+# guards; the board stopped three hours later and three of that day's nine alerts were its footprint.
+# The two checks above judge the shape and the scope of what is staged. Neither can see that the
+# MEANING of every product on the board just changed.
+# A MISSING CHECKER MUST NOT READ AS A PASS - same rule as the two above, same reason.
+cgate="$repo/ops/verify-commodities-gate.ps1"
+if [ ! -f "$cgate" ]; then
+  echo "pre-commit: REFUSING - ops/verify-commodities-gate.ps1 is missing, so a matching-rule change was never checked." >&2
+  echo "            Restore it, or commit with --no-verify if you have decided that is right." >&2
+  exit 1
+fi
+cout="$(powershell -NoProfile -ExecutionPolicy Bypass -File "$cgate" 2>/dev/null)"
+crc=$?
+if [ "$crc" -eq 1 ]; then
+  echo "$cout" >&2
+  exit 1
+fi
 exit 0

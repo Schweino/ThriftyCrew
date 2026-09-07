@@ -283,6 +283,10 @@ $static = @(
   @{ f = 'ops\audit-task-registry.ps1';        n = 'every task the registrar registers is watched under the same name, and no legacy name survives in the registry' }
   @{ f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
+  # ops\verify-commodities-gate.ps1 is deliberately NOT listed here. A $static entry passes no
+  # arguments, which would run its LIVE check against a staged set that is empty during a gate run -
+  # a confident "not applicable" that proves nothing. It declares [switch]$SelfTest, so the discovery
+  # pass above already runs its fixtures, which is the half that can rot.
 )
 # Same guard the loop applies, so nothing is spawned for a file the loop will skip.
 $staticJobs = [Collections.Generic.List[object]]::new(); $staticKeys = [Collections.Generic.List[string]]::new()
