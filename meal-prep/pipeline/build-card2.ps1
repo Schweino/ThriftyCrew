@@ -492,7 +492,6 @@ $recipe = [ordered]@{
   cookTime = $spec.head.cookTime
   totalTime= $spec.head.totalTime
 }
-$recipeJson = $recipe | ConvertTo-Json -Depth 8
 # ---- THE PAYWALL CLAIM FOLLOWS THE RECIPE'S VISIBILITY (2026-08-31) --------------------------------
 # This node was emitted UNCONDITIONALLY, so all 20 recipes in the free rotation told Google their
 # content was behind a paywall while serving it to everyone. Those 20 are the entire top of the funnel:
@@ -511,6 +510,22 @@ try {
   $dbVis = Get-AuxJson $RecipesDb
   if ($dbVis) { foreach ($rv in $dbVis.recipes) { if ([string]$rv.slug -eq [string]$spec.slug) { $isFreeNow = ([string]$rv.visibility -eq 'public') } } }
 } catch { $isFreeNow = $false }   # unknown visibility -> keep the paywall claim; understating access is the safe direction
+# THE PAYWALL CLAIM GOES ON THE RECIPE NODE, WHICH IS THE ONE GOOGLE READS (2026-09-07, backlog I44).
+# Until today it went only on the separate Article node below. Measured in Search Console: valid Recipe
+# rich results fell from ~40 in mid-July to ONE by 30 August, tracking the impression collapse. Fetched
+# as Googlebot, this page's Recipe node carried four full recipeInstructions steps, the last of which is
+# NOT in the visible body, with no isAccessibleForFree and no hasPart on that node - structured data
+# asserting content the page does not show, undeclared. An Article node beside it does not attach a
+# paywall to the Recipe.
+#
+# THE SAME CONDITION AS THE ARTICLE NODE, deliberately: a free recipe must claim nothing, which is the
+# 2026-08-31 defect where all 20 free-rotation cards told Google they were paywalled while serving to
+# everyone. sync-paywall-schema.ps1 keeps this true between builds and now handles BOTH nodes.
+if (-not $isFreeNow) {
+  $recipe['isAccessibleForFree'] = $false
+  $recipe['hasPart'] = [ordered]@{ '@type'='WebPageElement'; isAccessibleForFree=$false; cssSelector='.gh-content' }
+}
+$recipeJson = $recipe | ConvertTo-Json -Depth 8
 $head = "<script type=`"application/ld+json`">`n" + $recipeJson + "`n</script>`n"
 if (-not $isFreeNow) {
   $paywall = [ordered]@{ '@context'='https://schema.org'; '@type'='Article'; isAccessibleForFree=$false;
