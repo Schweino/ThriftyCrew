@@ -2813,3 +2813,46 @@ script destroyed the first draft of the audit: `open(path, 'w')` truncates the f
 else on that call can fail, so a bad `newline=` argument left a zero-byte file and no copy. The
 rewritten `save_baseline` serialises the whole document before it opens anything, and says why at the
 line.
+
+
+### I31 - Every LLM run here is costed AFTER it finishes and none is budgeted or capped BEFORE it starts `OPEN - RUNGS 1 AND 2 ARE REPORTS; ONLY THE CAP NEEDS A RULING` `queue-3`
+*Source: Optimize & Interface LLM Apps Effectively (queue-3, Starweaver), module 2.* The course's
+one genuinely new habit is trivial and this estate does not have it: **do the arithmetic before you
+build, not after the invoice** - expected tokens per call x price x expected calls, priced as two
+legs because output costs several times input.
+
+**What is already here, and it is ahead of the course.** Measured 2026-09-07 by grep across the tree
+(excluding .git, .venv, worktrees, out):
+
+- Per-lane token accounting exists and is good. meal-prep/pipeline/lane-tokens.ps1 and
+  harvest-lane-tokens.ps1 reconstruct real spend by reading subagent transcripts, because the
+  Workflow tool's gent() never exposes usage to the caller and 738 of 738 invocations on the
+  2026-08-15/16 run self-reported nothing. harvest-lane-tokens.ps1 counts cache reads SEPARATELY
+  and refuses to fold them into input, on the stated grounds that billing and burn diverge by an
+  order of magnitude - a distinction the course never reaches.
+- wall-clock-is-output-tokens models a run's DURATION from output tokens at ~81/sec.
+- Vendor rate-limit discipline is thorough, but all of it points at grocery and USDA endpoints, not
+  at our own model spend: measured per-store call caps in grocery/capture-policy-lib.ps1, a
+  circuit breaker in grocery/fix-links-ff.ps1, the throttle-wipeout guard in
+  grocery/pull-regular-familyfare.ps1.
+
+**What is missing, precisely.** All of the above is *retrospective*. Nothing anywhere:
+
+1. states an expected spend for a run before it is dispatched;
+2. converts a token count into money at any point - no price constant exists in the tree;
+3. stops, narrows or degrades a run that exceeds an expected spend. A hunt run that costs 10x its
+   usual has no mechanism that notices while it is still running.
+
+**Why it matters here rather than generally.** This estate runs a daily chain, a local model and
+16-way concurrent agent lanes unattended. The wall-clock model means a run's duration is already
+predictable from expected output length; the same number is one multiply away from a predicted
+spend, so rung 1 is nearly free.
+
+**Rungs, cheapest first.** (1) Add a price table and have -LaneSummary print money beside tokens,
+which turns an existing measurement into a number a human reacts to. (2) Record a predicted spend at
+dispatch and report predicted-versus-actual per run, which makes the estimate falsifiable.
+(3) Only then discuss a cap, which is a behaviour change and needs Brad's ruling: a cap that
+truncates a hunt mid-wave could be worse than the overspend.
+
+**Deliberately not proposed: a gate.** Per the standing rule, a gate that is red on day one for a
+backlog nobody is about to clear teaches people to ignore red. Rungs 1 and 2 are reports.
