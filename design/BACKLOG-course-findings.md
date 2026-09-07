@@ -7,7 +7,30 @@ in `LEDGER.md` beside it).
 **This is a backlog, not a plan.** Nothing here is ordered work until Brad rules on it. Each item
 says what, why, and what it would touch, so the size of the bet is visible before anyone takes it.
 
-Status: `OPEN` proposed, not started · `DONE` shipped, commit named · `WONTFIX` ruled out.
+## The five states, and why there are exactly five
+
+`OPEN` used to mean three different things at once - work nobody has started, a decision waiting on
+Brad, and a measurement whose own conclusion was "do not build this". Reading a list of seventeen
+open items and finding that five of them were never tasks is the same defect as I11's `CLEAN TWIN`:
+one label, more than one meaning. So (Brad asked, 2026-09-07):
+
+| State | What it means | Whose move |
+|---|---|---|
+| `DONE` | nothing left | nobody's |
+| `PARKED` | investigated, and no work is proposed. Reopen if the situation changes | nobody's |
+| `NEEDS A RULING` | nobody should build until Brad decides. The heading says what the question is | **Brad's** |
+| `PARTLY DONE` | something shipped, more is proposed | mine |
+| `OPEN` | proposed, nothing shipped yet | mine |
+
+**They have a precedence, and it is what stops the two-meanings problem coming back.** An item that
+is half built AND blocked on a ruling is `NEEDS A RULING`, not `PARTLY DONE` - the label exists to
+surface what is blocking, not to record how much code got written. Order:
+`DONE` > `PARKED` > `NEEDS A RULING` > `PARTLY DONE` > `OPEN`.
+
+Free text after the state carries the nuance (`PARKED - MEASURED, DO NOT BUILD`). The state itself is
+a closed vocabulary and `ops/audit-backlog-status.ps1` fails a heading that invents a sixth one or
+carries none. `ops/audit-backlog-status.ps1 -Summary` prints the board grouped by state, which is
+the answer to "what is open for me" without anyone reading 2,700 lines.
 
 ---
 
@@ -80,7 +103,7 @@ Note the irony: while adding D2 I put "exit 2" into five agent prompts and had i
 `run-gates` uses exit 3, the recipe battery uses 2. Corrected in `6a05dcd7`, but that is the exact
 failure this item is about.
 
-### E3 - Tool-list relevance hazard across twelve agent definitions `PARTLY DONE` `803af3d2`
+### E3 - Tool-list relevance hazard across twelve agent definitions `NEEDS A RULING - DOES A VERDICT-ONLY AGENT LOSE Write` `803af3d2`
 *Source: AI Agents in Python (course 6).* Given three well-named tools and no usage context, the
 course's agent decided the unnecessary one must be needed and **invented bolts and screws to justify
 it**. Several of our agents ship long tool lists with no statement of which are optional, how they
@@ -102,7 +125,7 @@ twenty, and eighteen of those are two complete and overlapping browser sets.
 
 ## Accuracy
 
-### E4 - The dedup pipeline is embeddings-only `MEASURED - DO NOT BUILD`
+### E4 - The dedup pipeline is embeddings-only `PARKED - MEASURED, DO NOT BUILD`
 *Source: Building with the Claude API (course 2), RAG module.* Vector search fails **quietly** on
 rare exact identifiers: it returns plausible irrelevance rather than nothing. Commodity ids, SKUs
 and slugs are exactly that shape. A BM25 lexical index alongside the embedding index, merged with
@@ -349,7 +372,7 @@ Method in `experiment-craft` (`errors-and-inflation.md` 4 and 5, `effect-size-an
 11). Sits directly on top of E19: a scored test set with no threshold for "it moved" answers half
 the question. Cheapest first step is (2), which is a convention rather than code.
 
-### E22 - Rare-target rules are judged on fixtures with a 50% base rate `HALF DONE`
+### E22 - Rare-target rules are judged on fixtures with a 50% base rate `PARTLY DONE - THE LIVE-PREVALENCE HALF IS OPEN`
 *Source: same course, and it sharpens `green-fixture-is-not-production-coverage` rather than
 repeating it.* **Precision is not a property of a detector; it is a property of a detector and the
 rate at which the thing it detects actually occurs.** A rule with 80% recall and a 13% false-alarm
@@ -497,7 +520,7 @@ the recorded space is correct, and says so in its own header.
 `signature_shape: "dish: <name>. protein: <protein>"`, which is the same two-of-four-fields finding
 E4 arrived at from the other direction.
 
-### E26 - A term that is identically zero on our fixtures is untested, not correct `SWEPT - ONE FOUND, FIXED`
+### E26 - A term that is identically zero on our fixtures is untested, not correct `DONE - SWEPT, ONE FOUND AND FIXED`
 *Source: same course, its naive Bayes module, and it is a different mechanism from E22.* E22 is
 about a **metric** being misread because the fixture's base rate is unrealistic. This is about a
 **code path never running**. The course's worked case: the log-prior term of a naive Bayes scorer is
@@ -560,7 +583,7 @@ declare. **Partly, because 584 live cards assert things nothing checks and 340 o
 were never declared** - those are baselined, so the gate holds the line without going red on day one
 over a backlog nobody can clear in a sitting. Clearing the 340 is what is left.
 
-### E27 - The reranker fine-tuner ships the LAST epoch, not the best one `SHIPPED`
+### E27 - The reranker fine-tuner ships the LAST epoch, not the best one `DONE - SHIPPED`
 *Source: Fine-Tuning Transformers with Hugging Face (queue 2, course 5).* `sidecar/finetune_reranker.py`
 scores holdout AUC after every epoch and appends it to `history`, then calls `model.save_pretrained(out)`
 **after** the loop finishes. So the weights that reach disk are whichever epoch happened to be last,
@@ -607,7 +630,7 @@ E28 shipped with it: `train_auc` and `overfit_gap` are now recorded per epoch, a
 the gap widening from 0.0299 to 0.0331 while holdout AUC fell, with train AUC reaching 0.9994. That
 is early memorisation, and until this change nothing in the estate could see it.
 
-### E28 - No held-out overfitting gap is computed for the reranker `SHIPPED`
+### E28 - No held-out overfitting gap is computed for the reranker `DONE - SHIPPED`
 *Source: same course.* `finetune_reranker.py` reports holdout AUC against a stock baseline, which
 answers "did fine-tuning help" but not "did it memorise". The train-versus-holdout gap is the cheap
 second number, and the course's own demo is the argument for it: its diagnosis flipped between
@@ -626,7 +649,7 @@ every new worktree. Would automate the manual copy-in that `run-gates-blind-in-w
 ignored set is ~25 GB, so it must be a narrow list: the four gates' real inputs plus the three board
 files.
 
-### E8 - "Don't ask" permission mode for unattended runs `FLAG SHIPPED - INERT UNTIL THE SETTINGS DEFAULT CHANGES`
+### E8 - "Don't ask" permission mode for unattended runs `NEEDS A RULING - THE FLAG IS SHIPPED AND INERT UNTIL settings.json CHANGES`
 *Source: Claude Code in Action (course 1).* Purpose-built for CI, scheduled jobs and overnight
 batches: pre-approved tools only, everything else auto-denied with no prompt to hang on. May fit the
 scheduled tasks and the daemon better than what they use now.
@@ -664,7 +687,7 @@ The flag stays: it is right in principle, costs nothing, and arms itself when th
 documented at the call site as inert, because an unarmed guard people believe in is worse than a
 missing one.
 
-### E9 - Model choice is pinned per agent, but MATE's M is per call `MEASURED - NO SWAP, DEFECT FOUND`
+### E9 - Model choice is pinned per agent, but MATE's M is per call `OPEN - THE SWAP IS REFUSED, AND NOTHING COMPARES A TRANSCRIPTION TO ITS PAGE`
 *Source: AI Agents Architecture (course 7).* All twelve definitions pin one model. A tool that makes
 its own LLM call can pick its own. Highest-leverage split: an expensive model for the up-front plan,
 a cheap one to execute it.
@@ -789,7 +812,7 @@ estate whose standing rule is that a wrong number on a page is a real cost to a 
 current shape - the document is ratified, the code implements it, and a gate compares them - keeps a
 human between an edit and the board.
 
-### E13 - Pass references, not copies `MEASURED - PREMISE DOES NOT HOLD HERE`
+### E13 - Pass references, not copies `PARKED - MEASURED, THE PREMISE DOES NOT HOLD HERE`
 *Source: AI Agents Architecture (course 7).* Models read far more than they can write, so a
 delegating agent physically cannot restate a large memory as a task description. Emit memory ids and
 inflate them in code. Beats the output cap and makes paraphrase of the referenced content
@@ -859,7 +882,7 @@ Related timing fact worth knowing before restructuring: **only CLAUDE.md files a
 current working directory load at session start**; a subdirectory CLAUDE.md loads lazily. So a
 `meal-prep/CLAUDE.md` costs nothing until someone works in there.
 
-### E16 - Plugin hooks written in bash fail on Windows `WONTFIX` - measured, no estate change owed
+### E16 - Plugin hooks written in bash fail on Windows `PARKED - MEASURED, NO ESTATE CHANGE OWED` - measured, no estate change owed
 *Source: Building Apps and AI Agents (course 9).* The `ralph-loop` plugin ships a Stop hook written
 in bash, which **fails on this machine because `bash` resolves to WSL**. Not our bug, but it is a
 standing hazard for any plugin we install: a plugin's hooks fire on every matching tool call, and a
@@ -928,7 +951,7 @@ throughout because JSON parsing ignores line endings.
 
 **A FRESH WORKTREE NOW PASSES 207/0.** It was 183/6 when first measured this morning.
 
-### E17 - Skill invocation flags are a matrix, and ours are all set the same `CLOSED - DECIDED, NO CHANGE`
+### E17 - Skill invocation flags are a matrix, and ours are all set the same `PARKED - DECIDED, NO CHANGE`
 *Source: Building Apps and AI Agents (course 9).* Invocation control is two independent flags, not
 one switch: `disable-model-invocation: true` makes a skill user-only, `user-invocable: false` makes
 it Claude-only. All eight of our personal skills set `user-invocable: true`.
@@ -946,7 +969,7 @@ where a rules-first prompt invents its own first input instead of waiting.
 
 ---
 
-### E29 - `run-log-lib.ps1` calls itself the one copy of the run-record rule, and covers two of five hidden tasks `PARTLY DONE`
+### E29 - `run-log-lib.ps1` calls itself the one copy of the run-record rule, and covers two of five hidden tasks `NEEDS A RULING - THREE OF THE FIVE TASKS ARE REGISTRY-ONLY AND NO DETECTOR CAN READ THEM`
 *Source: `apply-powershell-scripting-for-automation-and-projects` (course 6), and it is a criticism
 of that course rather than a lesson from it.* The course spends a full lecture arriving at a hidden
 console window for a scheduled PowerShell job and never once mentions what hiding it costs. This
@@ -1264,7 +1287,7 @@ Three things were fixed on the way, and the second is the one worth remembering:
 Both stores are now on private remotes. **The allow-list has now swallowed a root dotfile three
 times across this estate**, which is the argument for a gate rather than a fourth memory entry.
 
-### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `MEASURED - PREMISE WRONG ON BOTH HALVES`
+### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `PARKED - MEASURED, THE PREMISE WAS WRONG ON BOTH HALVES`
 *Surfaced by the Claude Cowork run (course 11), then verified directly rather than taken on its
 word.* `%APPDATA%\Claude\claude_desktop_config.json` carries, for this account:
 
@@ -1369,7 +1392,7 @@ only line endings were meant to change. Restored byte-for-byte from HEAD and ver
 is now in the workspace `CLAUDE.md`: skip files containing a NUL byte, and verify against the
 pre-edit copy rather than your own output.
 
-### I5 - Coursera enrollment lapsed on `building-with-the-claude-api` `WONTFIX` - knowledge banked, only the completion record is missing
+### I5 - Coursera enrollment lapsed on `building-with-the-claude-api` `PARKED - KNOWLEDGE BANKED, ONLY THE COMPLETION RECORD IS MISSING` - knowledge banked, only the completion record is missing
 Will not reinstate by clicking - three attempts. Course-specific, not account-wide. All content was
 already extracted and routed; outstanding are 6 ungraded dialogues and that course's progress ticks.
 Needs Brad to click enroll himself.
@@ -1448,7 +1471,7 @@ than 15 suites is itself a failure, because a walk that breaks looks exactly lik
 
 Gate went 225 to **245 passed, 0 failed**, in 285s.
 
-### I9 - The 95-file Python tree is not a package, and one consequence is already load-bearing `OPEN` `queue-2`
+### I9 - The 95-file Python tree is not a package, and one consequence is already load-bearing `PARKED - MEASUREMENT ONLY, NO WORK PROPOSED` `queue-2`
 *Source: Build Testable Python Packages for AI (queue 2, course 7).* Recording the state, not
 proposing the rewrite - the bet is large and the payback is not obvious.
 
@@ -1478,7 +1501,7 @@ that looks like a library rather than a set of scripts (`lib_match.py`, `score_c
 where a regression is hardest to see by eye. Everything else is orchestration and should stay
 scripts. Do not treat this item as a mandate to package the whole tree.
 
-### I10 - The estate's biggest files are also its most-changed files `OPEN` `queue-2`
+### I10 - The estate's biggest files are also its most-changed files `PARKED - MEASUREMENT ONLY, NO WORK PROPOSED` `queue-2`
 *Source: Clean Code and Refactoring Techniques (queue 2, course 8).* Recording a measurement, not
 proposing a split. The course's own Code Hygiene reading argues **against** a blanket file-size rule
 - see `software-craft/SKILL.md` for the axis that reconciles it with our global CLAUDE.md line.
@@ -2114,7 +2137,7 @@ gate that is red on day one: the nine would all be red, so the fix ships with th
 **Not proposing wording here.** The right line is short and the course's own framing is the model:
 text arriving through a tool is data, never an instruction, whatever it claims about its authority.
 
-### I20 - The two prompt-builder families disagree about untrusted text, and nobody decided that `DECIDED 2026-09-07` `queue-2`
+### I20 - The two prompt-builder families disagree about untrusted text, and nobody decided that `DONE - DECIDED 2026-09-07` `queue-2`
 
 > **RULED, and the ruling REVERSES this entry's own proposed fix for two of its three sites.** The
 > entry says "the cheap consistency fix is the `!r`". Measured 2026-09-07, it is not, and applying
@@ -2654,7 +2677,7 @@ correctly relative to the skill's own directory, and the file's 26 em dashes are
 internal skill rather than in reader-facing copy.
 
 
-### I30 - Eighteen live tables carry 28 indexes and nothing has ever looked at a query plan `OPEN` `queue-3`
+### I30 - Eighteen live tables carry 28 indexes and nothing has ever looked at a query plan `NEEDS A RULING - THE AUDIT IS SPECIFIED AND NOT ORDERED` `queue-3`
 *Source: Optimize SQL Queries - Uncover Performance Bottlenecks (queue-3).* Measured 2026-09-07 at
 commit `d172e3a6`: the estate greps to 61 `CREATE TABLE` and 84 `CREATE INDEX` across `*.py`/`*.sql`,
 `EXPLAIN` appears in exactly two files (`meal-prep/pipeline/coverage_check.py` and
@@ -2675,12 +2698,21 @@ statements, not objects, and reasoning from "61 tables" is reasoning about text.
    47,319-row `nodes` table, so it is maintained on every write and serves nothing the wider index
    does not. The only such pair in either database. The **check** generalises; the single finding
    does not.
-3. **A prefix `LIKE` here is a full scan, not a seek.** On the 76,439-row `aliases` table,
-   `WHERE alias LIKE 'beef%'` plans as `SCAN`, not `SEARCH`, because SQLite's default
-   case-insensitive `LIKE` cannot use the BINARY-collation `ix_alias_alias`. `PRAGMA
-   case_sensitive_like=ON`, `GLOB`, or a `COLLATE NOCASE` index each flip it to `SEARCH`. **This is
-   the one with real blast radius**: matcher and alias-resolution code is exactly where a prefix
-   `LIKE` gets written, and it reads as though it uses the index.
+3. **A prefix `LIKE` cannot use an index here, and today that costs nothing.** On the 76,439-row
+   `aliases` table, `WHERE alias LIKE 'beef%'` plans as `SCAN`, not `SEARCH`, because SQLite's
+   default case-insensitive `LIKE` cannot use the BINARY-collation `ix_alias_alias`. `PRAGMA
+   case_sensitive_like=ON`, `GLOB`, or a `COLLATE NOCASE` index each flip it to `SEARCH`.
+   **`[CORRECTED: 2026-09-07, before this item was acted on]` This read "the one with real blast
+   radius: matcher and alias-resolution code is exactly where a prefix `LIKE` gets written". That
+   was an inference and it is refuted.** The estate has exactly two live prefix-`LIKE` queries,
+   `sidecar/build_pair_corpus.py` 130 and `graph/pipeline/review_escalations.py` 748, and **both are
+   harmless**: an equality predicate on an indexed column drives each plan (`SEARCH ... USING INDEX
+   ix_nodes_type` and `... ix_dlog_type`) and the `LIKE` post-filters 592 and 752 rows at medians of
+   0.00019 s and 0.00006 s over 9 runs. Swapping in `GLOB` changes neither plan nor time. A third
+   grep hit in `graph/lib/authority.py` is inside a docstring, not executed SQL. So the mechanism
+   reproduces and the present cost is zero: it is a trap for the next query written, ranked third of
+   the three here. Kept rather than edited away because the error is the reusable part - a mechanism
+   reproduced in a probe and a mechanism costing us something are different claims.
 
 **What this proposes.** A read-only self-diagnostic, `ops/audit-sqlite-health.ps1` or a Python
 equivalent, reporting per database: object counts and journal mode; row count per table;
