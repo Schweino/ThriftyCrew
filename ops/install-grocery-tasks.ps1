@@ -23,8 +23,13 @@
       obvious one.
 
   MODES, and the default is the safe one:
-    -Verify   (DEFAULT) read-only. Compares the live scheduler against these files and reports drift.
+    -Verify   (DEFAULT) read-only. Compares the live scheduler against these files and reports drift,
+              AND checks that the watcher's registry names the same tasks this file registers.
               Changes nothing. This is the mode that can run in a gate or unattended.
+    -VerifyRegistry
+              read-only and HERMETIC: compares the $OWNED table below against
+              grocery\expected-automations.json and touches no scheduler at all, so it runs on a bare
+              checkout and in ops\run-gates.ps1. See the essay on Test-RegistryAgrees for why.
     -Install  registers/updates the three TC Grocery tasks from the XML. CHANGES SYSTEM STATE.
     -FixName  additionally renames "TC Grocery Capture Watchdog 0930" to ...1030 to match the time it
               actually runs. SEPARATE SWITCH ON PURPOSE: a rename is an unregister followed by a
@@ -36,7 +41,7 @@
 
   Self-test: powershell -File ops\install-grocery-tasks.ps1 -SelfTest
 #>
-param([switch]$Verify, [switch]$Install, [switch]$FixName, [switch]$SelfTest)
+param([switch]$Verify, [switch]$Install, [switch]$FixName, [switch]$VerifyRegistry, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
@@ -107,6 +112,45 @@ function Test-NameMatchesTime {
   return ("named {0} but its trigger is {1}" -f $claimed, $actual)
 }
 
+$REGISTRY = Join-Path $repo 'grocery\expected-automations.json'
+
+function Test-RegistryAgrees {
+  <# Do the registrar and the WATCHER'S registry name the same tasks? Returns a list of findings.
+
+     WHY (2026-09-07, queue 2026-09-07-dc7460). A scheduled task's NAME is a foreign key held in two
+     hand-maintained tables - the $OWNED list above, and windows_tasks in
+     grocery\expected-automations.json, which health-heartbeat reads - plus five documentary copies.
+     Nothing compared any two of them at the moment either one changed. So on 2026-09-07 at 06:30 a
+     rename was applied to the live scheduler and to $OWNED, every gate passed, and the heartbeat's
+     registry still named the old key: at 10:30 it paged ONE rename as TWO issues, a phantom
+     ('TASK MISSING: ...0930') and an unwatched real task ('TASK UNWATCHED: ...1030'). The registry's
+     own readme even carried the opposite ruling, that the name was deliberately not renamed.
+
+     THE HEARTBEAT IS THE RUNTIME BACKSTOP AND IT WORKED - it caught this the same morning. What did
+     not exist was anything at CHANGE time. This is that: hermetic, source-only, and red the moment the
+     two tables disagree, so a half-applied rename cannot pass the push gate again.
+
+     Pure over its arguments so the frozen fixtures below drive it rather than today's tree. #>
+  param([Parameter(Mandatory=$true)]$Owned, [Parameter(Mandatory=$true)]$Registry)
+  $findings = @()
+  $names = @()
+  foreach ($row in @($Registry.windows_tasks)) { if ($row -and $row.name) { $names += [string]$row.name } }
+  foreach ($o in @($Owned)) {
+    if ($names -notcontains [string]$o.Name) {
+      $findings += ("registrar registers '{0}' and grocery\expected-automations.json does not name it - the task is UNWATCHED, so health-heartbeat cannot notice if it stops firing" -f $o.Name)
+    }
+    $legacy = ''
+    if ($o.PSObject.Properties['Legacy']) { $legacy = [string]$o.Legacy }
+    if ($legacy -and ($names -contains $legacy)) {
+      $findings += ("grocery\expected-automations.json still names the LEGACY '{0}', which this registrar renamed to '{1}' - the heartbeat pages TASK MISSING about a phantom every morning" -f $legacy, $o.Name)
+    }
+  }
+  # COMMA-RETURNED ON PURPOSE. An empty @() unrolls to nothing, and a caller that then wrote
+  # @($null) would count 1 - the PS 5.1 trap this estate has been bitten by four times in a session.
+  # Callers ASSIGN this and read .Count; they must not wrap the call in @().
+  return ,$findings
+}
+
 if ($SelfTest) {
   $fail = 0
   function T($n, $c, $g = '') { if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
@@ -159,9 +203,107 @@ if ($SelfTest) {
     }
   }
 
+  # ---- Test-RegistryAgrees: the half-applied rename, frozen ------------------------------------------
+  # MUST FIRE, and it is the exact state of this tree at 13:12 on 2026-09-07: $OWNED names ...1030 with
+  # Legacy ...0930, the registry still names ...0930, and health-heartbeat exits 2 with those two issues
+  # verbatim. Both findings are asserted, because the two halves are different defects - a real task
+  # nobody watches, and a phantom row that pages every morning - and a check that found only one of them
+  # would leave the other running.
+  $rOwned = @(
+    [pscustomobject]@{ Name = 'TC Grocery Ad Pulls 0700';         File = 'a.xml' }
+    [pscustomobject]@{ Name = 'TC Grocery Capture Watchdog 1030'; File = 'b.xml'; Legacy = 'TC Grocery Capture Watchdog 0930' }
+  )
+  $rStale = [pscustomobject]@{ windows_tasks = @(
+    [pscustomobject]@{ name = 'TC Grocery Ad Pulls 0700' }
+    [pscustomobject]@{ name = 'TC Grocery Capture Watchdog 0930' }
+  ) }
+  $rf = Test-RegistryAgrees -Owned $rOwned -Registry $rStale
+  T 'MUST FIRE  a registry still naming the LEGACY task reports the phantom' ((($rf -join ' ') -like '*LEGACY*0930*')) ($rf -join '; ')
+  T 'MUST FIRE  a registrar-owned task absent from the registry reports it UNWATCHED' ((($rf -join ' ') -like '*UNWATCHED*1030*')) ($rf -join '; ')
+  T 'MUST FIRE  the half-applied rename is exactly TWO findings, not one' ($rf.Count -eq 2) ([string]$rf.Count)
+
+  # MUST NOT FIRE: the registry renamed to match. Zero findings, or the gate is red forever after the fix
+  # and gets switched off.
+  $rGood = [pscustomobject]@{ windows_tasks = @(
+    [pscustomobject]@{ name = 'TC Grocery Ad Pulls 0700' }
+    [pscustomobject]@{ name = 'TC Grocery Capture Watchdog 1030' }
+  ) }
+  $rg = Test-RegistryAgrees -Owned $rOwned -Registry $rGood
+  T 'MUST NOT FIRE a registry naming the current task and not the legacy one is silent' ($rg.Count -eq 0) ($rg -join '; ')
+
+  # MUST FIRE: BOTH names present. A rename that ADDED a row instead of renaming one leaves the phantom
+  # behind, and the unwatched half is silent - so a check that only looked for the new name would pass.
+  $rBoth = [pscustomobject]@{ windows_tasks = @(
+    [pscustomobject]@{ name = 'TC Grocery Ad Pulls 0700' }
+    [pscustomobject]@{ name = 'TC Grocery Capture Watchdog 1030' }
+    [pscustomobject]@{ name = 'TC Grocery Capture Watchdog 0930' }
+  ) }
+  $rb = Test-RegistryAgrees -Owned $rOwned -Registry $rBoth
+  T 'MUST FIRE  a registry carrying BOTH the new and the legacy name still reports the phantom' ($rb.Count -eq 1 -and (($rb -join ' ') -like '*LEGACY*')) ($rb -join '; ')
+
+  # MUST NOT FIRE: a registry row that is not registrar-owned (the graph and recipe tasks have their own
+  # registrars) is none of this file's business, or it would demand ownership of tasks it must not fight for.
+  $rExtra = [pscustomobject]@{ windows_tasks = @(
+    [pscustomobject]@{ name = 'TC Grocery Ad Pulls 0700' }
+    [pscustomobject]@{ name = 'TC Grocery Capture Watchdog 1030' }
+    [pscustomobject]@{ name = 'TC Graph Nightly Matching' }
+    [pscustomobject]@{ name = 'TC Recipe Harvest Crawl' }
+  ) }
+  $re = Test-RegistryAgrees -Owned $rOwned -Registry $rExtra
+  T 'MUST NOT FIRE registry rows this registrar does not own are not claimed' ($re.Count -eq 0) ($re -join '; ')
+
+  # MUST NOT FIRE, against the REAL $OWNED table and the REAL registry file on disk. This is the half a
+  # frozen fixture cannot prove - that the shipped table and the shipped registry actually agree TODAY -
+  # and it is the assertion that would have been red at 06:30 when the rename landed. Labelled MUST NOT
+  # FIRE and not CLEAN TWIN because its assertion proves an ABSENCE of findings on a legal input, which is
+  # what that label means since Brad's 2026-09-07 ruling; the CLEAN TWINs for this change are the cases
+  # above, which must keep their verdicts.
+  if (Test-Path $REGISTRY) {
+    $rLive = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json
+    $rl = Test-RegistryAgrees -Owned $OWNED -Registry $rLive
+    T 'MUST NOT FIRE the shipped $OWNED table and the shipped expected-automations.json name the same tasks' ($rl.Count -eq 0) ($rl -join '; ')
+  } else {
+    Write-Output ('FAIL  the registry is missing: ' + $REGISTRY); $fail++
+  }
+
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); Write-GuardComplete -Name 'grocery-tasks' -Summary ("selftest-fail={0}" -f $fail); exit 2 }
-  Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the 0930 name lie and its twins, and the committed definitions'
+  Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the 0930 name lie and its twins, the committed definitions, and the registrar-vs-registry agreement (frozen half-applied rename + the live tables)'
   Write-GuardComplete -Name 'grocery-tasks' -Summary 'selftest=pass'
+  exit 0
+}
+
+if ($VerifyRegistry) {
+  # HERMETIC. Reads two files in this repo and nothing else - no Get-ScheduledTask, no writes - so it
+  # runs on a bare checkout, on a CI runner, and in ops\run-gates.ps1, which is the only place a
+  # half-applied rename can be stopped BEFORE it ships. (ops\audit-task-registry.ps1 is the file-only
+  # wrapper run-gates calls, because that list passes no arguments.)
+  if (-not (Test-Path $REGISTRY)) {
+    Write-Output ("GROCERY TASKS REGISTRY COULD NOT EVALUATE: {0} does not exist. Discovery broken, NOT a clean tree." -f $REGISTRY)
+    Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=no-registry'
+    exit 3
+  }
+  $regDoc = $null
+  try { $regDoc = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json } catch { $regDoc = $null }
+  if (-not $regDoc) {
+    Write-Output ("GROCERY TASKS REGISTRY COULD NOT EVALUATE: {0} did not parse as JSON. Unreadable is not clean." -f $REGISTRY)
+    Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=registry-unparseable'
+    exit 3
+  }
+  $regRows = @($regDoc.windows_tasks)
+  if (-not $regRows.Count) {
+    Write-Output 'GROCERY TASKS REGISTRY COULD NOT EVALUATE: expected-automations.json carries ZERO windows_tasks rows, so agreement is unprovable rather than clean.'
+    Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=no-rows'
+    exit 3
+  }
+  $regFindings = Test-RegistryAgrees -Owned $OWNED -Registry $regDoc
+  foreach ($f in $regFindings) { Write-Output ('  ' + $f) }
+  if ($regFindings.Count -gt 0) {
+    Write-Output ("GROCERY TASKS REGISTRY DISAGREES: {0} finding(s) over {1} registrar-owned task(s) against {2} registry row(s). A task name is a foreign key in two hand-maintained tables and nothing compared them at change time, so a rename applied to the scheduler and to this registrar shipped while the watcher still named the old key. Fix the row in grocery\expected-automations.json (keep its allow_nonzero_exit and max_age_hours), not this table." -f $regFindings.Count, @($OWNED).Count, $regRows.Count)
+    Write-GuardComplete -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings={2}" -f @($OWNED).Count, $regRows.Count, $regFindings.Count)
+    exit 2
+  }
+  Write-Output ("grocery-tasks registry: PASSED - all {0} registrar-owned task(s) are named in expected-automations.json and no legacy name survives there ({1} registry row(s) read)." -f @($OWNED).Count, $regRows.Count)
+  Write-GuardComplete -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings=0" -f @($OWNED).Count, $regRows.Count)
   exit 0
 }
 
@@ -228,6 +370,19 @@ foreach ($o in $OWNED) {
   foreach ($t in @($live.Triggers)) { if ($t.StartBoundary) { $when = [string]$t.StartBoundary; break } }
   $nameSays = Test-NameMatchesTime -Name $live.TaskName -StartBoundary $when
   if ($nameSays) { $findings += ("{0}: {1} - run -Install -FixName to correct the NAME (the time is right; the name is not)" -f $live.TaskName, $nameSays) }
+}
+
+# AND THE WATCHER'S REGISTRY, beside the drift findings (2026-09-07, queue 2026-09-07-dc7460). Drift asks
+# "does the live task match the file"; this asks "does anything WATCH the live task under the name it now
+# has". The scheduler agreed with this registrar all morning on 09-07 and the heartbeat's registry did not,
+# so a check that only compared those first two would have reported PASSED on the day it broke.
+if (Test-Path $REGISTRY) {
+  $regDoc2 = $null
+  try { $regDoc2 = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json } catch { $regDoc2 = $null }
+  if ($regDoc2) { foreach ($rf2 in (Test-RegistryAgrees -Owned $OWNED -Registry $regDoc2)) { $findings += $rf2 } }
+  else { $findings += 'grocery\expected-automations.json did not parse, so whether these tasks are watched at all is UNKNOWN this run' }
+} else {
+  $findings += 'grocery\expected-automations.json is missing, so nothing is watching these tasks for silent death'
 }
 
 foreach ($f in $findings) { Write-Output ("  " + $f) }

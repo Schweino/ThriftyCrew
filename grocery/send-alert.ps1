@@ -34,6 +34,18 @@ param(
   # the emitting code changed after the alert fired. Absent is fine and always has been: an alert that
   # cannot name its emitter is still an alert, and nothing downstream may require this field.
   [string]$Emitter = "",
+  # AN ESCALATION IS BORN PARKED (2026-09-07, queue 2026-09-07-285b1f). Every alert written here is minted
+  # with status 'open', because that is the only status this script could ever give an item - and
+  # triage-close.ps1's disposition vocabulary (confirmed|false-alarm|superseded|by-design|wont-fix) has no
+  # park either, so needs-brad is a hand edit. The consequence measured on 2026-09-07: round 1's triage
+  # emailed Brad a genuine judgment call, parked the original item at needs-brad by hand, and the
+  # ESCALATION EMAIL ITSELF landed back in the queue as a fresh open item at 12:31 - so triage-due listed
+  # new work whose entire content was "we already asked Brad about this". One parked question, two items,
+  # and one of them re-triaged the next morning. Every escalation would cost that, forever.
+  # Pass -Escalates <queue-id> and the new item is written status needs-brad, noting which item owns the
+  # question. The mail still goes out unchanged, the once-a-day gate and -Force are untouched, and
+  # triage-due (which lists only status open, and counts needs-brad as parked) stops reporting it as work.
+  [string]$Escalates = "",
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
   [switch]$SelfTest
 )
@@ -95,6 +107,26 @@ function Get-QueueAction {
     return @{ action = 'absorb'; target = $i; days = $age }
   }
   return @{ action = 'new'; target = $null }
+}
+
+# ---- WHAT STATUS IS A NEW ITEM BORN WITH? (2026-09-07, queue 2026-09-07-285b1f) -------------------------
+# One function, so the rule is testable rather than an inline conditional nothing can reach. Until today
+# there was exactly one answer - 'open' - and that is the whole defect: an escalation email is not work
+# waiting to be done, it is a record that a question was handed to Brad, and the item that OWNS the
+# question is already parked at needs-brad. Minting a second open item for it guarantees that every
+# parked question generates fresh triage work the following morning, which is this estate's own "an alert
+# with no repair lane" shape pointed at its own escalation lane.
+# Get-QueueAction is deliberately NOT changed: a needs-brad item never absorbs (line above), so two
+# escalations for the same id mint two parked items. That is bounded, manual and visible in triage-due's
+# parked count, and making needs-brad absorb would let a parked item swallow unrelated recurrences.
+function Get-BirthDisposition([string]$Escalates) {
+  if ($Escalates) {
+    return [pscustomobject]@{
+      status = 'needs-brad'
+      notes  = ('escalation email for ' + $Escalates + ' (parked there; do not re-triage this item - the question, its evidence and its ruling live on ' + $Escalates + ')')
+    }
+  }
+  return [pscustomobject]@{ status = 'open'; notes = $null }
 }
 
 # ---- CAN A HUMAN (OR AN AGENT) JUDGE THIS ALERT FROM ITS OWN BODY? (2026-07-31) -------------------------
@@ -160,6 +192,23 @@ if ($SelfTest) {
   # and neither does something ancient
   $items5 = @([pscustomobject]@{ type='t'; date='2026-06-01'; status='open'; count=1 })
   _T 'open item older than the absorb window does NOT absorb' (Get-QueueAction $items5 't' '2026-07-31').action 'new'
+  # ---- AN ESCALATION IS BORN PARKED (2026-09-07, queue 2026-09-07-285b1f) ----
+  # MUST FIRE, frozen from the day it cost: at 12:31:33 round 1 sent "Your call: the memory store's
+  # private backup remote..." for item 2026-09-07-4f672e, which was already parked at needs-brad by hand.
+  # send-alert could only mint 'open', so the escalation re-entered the queue as fresh triage work and
+  # 4f672e's own question now had two items. With -Escalates the new item is parked and names its owner.
+  $esc = Get-BirthDisposition '2026-09-07-4f672e'
+  _T 'an escalation email is born needs-brad, not open' $esc.status 'needs-brad'
+  _T 'and its notes name the item that owns the question' ([bool]([string]$esc.notes -like '*2026-09-07-4f672e*')) 'True'
+  _T 'and the notes tell the next reader not to re-triage it' ([bool]([string]$esc.notes -like '*do not re-triage*')) 'True'
+  # MUST NOT FIRE: an ordinary alert is unchanged. This is the whole estate's alerting path, and a park
+  # that leaked onto normal alerts would silently stop triage from ever seeing a real failure again.
+  $plain = Get-BirthDisposition ''
+  _T 'an ordinary alert is still born open' $plain.status 'open'
+  _T 'and carries no notes' ([bool]($null -eq $plain.notes)) 'True'
+  # CLEAN TWIN: routing is untouched by any of this - a needs-brad item still does NOT absorb, so a second
+  # escalation for the same id mints a second parked item rather than reopening the parked one.
+  _T 'CLEAN TWIN routing is unchanged: needs-brad still does not absorb' (Get-QueueAction $items4 't' '2026-07-31').action 'new'
   # body-thin detection: the real multibuy record vs a real, judgeable body
   # a truncated first occurrence must be UPGRADED by a fuller later one, not preserved out of politeness
   $short = 'Verified in-browser: pull-aldi-instore reads the product page and takes its size field.'
@@ -291,13 +340,16 @@ try {
       Log ("QUEUE ABSORBED into open item " + $t.id + " (day " + $route.days + " of this condition, count now " + $t.count + ") - no new id minted")
     }
     default {
+      # -Escalates parks the item at birth; without it this is exactly the 'open' it has always been.
+      $birth = Get-BirthDisposition $Escalates
       $newItem = [pscustomobject]@{
         id = ($today + '-' + [guid]::NewGuid().ToString('N').Substring(0,6))
         date = $today; ts = (Get-Date).ToString('s')
         type = $typeKey; subject = $Subject
         body = $bodyStored
-        status = 'open'; count = 1; resolved_ts = $null; notes = $null
+        status = $birth.status; count = 1; resolved_ts = $null; notes = $birth.notes
       }
+      if ($Escalates) { Log ("QUEUE PARKED AT BIRTH: '" + $Subject + "' is the escalation email for " + $Escalates + ", so it is written needs-brad rather than open - triage-due will not list it as work.") }
       # WHICH CODE SAID SO (2026-09-05, queue 2026-09-04-bf1642). Stamped on NEW items only: an absorbed
       # recurrence belongs to the incident the first occurrence opened, and re-stamping it would overwrite
       # the provenance of the alert triage is actually working. -Emitter comes from alert-lib's call stack;

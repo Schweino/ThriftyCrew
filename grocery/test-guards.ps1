@@ -147,6 +147,97 @@ function RestoreAll {
   JournalClear   # the on-disk net is only needed while mutations are outstanding
 }
 
+# ---- GUARD STATE: RESTORE WHAT THE SUBJECT WROTE, NOT ONLY WHAT WE WROTE (2026-09-07) ------------------
+# Everything above restores what THIS HARNESS wrote. Nothing restored what the guard under test wrote,
+# and since 2026-09-05 one of the kids is a RATCHET: audit-band-censorship persists a high-water mark to
+# out\band-censorship-baseline.json and rewrites it, unconditionally, whenever the run comes in under it.
+# A ratchet is a STATEFUL SUBJECT. Drive it over a deliberately shrunken board - which is exactly what
+# case 18 does, halving the largest un-acked store - and it LEARNS the shrunken count as its new floor.
+# Restoring the board does not restore what it learned, so every guards run after that point is measured
+# against a mark this suite taught it. Measured 2026-09-07 against the real board: unmutated 58 findings
+# across 33 cells rc 0; Walmart halved (265 of 530 cells, what case 18 removes) -> 'ratchet tightened: 24
+# cell(s), was 33. New baseline written'; board restored, baseline not -> 'RATCHET BROKEN - 33 cell(s)
+# now, baseline 24' rc 2. Four expect-0 cases then failed naming a guard nobody had touched, including
+# the final 'restored' case which has NO mutation in place at all, and the residue tripwire passed
+# throughout because the baseline had never been registered with Backup().
+#
+# THE FIX IS HERE AND NOWHERE ELSE. The ratchets are not weakened, given a -NoLearn switch or opted out
+# of: a disarm path threaded through production code leaks into a session that then runs the daily chain
+# and stops the ratchet tightening silently. In the copy the ratchet still tightens exactly as it does
+# today - the audit's own output still says so - it is simply put back before the next case reads it.
+#
+# DISCOVERED BY SHAPE, NEVER A HAND LIST. Six files match today (5,034 bytes; band-censorship,
+# board-mojibake, guard-contract, json-readers, row-age, tile-integrity) and the next ratchet is covered
+# on the day it lands rather than on the day someone remembers this file. `*-baseline.json` deliberately
+# does NOT match out\_baseline.json / _baseline-batch.json / _baseline-rye.json, which are the multi-MB
+# verify-no-regression snapshots and not ratchet state (measured: 6 of the 9 files whose name contains
+# 'baseline').
+$script:GuardState = New-Object System.Collections.Generic.List[object]
+$script:GuardStateDir = ''
+function RegisterGuardState([string]$outDir) {
+  # Called ONCE, after the unmutated baseline run: whatever that run learned is legitimate (it read the
+  # real board), and everything after it is under mutation. Backup() gives bytes + mtime + the on-disk
+  # journal, so a killed run recovers these the same way it recovers a production file.
+  $script:GuardStateDir = $outDir
+  if (-not (Test-Path $outDir)) { return }
+  foreach ($b in @(Get-ChildItem (Join-Path $outDir '*-baseline.json') -File -ErrorAction SilentlyContinue)) {
+    $null = Backup $b.FullName
+    foreach ($r in $script:Restores) { if ($r.path -eq $b.FullName) { $script:GuardState.Add($r); break } }
+  }
+}
+function RestoreGuardState {
+  # AFTER EVERY CHILD RUN, not once at the end. RestoreAll runs in the finally block, and the failures
+  # this exists to stop are mid-run: the very next case reads the learned mark. Bringing the baselines
+  # under Backup() alone would have fixed nothing.
+  foreach ($r in $script:GuardState) { RestoreNow $r.path }
+}
+function BaselineMark($bytes) {
+  # A ratchet's high-water mark is one number, spelled 'cells' by band-censorship and 'count' by
+  # json-readers and board-mojibake. Report it by name so a finding reads 'cells=33 -> cells=24' rather
+  # than 'the bytes changed'. The three baselines that are structures rather than counters
+  # (guard-contract, row-age, tile-integrity) fall back to their size, which still names the file and
+  # proves it moved.
+  try {
+    $s = [Text.Encoding]::UTF8.GetString($bytes)
+    if ($s.Length -gt 0 -and [int]$s[0] -eq 0xFEFF) { $s = $s.Substring(1) }
+    $o = $s | ConvertFrom-Json
+    foreach ($k in @('cells', 'count')) {
+      if ($o.PSObject.Properties[$k]) { return ($k + '=' + [string]$o.$k) }
+    }
+  } catch { }
+  return ([string]$bytes.Length + ' bytes')
+}
+function RatchetHygieneFindings($snapshots, [string]$outDir) {
+  # Pure over its arguments, so the frozen -SelfTest cases below drive THIS function rather than a
+  # re-implementation of it. Two findings, because a ratchet can leak two ways:
+  #   LEARNED - a registered baseline whose bytes moved and were not put back. That is a call site with
+  #             no RestoreGuardState, which is how this class comes back.
+  #   NEW     - a baseline that did not exist when the suite started, i.e. a ratchet that landed and
+  #             wrote its FIRST high-water mark from whatever mutated board was on disk at that moment.
+  #             Nothing snapshotted it, so nothing can put it back; naming it is the whole repair.
+  $out = New-Object System.Collections.Generic.List[string]
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try {
+    $known = @{}
+    foreach ($r in $snapshots) {
+      $known[$r.path.ToLower()] = $true
+      if (-not (Test-Path $r.path)) { [void]$out.Add(('DELETED  {0}  (was {1})' -f (Split-Path $r.path -Leaf), (BaselineMark $r.bytes))); continue }
+      $now = [IO.File]::ReadAllBytes($r.path)
+      if ([BitConverter]::ToString($sha.ComputeHash($now)) -ne [BitConverter]::ToString($sha.ComputeHash($r.bytes))) {
+        [void]$out.Add(('LEARNED  {0}  {1} -> {2}' -f (Split-Path $r.path -Leaf), (BaselineMark $r.bytes), (BaselineMark $now)))
+      }
+    }
+    if ($outDir -and (Test-Path $outDir)) {
+      foreach ($nf in @(Get-ChildItem (Join-Path $outDir '*-baseline.json') -File -ErrorAction SilentlyContinue)) {
+        if (-not $known.ContainsKey($nf.FullName.ToLower())) {
+          [void]$out.Add(('NEW      {0}  ({1}) - a ratchet wrote its FIRST high-water mark DURING the suite, so it learned from a mutated board and no snapshot exists to put it back' -f $nf.Name, (BaselineMark ([IO.File]::ReadAllBytes($nf.FullName)))))
+        }
+      }
+    }
+  } finally { $sha.Dispose() }
+  return $out
+}
+
 if ($SelfTest) {
   # frozen founding bug: a BOM-less file must survive Backup->mutate->RestoreAll BYTE-identical, and a
   # MarkCreated file must be gone - on the finally path AND after a mid-run throw. The second Backup of
@@ -177,11 +268,95 @@ if ($SelfTest) {
   $okKill = (@(Compare-Object ([IO.File]::ReadAllBytes($f3)) $clean -SyncWindow 0).Count -eq 0)
   $okClear = -not (Test-Path $script:JournalDir)                  # recovery must not leave the journal armed
 
+  # ---- RATCHET HYGIENE, frozen from the 2026-09-07 developer bounce ---------------------------------
+  # THE FOUNDING BUG. Case 18 halves the largest un-acked store's cells; audit-band-censorship counts 24
+  # censored cells instead of 33 and TIGHTENS its own baseline to 24; the case restores the board and
+  # nothing restores the baseline; every later guards run hard-fails 'RATCHET BROKEN - 33 now, baseline
+  # 24', including the final 'restored' case with no mutation in place at all.
+  # FROZEN, NEVER REGENERATED FROM THE LIVE TREE. These are the real 219 bytes of
+  # out\band-censorship-baseline.json at cells=33 (UTF-8 BOM, CRLF, the note the audit itself writes) and
+  # the exact cells=24 the audit wrote when the board was halved. Rebuilding either from today's out\
+  # would dissolve the bug and the case would pass by finding nothing - the way the Lysol negative test
+  # in this same file quietly stopped testing anything. Written byte-wise rather than as a here-string on
+  # purpose: this file is LF in main and CRLF in a fresh checkout, and a here-string would make the
+  # fixture's SIZE depend on which one you are standing in.
+  $gsBom = [string][char]0xFEFF
+  $gsQ = [string][char]34
+  $gsNote = 'High-water mark for the band-censorship ratchet. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails.'
+  function GsBaselineText([int]$cells) {
+    return ($gsBom + '{' + "`r`n" +
+            '    ' + $gsQ + 'note' + $gsQ + ':  ' + $gsQ + $gsNote + $gsQ + ',' + "`r`n" +
+            '    ' + $gsQ + 'generated' + $gsQ + ':  ' + $gsQ + '2026-09-07T11:40:46' + $gsQ + ',' + "`r`n" +
+            '    ' + $gsQ + 'cells' + $gsQ + ':  ' + [string]$cells + "`r`n" +
+            '}' + "`r`n")
+  }
+  $gsGood = [Text.Encoding]::UTF8.GetBytes((GsBaselineText 33))
+  $gsLearned = [Text.Encoding]::UTF8.GetBytes((GsBaselineText 24))
+  $gsOut = Join-Path $td 'out'
+  New-Item -ItemType Directory -Force $gsOut | Out-Null
+  $gsF = Join-Path $gsOut 'band-censorship-baseline.json'
+  [IO.File]::WriteAllBytes($gsF, $gsGood)
+  # the fixture must BE the real file, or the cases below prove nothing about it
+  $okFixture = ($gsGood.Length -eq 219) -and ((BaselineMark $gsGood) -eq 'cells=33') -and ((BaselineMark $gsLearned) -eq 'cells=24')
+  (Get-Item $gsF).LastWriteTimeUtc = (Get-Date).ToUniversalTime().AddHours(-2)
+  $gsMtime = (Get-Item $gsF).LastWriteTimeUtc
+  RegisterGuardState $gsOut
+  $okReg = ($script:GuardState.Count -eq 1)
+
+  # MUST FIRE: the simulated child learns from a shrunken board and RestoreGuardState is NOT called.
+  # The tripwire has to name the file and both marks, because 'a case failed' without them is exactly
+  # the blindness that left four failures pointing at guards nobody had touched.
+  [IO.File]::WriteAllBytes($gsF, $gsLearned)
+  (Get-Item $gsF).LastWriteTimeUtc = (Get-Date).ToUniversalTime()
+  $gsFire = @(RatchetHygieneFindings $script:GuardState $gsOut)
+  $okFire = ($gsFire.Count -eq 1) -and ($gsFire[0] -match 'band-censorship-baseline\.json') -and ($gsFire[0] -match 'cells=33 -> cells=24')
+
+  # MUST RESTORE: the same child, then RestoreGuardState. Bytes AND mtime, because a restore that leaves
+  # the file newer than it found it has not restored the file - that is what held audit-tile-integrity
+  # for every case after it in August.
+  RestoreGuardState
+  $okRestore = (@(Compare-Object ([IO.File]::ReadAllBytes($gsF)) $gsGood -SyncWindow 0).Count -eq 0) -and
+               ((Get-Item $gsF).LastWriteTimeUtc -eq $gsMtime)
+
+  # MUST NOT FIRE: nothing outstanding, so the tripwire is silent. Without this a tripwire that always
+  # fired would satisfy the case above, and every run would end with a failure nobody could act on.
+  $gsQuiet = @(RatchetHygieneFindings $script:GuardState $gsOut)
+  $okQuiet = ($gsQuiet.Count -eq 0)
+
+  # MUST FIRE, second branch: a ratchet that lands mid-suite writes its FIRST mark from whatever board is
+  # on disk. No snapshot exists, so the restore cannot put it back and the tripwire must say so.
+  $gsNew = Join-Path $gsOut 'future-ratchet-baseline.json'
+  [IO.File]::WriteAllBytes($gsNew, [Text.Encoding]::UTF8.GetBytes('{"count":7}'))
+  $gsNewFind = @(RatchetHygieneFindings $script:GuardState $gsOut)
+  $okNew = ($gsNewFind.Count -eq 1) -and ($gsNewFind[0] -match 'future-ratchet-baseline\.json') -and ($gsNewFind[0] -match 'count=7')
+  Remove-Item $gsNew -Force
+
+  # CLEAN TWIN: the adjacent behaviour this fix was most likely to break. RestoreGuardState must touch
+  # ONLY the registered baselines, so a case's own outstanding mutation of a production file is STILL
+  # on disk afterwards and the residue tripwire can still find it. An over-broad restore would have
+  # quietly blinded the tripwire that diagnosed five order-dependent failures in August.
+  $gsProd = Join-Path $td 'prod-commodities.json'
+  [IO.File]::WriteAllBytes($gsProd, [Text.Encoding]::ASCII.GetBytes('{"id":"mangoes"}'))
+  $null = Backup $gsProd
+  $gsProdMut = [Text.Encoding]::ASCII.GetBytes('{"id":"mangoes","exclude":[]}')
+  [IO.File]::WriteAllBytes($gsProd, $gsProdMut)
+  RestoreGuardState
+  $okTwin = (@(Compare-Object ([IO.File]::ReadAllBytes($gsProd)) $gsProdMut -SyncWindow 0).Count -eq 0)
+  $script:GuardState.Clear(); $script:Restores.Clear(); JournalClear
+
   Remove-Item $td -Recurse -Force
-  if ($ok -and $okKill -and $okClear) { Write-Output 'SELFTEST PASS: byte-identical restore + created-file cleanup + killed-run recovery from the on-disk journal'; exit 0 }
+  $okRatchet = $okFixture -and $okReg -and $okFire -and $okRestore -and $okQuiet -and $okNew -and $okTwin
+  if ($ok -and $okKill -and $okClear -and $okRatchet) { Write-Output 'SELFTEST PASS: byte-identical restore + created-file cleanup + killed-run recovery from the on-disk journal + ratchet hygiene (7 of 7 cases: frozen fixture, registration, must-fire learned, must-restore bytes+mtime, must-not-fire, must-fire new-baseline, clean twin)'; exit 0 }
   if (-not $ok)      { Write-Output 'SELFTEST FAIL: restore is not byte-faithful or a created file survived' }
   if (-not $okKill)  { Write-Output 'SELFTEST FAIL: a killed run''s mutation was NOT recovered from the journal - a taskkill can still leave a mutated production file staged by git add -A' }
   if (-not $okClear) { Write-Output 'SELFTEST FAIL: the journal survived recovery - the next run would replay stale bytes over current work' }
+  if (-not $okFixture) { Write-Output 'SELFTEST FAIL: ratchet hygiene - the frozen baseline fixture is no longer the real 219-byte cells=33 file, so every case below it proves nothing' }
+  if (-not $okReg)     { Write-Output 'SELFTEST FAIL: ratchet hygiene - RegisterGuardState did not snapshot the baseline, so nothing could be restored or compared' }
+  if (-not $okFire)    { Write-Output 'SELFTEST FAIL: ratchet hygiene MUST FIRE - a baseline learned from a mutated board (cells 33 -> 24) was NOT named. This is the founding bounce; the suite would fail four expect-0 cases and blame guards nobody touched' }
+  if (-not $okRestore) { Write-Output 'SELFTEST FAIL: ratchet hygiene MUST RESTORE - RestoreGuardState did not put the baseline back byte-for-byte AND mtime-for-mtime' }
+  if (-not $okQuiet)   { Write-Output 'SELFTEST FAIL: ratchet hygiene MUST NOT FIRE - the tripwire fired on an untouched baseline, so it is crying wolf and every run ends red' }
+  if (-not $okNew)     { Write-Output 'SELFTEST FAIL: ratchet hygiene MUST FIRE - a baseline that appeared DURING the run (a new ratchet learning from a mutated board) was not named' }
+  if (-not $okTwin)    { Write-Output 'SELFTEST FAIL: ratchet hygiene CLEAN TWIN - RestoreGuardState reached past the baselines and undid a case''s own mutation, which blinds the residue tripwire' }
   exit 1
 }
 # Ctrl-C does not run finally in every host, so also arm an engine-exit handler.
@@ -223,7 +398,9 @@ function RunGuardsOut {
   # on is stdout (a full failing guards run measured 0 stderr bytes); stderr passes through to the console
   # exactly as it did before this change.
   $o = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | ForEach-Object { [string]$_ }) -join "`n"
-  return [pscustomobject]@{ rc = $LASTEXITCODE; text = $o }
+  $rc = $LASTEXITCODE
+  RestoreGuardState   # the child may have LEARNED from the mutation in place - see the guard-state essay
+  return [pscustomobject]@{ rc = $rc; text = $o }
 }
 function RunGuards { return (RunGuardsOut).rc }
 
@@ -299,6 +476,7 @@ function CheckLoud($name, $expect, $sig) {
   # whole verdict, so they have to be read from a loud run.
   $o = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { [string]$_ }) -join "`n"
   $rc = $LASTEXITCODE
+  RestoreGuardState   # the child may have LEARNED from the mutation in place - see the guard-state essay
   $sigOk = if ($sig) { $o -match $sig } else { $true }
   if ($rc -eq $expect -and $sigOk) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $rc); $script:pass++ }
   elseif ($rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); FailEvidence $o; $script:failed++ }
@@ -312,6 +490,7 @@ function CheckScript($name, $expect, $script, $sig) {
   # prints unconditionally, so the signature is still capturable.
   $o = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root $script) -Quiet | ForEach-Object { [string]$_ }) -join "`n"
   $rc = $LASTEXITCODE
+  RestoreGuardState   # the child may have LEARNED from the mutation in place - see the guard-state essay
   $sigOk = if ($sig) { $o -match $sig } else { $true }
   if ($rc -eq $expect -and $sigOk) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $rc); $script:pass++ }
   elseif ($rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); FailEvidence $o; $script:failed++ }
@@ -395,6 +574,13 @@ if ($rcBase -ne 0) {
 }
 Write-Output '  PASS  baseline: guards pass on the current board  (exit 0)'; $script:pass++
 try {
+
+# SNAPSHOT GUARD STATE, here and once. The baseline run above read the UNMUTATED board, so anything it
+# learned is legitimate; every child run from this point on is under a mutation this suite planted, and
+# a ratchet that learns from one of those is learning a lie. Inside the try so any throw still unwinds
+# through RestoreAll.
+RegisterGuardState (Join-Path $root 'out')
+Write-Output ("  ..... guard state: {0} ratchet baseline(s) snapshotted; each is put back after every child run" -f $script:GuardState.Count)
 
 # ---- 1. price-mode -----------------------------------------------------------------
 $f = (Get-ChildItem (Join-Path $root 'out\regular\aldi-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
@@ -630,6 +816,7 @@ if ($g8dCells.Count -lt 2) {
   # OK line proves it ran AND stayed quiet, which is the whole claim; the HARD FAIL check proves it is
   # not merely absent from the output.
   $g8dOut = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+  RestoreGuardState   # the fifth child-run site: it does not go through Check*, so it needs its own call
   $g8dOk    = ($g8dOut -match 'every ad-line cell publishes the price its own ad line quotes last')
   $g8dFired = ($g8dOut -match 'HARD FAIL: ad-line price provenance')
   if ($g8dOk -and -not $g8dFired) {
@@ -651,11 +838,31 @@ if ($g8dCells.Count -lt 2) {
 # baseline, no ratchet, no -Strict flag - there is no version of this repo where a wrong link is tolerable).
 # A gate that reports zero is worthless if it cannot fail, so plant one and prove it fires.
 $puF2 = Join-Path $root 'product-urls.json'
+# PRECONDITION, NAMED (2026-09-07). audit-tile-integrity HOLDS - exit 2, no grading - when
+# out\name-drift.json is older than EITHER product-urls.json or the newest comparison (its own lines
+# 69-89: it will not grade today's links against yesterday's drift verdicts). That hold is a correct
+# refusal, but arriving at it through this case is indistinguishable from the invariant below actually
+# breaking, and a copy taken mid-rebuild inherits it - the daily chain re-runs audit-name-drift after a
+# rebuild and this suite does not. So ask FIRST, and report it as the rotted precondition it is rather
+# than as a wrong link. Both dependencies are checked because the audit checks both; naming only
+# product-urls.json would let a comparison-driven hold arrive wearing this case's name.
+$ndF2 = Join-Path $root 'out\name-drift.json'
+$puHeldBy = @()
+if (Test-Path $ndF2) {
+  $ndAge2 = (Get-Item $ndF2).LastWriteTimeUtc
+  $cmpF2 = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue |
+    Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
+  foreach ($dep2 in @($puF2, $(if ($cmpF2) { $cmpF2.FullName } else { $null }))) {
+    if ($dep2 -and (Test-Path $dep2) -and ((Get-Item $dep2).LastWriteTimeUtc -gt $ndAge2)) { $puHeldBy += (Split-Path $dep2 -Leaf) }
+  }
+}
 $pubak = Backup $puF2
 $pud = $pubak | ConvertFrom-Json
 $victim = $null
 foreach ($n in @('bananas', 'milk', 'eggs', 'butter')) { if ($pud.items.$n.'Hy-Vee'.url) { $victim = $pud.items.$n.'Hy-Vee'; break } }
-if ($victim) {
+if ($puHeldBy.Count) {
+  Skip ('tile-integrity is HELD at baseline: out\name-drift.json is older than ' + ($puHeldBy -join ' and ') + ' in this tree, so the audit refuses to grade and this case cannot arm. Re-run audit-name-drift.ps1 before the suite (the daily chain does; a copy taken mid-rebuild inherits the stale mtime)')
+} elseif ($victim) {
   $victim.price = 99.99          # a real link, a price the store does not charge
   ($pud | ConvertTo-Json -Depth 8) | Set-Content $puF2 -Encoding UTF8
   # That write just made product-urls.json NEWER than out\name-drift.json, which HOLDS the very audit this
@@ -682,8 +889,12 @@ function CheckWarn($name, $pattern) {
   # wraps each line in an ErrorRecord that EAP=Stop turns into a terminating throw (reproduced 2026-07-30),
   # so the suite would CRASH mid-run instead of printing FAIL. The warn line arrives on stdout via Say.
   $o = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { [string]$_ }) -join "`n"
-  if ($LASTEXITCODE -eq 0 -and $o -match $pattern) { Write-Output ("  PASS  {0}  (exit 0 + warn fired)" -f $name); $script:pass++ }
-  else { Write-Output ("  FAIL  {0}  expected exit 0 with warn /{1}/, got exit {2} (warn present: {3})" -f $name, $pattern, $LASTEXITCODE, ($o -match $pattern)); FailEvidence $o; $script:failed++ }
+  # CAPTURE THE CODE BEFORE THE RESTORE. RestoreGuardState runs no native command so it cannot move
+  # $LASTEXITCODE today, but reading it twice through an intervening call is the shape that rots.
+  $rc = $LASTEXITCODE
+  RestoreGuardState   # the child may have LEARNED from the mutation in place - see the guard-state essay
+  if ($rc -eq 0 -and $o -match $pattern) { Write-Output ("  PASS  {0}  (exit 0 + warn fired)" -f $name); $script:pass++ }
+  else { Write-Output ("  FAIL  {0}  expected exit 0 with warn /{1}/, got exit {2} (warn present: {3})" -f $name, $pattern, $rc, ($o -match $pattern)); FailEvidence $o; $script:failed++ }
 }
 $bkf = (Get-ChildItem (Join-Path $root 'out\regular\bakers-regular-*.json') |
   Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
@@ -1004,6 +1215,24 @@ if (-not $g20F) {
     RestoreNow $g20F.FullName
     CheckLoud 'board-vs-identity: with the row restored, the gate reports agreement again' 0 'board-vs-identity \[staple\]: all \d+ cell'
   }
+}
+
+# ---- THE RATCHET-HYGIENE TRIPWIRE (2026-09-07, developer bounce round 1) ----------------------------
+# Read BEFORE the residue tripwire and before RestoreAll, for the same reason: this is the one moment a
+# leak is still visible. It answers a question the residue tripwire could not even ask until today,
+# because until today no baseline was registered with Backup() - which is exactly why it PASSED through
+# the run that produced four failures. The claim it makes is narrow and checkable: no guard learned a
+# high-water mark from a board this suite deliberately broke. Its real job is the NEXT call site - a
+# sixth child-run added without RestoreGuardState names itself here instead of failing four unrelated
+# cases three hundred lines later.
+$ratchets = @(RatchetHygieneFindings $script:GuardState $script:GuardStateDir)
+if ($ratchets.Count -gt 0) {
+  Write-Output ('  FAIL  ratchet hygiene: {0} of {1} guard baseline(s) were LEARNED from a mutated board and not put back. Every guards run after that point was measured against a mark this suite taught it, so the failures above name guards nobody touched:' -f $ratchets.Count, $script:GuardState.Count)
+  foreach ($r in $ratchets) { Write-Output ('          ' + $r) }
+  $script:failed++
+} else {
+  Write-Output ('  PASS  ratchet hygiene: 0 of {0} guard baseline(s) learned from a mutated board (each snapshotted before the first mutation and restored, bytes and mtime, after every child run)' -f $script:GuardState.Count)
+  $script:pass++
 }
 
 # ---- THE RESIDUE TRIPWIRE, ARMED (2026-08-30, queue 2026-08-27-a0aeb1) ------------------------------

@@ -2189,10 +2189,13 @@ Remove-Item $fxSf -Recurse -Force -ErrorAction SilentlyContinue
 # lookup would collapse the two HEALTHY rows to NONE and page them too.
 $fxOwn = Join-Path $env:TEMP ('tafxown-' + [guid]::NewGuid().ToString('N').Substring(0,8))
 New-Item -ItemType Directory -Force (Join-Path $fxOwn 'regular') | Out-Null
-# FROZEN registry: the five task names really registered on 2026-09-06. Written here, never read from the
-# live file - a fixture that re-reads the registry would go green the day someone registers a task called
-# daily-ff-selfheal, which is the one change that must make these cases FAIL.
-$ownReg = '{"windows_tasks":[{"name":"TC Grocery Ad Pulls 0700"},{"name":"TC Grocery Daily Capture 0800"},{"name":"TC Grocery Capture Watchdog 0930"},{"name":"TC Graph Nightly Matching"},{"name":"TC Recipe Harvest Crawl"}]}'
+# FROZEN registry: the five task names really registered, as of 2026-09-07 (the watchdog row was
+# 'TC Grocery Capture Watchdog 0930' until install-grocery-tasks -FixName renamed it that morning; kept in
+# step with the live key so this fixture never teaches a reader a name that no longer exists - neither
+# spelling changes what these cases assert, because the owner strings are what is on trial). Written here,
+# never read from the live file - a fixture that re-reads the registry would go green the day someone
+# registers a task called daily-ff-selfheal, which is the one change that must make these cases FAIL.
+$ownReg = '{"windows_tasks":[{"name":"TC Grocery Ad Pulls 0700"},{"name":"TC Grocery Daily Capture 0800"},{"name":"TC Grocery Capture Watchdog 1030"},{"name":"TC Graph Nightly Matching"},{"name":"TC Recipe Harvest Crawl"}]}'
 $ownRegF = Join-Path $fxOwn 'expected-automations.json'
 Set-Content $ownRegF $ownReg -Encoding UTF8
 # FROZEN board: today's two real shapes side by side - the Family Fare gap with the phantom owner, and the

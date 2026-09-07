@@ -70,7 +70,7 @@ $KNOWN = [ordered]@{
   #    repo does). Verified 2026-08-20 against Get-ScheduledTask; if a task is ever deleted, delete its
   #    line here too, or this table starts excusing a script that genuinely nothing runs.
   'capture-run.ps1'                  = 'scheduled tasks "TC Grocery Ad Pulls 0700" (-Kind ad) and "TC Grocery Daily Capture 0800" (-Kind daily) - the concurrent seven-store capture runner'
-  'capture-watchdog.ps1'             = 'scheduled task "TC Grocery Capture Watchdog 0930" (-Alert) - checks the 0700/0800 jobs actually captured AND published, rather than merely exiting 0'
+  'capture-watchdog.ps1'             = 'scheduled task "TC Grocery Capture Watchdog 1030" (-Alert; named 0930 until 2026-09-07, when ops\install-grocery-tasks.ps1 -FixName renamed it to match the 10:30 it has run at since 2026-08-31) - checks the 0700/0800 jobs actually captured AND published, rather than merely exiting 0'
   # -- launched by Windows Task Scheduler through the GENERIC run-hidden.vbs, so no file names it
   'familyfare-sweep.ps1'             = 'scheduled task "SMP Family Fare Term Sweep", every 3h via run-hidden.vbs'
   'send-friday-email.ps1'            = 'scheduled task "SMP Friday Email (draft)", weekly via run-hidden.vbs; drafts unless -Send, and a week_of stamp stops a double-mail'

@@ -111,6 +111,68 @@ function Test-RunSuperseded {
   return $true
 }
 
+function Test-HeldByGuards {
+  <#
+    .SYNOPSIS Is every symptom below just ONE thing - the gate refusing today's board?
+    .DESCRIPTION
+      Pure, so the -SelfTest fixtures can drive it with frozen values.
+
+      WHY (2026-09-07, queue 2026-09-07-e5efa6). At 08:14 check-ad-cycles ran guards, guards hard-failed
+      on the band-censorship ratchet, and it wrote that verdict down: out\chain-verdict.json. capture-run
+      then staged INPUTS ONLY, exited 1, and left public\board.json on yesterday's bytes with the exported
+      feed unstaged. At 10:30 this watchdog probed FOUR of those artifacts independently and emailed four
+      issues - a run record, a stale board.json, a failed task and an unshipped feed - two hours after
+      check-ad-cycles had already paged GUARDS FAILED for the same hold. Four probes, one cause, and the
+      one artifact that states the cause as a VALUE was read by nobody here: its only readers were
+      capture-run.ps1 and push-data.ps1.
+
+      Class: a derivative check that cannot see its upstream cause. Test-RunSuperseded (2026-08-31) fixed
+      the TIME axis of this exact shape - was the failure superseded later - and left the CAUSE axis.
+
+      DELIBERATELY NARROW, because the defect section 4 exists for looks identical from the outside. A
+      board that was rebuilt and never shipped with guards GREEN is a real, separate failure and must keep
+      paging on its own. So all of: the verdict exists, it is TODAY's (the same same-day rule push-data
+      and capture-run key on, so yesterday's refusal cannot silence today's), it says blocked, and
+      nothing has been rebuilt AND shipped since it was written. The moment something ships, this goes
+      false and every existing finding fires exactly as it did before.
+  #>
+  param($Verdict, [string]$Today, $BoardWritten, $PublishedWritten)
+  if ($null -eq $Verdict) { return $false }
+  if (-not $Verdict.date -or ([string]$Verdict.date -ne [string]$Today)) { return $false }
+  if (-not $Verdict.guards_blocked) { return $false }
+  # Rebuilt AND shipped after the refusal = the hold was cleared and this is not what is wrong now.
+  if (Test-RunSuperseded -RunAt $Verdict.written -BoardWritten $BoardWritten -PublishedWritten $PublishedWritten) { return $false }
+  return $true
+}
+
+function Merge-HeldFindings {
+  <#
+    .SYNOPSIS Fold the derivative symptoms of a guards hold under the one finding that names the cause.
+    .DESCRIPTION
+      Pure over its arguments so the -SelfTest fixtures drive the REAL assembly rather than a copy of it.
+      A fold tested only through its predicate would prove the predicate and nothing about the list the
+      reader actually receives, which is where the four-emails-for-one-hold cost lives.
+
+      Not held: everything is returned exactly as it came in. Held: the derivative lines leave the
+      findings list and come back as sub-lines under a single HELD BY GUARDS finding, so the exit code
+      stays 1 (a held board IS a finding), it is still one email, and the count says one.
+  #>
+  param($Findings, $Derivative, [bool]$Held, [string]$HeldText)
+  $outF = New-Object System.Collections.Generic.List[string]
+  $outS = New-Object System.Collections.Generic.List[string]
+  if (-not $Held) {
+    foreach ($f in $Findings) { [void]$outF.Add([string]$f) }
+    return [pscustomobject]@{ findings = $outF; sub = $outS }
+  }
+  $derivSet = @{}
+  foreach ($d in $Derivative) { $derivSet[[string]$d] = $true }
+  [void]$outF.Add($HeldText)
+  foreach ($f in $Findings) {
+    if ($derivSet.ContainsKey([string]$f)) { [void]$outS.Add([string]$f) } else { [void]$outF.Add([string]$f) }
+  }
+  return [pscustomobject]@{ findings = $outF; sub = $outS }
+}
+
 function Test-FlagStoreCold {
   <#
     .SYNOPSIS Is a store named on a capture flag actually still uncaptured?
@@ -326,6 +388,68 @@ if ($SelfTest) {
     Write-Output 'ok    a publish minutes either side of the board write still counts as shipped'
   } else { Write-Output 'FAIL  the publish/board write-order slack is gone - healthy days will page'; $fail++ }
 
+  # ---- Test-HeldByGuards + the fold: four probes of one held board -----------------------------------
+  # THE FROZEN 2026-09-07 MORNING, to the minute and to the artifact. guards hard-failed at 08:14:24 on
+  # the band-censorship ratchet, check-ad-cycles wrote {date 2026-09-07, written 08:14:24, guards_rc 2,
+  # guards_blocked true}, capture-run staged inputs only and exited 1 at 08:34, public\board.json stayed
+  # on the 09-06 bytes and the exported feed sat unstaged. At 10:30 this file emailed FOUR issues.
+  $hv = [pscustomobject]@{ date = '2026-09-07'; written = '2026-09-07T08:14:24'; guards_rc = 2; guards_blocked = $true }
+  $hBoard = [datetime]'2026-09-07 08:10:20'      # the board guards refused
+  $hPubOld = [datetime]'2026-09-06 12:07:00'     # public\board.json, still yesterday's
+  # MUST FIRE - the founding morning.
+  if (Test-HeldByGuards -Verdict $hv -Today '2026-09-07' -BoardWritten $hBoard -PublishedWritten $hPubOld) {
+    Write-Output 'ok    a same-day guards refusal with nothing shipped since reads as HELD BY GUARDS'
+  } else { Write-Output 'FAIL  the founding morning is not recognised as a guards hold - one held board pages as four issues again'; $fail++ }
+  # MUST NOT FIRE - guards were GREEN and the board never shipped. That is the real, separate defect
+  # section 4 exists for, and folding it away would delete the alert this watchdog is most for.
+  $hvGreen = [pscustomobject]@{ date = '2026-09-07'; written = '2026-09-07T08:14:24'; guards_rc = 0; guards_blocked = $false }
+  if (Test-HeldByGuards -Verdict $hvGreen -Today '2026-09-07' -BoardWritten $hBoard -PublishedWritten $hPubOld) {
+    Write-Output 'FAIL  a GREEN board that never shipped was folded away as a guards hold - the rebuilt-but-never-published defect would go silent'; $fail++
+  } else { Write-Output 'ok    a green board that never shipped still pages on its own' }
+  # MUST NOT FIRE - yesterday's refusal. Same same-day rule push-data.ps1 and capture-run.ps1 key on.
+  $hvOld = [pscustomobject]@{ date = '2026-09-06'; written = '2026-09-06T08:14:24'; guards_rc = 2; guards_blocked = $true }
+  if (Test-HeldByGuards -Verdict $hvOld -Today '2026-09-07' -BoardWritten $hBoard -PublishedWritten $hPubOld) {
+    Write-Output 'FAIL  a verdict from ANOTHER DAY silenced today - a stale chain-verdict would mute the watchdog indefinitely'; $fail++
+  } else { Write-Output 'ok    a verdict dated another day is ignored' }
+  # MUST NOT FIRE - no verdict file at all (absent or unparseable reads as null).
+  if (Test-HeldByGuards -Verdict $null -Today '2026-09-07' -BoardWritten $hBoard -PublishedWritten $hPubOld) {
+    Write-Output 'FAIL  a missing chain-verdict was treated as a hold'; $fail++
+  } else { Write-Output 'ok    no verdict on disk changes nothing' }
+  # CLEAN TWIN - this afternoon: round 1 rebuilt at 11:28 and published at 11:47, so the hold was
+  # cleared. The fold must switch itself off, and the 08:00 exit 1 goes back to reading SUPERSEDED
+  # through the founding 2026-08-31 case above.
+  if (Test-HeldByGuards -Verdict $hv -Today '2026-09-07' -BoardWritten ([datetime]'2026-09-07 11:28:28') -PublishedWritten ([datetime]'2026-09-07 11:47:33')) {
+    Write-Output 'FAIL  a board rebuilt and shipped after the refusal still read as held - the fold would outlive the hold'; $fail++
+  } else { Write-Output 'ok    a board rebuilt and shipped after the refusal is no longer held' }
+
+  # THE FOLD ITSELF, over the four lines that were actually emailed at 10:34.
+  $fFind = New-Object System.Collections.Generic.List[string]
+  [void]$fFind.Add('RUN RECORD: capture-run [daily] completed with exit 1 - see the log')
+  [void]$fFind.Add("NOT PUBLISHED: public\board.json is 1203 min older than today's comparison. The board was rebuilt but never shipped.")
+  [void]$fFind.Add("FAILED: 'TC Grocery Daily Capture 0800' last run 2026-09-07 08:00:01 exited 1, and no board has been rebuilt and published since. The live page is NOT carrying that run's work.")
+  [void]$fFind.Add('COMPUTED BUT NOT SHIPPED:  M public/smp-feed.json are modified in the working tree after today.')
+  $fDeriv = New-Object System.Collections.Generic.List[string]
+  foreach ($x in $fFind) { [void]$fDeriv.Add($x) }
+  $fHeld = Merge-HeldFindings $fFind $fDeriv $true 'HELD BY GUARDS: check-ad-cycles refused the 08:14 board (guards_rc 2) and nothing has shipped since.'
+  # MUST FIRE: four issues become one, and the one names the cause.
+  if ($fHeld.findings.Count -eq 1 -and $fHeld.sub.Count -eq 4 -and $fHeld.findings[0] -match 'HELD BY GUARDS' -and $fHeld.findings[0] -match '08:14' -and $fHeld.findings[0] -match 'guards_rc 2') {
+    Write-Output 'ok    the four derivative lines fold into ONE finding that names the cause (4 -> 1, all 4 kept as sub-lines)'
+  } else { Write-Output ("FAIL  the fold did not collapse the founding four: findings=" + $fHeld.findings.Count + " sub=" + $fHeld.sub.Count); $fail++ }
+  # CLEAN TWIN: a finding that is NOT derivative of the hold survives the fold at top level, or a real
+  # unrelated failure would be buried on exactly the day something else also went wrong.
+  $fFind2 = New-Object System.Collections.Generic.List[string]
+  foreach ($x in $fDeriv) { [void]$fFind2.Add($x) }
+  [void]$fFind2.Add('PAID CONTENT SERVED FREE: 3 live recipe(s) disagree with recipes-db about who may read them.')
+  $fHeld2 = Merge-HeldFindings $fFind2 $fDeriv $true 'HELD BY GUARDS: check-ad-cycles refused the 08:14 board (guards_rc 2) and nothing has shipped since.'
+  if ($fHeld2.findings.Count -eq 2 -and ($fHeld2.findings -join '|') -match 'PAID CONTENT SERVED FREE') {
+    Write-Output 'ok    an unrelated finding survives the fold at top level'
+  } else { Write-Output ("FAIL  the fold swallowed an unrelated finding: findings=" + $fHeld2.findings.Count); $fail++ }
+  # MUST NOT FIRE: not held, so nothing moves and the list is returned exactly as it came in.
+  $fPlain = Merge-HeldFindings $fFind2 $fDeriv $false 'unused'
+  if ($fPlain.findings.Count -eq 5 -and $fPlain.sub.Count -eq 0) {
+    Write-Output 'ok    on a day with no hold the findings list is untouched (5 in, 5 out, 0 folded)'
+  } else { Write-Output ("FAIL  the fold ran on a day with no guards hold: findings=" + $fPlain.findings.Count + " sub=" + $fPlain.sub.Count); $fail++ }
+
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
 }
@@ -409,6 +533,22 @@ foreach ($name in $TASKS) {
 # with its exit code. Task Scheduler only knows the process ended; this knows how far it got. A run
 # stuck in 'downstream' hours later, or one that never reached 'complete', is a finding even when the
 # task reports rc=0 - and it does not depend on ad-cycle-log.txt, which another process can hold mute.
+# THE CHAIN'S OWN VERDICT, read once (2026-09-07, queue 2026-09-07-e5efa6). check-ad-cycles writes what
+# guards decided about today's board; capture-run and push-data both key off it and this watchdog never
+# looked, so a single held board arrived as four independent findings. Absent or unparseable is null and
+# changes nothing - the whole fold below is opt-in on a same-day blocked verdict.
+$chainVerdict = $null
+try {
+  $cvF = Join-Path $OutDir 'chain-verdict.json'
+  if (Test-Path $cvF) { $chainVerdict = Read-JsonFile $cvF }
+} catch { $chainVerdict = $null }
+# Findings that are SYMPTOMS of that hold rather than independent facts. They are added exactly as
+# before, and are only demoted to sub-lines if Test-HeldByGuards says the hold is live - which needs
+# sections 3 and 4 to have run, so the decision is deferred to the report, the same way the non-zero
+# task verdict already defers to Test-RunSuperseded.
+$derivative = New-Object System.Collections.Generic.List[string]
+function Add-DerivativeFinding([string]$t) { [void]$findings.Add($t); [void]$derivative.Add($t) }
+
 $statusF = Join-Path $OutDir 'logs\capture-run-status.json'
 if (Test-Path $statusF) {
   try {
@@ -419,7 +559,12 @@ if (Test-Path $statusF) {
       if ([string]$r.date -ne $todayS) { if ($kind -eq 'daily') { [void]$findings.Add("RUN RECORD: the daily capture-run left no record for today (last $($r.date), stage $($r.stage)).") }; continue }
       $ageMin = [int]((Get-Date) - [datetime]$r.updated).TotalMinutes
       if ([string]$r.stage -eq 'complete') {
-        if ([int]$r.exit_code -ne 0) { [void]$findings.Add("RUN RECORD: capture-run [$kind] completed with exit $($r.exit_code) - see $($r.log)") }
+        if ([int]$r.exit_code -ne 0) {
+          # Only the DAILY run can be a symptom of a guards hold: the 07:00 ad run finishes before
+          # check-ad-cycles ever runs guards, so its exit code is always its own news.
+          $rrText = "RUN RECORD: capture-run [$kind] completed with exit $($r.exit_code) - see $($r.log)"
+          if ($kind -eq 'daily') { Add-DerivativeFinding $rrText } else { [void]$findings.Add($rrText) }
+        }
         else { [void]$ok.Add("capture-run [$kind] completed rc=0 at $($r.updated)") }
       } elseif (@('started','capturing','downstream','publishing') -notcontains [string]$r.stage) {
         # An UNRECOGNISED stage is not a healthy one. 'whatif' used to land here and read as ok simply
@@ -465,7 +610,7 @@ $pub = Join-Path (Split-Path $root -Parent) 'public\board.json'
 if ($cmp -and (Test-Path $cmp) -and (Test-Path $pub)) {
   $cT = (Get-Item $cmp).LastWriteTime; $pT = (Get-Item $pub).LastWriteTime
   if ($pT -lt $cT.AddMinutes(-30)) {
-    [void]$findings.Add("NOT PUBLISHED: public\board.json is $([int]($cT - $pT).TotalMinutes) min older than today's comparison. The board was rebuilt but never shipped.")
+    Add-DerivativeFinding "NOT PUBLISHED: public\board.json is $([int]($cT - $pT).TotalMinutes) min older than today's comparison. The board was rebuilt but never shipped."
   } else {
     [void]$ok.Add('public\board.json is current with the comparison')
   }
@@ -483,7 +628,12 @@ foreach ($ft in $failedTasks) {
   if (Test-RunSuperseded -RunAt $ft.at -BoardWritten $boardW -PublishedWritten $pubW) {
     [void]$ok.Add("$($ft.name) exited $($ft.rc) at $($ft.last) - SUPERSEDED: the board was rebuilt $($boardW.ToString('HH:mm')) and published after it, so the live page is current. Usually the guards refusing to ship, then the blocker cleared.")
   } else {
-    [void]$findings.Add("FAILED: '$($ft.name)' last run $($ft.last) exited $($ft.rc), and no board has been rebuilt and published since. The live page is NOT carrying that run's work.")
+    $ftText = "FAILED: '$($ft.name)' last run $($ft.last) exited $($ft.rc), and no board has been rebuilt and published since. The live page is NOT carrying that run's work."
+    # A task that STARTED before the refusal was written is downstream of it; one that started after is
+    # a separate failure and keeps its own line even on a held day.
+    $ftPreHold = $false
+    if ($chainVerdict -and $chainVerdict.written) { try { $ftPreHold = ([datetime]$ft.at -le [datetime]$chainVerdict.written) } catch { $ftPreHold = $false } }
+    if ($ftPreHold) { Add-DerivativeFinding $ftText } else { [void]$findings.Add($ftText) }
   }
 }
 
@@ -513,7 +663,7 @@ try {
     $seen = if ($lastBot) { "the last pipeline commit is $lastBot ($botAge days ago)" } else { 'there is NO pipeline commit in this history' }
     [void]$findings.Add("NEVER REACHED MAIN: $seen. Cloudflare deploys public\** from the repo, so the live board and feed are stale by that much no matter how fresh the local files look. Check the publish stage at the end of capture-run.ps1 (commit -> push -> edge verify).")
   } elseif ($dirty.Count) {
-    [void]$findings.Add("COMPUTED BUT NOT SHIPPED: " + ($dirty -join ', ') + " are modified in the working tree after today's run. The pipeline rebuilt them and the commit/push did not take them, so readers still get the previous board.")
+    Add-DerivativeFinding ("COMPUTED BUT NOT SHIPPED: " + ($dirty -join ', ') + " are modified in the working tree after today's run. The pipeline rebuilt them and the commit/push did not take them, so readers still get the previous board.")
   } else {
     [void]$ok.Add("reached main: last pipeline commit $lastBot, served files clean in git")
   }
@@ -933,14 +1083,33 @@ try {
   }
 } catch { }
 
+# ---- THE FOLD: one hold, one finding (2026-09-07, queue 2026-09-07-e5efa6) ----------------------
+# Sections 3 and 4 have established when the board was written and whether it shipped, so the question
+# "is every symptom above just the gate refusing today's board" can finally be answered - the same
+# deferral Test-RunSuperseded already uses. On any other day this is a no-op and the list is untouched.
+$heldSub = New-Object System.Collections.Generic.List[string]
+$heldNow = Test-HeldByGuards -Verdict $chainVerdict -Today $todayS -BoardWritten $boardW -PublishedWritten $pubW
+if ($heldNow) {
+  $hMin = if ($cmp -and (Test-Path $cmp) -and $pubW) { [int]((Get-Item $cmp).LastWriteTime - $pubW).TotalMinutes } else { 0 }
+  # NOT `$x = try {...} catch {...}` - that is PS 7 syntax and a parse error in 5.1.
+  $hWhen = [string]$chainVerdict.written
+  try { $hWhen = ([datetime]$chainVerdict.written).ToString('HH:mm') } catch { }
+  $hText = "HELD BY GUARDS: check-ad-cycles refused the $hWhen board (guards_rc $($chainVerdict.guards_rc)) and nothing has been rebuilt and shipped since. The 0800 exit code, public\board.json sitting $hMin min behind the comparison and the unstaged served files are all that ONE hold - the GUARDS FAILED alert owns it. Clear the guard failure, rebuild, publish."
+  $folded = Merge-HeldFindings $findings $derivative $true $hText
+  $findings = $folded.findings
+  $heldSub = $folded.sub
+}
+
 # ---- report ------------------------------------------------------------------
 Write-Output "CAPTURE WATCHDOG - $todayS"
 foreach ($o in $ok) { Write-Output "  ok    $o" }
 foreach ($f in $findings) { Write-Output "  FIND  $f" }
+foreach ($s in $heldSub) { Write-Output "          - $s" }
 
 if ($findings.Count -and $Alert) {
+  $subLines = if ($heldSub.Count) { "`n" + (($heldSub | ForEach-Object { "     . $_" }) -join "`n") } else { '' }
   $body = "Capture watchdog found $($findings.Count) issue(s) on $todayS.`n`n" +
-          (($findings | ForEach-Object { " - $_" }) -join "`n") +
+          (($findings | ForEach-Object { " - $_" }) -join "`n") + $subLines +
           "`n`nHealthy checks:`n" + (($ok | ForEach-Object { " - $_" }) -join "`n")
   try { Send-Alert -Subject "Grocery capture watchdog: $($findings.Count) issue(s) $todayS" -Body $body | Out-Null } catch { }
 }
