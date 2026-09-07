@@ -211,6 +211,34 @@ foreach ($wt in @(@(Get-ScheduledTask -TaskName 'SMP *' -ErrorAction SilentlyCon
   }
 }
 
+# ---- QUEUES: work that is waiting, and how long it has waited (2026-09-07) ------------------------
+# The three kinds above answer "did the producer run" and "is the artefact fresh". A QUEUE is neither:
+# when a drain does not run it produces no stale artefact, it produces NOTHING, and the pending set
+# grows in silence. That is how 120 corrected recipe cards sat unshipped for five days on 2026-09-02
+# with every component working - no failed task, no aged file, nothing for this script to see.
+#
+# grocery\queue-depth.ps1 owns the per-queue probes so this stays generic and the registry stays data.
+# A queue that could not be measured is UNKNOWN and is reported; it is never allowed to read as empty.
+if (@($cfg.queues).Count) {
+  $qd = Join-Path $PSScriptRoot 'queue-depth.ps1'
+  if (-not (Test-Path $qd)) {
+    $issues.Add('QUEUES UNWATCHED: expected-automations.json declares queues and grocery\queue-depth.ps1 is missing, so none of them was measured.')
+  } else {
+    try {
+      $qrows = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $qd -Json | ConvertFrom-Json)
+      foreach ($r in $qrows) {
+        if ([string]$r.verdict -eq 'STUCK') {
+          $issues.Add(("QUEUE STUCK: {0} - {1}. What that costs: {2}" -f $r.name, $r.line, $r.cost_if_undrained))
+        } elseif ([string]$r.verdict -eq 'unknown') {
+          $issues.Add(("QUEUE UNMEASURED: {0} - {1}. An unmeasured queue is not an empty one." -f $r.name, $r.line))
+        }
+      }
+    } catch {
+      $issues.Add(("QUEUES UNMEASURED: queue-depth.ps1 could not be run ({0}) - no queue was checked, which is not the same as every queue being empty." -f $_.Exception.Message))
+    }
+  }
+}
+
 # ---- critical output files (silent death = missing / stale) ----
 function Check-Age($path, $maxH, $why, $label) {
   if (-not (Test-Path $path)) { $issues.Add("OUTPUT MISSING: $label ($path) does not exist - $why"); return }
