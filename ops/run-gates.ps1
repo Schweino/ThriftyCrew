@@ -154,6 +154,14 @@ $static = @(
   # $script:CapturePlaceholderCount, which ZERO of its callers read. A drop nobody reads is a clean
   # bill (2026-09-06, backlog E5).
   @{ f = 'ops\audit-capture-ingest-reporting.ps1'; n = 'a row dropped at ingest is reported by whoever read it' }
+  # THREE non-comparable score spaces run here at once - bi-encoder cosine, cross-encoder
+  # sigmoid probability, and BM25 - and the two most confusable numbers sit TEN LINES APART in
+  # sweep.py: COVERAGE_COS_FLOOR 0.55 and COVERAGE_RERANK_FLOOR 0.90. They read like a loose bar
+  # and a strict one and they do not share a scale. A threshold carried between spaces fails by
+  # admitting or refusing rows rather than by erroring, so nothing else would ever report it
+  # (2026-09-06, backlog E25). Static analysis cannot check that a recorded space is CORRECT;
+  # it can check that a new threshold cannot appear without someone writing the space down.
+  @{ f = 'ops\audit-threshold-register.ps1'; n = 'no similarity threshold ships without recording which space it was tuned in' }
   # THE CHECK EXISTED AND NOTHING RAN IT (2026-09-06, worklist C3). It detects SCOPE DRIFT - the
   # user-scope copy of an agent differing from the project-scope one, so which prompt runs depends on
   # the session's working directory - and it detects a stale backup of the only versioned copy of the

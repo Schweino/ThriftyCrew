@@ -258,7 +258,7 @@ far a number must move) and E20: those two say what to compare against, this one
 evidence that lets you compare at all. **Worth pointing at `sidecar/` and the recipe-dedup RESCORE
 lane first** - both already re-score a fixed corpus, so both are one column away from compliant.
 
-### E25 - No similarity threshold here records which kind of space it was tuned on `OPEN`
+### E25 - No similarity threshold here records which kind of space it was tuned on `DONE - REGISTERED AND GATED`
 *Source: NLP with Classification and Vector Spaces (queue 2, course 4), and it sharpens what
 `rag-craft` section 3 already said about reading a distance metric the right way round.* Two
 distinct traps sit under every similarity number the estate computes, and neither is visible in the
@@ -280,6 +280,49 @@ The work is an audit, not a build: find every hard-coded similarity threshold in
 dedup rescore and the near-name shelf scorer, and record beside each one which metric it reads and
 which kind of space that metric came from. Cheap, and it is a precondition for E19's scored test
 set meaning anything. Detail in `rag-craft/vector-space-foundations.md` sections 21 and 22.
+
+**AUDITED 2026-09-06. Register at `sidecar/THRESHOLDS.md`, gated by
+`ops/audit-threshold-register.ps1`.** Seven thresholds in scope, all now recording their space.
+
+**The estate was in better shape than this item assumed, in one specific way.** Every threshold
+already named its metric and most carry the measurement they were set from - `COVERAGE_COS_FLOOR`
+cites the 0.58-0.69 band its true positives sat in, `--keep-above` cites 431 pairs against 159, and
+`catalog-similarity.json` **derives** both its numbers rather than hand-setting them and says so.
+`aisle.py` is the exemplar: it measured cross-encoder against cosine on the four founding failures
+(4.4x separation against 0.6%, which is noise) and records why it pays the reranker's cost. What was
+missing was never the metric. It was the **space**.
+
+**Three non-comparable spaces run here at once**: bi-encoder cosine over L2-normalised bge-m3
+(signed, so 0 is the middle and not the floor), cross-encoder sigmoid probability (0 to 1), and BM25
+(counting, unbounded, 0 is the floor). **The two most confusable numbers sit ten lines apart in
+`sweep.py`** - `COVERAGE_COS_FLOOR` 0.55 and `COVERAGE_RERANK_FLOOR` 0.90 - and read like a loose bar
+and a strict one. They do not share a scale, and neither can be moved by reasoning about the other.
+Worse for a reader: `aisle.py` reports a cross-encoder floor for RIGHT answers of **0.004334** while
+`sweep.py` sets its cross-encoder floor at **0.90**. Both are S2 and both are correct; they score
+different questions. **An operating point is a property of the question, not of the model**, so a
+threshold may never be carried between callers even inside one space.
+
+**A live hazard was found in the S2 space and it is currently not biting.** Verified against the
+installed sentence-transformers 5.6.1 rather than recalled: `cross_encoder/model.py:114` applies
+`nn.Sigmoid()` when `num_labels=1` - **but `get_default_activation_fn()` reads the model's OWN config
+first**, either `config.sentence_transformers["activation_fn"]` or the legacy
+`sbert_ce_default_activation_function`. So two copies of "the reranker" can return scores on
+different scales with no error, and every threshold tuned on one silently means something else on the
+other. Checked across the pinned model and all three local fine-tunes: `num_labels=1`, no declared
+activation, sigmoid everywhere, so `hardeval --reranker` compares like with like today. **Re-check
+whenever a new base is pinned**, because `finetune_reranker.py` saves an
+`AutoModelForSequenceClassification` rather than a `CrossEncoder` and a declared activation is
+exactly the key that would not survive that round trip.
+
+**The gate is strict rather than a ratchet**, unlike `audit-write-seam`. A ratchet is right when a
+backlog exists that nobody can clear in a sitting; here the register was written complete on the day
+the gate shipped, so a new unregistered threshold is always a new omission. It checks that a
+threshold is NAMED with a space, which is the one thing a static check can buy - it cannot check that
+the recorded space is correct, and says so in its own header.
+
+**Also confirmed independently:** `catalog-similarity.json` records
+`signature_shape: "dish: <name>. protein: <protein>"`, which is the same two-of-four-fields finding
+E4 arrived at from the other direction.
 
 ### E26 - A term that is identically zero on our fixtures is untested, not correct `SWEPT - ONE FOUND, FIXED`
 *Source: same course, its naive Bayes module, and it is a different mechanism from E22.* E22 is
