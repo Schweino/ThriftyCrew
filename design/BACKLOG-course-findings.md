@@ -801,42 +801,49 @@ not writing the detector.
 
 Found while running the programme; not course-derived.
 
-### I1 - `~/.claude` is a repo, caught up and normalised. It still has NO REMOTE `OPEN` `BRAD'S CALL`
-294 KB of skills plus the global `CLAUDE.md`, the memory stores, the agent definitions and the
-scheduled tasks - on one disk.
+### I1 - `~/.claude` is backed up to a private remote `DONE` `3116e5b`
+Seven-plus courses of distilled learning, the memory stores, the agent definitions and the scheduled
+tasks lived on one disk with no repo and no remote. Closed 2026-09-06.
 
-`[CORRECTED: 2026-09-06, course 6]` The title said "is not under version control", which stopped
-being true before it was written. Kept rather than rewritten: an item describing a solved problem
-teaches the next reader to re-solve it.
+**Remote:** `github.com/Schweino/claude-store`, **private**, 6 commits, 232 files, 1.0 MB.
+Confirmed on the live page rather than assumed: the Private badge is set, and the top level is
+exactly the allow-list - `agents/`, `projects/`, `scheduled-tasks/`, `skills/`,
+`workspace-context/` and four root files. No transcripts, no cache, no session state, no
+credentials. `gh` would not authenticate, so the repo was created through the browser; git already
+had credentials for `Schweino` in Windows Credential Manager, so the push handled no secrets.
 
-**Two of the three sub-problems are now closed, both verified rather than assumed:**
+Three sub-problems, all measured rather than asserted:
 
 1. **Staleness - FIXED.** The repo held a stale fraction of what it existed to protect: 42 untracked
    paths inside the allow-list and 23 tracked files with real drift, one untouched skill core
    diffing at 750 deletions, because several courses and a consolidation rewrote the store after the
-   repo's first two commits. **71 paths committed.** All inside the allow-list, nothing outside it
-   pulled in. The credential scan in `.gitignore`'s header was re-run against exactly the set being
-   added, and the scanner itself was proved to fire by planting two fake tokens. Clean both times.
+   first two commits. 71 paths committed. The credential scan in `.gitignore`'s header was re-run
+   against exactly the set being added, and **the scanner itself was proved to fire** by planting
+   two fake tokens first. Clean both times.
 2. **Line endings - FIXED, and the one-line fix did not work the first time.** `core.autocrlf=true`
    is set at SYSTEM level here, so a fresh clone came out CRLF while the repo stores LF - E15 in a
-   second repo, invisible in `git diff`. **Measured on worktrees of the commit before and after:
+   second repo, and invisible in `git diff`. **Measured on worktrees of the commits either side:
    231 of 231 tracked files checked out CRLF before, 0 of 232 after.** The catch: the allow-list
    `/*` silently ignored `.gitattributes` ITSELF, so the fix applied locally, would never have been
    committed, and every clone would still have come out CRLF - a fix that reports success and ships
-   nothing. Caught by checking whether the file was TRACKED rather than whether git had accepted it;
-   `!/.gitattributes` is the negation that was missing. Third time this estate has been bitten by
-   the allow-list trap.
+   nothing. Caught by checking whether the file was TRACKED, not whether git had accepted it.
+   `!/.gitattributes` is the negation that was missing. **Third time this estate has been bitten by
+   the allow-list trap**, which is the argument for a gate rather than a fourth memory.
+3. **No remote - FIXED**, above.
 
-**What is still open, and it is the whole of the original exposure: there is no remote.**
-`git remote -v` is empty, so all six commits sit on the same disk as the working copy. Brad ruled
-2026-09-06 for **a private GitHub repo**. Blocked on one thing only: `gh` is installed at
-`C:\Program Files\GitHub CLI\gh.exe` but **not on PATH and not logged in**, and authenticating is
-Brad's to do. Git itself already has working GitHub credentials for `Schweino` through Windows
-Credential Manager, so once the repo exists the push needs no credential handling at all.
+**What this does NOT cover, and it is the same exposure:** `projects/C--Codex/memory/` is its own
+git repo - **16 commits, 190 files, 4.0 MB, no remote** - deliberately excluded from `claude-store`
+because adding it would turn it into a gitlink with nothing behind it and lose that history. It
+needs its own private repo, by the same route. Tracked as I7.
 
-**Also still open, same exposure, separate repo:** `projects/C--Codex/memory/` is its own git repo
-with 16 commits and no remote, deliberately excluded from this one so its history is not lost to a
-gitlink. It needs the same treatment.
+### I7 - `projects/C--Codex/memory/` has 16 commits and no remote `OPEN`
+*Split out of I1, 2026-09-06.* The C--Codex workspace memory store is a separate git repo on the
+same disk as its working copy, with no remote and no backup. Same exposure I1 just closed, same fix:
+a private GitHub repo, created in the browser since `gh` will not authenticate here, then
+`git remote add` and push - git's stored credentials cover it. Scan the tracked set for
+credential-shaped strings first, and prove the scanner fires before believing a clean result.
+Check whether it needs a `.gitattributes` too; `core.autocrlf=true` is system-wide on this machine,
+so it almost certainly does.
 
 ### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `OPEN` `BRAD'S CALL`
 *Surfaced by the Claude Cowork run (course 11), then verified directly rather than taken on its
