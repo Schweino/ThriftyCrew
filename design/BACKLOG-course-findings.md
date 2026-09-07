@@ -284,7 +284,7 @@ the verdict stands and is now stated against something rather than against nothi
 per arm is written to `meal-prep/db/dedup-headtohead-cases.jsonl`, with the discordant counts derived
 from that file rather than being it.
 
-### E5 - Validate at source `PARTLY DONE - FORMAT LAYER RECORDED AND ROUTED`
+### E5 - Validate at source `DONE - THE ENGINE HAD ONE SILENT DROP, NOT 24`
 *Source: MCP (course 3).* A direct criticism of any tooling that hands a model raw rows to sift. The
 four-layer stack is format -> business rules -> self-prompted semantic -> human review, with **low
 confidence routed to review rather than rejection**. Applies to the ingredient queue and the
@@ -322,10 +322,42 @@ ADVISORY, AND BLIND-NEVER-BLOCK - so layer 3 stays advisory until the E19 findin
 ruled for the full stack and the full stack is what is built; this states the assumption rather than
 quietly narrowing it.
 
-**Still open:** `compare-deals.ps1` has 24 drop points in the pricing path and was left alone on
-purpose - it is the core engine, its functions are lifted by three other scripts, and its business-rule
-drops already produce `band-censorship.json` and `basis-outliers.json`. Wiring it is layer 2 work on
-a live engine and wants its own change.
+~~**Still open:** `compare-deals.ps1` has 24 drop points in the pricing path.~~
+
+**CLOSED 2026-09-07, and READING the 24 rather than counting them changed the job entirely.** They
+are not 24 silent drops; they are three different things and only one of them was silent:
+
+| Kind | Where | Was it silent? |
+|---|---|---|
+| FILE-level refusals | `Test-AdWindowClosed`, the price-mode gate | **No.** Both `Write-Warning` with the store, the reason and the row count. |
+| Row-level BUSINESS drop | the expired-sale check | **No.** Increments `$script:ExpiredSaleRows` and lands in `$health` as `expired_sale_rows_dropped`. |
+| Row-level FORMAT drop | `if (-not $name) { return }` at the top of `Add-Norm` | **Yes - and this is the only one.** |
+
+That last one is E5's format layer exactly as the item describes it: a row whose name did not parse
+vanishes before any business rule runs, so a capture whose name field moved would yield fewer rows
+and produce no signal at all. Silent by construction, and one site rather than twenty-four.
+
+**It is now counted PER STORE and reported in `$health` as `nameless_rows_dropped` and
+`nameless_rows_by_store`.** Per store because the total is the wrong grain: three nameless rows
+across seven stores is feed noise, three from ONE store is that store's capture shape having moved,
+which is the event worth seeing.
+
+**Provably inert on pricing, which is why it was safe to do to a live engine without rebuilding a
+board to check.** The row is still dropped, on the same condition, at the same place. No branch was
+added and none removed, so the engine cannot price differently because of this - it is only no longer
+invisible.
+
+**Two traps this file's own scars named, both hit on the way:**
+
+- `Join-String` is a **PowerShell 7** cmdlet and this estate is 5.1. The first draft used it in the
+  `$health` block, where `$ErrorActionPreference` is `Stop` - it would have thrown while composing the
+  health record on the live chain. `-join` instead.
+- The counting was inline in `Add-Norm`, which is defined ~30 lines AFTER `-SelfTest` exits, so
+  nothing could ever have asserted it. Lifted to `Add-TcNamelessRow` and `Format-TcNamelessByStore`
+  above the self-test block, which is this file's own stated rule: "TWO FUNCTIONS, BOTH PURE, BOTH
+  REACHED BY `-SelfTest`". Six fixtures, including the uninitialised-counter case, because a
+  `$script:` variable does not travel with a lifted function and three scripts lift from this file
+  ([[compare-deals-lifters-need-functions]]).
 
 ### E19 - No matcher in the estate has a scored test set `PARTLY DONE - MATCHER SCORED, BLIND SPOT FOUND`
 *Source: Recommender Systems: Evaluation and Metrics (queue 2, course 1).* Every retrieval-shaped
@@ -3568,3 +3600,51 @@ the JSON and HTML entry points, not to the whole tree.
 stage earlier over the git-bus, where the input is not adversarial and a fuzzer would find nothing.
 The value is concentrated at the boundary where outside bytes first arrive - the capture lanes and
 the feed readers - and an item that fuzzes everything would spend its budget on the wrong 200 files.
+
+---
+
+### I39 - 217 self-test files assert on a target set none of them prints, so a vacuous pass is invisible `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+
+**Source.** `chaos-engineering` (KodeKloud, Nasia Ullas, queue-4 course 6, worked 2026-09-07), items
+15 to 17. Routed to `reliability-craft/rca-and-chaos.md` 3.2 and 3.3, and cross-linked from
+`reliability-craft/estate-inventory.md`. Registered as claim C82.
+
+**Where it comes from.** The course's most instructive moment is an experiment that never ran. The
+hypothesis was that terminating 50% of the instances behind an auto-scaling group would not affect
+the application; the targeting resolved to an empty set and the run aborted, because the group was
+running a single instance and 50% of 1 is 0. The tempting reading is a targeting bug. The correct
+reading is that the empty target set WAS the finding - the group's desired and minimum capacity were
+both 1, so the redundancy the hypothesis assumed did not exist, and a real termination would have
+caused downtime. The tool offers two controls against this and both are free: **preview the resolved
+target set before running**, and **read the resolved count in the output afterwards.**
+
+**The estate's exposure, stated exactly.** This is the estate's single most-repeated failure shape
+under a new name. `lib/guard-contract.ps1` exists because "no findings" and "died halfway" are
+indistinguishable without a `<NAME>-COMPLETE` marker, and the notes say that shape has bitten at
+least five separate times. `@($null).Count` is 1, so an absent field scores 1 and a naive "did it
+grow?" check passes when nothing happened. `exit-code-first-tally-second` exists because deleting a
+case left exit 0. A candidate pool that legitimately pops nothing looks the same as a broken query.
+Every one of these is the same defect: **an assertion ran against a set nobody counted.**
+
+**What already exists, so this is not started from zero.** The daemon self-test solved it for one
+suite - `--names-out` / `--names-diff`, exit 2 on a removed case. That is exactly the right control.
+It is one suite out of 217, and it compares CASES rather than reporting a resolved count, so it
+cannot see a lost flag inside a case that still runs.
+
+**Rung 1 is a measurement and it is cheap.** For each `.ps1` carrying a `-SelfTest`, count the
+fixture cases it declares and check whether the run prints that count anywhere a reader could
+compare. The output of rung 1 is one number: how many of the 217 report what they resolved. Do not
+build anything until that number exists - if it is high the item shrinks, and if it is low it sizes
+the work.
+
+**What rung 2 would touch, if the number justifies it.** A line in each self-test harness printing
+the resolved case count alongside the pass/fail tally, and the existing `<NAME>-COMPLETE` convention
+extended to carry it. **Not a new gate.** A threshold on resolved counts would be red on day one for
+a backlog nobody is about to clear, which `.claude/rules/ops-and-gates.md` already forbids; the
+ratchet shape with a high-water mark that may only go down is the only acceptable form if it ever
+becomes enforced at all.
+
+**The honest counter-argument.** A detector whose target set is a literal list in the same file
+cannot resolve empty, and a good fraction of the 217 are that shape. The value is concentrated where
+the target set is DISCOVERED - a glob over the tree, a filter over a board, a query against a pool -
+which is a much smaller set than 217 and is what rung 1 should really be counting.

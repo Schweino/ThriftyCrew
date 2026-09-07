@@ -994,6 +994,39 @@ function Test-AdWindowClosed {
   return $null
 }
 
+function Add-TcNamelessRow {
+  <# Record a row whose name did not parse. Returns the running total, so -SelfTest can assert it.
+
+     THE FORMAT LAYER (2026-09-07, backlog E5). Add-Norm drops a nameless row before any business rule
+     runs, and until now said nothing - so a capture whose name field moved would yield fewer rows and
+     produce no signal at all. E5 calls that silent by construction, and this is the one site in the
+     engine that had it: the file-level drops Write-Warning, and the expired-sale drop already counts
+     into $health.
+
+     PER STORE, because the total is the wrong grain: three nameless rows across seven stores is feed
+     noise, three from ONE store is that store's capture shape having moved.
+
+     NULL-SAFE ON BOTH COUNTERS, because a $script: variable does not travel with a lifted function
+     and three scripts lift from this file ([[compare-deals-lifters-need-functions]]). #>
+  param([string]$Store)
+  if ($null -eq $script:NamelessRowsByStore) { $script:NamelessRowsByStore = @{} }
+  $k = [string]$Store
+  if (-not $k) { $k = '(no store)' }
+  $script:NamelessRowsByStore[$k] = 1 + [int]$script:NamelessRowsByStore[$k]
+  $script:NamelessRows = 1 + [int]$script:NamelessRows
+  return $script:NamelessRows
+}
+
+function Format-TcNamelessByStore {
+  <# The per-store breakdown as one stable string, or '' when there is nothing to say.
+
+     -join and NOT Join-String: this estate is PowerShell 5.1 and Join-String is a 7-only cmdlet. It
+     would have thrown inside the health block, where $ErrorActionPreference is Stop. #>
+  param($ByStore)
+  if ($null -eq $ByStore -or -not $ByStore.Keys.Count) { return '' }
+  return (($ByStore.Keys | Sort-Object | ForEach-Object { $_ + '=' + [int]$ByStore[$_] }) -join ',')
+}
+
 # ---------------------------------------------------------------- SELF-TEST (provable multibuy math; -SelfTest exits here)
 # Which everyday-price files (out\regular\<store>-regular-<date>.json) to load per store. EVERYDAY-ONLY stores
 # (Walmart) run no weekly ad cycle, so a partial daily refresh (a throttled ~50-item pull) must UNION with the
@@ -2275,7 +2308,29 @@ if ($SelfTest) {
   else { Write-Output 'FAIL  native: fl oz tokenised as ' + (ConvertTo-DisplayedUnitToken '37.3 c/fl oz'); $script:fail++ }
 
   Write-Output ('-'*54)
-  if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
+  # THE FORMAT-LAYER COUNTER (2026-09-07, backlog E5). Single-quoted literals: built by concatenation
+  # these would be three positional arguments and the case would run on a fragment.
+  function _T($label, $cond, $got) { if ($cond) { Write-Output ("ok    " + $label) } else { Write-Output ("FAIL  " + $label + "  got: " + $got); $script:fail++ } }
+  $script:NamelessRows = 0; $script:NamelessRowsByStore = @{}
+  $null = Add-TcNamelessRow 'Aldi'
+  $null = Add-TcNamelessRow 'Aldi'
+  $n3 = Add-TcNamelessRow 'Hy-Vee'
+  _T 'MUST FIRE  a nameless row is COUNTED instead of vanishing - the one silent drop in this engine' ($n3 -eq 3) ([string]$n3)
+  _T 'MUST FIRE  the count is PER STORE, because three across seven stores is noise and three from one store is a capture shape that moved' `
+    ((Format-TcNamelessByStore $script:NamelessRowsByStore) -eq 'Aldi=2,Hy-Vee=1') (Format-TcNamelessByStore $script:NamelessRowsByStore)
+  $script:NamelessRowsByStore = @{}
+  _T 'MUST NOT FIRE  no nameless rows reports an empty string, never a null that breaks the health block' `
+    ((Format-TcNamelessByStore $script:NamelessRowsByStore) -eq '') ('[' + (Format-TcNamelessByStore $script:NamelessRowsByStore) + ']')
+  _T 'MUST NOT FIRE  a null hashtable is empty, not a throw - the shape a lifted caller hands it' `
+    ((Format-TcNamelessByStore $null) -eq '') 'threw or returned non-empty'
+  $script:NamelessRows = $null; $script:NamelessRowsByStore = $null
+  _T 'CLEAN TWIN an UNINITIALISED counter starts at 1, because a $script: variable does not travel with a lifted function' `
+    ((Add-TcNamelessRow 'Walmart') -eq 1) 'a lifted call would have thrown or miscounted'
+  _T 'CLEAN TWIN a row with no store is attributed rather than dropped from the breakdown' `
+    ((Format-TcNamelessByStore $script:NamelessRowsByStore) -like '*Walmart=1*') (Format-TcNamelessByStore $script:NamelessRowsByStore)
+  $script:NamelessRows = 0; $script:NamelessRowsByStore = @{}
+
+  if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct, plus the format-layer nameless-row counter)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
 }
 
@@ -2307,7 +2362,18 @@ function Get-RowProductId($row) {
   return ''
 }
 function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='',$srcRow=$null) {
-  if (-not $name) { return }
+  # THE FORMAT LAYER, AND THE ONE DROP HERE THAT SAID NOTHING (2026-09-07, backlog E5). A row whose
+  # name did not parse vanishes before any business rule runs, so a capture whose name field moved
+  # would yield fewer rows and produce no signal at all - "silent by construction". It is still
+  # dropped, on the same condition, at the same place: no branch is added, so the engine cannot price
+  # differently because of this. It is only no longer invisible.
+  #
+  # PER STORE, because the total is the wrong grain: three nameless rows across seven stores is feed
+  # noise, three from ONE store is that store's capture shape having moved.
+  #
+  # NULL-SAFE, because a $script: variable does not travel with a lifted function and three scripts
+  # lift these ([[compare-deals-lifters-need-functions]]).
+  if (-not $name) { $null = Add-TcNamelessRow $store; return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
   # covers a commodity instead of letting an older capture's price compete with it.
@@ -2354,6 +2420,8 @@ $today = $ads.today
 # than the clock so a pinned regression run stays reproducible.
 $script:BoardToday = [string]$today
 $script:ExpiredSaleRows = 0
+$script:NamelessRows = 0
+$script:NamelessRowsByStore = @{}
 foreach ($d in $ads.deals) {                                                                # weekly ads = 'sale'
   switch ($d.store) {
     # pull-grocery-ads stamps ad_from/ad_to on EVERY deal now - per FLYER for Hy-Vee (it runs three at
@@ -3132,7 +3200,7 @@ $report = @($report | Sort-Object commodity)
 $flagPfx = if ($OutName -eq 'comparison') { 'flagged' } else { "$OutName-flagged" }
 (@{ week_of=$today; flagged_count=$flagged.Count; flagged=$flagged.ToArray(); multibuy_unpriced=$mbUnpriced.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir ("$flagPfx-"+$today+".json")) -Encoding UTF8
 $storesWithData = @($matched | Where-Object { $_.unit_price -ne $null } | ForEach-Object { $_.store } | Select-Object -Unique | Sort-Object)
-$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows; sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown }
+$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows; nameless_rows_dropped=$script:NamelessRows; nameless_rows_by_store=(Format-TcNamelessByStore $script:NamelessRowsByStore); sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown }
 
 # ---------------------------------------------------------------- output
 $out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; health=$health; comparison=$report }
