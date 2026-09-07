@@ -789,37 +789,42 @@ not writing the detector.
 
 Found while running the programme; not course-derived.
 
-### I1 - `~/.claude` has a local repo now, with no remote and most of it untracked `OPEN`
-294 KB across 17 skill files plus the global `CLAUDE.md` - seven courses of distilled learning - on
-one disk. Snapshot taken 2026-09-06 to `~/.claude/backups/skills-2026-09-06`, which protects against
-a bad edit but **not disk failure**.
+### I1 - `~/.claude` is a repo, caught up and normalised. It still has NO REMOTE `OPEN` `BRAD'S CALL`
+294 KB of skills plus the global `CLAUDE.md`, the memory stores, the agent definitions and the
+scheduled tasks - on one disk.
 
-`[CORRECTED: 2026-09-06, course 6]` **The title said "is not under version control" and that is no
-longer true.** `git rev-parse` in `~/.claude` returns a work tree with two commits, the first of
-which is literally "Seven courses of distilled learning were living on one disk with no repo and no
-remote". Kept rather than rewritten, because the correction is the point: an item that describes a
-solved problem teaches the next reader to re-solve it.
+`[CORRECTED: 2026-09-06, course 6]` The title said "is not under version control", which stopped
+being true before it was written. Kept rather than rewritten: an item describing a solved problem
+teaches the next reader to re-solve it.
 
-**What is actually still open, measured 2026-09-06:**
-1. **No remote.** `git remote -v` is empty, so every commit is on the same disk as the working copy.
-   This is the whole of the original exposure and none of it has moved. Still Brad's call.
-2. **The repo is far behind the disk, not merely incomplete.** Measured after committing course
-   6's work: **42 untracked paths and 23 tracked files with real content drift** - one untouched
-   skill core diffs at 750 deletions, because the store has been rewritten by several courses and a
-   consolidation since the repo's two commits were made. A repo that holds a stale fraction reads
-   as protection and is not. Committing three course files needed `git add` on two files git had
-   never seen.
-3. **No `.gitattributes`, and the tree is already mixed.** Every commit warns "LF will be replaced
-   by CRLF the next time Git touches it", which is E15 in a second repo. **Five tracked memory files
-   are CRLF on disk today** while everything else is LF, so the tree was never uniformly one thing -
-   the same thing E15 found here. `* text=auto eol=lf` is the same one-line fix.
+**Two of the three sub-problems are now closed, both verified rather than assumed:**
 
-   **Attempted during course 6 and deliberately backed out.** Adding the file immediately marked
-   dozens of paths modified, in a tree where nine files were being edited by concurrent sessions
-   (`CLAUDE.md`, seven agent definitions, `settings.json`). E15 recorded that this change breaks
-   things before it fixes them, and doing it under concurrent writers is how content gets lost. It
-   needs its own session with a clean tree, and it should be done together with item 2 rather than
-   before it.
+1. **Staleness - FIXED.** The repo held a stale fraction of what it existed to protect: 42 untracked
+   paths inside the allow-list and 23 tracked files with real drift, one untouched skill core
+   diffing at 750 deletions, because several courses and a consolidation rewrote the store after the
+   repo's first two commits. **71 paths committed.** All inside the allow-list, nothing outside it
+   pulled in. The credential scan in `.gitignore`'s header was re-run against exactly the set being
+   added, and the scanner itself was proved to fire by planting two fake tokens. Clean both times.
+2. **Line endings - FIXED, and the one-line fix did not work the first time.** `core.autocrlf=true`
+   is set at SYSTEM level here, so a fresh clone came out CRLF while the repo stores LF - E15 in a
+   second repo, invisible in `git diff`. **Measured on worktrees of the commit before and after:
+   231 of 231 tracked files checked out CRLF before, 0 of 232 after.** The catch: the allow-list
+   `/*` silently ignored `.gitattributes` ITSELF, so the fix applied locally, would never have been
+   committed, and every clone would still have come out CRLF - a fix that reports success and ships
+   nothing. Caught by checking whether the file was TRACKED rather than whether git had accepted it;
+   `!/.gitattributes` is the negation that was missing. Third time this estate has been bitten by
+   the allow-list trap.
+
+**What is still open, and it is the whole of the original exposure: there is no remote.**
+`git remote -v` is empty, so all six commits sit on the same disk as the working copy. Brad ruled
+2026-09-06 for **a private GitHub repo**. Blocked on one thing only: `gh` is installed at
+`C:\Program Files\GitHub CLI\gh.exe` but **not on PATH and not logged in**, and authenticating is
+Brad's to do. Git itself already has working GitHub credentials for `Schweino` through Windows
+Credential Manager, so once the repo exists the push needs no credential handling at all.
+
+**Also still open, same exposure, separate repo:** `projects/C--Codex/memory/` is its own git repo
+with 16 commits and no remote, deliberately excluded from this one so its history is not lost to a
+gitlink. It needs the same treatment.
 
 ### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `OPEN` `BRAD'S CALL`
 *Surfaced by the Claude Cowork run (course 11), then verified directly rather than taken on its
