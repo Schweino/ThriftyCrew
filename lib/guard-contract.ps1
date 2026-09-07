@@ -33,7 +33,25 @@ $__gcSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-S
 function Write-GuardComplete {
   <# Call ONCE, as the last thing a guard does on its normal path. Never inside a -SelfTest branch (those
      have their own PASS/FAIL line) and never before the work is done - a marker printed early is exactly
-     the checkpoint-before-durable lie this contract exists to prevent. #>
+     the checkpoint-before-durable lie this contract exists to prevent.
+
+     THE SUMMARY CARRIES THE DENOMINATOR, NOT JUST THE FINDING COUNT (2026-09-06, backlog E22).
+     Write `scanned=3164 findings=3`, never `findings=3`. Two reasons, and the second is the one that
+     is easy to miss:
+
+       * A count with no population cannot be read at all. "3 findings" is a clean board and a broken
+         one depending on whether 3,164 rows were examined or 4 were.
+       * PRECISION IS NOT A PROPERTY OF A DETECTOR. It is a property of a detector AND the rate at
+         which the thing it detects actually occurs. A rule with 80% recall and a 13% false-alarm rate
+         is right 18% of the times it fires on a population where the target sits in 3% of rows - with
+         nothing mis-scored and no rows dropped. Every -SelfTest in this estate drives one must-fire
+         fixture and its clean twin, which is a 50% base rate BY CONSTRUCTION: it measures recall
+         honestly and overstates precision enormously. So a detector moved to a rarer corpus loses
+         precision with NO code change and no movement in its fixture verdict, and the only number
+         that would have shown it is the live denominator.
+
+     A guard that genuinely has no denominator - one that answers a single yes/no about one file -
+     should say what it looked at instead, e.g. `file=comparison-2026-09-06.json`. #>
   param([Parameter(Mandatory=$true)][string]$Name, [string]$Summary = '')
   Write-Output ("{0}-COMPLETE {1}" -f $Name.ToUpper(), $Summary).TrimEnd()
 }

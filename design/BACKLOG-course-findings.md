@@ -250,7 +250,7 @@ Method in `experiment-craft` (`errors-and-inflation.md` 4 and 5, `effect-size-an
 11). Sits directly on top of E19: a scored test set with no threshold for "it moved" answers half
 the question. Cheapest first step is (2), which is a convention rather than code.
 
-### E22 - Rare-target rules are judged on fixtures with a 50% base rate `OPEN`
+### E22 - Rare-target rules are judged on fixtures with a 50% base rate `HALF DONE`
 *Source: same course, and it sharpens `green-fixture-is-not-production-coverage` rather than
 repeating it.* **Precision is not a property of a detector; it is a property of a detector and the
 rate at which the thing it detects actually occurs.** A rule with 80% recall and a 13% false-alarm
@@ -265,6 +265,24 @@ quote, and for the rules that scan a whole board for a rare defect, track the **
 live output** rather than the fixture verdict. Detail in
 `rag-craft/evaluating-retrieval.md` 11.1 and `experiment-craft/errors-and-inflation.md` 3. Does not
 weaken any gate; it changes how the gate's own numbers should be read.
+
+**HALF DONE 2026-09-06, and the half that shipped is the durable one.** E22 is a convention rather
+than a build, so it went where conventions for detectors are defined: `Write-GuardComplete` in
+`lib/guard-contract.ps1` now documents that a summary carries the **denominator** and not just the
+finding count - `scanned=3164 findings=3`, never `findings=3` - and states why, including the
+base-rate argument in full. Every guard in the estate routes through that function, so a new detector
+meets the rule at the point it is written rather than in a document nobody opens. Guards with no
+denominator are told to name what they looked at instead.
+
+Nothing was sprinkled across the existing audits, deliberately. Retrofitting a denominator onto forty
+detectors on the strength of a general argument is a large diff with no measured defect behind it,
+and several already carry one (`stores=7 shutouts=0`, `scanned=7 unregistered=0`). The convention
+catches the next one and each existing guard can gain it when it is next touched for another reason.
+
+**Still open: the live-prevalence half.** Tracking a confirmed-hit rate on live output, rather than
+the fixture verdict, is a real build - it needs somewhere to record which of a detector's live
+firings turned out to be true - and it has no home yet. It is also the half that would actually
+measure the precision this item says nobody knows.
 
 ### E23 - Our test sets are built out of successes `OPEN - EVIDENCE FOUND`
 *Source: same course, section 12, and it is publication bias wearing our clothes.* Fixtures and
