@@ -275,6 +275,32 @@ def build_argv(agent, reconstruct=False, extra=None, resume=None):
         argv += ["--agent", agent.name]
     if agent.effort:
         argv += ["--effort", agent.effort]
+    # PRE-APPROVED TOOLS ONLY, EVERYTHING ELSE DENIED (2026-09-07, backlog E8). Until today this
+    # passed --allowedTools and no permission mode, so every agent inherited defaultMode from
+    # ~/.claude/settings.json - bypassPermissions. The tool list shaped what an agent reached for and
+    # was not what stopped it reaching further.
+    #
+    # dontAsk and not a prompting mode, deliberately: this lane is unattended, and a mode that asks
+    # would stall the daemon rather than protect it. Value checked against `claude --help`, which
+    # lists acceptEdits, auto, bypassPermissions, default, dontAsk, plan.
+    #
+    # *** IT IS CURRENTLY INERT, AND THAT IS MEASURED, NOT ASSUMED (2026-09-07). *** With the prompt
+    # on stdin so the variadic --allowedTools could not swallow it:
+    #     --permission-mode dontAsk + --allowedTools Read -> a Bash command RAN
+    #     --permission-mode default + --allowedTools Read -> RAN
+    #     --permission-mode plan, which is read-only by definition -> RAN
+    # A read-only mode running a shell command is the decisive one: the CLI flag does NOT govern while
+    # ~/.claude/settings.json carries `defaultMode: bypassPermissions`. So --allowedTools is not a
+    # boundary either, and the tool lists ops/audit-agent-tools.ps1 gates are DOCUMENTATION of intent,
+    # not enforcement.
+    #
+    # The flag stays because it is right in principle and becomes effective the moment that setting
+    # changes - which is Brad's to change, not this file's. Until then, do not describe it as a
+    # boundary anywhere: an unarmed guard that people believe in is worse than a missing one.
+    #
+    # On EVERY road including resume and reconstruct - a resumed dispatch that quietly dropped the
+    # mode would be the one path nobody exercises.
+    argv += ["--permission-mode", "dontAsk"]
     argv += list(extra or [])
     return argv
 
@@ -762,6 +788,14 @@ def selftest():
           primary[primary.index("--effort") + 1] == "high", " ".join(primary))
         T("every dispatch asks for the JSON envelope",
           primary[primary.index("--output-format") + 1] == "json", " ".join(primary))
+        # PRE-APPROVED TOOLS ONLY, ON EVERY ROAD (2026-09-07, backlog E8). Before this, dispatch
+        # passed --allowedTools and NO mode, so agents inherited bypassPermissions from
+        # ~/.claude/settings.json: the tool list shaped what they reached for and did not stop them
+        # reaching further. dontAsk denies rather than prompts, because a prompting mode would stall
+        # an unattended daemon instead of protecting it.
+        T("MUST FIRE  every dispatch runs pre-approved tools only, and DENIES the rest",
+          primary[primary.index("--permission-mode") + 1] == "dontAsk", " ".join(primary))
+
         resumed = build_argv(a, resume="abc-123")
         T("MUST FIRE  the RESUME road continues the session by id and re-declares NEITHER the agent "
           "nor the model - the session already holds both, and a second declaration is a second "
@@ -769,12 +803,21 @@ def selftest():
           "--resume" in resumed and resumed[resumed.index("--resume") + 1] == "abc-123"
           and "--agent" not in resumed and "--model" not in resumed
           and "--append-system-prompt" not in resumed, " ".join(resumed))
+        T("MUST FIRE  the RESUME road keeps the permission mode - a resumed session that dropped it "
+          "would be the one road nobody exercises",
+          "--permission-mode" in resumed and resumed[resumed.index("--permission-mode") + 1] == "dontAsk",
+          " ".join(resumed))
+
         recon = build_argv(a, reconstruct=True)
         T("CLEAN TWIN the fallback road restates model, body and tools (section 4.1a as written)",
           recon[recon.index("--model") + 1] == "claude-opus-4-8"
           and recon[recon.index("--allowedTools") + 1] == "Read,Grep,Glob"
           and recon[recon.index("--append-system-prompt") + 1].startswith("You are a test agent."),
           " ".join(x[:30] for x in recon))
+        T("MUST FIRE  the RECONSTRUCT road keeps it too",
+          "--permission-mode" in recon and recon[recon.index("--permission-mode") + 1] == "dontAsk",
+          " ".join(x[:24] for x in recon))
+
         recon2 = build_argv(b, reconstruct=True)
         T("MUST FIRE  the fallback road omits --allowedTools for an agent that declares none, rather "
           "than passing an empty list and disabling every tool",

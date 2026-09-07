@@ -623,10 +623,43 @@ every new worktree. Would automate the manual copy-in that `run-gates-blind-in-w
 ignored set is ~25 GB, so it must be a narrow list: the four gates' real inputs plus the three board
 files.
 
-### E8 - "Don't ask" permission mode for unattended runs `OPEN`
+### E8 - "Don't ask" permission mode for unattended runs `FLAG SHIPPED - INERT UNTIL THE SETTINGS DEFAULT CHANGES`
 *Source: Claude Code in Action (course 1).* Purpose-built for CI, scheduled jobs and overnight
 batches: pre-approved tools only, everything else auto-denied with no prompt to hang on. May fit the
 scheduled tasks and the daemon better than what they use now.
+
+
+**Brad ruled: set the daemon's dispatch to dontAsk. Done - and then measured, and it does not
+currently do anything.**
+
+`hunt_dispatch` passed `--allowedTools` and no permission mode, so every agent inherited
+`defaultMode` from `~/.claude/settings.json`. It now passes `--permission-mode dontAsk` on all three
+roads, pinned by three must-fire cases including the resume road, which would otherwise be the one
+path nobody exercises.
+
+**Then it was tested rather than assumed**, with the prompt on stdin so the variadic `--allowedTools`
+could not swallow it (an earlier test was malformed exactly that way and the correction matters):
+
+| invocation | result |
+|---|---|
+| `--permission-mode dontAsk` + `--allowedTools Read` | a Bash command **RAN** |
+| `--permission-mode default` + `--allowedTools Read` | **RAN** |
+| `--permission-mode plan` - read-only by definition | **RAN** |
+
+**A read-only mode running a shell command is the decisive one.** The CLI flag is not governing at all
+while `~/.claude/settings.json` carries `defaultMode: bypassPermissions`. Two consequences follow and
+neither was known before:
+
+1. **`--allowedTools` is not a boundary.** The agent tool lists that `ops/audit-agent-tools.ps1` gates
+   are documentation of intent, not enforcement. That audit is still worth having - it keeps the
+   declarations honest - but it does not constrain anything.
+2. **E8 and I6 are one decision, not two.** The flag becomes effective the moment the settings default
+   changes and does nothing until then. That setting governs the surface these sessions run on and is
+   Brad's to change, not mine.
+
+The flag stays: it is right in principle, costs nothing, and arms itself when the default moves. It is
+documented at the call site as inert, because an unarmed guard people believe in is worse than a
+missing one.
 
 ### E9 - Model choice is pinned per agent, but MATE's M is per call `MEASURED - NO SWAP, DEFECT FOUND`
 *Source: AI Agents Architecture (course 7).* All twelve definitions pin one model. A tool that makes
