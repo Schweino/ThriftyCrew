@@ -655,12 +655,28 @@ not writing the detector.
 
 Found while running the programme; not course-derived.
 
-### I1 - `~/.claude` is not under version control `OPEN`
+### I1 - `~/.claude` has a local repo now, with no remote and most of it untracked `OPEN`
 294 KB across 17 skill files plus the global `CLAUDE.md` - seven courses of distilled learning - on
-one disk, no repo, no remote. Snapshot taken 2026-09-06 to
-`~/.claude/backups/skills-2026-09-06`, which protects against a bad edit but **not disk failure**.
-Durable fix needs Brad's call: a private repo for `~/.claude`, or committing the skills into this
-repo under a marked path (simpler, but creates two copies that drift).
+one disk. Snapshot taken 2026-09-06 to `~/.claude/backups/skills-2026-09-06`, which protects against
+a bad edit but **not disk failure**.
+
+`[CORRECTED: 2026-09-06, course 6]` **The title said "is not under version control" and that is no
+longer true.** `git rev-parse` in `~/.claude` returns a work tree with two commits, the first of
+which is literally "Seven courses of distilled learning were living on one disk with no repo and no
+remote". Kept rather than rewritten, because the correction is the point: an item that describes a
+solved problem teaches the next reader to re-solve it.
+
+**What is actually still open, measured 2026-09-06:**
+1. **No remote.** `git remote -v` is empty, so every commit is on the same disk as the working copy.
+   This is the whole of the original exposure and none of it has moved. Still Brad's call.
+2. **Most of the store is untracked.** Committing three course files needed `git add` on two that
+   git had never seen - `CLAIMS-REGISTER.md` and `QUEUE-2.md` - and `procedure.md`,
+   `orchestration.md`, `CONSOLIDATE.md`, `PLAN-knowledge-architecture.md` and the whole `archive/`
+   are still untracked in the `course` skill alone. A repo that holds a fraction of the thing reads
+   as protection and is not.
+3. **No `.gitattributes`.** Committing there warns "LF will be replaced by CRLF the next time Git
+   touches it" on every file, which is E15 in a second repo: a fresh clone would be CRLF while the
+   working copy is LF. `* text=auto eol=lf` is the same one-line fix.
 
 ### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `OPEN` `BRAD'S CALL`
 *Surfaced by the Claude Cowork run (course 11), then verified directly rather than taken on its
