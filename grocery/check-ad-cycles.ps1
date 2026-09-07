@@ -19,6 +19,11 @@ param(
   [string]$Today = "",
   [switch]$Force,
   [switch]$NoPull,
+  # Set by capture-run, which commits this chain's output itself in its own publish stage. Without it
+  # the same work would be committed twice. When a HUMAN or a triage session runs this script directly
+  # there is no such caller, and until 2026-09-07 that route committed nothing at all: on 2026-09-06 it
+  # ran twice, at 09:51 and 11:55, and left 141 files sitting dirty for twenty hours.
+  [switch]$NoCommit,
   [switch]$NoDownstream,
   [switch]$NoAlert,
   [switch]$NoPublish,
@@ -3006,5 +3011,26 @@ Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim() +
 # exactly what the caller believes the code means. Findings live in $summary and in each audit's own
 # exit code; they have never made this script non-zero and must not start now, or a REVIEW line would
 # read to capture-run as a failed lane.
+
+# COMMIT WHAT THIS CHAIN OWNS, unless the caller is going to (2026-09-07). capture-run passes
+# -NoCommit and keeps committing in its own publish stage, untouched. Everyone else - a human, a
+# triage session - gets their work committed here instead of leaving it for tomorrow's sweep.
+#
+# NOT A SWEEP, and the distinction is the whole safety case: lib\pipeline-commit.ps1 stages an
+# explicit list and REFUSES outright if any of it looks like source or config. That is what makes an
+# unattended committer safe in a tree that sessions are editing, and it is the direct answer to
+# 2026-09-05, when a blind add put 192 mid-edit .ps1 files on main.
+#
+# Guarded and non-fatal: a chain that cannot commit is degraded, and a chain KILLED BY its committer
+# has lost the board it just built.
+if (-not $NoCommit) {
+  try {
+    . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')
+    $msg = Invoke-PipelineCommit -Repo (Split-Path $root -Parent) -Paths (Get-PipelinePaths -Kind pricing) `
+             -Message ("Pricing chain: board, recost and audits (" + (Get-Date).ToString('yyyy-MM-dd') + ") [pricing]") `
+             -Name 'check-ad-cycles' -Push
+    Log $msg
+  } catch { Log ('pricing committer threw and was swallowed: ' + $_.Exception.Message) }
+}
 exit 0
 

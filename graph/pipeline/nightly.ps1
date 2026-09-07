@@ -631,4 +631,16 @@ finally {
 # scheduled task that reports failure for "the GPU was busy" trains its owner to ignore it. The one
 # thing worth an alarm is a card this script could not hand back.
 if (-not $freed) { exit 3 }
+# COMMIT WHAT THIS LANE OWNS (2026-09-07). Same reason as the harvest crawl: capture-run was the only
+# committer, so a night's identity, learning and provenance state waited for the morning sweep. The
+# provenance file in particular is an append-only record of what this chain decided, and an
+# uncommitted one is invisible to anything that reads the newest COMMITTED artefact.
+try {
+  . (Join-Path $root 'lib\pipeline-commit.ps1')
+  $msg = Invoke-PipelineCommit -Repo $root -Paths (Get-PipelinePaths -Kind graph) `
+           -Message ("Graph nightly: identity, learning and provenance (" + (Get-Date).ToString('yyyy-MM-dd') + ") [graph]") `
+           -Name 'graph-nightly' -Push
+  Write-Output $msg
+} catch { Write-Output ('graph-nightly: committer threw and was swallowed: ' + $_.Exception.Message) }
+
 Done 0

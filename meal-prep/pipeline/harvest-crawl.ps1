@@ -233,4 +233,21 @@ if ($idxStale) {
 }
 
 Say ("harvest-crawl: exit {0}  (log: {1})" -f $rc, $log)
+# COMMIT WHAT THIS LANE OWNS (2026-09-07). Until today capture-run.ps1 was the only committer in the
+# estate, so this task's pool and harvest state sat uncommitted until the next morning swept the tree -
+# on 2026-09-06 that was twenty hours. Several engines here read the newest COMMITTED artefact, so
+# uncommitted state is not merely untidy, it is invisible.
+#
+# NOT A SWEEP. lib\pipeline-commit.ps1 stages an explicit list and REFUSES outright if any of it looks
+# like source or config, which is the 2026-09-05 shape. Push is one attempt and never blocks: if it
+# fails the commit stays local and the next capture-run carries it.
+try {
+  . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\pipeline-commit.ps1')
+  $repoRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+  $msg = Invoke-PipelineCommit -Repo $repoRoot -Paths (Get-PipelinePaths -Kind harvest) `
+           -Message ("Harvest crawl: pool and harvest state (" + (Get-Date).ToString('yyyy-MM-dd') + ") [harvest]") `
+           -Name 'harvest-crawl' -Push
+  Say ('  ' + $msg)
+} catch { Say ('  harvest-crawl: committer threw and was swallowed: ' + $_.Exception.Message) }
+
 Done $rc

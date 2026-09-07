@@ -560,7 +560,9 @@ if ($runDownstream -and -not $WhatIf) {
 if ($runDownstream) {
   Write-RunStatus 'downstream'
   Write-Output ''
-  Write-Output 'downstream: check-ad-cycles -NoPull (compare -> guards -> publish -> recipes -> commit)'
+  # -NoCommit because THIS script commits the chain's output in its own publish stage below.
+  # Without it the same work would be committed twice (2026-09-07).
+  Write-Output 'downstream: check-ad-cycles -NoPull -NoCommit (compare -> guards -> publish -> recipes -> commit HERE)'
   $cac = Join-Path $root 'check-ad-cycles.ps1'
   if (Test-Path $cac) {
     # NO 2>&1 ON THE CHILD (fixed 2026-08-22). This line used to read:
@@ -585,7 +587,7 @@ if ($runDownstream) {
     # transcript that says how far it got. Verified: with no 2>&1 the child's stderr passes straight
     # through untouched (no NativeCommandError, no throw) and $LASTEXITCODE still reads the child's
     # real exit code through the pipeline.
-    & powershell -NoProfile -ExecutionPolicy Bypass -File $cac -NoPull | ForEach-Object { Write-Output ("  " + $_) }
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $cac -NoPull -NoCommit | ForEach-Object { Write-Output ("  " + $_) }
     $dsRc = $LASTEXITCODE
     Write-Output ("downstream rc=$dsRc")
     if ($dsRc -ne 0) { $failed += 'downstream' }
