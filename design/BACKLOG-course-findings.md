@@ -192,11 +192,48 @@ the verdict stands and is now stated against something rather than against nothi
 per arm is written to `meal-prep/db/dedup-headtohead-cases.jsonl`, with the discordant counts derived
 from that file rather than being it.
 
-### E5 - Validate at source `OPEN`
+### E5 - Validate at source `PARTLY DONE - FORMAT LAYER RECORDED AND ROUTED`
 *Source: MCP (course 3).* A direct criticism of any tooling that hands a model raw rows to sift. The
 four-layer stack is format -> business rules -> self-prompted semantic -> human review, with **low
 confidence routed to review rather than rejection**. Applies to the ingredient queue and the
 capture readers.
+
+**BUILT 2026-09-06 on Brad's ruling for the full stack. `lib/ingest-ledger.ps1`, wired into
+`import-walmart-batch.ps1`.** Measured before building, because E9 and E4 both inverted their own
+premise once measured and this item's deserved the same:
+
+| | |
+|---|---|
+| `capture-lib.ps1` | placeholder drops COUNTED, and a shape change already routes to REVIEW |
+| `import-walmart-batch.ps1` | 3P / test / quarantine / reject each reach a NAMED list with a reason, and the rejects reach `out\walmart-batch-rejects-<date>.json` for a human |
+| its PARSE loop | a line with no tab, a field group under three fields, and a row with no name - **no count, no record** |
+
+**So the gap is narrower than the item describes and it is the worst-shaped one: the FORMAT layer.**
+A business-rule rejection is loud by construction because somebody wrote the rule. A format drop is
+silent by construction because it happens before anyone's rule runs, so a reducer that changed its
+output shape would yield nothing and say so in no way at all.
+
+`New-IngestLedger` / `Add-IngestRead` / `Add-IngestDrop` / `Get-IngestReview` count with their
+**denominator** and route on two triggers. The second matters: a single reason taking more than 20%
+of rows read is a shape change, **and separately, rows read with NOTHING kept is a review even though
+no rule was violated** - in that case every share is 0 or 100 and a threshold tuned for normal noise
+cannot see it. Verified end to end on a synthetic capture through the real importer with `-OutRoot`
+pointed at a scratch directory: 5 read, 0 kept, four reasons recorded with examples, and the
+not-one-kept review fired. Before this, that run printed `total 0` and nothing said why.
+
+**Layer 3 is deliberately NOT wired as a gate, and the reason is a measurement from the same day.**
+The semantic layer is `sidecar/`, and E19 has just shown its retrieval stage drops **186 of 2,816**
+known-correct pairs under an absolute cosine floor. Wiring it to gate ingest would bake that blind
+spot into the ingest path, where it would reject correct rows for the same reason the coverage sweep
+cannot see missing ones. The estate's own precedent is the right shape here - `aisle.py` is marked
+ADVISORY, AND BLIND-NEVER-BLOCK - so layer 3 stays advisory until the E19 finding is ruled on. Brad
+ruled for the full stack and the full stack is what is built; this states the assumption rather than
+quietly narrowing it.
+
+**Still open:** `compare-deals.ps1` has 24 drop points in the pricing path and was left alone on
+purpose - it is the core engine, its functions are lifted by three other scripts, and its business-rule
+drops already produce `band-censorship.json` and `basis-outliers.json`. Wiring it is layer 2 work on
+a live engine and wants its own change.
 
 ### E19 - No matcher in the estate has a scored test set `PARTLY DONE - MATCHER SCORED, BLIND SPOT FOUND`
 *Source: Recommender Systems: Evaluation and Metrics (queue 2, course 1).* Every retrieval-shaped

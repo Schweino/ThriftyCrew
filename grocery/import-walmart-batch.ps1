@@ -428,28 +428,38 @@ $droppedTest = New-Object System.Collections.ArrayList
 $quarantined = New-Object System.Collections.ArrayList
 $rejects = New-Object System.Collections.ArrayList
 $overrides = New-Object System.Collections.ArrayList
+# THE FORMAT LAYER'S RECORD (2026-09-06, backlog E5). Every OTHER drop in this file already reaches a
+# named list with a reason, and the rejects reach out\walmart-batch-rejects-<date>.json for a human.
+# The three below did not: a line with no tab, a field group under three fields, and a row with no
+# name were dropped with no count and no record at all. That is the worst-shaped silence in an ingest,
+# because a business-rule rejection is loud by construction - somebody wrote the rule - while a format
+# drop happens before anyone's rule runs. A reducer that changed its output shape would have yielded
+# nothing here and said so in no way whatsoever.
+. (Join-Path $root '..\lib\ingest-ledger.ps1')
+$ledger = New-IngestLedger -Stage 'walmart-batch-parse'
 foreach ($ln in $lines) {
-  if (-not ($ln -match "`t")) { continue }
+  if (-not ($ln -match "`t")) { Add-IngestRead $ledger; Add-IngestDrop $ledger 'line-has-no-tab' ($ln.Substring(0, [math]::Min(60, $ln.Length))); continue }
   $prodStr = ($ln -split "`t", 2)[1]
   foreach ($p in ($prodStr -split '\|')) {
+    Add-IngestRead $ledger
     $f = $p -split '~~'
-    if ($f.Count -lt 3) { continue }
+    if ($f.Count -lt 3) { Add-IngestDrop $ledger 'under-three-fields' ($p.Substring(0, [math]::Min(60, $p.Length))); continue }
     $nm = ($f[0]).Trim()
-    if (-not $nm) { continue }
+    if (-not $nm) { Add-IngestDrop $ledger 'no-product-name' ($p.Substring(0, [math]::Min(60, $p.Length))); continue }
     # VENDOR TEST LISTING. This parser reads the reducer output directly rather than through
     # Import-CaptureCsv, so it does not inherit that reader's guard and needs its own. It is checked here,
     # ahead of the seller and unit-price checks, because a test row can pass BOTH: "Test Id 1 Homekist Fudge
     # Grahams" (item 105676485) was first-party, correctly priced at $2.26, and reproduced its own unit price
     # exactly. It reached the graph's confirm-match review as a live graham-crackers candidate on 2026-08-20
     # and was caught by a human reading the name. See placeholder-name-patterns.json.
-    if (Test-PlaceholderProductName $nm) { [void]$droppedTest.Add(("{0}  [id={1}, {2}]" -f $nm, $(if ($f.Count -ge 4) { ($f[3]).Trim() } else { '' }), [string]$f[1])); continue }
+    if (Test-PlaceholderProductName $nm) { Add-IngestDrop $ledger 'vendor-test-listing' $nm; [void]$droppedTest.Add(("{0}  [id={1}, {2}]" -f $nm, $(if ($f.Count -ge 4) { ($f[3]).Trim() } else { '' }), [string]$f[1])); continue }
     $itemId = ''; if ($f.Count -ge 4) { $itemId = ($f[3]).Trim() }
     $sv = Test-IwbSeller $f $TrustNoSeller.IsPresent
-    if ($sv.drop3p) { [void]$dropped3P.Add(("{0}  [seller={1}, fulfill={2}]" -f $nm, $sv.seller, $sv.fulfill)); continue }
-    if ($sv.quarantine) { [void]$quarantined.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; reason = 'no seller/fulfillment fields - marketplace filter cannot run; re-capture with the 6-field reducer, or hand-verify sellers and re-run with -TrustNoSeller' }); continue }
+    if ($sv.drop3p) { Add-IngestDrop $ledger 'third-party-seller' $nm; [void]$dropped3P.Add(("{0}  [seller={1}, fulfill={2}]" -f $nm, $sv.seller, $sv.fulfill)); continue }
+    if ($sv.quarantine) { Add-IngestDrop $ledger 'quarantined-no-seller-fields' $nm; [void]$quarantined.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; reason = 'no seller/fulfillment fields - marketplace filter cannot run; re-capture with the 6-field reducer, or hand-verify sellers and re-run with -TrustNoSeller' }); continue }
     $wasPx = ''; if ($f.Count -ge 7) { $wasPx = ($f[6]).Trim() }
     $res = Convert-BatchRow ([pscustomobject]@{ q = ''; n = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; was = $wasPx }) $overrides
-    if ($res.err) { [void]$rejects.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; reason = $res.err }); continue }
+    if ($res.err) { Add-IngestDrop $ledger 'row-rejected' $nm; [void]$rejects.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; reason = $res.err }); continue }
     $row = $res.row
     $row | Add-Member -NotePropertyName as_of -NotePropertyValue $today -Force
     $row | Add-Member -NotePropertyName seller_check -NotePropertyValue $sv.check -Force
@@ -462,9 +472,18 @@ foreach ($ln in $lines) {
     # and rode the 90-day Walmart carry with nothing able to expire it. Same function the builders call.
     if (Set-RollbackFields -Row $row -Was $wasPx -Store 'Walmart' -ItemId $itemId -Date $today -Root $root) { $markdowns++ }
     [void]$rows.Add($row)
+    Add-IngestKept $ledger
     if ($itemId) { $ids[$nm] = $itemId }
   }
 }
+# THE DENOMINATOR, AND THE ROUTING (backlog E5 + E20). "12 dropped" is a clean run out of 4,000 rows
+# and a catastrophe out of 13, so the count is meaningless without what it was read from. The REVIEW
+# line fires on a shape change or on nothing being kept at all; it never blocks, because withholding a
+# correct import is not obviously safer than shipping it and the human is the one who decides.
+Write-Output ("Walmart parse: read {0} row(s), kept {1}, dropped by reason: {2}" -f $ledger.Read, $ledger.Kept, (Format-IngestReasons $ledger))
+[void](Write-IngestLedger $ledger (Join-Path $outRootDir ("out\ingest-walmart-batch-$today.json")))
+$ingestReview = Get-IngestReview $ledger
+if ($ingestReview) { Write-Output $ingestReview }
 if ($dropped3P.Count -gt 0) { Write-Output ("Walmart: DROPPED {0} third-party/marketplace row(s) (in-store rule):" -f $dropped3P.Count); $dropped3P | ForEach-Object { Write-Output ('  - ' + $_) } }
 if ($droppedTest.Count -gt 0) { Write-Output ("Walmart: DROPPED {0} vendor TEST listing(s) (placeholder-name-patterns.json):" -f $droppedTest.Count); $droppedTest | ForEach-Object { Write-Output ('  - ' + $_) } }
 if ($overrides.Count -gt 0) { Write-Output ("Walmart: {0} row(s) where the name size beat Walmart's own unit price:" -f $overrides.Count); $overrides | ForEach-Object { Write-Output ('  - ' + $_) } }
