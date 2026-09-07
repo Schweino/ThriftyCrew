@@ -161,6 +161,12 @@ $static = @(
   # provable cases were renamed; this keeps a new one from appearing (backlog I11). It only judges
   # labels whose ASSERTION settles the sign, and its own header says so rather than implying a sweep.
   @{ f = 'ops\audit-fixture-vocabulary.ps1'; n = 'no fixture is labelled CLEAN TWIN while asserting that a detector found nothing' }
+  # The same one-label-two-meanings defect as the line above, one floor up: the backlog's `OPEN` meant
+  # work nobody started, a decision waiting on Brad, AND a measurement whose conclusion was "do not
+  # build this". Seventeen items read as a to-do list and five of them were never tasks (2026-09-07).
+  # Five states with a precedence now, and this fails a heading that invents a sixth or declares none.
+  # -Summary prints the board, so "what is open for me" is a command rather than a reading exercise.
+  @{ f = 'ops\audit-backlog-status.ps1'; n = 'every backlog item declares exactly one state from the closed vocabulary' }
   # THREE non-comparable score spaces run here at once - bi-encoder cosine, cross-encoder
   # sigmoid probability, and BM25 - and the two most confusable numbers sit TEN LINES APART in
   # sweep.py: COVERAGE_COS_FLOOR 0.55 and COVERAGE_RERANK_FLOOR 0.90. They read like a loose bar
