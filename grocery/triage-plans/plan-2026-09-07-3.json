@@ -1,0 +1,143 @@
+{
+  "generated": "2026-09-07T16:55",
+  "round": 3,
+  "board_week": "2026-09-07",
+  "scope": "The tail of the 2026-09-07 grocery alert triage: 8 rulings Brad had parked and 8 items rounds 1 and 2 could not finish. Not a reviewer-to-developer handoff - the triage queue was already clear of open items - so this file is the RULING DOCUMENT the four registry entries in ops/ruling-implementations.json cite, plus the record of what was decided and on what evidence.",
+  "trust_statement": "Three of the sixteen turned out to rest on a premise that had never been measured, and saying so is the main product of this run. Item 3 (yukon-gold @ Family Fare) assumed the store has no everyday yellow potato; the capture rotation had never asked - 595 of 602 terms carry outcome=not_attempted and 'yukon gold potatoes' is ordinal 342 against a budget of 7. Item 14 reported a 14-byte live drift measured against a working copy another session is holding mid-recost; against the committed source it is 1 byte. Item 6's feared misprice does not occur on today's board: of 33 range/or cells only 2 name several products AND carry two sizes, neither holds a crown, and both already price on the basis that matches their commodity's unit. What is NOT proven: the identity re-emit clears the staple BLIND and was watched doing it, but the re-emit is gated on $serverDue, so it is not guaranteed to run on a day when no server store's ad window is due - that gate was read, not exercised.",
+  "rulings": [
+    {
+      "n": 1,
+      "subject": "baked-beans: is pork and beans a baked bean?",
+      "ruling": "NO",
+      "evidence": "Six cells on the 2026-09-07 board: four true baked beans (Aldi, Sam's, Walmart, Baker's) and two pork-and-beans, with the crown on 'Fareway Pork and Beans' at 0.0593/oz. The cheapest cell was a different product from the four it was compared against. known-wrong.json already ruled the identical product wrong at Hy-Vee on 2026-08-08, naming the real store-brand floor there (0.0757 over five 28 oz variants); the include pattern carried no reasoning at all.",
+      "action": "add-commodity-rule.ps1 -Id baked-beans -RemoveInclude 'pork\\s*(?:&|and)\\s*beans' - 592-entry file verified, 0 collateral changes. audit-match-soundness: MOVED=0, DROPPED=7, new-contested=0, and all seven drops are pork-and-beans products.",
+      "result": "After the rebuild all six cells are genuine baked beans and no store lost its cell. Fareway keeps the crown at 0.0711 on a REAL baked bean (Saucy Spoon Applewood Smoked Bacon), tying Aldi - so the predicted 'Fareway loses its crown to Aldi' did not happen; Fareway had its own qualifying sale. Family Fare moved from Van Camp's pork and beans to Our Family Original Baked Beans at 0.0925.",
+      "class_fix": "NONE, and the reason is measured rather than an omission. The obvious detector - flag a commodity whose include still admits what its own ledger rules wrong - is red on 74 of 246 ruled-wrong names, because that is precisely what the blocklist is FOR: it exists for products an include cannot exclude ('cucumbers?' catching a cucumber-scented towelette). Three discriminators were tried; each either kept most of the 74 or lost this case too. Separating 'narrow the rule' from 'rule the cell wrong' is a judgement, not a computation. Recorded instead in ops/ruling-implementations.json so the pattern cannot come back unnoticed."
+    },
+    {
+      "n": 2,
+      "subject": "the memory store's private backup remote",
+      "ruling": "ALLOWLIST",
+      "evidence": "Anonymous GET of info/refs returns 401 and the GitHub API returns 404. Verified against a CONTROL in the same session: ThriftyCrew's own public repo returns 200 through the identical probe, so the 401 is a measurement rather than a probe that always says no.",
+      "action": "ops/memory-remote-allowlist.json plus Get-AllowedRemote and Test-RemoteIsPrivate in ops/audit-memory-backup.ps1.",
+      "result": "Stricter in three places, not weaker: an UNLISTED remote fails exactly as before; a LISTED one is re-proven private on EVERY run, which the old absolute rule could never have done because it never looked at a repository; and one that cannot be probed is BLIND, never clean. No credentials are sent - a probe carrying a token would report every private repo as public. Live: clean, 190 files. Queue item 2026-09-07-4f672e closed."
+    },
+    {
+      "n": 3,
+      "subject": "yukon-gold-potatoes @ Family Fare",
+      "ruling": "NONE OF THE THREE - the premise was never measured",
+      "evidence": "pull-regular-familyfare works a rotation: Freshop throttles on per-window request COUNT, so the measured-good burst is about seven terms per run out of 602. In today's file 595 of 602 carry outcome=not_attempted, and 'yukon gold potatoes' is ordinal 342. The term has not been asked; the store may well stock it. Separately, this audit's header claimed Family Fare gaps self-heal via research-familyfare-everyday.ps1 - a script that does not exist and never did.",
+      "action": "audit-sale-fallback.ps1 now reports a gap UNPROVEN when every search term for that commodity carries not_attempted in the store's own everyday file, and an unproven gap does not escalate. derive-not-carried.ps1 already stated this rule for its own question; this file did not.",
+      "result": "Live: 5 gaps, 0 escalated, 1 unproven - it was 1 escalated on day 0, paging daily to somebody who could not act on it. The rule is deliberately asymmetric: ONE attempted term makes an absence meaningful, a store recording no capture_terms behaves exactly as before, and a commodity with no terms is unchanged. A new blind spot must not arrive as a new silence."
+    },
+    {
+      "n": 4,
+      "subject": "band-censorship median discriminator, 0.4 or 0.3",
+      "ruling": "LEAVE AT 0.4",
+      "evidence": "0.3 keeps four arguable rows but leaves the 1/16 deli row at 0.318 standing. A ratchet with a known false positive in it is one people learn to scroll past, and that costs more than four maybes.",
+      "action": "The cost of the ruling is now recorded rather than hidden: every row the median floor retires is counted and named on each run.",
+      "result": "14 retired on 2026-09-07, and the four Brad was told about are all legible in it - pepperoni 0.3949, four 7.2 oz frozen pizzas 0.3913, muffins 0.383, couscous 0.3597. If that list grows, 0.4 is wrong and the number says so."
+    },
+    {
+      "n": 5,
+      "subject": "crown-by-contest: hard guard or advisory",
+      "ruling": "KEEP ADVISORY",
+      "evidence": "It detects a matcher TIE - two rules both admit a name and array order picked the winner - and array order is usually right. Stopping a live paid board on an ambiguity is disproportionate. Today's count is 0.",
+      "action": "The choice was a FALSE ONE until now: audit-match-soundness exits 1 for this, and check-ad-cycles handled exit 2 and exit 3 and nothing else, so a new contested name holding a crown produced no summary line at all. Advisory meant discarded. The rc=1 branch now reports, and test-auditors pins it.",
+      "result": "Advisory, and now actually read."
+    },
+    {
+      "n": 6,
+      "subject": "range-priced ad rows",
+      "ruling": "(a) KEEP MAX-END PRICING",
+      "evidence": "Of 33 range-or-'or' sale cells on today's board, only TWO name several products AND carry two distinct sizes - laundry-pods @ Fareway ('73 oz or 39 ct') and sports-drinks @ Baker's ('Powerade 28 fl oz or Body Armor 16 fl oz'). Neither holds a crown, and both already price on the basis that matches their commodity's unit: laundry-pods on per-39-pack (the pods, not the 73 oz liquid) and sports-drinks on 28 floz, a size a shopper can actually buy at that price. The feared misprice does not occur here.",
+      "action": "No change. Option (b) would move 14 of 20 range cells to the min end including rice-cakes, which is known correct at max; option (c) would refuse about 20 cells including three crowns whose prices are right - 'Gala or Granny Smith apples, $1.88 lb' is a correct apples price.",
+      "class_fix": "NONE SHIPPED, stated rather than implied. The invariant worth guarding is that a multi-size range row's chosen basis unit equals the commodity's unit, and it holds on both live cells - but the mechanism that makes it hold was read, not tested, and gating on a mechanism I have not exercised would be a guard asserting something I did not verify. Recorded here so the next run can pick it up with the measurement already done."
+    },
+    {
+      "n": 7,
+      "subject": "kind_equivalent near-water on disinfectant-spray",
+      "ruling": "KEEP THE DECLARATION",
+      "evidence": "A physics fact about a commodity is re-derivable; a per-size allowlist entry is a decision nobody can re-derive, which is the failure the retire_when discipline was written for (2026-07-30: two entries justified by 'the store does not carry the item' while the store carried it). Per-size entries are unbounded - each new size is another review and another chance to be wrong. The declaration is scoped to one commodity, an unrecognised value is NOT a silence, and its fixtures already include 'a declaration on ANOTHER commodity must not silence this one'. It also errs safely: treating fl oz as weight oz for a near-water liquid OVERSTATES the per-unit by about 4 percent.",
+      "action": "No change; registered in ops/ruling-implementations.json so removal is visible."
+    },
+    {
+      "n": 8,
+      "subject": "a pre-commit check on commodities.json",
+      "ruling": "ADD THE HOOK",
+      "evidence": "b28788fa changed six commodities' rules at 05:45 on 2026-09-06 with neither audit-match-soundness -Accept nor guards; the board stopped by 08:14 and three of that day's nine alerts were its footprint.",
+      "action": "ops/verify-commodities-gate.ps1 as a third arm of ops/hooks/pre-commit: a staged rule input must have match-baseline.json accepted at the SAME rules_hash, which audit-match-soundness now records. It hashes the STAGED bytes, because a partial `git add -p` commits something the working tree does not contain.",
+      "result": "It fired on the first rule change made after it - this run's own commodities.json edit - and then FALSE-blocked, which mattered more: the first cut materialised the staged blob through `& git show`, which returns decoded lines with the BOM eaten, so it hashed an artifact nobody had staged. A gate that false-blocks is a gate somebody routes around with --no-verify. It copies raw bytes now and the byte-fidelity case is fixtured."
+    }
+  ],
+  "items": [
+    {
+      "n": 9,
+      "subject": "ops/verify-bulk-edit.ps1 had no [CmdletBinding()]",
+      "status": "done",
+      "proof": "Reproduced on HEAD 43f09cff4 before any change: `-Paths grocery/commodities.json` printed '52 modified tracked file(s) compared against HEAD; 0 finding(s)' and exited 0. After: NamedParameterNotFound, exit 1.",
+      "class": "96 of the 281 param()-declaring scripts under ops/ and grocery/ are in the CHECKING class and were fixed. ops/audit-arg-binding.ps1 ratchets it at 0 of 117 examined, reading the PARSER's ParamBlock rather than a regex.",
+      "cost": "The sweep broke two things and both are now fixtured: [CmdletBinding()] leaves $PSScriptRoot EMPTY in a param default under PS 5.1 (three files died at bind time; the only symptom was guards reporting a HARD FAIL on coverage regression), and the insert regex matched a param line at column 0 INSIDE a here-string, editing a fixture - verify-bulk-edit's own defect 2, committed by the tool fixing defect 7. All 94 insert sites were re-checked against the AST: 93 real, 1 reverted."
+    },
+    {
+      "n": 10,
+      "subject": "out/chain-verdict.json was trusted on its date alone",
+      "status": "done",
+      "proof": "Still stale at 14:47 (guards_blocked=true from 08:14). Cleared by MEASURING it: grocery/refresh-chain-verdict.ps1 runs guards and hands the observed exit code to the single writer, so it cannot name an rc it did not produce. Result: guards rc 0, status PASS over inputs c243cc5b400faa04.",
+      "root_fix": "The verdict now carries an input fingerprint - the sha256 of every artifact guards.ps1 reads - and lib/chain-verdict-lib.ps1 is the one writer and one reader. Only PASS ships; OTHER-DAY, STALE-INPUTS and ABSENT are treated identically. The direction that costs money is the reverse of the one reported: guards PASS at 08:14, commodities.json edited at 11:10, a hand-run push-data at 14:00 shipping a board no gate has seen."
+    },
+    {
+      "n": 11,
+      "subject": "run-gates stripped line comments but not block comments",
+      "status": "done",
+      "proof": "Discovery 209 -> 201. The eight that leave are named, not counted: browser-feeds-lib, capture-lib, capture-policy-lib, ff-price-lib, regular-fileset-lib, search-verdict-lib, triage-lib, meal-prep/pipeline/head-ingredients-lib. Every one is a library, none accepts the switch, and every one was enrolled by its own header explaining why a library must NOT declare param([switch]$SelfTest). 0 files were added, which is what says these were phantom rather than lost.",
+      "root_fix": "lib/ps-source.ps1 is the one reduction; the three other line-only scanners are routed through it and ops/audit-source-comment-strip.ps1 ratchets the class at 0 of 448. run-gates also gained a discovery FLOOR - it only ever refused on ZERO, so a walk that lost most of the tree would have found twelve and printed green."
+    },
+    {
+      "n": 12,
+      "subject": "run-test-guards-weekly and the identity BLIND",
+      "status": "verified end to end",
+      "proof": "Before: 42,730 identity rows at rules_hash ccf5c21e891e while the tree was at 97caef3cef05, and guards reported board-vs-identity [staple] BLIND. compare-deals -IdentityNamespace staple reported '0 reused at rules_hash 97caef3cef05, 42773 re-matched'; after, the table is 42,773 rows at 97caef3cef05 and guards reports 'all 3173 cell(s) match the engine's own recorded assignment, 0 stale row(s) ignored'.",
+      "the_honest_half": "The re-emit is GATED on $serverDue -and (-not $NoDownstream) -and (-not $hardFail). $serverDue means a server store's next_pull has arrived, which is ad timing, not a daily certainty. So the mechanism works and was watched working, but 'it self-clears' is NOT guaranteed: on a day with no server store due and a rules change, the table stays stale and the weekly goes BLIND. That gate was read, not exercised.",
+      "recipe_namespace": "board-vs-identity [recipe] is still BLIND at the current hash - it is emitted by the recipe-board build, not by this one."
+    },
+    {
+      "n": 13,
+      "subject": "the bounce's fifth failure - an unproven hypothesis",
+      "status": "CONFIRMED",
+      "proof": "Two runs over IDENTICAL BYTES differing in one mtime: name-drift newer than product-urls gives rc=0 and no hold; product-urls rewritten afterwards gives rc=2 and 'HELD: out/name-drift.json is OLDER than product-urls.json'. The live file's mtime was moved and restored in a finally, bytes compared identical before and after. It then happened again unprompted during this run's own board rebuild, where prune-bad-links rewrote product-urls at 21:37:06 and staled a name-drift written at 21:35:41 - the same cycle check-ad-cycles already documents and repairs by re-deriving name-drift after its prune.",
+      "root_fix": "audit-tile-integrity.ps1 takes -ProductUrlsFile (defaulting to the live path) so the precondition is reachable from a fixture at all - the reason it stayed unproven for a day - and carries a -SelfTest with the founding case and two clean twins, one of them that EQUAL timestamps are not stale."
+    },
+    {
+      "n": 14,
+      "subject": "two Ghost tool pages drifted",
+      "status": "PARKED - named blocker",
+      "blocker": "site/tools/cheap-dinners-tool.html and site/tools/dinner-tonight-tool.html are still another session's uncommitted recost (fajita-chicken-rice-bowl 2.72 -> 2.66), unchanged since 08:34, alongside a dirty meal-prep/db/costed.json. Publishing from the working copy ships that; publishing from HEAD fights it.",
+      "what_changed_anyway": "The FINDING was four times larger than the drift. audit-ghost-drift compares live against the file on disk, and that file is dirty, so '+14 bytes' was 13 bytes of somebody else's in-flight edit plus 1 byte of real drift. Measured through the audit's own Compare-ToolBody with one input swapped: live vs working copy = 14, live vs HEAD = 1. The audit now prints the committed-source delta beside the working-tree one whenever the local file is uncommitted."
+    },
+    {
+      "n": 15,
+      "subject": "the write-only-report ratchet cost 41s of every run",
+      "status": "done",
+      "proof": "Profiled in three phases: the walk 6,193ms (13,549 files enumerated to keep 610), filtering 316ms, reading 80ms, the scan 51,573ms. Inside the scan the cost was not the regexes anyone would suspect - pass 2 called [regex]::Escape and CONSTRUCTED A FRESH REGEX inside the line loop, once per (line x alias). Result: 56s -> 17.5s, and 20,416ms inside the gate pool where it was 55,970ms. The suite's wall time went 114s -> 90s.",
+      "equivalence": "Measured by NAME, not by count: written=84 read=68 write_only=41 before and after with identical sorted name lists, and the two walks return the same 610 files with 0 differences either way. The first candidate was WRONG and the name comparison caught it - blanking every line without '.json' loses the two-line read resolution, dropping 14 families and inventing 8, which counts alone would have shown as 41 -> 35."
+    },
+    {
+      "n": 16,
+      "subject": "a BOM in commit 79c62b0f0's subject",
+      "status": "done, forward-looking only",
+      "proof": "Verified: `git log -1 --format=%s 79c62b0f0 | head -c 6 | xxd -p` -> efbbbf546865. Pushed history untouched.",
+      "scope_note": "There is no commit-message helper in this repo to fix - every automated committer uses -m with a generated string. The exposure is the estate's own rule that messages go in a FILE and ship with -F, which is what makes Set-Content -Encoding utf8 reachable at all.",
+      "root_fix": "ops/hooks/commit-msg, because a PRE-COMMIT hook cannot see the message being written - COMMIT_EDITMSG still holds the previous commit's text. It reads the first three BYTES and refuses rather than strips. ops/new-commit-message.ps1 is the paired tool, with a clean twin asserting the hook accepts the helper's own output and a case proving Set-Content -Encoding UTF8 really does emit a BOM on this host, without which the assertion would be vacuous."
+    }
+  ],
+  "board_action": {
+    "rebuilt": "yes - compare-deals -MinStores 1 -IdentityNamespace staple, then audit-name-drift, prune-bad-links, generate-board-overrides, build-deals-page, then audit-name-drift AGAIN (the pruner rewrites product-urls and stales the drift table - see item 13), then guards: exit 0, hard=0 warn=19.",
+    "published": "NO, deliberately. The task did not ask for a republish, and public/ currently carries another session's uncommitted planner-data.json and omaha-drops.png. public/board.json was restored from git after the local build, per the standing rule that build-deals-page clobbers public/ artifacts. The corrected baked-beans row reaches readers at the next chain run, through its own fully gated path.",
+    "consequence": "Until then the live board still crowns 'Fareway Pork and Beans' as the cheapest baked beans at 0.0593/oz. That is the one reader-facing wrong number this run leaves standing, and it is stated here rather than buried."
+  },
+  "open_questions_for_brad": [
+    "Publish now, or let the ~07:00 chain do it? The corrected board is built and guards-green locally; I did not republish because it is an outward action the task did not ask for and public/ carries another session's uncommitted files. Say the word and it is one run of publish-deals-page plus committing public/board.json alone.",
+    "Item 6's residual: the invariant that a multi-size range row's basis unit must equal its commodity's unit holds on both live cells today, but I did not build a guard for it because I read the mechanism rather than exercising it. Worth a small ratchet next run if you want it closed."
+  ]
+}

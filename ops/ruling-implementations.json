@@ -39,6 +39,42 @@
       "symbol": "BAND_CAL_MAX",
       "must": "absent",
       "why": "Section 3.3 names the harvest.py trio. A hard-coded 650 here once buried 1,556 candidates - 64% of the pool - against a band nobody had stated for that run."
+    },
+    {
+      "id": "pork-and-beans-is-not-a-baked-bean",
+      "document": "grocery/triage-plans/plan-2026-09-07-3.json",
+      "ruled": "Brad's ruling 1, 2026-09-07: pork and beans is NOT a baked bean. The include pattern admitted it while known-wrong.json ruled the same product wrong at Hy-Vee, so the rule and the ledger disagreed at two other stores.",
+      "file": "grocery/commodities.json",
+      "symbol": "pork\\s*(?:&|and)\\s*beans",
+      "must": "absent",
+      "why": "Measured on the 2026-09-07 board: six baked-beans cells, four true baked beans and two pork-and-beans, with the CROWN on 'Fareway Pork and Beans' at 0.0593 - so the cheapest cell was a different product from the four it was compared against. Re-adding this pattern hands the crown back to an adjacent cheaper product; that is the commodity-hijack shape the 2026-08-08 Hy-Vee ruling names."
+    },
+    {
+      "id": "band-censorship-median-floor-0.4",
+      "document": "grocery/triage-plans/plan-2026-09-07-3.json",
+      "ruled": "Brad's ruling 4, 2026-09-07: leave the band-censorship median discriminator at 0.4, not 0.3.",
+      "file": "grocery/audit-band-censorship.ps1",
+      "symbol": "MedianFloor = 0.4",
+      "must": "present",
+      "why": "0.3 keeps four arguable rows but leaves the 1/16 deli row (0.318) standing, and a ratchet with a known false positive in it is one people learn to scroll past. The cost of 0.4 is recorded rather than hidden: the rows the floor retires are counted and named on every run (14 on 2026-09-07). Changing this number without changing that report would make the trade invisible again."
+    },
+    {
+      "id": "kind-equivalent-near-water-declaration",
+      "document": "grocery/triage-plans/plan-2026-09-07-3.json",
+      "ruled": "Brad's ruling 7, 2026-09-07: keep the commodity-level kind_equivalent declaration rather than reverting to per-size allowlist entries.",
+      "file": "grocery/commodities.json",
+      "symbol": "kind_equivalent",
+      "must": "present",
+      "why": "A physics fact about a commodity is re-derivable; a per-size allowlist entry is a decision nobody can re-derive, which is the failure the retire_when discipline exists for (2026-07-30: two entries justified by 'the store does not carry the item' while the store carried it). Per-size entries are also unbounded - a new size needs a new review, and every review is a chance to be wrong. Removing the declaration silently restores that review queue."
+    },
+    {
+      "id": "memory-remote-allowlist-is-probed",
+      "document": "grocery/triage-plans/plan-2026-09-07-3.json",
+      "ruled": "Brad's ruling 2, 2026-09-07: allowlist the memory store's private backup remote, and make the guard PROVE it private on every run rather than forbidding all remotes.",
+      "file": "ops/audit-memory-backup.ps1",
+      "symbol": "Test-RemoteIsPrivate",
+      "must": "present",
+      "why": "The allowlist alone would be strictly WEAKER than the rule it replaced - it would let a repository be flipped to public without anything noticing, because nothing would ever look. The probe is the half that makes the ruling safe, and an allowlist entry with no live probe behind it is exactly the reviewed-exception-that-stopped-being-checked shape. If this symbol goes, ops/memory-remote-allowlist.json must go with it."
     }
   ]
 }
