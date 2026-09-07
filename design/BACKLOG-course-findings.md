@@ -1079,6 +1079,46 @@ uncommitting tasks looks like. Left as-is deliberately - one sweeper is the esta
 is worth knowing that anything produced between sweeps is invisible to any engine that reads the
 newest COMMITTED artefact.
 
+
+### I29 - The guards audited as a class, and the systemic worry was not borne out `DONE`
+
+**Run 2026-09-07** after five of this session's findings turned out to be defects in the
+defect-catching machinery. The worry was that those were a symptom rather than five separate bugs.
+They were not. `ops/probe-detector-health.py` and `ops/probe-detector-gate-claims.py` over 108
+detectors, asking the three questions nothing else gates:
+
+| | |
+|---|---|
+| **Can it fail at all?** (the I17 shape) | 11 of 108 have no non-zero exit path, and **none of them claims to gate**. All are probes and verifiers that legitimately report. `backtest.py` was the only real instance and it is fixed. |
+| **Can it lock in its own blindness?** (the I15 shape) | **0 of 108.** The `lib/ratchet.ps1` fix closed the whole class. |
+| **Does it report a denominator?** (E20/E22) | 44 flagged, and the flag does not survive inspection - see below. |
+
+**THE MOST USEFUL FINDING IS ABOUT THE METHOD, NOT THE ESTATE.** The probe returned **42** detectors
+that "cannot fail", then 29, then 11, and finally **zero** real gate-claim contradictions. Every
+correction was a bug in the probe, not in the tree:
+
+- it missed `exit $(if (...) { 1 } else { 0 })`, this estate's most common idiom, and flagged
+  `audit-guard-contract.ps1` - a core gate - as unable to fail
+- it missed `{ Write-GuardComplete; exit 1 }`, where the exit follows a semicolon rather than starting
+  a line
+- it counted `-lib.ps1` files as detectors
+- it read claim words like "refuses" and "block" that described a DIFFERENT script, or the phrase
+  "resolver block"
+
+And Q3's 44 dissolves the same way: `audit-feed-week-parity.ps1` is flagged for having no denominator
+when it compares two single values and correctly names what it looked at (`board=... feed=...`), which
+is precisely what the convention on `Write-GuardComplete` tells it to do. A static probe cannot
+separate "needs a population" from "has not got one and says what it examined", so **no gate was built
+on it** - one at 44 would be noise, and noise is how a red gate becomes one people skim.
+
+**So the systemic concern is answered and closed.** The five defects were real and they were not a
+rotten class: four are now structurally prevented (the ratchet library, the orphan gate that caught my
+own detector, the must-fire census, the denominator convention on `Write-GuardComplete`). Reporting
+the probe's raw first output would have been an agreeing number escaping scrutiny in the ALARMING
+direction, which is the same failure as the reassuring one and easier to get away with.
+
+Both probes are committed so the claim can be re-run rather than believed.
+
 ### Triage of I8-I27, 2026-09-07
 
 Every claim checked against the tree rather than against its own write-up, by
