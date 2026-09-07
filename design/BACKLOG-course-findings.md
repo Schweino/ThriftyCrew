@@ -2677,7 +2677,7 @@ correctly relative to the skill's own directory, and the file's 26 em dashes are
 internal skill rather than in reader-facing copy.
 
 
-### I30 - Eighteen live tables carry 28 indexes and nothing has ever looked at a query plan `NEEDS A RULING - THE AUDIT IS SPECIFIED AND NOT ORDERED` `queue-3`
+### I30 - Eighteen live tables carry 28 indexes and nothing has ever looked at a query plan `DONE - REDIRECTED 2026-09-07, THE RISK WAS DURABILITY AND NOT SPEED` `queue-3`
 *Source: Optimize SQL Queries - Uncover Performance Bottlenecks (queue-3).* Measured 2026-09-07 at
 commit `d172e3a6`: the estate greps to 61 `CREATE TABLE` and 84 `CREATE INDEX` across `*.py`/`*.sql`,
 `EXPLAIN` appears in exactly two files (`meal-prep/pipeline/coverage_check.py` and
@@ -2742,3 +2742,74 @@ database 126 MB) and that nothing is currently known to be slow. The case for th
 would tell us when that changes; it is not a case that anything is broken today.
 
 Method and full output: `~/.claude/skills/database-craft/estate-inventory.md`.
+
+---
+
+**RULED 2026-09-07. Brad asked for the smartest thing that scales rather than a quick fix, so the
+first move was to measure which database risk is actually real. It is not the one this item names.**
+
+**Performance is not the threat, and the item's own numbers say so.** 126 MB over 47,319 nodes,
+`ANALYZE` moving a three-table join by 0.0002 s across seven runs, all three findings costing zero
+today. SQLite is nowhere near strained and will not be at ten times this size. A plan baseline would
+mostly report churn, and six of the nine proposed checks are one-time answers that would be printed
+every run and acted on never - which is how a gate teaches people to skim it.
+
+**Integrity is already handled, and better than expected.** Both databases declare foreign keys on
+five tables; `graph/lib/graphdb.py:71` and `meal-prep/db/build_db.py:108` turn `PRAGMA foreign_keys
+= ON`, the latter asserting it stuck. `PRAGMA foreign_key_check` returns **0 violations** on both and
+`quick_check` returns **ok**. Checked before proposing anything, because "the FKs are probably
+decorative" was a plausible guess and it was wrong.
+
+**THE REAL HOLE IS THAT NOTHING RUNS THE VERIFIER.** `graph/lib/rebuild.py` already establishes the
+architecture - tracked JSON is truth, `graph.db` is an index, which is what makes the README's
+`rm graph.db` safe - and names the five tables that exist nowhere else: `learning_proposals`,
+`approved_patches`, `eval_runs`, `cell_state`, `question_verdicts`. Its `--verify` passes today
+(241/241, 186/186, 43/43, 3092/3092, 4141/4141). **And it has zero callers**: not `run-gates`, not the
+nightly chain, not CI, verified by grep. The mirror is kept by **eight hand-placed
+`export_learning()` calls** across `stage2_review.py` (three), `score.py`, `review_escalations.py`,
+`stage1_analyze.py` and graphdb's own writer - write-through by convention, not by construction.
+
+That is the failure that scales badly. Every new write path is another place to forget the call, the
+database stays right while the JSON falls behind, and nobody learns until the day someone does the
+`rm` the README suggests. `run-gates` records this exact shape about itself twice already:
+`audit-twin-drift` sat red for weeks because nothing ran that suite, and `golden-test.ps1` was
+ungated while being the only check that caught a schema change.
+
+**Shipped: `graph/pipeline/audit_graph_durability.py`, in the nightly chain, read-only (`mode=ro`).**
+Three checks, each of which grows in value as the graph grows:
+
+1. **MIRROR** - every irreplaceable table matches its tracked JSON row for row. The table list is
+   READ from `graphdb.GraphDB.LEARNING_TABLES` rather than restated, so a table this audit forgot
+   cannot be a table it reports clean.
+2. **INTEGRITY** - `PRAGMA quick_check`, 1.1 s on 126 MB, the only thing here that can see a torn
+   file. The database is WAL, written nightly, with no undo layer under it (E1).
+3. **VOLUME** - per-table row counts against a baseline. This is the **volume** limb of the four
+   standing data-quality checks; I12 established freshness, schema and null-rate elsewhere.
+
+**The volume asymmetry is the opposite way up from `lib/ratchet.ps1`** and confusing them would make
+it useless: that one counts FINDINGS, where a fall is suspicious; this counts ROWS, where growth is
+the steady state and a fall past 40% or to zero is the finding. The baseline is rewritten on every
+clean run with history appended, because writing it only on an `--update` flag - which is how the
+first draft worked - would compare tonight against a stale week and fire on nothing.
+
+It is the one stage in `nightly.ps1` that is FAILED rather than BLIND on a non-zero exit. Every other
+stage degrades a downstream result; this one is the only thing standing between a forgotten export
+and a month of silent drift. Exit 3, no database, stays BLIND - that is the normal state in a
+worktree.
+
+**Deliberately NOT done, and each one is a decision rather than an omission.**
+
+- **No query-plan gate.** Argued above.
+- **The redundant `ix_nodes_type` stays.** Dropping it is a schema write against a 126 MB live
+  database with no undo layer, to reclaim a write-side index update on a table nobody writes hot,
+  for a benefit the item itself measures at zero. Not a trade worth taking on those terms. Reopen it
+  if `nodes` ever becomes write-heavy.
+- **The prefix-`LIKE` trap is documentation, not a gate.** Both live instances are measured harmless;
+  it is a trap for the next query, and a gate for a thing that has never happened is a gate people
+  learn to ignore.
+
+**One incident worth recording, because it is E1's own argument arriving unannounced.** A patch
+script destroyed the first draft of the audit: `open(path, 'w')` truncates the file BEFORE anything
+else on that call can fail, so a bad `newline=` argument left a zero-byte file and no copy. The
+rewritten `save_baseline` serialises the whole document before it opens anything, and says why at the
+line.

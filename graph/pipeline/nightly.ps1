@@ -525,6 +525,23 @@ try {
     else { Record 'hunter' 'FAILED' ("rc=" + $r.ExitCode + ' ' + (($r.Tail | Select-Object -Last 1))) $r.Elapsed }
   } else { Record 'hunter' 'SKIPPED' '-SkipHunterIngest' 0 }
 
+  # -- 1d. THE GRAPH'S CENTRAL CLAIM, CHECKED (2026-09-07, backlog I30 redirected). graphdb states
+  #        that the tracked JSON is truth and graph.db is a rebuildable index, which is what makes the
+  #        README's `rm graph.db` safe. Five tables are the exception - learning_proposals,
+  #        approved_patches, eval_runs, cell_state, question_verdicts - and they stay mirrored by
+  #        EIGHT HAND-PLACED export_learning() calls. rebuild.py --verify proves the convention held
+  #        and had ZERO CALLERS until this line: not run-gates, not here, not CI.
+  #
+  #        FAILED, NOT BLIND, and it is the only stage in this chain that is. Every other one degrades
+  #        a downstream result if it does not run; this one is the only thing standing between a
+  #        forgotten export call and a month of silent drift, and a chain that shrugs at that is how
+  #        the drift gets to be a month long. Exit 3 - no database, the normal state in a worktree -
+  #        is still BLIND. Read-only, mode=ro, ~2 s: it cannot touch the WAL.
+  $r = Invoke-Stage 'durability' $py @('graph\pipeline\audit_graph_durability.py') 300
+  if ($r.Ok) { Record 'durability' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
+  elseif ($r.ExitCode -eq 3) { Record 'durability' 'BLIND' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
+  else { Record 'durability' 'FAILED' ("rc=" + $r.ExitCode + ' ' + (($r.Tail | Where-Object { $_ -match 'FINDING|FAILED' } | Select-Object -First 1))) $r.Elapsed }
+
   # -- 2. the sweep. The chain must not OOM its own sidecar, so llama-server goes down FIRST even
   #       though this script has not started it yet: a leftover from a human session is exactly the
   #       case the ordering rule exists for.
