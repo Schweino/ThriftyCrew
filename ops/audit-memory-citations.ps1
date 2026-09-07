@@ -36,7 +36,14 @@ $repo = Split-Path $here -Parent
 # The store for THIS project. C--Codex and C--Codex-income are different projects with their own
 # stores and nothing in them applies here, so this is deliberately not a wildcard.
 $MEM = Join-Path $env:USERPROFILE '.claude\projects\C--Codex-ThriftyCrew\memory'
-$SCAN = @('.claude\agents', '.claude\rules', 'design')
+# .claude\skills ADDED 2026-09-07 (backlog I27). It was outside the scan, and the `lesson` skill -
+# which publishes to a LIVE PAID SITE - carried SIX citations that resolved to nothing, plus a
+# pointer to a STYLE-GUIDE.md that does not exist, plus a standing instruction to read one of the
+# missing memories EVERY TIME before drafting. This audit passed every day while that was true,
+# because it was not looking there. A scanner that does not scan everything reports on what it
+# scanned, not on the estate - the same shape as I8, where the gate hand-listed six Python suites
+# out of thirty-two.
+$SCAN = @('.claude\agents', '.claude\rules', '.claude\skills', 'design')
 $RESOLVER_MARK = 'The memory index is a set of POINTERS'
 
 function Get-TcCitations {

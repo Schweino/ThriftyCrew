@@ -13,11 +13,11 @@ Publish a new financial lesson so it fits the existing lessons **exactly**. Brad
 
 The site's **global Code Injection** automatically adds to **any post tagged `financial-lessons`**: the top-of-post financial disclaimer, the "Keep going" internal-link block, the breadcrumb JSON-LD, the 620px reading measure, the active-nav highlight, AND a keyword-matched **"Put it into practice" card** that links the single most relevant free tool (it reads the lesson's title + text and picks Where Do You Stand?, the Compound Interest Calculator, Budget Tracker, etc.). **So you never rebuild those per lesson**, and you don't hand-add the tool link. Tag it right and set the fields, and the styling + on-page SEO fit happens on its own. Do **not** touch the site Code Injection for a normal lesson.
 
-Full background on why each piece exists: memory **[[ghost-migration]]**. The site is **LIVE** (public, indexed) at `www.thriftycrew.com`.
+Full background on why each piece exists: `docs/RUNTIME-MAP.md` (the architecture document). The site is **LIVE** (public, indexed) at `www.thriftycrew.com`.
 
 ---
 
-## Step 1 — Get the real substance (never fabricate) [[book-method-keep-asking]]
+## Step 1 — Get the real substance (never fabricate)
 
 Ask Brad and keep asking until you can write it truthfully:
 - The **topic / title** (a normal title — no "Week N"), and whether it's **paid** (default) or **free**.
@@ -26,15 +26,15 @@ Ask Brad and keep asking until you can write it truthfully:
 
 ## Step 2 — Write the lesson to spec
 
-**Read memory [[brand-voice-brad]] first (THE voice) and `C:\Codex\ThriftyCrew\STYLE-GUIDE.md` (structure + hard rules).** Apply these **OVERRIDES** to the style guide (it is partly stale):
+**The voice is described in full below and is non-negotiable.** (There is no STYLE-GUIDE.md and no brand-voice memory - both were cited here for months and neither exists. The voice section below IS the source; keep it that way rather than pointing somewhere else.) Apply these **OVERRIDES** to the style guide (it is partly stale):
 - Pricing is **$1/month or $10/year** (ignore the old "$5/mo").
 - The reader may be doing this **for themselves OR to teach a young person**. Write so both land.
 - **Always include the "For yourself:" question block** (added to every lesson in this project).
 - **No "Week N" framing.** The lesson stands on its own.
 
-**Voice: write as BRAD. Non-negotiable.** Match memory **[[brand-voice-brad]]** exactly. In short: a mix of **Morgan Freeman and Dave Ramsey** (calm, warm, steady, but tells the truth straight). **Analytical and data-first**: lead with a question or a real, 100%-accurate number, and never hand-wave a stat (Brad is analytical and vague claims read as fake). Warm and encouraging by default, balanced with objectivity and no-BS. Jokes now and then, never swears, mild vulnerability is welcome. Folksy and plain, never corporate or salesy. Short sentences. Concrete over abstract (real numbers, real scripts). ~**900-1,300 words** of teaching. Read it aloud before you publish; if it sounds like a press release or a term paper, rewrite it.
+**Voice: write as BRAD. Non-negotiable.** The voice, in full: a mix of **Morgan Freeman and Dave Ramsey** (calm, warm, steady, but tells the truth straight). **Analytical and data-first**: lead with a question or a real, 100%-accurate number, and never hand-wave a stat (Brad is analytical and vague claims read as fake). Warm and encouraging by default, balanced with objectivity and no-BS. Jokes now and then, never swears, mild vulnerability is welcome. Folksy and plain, never corporate or salesy. Short sentences. Concrete over abstract (real numbers, real scripts). ~**900-1,300 words** of teaching. Read it aloud before you publish; if it sounds like a press release or a term paper, rewrite it.
 
-**Punctuation rule (HARD): no em dashes, anywhere.** They read as obviously AI and Brad hates them (memory [[writing-no-em-dashes]]). Use periods and commas instead, and split a sentence rather than joining it with a dash. Go easy on semicolons and exclamation points too.
+**Punctuation rule (HARD): no em dashes, anywhere.** They read as obviously AI and Brad hates them (`CLAUDE.md`, both the workspace and project files: "No em dashes"). Use periods and commas instead, and split a sentence rather than joining it with a dash. Go easy on semicolons and exclamation points too.
 
 **Hard rules (do NOT break):** no addiction / jail / recovery / DUIs / AA anywhere in the lesson; when money or investing comes up, include a light "this isn't financial advice, so check with a professional" caveat; values-based, not faith-based; age-appropriate; don't retell Brad's life story. Weave the motifs naturally: Future You, compounding/"stacking", the gap, needs-first-then-wants, value-first, reputation-travels, time-is-the-superpower, want-less-win-more, borrow-hindsight, celebrate-small-wins, pay-a-little-now-or-a-lot-later.
 
@@ -123,7 +123,7 @@ If anything is off, fix the field and re-run the publish script (it upserts). (A
 
 ## Step 6 — Search visibility (the site is live and indexed)
 
-The site is verified in **Google Search Console AND Bing Webmaster Tools** under `admin@thriftycrew.com` (memory [[google-search-console]]). The **sitemap auto-updates** the moment you publish (Ghost regenerates `/sitemap.xml`), so a new lesson is discoverable on its own. Nothing per-post is required. Two optional nudges for a lesson you want ranking fast:
+The site is verified in **Google Search Console AND Bing Webmaster Tools** under `admin@thriftycrew.com` . The **sitemap auto-updates** the moment you publish (Ghost regenerates `/sitemap.xml`), so a new lesson is discoverable on its own. Nothing per-post is required. Two optional nudges for a lesson you want ranking fast:
 - In **Google Search Console** -> URL Inspection -> paste the new URL -> **Request indexing** (jumps the crawl queue).
 - Site-verification lives in a `google-site-verification` meta tag inside the site Code Injection. **Never strip it** when editing the injection.
 
@@ -136,9 +136,9 @@ The site is verified in **Google Search Console AND Bing Webmaster Tools** under
 - Credentials + site URL live in **`ghost-config.ps1`**. On a custom-domain move, update `$apiUrl` there (the key is unchanged).
 - Meta/OG/paywall are all handled by `publish-lesson.ps1` — don't set them by hand.
 - Lessons have **no feature image**; they inherit the branded default og:image automatically.
-- PowerShell 5.1 reads `.ps1` as ANSI, so keep the `.ps1` helper scripts ASCII (use `&rarr;` for arrows, etc.). Lesson HTML you pass via `-HtmlFile` is read as UTF-8. **But use NO em dashes in the lesson at all** (Brad's rule, memory [[writing-no-em-dashes]]); write with periods and commas.
-- For a **meal-prep recipe** (not a lesson) the conventions differ (Recipe JSON-LD, cost-per-serving stats bar, `meal-prep` tag). See memory [[meal-prep-recipe-template]]; this skill is for financial lessons.
-- **Voice + SEO + search-console are all baked in now.** The three memories that govern any creation: **[[brand-voice-brad]]** (write as Brad), **[[writing-no-em-dashes]]** (no em dashes), **[[google-search-console]]** (indexing). Read [[brand-voice-brad]] every time before drafting.
+- PowerShell 5.1 reads `.ps1` as ANSI, so keep the `.ps1` helper scripts ASCII (use `&rarr;` for arrows, etc.). Lesson HTML you pass via `-HtmlFile` is read as UTF-8. **But use NO em dashes in the lesson at all** (Brad's rule, stated in `CLAUDE.md` at both the workspace and project level); write with periods and commas.
+- For a **meal-prep recipe** (not a lesson) the conventions differ (Recipe JSON-LD, cost-per-serving stats bar, `meal-prep` tag). See `.claude/rules/meal-prep.md` and the `recipe-paywall` memory; this skill is for financial lessons.
+- **Voice, SEO and search-console are baked into THIS FILE.** They used to be three memory citations - `brand-voice-brad`, `writing-no-em-dashes`, `google-search-console` - and none of the three ever existed, so "read it every time before drafting" sent the writer to a file that was not there. The voice section above IS the voice, the em-dash rule is in `CLAUDE.md`, and the Search Console facts are in the publishing section. Keep them here rather than pointing away.
 
 ---
 

@@ -2120,9 +2120,58 @@ correct shape for a ratchet over a property that is already true and must stay t
 > byte-identical; `graph/pipeline/resolve.py` and `meal-prep/pipeline/local_extract.py` are
 > unchanged by this work.
 >
-> **What remains open in this family** is course 14's real gap, which is not a fixture: there is
-> still no *evaluation protocol* for injection resistance - no corpus of payloads, no measured rate.
-> This pins named defences against named payloads, which is the checkable part.
+> **The evaluation protocol is now BUILT, and building it corrected this entry.** See the
+> correction block below.
+
+---
+
+#### I23 follow-up, 2026-09-07: the protocol, and what measuring changed
+
+`ops/injection_eval.py` plus a frozen `ops/injection-payloads.json` (10 payloads across seven
+families, 5 genuine controls). Discovered by `run-gates`. Three rates, baselined in
+`ops/injection-eval-baseline.json`:
+
+| rate | measured | meaning |
+|---|---|---|
+| `fabrication_block_rate` | **1.00** | a line the model invented is always refused |
+| `indirect_block_rate` | **0.00** | a line the ATTACKER PUT ON THE PAGE is never refused |
+| `genuine_pass_rate` | **1.00** | and it is not achieving that by refusing everything |
+
+**`[CORRECTED: 2026-09-07]` This entry, and `security-craft/estate-exposure.md`, overstate the
+transcription layer's defence.** Both say `verify()` "is the only thing standing behind" the
+24,000-character scraped-page surface, which reads as though it defends it. Measured, it does not:
+
+- `verify()` asks whether a transcribed line **occurs in the page**. Indirect prompt injection is
+  precisely the case where the attacker owns the page, so the answer is legitimately yes and the
+  check passes. Confirmed: the payload embedded in an HTML comment on the page verifies clean.
+- `verify_split()` does not catch it either. An injected line assigned wholly to `item` scores
+  **100% round-trip coverage** and passes all three of its tests.
+
+So against FABRICATION the layer is perfect, and against INDIRECT INJECTION it is absent. Course 13
+read the first and recorded it as strength; the second was never measured until now.
+
+**What this does NOT mean.** There is no path from here to a wrong number on a paid page, and this
+must not be read as one. What arm B wins is a junk string in an ingredient list. Becoming a price
+requires mapping to a real commodity id and then being priced, and `graph/pipeline/resolve.py` rules
+that the local model may reject but may **never mint a price** (pinned by I22). The defence is real.
+It is one layer further downstream than our own notes claimed.
+
+**Why `indirect_block_rate = 0.00` is a recorded baseline and not a red gate.** It is a measured,
+documented, downstream-mitigated exposure. A gate red on day one for a backlog nobody is about to
+clear teaches people to ignore red. The ratchet makes any future defence permanent instead: the rate
+may rise and may never fall.
+
+**The three guards were each proved by breaking them**, restoring by bytes, md5 verified:
+weakening `verify()` drops the fabrication rate and fails; making `verify()` refuse EVERYTHING sends
+both block rates to a perfect 1.00 and **only the genuine-pass control catches it**, which is
+`rag-craft/evaluating-retrieval.md`'s abstaining-system trap; and shrinking the corpus leaves every
+rate perfect, caught only by the harness guard, which is `lib/ratchet.ps1`'s asymmetry.
+
+**Still open, and honestly out of reach here:** this measures the layer BEHIND the model, given a
+compromised output. It does not measure how often a hostile page actually compromises the model,
+which needs the local model in the loop and is the black box course 14 correctly declines to
+promise. **And `security-craft/estate-exposure.md` still carries the overstatement**; it was not
+edited because a consolidation session held the knowledge store when this landed.
 
 **Source:** course 14, *Introduction to Prompt Injection Vulnerabilities* (Kevin Cardwell, Coursera),
 whose three testing lectures argue that LLM systems are "the ultimate black box" and cannot be
