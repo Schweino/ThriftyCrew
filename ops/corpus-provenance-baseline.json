@@ -1,0 +1,6 @@
+{
+  "no_provenance": [
+    "sidecar/data/eval-positives.json"
+  ],
+  "note": "Corpora whose rows carry no source at all, so they cannot answer 'how much of this evidence is a recorded failure' even in principle. This list may only get SHORTER."
+}

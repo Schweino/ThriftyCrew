@@ -535,7 +535,7 @@ mark.
 characters: a disposition with no evidence is a vote, not a finding, and `ok` closing an alert is how
 a queue becomes a formality.
 
-### E23 - Our test sets are built out of successes `OPEN - EVIDENCE FOUND`
+### E23 - Our test sets are built out of successes `DONE - MEASURED 2026-09-07; 189 OF 6,476 ROWS ARE FAILURES`
 *Source: same course, section 12, and it is publication bias wearing our clothes.* Fixtures and
 golden files here are assembled from bugs we found and cases we already handle correctly. Cases that
 failed silently were never written down, so they are absent from the evidence and **their absence is
@@ -552,6 +552,47 @@ out did so because the twin had left the candidate pool - which is what happens 
 ACCEPTED and built. So the surviving evidence is filtered toward the pipeline's successes by the
 mechanism this item describes, and the filtering was invisible until the denominator was printed. The
 score was not wrong; it was answering a narrower question than it appeared to.
+
+**DONE 2026-09-07. The item's sharpest line is that the absence is INVISIBLE IN THE SCORE, so the
+work was to make it visible rather than to build another corpus.**
+
+`ops/audit_corpus_provenance.py` reads every registered corpus and prints, per corpus, how many cases
+came from a recorded FAILURE, how many from a SUCCESS we already handle, and how many from neither -
+with the counts beside every share, because a share without its population is what caused this in the
+first place.
+
+**What it found, and the second row is the whole item in one line:**
+
+| Corpus | Rows | From a recorded failure | From a success | Neither | Labels |
+|---|---|---|---|---|---|
+| `graph/gold/gold.jsonl` | 1,968 | 189 | 400 | 1,379 | MATCH 1332, NO_MATCH 633, DIFFERENT 3 |
+| `graph/gold/hunter-gold.jsonl` | 281 | **0** | **281** | 0 | **MATCH 281** |
+| `graph/gold/escalation-review.jsonl` | 1,411 | 0 | 0 | 1,411 | MATCH 944, NO_MATCH 467 |
+| `sidecar/data/eval-positives.json` | 2,816 | — | — | — | **no `source` on any row** |
+
+**189 of 6,476 rows come from a recorded failure.** And `hunter-gold.jsonl` is 281 rows where every
+case is a success and every label is MATCH - **a corpus with no negative cases cannot measure
+over-firing at all**, which is a fixture with no clean twin wearing a bigger coat.
+
+**An escalation is counted as NEITHER, deliberately.** The automatic path could not settle it and a
+reasoner did; that is not the same as a shipped answer being wrong, and folding 1,379 of them into
+either column would flatter or damn the corpus by definition.
+
+**It reports and does not judge the mix.** A matcher corpus SHOULD be heavy on adjudicated failures
+and an identity corpus should not, and no rule here knows which is which. The one thing it ratchets
+is corpora carrying no `source` at all - that number may only go DOWN, because such a corpus cannot
+answer this question even in principle.
+
+**One bug in my own ratchet, found before it shipped and worth recording.** `eval-positives.json` is
+gitignored, so in a worktree it is simply absent - and "in the baseline, not in this run's findings"
+would have read that absence as a REPAIR and dropped it from the list forever, on the strength of a
+run that never opened the file. Exactly the shape `lib/ratchet.ps1` exists to refuse. A corpus counts
+as repaired only when it was actually READ and now carries provenance; three fixtures pin it.
+
+**The habit half is at the point of read**, in `.claude/rules/measurement.md`: record the case at the
+moment it fails, including the ones fixed by hand and moved on from, and give every corpus row a
+`source`. A habit is not something a script enforces - but the script now makes the consequence of
+skipping it a number somebody can see.
 
 ### E24 - Every A/B here logs counts, and counts cannot be un-aggregated `DONE - BOTH NAMED LANES COMPLY` `82377028`
 *Source: `evaluate-llms-test-and-prove-significance` (course 18), and it is a correction of that
@@ -3207,3 +3248,61 @@ hand. That is why nobody has.
 
 **What it would touch.** Rung 1 is a new read-only script under `ops/` and nothing else. No gate
 changes, no agent changes, no data writes.
+
+---
+
+### I34 - The estate wrote one exemplary postmortem and never wrote a second `OPEN - RUNG 1 IS A TEMPLATE, NOT A PROCESS` `queue-4`
+
+**Source.** Queue-4 course 3, `foundations-of-site-reliability-engineering-training` (Simplilearn).
+The transferable piece is its three-way split of postmortem corrective actions - **preventive**
+(stop the cause recurring), **detective** (find it faster next time), **responsive** (respond better
+to this shape) - recorded in `reliability-craft/rca-and-chaos.md` 2.
+
+**What was actually found, which is not what the course predicted.** The check was expected to show
+the estate has no RCA practice. It shows the opposite and something more useful:
+`grocery/INCIDENT-2026-07-23-walmart-flood.md` is a **complete, high-quality incident postmortem** -
+severity in the header, a timestamped timeline, a `## Root cause (the five whys)` section, a
+`## The class (this has happened before)` section that refuses to stop at the single cause, what
+worked and what did not, four fixes each with a *Verified:* line, tracked follow-ups, three accepted
+risks with stated bounds, and an independent re-review that corrected the RCA's own attribution and
+found two further gaps. It contains all three kinds of corrective action.
+
+**And it is the only one.** `find . -name "INCIDENT*"` returns exactly that file. The practice
+produced one artefact and did not become a practice.
+
+**Why that matters here.** The half of that incident's answer that survived into standing policy is
+the **preventive** half - `CLAUDE.md`'s *"when a defect recurs, the durable fix is a memory, a gate
+or a command, not just the repair"*. The detective and responsive halves did not. There is a
+structural reason to expect that drift rather than treat it as an oversight: a must-fire fixture is
+a preventive artefact by construction, so a test philosophy built entirely out of them (164 files
+carry a `CLEAN TWIN` as of 2026-09-07) will keep prompting for prevention and will never prompt for "would we notice this faster next time".
+
+The one detective artefact in the estate, `grocery/audit-walmart-fullpull.ps1`, exists because that
+incident's re-review explicitly asked the detective question and found a blind spot the preventive
+fixes had just created. That is the case for asking it routinely.
+
+**Rungs, cheapest first.**
+
+1. **A template, not a process.** Add the three-way action split to whatever is used when an incident
+   record next gets written, so the author is prompted for all three rather than only prevention.
+   This is text, changes no code, and is the only rung that should happen without a further ruling.
+2. **Then ask the detective question against the existing backlog**, once, retrospectively: for the
+   defects already fixed here, how many would be noticed faster today than they were then. That is a
+   read, and its answer decides whether rung 3 is worth anything.
+3. **Only then consider a second incident record.** Note the honest counter-argument, and note that
+   it cuts both ways: the repo's first commit is **2026-07-08**, the incident is **2026-07-23**, and
+   today is 2026-09-07. So the record covers **one incident in the whole two-month life of the
+   repository**, written two weeks in - and **six weeks have passed since with no second one.** On a
+   base rate that thin, a standing postmortem process is ceremony, and the right outcome of rung 2
+   may well be `PARKED`. What is NOT thin is the template: it cost nothing to keep and the next
+   incident, whenever it lands, should not be written from scratch.
+
+**What it would touch.** Rung 1 is one markdown file. Rungs 2 and 3 are reads. No gate changes, no
+agent changes, no data writes.
+
+**Explicitly NOT proposed: chaos engineering.** The same course names inadequate monitoring as the
+disqualifying precondition for fault injection, and this estate has telemetry on 1 of 243 gates
+(item I33). It also already gets much of the value by another route: `ops/test-guards.ps1` runs a
+sabotage case per guard, and the 2026-07-23 re-review deliberately reverted a fix to watch the gate
+hard-fail end to end. Reasoning recorded in `reliability-craft/estate-inventory.md` so it is not
+re-derived as an open gap.

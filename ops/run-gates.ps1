@@ -281,6 +281,36 @@ foreach ($cand in @('C:\Codex\Python312\python.exe', 'python3', 'python')) {
     if ($LASTEXITCODE -eq 0 -and ([string]$v) -match 'Python\s+3') { $pyExe = $cand; break }
   } catch { }
 }
+# PYTHON AUDITS WHOSE LIVE PASS BELONGS IN THE GATE (2026-09-07). The discovery pass below gives
+# every Python file its --selftest, which proves the logic works and never looks at production - the
+# same hole audit-twin-drift's entry above describes from the PowerShell side. These read TRACKED
+# inputs, so they are hermetic and belong here rather than in the daily chain.
+#
+# SEPARATE FROM $static BECAUSE THAT LOOP RUNS `powershell -File`, which cannot execute a .py: putting
+# one there exits -196608 with nothing useful said about why (measured, the same day).
+$pyStatic = @(
+  # Our test sets are built out of successes and their absence is invisible in the score (E23). The
+  # dedup set was 31 pairs from 168 ruled duplicates, filtered toward the pipeline's own successes by
+  # a mechanism nobody saw until the denominator was printed. This prints it per corpus and ratchets
+  # the checkable half: a corpus whose rows do not say where they came from cannot answer the
+  # question even in principle. A gitignored corpus that is absent reads as not-read, never repaired.
+  @{ f = 'ops\audit_corpus_provenance.py'; n = 'no NEW test corpus loses track of where its cases came from' }
+)
+foreach ($g in $pyStatic) {
+  $p = Join-Path $repo $g.f
+  if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
+  if (-not $pyExe) { $fail += $g.f; Write-Output ("  FAIL  {0} - no Python 3 interpreter found, so this audit DID NOT RUN" -f $g.f); continue }
+  # NO 2>&1 ON A NATIVE EXE under $ErrorActionPreference='Stop' - it turns a clean exit into a throw.
+  $out = & $pyExe $p
+  $rc = $LASTEXITCODE
+  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  else {
+    $fail += $g.f
+    Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
+    @($out) | Where-Object { $_ -match '!|FAIL|FINDING' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
+  }
+}
+
 foreach ($g in $pySuites) {
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }

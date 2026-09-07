@@ -41,6 +41,14 @@ carries all four rules in one file, and copying it is faster than re-deriving th
   totals - `old: 50 wrong, new: 38 wrong` - cannot be un-aggregated, so the paired comparison that
   would have been free is gone forever. Cheap to adopt, impossible to backfill.
   `meal-prep/db/dedup-headtohead-cases.jsonl` is what this looks like.
+- **RECORD THE CASE AT THE MOMENT IT FAILS**, including the ones you fix by hand and move on from,
+  and give every corpus row a `source` (backlog E23). Fixtures here are assembled from bugs we found
+  and cases we already handle, so the ones that failed silently are absent - and **their absence is
+  invisible in the score**. Measured 2026-09-07: **189 of 6,476 gold rows** come from a recorded
+  failure, and `graph/gold/hunter-gold.jsonl` is **281 rows, every one a SUCCESS, every label MATCH**
+  - a corpus with no negative cases cannot measure over-firing at all, which is a fixture with no
+  clean twin wearing a bigger coat. `ops/audit_corpus_provenance.py` prints the mix and ratchets
+  corpora that carry no `source` at all.
 - **Record an INPUT FINGERPRINT** with the result. The dedup probe disagreed with itself across two
   runs because its inputs moved underneath it and it recorded nothing about what it had read.
 
