@@ -141,8 +141,34 @@ if ($SelfTest) {
   $r8 = Get-StrayRootEntry -Entries @() -Tracked $fxTracked -Allow $fxAllow
   T 'an empty enumeration yields no findings' ($r8.Count -eq 0) ("Count=" + $r8.Count)
 
+  # MUST FIRE 4 - THE SWALLOWED DOTFILE, and it is the inverse of the founding bug rather than another
+  # shape of it. The three cases above are DEBRIS: something arrived at the root that nobody meant to
+  # write. This one is the opposite and it is worse, because it reads as success: a root dotfile somebody
+  # wrote ON PURPOSE, which `/*` ignores, which git therefore never tracks, and which consequently does
+  # nothing on any machine but the one it was typed on.
+  #
+  # This estate has now been bitten by it FOUR times, and .gitignore carries the scar twice in its own
+  # comments - once for .gitattributes and once for .worktreeinclude, both of which say in as many words
+  # that a root file not allow-listed here is never committed. The fourth was 2026-09-06 in the ~/.claude
+  # store: a .gitattributes written to stop clones coming out CRLF, accepted by git without complaint,
+  # silently untracked, and it would have shipped nothing. Caught only by asking whether the file was
+  # TRACKED rather than whether git had taken it.
+  #
+  # The structural rule already covers this - an untracked, un-allow-listed root entry is a finding
+  # whatever it is called - so this case adds no logic. It is here to PIN that coverage, because the
+  # obvious future "simplification" is to skip dotfiles as noise, and that edit would look harmless and
+  # would silently delete the only check standing between this repo and the fourth recurrence.
+  $r9 = Get-StrayRootEntry -Entries @('CLAUDE.md', 'grocery', '.gitattributes') -Tracked $fxTracked -Allow $fxAllow
+  T 'MUST FIRE  a root DOTFILE the allow-list swallowed is a finding, not noise to skip' `
+    ($r9.Count -eq 1 -and $r9[0] -eq '.gitattributes') ("[" + ($r9 -join ', ') + "]")
+
+  # CLEAN TWIN for it: once allow-listed, the same name must go quiet. A gate that cannot be satisfied
+  # gets unregistered, which is how a repo ends up with no gate at all.
+  $r10 = Get-StrayRootEntry -Entries @('.gitattributes') -Tracked @('.gitattributes') -Allow $fxAllow
+  T 'CLEAN TWIN a dotfile that IS tracked passes' ($r10.Count -eq 0) ("[" + ($r10 -join ', ') + "]")
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 4 must-fire cases (3 stray shapes plus the return-arity trap), 3 clean twins, count and empty-enumeration checks'
+  Write-Output 'SELF-TEST PASS: 5 must-fire cases (3 stray shapes, the return-arity trap, the swallowed dotfile), 4 clean twins, count and empty-enumeration checks'
   exit 0
 }
 
