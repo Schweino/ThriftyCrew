@@ -1468,7 +1468,7 @@ number comes from is a behaviour change to a live correctness guard and needs it
 
 ---
 
-### I15 - No audit's FINDING COUNT is tracked over time, so an audit that stops firing looks like one that passes `OPEN` `queue-2`
+### I15 - No audit's FINDING COUNT is tracked over time, so an audit that stops firing looks like one that passes `DONE` `queue-2`
 
 **Source:** course 11, production monitoring section. The course's cheapest production signal is the
 **detection rate** - the daily volume of alerts a detector raises - on the argument that a change in
@@ -1498,6 +1498,39 @@ only at first: a finding count legitimately goes to zero when things are fixed, 
 a gate on day one, per the standing rule about gates that are red on arrival.
 
 ---
+
+
+**VERIFIED AND FIXED 2026-09-07, and it was worse than written: three of the four ratchets it
+describes were BUILT THE DAY BEFORE, by me.** Every one lowered its high-water mark unconditionally:
+
+    if ($count -lt $base) { write the new, lower baseline }
+
+That is right for a real migration and catastrophic for a broken detector. A regex that stops
+matching, a path that moved, an empty tree inside a worktree - any of these makes a detector find
+NOTHING, and the ratchet then records **0 as the permanent ceiling**, prints "PASSED and TIGHTENED",
+and can never rise again. The gate goes green forever on a detector that died. `audit-mustfire-census`
+sits at 653; the same failure there would have recorded a tightening while every must-fire assertion
+in the estate had vanished.
+
+`lib/ratchet.ps1` now owns the rule, and the asymmetry is the point: a count that ROSE proves the
+detector works, while a count that FELL is either good news or a corpse, and those look identical
+from outside. Two refusals, neither a hard failure - the caller KEEPS its baseline and says what to
+check: a fall to zero, and a fall over 60% in one run. `-AcceptDrop` records a genuine bulk migration
+in one flag rather than a hand-edited baseline file. It also keeps **history on every run**, which is
+this item's actual ask - a single number cannot show a detection RATE, and a detector quietly
+returning the same figure for six weeks is invisible without one.
+
+Proved on the live path, not just in fixtures: with the baseline temporarily set to 100 against a real
+count of 17, `audit-write-seam` exits **2** with the baseline still at 100; with `-AcceptDrop` it exits
+0 and records 17. Before this change the identical run silently wrote 17 and moved on.
+
+**`audit-board-mojibake` is deliberately NOT routed through it**, and the reason is in its own header:
+zero mangled names is that audit's GOAL state, not a suspicious one, and its could-not-read paths
+already exit 3 before the ratchet - so the broken-detector case is covered by a different mechanism
+and refusing a fall to zero would punish the success it exists to reach.
+
+Wired: `audit-write-seam`, `audit-ruling-drift`, `audit-fact-claims`. `audit-mustfire-census` and
+`audit-fixture-inputs` already treat a DROP as a hard fail and needed nothing.
 
 ### I16 - The two median-based outlier rules are single-tailed in OPPOSITE directions, and nothing watches both `OPEN` `queue-2`
 

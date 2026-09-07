@@ -35,11 +35,12 @@
 
   Self-test: powershell -File meal-prep\pipeline\audit-fact-claims.ps1 -SelfTest
 #>
-param([switch]$SelfTest)
+param([switch]$SelfTest, [switch]$AcceptDrop)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep\pipeline' }
 $repo = Split-Path (Split-Path $here -Parent) -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\ratchet.ps1')
 
 $SPEC_DIR      = Join-Path $repo 'meal-prep\db\recipes'
 $BASELINE_FILE = Join-Path $repo 'meal-prep\db\fact-claims-baseline.json'
@@ -245,11 +246,28 @@ if ($count -gt $base) {
   Write-GuardComplete -Name 'fact-claims' -Summary ("undeclared={0} baseline={1}" -f $count, $base)
   exit 2
 }
-if ($count -lt $base) {
-  @{ generated = (Get-Date).ToString('s'); undeclared = $count
-     note = 'HIGH-WATER MARK for prose risk assertions no fact_claims list declares. May only go DOWN.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $BASELINE_FILE -Encoding UTF8
-  Write-Output ("fact-claims: PASSED and TIGHTENED - {0} undeclared assertion(s), down from {1}. Baseline lowered; it can never rise again." -f $count, $base)
+# THE FALL IS THE DIRECTION THAT CANNOT BE TRUSTED (2026-09-07, backlog I15). This block used to
+# lower the baseline unconditionally, so a detector that broke and found NOTHING recorded 0 as the
+# permanent ceiling and printed "PASSED and TIGHTENED" forever after. lib\ratchet.ps1 refuses a fall
+# to zero or a fall over 60% in one run, KEEPS the old baseline, and says what to check. -AcceptDrop
+# records a genuine bulk migration in one flag rather than a hand-edited baseline file.
+$move = Test-RatchetMove -Name 'fact-claims' -Count $count -Baseline $base -AcceptDrop:$AcceptDrop
+if ($move.Verdict -eq 'implausible') {
+  Write-Output $move.Message
+  Write-GuardComplete -Name 'fact-claims' -Summary ("undeclared={0} baseline={1} refused-to-lower" -f $count, $base)
+  exit 2
+}
+if ($move.Verdict -eq 'tightened') {
+  $doc = $null
+  try { $doc = Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
+  if (-not $doc) { $doc = [pscustomobject]@{} }
+  $hist = Add-RatchetHistory -Doc $doc -Count $count
+  @{ generated = (Get-Date).ToString('s'); undeclared = $move.NewBaseline; history = $hist
+     note = 'HIGH-WATER MARK for prose risk assertions no fact_claims list declares. May only go DOWN, and an implausible fall is refused.' } |
+    ConvertTo-Json -Depth 5 | Set-Content $BASELINE_FILE -Encoding UTF8
+  # The library message already names the guard; prefixing it again read as "x: ... x: ...".
+  Write-Output ("PASSED and TIGHTENED - " + $move.Message)
+  Write-Output ("  " + (Get-RatchetTrend -History $hist))
   Write-GuardComplete -Name 'fact-claims' -Summary ("undeclared={0} tightened-from={1}" -f $count, $base)
   exit 0
 }

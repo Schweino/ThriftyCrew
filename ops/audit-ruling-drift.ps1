@@ -30,11 +30,12 @@
 
   Self-test: powershell -File ops\audit-ruling-drift.ps1 -SelfTest
 #>
-param([switch]$SelfTest)
+param([switch]$SelfTest, [switch]$AcceptDrop)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\ratchet.ps1')
 
 $REGISTRY = Join-Path $repo 'ops\ruling-implementations.json'
 $BASELINE = Join-Path $repo 'ops\ruling-drift-baseline.json'
@@ -170,11 +171,28 @@ if ($count -gt $base) {
   Write-GuardComplete -Name 'ruling-drift' -Summary ("violations={0} baseline={1}" -f $count, $base)
   exit 2
 }
-if ($count -lt $base) {
-  @{ generated = (Get-Date).ToString('s'); violations = $count
-     note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $BASELINE -Encoding UTF8
-  Write-Output ("ruling-drift: PASSED and TIGHTENED - {0} unimplemented ruling(s), down from {1}. Baseline lowered; it can never rise again." -f $count, $base)
+# THE FALL IS THE DIRECTION THAT CANNOT BE TRUSTED (2026-09-07, backlog I15). This block used to
+# lower the baseline unconditionally, so a detector that broke and found NOTHING recorded 0 as the
+# permanent ceiling and printed "PASSED and TIGHTENED" forever after. lib\ratchet.ps1 refuses a fall
+# to zero or a fall over 60% in one run, KEEPS the old baseline, and says what to check. -AcceptDrop
+# records a genuine bulk migration in one flag rather than a hand-edited baseline file.
+$move = Test-RatchetMove -Name 'ruling-drift' -Count $count -Baseline $base -AcceptDrop:$AcceptDrop
+if ($move.Verdict -eq 'implausible') {
+  Write-Output $move.Message
+  Write-GuardComplete -Name 'ruling-drift' -Summary ("violations={0} baseline={1} refused-to-lower" -f $count, $base)
+  exit 2
+}
+if ($move.Verdict -eq 'tightened') {
+  $doc = $null
+  try { $doc = Get-Content $BASELINE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
+  if (-not $doc) { $doc = [pscustomobject]@{} }
+  $hist = Add-RatchetHistory -Doc $doc -Count $count
+  @{ generated = (Get-Date).ToString('s'); violations = $move.NewBaseline; history = $hist
+     note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN, and an implausible fall is refused.' } |
+    ConvertTo-Json -Depth 5 | Set-Content $BASELINE -Encoding UTF8
+  # The library message already names the guard; prefixing it again read as "x: ... x: ...".
+  Write-Output ("PASSED and TIGHTENED - " + $move.Message)
+  Write-Output ("  " + (Get-RatchetTrend -History $hist))
   Write-GuardComplete -Name 'ruling-drift' -Summary ("violations={0} tightened-from={1}" -f $count, $base)
   exit 0
 }
