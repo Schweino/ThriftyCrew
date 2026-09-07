@@ -800,15 +800,17 @@ throughout because JSON parsing ignores line endings.
 
 **A FRESH WORKTREE NOW PASSES 207/0.** It was 183/6 when first measured this morning.
 
-### E17 - Skill invocation flags are a matrix, and ours are all set the same `OPEN` `LOW`
+### E17 - Skill invocation flags are a matrix, and ours are all set the same `CLOSED - DECIDED, NO CHANGE`
 *Source: Building Apps and AI Agents (course 9).* Invocation control is two independent flags, not
 one switch: `disable-model-invocation: true` makes a skill user-only, `user-invocable: false` makes
 it Claude-only. All eight of our personal skills set `user-invocable: true`.
 
-**Deliberately not changed.** The cost of leaving it is seven extra entries in the slash menu; the
+**Closed 2026-09-06 as a decision, not as work.** It sat `OPEN` `LOW` while the body already
+recorded the ruling, which is the worst of both - it reads as a task nobody is doing. The decision
+stands and it is deliberate: the cost of leaving it is seven extra entries in the slash menu, the
 benefit is being able to force-load a reference on purpose ("load `rag-craft` before we design
-this"), which is occasionally worth having. It does not suppress model invocation either way. Listed
-so the decision is visible rather than accidental, not because it needs doing.
+this"), and it does not suppress model invocation either way. Reopen only if the slash menu becomes
+hard to use.
 
 ### E15 - "Ask for Input" for rules-first prompts `DONE` `8e3de6d9`
 *Source: Prompt Engineering (course 4).* One statement, and it must come last. Fixes the annoyance
@@ -974,11 +976,48 @@ mangled `C:\Codex\ThriftyCrew\grocery\out\captures_sink`). Both look like path-c
 Untouched deliberately: something wrote them and may still be writing them, so find the writer
 before deleting the evidence.
 
-### I3 - `C:\Codex\CLAUDE.md` and `C:\Codex\Fantasy\CLAUDE.md` have no backup `OPEN`
-Neither directory is a git repo. Same exposure as I1, smaller.
+### I3 - the two out-of-repo CLAUDE.md files are backed up `DONE`
+`C:\Codex\CLAUDE.md` and `C:\Codex\Fantasy\CLAUDE.md` drove real work from directories that were
+not repositories. Copies live at `~/.claude/workspace-context/`, which as of 2026-09-06 is on a
+private remote (I1), so the exposure is closed. Verified 2026-09-06: both copies are byte-identical
+to their sources with line endings normalised, and both are present in the remote's tree.
 
-### I4 - Fantasy has 212 Python files and no version control `OPEN`
-No branch to abandon, no diff to review, no undo. `git init` there is worth one conversation.
+**The residual is drift, and it is real** - these are copies and nothing automates the refresh, as
+`workspace-context/README.md` says in as many words. It bit within the hour: the workspace
+`CLAUDE.md` gained a rule about CRLF sweeps and binaries, and the copy had to be refreshed by hand
+immediately afterwards. If that becomes a habit rather than an event, the check belongs next to the
+root-dotfile check in `check-skills.py`, which already walks both stores.
+
+### I4 - Fantasy is under version control and on a private remote `DONE`
+212 Python files with no branch to abandon, no diff to review and no undo. A repo was created
+2026-09-06 with a deliberately-reasoned DENY-list `.gitignore` - the opposite of `~/.claude`'s
+allow-list, and correctly so: this is a source tree with one large derived directory, not private
+session state with a little source in it.
+
+**Remote:** `github.com/Schweino/fantasy-nfl`, **private**, 313 files, 5.5 MB. Private badge read
+off the live page. Verified on the remote tree: no `data/` (901 MB, re-pullable), no `.npy`, nothing
+secrets-shaped. Credential scan clean, scanner proved to fire first.
+
+Three things fixed on the way, and two were near-misses rather than tidying:
+
+1. **`*.npy` was missing from the deny-list next to `*.npz`.** Not hypothetical - `search_preds.npy`,
+   684 KB of derived prediction array written by `search.py:151`, was already tracked and would have
+   gone to the remote. Now ignored and untracked, which is what that file's own comments say about
+   derived artifacts: track the card, not the weights.
+2. **No `.gitattributes`.** `core.autocrlf=true` is system-wide here, so a clone came out CRLF while
+   the repo stored LF. **Measured on worktrees either side: 311 of 313 checked out CRLF before, 0
+   after.** Being a deny-list, the file is tracked by default and needed no negation - but it was
+   verified as tracked rather than assumed, which is the lesson from I1.
+3. **`.env` was already covered** at line 30, so nothing was added. Checked rather than assumed.
+
+**A mistake worth recording, because it is the kind that passes its own test.** The CRLF sweep that
+prepared this repo ran over every tracked file including binaries, and silently rewrote
+`search_preds.npy`. The sha256 "integrity check" compared the converted bytes against themselves, so
+it was tautological and reported clean. `git status` caught it - a binary showing as modified when
+only line endings were meant to change. Restored byte-for-byte from HEAD and verified against
+`git cat-file`, valid NumPy header intact; no other repo had a binary to damage, checked. The rule
+is now in the workspace `CLAUDE.md`: skip files containing a NUL byte, and verify against the
+pre-edit copy rather than your own output.
 
 ### I5 - Coursera enrollment lapsed on `building-with-the-claude-api` `OPEN`
 Will not reinstate by clicking - three attempts. Course-specific, not account-wide. All content was
