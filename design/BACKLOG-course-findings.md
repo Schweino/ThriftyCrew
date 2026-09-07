@@ -2201,11 +2201,44 @@ both block rates to a perfect 1.00 and **only the genuine-pass control catches i
 `rag-craft/evaluating-retrieval.md`'s abstaining-system trap; and shrinking the corpus leaves every
 rate perfect, caught only by the harness guard, which is `lib/ratchet.ps1`'s asymmetry.
 
-**Still open, and honestly out of reach here:** this measures the layer BEHIND the model, given a
-compromised output. It does not measure how often a hostile page actually compromises the model,
-which needs the local model in the loop and is the black box course 14 correctly declines to
-promise. **And `security-craft/estate-exposure.md` still carries the overstatement**; it was not
-edited because a consolidation session held the knowledge store when this landed.
+**`security-craft/estate-exposure.md` has been corrected** (2026-09-07), in the two places that
+conflated fabrication with injection.
+
+#### The downstream chain, traced rather than asserted
+
+The paragraph above claims a junk ingredient "has to map to a real commodity id and then be priced".
+That was asserted, not checked, so it was checked. `meal-prep/engine/cost-recipes.ps1`:
+
+1. `Resolve-ItemRow` (line 66) looks the item up in `ingredients.json` and then in the alias table,
+   and **returns `$null` on a miss**. An injected string matches neither.
+2. A null row hits line 231, which adds a **`NO PRICE BASIS`** flag and `continue`s. So the line is
+   flagged AND skipped from the cost. It is not silently swallowed, and it cannot contribute a
+   price, because there is no row to price it from.
+3. `meal-prep/engine/golden-test.ps1` line 175 hashes `cost-flags.txt` against a frozen baseline, so
+   the flag BRANCHES are pinned as reachable. That is a regression test on a fixture.
+
+**The refinement, and it is the part worth knowing: the flag is ADVISORY.** `$costFlags` is written
+to a file and its count printed (lines 397-399). Nothing sets an exit code on it and **no gate reads
+the production flag count**, so a flagged recipe is not blocked from shipping.
+
+For an INJECTED junk ingredient that is benign - the junk cannot be priced, so it cannot inflate a
+number. **The sharper case is the same mechanism pointed at a real ingredient.** If an injection
+altered a genuine ingredient's name enough to miss the lookup, that line would be flagged, dropped
+from the cost, and the batch would ship UNDERSTATED. That is not hypothetical: the comment at line
+52 records exactly that outcome from an alias bug, where sheet-pan-smoked-sausage-broccoli-cheddar
+published at **$2.12 for the batch** because two real ingredients resolved to nothing. And this
+estate's standing rule is that understating is exactly as wrong as overstating.
+
+So the honest chain is: extraction does not block on-page injection (measured 0.00); costing cannot
+be made to emit a wrong price for injected junk, and flags it; and the residual is that the flag
+does not stop a publish. **Not filed as a new item** because the failure it describes is reachable
+without any attacker at all, which is a costing-gate question rather than a security one, and it
+already has a documented precedent.
+
+**Still genuinely out of reach here:** none of this measures how often a hostile page actually
+compromises the model. That needs the local model in the loop, the endpoint was not running, and it
+is the black box course 14 correctly declines to promise. What is now measured is every layer
+BEHIND the model, given a compromised output.
 
 **Source:** course 14, *Introduction to Prompt Injection Vulnerabilities* (Kevin Cardwell, Coursera),
 whose three testing lectures argue that LLM systems are "the ultimate black box" and cannot be
