@@ -913,6 +913,43 @@ in-repo half only and say so in its own header rather than letting a green run i
 first is the right shape** and it is a bigger job than this item looks; sizing it is the next step,
 not writing the detector.
 
+
+**THE DURABLE HALF, PART ONE, 2026-09-06: the definitions are in the repo.**
+`ops/scheduled-tasks/*.xml` holds all five, exported from the live scheduler as a before-image, and
+`ops/install-grocery-tasks.ps1` owns the three TC Grocery ones.
+
+Two edits to the raw export, both load-bearing. The account **SID became `__CURRENT_USER_SID__`**,
+substituted at registration time - a raw export carries `S-1-5-21-...`, which is identifying,
+machine-specific, and would name a nonexistent account anywhere else; `gh` is not authenticated here
+so the repo had to be treated as public. And the XML **declaration said UTF-16** (what the scheduler
+emits) while the bytes were UTF-8, which fails in the confusing way rather than the obvious one.
+
+**`-Verify` is read-only and is the default.** Run against the live scheduler it reports **zero
+drift** on command, arguments and start time for all three, which is the result that matters: the
+committed before-image is faithful. Its one finding is the naming lie - **the watchdog is named 0930
+and its trigger is 10:30** - which `docs/RUNTIME-MAP.md` had to explain away because the registry was
+the only authority. `-FixName` corrects the NAME and never the time: 10:30 is what the estate has
+been running and validating against for months.
+
+**Only the `-SelfTest` is in `run-gates`, and it is auto-discovered.** `-Verify` reads the live
+Windows scheduler, so it is not hermetic, and it exits 2 today on something only a human can fix -
+gating on it would be red on day one, which is how a red gate becomes one people skim. The self-test
+is hermetic and covers drift on arguments, drift on time, a definition that lost `-WindowStyle
+Hidden`, and the name lie with its twins.
+
+**The registration itself was NOT executed.** It changes Windows scheduler state on a live estate,
+and a rename is an unregister followed by a register with a window in between where no task exists.
+The script is written, self-tested and verified against the live definitions; running it is one
+command and it is Brad's to run:
+
+```
+powershell -File ops\install-grocery-tasks.ps1 -Install -FixName
+powershell -File ops\install-grocery-tasks.ps1 -Verify
+```
+
+**Still open: the logging convergence**, which is the other half of Brad's ruling and touches two
+live jobs' scripts rather than their registrations.
+
 ## Infrastructure and hygiene
 
 Found while running the programme; not course-derived.
@@ -1060,3 +1097,69 @@ pre-edit copy rather than your own output.
 Will not reinstate by clicking - three attempts. Course-specific, not account-wide. All content was
 already extracted and routed; outstanding are 6 ungraded dialogues and that course's progress ticks.
 Needs Brad to click enroll himself.
+
+### I8 - `run-gates` DISCOVERS PowerShell self-tests and HAND-LISTS the Python ones `OPEN` `queue-2`
+*Source: Build Testable Python Packages for AI (queue 2, course 7).* The course's whole argument is
+that a test only protects you if the runner finds it without being told. Checked here, and the two
+halves of our own gate are built on opposite principles.
+
+The PowerShell half **discovers**: it walks the tree, and `run-gates.ps1`'s header says exit 3 means
+"discovered zero self-tests, which means this discovery is broken". The Python half, added later at
+lines 214-253 under a comment admitting "the discovery above reads `*.ps1` and nothing else, so
+every Python suite in this estate was ungated", is **six literal hashtable entries**:
+`coverage_check.py`, `executor_selftest.py`, `bm25_dedup_probe.py`, `checkpoint_selection.py`,
+`extractor_model_probe.py`, `matcher_eval.py`. There is no Python discovery anywhere in the repo
+(`Get-ChildItem *.py` appears once, in `audit-twin-drift.ps1`, for a different job).
+
+**Measured 2026-09-06.** Sixteen further `.py` files define a real `--selftest` entry point
+(`ap.add_argument("--selftest", ...)`, not merely a mention of the flag) and are NOT in that list:
+
+`graph/bench/priors_ablation.py`, `graph/learning/ingest_hunter_events.py`,
+`graph/pipeline/scorecard_query.py`, `grocery/pull-browser-stores.py`,
+`meal-prep/pipeline/browser_price_work.py`, `decide_apply.py`, `extract_sweep.py`, `harvest.py`,
+`harvest_embed.py`, `hunt-daemon.py`, `hunt_dispatch.py`, `hunt_lib.py`, `learn_apply.py`,
+`local_extract.py`, `resolution_embed.py`, `retire_food_db_row.py`.
+
+Of those sixteen, exactly **one** is invoked by any runner in the repo: `ingest_hunter_events.py`,
+from `graph/pipeline/nightly.ps1`. The other fifteen are suites nobody runs.
+
+**Why this is worse than a plain coverage gap.** The Python half cannot report exit 3. A discovery
+that finds nothing is loud by design; a hand-list that is missing an entry is silent, and the
+failure looks exactly like a clean run. So the estate's own "a blind check that reports success is
+the worst failure" rule is enforced on one language and not the other.
+
+**Touches** `ops/run-gates.ps1` only. The work is a `*.py` discovery pass plus the same
+reason-per-line `$SKIP` allowlist the PowerShell half already carries - and it needs that allowlist,
+because some of the sixteen will not be hermetic (models, network, a real board). **Expect it red on
+day one**, which the ops rules say is the wrong way to add a gate: it wants a ratchet with a
+high-water mark, the `audit-write-seam` shape, not a bare discovery.
+
+### I9 - The 95-file Python tree is not a package, and one consequence is already load-bearing `OPEN` `queue-2`
+*Source: Build Testable Python Packages for AI (queue 2, course 7).* Recording the state, not
+proposing the rewrite - the bet is large and the payback is not obvious.
+
+Measured 2026-09-06 across the repo, excluding `.venv`, `__pycache__` and `.claude/worktrees`:
+
+- **95 Python files. Zero import `pytest` or `unittest`.** The test story is entirely hand-rolled
+  `--selftest` flags inside the modules under test, driven by `run-gates` (I8).
+- **No `pyproject.toml`, `setup.py` or `setup.cfg` anywhere.** The single dependency declaration in
+  the estate is `sidecar/requirements.txt`. Nothing is installable and nothing is importable by
+  name; modules reach each other with `sys.path.insert(0, HERE)`.
+- **Five files carry a hyphen** and therefore cannot be imported by name at all:
+  `grocery/pull-browser-stores.py`, `meal-prep/pipeline/hunt-daemon.py`, and three under
+  `media/reels/`. This is not theoretical: `meal-prep/pipeline/hunt_daemon_selftest.py` exists as a
+  separate file *for that reason*, and says so in its own header - it loads the daemon back through
+  `importlib.util.spec_from_file_location`. A naming convention chosen for the orchestration
+  surfaces has bent the test architecture around it.
+
+**The one argument from the course worth keeping**, because it names a failure shape this estate
+already has under a different name: without a `src/` layout, tests import from the current working
+directory instead of the installed package, so they pass where they were written and fail everywhere
+else. That is the same shape as `run-gates-blind-in-worktrees` and
+`worktrees-lack-the-boards-the-engines-price-on` - a check that is green because of where it ran.
+
+**If any of this is ever done, the cheap slice first and on its own:** `sidecar/` is the one part
+that looks like a library rather than a set of scripts (`lib_match.py`, `score_cache.py`,
+`checkpoint_selection.py`, `matcher_eval.py`), it already has the only `requirements.txt`, and it is
+where a regression is hardest to see by eye. Everything else is orchestration and should stay
+scripts. Do not treat this item as a mandate to package the whole tree.
