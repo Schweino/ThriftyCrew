@@ -296,11 +296,18 @@ pack-size normaliser where the fixture is already 1 unit, a prevalence weight wh
 is recorded so it has an id rather than living in a report. The check is mechanical: for each such
 term, assert the fixture actually exercises a non-identity value, or add a second fixture that does.
 
-### E6 - Fact Check List before we publish `OPEN`
+### E6 - Fact Check List before we publish `PARTLY DONE` `a90b2081`
 *Source: Prompt Engineering (course 4).* Ask the generator for the fundamental claims that would
 undermine its own output, then diff that list against the prose. Cheap pre-publish check, close in
 spirit to what `post-publish-reviewer` does afterwards - and on the correct side of the publish,
 which is E1's whole point.
+
+**Shipped as a declaration plus a ratchet, not as a second generator call.** `fact_claims` joined
+`WRITER_FIELDS`, so the writer states the claims its card rests on, and
+`meal-prep/pipeline/audit-fact-claims.ps1` fails when a NEW card ships prose claims it did not
+declare. **Partly, because 584 live cards assert things nothing checks and 340 of those assertions
+were never declared** - those are baselined, so the gate holds the line without going red on day one
+over a backlog nobody can clear in a sitting. Clearing the 340 is what is left.
 
 ### E27 - The reranker fine-tuner ships the LAST epoch, not the best one `SHIPPED`
 *Source: Fine-Tuning Transformers with Hugging Face (queue 2, course 5).* `sidecar/finetune_reranker.py`
@@ -417,12 +424,24 @@ Three things this does NOT establish. Four pages is four pages. Haiku's fraction
 a general claim about Haiku. And nothing was measured about cost or latency, so even a clean
 agreement would not by itself have argued for the swap.
 
-### E10 - Long-running lanes have no progress tracking `OPEN`
+### E10 - Long-running lanes have no progress tracking `PARTLY DONE` `9301d154`
 *Source: AI Agents Architecture (course 7).* The Recipe Hunter daemon runs far past the point where
 its initial plan is still near the front of context. Fix is a cheap end-of-iteration progress report
 every Nth loop; calibrate N by running plan-only and watching for where drift starts.
 
-### E18 - Tool arguments are untrusted model input, and our pattern does not validate them `OPEN`
+**The premise was wrong and the fix that shipped is a different one.** The daemon is a Python
+process, not a conversation: it has no context window to sink and no plan drifting out of the front
+of one. What it actually had was silence - a run lasts hours and said nothing until it finished, so a
+hung lane and a slow lane looked identical from outside. `status_heartbeat` plus `--status-every`
+(default 600s) shipped in `9301d154`.
+
+**Partly, because N is time-based and was never calibrated.** 600 seconds is a guess that has not
+been checked against how long a real iteration takes, and the calibration this item asked for -
+watching where drift starts - does not apply to the defect that turned out to be there. What would
+be worth measuring instead is the longest legitimate gap between heartbeats, so a stall can be
+distinguished from a slow page fetch rather than merely being visible.
+
+### E18 - Tool arguments are untrusted model input, and our pattern does not validate them `DONE` `d2dc0cd5`
 *Source: AI Agents in TypeScript (course 10).* The Python decorator pattern in E11 **derives** a tool
 schema from the function signature and then never checks what comes back: the model's arguments
 arrive and are passed straight into `execute`. The TypeScript route **declares** a schema once and
@@ -436,6 +455,19 @@ out, an unvalidated boundary is the same class of exposure as E1.
 
 Take this together with E11 rather than separately: if we adopt decorators, add explicit argument
 validation at the same time rather than inheriting the gap.
+
+**Shipped standalone in `d2dc0cd5`, and the pairing rule is not broken by that.** The rule says do
+not adopt decorators WITHOUT validation; this added validation without decorators, which is the safe
+direction of the same constraint. It shipped alone because the exposure was concrete and located
+rather than hypothetical: `graph/agentic/Executor` shells out on a plan's tool string, and
+`os.path.join` discards the repo root the moment a tool name is absolute, so an absolute or
+traversing name escaped the repo entirely. The plan-hash check sitting above it proves the plan was
+not MUTATED, which is a different question and answers this one not at all.
+
+`graph/agentic` was covered by nothing before this - not in the gate's Python list, no `-SelfTest`,
+imported by no other suite - so the fix ships with `graph/agentic/executor_selftest.py`, which is
+that directory's first coverage of any kind. **E11 stays open**, and nothing now forces it: it is a
+refactor with no defect behind it, and the gap it would have inherited is already closed.
 
 ### E11 - Tool decorators and tag-scoped registries for the daemon `OPEN`
 *Source: AI Agents in Python (course 6).* Derive each tool's schema from its signature, docstring
@@ -454,7 +486,7 @@ delegating agent physically cannot restate a large memory as a task description.
 inflate them in code. Beats the output cap and makes paraphrase of the referenced content
 structurally impossible. Relevant anywhere we hand a brief to a spawned agent.
 
-### E14 - Agent definitions front-load their rules `OPEN`
+### E14 - Agent definitions front-load their rules `DONE` `6f3b6fd5`
 *Source: MCP (course 3), mechanism from Mastering Claude Code (course 8).* A five-trigger framing
 plus a hierarchical context walk is a cheaper shape for the estate's per-directory conventions than
 the current front-loading.
@@ -466,6 +498,16 @@ matter carrying a `paths` glob so the file loads ONLY when Claude touches a matc
 > and nothing on this machine corroborates it - no `.claude/rules/` directory, no `paths` key on any
 > file. Registered as C3 in `~/.claude/skills/course/CLAIMS-REGISTER.md`. First step of this item is
 > a two-file test proving a rule file actually loads conditionally, not a restructure. That is
+
+> **VERIFIED 2026-09-06, AND THE COURSE NAMED THE WRONG FIELD. The key is `globs:`, not `paths:`.**
+> This is exactly why the verification step was written in before the restructure: every rule file
+> built to the course's description would have carried a `paths:` key, loaded never, and looked
+> completely correct on disk. A scoping mechanism that silently matches nothing is worse than none,
+> because nobody goes looking for the rules that did not appear. Five files shipped under
+> `.claude/rules/` - `graph`, `grocery`, `meal-prep`, `ops-and-gates`, `site-and-publish` - each
+> scoped with `globs:`, and `ops/audit-memory-citations.ps1` now checks that every `[[name]]` they
+> cite resolves. C3 in the claims register is answered: corrected, not confirmed.
+
 conditional loading, which we had written down nowhere - `claude-code-craft` had been posing the
 attention-budget problem since course 2 without an answer to it.
 
@@ -572,8 +614,12 @@ estate already paid that cost and wrote it down: `grocery/run-log-lib.ps1`'s hea
 at all to learn why, because "the exit code was the entire diagnostic surface". Reading that file
 against the rest of the tree is what turned up the gap.
 
-**Measured 2026-09-06.** Five scheduled tasks are registered with `-WindowStyle Hidden`, across four
-registering scripts, and they use **three different hand-rolled diagnostic conventions**:
+**Measured 2026-09-06.** Five scheduled tasks run with `-WindowStyle Hidden` and they use **three
+different hand-rolled diagnostic conventions**. Only two of the five are registered by a script in
+this repo: `Register-ScheduledTask` appears in exactly two files, and the three `TC Grocery` tasks
+have no in-repo registrar at all - they exist only in the Windows registry, which is why
+`docs/RUNTIME-MAP.md:58` has to note that one of them is named 0930 and runs at 10:30 because "it is
+the registry key".
 
 | Task(s) | Registered by | Diagnostic surface |
 |---|---|---|
@@ -590,14 +636,20 @@ two rules that file obeys and states explicitly - logging must never kill the ru
 `Add-Content`/`Start-Transcript` under `$ErrorActionPreference = 'Stop'` must be guarded - are
 enforced for two tasks and merely hoped for in the other three.
 
-**The fix is cheap and has two halves, and the second is the one that lasts.** Either bring the
-graph and harvest wrappers onto `run-log-lib`, or correct its header to say what it actually covers
-and name the other two conventions. Then the durable half: a hidden-window task with no route to
-`run-log-lib` is exactly the shape a static-analysis detector catches - grep for
-`-WindowStyle Hidden` in any `Register-ScheduledTask` argument line and require the target script to
-dot-source the lib. That is a `run-gates` detector reading source rather than data, so it is
-hermetic and belongs there. **Ratchet it**, per the standing rule about gates that are red on day
-one: high-water mark 3, may only go down.
+**The cheap half:** either bring the graph and harvest wrappers onto `run-log-lib`, or correct its
+header to say what it actually covers and name the other two conventions. Worth doing either way.
+
+**The durable half needs a ruling first, and the obvious version of it does not work.** The tempting
+gate is a `run-gates` detector that greps `-WindowStyle Hidden` out of every
+`Register-ScheduledTask` argument line and requires the target script to dot-source the lib. It
+would be hermetic, and it would **miss three of the five tasks** - precisely the three the rule was
+written for - because they are registered in the registry and not by any file the detector can read.
+A static-analysis gate can only cover what is in the tree, and the tasks that hurt are the ones that
+are not. So the honest options are: move the three `TC Grocery` registrations into an in-repo
+installer alongside the other two and then gate all five, or accept that the gate covers the
+in-repo half only and say so in its own header rather than letting a green run imply five. **The
+first is the right shape** and it is a bigger job than this item looks; sizing it is the next step,
+not writing the detector.
 
 ## Infrastructure and hygiene
 
