@@ -281,7 +281,7 @@ dedup rescore and the near-name shelf scorer, and record beside each one which m
 which kind of space that metric came from. Cheap, and it is a precondition for E19's scored test
 set meaning anything. Detail in `rag-craft/vector-space-foundations.md` sections 21 and 22.
 
-### E26 - A term that is identically zero on our fixtures is untested, not correct `OPEN`
+### E26 - A term that is identically zero on our fixtures is untested, not correct `SWEPT - ONE FOUND, FIXED`
 *Source: same course, its naive Bayes module, and it is a different mechanism from E22.* E22 is
 about a **metric** being misread because the fixture's base rate is unrealistic. This is about a
 **code path never running**. The course's worked case: the log-prior term of a naive Bayes scorer is
@@ -295,6 +295,41 @@ pack-size normaliser where the fixture is already 1 unit, a prevalence weight wh
 50/50. **Nothing has been checked yet** - this is a proposed sweep, not an observed defect, and it
 is recorded so it has an id rather than living in a report. The check is mechanical: for each such
 term, assert the fixture actually exercises a non-identity value, or add a second fixture that does.
+
+**SWEPT 2026-09-06. One instance found, and the estate came out of it better than the item feared.**
+
+The two shapes this item names as most likely turned out to be the best-covered code in the file.
+`min_pack_oz` and `min_piece_oz` drive fixtures at non-identity values (32, 12, 1.5), test both sides
+of each bound, cover multipacks, count-first size idioms, ascending ranges, unreadable sizes and
+undeclared commodities. `weight_is_one_unit` exercises a real division (`2 pack, 30 oz` to 2.99)
+rather than only the one-unit case. Nothing to fix in either.
+
+**The instance is `Test-Membership`, and it had no coverage of any kind.** One line:
+`return ($store -eq "Sam's Club")`. Every fixture in `compare-deals.ps1` uses `Walmart`, so its true
+branch had never executed in a test, and the function is referenced nowhere else in the tree. It is
+**correct today** - the live board carries 376 Sam's Club rows and all 376 are flagged - which is
+this item's thesis rather than a refutation of it. Untested is not wrong, and it is not safe either.
+
+**What it would cost.** It decides the `membership` flag and the `membership` label on a live paid
+page. A Sam's Club price shown without that label is a price the reader cannot actually get without
+paying for a membership first, which is the understating half of the accuracy rule.
+
+**The fragile part is the string, so the fixture pins it.** The code and the board both use U+0027,
+checked byte by byte against `comparison-2026-09-06.json`. A curly U+2019 arriving from a capture, a
+rename or an editor autocorrect flips the comparison false for every row at once with no other
+symptom. Five cases shipped, and the mutation check that matters was run: swapping the function to a
+curly apostrophe takes the suite from exit 0 to **exit 1 with two failures**, where before this block
+the identical mutation exited 0.
+
+**Two shapes were looked for and are not present.** There is no prevalence weight anywhere - the
+estate's detectors are rule-based rather than probabilistic, so the naive-Bayes log-prior case that
+prompted this item has no analogue here. And `Test-Membership` is the only per-store branch in the
+comparison path; there is no per-store adjustment table to sweep.
+
+Left open rather than closed: this was a targeted sweep of the shapes the item names, not exhaustive
+coverage analysis. The general form - a term whose deletion no self-test notices - is answerable only
+by mutation across the whole gate, which is a bigger build than this item asks for and has no defect
+behind it yet.
 
 ### E6 - Fact Check List before we publish `PARTLY DONE` `a90b2081`
 *Source: Prompt Engineering (course 4).* Ask the generator for the fundamental claims that would

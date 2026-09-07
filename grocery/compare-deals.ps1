@@ -1341,6 +1341,29 @@ if ($SelfTest) {
   # to "also check piece size on weight commodities", which would refuse them.
   if (Test-PieceSize 'bacon' '80 oz' 'Webster City Bacon Ends' 1) { Write-Output 'ok    min_piece_oz: a weight-unit commodity declares nothing and is never piece-tested' } else { Write-Output 'FAIL  min_piece_oz reached a by-weight commodity - bacon ends are cheaper bacon, not a smaller piece'; $script:fail++ }
 
+  # --- 11f4: Test-Membership - THE ONE-LINE FUNCTION NOTHING EVER TESTED (2026-09-06, backlog E26) -------
+  # FOUND BY SWEEP, NOT BY A FAILURE. E26's shape is a term that evaluates to the identity on every
+  # fixture, so the code path never runs and a green suite says nothing about it. Test-Membership is
+  # exactly that: it returns true only for Sam's Club, and every fixture in this file uses Walmart, so
+  # its true branch had never executed in a test. It is correct today - the live board carries 376
+  # Sam's Club rows and all 376 are flagged - which is the point. Untested is not the same as wrong,
+  # and it is not the same as safe either.
+  #
+  # WHAT IT COSTS A READER IF IT BREAKS. This decides the `membership` flag and the 'membership' label
+  # on a live paid page. A Sam's Club price shown without it is a price the reader cannot actually get
+  # without paying for a membership first, which is the understating half of the accuracy rule and is
+  # exactly as wrong as overstating.
+  #
+  # THE STRING IS THE FRAGILE PART, so the fixture pins it. Both the code and the board use U+0027, the
+  # straight apostrophe (verified byte by byte against comparison-2026-09-06.json). A curly U+2019
+  # arriving from a capture, a store rename, or a well-meant editor autocorrect turns this comparison
+  # false for every row at once, silently, with no other symptom.
+  if (Test-Membership "Sam's Club") { Write-Output 'ok    Test-Membership fires for the exact live store string' } else { Write-Output 'FAIL  Test-Membership does not recognise the store string the board actually carries - every Sam''s Club row loses its membership label'; $script:fail++ }
+  if (-not (Test-Membership 'Walmart')) { Write-Output 'ok    Test-Membership does not fire for a non-membership store' } else { Write-Output 'FAIL  Test-Membership labelled Walmart as membership-only'; $script:fail++ }
+  if (-not (Test-Membership ([string][char]0x53 + 'am' + [string][char]0x2019 + 's Club'))) { Write-Output 'ok    Test-Membership is documented as apostrophe-exact: the curly form does NOT match' } else { Write-Output 'FAIL  Test-Membership matched a curly apostrophe - the comment above is now wrong'; $script:fail++ }
+  if (-not (Test-Membership '')) { Write-Output 'ok    Test-Membership: an empty store is not a membership store' } else { Write-Output 'FAIL  Test-Membership fired on an empty store string'; $script:fail++ }
+  if (-not (Test-Membership 'Sams Club')) { Write-Output 'ok    Test-Membership does not fire on the apostrophe-less spelling' } else { Write-Output 'FAIL  Test-Membership matched a spelling the board does not use'; $script:fail++ }
+
   # --- 11g: Test-InStore - the IN-STORE PRICE MODE gate (2026-08-31 achiote ruling) ------------------------
   # The live rows, both from walmart-regular-2026-08-30, both the same 3.5 oz Chef Merito jar:
   #   STORE $2.27 (on the Omaha shelf)  vs  FC $16.24 for a (Pack of 12) shipped case, which took the crown
