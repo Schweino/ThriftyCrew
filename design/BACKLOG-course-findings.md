@@ -1031,6 +1031,35 @@ twin proving a quoted historical claim does not trip it.
 
 Found while running the programme; not course-derived.
 
+
+### Triage of I8-I27, 2026-09-07
+
+Every claim checked against the tree rather than against its own write-up, by
+`ops/probe-queue2-triage.py`. Four items on this backlog have already inverted their own premise once
+measured, so nothing here was taken on trust. I19 was skipped: another session owns it.
+
+| | Items |
+|---|---|
+| **VERIFIED** and now DONE | I12, I13/I14 (partly), I15, I17 |
+| **VERIFIED**, not yet worked | I8, I9, I10, I18, I23, I26 |
+| **NEEDS-LOOK** - not settleable mechanically | I11, I16, I20, I21, I22, I24, I25, I27 |
+
+**Three of the probe's own answers were wrong and were corrected before use**, which is the reason it
+is committed rather than thrown away:
+
+- **I15** looked NOT VERIFIED because the probe's grep missed four baseline files that do pin a count.
+  Reading the claim properly showed it stands and is sharper than written: those pin a MAXIMUM, not a
+  time series, so a detector that stops firing sails through a high-water ratchet. That became the
+  day's most serious finding.
+- **I16**'s file was not where the probe guessed; the real one is `grocery/audit-unit-basis-outlier.ps1`.
+- **I27** could not be checked at all - there is no `lesson/SKILL.md` under `~/.claude/skills`, so the
+  premise needs locating before the claim can be judged.
+
+**I11 is a NEEDS-LOOK worth stating**, because the number is large: 1,788 "CLEAN TWIN" lines across the
+tree, 695 phrased as "must NOT fire" and 1,093 phrased positively. Two readings genuinely coexist, so
+the item is right that the phrase carries opposite meanings - what it needs is a ruling on which one
+is canonical, not a patch.
+
 ### I1 - `~/.claude` is backed up to a private remote `DONE` `3116e5b`
 Seven-plus courses of distilled learning, the memory stores, the agent definitions and the scheduled
 tasks lived on one disk with no repo and no remote. Closed 2026-09-06.
