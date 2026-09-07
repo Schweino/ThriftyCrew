@@ -357,7 +357,7 @@ gives up on its hard rows outscore one that attempts everything (E20).
 **Still open:** every other retrieval-shaped component - `knowledge-search`, the near-name shelf
 scorer, the ingredient mapper. The pattern is now demonstrated twice, on dedup and on the matcher.
 
-### E20 - Match rates are reported without their abstention rate `PARTLY DONE` `82377028`
+### E20 - Match rates are reported without their abstention rate `DONE - SWEPT 2026-09-07, 3 OF 45 SITES FIXED` `82377028`
 *Source: same course, section 14 of the file above.* A matcher that returns `UNUSABLE`, `PENDING`
 or nothing on the rows it finds hard, and is then scored only on the rows it answered, **outscores
 one that attempts everything** - and neither number looks wrong. Any accuracy or match-rate figure
@@ -374,10 +374,24 @@ random**, which is the part that makes this worse than a missing caveat: a twin 
 its recipe is accepted and built, so the 82% that dropped out are weighted toward the cases the
 pipeline handles well. That is E23 arriving through E20's door.
 
-Still open: the estate-wide sweep for bare rates, starting with the pricing pre-pass and the
-ingredient mapper as this item says.
+~~Still open: the estate-wide sweep for bare rates.~~ **SWEPT 2026-09-07, and the estate was in far
+better shape than this item assumed: 45 percentage computations across 25 tracked `.ps1` and `.py`
+files, every print site read by eye, and 42 already carried their denominator** - `examined 15 of 17
+(88%)`, `N of M captured row(s)`, `recall@25 41 / 168`. Three did not, and all three are fixed:
 
-### E21 - Nothing in the estate states how far a number has to move to count `PARTLY DONE` `82377028`
+| Site | What it printed | What it prints now |
+|---|---|---|
+| `graph/pipeline/scorecard.ps1:308-309` | two shares of `$tot`, and `$tot` appeared nowhere on the page - the second line did not even say what it was a share OF | the settled total on its own line, and both shares as `% of the N settled` |
+| `meal-prep/pipeline/map-preresolve.ps1` assemble | `assemble <slug>: 3 finding(s)` | `scanned=N findings=3` - three findings in four lines and three in four hundred are different events |
+| `meal-prep/pipeline/map-preresolve.ps1` final | residual and hold LINE counts reported against a SLUG count, which is a different population | `scanned=N line(s), resolved=, residual=, holds=` |
+
+**The sweep's own denominator, because this item is about exactly that.** It matched `100 *` and
+`* 100`, so it sees a rate expressed as a PERCENTAGE and nothing else. A bare fraction reported as
+"0.83 match rate" would not be found by it, and no claim is made about those. The pricing pre-pass
+this item names (`map-preresolve`) was in the sweep and is now compliant; the ingredient mapper
+prints no percentage at all.
+
+### E21 - Nothing in the estate states how far a number has to move to count `DONE - THE CONVENTION IS AT THE POINT OF READ` `82377028`
 *Source: Improving your statistical inferences (queue 2, course 2).* Every "did this change help"
 read here is a comparison of two single numbers with no interval, no case count and no record of how
 many variants were tried: a seed sweep, a threshold tune, a detector tweak, a prompt or agent
@@ -396,6 +410,19 @@ probably reverted on noise: at 80% power, four runs on a real effect disagree wi
 Method in `experiment-craft` (`errors-and-inflation.md` 4 and 5, `effect-size-and-power.md` 9 and
 11). Sits directly on top of E19: a scored test set with no threshold for "it moved" answers half
 the question. Cheapest first step is (2), which is a convention rather than code.
+
+**DONE 2026-09-07, and step (2) turned out to be already practised in both places that matter -
+which is precisely why it needed writing down.** `sidecar/matcher_eval.py` states the acceptance bar
+in its header, and `meal-prep/pipeline/bm25_dedup_probe.py:305-309` states its bar in the source
+ABOVE the run, with the reason: "a threshold chosen afterwards is not a threshold". Two file headers
+are not a convention, though - they are two people having independently done the right thing, and the
+third person will not.
+
+**So the convention now lives at the point of read: `.claude/rules/measurement.md`**, loaded on
+`sidecar/**`, `**/*eval*.py`, `**/*probe*.py` and `**/audit-*.ps1`. It carries E20's denominator rule
+and abstention rule, E21's acceptance bar and the "a number that moved is not a number that improved"
+line, E24's one-row-per-case rule, and the input fingerprint - with `sidecar/matcher_eval.py` named
+as the exemplar to copy rather than the rules described in the abstract.
 
 ### E22 - Rare-target rules are judged on fixtures with a 50% base rate `DONE - THE LIVE-PREVALENCE HALF SHIPPED 2026-09-07`
 *Source: same course, and it sharpens `green-fixture-is-not-production-coverage` rather than
@@ -485,7 +512,7 @@ ACCEPTED and built. So the surviving evidence is filtered toward the pipeline's 
 mechanism this item describes, and the filtering was invisible until the denominator was printed. The
 score was not wrong; it was answering a narrower question than it appeared to.
 
-### E24 - Every A/B here logs counts, and counts cannot be un-aggregated `PARTLY DONE` `82377028`
+### E24 - Every A/B here logs counts, and counts cannot be un-aggregated `DONE - BOTH NAMED LANES COMPLY` `82377028`
 *Source: `evaluate-llms-test-and-prove-significance` (course 18), and it is a correction of that
 course rather than a lesson from it.* When we compare two versions of anything on the same case set
 - two matcher builds over the identical board, two prompt variants over one frozen record set, a
@@ -506,6 +533,16 @@ nothing about it, and a bar stated before the result instead of after.
 
 **What is NOT done is the estate-wide sweep.** `sidecar/` and the recipe-dedup RESCORE lane are still
 the two named candidates, both already re-scoring a fixed corpus and both still one column short.
+
+**CHECKED 2026-09-07, and both named lanes already comply.** `sidecar/matcher_eval.py` writes one row
+per case with the totals derived from the file rather than being it, and the recipe-dedup RESCORE lane
+writes `meal-prep/db/dedup-headtohead-cases.jsonl` - `len(rows)` cases x 2 arms, keyed by slug, with
+the discordant pairs at top-10 DERIVED from that file. It even reports honestly when it could not
+write them: *"per-case rows NOT written - the totals below stand, but this run left no evidence"*.
+
+So the build was done and the CONVENTION was not: two lanes doing the right thing is not a rule, and
+the next comparison would have been written by someone who had read neither header. It is now
+`.claude/rules/measurement.md`, loaded on the paths where a comparison actually gets written.
 
 **The fix is a logging convention, not a statistics build**: any run that scores two arms over one
 case set writes **one row per case per arm, keyed by case id**, and the totals are derived from that

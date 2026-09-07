@@ -3433,7 +3433,9 @@ if ($runAssemble) {
     # settled, and D8 builds an intake over it.
     Write-Output ("map-preresolve -Assemble: {0} finding(s) - NOTHING was written to mapped\{1}.json" -f @($res.findings).Count, $Slug)
     foreach ($f in @($res.findings)) { Write-Output ("    FINDING  " + $f) }
-    Write-GuardComplete -Name 'map-preresolve' -Summary ("assemble {0}: {1} finding(s)" -f $Slug, @($res.findings).Count)
+    # SCANNED, NOT JUST FOUND (backlog E20). "3 finding(s)" is unreadable without the population -
+    # three findings in four lines and three in four hundred are different events.
+    Write-GuardComplete -Name 'map-preresolve' -Summary ("assemble {0}: scanned={1} findings={2}" -f $Slug, @($res.doc.ingredients).Count, @($res.findings).Count)
     exit 1
   }
   $outMapped = Join-Path $RunDir 'mapped'
@@ -3656,6 +3658,8 @@ $rate = if ($totLines -gt 0) { [Math]::Round(100.0 * $totResolved / $totLines, 1
 Write-Output ("map-preresolve: {0} slug(s), {1} line(s), {2} pre-resolved ({3}%), {4} residual, {5} hold(s)" -f $tblArr.Count, $totLines, $totResolved, $rate, $totRes, $totHold)
 if ($runJson) { ([pscustomobject]@{ slugs=$slugList; lines=$totLines; resolved=$totResolved; residual=$totRes; holds=$totHold; tables=$tblArr } | ConvertTo-Json -Depth 9) }
 
-Write-GuardComplete -Name 'map-preresolve' -Summary ("{0} slug(s), {1} residual line(s), {2} hold(s)" -f $tblArr.Count, $totRes, $totHold)
+# THE LINE COUNT IS THE DENOMINATOR (backlog E20). Residuals and holds are counts of lines, and the
+# summary reported them against a slug count, which is a different population.
+Write-GuardComplete -Name 'map-preresolve' -Summary ("{0} slug(s), scanned={1} line(s), resolved={2}, residual={3}, holds={4}" -f $tblArr.Count, $totLines, $totResolved, $totRes, $totHold)
 if ($totRes -gt 0) { exit 1 }
 exit 0

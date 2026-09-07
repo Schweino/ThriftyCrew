@@ -305,8 +305,13 @@ $tot = $det + $l5 + [int]$g.settled_by.other
 Write-Output ("MATCHING LANE SCORECARD   {0} .. {1}   (exclusive end)" -f $Since, $Until)
 Write-Output ''
 Write-Output ("  questions asked                 {0,10:N0}   over {1} resolve run(s)" -f $g.questions_asked, @($g.resolve_runs).Count)
-Write-Output ("  rows settled, deterministic     {0,10:N0}   {1}" -f $det, $(if ($tot -gt 0) { '{0:N1}% of settled rows' -f (100.0 * $det / $tot) } else { '-' }))
-Write-Output ("  rows settled, layer 5 (local)   {0,10:N0}   {1}" -f $l5, $(if ($tot -gt 0) { '{0:N1}%' -f (100.0 * $l5 / $tot) } else { '-' }))
+# THE DENOMINATOR IS PRINTED, NOT IMPLIED (2026-09-07, backlog E20). These two lines carried a
+# percentage of $tot and $tot appeared nowhere on the page, so "42.0%" was a share of a number the
+# reader could not see - and the second line did not even say what it was a share OF. A rate without
+# its population is not a measurement, it is a mood.
+Write-Output ("  rows settled, TOTAL             {0,10:N0}   deterministic + layer 5 + other" -f $tot)
+Write-Output ("  rows settled, deterministic     {0,10:N0}   {1}" -f $det, $(if ($tot -gt 0) { '{0:N1}% of the {1:N0} settled' -f (100.0 * $det / $tot), $tot } else { '-' }))
+Write-Output ("  rows settled, layer 5 (local)   {0,10:N0}   {1}" -f $l5, $(if ($tot -gt 0) { '{0:N1}% of the {1:N0} settled' -f (100.0 * $l5 / $tot), $tot } else { '-' }))
 Write-Output ("  local model calls               {0,10:N0}" -f $g.model_calls)
 if ($g.layer5_outcomes) {
   foreach ($p in $g.layer5_outcomes.PSObject.Properties) {
