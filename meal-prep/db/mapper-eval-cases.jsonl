@@ -1,0 +1,661 @@
+{"_run": "2026-09-07T10:37:09", "_pairs": 660, "_skipped": {"no extractor noun for this raw line": 42, "decision is not a mapping: mapped-null": 46, "decision is not a mapping: mapped-null-pending-registrar": 7, "decision is not a mapping: mapped-free": 3, "decision is not a mapping: mapped-ruled-addition": 1, "decision is not a mapping: flagged-no-label-and-no-commodity": 1, "decision is not a mapping: sub-recipe": 1, "decision is not a mapping: optional-pantry": 9, "decision is not a mapping: alternative-not-mapped": 1, "decision is not a mapping: mapped-pending-price": 3, "decision is not a mapping: optional-null": 2, "decision is not a mapping: optional-unquantified": 1, "decision is not a mapping: optional-note": 23, "decision is not a mapping: sub-recipe-reference": 1, "decision is not a mapping: omitted-serving-suggestion": 1, "decision is not a mapping: unresolved-hold": 1, "decision is not a mapping: ruled-substitution": 1}, "_corpus": "success-derived: every pair is a line that WAS mapped"}
+{"query": "30% Reduced Fat Cheddar Cheese", "correct": "Reduced Fat Cheddar Cheese", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "Adobo Seasoning", "correct": "Adobo Seasoning", "class": "RESOLVES", "resolves_to": "Adobo Seasoning", "rank": null, "n_candidates": 0}
+{"query": "Alfredo Sauce", "correct": "Alfredo Sauce", "class": "RESOLVES", "resolves_to": "Alfredo Sauce", "rank": null, "n_candidates": 0}
+{"query": "Asiago cheese", "correct": "Asiago Cheese", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "Avocado", "correct": "Avocado", "class": "RESOLVES", "resolves_to": "Avocado", "rank": null, "n_candidates": 0}
+{"query": "BBQ sauce", "correct": "BBQ Sauce", "class": "RESOLVES", "resolves_to": "BBQ Sauce", "rank": null, "n_candidates": 0}
+{"query": "Bay Leaves", "correct": "Bay Leaves", "class": "RESOLVES", "resolves_to": "Bay Leaves", "rank": null, "n_candidates": 0}
+{"query": "Black Pepper", "correct": "Black Pepper", "class": "RESOLVES", "resolves_to": "Black Pepper", "rank": null, "n_candidates": 0}
+{"query": "Black pepper", "correct": "Black Pepper", "class": "RESOLVES", "resolves_to": "Black Pepper", "rank": null, "n_candidates": 0}
+{"query": "Boneless Eye of Round Roast", "correct": "Boneless Eye of Round Roast", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Boneless Eye of Round Roast", "correct": "Eye of Round Roast", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Boneless skinless chicken breast", "correct": "Boneless Skinless Chicken Breast", "class": "RESOLVES", "resolves_to": "Boneless Skinless Chicken Breast", "rank": null, "n_candidates": 0}
+{"query": "Boursin cheese", "correct": "Boursin Cheese", "class": "RESOLVES", "resolves_to": "Boursin Cheese", "rank": null, "n_candidates": 0}
+{"query": "Brussels sprouts", "correct": "Brussels Sprouts", "class": "RESOLVES", "resolves_to": "Brussels Sprouts", "rank": null, "n_candidates": 0}
+{"query": "Burrata Cheese", "correct": "Burrata Cheese", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "Buttermilk Ranch salad dressing", "correct": "Ranch Dressing", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Caesar dressing", "correct": "Caesar Dressing", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "Cajun seasoning", "correct": "Cajun Seasoning", "class": "RESOLVES", "resolves_to": "Cajun Seasoning", "rank": null, "n_candidates": 0}
+{"query": "Carrots", "correct": "Carrots", "class": "RESOLVES", "resolves_to": "Carrots", "rank": null, "n_candidates": 0}
+{"query": "Cayenne Pepper", "correct": "Cayenne Pepper", "class": "RESOLVES", "resolves_to": "Cayenne Pepper", "rank": null, "n_candidates": 0}
+{"query": "Cayenne pepper", "correct": "Cayenne Pepper", "class": "RESOLVES", "resolves_to": "Cayenne Pepper", "rank": null, "n_candidates": 0}
+{"query": "Cherry Tomatoes", "correct": "Cherry Tomatoes", "class": "RESOLVES", "resolves_to": "Cherry Tomatoes", "rank": null, "n_candidates": 0}
+{"query": "Chicken Breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "Chicken Broth", "correct": "Chicken Broth", "class": "RESOLVES", "resolves_to": "Chicken Broth", "rank": null, "n_candidates": 0}
+{"query": "Chicken breast or turkey", "correct": "Boneless Skinless Chicken Breast", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "Chili Flakes", "correct": "Red Pepper Flakes", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Chili Powder", "correct": "Chili Powder", "class": "RESOLVES", "resolves_to": "Chili Powder", "rank": null, "n_candidates": 0}
+{"query": "Chopped Fresh Thyme", "correct": "Fresh Thyme", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "Cilantro", "correct": "Fresh Cilantro", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Coriander/cilantro leaves", "correct": "Fresh Cilantro", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "Corn or flour tortillas", "correct": "Corn Tortillas", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Cornstarch", "correct": "Cornstarch", "class": "RESOLVES", "resolves_to": "Cornstarch", "rank": null, "n_candidates": 0}
+{"query": "Cottage cheese", "correct": "Cottage Cheese", "class": "RESOLVES", "resolves_to": "Cottage Cheese", "rank": null, "n_candidates": 0}
+{"query": "Cranberry Sauce", "correct": "Cranberry Sauce", "class": "RESOLVES", "resolves_to": "Cranberry Sauce", "rank": null, "n_candidates": 0}
+{"query": "Cremini Mushrooms", "correct": "Cremini Mushrooms", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "Cremini Mushrooms", "correct": "White Mushrooms", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "Crimini mushrooms", "correct": "Baby Bella (Crimini) Mushrooms", "class": "RESOLVES", "resolves_to": "White Mushrooms", "rank": null, "n_candidates": 0}
+{"query": "Cucumber", "correct": "Cucumber", "class": "RESOLVES", "resolves_to": "Cucumber", "rank": null, "n_candidates": 0}
+{"query": "Dijon", "correct": "Dijon Mustard", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Dijon mustard", "correct": "Dijon Mustard", "class": "RESOLVES", "resolves_to": "Dijon Mustard", "rank": null, "n_candidates": 0}
+{"query": "Distilled white vinegar", "correct": "White Vinegar", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Dry Red Wine", "correct": "Dry Red Wine", "class": "RESOLVES", "resolves_to": "Dry Red Wine", "rank": null, "n_candidates": 0}
+{"query": "Dry couscous", "correct": "Couscous", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Fat Free Cottage Cheese", "correct": "Fat Free Cottage Cheese", "class": "RESOLVES", "resolves_to": "Fat Free Cottage Cheese", "rank": null, "n_candidates": 0}
+{"query": "Fresh Chopped parsley", "correct": "Fresh Parsley", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "Fresh Mozzarella", "correct": "Fresh Mozzarella", "class": "RESOLVES", "resolves_to": "Fresh Mozzarella", "rank": null, "n_candidates": 0}
+{"query": "Fresh Parsley", "correct": "Fresh Parsley", "class": "RESOLVES", "resolves_to": "Fresh Parsley", "rank": null, "n_candidates": 0}
+{"query": "Fresh Rosemary", "correct": "Fresh Rosemary", "class": "RESOLVES", "resolves_to": "Fresh Rosemary", "rank": null, "n_candidates": 0}
+{"query": "Fresh Thyme", "correct": "Fresh Thyme", "class": "RESOLVES", "resolves_to": "Fresh Thyme", "rank": null, "n_candidates": 0}
+{"query": "Freshly Grated Parmesan", "correct": "Parmesan Cheese", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Frozen Lightly Breaded Chicken Breast Bites", "correct": "Frozen Lightly Breaded Chicken Breast Bites", "class": "RESOLVES", "resolves_to": "Frozen Lightly Breaded Chicken Breast Bites", "rank": null, "n_candidates": 0}
+{"query": "Garam Masala", "correct": "Garam Masala", "class": "RESOLVES", "resolves_to": "Garam Masala", "rank": null, "n_candidates": 0}
+{"query": "Garlic", "correct": "Garlic", "class": "RESOLVES", "resolves_to": "Garlic", "rank": null, "n_candidates": 0}
+{"query": "Garlic Powder", "correct": "Garlic Powder", "class": "RESOLVES", "resolves_to": "Garlic Powder", "rank": null, "n_candidates": 0}
+{"query": "Gouda cheese", "correct": "Cheddar Cheese", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "Greek yogurt", "correct": "Greek Yogurt", "class": "RESOLVES", "resolves_to": "Greek Yogurt", "rank": null, "n_candidates": 0}
+{"query": "Green Onions", "correct": "Green Onions", "class": "RESOLVES", "resolves_to": "Green Onions", "rank": null, "n_candidates": 0}
+{"query": "Ground Ginger", "correct": "Ground Ginger", "class": "RESOLVES", "resolves_to": "Ground Ginger", "rank": null, "n_candidates": 0}
+{"query": "Ground black pepper", "correct": "Black Pepper", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "Ground cinnamon", "correct": "Ground Cinnamon", "class": "RESOLVES", "resolves_to": "Ground Cinnamon", "rank": null, "n_candidates": 0}
+{"query": "Ground ginger", "correct": "Ground Ginger", "class": "RESOLVES", "resolves_to": "Ground Ginger", "rank": null, "n_candidates": 0}
+{"query": "Ground nutmeg", "correct": "Ground Nutmeg", "class": "RESOLVES", "resolves_to": "Ground Nutmeg", "rank": null, "n_candidates": 0}
+{"query": "Heavy Cream", "correct": "Heavy Cream", "class": "RESOLVES", "resolves_to": "Heavy Cream", "rank": null, "n_candidates": 0}
+{"query": "Homemade Barbecue Sauce", "correct": "BBQ Sauce", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Honey", "correct": "Honey", "class": "RESOLVES", "resolves_to": "Honey", "rank": null, "n_candidates": 0}
+{"query": "Honey glazed almonds", "correct": "Honey Roasted Almonds", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "Hot Honey", "correct": "Hot Honey", "class": "RESOLVES", "resolves_to": "Hot Honey", "rank": null, "n_candidates": 0}
+{"query": "Italian sausage", "correct": "Hot Italian Sausage", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "Italian sausage links", "correct": "Hot Italian Sausage", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Italian seasoning", "correct": "Italian Seasoning", "class": "RESOLVES", "resolves_to": "Italian Seasoning", "rank": null, "n_candidates": 0}
+{"query": "Juice + zest of 1 lime", "correct": "Lime Juice", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "Juice of half a lemon", "correct": "Fresh Lemon Juice", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "Kosher Salt", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "Kosher Salt & Freshly Cracked Black Pepper", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "Kosher salt", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "Kosher salt and ground pepper", "correct": "Salt", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "Large Egg", "correct": "Eggs", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Light Cream Cheese", "correct": "1/3 Fat Cream Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "Lime Wedges", "correct": "Lime", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Lime wedges", "correct": "Lime", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Little Potatoes", "correct": "Baby Potatoes", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "Low Calorie Cooking Spray", "correct": "Cooking Spray", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Low Fat Cottage Cheese", "correct": "Cottage Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "Madras curry", "correct": "Curry Powder", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "Mexican crema", "correct": "Mexican Crema", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Mexican style cheese", "correct": "Mexican Blend Shredded Cheese", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "Monterey jack cheese", "correct": "Monterey Jack Cheese", "class": "RESOLVES", "resolves_to": "Monterey Jack Cheese", "rank": null, "n_candidates": 0}
+{"query": "Mozzarella", "correct": "Mozzarella Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "Mozzarella cheese", "correct": "Mozzarella Cheese", "class": "RESOLVES", "resolves_to": "Mozzarella Cheese", "rank": null, "n_candidates": 0}
+{"query": "Mustard", "correct": "Yellow Mustard", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "No Boil Lasagna", "correct": "No-Boil Lasagna Noodles", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "No Sodium Beef Stock", "correct": "Beef Broth", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Oil spray", "correct": "Cooking Spray", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Olive Oil", "correct": "Olive Oil", "class": "RESOLVES", "resolves_to": "Olive Oil", "rank": null, "n_candidates": 0}
+{"query": "Olive oil", "correct": "Olive Oil", "class": "RESOLVES", "resolves_to": "Olive Oil", "rank": null, "n_candidates": 0}
+{"query": "Onion Powder", "correct": "Onion Powder", "class": "RESOLVES", "resolves_to": "Onion Powder", "rank": null, "n_candidates": 0}
+{"query": "Panko", "correct": "Panko Bread Crumbs", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Panko bread crumbs", "correct": "Panko Breadcrumbs", "class": "RESOLVES", "resolves_to": "Panko Breadcrumbs", "rank": null, "n_candidates": 0}
+{"query": "Paprika", "correct": "Paprika", "class": "RESOLVES", "resolves_to": "Paprika", "rank": null, "n_candidates": 0}
+{"query": "Parmesan", "correct": "Parmesan Cheese", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Parmesan cheese", "correct": "Parmesan Cheese", "class": "RESOLVES", "resolves_to": "Parmesan Cheese", "rank": null, "n_candidates": 0}
+{"query": "Parsley", "correct": "Dried Parsley", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "Pasta", "correct": "Ziti Pasta", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "Pepper Jack cheese", "correct": "Pepper Jack Cheese", "class": "RESOLVES", "resolves_to": "Pepper Jack Cheese", "rank": null, "n_candidates": 0}
+{"query": "Portobello mushrooms", "correct": "Portobello Mushrooms", "class": "RESOLVES", "resolves_to": "Portobello Mushrooms", "rank": null, "n_candidates": 0}
+{"query": "Provolone cheese", "correct": "Provolone Cheese", "class": "RESOLVES", "resolves_to": "Provolone Cheese", "rank": null, "n_candidates": 0}
+{"query": "Ranch Seasoning Mix", "correct": "Ranch Seasoning Mix", "class": "RESOLVES", "resolves_to": "Ranch Seasoning Mix", "rank": null, "n_candidates": 0}
+{"query": "Rao's Marinara Sauce", "correct": "Marinara Sauce", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Red Onion", "correct": "Red Onion", "class": "RESOLVES", "resolves_to": "Red Onion", "rank": null, "n_candidates": 0}
+{"query": "Red pepper flakes", "correct": "Red Pepper Flakes", "class": "RESOLVES", "resolves_to": "Red Pepper Flakes", "rank": null, "n_candidates": 0}
+{"query": "Reduced BBQ Sauce", "correct": "BBQ Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Salt and Pepper", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "Salt and freshly ground black pepper", "correct": "Salt", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "Salt and pepper", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "Salt/Pepper", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "Sea Salt", "correct": "Sea Salt", "class": "RESOLVES", "resolves_to": "Sea Salt", "rank": null, "n_candidates": 0}
+{"query": "Semi Skimmed Milk", "correct": "Milk", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "Sesame seeds", "correct": "Toasted Sesame Seeds", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "Shredded Cheddar", "correct": "Cheddar Cheese, Shredded", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "Sliced onions", "correct": "Yellow Onion", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "Smoked paprika", "correct": "Smoked Paprika", "class": "RESOLVES", "resolves_to": "Smoked Paprika", "rank": null, "n_candidates": 0}
+{"query": "Sour Cream", "correct": "Light Sour Cream", "class": "RESOLVES", "resolves_to": "Sour Cream", "rank": null, "n_candidates": 0}
+{"query": "Sriracha sauce", "correct": "Sriracha", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Swiss cheese", "correct": "Swiss Cheese", "class": "RESOLVES", "resolves_to": "Swiss Cheese", "rank": null, "n_candidates": 0}
+{"query": "Swiss cheese slices", "correct": "Swiss Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "Tabasco", "correct": "Hot Sauce", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "Toasted desiccated coconut", "correct": "Desiccated Coconut", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "Tomato paste", "correct": "Tomato Paste", "class": "RESOLVES", "resolves_to": "Tomato Paste", "rank": null, "n_candidates": 0}
+{"query": "Unsalted Butter", "correct": "Butter", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 3}
+{"query": "Water or broth", "correct": "Chicken Broth", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "Whole Wheat Flour", "correct": "Whole Wheat Flour", "class": "RESOLVES", "resolves_to": "Whole Wheat Flour", "rank": null, "n_candidates": 0}
+{"query": "Worcestershire", "correct": "Worcestershire Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "Worcestershire Sauce", "correct": "Worcestershire Sauce", "class": "RESOLVES", "resolves_to": "Worcestershire Sauce", "rank": null, "n_candidates": 0}
+{"query": "Worcestershire sauce", "correct": "Worcestershire Sauce", "class": "RESOLVES", "resolves_to": "Worcestershire Sauce", "rank": null, "n_candidates": 0}
+{"query": "Yellow Onion", "correct": "Yellow Onion", "class": "RESOLVES", "resolves_to": "Yellow Onion", "rank": null, "n_candidates": 0}
+{"query": "adobo sauce", "correct": "Chipotle in Adobo", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "all purpose flour", "correct": "All-Purpose Flour", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "all-purpose flour", "correct": "All-Purpose Flour", "class": "RESOLVES", "resolves_to": "All-Purpose Flour", "rank": null, "n_candidates": 0}
+{"query": "allspice berries", "correct": "Ground Allspice", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "almond butter", "correct": "Almond Butter", "class": "RESOLVES", "resolves_to": "Almond Butter", "rank": null, "n_candidates": 0}
+{"query": "almonds", "correct": "Almonds", "class": "RESOLVES", "resolves_to": "Almonds", "rank": null, "n_candidates": 0}
+{"query": "andouille smoked sausage", "correct": "Andouille Smoked Sausage", "class": "RESOLVES", "resolves_to": "Andouille Smoked Sausage", "rank": null, "n_candidates": 0}
+{"query": "apple cider vinegar", "correct": "Apple Cider Vinegar", "class": "RESOLVES", "resolves_to": "Apple Cider Vinegar", "rank": null, "n_candidates": 0}
+{"query": "apple juice", "correct": "Apple Juice", "class": "RESOLVES", "resolves_to": "Apple Juice", "rank": null, "n_candidates": 0}
+{"query": "apricot jam", "correct": "Apricot Jam", "class": "RESOLVES", "resolves_to": "Apricot Jam", "rank": null, "n_candidates": 0}
+{"query": "artichoke hearts", "correct": "Artichoke Hearts", "class": "RESOLVES", "resolves_to": "Artichoke Hearts", "rank": null, "n_candidates": 0}
+{"query": "avocado", "correct": "Avocado", "class": "RESOLVES", "resolves_to": "Avocado", "rank": null, "n_candidates": 0}
+{"query": "avocado oil", "correct": "Avocado Oil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "avocado oil", "correct": "Olive Oil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "avocado oil mayonnaise", "correct": "Mayonnaise", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "avocado, sour cream, or additional cheese", "correct": "Sour Cream", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "baby bella mushrooms", "correct": "Baby Bella (Crimini) Mushrooms", "class": "RESOLVES", "resolves_to": "White Mushrooms", "rank": null, "n_candidates": 0}
+{"query": "baby bella mushrooms", "correct": "White Mushrooms", "class": "RESOLVES", "resolves_to": "White Mushrooms", "rank": null, "n_candidates": 0}
+{"query": "baby potatoes", "correct": "Baby Potatoes", "class": "RESOLVES", "resolves_to": "Baby Potatoes", "rank": null, "n_candidates": 0}
+{"query": "baby spinach", "correct": "Spinach", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "bacon", "correct": "Hickory Smoked Bacon", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "baking powder", "correct": "Baking Powder", "class": "RESOLVES", "resolves_to": "Baking Powder", "rank": null, "n_candidates": 0}
+{"query": "balsamic syrup", "correct": "Balsamic Glaze", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "balsamic vinegar", "correct": "Balsamic Vinegar", "class": "RESOLVES", "resolves_to": "Balsamic Vinegar", "rank": null, "n_candidates": 0}
+{"query": "basil", "correct": "Fresh Basil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "basil pesto", "correct": "Basil Pesto", "class": "RESOLVES", "resolves_to": "Basil Pesto", "rank": null, "n_candidates": 0}
+{"query": "bay leaf", "correct": "Bay Leaves", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "bay leaves", "correct": "Bay Leaves", "class": "RESOLVES", "resolves_to": "Bay Leaves", "rank": null, "n_candidates": 0}
+{"query": "bean sprouts", "correct": "Bean Sprouts", "class": "RESOLVES", "resolves_to": "Bean Sprouts", "rank": null, "n_candidates": 0}
+{"query": "beef back ribs", "correct": "Beef Back Ribs", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "beef base", "correct": "Beef Base", "class": "RESOLVES", "resolves_to": "Beef Base", "rank": null, "n_candidates": 0}
+{"query": "beef broth", "correct": "Beef Broth", "class": "RESOLVES", "resolves_to": "Beef Broth", "rank": null, "n_candidates": 0}
+{"query": "bell pepper", "correct": "Bell Peppers", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "bell pepper", "correct": "Green Bell Peppers", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "bell pepper", "correct": "Red Bell Pepper", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "bell peppers", "correct": "Bell Peppers", "class": "RESOLVES", "resolves_to": "Bell Peppers", "rank": null, "n_candidates": 0}
+{"query": "better than bouillon", "correct": "Beef Bouillon Base", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "black beans", "correct": "Canned Black Beans", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 5}
+{"query": "black olives", "correct": "Black Olives", "class": "RESOLVES", "resolves_to": "Black Olives", "rank": null, "n_candidates": 0}
+{"query": "black pepper", "correct": "Black Pepper", "class": "RESOLVES", "resolves_to": "Black Pepper", "rank": null, "n_candidates": 0}
+{"query": "black peppercorns", "correct": "black peppercorns", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "blackened seasoning mix", "correct": "Blackened Seasoning", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "bok choys", "correct": "Bok Choy", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "bone broth", "correct": "Bone Broth", "class": "RESOLVES", "resolves_to": "Bone Broth", "rank": null, "n_candidates": 0}
+{"query": "bone-in chicken thighs", "correct": "Boneless Skinless Chicken Thigh", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 4, "n_candidates": 4}
+{"query": "bone-in skin-on chicken thighs", "correct": "Bone-In Skin-On Chicken Thighs", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "bone-in skin-on chicken thighs", "correct": "Chicken Thighs", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "bone-in skin-on chicken thighs, drumsticks, or both", "correct": "Chicken Thighs (bone-in, skin-on, raw)", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "bone-in, skin-on chicken breasts", "correct": "Bone-In Skin-On Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "boneless (skinless chicken breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "boneless chicken breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "boneless pork chops", "correct": "Boneless Pork Chops", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "boneless pork loin roast", "correct": "Pork Loin", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "boneless skinless chicken breast", "correct": "Boneless Skinless Chicken Breast", "class": "RESOLVES", "resolves_to": "Boneless Skinless Chicken Breast", "rank": null, "n_candidates": 0}
+{"query": "boneless skinless chicken breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "boneless skinless chicken thighs", "correct": "Boneless Skinless Chicken Thigh", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 4, "n_candidates": 4}
+{"query": "boneless, skinless chicken breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "bonless skinless chicken breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "bourbon", "correct": "Bourbon", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "bread cubes", "correct": "Bread", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "bread cubes", "correct": "Sandwich Bread", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "breadcrumbs", "correct": "Bread Crumbs", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "broccoli", "correct": "Broccoli", "class": "RESOLVES", "resolves_to": "Broccoli", "rank": null, "n_candidates": 0}
+{"query": "broccoli florets", "correct": "Broccoli", "class": "RESOLVES", "resolves_to": "Broccoli Florets", "rank": null, "n_candidates": 0}
+{"query": "broccoli florets", "correct": "Broccoli Florets", "class": "RESOLVES", "resolves_to": "Broccoli Florets", "rank": null, "n_candidates": 0}
+{"query": "broccoli rabe", "correct": "broccoli rabe", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "broccolini", "correct": "Broccolini", "class": "RESOLVES", "resolves_to": "Broccolini", "rank": null, "n_candidates": 0}
+{"query": "brown gravy mix", "correct": "Brown Gravy Mix", "class": "RESOLVES", "resolves_to": "Brown Gravy Mix", "rank": null, "n_candidates": 0}
+{"query": "brown sugar", "correct": "Brown Sugar", "class": "RESOLVES", "resolves_to": "Brown Sugar", "rank": null, "n_candidates": 0}
+{"query": "butter", "correct": "Butter", "class": "RESOLVES", "resolves_to": "Butter", "rank": null, "n_candidates": 0}
+{"query": "buttermilk", "correct": "Buttermilk", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "butternut squash", "correct": "Butternut Squash", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "button Mushrooms", "correct": "White Mushrooms", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "cabbage", "correct": "Green Cabbage", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "canned artichoke hearts", "correct": "Artichoke Hearts", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "canned whole hatch green chiles", "correct": "Diced Green Chiles", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "cannellini beans", "correct": "Cannellini Beans", "class": "RESOLVES", "resolves_to": "Cannellini Beans", "rank": null, "n_candidates": 0}
+{"query": "capers", "correct": "Capers", "class": "RESOLVES", "resolves_to": "Capers", "rank": null, "n_candidates": 0}
+{"query": "cardamom pods", "correct": "cardamom pods", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "carnitas meat", "correct": "Carnitas", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "carrot", "correct": "Carrots", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "carrots", "correct": "Carrots", "class": "RESOLVES", "resolves_to": "Carrots", "rank": null, "n_candidates": 0}
+{"query": "cauliflower", "correct": "Cauliflower", "class": "RESOLVES", "resolves_to": "Cauliflower", "rank": null, "n_candidates": 0}
+{"query": "cauliflower florets", "correct": "Cauliflower", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "cauliflower rice", "correct": "Cauliflower", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "cayenne", "correct": "Cayenne Pepper", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "cayenne pepper", "correct": "Cayenne Pepper", "class": "RESOLVES", "resolves_to": "Cayenne Pepper", "rank": null, "n_candidates": 0}
+{"query": "cayenne pepper or ground pure chili", "correct": "Cayenne Pepper", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "celery salt", "correct": "Celery Salt", "class": "RESOLVES", "resolves_to": "Celery Salt", "rank": null, "n_candidates": 0}
+{"query": "celery stalk", "correct": "Celery", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "celery stalks", "correct": "Celery", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "cheddar cheese", "correct": "Cheddar Cheese", "class": "RESOLVES", "resolves_to": "Cheddar Cheese", "rank": null, "n_candidates": 0}
+{"query": "cheddar cheese", "correct": "Cheddar Cheese, Shredded", "class": "RESOLVES", "resolves_to": "Cheddar Cheese", "rank": null, "n_candidates": 0}
+{"query": "cheese", "correct": "Mexican Cheese Blend", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "cheese stick", "correct": "String Cheese", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "chicken bone broth", "correct": "Bone Broth", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "chicken bouillon cube", "correct": "Chicken Bouillon", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "chicken breast", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "chicken breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "chicken broth", "correct": "Chicken Broth", "class": "RESOLVES", "resolves_to": "Chicken Broth", "rank": null, "n_candidates": 0}
+{"query": "chicken cutlets", "correct": "Boneless Skinless Chicken Breast", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "chicken drumsticks", "correct": "Bone-In Skin-On Chicken Drumstick", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "chicken or beef broth", "correct": "Chicken Broth", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "chicken stock", "correct": "Chicken Broth", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "chicken tenderloin", "correct": "Chicken Tenderloins", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "chicken thighs", "correct": "Boneless Skinless Chicken Thigh", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 4, "n_candidates": 4}
+{"query": "chicken thighs", "correct": "Chicken Thigh (Bone-In, Skin-On)", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "chicken wings", "correct": "Chicken Wings", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "chickpeas", "correct": "Chickpeas", "class": "RESOLVES", "resolves_to": "Chickpeas", "rank": null, "n_candidates": 0}
+{"query": "chili powder", "correct": "Chili Powder", "class": "RESOLVES", "resolves_to": "Chili Powder", "rank": null, "n_candidates": 0}
+{"query": "chili seasoning", "correct": "Chili Powder", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 4, "n_candidates": 4}
+{"query": "chinese cooking wine", "correct": "Chinese Cooking Wine", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "chipotle peppers packed in adobo", "correct": "Chipotle in Adobo", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "chopped cilantro", "correct": "Fresh Cilantro", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "chopped green chiles", "correct": "Diced Green Chiles", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "chopped tomatoes", "correct": "Diced Tomatoes", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "chorizo sausage", "correct": "Pork Chorizo", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "cider vinegar", "correct": "Apple Cider Vinegar", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "cilantro", "correct": "Fresh Cilantro", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "cilantro sprigs", "correct": "Fresh Cilantro", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "cinnamon", "correct": "Ground Cinnamon", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "coarsely ground black pepper", "correct": "Black Pepper", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "coconut aminos (or soy sauce)", "correct": "Soy Sauce", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "coconut milk", "correct": "Coconut Milk", "class": "RESOLVES", "resolves_to": "Coconut Milk", "rank": null, "n_candidates": 0}
+{"query": "coconut oil", "correct": "Coconut Oil", "class": "RESOLVES", "resolves_to": "Coconut Oil", "rank": null, "n_candidates": 0}
+{"query": "coconut sugar", "correct": "Brown Sugar", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "colby jack, monterey jack or pepper jack cheese", "correct": "Monterey Jack Cheese", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "cold butter", "correct": "Butter", "class": "RENAME", "resolves_to": null, "rank": 3, "n_candidates": 3}
+{"query": "condensed cream of mushroom soup", "correct": "Cream of Mushroom Soup", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "cooked bacon", "correct": "Hickory Smoked Bacon", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "cooked chicken", "correct": "Rotisserie Chicken", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "cooked chicken breast", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "cooked corn", "correct": "Sweet Whole Kernel Corn", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "cooked cubed chicken", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "cooked frozen cauliflower rice", "correct": "Frozen Cauliflower Rice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "cooked leftover turkey or chicken", "correct": "Turkey Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "cooked quinoa", "correct": "Cooked Quinoa", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "cooked shredded chicken", "correct": "Cooked Shredded Chicken", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "cooked white rice", "correct": "Cooked White Rice", "class": "RESOLVES", "resolves_to": "Cooked White Rice", "rank": null, "n_candidates": 0}
+{"query": "cooking spray", "correct": "Cooking Spray", "class": "RESOLVES", "resolves_to": "Cooking Spray", "rank": null, "n_candidates": 0}
+{"query": "coriander", "correct": "Ground Coriander", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "corn", "correct": "Sweet Whole Kernel Corn", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "corn starch", "correct": "Cornstarch", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "corn tortillas", "correct": "Corn Tortillas", "class": "RESOLVES", "resolves_to": "Corn Tortillas", "rank": null, "n_candidates": 0}
+{"query": "cornflour/cornstarch", "correct": "Cornstarch", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "cornmeal", "correct": "Cornmeal", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "cornstarch", "correct": "Cornstarch", "class": "RESOLVES", "resolves_to": "Cornstarch", "rank": null, "n_candidates": 0}
+{"query": "cottage cheese", "correct": "Cottage Cheese", "class": "RESOLVES", "resolves_to": "Cottage Cheese", "rank": null, "n_candidates": 0}
+{"query": "cranberries", "correct": "Fresh Cranberries", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "cream cheese", "correct": "1/3 Fat Cream Cheese", "class": "RESOLVES", "resolves_to": "1/3 Fat Cream Cheese", "rank": null, "n_candidates": 0}
+{"query": "cream cheese", "correct": "Cream Cheese", "class": "RESOLVES", "resolves_to": "1/3 Fat Cream Cheese", "rank": null, "n_candidates": 0}
+{"query": "cremini mushrooms", "correct": "Baby Bella (Crimini) Mushrooms", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "crumbled feta", "correct": "Feta Cheese", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "crushed pineapple in natural juice", "correct": "Crushed Pineapple in Juice", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "crushed red pepper", "correct": "Red Pepper Flakes", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "crushed red pepper flakes", "correct": "Red Pepper Flakes", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "crushed tomatoes", "correct": "Crushed Tomatoes", "class": "RESOLVES", "resolves_to": "Crushed Tomatoes", "rank": null, "n_candidates": 0}
+{"query": "cube steaks", "correct": "Cube Steak", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "cubed butternut squash", "correct": "Butternut Squash", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "cucumber", "correct": "Cucumber", "class": "RESOLVES", "resolves_to": "Cucumber", "rank": null, "n_candidates": 0}
+{"query": "cumin", "correct": "Ground Cumin", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "cumin powder", "correct": "Ground Cumin", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "cumin seeds or dried cumin", "correct": "Ground Cumin", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "curry powder", "correct": "Curry Powder", "class": "RESOLVES", "resolves_to": "Curry Powder", "rank": null, "n_candidates": 0}
+{"query": "dark brown sugar", "correct": "Brown Sugar", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "dark red kidney beans", "correct": "Kidney Beans", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "diced tomatoes", "correct": "Diced Tomatoes", "class": "RESOLVES", "resolves_to": "Diced Tomatoes", "rank": null, "n_candidates": 0}
+{"query": "dijon mustard", "correct": "Dijon Mustard", "class": "RESOLVES", "resolves_to": "Dijon Mustard", "rank": null, "n_candidates": 0}
+{"query": "dill", "correct": "Fresh Dill", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "dill pickle juice/brine", "correct": "Dill Pickle Juice", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "dill pickle juice/brine", "correct": "Dill Pickles", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "dried Italian seasoning", "correct": "Italian Seasoning", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "dried Poultry Seasoning", "correct": "Poultry Seasoning", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "dried Poultry seasoning", "correct": "Poultry Seasoning", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "dried apricots", "correct": "Dried Apricots", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "dried basil", "correct": "Dried Basil", "class": "RESOLVES", "resolves_to": "Dried Basil", "rank": null, "n_candidates": 0}
+{"query": "dried basil, dried oregano", "correct": "Dried Oregano", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "dried dill", "correct": "Dried Dill", "class": "RESOLVES", "resolves_to": "Dried Dill", "rank": null, "n_candidates": 0}
+{"query": "dried guajillo chile", "correct": "Dried Guajillo Chiles", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "dried oregano", "correct": "Dried Oregano", "class": "RESOLVES", "resolves_to": "Dried Oregano", "rank": null, "n_candidates": 0}
+{"query": "dried parsley", "correct": "Dried Parsley", "class": "RESOLVES", "resolves_to": "Dried Parsley", "rank": null, "n_candidates": 0}
+{"query": "dried thyme", "correct": "Dried Thyme", "class": "RESOLVES", "resolves_to": "Dried Thyme", "rank": null, "n_candidates": 0}
+{"query": "dry rotini pasta", "correct": "Rotini Pasta", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "dry white wine", "correct": "Dry White Wine", "class": "RESOLVES", "resolves_to": "Dry White Wine", "rank": null, "n_candidates": 0}
+{"query": "egg", "correct": "Egg Yolk", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "egg", "correct": "Eggs", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "egg yolk", "correct": "Egg Yolk", "class": "RESOLVES", "resolves_to": "Egg Yolk", "rank": null, "n_candidates": 0}
+{"query": "eggs", "correct": "Eggs", "class": "RESOLVES", "resolves_to": "Eggs", "rank": null, "n_candidates": 0}
+{"query": "extra virgin olive oil", "correct": "Olive Oil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "extra-virgin olive oil", "correct": "Olive Oil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "fajita seasoning", "correct": "Fajita Seasoning", "class": "RESOLVES", "resolves_to": "Fajita Seasoning", "rank": null, "n_candidates": 0}
+{"query": "fennel", "correct": "Fennel Bulb", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "fennel seeds", "correct": "Fennel Seeds", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "fennel seeds", "correct": "Ground Fennel", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "feta cheese", "correct": "Feta Cheese", "class": "RESOLVES", "resolves_to": "Feta Cheese", "rank": null, "n_candidates": 0}
+{"query": "fine sea salt", "correct": "Sea Salt", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "finely chopped onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "fire roasted diced tomatoes", "correct": "Diced Tomatoes", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "fire roasted tomatoes", "correct": "Diced Tomatoes", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 5}
+{"query": "fire-roasted crushed or diced tomatoes", "correct": "Diced Tomatoes", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "fire-roasted diced tomatoes", "correct": "Diced Tomatoes", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "flank steak", "correct": "Beef Flank/Sirloin Steak", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "flour", "correct": "All-Purpose Flour", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "fresh baby spinach", "correct": "Spinach", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "fresh basil leaves", "correct": "Fresh Basil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "fresh black pepper", "correct": "Black Pepper", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "fresh cilantro", "correct": "Fresh Cilantro", "class": "RESOLVES", "resolves_to": "Fresh Cilantro", "rank": null, "n_candidates": 0}
+{"query": "fresh cilantro stems and leaves", "correct": "Fresh Cilantro", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "fresh egg noodles", "correct": "Fresh Egg Noodles", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "fresh flat-leaf parsley stems and leaves", "correct": "Fresh Parsley", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "fresh garlic", "correct": "Garlic", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "fresh ginger", "correct": "Ginger", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "fresh ground black pepper", "correct": "Black Pepper", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "fresh herbs (basil or parsley)", "correct": "Fresh Basil", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "fresh lemon juice", "correct": "Fresh Lemon Juice", "class": "RESOLVES", "resolves_to": "Fresh Lemon Juice", "rank": null, "n_candidates": 0}
+{"query": "fresh lime juice", "correct": "Lime Juice", "class": "RESOLVES", "resolves_to": "Fresh Lime Juice", "rank": null, "n_candidates": 0}
+{"query": "fresh lime or orange", "correct": "Lime Juice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "fresh mint", "correct": "Fresh Mint", "class": "RESOLVES", "resolves_to": "Fresh Mint", "rank": null, "n_candidates": 0}
+{"query": "fresh mozzarella", "correct": "Fresh Mozzarella", "class": "RESOLVES", "resolves_to": "Fresh Mozzarella", "rank": null, "n_candidates": 0}
+{"query": "fresh or frozen cheese tortellini", "correct": "Cheese Tortellini", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "fresh or frozen peas", "correct": "Frozen Green Peas", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "fresh parsley", "correct": "Fresh Parsley", "class": "RESOLVES", "resolves_to": "Fresh Parsley", "rank": null, "n_candidates": 0}
+{"query": "fresh parsley or basil", "correct": "Fresh Parsley", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "fresh red chilli", "correct": "Fresh Red Chili", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "fresh rosemary", "correct": "Fresh Rosemary", "class": "RESOLVES", "resolves_to": "Fresh Rosemary", "rank": null, "n_candidates": 0}
+{"query": "fresh sage leaves", "correct": "Fresh Sage", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "fresh spinach", "correct": "Spinach", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "fresh thyme", "correct": "Fresh Thyme", "class": "RESOLVES", "resolves_to": "Fresh Thyme", "rank": null, "n_candidates": 0}
+{"query": "freshly grated Parmesan", "correct": "Parmesan Cheese", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "freshly grated parmesan cheese", "correct": "Parmesan Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "freshly ground black pepper", "correct": "Black Pepper", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "freshly squeezed lemon juice", "correct": "Lemon Juice", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "frilly protein pasta", "correct": "High Protein Pasta", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "frozen chopped spinach", "correct": "Frozen Chopped Spinach", "class": "RESOLVES", "resolves_to": "Frozen Chopped Spinach", "rank": null, "n_candidates": 0}
+{"query": "frozen cilantro lime rice", "correct": "Frozen Cilantro Lime Rice", "class": "RESOLVES", "resolves_to": "Cilantro Lime Rice", "rank": null, "n_candidates": 0}
+{"query": "frozen spinach", "correct": "Frozen Chopped Spinach", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "fuji apples", "correct": "Apple", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "fuji apples", "correct": "Apples", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "full fat coconut milk", "correct": "Coconut Milk", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "full-fat coconut milk or plain coconut yogurt", "correct": "Coconut Milk", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "garam masala", "correct": "Garam Masala", "class": "RESOLVES", "resolves_to": "Garam Masala", "rank": null, "n_candidates": 0}
+{"query": "garlic", "correct": "Garlic", "class": "RESOLVES", "resolves_to": "Garlic", "rank": null, "n_candidates": 0}
+{"query": "garlic cloves", "correct": "Garlic", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "garlic powder", "correct": "Garlic Powder", "class": "RESOLVES", "resolves_to": "Garlic Powder", "rank": null, "n_candidates": 0}
+{"query": "garlic powder, onion powder", "correct": "Garlic Powder", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "ginger", "correct": "Ginger", "class": "RESOLVES", "resolves_to": "Ginger", "rank": null, "n_candidates": 0}
+{"query": "golden beets with their greens", "correct": "Golden Beets with Greens", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "golden raisins", "correct": "Golden Raisins", "class": "RESOLVES", "resolves_to": "Golden Raisins", "rank": null, "n_candidates": 0}
+{"query": "good-quality sourdough bread", "correct": "Sourdough Bread", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "granulated sugar", "correct": "Sugar", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "grape tomatoes", "correct": "Cherry Tomatoes", "class": "RENAME", "resolves_to": null, "rank": 3, "n_candidates": 5}
+{"query": "grated Parmesan cheese", "correct": "Parmesan Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "grated ginger", "correct": "Ginger", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "grated parmesan cheese", "correct": "Parmesan Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "greek yogurt", "correct": "Greek Yogurt", "class": "RESOLVES", "resolves_to": "Greek Yogurt", "rank": null, "n_candidates": 0}
+{"query": "green beans, fresh or frozen", "correct": "Green Beans", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "green bell pepper", "correct": "Green Bell Pepper", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "green bell pepper", "correct": "Green Bell Peppers", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "green chiles", "correct": "Diced Green Chiles", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "green chiles", "correct": "Poblano Peppers", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "green chilies", "correct": "Diced Green Chiles", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "green onions", "correct": "Green Onions", "class": "RESOLVES", "resolves_to": "Green Onions", "rank": null, "n_candidates": 0}
+{"query": "ground basil", "correct": "Dried Basil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "ground beef", "correct": "80/20 Ground Beef", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "ground beef", "correct": "93/7 Ground Beef", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "ground beef or ground turkey", "correct": "80/20 Ground Beef", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "ground black pepper", "correct": "Black Pepper", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "ground cinnamon", "correct": "Ground Cinnamon", "class": "RESOLVES", "resolves_to": "Ground Cinnamon", "rank": null, "n_candidates": 0}
+{"query": "ground cloves or cardamom", "correct": "Ground Cloves", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "ground coriander", "correct": "Ground Coriander", "class": "RESOLVES", "resolves_to": "Ground Coriander", "rank": null, "n_candidates": 0}
+{"query": "ground cumin", "correct": "Ground Cumin", "class": "RESOLVES", "resolves_to": "Ground Cumin", "rank": null, "n_candidates": 0}
+{"query": "ground ginger", "correct": "Ground Ginger", "class": "RESOLVES", "resolves_to": "Ground Ginger", "rank": null, "n_candidates": 0}
+{"query": "ground oregano", "correct": "Dried Oregano", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "ground turkey", "correct": "93/7 Ground Turkey", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "ground turkey or beef", "correct": "93/7 Ground Turkey", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "ground turkey, chicken or beef", "correct": "93/7 Ground Turkey", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "ground turmeric", "correct": "Ground Turmeric", "class": "RESOLVES", "resolves_to": "Ground Turmeric", "rank": null, "n_candidates": 0}
+{"query": "half and half", "correct": "Half and Half", "class": "RESOLVES", "resolves_to": "Half and Half", "rank": null, "n_candidates": 0}
+{"query": "half-and-half", "correct": "Half and Half", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "halved refrigerated biscuits", "correct": "Refrigerated Biscuits", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "ham slices", "correct": "Deli Ham", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "head of garlic", "correct": "Garlic", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "heavy cream", "correct": "Heavy Cream", "class": "RESOLVES", "resolves_to": "Heavy Cream", "rank": null, "n_candidates": 0}
+{"query": "heavy whipping cream", "correct": "Heavy Cream", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "heavy/whipping cream", "correct": "Heavy Cream", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "high protein pesto", "correct": "Basil Pesto", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "hoisin sauce", "correct": "Hoisin Sauce", "class": "RESOLVES", "resolves_to": "Hoisin Sauce", "rank": null, "n_candidates": 0}
+{"query": "honey", "correct": "Honey", "class": "RESOLVES", "resolves_to": "Honey", "rank": null, "n_candidates": 0}
+{"query": "hot sauce", "correct": "Hot Sauce", "class": "RESOLVES", "resolves_to": "Hot Sauce", "rank": null, "n_candidates": 0}
+{"query": "jalapeno", "correct": "Jalapeno", "class": "RESOLVES", "resolves_to": "Jalapeno", "rank": null, "n_candidates": 0}
+{"query": "jalapeno or poblano pepper", "correct": "Jalapeno", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "jalapeno peppers", "correct": "Jalapeno", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "jalape\u00f1o", "correct": "Jalapeno", "class": null, "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "jumbo yellow onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "ketchup", "correct": "Ketchup", "class": "RESOLVES", "resolves_to": "Ketchup", "rank": null, "n_candidates": 0}
+{"query": "kidney beans", "correct": "Kidney Beans", "class": "RESOLVES", "resolves_to": "Kidney Beans", "rank": null, "n_candidates": 0}
+{"query": "kosher salt", "correct": "Kosher Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "kosher salt", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "large bell peppers", "correct": "Bell Peppers", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "large boneless skinless chicken breast", "correct": "Boneless Skinless Chicken Breast", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "large bunch thyme", "correct": "Fresh Thyme", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "large carrots", "correct": "Carrots", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "large egg", "correct": "Eggs", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "large eggs", "correct": "Eggs", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "large garlic cloves", "correct": "Garlic", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "large lemons", "correct": "Lemons", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "large red onion", "correct": "Red Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "large rolls", "correct": "Kaiser Rolls", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "large yellow onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "lean ground beef", "correct": "93/7 Ground Beef", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "lean ground bison", "correct": "Lean Ground Bison", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "lean ground turkey", "correct": "93/7 Ground Turkey", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 3}
+{"query": "lean ground turkey", "correct": "99/1 Ground Turkey", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 3}
+{"query": "leeks", "correct": "Leeks", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "lemon", "correct": "Lemon", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "lemon", "correct": "Lemon (wedges)", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "lemon", "correct": "Lemon Juice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "lemon grass", "correct": "Lemongrass Paste", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "lemon juice", "correct": "Lemon Juice", "class": "RESOLVES", "resolves_to": "Lemon Juice", "rank": null, "n_candidates": 0}
+{"query": "lemon zest", "correct": "Lemon Zest", "class": "RESOLVES", "resolves_to": "Lemon Zest", "rank": null, "n_candidates": 0}
+{"query": "lemons", "correct": "Lemons", "class": "RESOLVES", "resolves_to": "Lemons", "rank": null, "n_candidates": 0}
+{"query": "less sodium soy sauce", "correct": "Soy Sauce", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "light mayonnaise", "correct": "Light Mayonnaise", "class": "RESOLVES", "resolves_to": "Light Mayonnaise", "rank": null, "n_candidates": 0}
+{"query": "light soy sauce", "correct": "Soy Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "light-brown sugar", "correct": "Brown Sugar", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "lime", "correct": "Lime", "class": "RESOLVES", "resolves_to": "Lime", "rank": null, "n_candidates": 0}
+{"query": "lime zest", "correct": "Lime Zest", "class": "RESOLVES", "resolves_to": "Lime Zest", "rank": null, "n_candidates": 0}
+{"query": "lime/lemon juice", "correct": "Lime Juice", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "limes", "correct": "Lime", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "long dill pickle slices", "correct": "Dill Pickle Slices", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "long grain or medium grain rice", "correct": "Rice", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 5}
+{"query": "long grain white rice", "correct": "Rice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 5}
+{"query": "long-grain white rice", "correct": "Rice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 5}
+{"query": "low carb marinara sauce", "correct": "Marinara Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "low fat cottage cheese", "correct": "Fat Free Cottage Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 5}
+{"query": "low sodium chicken broth", "correct": "Chicken Broth", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "low sodium soy sauce", "correct": "Soy Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "low sodium tamari or soy sauce", "correct": "Soy Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "low-sodium chicken broth", "correct": "Chicken Broth", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "low-sodium soy sauce", "correct": "Soy Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "mango", "correct": "Mango", "class": "RESOLVES", "resolves_to": "Mango", "rank": null, "n_candidates": 0}
+{"query": "marinara sauce", "correct": "Marinara Sauce", "class": "RESOLVES", "resolves_to": "Marinara Sauce", "rank": null, "n_candidates": 0}
+{"query": "masa harina", "correct": "Masa Harina", "class": "RESOLVES", "resolves_to": "Masa Harina", "rank": null, "n_candidates": 0}
+{"query": "matchstick carrots", "correct": "Carrots", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "mayo", "correct": "Mayonnaise", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "mayonnaise", "correct": "Mayonnaise", "class": "RESOLVES", "resolves_to": "Mayonnaise", "rank": null, "n_candidates": 0}
+{"query": "med onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "medium onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "medium tart apple", "correct": "Apple", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "medium yellow onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "medium zucchini", "correct": "Zucchini", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "medium/large yellow onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "medium/large zucchini", "correct": "Zucchini", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "milk", "correct": "Milk", "class": "RESOLVES", "resolves_to": "Milk", "rank": null, "n_candidates": 0}
+{"query": "minced garlic", "correct": "Garlic", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "mixed color bell pepper", "correct": "Red Bell Pepper", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "mozzarella cheese", "correct": "Mozzarella Cheese", "class": "RESOLVES", "resolves_to": "Mozzarella Cheese", "rank": null, "n_candidates": 0}
+{"query": "mushrooms", "correct": "White Mushrooms", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "mustard", "correct": "Yellow Mustard", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "nonfat plain Greek yogurt", "correct": "Greek Yogurt", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "nonfat plain Greek yogurt", "correct": "Plain Yogurt", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "nutmeg", "correct": "Ground Nutmeg", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "oil", "correct": "Vegetable Oil", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "olive oil", "correct": "Olive Oil", "class": "RESOLVES", "resolves_to": "Olive Oil", "rank": null, "n_candidates": 0}
+{"query": "olive oil or avocado oil", "correct": "Olive Oil", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "olive oil or lard", "correct": "Olive Oil", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "onion powder", "correct": "Onion Powder", "class": "RESOLVES", "resolves_to": "Onion Powder", "rank": null, "n_candidates": 0}
+{"query": "onions", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "orange juice", "correct": "Orange Juice", "class": "RESOLVES", "resolves_to": "Orange Juice", "rank": null, "n_candidates": 0}
+{"query": "oregano", "correct": "Dried Oregano", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "panko bread crumbs", "correct": "Panko Breadcrumbs", "class": "RESOLVES", "resolves_to": "Panko Breadcrumbs", "rank": null, "n_candidates": 0}
+{"query": "panko breadcrumbs", "correct": "Panko Breadcrumbs", "class": "RESOLVES", "resolves_to": "Panko Breadcrumbs", "rank": null, "n_candidates": 0}
+{"query": "paprika", "correct": "Paprika", "class": "RESOLVES", "resolves_to": "Paprika", "rank": null, "n_candidates": 0}
+{"query": "paprika powder", "correct": "Paprika", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "paprika, thyme", "correct": "Paprika", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "parmesan", "correct": "Parmesan Cheese", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "parmesan cheese", "correct": "Parmesan Cheese", "class": "RESOLVES", "resolves_to": "Parmesan Cheese", "rank": null, "n_candidates": 0}
+{"query": "parsley", "correct": "Fresh Parsley", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "part-skim mozzarella cheese", "correct": "Mozzarella Cheese", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "peaches", "correct": "Peaches", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "penne", "correct": "Penne Pasta", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "pepper", "correct": "Black Pepper", "class": "RENAME", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "pepper jack cheese", "correct": "Pepper Jack Cheese", "class": "RESOLVES", "resolves_to": "Pepper Jack Cheese", "rank": null, "n_candidates": 0}
+{"query": "pepperoni", "correct": "Pepperoni", "class": "RESOLVES", "resolves_to": "Pepperoni", "rank": null, "n_candidates": 0}
+{"query": "pesto", "correct": "Basil Pesto", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "petite diced tomatoes", "correct": "Diced Tomatoes", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "pickled onions", "correct": "Yellow Onion", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "pine nuts", "correct": "Pine Nuts", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "pineapple juice", "correct": "Pineapple Juice", "class": "RESOLVES", "resolves_to": "Pineapple Juice", "rank": null, "n_candidates": 0}
+{"query": "pinto beans", "correct": "Canned Pinto Beans", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "pizza blend cheese", "correct": "Mozzarella Cheese", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "plain Greek yogurt", "correct": "Greek Yogurt", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "pork chops", "correct": "Pork Chops", "class": "RESOLVES", "resolves_to": "Pork Chops", "rank": null, "n_candidates": 0}
+{"query": "pork loin", "correct": "Pork Loin", "class": "RESOLVES", "resolves_to": "Pork Loin", "rank": null, "n_candidates": 0}
+{"query": "pork loin OR shoulder/boston butt ,or scotch fillet, skinless", "correct": "Pork Loin", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "pork shoulder", "correct": "Pork Shoulder", "class": "RESOLVES", "resolves_to": "Pork Shoulder", "rank": null, "n_candidates": 0}
+{"query": "pork shoulder or chuck roast", "correct": "Pork Shoulder", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "pork shoulder roast", "correct": "Pork Shoulder", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "potatoes", "correct": "Potatoes", "class": "RESOLVES", "resolves_to": "Potato", "rank": null, "n_candidates": 0}
+{"query": "pulled pork", "correct": "Pork Shoulder", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "quartered artichoke hearts", "correct": "Artichoke Hearts", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "quick oats", "correct": "Quick Oats", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "quinoa", "correct": "Quinoa", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "ranch dressing", "correct": "Ranch Dressing", "class": "RESOLVES", "resolves_to": "Ranch Dressing", "rank": null, "n_candidates": 0}
+{"query": "ranch dressing mix", "correct": "Ranch Seasoning Mix", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "ranch seasoning", "correct": "Ranch Seasoning Mix", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "raw cauliflower", "correct": "Cauliflower", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "raw chicken breast", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "red bell pepper", "correct": "Red Bell Pepper", "class": "RESOLVES", "resolves_to": "Red Bell Pepper", "rank": null, "n_candidates": 0}
+{"query": "red bell peppers", "correct": "Red Bell Pepper", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "red chili flakes", "correct": "Red Pepper Flakes", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "red chilli flakes", "correct": "Red Pepper Flakes", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "red enchilada sauce", "correct": "Enchilada Sauce", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "red onion", "correct": "Red Onion", "class": "RESOLVES", "resolves_to": "Red Onion", "rank": null, "n_candidates": 0}
+{"query": "red pepper", "correct": "Red Bell Pepper", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "red pepper flakes", "correct": "Red Pepper Flakes", "class": "RESOLVES", "resolves_to": "Red Pepper Flakes", "rank": null, "n_candidates": 0}
+{"query": "red wine vinegar", "correct": "Red Wine Vinegar", "class": "RESOLVES", "resolves_to": "Red Wine Vinegar", "rank": null, "n_candidates": 0}
+{"query": "red, orange, or yellow bell pepper", "correct": "Red Bell Pepper", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "reduced fat shredded Mexican cheese", "correct": "Reduced Fat Mexican Blend Shredded Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "reduced sodium beef broth", "correct": "Beef Broth", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "rice vinegar", "correct": "Rice Vinegar", "class": "RESOLVES", "resolves_to": "Rice Vinegar", "rank": null, "n_candidates": 0}
+{"query": "roasted red peppers", "correct": "Roasted Red Peppers", "class": "RESOLVES", "resolves_to": "Roasted Red Peppers", "rank": null, "n_candidates": 0}
+{"query": "roma tomatoes", "correct": "Tomatoes", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 5}
+{"query": "rotisserie chicken", "correct": "Rotisserie Chicken", "class": "RESOLVES", "resolves_to": "Rotisserie Chicken", "rank": null, "n_candidates": 0}
+{"query": "salsa", "correct": "Salsa", "class": "RESOLVES", "resolves_to": "Salsa", "rank": null, "n_candidates": 0}
+{"query": "salsa verde", "correct": "Salsa Verde", "class": "RESOLVES", "resolves_to": "Salsa Verde", "rank": null, "n_candidates": 0}
+{"query": "salt", "correct": "Salt", "class": "RESOLVES", "resolves_to": "Salt", "rank": null, "n_candidates": 0}
+{"query": "salt & pepper", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "salt and black pepper", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "salt and freshly ground pepper", "correct": "Salt", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "salt and pepper", "correct": "Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "salt and pepper", "correct": "Salt and Pepper", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "salted butter", "correct": "Butter", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 3}
+{"query": "scallion/shallot", "correct": "Green Onions", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "sea salt", "correct": "Salt", "class": "RESOLVES", "resolves_to": "Sea Salt", "rank": null, "n_candidates": 0}
+{"query": "sea salt", "correct": "Sea Salt", "class": "RESOLVES", "resolves_to": "Sea Salt", "rank": null, "n_candidates": 0}
+{"query": "seasoned salt", "correct": "Seasoned Salt", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "sesame oil", "correct": "Sesame Oil", "class": "RESOLVES", "resolves_to": "Sesame Oil", "rank": null, "n_candidates": 0}
+{"query": "sesame seeds", "correct": "Toasted Sesame Seeds", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "shallot", "correct": "Shallots", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "shallots", "correct": "Shallots", "class": "RESOLVES", "resolves_to": "Shallots", "rank": null, "n_candidates": 0}
+{"query": "sharp cheddar cheese", "correct": "Cheddar Cheese, Shredded", "class": "RENAME", "resolves_to": null, "rank": 2, "n_candidates": 5}
+{"query": "short pasta", "correct": "Ziti Pasta", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "shredded Cheddar cheese", "correct": "Cheddar Cheese, Shredded", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "shredded Chihuahua cheese", "correct": "Chihuahua Cheese", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "shredded Parmesan cheese", "correct": "Parmesan Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "shredded cheddar", "correct": "Cheddar Cheese, Shredded", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "shredded cheddar cheese", "correct": "Cheddar Cheese, Shredded", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "shredded cheese", "correct": "Mexican Cheese Blend", "class": "RESOLVES", "resolves_to": "Shredded Cheese", "rank": null, "n_candidates": 0}
+{"query": "shredded cheese", "correct": "Shredded Cheese", "class": "RESOLVES", "resolves_to": "Shredded Cheese", "rank": null, "n_candidates": 0}
+{"query": "shredded green cabbage", "correct": "Green Cabbage", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "shredded lettuce", "correct": "Lettuce (optional garnish)", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "shredded low-moisture mozzarella", "correct": "Shredded Mozzarella", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "shredded mozzarella", "correct": "Mozzarella Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "shredded mozzarella cheese", "correct": "Mozzarella Cheese", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "shredded parmesan", "correct": "Parmesan Cheese", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "shredded romaine lettuce", "correct": "Romaine Lettuce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "siracha mayo", "correct": "Sriracha Mayo (optional topping)", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "sirloin steak", "correct": "Beef Flank/Sirloin Steak", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "skinless chicken drumsticks", "correct": "Bone-In Skinless Chicken Drumstick", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "skinless chicken thighs", "correct": "Bone-In Skinless Chicken Thigh", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "skinless/boneless chicken breasts", "correct": "Boneless Skinless Chicken Breast", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 4}
+{"query": "skirt or flank steak", "correct": "Beef Flank/Sirloin Steak", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "slivered almonds", "correct": "Almonds", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "small broccoli florets", "correct": "Broccoli", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "small garlic cloves", "correct": "Garlic", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "small white onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "small yellow onion", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "smoked Spanish paprika", "correct": "Smoked Paprika", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 2}
+{"query": "smoked paprika", "correct": "Smoked Paprika", "class": "RESOLVES", "resolves_to": "Smoked Paprika", "rank": null, "n_candidates": 0}
+{"query": "smoked sausage", "correct": "Smoked Sausage", "class": "RESOLVES", "resolves_to": "Smoked Sausage", "rank": null, "n_candidates": 0}
+{"query": "sour cream", "correct": "Light Sour Cream", "class": "RESOLVES", "resolves_to": "Sour Cream", "rank": null, "n_candidates": 0}
+{"query": "sour cream", "correct": "Sour Cream", "class": "RESOLVES", "resolves_to": "Sour Cream", "rank": null, "n_candidates": 0}
+{"query": "sour cream", "correct": "Sour Cream (optional topping)", "class": "RESOLVES", "resolves_to": "Sour Cream", "rank": null, "n_candidates": 0}
+{"query": "soy sauce", "correct": "Soy Sauce", "class": "RESOLVES", "resolves_to": "Soy Sauce", "rank": null, "n_candidates": 0}
+{"query": "spaghetti squash", "correct": "Spaghetti Squash", "class": "RESOLVES", "resolves_to": "Spaghetti Squash", "rank": null, "n_candidates": 0}
+{"query": "spinach", "correct": "Spinach", "class": "RESOLVES", "resolves_to": "Spinach", "rank": null, "n_candidates": 0}
+{"query": "spiral ham", "correct": "Spiral Ham", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "spring mix", "correct": "Spring Mix", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "sriracha", "correct": "Sriracha", "class": "RESOLVES", "resolves_to": "Sriracha", "rank": null, "n_candidates": 0}
+{"query": "star anise", "correct": "Star Anise", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "steak (sirloin or flank)", "correct": "Beef Flank/Sirloin Steak", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "stew meat", "correct": "Beef Stew Meat", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "sugar", "correct": "Sugar", "class": "RESOLVES", "resolves_to": "Sugar", "rank": null, "n_candidates": 0}
+{"query": "sugar-free BBQ sauce", "correct": "BBQ Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "sun-dried tomatoes", "correct": "Sun-Dried Tomatoes", "class": "RESOLVES", "resolves_to": "Sun-Dried Tomatoes", "rank": null, "n_candidates": 0}
+{"query": "sun-dried tomatoes", "correct": "Sun-Dried Tomatoes (Oil-Packed)", "class": "RESOLVES", "resolves_to": "Sun-Dried Tomatoes", "rank": null, "n_candidates": 0}
+{"query": "sweet chili sauce", "correct": "Sweet Chili Sauce", "class": "RESOLVES", "resolves_to": "Sweet Chili Sauce", "rank": null, "n_candidates": 0}
+{"query": "sweet potatoes", "correct": "Sweet Potatoes", "class": "RESOLVES", "resolves_to": "Sweet Potatoes", "rank": null, "n_candidates": 0}
+{"query": "tarragon", "correct": "Fresh Parsley", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "thick-cut bacon slices", "correct": "Hickory Smoked Bacon", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "thick-sliced center-cut bacon", "correct": "Hickory Smoked Bacon", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "thyme", "correct": "Dried Thyme", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 2, "n_candidates": 2}
+{"query": "tomatillos", "correct": "Tomatillos", "class": "RESOLVES", "resolves_to": "Tomatillos", "rank": null, "n_candidates": 0}
+{"query": "tomato basil sauce", "correct": "Marinara Sauce", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 2}
+{"query": "tomato paste", "correct": "Tomato Paste", "class": "RESOLVES", "resolves_to": "Tomato Paste", "rank": null, "n_candidates": 0}
+{"query": "tomato sauce", "correct": "Tomato Sauce", "class": "RESOLVES", "resolves_to": "Tomato Sauce", "rank": null, "n_candidates": 0}
+{"query": "tomato sauce or ketchup", "correct": "Ketchup", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "turkey sausage", "correct": "Italian Turkey Sausage", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "turkey sausage", "correct": "Turkey Sausage", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": null, "n_candidates": 5}
+{"query": "turmeric", "correct": "Ground Turmeric", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 1}
+{"query": "uncooked penne pasta", "correct": "Penne Pasta", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 5}
+{"query": "unsalted butter", "correct": "Butter", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 3}
+{"query": "unsalted chicken broth", "correct": "Chicken Broth", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 1, "n_candidates": 3}
+{"query": "vegetable oil", "correct": "Vegetable Oil", "class": "RESOLVES", "resolves_to": "Vegetable Oil", "rank": null, "n_candidates": 0}
+{"query": "vegetable or canola oil", "correct": "Vegetable Oil", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "very thinly sliced prosciutto", "correct": "Prosciutto", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "white long grain rice", "correct": "Rice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 5}
+{"query": "white mushrooms", "correct": "White Mushrooms", "class": "RESOLVES", "resolves_to": "White Mushrooms", "rank": null, "n_candidates": 0}
+{"query": "white onion", "correct": "White Onion", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 3}
+{"query": "white or brown rice", "correct": "Rice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 5}
+{"query": "white pepper", "correct": "White Pepper", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 4}
+{"query": "white rice", "correct": "Rice", "class": "DIFFERENT-FORM", "resolves_to": null, "rank": 3, "n_candidates": 5}
+{"query": "white wine", "correct": "Dry White Wine", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "whole chicken", "correct": "Whole Chicken", "class": "RESOLVES", "resolves_to": "Whole Chicken", "rank": null, "n_candidates": 0}
+{"query": "whole wheat hamburger buns", "correct": "Hamburger Buns", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "whole wheat hamburger buns", "correct": "Whole Wheat Hamburger Buns", "class": "GENUINE-GAP", "resolves_to": null, "rank": null, "n_candidates": 0}
+{"query": "wide homestyle egg noodles", "correct": "Egg Noodles", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "yellow bell pepper", "correct": "Yellow Bell Pepper", "class": "RESOLVES", "resolves_to": "Yellow Bell Pepper", "rank": null, "n_candidates": 0}
+{"query": "yellow mustard", "correct": "Yellow Mustard", "class": "RESOLVES", "resolves_to": "Yellow Mustard", "rank": null, "n_candidates": 0}
+{"query": "yellow onion", "correct": "Yellow Onion", "class": "RESOLVES", "resolves_to": "Yellow Onion", "rank": null, "n_candidates": 0}
+{"query": "yellow onions", "correct": "Yellow Onion", "class": "RENAME", "resolves_to": null, "rank": null, "n_candidates": 1}
+{"query": "yellow pepper", "correct": "Yellow Bell Pepper", "class": "RENAME", "resolves_to": null, "rank": 1, "n_candidates": 4}
+{"query": "zucchini", "correct": "Zucchini", "class": "RESOLVES", "resolves_to": "Zucchini", "rank": null, "n_candidates": 0}

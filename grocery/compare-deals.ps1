@@ -1007,7 +1007,7 @@ function Add-TcNamelessRow {
      noise, three from ONE store is that store's capture shape having moved.
 
      NULL-SAFE ON BOTH COUNTERS, because a $script: variable does not travel with a lifted function
-     and three scripts lift from this file ([[compare-deals-lifters-need-functions]]). #>
+     and three scripts lift from this file ([[compare-deals-lifters-need-functions-not-variables]]). #>
   param([string]$Store)
   if ($null -eq $script:NamelessRowsByStore) { $script:NamelessRowsByStore = @{} }
   $k = [string]$Store
@@ -2372,7 +2372,7 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   # noise, three from ONE store is that store's capture shape having moved.
   #
   # NULL-SAFE, because a $script: variable does not travel with a lifted function and three scripts
-  # lift these ([[compare-deals-lifters-need-functions]]).
+  # lift these ([[compare-deals-lifters-need-functions-not-variables]]).
   if (-not $name) { $null = Add-TcNamelessRow $store; return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that

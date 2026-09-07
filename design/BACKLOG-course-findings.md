@@ -357,9 +357,9 @@ invisible.
   above the self-test block, which is this file's own stated rule: "TWO FUNCTIONS, BOTH PURE, BOTH
   REACHED BY `-SelfTest`". Six fixtures, including the uninitialised-counter case, because a
   `$script:` variable does not travel with a lifted function and three scripts lift from this file
-  ([[compare-deals-lifters-need-functions]]).
+  ([[compare-deals-lifters-need-functions-not-variables]]).
 
-### E19 - No matcher in the estate has a scored test set `PARTLY DONE - MATCHER SCORED, BLIND SPOT FOUND`
+### E19 - No matcher in the estate has a scored test set `DONE - ALL THREE ACCOUNTED FOR, 2026-09-07`
 *Source: Recommender Systems: Evaluation and Metrics (queue 2, course 1).* Every retrieval-shaped
 component here - the commodity matcher, the dedup pipeline, `sidecar/`'s recall-then-rerank pair,
 `knowledge-search` - is changed on the strength of "it fixed the case I was looking at". None has a
@@ -427,8 +427,63 @@ hermetic, and it currently exits 2 on this real finding. Its must-fire is the ab
 unranked row lowers MRR rather than vanishing from it, which is the trick that lets a matcher which
 gives up on its hard rows outscore one that attempts everything (E20).
 
-**Still open:** every other retrieval-shaped component - `knowledge-search`, the near-name shelf
-scorer, the ingredient mapper. The pattern is now demonstrated twice, on dedup and on the matcher.
+~~**Still open:** every other retrieval-shaped component.~~ **CLOSED 2026-09-07, and the three named
+components turned out to be two - one of which cannot be scored honestly.**
+
+**The near-name shelf scorer IS the ingredient matcher.** `ingredient-vocab.ps1` says so at its own
+line 262: the food DB needed a near-name shelf and "there were two wrong ways to build one: a second
+head-noun scorer inside map-preresolve, or a third inside coverage_check.py. These pin that the rows
+became an argument and the scorer did not fork." Same `Get-Candidates`, different `-Rows`. Scoring
+one scored both, and this item listed them as two things because nobody had looked.
+
+**The ingredient matcher now has a scored set: `meal-prep/pipeline/score_ingredient_mapper.py`,
+659 distinct (query, canon) pairs built from 1,525 mapped rows across the whole run corpus**, one row
+per case in `meal-prep/db/mapper-eval-cases.jsonl` (E24's shape).
+
+**Getting the QUERY right was the load-bearing decision.** The mapped files carry `source_raw` - the
+page's whole line, *"16 ounces cauliflower chopped into macaroni sized pieces"* - and scoring on that
+returns `GENUINE-GAP` with zero candidates. But production never hands the matcher a raw line: the
+extractor resolves the noun first and the matcher sees *"Cauliflower"*. **Scoring a component on an
+input it never receives is E23's bias with the sign flipped** - a falsely terrible number instead of
+a falsely good one. So the pairs are built by joining `extracted/` to `mapped/` on the raw line.
+
+| | |
+|---|---|
+| pairs scored | **659** |
+| exact resolve | 215 |
+| recall@1 | **0.5751** |
+| recall@5 | **0.6874** |
+| recall@25 | **0.6874** |
+| MRR | 0.6232 |
+| abstained (returned nothing) | **88** |
+
+**Two findings, and the first is actionable today.** `recall@5` and `recall@25` are **identical** -
+nothing is ever found beyond rank 5. So any future "return more candidates" change is already
+answered: it buys nothing, and the shortfall is retrieval, not ranking.
+
+**The second is a number this estate has never had.** On a corpus filtered toward its own successes,
+the vocabulary matcher retrieves the eventual canon name for about **69%** of the names it is asked
+about. The other 31% were settled by something else - a registrar ruling, a new row, an agent's
+judgement. That is not necessarily a defect; it is the first measurement of **how much of the mapping
+work the matcher does and how much the agent does**, and every future change to either can now be
+scored against it.
+
+**Abstention is in the denominator, never dropped** (E20): 88 names returned nothing, and they lower
+MRR rather than vanishing from it - the trick that lets a matcher which gives up on its hard rows
+outscore one that attempts everything. And the report states on every run that this is an **upper
+bound**, because every pair is a line that WAS mapped (E23).
+
+**Nothing was tuned.** This scores and does not change the matcher, or the measurement would be a
+description of a decision already taken.
+
+**`knowledge-search` is NOT scored, and the reason is the item's own argument turned on itself.**
+Every gold set available for it is derivable only from the corpus it searches - section headings, the
+catalogue, the skills' own `description` frontmatter - and all of that text is IN the BM25 index. A
+set built from it would score near-perfectly and mean nothing, which is exactly the flattering
+measurement E19 and E23 both warn about. **A weak scorer built to close a ticket is worse than no
+scorer**, because the number would be quoted. An honest set needs queries a person actually typed
+against answers they knew, collected as they search - which is a habit rather than a build, and is
+the same mechanism E23 prescribes. Recorded rather than faked.
 
 ### E20 - Match rates are reported without their abstention rate `DONE - SWEPT 2026-09-07, 3 OF 45 SITES FIXED` `82377028`
 *Source: same course, section 14 of the file above.* A matcher that returns `UNUSABLE`, `PENDING`
@@ -3648,3 +3703,67 @@ becomes enforced at all.
 cannot resolve empty, and a good fraction of the 217 are that shape. The value is concentrated where
 the target set is DISCOVERED - a glob over the tree, a filter over a board, a query against a pool -
 which is a much smaller set than 217 and is what rung 1 should really be counting.
+
+----
+
+### I40 - the git-bus is an untyped producer/consumer contract with no schema and no version `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4`
+
+**Source.** `automate-data-pipelines-schema-evolution` (Coursera, content credited to Jason Rand,
+queue-4 course 7, worked 2026-09-07), items 6 to 9. Routed to
+`database-craft/changing-a-schema.md` and `data-quality-craft/checks-and-thresholds.md` 3.
+
+**Where it comes from.** The course's whole subject is that a structure change arriving unannounced
+at a consumer is the leading cause of silent pipeline failure, and that the fix is a declared
+contract plus a check that fires when reality leaves it. `docs/RUNTIME-MAP.md` documents the
+git-bus: one runtime writes a file that another runtime reads through the repo. That is a
+producer/consumer interface with **no declared schema, no version field and no compatibility rule**,
+across roughly 27,154 JSON files acting as data. Neither side can tell whether the other changed.
+
+**Why it matters here specifically.** The estate already knows this shape hurts. Its own record of
+it is `graph/pipeline/audit_graph_durability.py`, which notes that `golden-test.ps1` "was ungated
+while being the only thing that caught a schema change" - a single unscheduled test was the whole
+detection surface. And several engines here read the newest COMMITTED artifact, so a producer's
+shape change reaches a consumer through a commit, with no handshake anywhere in between.
+
+**What rung 1 would be, and it is a measurement rather than a build.** Count the distinct
+producer/consumer file contracts on the bus and, for each, whether the consumer reads fields **by
+name or by position**. The name/position split is the whole risk ranking: an added key is harmless
+to a name-addressed reader and silently shifts every value for a position-addressed one. Output is
+one table. Do not build a schema registry before that table exists - if almost everything is
+name-addressed the item shrinks to a handful of files.
+
+**What rung 2 would touch, if the number justifies it.** A declared shape per bus file, checked at
+write time by the producer rather than at read time by the consumer, because the producer is the
+only party that knows the change was intentional. **Not a new gate on day one** - a shape assertion
+across 27,154 files would be red immediately for a backlog nobody is about to clear, which
+`.claude/rules/ops-and-gates.md` forbids. The ratchet shape is the only acceptable enforced form.
+
+**The honest counter-argument.** Most of those 27,154 files are written and read by the same script,
+which is not a contract at all, and the real bus is much narrower than the file count suggests. That
+is exactly what rung 1 is for.
+
+----
+
+### I41 - a `graph.db` schema change today has no recorded procedure, and no rollback `OPEN - NEEDS A RULING ON SCOPE` `queue-4`
+
+**Source.** Same course, sections 4 to 9 of `database-craft/changing-a-schema.md`. Registered as
+claims C84 and C85.
+
+**What was verified, and how.** Grepped 2026-09-07 across `ops/`, `graph/`, `lib/` and `docs/` for
+`migrat`, `ALTER TABLE`, `schema.change` and `schema.version`. The 18 live SQLite tables have **no
+migration script, no schema-version table and no change record**. What exists is one narrow gate
+(`graph/pipeline/state.py --verify`, called a "migration gate" in `graph/README.md`, comparing state
+coverage against the live board across one derivation change) and the accident noted in I40.
+
+**Why it matters here specifically.** `graph.db` is 126 MB of live state, written nightly under WAL,
+committed by the ~07:00 bot, with **no undo layer** (E1). A schema mistake made against it today has
+no defined way back. The only recovery mechanism the estate currently has is
+`database-craft/SKILL.md` section 8's rule to copy the file before running anything experimental.
+
+**The ruling needed.** The course teaches the change-management wrapper and **none of the mechanics**
+- it covers no expand-contract/parallel-change, no backfill and no rollback, and all four terms are
+absent from our whole skill store as well (`--files` over 819 sections, 2026-09-07). So the question
+is which of two things this estate wants: a lightweight written record per schema change (cheap,
+proposed in `changing-a-schema.md` 4, uncorroborated as C84), or an actual staged-migration
+capability, which nothing here currently knows how to do and which would want its own course first.
+Recommending neither until Brad rules, because the second is much the larger bet.
