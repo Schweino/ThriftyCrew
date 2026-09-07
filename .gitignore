@@ -269,6 +269,13 @@ __pycache__/
 # --- never commit, anywhere in the tree ---
 # secrets (the Ghost admin key lives here locally; it is a GitHub Actions secret in CI)
 .ghostkey
+# GOOGLE SEARCH CONSOLE service-account key (backlog I24). A private key for an account that can read
+# the site's search performance. Local only; if this ever runs in the cloud it goes in as a GitHub
+# Actions secret, never in a tracked file. The puller also accepts it in $GSC_KEY_JSON.
+ops/.gsc-key.json
+# The series it writes IS tracked - it is a measurement, not a secret, and the whole point of I24 is
+# that a future "we fixed the images" claim can be checked against it.
+!ops/seo-search-console-history.jsonl
 # Kroger/Baker's developer API client id + secret (developer.kroger.com). Local only; if this ever runs
 # in the cloud it goes in as GitHub Actions secrets, never in a tracked file.
 .krogerkey
