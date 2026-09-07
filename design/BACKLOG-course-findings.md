@@ -210,7 +210,7 @@ the right answer was never retrieved or was retrieved and buried, and those need
 Method in `rag-craft/evaluating-retrieval.md` sections 12 and 18. Sits directly under E4, which
 proposes a retrieval change with nothing to score it with.
 
-### E20 - Match rates are reported without their abstention rate `OPEN`
+### E20 - Match rates are reported without their abstention rate `PARTLY DONE` `82377028`
 *Source: same course, section 14 of the file above.* A matcher that returns `UNUSABLE`, `PENDING`
 or nothing on the rows it finds hard, and is then scored only on the rows it answered, **outscores
 one that attempts everything** - and neither number looks wrong. Any accuracy or match-rate figure
@@ -219,7 +219,18 @@ figure, or substitute a documented fallback for the declines and score that too.
 where the estate already quotes a bare rate, starting with the pricing pre-pass and the ingredient
 mapper. Cheap, and it changes how existing numbers should be read rather than requiring new code.
 
-### E21 - Nothing in the estate states how far a number has to move to count `OPEN`
+**FOUND IN THE WILD 2026-09-06, in this backlog's own work.** The E4 head-to-head was reporting
+recall over 31 pairs. The ledger holds 168 ruled duplicates: 135 decline because the twin is not in
+the candidate pool and 2 because both sides collapse onto one cache row, so the real coverage is
+**18%**. The probe now prints the denominator and every decline by reason. **The decline is not
+random**, which is the part that makes this worse than a missing caveat: a twin leaves the pool when
+its recipe is accepted and built, so the 82% that dropped out are weighted toward the cases the
+pipeline handles well. That is E23 arriving through E20's door.
+
+Still open: the estate-wide sweep for bare rates, starting with the pricing pre-pass and the
+ingredient mapper as this item says.
+
+### E21 - Nothing in the estate states how far a number has to move to count `PARTLY DONE` `82377028`
 *Source: Improving your statistical inferences (queue 2, course 2).* Every "did this change help"
 read here is a comparison of two single numbers with no interval, no case count and no record of how
 many variants were tried: a seed sweep, a threshold tune, a detector tweak, a prompt or agent
@@ -255,7 +266,7 @@ live output** rather than the fixture verdict. Detail in
 `rag-craft/evaluating-retrieval.md` 11.1 and `experiment-craft/errors-and-inflation.md` 3. Does not
 weaken any gate; it changes how the gate's own numbers should be read.
 
-### E23 - Our test sets are built out of successes `OPEN`
+### E23 - Our test sets are built out of successes `OPEN - EVIDENCE FOUND`
 *Source: same course, section 12, and it is publication bias wearing our clothes.* Fixtures and
 golden files here are assembled from bugs we found and cases we already handle correctly. Cases that
 failed silently were never written down, so they are absent from the evidence and **their absence is
@@ -266,7 +277,14 @@ fails**, including the ones fixed by hand and moved on from, so the corpus is no
 successes. `known-wrong.json` and `research-worklist.json` are already the right shape for this and
 are populated by rulings rather than by failures. Small, ongoing, and it compounds.
 
-### E24 - Every A/B here logs counts, and counts cannot be un-aggregated `OPEN`
+**A concrete instance surfaced 2026-09-06 and it is worth keeping because it is measured rather than
+argued.** The dedup test set is 31 pairs drawn from 168 ruled duplicates, and the 135 that dropped
+out did so because the twin had left the candidate pool - which is what happens when a recipe is
+ACCEPTED and built. So the surviving evidence is filtered toward the pipeline's successes by the
+mechanism this item describes, and the filtering was invisible until the denominator was printed. The
+score was not wrong; it was answering a narrower question than it appeared to.
+
+### E24 - Every A/B here logs counts, and counts cannot be un-aggregated `PARTLY DONE` `82377028`
 *Source: `evaluate-llms-test-and-prove-significance` (course 18), and it is a correction of that
 course rather than a lesson from it.* When we compare two versions of anything on the same case set
 - two matcher builds over the identical board, two prompt variants over one frozen record set, a
@@ -278,6 +296,15 @@ that is compatible with 50 fixed and 38 broken (88 verdicts churned, split nearl
 unactionable) and with 12 fixed and 0 broken (overwhelming) alike. Same headline, opposite
 decisions, and nothing recovers the difference after the fact. It also silently discards the free power that running both arms on one
 frozen set was supposed to buy - see `experiment-craft/effect-size-and-power.md` section 9.
+
+**PARTLY DONE 2026-09-06 `82377028`, on one probe rather than across the estate.** The fix landed on
+the E4 head-to-head because that was the comparison being run that day, and E24 is explicit that this
+is impossible to backfill - so the argument is always to fix the run in front of you. What that one
+application bought is recorded under E4: coverage of 18%, a run that was not reproducible and said
+nothing about it, and a bar stated before the result instead of after.
+
+**What is NOT done is the estate-wide sweep.** `sidecar/` and the recipe-dedup RESCORE lane are still
+the two named candidates, both already re-scoring a fixed corpus and both still one column short.
 
 **The fix is a logging convention, not a statistics build**: any run that scores two arms over one
 case set writes **one row per case per arm, keyed by case id**, and the totals are derived from that
