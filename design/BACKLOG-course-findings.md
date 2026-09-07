@@ -1032,6 +1032,53 @@ twin proving a quoted historical claim does not trip it.
 Found while running the programme; not course-derived.
 
 
+
+### I28 - A republished board does not re-cost the recipes, and no clock could ever have caught it `DONE`
+
+**Found 2026-09-07 by asking why 153 files were dirty.** The open half of the 2026-09-06 feed incident.
+
+That day `guards.ps1` hard-failed at 08:15, so the daily run's publish stage staged **inputs only** -
+"guards BLOCKED this board, so `public\**` and the recipe files are NOT shipped". Triage unblocked the
+guard and rebuilt the board at **11:55**. The FEED half of that asymmetry was caught the same day and
+fixed (`efa08722`, and `audit-feed-week-parity.ps1` in the chain). **The RECOST half was not.**
+`db/costed.json` stayed at **09:51**, priced off the superseded board, for twenty hours.
+
+**Measured rather than asserted.** Re-costing to a scratch path against the corrected board, same
+engine and same specs so the board is the only variable: **20 of 584 recipes moved, all in the same
+direction - understated**, mean $0.098 and worst **$0.23 per serving** (`kielbasa-cabbage-potato-skillet`
+2.35 to 2.58). All cabbage and kielbasa dishes, consistent with one commodity the triage corrected.
+They never reached a reader only because the guards were still blocking; had they passed, they would
+have. Understating is exactly as wrong as overstating - a reader budgeting from a low number is misled
+in the direction that costs them at the till.
+
+**NO CLOCK COULD HAVE CAUGHT THIS, which is why a stamp had to come first.** `cost-recipes.ps1` picks
+its board by **filename descending**, and a rebuild REUSES the filename: `comparison-2026-09-06.json`
+at 05:24 and the corrected one at 11:55 are the same name with different bytes. A filename comparison
+sees nothing, and an mtime comparison is worse than nothing in an estate that already has a scar about
+mtime moving on unchanged content. The only thing identifying a build of the board is its own
+`built_at`, and the recost recorded nothing at all.
+
+- `cost-recipes.ps1` now writes `db/costed.stamp.json` with the `built_at` of the board it priced from.
+  A **sidecar, not a header**, because `costed.json` is a bare list many readers consume positionally.
+- **A `-Slugs` recost deliberately does not advance the stamp.** A catalog is not priced off today's
+  board because three of its rows are, and a guard that accepted that would lie in the reassuring
+  direction. That case has its own must-fire.
+- `meal-prep/pipeline/audit-recost-freshness.ps1` compares the two identities. **A missing stamp is
+  `unknown`, not a pass** - every recost before today is in that state, and that is not evidence the
+  costs are current.
+- Wired into `check-ad-cycles.ps1` immediately after the recost. Alerts, does not block, matching the
+  feed-parity check beside it: withholding a correct board would leave the recipe pages on the old
+  costs too, which is the same divergence with fewer people looking at it.
+
+**Separately, and this is why the tree looked alarming:** only **one of the five scheduled tasks
+commits**. `capture-run.ps1` carries 12 git references; `capture-watchdog.ps1`, `graph/pipeline/nightly.ps1`
+and `meal-prep/pipeline/harvest-crawl.ps1` carry none. `capture-run` last swept the whole tree at 08:33
+on 09-06, so the 09:51 recost, the 11:55 corrected board, the midday audits and the entire evening
+harvest and nightly-matching output had no committer. 153 dirty files is what twenty hours of three
+uncommitting tasks looks like. Left as-is deliberately - one sweeper is the estate's design - but it
+is worth knowing that anything produced between sweeps is invisible to any engine that reads the
+newest COMMITTED artefact.
+
 ### Triage of I8-I27, 2026-09-07
 
 Every claim checked against the tree rather than against its own write-up, by

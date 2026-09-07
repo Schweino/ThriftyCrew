@@ -71,7 +71,10 @@ function Has($row,[string]$p){ $row.PSObject.Properties.Name -contains $p -and $
 
 # ---- price boards (identical resolution order to the per-run engines) ----
 $cmpFile = Get-ChildItem (Join-Path $gout 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-$cmp = (Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json).comparison
+# The WHOLE document, not just .comparison: built_at is what identifies this build of the board,
+# and the filename cannot - a rebuild reuses it (2026-09-07).
+$cmpDoc = (Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json)
+$cmp = $cmpDoc.comparison
 $board=@{}
 foreach($row in $cmp){
   $wm = $row.stores | Where-Object { $_.store -eq 'Walmart' } | Select-Object -First 1
@@ -354,6 +357,43 @@ if($Slugs){
   Write-Output ("targeted recost: spliced into {0} total ({1} replaced, {2} newly added)" -f $out.Count, $replaced.Count, $appended)
 }
 $out | ConvertTo-Json -Depth 7 | Out-File $costedPath -Encoding utf8
+
+# WHICH BOARD THIS RECOST PRICED FROM (2026-09-07). On 2026-09-06 guards blocked the 08:00 publish, so
+# the run staged inputs only. Triage unblocked the guard and rebuilt the board at 11:55, the feed was
+# re-exported to match - and the RECOST never re-ran, so db\costed.json stayed priced off the 09:51
+# board for twenty hours with nothing able to say so. The feed half of that asymmetry was fixed the
+# same day; this is the half that was left.
+#
+# A SIDECAR, NOT A HEADER. costed.json is a bare LIST that many readers consume positionally; adding a
+# header would break every one of them.
+#
+# A PARTIAL RECOST DOES NOT ADVANCE THE BOARD STAMP, and that is the point rather than an omission.
+# -Slugs re-prices a handful of recipes and splices them in; claiming the whole catalog is now priced
+# off today's board because three slugs are would be a guard that lies in the reassuring direction.
+try {
+  $stampPath = (Join-Path (Split-Path $costedPath -Parent) 'costed.stamp.json')
+  $prior = $null
+  if (Test-Path $stampPath) { try { $prior = Get-Content $stampPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch { $prior = $null } }
+  $isPartial = ($Slugs -and $Slugs.Count -gt 0)
+  $stamp = [ordered]@{
+    generated       = (Get-Date).ToString('s')
+    scope           = $(if ($isPartial) { 'partial' } else { 'full' })
+    board_file      = $cmpFile.Name
+    board_built_at  = $(if ($isPartial -and $prior) { [string]$prior.board_built_at } else { [string]$cmpDoc.built_at })
+    board_week_of   = $(if ($isPartial -and $prior) { [string]$prior.board_week_of } else { [string]$cmpDoc.week_of })
+    recipes_costed  = @($out).Count
+    note            = 'board_built_at is the build of the board the WHOLE catalog was priced from. A -Slugs recost splices a few recipes and deliberately leaves it where it was: the catalog is not fresher because three of its rows are.'
+  }
+  if ($isPartial) {
+    $stamp['partial_slugs'] = @($Slugs)
+    $stamp['partial_priced_from'] = [string]$cmpDoc.built_at
+  }
+  ($stamp | ConvertTo-Json -Depth 5) | Set-Content $stampPath -Encoding UTF8
+} catch {
+  # Never kill a cost run over its own stamp. A recost with no stamp is degraded; a recost KILLED BY
+  # its stamp is a lost board - the same rule run-log-lib states for logging.
+  Write-Output ('cost-recipes: could not write the board stamp (not fatal): ' + $_.Exception.Message)
+}
 $costFlags | Out-File $flagsPath -Encoding utf8
 if($script:registerEst -gt 0){ Write-Output ("register-estimate lines (allowlisted): " + $script:registerEst) }
 Write-Output ("costed {0} recipes; flags {1}" -f @($out).Count, $costFlags.Count)
