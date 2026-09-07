@@ -258,6 +258,12 @@ $pySuites = @(
   # on the pinned interpreter, without torch. Its must-fire is a candidate that wins at every
   # other budget and loses ONE known-wrong pair at one of them.
   @{ f = 'sidecar\backtest_veto.py'; a = '--selftest'; n = 'the candidate veto still refuses a comparison it cannot make, and fires on a lost defect' }
+  # sweep.py's coverage prefilter was CHOSEN - 0.55, from eight observations in a 0.58-0.69 band -
+  # and a product under it is never reranked, so the cross-encoder that actually discriminates
+  # never sees it. Measured against 2,816 confirmed-correct pairs, true positives sit as low as
+  # 0.3948 (2026-09-07, backlog I13/I14 and the E19 floor finding). The must-fire is that a floor
+  # derived from a narrow sample sits ABOVE a real pair outside it - which is what happened.
+  @{ f = 'sidecar\derive_coverage_floor.py'; a = '--selftest'; n = 'the coverage floor is read off the lowest confirmed pair, and its volume cap says when it bound' }
 )
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly

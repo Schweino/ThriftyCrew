@@ -1,0 +1,16 @@
+{
+  "generated": "2026-09-07T04:28:05",
+  "coverage_cos_floor": 0.3848,
+  "basis": "the lowest BEST-cosine at which any of 2816 confirmed-correct pairs sits (0.3948), less 0.01",
+  "hair": 0.01,
+  "max_candidates": 1500,
+  "derived_from": {
+    "file": "eval-positives.json",
+    "pairs": 2816,
+    "defs": "commodity-defs.json"
+  },
+  "previous_chosen_value": 0.55,
+  "previous_basis": "set where Task C's true positives sat (0.58-0.69) - eight observations",
+  "CAVEAT": "Derived from ACCEPTED BOARD PAIRS, which all match rules. sweep.py's coverage lane sees rule-invisible products, so this is the right kind of evidence on the wrong slice. It is strictly better than a number chosen from eight observations and it is NOT a floor measured on the lane's own traffic. Read it as such.",
+  "NOT_APPLIED": "sweep.py still uses its own constant. Applying this changes a live daily auditor's behaviour and wants the volume measured on the real unmatched population first."
+}

@@ -86,6 +86,11 @@
 # case is the evidence a later run is compared against, and E24's whole point is that it
 # cannot be reconstructed after the fact: the pool and the defs move underneath it.
 !/sidecar/out/matcher-eval-cases.jsonl
+# The DERIVED coverage floor and its basis. I13's complaint is that every threshold here is
+# chosen; this one is read off 2,816 confirmed-correct pairs and records the number, the basis,
+# the sample it came from, and the slice it does NOT cover. A derived threshold whose derivation
+# is not committed is just another chosen number with a longer story.
+!/sidecar/out/coverage-floor.json
 # The TAGGED eval records too (backtest.py/hardeval.py --tag). These are baselines a fine-tune
 # is measured against months later; an evaluation record that does not outlive the machine that
 # produced it is not a record. Tens of KB each.

@@ -1382,7 +1382,7 @@ in these feeds and at least two of them currently survive as ordinary values.
 
 ---
 
-### I13 - Every threshold in the estate is CHOSEN, because only two artefacts keep history `OPEN` `queue-2`
+### I13 - Every threshold in the estate is CHOSEN, because only two artefacts keep history `PARTLY DONE` `queue-2`
 
 **Source:** course 10, same run as I12. This is the standing `no-hardcoded-bands` ruling (Brad,
 2026-09-04) arriving from the other direction: the reason bands get hard-coded here is that there is
@@ -1428,7 +1428,7 @@ behaviour change today.
 
 ---
 
-### I14 - The derived-threshold technique I13 wants is ALREADY IN THIS REPO, in the Python half `OPEN` `queue-2`
+### I14 - The derived-threshold technique I13 wants is ALREADY IN THIS REPO, in the Python half `DONE - APPLIED` `queue-2`
 
 **Source:** course 11, `applied-anomaly-detection-with-machine-learning`. This is a **sharpening of
 I13, not a new problem.** I13 says every tolerance in the estate is chosen rather than derived and
@@ -1467,6 +1467,41 @@ both have self-tests pinned to founding bugs, and both state their reasoning. Ch
 number comes from is a behaviour change to a live correctness guard and needs its own evidence.
 
 ---
+
+
+**APPLIED 2026-09-07 to the one prefilter whose miss is unrecoverable, and it CORRECTS a
+recommendation I made the day before.** `sidecar/derive_coverage_floor.py` reads `sweep.py`'s
+`COVERAGE_COS_FLOOR` off the data the way `harvest_embed.py` already reads `ask_floor` - the technique
+I14 says is in the repo - and writes the number, its basis, its sample and its caveat to
+`sidecar/out/coverage-floor.json`.
+
+| | |
+|---|---|
+| chosen value | 0.55, from eight observations where Task C's true positives sat (0.58-0.69) |
+| derived value | **0.3848** - the lowest BEST-cosine among 2,816 confirmed-correct pairs (0.3948), less a hair |
+
+**The correction.** E19 reported 186 of 2,816 known-correct pairs under the floor and I recommended a
+rank-based cut on that basis. Reading how the lane actually works makes that wrong twice over: the
+floor is applied to each product's **BEST** cosine against any commodity, not to its true one, and the
+lane only sees products matching **NO RULE** - while all 2,816 are accepted board pairs, which match
+rules by definition. Re-measured properly: **134** rows have a best-cosine under the floor and would be
+dropped outright, while the other 52 clear it on the WRONG commodity, which a rank-based cut cannot
+help and the cross-encoder exists to reject. Applying the first number to this floor would have been
+the base-rate error E22 is about.
+
+**So it is derived and deliberately NOT applied.** Those 2,816 pairs are the right KIND of evidence -
+human-confirmed product-to-commodity pairs - on the wrong SLICE. That is strictly better than a number
+chosen from eight observations and it is not a floor measured on the lane's own traffic, so `sweep.py`
+keeps its constant and now carries a comment pointing at the derivation and saying why. Lowering a
+live daily auditor's prefilter wants the volume measured on the real unmatched population first.
+
+**The cap is part of the threshold.** A floor without its volume is half a decision, and `sweep.py`'s
+own header records what an unbounded report does - 1,404 rows, "a firehose nobody reads, and a guard
+nobody reads is worse than no guard". So the artefact carries `max_candidates` beside the floor, and
+the derivation reports when the cap binds rather than truncating silently. On this population it
+bound: 1,500 of 2,816.
+
+**I13 stays PARTLY DONE**: one threshold is now derived, and `sidecar/THRESHOLDS.md` lists eight.
 
 ### I15 - No audit's FINDING COUNT is tracked over time, so an audit that stops firing looks like one that passes `DONE` `queue-2`
 

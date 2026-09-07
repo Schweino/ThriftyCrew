@@ -60,6 +60,17 @@ os.makedirs(OUT, exist_ok=True)
 # bar. 0.10 = "less than a tenth as good a match as this commodity's typical accepted product".
 IDENTITY_PEER_RATIO = 0.10
 COVERAGE_COS_FLOOR = 0.55        # bi-encoder cosine; cheap prefilter, NOT the decision
+# CHOSEN, NOT DERIVED, AND MEASURED TO BE TOO HIGH (2026-09-07, backlog I13/I14 + E19). The 0.55
+# above was set from eight observations - where Task C's true positives happened to sit, 0.58 to
+# 0.69. Scored against all 2,816 confirmed-correct board pairs, true positives sit as low as
+# 0.3948, and 134 of them have a BEST cosine under 0.55, so this lane would never rerank them at
+# all. sidecar/derive_coverage_floor.py reads the floor off that evidence instead: 0.3848, with
+# its basis and its volume cap in sidecar/out/coverage-floor.json.
+#
+# IT IS DELIBERATELY NOT APPLIED HERE YET. Those 2,816 pairs all MATCH RULES, and this lane sees
+# only products that match none - so the derivation is the right kind of evidence on the wrong
+# slice, and lowering a live daily auditor's prefilter wants the volume measured on its own
+# traffic first. The artefact records that caveat rather than hiding it.
 # The coverage floor was set on evidence, not taste. The first full sweep at 0.05 returned 1,404 rows,
 # which is a firehose nobody reads, and a guard nobody reads is worse than no guard (see the link-drift
 # alert that fired daily on unfixable cells until 2026-08-01). Sampling the bands:
