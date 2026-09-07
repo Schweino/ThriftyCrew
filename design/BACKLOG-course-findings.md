@@ -739,7 +739,7 @@ where a rules-first prompt invents its own first input instead of waiting.
 
 ---
 
-### E29 - `run-log-lib.ps1` calls itself the one copy of the run-record rule, and covers two of five hidden tasks `OPEN`
+### E29 - `run-log-lib.ps1` calls itself the one copy of the run-record rule, and covers two of five hidden tasks `PARTLY DONE`
 *Source: `apply-powershell-scripting-for-automation-and-projects` (course 6), and it is a criticism
 of that course rather than a lesson from it.* The course spends a full lecture arriving at a hidden
 console window for a scheduled PowerShell job and never once mentions what hiding it costs. This
@@ -772,6 +772,18 @@ enforced for two tasks and merely hoped for in the other three.
 
 **The cheap half:** either bring the graph and harvest wrappers onto `run-log-lib`, or correct its
 header to say what it actually covers and name the other two conventions. Worth doing either way.
+
+**THE CHEAP HALF IS DONE 2026-09-06.** The header now opens by saying it covers the three TC Grocery
+tasks and NOT all five, carries the table of which task uses which convention, and rule 2 no longer
+claims to be the only copy - it says the one-copy argument applies just as well to the other two,
+which is the open half. `ops/audit-run-log-claims.ps1` keeps it honest: it fired at exit 2 on the
+false claim before the edit and passes at exit 0 after, with seven self-test cases.
+
+**The gate checks the claim, not the convergence, and its header says so.** It cannot do more: three
+of the five registrations live in the Windows registry, so a static detector reaches two. One case
+worth noting is the `MUST FIRE` for **code is not documentation** - a mention of the other convention
+in the file's body does not satisfy it, only the comment header, or the claim could drift back while
+the gate stayed green.
 
 **The durable half needs a ruling first, and the obvious version of it does not work.** The tempting
 gate is a `run-gates` detector that greps `-WindowStyle Hidden` out of every

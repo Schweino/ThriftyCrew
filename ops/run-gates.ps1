@@ -162,6 +162,14 @@ $static = @(
   # (2026-09-06, backlog E25). Static analysis cannot check that a recorded space is CORRECT;
   # it can check that a new threshold cannot appear without someone writing the space down.
   @{ f = 'ops\audit-threshold-register.ps1'; n = 'no similarity threshold ships without recording which space it was tuned in' }
+  # run-log-lib.ps1 opened with 'ONE copy of the write this run down rule' and it was one of
+  # THREE: five hidden scheduled tasks, three conventions, and only the TC Grocery ones use the
+  # library (2026-09-06, backlog E29). Nothing is unlogged, so the defect is the CLAIM - a file
+  # that says it is the single copy of a rule and is not is worse than no claim, because the
+  # next person to add a hidden task reads it, sees a library, and cannot learn that two other
+  # tasks route around it. Documentation drift, checkable; CONVERGENCE is not, because three of
+  # the five registrations live in the Windows registry where no static detector can reach them.
+  @{ f = 'ops\audit-run-log-claims.ps1'; n = 'the run-record library describes the logging conventions that actually exist' }
   # THE CHECK EXISTED AND NOTHING RAN IT (2026-09-06, worklist C3). It detects SCOPE DRIFT - the
   # user-scope copy of an agent differing from the project-scope one, so which prompt runs depends on
   # the session's working directory - and it detects a stale backup of the only versioned copy of the

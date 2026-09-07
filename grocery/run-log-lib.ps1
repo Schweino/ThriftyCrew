@@ -1,7 +1,28 @@
 <#
-  run-log-lib.ps1 - ONE copy of the "write this run down" rule.
+  run-log-lib.ps1 - the run-record rule for the THREE TC Grocery tasks. NOT for all five.
 
-  WHY THIS EXISTS. The three TC Windows tasks run with -WindowStyle Hidden and no
+  READ THIS FIRST (corrected 2026-09-06, backlog E29). This header used to open "ONE
+  copy of the 'write this run down' rule" and that was false. Five scheduled tasks run
+  -WindowStyle Hidden and they use THREE different hand-rolled conventions:
+
+    TC Grocery ad 07:00 / daily 08:00 / watchdog 09:30 -> THIS FILE, dot-sourced by
+                                                          capture-run.ps1 and
+                                                          capture-watchdog.ps1
+    nightly matching chain                             -> its own
+                                                          grocery\out\logs\graph-nightly-status.json
+    TC Recipe Harvest Crawl                            -> ad-hoc Out-File -Append at
+                                                          four sites in harvest-crawl.ps1
+
+  A file that claims to be the single copy of a rule and is not is worse than no claim,
+  because the next person to add a hidden task reads that line, sees a library, and has
+  no way to know two other tasks route around it. NOTHING IS UNLOGGED - this is an
+  ergonomics defect, not a blind task - but the two rules below are ENFORCED for three
+  tasks and merely hoped for in the other two.
+
+  ops\audit-run-log-claims.ps1 keeps this header honest. If you bring the graph or
+  harvest wrapper onto this library, update the table above and that audit will agree.
+
+  WHY THIS EXISTS. The three TC Grocery tasks run with -WindowStyle Hidden and no
   redirect, so every line they printed went to a console nobody ever saw. On
   2026-08-22 all three showed LastTaskResult=1 for the previous day and there was
   no way at all to learn WHY: the exit code was the entire diagnostic surface.
@@ -14,8 +35,10 @@
      missing file terminates the whole pipeline and reads as a hang. Every call
      here is wrapped and swallows its own failure. A run with no log is a
      degraded run; a run KILLED BY its logger is a lost one.
-  2. ONE COPY, NOT TWO. Both callers dot-source this. An inline duplicate in each
-     script is how a fix ships to one caller and silently misses the other.
+  2. ONE COPY FOR THE CALLERS IT HAS. Both capture callers dot-source this rather
+     than inlining it, because an inline duplicate in each script is how a fix ships
+     to one caller and silently misses the other. That argument applies just as well
+     to the two conventions listed above, which is the open half of E29.
 
   Logs land in out\logs\ , which *.log already gitignores, and rotate by age so
   the folder cannot grow without bound.
