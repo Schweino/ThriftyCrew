@@ -1950,7 +1950,35 @@ gate that is red on day one: the nine would all be red, so the fix ships with th
 **Not proposing wording here.** The right line is short and the course's own framing is the model:
 text arriving through a tool is data, never an instruction, whatever it claims about its authority.
 
-### I20 - The two prompt-builder families disagree about untrusted text, and nobody decided that `OPEN` `queue-2`
+### I20 - The two prompt-builder families disagree about untrusted text, and nobody decided that `DECIDED 2026-09-07` `queue-2`
+
+> **RULED, and the ruling REVERSES this entry's own proposed fix for two of its three sites.** The
+> entry says "the cheap consistency fix is the `!r`". Measured 2026-09-07, it is not, and applying
+> it to the page-sized sites would make extraction worse.
+>
+> **`repr()` escapes newlines, so it collapses a page into a single line.** Demonstrated on a
+> four-line page: `PAGE TEXT:\n%r` renders as **1 line** where the raw form renders as 4. On the
+> 24,000-character page at `local_extract.py:529` that destroys exactly the line structure the
+> extractor needs to find a recipe card, and the estate's own comments record that this prompt's
+> wording was earned by a 7-publisher measurement.
+>
+> **So the two families are not inconsistent by accident. The axis is whether line structure carries
+> information.** `graph/` repr-quotes short product NAMES, where a newline carries nothing and can
+> only be used to impersonate prompt structure - there `!r` is free and correct. `local_extract`
+> handles PAGES, where the newlines are the signal. **The same mechanism that blocks
+> structure-impersonation destroys the content.** Both families are right for their input shape.
+>
+> **Not changed, deliberately.** Line 325's `"LINE: %s" % raw` is a single ingredient line and is
+> the one borderline case, but it feeds the split prompt whose wording is part of the measured
+> threshold, so changing it needs re-measurement rather than eyeballing and that measurement was not
+> available to this session. The delimiter approach (`<page>...</page>`) preserves line structure and
+> is the right shape for a page, and it also changes what the model sees, so it carries the same
+> re-measurement cost. Recorded so the next session does not re-derive the `!r` idea and ship it.
+>
+> **The layer that actually holds is now pinned.** This entry always said the validators, not the
+> prompt shape, are what stop an injected instruction becoming a published ingredient. As of
+> 2026-09-07 those validators are covered by `ops/injection_resistance_selftest.py`, so the residual
+> exposure here is documented rather than merely believed.
 
 **Source:** course 13, on where untrusted text sits in a context and what interpolation shape it
 gets.
@@ -2018,7 +2046,26 @@ argument in front of him, rather than as work to do.
 E1 already notes `post-publish-reviewer` could move to run BEFORE the publish, which is what the item
 originally asked for. E1's R2 gap is unchanged and unaddressed by this.
 
-### I22 - The estate's single strongest defensive property is undocumented as one and pinned by no test `OPEN` `queue-2`
+### I22 - The estate's single strongest defensive property is undocumented as one and pinned by no test `DONE 2026-09-07` `queue-2`
+
+> **CLOSED by `ops/injection_resistance_selftest.py`, group A.** The rule that the local model may
+> reject but may never mint a price is now pinned by two must-fire cases, and discovered
+> automatically by `run-gates` (245 passed, 0 failed).
+>
+> **Checked by AST, not by import, and that was deliberate.** Importing `resolve.py` pulls `GraphDB`
+> and would need a database, so the test would have to skip when the database is absent - and a
+> self-test that degrades to a skip is the could-not-run-reads-as-a-pass shape this estate has been
+> bitten by repeatedly. The property is a source-level invariant, so it is checked as one and always
+> runs. A2 collects every `Verdict(...)` constructed inside `_llm_adjudicate` and fails if any
+> carries a priceable status; A1 pins the priceable set itself, because widening
+> `Verdict.is_match` would void every downstream guarantee.
+>
+> **A3 is the clean twin and it is load-bearing:** it asserts the AST walk found any `Verdict`
+> construction at all. Without it, a renamed function or a changed call shape would make A2 pass
+> vacuously, which is exactly what makes a green test worthless.
+>
+> Proved by breaking both: adding `llm_match_unverified` to `is_match` fires A1 alone; making the
+> adjudicator return `llm_confirmed` fires A2 alone. Exit 1 both times, restored byte-identical.
 
 **Source:** course 13, on permission boundaries as the defence that does not depend on recognising
 the attack.
@@ -2048,7 +2095,34 @@ added to `run-gates`' Python list. Cheap, must-fire, and it would be green on da
 correct shape for a ratchet over a property that is already true and must stay true. Related to I8
 (`run-gates` hand-lists its Python self-tests), which is the reason a new one has to be remembered.
 
-### I23 - No fixture anywhere asserts this estate resists an injected instruction `OPEN` `queue-2`
+### I23 - No fixture anywhere asserts this estate resists an injected instruction `DONE 2026-09-07` `queue-2`
+
+> **CLOSED by `ops/injection_resistance_selftest.py`.** Ten cases, exit 0, carrying the
+> `INJECTION-RESISTANCE-SELFTEST-COMPLETE` marker `lib/guard-contract.ps1` requires. The grep this
+> item was measured by now returns a file.
+>
+> **What it does NOT test, and why that is the point.** It does not ask whether the model can be
+> fooled. Course 14's own testing lectures are right that this is a black box and cannot be
+> exhausted, and a fixture pretending otherwise would be theatre. It tests the far narrower question
+> the estate actually depends on: **given a model output that has been fully compromised, does the
+> checked layer still refuse it?** That is completely answerable, and it is answered here against
+> real adversarial input rather than by argument.
+>
+> Groups B and C call the validators for real. B1 feeds the transcriber an injected instruction as
+> an ingredient; B2 feeds it a plausible ingredient that is simply absent from the page, which is
+> the one a human reviewer would wave through; B4 pins that an empty answer is a failure rather than
+> a clean pass. C2 pins the quieter failure `verify_split()` exists for, a split that silently DROPS
+> part of the line while every field it does emit is genuine. Each group carries a clean twin so the
+> must-fire cases cannot be satisfied by a function that refuses everything.
+>
+> Proved by breaking the page check: `verify()` stopped requiring a line to occur in the page and
+> **B1 and B2 both fired**, correctly, since both rest on that one predicate. Restored
+> byte-identical; `graph/pipeline/resolve.py` and `meal-prep/pipeline/local_extract.py` are
+> unchanged by this work.
+>
+> **What remains open in this family** is course 14's real gap, which is not a fixture: there is
+> still no *evaluation protocol* for injection resistance - no corpus of payloads, no measured rate.
+> This pins named defences against named payloads, which is the checkable part.
 
 **Source:** course 14, *Introduction to Prompt Injection Vulnerabilities* (Kevin Cardwell, Coursera),
 whose three testing lectures argue that LLM systems are "the ultimate black box" and cannot be
