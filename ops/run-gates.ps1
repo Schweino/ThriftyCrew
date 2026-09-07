@@ -220,51 +220,44 @@ foreach ($g in $static) {
 # correct spec), and a splitting case had flipped when the estate learned a head noun. Both were real,
 # both were invisible, and the same file had just produced a 7x mass error. A suite nobody runs is a
 # suite that rots.
-$pySuites = @(
-  @{ f = 'meal-prep\pipeline\coverage_check.py'; a = '--selftest'; n = 'the recipe QA battery: coverage, scaling, prose numbers, the mass reader' }
-  # graph\agentic WAS COVERED BY NOTHING - not in this list, no -SelfTest, imported by no other suite -
-  # and it holds the Executor that shells out on a plan's tool string. os.path.join discards the repo
-  # root when the tool name is absolute, so an absolute or traversing name escaped entirely, and the
-  # plan-hash check above it proves the plan was not MUTATED, which is a different question
-  # (2026-09-06, backlog E11+E18).
-  @{ f = 'graph\agentic\executor_selftest.py'; a = '--selftest'; n = 'the executor refuses a tool path that escapes the repo, and records why' }
-  # The BM25 probe's ARITHMETIC, not its verdict. A scorer nobody checked, reporting a recall that a
-  # build decision rests on, is the shape this estate keeps writing guards about (backlog E4).
-  @{ f = 'meal-prep\pipeline\bm25_dedup_probe.py'; a = '--selftest'; n = 'the E4 lexical probe still scores rare terms above common ones' }
-  # finetune_reranker.py scored holdout AUC every epoch and then saved whichever epoch ran
-  # LAST, so the scores decided nothing and an overfit final epoch shipped over a better one
-  # (2026-09-06, backlog E27). The rule that fixes it is split into its own module for one
-  # reason: the trainer imports torch at module scope and runs on the sidecar venv, which the
-  # interpreter above does not have, so a decision rule left inside it could never run HERE.
-  # Its clean twin is the load-bearing case - a plain 'keep the best epoch' would select the
-  # maximum of k noisy draws, and this file's own docstring measures that noise at 0.0033.
-  @{ f = 'sidecar\checkpoint_selection.py'; a = '--selftest'; n = 'the trainer ships a mid-run peak but refuses to chase a lead inside measured seed noise' }
-  # The E9 probe's COMPARATOR, not its verdict. Its whole job is to notice that one
-  # transcription differs from another, so a comparator that has quietly gone lenient reports
-  # agreement and retires a question that was never asked. Its must-fire is the unit rewrite
-  # ('ounces' to 'oz') the extractor is forbidden to make.
-  @{ f = 'meal-prep\pipeline\extractor_model_probe.py'; a = '--selftest'; n = 'the E9 transcription comparator still calls a rewritten unit a difference' }
-  # ONLY THE SELF-TEST, never the live run. matcher_eval's real pass needs torch and the model,
-  # which is not hermetic, and it currently exits 2 on a real finding - 186 of 2,816 known-
-  # correct pairs score under sweep.py's prefilter floor (2026-09-06, backlog E19). Its
-  # arithmetic is what belongs in the gate: the must-fire is that an ABSTENTION lowers MRR
-  # rather than vanishing from it, which is the trick that makes a matcher which gives up on
-  # its hard rows outscore one that attempts everything.
-  @{ f = 'sidecar\matcher_eval.py'; a = '--selftest'; n = 'the matcher scorer still counts an abstention against itself, and reads the live floor' }
-  # backtest.py called itself an ACCEPTANCE GATE, said in its own header that it was allowed to
-  # fail, and contained no sys.exit at all - so every run exited 0 whatever it measured
-  # (2026-09-07, backlog I17). The bar it now enforces is the one it always stated: a candidate
-  # ships only if it still catches what stock catches. The rule is split out so it can run HERE,
-  # on the pinned interpreter, without torch. Its must-fire is a candidate that wins at every
-  # other budget and loses ONE known-wrong pair at one of them.
-  @{ f = 'sidecar\backtest_veto.py'; a = '--selftest'; n = 'the candidate veto still refuses a comparison it cannot make, and fires on a lost defect' }
-  # sweep.py's coverage prefilter was CHOSEN - 0.55, from eight observations in a 0.58-0.69 band -
-  # and a product under it is never reranked, so the cross-encoder that actually discriminates
-  # never sees it. Measured against 2,816 confirmed-correct pairs, true positives sit as low as
-  # 0.3948 (2026-09-07, backlog I13/I14 and the E19 floor finding). The must-fire is that a floor
-  # derived from a narrow sample sits ABOVE a real pair outside it - which is what happened.
-  @{ f = 'sidecar\derive_coverage_floor.py'; a = '--selftest'; n = 'the coverage floor is read off the lowest confirmed pair, and its volume cap says when it bound' }
-)
+# DISCOVERED, NOT HAND-LISTED (2026-09-07, backlog I8). Every PowerShell -SelfTest in the tree has
+# always been found by walking it; the Python ones were a list somebody had to remember to add to. On
+# the day this changed, 32 .py files carried --selftest and SIX were listed: nineteen working suites
+# had simply never been wired in, including the band pre-check, the food-provenance reader, the
+# ingredient learner and the whole hunt_lib. A suite nobody runs is a suite that rots, and this estate
+# has already been bitten by exactly that (coverage_check sat at two failures for weeks).
+#
+# THE SKIP LIST IS EXPLICIT AND CARRIES ITS REASON, and anything discovered that is NOT skipped MUST
+# run. That is what makes this different from the hand-list it replaces: a new suite is in the gate the
+# moment it exists, and the only way out is to name it here and say why.
+$pySkip = @{
+  # numpy/torch live in the sidecar venv, not in the pinned interpreter. Each of these already detects
+  # that itself and prints a CANNOT RUN line, so the gate would be re-testing the interpreter rather
+  # than the estate.
+  'meal-prep\pipeline\harvest_embed.py'     = 'needs numpy - sidecar venv; it says so itself and stops'
+  'meal-prep\pipeline\resolution_embed.py'  = 'needs numpy - sidecar venv; it says so itself and stops'
+  'sidecar\sweep.py'                        = 'needs torch - sidecar venv'
+  # The daemon and its full battery run for minutes, and the gate has to stay fast enough that people
+  # run it. Both are exercised in the nightly chain instead.
+  'meal-prep\pipeline\hunt-daemon.py'       = 'the daemon itself - runs for minutes; exercised nightly'
+  'meal-prep\pipeline\hunt_daemon_selftest.py' = 'the full daemon battery - runs for minutes; exercised nightly'
+}
+$pySuites = @()
+foreach ($f in @(Get-ChildItem -Path $repo -Recurse -Filter '*.py' -File -ErrorAction SilentlyContinue |
+                 Where-Object { $_.FullName -notmatch '\\\.venv\\|\\archive\\|\\worktrees\\|\\node_modules\\|\\site-packages\\|\\\.git\\' })) {
+  $rel = $f.FullName.Substring($repo.Length).TrimStart('\')
+  $txt = ''
+  try { $txt = [IO.File]::ReadAllText($f.FullName) } catch { continue }
+  if ($txt -notmatch '--selftest') { continue }
+  if ($pySkip.ContainsKey($rel)) { continue }
+  $pySuites += @{ f = $rel; a = '--selftest'; n = 'discovered Python self-test' }
+}
+if ($pySuites.Count -lt 15) {
+  # DISCOVERY BROKEN IS NOT A CLEAN TREE. Nineteen suites were found the day this shipped; a run that
+  # finds almost none has lost the walk, not the suites.
+  Write-Output ("  FAIL  python self-test DISCOVERY found only {0} suite(s) - it found 27 on 2026-09-07. That is the walk broken, not the tree clean." -f $pySuites.Count)
+  $fail += 'python-selftest-discovery'
+}
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly
 # the blindness this section exists to end, so the candidates are probed and a miss is reported loudly.
@@ -283,7 +276,14 @@ foreach ($g in $pySuites) {
     Write-Output ("  FAIL  {0} - no Python 3 interpreter found, so this battery DID NOT RUN" -f $g.f)
     continue
   }
-  $out = & $pyExe $p $g.a 2>&1
+  # NO 2>&1 ON A NATIVE EXE (2026-09-07). This line used to redirect python's stderr into $out,
+  # and this script sets $ErrorActionPreference='Stop'. In PS 5.1 that combination is fatal: each
+  # stderr line becomes an ErrorRecord and the FIRST one is a TERMINATING throw, so the gate DIED
+  # at the first suite that printed a warning instead of reporting it. It survived six curated
+  # suites and broke on the twenty-seventh the moment discovery widened the input - the same shape
+  # capture-run.ps1 records from 2026-08-22. stderr now goes to the console where a human sees it;
+  # the verdict was never in stderr, it is the exit code.
+  $out = & $pyExe $p $g.a
   $rc = $LASTEXITCODE
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {

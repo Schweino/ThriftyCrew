@@ -1291,7 +1291,7 @@ Will not reinstate by clicking - three attempts. Course-specific, not account-wi
 already extracted and routed; outstanding are 6 ungraded dialogues and that course's progress ticks.
 Needs Brad to click enroll himself.
 
-### I8 - `run-gates` DISCOVERS PowerShell self-tests and HAND-LISTS the Python ones `OPEN` `queue-2`
+### I8 - `run-gates` DISCOVERS PowerShell self-tests and HAND-LISTS the Python ones `DONE` `queue-2`
 *Source: Build Testable Python Packages for AI (queue 2, course 7).* The course's whole argument is
 that a test only protects you if the runner finds it without being told. Checked here, and the two
 halves of our own gate are built on opposite principles.
@@ -1326,6 +1326,35 @@ reason-per-line `$SKIP` allowlist the PowerShell half already carries - and it n
 because some of the sixteen will not be hermetic (models, network, a real board). **Expect it red on
 day one**, which the ops rules say is the wrong way to add a gate: it wants a ratchet with a
 high-water mark, the `audit-write-seam` shape, not a bare discovery.
+
+
+**FIXED 2026-09-07, and the hand-list was hiding more than anyone thought.** 32 `.py` files carry
+`--selftest`; the gate listed **six**. Running all of them on the pinned interpreter:
+
+| | |
+|---|---|
+| pass and were NOT gated | **19** - band_precheck, food_provenance, learn_apply, local_extract, hunt_lib, decide_apply, retire_food_db_row, price_evidence, authority, scorecard_query and nine more |
+| genuinely cannot run there | 5 - three need numpy/torch from the sidecar venv and say so themselves; the daemon and its full battery run for minutes |
+
+Nineteen working suites had simply never been wired in. A suite nobody runs is a suite that rots, and
+this estate has already paid for that: `coverage_check.py` sat at two failures for weeks.
+
+Discovery now walks the tree exactly as the PowerShell side always has. **The skip list is explicit and
+carries its reason**, and anything discovered that is not skipped MUST run - so a new suite is in the
+gate the moment it exists, and the only way out is to name it and say why. Discovery finding fewer
+than 15 suites is itself a failure, because a walk that breaks looks exactly like a tree with no tests.
+
+**Widening the input exposed two real defects that six curated suites had hidden:**
+
+1. **`run-gates` line 279 redirected a NATIVE exe's stderr into a variable** under
+   `$ErrorActionPreference='Stop'`. In PS 5.1 each stderr line becomes an ErrorRecord and the FIRST is
+   a TERMINATING throw, so the gate **died** at the first Python suite that printed a warning rather
+   than reporting it. It survived six suites and broke on the twenty-seventh. Same shape
+   `capture-run.ps1` records from 2026-08-22, and one CLAUDE.md warns about by name.
+2. **`fdc_lookup.py` carried an invalid `\d` escape** in its module docstring - the warning that
+   triggered the above.
+
+Gate went 225 to **245 passed, 0 failed**, in 285s.
 
 ### I9 - The 95-file Python tree is not a package, and one consequence is already load-bearing `OPEN` `queue-2`
 *Source: Build Testable Python Packages for AI (queue 2, course 7).* Recording the state, not

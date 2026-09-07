@@ -1,4 +1,4 @@
-"""fdc_lookup.py - candidate nutrition rows from USDA FoodData Central. Mechanical, no model.
+r"""fdc_lookup.py - candidate nutrition rows from USDA FoodData Central. Mechanical, no model.
 
 WHY THIS EXISTS (2026-08-24). The mapper WebFetches 9-10 nutrition labels per singleton dispatch, and
 every fetched page then rides in its conversation for each later round trip - that is the quadratic
