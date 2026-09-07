@@ -544,27 +544,6 @@
                                                      "name":  "Boulder Regular Aluminum Foil (75 ft)",
                                                      "board_pu":  4.39
                                                  },
-                                        "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/reynolds-wrap-aluminum-foil/0001090008031",
-                                                             "price":  3.49,
-                                                             "size":  "each",
-                                                             "name":  "Reynolds Wrap Aluminum Foil",
-                                                             "board_pu":  3.49,
-                                                             "verified":  "2026-08-23"
-                                                         },
-                                        "Family Fare":  {
-                                                            "url":  "https://www.shopfamilyfare.com/shop/household/food_storage/food_wraps/our_family_aluminum_foil_25_square_feet_1_ea/p/6787298",
-                                                            "name":  "Our Family Aluminum Foil, 25 Square Feet 1 Ea",
-                                                            "price":  "$1.79",
-                                                            "size":  "1 ea",
-                                                            "board_pu":  1.99
-                                                        },
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2924912/thats-smart-aluminum-foil",
-                                                       "price":  1.82,
-                                                       "size":  "25 sq ft",
-                                                       "name":  "That\u0027s Smart Aluminum Foil"
-                                                   },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Reynolds-Wrap-Heavy-Duty-18-Aluminum-Foil-120-sq-ft-2-pk/15409719345",
                                                                 "price":  19.98,
@@ -572,14 +551,6 @@
                                                                 "name":  "Reynolds Wrap Heavy Duty 18 Inch Aluminum Foil, 2 pk",
                                                                 "board_pu":  9.99
                                                             },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/18329708380",
-                                                        "name":  "GARITIN Aluminum Foil Paper 223 Sq Ft, Heavy Duty Aluminum Foil, Non Stick Foil Roll with Cutter for Grilling, Cooking, Catering, Grill Foil Wraps for Food, 12 Inches Wide, Silver",
-                                                        "price":  "$10.99",
-                                                        "size":  "each",
-                                                        "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)",
-                                                        "board_pu":  10.99
-                                                    },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408143-reynolds-wrap-every-day-aluminum-foil-200-sq-ft",
                                                         "name":  "reynolds wrap every day aluminum foil 200 sq ft",
@@ -1485,14 +1456,6 @@
                                                      "size":  "6 ea",
                                                      "board_pu":  0.5983
                                                  },
-                                 "Hy-Vee":  {
-                                                "url":  "https://www.hy-vee.com/aisles-online/p/23552/hy-vee-plain-bagels-5-count-pre-split",
-                                                "name":  "Hy-Vee Plain Bagels 5 Count Pre-Split",
-                                                "board_pu":  0.456,
-                                                "price":  1.58,
-                                                "size":  "5 ct",
-                                                "verified":  "2026-08-18 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                            },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34359829-fareway-wheat-presliced-bagels-24-oz",
                                                  "name":  "Fareway Pre-Sliced Wheat Bagels",
@@ -2907,13 +2870,6 @@
                                 },
                   "bread":  {
                                 "commodity":  "Bread (loaf)",
-                                "Family Fare":  {
-                                                    "url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/wheat_bread/sara_lee_honey_wheat_bread_20_oz/p/2517",
-                                                    "price":  4.49,
-                                                    "size":  "20 oz",
-                                                    "name":  "Sara Lee Honey Wheat Bread 20 Oz",
-                                                    "board_pu":  3
-                                                },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/1955/hy-vee-white-bread",
                                                "name":  "Hy-Vee White Bread",
@@ -3183,12 +3139,6 @@
                                       },
                   "brownie-mix":  {
                                       "commodity":  "brownie-mix",
-                                      "Aldi":  {
-                                                   "url":  "https://www.aldi.us/store/aldi/products/20717386-baker-s-corner-fudge-brownie-mix-18-3-oz",
-                                                   "price":  1.59,
-                                                   "size":  "18.3 oz",
-                                                   "name":  "Baker\u0027s Corner Fudge Brownie Mix"
-                                               },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/32646/duncan-hines-family-size-chewy-fudge-brownie-mix-18-3-oz",
                                                      "name":  "Duncan Hines Family Size Chewy Fudge Brownie Mix, 18.3 oz.",
@@ -3643,14 +3593,7 @@
                                                  "size":  "lb",
                                                  "name":  "Green Cabbage",
                                                  "board_pu":  0.89
-                                             },
-                                  "Walmart":  {
-                                                  "url":  "https://www.walmart.com/ip/44391042",
-                                                  "name":  "Fresh Green Cabbage, Each",
-                                                  "price":  "$2.59",
-                                                  "size":  "3.047 lb",
-                                                  "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                              }
+                                             }
                               },
                   "caesar-dressing":  {
                                           "commodity":  "Caesar Dressing",
@@ -3804,12 +3747,6 @@
                                       },
                   "cake-mix":  {
                                    "commodity":  "cake-mix",
-                                   "Aldi":  {
-                                                "url":  "https://www.aldi.us/store/aldi/products/20846811-baker-s-corner-yellow-cake-mix-15-25-oz",
-                                                "price":  1.09,
-                                                "size":  "15.25 oz",
-                                                "name":  "Baker\u0027s Corner Yellow Cake Mix"
-                                            },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/2263913/hy-vee-extra-moist-classic-yellow-deluxe-cake-mix",
                                                   "name":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix",
@@ -4338,13 +4275,6 @@
                                                         "name":  "That\u0027s Smart! Yellow Cling Sliced Peaches in Light Syrup 15 oz",
                                                         "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                     },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/19269758979",
-                                                                 "name":  "Member\u0027s Mark Sliced Peaches in Extra Light Syrup, 104 oz.",
-                                                                 "price":  "$8.84",
-                                                                 "size":  "104 oz",
-                                                                 "verified":  "2026-08-24 DERIVED from the price row (same record the board priced)"
-                                                             },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23412177-fareway-diced-peaches-in-100-juice-yellow-cling-12-pack-12-each",
                                                          "name":  "Fareway 12 Pack Yellow Cling Diced Peaches in 100% Juice",
@@ -9576,13 +9506,7 @@
                                                "price":  "$1.65",
                                                "size":  "dozen",
                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                           },
-                               "Family Fare":  {
-                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                                                   "name":  "Large Eggs, Grade A Our Family",
-                                                   "price":  "$2.39",
-                                                   "size":  "12 ct"
-                                               }
+                                           }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -10332,12 +10256,6 @@
                             },
                   "french-bread":  {
                                        "commodity":  "french-bread",
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/63781141-french-bread",
-                                                    "price":  3.15,
-                                                    "size":  "18.5 oz",
-                                                    "name":  "Specially Selected French Bread"
-                                                },
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/private-selection-french-baguette-sliced/0004157309230",
                                                             "name":  "Private Selection French Baguette Sliced",
@@ -10346,19 +10264,6 @@
                                                             "verified":  "2026-08-23",
                                                             "board_pu":  1.99
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/pizza/stouffer_s_three_meat_french_bread_pizzas_2_ea/p/1564405684713073823",
-                                                           "name":  "Stouffer\u0027s Three Meat French Bread Pizzas 2 Ea",
-                                                           "price":  "$4.49",
-                                                           "size":  "2 ea",
-                                                           "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                       },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/98948/baking-stone-french-bread",
-                                                      "price":  2.99,
-                                                      "size":  "20 oz",
-                                                      "name":  "Baking Stone French Bread"
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13869417378",
                                                                "price":  4.46,
@@ -11883,18 +11788,6 @@
                              },
                   "garlic-bread":  {
                                        "commodity":  "garlic-bread",
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/21221643-mama-cozzi-s-pizza-kitchen-garlic-texas-toast-11-25-oz",
-                                                    "price":  1.95,
-                                                    "size":  "11.25 oz",
-                                                    "name":  "Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast"
-                                                },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_breads/garlic_bread/our_family_slices_original_garlic_texas_toast_8_ea/p/7081079",
-                                                           "price":  2.89,
-                                                           "size":  "8 ea",
-                                                           "name":  "Our Family Slices Original Garlic Texas Toast 8 Ea"
-                                                       },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24303544-fareway-garlic-bread-16-oz",
                                                        "price":  3.99,
@@ -16102,13 +15995,6 @@
                                                               "size":  "5 pk 7.25 oz",
                                                               "verified":  "2026-08-23"
                                                           },
-                                         "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/dairy/ready_to_eat/heat_serve/bob_evans_macaroni_cheese_2_ea/p/44096",
-                                                             "name":  "Bob Evans Macaroni \u0026 Cheese 2 Ea",
-                                                             "price":  "$5.99",
-                                                             "size":  "2 ct",
-                                                             "verified":  "2026-08-07 DERIVED from the price row (same record the board priced)"
-                                                         },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22159772-corner-store-dinner-macaroni-cheese-625-oz",
                                                          "price":  0.54,
@@ -18135,13 +18021,6 @@
                                                              "verified":  "2026-08-23",
                                                              "board_pu":  0.0936
                                                          },
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/204508/hy-vee-creamy-peanut-butter-40-oz",
-                                                       "name":  "Hy-Vee Creamy Peanut Butter 40 oz",
-                                                       "price":  "$5.98",
-                                                       "size":  "40 oz",
-                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                   },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/285601-skippy-creamy-peanut-butter-16-3-oz",
                                                         "name":  "SKIPPY Peanut Butter, Creamy, 7 g protein per serving, 16.3 oz",
@@ -21124,14 +21003,6 @@
                                    },
                   "rotisserie-chicken":  {
                                              "commodity":  "rotisserie-chicken",
-                                             "Baker\u0027s":  {
-                                                                  "url":  "https://www.bakersplus.com/p/simple-truth-fresh-hot-roasted-whole-rotisserie-chicken-available-11am-8pm/0001111006806",
-                                                                  "price":  8.99,
-                                                                  "size":  "2 lb",
-                                                                  "name":  "Simple Truth Fresh Hot Roasted Whole Rotisserie Chicken - Available 11am-8pm",
-                                                                  "board_pu":  7.99,
-                                                                  "verified":  "2026-08-23"
-                                                              },
                                              "Family Fare":  {
                                                                  "url":  "https://www.shopfamilyfare.com/shop/deli/ready_to_go_hot/whole_rotisserie_chicken_no_pick_up_delivery_before_11am/p/1564405684714636712",
                                                                  "price":  7.99,
@@ -22482,13 +22353,6 @@
                                                              "name":  "Daisy Brand Pure and Natural Sour Cream, 48 oz.",
                                                              "board_pu":  0.1154
                                                          },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24269937-fareway-sour-cream-8-oz",
-                                                     "name":  "Fareway Sour Cream",
-                                                     "price":  "$0.99",
-                                                     "size":  "8 oz",
-                                                     "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/23920/hy-vee-sour-cream",
                                                     "name":  "Hy-Vee Sour Cream",
@@ -23009,13 +22873,6 @@
                                                            "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)",
                                                            "board_pu":  0.2806
                                                        },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/13612870276",
-                                                               "name":  "Strawberries, 2 lbs.",
-                                                               "price":  "$3.92",
-                                                               "size":  "2 lb",
-                                                               "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
-                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Sunrise-Growers-New-West-Whole-Strawberry/156682663",
                                                        "name":  "Sunrise Growers New West Whole Strawberry",

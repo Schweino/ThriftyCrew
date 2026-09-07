@@ -421,20 +421,6 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
-                              "id":  "disinfectant-spray",
-                              "commodity":  "Disinfectant Spray",
-                              "unit":  "oz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1996,
-                              "size":  "26 fl oz",
-                              "item":  "Seventh Generation Lemongrass Citrus Disinfecting Spray",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  true,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
                               "id":  "evaporated-milk",
                               "commodity":  "Evaporated Milk",
                               "unit":  "oz",
@@ -736,6 +722,20 @@
                               "per_unit":  0.1658,
                               "size":  "12 oz",
                               "item":  "Valentina Hot Sauce, Mexican 12.5 Fl Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "ice-cream",
+                              "commodity":  "Ice Cream",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0663,
+                              "size":  "128 oz",
+                              "item":  "Vanilla Ice Cream Our Family",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false,
@@ -1314,20 +1314,6 @@
                                                      "per_unit":  0.1319,
                                                      "size":  "18.8 fl oz",
                                                      "item":  "Campbell S Chunky New England Clam Chowder 18.8 OZ",
-                                                     "kind":  "volume",
-                                                     "row_kind":  "weight",
-                                                     "holds_crown":  true,
-                                                     "unit_kind":  "weight",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "disinfectant-spray",
-                                                     "commodity":  "Disinfectant Spray",
-                                                     "unit":  "oz",
-                                                     "store":  "Baker\u0027s",
-                                                     "per_unit":  0.1996,
-                                                     "size":  "26 fl oz",
-                                                     "item":  "Seventh Generation Lemongrass Citrus Disinfecting Spray",
                                                      "kind":  "volume",
                                                      "row_kind":  "weight",
                                                      "holds_crown":  true,
@@ -1951,6 +1937,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "ice-cream",
+                                                     "commodity":  "Ice Cream",
+                                                     "unit":  "floz",
+                                                     "store":  "Family Fare",
+                                                     "per_unit":  0.0663,
+                                                     "size":  "128 oz",
+                                                     "item":  "Vanilla Ice Cream Our Family",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "italian-dressing",
                                                      "commodity":  "Italian Dressing",
                                                      "unit":  "floz",
@@ -2433,23 +2433,10 @@
                      }
                  ],
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "disinfectant-spray",
-                                    "commodity":  "Disinfectant Spray",
-                                    "unit":  "oz",
-                                    "store":  "Baker\u0027s",
-                                    "per_unit":  0.1996,
-                                    "size":  "26 fl oz",
-                                    "item":  "Seventh Generation Lemongrass Citrus Disinfecting Spray",
-                                    "kind":  "volume",
-                                    "row_kind":  "weight",
-                                    "holds_crown":  true,
-                                    "unit_kind":  "weight",
-                                    "agrees_with_engine_divisor":  false
-                                }
+
                             ],
     "ratio":  4,
-    "generated":  "2026-09-06T08:14:55",
+    "generated":  "2026-09-06T12:40:09",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",

@@ -3,18 +3,18 @@
                   "date":  "2026-09-06",
                   "pid":  26932,
                   "started":  "2026-09-06T08:00:02",
-                  "updated":  "2026-09-06T08:33:26",
-                  "stage":  "publishing",
-                  "exit_code":  null,
+                  "updated":  "2026-09-06T08:34:06",
+                  "stage":  "complete",
+                  "exit_code":  1,
                   "log":  "--- run-log: capture-run-daily | 2026-09-06T08:00:02 | pid 26932 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-06.log"
               },
     "ad":  {
-               "date":  "2026-09-06",
-               "pid":  45448,
-               "started":  "2026-09-06T07:00:02",
-               "updated":  "2026-09-06T07:02:52",
-               "stage":  "complete",
-               "exit_code":  1,
-               "log":  "--- run-log: capture-run-ad | 2026-09-06T07:00:02 | pid 45448 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-06.log"
+               "date":  "2026-09-07",
+               "pid":  53092,
+               "started":  "2026-09-07T07:00:02",
+               "updated":  "2026-09-07T07:02:16",
+               "stage":  "publishing",
+               "exit_code":  null,
+               "log":  "--- run-log: capture-run-ad | 2026-09-07T07:00:02 | pid 53092 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-07.log"
            }
 }
