@@ -64,8 +64,11 @@ twin proving the journal still records when staging is off.
    separate work.
 2. **Neither would have caught the 2026-08-29 paywall leak** (22 paid recipes served free): that PUT
    reported success without taking effect. A downstream audit caught it, and still would.
-3. **Nothing is armed yet.** Both switches are off, so today this changes nothing - it is capability,
-   not protection, until someone turns one on.
+3. ~~**Nothing is armed yet.**~~ **Half armed since 2026-09-07 (I21, Brad's ruling): staging is ON
+   for agent dispatches and off for the daily chain.** Arming it immediately found that the approver
+   would have corrupted the post - a `[byte[]]` body was recorded as the STRING `"(byte[] length N)"`
+   and `-Apply` replayed that description to Ghost, on the only branch the live chain takes. The
+   journal switch (`TC_WRITE_JOURNAL`) is still off everywhere.
 4. **`publish.ps1:285` needs teaching before staging can be armed on the publish chain** - it GETs the
    public page after the PUT to confirm it shipped, and would report a failure when nothing shipped.
 
