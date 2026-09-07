@@ -1573,7 +1573,7 @@ shapes, and each has a self-test pinned to a different founding bug.
 
 ---
 
-### I17 - `backtest.py` calls itself an ACCEPTANCE GATE and always exits 0 `OPEN` `queue-2`
+### I17 - `backtest.py` calls itself an ACCEPTANCE GATE and always exits 0 `DONE` `queue-2`
 
 **Source:** course 12, `automate-and-evaluate-ml-pipeline-tests`, on the failure-versus-warning
 threshold and on what makes a regression suite a gate rather than a report.
@@ -1615,6 +1615,39 @@ enforced mechanism rather than needing one built. It also means the floor cannot
 scheduled chain, not in the hermetic change-time gate. See I18.
 
 ---
+
+
+**VERIFIED AND FIXED 2026-09-07.** The file convicted itself: line 2 said "the ACCEPTANCE GATE for the
+semantic sidecar", the next paragraph said "it is allowed to fail", and there was no `sys.exit`
+anywhere in it - `main()` wrote a JSON report and returned `None`, so every run exited 0 whatever it
+measured.
+
+**The bar was taken from the file, not invented.** It states the candidate rule twice: *"beating stock
+on a cold holdout is not enough if the new weights lose a defect the old ones caught [...] it ships
+only if it still catches what stock catches."* So this is a **veto, not the decider** - `hardeval.py`
+has always said GOLD decides and that these 25 negatives "never ask a hard question". A stock run
+still just reports and exits 0; a `--reranker` candidate is compared and can now exit 2.
+
+**The refusal is the interesting half.** `commodity_text()` is "label + up to 5 products the board
+currently accepts", and backtest.py measured what that does: same model, same eval files, only the
+commodity text changed, and known-wrong caught went **17/25 to 0/25**. So a candidate compared against
+a baseline built on different defs is measuring board churn. The veto refuses that comparison as
+could-not-evaluate rather than reporting a verdict - including when a report simply does not RECORD
+its defs, because "cannot prove they matched" is not "they matched".
+
+**That refusal immediately bit the real data, which is why the chooser exists.** `backtest.json` is the
+conventional stock report and it predates the `defs` field, so preferring it by name made every veto a
+permanent 3. `backtest-phase3-frozen.json` is the same pinned model run six minutes later, same
+numbers, with its defs recorded - a valid baseline that was simply never looked for. `find_stock_baseline`
+picks the newest PINNED report that records its defs and names the file it chose.
+
+**The historical promotions were sound.** Against that baseline, ft-v1 catches 18/20/23/23/24 where
+stock catches 4/8/12/15/17, and ft-v3 16/22/23/23/24. Neither would have been vetoed. What was missing
+was the enforcement, not the judgement.
+
+The rule lives in `sidecar/backtest_veto.py` so it imports nothing heavy and `run-gates` can exercise
+it on the pinned interpreter. Its must-fire is a candidate that wins at every other budget and loses
+ONE known-wrong pair at one of them.
 
 ### I18 - Nothing schedules the sidecar's ML eval suite, and its inputs change without a commit `OPEN` `queue-2`
 

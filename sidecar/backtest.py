@@ -1,8 +1,20 @@
 """
-backtest.py - the ACCEPTANCE GATE for the semantic sidecar.
+backtest.py - the CANDIDATE VETO for the semantic sidecar. Not the decider.
+
+CORRECTED 2026-09-07 (backlog I17). This file used to open by calling itself "the ACCEPTANCE GATE",
+and in the next breath said "it is allowed to fail" - while containing no sys.exit at all, so every
+run exited 0 whatever it measured. A gate that cannot fail is a report with a misleading name. It can
+fail now, and the bar it enforces is the one this file already stated for itself (see THE SAME GATE,
+POINTED AT A CANDIDATE below): a candidate ships only if it still catches what stock catches.
+
+IT IS A VETO AND NOT THE DECIDER, which hardeval.py has always said: GOLD is the number that decides,
+and these 25 negatives "never ask a hard question". A stock run still just reports and exits 0. A
+CANDIDATE run is compared against sidecar/out/backtest.json and exits 2 when it loses a defect stock
+caught, or 3 when the comparison cannot honestly be made. The rule lives in sidecar/backtest_veto.py,
+which imports nothing heavy so run-gates can exercise it on the pinned interpreter.
 
 The design doc says: do not wire anything in until it is scored against defects the estate already knows
-about. This is that score. It answers three questions, and it is allowed to fail.
+about. This is that score. It answers three questions.
 
   TASK A - IDENTITY (does it catch wrong products?)
       Rank the 25 adjudicated-wrong (product, commodity) pairs against the 2,816 pairs the board
@@ -57,6 +69,9 @@ measuring board churn, and the difference is larger than any fine-tune is likely
 """
 from __future__ import annotations
 import json, os, sys, time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from backtest_veto import veto, find_stock_baseline                # noqa: E402
 from collections import defaultdict
 
 import torch
@@ -97,7 +112,7 @@ def auc(pos: list[float], neg: list[float]) -> float:
     return (sr - n1 * (n1 + 1) / 2.0) / (n1 * n0)
 
 
-def main() -> None:
+def main() -> int:
     import argparse
     ap = argparse.ArgumentParser(description="Acceptance gate for the semantic matcher")
     ap.add_argument("--reranker", default=None,
@@ -249,6 +264,24 @@ def main() -> None:
         json.dump(report, f, indent=2)
     log(f"wrote {os.path.join(OUT, name)}")
 
+    # THE VETO (backlog I17). A stock run reports and stops - hardeval GOLD is what decides, and this
+    # file's own header has always said so. A CANDIDATE run is held to the bar this file states: it
+    # ships only if it still catches what stock catches. Until 2026-09-07 nothing enforced that, so a
+    # candidate that lost a defect stock caught still exited 0 and read as a pass.
+    if not args.reranker:
+        log("stock run: report only, exit 0. hardeval GOLD is the number that decides; this file's "
+            "veto applies to a --reranker candidate.")
+        return 0
+    # NOT backtest.json BY NAME. That is the conventional stock filename and it predates the `defs`
+    # field, so preferring it would make every veto a permanent could-not-evaluate. What the
+    # comparison needs is a PINNED-model report that records which commodity text it saw.
+    stock, _stock_path, why = find_stock_baseline(OUT)
+    log(why)
+    rc, lines = veto(report, stock)
+    for ln in lines:
+        log(ln)
+    return rc
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

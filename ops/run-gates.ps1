@@ -251,6 +251,13 @@ $pySuites = @(
   # rather than vanishing from it, which is the trick that makes a matcher which gives up on
   # its hard rows outscore one that attempts everything.
   @{ f = 'sidecar\matcher_eval.py'; a = '--selftest'; n = 'the matcher scorer still counts an abstention against itself, and reads the live floor' }
+  # backtest.py called itself an ACCEPTANCE GATE, said in its own header that it was allowed to
+  # fail, and contained no sys.exit at all - so every run exited 0 whatever it measured
+  # (2026-09-07, backlog I17). The bar it now enforces is the one it always stated: a candidate
+  # ships only if it still catches what stock catches. The rule is split out so it can run HERE,
+  # on the pinned interpreter, without torch. Its must-fire is a candidate that wins at every
+  # other budget and loses ONE known-wrong pair at one of them.
+  @{ f = 'sidecar\backtest_veto.py'; a = '--selftest'; n = 'the candidate veto still refuses a comparison it cannot make, and fires on a lost defect' }
 )
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly
