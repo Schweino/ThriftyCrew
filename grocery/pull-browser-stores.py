@@ -945,10 +945,19 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
             return False, str(e)
 
     release_profile(prof)
-    # Parked off-screen when this is one of several concurrent lanes, so two visible browsers do
-    # not fight over focus while Brad is working. Seeding is ATTENDED - he has to see and drive
-    # that window - so a seed run is never parked.
-    win_pos = None if (seed or slot is None) else (-2400, -2400 + (slot * 40))
+    # Parked off-screen so a driver does not fight for focus while Brad is working. SEEDING is the
+    # only attended case - he has to see and drive that window to log in - so a seed run is never
+    # parked.
+    #
+    # `slot is None` USED TO SUPPRESS THE PARKING TOO, and that was wrong (Brad, 2026-09-07: windows
+    # kept appearing). slot says how many lanes are running, not whether anybody is watching: a
+    # one-store unattended pull got slot None and therefore opened in front of him. A lane with no
+    # slot now parks at 0 rather than not parking at all.
+    #
+    # OFF-SCREEN, NOT MINIMISED: minimising triggers Windows occlusion detection, which throttles
+    # rendering and timers, and these lanes depend on lazy-load - a throttled window returns a SHORT
+    # page that still looks like a real answer.
+    win_pos = None if seed else (-2400, -2400 + ((slot or 0) * 40))
     browser = Chrome(headless=headless, width=1440, height=900, dsf=1.0,
                      profile_dir=prof, mobile=False, browsing=True, window_position=win_pos)
     try:
@@ -1343,7 +1352,20 @@ def self_test(headless=False):
 
         # Throwaway profile ON PURPOSE: this must never inherit a seeded session, or the identity
         # check below would pass for the wrong reason and prove nothing.
-        b = Chrome(headless=headless, width=1440, height=900, dsf=1.0, mobile=False, browsing=True)
+        #
+        # OFF SCREEN, like the real lane (Brad, 2026-09-07: "can those be tabs in existing chrome").
+        # They cannot be tabs - Chrome hard-locks a --user-data-dir to one running instance, so a
+        # throwaway profile is necessarily a separate window, and pointing it at his own profile
+        # while his Chrome is open exits silently without ever opening the debug port. What they CAN
+        # be is out of the way, which is what he actually wants and what the real pull lane already
+        # does at :951. This path was the only one that never passed a position, so it was the only
+        # one that appeared in front of him.
+        #
+        # OFF-SCREEN, NOT MINIMISED, and the distinction is load-bearing: minimising triggers Windows
+        # occlusion detection, which throttles rendering and timers, and these lanes depend on
+        # lazy-load - a throttled window returns a SHORT page that still looks like a real answer.
+        b = Chrome(headless=headless, width=1440, height=900, dsf=1.0, mobile=False, browsing=True,
+                   window_position=(-2400, -2400))
         try:
             b.start()
             b.goto(cfg["origin"], wait_ms=4000)
