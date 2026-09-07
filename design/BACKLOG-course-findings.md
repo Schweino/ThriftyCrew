@@ -867,7 +867,7 @@ The flag stays: it is right in principle, costs nothing, and arms itself when th
 documented at the call site as inert, because an unarmed guard people believe in is worse than a
 missing one.
 
-### E9 - Model choice is pinned per agent, but MATE's M is per call `OPEN - THE SWAP IS REFUSED, AND NOTHING COMPARES A TRANSCRIPTION TO ITS PAGE`
+### E9 - Model choice is pinned per agent, but MATE's M is per call `DONE - THE SWAP IS REFUSED AND THE COMPARISON IS BUILT, 2026-09-07`
 *Source: AI Agents Architecture (course 7).* All twelve definitions pin one model. A tool that makes
 its own LLM call can pick its own. Highest-leverage split: an expensive model for the up-front plan,
 a cheap one to execute it.
@@ -906,6 +906,48 @@ wrong number on a page.
 rules whether the built recipe matches the transcription, which is one link downstream of where this
 drift happens, so a transcription that quietly normalised its source passes every check we run. That
 is the same shape as E19's complaint and is where the cheap fix goes.
+
+**BUILT 2026-09-07: `meal-prep/pipeline/audit_transcription_fidelity.py`, wired into
+`wave-preaudit.ps1` as `p9-transcription-fidelity`** - which is the correct side of the publish, E1's
+whole point. It fetches each transcription's `source_url`, reads the page's own JSON-LD
+`recipeIngredient` list, and compares.
+
+**Numbers and units strictly, prose loosely, which is the opposite of a text diff.** A dropped
+adjective is a fidelity nit; a quantity that moved is a price on a live paid page. Findings are
+ranked by what they cost: `quantity-moved`, `unit-moved`, `invented`, `dropped`.
+
+**The calibration is the whole thing.** The extractor is not verbatim ON PURPOSE - it folds unicode
+fractions and strips parentheticals ([[extractor-raw-is-not-verbatim]]) - so a checker that did not
+know that would flag every line on every page and be switched off inside a day. Both transformations
+are normalised on both sides before anything is compared, and four must-not-fire fixtures pin exactly
+that.
+
+**Three defects my own fixtures caught before it shipped, and the first is the one that mattered:**
+
+1. **A UNIT SWAP WAS INVISIBLE.** "1 cup smoked sausage" against "1 pound smoked sausage" paired on
+   prose and agreed on every digit, so nothing fired - and that is the single most expensive drift
+   there is. Units are now compared as strictly as numbers.
+2. **A quantity change was mislabelled.** Pairing scored the whole line, so numbers and units - the
+   very things that may have drifted - pushed a changed line below the pairing floor and it came back
+   as an invention plus a drop. Pairing now scores PROSE ONLY: what a line IS decides the pairing,
+   what it SAYS decides the finding.
+3. **NFKC ran before the fraction map and glued the digits.** "1half" became "11/2" = 5.5 rather than
+   1.5, so the calibration case this file depends on reported a quantity that had not moved.
+
+**Measured on real pages, both directions, because a green on nothing proves nothing.** 31 of 31
+transcriptions across two runs were read and agreed - 5 of 5 on `hunt-2026-09-04-five`, 26 of 26 on
+`hunt-2026-08-27-highprotein` - so the extractor is faithful and the checker does not cry wolf. Then a
+real transcription was corrupted on a temp copy and it fired correctly at exit 2, catching both the
+quantity change and the invented line. **An agreeing number that has never been shown to disagree is
+not evidence.**
+
+**A page it cannot read is never counted as agreement.** No JSON-LD, a 403, a paywall - each is
+CANNOT-CHECK against its own count, and the pass line prints "N page(s) could not be read and are NOT
+counted as agreement". p9 passes on cannot-check and fails only on a real finding, which diverges
+from `p8-feed-liveness` beside it on purpose: p8 is false-on-skip because a wave must never ship
+without knowing the feed is up, whereas a source page that 403s is not something anybody here can
+clear, and a wave blocked by somebody else's server is a gate that gets `-SkipLive` added to every
+call within a week.
 
 Three things this does NOT establish. Four pages is four pages. Haiku's fraction fidelity here is not
 a general claim about Haiku. And nothing was measured about cost or latency, so even a clean
@@ -3302,7 +3344,8 @@ agent changes, no data writes.
 
 **Explicitly NOT proposed: chaos engineering.** The same course names inadequate monitoring as the
 disqualifying precondition for fault injection, and this estate has telemetry on 1 of 243 gates
-(item I33). It also already gets much of the value by another route: `ops/test-guards.ps1` runs a
-sabotage case per guard, and the 2026-07-23 re-review deliberately reverted a fix to watch the gate
-hard-fail end to end. Reasoning recorded in `reliability-craft/estate-inventory.md` so it is not
+(item I33). It also already does deliberate fault injection one layer down: `grocery/test-guards.ps1` breaks each
+guard invariant on purpose, asserts the gate exits 2, restores and asserts exit 0 again - 16 mutation
+windows with a crash-safe restore. That is the chaos loop against the gate layer, where a steady
+state is observable. Reasoning recorded in `reliability-craft/estate-inventory.md` so it is not
 re-derived as an open gap.

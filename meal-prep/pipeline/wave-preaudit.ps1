@@ -1056,6 +1056,40 @@ if ($runSkipShared) {
     $sharedChecks.Add((New-Check 'p8-feed-liveness' $liveOk ([ordered]@{ url = $cardFeedUrl; feed_recipes = $nRecipes; generated = $gen }) `
       $(if ($liveOk) { ("200 + parseable ({0} recipes, generated {1})" -f $nRecipes, $gen) } else { ("the card price source {0} {1}" -f $cardFeedUrl, $why) })))
   }
+
+  # p9. IS THE RECIPE WE TRANSCRIBED THE RECIPE THE PAGE STATES (2026-09-07, backlog E9)?
+  # recipe-source-qa rules whether the BUILT card matches the TRANSCRIPTION - one link downstream of
+  # where drift happens - so a transcription that quietly normalised, dropped or invented a line
+  # passes every check we run and the card faithfully reproduces the wrong thing. This compares the
+  # transcription against the page's own JSON-LD ingredient list, strictly on numbers and units
+  # (those reprice a card) and loosely on prose (the extractor is not verbatim on purpose).
+  #
+  # PASS ON CANNOT-CHECK, FAIL ON A FINDING, and that diverges from p8 above on purpose. p8 is
+  # false-on-skip because a wave must never ship without knowing the feed is up; a source page that
+  # 403s is not something anybody here can clear, and a wave blocked by somebody else's server is a
+  # gate that gets -SkipLive added to every call within a week. The numbers below always carry the
+  # checked and unreadable counts, so "we could read 3 of 40" can never print as "40 agree".
+  if ($runSkipLive) {
+    $sharedChecks.Add((New-Check 'p9-transcription-fidelity' $true ([ordered]@{ skipped = $true }) '-SkipLive was passed: the source pages were NOT read. This proves nothing about fidelity and must not be read as agreement.'))
+  } else {
+    $tfPy = $null
+    foreach ($cand in @('C:\Codex\Python312\python.exe', 'python3', 'python')) {
+      try { $v = & $cand --version; if ($LASTEXITCODE -eq 0 -and ([string]$v) -match 'Python\s+3') { $tfPy = $cand; break } } catch { }
+    }
+    $tfScript = Join-Path $here 'audit_transcription_fidelity.py'
+    if (-not $tfPy -or -not (Test-Path $tfScript)) {
+      $sharedChecks.Add((New-Check 'p9-transcription-fidelity' $true ([ordered]@{ ran = $false }) 'no Python 3 interpreter or the audit is missing, so the transcriptions were NOT compared to their pages. Not evidence of agreement.'))
+    } else {
+      $tfOut = @(); $tfRc = 3
+      try { $tfOut = @(& $tfPy $tfScript '--run' $RunDir); $tfRc = $LASTEXITCODE } catch { $tfOut = @($_.Exception.Message) }
+      $tfLast = ([string](@($tfOut) | Where-Object { $_ -match 'TRANSCRIPTION-FIDELITY-COMPLETE' } | Select-Object -Last 1))
+      $tfFind = @(@($tfOut) | Where-Object { $_ -match '^\s+(QUANTITY-MOVED|UNIT-MOVED|INVENTED|DROPPED)' })
+      $sharedChecks.Add((New-Check 'p9-transcription-fidelity' ($tfRc -ne 2) ([ordered]@{ rc = $tfRc; findings = $tfFind.Count; marker = $tfLast }) `
+        $(if ($tfRc -eq 2) { ("the transcription disagrees with the page it came from on {0} line(s): {1}" -f $tfFind.Count, (($tfFind | Select-Object -First 4) -join ' | ')) }
+          elseif ($tfRc -eq 0) { ("every readable source page states the lines we transcribed - " + $tfLast) }
+          else { ("could not be checked (rc " + $tfRc + ") - " + $tfLast + ". NOT evidence of agreement.") })))
+    }
+  }
 }
 
 # ---- the PER-SLUG checks ---------------------------------------------------------------------------
