@@ -242,7 +242,7 @@ try {
   # backlog would disappear. Only build a fresh queue when the file genuinely does not exist.
   if (-not $q) {
     if (Test-Path $qFile) { throw ('triage-queue.json exists but read back empty/unparseable - refusing to overwrite ' + @(Get-Content $qFile -Raw -Encoding UTF8).Length + ' bytes') }
-    $q = [pscustomobject]@{ readme = 'Durable ops-alert queue. Written by send-alert.ps1 on EVERY alert (even inbox-suppressed dupes). Drained by the grocery-alert-triage scheduled agent: investigate -> fix -> fix the ROOT cause -> status=resolved + notes. Do not hand-edit except to force a re-triage (set status back to open).'; items = @() }
+    $q = [pscustomobject]@{ readme = 'Durable ops-alert queue. Written by send-alert.ps1 on EVERY alert (even inbox-suppressed dupes). Drained by the grocery-alert-triage scheduled agent: investigate -> fix -> fix the ROOT cause -> CLOSE THROUGH grocery\triage-close.ps1 -Id <id> -Disposition <confirmed|false-alarm|superseded|by-design|wont-fix> -Notes "<what was established>". The disposition is what makes a per-alert LIVE precision computable (backlog E22); a hand-edited status=resolved records that somebody dealt with it and loses whether the alert was right. Do not hand-edit except to force a re-triage (set status back to open).'; items = @() }
   }
   $items = @($q.items)
   $bodyStored = $(if ($Body.Length -gt 1500) { $Body.Substring(0,1500) + ' ...[truncated - full context in ad-cycle-log.txt / the source audit json]' } else { $Body })

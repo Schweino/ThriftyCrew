@@ -397,7 +397,7 @@ Method in `experiment-craft` (`errors-and-inflation.md` 4 and 5, `effect-size-an
 11). Sits directly on top of E19: a scored test set with no threshold for "it moved" answers half
 the question. Cheapest first step is (2), which is a convention rather than code.
 
-### E22 - Rare-target rules are judged on fixtures with a 50% base rate `PARTLY DONE - THE LIVE-PREVALENCE HALF IS OPEN`
+### E22 - Rare-target rules are judged on fixtures with a 50% base rate `DONE - THE LIVE-PREVALENCE HALF SHIPPED 2026-09-07`
 *Source: same course, and it sharpens `green-fixture-is-not-production-coverage` rather than
 repeating it.* **Precision is not a property of a detector; it is a property of a detector and the
 rate at which the thing it detects actually occurs.** A rule with 80% recall and a 13% false-alarm
@@ -426,10 +426,46 @@ detectors on the strength of a general argument is a large diff with no measured
 and several already carry one (`stores=7 shutouts=0`, `scanned=7 unregistered=0`). The convention
 catches the next one and each existing guard can gain it when it is next touched for another reason.
 
-**Still open: the live-prevalence half.** Tracking a confirmed-hit rate on live output, rather than
-the fixture verdict, is a real build - it needs somewhere to record which of a detector's live
-firings turned out to be true - and it has no home yet. It is also the half that would actually
-measure the precision this item says nobody knows.
+~~**Still open: the live-prevalence half.**~~ **SHIPPED 2026-09-07.** It needed somewhere to record
+which of a detector's live firings turned out to be true, and the honest constraint was that a NEW
+ledger nobody fills in is worth nothing.
+
+**It did not need a new ledger.** `grocery/triage-queue.json` already holds every alert raised since
+the 2026-08-22 reset - 127 items, 124 of them closed with `status=resolved` and free-text notes. What
+the notes cannot do is be COUNTED: *"RESOLVED on re-measurement, the signal no longer holds"* and
+*"Rolling condition by design"* are opposite outcomes in identical prose. One closed-vocabulary field
+beside the notes turns the queue that already exists into the precision record that did not.
+
+**The vocabulary, and every word is a decision:**
+
+| | Means | Counts as |
+|---|---|---|
+| `confirmed` | a real defect, found and fixed or found and filed | hit |
+| `false-alarm` | the condition was not there, or was legal | **miss - and this is the one that matters. A detector nobody ever marks `false-alarm` has an UNMEASURED precision, not a good one** |
+| `superseded` | real when raised, fixed by something else before triage arrived | neither |
+| `by-design` | real, recurring and EXPECTED - a rolling worklist, an ad window between cycles. The detector works and the alert is noise, which wants a quieter threshold rather than a fix | neither |
+| `wont-fix` | real, understood, deliberately not fixed | hit - the detector was right |
+
+**Three files.** `grocery/triage-lib.ps1` holds the vocabulary and the pure judgements;
+`grocery/triage-close.ps1` is the only way to close an item, so the disposition is a required
+argument rather than a field somebody remembers; `grocery/audit-alert-precision.ps1` reports per-type
+precision and runs daily from `check-ad-cycles`, alerting rather than blocking.
+
+**It carries E20 and E21 by construction rather than by convention.** The reported line always prints
+its denominator (`85.7% precision over 7 judged closes`, never a bare rate), and no rate is stated at
+all below five judged closes - three closed alerts do not make a 33% precision, they make "too few to
+say", and a number that reads as a measurement and is one coin flip is worse than none because it
+gets quoted.
+
+**Green on day one, deliberately.** The 124 historical closes are exempt: back-filling them would
+mean guessing a disposition from prose, which is the exact judgement this machinery exists to stop
+being guessed. Only closes on or after 2026-09-07 owe one. The first run reports the honest state -
+*"no alert has a judged close yet, so no precision is claimed for any of them"* - rather than a pass
+mark.
+
+**The rubber-stamp guard is the fixture worth keeping.** A close is refused if its notes are under 20
+characters: a disposition with no evidence is a vote, not a finding, and `ok` closing an alert is how
+a queue becomes a formality.
 
 ### E23 - Our test sets are built out of successes `OPEN - EVIDENCE FOUND`
 *Source: same course, section 12, and it is publication bias wearing our clothes.* Fixtures and
@@ -994,7 +1030,7 @@ where a rules-first prompt invents its own first input instead of waiting.
 
 ---
 
-### E29 - `run-log-lib.ps1` calls itself the one copy of the run-record rule, and covers two of five hidden tasks `NEEDS A RULING - THREE OF THE FIVE TASKS ARE REGISTRY-ONLY AND NO DETECTOR CAN READ THEM`
+### E29 - `run-log-lib.ps1` calls itself the one copy of the run-record rule, and covers two of five hidden tasks `DONE - ALL FIVE CONVERGED, AND THE GATE THIS ITEM CALLED IMPOSSIBLE IS BUILT` `2ff1df59`
 *Source: `apply-powershell-scripting-for-automation-and-projects` (course 6), and it is a criticism
 of that course rather than a lesson from it.* The course spends a full lecture arriving at a hidden
 console window for a scheduled PowerShell job and never once mentions what hiding it costs. This
@@ -1123,6 +1159,24 @@ script does not dot-source the library. That was unbuildable while three of the 
 lived only in the registry; committing the definitions is what made it hermetic AND complete. It
 still cannot see a task present in the registry and absent from the repo - `install-grocery-tasks.ps1
 -Verify` is that check, and it stays out of the gate because it reads live scheduler state.
+
+**RULED 2026-09-07 (Brad): converge the two wrappers - and it was ALREADY DONE when the ruling
+landed, in `2ff1df59`. Checked rather than assumed before starting the work.** All five hidden tasks
+now dot-source `run-log-lib`, so the two rules this file states - logging must never kill the run,
+and every `Add-Content`/`Start-Transcript` under `$ErrorActionPreference = Stop` must be guarded -
+are enforced for five tasks rather than hoped for in three.
+
+`graph-nightly-status.json` and `crawl-<date>.log` deliberately SURVIVE the convergence. They persist
+subprocess output captured into a variable, which never reaches a transcript, so they are a different
+artefact rather than a third convention. What those two lanes gained is the run record itself - a
+transcript, and the exit code stamped as the last line. Neither had one, and nightly writes its status
+file at the very end, so a run that died before that left nothing at all, which is indistinguishable
+from a run that never started.
+
+**The half this item called impossible is built.** A static detector could not read three of the five
+registrations because they lived only in the Windows registry; committing `ops/scheduled-tasks/*.xml`
+gave it something to read, and `ops/audit-run-log-claims.ps1` now fails a hidden task whose target
+script does not dot-source the library. It passes at 5 tasks, 0 without a run log.
 
 **One detector defect found by the fix itself.** The ONE-copy check greped the whole header, so it
 fired on the CORRECTED header - which quotes the old false claim in order to explain what changed. A

@@ -752,6 +752,26 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         }
       } catch { Log ('recost-freshness threw: ' + $_.Exception.Message) }
+      # WHAT DID YESTERDAY'S ALERTS TURN OUT TO MEAN (2026-09-07, backlog E22's open half)? Every
+      # -SelfTest in this estate drives a must-fire fixture and its twin, which is a 50% base rate by
+      # construction: it measures recall honestly and overstates precision enormously. So a fixture
+      # verdict cannot say whether an alert is worth reading. Only its live firings can, and nothing
+      # recorded what a firing MEANT until grocery\triage-close.ps1 - "RESOLVED on re-measurement" and
+      # "Rolling condition by design" are opposite outcomes in identical prose.
+      #
+      # REPORTS AND ALERTS, NEVER BLOCKS, exactly like the freshness check above: an unjudged close is
+      # a gap in the record, and withholding a correct board over it helps nobody.
+      try {
+        $apa = Join-Path $root 'audit-alert-precision.ps1'
+        if (Test-Path $apa) {
+          $apOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $apa
+          $apRc = $LASTEXITCODE
+          foreach ($l in @($apOut)) { Log ('alert-precision: ' + [string]$l) }
+          if ($apRc -eq 2) {
+            try { Send-Alert -Subject "Alerts closed without saying what they meant - $asofS" -Body (@($apOut) -join "`n") | Out-Null } catch {}
+          }
+        }
+      } catch { Log ('alert-precision threw: ' + $_.Exception.Message) }
       # EXPORT THE FEED BEFORE ANYTHING RESOLVES IT (2026-08-22). compute-v2-perserving.ps1 is invoked with
       # -FeedPath out\smp-feed.json and export-feed.ps1 is what WRITES that file - and until today it wrote
       # it ~270 lines LATER in this same run. So compute-v2 resolved YESTERDAY's feed every single day and
