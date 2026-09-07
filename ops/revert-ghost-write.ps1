@@ -128,7 +128,7 @@ if ($SelfTest) {
   T 'MUST FIRE  PUT is journalled'    (Test-TcMutatingMethod 'PUT')    'not mutating'
   T 'MUST FIRE  DELETE is journalled' (Test-TcMutatingMethod 'DELETE') 'not mutating'
   T 'MUST FIRE  a lower-case verb is journalled' (Test-TcMutatingMethod 'put') 'case-sensitive gate misses a write'
-  T 'CLEAN TWIN a GET needs no before-image' (-not (Test-TcMutatingMethod 'GET')) 'a read was journalled'
+  T 'MUST NOT FIRE a GET needs no before-image' (-not (Test-TcMutatingMethod 'GET')) 'a read was journalled'
 
   $saved = $env:TC_WRITE_JOURNAL
   $env:TC_WRITE_JOURNAL = $null

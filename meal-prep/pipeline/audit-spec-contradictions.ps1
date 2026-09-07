@@ -264,8 +264,8 @@ if ($SelfTest) {
   }
   $r2 = @(Get-SpecContradictions $good $vocabFx)
   $hard2 = @($r2 | Where-Object { $_.cls -ne 'UNUSED' })
-  Chk 'CLEAN TWIN a self-consistent spec produces no findings' ($hard2.Count -eq 0) (($hard2 | ForEach-Object { $_.cls + ': ' + $_.why }) -join ' | ')
-  Chk 'CLEAN TWIN a comparison price ($14 a restaurant charges) is not stale money' (@($r2 | Where-Object { $_.why -match '14' }).Count -eq 0) (($r2 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE a self-consistent spec produces no findings' ($hard2.Count -eq 0) (($hard2 | ForEach-Object { $_.cls + ': ' + $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE a comparison price ($14 a restaurant charges) is not stale money' (@($r2 | Where-Object { $_.why -match '14' }).Count -eq 0) (($r2 | ForEach-Object { $_.why }) -join ' | ')
 
   # ---- UNUSED: the head-noun bug, and the over-forgiving trap that replaces it if you are careless ----
   # Both halves are real catalog shapes. The first two are what made this class 150 findings of noise;
@@ -286,11 +286,11 @@ if ($SelfTest) {
   }
   $r2b = @(Get-SpecContradictions $unusedFx $null)
   $un = @($r2b | Where-Object { $_.cls -eq 'UNUSED' } | ForEach-Object { $_.why })
-  Chk 'CLEAN TWIN "stir in the parmesan" uses Parmesan Cheese (head noun said cheese)' (@($un | Where-Object { $_ -match 'parmesan' }).Count -eq 0) ($un -join ' | ')
-  Chk 'CLEAN TWIN "cube the chicken" uses Chicken Breast (head noun said breast)'      (@($un | Where-Object { $_ -match 'chicken breast' }).Count -eq 0) ($un -join ' | ')
+  Chk 'MUST NOT FIRE "stir in the parmesan" uses Parmesan Cheese (head noun said cheese)' (@($un | Where-Object { $_ -match 'parmesan' }).Count -eq 0) ($un -join ' | ')
+  Chk 'MUST NOT FIRE "cube the chicken" uses Chicken Breast (head noun said breast)'   (@($un | Where-Object { $_ -match 'chicken breast' }).Count -eq 0) ($un -join ' | ')
   Chk 'MUST FIRE  UNUSED     rice vinegar is bought and only "rice" is cooked'         (@($un | Where-Object { $_ -match 'rice vinegar' }).Count -eq 1) ($un -join ' | ')
   Chk 'MUST FIRE  UNUSED     sesame oil is bought and never named at all'              (@($un | Where-Object { $_ -match 'sesame oil' }).Count -eq 1) ($un -join ' | ')
-  Chk 'CLEAN TWIN plain Rice itself is not reported - the step cooks it'               (@($un | Where-Object { $_ -match "^'rice'" }).Count -eq 0) ($un -join ' | ')
+  Chk 'MUST NOT FIRE plain Rice itself is not reported - the step cooks it'            (@($un | Where-Object { $_ -match "^'rice'" }).Count -eq 0) ($un -join ' | ')
 
   # ---- singular/plural, added 2026-08-16 after a live recipe read as never using its tomatoes ----
   $pluralFx = [pscustomobject]@{
@@ -452,7 +452,7 @@ if ($SelfTest) {
     make_it = @('Pour in the marinara sauce and simmer 5 minutes so the turkey soaks up the tomato flavor.')
   }
   $ph5 = @(Get-SpecContradictions $phantomConstituent $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
-  Chk 'CLEAN TWIN "tomato flavor" is covered by the bought MARINARA (constituent rule)' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE "tomato flavor" is covered by the bought MARINARA (constituent rule)' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
   $phantomNoTomato = [pscustomobject]@{
     stat = [pscustomobject]@{ cal = 590; protein = 45; cost_ps = '2.61' }
     ingredients_display = @('<strong>Ziti Pasta:</strong> 2 lb (908 g)', '<strong>Alfredo Sauce:</strong> 2 jars (1320 g)')
@@ -532,7 +532,7 @@ if ($SelfTest) {
       'Splash in the rice vinegar at the end.')                          # an unknown compound is not its head word
   }
   $ph5 = @(Get-SpecContradictions $noise $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
-  Chk 'CLEAN TWIN the eight live false-positive shapes all stay silent' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE the eight live false-positive shapes all stay silent' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
 
   # ---- PHANTOM composite-rider (2026-08-24): a food named only in a buy string AFTER the colon IS bought --
   # FROZEN FIXTURE - slow-cooker-pork-loin-roast-or-pork-shoulder and stuffed-chicken-breast reached the gate
@@ -557,8 +557,8 @@ if ($SelfTest) {
       'Then pour the zero-sugar soda over the pork until it is halfway up the sides.')
   }
   $rider = @(Get-SpecContradictions $phantomRider $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
-  Chk 'CLEAN TWIN composite rider "dried thyme" (rides the paprika buy line) is not a phantom' (@($rider | Where-Object { $_.why -match 'Dried Thyme' }).Count -eq 0) (($rider | ForEach-Object { $_.why }) -join ' | ')
-  Chk 'CLEAN TWIN composite rider "onion powder" (rides the garlic-powder buy line) is not a phantom' (@($rider | Where-Object { $_.why -match 'Onion Powder' }).Count -eq 0) (($rider | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE composite rider "dried thyme" (rides the paprika buy line) is not a phantom' (@($rider | Where-Object { $_.why -match 'Dried Thyme' }).Count -eq 0) (($rider | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE composite rider "onion powder" (rides the garlic-powder buy line) is not a phantom' (@($rider | Where-Object { $_.why -match 'Onion Powder' }).Count -eq 0) (($rider | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  PHANTOM     a zero-sugar soda in the SAME spec (no line, no buy string) still fires' (@($rider | Where-Object { $_.why -match 'Zero-Sugar Soda' }).Count -eq 1) (($rider | ForEach-Object { $_.why }) -join ' | ')
 
   # ---- BUY-COVERAGE -------------------------------------------------------------------------------
@@ -589,7 +589,7 @@ if ($SelfTest) {
   $bc1 = @(Get-BuyCoverageFindings $buyBad $pkgFx)
   Chk 'MUST FIRE  BUY-COVERAGE raisin box: 1.88 batches is not "several"' (@($bc1 | Where-Object { $_.why -match 'Golden Raisins' }).Count -eq 1) (($bc1 | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  BUY-COVERAGE broth carton: 1.70 batches is not "several"' (@($bc1 | Where-Object { $_.why -match 'Chicken Broth' }).Count -eq 1) (($bc1 | ForEach-Object { $_.why }) -join ' | ')
-  Chk 'CLEAN TWIN a 14.8-batch soy bottle in the SAME spec stays silent' (@($bc1 | Where-Object { $_.why -match 'Soy Sauce' }).Count -eq 0) (($bc1 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE a 14.8-batch soy bottle in the SAME spec stays silent' (@($bc1 | Where-Object { $_.why -match 'Soy Sauce' }).Count -eq 0) (($bc1 | ForEach-Object { $_.why }) -join ' | ')
 
   # MUST FIRE - green-chile-ground-turkey-skillet: the line states 3.5 cans and instructs Buy 1. This is
   # the shape that is a wrong INSTRUCTION rather than wrong wording, so it must be reported even though
@@ -616,14 +616,14 @@ if ($SelfTest) {
       'Soy Sauce, 2 tbsp: ~$0.18. <strong>Buy 1 (lasts several batches).</strong>')
   }
   $bc3 = @(Get-BuyCoverageFindings $buyGood $pkgFx)
-  Chk 'CLEAN TWIN the repaired spec is silent on every line' ($bc3.Count -eq 0) (($bc3 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE the repaired spec is silent on every line' ($bc3.Count -eq 0) (($bc3 | ForEach-Object { $_.why }) -join ' | ')
 
   # CLEAN TWIN - no package map (repair-spec-contradictions reads one spec in isolation). The class must
   # skip, not guess, exactly as PHANTOM does without a vocabulary.
   $bc4 = @(Get-BuyCoverageFindings $buyBad $null)
-  Chk 'CLEAN TWIN no package map - the class skips rather than guesses' ($bc4.Count -eq 0) (($bc4 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE no package map - the class skips rather than guesses' ($bc4.Count -eq 0) (($bc4 | ForEach-Object { $_.why }) -join ' | ')
   $bc5 = @(Get-SpecContradictions $buyBad $vocabFx | Where-Object { $_.cls -eq 'BUY-COVERAGE' })
-  Chk 'CLEAN TWIN a 2-arg caller gets no BUY-COVERAGE findings' ($bc5.Count -eq 0) (($bc5 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST NOT FIRE a 2-arg caller gets no BUY-COVERAGE findings' ($bc5.Count -eq 0) (($bc5 | ForEach-Object { $_.why }) -join ' | ')
 
   # ---- THE ARGUMENT SINK (2026-09-02) --------------------------------------------------------------
   # These two cases drive THIS FILE as a subprocess, because the defect lives in parameter BINDING and

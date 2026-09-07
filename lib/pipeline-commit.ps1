@@ -172,7 +172,7 @@ if ($__pcSelfTest) {
   $fail = 0
   function T($n, $c, $g = '') { if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
 
-  T 'CLEAN TWIN a data path list is accepted' ((Assert-NoSourcePaths @('grocery/out', 'meal-prep/db/costed.json')).Count -eq 0)
+  T 'MUST NOT FIRE a data path list is accepted' ((Assert-NoSourcePaths @('grocery/out', 'meal-prep/db/costed.json')).Count -eq 0)
 
   # THE FOUNDING CASE, 2026-09-05: 192 .ps1 files on main, mid-edit.
   T 'MUST FIRE  a .ps1 path is refused' ((Assert-NoSourcePaths @('grocery/out', 'grocery/capture-run.ps1')).Count -eq 1)

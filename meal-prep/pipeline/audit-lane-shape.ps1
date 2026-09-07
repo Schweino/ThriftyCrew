@@ -309,13 +309,13 @@ if ($runSelfTest) {
   # terms arrive; that is the design, not a defect. Full batches never fire however many there are.
   $honest = @((Inv 'b1' @(1..10 | ForEach-Object { "t$_" })), (Inv 'b2' @(11..20 | ForEach-Object { "t$_" })),
               (Inv 'b3' @(21..30 | ForEach-Object { "t$_" })), (Inv 'b4' @(31..40 | ForEach-Object { "t$_" })))
-  T 'CLEAN TWIN four FULL 10-term batches never fire, however many rounds' (-not (Get-BatchShape $honest 10).fires) 'fired on a correct drainer'
+  T 'MUST NOT FIRE four FULL 10-term batches never fire, however many rounds' (-not (Get-BatchShape $honest 10).fires) 'fired on a correct drainer'
   $halfish = @((Inv 'b1' @('a', 'b', 'c', 'd', 'e')), (Inv 'b2' @('f', 'g', 'h', 'i', 'j')),
                (Inv 'b3' @('k', 'l', 'm', 'n', 'o')), (Inv 'b4' @('p', 'q', 'r', 's', 't')))
-  T 'CLEAN TWIN half-full batches as terms trickle in do not fire either' (-not (Get-BatchShape $halfish 10).fires) 'fired on a trickling drainer'
+  T 'MUST NOT FIRE half-full batches as terms trickle in do not fire either' (-not (Get-BatchShape $halfish 10).fires) 'fired on a trickling drainer'
   T 'CLEAN TWIN two invocations for two terms is stream timing, not a shape defect' `
     (-not (Get-BatchShape @((Inv 'b1' @('a')), (Inv 'b2' @('b'))) 10).fires) 'fired on small-n noise'
-  T 'CLEAN TWIN a run that never priced is not a finding' (-not (Get-BatchShape @() 10).fires) 'fired on an empty lane'
+  T 'MUST NOT FIRE a run that never priced is not a finding' (-not (Get-BatchShape @() 10).fires) 'fired on an empty lane'
 
   # ---- FIXTURE 3. LOST CROSS-RECIPE DEDUP. The queue is keyed by TERM precisely so a shared ingredient is
   # priced once. Per-recipe driving prices it once per recipe, and that is visible without any threshold.
@@ -461,7 +461,7 @@ if ($runSelfTest) {
   T '   and ceil(9/5) = 2 micro-batches would have done it' ($m1.floor -eq 2) $m1.floor
   $mapBatched = @((MInv 'micro-batch 1' @('slug-1', 'slug-2', 'slug-3', 'slug-4', 'slug-5')),
                   (MInv 'micro-batch 2' @('slug-6', 'slug-7', 'slug-8', 'slug-9')))
-  T 'CLEAN TWIN two micro-batches of 5 and 4 are clean' (-not (Get-BatchShape $mapBatched 5).fires) 'fired on correct micro-batching'
+  T 'MUST NOT FIRE two micro-batches of 5 and 4 are clean' (-not (Get-BatchShape $mapBatched 5).fires) 'fired on correct micro-batching'
 
   # ---- FIXTURE 6. VOCABULARY DRIFT. hunt-run refuses an unknown lane on the write side; if the two lists
   # ever part company, an unjudged lane must be a FINDING here and not a silent skip. An unwatched lane is

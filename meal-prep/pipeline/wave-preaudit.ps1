@@ -460,7 +460,7 @@ if ($runSelfTest) {
   $dBad = Test-MacroDrift $rc $statBad $script:MACRO_CAL_TOL $script:MACRO_GRAM_TOL
   T 'MUST FIRE  a stat calorie figure 80 over its own recompute is caught' ($dBad.Count -ge 1) ($dBad -join ' | ')
   $dGood = Test-MacroDrift $rc $statGood $script:MACRO_CAL_TOL $script:MACRO_GRAM_TOL
-  T 'CLEAN TWIN a 1-cal rounding seam is inside tolerance and stays quiet' ($dGood.Count -eq 0) ($dGood -join ' | ')
+  T 'MUST NOT FIRE a 1-cal rounding seam is inside tolerance and stays quiet' ($dGood.Count -eq 0) ($dGood -join ' | ')
   # the gram macros were NOT checked before v3; the wave-2 report recomputed all four and this is why
   $statCarb = [pscustomobject]@{ cal = 441; protein = 22; carbs = 90; fat = 22 }
   $dCarb = Test-MacroDrift $rc $statCarb $script:MACRO_CAL_TOL $script:MACRO_GRAM_TOL
@@ -480,7 +480,7 @@ if ($runSelfTest) {
   }
   $good = NewRow 24.25 31.56 1.73 2.25 5.67 37.23 0 @(17.31, 5.47, 1.47)
   $pGood = Test-CostEngineConsistency $good 14 $script:CENT
-  T 'CLEAN TWIN a coherent engine row reports nothing' ($pGood.Count -eq 0) ($pGood -join ' | ')
+  T 'MUST NOT FIRE a coherent engine row reports nothing' ($pGood.Count -eq 0) ($pGood -join ' | ')
   # THE FOUNDING CASE, frozen from 2026-08-16: sheet-pan-smoked-sausage-broccoli-cheddar published at
   # $2.12 for the batch and $0.15 a serving with 3 lb of andouille in it, because the cost engine dropped
   # two lines. Every "could it be priced" gate passed; only the arithmetic was absurd.
@@ -525,7 +525,7 @@ if ($runSelfTest) {
   $specGood = [pscustomobject]@{ cost_batch = 24.25; cost_batch_true = 31.56; cost_per_serving = 1.73
     cost_per_serving_true = 2.25; cost_pantry_add = 5.67; cost_first_run = 37.23 }
   $pFresh = Test-CostSpecVsEngine $specGood $good $script:CENT
-  T 'CLEAN TWIN a spec printing the engine''s own numbers reconciles' ($pFresh.Count -eq 0) ($pFresh -join ' | ')
+  T 'MUST NOT FIRE a spec printing the engine''s own numbers reconciles' ($pFresh.Count -eq 0) ($pFresh -join ' | ')
   $specStale = [pscustomobject]@{ cost_batch = 19.32; cost_batch_true = 23.51; cost_per_serving = 1.38
     cost_per_serving_true = 1.68; cost_pantry_add = 5.67; cost_first_run = 24.83 }
   $pStale = Test-CostSpecVsEngine $specStale $good $script:CENT
@@ -616,7 +616,7 @@ if ($runSelfTest) {
   $dTwo = Get-DashHits ([pscustomobject]@{ a = ('x' + [char]0x2014 + 'y'); b = ('p' + [char]0x2014 + 'q') })
   T 'MUST FIRE  two dashes count as TWO, not as one joined blob' ($dTwo.Count -eq 2) ('count=' + $dTwo.Count)
   $dNone = Get-DashHits ([pscustomobject]@{ prose = 'a low-carb, high-protein dinner' })
-  T 'CLEAN TWIN ordinary prose with hyphens is silent, and counts ZERO' ($dNone.Count -eq 0) ('count=' + $dNone.Count)
+  T 'MUST NOT FIRE ordinary prose with hyphens is silent, and counts ZERO' ($dNone.Count -eq 0) ('count=' + $dNone.Count)
 
   # THE BAN LIST IS NOT SPEC TEXT (wave 1 of hunt-2026-08-27-highprotein). `forbidden_prose_terms` is
   # the intake's list of characters the writer may NOT use, and an em dash is its first entry; sweeping
@@ -629,9 +629,9 @@ if ($runSelfTest) {
   # pass with the skip torn out. The intake's terms are strings; the fixture has to be one too.
   $emc = [string][char]0x2014
   $dBan = Get-DashHits ([pscustomobject]@{ forbidden_prose_terms = @($emc, 'delicious'); prose = 'clean prose' })
-  T 'CLEAN TWIN the ban list naming the em dash is NOT swept as spec text' ($dBan.Count -eq 0) ('count=' + $dBan.Count + ' ' + ($dBan -join ' | '))
+  T 'MUST NOT FIRE the ban list naming the em dash is NOT swept as spec text' ($dBan.Count -eq 0) ('count=' + $dBan.Count + ' ' + ($dBan -join ' | '))
   $dBanHash = Get-DashHits (@{ forbidden_prose_terms = @($emc); prose = 'clean prose' })
-  T 'CLEAN TWIN the skip holds on a hashtable spec too, not just a psobject' ($dBanHash.Count -eq 0) ('count=' + $dBanHash.Count)
+  T 'MUST NOT FIRE the skip holds on a hashtable spec too, not just a psobject' ($dBanHash.Count -eq 0) ('count=' + $dBanHash.Count)
   # and the half that proves the skip is a SKIP and not an off switch:
   $dBanReal = Get-DashHits ([pscustomobject]@{ forbidden_prose_terms = @($emc); prose = ('a real' + $emc + 'dash a reader would see') })
   T 'MUST FIRE  a real dash in prose still fires in a spec that ALSO carries the ban list' `
@@ -644,7 +644,7 @@ if ($runSelfTest) {
   $refCard = '<div class="smp-ing" id="smp-ing"></div><div class="smp-cost" id="smp-cost"></div>' +
              '<div class="smp-credit"></div><ol><li id="step1">a</li><li id="step2">b</li></ol>'
   $gSame = Get-CardStructuralGaps $refCard $refCard 2
-  T 'CLEAN TWIN an identical rebuild has no structural gap' ($gSame.Count -eq 0) ($gSame -join ' | ')
+  T 'MUST NOT FIRE an identical rebuild has no structural gap' ($gSame.Count -eq 0) ($gSame -join ' | ')
   # THE FOUNDING CASE: the wave-2 auditor byte-compared four rebuilt cards against the live al-pastor card
   # precisely to catch a renderer that quietly stopped emitting a section.
   $mutated = $refCard -replace '<div class="smp-credit"></div>', ''

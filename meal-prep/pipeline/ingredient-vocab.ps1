@@ -213,7 +213,7 @@ if ($runSelfTest) {
   T 'an exact name resolves' ((Test-Resolves 'Dried Parsley' $fake) -ne $null) 'did not resolve'
   T 'MUST FIRE  an alias resolves to its row' ((Test-Resolves 'Boneless Skinless Chicken Breast' $fake).item -eq 'Chicken Breast') 'alias ignored'
   T 'MUST FIRE  an unknown name does NOT resolve' ($null -eq (Test-Resolves 'Cream Cheese' $fake)) 'falsely resolved'
-  T 'CLEAN TWIN a totally unrelated name yields no candidates at all' ((@(Get-Candidates 'Saffron' $fake 5)).Count -eq 0) 'invented a match'
+  T 'MUST NOT FIRE a totally unrelated name yields no candidates at all' ((@(Get-Candidates 'Saffron' $fake 5)).Count -eq 0) 'invented a match'
 
   # head-noun discipline - the fix for a worklist full of noise, found on the first real run
   $fake2 = @(

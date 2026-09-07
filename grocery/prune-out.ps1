@@ -76,7 +76,7 @@ if ($SelfTest) {
   $files = @((Fx 'comparison-2026-08-07.json'), (Fx 'comparison-2026-07-01.json'), (Fx 'comparison-2026-05-01.json'), (Fx 'comparison-undated.json'))
   $p = @(Get-PruneList $files $today 45 1)
   T 'MUST FIRE  a generation past the window is pruned (05-01 at 45d)' ($p.Count -eq 1 -and $p[0].Name -eq 'comparison-2026-05-01.json') (@($p | ForEach-Object { $_.Name }) -join ',')
-  T 'CLEAN TWIN inside-window generations survive'                     (@(Get-PruneList $files $today 45 1 | Where-Object { $_.Name -eq 'comparison-2026-07-01.json' }).Count -eq 0) 'pruned in-window'
+  T 'MUST NOT FIRE inside-window generations survive'                  (@(Get-PruneList $files $today 45 1 | Where-Object { $_.Name -eq 'comparison-2026-07-01.json' }).Count -eq 0) 'pruned in-window'
   T 'an UNDATED file in a dated family is never touched'               (@(Get-PruneList $files $today 0 0 | Where-Object { $_.Name -eq 'comparison-undated.json' }).Count -eq 0) 'guessed at undated'
   # the erosion case: a family nobody writes anymore keeps its newest N forever
   $old = @((Fx 'x-2026-01-03.json'), (Fx 'x-2026-01-02.json'), (Fx 'x-2026-01-01.json'))

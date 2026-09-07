@@ -89,7 +89,7 @@ if ($SelfTest) {
     [pscustomobject]@{ item = 'Black Pepper'; grams = 7;  buy = '1 tbsp' }) } }
   $e = @(Get-ToTasteEdits -Slug 'peruvian-pollo-saltado' -Spec $fx)
   Chk 'MUST FIRE  the 1 g placeholder salt becomes "to taste"' ($e.Count -eq 1 -and $e[0].Item -eq 'Salt' -and $e[0].New -eq 'to taste') (($e | ForEach-Object { $_.Item + '->' + $_.New }) -join ' | ')
-  Chk 'CLEAN TWIN a measurable pepper on the same spec is untouched' (@($e | Where-Object { $_.Item -eq 'Black Pepper' }).Count -eq 0) (($e | ForEach-Object { $_.Item }) -join ' | ')
+  Chk 'MUST NOT FIRE a measurable pepper on the same spec is untouched' (@($e | Where-Object { $_.Item -eq 'Black Pepper' }).Count -eq 0) (($e | ForEach-Object { $_.Item }) -join ' | ')
   # THE SCOPE FLOOR. A slug that is not in the ruling table gets nothing, however similar it looks -
   # this repair is a list of adjudicated rows, not a shape matcher.
   $e2 = @(Get-ToTasteEdits -Slug 'some-other-recipe' -Spec $fx)

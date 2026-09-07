@@ -91,7 +91,7 @@ if ($SelfTest) {
   }
   $thinRes = Get-ThinBids -FeedIngredients $ING -BidRecipes @{ 'one-store' = @('a', 'b'); 'two-store' = @('c') }
   T 'a one-store bid in use is thin' (@($thinRes | Where-Object { $_.bid -eq 'one-store' }).Count -eq 1) 'missed'
-  T 'CLEAN TWIN  a two-store bid is not thin' (@($thinRes | Where-Object { $_.bid -eq 'two-store' }).Count -eq 0) 'false positive'
+  T 'MUST NOT FIRE  a two-store bid is not thin' (@($thinRes | Where-Object { $_.bid -eq 'two-store' }).Count -eq 0) 'false positive'
   T 'a one-store bid NO recipe uses is not reported' (@($thinRes | Where-Object { $_.bid -eq 'unused-one' }).Count -eq 0) 'noise'
   T 'thin bids carry what they would take down' ((@($thinRes | Where-Object { $_.bid -eq 'one-store' })[0].recipes).Count -eq 2) 'lost the blast radius'
 

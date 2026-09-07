@@ -72,14 +72,14 @@ if ($SelfTest) {
   BsT 'MUST FIRE: a .ps1 staged alongside data is named as out of scope (this is 3c44d0c1)' `
       (($u.Count -eq 1) -and ($u[0] -eq 'grocery/push-data.ps1'))
   $u = Get-UnownedStagedPaths -Staged @('grocery/out/regular/2026-09-05.json', 'grocery/carriage.json', 'public/board.json')
-  BsT 'CLEAN TWIN: a commit of nothing but owned paths is silent' ($u.Count -eq 0)
+  BsT 'MUST NOT FIRE: a commit of nothing but owned paths is silent' ($u.Count -eq 0)
   $u = Get-UnownedStagedPaths -Staged @('design/PLAN-x.md', 'meal-prep/pipeline/harvest-crawl.ps1', 'graph/identity/table.json')
   BsT 'MUST FIRE: every out-of-scope path is named, not just the first' `
       (($u.Count -eq 2) -and ($u -contains 'design/PLAN-x.md') -and ($u -contains 'meal-prep/pipeline/harvest-crawl.ps1'))
   $u = Get-UnownedStagedPaths -Staged @('grocery\out\regular\x.json')
-  BsT 'CLEAN TWIN: a Windows-slashed staged path is the same path' ($u.Count -eq 0)
+  BsT 'MUST NOT FIRE: a Windows-slashed staged path is the same path' ($u.Count -eq 0)
   $u = Get-UnownedStagedPaths -Staged @()
-  BsT 'CLEAN TWIN: an empty staged set has nothing out of scope' ($u.Count -eq 0)
+  BsT 'MUST NOT FIRE: an empty staged set has nothing out of scope' ($u.Count -eq 0)
 
   if ($fail) { Write-Output "BOT-COMMIT-SCOPE SELF-TEST FAILED ($fail)"; exit 2 }
   Write-Output 'BOT-COMMIT-SCOPE SELF-TEST PASSED (bot recognised two ways, sessions untouched, every stray path named)'

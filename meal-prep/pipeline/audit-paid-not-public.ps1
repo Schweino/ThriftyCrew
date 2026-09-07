@@ -98,8 +98,8 @@ if ($SelfTest) {
     ($f.Count -eq 1 -and $f[0].verdict -eq 'BADGE-SKEW') (($f | ForEach-Object { $_.verdict }) -join ',')
 
   # CLEAN TWINS. Agreement in either direction is silence.
-  T 'CLEAN TWIN paid and paid is silent'     ((@(Get-VisibilityFindings @{ 'a' = 'paid' }   @{ 'a' = 'paid' })).Count -eq 0)   'spurious'
-  T 'CLEAN TWIN public and public is silent' ((@(Get-VisibilityFindings @{ 'b' = 'public' } @{ 'b' = 'public' })).Count -eq 0) 'spurious'
+  T 'MUST NOT FIRE paid and paid is silent'  ((@(Get-VisibilityFindings @{ 'a' = 'paid' }   @{ 'a' = 'paid' })).Count -eq 0)   'spurious'
+  T 'MUST NOT FIRE public and public is silent' ((@(Get-VisibilityFindings @{ 'b' = 'public' } @{ 'b' = 'public' })).Count -eq 0) 'spurious'
 
   # MEMBERS IS NOT A LEAK. Ghost has three visibilities and only one of them gives the content away;
   # calling 'members' a leak would fill the report with posts that are correctly gated.

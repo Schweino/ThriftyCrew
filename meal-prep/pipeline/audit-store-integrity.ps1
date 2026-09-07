@@ -170,18 +170,18 @@ if($SelfTest){
   # CLEAN TWIN: the japchae display override, which is the reason the WARN tier exists at all.
   T 'CLEAN TWIN a PAIRED rename (Rice Noodles <-> Korean glass noodles) stays a WARN' `
     (Test-SplitPaired 1 1) 'promoted a legitimate display override to HARD'
-  T 'CLEAN TWIN no split at all is not paired'                                          (-not (Test-SplitPaired 0 0)) 'spurious'
+  T 'MUST NOT FIRE no split at all is not paired'                                       (-not (Test-SplitPaired 0 0)) 'spurious'
   T 'MUST FIRE  an uncounted-but-costed ingredient (scaler surplus) is also unpaired'    (-not (Test-SplitPaired 0 1)) 'missed'
   # FROZEN FIXTURES - each is a real defect this estate actually shipped, with the twin that must stay quiet.
   T 'MUST FIRE  macros but no price row (the 6 items that dropped out of recipe cost)' ((Test-MissingSide -Item 'Rotisserie Chicken' -InPrice $false -InMacro $true).Count -eq 1) 'no finding'
   T 'MUST FIRE  price row but no macros (the spinach that made build-v2-spec throw)'   ((Test-MissingSide -Item 'Spinach' -InPrice $true -InMacro $false).Count -eq 1) 'no finding'
   T 'MUST FIRE  neither side (the 19 unmapped names)'                                  ((Test-MissingSide -Item 'Panko Breadcrumbs' -InPrice $false -InMacro $false).Count -eq 2) 'wrong count'
-  T 'CLEAN TWIN an item present on both sides'                                         ((Test-MissingSide -Item 'Rice' -InPrice $true -InMacro $true).Count -eq 0) 'spurious finding'
+  T 'MUST NOT FIRE an item present on both sides'                                      ((Test-MissingSide -Item 'Rice' -InPrice $true -InMacro $true).Count -eq 0) 'spurious finding'
   T 'MUST FIRE  a spec naming one thing to cost and another to count macros'           (Test-NameSplit 'Green Olives' 'Olives') 'no finding'
-  T 'CLEAN TWIN both arrays naming the same item'                                      (-not (Test-NameSplit 'Rice' 'Rice')) 'spurious finding'
+  T 'MUST NOT FIRE both arrays naming the same item'                                   (-not (Test-NameSplit 'Rice' 'Rice')) 'spurious finding'
   T 'MUST FIRE  Rice at 185 g/cup in densities against 200 in the food DB'             (Test-BaseDrift 185 200) 'no finding'
-  T 'CLEAN TWIN a base inside rounding (203 vs 200)'                                   (-not (Test-BaseDrift 203 200)) 'spurious finding'
-  T 'CLEAN TWIN a missing base is not drift'                                           (-not (Test-BaseDrift 0 200)) 'spurious finding'
+  T 'MUST NOT FIRE a base inside rounding (203 vs 200)'                                (-not (Test-BaseDrift 203 200)) 'spurious finding'
+  T 'MUST NOT FIRE a missing base is not drift'                                        (-not (Test-BaseDrift 0 200)) 'spurious finding'
 
   # ---- THE LABEL FRACTION (2026-08-29) -------------------------------------------------------------
   # A CASE WAS REVERSED HERE, deliberately, and this is the reasoning so nobody re-flips it by feel.

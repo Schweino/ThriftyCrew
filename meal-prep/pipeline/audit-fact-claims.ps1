@@ -139,11 +139,11 @@ if ($SelfTest) {
 
   # --- CLEAN TWINS. These keep the detector usable; without them it fires on every card.
   $c1 = Get-TcRiskAssertions -Prose 'Makes 14 servings at 42 grams of protein each. Serve with rice.'
-  T 'CLEAN TWIN pipeline numbers are not claims' (@($c1).Count -eq 0) (($c1 | ForEach-Object { $_.Sentence }) -join ' | ')
+  T 'MUST NOT FIRE pipeline numbers are not claims' (@($c1).Count -eq 0) (($c1 | ForEach-Object { $_.Sentence }) -join ' | ')
   $c2 = Get-TcRiskAssertions -Prose 'We priced this at Aldi this week.'
-  T 'CLEAN TWIN naming a store without an availability assertion is not a carriage claim' (@($c2).Count -eq 0) (($c2 | ForEach-Object { $_.Sentence }) -join ' | ')
+  T 'MUST NOT FIRE naming a store without an availability assertion is not a carriage claim' (@($c2).Count -eq 0) (($c2 | ForEach-Object { $_.Sentence }) -join ' | ')
   $c3 = Get-TcRiskAssertions -Prose 'Let it cool before you portion it.'
-  T 'CLEAN TWIN a storage verb with NO duration is not a claim' (@($c3).Count -eq 0) (($c3 | ForEach-Object { $_.Sentence }) -join ' | ')
+  T 'MUST NOT FIRE a storage verb with NO duration is not a claim' (@($c3).Count -eq 0) (($c3 | ForEach-Object { $_.Sentence }) -join ' | ')
 
   # --- the echo test
   T 'a claim whose words are in the prose is echoed' `
@@ -153,7 +153,7 @@ if ($SelfTest) {
 
   # --- BOTH DIRECTIONS OF THE DIFF, which is the pattern
   $p1 = Get-TcSpecFactProblems -Slug 'zz' -Prose 'It keeps 5 days in the fridge.' -Claims @('it keeps 5 days in the fridge')
-  T 'CLEAN TWIN a declared claim that the prose makes raises nothing' (@($p1).Count -eq 0) (($p1 | ForEach-Object { $_.Kind }) -join ',')
+  T 'MUST NOT FIRE a declared claim that the prose makes raises nothing' (@($p1).Count -eq 0) (($p1 | ForEach-Object { $_.Kind }) -join ',')
 
   $p2 = Get-TcSpecFactProblems -Slug 'zz' -Prose 'It keeps 5 days in the fridge.' -Claims @()
   T 'MUST FIRE  INVERSE - a risk assertion the writer did NOT declare is the finding this audit exists for' `
@@ -164,7 +164,7 @@ if ($SelfTest) {
     (@($p3).Count -eq 1 -and $p3[0].Kind -eq 'declared-not-said') (($p3 | ForEach-Object { $_.Kind }) -join ',')
 
   $p4 = Get-TcSpecFactProblems -Slug 'zz' -Prose 'Serve with rice. Makes 14 servings.' -Claims @()
-  T 'CLEAN TWIN a card asserting nothing raises nothing' (@($p4).Count -eq 0) (($p4 | ForEach-Object { $_.Kind }) -join ',')
+  T 'MUST NOT FIRE a card asserting nothing raises nothing' (@($p4).Count -eq 0) (($p4 | ForEach-Object { $_.Kind }) -join ',')
 
   T 'MUST FIRE  a single problem comes back as an ARRAY, not unrolled' ($p2 -is [array]) ($p2.GetType().FullName)
 

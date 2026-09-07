@@ -118,7 +118,7 @@ if ($SelfTest) {
     Actions  = @([pscustomobject]@{ Execute = 'powershell.exe'; Arguments = '-WindowStyle Hidden -File "x.ps1"' })
     Triggers = @([pscustomobject]@{ StartBoundary = '2026-08-31T10:30:00-05:00' })
   }
-  T 'CLEAN TWIN a live task matching the file reports no drift' ((Compare-TaskToXml $live $xml).Count -eq 0) ((Compare-TaskToXml $live $xml) -join '; ')
+  T 'MUST NOT FIRE a live task matching the file reports no drift' ((Compare-TaskToXml $live $xml).Count -eq 0) ((Compare-TaskToXml $live $xml) -join '; ')
 
   # MUST FIRE: the thing this whole file exists to make visible. A task whose ARGUMENTS drifted from
   # the repo is running something nobody committed.

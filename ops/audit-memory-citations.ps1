@@ -81,20 +81,20 @@ if ($SelfTest) {
   $c2 = Get-TcCitations -Text 'the same one twice: [[a-b]] and [[a-b]]'
   T 'a repeated citation counts once' (@($c2).Count -eq 1) (($c2) -join ',')
   $c3 = Get-TcCitations -Text 'a markdown table [[ ]] and [[Not A Memory]] are not citations'
-  T 'CLEAN TWIN non-kebab double brackets are not citations' (@($c3).Count -eq 0) (($c3) -join ',')
+  T 'MUST NOT FIRE non-kebab double brackets are not citations' (@($c3).Count -eq 0) (($c3) -join ',')
   # The case that made the first live run report twelve false danglers.
   $c5 = Get-TcCitations -Text 'the format is `[[double-bracket]]`, as in [[a-real-one]].'
   T 'CLEAN TWIN a BACKTICKED citation is syntax being shown, not a reference being made' `
     (@($c5).Count -eq 1 -and $c5[0] -eq 'a-real-one') (($c5) -join ',')
   $c4 = Get-TcCitations -Text 'no citations here at all'
-  T 'CLEAN TWIN text with none yields none' (@($c4).Count -eq 0) (($c4) -join ',')
+  T 'MUST NOT FIRE text with none yields none' (@($c4).Count -eq 0) (($c4) -join ',')
 
   $d1 = Get-TcDanglingCitations -Cited @('real-one', 'ghost-one') -Known @('real-one', 'other')
   T 'MUST FIRE  a citation with no memory file is DANGLING' (@($d1).Count -eq 1 -and $d1[0] -eq 'ghost-one') (($d1) -join ',')
   $d2 = Get-TcDanglingCitations -Cited @('real-one') -Known @('real-one', 'other')
-  T 'CLEAN TWIN a citation that resolves raises nothing' (@($d2).Count -eq 0) (($d2) -join ',')
+  T 'MUST NOT FIRE a citation that resolves raises nothing' (@($d2).Count -eq 0) (($d2) -join ',')
   $d3 = Get-TcDanglingCitations -Cited @() -Known @('a')
-  T 'CLEAN TWIN citing nothing raises nothing' (@($d3).Count -eq 0) (($d3) -join ',')
+  T 'MUST NOT FIRE citing nothing raises nothing' (@($d3).Count -eq 0) (($d3) -join ',')
   # THE FAILURE THIS GATE IS ACTUALLY FOR: the store cannot be read, so EVERY citation looks dangling.
   # That must never be reported as 200 findings - it is one blind run, and the live path exits 3.
   $d4 = Get-TcDanglingCitations -Cited @('a', 'b', 'c') -Known @()

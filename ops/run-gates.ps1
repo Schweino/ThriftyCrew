@@ -154,6 +154,13 @@ $static = @(
   # $script:CapturePlaceholderCount, which ZERO of its callers read. A drop nobody reads is a clean
   # bill (2026-09-06, backlog E5).
   @{ f = 'ops\audit-capture-ingest-reporting.ps1'; n = 'a row dropped at ingest is reported by whoever read it' }
+  # "CLEAN TWIN" meant two OPPOSITE things here - zero findings in the PowerShell audits, a HIT in
+  # knowledge-search - so the standing instruction to "add a must-fire and a clean twin" could be read
+  # either way, and read the wrong way it produces a fixture that passes while proving nothing about
+  # over-firing. Brad ruled the knowledge-search vocabulary canonical on 2026-09-07 and the 133
+  # provable cases were renamed; this keeps a new one from appearing (backlog I11). It only judges
+  # labels whose ASSERTION settles the sign, and its own header says so rather than implying a sweep.
+  @{ f = 'ops\audit-fixture-vocabulary.ps1'; n = 'no fixture is labelled CLEAN TWIN while asserting that a detector found nothing' }
   # THREE non-comparable score spaces run here at once - bi-encoder cosine, cross-encoder
   # sigmoid probability, and BM25 - and the two most confusable numbers sit TEN LINES APART in
   # sweep.py: COVERAGE_COS_FLOOR 0.55 and COVERAGE_RERANK_FLOOR 0.90. They read like a loose bar

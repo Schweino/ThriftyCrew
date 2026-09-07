@@ -1526,7 +1526,7 @@ regression in it is visible as a changed pass count rather than as a wrong numbe
 
 ---
 
-### I11 - "CLEAN TWIN" means two opposite things in this estate's own test fixtures `OPEN` `queue-2`
+### I11 - "CLEAN TWIN" means two opposite things in this estate's own test fixtures `DONE 2026-09-07` `queue-2`
 
 **Source:** course 9, `test-driven-development-workflow` (LearnQuest). Found while checking the
 queue's claim that our gate philosophy is TDD - the claim itself is answered in
@@ -1563,6 +1563,44 @@ queue entry that said so has been corrected in the claims register as X5.
 the third category explicitly, so the instruction to "add a clean twin" is unambiguous at the point
 it is read. Renaming existing cases across 158 files is **not** proposed - it is churn across the
 whole gate surface for no behaviour change, and the files are individually consistent.
+
+**RULED 2026-09-07 (Brad): the knowledge-search vocabulary is canonical.** Three labels, three jobs -
+`MUST FIRE` the founding bug, `MUST NOT FIRE` a legal input the detector must be silent on, and
+`CLEAN TWIN` an adjacent behaviour that still works, which is a POSITIVE assertion. That inverts the
+"cheap form" proposed above, which had assumed the `ops/` reading would win.
+
+**The corpus is far larger than this item measured, and that changed the plan.** The item counted
+158 files carrying a `CLEAN TWIN`; the real figure on tracked source is **1,673 labels across 214
+files**, 1,166 of them non-comment lines in `.ps1` and `.py`. A blind rename of that is not
+available: the sense is decidable only where the ASSERTION settles it, and a keyword classifier over
+the PROSE agrees with a hand read about 85% of the time - which would have planted roughly 250
+confidently WRONG labels. **A wrong label is worse than an ambiguous convention, because it is
+believed.**
+
+**So the rename is the provable subset and nothing else: 133 cases in 39 files**, every one read
+before it was changed, chosen by the assertion asserting an absence - a zero count, a null, a negated
+detector call, `len(x) == 0`. Diff is +133/-133 and every changed line is a label; alignment is
+preserved because the three extra characters come out of padding outside the quotes. `grocery/
+fanout-lib.ps1`'s two `-eq 0` twins are the founding false positive and are deliberately untouched:
+**an exit code of 0 is not an absence, it is a run that succeeded**, which is a real clean twin.
+
+**What holds the line going forward.** `ops/audit-fixture-vocabulary.ps1` fails a `CLEAN TWIN` whose
+assertion proves an absence, is wired into `run-gates` for both its self-test and a live pass, and is
+green at zero rather than red on day one. Its header states what it cannot see rather than implying a
+sweep: ~1,000 labels carry the sense in their wording alone and are out of its reach. The vocabulary
+itself is now in `.claude/rules/ops-and-gates.md`, where an author reads it before writing the next
+fixture.
+
+**Found while building the gate for this item, and it belongs here because it is the same failure
+one level up.** Two of that gate's own must-not-fire cases PASSED while proving nothing:
+`Test-Thing "a" + "b" + "c"` is not a concatenation inside an argument, it is THREE positional
+arguments, and a simple function binds the first and drops the rest into `$args`. The cases ran
+against a truncated line that could never have matched anything. Recorded in the rules file beside
+the vocabulary.
+
+**The non-actionable observation above stands unchanged** - every fixture here was written after its
+defect, this tree has no test-first discipline, and freezing a scar remains the right instinct for a
+detector estate.
 
 ---
 
@@ -2611,3 +2649,61 @@ it scanned, not on the estate. Two independent instances in one session is the f
 Two false alarms recorded rather than dropped: `ghost-config.ps1` and `publish-lesson.ps1` resolve
 correctly relative to the skill's own directory, and the file's 26 em dashes are pre-existing in an
 internal skill rather than in reader-facing copy.
+
+
+### I30 - Eighteen live tables carry 28 indexes and nothing has ever looked at a query plan `OPEN` `queue-3`
+*Source: Optimize SQL Queries - Uncover Performance Bottlenecks (queue-3).* Measured 2026-09-07 at
+commit `d172e3a6`: the estate greps to 61 `CREATE TABLE` and 84 `CREATE INDEX` across `*.py`/`*.sql`,
+`EXPLAIN` appears in exactly two files (`meal-prep/pipeline/coverage_check.py` and
+`meal-prep/pipeline/learn_apply.py`), and the two databases that actually exist on disk hold
+**18 tables, 28 indexes and 4 views**: `graph/sqlite/graph.db` (11 tables, 24 indexes, 126 MB, WAL)
+and `meal-prep/db/thriftycrew.db` (7 tables, 4 indexes, 1.8 MB). The source-level counts are
+statements, not objects, and reasoning from "61 tables" is reasoning about text.
+
+**What a first pass found, in about twenty minutes of read-only probing.**
+
+1. **`ANALYZE` has never been run on either database.** Neither has a `sqlite_stat1` table, which is
+   definitional. Both planners are on built-in guesses. On a copy, `ANALYZE` produced 36 stat rows
+   and reordered a three-table join - **and bought no measurable time**: 7 runs each, `count(*)` over
+   `v_current_rows` (15,607 rows) 0.0446 s to 0.0453 s, a 3.7-million-row fan-out join 0.1592 s to
+   0.1594 s. Both inside noise. **This is a finding, not a fix.** Do not schedule a nightly `ANALYZE`
+   on this evidence.
+2. **`ix_nodes_type (type)` is a strict prefix of `ix_nodes_type_name (type, canonical_name)`** on the
+   47,319-row `nodes` table, so it is maintained on every write and serves nothing the wider index
+   does not. The only such pair in either database. The **check** generalises; the single finding
+   does not.
+3. **A prefix `LIKE` here is a full scan, not a seek.** On the 76,439-row `aliases` table,
+   `WHERE alias LIKE 'beef%'` plans as `SCAN`, not `SEARCH`, because SQLite's default
+   case-insensitive `LIKE` cannot use the BINARY-collation `ix_alias_alias`. `PRAGMA
+   case_sensitive_like=ON`, `GLOB`, or a `COLLATE NOCASE` index each flip it to `SEARCH`. **This is
+   the one with real blast radius**: matcher and alias-resolution code is exactly where a prefix
+   `LIKE` gets written, and it reads as though it uses the index.
+
+**What this proposes.** A read-only self-diagnostic, `ops/audit-sqlite-health.ps1` or a Python
+equivalent, reporting per database: object counts and journal mode; row count per table;
+`sqlite_stat1` present; prefix-redundant indexes; indexes on very small tables (information only);
+`PRAGMA foreign_key_check` violations; and `EXPLAIN QUERY PLAN` for every view plus a curated hot-query
+list, flagging `SCAN` on a table over N rows, `USE TEMP B-TREE`, and `USING INDEX` where
+`USING COVERING INDEX` was expected.
+
+**Why it matters here.** Nothing in the estate can currently tell you that a query got slower, or
+that an index stopped being used. The three findings above were all invisible until somebody ran
+`EXPLAIN QUERY PLAN` by hand for the first time.
+
+**Touches.** A new read-only audit script and its `-SelfTest`. Nothing else, if built correctly.
+
+**Two hazards that would make it destructive.** Open every database **`mode=ro`**: `graph.db` is
+126 MB of live state the graph pipeline writes, and a read-write handle can take a WAL lock or leave
+a `-wal` file the ~07:00 bot then commits. And to test an index or `ANALYZE`, **copy the file with
+`shutil.copy2` first and delete the copy** - running either against the real database is a schema
+change performed as a measurement, against state with no undo layer (E1).
+
+**Do NOT put it in `run-gates` red.** Findings 2, 3 and the plan flags would be red on day one
+against a backlog nobody is about to clear, which teaches people to ignore red. Ratchet it with a
+high-water mark that may only go DOWN, the way `audit-write-seam` and `audit-band-censorship` do.
+
+**Not ordered work.** The measurements say this estate is small (biggest table 84,748 rows, biggest
+database 126 MB) and that nothing is currently known to be slow. The case for the audit is that it
+would tell us when that changes; it is not a case that anything is broken today.
+
+Method and full output: `~/.claude/skills/database-craft/estate-inventory.md`.

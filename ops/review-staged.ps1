@@ -70,8 +70,8 @@ if ($SelfTest) {
   T 'MUST FIRE  POST is mutating and is staged'   (Test-TcMutatingMethod 'POST')   'not mutating'
   T 'MUST FIRE  DELETE is mutating and is staged' (Test-TcMutatingMethod 'DELETE') 'not mutating'
   T 'MUST FIRE  a lower-case verb still stages'   (Test-TcMutatingMethod 'put')    'case-sensitive gate leaks a write'
-  T 'CLEAN TWIN GET is a read and executes immediately'  (-not (Test-TcMutatingMethod 'GET'))  'a read was staged'
-  T 'CLEAN TWIN HEAD is a read and executes immediately' (-not (Test-TcMutatingMethod 'HEAD')) 'a read was staged'
+  T 'MUST NOT FIRE GET is a read and executes immediately'  (-not (Test-TcMutatingMethod 'GET'))  'a read was staged'
+  T 'MUST NOT FIRE HEAD is a read and executes immediately' (-not (Test-TcMutatingMethod 'HEAD')) 'a read was staged'
 
   # --- OFF BY DEFAULT. If this ever fails, arming has leaked and all 29 callers changed behaviour.
   $saved = $env:TC_STAGE_WRITES
@@ -136,7 +136,7 @@ if ($SelfTest) {
   # ASSIGN THEN WRAP. `@(Get-TcQueueConcerns ...)` inline reports Count=1 on an EMPTY result - see the
   # note on that function. Written the wrong way first, and this clean twin is what caught it.
   $cleanCon = Get-TcQueueConcerns -Entries $clean
-  T 'CLEAN TWIN one PUT from one caller raises nothing' (@($cleanCon).Count -eq 0) (@($cleanCon) -join ' | ')
+  T 'MUST NOT FIRE one PUT from one caller raises nothing' (@($cleanCon).Count -eq 0) (@($cleanCon) -join ' | ')
 
   # --- THE COMPOSITION CASE. The one thing having BOTH mechanisms can get wrong, and the reason the
   # order of the two gates in ghost-lib is load-bearing rather than stylistic.

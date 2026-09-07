@@ -121,8 +121,8 @@ $script:BARE_ALLOWED = @{
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
-  T 'CLEAN TWIN a puller is not a detector (its failure is loud downstream)' (-not (Test-IsDetector 'pull-regular-hyvee.ps1')) 'classed as detector'
-  T 'CLEAN TWIN a builder is not a detector'                                 (-not (Test-IsDetector 'build-deals-page.ps1')) 'classed as detector'
+  T 'MUST NOT FIRE a puller is not a detector (its failure is loud downstream)' (-not (Test-IsDetector 'pull-regular-hyvee.ps1')) 'classed as detector'
+  T 'MUST NOT FIRE a builder is not a detector'                              (-not (Test-IsDetector 'build-deals-page.ps1')) 'classed as detector'
   T 'an audit-* script IS a detector'                                        (Test-IsDetector 'audit-row-age.ps1') 'missed'
   T 'test-auditors IS a detector (the founding case)'                        (Test-IsDetector 'test-auditors.ps1') 'missed'
   T 'guards.ps1 and golden-test are detectors'                               ((Test-IsDetector 'guards.ps1') -and (Test-IsDetector 'golden-test.ps1')) 'missed'
@@ -140,8 +140,8 @@ if ($SelfTest) {
   T 'MUST FIRE  test-auditors is a TESTER, so naming a guard there is not a production call' (Test-IsTesterFile 'test-auditors.ps1') 'counted as production'
   T 'MUST FIRE  test-guards is a TESTER too' (Test-IsTesterFile 'test-guards.ps1') 'counted as production'
   T 'the census is a TESTER - naming scripts is its whole job' (Test-IsTesterFile 'audit-script-census.ps1') 'counted as production'
-  T 'CLEAN TWIN the daily chain is NOT a tester - a call from it is a real one' (-not (Test-IsTesterFile 'check-ad-cycles.ps1')) 'chain treated as a test'
-  T 'CLEAN TWIN guards.ps1 is NOT a tester - it delegates for real' (-not (Test-IsTesterFile 'guards.ps1')) 'guards treated as a test'
+  T 'MUST NOT FIRE the daily chain is NOT a tester - a call from it is a real one' (-not (Test-IsTesterFile 'check-ad-cycles.ps1')) 'chain treated as a test'
+  T 'MUST NOT FIRE guards.ps1 is NOT a tester - it delegates for real' (-not (Test-IsTesterFile 'guards.ps1')) 'guards treated as a test'
 
   T 'MUST FIRE  a marker below a conditional verdict exit leaves that exit bare' `
     ((Get-BareVerdictExits $half).Count -eq 1) ("bare=" + (Get-BareVerdictExits $half).Count)

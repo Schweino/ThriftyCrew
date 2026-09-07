@@ -132,7 +132,7 @@ if ($SelfTest) {
       ('Ensue' + [char]0x00F1 + 'o Max Liquid Fabric Softener, Spring Fresh 330 loads, 236 fl. oz.'),
       ('Member' + [char]0x2019 + 's Mark Wildflower Pure Premium Honey, 48 oz.'),
       'Great Value Gluten-Free Vegetable Broth, 32 oz Carton')) {
-    _T ('CLEAN TWIN stays silent: ' + $clean.Substring(0, [math]::Min(34, $clean.Length))) (-not (Test-BoardMojibake $clean))
+    _T ('MUST NOT FIRE stays silent: ' + $clean.Substring(0, [math]::Min(34, $clean.Length))) (-not (Test-BoardMojibake $clean))
   }
 
   # THE WALKER, on a board-shaped document: it must find the two planted rows and name them, and it must

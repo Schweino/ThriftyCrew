@@ -117,7 +117,7 @@ if ($SelfTest) {
   T 'the scanner finds the one bypass and reports its line' (($r.Count -eq 1) -and ($r[0].File -eq 'a.ps1') -and ($r[0].Line -eq 2)) ("Count=" + $r.Count)
   T 'MUST FIRE  a single finding comes back as an ARRAY, not unrolled to a string' ($r -is [array]) ($r.GetType().FullName)
   $r0 = Get-TcSeamBypasses -Files @('b.ps1') -ReadLines $fake
-  T 'CLEAN TWIN a file with only reads yields nothing' ((@($r0)).Count -eq 0) ("Count=" + @($r0).Count)
+  T 'MUST NOT FIRE a file with only reads yields nothing' ((@($r0)).Count -eq 0) ("Count=" + @($r0).Count)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
   Write-Output 'SELF-TEST PASS: 6 must-fire bypass shapes, 4 clean twins including a store search POST, plus the scanner and its return arity'

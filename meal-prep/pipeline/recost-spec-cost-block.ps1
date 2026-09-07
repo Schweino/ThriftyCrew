@@ -297,7 +297,7 @@ if($SelfTest){
   # is 1 - so this MUST-NOT-FIRE twin is the one that keeps the guard from refusing every clean call.
   $nullRes = TryResolve @('a','b') '' $null
   Chk 'CLEAN TWIN an UNBOUND residue ($null, not @()) is not a dropped slug' (-not $nullRes.threw -and @($nullRes.slugs).Count -eq 2) $nullRes.msg
-  Chk 'CLEAN TWIN nor is a residue of empty strings'                   (-not (TryResolve @('a') '' @('','  ')).threw) 'refused a blank residue'
+  Chk 'MUST NOT FIRE nor is a residue of empty strings'                (-not (TryResolve @('a') '' @('','  ')).threw) 'refused a blank residue'
   $resid = TryResolve @('a') '' @('b','c')
   Chk 'MUST FIRE  argv residue (the 2026-08-23 -File shape) throws'    $resid.threw ('resolved ' + @($resid.slugs).Count)
   Chk '   and the refusal names the slugs that were dropped'           ($resid.msg -match 'b, c')            $resid.msg

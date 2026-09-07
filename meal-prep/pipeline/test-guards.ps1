@@ -54,12 +54,12 @@ Check "MUST FIRE  a bare RANGE '1-2' (also breaks the widget's scaleBuy)" (BuyHa
 Check "PASSES the repaired label '18.4 potatoes'"                  (-not (BuyHasUnitFlags '18.4 potatoes'))
 Check "PASSES the singular repair '1 onion'"                       (-not (BuyHasUnitFlags '1 onion'))
 Check "PASSES a two-word noun '3 lemons worth'"                    (-not (BuyHasUnitFlags '3 lemons worth'))
-Check "CLEAN TWIN an ordinary weight '5.75 lb'"                    (-not (BuyHasUnitFlags '5.75 lb'))
-Check "CLEAN TWIN a fraction '1/2 cup'"                            (-not (BuyHasUnitFlags '1/2 cup'))
-Check "CLEAN TWIN freeform 'to taste'"                             (-not (BuyHasUnitFlags 'to taste'))
-Check "CLEAN TWIN freeform 'about 1 3/4 cups shredded'"            (-not (BuyHasUnitFlags 'about 1 3/4 cups shredded'))
-Check "CLEAN TWIN freeform 'juice of 1 lime'"                      (-not (BuyHasUnitFlags 'juice of 1 lime'))
-Check "CLEAN TWIN freeform '1 (1 oz) packet'"                      (-not (BuyHasUnitFlags '1 (1 oz) packet'))
+Check "MUST NOT FIRE an ordinary weight '5.75 lb'"                 (-not (BuyHasUnitFlags '5.75 lb'))
+Check "MUST NOT FIRE a fraction '1/2 cup'"                         (-not (BuyHasUnitFlags '1/2 cup'))
+Check "MUST NOT FIRE freeform 'to taste'"                          (-not (BuyHasUnitFlags 'to taste'))
+Check "MUST NOT FIRE freeform 'about 1 3/4 cups shredded'"         (-not (BuyHasUnitFlags 'about 1 3/4 cups shredded'))
+Check "MUST NOT FIRE freeform 'juice of 1 lime'"                   (-not (BuyHasUnitFlags 'juice of 1 lime'))
+Check "MUST NOT FIRE freeform '1 (1 oz) packet'"                   (-not (BuyHasUnitFlags '1 (1 oz) packet'))
 
 # ---- cal-floor guard predicate ----
 # FROZEN FIXTURE of the founding change (2026-08-06): the gate was a flat
@@ -83,10 +83,10 @@ Check "MUST FIRE ordinary dinner at 400 with no declared floor (old 550 behaviou
 Check "MUST FIRE a non-burrito trying to declare a lowered floor"                          ((CalFloorFlags 'beef-birria-rice-bowls' 300 250) -eq 'non-burrito lowered floor')
 Check "MUST FIRE a floor under the 200 hard minimum"                                       ((CalFloorFlags 'buffalo-chicken-burrito' 150 150) -eq 'under hard minimum')
 Check "MUST FIRE a burrito that falls under its OWN declared floor"                        ((CalFloorFlags 'buffalo-chicken-burrito' 240 250) -eq 'under declared floor')
-Check "CLEAN TWIN a burrito at 380 declaring 250"                                          ($null -eq (CalFloorFlags 'buffalo-chicken-burrito' 380 250))
-Check "CLEAN TWIN the batch's leanest, shawarma at 273 declaring 250"                      ($null -eq (CalFloorFlags 'chicken-shawarma-burrito' 273 250))
-Check "CLEAN TWIN the batch's fullest, carne asada at 398 declaring 250"                   ($null -eq (CalFloorFlags 'carne-asada-burrito' 398 250))
-Check "CLEAN TWIN an ordinary 600-cal dinner with no declared floor"                       ($null -eq (CalFloorFlags 'slow-cooker-barbacoa-bowls' 600 $null))
+Check "MUST NOT FIRE a burrito at 380 declaring 250"                                       ($null -eq (CalFloorFlags 'buffalo-chicken-burrito' 380 250))
+Check "MUST NOT FIRE the batch's leanest, shawarma at 273 declaring 250"                   ($null -eq (CalFloorFlags 'chicken-shawarma-burrito' 273 250))
+Check "MUST NOT FIRE the batch's fullest, carne asada at 398 declaring 250"                ($null -eq (CalFloorFlags 'carne-asada-burrito' 398 250))
+Check "MUST NOT FIRE an ordinary 600-cal dinner with no declared floor"                    ($null -eq (CalFloorFlags 'slow-cooker-barbacoa-bowls' 600 $null))
 Check "CLEAN TWIN a burrito with NO declared floor still faces 550"                        ($null -ne (CalFloorFlags 'some-future-burrito' 400 $null))
 
 # ---- bounded-calorie-claim exemption ----
@@ -129,15 +129,15 @@ Check "MUST FIRE  a stale figure '499 calories' on a 373-cal card (the founding 
 Check "MUST FIRE  an UNSATISFIED bound 'under 300 calories' on a 396-cal recipe"                 (StatProseCalFlags 'every one lands under 300 calories' 396)
 Check "MUST FIRE  a bare '400 calories' with no bound word on a 396-cal recipe"                  (StatProseCalFlags 'these are 400 calories each' 396)
 Check "MUST FIRE  an exact-equal bound 'under 396 calories' on a 396-cal recipe (not under it)"  (StatProseCalFlags 'lands under 396 calories' 396)
-Check "CLEAN TWIN 'under 400 calories' on a 396-cal recipe (true, and the batch's premise)"      (-not (StatProseCalFlags 'every one lands under 400 calories' 396))
-Check "CLEAN TWIN 'under 400 calories' on the leanest, 273 cal"                                  (-not (StatProseCalFlags 'under 400 calories with 34 g protein' 273))
-Check "CLEAN TWIN 'less than 400 calories'"                                                      (-not (StatProseCalFlags 'less than 400 calories a burrito' 396))
-Check "CLEAN TWIN 'no more than 400 calories'"                                                   (-not (StatProseCalFlags 'no more than 400 calories each' 396))
-Check "CLEAN TWIN the exact stat quoted plainly"                                                 (-not (StatProseCalFlags 'a 396 calorie burrito' 396))
+Check "MUST NOT FIRE 'under 400 calories' on a 396-cal recipe (true, and the batch's premise)"   (-not (StatProseCalFlags 'every one lands under 400 calories' 396))
+Check "MUST NOT FIRE 'under 400 calories' on the leanest, 273 cal"                               (-not (StatProseCalFlags 'under 400 calories with 34 g protein' 273))
+Check "MUST NOT FIRE 'less than 400 calories'"                                                   (-not (StatProseCalFlags 'less than 400 calories a burrito' 396))
+Check "MUST NOT FIRE 'no more than 400 calories'"                                                (-not (StatProseCalFlags 'no more than 400 calories each' 396))
+Check "MUST NOT FIRE the exact stat quoted plainly"                                              (-not (StatProseCalFlags 'a 396 calorie burrito' 396))
 Check "MUST FIRE  a bound too far away to reach the number (lookback is a 24-char window)"       (StatProseCalFlags 'under a tight budget and a long day of cooking, 500 calories' 396)
 Check "MUST FIRE  a NEGATED bound 'not under 400 calories' on a 396-cal recipe"                  (StatProseCalFlags 'these are not under 400 calories' 396)
 Check "MUST FIRE  a word merely ENDING in a bound word ('thunder 400 calories')"                 (StatProseCalFlags 'a clap of thunder 400 calories later' 396)
-Check "CLEAN TWIN 'never under 400' still fires, but plain 'under 400' after a comma passes"     (-not (StatProseCalFlags 'lean, under 400 calories' 396))
+Check "MUST NOT FIRE 'never under 400' still fires, but plain 'under 400' after a comma passes"  (-not (StatProseCalFlags 'lean, under 400 calories' 396))
 
 Write-Output ""
 Write-Output "STAT-PROSE carbs and fat (2026-09-01):"
@@ -156,21 +156,21 @@ Check "MUST FIRE  ground-beef-gyro-bowls 'just 11 grams of fat' on a 13 g stat (
 Check "MUST FIRE  stuffed-chicken-breast 'under 10 grams of carbs' on a 10 g stat (not under it)" (StatProseMacroFlags 'and 524 calories with under 10 grams of carbs, for about' $statStuff)
 # CLEAN TWINS: the same three sentences as they now ship. A token leaves no literal to read, which is
 # what makes the repaired copy silent rather than merely correct.
-Check "CLEAN TWIN the repaired bbq sentence carries a {{fat}} token and no literal at all"        (-not (StatProseMacroFlags 'brings 34 grams of protein at 435 calories and {{fat}} grams of fat' $statBbq))
-Check "CLEAN TWIN the repaired gyro portion line is silent"                                       (-not (StatProseMacroFlags 'delivers 46 grams of protein at 620 calories and {{fat}} grams of fat.' $statGyro))
-Check "CLEAN TWIN a fat literal that EQUALS the stat is not a contradiction"                      (-not (StatProseMacroFlags 'with only 10 grams of fat' $statBbq))
+Check "MUST NOT FIRE the repaired bbq sentence carries a {{fat}} token and no literal at all"     (-not (StatProseMacroFlags 'brings 34 grams of protein at 435 calories and {{fat}} grams of fat' $statBbq))
+Check "MUST NOT FIRE the repaired gyro portion line is silent"                                    (-not (StatProseMacroFlags 'delivers 46 grams of protein at 620 calories and {{fat}} grams of fat.' $statGyro))
+Check "MUST NOT FIRE a fat literal that EQUALS the stat is not a contradiction"                   (-not (StatProseMacroFlags 'with only 10 grams of fat' $statBbq))
 # CLEAN TWIN: the lowcarb sentence, 57 live occurrences. Reading these as quotes would fire on copy
 # that is true, which is the failure mode that makes a gate something people learn to skip.
-Check "CLEAN TWIN 'with under 20 grams of carbs' on a 16 g stat (the lowcarb sentence, 57 live)"  (-not (StatProseMacroFlags 'a serving, with under 20 grams of carbs. That is' @{ carbs = 16; fat = 9 }))
+Check "MUST NOT FIRE 'with under 20 grams of carbs' on a 16 g stat (the lowcarb sentence, 57 live)"  (-not (StatProseMacroFlags 'a serving, with under 20 grams of carbs. That is' @{ carbs = 16; fat = 9 }))
 Check "MUST FIRE  ...but an UNSATISFIED carb bound 'under 10 grams of carbs' on a 31 g stat"      (StatProseMacroFlags 'a serving, with under 10 grams of carbs' @{ carbs = 31; fat = 9 })
 # CLEAN TWIN: decimals. The stat is a rounded integer, so a decimal that rounds to it is the same
 # claim; and the (?<![\d.]) guard is what stops "9.6 grams of fat" being read as the "6" a leading \b
 # would have captured - the RX_PROTEIN bug, which shipped once already on this exact pattern shape.
-Check "CLEAN TWIN '9.6 grams of fat' on a 10 g stat is the same claim, not a contradiction"       (-not (StatProseMacroFlags 'at 9.6 grams of fat a serving' @{ carbs = 50; fat = 10 }))
+Check "MUST NOT FIRE '9.6 grams of fat' on a 10 g stat is the same claim, not a contradiction"    (-not (StatProseMacroFlags 'at 9.6 grams of fat a serving' @{ carbs = 50; fat = 10 }))
 Check "MUST FIRE  ...but '99.9 grams of fat' on a 10 g stat still fires - decimals are not blinded" (StatProseMacroFlags 'at 99.9 grams of fat a serving' @{ carbs = 50; fat = 10 })
-Check "CLEAN TWIN a spec with NO carbs stat is skipped, never compared against zero"              (-not (StatProseMacroFlags 'with 40 grams of carbs' @{ carbs = 0; fat = 10 }))
+Check "MUST NOT FIRE a spec with NO carbs stat is skipped, never compared against zero"           (-not (StatProseMacroFlags 'with 40 grams of carbs' @{ carbs = 0; fat = 10 }))
 # CLEAN TWIN: 'fat' must be the noun, not a word that merely starts with it.
-Check "CLEAN TWIN '12 grams of fatty acids' is not a fat claim"                                   (-not (StatProseMacroFlags 'about 12 grams of fatty acids' @{ carbs = 50; fat = 10 }))
+Check "MUST NOT FIRE '12 grams of fatty acids' is not a fat claim"                                (-not (StatProseMacroFlags 'about 12 grams of fatty acids' @{ carbs = 50; fat = 10 }))
 
 
 # ---- bullet-field shape guard predicate ----

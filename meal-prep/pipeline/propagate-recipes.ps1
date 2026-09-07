@@ -100,7 +100,7 @@ if ($SelfTest) {
     $stamps = @{}
     T 'MUST FIRE  with no stamps, every spec is dirty' ((Get-DirtySlugs $stamps $files).Count -eq 2) 'missed'
     foreach ($x in $files) { $stamps[$x.BaseName] = Get-SpecHash $x.FullName }
-    T 'CLEAN TWIN stamped specs are clean' ((Get-DirtySlugs $stamps $files).Count -eq 0) 'spurious dirt'
+    T 'MUST NOT FIRE stamped specs are clean' ((Get-DirtySlugs $stamps $files).Count -eq 0) 'spurious dirt'
     # ---- MACHINE-FIELD MASKING (the 465-dirty founding case, 2026-08-20) ----
     Set-Content (Join-Path $tmp 'm.json') '{"stat":{"cost_ps":"3.99"},"head":{"costPerServing":3.99},"prose":"hello"}' -Encoding UTF8
     $h1 = Get-SpecHash (Join-Path $tmp 'm.json')
@@ -162,7 +162,7 @@ if ($SelfTest) {
     $u1 = Parse-Unstampable @('published+verified OK: 9 / 30', 'PUBLISH-UNSTAMPABLE: alpha,bravo')
     T 'MUST FIRE  refused and failed slugs are parsed out of the contract line' ($u1.Count -eq 2 -and $u1 -contains 'bravo') ($u1 -join '|')
     $u2 = Parse-Unstampable @('published+verified OK: 30 / 30', 'PUBLISH-UNSTAMPABLE: ')
-    T 'CLEAN TWIN a clean run yields an EMPTY list, and stamps everything' ($null -ne $u2 -and $u2.Count -eq 0) "$u2"
+    T 'MUST NOT FIRE a clean run yields an EMPTY list, and stamps everything' ($null -ne $u2 -and $u2.Count -eq 0) "$u2"
     # A missing contract line must be distinguishable from "nothing was refused" - otherwise an older
     # publish.ps1, or one that died before its summary, reads as a perfect run and stamps the lot.
     $u3 = Parse-Unstampable @('published+verified OK: 30 / 30')

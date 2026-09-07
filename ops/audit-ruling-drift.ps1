@@ -86,8 +86,8 @@ if ($SelfTest) {
   # same file whose header explains at length why it must go.
   T 'CLEAN TWIN a symbol only NAMED IN A COMMENT is not present' `
     (-not (Test-TcSymbolPresent -Lines @('# DEFAULT_COND above states the same numbers in prose') -Symbol 'DEFAULT_COND')) 'a comment counted as an implementation'
-  T 'CLEAN TWIN a different symbol does not match' (-not (Test-TcSymbolPresent -Lines @('x = OTHER_CONST') -Symbol 'DEFAULT_COND')) 'false match'
-  T 'CLEAN TWIN case matters - default_cond is not DEFAULT_COND' (-not (Test-TcSymbolPresent -Lines @('x = default_cond') -Symbol 'DEFAULT_COND')) 'case-insensitive match'
+  T 'MUST NOT FIRE a different symbol does not match' (-not (Test-TcSymbolPresent -Lines @('x = OTHER_CONST') -Symbol 'DEFAULT_COND')) 'false match'
+  T 'MUST NOT FIRE case matters - default_cond is not DEFAULT_COND' (-not (Test-TcSymbolPresent -Lines @('x = default_cond') -Symbol 'DEFAULT_COND')) 'case-insensitive match'
 
   $R = @([pscustomobject]@{ id = 'r1'; file = 'a.py'; symbol = 'GONE'; must = 'absent' },
          [pscustomobject]@{ id = 'r2'; file = 'b.py'; symbol = 'KEEP'; must = 'present' })
@@ -101,7 +101,7 @@ if ($SelfTest) {
     (@($v2).Count -eq 1 -and $v2[0].Kind -eq 'ruling-regressed') (($v2 | ForEach-Object { $_.Kind }) -join ',')
 
   $v3 = Get-TcRulingViolations -Rulings $R -Reader { param($p) if ($p -eq 'a.py') { @('x = 1') } else { @('y = KEEP') } }
-  T 'CLEAN TWIN both rulings honoured raises nothing' (@($v3).Count -eq 0) (($v3 | ForEach-Object { $_.Kind }) -join ',')
+  T 'MUST NOT FIRE both rulings honoured raises nothing' (@($v3).Count -eq 0) (($v3 | ForEach-Object { $_.Kind }) -join ',')
 
   # A rule about a file nobody can read has stopped being checked, and that must not read as a pass.
   $v4 = Get-TcRulingViolations -Rulings $R -Reader { param($p) $null }

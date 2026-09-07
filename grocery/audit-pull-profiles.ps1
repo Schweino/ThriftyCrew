@@ -175,7 +175,7 @@ const SAMS_PROFILE = { delayMs: 2600, jitterMs: 1400, retries: 3, backoffMs: 200
 runPacedSweep(agent, worklist);   // fixture delegates its ledger to the lib, like the real agents
 '@
     $r2 = Test-PullProfiles -Stores $drift -Root $fixDir
-    Check "CLEAN TWIN: an agreeing mirror passes" ($r2.Count -eq 0)
+    Check "MUST NOT FIRE: an agreeing mirror passes" ($r2.Count -eq 0)
   }
   finally { Remove-Item $fixDir -Recurse -Force -ErrorAction SilentlyContinue }
 
@@ -196,7 +196,7 @@ runPacedSweep(agent, worklist);   // fixture delegates its ledger to the lib, li
   $server = @([pscustomobject]@{ name = 'ServerStore'; pull_profile = [pscustomobject]@{
       agent = $null; delay_ms = $null; confidence = 'n/a'; evidence = 'sanctioned feed' } })
   $r5 = Test-PullProfiles -Stores $server -Root $here
-  Check "CLEAN TWIN: a server-fed store needs no pacing" ($r5.Count -eq 0)
+  Check "MUST NOT FIRE: a server-fed store needs no pacing" ($r5.Count -eq 0)
 
   # MUST-FIRE: a walled store with no agent - the ad-hoc-snippet shape that walled Sam's and Walmart.
   $noAgent = @([pscustomobject]@{ name = 'WalledStore'; walled = $true; pull_profile = [pscustomobject]@{

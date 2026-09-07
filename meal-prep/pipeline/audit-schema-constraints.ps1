@@ -192,7 +192,7 @@ if ($SelfTest) {
   $omNames = @{}; $omNames['Turkey Pepperoni'] = 1; $omNames['Light Sour Cream'] = 1
   T 'MUST FIRE  a macro row a SPEC CONSUMES with no price row is an identity defect' ((Get-OrphanMacroClass 'Pepperoni' $omNames 1) -eq 'MACRO-IDENTITY') ((Get-OrphanMacroClass 'Pepperoni' $omNames 1))
   T 'BACKLOG    an unconsumed orphan is backlog, not a defect'        ((Get-OrphanMacroClass 'Quinoa' $omNames 0) -eq 'ORPHAN-MACRO') ((Get-OrphanMacroClass 'Quinoa' $omNames 0))
-  T 'CLEAN TWIN a macro row WITH its own price row is neither'        ($null -eq (Get-OrphanMacroClass 'Turkey Pepperoni' $omNames 3)) ((Get-OrphanMacroClass 'Turkey Pepperoni' $omNames 3))
+  T 'MUST NOT FIRE a macro row WITH its own price row is neither'     ($null -eq (Get-OrphanMacroClass 'Turkey Pepperoni' $omNames 3)) ((Get-OrphanMacroClass 'Turkey Pepperoni' $omNames 3))
   # the whole point of the split: the backlog half must never page, the defect half must page immediately
   T 'the backlog half is exempt from the ratchet'                     ($script:BACKLOG_CLASSES -contains 'ORPHAN-MACRO') 'ORPHAN-MACRO would page daily again'
   T 'the identity half is NOT exempt - it is hard from the first one' ($script:BACKLOG_CLASSES -notcontains 'MACRO-IDENTITY') 'MACRO-IDENTITY was exempted'

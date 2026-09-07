@@ -97,11 +97,11 @@ if($runSelfTest){
   # CLEAN TWIN: every ingredient bid
   $f3 = @([pscustomobject]@{ item='Chicken Breast'; canon='Chicken Breast'; grams=3175; bid='chicken-breast' },
           [pscustomobject]@{ item='Salt'; canon='Salt'; grams=21; bid='salt' })
-  T 'CLEAN TWIN a fully bid spec is silent' ((Get-UnbidItems $f3 $allow).Count -eq 0) ([string](Get-UnbidItems $f3 $allow).Count)
+  T 'MUST NOT FIRE a fully bid spec is silent' ((Get-UnbidItems $f3 $allow).Count -eq 0) ([string](Get-UnbidItems $f3 $allow).Count)
 
   # CLEAN TWIN: unbid but allowlisted
   $f4 = @([pscustomobject]@{ item='Water'; canon='Water'; grams=500 })
-  T 'CLEAN TWIN an allowlisted unbid item is pardoned' ((Get-UnbidItems $f4 $allow).Count -eq 0) ([string](Get-UnbidItems $f4 $allow).Count)
+  T 'MUST NOT FIRE an allowlisted unbid item is pardoned' ((Get-UnbidItems $f4 $allow).Count -eq 0) ([string](Get-UnbidItems $f4 $allow).Count)
 
   # MUST FIRE: the allowlist pardons only its own item, not the whole spec
   $f5 = @([pscustomobject]@{ item='Water'; canon='Water'; grams=500 },
@@ -120,7 +120,7 @@ if($runSelfTest){
 
   # CLEAN TWIN: canon preferred over item for the allowlist key (display name may differ)
   $f7 = @([pscustomobject]@{ item='Filtered Water'; canon='Water'; grams=500 })
-  T 'CLEAN TWIN allowlist matches on canon, not the display name' ((Get-UnbidItems $f7 $allow).Count -eq 0) ([string](Get-UnbidItems $f7 $allow).Count)
+  T 'MUST NOT FIRE allowlist matches on canon, not the display name' ((Get-UnbidItems $f7 $allow).Count -eq 0) ([string](Get-UnbidItems $f7 $allow).Count)
 
   # MUST FIRE: the live founding cases, as a frozen regression
   $f8 = @([pscustomobject]@{ item='Keto Bun'; canon='Keto Bun'; grams=1320 })

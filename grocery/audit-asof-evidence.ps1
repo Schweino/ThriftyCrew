@@ -183,8 +183,8 @@ if ($SelfTest) {
     }
     Chk 'MUST FIRE  ranch dressing dated 08-01 with 07-23 evidence' ($fw.violations -eq 1) ("violations=$($fw.violations)")
     Chk 'MUST FIRE  the violation NAMES the product and both dates' (($fw.detail.Count -eq 1) -and ($fw.detail[0].item -match 'Ranch Dressing') -and ($fw.detail[0].evidence -eq '2026-07-23')) (($fw.detail | ConvertTo-Json -Compress))
-    Chk 'CLEAN TWIN row dated to the extract that holds it does NOT fire' (-not (@($fw.detail | Where-Object { $_.item -match 'Cherubs' }).Count)) 'tomatoes flagged'
-    Chk 'CLEAN TWIN an as_of OLDER than the evidence is lawful (carry-forward)' (-not (@($fw.detail | Where-Object { $_.says -eq '2026-07-23' }).Count)) 'older row flagged'
+    Chk 'MUST NOT FIRE row dated to the extract that holds it does NOT fire' (-not (@($fw.detail | Where-Object { $_.item -match 'Cherubs' }).Count)) 'tomatoes flagged'
+    Chk 'MUST NOT FIRE an as_of OLDER than the evidence is lawful (carry-forward)' (-not (@($fw.detail | Where-Object { $_.says -eq '2026-07-23' }).Count)) 'older row flagged'
     Chk 'UNBACKED row is counted, never a violation' ($fw.unbacked -eq 1 -and $fw.checked -eq 3) ("unbacked=$($fw.unbacked) checked=$($fw.checked)")
     Chk 'MUST FIRE  the CSV surface works too (Aldi, 1 violation)' ($al -and $al.violations -eq 1) ("violations=$($al.violations)")
     Chk 'unwatched stores are NAMED, so 2-of-7 never reads as a pass' ($res.unwatched.Count -ge 5) ("unwatched=$($res.unwatched.Count)")

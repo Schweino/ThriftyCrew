@@ -80,13 +80,13 @@ if ($SelfTest) {
     @{ Name = 'build-x.ps1'; Lines = @('$rows = Import-CaptureCsv $p',
                                        'Write-Output $script:CapturePlaceholderCount',
                                        'Write-Output $script:CaptureIngestWarning') })
-  T 'CLEAN TWIN a caller that reports both raises nothing' (@($r2).Count -eq 0) (($r2 | ForEach-Object { $_.Missing }) -join ',')
+  T 'MUST NOT FIRE a caller that reports both raises nothing' (@($r2).Count -eq 0) (($r2 | ForEach-Object { $_.Missing }) -join ',')
 
   # CLEAN TWIN - a file that never reads captures owes nothing. Without this the gate would demand the
   # reporting from every script in the tree.
   $r3 = Get-TcIngestReportingProblems -Reader $R -MustReport $M -Files @(
     @{ Name = 'unrelated.ps1'; Lines = @('Write-Output "hello"') })
-  T 'CLEAN TWIN a script that never reads captures owes no report' (@($r3).Count -eq 0) (($r3 | ForEach-Object { $_.File }) -join ',')
+  T 'MUST NOT FIRE a script that never reads captures owes no report' (@($r3).Count -eq 0) (($r3 | ForEach-Object { $_.File }) -join ',')
 
   # CLEAN TWIN - the library is exempt. It SETS the variables and must never print: a function that
   # returns data emitting anything else already put a progress line into the returned array once.
@@ -98,7 +98,7 @@ if ($SelfTest) {
   # CLEAN TWIN - a comment mentioning the reader is not a call.
   $r5 = Get-TcIngestReportingProblems -Reader $R -MustReport $M -Files @(
     @{ Name = 'doc.ps1'; Lines = @('# the old code used Import-CaptureCsv before the lib existed') })
-  T 'CLEAN TWIN prose naming the reader is not a call to it' (@($r5).Count -eq 0) (($r5 | ForEach-Object { $_.File }) -join ',')
+  T 'MUST NOT FIRE prose naming the reader is not a call to it' (@($r5).Count -eq 0) (($r5 | ForEach-Object { $_.File }) -join ',')
 
   T 'MUST FIRE  a single problem comes back as an ARRAY, not unrolled' ($r1 -is [array]) ($r1.GetType().FullName)
 

@@ -213,10 +213,10 @@ if($SelfTest){
   T 'MUST FIRE  an open batch idle past the age limit'                            (Test-BatchStale $interrupted $now 24) 'not stale'
   $done = [pscustomobject]@{ closed=$true; last_activity='2026-08-07T06:40:00'
     stages=@($script:REQUIRED | ForEach-Object { @{stage=$_} }) }
-  T 'CLEAN TWIN a batch with every stage stamped'                                 ((Test-BatchComplete $done).Count -eq 0) 'spurious finding'
-  T 'CLEAN TWIN a CLOSED batch is never stale, however old'                       (-not (Test-BatchStale $done $now 24)) 'spurious finding'
+  T 'MUST NOT FIRE a batch with every stage stamped'                              ((Test-BatchComplete $done).Count -eq 0) 'spurious finding'
+  T 'MUST NOT FIRE a CLOSED batch is never stale, however old'                    (-not (Test-BatchStale $done $now 24)) 'spurious finding'
   $fresh = [pscustomobject]@{ closed=$false; last_activity=$now.AddHours(-2).ToString('s'); stages=@(@{stage='select'}) }
-  T 'CLEAN TWIN an open batch still inside the window is not yet a finding'       (-not (Test-BatchStale $fresh $now 24)) 'spurious finding'
+  T 'MUST NOT FIRE an open batch still inside the window is not yet a finding'    (-not (Test-BatchStale $fresh $now 24)) 'spurious finding'
   T 'MUST FIRE  that same young batch is still INCOMPLETE'                        ((Test-BatchComplete $fresh).Count -gt 0) 'not reported'
 
   # ---- RECONCILE. FROZEN FIXTURE: wave 1 of hunt-2026-08-15-lowcarb-100 on 2026-08-16. The row opened
@@ -251,7 +251,7 @@ if($SelfTest){
   $closedBad = [pscustomobject]@{ closed=$true; closed_at='2026-08-07T14:00:00'; last_activity='2026-08-07T14:00:00'
     stages=@(@{stage='select'},@{stage='map'},@{stage='write'},@{stage='build-specs'},@{stage='audit'},@{stage='recipes-db'},@{stage='build-cards'},@{stage='publish'}) }
   T 'MUST FIRE  a batch CLOSED while the post-publish review was never stamped'   ((Test-ClosedIncomplete $closedBad) -contains 'post-publish-review') 'invisible once closed'
-  T 'CLEAN TWIN a properly closed batch reports nothing'                          ((Test-ClosedIncomplete $done).Count -eq 0) 'spurious finding'
+  T 'MUST NOT FIRE a properly closed batch reports nothing'                       ((Test-ClosedIncomplete $done).Count -eq 0) 'spurious finding'
 
   # FROZEN FIXTURE: a last_activity in the FUTURE. Test-BatchStale structurally CANNOT fire on it (negative
   # elapsed), so it is exempt for as long as the stamp stays ahead - the gates-that-can-never-arm class.
@@ -259,7 +259,7 @@ if($SelfTest){
   T 'MUST FIRE  a future-dated last_activity is reported as corrupt'              (Test-FutureStamp $future $now) 'exempt forever, silently'
   T 'the staleness test genuinely cannot catch it (which is WHY the check above exists)' `
     (-not (Test-BatchStale $future $now 24)) 'staleness caught it after all'
-  T 'CLEAN TWIN an ordinary past stamp is not called corrupt'                     (-not (Test-FutureStamp $interrupted $now)) 'spurious finding'
+  T 'MUST NOT FIRE an ordinary past stamp is not called corrupt'                  (-not (Test-FutureStamp $interrupted $now)) 'spurious finding'
 
   # ---- ABANDON. FROZEN FIXTURES from the real ledger on 2026-08-29, where 15 open rows had accumulated
   # and -Verify had been exiting 1 for days. w11 and w12 both carry honey-bbq-chicken-mac-and-cheese: w11
@@ -354,8 +354,8 @@ if($SelfTest){
     ([string](Get-VerifyFinding $shipped $luNow 24 $null) -match 'OPEN\+STALE') `
     ([string](Get-VerifyFinding $shipped $luNow 24 $null))
 
-  T 'CLEAN TWIN -Verify says nothing about a properly closed batch' ($null -eq (Get-VerifyFinding $done $now 24)) ([string](Get-VerifyFinding $done $now 24))
-  T 'CLEAN TWIN -Verify says nothing about a young open batch'      ($null -eq (Get-VerifyFinding $fresh $now 24)) ([string](Get-VerifyFinding $fresh $now 24))
+  T 'MUST NOT FIRE -Verify says nothing about a properly closed batch' ($null -eq (Get-VerifyFinding $done $now 24)) ([string](Get-VerifyFinding $done $now 24))
+  T 'MUST NOT FIRE -Verify says nothing about a young open batch'   ($null -eq (Get-VerifyFinding $fresh $now 24)) ([string](Get-VerifyFinding $fresh $now 24))
 
   if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }

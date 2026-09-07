@@ -176,7 +176,7 @@ if($SelfTest){
   # CLEAN TWIN: Baker's on the same day, still inside its window.
   T 'CLEAN TWIN an ad still inside its window (Baker''s 2026-08-05..08-11)' `
     (-not (Test-AdWindowExpired ([pscustomobject]@{ ad_from='2026-08-05'; ad_to='2026-08-11' }) $today)) 'spurious finding'
-  T 'CLEAN TWIN a non-ad file with no window is never called expired'             (-not (Test-AdWindowExpired ([pscustomobject]@{ store='Walmart' }) $today)) 'spurious finding'
+  T 'MUST NOT FIRE a non-ad file with no window is never called expired'          (-not (Test-AdWindowExpired ([pscustomobject]@{ store='Walmart' }) $today)) 'spurious finding'
   # ---- AN AD IN HAND IS NOT A FAILED PULL (2026-09-06, queue 2026-09-06-6e08ed) ---------------------
   # FROZEN from today's real Fareway state, read on 2026-09-06: the 08-30 capture holds 2026-08-31..09-05
   # (closed yesterday) and the 09-06 capture holds 2026-09-07..2026-09-12 with 238 deals (opens tomorrow).

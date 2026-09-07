@@ -123,13 +123,13 @@ if ($SelfTest) {
   T 'MUST FIRE  that jump is a finding' ((@($f) -join ' ') -like '*size*stopped arriving*') ($f -join '; ')
 
   $f2 = Compare-NullRates $base (Get-NullRates $rows) $RISE_PCT
-  T 'CLEAN TWIN unchanged data is not a finding' (@($f2).Count -eq 0) ($f2 -join '; ')
+  T 'MUST NOT FIRE unchanged data is not a finding' (@($f2).Count -eq 0) ($f2 -join '; ')
 
   # A small wobble must NOT fire, or the guard cries daily and stops being read.
   $wobble = @()
   for ($i = 0; $i -lt 300; $i++) { $wobble += [pscustomobject]@{ item = "p$i"; regular = '1.99'; size = $(if ($i -lt 15) { '' } else { '12 oz' }) } }
   $f3 = Compare-NullRates $base (Get-NullRates $wobble) $RISE_PCT
-  T 'CLEAN TWIN a 5-point wobble is normal variation, not a shape change' (@($f3).Count -eq 0) ($f3 -join '; ')
+  T 'MUST NOT FIRE a 5-point wobble is normal variation, not a shape change' (@($f3).Count -eq 0) ($f3 -join '; ')
 
   # THE CASE A RATE COMPARISON ALONE CANNOT SEE.
   $gone = @()

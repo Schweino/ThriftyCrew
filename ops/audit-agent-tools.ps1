@@ -152,7 +152,7 @@ if ($SelfTest) {
   T 'MUST FIRE  an agent with NO effort: pin is a finding too' `
     (@($m2 | Where-Object { $_.Kind -eq 'no-effort-pin' }).Count -eq 1) (($m2 | ForEach-Object { $_.Kind }) -join ',')
   $m3 = Get-TcAgentProblems -Name 'x' -Lines @('---', 'name: x', 'model: fable', 'effort: medium', 'tools: Read', '---') -Known $K -AbsentMarkers $A
-  T 'CLEAN TWIN both pins present raises nothing' (@($m3).Count -eq 0) (($m3 | ForEach-Object { $_.Kind }) -join ',')
+  T 'MUST NOT FIRE both pins present raises nothing' (@($m3).Count -eq 0) (($m3 | ForEach-Object { $_.Kind }) -join ',')
 
   # MUST FIRE 2 - the drift E3 is actually about.
   $r2 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
@@ -172,16 +172,16 @@ if ($SelfTest) {
   $r4 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
     '---', 'model: fable', 'effort: medium', 'tools: Read', '---', '## Your tool list is not a checklist', '| `Read` | spine |',
     'You can write nothing, do not edit the catalog, and re-read the task.')
-  T 'CLEAN TWIN lower-case verbs (write, edit, task) are not tool names' (@($r4).Count -eq 0) (($r4 | ForEach-Object { $_.Detail }) -join ' | ')
+  T 'MUST NOT FIRE lower-case verbs (write, edit, task) are not tool names' (@($r4).Count -eq 0) (($r4 | ForEach-Object { $_.Detail }) -join ' | ')
 
   # CLEAN TWIN - an agent with a tools line and no capability block is legal.
   $r5 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @('---', 'model: fable', 'effort: medium', 'tools: Read, Grep', '---', 'body with no block')
-  T 'CLEAN TWIN a declared agent with no capability block raises nothing' (@($r5).Count -eq 0) (($r5 | ForEach-Object { $_.Kind }) -join ',')
+  T 'MUST NOT FIRE a declared agent with no capability block raises nothing' (@($r5).Count -eq 0) (($r5 | ForEach-Object { $_.Kind }) -join ',')
 
   # CLEAN TWIN - a fully consistent agent.
   $r6 = Get-TcAgentProblems -Name 'x' -Known $K -AbsentMarkers $A -Lines @(
     '---', 'model: fable', 'effort: medium', 'tools: Read, Grep, Glob', '---', '## Your tool list is not a checklist', '| `Read`, `Grep`, `Glob` | spine |')
-  T 'CLEAN TWIN a block naming exactly its declared tools raises nothing' (@($r6).Count -eq 0) (($r6 | ForEach-Object { $_.Detail }) -join ' | ')
+  T 'MUST NOT FIRE a block naming exactly its declared tools raises nothing' (@($r6).Count -eq 0) (($r6 | ForEach-Object { $_.Detail }) -join ' | ')
 
   # CLEAN TWIN - the absence marker and the names on DIFFERENT lines, because prose wraps. Found live:
   # a per-line exemption passed `Write` on the marker's line and flagged the three that wrapped onto the

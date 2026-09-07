@@ -248,7 +248,7 @@ if ($SelfTest) {
   $f = Invoke-Cov -PublishedSlugs @('country-captain-chicken', 'american-goulash-pasta') -CardBids $CARDS `
         -FeedRecipes @{ 'country-captain-chicken' = 1; 'american-goulash-pasta' = 1 } `
         -FeedIngredients $ING -FeedPricingInputs $PIN
-  TT 'CLEAN TWIN  both published recipes fully covered is silent' ($f.Count -eq 0) ("count=$($f.Count)")
+  TT 'MUST NOT FIRE  both published recipes fully covered is silent' ($f.Count -eq 0) ("count=$($f.Count)")
 
   # -- THE ALLOWLIST, honoured from the file cost-engine already reads. aji-amarillo-paste is on it: the
   #    estate ruled it has no first-party Omaha board price and carries a register-estimate label
@@ -263,7 +263,7 @@ if ($SelfTest) {
   $r = Test-FeedCoverage -PublishedSlugs @('peruvian-pollo-saltado') -CardBids $CARDS2 `
         -FeedRecipes @{ 'peruvian-pollo-saltado' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
         -Exempt @('aji-amarillo-paste', 'dried-guajillo-chiles')
-  TT 'CLEAN TWIN  an allowlisted no-board-price bid does not fail the gate' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
+  TT 'MUST NOT FIRE  an allowlisted no-board-price bid does not fail the gate' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
   TT 'MUST FIRE  ...but it is still REPORTED, never silently dropped' `
      ($r.exempted.Count -eq 1 -and $r.exempted[0].bids -contains 'aji-amarillo-paste') ("exempted=$($r.exempted.Count)")
 
@@ -287,7 +287,7 @@ if ($SelfTest) {
   $r = Test-FeedCoverage -PublishedSlugs @('country-captain-chicken') -CardBids $CARDS `
         -FeedRecipes @{ 'country-captain-chicken' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
         -Uncarried @{ 'american-goulash-pasta' = @('Something [UNKNOWN]') }
-  TT 'CLEAN TWIN  another recipe''s uncarried line does not fail this one' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
+  TT 'MUST NOT FIRE  another recipe''s uncarried line does not fail this one' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
 
   # -- THE BLIND SPOT, frozen (2026-08-29). A card carrying a line with NO bid at all. Every bid it DOES
   #    carry is covered, so every check above this one reads green - which is exactly how three live
@@ -311,7 +311,7 @@ if ($SelfTest) {
   $r = Test-FeedCoverage -PublishedSlugs @('country-captain-chicken') -CardBids $CARDS `
         -FeedRecipes @{ 'country-captain-chicken' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
         -CardUnbid @{ 'american-goulash-pasta' = @('Sumac') }
-  TT 'CLEAN TWIN  another recipe''s unbid line does not fail this one' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
+  TT 'MUST NOT FIRE  another recipe''s unbid line does not fail this one' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
 
   # -- THE EXTRACTOR, against the real baked shape. Get-CardBids skipping bid-less lines is correct for
   #    what it returns; the bug was that nothing ELSE looked. These two must disagree on the same card.
@@ -329,7 +329,7 @@ if ($SelfTest) {
   TT 'MUST FIRE  the extractor names an item with no bid property at all' ($gotUnbid -contains 'Sumac') ($gotUnbid -join ',')
   TT 'MUST FIRE  a whitespace-only bid counts as unbid, matching audit-unbid-ingredients' `
      ($gotUnbid -contains 'Salt') ($gotUnbid -join ',')
-  TT 'CLEAN TWIN a properly bid line is not reported as unbid' (-not ($gotUnbid -contains 'Ground Turkey')) ($gotUnbid -join ',')
+  TT 'MUST NOT FIRE a properly bid line is not reported as unbid' (-not ($gotUnbid -contains 'Ground Turkey')) ($gotUnbid -join ',')
   # THE PARTITION IS THE INVARIANT. Every line lands in exactly one extractor - no line counted twice,
   # none dropped. This is what caught the whitespace-bid disagreement: Get-CardBids collected "   " as a
   # real id while Get-CardUnbidItems called the same line unbid, so a 3-line card reported 2+2.
@@ -355,7 +355,7 @@ if ($SelfTest) {
   #    being read (the standing regression-test lesson).
   $f = Invoke-Cov -PublishedSlugs @('american-goulash-pasta') -CardBids $CARDS `
         -FeedRecipes @{ 'american-goulash-pasta' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN
-  TT 'CLEAN TWIN  an unpublished recipe is not judged' ($f.Count -eq 0) ("count=$($f.Count)")
+  TT 'MUST NOT FIRE  an unpublished recipe is not judged' ($f.Count -eq 0) ("count=$($f.Count)")
 
   # -- a published slug with no built card is reported on its slug alone, never silently skipped:
   #    "could not read the card" must not read as "the card is fine".

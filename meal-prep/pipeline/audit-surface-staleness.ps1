@@ -129,7 +129,7 @@ if ($SelfTest) {
     ($f.Count -eq 1 -and $f[0] -match 'STALE') (($f -join ' | '))
 
   $f2 = @(Get-StalenessFindings (Get-SurfaceRows $CLEAN_CN 'CN') $MAN $CAT 'cheapnow')
-  T 'CLEAN TWIN  the same surface agreeing with the manifest is silent' ($f2.Count -eq 0) (($f2 -join ' | '))
+  T 'MUST NOT FIRE  the same surface agreeing with the manifest is silent' ($f2.Count -eq 0) (($f2 -join ' | '))
 
   # THE PENNY BOUNDARY, both sides of it. Rounding is noise; two pennies is drift.
   $penny = '/*CN-DATA*/var CN={rec:[{"n":"X","s":"slow-cooker-tuscan-chicken-pasta","sv":14,"cal":1,"p":1,"c":3.40}]};'

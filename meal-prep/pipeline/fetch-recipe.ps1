@@ -105,7 +105,7 @@ if ($runSelfTest) {
   T 'the Recipe node is found inside a top-level array' ((Find-RecipeNode $arr).name -eq 'InArray') 'missed array'
   $multi = '{"@type":["Recipe","NewsArticle"],"name":"MultiType"}' | ConvertFrom-Json
   T 'MUST FIRE  a multi-valued @type containing Recipe still matches' ((Find-RecipeNode $multi).name -eq 'MultiType') 'missed multi-type'
-  T 'CLEAN TWIN a non-Recipe page yields no node' ($null -eq (Find-RecipeNode ('{"@type":"Article","name":"No"}' | ConvertFrom-Json))) 'false positive'
+  T 'MUST NOT FIRE a non-Recipe page yields no node' ($null -eq (Find-RecipeNode ('{"@type":"Article","name":"No"}' | ConvertFrom-Json))) 'false positive'
 
   if ($bad -gt 0) { Write-Output ("fetch-recipe SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'fetch-recipe SELF-TEST PASS'

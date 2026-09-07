@@ -465,7 +465,7 @@ if ($runSelfTest) {
     ($sk.head.totalTime -eq 'PT40M' -and $sk.head.prepTime -eq 'PT15M' -and $sk.head.description -eq '' -and
      $sk.cuisine -eq '' -and @($sk.prose.Keys).Count -eq 0) `
     ($sk.head.totalTime + " desc='" + $sk.head.description + "'")
-  T 'CLEAN TWIN a complete decision file produces NO findings' (@($built.findings).Count -eq 0) `
+  T 'MUST NOT FIRE a complete decision file produces NO findings' (@($built.findings).Count -eq 0) `
     ((@($built.findings)) -join ' | ')
 
   # ---- FIXTURE 2b. THE DECISION VOCABULARY, over the words that are ACTUALLY on disk. `decision` is
@@ -511,7 +511,7 @@ if ($runSelfTest) {
   T 'MUST FIRE  ...the optional line and the unrecognised word are both NAMED in the notes' `
     ((@($bv.notes) -join ' ') -match "'Heavy Cream' is optional" -and
      (@($bv.notes) -join ' ') -match 'unrecognised decision') ((@($bv.notes)) -join ' | ')
-  T 'CLEAN TWIN and none of that is a FINDING - the recipe is buildable' (@($bv.findings).Count -eq 0) `
+  T 'MUST NOT FIRE and none of that is a FINDING - the recipe is buildable' (@($bv.findings).Count -eq 0) `
     ((@($bv.findings)) -join ' | ')
 
   $heldMapped = [pscustomobject]@{ slug='h'; title='H'; source_url='https://d/h'; protein='chicken'
@@ -624,7 +624,7 @@ if ($runSelfTest) {
   $wrapped = @(Get-LockedDrift $filled $issued)
   T 'MUST FIRE  @() around the CALL reads Count 1 on a CLEAN diff - the trap, in the direction that hides' `
     ($wrapped.Count -eq 1) ("Count=" + [string]$wrapped.Count)
-  T 'CLEAN TWIN assigning first reads the real answer, 0' ($d0.Count -eq 0) ("Count=" + [string]$d0.Count)
+  T 'MUST NOT FIRE assigning first reads the real answer, 0' ($d0.Count -eq 0) ("Count=" + [string]$d0.Count)
   $wrapped3 = @(Get-LockedDrift $drifted2 $issued)
   T 'MUST FIRE  and it reads Count 1 on a THREE-field drift too, so the count means nothing either way' `
     ($wrapped3.Count -eq 1 -and $d2.Count -eq 3) ("wrapped=" + [string]$wrapped3.Count + " assigned=" + [string]$d2.Count)

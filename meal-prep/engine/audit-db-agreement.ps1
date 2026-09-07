@@ -98,13 +98,13 @@ if($SelfTest){
     T 'MUST FIRE  a stamped cost block is reported against its real spec' ($d1.Count -eq 6) ("issues=" + $d1.Count)
     T 'MUST FIRE  the per-serving line names both numbers so triage can act on it' (($d1 -join '|') -match 'cost_per_serving index=1\.83 spec=6\.14') ($d1 -join '|')
     $d2 = Get-CostDrift -Row $stamped -Spec $stamped -Slug 'panang-chicken-curry'
-    T 'CLEAN TWIN the one recipe the stamped block belongs to is silent' ($d2.Count -eq 0) ("issues=" + $d2.Count)
+    T 'MUST NOT FIRE the one recipe the stamped block belongs to is silent' ($d2.Count -eq 0) ("issues=" + $d2.Count)
     $legacy = [pscustomobject]@{ cost_per_serving=2.45; cost_batch=32.89; cost_batch_true=40.11; cost_per_serving_true=2.87 }
     $legSpec= [pscustomobject]@{ cost_per_serving=2.45; cost_batch=32.89; cost_batch_true=40.11; cost_per_serving_true=2.87; cost_pantry_add=0; cost_first_run=40.11 }
     $d3 = Get-CostDrift -Row $legacy -Spec $legSpec -Slug 'legacy-row'
-    T 'CLEAN TWIN a pre-r300 row that never carried first_run is not drift' ($d3.Count -eq 0) ($d3 -join '|')
+    T 'MUST NOT FIRE a pre-r300 row that never carried first_run is not drift' ($d3.Count -eq 0) ($d3 -join '|')
     $d4 = Get-CostDrift -Row ([pscustomobject]@{ cost_per_serving=2.45 }) -Spec ([pscustomobject]@{ cost_per_serving=2.455 }) -Slug 'rounding'
-    T 'CLEAN TWIN a sub-half-cent difference is rounding, not drift' ($d4.Count -eq 0) ($d4 -join '|')
+    T 'MUST NOT FIRE a sub-half-cent difference is rounding, not drift' ($d4.Count -eq 0) ($d4 -join '|')
     $d5 = Get-CostDrift -Row ([pscustomobject]@{ cost_per_serving=2.45 }) -Spec ([pscustomobject]@{ cost_per_serving=2.46 }) -Slug 'onecent'
 
     # ---- MACRO DRIFT (2026-08-29) -------------------------------------------------------------
@@ -116,7 +116,7 @@ if($SelfTest){
     # CLEAN TWIN: agreement is silent.
     $mOk = [pscustomobject]@{ stat = [pscustomobject]@{ cal=567; protein=36; carbs=62; fat=18 } }
     $m2 = @(Get-MacroDrift -Row $mRow -Spec $mOk -Slug 'agreeing')
-    T 'CLEAN TWIN a matching macro copy is silent' ($m2.Count -eq 0) ("issues=" + $m2.Count)
+    T 'MUST NOT FIRE a matching macro copy is silent' ($m2.Count -eq 0) ("issues=" + $m2.Count)
     # THE FIELD-NAME TRAP ITSELF. If the pairing is ever "fixed" to compare like-named fields, this check
     # goes permanently quiet against a fully drifted row - which is exactly how it stayed unnoticed.
     T 'the two sides use DIFFERENT field names, so a like-for-like comparison would prove nothing' (@($script:MACRO_PAIRS | Where-Object { $_.Spec -eq $_.Idx }).Count -eq 0) 'a pair uses the same name on both sides'

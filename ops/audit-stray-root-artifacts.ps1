@@ -117,15 +117,15 @@ if ($SelfTest) {
 
   # CLEAN TWINS - the fix must be scoped to the founding bug and must not start flagging the real root.
   $r4 = Get-StrayRootEntry -Entries $fxTracked -Tracked $fxTracked -Allow $fxAllow
-  T 'CLEAN TWIN every tracked root entry passes' ($r4.Count -eq 0) ("[" + ($r4 -join ', ') + "]")
+  T 'MUST NOT FIRE every tracked root entry passes' ($r4.Count -eq 0) ("[" + ($r4 -join ', ') + "]")
 
   $r5 = Get-StrayRootEntry -Entries @('.git', '.wrangler', 'site-backups') -Tracked $fxTracked -Allow $fxAllow
-  T 'CLEAN TWIN every allow-listed entry passes' ($r5.Count -eq 0) ("[" + ($r5 -join ', ') + "]")
+  T 'MUST NOT FIRE every allow-listed entry passes' ($r5.Count -eq 0) ("[" + ($r5 -join ', ') + "]")
 
   # A digit-leading name that is NOT debris. The name matcher this detector replaced would have had to
   # special-case it; the structural rule never sees it, because it is tracked.
   $r6 = Get-StrayRootEntry -Entries @('2026-09-06-notes.md') -Tracked @('2026-09-06-notes.md') -Allow $fxAllow
-  T 'CLEAN TWIN a tracked digit-leading filename is not debris' ($r6.Count -eq 0) ("[" + ($r6 -join ', ') + "]")
+  T 'MUST NOT FIRE a tracked digit-leading filename is not debris' ($r6.Count -eq 0) ("[" + ($r6 -join ', ') + "]")
 
   # ARITY, AND IT IS A MUST-FIRE IN ITS OWN RIGHT. The first version of this file returned `@($stray)`,
   # which unrolls, so one finding came back as a bare string. Asserting only on .Count would still have
@@ -165,7 +165,7 @@ if ($SelfTest) {
   # CLEAN TWIN for it: once allow-listed, the same name must go quiet. A gate that cannot be satisfied
   # gets unregistered, which is how a repo ends up with no gate at all.
   $r10 = Get-StrayRootEntry -Entries @('.gitattributes') -Tracked @('.gitattributes') -Allow $fxAllow
-  T 'CLEAN TWIN a dotfile that IS tracked passes' ($r10.Count -eq 0) ("[" + ($r10 -join ', ') + "]")
+  T 'MUST NOT FIRE a dotfile that IS tracked passes' ($r10.Count -eq 0) ("[" + ($r10 -join ', ') + "]")
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
   Write-Output 'SELF-TEST PASS: 5 must-fire cases (3 stray shapes, the return-arity trap, the swallowed dotfile), 4 clean twins, count and empty-enumeration checks'
