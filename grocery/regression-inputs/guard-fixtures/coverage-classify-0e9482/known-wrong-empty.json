@@ -1,0 +1,4 @@
+{
+ "generated": "FIXTURE - frozen on purpose, do not regenerate from the live board. Every row below is a REAL row, transcribed from the 2026-09-07 triage (queue 2026-09-07-0e9482). Regenerating it would delete the defects it encodes and the cases would then pass by finding nothing. Deliberately EMPTY. Paired with the ledger beside it this is the whole assertion: the SAME fixture, with and without one ruling, must classify the pork & beans row RULED-WRONG (silent) and PRICED (paging). A single run against the populated ledger could not tell 'the ruling was read' from 'the row never reached the classifier'.",
+ "entries": []
+}

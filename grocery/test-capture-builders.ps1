@@ -28,13 +28,26 @@
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $src = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
-$i = $src.IndexOf('      $bLanes = @(); $bMeta = @{}')
+# A LINE ENDING IS NOT PART OF THE SUBJECT. Until 2026-09-07 the end marker was the literal
+# "`r`n      }`r`n    }`r`n  }`r`n}" and the block length added a hard-coded 9 ('CRLF + six spaces
+# + }'). The eol=lf attribute landed estate-wide in 39ad18d3d (2026-09-06 17:59) and capture-run.ps1
+# was rewritten LF the next morning, so the marker stopped matching and this fixture reported BLIND
+# while the block it guards was byte-for-byte unchanged. Fold to LF, and locate by NAMED markers
+# that encode neither a line ending nor a brace-nesting depth.
+$src = $src -replace "`r`n", "`n"
+$startMark = '# >>> BUILDER-BLOCK >>>'
+$endMark   = '# <<< BUILDER-BLOCK <<<'
+$i = $src.IndexOf($startMark)
 if ($i -lt 0) { Write-Output 'BLIND: could not find the builder block start marker in capture-run.ps1 - the fixture proved NOTHING'; exit 3 }
-$endMark = "`r`n      }`r`n    }`r`n  }`r`n}"
+$i = $src.IndexOf("`n", $i) + 1
 $j = $src.IndexOf($endMark, $i)
 if ($j -lt 0) { Write-Output 'BLIND: could not find the builder block end marker in capture-run.ps1 - the fixture proved NOTHING'; exit 3 }
-# through the pass-3 loop's OWN closing brace: CRLF + six spaces + '}' = 9 chars.
-$block = $src.Substring($i, ($j - $i) + 9)
+$block = $src.Substring($i, $j - $i)
+# AN EXTRACTION THAT SUCCEEDED IS NOT AN EXTRACTION THAT IS WHOLE. Both markers can match and still
+# hand back a truncated block if one of them moves; the cases below would then run against a
+# fragment and pass by finding nothing. Assert the two ends of the subject are actually in hand.
+if ($block -notmatch '\$bLanes = @\(\)') { Write-Output 'BLIND: the extracted builder block does not contain $bLanes = @() - the extraction is truncated and the fixture proved NOTHING'; exit 3 }
+if ($block -notmatch 'build2-')          { Write-Output 'BLIND: the extracted builder block does not reach the stage-2 verdict (build2-) - the extraction is truncated and the fixture proved NOTHING'; exit 3 }
 
 $sandbox = Join-Path $env:TEMP ('p4-' + [guid]::NewGuid().ToString('N').Substring(0,8))
 New-Item -ItemType Directory (Join-Path $sandbox 'out\captures') -Force | Out-Null

@@ -326,6 +326,46 @@ $r = RunPS 'audit-coverage-gaps.ps1' ($cgArgs + @('-CommoditiesFile', (Join-Path
 if ($r.rc -eq 0 -and $r.text -match 'no ACTIONABLE gap' -and $r.text -match 'BASIS-NULL' -and $r.text -match 'BAND-DROPPED') { Ok 'coverage-gaps stays QUIET (exit 0) when every gap is basis/band, while still reporting them' }
 else { Bad ("coverage-gaps paged on gaps the engine itself explains (rc=$($r.rc)): " + $r.text) }
 
+# ---- 2c-bis. THE AUDITOR'S OWN TWO BLIND SPOTS (2026-09-07, queue 2026-09-07-0e9482) -------------------
+# Four of the five gaps on 2026-09-07 were not rule problems at all; they were this audit reporting things
+# it could not see the explanation for.
+#   RULED-WRONG - it never read known-wrong.json. A reasoner had already looked at 'Hy-Vee Pork & Beans in
+#                 Tomato Sauce' and decided it is not a baked bean; the guard 'no product a reasoner already
+#                 ruled wrong is priced' then removes it, and this audit paged on the resulting absence.
+#                 That is a page asking a human to re-take a decision they already took, every day, forever.
+#   AD-LINE     - Hy-Vee's ad feed is made of SENTENCES ("Hy-Vee rice, quinoa or Israeli-style couscous,
+#                 ..."), and the candidate test is "does the pattern match the name", which cannot tell a
+#                 product from a line that merely names one. One commodity must own such a line and every
+#                 other commodity it names pages as CLAIMED-BY forever - with nothing fixable behind it,
+#                 because the line carries no size and NO commodity can price it whoever owns it.
+# The fixture is frozen from the real rows and lives in its own directory, so none of the five assertions
+# in 2c above can move under it.
+$cg2Fix  = Join-Path $fix 'coverage-classify-0e9482'
+$cg2Args = @('-OutDir', $cg2Fix, '-ReportDir', $fixRep,
+             '-CompareFile',     (Join-Path $cg2Fix 'comparison-fixture.json'),
+             '-CandidatesFile',  (Join-Path $cg2Fix 'candidates-fixture.json'),
+             '-AllowFile',       (Join-Path $cg2Fix 'allowlist.json'),
+             '-CommoditiesFile', (Join-Path $cg2Fix 'commodities.json'))
+$r = RunPS 'audit-coverage-gaps.ps1' ($cg2Args + @('-LedgerFile', (Join-Path $cg2Fix 'known-wrong-fixture.json')))
+if ($r.text -match 'baked-beans\s+Hy-Vee\s+\[RULED-WRONG\]') { Ok 'coverage-gaps MUST FIRE: a product a reasoner already ruled wrong classifies RULED-WRONG instead of paging as a rule gap' }
+else { Bad ('coverage-gaps still cannot see known-wrong.json - a ruled-out product is being paged as a coverage gap: ' + $r.text) }
+if ($r.text -match 'quinoa-uncooked\s+Hy-Vee\s+\[AD-LINE\]' -and $r.text -match "gave it to 'rice'") { Ok 'coverage-gaps MUST FIRE: a multi-product ad line with no priceable owner classifies AD-LINE and names the owner' }
+else { Bad ('coverage-gaps lost the AD-LINE class - every commodity named in a Hy-Vee ad sentence pages forever: ' + $r.text) }
+# MUST NOT FIRE: the class must stay narrow. Both of these carry the words the AD-LINE test looks at and
+# must still page, or the two new classes have become a way to silence real hijacks.
+if ($r.text -match 'frozen-chimichangas\s+Walmart\s+\[CLAIMED-BY\]') { Ok 'coverage-gaps MUST NOT FIRE: a name with " or " in it whose owner PRICED it is still a plain CLAIMED-BY hijack, not an AD-LINE' }
+else { Bad ('AD-LINE has widened past unpriceable ad sentences and is now swallowing real first-match hijacks: ' + $r.text) }
+if ($r.text -match 'sea-salt\s+Hy-Vee\s+\[CLAIMED-BY\]' -and $r.text -match "gave this name to 'honey'") { Ok 'CLEAN TWIN: the honey line has no " or ", so it stays an actionable CLAIMED-BY - it is the allowlist that silences that one, not the class' }
+else { Bad ('the honey/sea-salt line stopped classifying as CLAIMED-BY: ' + $r.text) }
+if ($r.rc -eq 2 -and $r.text -match '3 actionable, 4 explained') { Ok 'coverage-gaps: 3 of the 7 fixture gaps page and 4 are explained (RULED-WRONG, AD-LINE and two BASIS-NULL)' }
+else { Bad ("coverage-gaps paged on the wrong set with the new classes (rc=$($r.rc)): " + $r.text) }
+# FIXTURE INTEGRITY, and it is the whole of the RULED-WRONG assertion: run the SAME fixture with an EMPTY
+# ledger and the pork & beans row must go back to PRICED and paging. Without this, "RULED-WRONG" would be
+# equally consistent with the row never having reached the classifier at all.
+$r = RunPS 'audit-coverage-gaps.ps1' ($cg2Args + @('-LedgerFile', (Join-Path $cg2Fix 'known-wrong-empty.json')))
+if ($r.text -match 'baked-beans\s+Hy-Vee\s+\[PRICED\]' -and $r.text -match '4 actionable, 3 explained') { Ok 'FIXTURE INTEGRITY: with the ruling removed the same row is PRICED and pages again, so RULED-WRONG is the ledger being read and not the row going missing' }
+else { Bad ('the RULED-WRONG case proves nothing: with an EMPTY ledger the pork & beans row does not come back as PRICED (rc=' + $r.rc + '): ' + $r.text) }
+
 # ---------------------------------------------------------------- 3. triage-due must FAIL CLOSED
 # Run a COPY of the guard in a temp dir so the live queue is never touched ($PSScriptRoot decides its paths).
 $tmp = Register-Fx (Join-Path $env:TEMP ('triage-fixture-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
@@ -1672,6 +1712,69 @@ if (-not (Test-Path $tcb)) {
     Ok 'capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, stage 2 is still judged on evidence, and the edge read-after-write is gated on $shipServed and compares COMMITTED BYTES against git (test-capture-builders 28/28)'
   } else { Bad ('test-capture-builders failed (rc=' + $tcbRc + '): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 }
+
+# ---- THE FIXTURE MUST NOT CARE WHAT A LINE ENDING IS (2026-09-07, queue 2026-09-07-76ec7f) -------------
+# On 2026-09-07 the block above reported BLIND and proved nothing about the last mile of every capture.
+# Nothing was wrong with the builders. test-capture-builders located its subject by a literal CRLF brace
+# ladder ("`r`n      }`r`n    }`r`n  }`r`n}") and added a hard-coded 9 for 'CRLF + six spaces + }'; the
+# eol=lf attribute landed estate-wide in 39ad18d3d (2026-09-06 17:59) and capture-run.ps1 was rewritten LF
+# the next morning, so the marker stopped matching. A fixture that inherits the repository's line-ending
+# regime as an unstated assumption goes blind the day the regime moves, and the only reason anyone could
+# tell is that its author hand-wrote a BLIND branch. So the fixture is now run under BOTH regimes here, and
+# the founding bug is frozen below so the LF regime cannot blind a marker again without saying so.
+$fxLe = NewFxDir 'tcb-lineending'
+# the fixture dot-sources lib\git-blob-lib.ps1 from its PARENT dir, and for the copies below that parent
+# is $fxLe. Without this the copy throws at startup and exits 1 before printing anything, which reads as
+# a case failure rather than a missing dependency.
+Copy-Item (Join-Path (Split-Path $root -Parent) 'lib') (Join-Path $fxLe 'lib') -Recurse -Force
+$crRaw = [IO.File]::ReadAllText((Join-Path $root 'capture-run.ps1'))
+$crLf   = $crRaw -replace "`r`n", "`n"
+$crCrLf = $crLf  -replace "`n", "`r`n"
+$fxLeLf   = Join-Path $fxLe 'lf';   New-Item -ItemType Directory -Force $fxLeLf   | Out-Null
+$fxLeCrLf = Join-Path $fxLe 'crlf'; New-Item -ItemType Directory -Force $fxLeCrLf | Out-Null
+foreach ($d in @($fxLeLf, $fxLeCrLf)) { Copy-Item (Join-Path $root 'test-capture-builders.ps1') (Join-Path $d 'test-capture-builders.ps1') -Force }
+[IO.File]::WriteAllText((Join-Path $fxLeLf   'capture-run.ps1'), $crLf,   (New-Object Text.UTF8Encoding $true))
+[IO.File]::WriteAllText((Join-Path $fxLeCrLf 'capture-run.ps1'), $crCrLf, (New-Object Text.UTF8Encoding $true))
+# fixture integrity: the two copies really do differ in line endings and in nothing else. Without this a
+# 'both pass' result is equally consistent with having written the same bytes into both directories.
+$nLf   = ([IO.File]::ReadAllBytes((Join-Path $fxLeLf   'capture-run.ps1')) | Where-Object { $_ -eq 13 }).Count
+$nCrLf = ([IO.File]::ReadAllBytes((Join-Path $fxLeCrLf 'capture-run.ps1')) | Where-Object { $_ -eq 13 }).Count
+if ($nLf -eq 0 -and $nCrLf -gt 1000 -and (($crCrLf -replace "`r`n", "`n") -eq $crLf)) {
+  Ok ('line-ending fixture integrity: the LF copy carries 0 CR and the CRLF copy carries ' + $nCrLf + ', and the two fold to identical text - the two runs below really are the same subject under two regimes')
+} else { Bad ('line-ending fixture integrity FAILED (CR counts ' + $nLf + ' / ' + $nCrLf + ') - the two copies are not the same bytes under two regimes, so neither run below means anything') }
+$rLf = RunPSAt $fxLeLf 'test-capture-builders.ps1' @()
+if ($rLf.rc -eq 0 -and $rLf.text -match 'SELFTEST: 28/28 pass') { Ok 'capture-run builder block under LF (today''s regime): test-capture-builders finds its subject and passes 28/28' }
+elseif ($rLf.text -match 'BLIND') { Bad ('test-capture-builders is BLIND against an LF capture-run.ps1 (rc=' + $rLf.rc + ') - this is the 2026-09-07 defect returning: ' + (($rLf.text -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | ')) }
+else { Bad ('test-capture-builders failed against an LF capture-run.ps1 (rc=' + $rLf.rc + '): ' + (($rLf.text -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+# CLEAN TWIN: the regime the fixture was written under. The fix folds CRLF to LF, and the thing that fold
+# was most likely to break is the case it used to handle. The builders' behaviour is not a line ending.
+$rCrLf = RunPSAt $fxLeCrLf 'test-capture-builders.ps1' @()
+if ($rCrLf.rc -eq 0 -and $rCrLf.text -match 'SELFTEST: 28/28 pass') { Ok 'CLEAN TWIN: capture-run builder block under CRLF (a fresh checkout''s regime) still passes 28/28 - the fold did not trade one regime for the other' }
+elseif ($rCrLf.text -match 'BLIND') { Bad ('test-capture-builders is BLIND against a CRLF capture-run.ps1 (rc=' + $rCrLf.rc + ') - the fix traded the old blindness for a new one, and every fresh worktree is CRLF: ' + (($rCrLf.text -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | ')) }
+else { Bad ('test-capture-builders failed against a CRLF capture-run.ps1 (rc=' + $rCrLf.rc + '): ' + (($rCrLf.text -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+# MUST FIRE (the founding bug, frozen). The OLD locate logic, reconstructed here so it cannot be edited
+# away with the fixture it used to live in. FROZEN, not read off the live file: capture-run.ps1 now carries
+# the named markers between the braces, so the live source no longer reproduces the shape at all and a
+# reconstruction that read it would pass by finding nothing - the exact defect this whole item is about.
+# The tail below is the brace ladder capture-run.ps1 carried on 2026-09-04, the day the fixture last passed.
+$oldEndMark = "`r`n" + '      }' + "`r`n" + '    }' + "`r`n" + '  }' + "`r`n" + '}'
+$frozenTailLf = '      $bLanes = @(); $bMeta = @{}' + "`n" + '              $failed += ("build2-" + $key)' + "`n" + '            }' + "`n" + '          }' + "`n" + '        }' + "`n" + '      }' + "`n" + '    }' + "`n" + '  }' + "`n" + '}' + "`n"
+$frozenTailCrLf = $frozenTailLf -replace "`n", "`r`n"
+$oldOnFrozenLf   = $frozenTailLf.IndexOf($oldEndMark)
+$oldOnFrozenCrLf = $frozenTailCrLf.IndexOf($oldEndMark)
+if ($oldOnFrozenCrLf -ge 0 -and $oldOnFrozenLf -lt 0) {
+  Ok 'MUST FIRE (founding bug, frozen): the OLD hard-coded-CRLF end marker finds the 2026-09-04 brace ladder under CRLF and finds NOTHING in the identical text under LF - the whole of the 2026-09-07 blindness, and the reason the fixture locates by named marker now'
+} else { Bad ('the frozen reconstruction of the 2026-09-07 blindness no longer reproduces (CRLF=' + $oldOnFrozenCrLf + ' LF=' + $oldOnFrozenLf + ') - it has drifted from the bug and proves nothing') }
+# and the same old logic against the LIVE LF source must still find nothing, which is what actually
+# happened at 08:00 on 2026-09-07. Two separate assertions on purpose: the frozen one proves the
+# mechanism is a line ending, this one proves today's file is still on the losing side of it.
+$oldJLive = $crLf.IndexOf($oldEndMark, [Math]::Max(0, $crLf.IndexOf('      $bLanes = @(); $bMeta = @{}')))
+if ($oldJLive -lt 0) { Ok 'MUST FIRE (live): the OLD CRLF end marker still finds nothing in the shipped LF capture-run.ps1 - a fixture locating by literal line ending would be BLIND right now' }
+else { Bad 'the OLD CRLF end marker matches the shipped capture-run.ps1 again, so the file has gone back to CRLF - check .gitattributes eol=lf before trusting any byte-exact comparison in this estate' }
+# and the named markers themselves must be present in the SHIPPED file, not only in the copies above.
+if ($crSrc -match '# >>> BUILDER-BLOCK >>>' -and $crSrc -match '# <<< BUILDER-BLOCK <<<') {
+  Ok 'capture-run.ps1 still carries the named BUILDER-BLOCK markers the fixture locates by'
+} else { Bad 'capture-run.ps1 has lost one of its BUILDER-BLOCK markers - test-capture-builders will go BLIND on the next run' }
 # THE SECOND STAGE MUST STAY SERIAL. build-fareway-regular runs only if stage 1 exited 0, and its failure
 # is judged on EVIDENCE - does today's file already hold rows captured today? - not on its exit code. That
 # is per-store conditional logic. Putting it in the pool would mean launching it before knowing whether it
@@ -1957,6 +2060,54 @@ else { Bad ('phase-wiring check did NOT fire correctly on the stripped-publish f
 $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
 if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND' -and $pdpSrc -match 'match-soundness: BLIND') { Ok 'publish-deals-page surfaces exit 3 from all three of its direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
+
+# ---- A HELD BOARD MUST HOLD THE THINGS COSTED OFF IT (2026-09-07, queue 2026-09-07-e9edb9) -------------
+# On 2026-09-07 guards correctly refused the board at 08:13:34 and the publish of public/** honoured that.
+# Nothing BELOW the ship boundary did. free-rotation republished the hub at 08:15:25 and build-hub-grid
+# -Publish shipped 591 recipe cards at 08:17:42, priced off the refused board, while the live feed still
+# said week_of 2026-09-06 - so a reader saw card costs from a board that does not exist. Three call sites
+# write to Ghost after the boundary and all three now read the same $guardsBlocked the publish reads.
+# A SOURCE ASSERTION, deliberately: these three shell out to Ghost-publishing children, and a fixture that
+# actually ran them would either publish to the live site or prove nothing about the live wiring. The
+# checker below is exercised against a source with the gate REMOVED, so it cannot pass while blind.
+$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+function Test-CacInspectGating([string]$src) {
+  $bad = New-Object System.Collections.Generic.List[string]
+  $lines = @($src -split "`r?`n")
+  # Each publisher must sit UNDER a guard-verdict test: on its own line, or within the three lines above
+  # it (build-hub-grid's call is a two-line try/catch inside an if block). Three lines is deliberately
+  # tight - it proves the gate is the one wrapping this call, not one further up the file.
+  foreach ($call in @('top5-weekly.ps1', 'rotate-free-dinners.ps1', ('build-hub-grid.ps1' + "'),'-Publish'"))) {
+    $hit = $false; $seen = $false
+    for ($li = 0; $li -lt $lines.Count; $li++) {
+      if ($lines[$li] -notmatch [regex]::Escape($call)) { continue }
+      $seen = $true
+      $lo = [Math]::Max(0, $li - 3)
+      $window = ($lines[$lo..$li] -join "`n")
+      # THE NEEDLE IS THE NEGATIVE FORM, not the bare variable name. The line directly above top5-weekly
+      # is the `if ($guardsBlocked) { Log 'held: ...' }` announcement, so a check looking merely for the
+      # variable would read that as the gate and pass on a source with the real gate removed. Measured:
+      # it did, and the must-fire case below found 2 of 3 instead of 3.
+      if ($window.Contains('-not $guardsBlocked')) { $hit = $true }
+    }
+    if (-not $seen) { $bad.Add($call + ' is not invoked at all - the check cannot see its subject') }
+    elseif (-not $hit) { $bad.Add($call + ' is invoked without reading the guard verdict') }
+  }
+  # ...and the ship-path line must stop claiming a held board was published
+  if ($src -notmatch 'SHIP PATH COMPLETE[^\n]*HELD \(guards blocked it\)') { $bad.Add('the SHIP PATH COMPLETE log has no held-board wording') }
+  return $bad
+}
+$cacLive = @(Test-CacInspectGating $cacSrc)
+if ($cacLive.Count -eq 0) { Ok 'check-ad-cycles gates the three Ghost-publishing INSPECT stages on the guard verdict, and the ship-path log says so when the board is held' }
+else { Bad ('a refused board can still reach readers through the INSPECT path: ' + ($cacLive -join '; ')) }
+# MUST FIRE: the 2026-09-07 shape, built by deleting the gate from the LIVE source rather than transcribing
+# it, so the case encodes the bug permanently and cannot pass by finding nothing. A literal .Replace, not a
+# regex: a double-quoted PowerShell pattern would expand the variable name it is looking for to nothing.
+$cacBroke = $cacSrc.Replace('if (-not $guardsBlocked)', 'if ($true)')
+$cacFired = @(Test-CacInspectGating $cacBroke)
+if ($cacFired.Count -eq 3 -and ($cacFired -join ' ') -match 'top5-weekly' -and ($cacFired -join ' ') -match 'rotate-free-dinners' -and ($cacFired -join ' ') -match 'build-hub-grid') {
+  Ok 'the INSPECT-gating check FIRES on a source with the guard verdict stripped, and names all three Ghost publishers'
+} else { Bad ('the INSPECT-gating check did NOT fire correctly on the stripped fixture (' + $cacFired.Count + ' finding(s)): [' + ($cacFired -join '; ') + '] - it would not have caught the 2026-09-07 defect') }
 
 # ---------------------------------------------------------------- (k3) sale-fallback reads the ENGINE's
 # fileset, not its own newest-file-per-store (2026-09-02, queue 2026-09-02-5df03f).

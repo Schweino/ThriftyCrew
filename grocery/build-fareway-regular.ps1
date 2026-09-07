@@ -161,6 +161,15 @@ if ($SelfTest) {
       @{ id = 'mac-and-cheese'; name = 'Fareway Original Macaroni & Cheese Dinner'; price = '0.68'; per = ''; orig = '0.99'; unit = ''; size = '7.25 oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/69966184-fareway-original-macaroni-cheese-dinner-725-oz' },
       # (e) CLEAN TWIN: the 2026-07-23 "-1-lb" basis override keeps today's behaviour exactly
       @{ id = 'apples'; name = 'Granny Smith Apple'; price = '0.84'; per = 'each'; orig = '1.00'; unit = '$1.68/lb'; size = 'About 0.5 lb each'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/16516401-granny-smith-apple-1-lb' },
+      # (u) MUST FIRE (2026-09-07, queue 2026-09-07-0e9482): the capture put the per-pound RATE in the SIZE
+      #     slot and left `unit` empty, so this row shipped size "$4.99 / lb" - a size that is a price, which
+      #     the engine has no branch for. Eight rows sat BASIS-NULL in every Fareway file back to 09-01 and
+      #     anaheim-peppers was reported as a store that had dropped a commodity it carries. Frozen verbatim
+      #     off fareway-regular-2026-09-07.json.
+      @{ id = 'anaheim-peppers'; name = 'Anaheim Pepper'; price = '1.00'; per = ''; orig = ''; unit = ''; size = '$4.99 / lb'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/19141625-anaheim-pepper-1-lb'; taxonomy_path = 'About 0.2 lb each' },
+      # (v) CLEAN TWIN for (u): the SIBLING row that already worked, because its rate arrived in `unit`
+      #     where the builder expects it. The repair must not change this one by a byte.
+      @{ id = 'serrano-peppers'; name = 'Green Serrano Pepper'; price = '0.21'; per = ''; orig = ''; unit = '$4.99/lb'; size = 'About 0.04 lb each'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb' },
       # (f) CLEAN TWIN: a real captured size with an AGREEING slug passes through untouched
       @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '3.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/20337467-naturesweet-salad-tomatoes-heavenly-10-oz' },
       # (g) MUST FIRE: the pack trap WITHOUT a "- Pack" suffix. $8.48 is a multipack price, the slug names one
@@ -210,6 +219,13 @@ if ($SelfTest) {
     Chk '(e) CLEAN TWIN "-1-lb" override unchanged  $1.68 / lb' ($e -and $e.ad_price -eq '$1.68' -and $e.size -eq 'lb') ("$($e.ad_price) / $($e.size)")
     $f = $byid['NatureSweet Cherubs Tomatoes']
     Chk '(f) CLEAN TWIN agreeing slug passes through 10 oz' ($f -and $f.size -eq '10 oz') ("$($f.size)")
+    $u1 = $byid['Anaheim Pepper']
+    Chk '(u) MUST FIRE  rate in the SIZE slot becomes the price  $4.99 / "lb"' ($u1 -and $u1.ad_price -eq '$4.99' -and $u1.size -eq 'lb') ("$($u1.ad_price) / $($u1.size)")
+    Chk '(u) current_price follows ad_price, so guard 10 still compares one basis' ($u1 -and [double]$u1.current_price -eq 4.99) ("current_price=$($u1.current_price)")
+    Chk '(u) the each price the store stated is kept, not thrown away' ($u1 -and $u1.size_raw -eq '$4.99 / lb' -and "$($u1.size_repaired)" -match 'each price \$1\.00') ("size_raw=$($u1.size_raw) size_repaired=$($u1.size_repaired)")
+    $v1 = $byid['Green Serrano Pepper']
+    Chk '(v) CLEAN TWIN  the sibling whose rate arrived in `unit` is unchanged  $4.99 / "lb"' ($v1 -and $v1.ad_price -eq '$4.99' -and $v1.size -eq 'lb') ("$($v1.ad_price) / $($v1.size)")
+    Chk '(v) CLEAN TWIN  and it carries NO repair stamp - only the repaired row is stamped' ($v1 -and -not $v1.PSObject.Properties['size_repaired']) ("size_repaired=$($v1.size_repaired)")
     $g = $byid['Gatorade Orange Thirst Quencher, Sports Drink']
     Chk '(g) volume slug w/o a size in the NAME refused (multipack price)' ($g -and [string]::IsNullOrEmpty([string]$g.size)) ("$($g.size)")
     $h = $byid['Bright Essentials Trash Bags, Black, Drawstring, Unscented, Large']
@@ -360,6 +376,10 @@ foreach ($f in $In) {
     $unit = [string]$r.unit
     $size = [string]$r.size
     $adp = ''; $sz = ''
+    # RESET PER ROW. PowerShell has no per-iteration scope, so a variable only assigned inside one branch
+    # keeps the PREVIOUS row's value on every row that takes another branch - and the stamp below would
+    # then be written onto rows that were never repaired.
+    $rateInSize = $null; $rateRepairFrom = ''; $rateRepairEach = ''
     $um = [regex]::Match($unit, '\$?\s*([\d.]+)\s*/\s*(lb|oz|gal|kg|ct|ea|each|pound)')
     if ($um.Success) {
       $adp = '$' + $um.Groups[1].Value
@@ -367,7 +387,29 @@ foreach ($f in $In) {
       $sz = $u
     } elseif ($per -eq 'pound') { $adp = '$' + $price; $sz = 'lb' }
       elseif ($per -eq 'each')  { $adp = '$' + $price; $sz = 'each' }
-      else { $adp = '$' + $price; $sz = $size }
+      else {
+        # THE RATE ARRIVED IN THE SIZE SLOT (2026-09-07, queue 2026-09-07-0e9482).
+        # On eight weight-sold produce rows the capture puts the per-pound RATE where a size belongs and
+        # leaves `unit` empty, so the branch above never fires and the row shipped size "$4.99 / lb". The
+        # engine has no branch for a size that is a price, so those rows were BASIS-NULL - unpriceable - in
+        # every Fareway file back to at least 2026-09-01, and audit-coverage-gaps reported them as stores
+        # that had dropped a commodity they plainly carry (anaheim-peppers among them).
+        # The rate is the store's own exact per-pound price, and its own catalog agrees twice over: the slug
+        # ends "-1-lb" and the taxonomy reads "About 0.2 lb each". Deriving the rate from the each price and
+        # that rounded weight instead would be up to 5% out (tomatillo: 0.31 / 0.13 = 2.38 against a stated
+        # 2.49), which is exactly the kind of number this estate does not invent.
+        # THIS IS THE SAME TRANSFORMATION THE $um BRANCH ABOVE MAKES, deliberately: ad_price becomes the
+        # rate, size becomes 'lb', and current_price follows ad_price further down, so guard 10 still
+        # compares two numbers in one basis. base_price/marked_down are already withheld for $sz -eq 'lb'
+        # rows by the clause at the bottom of this loop - a pack was-price is not a per-pound was-price.
+        $rateInSize = [regex]::Match($size, '^\s*\$\s*([\d.]+)\s*/\s*(?:lb|lbs|pound)\.?\s*$')
+        if ($rateInSize.Success) {
+          $adp = '$' + $rateInSize.Groups[1].Value
+          $sz = 'lb'
+          $rateRepairFrom = $size
+          $rateRepairEach = $price
+        } else { $adp = '$' + $price; $sz = $size }
+      }
     # SLUG BASIS OVERRIDE (2026-07-23): Fareway's catalog slug names the sell basis for by-weight
     # produce - ".../products/16606119-cantaloupe-melon-1-lb" is priced PER POUND even when the tile's
     # DOM says "each". Trusting the DOM published $0.88 as the price of a WHOLE melon (real price
@@ -514,6 +556,13 @@ foreach ($f in $In) {
     if ($r.url -and "$($r.url)" -ne '') { $row['link_url'] = [string]$r.url }
     if ($r.taxonomy_path) { $row['taxonomy_path'] = [string]$r.taxonomy_path }
     if ($curNum -gt 0) { $row['current_price'] = $curNum }
+    # NOTHING IS THROWN AWAY BY THE RATE-IN-SIZE REPAIR. The each price the capture stated stays on the
+    # row beside the string it was read out of, using the same `size_raw`/`size_repaired` pair
+    # repair-multipack-sizes.ps1 stamps, so a reader can always get back to what the store said.
+    if ($null -ne $rateInSize -and $rateInSize.Success) {
+      $row['size_raw'] = [string]$rateRepairFrom
+      $row['size_repaired'] = ('per-lb rate was in the size field; each price $' + $rateRepairEach + ' kept here, basis moved to lb (2026-09-07 queue 0e9482)')
+    }
     # THE STORE'S OWN COUNTDOWN (2026-08-21). Brad pointed at a Fareway product page reading
     # "Sale ends in 1 day" and asked why we were guessing a 30-day TTL for it. We were guessing
     # because nothing captured the field: saleDisclaimerString lives ONLY in the page's Apollo

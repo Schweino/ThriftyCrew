@@ -513,6 +513,24 @@ function ConvertTo-DigitNumerals([string]$t) {
 # or $null if price can't be read. kind flags per-lb / per-each markers found in the text.
 function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   $p = ConvertTo-DigitNumerals ((("" + $priceText + " " + $nameText) -replace "`n", ' '))
+  # A FUEL-SAVER REWARD IS NOT A PRICE (2026-09-07, queue 2026-09-07-05e4c3). Hy-Vee's weekly ad hangs a
+  # loyalty clause off the front of an item line - "Gain Flings, EARN 10<cent> OFF PER GALLON, -3.00 off with
+  # manufacturer's digital coupon, $12.94" - and the cents branch below reads the FIRST cents-shaped token
+  # anywhere in the line. So the engine published Gain Flings at $0.10 a pod, and it held the laundry-pods
+  # CROWN from 2026-08-31 to 2026-09-06 with every guard green, because guard 10 verifies rows against their
+  # own current_price and a Hy-Vee ad row does not carry one. Two more sat on the same live board (diapers
+  # $0.25, dryer-sheets $0.05) and two more on the next build (disinfecting-wipes $0.10, facial-tissues
+  # $0.03). Strip the clause before ANY extraction, so the cents branch, the N-for-$M branch and the
+  # last-dollar branch all read the line the ad actually prices.
+  # ANCHORED ON "OFF PER GALLON", not on the cents sign: "Bananas, 49<cent> lb." is a real cents price and
+  # must keep working. The FUEL SAVE(R|D) prefix is OPTIONAL because the founding row does not carry it -
+  # five of the six live rows say FUEL SAVER and the crown-holder just says EARN.
+  # The trailing eat is `\s*,?` and NOT `[^,]*,?`: a line whose price follows the clause with no comma
+  # ("... OFF PER GALLON $2.29") would lose its own price to a greedy run-to-the-next-comma.
+  # THE GLYPH RIDES AS \u00XX ESCAPES, NEVER A LITERAL - the same rule the cents branch below states, and
+  # for the same reason: a literal cent sign in this source has been re-encoded by an editor before now.
+  # The leading U+00C2 stays optional so a mojibaked capture still inside the carry window is stripped too.
+  $p = [regex]::Replace($p, '(?i)(?:\bFUEL\s+SAVE[RD]?\b[,\s]*)?(?:\bEARN\s+)?\d+\s*(?:\u00C2?\u00A2|cents?)\s*OFF\s+PER\s+GALLON\s*,?', ' ')
   $note = ''
   # PACKAGE SIZE vs PER-LB PRICE. This string is priceText + nameText, so a product NAMED
   # "Yellow Onions, 3 lb Bag" used to trip the per-lb marker and its $2.39 BAG price got published
@@ -580,7 +598,11 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # now decodes UTF-8, so a clean U+00A2 is what arrives - and the old pattern could not match it,
   # returning no price at all rather than a wrong one. The leading U+00C2 stays OPTIONAL so captures
   # still inside the carry window, written before that fix, keep pricing.
-  $m = [regex]::Match($p, '(\d+)\s*(?:\u00C2?\u00A2|cents?)')
+  # AND A SECOND LINE OF DEFENCE ON THE SAME CLAUSE (2026-09-07, 05e4c3). The strip at the top of this
+  # function removes the shapes Hy-Vee writes today; the lookahead refuses the READING regardless of how the
+  # clause is worded around it, so a fuel-saver line the strip has not learned yet goes UNPRICED instead of
+  # publishing a reward as a price. Understating is wrong, but a $0.10 laundry pod is wrong AND believable.
+  $m = [regex]::Match($p, '(\d+)\s*(?:\u00C2?\u00A2|cents?)(?!\s*OFF\s*PER\s*GALLON)')
   if ($m.Success) { return @{ per_item = ([double]$m.Groups[1].Value)/100.0; kind=@{perlb=$perlb;pereach=$pereach}; note='cents' } }
   # plain dollar amount (take the LAST one, which is usually the sale/ad price)
   $dm = [regex]::Matches($p, '\$\s*([\d]+(?:\.\d{1,2})?)')
@@ -783,6 +805,35 @@ function Get-UnitPrice($deal, $cat) {
       $rate = [double]$slb.Groups[1].Value
       if ($rate -gt 0 -and [math]::Abs($pr.per_item - $rate) -lt 0.005) {
         return @{ unit_price=$rate; basis='per-lb rate in size'; note=$pr.note }
+      }
+    }
+  }
+  # A PER-POUND PRICE ON AN OUNCE COMMODITY IS A RATE, NOT A PACK WEIGHT (2026-09-07, queue 2026-09-07-e9edb9).
+  # Hy-Vee's deli lines put the price LAST and label it per pound: "Di Lusso premium sliced cheese, $9.99 lb."
+  # Get-ItemPrice reads 9.99 as the price (right) and sets the perlb marker (right), but sliced-cheese is an
+  # OZ commodity, so the lb branch above never runs and the size parser below reads the SAME "9.99 lb" out of
+  # the name as a 9.99-POUND package: 9.99 / (9.99 x 16) = 1/16 = 0.0625 for ANY price. That is a fingerprint,
+  # not a coincidence, and five Hy-Vee rows carried it on 2026-09-07 (parmesan $21.99 lb., turkey-lunchmeat
+  # $8.99 lb., deli-ham $8.99 lb., sliced-cheese $9.99 lb., queso $9.99 lb.). The band refused all five, which
+  # is what held the whole board on the band-censorship ratchet that morning. The same token on an LB
+  # commodity has always been read correctly ("Gala or Granny Smith apples, $1.88 lb." publishes 1.88/lb).
+  #
+  # THE TELL IS SELF-CHECKING, the same shape as 'per-lb rate in size' just above: the number glued to "lb"
+  # IS the number Get-ItemPrice took as the price, so the row states a RATE and no package weight at all.
+  # And it only fires when the SIZE field has no usable amount - when the store gave a real size ("12 oz"),
+  # that size is a statement about the package and the division below is right.
+  #
+  # THE BASIS STRING IS LOAD-BEARING: export-feed.ps1:116 matches the substring 'per-lb marker' and ships the
+  # cell as variableWeight, so a recipe card charges the exact amount used instead of rounding up to a
+  # package. That is correct for these rows - a deli counter sells cheese and ham by weight, there is no
+  # package - so the substring is kept deliberately, not by accident.
+  if ($unit -eq 'oz' -and $plain -and $pr.kind.perlb) {
+    $rateTxt = ConvertTo-DigitNumerals ((("" + $deal.price_text + " " + $deal.name) -replace "`n", ' '))
+    $rm = [regex]::Match($rateTxt, '(?i)\$\s*(\d+(?:\.\d{1,2})?)\s*(?:/\s*|per\s*)?lbs?\.?(?![\w-])')
+    if ($rm.Success -and ([math]::Abs([double]$rm.Groups[1].Value - $pr.per_item) -lt 0.005)) {
+      $szAmtLb = Get-SizeAmount ([string]$deal.size_text) $unit
+      if (($null -eq $szAmtLb) -or ($szAmtLb -le 0)) {
+        return @{ unit_price=($pr.per_item/16.0); basis='per-lb marker (converted to oz)'; note=$pr.note }
       }
     }
   }
@@ -1172,6 +1223,57 @@ if ($SelfTest) {
   _Near 'per-lb rate in size (light pkg)' (Get-UnitPrice (_D '$1.28' 'Sweet Red Onions' $null '0.85 lbs ($1.28/lb)') (_C 'lb')).unit_price 1.28 0.001
   # price != the stated rate -> it IS a package total and must still divide: $0.19 / 0.15 lb = $1.267/lb
   _Near 'package total w/ rate shown'     (Get-UnitPrice (_D '$0.19' 'B-Size Gold Potatoes' $null '0.15 lbs ($1.29/lb)') (_C 'lb')).unit_price 1.2667 0.001
+
+  # --- 11c-bis: A PER-POUND PRICE ON AN OUNCE COMMODITY (2026-09-07, queue 2026-09-07-e9edb9) -------------
+  # Hy-Vee's deli lines: "<product>, $9.99 lb." The perlb marker fires, the commodity is OZ, and the size
+  # parser used to read the same "9.99 lb" out of the NAME as a 9.99-pound pack -> 9.99/159.84 = 0.0625
+  # exactly, for ANY price. Five rows carried that 1/16 fingerprint on 09-07 and the band refused all five,
+  # which held the board on the censorship ratchet. Rows are the REAL ones off flagged-2026-09-07.
+  # MUST FIRE (the founding row): 9.99/lb -> 0.6244/oz, not 0.0625.
+  _Near 'MUST FIRE  Hy-Vee deli $9.99 lb. on an OZ commodity' (Get-UnitPrice (_D 'Di Lusso premium sliced cheese, $9.99 lb.' 'Di Lusso premium sliced cheese, $9.99 lb.' $null '') (_C 'oz')).unit_price 0.6244 0.0002
+  _Near 'MUST FIRE  the same shape at $21.99 lb. (parmesan)' (Get-UnitPrice (_D 'Parmigiano reggiano cheese, $21.99 lb.' 'Parmigiano reggiano cheese, $21.99 lb.' $null '') (_C 'oz')).unit_price 1.3744 0.0002
+  # ...and it is the RATE that converts, so the answer must not be 1/16 of itself any more. A separate
+  # assertion because 0.0625 is what a wrong reading returns for every one of these rows, at every price.
+  $_dl = (Get-UnitPrice (_D 'Di Lusso premium sliced cheese, $9.99 lb.' 'Di Lusso premium sliced cheese, $9.99 lb.' $null '') (_C 'oz')).unit_price
+  if ([math]::Abs([double]$_dl - 0.0625) -gt 0.0001) { Write-Output 'ok    MUST FIRE  the 1/16 fingerprint is gone (any price divided by its own pounds returns exactly 0.0625)' }
+  else { Write-Output 'FAIL  the 1/16 fingerprint is BACK - a per-lb price is being read as a pack weight again'; $script:fail++ }
+  # MUST NOT FIRE: the same token on an LB commodity was always read correctly and must not move.
+  _Near 'MUST NOT FIRE  $1.88 lb. on an LB commodity is unchanged' (Get-UnitPrice (_D 'Gala or Granny Smith apples, $1.88 lb.' 'Gala or Granny Smith apples, $1.88 lb.' $null '') (_C 'lb')).unit_price 1.88 0.001
+  # CLEAN TWIN: the ordinary OZ path is untouched - the real Fareway cell from the same commodity.
+  _Near 'CLEAN TWIN  an ordinary OZ row with a size still divides' (Get-UnitPrice (_D '$2.48' 'Fareway American Cheese Slices' $null '12 oz') (_C 'oz')).unit_price 0.2067 0.001
+  # CLEAN TWIN: a genuine multi-pound package on an OZ commodity (the price is a TOTAL, not a rate) still
+  # divides - the rate test requires the number glued to "lb" to BE the number taken as the price, and
+  # "$12.16 ... 5 lbs." has a whole product name in between. This is the real Sam's cell, 12.16/80 oz.
+  _Near 'CLEAN TWIN  a 5 lb pack total on an OZ commodity still divides' (Get-UnitPrice (_D '$12.16' "Member's Mark American Cheese 5 lbs., 160 slices" $null '5 lb') (_C 'oz')).unit_price 0.152 0.001
+  # A STATED SIZE STILL WINS, which is today's behaviour and not a new ruling: size_text is the store's own
+  # statement about the unit being priced, so the new branch is scoped to rows that have no size at all -
+  # exactly the Hy-Vee ad shape. This case is here because the guard is a real branch and an untested
+  # branch is how the next wrong price gets in.
+  _Near 'a stated size beats the bare rate (guard branch)' (Get-UnitPrice (_D 'Deli sliced cheese, $9.99 lb.' 'Deli sliced cheese' $null '12 oz') (_C 'oz')).unit_price 0.8325 0.001
+
+  # --- 11c-ter: THE FUEL-SAVER CLAUSE IS NOT A PRICE (2026-09-07, queue 2026-09-07-05e4c3) ----------------
+  # The row that held the laundry-pods crown at $0.10 a pod from 08-31 to 09-06, frozen exactly as the
+  # engine saw it. laundry-pods is an each-commodity and the line states no count, so after the strip the
+  # correct answer is UNPRICED - the $12.94 is a tub price, and inventing a pod count would be a fabricated
+  # number. Understating is wrong; a believable wrong number on a live page is worse.
+  # SINGLE-QUOTED LITERALS WITH DOUBLED APOSTROPHES, never double quotes: "... coupon, $12.94" expands $12
+  # as a variable and feeds the case ".94" - a fixture that can never match anything, passing by finding
+  # nothing. The cent sign is the one piece built by concatenation, and it is inside the parentheses so the
+  # whole thing arrives as ONE argument rather than three positional ones.
+  _Null 'MUST FIRE  the Gain Flings fuel-saver line no longer prices as 10 cents' (Get-UnitPrice (_D ('Gain Flings, EARN 10' + [char]0x00A2 + ' OFF PER GALLON, -3.00 off with manufacturer''s digital coupon, $12.94') 'Gain Flings' $null '') (_C 'each'))
+  # and the price it DOES read is the line's own trailing dollar token, proven on a count-bearing twin.
+  _Near 'the same line WITH a pack count prices off $12.94, not 10 cents' (Get-UnitPrice (_D ('Gain Flings 42 ct., EARN 10' + [char]0x00A2 + ' OFF PER GALLON, -3.00 off with manufacturer''s digital coupon, $12.94') 'Gain Flings' $null '') (_C 'each')).unit_price 0.3081 0.001
+  # the three siblings that were live or built the same morning, all with the FUEL SAVER prefix.
+  _Null 'MUST FIRE  diapers FUEL SAVER 25 cents'      (Get-UnitPrice (_D ('Pampers Swaddlers diapers, FUEL SAVER EARN 25' + [char]0x00A2 + ' OFF PER GALLON -3.00 off with manufacturer''s digital coupon, $24.97') 'Pampers Swaddlers diapers' $null '') (_C 'each'))
+  _Null 'MUST FIRE  facial tissue FUEL SAVER 3 cents' (Get-UnitPrice (_D ('Hy-Vee facial tissue, FUEL SAVER EARN 3' + [char]0x00A2 + ' OFF PER GALLON, $2.29') 'Hy-Vee facial tissue' $null '') (_C 'each'))
+  # a FUEL SAVER line on an LB commodity prices per lb off its own trailing token - the clause goes, the
+  # price stays. This is the row that proves the strip does not simply blank the line.
+  _Near 'FUEL SAVER on an lb commodity prices $5.99/lb' (Get-UnitPrice (_D ('Smart Chicken boneless skinless chicken thighs, FUEL SAVER EARN 3' + [char]0x00A2 + ' OFF PER GALLON, $5.99 lb.') 'Smart Chicken boneless skinless chicken thighs' $null '') (_C 'lb')).unit_price 5.99 0.001
+  # MUST NOT FIRE: a real cents PRICE is not a fuel-saver reward. The strip is anchored on OFF PER GALLON,
+  # so the shape that made this fix risky at all still prices exactly as it did.
+  _Near 'MUST NOT FIRE  "Bananas, 49 cents lb." still prices 0.49/lb' (Get-UnitPrice (_D ('Bananas, 49' + [char]0x00A2 + ' lb.') 'Bananas' $null '') (_C 'lb')).unit_price 0.49 0.001
+  # CLEAN TWIN: the Hy-Vee storage-bags row from the same ad, no fuel-saver clause, unchanged at 0.0299.
+  _Near 'CLEAN TWIN  Hy-Vee storage bags 75 to 100 ct., $2.99' (Get-UnitPrice (_D 'Hy-Vee storage bags, 75 to 100 ct., $2.99' 'Hy-Vee storage bags' $null '') (_C 'each')).unit_price 0.0299 0.001
 
   # --- 11d: SIZE-PARSER DIVERGENCE FIXES (2026-07-30) - the engine vs pu-lib split, closed --------------
   # Every case is a REAL row from 2026-07-29: Bush's beans band-flagged at $0.3988/oz, Hy-Vee Cola flagged

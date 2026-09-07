@@ -1375,6 +1375,95 @@ foreach ($st in $partial) {
   [void]$warn.Add(("guard 10 checks {0} but not all of it: {1} capture(s) in its engine set PREDATE the current_price field, so those rows are compared against nothing. The puller is fine - these are legacy files aging out of the window, and the finding closes itself when they do. Unguarded until then: {2}" -f $st, @($legacyFiles[$st]).Count, ((@($legacyFiles[$st]) | Sort-Object) -join ', ')))
 }
 
+# ---------------------------------------------------------------- 10b: AD-LINE PRICE PROVENANCE
+<#
+  THE $0.10 LAUNDRY POD (2026-09-07, queue 2026-09-07-05e4c3), turned into an invariant.
+
+  Hy-Vee's weekly ad is not a product record, it is a SENTENCE: "<product>, <qualifiers>, <price>". The
+  engine extracts the first money-shaped token it can find anywhere in that sentence, so a loyalty clause
+  wearing a cent sign is a price:
+
+      "Gain Flings, EARN 10<cent> OFF PER GALLON, -3.00 off with manufacturer's digital coupon, $12.94"
+
+  The fuel-saver reward became $0.10 a pod, that number took the laundry-pods CROWN, and it stayed on the
+  live board from 2026-08-31 to 2026-09-06 with every guard green. Two siblings sat beside it (diapers
+  $0.25, dryer-sheets $0.05) and two more were on the next build (disinfecting-wipes $0.10, facial-tissues
+  $0.03). The parser fix in compare-deals strips the clause; this is the class fix, because it catches the
+  NEXT token shape nobody has enumerated rather than the one we just learned.
+
+  WHY NO EXISTING GUARD COULD SEE IT. Guard 10 compares what we publish to the store's own current_price -
+  the only independent statement of price we have - and a Hy-Vee ad row does not carry one. So the strongest
+  price check in the estate is structurally blind to exactly the store whose prices arrive as prose.
+
+  THE INVARIANT. On a cell whose source_ad is a Hy-Vee-style ad and whose `ad` text IS the item line, the
+  price the engine used must be the LAST money token in that line. Hy-Vee writes the price last, every time;
+  everything before it is qualifiers. The engine's price is recovered from per_unit and the basis string it
+  wrote (per-each -> x1, per-N-pack -> xN, size X -> xX), not re-derived from the text, so this compares the
+  engine's own two statements about the same row rather than re-implementing the parser.
+
+  IT FAILS CLOSED BY SKIPPING, NOT BY GUESSING. A basis shape this guard does not understand is SKIPPED and
+  COUNTED, never assumed correct - and the skip counts are printed, because "checked 39" without its
+  denominator is a mood. A multibuy legitimately differs from the last token (its per-item price is
+  computed, not quoted) and is skipped by its own note.
+
+  MEASURED BEFORE IT WAS MADE HARD, on the two real boards it was written from:
+      comparison-2026-09-06 (live): 45 ad-line cells, 38 checked, 3 findings - exactly the three
+                                    fuel-saver cells, no others.
+      comparison-2026-09-07:        44 ad-line cells, 39 checked, 2 findings - exactly the two.
+  Zero false positives over 77 checked cells, so it is a hard invariant on day one rather than a ratchet.
+#>
+$alSources = @('Weekly Ad', 'DEALS GOOD ALL MONTH LONG')
+function Get-AdLineLastMoney([string]$t) {
+  # THE GLYPH RIDES AS \u00XX ESCAPES, NEVER A LITERAL - same rule as compare-deals' own cents branch.
+  # "N cents OFF PER GALLON" is excluded here for the same reason it is excluded there: it is a fuel
+  # reward, not a price, so it must not be able to satisfy this guard either.
+  $rx = '(?:(\d+)\s*(?:/|for)\s*\$\s*(\d+(?:\.\d{1,2})?))|(?:\$\s*(\d+(?:\.\d{1,2})?))|(?:(\d+)\s*(?:\u00C2?\u00A2|cents?)(?!\s*OFF\s*PER\s*GALLON))'
+  $last = $null
+  foreach ($m in [regex]::Matches(("" + $t), $rx, [Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
+    if ($m.Groups[1].Success) { $n = [double]$m.Groups[1].Value; if ($n -gt 0) { $last = [double]$m.Groups[2].Value / $n } }
+    elseif ($m.Groups[3].Success) { $last = [double]$m.Groups[3].Value }
+    elseif ($m.Groups[4].Success) { $last = [double]$m.Groups[4].Value / 100.0 }
+  }
+  return $last
+}
+function Get-AdLineBasisMultiplier([string]$basis) {
+  # The engine's own basis string, read back. Anything not listed returns $null and the cell is SKIPPED.
+  $b = ("" + $basis)
+  if ($b -eq 'per-lb marker (converted to oz)') { return 16.0 }           # a per-lb RATE published per oz
+  $m = [regex]::Match($b, '^per-(\d+(?:\.\d+)?)-pack$');      if ($m.Success) { return [double]$m.Groups[1].Value }
+  $m = [regex]::Match($b, '^per-(\d+(?:\.\d+)?)-lb pkg$');    if ($m.Success) { return [double]$m.Groups[1].Value }
+  $m = [regex]::Match($b, '^size\s+(\d+(?:\.\d+)?)\s');       if ($m.Success) { return [double]$m.Groups[1].Value }
+  if ($b -eq 'per-each' -or $b -eq 'per-lb marker' -or $b -eq 'per-lb rate in size') { return 1.0 }
+  if ($b -like 'per-package*' -or $b -like 'per-each (*') { return 1.0 }
+  return $null
+}
+$alTotal = 0; $alChecked = 0; $alSkipBasis = 0; $alSkipNote = 0; $alSkipToken = 0; $alBad = 0
+foreach ($row in $cmp.comparison) {
+  foreach ($s in @($row.stores)) {
+    if ($alSources -notcontains ([string]$s.source_ad)) { continue }
+    $adTxt = [string]$s.ad
+    if ($adTxt -ne ([string]$s.item)) { continue }   # a store that quotes a bare price is not an ad LINE
+    $alTotal++
+    if (([string]$s.note) -match '(?i)bogo|buy \d|\d+ for \$') { $alSkipNote++; continue }
+    $mult = Get-AdLineBasisMultiplier ([string]$s.basis)
+    if ($null -eq $mult) { $alSkipBasis++; continue }
+    $lastTok = Get-AdLineLastMoney $adTxt
+    if ($null -eq $lastTok -or $lastTok -le 0) { $alSkipToken++; continue }
+    $alChecked++
+    $implied = [double]$s.per_unit * $mult
+    if ([math]::Abs($implied - $lastTok) -gt ([math]::Max(0.01, $lastTok * 0.005))) {
+      $alBad++
+      [void]$fail.Add(("HARD FAIL: ad-line price provenance  [{0}] {1} @ {2}  we publish {3}/{4} (basis '{5}'), which works out to `${6} for the package - but the line's own last price is `${7}. The engine took a number that is not the price this ad quotes.`n           line: {8}" -f `
+        [string]$s.store, [string]$row.id, [string]$s.store, [string]$s.per_unit, [string]$row.unit, [string]$s.basis, [math]::Round($implied,2), $lastTok, $adTxt))
+    }
+  }
+}
+if ($alBad -eq 0) {
+  OkUnlessBlind $alChecked `
+    ("every ad-line cell publishes the price its own ad line quotes last (checked $alChecked of $alTotal ad-line cell(s); skipped $alSkipBasis for a basis this check cannot reconstruct, $alSkipNote multibuy, $alSkipToken with no money token)") `
+    'ad-line price provenance verified ZERO cells. Either no Hy-Vee-style ad cell reached the board, or the basis strings the engine writes have changed shape and every cell fell into the skip counter - a $0.10 laundry pod would be invisible again either way.'
+}
+
 # ---------------------------------------------------------------- 11: Baker's price PROVENANCE
 # RETIRED AND REPLACED 2026-07-30. What used to live here was a reconcile against out\bakers-prices-raw.csv,
 # built for the 2026-07-14 milk bug: bakersplus printed its unit price coarsely ("$0.02/fl oz"), the importer

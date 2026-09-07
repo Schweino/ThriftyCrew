@@ -25,9 +25,10 @@
 # allowlist entry added tomorrow could silently delete a fixture's gap and the test would pass by finding
 # nothing - the exact way the Lysol negative test stopped testing anything.
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$CandidatesFile = "", [string]$ReportDir = "",
-      [string]$CommoditiesFile = "", [string]$AllowFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
+      [string]$CommoditiesFile = "", [string]$AllowFile = "", [string]$LedgerFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path $PSScriptRoot 'known-wrong-lib.ps1')                    # Test-KnownWrong: a product a reasoner already ruled out is not a coverage gap
 . (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 
@@ -240,6 +241,13 @@ foreach ($glob in @('bakers\bakers-deals-*.json','sams\sams-deals-*.json','farew
 $allow = @{}
 $allowF = if ($AllowFile) { $AllowFile } else { Join-Path $root 'coverage-gap-allowlist.json' }
 if (Test-Path $allowF) { try { foreach ($a in (Read-JsonFile $allowF).allow) { $allow[([string]$a.commodity + '|' + [string]$a.store)] = $true } } catch {} }
+# THE RULINGS LEDGER (2026-09-07, queue 2026-09-07-0e9482). audit-semantic-identity has read this since it
+# shipped; this audit never did, so a product a reasoner had already ruled out was reported as a store the
+# rule had dropped. -LedgerFile so a frozen fixture can pin it: the RULED-WRONG case below rests on a
+# specific ruling still being in the ledger, and an ordinary reversal would otherwise turn the test red or,
+# worse, make it pass by finding nothing.
+$cgLedgerF = if ($LedgerFile) { $LedgerFile } else { Join-Path $root 'known-wrong.json' }
+$script:cgKnownWrong = Get-KnownWrongBlocks -Path $cgLedgerF
 # NOT-CARRIED: the OTHER reason a cell is legitimately missing. The allowlist above says "the store sells
 # it and we cannot price it like-for-like"; not-carried.json says "the store does not sell it", derived
 # from the store's own capture evidence (see derive-not-carried.ps1). Both explain a gap; conflating them
@@ -442,6 +450,18 @@ function Classify([string]$id, [string]$store, [string]$name) {
   $k = $id + '|' + $store + '|' + (CgNorm $name)
   if ($engineRow.ContainsKey($k)) {
     $b = [string]$engineRow[$k].basis
+    # RULED-WRONG: A PRODUCT A REASONER ALREADY THREW OUT IS NOT A COVERAGE GAP (2026-09-07, 0e9482).
+    # This audit reads the ENGINE'S candidates and the RULES, and never read known-wrong.json - the ledger
+    # a human writes when they have looked at a product and decided it is not the commodity. Guard "no
+    # product a reasoner already ruled wrong is priced" then removes the row from the board, and this audit
+    # reports the resulting absence as an actionable gap: it pages a human to re-do a decision that human
+    # already made, forever, with no way to close it. Founding case: baked-beans @ Hy-Vee, where
+    # 'Hy-Vee Pork & Beans in Tomato Sauce' is PRICED at 0.0556/oz (cheaper than the crown) and ruled wrong.
+    # Checked FIRST, ahead of the basis verdicts, because the ruling is a statement about the PRODUCT and
+    # holds whatever the engine managed to compute for it.
+    if (Test-KnownWrong -Blocks $script:cgKnownWrong -CommodityId $id -Store $store -ProductName $name) {
+      return [pscustomobject]@{ reason='RULED-WRONG'; detail=("a reasoner already ruled this product wrong for this commodity in known-wrong.json, so the guard removes it from the board - the absence is the ruling working, not a rule gap (engine basis '" + $b + "')"); actionable=$false }
+    }
     if ($b -eq 'UNPRICED')    { return [pscustomobject]@{ reason='BASIS-NULL';   detail=("the engine matched it and could not express a price in this commodity's unit (size '" + [string]$engineRow[$k].size_text + "')"); actionable=$false } }
     if ($b -eq 'OUT-OF-BAND') { return [pscustomobject]@{ reason='BAND-DROPPED'; detail=("the engine matched and priced it; the sanity band refused the number (ad " + [string]$engineRow[$k].price_text + ", size '" + [string]$engineRow[$k].size_text + "')"); actionable=$false } }
     return [pscustomobject]@{ reason='PRICED'; detail=("the engine priced this row (basis '" + $b + "') yet the store is absent from the board - look downstream of matching"); actionable=$true }
@@ -449,7 +469,25 @@ function Classify([string]$id, [string]$store, [string]$name) {
   $ok = $store + '|' + (CgNorm $name)
   if ($engineOwner.ContainsKey($ok)) {
     $others = @($engineOwner[$ok] | Where-Object { $_ -ne $id })
-    if ($others.Count) { return [pscustomobject]@{ reason='CLAIMED-BY'; detail=("first-match-wins gave this name to '" + ($others -join "', '") + "'"); actionable=$true } }
+    if ($others.Count) {
+      # AD-LINE: A LINE THAT NAMES SEVERAL PRODUCTS IS NOT A PRODUCT (2026-09-07, 0e9482).
+      # Hy-Vee's weekly ad feed is composed of multi-product lines - "Hy-Vee rice, quinoa or Israeli-style
+      # couscous, ...", "Anaheim, Serrano or Poblano Peppers" - and this audit's whole candidate test is
+      # "does the commodity's pattern match the name", which cannot tell a PRODUCT from a SENTENCE that
+      # merely names one. One commodity must own such a line (first-match-wins), and every other commodity
+      # named in it then pages as CLAIMED-BY forever. Nothing is fixable: the line carries no size, so NO
+      # commodity can price it whoever owns it, and moving the ownership just moves the complaint.
+      # THE TWO CONDITIONS ARE BOTH REQUIRED, and the second is what keeps this narrow: the name reads as a
+      # list ("<something>, <something> or <something>") AND the engine could not price it. A real product
+      # whose name happens to contain " or " but which the engine priced still pages as CLAIMED-BY, which
+      # is the founding pork-chops hijack and must not be silenced.
+      $adLineOwner = $engineRow.ContainsKey(([string]$others[0]) + '|' + $store + '|' + (CgNorm $name))
+      $ownerBasis = if ($adLineOwner) { [string]$engineRow[(([string]$others[0]) + '|' + $store + '|' + (CgNorm $name))].basis } else { '' }
+      if (($name -match '(?i),\s*[^,]+\s+or\s+') -and ($ownerBasis -eq 'UNPRICED')) {
+        return [pscustomobject]@{ reason='AD-LINE'; detail=("this is an ad LINE naming several products, not a product: first-match-wins gave it to '" + ($others -join "', '") + "' and the engine could not price it there either (basis UNPRICED), so no commodity can price it whoever owns it"); actionable=$false }
+      }
+      return [pscustomobject]@{ reason='CLAIMED-BY'; detail=("first-match-wins gave this name to '" + ($others -join "', '") + "'"); actionable=$true }
+    }
   }
   # ---- NOT-INGESTED: the rule DOES match, the engine simply never saw the row -----------------------
   # Classify had no verdict for 'not ingested' and fell through to RULE-INVISIBLE by elimination, so

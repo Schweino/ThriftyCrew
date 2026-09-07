@@ -4273,6 +4273,51 @@
                         "ruled_on":  "2026-09-06",
                         "ruled_by":  "claude (grocery triage-developer, plan-2026-09-06)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Walmart|80-lean-20-fat-ground-beef-and-pork-blend-3-lb-r",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "80% Lean / 20% Fat Ground Beef and Pork Blend, 3 lb Roll, Fresh"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "beef and pork blend, not 80/20 ground beef - a different species mix, killed by the commodity own pork exclude; semantic sweep 2026-09-07 cos 0.698",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-07",
+                        "ruled_by":  "triage-2026-09-07",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-pods|Bakers|arm-hammer-power-sheets-laundry-detergent-fresh",
+                        "commodity":  "laundry-pods",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Power Sheets Laundry Detergent Fresh Breeze"
+                                  ],
+                        "product_id":  "0003320000366",
+                        "verdict":  "wrong-product",
+                        "evidence":  "laundry SHEETS, not pods - a different form, and the rule has no sheets token on purpose; semantic sweep 2026-09-07 cos 0.683",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-07",
+                        "ruled_by":  "triage-2026-09-07",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-burritos|Walmart|el-monterey-beef-bean-cheese-flavor-chimichangas",
+                        "commodity":  "frozen-burritos",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "El Monterey Beef, Bean \u0026 Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen)"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "chimichangas, not burritos - a fried burrito is a different SKU class; semantic sweep 2026-09-07 cos 0.728",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-07",
+                        "ruled_by":  "triage-2026-09-07",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

@@ -64,6 +64,34 @@ function Get-DriftRows {
   return $out
 }
 
+
+function Get-CrownNames {
+  <#
+    The product NAME on every cheapest cell of a comparison, mapped to a readable description of the
+    cell it crowns. A PARAMETER rather than a file read, so the CROWN-BY-CONTEST case in -SelfTest can
+    be driven by a frozen board slice. The whole point of the class is a wrong product that HELD a
+    crown, and the exclude that shipped the same day removes that product from today's board - so a
+    check that could only read live data could never fire, which is the defect this estate keeps paying
+    for (see grocery\test-capture-builders.ps1's BLIND branch).
+  #>
+  param($Comparison)
+  $out = @{}
+  foreach ($r in @($Comparison)) {
+    $cs = [string]$r.cheapest_store
+    if (-not $cs) { continue }
+    foreach ($s in @($r.stores)) {
+      if ([string]$s.store -ne $cs) { continue }
+      $itm = [string]$s.item
+      if ($itm) { $out[$itm] = ([string]$r.id + ' @ ' + $cs + ' ' + [string]$s.per_unit + '/' + [string]$r.unit) }
+    }
+  }
+  return $out
+}
+function Select-CrownByContest {
+  # The intersection, as its own function so both the fixture and the live path drive the SHIPPED rule.
+  param($NewContest, $CrownNames)
+  return @(@($NewContest) | Where-Object { $CrownNames.ContainsKey([string]$_) })
+}
 if ($SelfTest) {
   $bad = 0
   function T([string]$n, [bool]$ok, [string]$got) {
@@ -90,6 +118,39 @@ if ($SelfTest) {
   T 'MUST FIRE  the report and the console both carry the NAMES, not just the count' `
     (((Get-Content $PSCommandPath -Raw) -match ('drift_' + 'products')) -and ((Get-Content $PSCommandPath -Raw) -match ('DRIFT    engine says'))) `
     'the names are collected and then never rendered'
+  # ---- CROWN-BY-CONTEST (2026-09-07, queue 2026-09-07-0b232c) ----------------------------------------
+  # FROZEN BOARD SLICE, transcribed from comparison-2026-09-06 - the board that was LIVE while it was
+  # wrong. 'BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz' is a biscuit snack
+  # bar. It held the breakfast-sandwiches CROWN at Fareway at $3.98 / 5 ct = 0.796/each - the cheapest
+  # breakfast sandwich in Omaha - for a week, riding the ordinary accept-all new-contested review line
+  # beside nine harmless multi-product ad lines. A contested name is where a wrong product enters; one
+  # that wins a crown is the expensive case and now pages on its own.
+  # NEVER REGENERATE THIS FROM THE LIVE BOARD: the exclude that shipped the same day removes the row, so
+  # a regenerated fixture would have nothing to find and this case would pass by finding nothing.
+  $cbcBoard = @(
+    [pscustomobject]@{ id='breakfast-sandwiches'; unit='each'; cheapest_store='Fareway'; stores=@(
+      [pscustomobject]@{ store='Fareway';    per_unit=0.796;  item='BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz' },
+      [pscustomobject]@{ store='Sam''s Club'; per_unit=0.9775; item='Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches, Frozen, 12ct.' }) },
+    [pscustomobject]@{ id='raspberries'; unit='oz'; cheapest_store='Aldi'; stores=@(
+      [pscustomobject]@{ store='Aldi';   per_unit=0.3113; item='Fresh Raspberries 6 Oz' },
+      [pscustomobject]@{ store='Hy-Vee'; per_unit=0.6133; item='Fresh raspberries or blackberries, 6 oz. pkg., $3.68' }) })
+  $cbcCrowns = Get-CrownNames $cbcBoard
+  $cbcContest = @('BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz',
+                  'Fresh raspberries or blackberries, 6 oz. pkg., $3.68',
+                  'Hy-Vee rice, quinoa or Israeli-style couscous,')
+  $cbcHit = @(Select-CrownByContest $cbcContest $cbcCrowns)
+  T 'MUST FIRE  a NEW contested name that HOLDS A CROWN is its own class (the BELVITA biscuit bar at 0.796/each, Fareway)' `
+    ($cbcHit.Count -eq 1 -and $cbcHit[0] -like 'BELVITA*') (($cbcHit -join ' | '))
+  T 'MUST FIRE  the finding names the CELL it crowns, not just the product' `
+    ($cbcHit.Count -eq 1 -and $cbcCrowns[$cbcHit[0]] -eq 'breakfast-sandwiches @ Fareway 0.796/each') ([string]$cbcCrowns[[string]$cbcHit[0]])
+  T 'MUST NOT FIRE  a contested name holding a NON-crown cell stays a plain new-contested (the raspberries-or-blackberries line at Hy-Vee)' `
+    (-not ($cbcHit -contains 'Fresh raspberries or blackberries, 6 oz. pkg., $3.68')) (($cbcHit -join ' | '))
+  T 'MUST NOT FIRE  a contested name with no board cell at all is not a crown' `
+    (-not ($cbcHit -contains 'Hy-Vee rice, quinoa or Israeli-style couscous,')) (($cbcHit -join ' | '))
+  T 'CLEAN TWIN  the crown reader still finds the other commodity''s crown, so it reads the WHOLE board' `
+    ($cbcCrowns.ContainsKey('Fresh Raspberries 6 Oz') -and $cbcCrowns.Count -eq 2) ([string]$cbcCrowns.Count)
+  T 'CLEAN TWIN  an empty contested set yields 0 findings, not the PS 5.1 @($null) count of 1' `
+    ((@(Select-CrownByContest @() $cbcCrowns)).Count -eq 0) ([string](@(Select-CrownByContest @() $cbcCrowns)).Count)
   if ($bad -eq 0) { Write-Output 'match-soundness SELF-TEST PASS'; exit 0 }
   Write-Output ("match-soundness SELF-TEST FAIL: $bad case(s)"); exit 2
 }
@@ -336,7 +397,28 @@ foreach ($nm in $baseNames.Keys) {
 }
 $newContest = @($contest.Keys | Where-Object { -not $baseContest.ContainsKey($_) } | Sort-Object)
 
-$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_vs_engine = $drift; drift_products = $driftRows; moved = $moved; dropped = $dropped; new_contested = $newContest }
+# ---- CROWN-BY-CONTEST (2026-09-07, queue 2026-09-07-0b232c) --------------------------------------------
+# A CONTESTED name is a name two rules both admit, resolved by array position. That makes new-contested the
+# exact place a wrong product enters the estate - and on 2026-09-07 it did. 'BELVITA Breakfast Bar Biscuit
+# Sandwiches, Dark Chocolate Creme 8.8 oz' is a biscuit snack bar; breakfast-sandwiches' pattern reads
+# 'sandwiches' and nothing reads 'bar'. It took the breakfast-sandwiches CROWN at Fareway ($3.98 / 5 ct =
+# 0.796/each), was the cheapest breakfast sandwich in Omaha for a week, and rode the ordinary accept-all
+# review line the whole time, indistinguishable from nine harmless multi-product ad lines.
+# So a contested name that WINS A CROWN gets its own class. Everything else about new-contested is unchanged.
+# ADVISORY (exit 1) UNTIL BRAD RULES on promoting it to guards - the estate's standing rule is that a gate
+# which is red on day one is a gate people learn to ignore, and this one has not run a clean week yet.
+# The reader is the board itself, not a re-derivation: a name is crowned if it is the item on a cheapest
+# cell of the current comparison.
+# ONE implementation, driven by the frozen fixture in -SelfTest and by this live path - see Get-CrownNames.
+$crownNames = @{}
+try {
+  $msCmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
+            Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
+  if ($msCmpF) { $crownNames = Get-CrownNames ((ConvertFrom-Json ([IO.File]::ReadAllText($msCmpF.FullName))).comparison) }
+} catch { }
+$crownContest = @(Select-CrownByContest $newContest $crownNames)
+$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_vs_engine = $drift; drift_products = $driftRows; moved = $moved; dropped = $dropped; new_contested = $newContest
+                      crown_by_contest = @($crownContest | ForEach-Object { [pscustomobject]@{ name = [string]$_; cell = [string]$crownNames[[string]$_]; claimed_by = [string]$contest[[string]$_] } }) }
 Set-Content (Join-Path $audDir 'soundness-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
 
 $regr = $moved.Count + $dropped.Count
@@ -349,6 +431,7 @@ if ($drift -gt 0) {
 foreach ($d in $dropped) { Write-Output ("  DROPPED  $($d.from)  ->  <unmatched>   '$($d.name)'") }
 foreach ($mv in $moved)  { Write-Output ("  MOVED    $($mv.from) -> $($mv.to)   '$($mv.name)'") }
 if ($newContest.Count) { Write-Output ("  new-contested (order-dependence to review): " + (($newContest | Select-Object -First 25) -join ' | ')) }
+foreach ($cbc in $crownContest) { Write-Output ("  CROWN-BY-CONTEST  a NEW contested name is holding a CROWN: '" + $cbc + "'  cell " + $crownNames[[string]$cbc] + "  claimed by: " + $contest[[string]$cbc] + " - two rules both admit this name and array order picked the winner; if the winner is the wrong product this is the cheapest price in Omaha for a week (the 2026-09-07 BELVITA case)") }
 
 if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   $sig = ([string]$drift + '|' + (($dropped | ForEach-Object { $_.name }) -join ';') + '|' + (($moved | ForEach-Object { $_.name }) -join ';') + '|' + ($newContest -join ';'))
@@ -361,4 +444,9 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   }
 }
 # regressions (moved/dropped of an existing product) HOLD the publish until reviewed+accepted
-if ($regr -gt 0) { Write-GuardComplete -Name 'match-soundness'; exit 2 } else { Write-GuardComplete -Name 'match-soundness'; exit 0 }
+# EXIT: 2 stays the REGRESSION verdict (a moved/dropped product holds the publish). CROWN-BY-CONTEST is
+# ADVISORY at 1 - a new class gets a clean week before it can hold a board, and the plan's do_not_touch
+# keeps it out of guards until Brad rules. The verdict line above is the thing to read either way.
+if ($regr -gt 0) { Write-GuardComplete -Name 'match-soundness'; exit 2 }
+if ($crownContest.Count -gt 0) { Write-Output ('match-soundness: ' + $crownContest.Count + ' CROWN-BY-CONTEST finding(s) - ADVISORY, review the names above before accepting'); Write-GuardComplete -Name 'match-soundness'; exit 1 }
+Write-GuardComplete -Name 'match-soundness'; exit 0

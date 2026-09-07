@@ -3881,7 +3881,10 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bbeets?\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bblack\\s+pepper\\b",
+                        "\\ball[\\s-]purpose\\b",
+                        "\\bcomplete\\s+seasoning\\b"
                     ]
     },
     {
@@ -11990,7 +11993,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bscrub\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bbelvita\\b",
+                        "\\bbel\\s+vita\\b"
                     ]
     },
     {
@@ -36414,7 +36419,10 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bbelvita\\b",
+                        "\\bbel\\s+vita\\b",
+                        "\\bbreakfast\\s+bars?\\b"
                     ]
     },
     {
@@ -37841,7 +37849,8 @@
         "exclude":  [
                         "\\bfabric\\s+(?:spray|refresher)\\b",
                         "\\bcar\\b.{0,10}\\bvent\\b",
-                        "candle"
+                        "candle",
+                        "\\blitter\\b"
                     ]
     },
     {
@@ -75800,7 +75809,8 @@
                         "\\b(?:cashews?|almonds?|pistachios?|peanuts?|macadamia|nuts?|seeds?|caramels?|chocolate|thins|squares?|bars?)\\b",
                         "\\bpop\\s*corn\\b",
                         "\\bstraws?\\b",
-                        "\\bedamame\\b"
+                        "\\bedamame\\b",
+                        "\\bblack\\s+pepper\\b"
                     ]
     }
 ]

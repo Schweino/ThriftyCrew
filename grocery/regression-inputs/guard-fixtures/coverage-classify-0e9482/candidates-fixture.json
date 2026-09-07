@@ -1,0 +1,74 @@
+{
+ "week_of": "2026-09-07",
+ "generated": "FIXTURE - frozen on purpose, do not regenerate from the live board. Every row below is a REAL row, transcribed from the 2026-09-07 triage (queue 2026-09-07-0e9482). Regenerating it would delete the defects it encodes and the cases would then pass by finding nothing. This is the ENGINE'S OWN verdict file: basis 'UNPRICED' means Get-UnitPrice returned null. Note what is deliberately ABSENT - the rice line appears under RICE only, the honey line under HONEY only and the burrito line under FROZEN-BURRITOS only, which is what makes quinoa-uncooked / sea-salt / frozen-chimichangas read as CLAIMED-BY.",
+ "commodities": [
+  {
+   "id": "baked-beans",
+   "label": "FIXTURE Baked Beans",
+   "unit": "oz",
+   "candidates": [
+    {
+     "store": "Hy-Vee",
+     "name": "Hy-Vee Pork & Beans in Tomato Sauce",
+     "price_text": "$0.89",
+     "size_text": "16 oz",
+     "regular": null,
+     "unit_price": 0.0556,
+     "basis": "size 16 oz",
+     "price_type": "everyday"
+    }
+   ]
+  },
+  {
+   "id": "rice",
+   "label": "FIXTURE Rice",
+   "unit": "oz",
+   "candidates": [
+    {
+     "store": "Hy-Vee",
+     "name": "Hy-Vee rice, quinoa or Israeli-style couscous, FUEL SAVER EARN 3¢ OFF PER GALLON,",
+     "price_text": "Hy-Vee rice, quinoa or Israeli-style couscous, FUEL SAVER EARN 3¢ OFF PER GALLON,",
+     "size_text": "",
+     "regular": null,
+     "unit_price": null,
+     "basis": "UNPRICED",
+     "price_type": "sale"
+    }
+   ]
+  },
+  {
+   "id": "honey",
+   "label": "FIXTURE Honey",
+   "unit": "oz",
+   "candidates": [
+    {
+     "store": "Hy-Vee",
+     "name": "Sue Bee pure honey, FREE Sue Bee sea salt honey 12 oz. with purchase of Sue Bee pure honey 16 oz.,",
+     "price_text": "Sue Bee pure honey, FREE Sue Bee sea salt honey 12 oz. with purchase of Sue Bee pure honey 16 oz.,",
+     "size_text": "",
+     "regular": null,
+     "unit_price": null,
+     "basis": "UNPRICED",
+     "price_type": "sale"
+    }
+   ]
+  },
+  {
+   "id": "frozen-burritos",
+   "label": "FIXTURE Frozen Burritos",
+   "unit": "each",
+   "candidates": [
+    {
+     "store": "Walmart",
+     "name": "El Monterey Burritos or Chimichangas, 8 ct",
+     "price_text": "$7.98",
+     "size_text": "8 ct",
+     "regular": null,
+     "unit_price": 0.9975,
+     "basis": "per-8-pack",
+     "price_type": "everyday"
+    }
+   ]
+  }
+ ]
+}

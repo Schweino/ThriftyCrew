@@ -575,6 +575,57 @@ if ($mb) {
   Skip 'multibuy: no price_multiple row - inject one (store=Hy-Vee, ad_price=1.3333, price_multiple=3, current_price=4)'
 }
 
+# ---- 8d. AD-LINE PRICE PROVENANCE: the $0.10 laundry pod (2026-09-07, queue 2026-09-07-05e4c3) --------
+# Hy-Vee's ad arrives as prose, so the engine reads the first money-shaped token anywhere in the line and a
+# fuel-saver reward wearing a cent sign became a price. "Gain Flings, EARN 10c OFF PER GALLON, ... $12.94"
+# published at $0.10 a pod and HELD THE laundry-pods CROWN for six days on the live board. Guard 10, the
+# only check that compares what we publish to what a store charges, is structurally blind to it: it needs
+# the row's own current_price and a Hy-Vee ad row does not carry one.
+# THE ROW IS FROZEN, taken verbatim off comparison-2026-09-06 (the board that was live while it was wrong).
+# It is planted onto a real ad-line cell rather than rebuilt from today's board, because the parser fix in
+# compare-deals means today's board no longer contains it - and a fixture regenerated from live data would
+# have nothing to find.
+$g8dCmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') |
+  Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
+$g8dBak = Backup $g8dCmpF
+$g8dDoc = $g8dBak | ConvertFrom-Json
+$g8dCent = [string][char]0x00A2
+# the cells to plant on: Hy-Vee weekly-ad cells whose ad text IS the item line (that is what the guard
+# scopes to) and which carry no product url, so nothing about name-drift or tile integrity moves.
+$g8dCells = @()
+foreach ($g8dRow in @($g8dDoc.comparison)) {
+  foreach ($g8dS in @($g8dRow.stores)) {
+    if (([string]$g8dS.source_ad) -ne 'Weekly Ad') { continue }
+    if (([string]$g8dS.ad) -ne ([string]$g8dS.item)) { continue }
+    if ($g8dS.PSObject.Properties['url'] -and $g8dS.url) { continue }
+    $g8dCells += $g8dS
+  }
+}
+if ($g8dCells.Count -lt 2) {
+  Skip 'ad-line provenance: fewer than two Hy-Vee weekly-ad cells on the board, so the guard could not be exercised - it scopes to cells whose ad text IS the item line'
+} else {
+  function Set-G8dCell($cell, [string]$line, [double]$pu, [string]$basis) {
+    $cell.item = $line; $cell.ad = $line; $cell.per_unit = $pu; $cell.basis = $basis; $cell.note = ''
+  }
+  # MUST FIRE - the founding row, exactly as it was published.
+  $g8dLine = 'Gain Flings, EARN 10' + $g8dCent + ' OFF PER GALLON, -3.00 off with manufacturer''s digital coupon, $12.94'
+  Set-G8dCell $g8dCells[0] $g8dLine 0.1 'per-each'
+  ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
+  Check 'ad-line provenance: a fuel-saver reward published as the price ($0.10 a pod against a $12.94 line)' 2 'ad-line price provenance'
+  # MUST NOT FIRE and CLEAN TWIN in one run, because each of these costs a full guards pass.
+  #   MUST NOT FIRE - a real cents PRICE. "Bananas, 49c lb." IS quoted in cents and the cents token IS the
+  #                   line's last money token, so a guard that simply distrusted cent signs would cry wolf
+  #                   on every banana ad in Omaha.
+  #   CLEAN TWIN    - the adjacent behaviour the fix was most likely to break: a per-N-pack cell, where the
+  #                   published per-unit is the line's price DIVIDED by a count, must still reconcile.
+  #                   Frozen from the same Hy-Vee ad: storage bags, 100 ct, $2.99 -> 0.0299 each.
+  Set-G8dCell $g8dCells[0] ('Bananas, 49' + $g8dCent + ' lb.') 0.49 'per-lb marker'
+  Set-G8dCell $g8dCells[1] 'Hy-Vee storage bags, 75 to 100 ct., $2.99' 0.0299 'per-100-pack'
+  ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
+  CheckLoud 'ad-line provenance MUST NOT FIRE + CLEAN TWIN: a real cents price and a per-100-pack cell both reconcile' 0 'every ad-line cell publishes the price its own ad line quotes last'
+  RestoreNow $g8dCmpF
+}
+
 # ---- 8c. a shipped link that disagrees with its tile -------------------------------------------------
 # Brad's bar: a shopper must never click "See item" and land on a different product or price. That is the ONE
 # thing on this board that is a lie rather than a gap, so audit-tile-integrity gates ACCURACY hard (no

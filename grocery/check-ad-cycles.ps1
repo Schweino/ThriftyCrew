@@ -1250,8 +1250,17 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # ================================================================================================
       $script:DownstreamRan = $true
       $shipSecs = [int]((Get-Date) - $script:ShipStart).TotalSeconds
-      Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----')
-      $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min) - the board published before any advisory audit ran')
+      # THIS LINE USED TO LIE (2026-09-07, queue 2026-09-07-e9edb9). It printed unconditionally, so on
+      # 2026-09-07 it announced 'the board, the feed and the cards are published' FOUR SECONDS after
+      # 'GUARDS FAILED - board NOT republished'. A log a human reads to decide whether to intervene must
+      # not describe an outcome that did not happen.
+      if ($guardsBlocked) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min) - board HELD by guards, nothing was published')
+      } else {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min) - the board published before any advisory audit ran')
+      }
 
       # ---------------------------------------------------------------------------------------------
       # INSPECT PATH - ADVISORY ONLY. Nothing below may hold, change or unpublish today's board. Several
@@ -1265,11 +1274,18 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
       # green free-week grid, which was removed same day). The free ROTATION still runs below - it just
       # renders nothing on the hub; the Top 5 section is the display.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) }
+      # GATED ON THE SAME VERDICT THE FEED HONOURS (2026-09-07, queue 2026-09-07-e9edb9). The publish of
+      # public/** already reads chain-verdict.json's guards_blocked, but nothing below the ship boundary
+      # did - so on 2026-09-07 the board was correctly HELD at 08:13 and then free-rotation republished
+      # the hub at 08:15 and build-hub-grid PUBLISHED 591 recipe cards at 08:17, costed off the refused
+      # board, while the live feed still read week_of 2026-09-06. Readers saw card prices from a board
+      # they could not see. These three write to Ghost; a held board must hold them too.
+      if ($guardsBlocked) { Log 'held: guards blocked - hub/rotation not republished from a refused board (top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped)'; $summary += 'HELD      guards blocked the board, so the hub Top 5, the free rotation and the 591 recipe cards were NOT republished from it' }
+      if (-not $guardsBlocked) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } }
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
-      try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
+      if (-not $guardsBlocked) { try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) } }
       # DID THE PAYWALL SURVIVE THE ROTATION? (2026-08-29) Immediately after the only thing in the estate
       # that changes post visibility, ask the revenue question nobody was asking: is any recipe the
       # database calls PAID being served free to anonymous visitors? 22 were, found by accident during a
@@ -1301,8 +1317,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # The hub publishes itself (it splices the live Ghost page between its own markers), so it is the
       # one that carries -Publish. The three tools above only write their local source; publishing those
       # goes through publish-tool-post.ps1, which refuses to overwrite an unreviewed live body.
-      try { (Invoke-Bounded 'surface-hub' @('-ExecutionPolicy','Bypass','-File',(Join-Path $mpRoot 'meal-prep\build-hub-grid.ps1'),'-Publish') 900).Output | Select-Object -Last 3 | ForEach-Object { Log ('surface-hub: ' + $_) } }
-      catch { Log ('build-hub-grid threw: ' + $_.Exception.Message) }
+      # -Publish WRITES TO GHOST, so it is gated with its two siblings above - see the note at top5-weekly.
+      if (-not $guardsBlocked) {
+        try { (Invoke-Bounded 'surface-hub' @('-ExecutionPolicy','Bypass','-File',(Join-Path $mpRoot 'meal-prep\build-hub-grid.ps1'),'-Publish') 900).Output | Select-Object -Last 3 | ForEach-Object { Log ('surface-hub: ' + $_) } }
+        catch { Log ('build-hub-grid threw: ' + $_.Exception.Message) }
+      }
 
       # AND THEN ASK WHETHER IT WORKED. Rebuilding without checking is how this went unnoticed for weeks:
       # every builder above exits 0 whether or not the thing it wrote reached a reader.

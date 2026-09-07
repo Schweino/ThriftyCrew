@@ -1,0 +1,4 @@
+{
+ "generated": "FIXTURE - frozen on purpose, do not regenerate from the live board. Every row below is a REAL row, transcribed from the 2026-09-07 triage (queue 2026-09-07-0e9482). Regenerating it would delete the defects it encodes and the cases would then pass by finding nothing. Deliberately EMPTY, so no live allowlist entry can delete a fixture gap and turn this test green by finding nothing.",
+ "allow": []
+}

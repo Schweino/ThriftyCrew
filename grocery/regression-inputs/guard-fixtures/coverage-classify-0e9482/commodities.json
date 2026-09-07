@@ -1,0 +1,69 @@
+[
+ {
+  "id": "rice",
+  "label": "FIXTURE Rice",
+  "unit": "oz",
+  "include": [
+   "\\brice\\b"
+  ],
+  "exclude": []
+ },
+ {
+  "id": "honey",
+  "label": "FIXTURE Honey",
+  "unit": "oz",
+  "include": [
+   "\\bhoney\\b"
+  ],
+  "exclude": []
+ },
+ {
+  "id": "frozen-burritos",
+  "label": "FIXTURE Frozen Burritos",
+  "unit": "each",
+  "include": [
+   "burritos?"
+  ],
+  "exclude": []
+ },
+ {
+  "id": "baked-beans",
+  "label": "FIXTURE Baked Beans",
+  "unit": "oz",
+  "include": [
+   "pork\\s*(?:&|and)\\s*beans",
+   "baked\\s+beans"
+  ],
+  "exclude": [],
+  "relax_global": [
+   "\\bsauce\\b"
+  ]
+ },
+ {
+  "id": "quinoa-uncooked",
+  "label": "FIXTURE Quinoa",
+  "unit": "oz",
+  "include": [
+   "\\bquinoa\\b"
+  ],
+  "exclude": []
+ },
+ {
+  "id": "sea-salt",
+  "label": "FIXTURE Sea Salt",
+  "unit": "oz",
+  "include": [
+   "\\bsea\\s+salt\\b"
+  ],
+  "exclude": []
+ },
+ {
+  "id": "frozen-chimichangas",
+  "label": "FIXTURE Chimichangas",
+  "unit": "each",
+  "include": [
+   "chimichangas?"
+  ],
+  "exclude": []
+ }
+]

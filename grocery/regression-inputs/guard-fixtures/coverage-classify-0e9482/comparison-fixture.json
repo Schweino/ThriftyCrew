@@ -1,0 +1,125 @@
+{
+ "week_of": "2026-09-07",
+ "generated": "FIXTURE - frozen on purpose, do not regenerate from the live board. Every row below is a REAL row, transcribed from the 2026-09-07 triage (queue 2026-09-07-0e9482). Regenerating it would delete the defects it encodes and the cases would then pass by finding nothing. Each commodity carries ONE store that is NOT Hy-Vee/Walmart, so every (commodity, store) pair above reads as absent and reaches the classifier.",
+ "comparison": [
+  {
+   "commodity": "FIXTURE Baked Beans",
+   "id": "baked-beans",
+   "unit": "oz",
+   "cheapest_store": "Fareway",
+   "cheapest_price": 0.0593,
+   "stores": [
+    {
+     "store": "Fareway",
+     "per_unit": 0.0593,
+     "item": "Fareway Pork and Beans",
+     "ad": "$0.95",
+     "size": "16 oz",
+     "basis": "size 16 oz"
+    }
+   ]
+  },
+  {
+   "commodity": "FIXTURE Rice",
+   "id": "rice",
+   "unit": "oz",
+   "cheapest_store": "Aldi",
+   "cheapest_price": 0.0625,
+   "stores": [
+    {
+     "store": "Aldi",
+     "per_unit": 0.0625,
+     "item": "Earthly Grains Long Grain Rice",
+     "ad": "$2.00",
+     "size": "32 oz",
+     "basis": "size 32 oz"
+    }
+   ]
+  },
+  {
+   "commodity": "FIXTURE Honey",
+   "id": "honey",
+   "unit": "oz",
+   "cheapest_store": "Aldi",
+   "cheapest_price": 0.25,
+   "stores": [
+    {
+     "store": "Aldi",
+     "per_unit": 0.25,
+     "item": "Berryhill Honey",
+     "ad": "$3.00",
+     "size": "12 oz",
+     "basis": "size 12 oz"
+    }
+   ]
+  },
+  {
+   "commodity": "FIXTURE Quinoa",
+   "id": "quinoa-uncooked",
+   "unit": "oz",
+   "cheapest_store": "Aldi",
+   "cheapest_price": 0.2,
+   "stores": [
+    {
+     "store": "Aldi",
+     "per_unit": 0.2,
+     "item": "Simply Nature Organic Quinoa",
+     "ad": "$3.20",
+     "size": "16 oz",
+     "basis": "size 16 oz"
+    }
+   ]
+  },
+  {
+   "commodity": "FIXTURE Sea Salt",
+   "id": "sea-salt",
+   "unit": "oz",
+   "cheapest_store": "Aldi",
+   "cheapest_price": 0.1,
+   "stores": [
+    {
+     "store": "Aldi",
+     "per_unit": 0.1,
+     "item": "Stonemill Sea Salt",
+     "ad": "$1.78",
+     "size": "17.6 oz",
+     "basis": "size 17.6 oz"
+    }
+   ]
+  },
+  {
+   "commodity": "FIXTURE Frozen Burritos",
+   "id": "frozen-burritos",
+   "unit": "each",
+   "cheapest_store": "Aldi",
+   "cheapest_price": 0.75,
+   "stores": [
+    {
+     "store": "Aldi",
+     "per_unit": 0.75,
+     "item": "El Monterey Bean & Cheese Burritos",
+     "ad": "$6.00",
+     "size": "8 ct",
+     "basis": "per-8-pack"
+    }
+   ]
+  },
+  {
+   "commodity": "FIXTURE Chimichangas",
+   "id": "frozen-chimichangas",
+   "unit": "each",
+   "cheapest_store": "Aldi",
+   "cheapest_price": 0.9,
+   "stores": [
+    {
+     "store": "Aldi",
+     "per_unit": 0.9,
+     "item": "Some Chimichangas",
+     "ad": "$7.20",
+     "size": "8 ct",
+     "basis": "per-8-pack"
+    }
+   ]
+  }
+ ]
+}

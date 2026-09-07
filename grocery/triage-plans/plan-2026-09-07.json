@@ -1,0 +1,579 @@
+{
+  "generated": "2026-09-07T10:55:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-07",
+  "board_state": "comparison-2026-09-07 built 08:10:20 and NOT published (guards hard=1 at 08:14:24). The LIVE board is comparison-2026-09-06 (11:55 build, committed 6708f0a31 09-06 12:14). Hy-Vee's weekly ad flipped at 08:08:44 (NEW AD 2026-09-07), so every Hy-Vee sale cell on the live board is from the ad that ended 09-06. public/smp-feed.json is exported at week 2026-09-07 but sits uncommitted (foreign, not deployed).",
+  "queue_ids_seen": [
+    "2026-09-07-76ec7f",
+    "2026-09-07-e9edb9",
+    "2026-09-07-0e9482",
+    "2026-09-07-abae06",
+    "2026-09-07-05e4c3",
+    "2026-09-07-0b232c",
+    "2026-09-07-72756b",
+    "2026-09-07-e7286e",
+    "2026-09-07-4f672e"
+  ],
+  "routing_artifact": "plan-2026-09-07.routing.json",
+  "trust_statement": "The blind fixture (item 76ec7f) proved nothing about the browser-store builders this morning. Re-run in scratch against a CRLF copy of the identical capture-run.ps1 bytes it passes 28/28 (rc 0), and against the LF copy it reproduces BLIND (rc 3); the builder block itself is unchanged by both commits that touched the file today (hunks at lines 560 and 585, block is 339-437). So the other 678 green results today are not contaminated by this blindness. Two caveats stay unproven: test-auditors was rc=1 on 09-05 and 09-06 with no saved fail file and I did not investigate what 1 meant, and the 08:33 ghost-drift alert body was truncated in the queue so its third finding (item e7286e) was invisible to the dispatch.",
+  "items": [
+    {
+      "queue_id": "2026-09-07-76ec7f",
+      "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+      "classification": "infra",
+      "evidence": [
+        "test-auditors-fail-2026-09-07.txt line 148: FAIL test-capture-builders is BLIND - it could not find the builder block END marker in capture-run.ps1; 1 failed, 678 passed, rc=2 (the run correctly failed closed)",
+        "test-capture-builders.ps1:31-37 (blame 50a5e62373, 2026-08-23): start marker '      $bLanes = @(); $bMeta = @{}' carries no line ending and is found; end marker is the literal \"`r`n      }`r`n    }`r`n  }`r`n}\" and the block length adds a hard-coded 9 = 'CRLF + six spaces + }'",
+        "capture-run.ps1 working copy: 83,696 bytes, CR=0, LF=1182; git ls-files --eol: i/lf w/lf attr/text=auto eol=lf; the block is intact at lines 339-437 with the closing braces at 437-440",
+        ".gitattributes gained 'eol=lf' in 39ad18d3d (2026-09-06 17:59, 'Every fresh worktree started two gates red over line endings'); capture-run.ps1 was rewritten 2026-09-07 05:16 (13ff1493d) - the first write after the attribute landed",
+        "the fixture last passed on 2026-09-04 08:28 (19/19 at that time); the two commits that touched capture-run.ps1 today (13ff1493d: hunks @560 and @585, -NoCommit; 8b14bfd72: hunk @529) are both OUTSIDE the builder block",
+        "scratch replay: fixture + LF copy of capture-run.ps1 -> 'BLIND: could not find the builder block end marker' rc=3; fixture + the SAME bytes converted to CRLF -> SELFTEST 28/28 pass, CAPTURE-BUILDERS-COMPLETE cases=28 failed=0, rc=0",
+        "repo scan of source-extracting fixtures: test-capture-builders (2 blocks), test-push-data, test-commit-size-gate (2 blocks), test-match-lib, test-cadence, test-auditors Test-FfCarryCallerSees = 7 extraction sites; exactly ONE hard-codes a line ending in its marker (test-capture-builders.ps1:33); test-cadence already uses \\r?\\n; the rest locate by comment-line markers"
+      ],
+      "surface_fix": {
+        "what": "make the builder-block extraction line-ending agnostic: normalise the source to LF right after reading (or match the end with a \\r?\\n regex) and derive the trailing-brace offset from the match instead of the constant 9",
+        "files": [
+          "grocery/test-capture-builders.ps1"
+        ],
+        "exact_change": "after line 30: $src = $src -replace \"`r`n\", \"`n\"; line 33: $endMark = \"`n      }`n    }`n  }`n}\"; line 37: $block = $src.Substring($i, ($j - $i) + 8)  (LF + six spaces + '}' = 8). Keep the BLIND exits exactly as they are - they did their job."
+      },
+      "root_cause": "a fixture that locates its subject by byte-exact source text inherits the repository's line-ending regime as an unstated assumption; the regime changed estate-wide in one commit (eol=lf, 39ad18d3d) and the fixture went BLIND on the next rewrite of the file it reads, while the code it guards was untouched. The same commit is what fired item e7286e from the other side (a byte-exact live-vs-local comparison). Nothing checks that an extraction actually captured the whole subject, so a marker that silently stops matching one day is reported honestly only because the author wrote a BLIND branch by hand.",
+      "root_fix": {
+        "what": "give the block a named marker pair like the file's other fixtured regions, and make extraction assert its own completeness",
+        "files": [
+          "grocery/capture-run.ps1",
+          "grocery/test-capture-builders.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "capture-run.ps1: add '# >>> BUILDER-BLOCK >>>' immediately above line 339 ($bLanes = @()) and '# <<< BUILDER-BLOCK <<<' immediately after the pass-3 foreach closes at line 437 (inside the same if/else, so the dot-source scope note at test-capture-builders.ps1:93-98 still holds). test-capture-builders.ps1: extract between those markers, then assert the block contains both '$bLanes = @()' and 'build2-' before running it (a truncated extraction is FAIL, not a quiet pass). test-auditors.ps1: add a case that runs test-capture-builders against an LF copy AND a CRLF copy of capture-run.ps1 in a temp dir (the two scratch runs above, frozen) and requires 28/28 on both."
+      },
+      "blast_radius": {
+        "measured_as": "fixtures",
+        "measured_by": "scan of every *.ps1 under the repo (archive excluded) for IndexOf/Substring/regex source extraction: 7 extraction sites in 6 fixtures; 1 line-ending dependent (this one). capture-run.ps1 at HEAD, 13ff1493d, 8b14bfd72 and 0443156d6 are all CR=0, so the marker cannot have matched at any commit since at least 09-06 03:43; the fixture passed on 09-04 because the WORKING COPY was still CRLF then.",
+        "affected_now": 1,
+        "names": [
+          "grocery/test-capture-builders.ps1:33 (end marker) and :37 (offset 9)"
+        ],
+        "risk": "none to production: the change is to a fixture and two comment lines. The marker lines must not land INSIDE the extracted block text in a way that changes its first executable line; the dot-source at test-capture-builders.ps1:101 tolerates leading comment lines."
+      },
+      "freshness": "measured against capture-run.ps1 at HEAD 3c48050b9 (working copy CR=0, mtime 2026-09-07 05:16) and test-capture-builders.ps1 at HEAD (mtime 09-04 11:52); scratch replays run 2026-09-07 ~09:55",
+      "proof": {
+        "guard_or_fixture": "test-capture-builders.ps1 (28 cases) run twice from test-auditors.ps1: once against an LF copy, once against a CRLF copy of capture-run.ps1",
+        "must_fire_case": "the founding bug, frozen: the current fixture code (CRLF end marker, offset 9) run against an LF-only copy of capture-run.ps1 must print 'BLIND: could not find the builder block end marker' and exit 3 - keep this as a negative case in test-auditors so the LF regime cannot blind a marker again without saying so",
+        "clean_twin": "the fixed fixture against the CRLF copy must still report SELFTEST 28/28 pass (this is the run that passed in scratch today), and against the LF copy must ALSO report 28/28 - the builders' behaviour (missing capture outstanding, failed builder named, failed stage 1 skips stage 2, stage 2 judged on evidence) is unchanged by the line ending",
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-capture-builders.ps1",
+          "powershell -File grocery\\test-auditors.ps1 (MUST be rc 0, 679+ passed)",
+          "powershell -File ops\\run-gates.ps1 (exit 0)"
+        ]
+      },
+      "rollback": "revert the fixture hunk and the two marker comment lines; no data involved",
+      "do_not_touch": [
+        "the builder block logic at capture-run.ps1:339-437",
+        "the BLIND exits in test-capture-builders.ps1 (they are the only reason today's blindness was visible)",
+        "the -NoCommit change from 13ff1493d"
+      ],
+      "resolution_note": "Blind fixture: test-capture-builders located the builder block by a CRLF end marker; the eol=lf attribute (09-06) turned capture-run.ps1 LF on its next rewrite (09-07 05:16) and the marker stopped matching. The builders themselves are intact (28/28 against a CRLF copy of the same bytes). Marker made line-ending agnostic, block given named markers, extraction asserts completeness, and test-auditors now runs the fixture under both regimes.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "TRUE, reproduced. test-capture-builders.ps1:33 carried the literal CRLF end marker and :37 the hard-coded offset 9, exactly as the plan states; capture-run.ps1 on disk is 83,696 bytes CR=0 LF=1182 with the block at 339-437 and the brace ladder at 434-440. Running the fixture unchanged printed 'BLIND: could not find the builder block end marker in capture-run.ps1 - the fixture proved NOTHING' and exited 3.",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-07-e9edb9",
+      "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-07",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "ad-cycle-log 08:14:24: the ONLY hard fail is 'no NEW cell publishes a dearer price because the band refused a near-floor row that was cheaper (RATCHET against out/band-censorship-baseline.json, may only go down)'. None of the invariants the alert body lists (mode, cleaner-as-food, pin, factor, multipack) fired; the alert text is a fixed string at check-ad-cycles.ps1:1043.",
+        "out/band-censorship.json (08:13:37, compare_file comparison-2026-09-07): cells=43, findings=73; baseline (09-06 08:14:55): cells=41. Re-running audit-band-censorship in scratch against flagged-2026-09-06 + comparison-2026-09-06 (the 11:55 board) gives 41 cells; the diff to today is exactly two NEW cells and zero gone.",
+        "NEW 1: coffee | Fareway | board 0.4184/oz 'Fareway Coffee, Ground, Medium Roast Style, Classic Roast' | refused row 'Scooter's Coffee French Vanilla Ground Coffee' $10.99, size_text '12 x 12 oz' -> 0.0763/oz (floor 0.10, ratio 0.763). A 12 oz bag read as 144 oz: the size is shop.fareway.com case notation. The band refused it correctly; the guard counted it because 0.0763 happens to sit within 25% of a low floor.",
+        "NEW 2: sliced-cheese | Hy-Vee | board 0.2494/oz 'Hy-Vee Singles American Cheese 24Ct' | refused row 'Di Lusso premium sliced cheese, $9.99 lb.' -> 0.0625/oz (floor 0.08, ratio 0.781). $9.99 lb. is a per-pound PRICE; the engine read '9.99 lb' as a pack WEIGHT and divided the same 9.99 by it: 9.99 / (9.99 x 16 oz) = 1/16 = 0.0625 exactly, for ANY price. flagged-2026-09-07 carries 5 Hy-Vee rows with this exact 0.0625 fingerprint (parmesan $21.99 lb., turkey-lunchmeat $8.99 lb., deli-ham $8.99 lb., sliced-cheese $9.99 lb., queso $9.99 lb.) - all on oz commodities, all band-refused. The same token on lb commodities is read correctly (apples 'Gala or Granny Smith apples, $1.88 lb.' publishes 1.88/lb basis 'per-lb marker').",
+        "median test over today's 73 findings: coffee refused/median = 0.156, sliced-cheese = 0.318; the founding lettuce fixture = 0.751. At 'refused >= 0.4 x commodity median published per-unit': findings 73 -> 58, cells 43 -> 33, and both new cells drop out; at 0.3: 69/39 and sliced-cheese (0.318) still counts. The 15 findings a 0.4 test drops: coffee case-pack, Hawaiian Punch 512 fl oz (0.0078/floz), Ezekiel bread per slice (20 Count Bag), Ocean Spray juice on strawberries, Kleenex 2557 ct, peach-mango juice on peaches, the 0.0625 cheese line, a 2-pack couscous (0.36), mini muffins (0.383), four 7.2 oz personal pizzas (0.391), a 25 lb pepperoni case (0.395). Eleven are parse or wrong-product rows; four (couscous 2-pack, muffins, personal pizzas, pepperoni case) are arguable real prices already in the old backlog.",
+        "the live board is comparison-2026-09-06 (board.json last committed 6708f0a31 09-06 12:14; git status shows only smp-feed.json modified). check-ad-cycles ran cost-recipes (08:12:02), exported smp-feed (08:12:03), then guards (08:13:34) blocked; capture-run holds public/** on chain-verdict.json guards_blocked=true, so the feed is NOT deployed. But the INSPECT path is not gated on $guardsBlocked (only lines 1022-1051 and 2465 read it): free-rotation ran on board-week=2026-09-07 and republished the hub (08:15:25), and build-hub-grid -Publish PUBLISHED 591 cards at 08:17:42 with costs from db/costed priced off the refused board, while 'surface: live feed OK: week_of=2026-09-06'. Readers now see hub card costs from a board they cannot see.",
+        "check-ad-cycles.ps1:1218 logs '---- SHIP PATH COMPLETE ... the board, the feed and the cards are published' unconditionally; today it printed 4 s after 'GUARDS FAILED - board NOT republished'.",
+        "RE-MEASURED: check-ad-cycles.ps1 changed at 08:23:50 (bfd0d2802, +20 lines: alert-meaning fields for triage-close/audit-alert-precision; no guard or band logic). out/band-censorship.json still says 43 vs baseline 41 and comparison-2026-09-07 is still the newest build, so the block persists and will recur at tomorrow's 08:00 run unless the two rows are fixed."
+      ],
+      "surface_fix": {
+        "what": "fix the two rows at the source so the board republishes on its own ratchet, never by touching the baseline: (1) a per-pound price token on an oz-unit commodity must convert the RATE, not read the number as a pack weight; (2) the Fareway case-notation size is left to the band (3 products, 6 rows, all correctly refused) and recorded as a known shape",
+        "files": [
+          "grocery/compare-deals.ps1"
+        ],
+        "exact_change": "compare-deals.ps1 around lines 527 (the per-lb marker: (per\\s*lb|/\\s*lb|\\blb\\.?\\b|a\\s*pound|per\\s*pound)) and 709 (the size regex that reads '(\\d+(?:\\.\\d+)?)\\s*-?\\s*lb\\.?' as a weight): when the price token itself is followed by 'lb.' (the Hy-Vee ad shape 'X, $9.99 lb.'), treat it as a per-lb PRICE for every unit family - for an oz commodity emit per_unit = price / 16 with basis 'per-lb marker (converted)' and never feed the same number to the weight parser. Add a fixture row in compare-deals -SelfTest: 'Di Lusso premium sliced cheese, $9.99 lb.' on an oz commodity -> 0.6244/oz, and 'Gala or Granny Smith apples, $1.88 lb.' on a lb commodity -> 1.88/lb (unchanged)."
+      },
+      "root_cause": "two independent gaps stacked: (a) the Hy-Vee ad line puts its price LAST and the engine's extractors read money-shaped tokens anywhere in the line, so '$9.99 lb.' is a weight to the size parser and (item 05e4c3) '10 cents' is a price to the cents parser; (b) audit-band-censorship discriminates a real bargain from a parse error by distance-to-floor ONLY, and a floor is a band edge, not a scale, so a 12x or 16x parse error on a commodity whose real prices sit far above its floor lands inside the 25% window by arithmetic accident. The ratchet then held the board for two rows the band had correctly refused, and the INSPECT publishers shipped recipe costs from that held board anyway because the guard verdict gates only the board POST and the public/** commit.",
+      "root_fix": {
+        "what": "give the censorship guard a second, scale-aware discriminator with the founding fixture still firing, and gate the INSPECT-path publishers on the same chain verdict the feed already honours",
+        "files": [
+          "grocery/audit-band-censorship.ps1",
+          "grocery/check-ad-cycles.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "audit-band-censorship.ps1 Find-BandCensorship: add -MedianFloor 0.4 and a per-commodity median of the board's published per-unit (computed from the same $Board hashtable; a commodity with one cell uses that cell); a rejected row is a finding only if BOTH ratio-to-floor >= NearFloor AND rejected/median >= MedianFloor. Self-test: the lettuce row (0.7783 vs 1.0367 = 0.751) MUST still fire; add the frozen coffee case-pack row (0.0763 vs median 0.4906 = 0.156) as a MUST-NOT-FIRE; keep the four existing twins. The ratchet baseline then tightens itself from 41 (developer re-runs guards; expect 'tighten' to 33 minus the two fixed rows). Do NOT edit out/band-censorship-baseline.json by hand. check-ad-cycles.ps1: read guards_blocked (already in $guardsBlocked) before top5-weekly (1233), rotate-free-dinners (1237) and build-hub-grid -Publish (1269); when blocked, log 'held: guards blocked - hub/rotation not republished from a refused board' and skip the Ghost writes; and make line 1218 print 'SHIP PATH COMPLETE - board HELD (guards)' when $guardsBlocked."
+      },
+      "blast_radius": {
+        "measured_as": "cells",
+        "measured_by": "today's 73 band-censorship findings re-scored with a per-commodity median from comparison-2026-09-07 (3164 priced cells); the 0.0625 fingerprint counted in flagged-2026-09-07 (11 rows: 5 Hy-Vee per-lb deli lines, 6 Walmart $1.00/16 ct napkins that are legitimately 0.0625) and on both boards (1 cell, refried-beans @ Hy-Vee $1.00/16 oz, legitimate); N x M sizes counted in flagged (6 rows, 3 Fareway products) and on the board (7 cells, all real multipacks: 2 x 12.5 oz chicken, 12 x 4 oz peaches, 24 x 16.9 fl oz water...)",
+        "affected_now": 2,
+        "names": [
+          "coffee | Fareway | Scooter's Coffee French Vanilla Ground Coffee | 12 x 12 oz",
+          "sliced-cheese | Hy-Vee | Di Lusso premium sliced cheese, $9.99 lb."
+        ],
+        "risk": "the per-lb conversion moves 5 Hy-Vee deli rows from 0.0625/oz to their true 0.56-1.37/oz: parmesan 1.374 (band 0.25-1.5, now IN band and would price), turkey-lunchmeat 0.562, deli-ham 0.562, sliced-cheese 0.624, queso 0.624 - four of five would become priced Hy-Vee cells; none beats its commodity crown on today's board (queso crown 0.1413 Sam's, sliced-cheese 0.2494 Hy-Vee singles is cheaper than 0.624, deli-ham crown 0.1238 Walmart, turkey-lunchmeat and parmesan not checked for crown - developer verifies after rebuild). The median discriminator at 0.4 drops 15 findings/10 cells of which 4 findings are arguable real backlog (listed in evidence); at 0.3 it drops only parse/wrong-product rows but does not clear sliced-cheese - the unblock must come from the compare-deals fix, not the threshold.",
+        "cell_effects": []
+      },
+      "freshness": "measured against comparison-2026-09-07 (built 08:10:20, unpublished), flagged-2026-09-07, out/band-censorship.json 08:13:37 and a scratch re-run on the 09-06 11:55 board; the 09-06 baseline (41) was recorded at 08:14:55 against the 08:10 build of 09-06, three hours before that board was rebuilt at 11:55, and the 11:55 board also scores 41",
+      "proof": {
+        "guard_or_fixture": "audit-band-censorship.ps1 -SelfTest (extended) + compare-deals.ps1 -SelfTest (per-lb-price-on-oz row) + guards.ps1 on the rebuilt board",
+        "must_fire_case": "the frozen founding row (lettuce Romaine Hearts 0.7783 against a 0.80 floor, board 1.0367) must still be reported under the new discriminator (0.751 of median); and the ratchet MUST still 'break' on cells 34 vs baseline 33 after the re-record",
+        "clean_twin": "the frozen coffee row (Scooter's $10.99 '12 x 12 oz' -> 0.0763, board 0.4184, median 0.4906) must NOT be reported; the Di Lusso $9.99 lb. row must price at 0.6244/oz in compare-deals -SelfTest and must NOT appear in flagged as OUT-OF-BAND; the four existing twins (per-sheet parse bug silent, dearer-than-board silent, cap rejection silent, discrimination 1 of 2) unchanged",
+        "commands": [
+          "powershell -File grocery\\audit-band-censorship.ps1 -SelfTest",
+          "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+          "powershell -File grocery\\guards.ps1 (MUST be 0, expect 'tighten')",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the compare-deals and audit-band-censorship hunks; the baseline file re-records itself on the next clean run (it only moves down), so no hand edit is needed either way",
+      "do_not_touch": [
+        "out/band-censorship-baseline.json (never hand-edit a ratchet)",
+        "NearFloor 0.75",
+        "the ratchet verdict function Get-RatchetVerdict",
+        "the sale-expiry / history banking order above the guard"
+      ],
+      "resolution_note": "Guards held the board on the band-censorship ratchet (43 vs 41): the two new 'censored bargains' were parse errors the band had rightly refused - a Fareway case-notation coffee size (12 x 12 oz) and a Hy-Vee deli line whose '$9.99 lb.' was read as a 9.99 lb pack (the 1/16 fingerprint, 5 rows today). Fixed the per-lb-price-on-oz parse in compare-deals, gave the censorship guard a scale-aware second discriminator with the founding lettuce row still firing, gated the hub/rotation publishers on the chain verdict, and made the ship-path log stop claiming a held board was published. Board republished on its own ratchet.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "TRUE, re-measured independently. Re-scored today's 73 band-censorship findings over the 3,167 priced cells of the 08:10 board with a per-commodity median: coffee|Fareway refused 0.0763 against a median of 0.4906 = 0.156, sliced-cheese|Hy-Vee 0.0625 against 0.1967 = 0.318, and the founding lettuce row 0.751 of its (single-cell) median - all three exactly the plan's numbers. MedianFloor 0.4 takes findings 73 -> 58 and cells 43 -> 33; MedianFloor 0.3 gives 69/39 and does NOT clear the deli row. The 15 findings a 0.4 test drops are the same 15 the plan lists. The 1/16 fingerprint is arithmetic, not coincidence: flagged-2026-09-07 carries all five Hy-Vee '$N lb.' deli rows at exactly 0.0625.",
+      "deviation": "THREE deviations. (1) The plan's basis string 'per-lb marker (converted)' would have been read by export-feed.ps1:116, which matches the substring 'per-lb marker' and ships the cell as variableWeight. That is in fact CORRECT for a deli counter that sells by weight, so the substring is KEPT - but deliberately and with a comment saying it is load-bearing, rather than by accident. Shipped basis: 'per-lb marker (converted to oz)'. (2) The plan's root_fix for the INSPECT publishers is shipped, but the three Ghost stages were NOT re-run for today after guards went green: the recipe re-cost they read (meal-prep/pipeline/v2-perserving.json, meal-prep/db/**) is another session's in-flight work and re-costing would have collided with it. Consequence, stated rather than hidden: the 591 hub cards published at 08:17 are costed off the 08:10 board, which differs from the 11:28 board that is now live in 6 new Fareway produce cells, 5 Hy-Vee household cells, cat-litter@Sam's and breakfast-sandwiches@Fareway. The gate that stops this recurring is shipped. (3) test-guards was run AFTER the rebuild rather than before it, because the new ad-line provenance invariant is red by design on the pre-fix board - that redness IS the defect.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-07-05e4c3",
+      "subject": "Grocery: 3 NEW price flag(s) - 2026-09-07",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "laundry-pods wow ($0.10 -> $0.15): price-history weeks 2026-08-31, 09-02 and 09-06 cheapest 0.10 @ Hy-Vee from the row 'Gain Flings, EARN 10¢ OFF PER GALLON, -3.00 off with manufacturer's digital coupon, $12.94' | basis 'per-each' | size '' | per_unit 0.1 (comparison-2026-09-06 and 09-02). The engine took '10¢' (the fuel-saver reward) as the price and, with no count, published $0.10 per pod as the CROWN for three published weeks (08-31 through 09-06, live now). Today's Sam's 0.1498 (130 ct $19.48, native 0.15/each agrees) is correct: the flag is the bug expiring with the Hy-Vee ad flip, not a price move.",
+        "same mechanism on the LIVE 09-06 board: diapers @ Hy-Vee 0.25/each ('Pampers Swaddlers diapers, FUEL SAVER EARN 25¢ OFF PER GALLON ... $24.97') and dryer-sheets @ Hy-Vee 0.05/each ('Bounce dryer sheets, FUEL SAVED EARN 5¢ OFF PER GALLON ... $4.99'); neither holds a crown (diapers Sam's 0.1402, dryer-sheets Sam's 0.0199). On the unpublished 09-07 board: disinfecting-wipes @ Hy-Vee 0.10/each ('Lysol disinfecting wipes, FUEL SAVER EARN 10¢ OFF PER GALLON, $13.97') and facial-tissues @ Hy-Vee 0.03/each ('Hy-Vee facial tissue, FUEL SAVER EARN 3¢ OFF PER GALLON, $2.29'); neither a crown. In flagged-2026-09-07: chicken-thighs 'Smart Chicken ... FUEL SAVER EARN 3¢ OFF PER GALLON, $5.99 lb.' -> 0.03/lb (band-refused).",
+        "candidates-2026-09-07: 16 Hy-Vee lines carry a FUEL SAVER / EARN N¢ clause; 2 got a unit_price (the two cells above), 14 are UNPRICED or OUT-OF-BAND. ads-2026-09-07.json (1948 rows) shows the raw lines with no price field: the price is extracted by compare-deals, whose cents parser at line 583 is [regex]::Match($p, '(\\d+)\\s*(?:\\u00C2?\\u00A2|cents?)') and fires on the first N¢ in the line.",
+        "storage-bags wow ($0.03 -> $0.05): 09-06 cheapest 0.0299 @ Hy-Vee 'Hy-Vee storage bags, 75 to 100 ct., $2.99' (sale, basis per-100-pack); today 0.0462 @ Aldi 'Boulder Twin Lock Storage Bags 40 CT' $1.85/40 = 0.04625 (everyday). The Hy-Vee sale left with the ad flip; Aldi 0.0462 was the crown on 08-30, 08-31 and 09-02 too. REAL-ECONOMICS (sale expiry). Basis check: per_store Aldi=0.0462 in both weeks, unit 'each' both weeks; 'prior unit unrecorded' only because the 09-06 history entry predates the unit field (recorded from 09-07 on).",
+        "laundry-pods basis check: per_store Sam's Club=0.1498 in every week 08-30 through 09-07, so the two weeks share the 'each' basis; the prior-unit caveat is the same legacy-entry gap, not a re-basing.",
+        "MULTIBUY | Hy-Vee | Sparkling Water: flagged multibuy_unpriced row 'Bubly sparkling water, buy two, get one FREE,' reason 'missing regular price - a Buy-N-Get-K needs the regular retail number to price'. The Hy-Vee cell on the board is a different row (LaCroix 12 pk, 0.045/floz, basis size 144 floz) and the crown is Aldi 0.0234. Unpriceable-by-design; nothing published from it.",
+        "RE-MEASURED after the 08:23:50 check-ad-cycles change: the five cents-priced cells are unchanged on their boards; the class is in compare-deals, which did not change."
+      ],
+      "surface_fix": {
+        "what": "stop the fuel-saver clause from being read as a price: strip 'FUEL SAVE(R|D)?[, ]*(EARN )?N¢ OFF PER GALLON ...' from a Hy-Vee ad line before any price extraction, and make the cents parser refuse a match that is followed by 'OFF PER GALLON'",
+        "files": [
+          "grocery/compare-deals.ps1"
+        ],
+        "exact_change": "compare-deals.ps1 near line 583: before the cents match, $p = [regex]::Replace($p, '(?i)FUEL\\s+SAVE[RD]?,?\\s*(?:EARN\\s+)?\\d+\\s*\\u00A2\\s*OFF\\s*PER\\s*GALLON[^,]*,?', ''); and guard the cents parser with a negative lookahead (?!\\s*OFF\\s*PER\\s*GALLON). Then the line's real price ('$12.94', '$13.97', '$2.29', '$5.99 lb.') is what remains. With no pack count a per-each commodity stays UNPRICED (correct); a lb line prices per lb."
+      },
+      "root_cause": "the Hy-Vee weekly-ad line is structured text ('<product>, <qualifiers>, <price>') and the engine extracts the first money-shaped token from anywhere in it, so a fuel-saver reward wearing a cents sign is a price and (item e9edb9) a per-pound price is a weight. No guard reads the LINE against the CELL: guard 10 verifies rows against their own current_price, which Hy-Vee ad rows do not carry, so a $0.10 laundry-pod crown published for three weeks with every guard green.",
+      "root_fix": {
+        "what": "a hard guard that a Hy-Vee ad-line cell's price equals the LAST money token in its line, plus the parser fix above; the guard is the class fix because it also catches the next token shape nobody has enumerated",
+        "files": [
+          "grocery/guards.ps1",
+          "grocery/test-guards.ps1",
+          "grocery/compare-deals.ps1"
+        ],
+        "exact_change": "guards.ps1: new invariant 'ad-line price provenance' over cells whose source_ad is 'Weekly Ad' or 'DEALS GOOD ALL MONTH LONG' and whose ad text is the item line: derive the last money token (\\$\\d+(\\.\\d\\d)?, N/\\s*\\$X, or N¢ not followed by OFF PER GALLON) and require the cell's ad price to equal it; HARD FAIL naming the cell. test-guards.ps1: frozen must-fire from the real row (Gain Flings line published at 0.10 with last token $12.94), must-not-fire 'Bananas, 49¢ lb.' (last token IS 49¢), clean twin 'Hy-Vee storage bags, 75 to 100 ct., $2.99' (0.0299/each, last token $2.99)."
+      },
+      "blast_radius": {
+        "measured_as": "cells",
+        "measured_by": "every cell on comparison-2026-09-06 (live) and comparison-2026-09-07 whose item carries a cents sign, EARN or FUEL SAVER; every candidate row in candidates-2026-09-07 carrying the clause (16, 2 priced); price-history for the five commodities back to 08-26",
+        "affected_now": 5,
+        "names": [
+          "laundry-pods @ Hy-Vee 0.10/each (LIVE, crown 08-31..09-06)",
+          "diapers @ Hy-Vee 0.25/each (LIVE)",
+          "dryer-sheets @ Hy-Vee 0.05/each (LIVE)",
+          "disinfecting-wipes @ Hy-Vee 0.10/each (09-07 build)",
+          "facial-tissues @ Hy-Vee 0.03/each (09-07 build)"
+        ],
+        "risk": "after the fix all five become UNPRICED (per-each with no count) or price from their trailing dollar token; the only crown that moves already moved with the ad flip (laundry-pods Hy-Vee 0.10 -> Sam's 0.1498). 14 other fuel-saver lines are already unpriced. The 'Bananas, 49¢ lb.' shape keeps working because the strip is anchored on OFF PER GALLON.",
+        "cell_effects": [
+          {
+            "commodity": "laundry-pods",
+            "store": "Hy-Vee",
+            "before": 0.1,
+            "after": 0.2832,
+            "note": "on the 09-07 build the Hy-Vee cell is already the new ad's 'All Mighty Pacs 60 ct ... $16.99' at 0.2832; the 0.10 cell is what the LIVE 09-06 board shows"
+          },
+          {
+            "commodity": "disinfecting-wipes",
+            "store": "Hy-Vee",
+            "before": 0.1,
+            "after": 0,
+            "note": "after = UNPRICED (no count in the line); crown Sam's 0.0352 unaffected"
+          },
+          {
+            "commodity": "facial-tissues",
+            "store": "Hy-Vee",
+            "before": 0.03,
+            "after": 0,
+            "note": "after = UNPRICED; crown Walmart 0.0069 unaffected"
+          }
+        ]
+      },
+      "freshness": "measured against comparison-2026-09-07 (08:10:20, unpublished), comparison-2026-09-06 (11:55, live), candidates-2026-09-07, ads-2026-09-07.json (1948 rows), price-history.json as of 08:10:48",
+      "proof": {
+        "guard_or_fixture": "compare-deals.ps1 -SelfTest (fuel-saver line) + test-guards.ps1 (new ad-line provenance invariant) + test-auditors sanity-wow cases (unchanged)",
+        "must_fire_case": "frozen row 'Gain Flings, EARN 10¢ OFF PER GALLON, -3.00 off with manufacturer's digital coupon, $12.94' published at 0.10/each must HARD FAIL the new guard (last token $12.94); and in compare-deals -SelfTest the same line must NOT yield price 0.10",
+        "clean_twin": "'Bananas, 49¢ lb.' must still price 0.49/lb and pass the guard (the last token is the cents token); 'Hy-Vee storage bags, 75 to 100 ct., $2.99' must still price 0.0299/each and pass; the two sanity-wow twins in test-auditors (fl_oz/floz rename silent; legacy no-unit entry pages with 'prior unit unrecorded') unchanged",
+        "commands": [
+          "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+          "powershell -File grocery\\test-guards.ps1",
+          "powershell -File grocery\\guards.ps1 (MUST be 0 on the rebuilt board)"
+        ]
+      },
+      "rollback": "revert the compare-deals strip and the guards.ps1 invariant; no data migration; the history entries already carry the wrong 0.10 for three weeks and are not rewritten",
+      "do_not_touch": [
+        "sanity-check.ps1 wow logic (it did its job)",
+        "the multibuy_unpriced path (Buy-2-get-1 without a regular price stays unpriced)",
+        "any band"
+      ],
+      "resolution_note": "Three flags, one real bug: the laundry-pods 'move' was a Hy-Vee ad line whose fuel-saver reward (EARN 10 cents OFF PER GALLON) had been published as the price - $0.10 per pod held the crown 08-31..09-06 and two sibling cells (diapers 0.25, dryer-sheets 0.05) are on the live board the same way. Fixed the extractor to strip the fuel-saver clause and added a hard guard that an ad-line cell's price is the line's last money token. storage-bags was a real sale expiry (Aldi 0.0462 everyday returns), and the Bubly buy-2-get-1 is unpriceable by design. Both wow flags share their basis week to week (each/each).",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "TRUE, read off both boards. comparison-2026-09-06 (LIVE at the time) carried laundry-pods|Hy-Vee at 0.10/each AS THE CROWN, from \"Gain Flings, EARN 10c OFF PER GALLON, -3.00 off with manufacturer's digital coupon, $12.94\", plus diapers|Hy-Vee 0.25 and dryer-sheets|Hy-Vee 0.05 from FUEL SAVER lines. comparison-2026-09-07 (08:10) carried disinfecting-wipes|Hy-Vee 0.10 and facial-tissues|Hy-Vee 0.03 the same way. The cent sign in the data is a clean U+00A2. The proposed guard was measured on both boards BEFORE being made hard: 45 ad-line cells / 38 checked / 3 findings on 09-06 and 44 / 39 / 2 on 09-07 - exactly the known-bad cells and zero false positives over 77 checked cells.",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-07-0e9482",
+      "subject": "Grocery: 5 store(s) dropped from a commodity they carry - 2026-09-07",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "baked-beans @ Hy-Vee (PRICED): candidate 'Hy-Vee Pork & Beans in Tomato Sauce' $0.89 / 16 oz = 0.0556/oz, basis 'size 16 oz', everyday - cheaper than the crown (Fareway 0.0593 'Fareway Pork and Beans'). Absent because known-wrong.json carries the ruling key 'baked-beans|HyVee|hy-vee-pork-beans-in-tomato-sauce' and guard 'no product a reasoner already ruled wrong is priced' removes it. audit-coverage-gaps does not read known-wrong.json, so it reports a ruled-out product as an actionable gap. Note the contradiction: baked-beans' rule admits 'pork & beans' and the Fareway crown IS pork and beans, while a ruling says pork & beans is wrong at Hy-Vee.",
+        "anaheim-peppers @ Fareway: two candidates. (1) 'Anaheim Pepper' fareway-regular-2026-09-07 row: ad_price '$1.00', size '$4.99 / lb', taxonomy 'About 0.2 lb each', as_of 2026-08-11 -> BASIS-NULL: the store's per-pound rate sits in the SIZE field. 8 rows in the Fareway file share this shape (Tomatillo $2.49/lb, Spaghetti Squash 1.49, Green Acorn Squash 1.49, Green Serrano Pepper 4.99, Shallot 4.99, White Nectarine 3.88, Red Onion 1.69, Anaheim 4.99), identical in every Fareway file back to 09-02. (2) 'Anaheim, Serrano or Poblano Peppers' (Fareway ad line) CLAIMED-BY poblano-peppers [440] ahead of serrano [486] and anaheim [487] - a three-product ad line one commodity must own.",
+        "quinoa-uncooked and couscous @ Hy-Vee: one candidate for both, 'Hy-Vee rice, quinoa or Israeli-style couscous, FUEL SAVER EARN 3¢ OFF PER GALLON,' CLAIMED-BY rice [63]; the line carries no size and no price (candidates basis UNPRICED), so no commodity can price it whoever owns it.",
+        "sea-salt @ Hy-Vee: candidate 'Sue Bee pure honey, FREE Sue Bee sea salt honey 12 oz. with purchase of Sue Bee pure honey 16 oz.,' CLAIMED-BY honey [78] - correctly: it is honey. sea-salt's pattern matched 'sea salt honey'.",
+        "the Hy-Vee concentration is one cause for 3 of 4: Hy-Vee's weekly-ad feed is composed of multi-product lines ('A, B or C, $price', 'FREE X with purchase of Y'), and audit-coverage-gaps' candidate test is 'does the commodity's pattern match the name', which cannot tell a product from a line that merely names one. The 4th (baked-beans) is the auditor not reading a sibling ruling.",
+        "explain-coverage-gap model (scratch routing over commodities.json): pork & beans -> baked-beans owns, no kill; Anaheim Pepper -> anaheim-peppers owns; the three-pepper line -> poblano-peppers owns with serrano/anaheim contesting; the rice line -> rice owns with quinoa-uncooked/couscous contesting; the honey line -> honey owns, salt [88] killed by its own sea-salt exclude. No pattern is too strict in any of the five.",
+        "RE-MEASURED after 08:23:50: coverage-gaps.json (08:18) is unchanged; commodities.json unchanged; the five gaps stand as described."
+      ],
+      "surface_fix": {
+        "what": "read the Fareway per-pound rate out of the size slot at ingest, and record the four rulings the auditor needs",
+        "files": [
+          "grocery/build-fareway-regular.ps1",
+          "grocery/select-fareway-shop.ps1",
+          "grocery/coverage-gap-allowlist.json"
+        ],
+        "exact_change": "Fareway ingest (whichever of select-fareway-shop / build-fareway-regular writes size): when size matches '^\\$([\\d.]+)\\s*/\\s*lb$', write size 'lb', ad_price '$<rate>' and keep the each price in note ('each $1.00, about 0.2 lb'); 8 rows today. coverage-gap-allowlist.json: four entries with reviewed 2026-09-07 - quinoa-uncooked@Hy-Vee and couscous@Hy-Vee (MULTI-PRODUCT AD LINE, no size, owned by rice, unpriceable), anaheim-peppers@Fareway for the three-pepper line (MULTI-PRODUCT AD LINE owned by poblano-peppers; the single Anaheim row is the ingest fix), sea-salt@Hy-Vee (the candidate is honey; the sea-salt token is a flavour word). Each quotes the price_text/size_text the engine saw, per the file's readme."
+      },
+      "root_cause": "audit-coverage-gaps decides 'the store HAS a matching product' from the commodity's pattern alone, so it cannot distinguish a product from an ad line that names several products, and it does not consult known-wrong.json, so a product a reasoner already ruled wrong is paged as a store the rule dropped. Hy-Vee is over-represented because its ad feed is made of exactly those lines. Separately, the Fareway shop ingest writes the store's unit-rate string into the size field for weight-sold produce, a shape the engine has no branch for, so eight Fareway produce rows have been BASIS-NULL since at least 09-02.",
+      "root_fix": {
+        "what": "two new non-actionable classes in audit-coverage-gaps so the auditor stops paging on its own blind spots: RULED-WRONG (the candidate is in known-wrong.json for that commodity+store) and AD-LINE (a CLAIMED-BY candidate whose name lists two or more tracked commodities with ' or ' and carries no size)",
+        "files": [
+          "grocery/audit-coverage-gaps.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "audit-coverage-gaps.ps1: load known-wrong via known-wrong-lib.ps1 (audit-semantic-identity.ps1:148 already does) and classify a PRICED candidate whose key is ruled as RULED-WRONG, actionable=false, listed without paging; for CLAIMED-BY, when the candidate name matches '(?i),\\s*[^,]+\\s+or\\s+' and the engine basis is UNPRICED, classify AD-LINE, actionable=false. test-auditors: must-fire = the founding pork-chops hijack still classifies CLAIMED-BY actionable (existing case), the 'Hy-Vee rice, quinoa or Israeli-style couscous' line classifies AD-LINE non-actionable, the pork & beans row with the frozen ruling classifies RULED-WRONG; clean twin = 'Sue Bee ... sea salt honey' is NOT an AD-LINE (no ' or ') and stays CLAIMED-BY, so it is the allowlist, not the class, that silences it."
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "today's 30 coverage gaps by reason (BAND-DROPPED 9, BASIS-NULL 16, PRICED 1, CLAIMED-BY 4); all 799 rows of fareway-regular-2026-09-07 and the six files back to 09-02 for the price-in-size shape (8 rows each); the 8 commodities' Fareway cells on comparison-2026-09-07",
+        "affected_now": 8,
+        "names": [
+          "Fareway price-in-size rows and what the fix does: Tomatillo 2.49/lb (no Fareway cell today; crown FF 2.49 - a tie), Spaghetti Squash 1.49 (none; crown Aldi 1.29), Green Acorn Squash 1.49 (none; crown Hy-Vee 1.4889), Green Serrano Pepper 4.99 (Fareway cell already 4.99 from a sibling row), Shallot 4.99 (Fareway cell 13.28 'Spice World Fresh Shallots' would drop to 4.99; crown Walmart 2.88 unmoved), White Nectarine 3.88 (none; crown Aldi 1.845), Red Onion 1.69 (none; crown Aldi 1.095), Anaheim Pepper 4.99 (none; crown Baker's 1.49)"
+        ],
+        "risk": "six new Fareway cells and one cheaper Fareway cell (shallots 13.28 -> 4.99), no crown changes; the rows are as_of 2026-08-11 so they age like any carried row. AD-LINE classification is measured on today's 4 CLAIMED-BY gaps: 3 become non-actionable, sea-salt/honey stays actionable until allowlisted. The founding CLAIMED-BY fixture (pork-chops hijack) has a size and no ' or ', so it stays actionable."
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against out/coverage-gaps.json (08:18), candidates-2026-09-07 (08:10), fareway-regular-2026-09-07.json, comparison-2026-09-07 (08:10:20, unpublished), commodities.json and known-wrong.json at HEAD 3c48050b9",
+      "proof": {
+        "guard_or_fixture": "test-auditors.ps1 coverage-gaps cases (existing RULE-INVISIBLE / CLAIMED-BY fixtures + the two new classes) and build-fareway-regular -SelfTest for the size shape",
+        "must_fire_case": "frozen Fareway row {item 'Anaheim Pepper', ad_price '$1.00', size '$4.99 / lb'} must ingest as size 'lb' price $4.99 and price anaheim-peppers @ Fareway at 4.99/lb; the frozen 'Hy-Vee rice, quinoa or Israeli-style couscous ...' line must classify AD-LINE (non-actionable); the pork & beans row with its ruling must classify RULED-WRONG",
+        "clean_twin": "a Fareway row with size 'lb' and ad_price '$4.99' (the sibling serrano row) ingests unchanged; the founding pork-chops hijack still classifies CLAIMED-BY actionable and names the thief; a name with ' or ' but a size present (e.g. 'El Monterey Burritos or Chimichangas', 8 ct) is NOT AD-LINE",
+        "commands": [
+          "powershell -File grocery\\build-fareway-regular.ps1 -SelfTest",
+          "powershell -File grocery\\audit-coverage-gaps.ps1 (expect actionable 0 after allowlist + fix)",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the ingest hunk and the auditor hunk; delete the four allowlist entries; no board data is rewritten (the Fareway rows are regenerated at the next pull)",
+      "do_not_touch": [
+        "any pattern in commodities.json for these five commodities (none is too strict)",
+        "the known-wrong ruling on baked-beans|HyVee until Brad answers the open question",
+        "guard 'no product a reasoner already ruled wrong is priced'"
+      ],
+      "resolution_note": "Five gaps, no pattern was too strict. Four are the auditor's own blind spots: three Hy-Vee/Fareway multi-product ad lines ('rice, quinoa or couscous', 'Anaheim, Serrano or Poblano', 'FREE sea salt honey with honey') that one commodity must own and that carry no size, plus a Hy-Vee pork & beans row a reasoner already ruled wrong that the auditor could not see was ruled. The fifth is real: Fareway's shop ingest writes '$4.99 / lb' into the size field for 8 weight-sold produce rows, so they have been unpriceable since 09-02; fixed at ingest (6 Fareway cells appear, shallots drops 13.28 -> 4.99, no crowns move). Auditor now classifies RULED-WRONG and AD-LINE as non-actionable; four allowlist rulings recorded. Open for Brad: is pork & beans a baked bean (the rule and a ruling disagree).",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "TRUE. All 8 Fareway price-in-size rows are present in every fareway-regular file from 2026-09-01 to 2026-09-07, with the Anaheim Pepper row exactly as quoted (ad_price $1.00, size '$4.99 / lb', taxonomy 'About 0.2 lb each', slug ...-anaheim-pepper-1-lb). The known-wrong.json block key for the pork & beans ruling is 'baked-beans|Hy-Vee' (the 'HyVee' form the plan quotes is the entry's `key` field, not the block key), so the new RULED-WRONG lookup matches it.",
+      "deviation": "The plan's step 'rebuild the Fareway regular file from today's capture' could not be run: build-fareway-regular.ps1 REFUSED, because a shop-file rebuild produces 467 rows against the 799 that file has accumulated, and -Force would have dropped 332 verified rows to fix 8. That refusal is the thin-capture-evicts-rich guard doing its job and was not overridden. Instead the ingest fix landed in the builder (durable, with a frozen must-fire fixture off the real Anaheim row and a clean twin off its sibling), and today's 8 rows were repaired in place to byte-identical output - ad_price becomes the rate, size becomes 'lb', current_price follows ad_price so guard 10 still compares one basis, base_price/marked_down are withheld on the one marked-down row exactly as the builder withholds them for lb rows, and size_raw/size_repaired keep the each price. Second deviation: that repair first wrote the file BOM-less, and audit-capture-encoding hard-failed it (154 non-ASCII bytes, no BOM). The guard was right; the BOM was restored and the audit went to 0 ambiguous of 379.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-07-abae06",
+      "subject": "Grocery: semantic sweep found 3 product(s) no rule can see - 2026-09-07",
+      "classification": "no-code-change",
+      "evidence": [
+        "semantic-findings.json (08:20, board comparison-2026-09-07, corpus 41,209, rule_invisible 7,731, coverage_count 3): ground-beef-8020 @ Walmart '80% Lean / 20% Fat Ground Beef and Pork Blend, 3 lb Roll, Fresh' (cos 0.698); laundry-pods @ Baker's 'ARM & HAMMER Power Sheets Laundry Detergent Fresh Breeze' (cos 0.683); frozen-burritos @ Walmart 'El Monterey Beef, Bean & Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen)' (cos 0.728). The count 3 is what the sidecar's thresholds produced over its 41,209-name corpus; I counted independently below and found no additional real instance.",
+        "routing (explain-coverage-gap model): the beef-and-pork blend is EXCLUDED by ground-beef-8020's own '\\bpork\\b' (a different product: a blend, not 80/20 beef); Power Sheets is NO-INCLUDE (laundry SHEETS, not pods - the rule has no 'sheets' on purpose); Chimichangas is NO-INCLUDE (the rule is 'burritos?'; a chimichanga is a fried burrito and a different SKU class; Fareway's 'El Monterey Burritos or Chimichangas' ad line is on the board only because it names burritos). All three are correctly invisible.",
+        "independent count over the newest per-store capture files (11,092 names): /80\\/20|80% lean/ 9 hits, 8 route to ground-beef-8020, 1 excluded by 'patties' (USDA 80/20 Ground Beef Patties - correct); /burrito|chimichanga/ 19 hits, the invisible ones are burrito BOWLS, a breakfast burrito and Tina's Quick Meal (a single frozen burrito that DOES route to frozen-burritos); /laundry.*(pod|pac|sheet)/ 13 hits, the only invisible one is a stain remover; the two 'Free & Clear' / 'Free & Gentle' pacs names route to laundry-pods (my first pass called them invisible because the candidates file JSON-escapes '&'). No real 80/20 beef, pod or frozen burrito is invisible.",
+        "ground-beef-8020 money check: the crown is Sam's 4.77/lb 'Ground Chuck Chub, Case'; the blend must not be admitted at all (different species mix), and it would not move the crown if it were."
+      ],
+      "root_cause": "the semantic sidecar scores 'reads as an instance of this commodity' on embedding similarity, which cannot see a species blend, a form change (sheets vs pods) or a preparation change (chimichanga vs burrito); it is a lead generator by design and all three leads are different products. audit-semantic-identity honours known-wrong.json rulings (line 83), so the durable answer is three rulings, not a rule.",
+      "resolution_note": "All three are correctly invisible different products: an 80/20 beef AND PORK blend (killed by ground-beef-8020's own pork exclude), laundry SHEETS (not pods), and chimichangas (not burritos). Independent scan of the newest captures found no real instance the rules miss. Record rulings so the sweep stops re-finding them: add-known-wrong.ps1 -Commodity ground-beef-8020 -Store Walmart -Name '80% Lean / 20% Fat Ground Beef and Pork Blend, 3 lb Roll, Fresh' -RuledBy triage-2026-09-07 -Evidence 'beef and pork blend, not 80/20 ground beef'; same for laundry-pods @ Baker's (Power Sheets: laundry sheets, not pods) and frozen-burritos @ Walmart (chimichangas, not burritos). No rule change.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "TRUE. All three rulings recorded via add-known-wrong.ps1, each exit 0, and audit-known-wrong re-ran clean after each: 'KNOWN-WRONG AUDIT OK: 0 of 286 adjudicated-wrong products are priced on the board (279 entries evaluable against 3442 named priced cells; 0 near-match(es) for review)'. No rule was widened.",
+      "deviation": null
+    },
+    {
+      "queue_id": "2026-09-07-0b232c",
+      "subject": "Grocery matching soundness - review needed",
+      "classification": "wrong-product",
+      "evidence": [
+        "out/audit/soundness-report.json (08:19): moved 0, dropped 0, drift_vs_engine 0, new_contested 11 - count verified; the eleven names are the ones in the log line. All eleven were routed through commodities.json in array order (scratch route-names.ps1, the explain-coverage-gap model); owner and contest for each:",
+        "1 'BELVITA Breakfast Bar Biscuit Sandwiches, Cinnamon Brown Sugar With Vanilla Creme 8.8 oz' -> owner brown-sugar [72], contest breakfast-sandwiches [264]. WRONG OWNER. And its sibling 'BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz' (no sugar token) routes to breakfast-sandwiches and HOLDS THE CROWN: breakfast-sandwiches | Fareway | $3.98 / 5 ct | 0.796/each, sale, on the LIVE 09-06 board and the 09-07 build; history shows the crown moved Sam's 0.9775 -> Fareway 0.796 on 09-06. A biscuit snack bar is priced as a frozen breakfast sandwich, and it is the cheapest one in Omaha.",
+        "2 'Cottonelle bath tissue 6 mega rolls or Viva paper towels 3 double rolls, $5.99' -> paper-towels [101], contest toilet-paper [102]; two-product ad line, no cell today.",
+        "3 'Fresh raspberries or blackberries, 6 oz. pkg., $3.68' -> raspberries [118], contest blackberries; holds raspberries @ Hy-Vee 0.6133/oz (not crown). Acceptable: the price applies to both.",
+        "4 'HyChi dinner for 2, ... 1 pint rice, ... $19.99' -> rice [63], contest cookies; no size, unpriced. Acceptable.",
+        "5 'Hy-Vee heavy whipping cream 16 fl. oz. or half & half 32 fl. oz., $2.99' -> heavy-cream [156], contest half-and-half; no cell today. Acceptable (heavy cream is named first and sized).",
+        "6 'Hy-Vee rice, quinoa or Israeli-style couscous, FUEL SAVER ...' -> rice, contest quinoa-uncooked/couscous; unpriced (item 0e9482).",
+        "7 'McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.' -> owner onions [23] (!), contest sea-salt [591]; a seasoning blend on fresh onions ($/lb). Kept off the board only by the band; the corpus holds 3 such blends owned by onions (McCormick x2, Badia Complete Seasoning).",
+        "8 'Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $3.49' -> strawberries [18], contest blueberries, frozen-fruit; no cell today.",
+        "9 'On The Border tortilla chips or queso, 15 to 15.5 oz., $2.98' -> tortilla-chips [91], contest queso; holds tortilla-chips @ Hy-Vee 0.1923/oz (not crown). Acceptable.",
+        "10 'Pace salsa, picante, queso or Late July salsa, 15 to 24 oz., $3.49' -> salsa [87], contest queso; holds salsa @ Hy-Vee 0.1454/oz (not crown). Acceptable.",
+        "11 'Tidy Cat Super Jug Twin Pack Multi-Cat Clumping Litter With Glade Clear Springs Scent, 42 lbs.' -> owner air-freshener [289] (!), contest cat-litter [314]; 42 lb of cat litter as air freshener per oz, kept off only by the band. The corpus holds 12 Glade/Air Wick-scented litters owned by air-freshener (Walmart, Sam's, Family Fare).",
+        "engine agreement check for the simulator: the 4 contested names that hold board cells today (BELVITA Dark Chocolate, raspberries line, Pace line, On The Border line) are assigned by the engine exactly as the simulator routes them.",
+        "blast radius (routing artifact plan-2026-09-07.routing.json): corpus 46,426 distinct names from 380 files (comparison-2026-09-07 + every out/regular, out/sams, out/bakers, out/fareway file); 648 names match any proposed token and were fully routed before and after; 21 change owner: BELVITA Dark Chocolate breakfast-sandwiches -> none, 5 belVita names brown-sugar -> none, 12 scented litters air-freshener -> cat-litter, 3 seasoning blends onions -> none, 0 sea-salt changes. Positive control: the Tidy Cat 42 lb name, expected cat-litter, observed cat-litter."
+      ],
+      "surface_fix": {
+        "what": "exclude the crown-holding biscuit bar from breakfast-sandwiches and its brown-sugar landing, and the two band-saved hijacks from air-freshener and onions",
+        "files": [
+          "grocery/commodities.json"
+        ],
+        "exact_change": "breakfast-sandwiches.exclude += '\\bbelvita\\b', '\\bbel\\s+vita\\b', '\\bbreakfast\\s+bars?\\b'; brown-sugar.exclude += '\\bbelvita\\b', '\\bbel\\s+vita\\b'; air-freshener.exclude += '\\blitter\\b'; onions.exclude += '\\bblack\\s+pepper\\b', '\\ball[\\s-]purpose\\b', '\\bcomplete\\s+seasoning\\b'; sea-salt.exclude += '\\bblack\\s+pepper\\b' (so the McCormick line does not re-land on sea-salt; touches no sea-salt name owned today). Exclude additions only. Then rebuild, run audit-match-soundness.ps1 and -Accept ONLY after MOVED lists exactly the breakfast-sandwiches@Fareway change and DROPPED is empty."
+      },
+      "root_cause": "a contested name is a name two rules both admit, and the estate resolves it by array position; new-contested is therefore the exact place a wrong product enters, and today it did: a snack bar named 'Biscuit Sandwiches' won a crown because breakfast-sandwiches' pattern reads 'sandwiches' and nothing reads 'bar'. The wider mechanism is flavour-word and scent-word hijack: a commodity whose pattern is also a common descriptor (brown sugar, onion, Glade/air freshener) owns every product that carries the word. Measured: brown-sugar owns 65 non-sugar names today (BBQ sauces, toaster pastries, waffles, creamers), harmless only because every one is dearer per lb than real sugar; air-freshener owns 12 litters and onions 3 seasoning blends, kept off cells only by the bands.",
+      "root_fix": {
+        "what": "a soundness rule that a NEW contested name which wins a CROWN pages as its own class (crown-by-contest) instead of riding the accept-all review line, so the next 'Biscuit Sandwiches' cannot hold a crown for a week unnoticed",
+        "files": [
+          "grocery/audit-match-soundness.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "audit-match-soundness.ps1: for each new-contested name, look up whether it is a cheapest_store row on the current comparison; if so print 'CROWN-BY-CONTEST' with the commodity and the contesting ids and exit 1 (advisory today; the plan's do_not_touch keeps it out of guards until Brad rules). test-auditors: must-fire = frozen BELVITA Dark Chocolate row holding breakfast-sandwiches@Fareway crown with brown-sugar/breakfast-sandwiches both admitting its cinnamon sibling; must-not-fire = the raspberries-or-blackberries line (contested, holds a non-crown cell) stays a plain new-contested; clean twin = MOVED/DROPPED accounting unchanged on the frozen soundness fixture."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of the 648 candidate names (every name in the 46,426-name corpus that matches any added token) across comparison-2026-09-07 + out/regular (all files) + out/sams + out/bakers + out/fareway, frozen in plan-2026-09-07.routing.json with the file list, both controls, the 21 changes, the rejected wider variants and the brown-sugar exposure list",
+        "affected_now": 21,
+        "names": [
+          "BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz (breakfast-sandwiches -> none)",
+          "5 belVita cinnamon brown sugar names (brown-sugar -> none)",
+          "12 Tidy Cats / Vibrant Life scented litters (air-freshener -> cat-litter)",
+          "McCormick All Purpose Garlic Onion Black Pepper Sea Salt 9.12 oz, McCormick Seasoning Garlic and Onion Black Pepper and Sea Salt 4.25 oz, Badia Complete Seasoning 6 oz (onions -> none)"
+        ],
+        "risk": "measured second-order landings: the 12 litters land on cat-litter, which is right, and one of them is cheaper than the current Sam's cell (see cell_effects). Two wider variants were measured and REJECTED in the artifact: a brown-sugar flavour-exclude set re-lands a BBQ sauce on cherries and a cream-cheese dip on queso (new wrong products), and a sea-salt garlic/onion/all-purpose exclude would delete the Walmart and Baker's sea-salt cells (Morton All-Purpose Iodized Sea Salt). Nothing in the shipped set touches a currently owned real product.",
+        "cell_effects": [
+          {
+            "commodity": "breakfast-sandwiches",
+            "store": "Fareway",
+            "before": 0.796,
+            "after": 1.2488,
+            "note": "next Fareway candidate is Jimmy Dean Breakfast Sandwiches per-8-pack (candidates-2026-09-07); crown moves Fareway 0.796 -> Sam's Club 0.9775"
+          },
+          {
+            "commodity": "cat-litter",
+            "store": "Sam's Club",
+            "before": 0.5141,
+            "after": 0.459,
+            "note": "Tidy Cat Super Jug 42 lb $19.28 (sams-deals-2026-09-07) beats Fresh Step 44 lb $22.62; computed by hand, confirm with audit-capture-eviction; crown Hy-Vee 0.2622 unchanged"
+          }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "corpus frozen 2026-09-07 ~10:40 against comparison-2026-09-07 (08:10:20, unpublished) and every capture file on disk at that minute including the untracked aldi/walmart-regular-2026-09-07 files and the Family Fare 09-07 sweep as it stood; the Family Fare sweep appends every three hours, so re-run the artifact's candidate filter if the developer starts after the next window lands",
+      "proof": {
+        "guard_or_fixture": "audit-match-soundness.ps1 (MOVED must list exactly breakfast-sandwiches@Fareway; DROPPED empty) + guards.ps1 board-vs-identity + verify-no-regression + the new CROWN-BY-CONTEST case in test-auditors",
+        "must_fire_case": "frozen row 'BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz' with price $3.98 / 5 ct must route to NO commodity after the change (routing artifact second_control) and the frozen crown row must trigger CROWN-BY-CONTEST in the soundness fixture",
+        "clean_twin": "'Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct' and 'Breakfast Best Sausage, Egg & Cheese Biscuit Sandwiches' must still route to breakfast-sandwiches (a biscuit SANDWICH is a breakfast sandwich; only the bar is excluded); 'Glade Soft Mist Air Freshener, Clean Linen' still routes to air-freshener; 'Vidalia Onions' still to onions; 'Morton All-Purpose Iodized Sea Salt' still to sea-salt",
+        "commands": [
+          "powershell -File grocery\\compare-deals.ps1 -MinStores 1 (with the newest Bakers/Fareway files)",
+          "powershell -File grocery\\audit-match-soundness.ps1 (review, then -Accept)",
+          "powershell -File grocery\\verify-no-regression.ps1",
+          "powershell -File grocery\\guards.ps1",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the commodities.json hunk (five exclude additions) and re-run the chain; the soundness baseline is re-accepted against the reverted board",
+      "do_not_touch": [
+        "breakfast-sandwiches' pattern itself (biscuit sandwiches are legitimate)",
+        "the brown-sugar flavour excludes measured in the artifact's rejected_variants (they re-land wrong products on cherries and queso)",
+        "sea-salt excludes beyond black pepper (all-purpose/garlic/onion delete two real cells)",
+        "the CROWN-BY-CONTEST verdict stays advisory (exit 1) until Brad rules on promoting it to guards"
+      ],
+      "resolution_note": "Eleven new-contested names verified; MOVED=0/DROPPED=0 held. Three needed a rule: a BELVITA biscuit bar had taken the breakfast-sandwiches crown at Fareway (0.796/each, live since 09-06) and its cinnamon sibling was landing on brown-sugar; Glade-scented cat litter was owned by air-freshener (12 names) and McCormick/Badia seasoning blends by onions (3), both held off cells only by the bands. Excludes added (measured: 21 routing changes of 46,426 names, 2 cell moves, no crown gained by a wrong product), the other eight are multi-product ad lines owned by the first-named product and are acceptable. Accepted with -Accept after the rebuild; a CROWN-BY-CONTEST class added to the soundness auditor so a contested crown pages on its own.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "TRUE, and the routing was DIFFED against the artifact rather than re-derived. Re-routing only the 648 frozen candidate names under the edited commodities.json reproduced plan-2026-09-07.routing.json's `after` column on 648 of 648 - no name outside the contract moved. positive_control (Tidy Cat 42 lb) observed cat-litter; second_control (BELVITA Dark Chocolate) observed (none); all six clean twins held (both Jimmy Dean/Breakfast Best biscuit sandwiches, Glade air freshener, Vidalia onions, Morton All-Purpose Iodized Sea Salt, Domino brown sugar). The artifact's freshness held: the Family Fare 09-07 file's mtime is 10:34:10, before the 10:40 freeze, so no new sweep window had landed. THE HAND-COMPUTED CELL EFFECT IS CONFIRMED AGAINST THE REAL ENGINE, not the arithmetic: after the rebuild cat-litter|Sam's Club reads 0.459 (Tidy Cat Super Jug 42 lb, basis 'size 42 lb') against the plan's hand-computed 0.459, crown unchanged at Hy-Vee 0.2622; breakfast-sandwiches|Fareway reads 1.2488 (Jimmy Dean per-8-pack) against the plan's 1.2488, crown moved Fareway 0.796 -> Sam's Club 0.9775. audit-capture-eviction: 0 cells dearer than the engine's own eligibility rule allows.",
+      "deviation": "audit-match-soundness reported MOVED=1 DROPPED=2 rather than the plan's 'MOVED exactly breakfast-sandwiches@Fareway, DROPPED empty' - a vocabulary mismatch, not a substantive one: this tool calls an unmatched name DROPPED and a re-owned name MOVED. All three rows were checked line by line against the artifact's frozen 21 routing changes and all three are in it (BELVITA Dark Chocolate breakfast-sandwiches -> none; Bel Vita Crunchy Cinnamon brown-sugar -> none; Tidy Cats Glade Clear Springs 20 Lb air-freshener -> cat-litter). No unexplained MOVE. TWO NEW contested names appeared that the plan never saw - 'bettergoods Garlic, Parmesan, and Basil Butter, 3 oz' and 'Panko Chicken Nuggets' - and both were checked against the rebuilt board: neither holds any cell, let alone a crown. Accepted with -Accept; a re-run then reported MOVED=0 DROPPED=0 new-contested=0 drift-vs-engine=0.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-07-72756b",
+      "subject": "Grocery: Family Fare pull dropped a carried item - review",
+      "classification": "infra",
+      "evidence": [
+        "ad-cycle-log 08:08:44 ff-carry: FOUND 2 uncovered terms (40 of 595 empty terms re-probed, 466 skipped, 89 RATE-LIMITED): jarred-gravy <- 'Heinz Home Style Turkey Gravy, 12 Oz Jar' term 'turkey gravy jar' index 383 of 602, cursor 152, due in 33 windows (~09-18); 15-bean-soup-mix <- 'Hurst's Hambeens 15 Bean Soup Mix 20 Oz' term '15 bean soup mix' index 552, due in 58 windows (~09-27).",
+        "capture depth held (dispatch measurement): family-fare-regular-2026-09-07 deals=5361 terms=602 carried=5312 vs 09-06 deals=5359 carried=5254; no thin capture, no eviction.",
+        "the claim 'Confirmed victims lead the next window's slice automatically' is the alert body's own text, audit-ff-carry.ps1:323. Repo-wide, 'ff-carry-report' and 'confirmed_victims' appear ONLY in the writer (audit-ff-carry.ps1:252-253) and in test-auditors.ps1:1835/1837, which assert the JSON array shape and never that anything reads it. pull-regular-familyfare.ps1's only front-of-slice mechanism is Select-ExpiryFirstSlice at lines 819-845, fed by $plan.SaleExpiries from Get-CapturePlan (capture-policy-lib); its 'victims' at 795/907/910 are rate-limit victims (asked, answered empty), a different concept. build-pull-order.ps1 orders by history depth/contest/has/id. No promotion path exists; the dispatch's finding holds.",
+        "class measurement (scratch census over every *.ps1/*.py/*.js outside archive/out/worktrees): 160 out/*.json families, 17 are WRITTEN by a script and READ by none: category-coverage-report, chain-verdict (capture-run reads it through a variable, so treat this one as a census false positive to verify), commodity-dupes, coverage-gap-explained, coverage-regression, ff-carry-report, ff-missing-products, ff-notcarry, ghost-drift-recipes, instore-channel-doubt, link-audit, outofband-triage, purge-verdict-lows-unresolved, research-worklist, review-ack (test-auditors only), unpriced-triage, walmart-batch-rejects. Several are legitimately human-read reports; ff-carry-report is the one whose alert promises a consumer."
+      ],
+      "surface_fix": {
+        "what": "wire confirmed_victims into the next Family Fare window's slice, and make the alert say what actually happens",
+        "files": [
+          "grocery/pull-regular-familyfare.ps1",
+          "grocery/audit-ff-carry.ps1"
+        ],
+        "exact_change": "pull-regular-familyfare.ps1 after the SaleExpiries prepend (line 845): if out/ff-carry-report.json exists and its generated stamp is within 48 h, take confirmed_victims[].term, and prepend those terms with the SAME Select-ExpiryFirstSlice helper (KeyOf by term), counting them into the budget exactly as expiries are (one slot per term, clamped by $plan.CallCap at lines 840-843); log 'Family Fare: N confirmed pull-drop victim term(s) moved to the FRONT of today's slice'. audit-ff-carry.ps1:323: replace 'lead the next window's slice automatically' with 'are read from out/ff-carry-report.json by the next window and asked first (within the call cap)'."
+      },
+      "root_cause": "an auditor writes a machine-readable report that no machine reads, and its alert describes the consumer that was meant to exist; the human reading the alert is reassured by a mechanism that is not there, so a genuinely dropped carried item waits a third of a rotation. The class is auditors whose output is a file with a writer and no reader; measured at 17 families today, of which the ff-carry one is the only alert that promises a consumer.",
+      "root_fix": {
+        "what": "a ratchet that counts out/ report families with a script writer and no script reader, so a promised consumer that never lands is visible the day it is promised",
+        "files": [
+          "ops/audit-write-only-reports.ps1",
+          "ops/run-gates.ps1"
+        ],
+        "exact_change": "new ops/audit-write-only-reports.ps1: scan *.ps1/*.py/*.js outside archive/out/.claude for Set-Content/Out-File/WriteAll* lines naming an out/<family>.json and Get-Content/Read-JsonFile/ReadAll*/Test-Path lines naming the same family; report families with writers and no readers; ratchet against out/write-only-reports-baseline.json (may only go down; first run records 17 minus ff-carry-report = 16 after this plan). -SelfTest with a frozen two-file fixture (writer only -> fires; writer + reader -> silent). Register in run-gates."
+      },
+      "blast_radius": {
+        "measured_as": "schedule",
+        "measured_by": "the FF term budget and slice order read from pull-regular-familyfare.ps1 (TermBudget from capture-policy, 7 per landed window, CallCap clamp) and today's ff-carry report (2 victims); the census of 160 out/*.json families",
+        "affected_now": 2,
+        "names": [
+          "turkey gravy jar (jarred-gravy)",
+          "15 bean soup mix (15-bean-soup-mix)"
+        ],
+        "risk": "two terms move to the front of the next window, displacing two rotation terms by one window; bounded by CallCap so the Freshop throttle cannot be breached; a stale report (older than 48 h) is ignored so a fixed victim cannot be re-asked forever"
+      },
+      "freshness": "measured against pull-regular-familyfare.ps1, audit-ff-carry.ps1, build-pull-order.ps1 at HEAD 3c48050b9 and out/ff-carry-report.json of 08:08:44; the FF cursor file is foreign in-flight work and was not read",
+      "proof": {
+        "guard_or_fixture": "test-capture-policy.ps1 / pull-regular-familyfare -SelfTest (the frozen slice fixtures already there) + ops/audit-write-only-reports.ps1 -SelfTest",
+        "must_fire_case": "a frozen out/ff-carry-report.json with confirmed_victims for 'turkey gravy jar' and '15 bean soup mix' generated 1 h ago must produce a slice whose first two terms are exactly those, with the budget raised by 2 and clamped at CallCap; the write-only audit must fire on a fixture directory holding a writer and no reader",
+        "clean_twin": "a report generated 72 h ago must leave the slice exactly as the cursor left it (the expiry prepend still applies), and an empty confirmed_victims array must change nothing; the write-only audit must be silent when a reader exists",
+        "commands": [
+          "powershell -File grocery\\pull-regular-familyfare.ps1 -SelfTest",
+          "powershell -File ops\\audit-write-only-reports.ps1 -SelfTest",
+          "powershell -File ops\\run-gates.ps1"
+        ]
+      },
+      "rollback": "revert the prepend hunk and the alert text; delete the new ops audit and its baseline; the FF cursor is never touched by this change",
+      "do_not_touch": [
+        "out/capture-cursor*.json (foreign in-flight)",
+        "the 7-per-window term budget (Brad's deliberate cadence)",
+        "Get-FfNextCursor / Get-FfCursorCommit"
+      ],
+      "resolution_note": "Rotation latency is by design and depth held (5361 deals, 602 terms). The defect is the alert's promise: nothing reads ff-carry-report.json, so confirmed victims never led any slice. Wired confirmed_victims into the next window's front-of-slice via the existing expiry helper (48 h freshness, CallCap-clamped), corrected the alert text, and added a write-only-report ratchet (17 such families measured today).",
+      "publish_batch": 2,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-07-e7286e",
+      "subject": "Tools: a live page has drifted from its local source",
+      "classification": "infra",
+      "evidence": [
+        "live bodies fetched via Get-GhostCardBody at ~10:15 and byte-compared after Get-CanonicalBody: cheap-dinners-right-now local len 74,022 CR=0 LF=145 vs live len 74,181 CR=145 LF=145 (delta +159, first diff at char 15 = the first newline); whats-for-dinner-tonight local 125,279 CR=0 LF=272 vs live 125,565 CR=272 LF=272 (delta +286). The +159/+286 are exactly one CR per line plus 14 bytes.",
+        "with CR stripped on the live side the residual is +14 bytes in each and is entirely the /*CN-DATA*/ cost blob: local 'c':2.66 ... 1.89 vs live 2.72 ... 1.94 (the daily splice at 08:17 and again 08:34 wrote today's per-serving costs into the local files; both are foreign-dirty and uncommitted). Nothing else differs. Both posts' updated_at = 2026-09-03T21:29:18Z, i.e. last published from a CRLF working copy three days before the eol=lf attribute (39ad18d3d, 09-06 17:59) turned the sources LF. Thirteen other tools match live because both sides were already LF.",
+        "THIRD DRIFT, not in the dispatch: sams-club-worth-it live len 34,027 vs local sams-worth-it-tool.html 69,200 (delta -35,173), first diff at char 9214: live 'var SC={week:\"2026-07-08\",...' vs local week \"2026-09-02\". Live updated_at = 2026-07-11T09:07:32Z; local last committed 3c44d0c18 (2026-09-05 14:40), mtime 09-05 14:33, working tree clean. The live Sam's Club worth-it tool has shown 8 July prices for 58 days. Both sides predate the 08:33 audit, so the 08:33 run must have reported it too; the queue body was truncated after the second DRIFT excerpt.",
+        "check-ad-cycles.ps1:1266-1268: 'The three tools above only write their local source; publishing those goes through publish-tool-post.ps1, which refuses to overwrite an unreviewed live body.' Nothing in the daily chain publishes a tool page; audit-surface-staleness compares the LOCAL files to the manifest (findings=0 today) and is blind to an unpublished live page.",
+        "Compare-ToolBody (lib/ghost-drift-lib.ps1:42-71) compares bytes after one URL fold; a CR-only difference is reported as drift with the first diff at the first newline, which is why the excerpts looked identical."
+      ],
+      "surface_fix": {
+        "what": "republish the three tools from their local sources; there is no live-only content to fold back (CRs and stale costs on two, a 58-day-old data blob on the third)",
+        "files": [
+          "site/tools/sams-worth-it-tool.html",
+          "site/tools/cheap-dinners-tool.html",
+          "site/tools/dinner-tonight-tool.html"
+        ],
+        "exact_change": "site\\build\\publish-tool-post.ps1 -Slug sams-club-worth-it -File sams-worth-it-tool.html NOW (from HEAD; the page is a money page showing July prices). For cheap-dinners-right-now and whats-for-dinner-tonight publish AFTER the foreign session commits its 08:34 splice (or from HEAD if it has not landed by the developer's run); do not modify or commit those two files yourself. Then audit-ghost-drift.ps1 -> expect 16 of 16."
+      },
+      "root_cause": "two causes wearing one alert. (1) The estate's line-ending regime changed in one commit (eol=lf, 09-06) and every byte-exact comparison against something published under the old regime now reads as drift by exactly its line count - the same mechanism that blinded item 76ec7f. (2) The daily pipeline rebuilds three tool sources and nothing publishes them, so a tool page goes stale for as long as nobody remembers, and the only watcher that looks at live (ghost-drift) reports it as 'drift' with no age, while audit-surface-staleness reads local files and stays green.",
+      "root_fix": {
+        "what": "make the drift comparison line-ending agnostic and add a live-age line so an unpublished tool pages as stale, not as drift",
+        "files": [
+          "lib/ghost-drift-lib.ps1",
+          "grocery/audit-ghost-drift.ps1",
+          "meal-prep/pipeline/audit-surface-staleness.ps1"
+        ],
+        "exact_change": "ghost-drift-lib Get-CanonicalBody: also .Replace(\"`r`n\", \"`n\") on both sides (one more platform-neutral fold; a copy edit, a foreign host, an extra space must still fire - the lib's own fixtures). audit-ghost-drift: for every DRIFT and UNPUBLISHED tool print 'live updated_at <date> (<N> days ago), local committed <date>' and treat N > 14 as its own line 'STALE LIVE PAGE'. audit-surface-staleness: add the live check it lacks - fetch each tool's live body and compare its data week to the manifest week (today it would have said sams-club-worth-it live week 2026-07-08 vs manifest 2026-09-06)."
+      },
+      "blast_radius": {
+        "measured_as": "pages",
+        "measured_by": "all 16 mapped tools compared live vs local by audit-ghost-drift -ShowDiff and by a scratch byte diff of the 3 drifted ones (CR/LF counts, first-diff offset, residual after CR strip)",
+        "affected_now": 3,
+        "names": [
+          "sams-club-worth-it (live 2026-07-11, data week 2026-07-08, 58 days stale)",
+          "cheap-dinners-right-now (CRLF + 14-byte cost delta)",
+          "whats-for-dinner-tonight (CRLF + 14-byte cost delta)"
+        ],
+        "risk": "republishing overwrites live bodies whose only extra content is CRs and older numbers; the CR fold cannot hide a real edit because every other byte still compares; the lib's must-fire fixtures (copy edit, foreign host, changed path, extra space) stay in place"
+      },
+      "freshness": "live bodies fetched 2026-09-07 ~10:15 (updated_at 2026-09-03T21:29:18Z x2 and 2026-07-11T09:07:32Z); local files as of 08:34 (two foreign-dirty) and HEAD 3c48050b9 for sams-worth-it-tool.html",
+      "proof": {
+        "guard_or_fixture": "lib/ghost-drift-lib.ps1 fixtures via audit-ghost-drift.ps1 -SelfTest, then a live run of audit-ghost-drift.ps1",
+        "must_fire_case": "a live body that differs from local by one copy edit must still report drift after the CR fold; a live body whose data week is 2026-07-08 against a manifest week 2026-09-06 must report STALE LIVE PAGE",
+        "clean_twin": "a live body that is the local body with CRLF line endings must report same=true; the URL round-trip fixture (__GHOST_URL__ vs site-relative) still folds; after the three republishes audit-ghost-drift reports 16 of 16",
+        "commands": [
+          "powershell -File grocery\\audit-ghost-drift.ps1 -SelfTest",
+          "powershell -File site\\build\\publish-tool-post.ps1 -Slug sams-club-worth-it -File sams-worth-it-tool.html",
+          "powershell -File grocery\\audit-ghost-drift.ps1 (expect 16 of 16)"
+        ]
+      },
+      "rollback": "revert the lib fold and the two audit hunks; a republished page can be re-published from the previous committed source if a live-only edit is later found (none was found today)",
+      "do_not_touch": [
+        "site/tools/cheap-dinners-tool.html and dinner-tonight-tool.html contents (foreign in-flight; publish, never edit or commit them)",
+        "the 13 matching tools",
+        "publish-tool-post's refusal to overwrite an unreviewed live body"
+      ],
+      "resolution_note": "The two reported drifts are line endings (145 and 272 CRs from a 09-03 CRLF publish, before the 09-06 eol=lf flip) plus today's 14-byte cost delta - nothing live-only to keep. The run also exposed a third, worse one the truncated alert hid: sams-club-worth-it has been live with 8 July prices since 07-11 while local carries 09-02. Republished all three; the drift comparison now folds CR, and the audit prints live age so an unpublished tool pages as STALE rather than as drift.",
+      "publish_batch": 2,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-07-4f672e",
+      "subject": "Ops: the agent memory store has a finding",
+      "classification": "needs-brad",
+      "evidence": [
+        "git -C C:\\Users\\Owner\\.claude\\projects\\C--Codex\\memory remote -v returns origin https://github.com/Schweino/codex-memory.git (fetch) / (push); HEAD is 4041025 'An allow-list and one line ending, before this store gets a remote'; git branch -vv shows '* main 4041025 [origin/main]' with refs/remotes/origin/main at the same sha - the remote was added deliberately and the store has been pushed to it.",
+        "an anonymous HTTPS request to https://github.com/Schweino/codex-memory.git/info/refs?service=git-upload-pack returns HTTP 401: the repo is NOT anonymously readable, so no public exposure has occurred.",
+        "ops/audit-memory-backup.ps1 encodes NO REMOTE as an absolute invariant ('it has no push target, so it cannot leak to a public host') with no allowlist, and its own must-fire fixture adds a remote and asserts rc=2. The run is otherwise clean: 189 memory files, 6 checks, index reconciles (125 named + 64 reached in one hop, 0 unreachable), nothing mojibaked, nothing to commit; issues=1 and the remote is the only one."
+      ],
+      "root_cause": "the guard treats 'a remote exists' as identical to 'memory can leak publicly', but those are different propositions. A deliberate, private, authenticated backup satisfies the first and not the second. Because the guard cannot tell them apart and has no reviewed-exception path, a decision someone made on purpose now re-fires this alert every day and can never be closed - an alert with no repair lane.",
+      "root_fix_none_because": "Both branches of the fix are Brad's call, not the triage's. Removing the remote deletes a backup that the HEAD commit message shows was created deliberately. Teaching the guard to accept a reviewed private remote changes the behaviour of a SECURITY guard, and the standing rule is that guards fail closed and are never weakened to make a run pass. The measured facts needed for the decision (remote is deliberate, is pushed, and is private by a 401 anonymous probe) are recorded above so the decision is a ruling and not an investigation.",
+      "resolution_note": "needs-brad: the memory store has a deliberate, pushed, private (401 anonymous) GitHub remote and the memory-backup guard has no reviewed-exception path, so it pages daily. One email at the end of the run with the two options (remove the remote, or add a reviewed private-remote allowlist to the security guard); no code change this run. If the gate demands a fixture for this item, it is demanding one for a change nobody is making.",
+      "publish_batch": "next-round",
+      "status": "needs-brad"
+    }
+  ],
+  "ship_sequence": [
+    "BATCH 1 (one board rebuild, one publish). Edit in this order: test-capture-builders.ps1 + capture-run.ps1 markers + test-auditors case (76ec7f); compare-deals.ps1 per-lb-price-on-oz + fuel-saver strip + both -SelfTest rows (e9edb9, 05e4c3); audit-band-censorship.ps1 median discriminator + self-test rows (e9edb9); guards.ps1 ad-line provenance invariant + test-guards fixtures (05e4c3); commodities.json five exclude additions (0b232c); Fareway ingest size fix + coverage-gap-allowlist entries + audit-coverage-gaps RULED-WRONG/AD-LINE classes + test-auditors cases (0e9482); check-ad-cycles.ps1 INSPECT gating + honest ship-path line (e9edb9); three add-known-wrong rulings (abae06).",
+    "powershell -File grocery\\compare-deals.ps1 -SelfTest; audit-band-censorship.ps1 -SelfTest; test-capture-builders.ps1 (LF and CRLF copies); test-guards.ps1; build-fareway-regular.ps1 -SelfTest - all exit 0 before any rebuild",
+    "rebuild the Fareway regular file from today's capture (so the 8 price-in-size rows carry size 'lb'), then compare-deals.ps1 -MinStores 1 -BakersFile <newest> -FarewayFile <newest>",
+    "audit-food-category.ps1 (expect 0); audit-name-drift / prune-bad-links / generate-board-overrides / build-deals-page in the chain's own order (compare-deals is not standalone)",
+    "audit-match-soundness.ps1: MOVED must be exactly breakfast-sandwiches@Fareway (BELVITA out), DROPPED empty, new-contested reviewed -> -Accept",
+    "verify-no-regression.ps1; audit-coverage-gaps.ps1 (actionable 0); audit-capture-eviction.ps1 (confirm the two cell_effects: breakfast-sandwiches@Fareway 0.796->1.2488, cat-litter@Sam's 0.5141->0.459)",
+    "guards.ps1 MUST be 0: band-censorship must read 'tighten' (never hand-edit the baseline), the new ad-line provenance invariant ok, board-vs-identity ok; then audit-basis-reconcile + audit-pack-basis",
+    "publish-deals-page.ps1; commit public/board.json + public/smp-feed.json (the feed deploy) with explicit paths; NEVER stage site/tools/*, meal-prep/db/**, grocery/out/capture-cursor* or any other foreign-dirty file listed in the dispatch",
+    "test-auditors.ps1 MUST be 0 (679+ passed, the builder fixture green under both line endings); ops/run-gates.ps1 exit 0",
+    "live verification with a cache-busting query: breakfast-sandwiches crown is Sam's Club 0.9775 (not Fareway 0.796); laundry-pods @ Hy-Vee is no longer $0.10; diapers/dryer-sheets @ Hy-Vee no longer 0.25/0.05; anaheim-peppers shows a Fareway cell at 4.99/lb; the hub cards' costs agree with the live feed week",
+    "commit + push batch 1 (message via -F file), then triage-close the seven batch-1 ids with the resolution notes",
+    "BATCH 2 (no board rebuild): publish-tool-post sams-club-worth-it from HEAD immediately; ghost-drift-lib CR fold + audit-ghost-drift age line + surface-staleness live check (e7286e); pull-regular-familyfare confirmed_victims prepend + alert text + ops/audit-write-only-reports.ps1 (72756b); then publish cheap-dinners-right-now and whats-for-dinner-tonight once the foreign splice has been committed by its owner (or from HEAD)",
+    "audit-ghost-drift.ps1 expect 16 of 16; pull-regular-familyfare.ps1 -SelfTest; audit-write-only-reports.ps1 -SelfTest; run-gates exit 0; commit + push batch 2; close 72756b and e7286e",
+    "4f672e: send Brad the one email (options: remove the remote / add a reviewed private-remote allowlist to audit-memory-backup); leave the queue item needs-brad"
+  ],
+  "open_questions_for_brad": [
+    "baked-beans: the rule admits 'pork & beans' (and the Fareway crown IS 'Fareway Pork and Beans' at 0.0593/oz) while known-wrong.json rules 'Hy-Vee Pork & Beans in Tomato Sauce' wrong for baked-beans @ Hy-Vee (it would be the cheapest at 0.0556/oz). Is pork & beans a baked bean? If yes, reverse the Hy-Vee ruling (add-known-wrong -Reverse) and Hy-Vee takes the crown; if no, remove 'pork\\s*(?:&|and)\\s*beans' from the rule and Fareway loses its crown to Aldi 0.0711. One of the two is wrong today.",
+    "memory store remote (4f672e): remove the deliberate private backup remote, or add a reviewed private-remote allowlist to the security guard ops/audit-memory-backup.ps1? It pages daily until one of these lands.",
+    "CROWN-BY-CONTEST (0b232c root fix): should a new-contested name that holds a crown be a HARD guard (blocks publish) or stay advisory? The plan ships it advisory.",
+    "band-censorship median discriminator (e9edb9): 0.4 x median clears the false positives but also retires four arguable real backlog findings (a 2-pack couscous, mini muffins, four 7.2 oz personal pizzas, a 25 lb pepperoni case); 0.3 keeps them but does not clear the 1/16 deli row. The plan ships 0.4 with the parse fix doing the unblocking; say if you want 0.3."
+  ]
+}

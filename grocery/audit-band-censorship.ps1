@@ -44,16 +44,22 @@
 #   1. it was rejected for falling BELOW the band floor (not above the cap),
 #   2. its per-unit is at least -NearFloor of the floor (default 0.75, i.e. within 25% of it), so an
 #      order-of-magnitude parse error is excluded by construction, and
-#   3. its per-unit is CHEAPER than what the board actually publishes for that cell.
+#   3. its per-unit is CHEAPER than what the board actually publishes for that cell, and
+#   4. its per-unit is at least -MedianFloor of the commodity's MEDIAN published per-unit (default 0.4).
+#      A floor is a band edge and carries no notion of what a commodity actually costs, so on a commodity
+#      whose real prices sit far above its floor a 12x or 16x parse error can land inside the 25% window by
+#      arithmetic accident. Two did on 2026-09-07 and between them they held the board. See the long note
+#      on Find-BandCensorship for the measurement that chose 0.4.
 #   Findings rank by NEARNESS TO THE FLOOR, not by savings. The nearest ones are the likeliest to be real
 #   prices. Sorting by savings would put the parse bugs on top, which is backwards: a huge "saving" is the
 #   tell for a bad number, and the 1% miss is the one really costing a reader money.
 #
 #   .\audit-band-censorship.ps1                  audit the newest flagged file against the newest board
 #   .\audit-band-censorship.ps1 -NearFloor 0.5   widen to rows down to half the floor (noisier)
+#   .\audit-band-censorship.ps1 -MedianFloor 0.3 widen the SCALE test (Find-BandCensorship's own note)
 #   .\audit-band-censorship.ps1 -SelfTest        frozen founding-bug fixture + three clean twins
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (nothing to judge).
-param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [switch]$SelfTest)
+param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -63,7 +69,51 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # ONE implementation, driven by the self-test with frozen rows and by the live path with real ones. A guard
 # whose self-test exercises a different code path than production is [[fix-needs-reachable-selftest]].
 function Find-BandCensorship {
-  param([array]$Flagged, [hashtable]$Board, [double]$NearFloor)
+  param([array]$Flagged, [hashtable]$Board, [double]$NearFloor, [double]$MedianFloor = 0.4)
+  # A FLOOR IS A BAND EDGE, NOT A SCALE (2026-09-07, queue 2026-09-07-e9edb9). Distance-to-floor was this
+  # guard's ONLY discriminator, and a floor carries no information about where a commodity's real prices
+  # actually sit. So on a commodity whose prices are far above its floor, a 12x or 16x parse error can land
+  # INSIDE the 25% window by arithmetic accident and be reported as a censored bargain. Two did on
+  # 2026-09-07 and between them they held the whole board:
+  #   coffee | Fareway  | "Scooter's Coffee French Vanilla Ground Coffee" $10.99 size "12 x 12 oz"
+  #                       -> 0.0763/oz. A 12 oz bag read as 144 oz (shop.fareway.com case notation).
+  #                       76% of the 0.10 floor, so it passed NearFloor - but 15.6% of the 0.4906 median.
+  #   sliced-cheese | Hy-Vee | "Di Lusso premium sliced cheese, $9.99 lb." -> 0.0625/oz. A per-POUND price
+  #                       read as a 9.99-pound pack: 9.99 / (9.99 x 16) = 1/16 exactly, for any price.
+  #                       78% of the 0.08 floor; 31.8% of the 0.1967 median.
+  # So the second discriminator is SCALE-AWARE: what the commodity's own published cells actually cost. A
+  # real bargain is a few tens of percent under the going rate; a parse error is a different order of
+  # magnitude from it. Both tests must pass, so this can only ever REMOVE a finding the floor test admitted
+  # and never add one - the founding lettuce row is 75.1% of its (single-cell) median and still fires.
+  #
+  # MEASURED BEFORE THE THRESHOLD WAS CHOSEN, on today's 73 findings over 3,167 priced cells:
+  #   MedianFloor 0.3 -> 69 findings / 39 cells, and the 1/16 deli row (0.318) SURVIVES - it does not clear
+  #   MedianFloor 0.4 -> 58 findings / 33 cells, and both parse errors drop out
+  # 0.4 also retires 4 arguable-real backlog rows (a 2-pack couscous 0.36, mini muffins 0.383, four 7.2 oz
+  # personal pizzas 0.391, a 25 lb pepperoni case 0.395); that trade is an open question for Brad. The
+  # UNBLOCK does not depend on it: the deli row is fixed at the parser in compare-deals, and this test is
+  # what stops the Fareway case-notation shape (which is left to the band on purpose) from paging.
+  $medianOf = @{}
+  if ($Board -and $Board.Count) {
+    $byCom = @{}
+    foreach ($k in @($Board.Keys)) {
+      $cid = ([string]$k).Split('|')[0]
+      $pv = [double]$Board[$k].per_unit
+      if ($pv -le 0) { continue }
+      if (-not $byCom.ContainsKey($cid)) { $byCom[$cid] = New-Object System.Collections.ArrayList }
+      [void]$byCom[$cid].Add($pv)
+    }
+    foreach ($cid in @($byCom.Keys)) {
+      # ASSIGN THEN WRAP: @(Sort-Object ...) inline on a comma-returned array reads as ONE element.
+      $vals = @($byCom[$cid] | Sort-Object)
+      $n = $vals.Count
+      # a commodity with ONE cell uses that cell, which is the honest answer for a one-store commodity and
+      # is what the founding fixture's board is.
+      if ($n -eq 0) { continue }
+      if ($n % 2 -eq 1) { $medianOf[$cid] = [double]$vals[[int](($n - 1) / 2)] }
+      else { $medianOf[$cid] = ([double]$vals[($n / 2) - 1] + [double]$vals[$n / 2]) / 2.0 }
+    }
+  }
   $out = New-Object System.Collections.ArrayList
   foreach ($r in @($Flagged)) {
     $band = [string]$r.band
@@ -85,6 +135,14 @@ function Find-BandCensorship {
     $pu = [double]$Board[$key].per_unit
     if ($pu -le 0) { continue }
     if ($up -ge $pu) { continue }                         # rejected row is DEARER than we publish: costs nobody
+    # THE SECOND, SCALE-AWARE DISCRIMINATOR - see the long note on this function. BLIND-SAFE: a commodity
+    # with no median (it has no priced cell at all) cannot reach here, because the $Board lookup above
+    # already required one. A zero median is refused rather than divided by.
+    $med = 0.0
+    if ($medianOf.ContainsKey([string]$r.id)) { $med = [double]$medianOf[[string]$r.id] }
+    if ($med -le 0) { continue }
+    $medRatio = $up / $med
+    if ($medRatio -lt $MedianFloor) { continue }          # a different ORDER of magnitude from the going rate: a parse error
     [void]$out.Add([pscustomobject]@{
       commodity   = [string]$r.id
       label       = [string]$r.label
@@ -95,6 +153,8 @@ function Find-BandCensorship {
       rejected    = [math]::Round($up, 4)
       band_min    = $bmin
       floor_ratio = [math]::Round($ratio, 4)
+      median_price = [math]::Round($med, 4)
+      median_ratio = [math]::Round($medRatio, 4)
       save_pct    = [math]::Round((($pu - $up) / $pu) * 100, 1)
       name        = [string]$r.name
       price_text  = [string]$r.price_text
@@ -125,6 +185,17 @@ if ($SelfTest) {
   $board['toilet-paper|Walmart']  = @{ per_unit = 0.9725; item = 'Great Value Toilet Paper' }
   $board['dryer-sheets|' + $sams] = @{ per_unit = 0.0207; item = 'all Fabric Softener Dryer Sheets' }
   $board['coffee|Fareway']        = @{ per_unit = 0.4184; item = 'Folgers Classic Roast' }
+  # THE COFFEE ROW'S REAL PEERS, FROZEN off comparison-2026-09-07 (2026-09-07, queue 2026-09-07-e9edb9).
+  # The median discriminator is meaningless against a one-cell commodity, so the fixture has to carry the
+  # shape the live board has. These are the seven priced coffee cells that morning; their median is 0.4906,
+  # which is the number the case below asserts against. Frozen deliberately: recomputing them from the live
+  # board would make the case pass by finding whatever is there.
+  $board['coffee|Aldi']           = @{ per_unit = 0.3825; item = 'Beaumont Ground Coffee' }
+  $board['coffee|' + $sams]       = @{ per_unit = 0.3940; item = 'Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.' }
+  $board['coffee|Walmart']        = @{ per_unit = 0.4906; item = 'Great Value Classic Roast' }
+  $board['coffee|Family Fare']    = @{ per_unit = 0.4997; item = 'Folgers Ground Coffee' }
+  $board["coffee|Baker's"]        = @{ per_unit = 0.5087; item = 'Kroger Classic Roast' }
+  $board['coffee|Hy-Vee']         = @{ per_unit = 0.5262; item = 'Maxwell House Coffee, Ground, Medium, Original Roast' }
 
   # (1) MUST FIRE - the founding bug, frozen. Romaine hearts captured 2026-09-01 at 0.7783 against a floor
   #     of 0.80 while the board publishes a 46-day-old 1.0367. 2.7% below the floor is not a parse error.
@@ -167,6 +238,33 @@ if ($SelfTest) {
   if ($r.Count -eq 1 -and $r[0].rejected -eq 0.0199) { Write-Output '  PASS  DISCRIMINATION: of two below-floor rows on one cell, only the 0.5%-under one is reported' }
   else { Write-Output ('  FAIL  DISCRIMINATION: expected exactly the near-floor row, got ' + $r.Count); $fail++ }
 
+  # (5b) THE SCALE TEST, and the row that bought it (2026-09-07, queue 2026-09-07-e9edb9). Frozen exactly
+  #      as flagged-2026-09-07 recorded it: Fareway's shop feed writes a CASE size, "12 x 12 oz", so a 12 oz
+  #      bag was read as 144 oz and $10.99 came out at 0.0763/oz. That is 76.3% of coffee's 0.10 floor, so
+  #      it SAILS THROUGH NearFloor - the floor is a band edge and knows nothing about what coffee costs -
+  #      but it is 15.6% of the commodity's 0.4906 median. It held the whole board on the ratchet.
+  $fxCoffee = @([pscustomobject]@{ id='coffee'; label='Coffee (ground)'; store='Fareway'; unit='oz'; unit_price=0.0763; band='0.10-2.00'; name="Scooter's Coffee French Vanilla Ground Coffee"; price_text='$10.99'; size_text='12 x 12 oz' })
+  #      FIXTURE INTEGRITY FIRST, or the silence below proves nothing. With the scale test switched off the
+  #      row MUST be reported, with the frozen median and the floor ratio that let it in. Without this, a
+  #      case that stopped reaching the guard at all would look exactly like a case the guard correctly
+  #      refused - the [[selftest-greps-its-own-source]] shape, one layer up.
+  $r = @(Find-BandCensorship -Flagged $fxCoffee -Board $board -NearFloor 0.75 -MedianFloor 0)
+  if ($r.Count -eq 1 -and $r[0].median_price -eq 0.4906 -and $r[0].floor_ratio -eq 0.763) {
+    Write-Output '  PASS  FIXTURE INTEGRITY: the frozen case-pack row does pass the FLOOR test (76.3% of 0.10) and the commodity median computes to the frozen 0.4906'
+  } else { Write-Output ('  FAIL  FIXTURE INTEGRITY: the case-pack row is not reaching the guard as recorded (count ' + $r.Count + ') - the MUST-NOT-FIRE below would be silent for the wrong reason'); $fail++ }
+  $r = @(Find-BandCensorship -Flagged $fxCoffee -Board $board -NearFloor 0.75 -MedianFloor 0.4)
+  if ($r.Count -eq 0) { Write-Output '  PASS  MUST NOT FIRE: a 12x case-notation parse error at 15.6% of the commodity median is refused, even though it sits inside the 25% floor window' }
+  else { Write-Output '  FAIL  MUST NOT FIRE: the Fareway case-pack parse error is being reported as a censored bargain again - this is what blocked the board on 2026-09-07'; $fail++ }
+
+  # (5c) MUST FIRE, RE-ASSERTED UNDER THE NEW TEST. The founding lettuce row is 75.1% of its median (its
+  #      board carries one lettuce cell, so the median IS that cell). Case (1) already runs it on the
+  #      default MedianFloor; this one names the number, so a threshold moved to 0.8 fails HERE with a
+  #      reason rather than silently deleting the founding bug.
+  $fx = @([pscustomobject]@{ id='lettuce'; label='Lettuce (head)'; store=$sams; unit='each'; unit_price=0.7783; band='0.8-4.5'; name='Romaine Hearts, 6 ct.'; price_text='$4.67'; size_text='6 ct' })
+  $r = @(Find-BandCensorship -Flagged $fx -Board $board -NearFloor 0.75 -MedianFloor 0.4)
+  if ($r.Count -eq 1 -and $r[0].median_ratio -eq 0.7507) { Write-Output '  PASS  MUST FIRE under the scale test: the founding lettuce row is 75.1% of its commodity median and still reported' }
+  else { Write-Output ('  FAIL  MUST FIRE: the founding lettuce row did not survive the median discriminator (count ' + $r.Count + ') - the guard has stopped seeing its own founding bug'); $fail++ }
+
   # (6) THE RATCHET. This guard shipped for about an hour exiting 0 with 50 real findings, which made
   #     guards.ps1 print "ok  no cell publishes a dearer price..." while fifty cells did exactly that. A
   #     finding indistinguishable from a pass is the advisory-report failure this estate has already paid
@@ -180,9 +278,14 @@ if ($SelfTest) {
   else { Write-Output '  FAIL  RATCHET: the baseline does not tighten, so a fixed cell could silently regress later'; $fail++ }
   if ((Get-RatchetVerdict -Cells 50 -Baseline $null) -eq 'first') { Write-Output '  PASS  RATCHET: a first run with no baseline writes one rather than reading a missing file as zero' }
   else { Write-Output '  FAIL  RATCHET: a missing baseline is not handled as a first run'; $fail++ }
+  # AND AT THE NEW HIGH-WATER MARK. The scale test tightens the baseline from 41 to the low 30s, and the
+  # thing that must not happen is a tighter ratchet that has stopped ratcheting. One cell over the NEW
+  # baseline is still a hard fail; the numbers are the ones this run is about to record.
+  if ((Get-RatchetVerdict -Cells 34 -Baseline 33) -eq 'break') { Write-Output '  PASS  RATCHET at the tightened mark: 34 cells against a baseline of 33 still breaks' }
+  else { Write-Output '  FAIL  RATCHET: the tightened baseline no longer breaks on a new censored cell'; $fail++ }
 
   if ($fail) { Write-Output ("SELF-TEST FAILED ($fail)"); exit 2 }
-  Write-Output 'SELF-TEST PASS - founding bug armed, three clean twins, the discrimination case and the ratchet hold'
+  Write-Output 'SELF-TEST PASS - founding bug armed (floor AND scale), the case-pack parse error refused, three clean twins, the discrimination case and the ratchet hold'
   exit 0
 }
 
@@ -221,7 +324,7 @@ foreach ($r in @($cmp.comparison)) {
 }
 if (-not $board.Count) { Write-Output 'BLIND: comparison carries no priced store cells'; exit 3 }
 
-$findings = @(Find-BandCensorship -Flagged $flagged -Board $board -NearFloor $NearFloor)
+$findings = @(Find-BandCensorship -Flagged $flagged -Board $board -NearFloor $NearFloor -MedianFloor $MedianFloor)
 $cells = @($findings | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object -Unique).Count
 $pct = [int]((1 - $NearFloor) * 100)
 Write-Output ("audit-band-censorship: $($board.Count) published cell(s), $banded banded rejection(s) in " + (Split-Path $FlaggedFile -Leaf) + "; $($findings.Count) rejected row(s) across $cells cell(s) sat within $pct% of the floor AND cheaper than what the board publishes")
@@ -234,7 +337,7 @@ foreach ($f in ($findings | Select-Object -First 25)) {
 }
 if ($findings.Count -gt 25) { Write-Output ("  ... and " + ($findings.Count - 25) + " more (nothing truncated silently: rerun with -NearFloor to widen or narrow)") }
 $outFile = Join-Path $OutDir 'band-censorship.json'
-@{ generated = (Get-Date).ToString('s'); flagged_file = (Split-Path $FlaggedFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); near_floor = $NearFloor; cells = $cells; findings = $findings } |
+@{ generated = (Get-Date).ToString('s'); flagged_file = (Split-Path $FlaggedFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); near_floor = $NearFloor; median_floor = $MedianFloor; cells = $cells; findings = $findings } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 Write-Output ("  -> $outFile")
 

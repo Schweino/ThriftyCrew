@@ -1,0 +1,14 @@
+{
+ "generated": "FIXTURE - frozen on purpose, do not regenerate from the live board. Every row below is a REAL row, transcribed from the 2026-09-07 triage (queue 2026-09-07-0e9482). Regenerating it would delete the defects it encodes and the cases would then pass by finding nothing. ONE ruling, the real one: a reasoner looked at Hy-Vee's pork & beans and decided it is not a baked bean. The RULED-WRONG case rests on this entry, so it is frozen here rather than read from the live known-wrong.json, where an ordinary reversal would silently change what the case proves.",
+ "entries": [
+  {
+   "commodity": "baked-beans",
+   "store": "Hy-Vee",
+   "names": [
+    "Hy-Vee Pork & Beans in Tomato Sauce"
+   ],
+   "ruled_by": "FIXTURE (transcribed from known-wrong.json, 2026-09-07)",
+   "evidence": "pork & beans is not a baked bean at this store"
+  }
+ ]
+}

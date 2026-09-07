@@ -336,6 +336,10 @@ if ($browser.Count) {
       # exited 0, and its failure is judged on EVIDENCE - does today's file already hold rows captured
       # today? - rather than on the exit code. None of that reasoning changed; only when the builder
       # ran did.
+      # >>> BUILDER-BLOCK >>>  test-capture-builders.ps1 extracts everything between these two
+      # markers and dot-sources it. A NAMED marker, because the old one was a literal CRLF brace
+      # ladder and the eol=lf attribute (39ad18d3d) turned this file LF, so the fixture went BLIND
+      # on 2026-09-07 while this block was untouched. Do not delete, renumber or reindent them.
       $bLanes = @(); $bMeta = @{}
       foreach ($s in $drivable) {
         $key = $BROWSER_DRIVER_KEYS[$s]
@@ -435,6 +439,7 @@ if ($browser.Count) {
           }
         }
       }
+      # <<< BUILDER-BLOCK <<<
     }
   }
 }
