@@ -237,6 +237,12 @@ if ($null -eq $base) {
   Write-Output ("audit-board-mojibake: baseline written at $count. From here the number may only go DOWN.")
   $base = $count
 }
+# DELIBERATELY NOT ROUTED THROUGH lib\ratchet.ps1 (2026-09-07, backlog I15). That library refuses a
+# fall to ZERO, because for a FINDINGS ratchet a sudden nothing usually means the detector broke. Here
+# zero is the GOAL STATE - a board with no mangled names - and the clean branch below exits 0 on
+# exactly that, so refusing it would punish the success this audit exists to reach. The broken-detector
+# case that motivates the library is already covered here by a different mechanism: every
+# could-not-read path above exits 3 BEFORE this line, so a run that reaches it examined a real board.
 if ($count -lt $base) {
   @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet. May only go DOWN.' } |
     ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8

@@ -26,11 +26,12 @@
 
   Self-test: powershell -File ops\audit-write-seam.ps1 -SelfTest
 #>
-param([switch]$SelfTest)
+param([switch]$SelfTest, [switch]$AcceptDrop)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\ratchet.ps1')
 
 $BASELINE_FILE = Join-Path $repo 'ops\write-seam-baseline.json'
 
@@ -158,11 +159,28 @@ if ($count -gt $base) {
   Write-GuardComplete -Name 'write-seam' -Summary ("sites={0} baseline={1}" -f $count, $base)
   exit 2
 }
-if ($count -lt $base) {
-  @{ generated = (Get-Date).ToString('s'); sites = $count
-     note = 'HIGH-WATER MARK for mutating calls to our own surfaces that bypass Invoke-GhostApi. This number may only go DOWN. A run above it is a NEW bypass and hard-fails.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $BASELINE_FILE -Encoding UTF8
-  Write-Output ("write-seam: PASSED and TIGHTENED - {0} bypass(es), down from {1}. Baseline lowered; it can never rise again." -f $count, $base)
+# THE FALL IS THE DIRECTION THAT CANNOT BE TRUSTED (2026-09-07, backlog I15). This block used to
+# lower the baseline unconditionally, so a detector that broke and found NOTHING recorded 0 as the
+# permanent ceiling and printed "PASSED and TIGHTENED" forever after. lib\ratchet.ps1 refuses a fall
+# to zero or a fall over 60% in one run, KEEPS the old baseline, and says what to check. -AcceptDrop
+# records a genuine bulk migration in one flag rather than a hand-edited baseline file.
+$move = Test-RatchetMove -Name 'write-seam' -Count $count -Baseline $base -AcceptDrop:$AcceptDrop
+if ($move.Verdict -eq 'implausible') {
+  Write-Output $move.Message
+  Write-GuardComplete -Name 'write-seam' -Summary ("sites={0} baseline={1} refused-to-lower" -f $count, $base)
+  exit 2
+}
+if ($move.Verdict -eq 'tightened') {
+  $doc = $null
+  try { $doc = Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
+  if (-not $doc) { $doc = [pscustomobject]@{} }
+  $hist = Add-RatchetHistory -Doc $doc -Count $count
+  @{ generated = (Get-Date).ToString('s'); sites = $move.NewBaseline; history = $hist
+     note = 'HIGH-WATER MARK for mutating calls to our own surfaces that bypass Invoke-GhostApi. This number may only go DOWN, and a fall to zero or a fall over 60% in one run is REFUSED as a probably-broken detector.' } |
+    ConvertTo-Json -Depth 5 | Set-Content $BASELINE_FILE -Encoding UTF8
+  # The library message already names the guard; prefixing it again read as "x: ... x: ...".
+  Write-Output ("PASSED and TIGHTENED - " + $move.Message)
+  Write-Output ("  " + (Get-RatchetTrend -History $hist))
   Write-GuardComplete -Name 'write-seam' -Summary ("sites={0} tightened-from={1}" -f $count, $base)
   exit 0
 }
