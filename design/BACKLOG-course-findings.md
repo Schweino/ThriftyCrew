@@ -103,7 +103,7 @@ Note the irony: while adding D2 I put "exit 2" into five agent prompts and had i
 `run-gates` uses exit 3, the recipe battery uses 2. Corrected in `6a05dcd7`, but that is the exact
 failure this item is about.
 
-### E3 - Tool-list relevance hazard across twelve agent definitions `NEEDS A RULING - DOES A VERDICT-ONLY AGENT LOSE Write` `803af3d2`
+### E3 - Tool-list relevance hazard across twelve agent definitions `DONE - RULED 2026-09-07; THE PREMISE WAS STALE AND HALF THE RULING REFUTED` `803af3d2`
 *Source: AI Agents in Python (course 6).* Given three well-named tools and no usage context, the
 course's agent decided the unnecessary one must be needed and **invented bolts and screws to justify
 it**. Several of our agents ship long tool lists with no statement of which are optional, how they
@@ -120,6 +120,31 @@ twenty, and eighteen of those are two complete and overlapping browser sets.
   inherit every tool including `Write` and `Edit`. Two of those four are verdict-only agents, so this
   is a least-privilege hole of the same class as E1 rather than a documentation gap. Narrowing a tool
   list changes behaviour and needs a ruling: **does a verdict-only agent lose `Write`?**
+
+**RULED 2026-09-07: Brad said yes, and measuring refuted half of it. Recorded rather than quietly
+executed, because a ruling carried out on a wrong premise is worse than one that was never asked.**
+
+- **The premise is stale.** All twelve agents now declare a `tools:` line - E3a's commit closed that,
+  and this bullet was never updated. Read off disk 2026-09-07.
+- **`recipe-batch-auditor` REQUIRES `Write`.** Its verdict IS a file: `waves\wave-<k>.audit.md`,
+  read by `hunt-daemon.py:7522` and gated by `audit-wave-blocker-headings.ps1`. Taking `Write` breaks
+  the publish chain outright, and the agent's own tool table says so at the line.
+- **Removing `Write` from `post-publish-reviewer` narrows nothing.** It holds `Bash` and `PowerShell`
+  and needs them - it checks live pages and pushed commits. An agent with a shell can write any file,
+  so this would only move the write out of a sanctioned repo-relative path into an unaudited shell
+  call. Strictly worse.
+
+**So the intent landed where the facts allow it,** as two invariants in
+`ops/audit-agent-tools.ps1`, both green on the day they shipped:
+
+| Rule | Agents | Why |
+|---|---|---|
+| may not declare `Edit` | all five verdict agents | `Edit` is the tool that turns a reviewer into a participant, and a reviewer who can fix what it found stops reporting it |
+| may not declare `Write` | the three that report through their RETURN VALUE (`recipe-dedup-selector`, `recipe-source-qa`, `triage-reviewer`) | they have no file to write, so `Write` is pure surface |
+
+The two whose verdict is a file keep `Write`, and the list says which is which rather than leaving
+the next reader to guess. Four fixtures, led by the must-not-fire case that keeps the publish chain
+alive.
 
 ---
 
@@ -649,7 +674,7 @@ every new worktree. Would automate the manual copy-in that `run-gates-blind-in-w
 ignored set is ~25 GB, so it must be a narrow list: the four gates' real inputs plus the three board
 files.
 
-### E8 - "Don't ask" permission mode for unattended runs `NEEDS A RULING - THE FLAG IS SHIPPED AND INERT UNTIL settings.json CHANGES`
+### E8 - "Don't ask" permission mode for unattended runs `DONE - RULED 2026-09-07, BYPASS STAYS ON AND THE FLAG STAYS INERT`
 *Source: Claude Code in Action (course 1).* Purpose-built for CI, scheduled jobs and overnight
 batches: pre-approved tools only, everything else auto-denied with no prompt to hang on. May fit the
 scheduled tasks and the daemon better than what they use now.

@@ -33,6 +33,22 @@ $repo = Split-Path $here -Parent
 $AGENT_DIR = Join-Path $repo '.claude\agents'
 $KNOWN = @('Read', 'Grep', 'Glob', 'Bash', 'PowerShell', 'Edit', 'Write', 'WebFetch', 'WebSearch', 'Task', 'NotebookEdit')
 
+# LEAST PRIVILEGE FOR THE AGENTS THAT ONLY REPORT (2026-09-07, backlog E3b, Brad's ruling).
+# An agent whose job is a verdict must never be able to EDIT the work it is judging - that is the
+# tool that turns a reviewer into a participant, and a reviewer who can fix what it found stops
+# reporting it. None declares Edit today; this keeps it that way.
+#
+# WRITE IS SPLIT, AND THE SPLIT IS THE MEASURED PART. Brad ruled "verdict-only agents lose Write" and
+# the facts only half allow it. recipe-batch-auditor's verdict IS a file - waves\wave-<k>.audit.md,
+# read by hunt-daemon.py:7522 and gated by audit-wave-blocker-headings.ps1 - so taking Write breaks
+# the publish chain. post-publish-reviewer holds Bash and PowerShell and needs them, so removing
+# Write would not narrow what it can do; it would only move the write out of a sanctioned
+# repo-relative path into an unaudited shell call. The three that report through their RETURN VALUE
+# have no such need and are held to it.
+$VERDICT_NO_EDIT  = @('post-publish-reviewer', 'recipe-batch-auditor', 'recipe-dedup-selector',
+                      'recipe-source-qa', 'triage-reviewer')
+$VERDICT_NO_WRITE = @('recipe-dedup-selector', 'recipe-source-qa', 'triage-reviewer')
+
 # A line saying a tool is NOT there is documentation, not a claim to have it. Without this exemption the
 # rule punishes the single most useful sentence one of these blocks can carry.
 $ABSENT_MARKERS = @('deliberately absent', 'is missing', 'are missing', 'that is missing',
@@ -88,7 +104,8 @@ function Get-TcFrontmatterValue {
 }
 
 function Get-TcAgentProblems {
-  param([string]$Name, [string[]]$Lines, [string[]]$Known, [string[]]$AbsentMarkers)
+  param([string]$Name, [string[]]$Lines, [string[]]$Known, [string[]]$AbsentMarkers,
+         [string[]]$NoEdit = @(), [string[]]$NoWrite = @())
   $p = @()
 
   # MATE's M and E, made non-silent (2026-09-06, backlog E9). Model choice is the highest-leverage
@@ -110,6 +127,13 @@ function Get-TcAgentProblems {
   }
 
   $declared = Get-TcDeclaredTools -Lines $Lines
+  foreach ($t in @('Edit', 'Write')) {
+    $forbidden = if ($t -eq 'Edit') { $NoEdit } else { $NoWrite }
+    if (@($forbidden) -contains $Name -and @($declared) -contains $t) {
+      $p += [pscustomobject]@{ Agent = $Name; Kind = ('verdict-agent-declares-' + $t.ToLower())
+        Detail = ('reports a verdict and declares ' + $t + ', which lets it change the work it is judging') }
+    }
+  }
   if (-not @($declared).Count) {
     $p += [pscustomobject]@{ Agent = $Name; Kind = 'no-tools-line'
                              Detail = 'declares no tools: line, so it inherits EVERY tool including Write and Edit' }
@@ -201,10 +225,28 @@ if ($SelfTest) {
   T 'MUST FIRE  the look-back does not amnesty a real claim further down' `
     (@($r8).Count -eq 1 -and $r8[0].Detail -like '*WebSearch*') (($r8 | ForEach-Object { $_.Detail }) -join ' | ')
 
+  # LEAST PRIVILEGE ON THE VERDICT AGENTS (2026-09-07, backlog E3b). Single-quoted literals, never
+  # concatenation: `Fn 'a' + 'b'` passes THREE positional arguments and the case then runs on a
+  # fragment - it cost two wrong-reason passes elsewhere the same day.
+  $fmEdit = @('---', 'model: fable', 'effort: high', 'tools: Read, Grep, Glob, Edit', '---')
+  $rv1 = Get-TcAgentProblems -Name 'recipe-source-qa' -Known $K -AbsentMarkers $A -Lines $fmEdit -NoEdit @('recipe-source-qa')
+  T 'MUST FIRE  a verdict agent that declares Edit can change the work it is judging' `
+    (@($rv1 | Where-Object { $_.Kind -eq 'verdict-agent-declares-edit' }).Count -eq 1) (($rv1 | ForEach-Object { $_.Kind }) -join ',')
+  $fmWrite = @('---', 'model: fable', 'effort: high', 'tools: Read, Grep, Glob, Write', '---')
+  $rv2 = Get-TcAgentProblems -Name 'triage-reviewer' -Known $K -AbsentMarkers $A -Lines $fmWrite -NoWrite @('triage-reviewer')
+  T 'MUST FIRE  a return-value verdict agent that declares Write has gained a side effect' `
+    (@($rv2 | Where-Object { $_.Kind -eq 'verdict-agent-declares-write' }).Count -eq 1) (($rv2 | ForEach-Object { $_.Kind }) -join ',')
+  $rv3 = Get-TcAgentProblems -Name 'recipe-batch-auditor' -Known $K -AbsentMarkers $A -Lines $fmWrite -NoEdit @('recipe-batch-auditor') -NoWrite @('recipe-dedup-selector')
+  T 'MUST NOT FIRE  THE ONE THAT KEEPS THE PUBLISH CHAIN ALIVE - the batch auditor''s verdict IS a file, so Write is required and must not be flagged' `
+    (@($rv3).Count -eq 0) (($rv3 | ForEach-Object { $_.Kind }) -join ',')
+  $rv4 = Get-TcAgentProblems -Name 'recipe-ingredient-mapper' -Known $K -AbsentMarkers $A -Lines $fmEdit -NoEdit @('recipe-source-qa')
+  T 'MUST NOT FIRE  an agent that is not on the verdict list keeps Edit, because writing is its job' `
+    (@($rv4).Count -eq 0) (($rv4 | ForEach-Object { $_.Kind }) -join ',')
+
   T 'MUST FIRE  a single problem comes back as an ARRAY, not unrolled' ($r1 -is [array]) ($r1.GetType().FullName)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: the missing-tools-line case, the description-drift case, and four clean twins including the deliberately-absent exemption'
+  Write-Output 'SELF-TEST PASS: the missing-tools-line case, the description-drift case, four clean twins including the deliberately-absent exemption, and the four verdict-agent privilege cases led by the batch auditor whose verdict IS a file'
   exit 0
 }
 
@@ -222,7 +264,7 @@ if (-not $files.Count) {
 }
 $problems = @()
 foreach ($fl in $files) {
-  $found = Get-TcAgentProblems -Name $fl.BaseName -Lines ([IO.File]::ReadAllLines($fl.FullName)) -Known $KNOWN -AbsentMarkers $ABSENT_MARKERS
+  $found = Get-TcAgentProblems -Name $fl.BaseName -Lines ([IO.File]::ReadAllLines($fl.FullName)) -Known $KNOWN -AbsentMarkers $ABSENT_MARKERS -NoEdit $VERDICT_NO_EDIT -NoWrite $VERDICT_NO_WRITE
   foreach ($x in @($found)) { $problems += $x }
 }
 $problems = @($problems)
