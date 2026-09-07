@@ -717,22 +717,77 @@ imported by no other suite - so the fix ships with `graph/agentic/executor_selft
 that directory's first coverage of any kind. **E11 stays open**, and nothing now forces it: it is a
 refactor with no defect behind it, and the gap it would have inherited is already closed.
 
-### E11 - Tool decorators and tag-scoped registries for the daemon `OPEN`
+### E11 - Tool decorators and tag-scoped registries for the daemon `PARKED - BENEFIT ALREADY DELIVERED`
 *Source: AI Agents in Python (course 6).* Derive each tool's schema from its signature, docstring
 and type hints. Removes the class of bug where an agent's map of a tool has drifted from the tool,
 and makes "which agents can write?" a grep instead of an audit.
 
-### E12 - Document-as-implementation `OPEN`
+**PARKED 2026-09-06 on Brad's ruling, and the reason is written down so nobody re-derives it.** Both
+benefits this item claims already exist, by better mechanisms than the one proposed:
+
+- *"which agents can write is a grep"* - it is an AUDIT, `ops/audit-agent-tools.ps1`, in the gate. It
+  requires every agent to declare `tools:` and fails when a block names a tool the agent lacks. An
+  audit beats a grep here for one reason: it cannot be forgotten.
+- *"an agent's map of a tool has drifted from the tool"* - that is the same check, and E18's argument
+  validation closed the correctness half of it in `d2dc0cd5`.
+
+What remains is schema derivation from a Python signature inside the daemon's tool layer. That is an
+ergonomics convenience with **no defect behind it**, and E18 already noted nothing forces it. Reopen
+when a tool-schema drift actually bites; there is no instance today.
+
+### E12 - Document-as-implementation `PARKED - ARGUES AGAINST ITSELF ON A LIVE SITE`
 *Source: AI Agents Architecture (course 7).* Brad's rulings, the band rules and the naming
 conventions are already written for humans and already change without a deploy. Loading the rules
 file at run time and pairing it with a schema'd verdict is smaller than the equivalent code, and
 removes the class of bug where the ruling document and the enforcing script have drifted.
 
-### E13 - Pass references, not copies `OPEN`
+**PARKED 2026-09-06 on Brad's ruling, and this one has an argument AGAINST it rather than merely an
+absence of one for.** The drift it exists to remove is already detected: `ops/audit-ruling-drift.ps1`
+plus `ops/ruling-implementations.json` fail when a ratified ruling goes unimplemented, with three
+violations baselined.
+
+The proposal's own mechanism is the problem on a live paid site. **Loading a rulings document at run
+time means a bad edit to a markdown file changes live pricing behaviour immediately, with no gate in
+between.** That trades a drift the gate can see for one it cannot, which is the wrong direction for an
+estate whose standing rule is that a wrong number on a page is a real cost to a real reader. The
+current shape - the document is ratified, the code implements it, and a gate compares them - keeps a
+human between an edit and the board.
+
+### E13 - Pass references, not copies `MEASURED - PREMISE DOES NOT HOLD HERE`
 *Source: AI Agents Architecture (course 7).* Models read far more than they can write, so a
 delegating agent physically cannot restate a large memory as a task description. Emit memory ids and
 inflate them in code. Beats the output cap and makes paraphrase of the referenced content
 structurally impossible. Relevant anywhere we hand a brief to a spawned agent.
+
+**Brad ruled BUILD IT 2026-09-06. Measuring first turned up two things that change the answer, so
+this is recorded rather than built and the decision goes back to him.**
+
+**1. The half that applies already shipped.** All twelve agent definitions carry `[[name]]` memory
+citations plus a resolver block, gated by `ops/audit-memory-citations.ps1`, so a brief already passes
+memory IDENTIFIERS rather than memory CONTENT. Before that gate an agent could not resolve an id at
+all - no CLAUDE.md reaches a spawned agent and the MEMORY.md index is snapshotted at session start -
+which is why this was impossible until this week.
+
+A scan for the other failure mode found nothing: **zero duplicated prose** across the twelve agent
+definitions against 16,275 distinct long lines from 97 design and docs files. No agent pastes a
+ruling it should cite, so the copy-drift half has no instance to fix either.
+
+**2. The premise does not transfer, and the estate has already measured the opposite.** E13's argument
+is that *a delegating agent physically cannot restate a large memory*, which is a statement about a
+MODEL's output cap. In this estate briefs are composed by **code** - `hunt-daemon.py`'s twelve
+`*_prompt` builders - and code has no output cap. Worse, `map_prompt` carries a measured finding
+pointing the other way:
+
+> A2: THE EVIDENCE TRAVELS WHOLE. It was truncated at 220 characters, which cut the near-miss list
+> [...] Truncating it sent the mapper back to the estate to re-derive what the table had already
+> computed. **Phase 1 measured inlining beating tool-call reads by a wide margin.**
+
+Converting those prompts to identifiers-plus-fetch would undo a finding the estate paid for. The one
+place a MODEL composes a brief is the main session spawning through the Agent tool, and that is
+exactly where the `[[name]]` citations already apply.
+
+**So: nothing to build that would not make things worse.** If Brad wants it built anyway the concrete
+scope would be re-measuring A2 first, because that measurement is the whole obstacle.
 
 ### E14 - Agent definitions front-load their rules `DONE` `6f3b6fd5`
 *Source: MCP (course 3), mechanism from Mastering Claude Code (course 8).* A five-trigger framing
@@ -1185,3 +1240,52 @@ that looks like a library rather than a set of scripts (`lib_match.py`, `score_c
 `checkpoint_selection.py`, `matcher_eval.py`), it already has the only `requirements.txt`, and it is
 where a regression is hardest to see by eye. Everything else is orchestration and should stay
 scripts. Do not treat this item as a mandate to package the whole tree.
+
+### I10 - The estate's biggest files are also its most-changed files `OPEN` `queue-2`
+*Source: Clean Code and Refactoring Techniques (queue 2, course 8).* Recording a measurement, not
+proposing a split. The course's own Code Hygiene reading argues **against** a blanket file-size rule
+- see `software-craft/SKILL.md` for the axis that reconciles it with our global CLAUDE.md line.
+
+Measured 2026-09-06 across the repo, excluding `.venv`, `site-packages`, `__pycache__`,
+`node_modules` and `.claude/worktrees`. **765 PowerShell and Python files, 211,075 lines.** 26 files
+exceed 1,000 lines; 10 exceed 2,000.
+
+| Lines | File | Commits since 2026-06-01 |
+|---|---|---|
+| 12,721 | `meal-prep/pipeline/hunt_daemon_selftest.py` | 91 |
+| 8,713 | `meal-prep/pipeline/hunt-daemon.py` | 88 |
+| 6,198 | `grocery/test-auditors.ps1` | **150** |
+| 4,169 | `meal-prep/pipeline/harvest.py` | - |
+| 3,661 | `meal-prep/pipeline/map-preresolve.ps1` | - |
+| 3,396 | `grocery/compare-deals.ps1` | 74 |
+| 2,983 | `grocery/check-ad-cycles.ps1` | **137** |
+| 2,751 | `meal-prep/pipeline/hunt-run.ps1` | 40 |
+| 2,548 | `grocery/build-deals-page.ps1` | 64 |
+
+**The finding is the correlation, not either column.** The six most-edited source files in the last
+three months are all in the top nine by size. A large file that nobody touches costs nothing; a
+large file edited 150 times is the case where per-change cost actually compounds, and that is what
+this list is. `grocery/test-auditors.ps1` alone absorbed 150 commits at 6,198 lines.
+
+**Two structural notes, both already recorded elsewhere and confirmed here:**
+
+- The single largest file in the estate is a **test** file, and it is 46% larger than the module it
+  tests. `hunt_daemon_selftest.py` exists as a separate file only because `hunt-daemon.py` carries a
+  hyphen and cannot be imported by name - see **I9**. So the naming constraint and the size
+  concentration are the same defect seen twice.
+- `compare-deals.ps1` at 3,396 lines is the file three other scripts LIFT functions out of
+  (`compare-deals-functions-are-lifted-by-three-scripts`). In the course's vocabulary that is
+  **shotgun surgery**: one conceptual change to a lifted helper has a plural edit site, and the lift
+  breaks at call time rather than at parse time.
+
+**What this item is NOT.** It is not a mandate to split anything. The course's own judgment section
+is explicit that stability has value and that refactoring without a stated objective consumes effort
+for no return, and every file above is working. The useful form of this item is a **trigger**: when
+one of these files is next opened for a real change, that is the moment the split pays for itself,
+because the reading cost is already being paid. Splitting them speculatively is the
+`Speculative Generality` smell wearing a different hat.
+
+**Touches** nothing until Brad rules. If it is ever taken, `grocery/test-auditors.ps1` is the
+cheapest first slice: it is the highest-churn file in the repo, it is a battery of independent
+auditors rather than one algorithm, so the seams are already there, and it is test code - a
+regression in it is visible as a changed pass count rather than as a wrong number on a live page.
