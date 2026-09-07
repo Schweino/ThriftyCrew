@@ -1649,7 +1649,28 @@ tree mention `--selftest` and **19 define one via `add_argument`**, against six 
 `run-gates`'s hand-list, of which only two are among the 19. I8 recorded "sixteen". None of the four
 sidecar eval files defines a `--selftest` at all.
 
-### I19 - Nine of twelve agents read the open web and can also execute, and none is told that page content is data `OPEN` `queue-2`
+### I19 - Nine of twelve agents read the open web and can also execute, and none is told that page content is data `DONE 2026-09-07` `queue-2`
+
+> **CLOSED 2026-09-07, and the measurement above understated it.** All nine now carry an
+> `UNTRUSTED INPUT` clause after their role paragraph, naming the channel each actually reads, with
+> the wording drawn from `security-craft/injection-and-defences.md`. The detector that found nine
+> zeros returns nine ones.
+>
+> **The part this entry missed: SIX of the nine also have USER-SCOPE copies in `~/.claude/agents/`,
+> and which copy runs depends on the session's working directory.** The count above was taken from
+> `.claude/agents/` alone, so hardening the project copies would have left the same hole open on a
+> coin flip. `ops/audit-prompt-backup.ps1` caught it by exiting 2 with `SCOPE DRIFT` the moment the
+> project copies changed; nothing else in the tree would have said so.
+>
+> Before syncing, the six user-scope copies were confirmed **byte-identical to the pre-edit project
+> copies**, so `project -> user` propagated the fix and lost nothing. Repaired with the audit's own
+> `-SyncScopes -SyncMirror` rather than by hand. `run-gates` exit 0, 220 passed, 0 failed.
+>
+> **The transferable lesson, which is bigger than this item:** an inventory of agent capability that
+> reads one scope is not an inventory. `~/.claude/agents/` holds eight files, two of which
+> (`recipe-dedup-selector`, `recipe-writer`) exist at user scope and have no web tools, so they were
+> correctly out of scope here - but nothing about the original method would have noticed if they
+> had.
 
 **Source:** course 13, *LLM Security and Vulnerabilities*, on indirect prompt injection - the case
 where the user is innocent and the payload arrives in data the model fetched on their behalf.
