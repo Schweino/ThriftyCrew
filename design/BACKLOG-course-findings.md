@@ -2304,7 +2304,7 @@ against doing on-page work at all, and it is the on-page work the baseline point
 
 ---
 
-### I27 - `lesson/SKILL.md` cites a memory that does not exist `OPEN` `queue-2`
+### I27 - `lesson/SKILL.md` cites a memory that does not exist `DONE` `queue-2`
 
 **Source:** course 15.
 
@@ -2321,3 +2321,31 @@ items here.
 
 **Touches.** Either repoint both citations at `seo-baseline-2026-08-31`, or write the memory the
 skill thinks it is citing. Not a course-run decision, because whichever is right depends on I25.
+
+**FIXED 2026-09-07, and it was SEVEN dead pointers, not one.** Six `[[memory]]` citations resolving to
+nothing - `brand-voice-brad`, `writing-no-em-dashes`, `ghost-migration`, `google-search-console`,
+`meal-prep-recipe-template`, `book-method-keep-asking` - plus a file pointer to a `STYLE-GUIDE.md`
+that does not exist. In the skill that **publishes lessons to a live paid site**.
+
+The worst line told the writer: *"The three memories that govern any creation [...] Read
+`[[brand-voice-brad]]` every time before drafting."* A standing instruction to open a file that was
+never there.
+
+**No memory was invented to satisfy a link.** The skill already states the substance inline beside
+every citation - the voice, the em-dash rule and the Search Console facts are all in the text. So each
+pointer was either repointed at something that exists (`CLAUDE.md` for em dashes,
+`docs/RUNTIME-MAP.md` for the migration background, `.claude/rules/meal-prep.md` for recipe
+conventions) or removed while its content stayed.
+
+**The process half is the more important one: `ops/audit-memory-citations.ps1` was not scanning
+`.claude/skills` at all.** Its scan list was agents, rules and design, so it passed every day at 30
+citations across 102 files while seven pointers in a live-publishing skill were dead. Skills are now
+in the scan (105 files), it still passes, and a planted dead citation makes it exit 2 - proved both
+ways rather than assumed.
+
+**Same shape as I8, found the same morning:** a scanner that does not scan everything reports on what
+it scanned, not on the estate. Two independent instances in one session is the finding worth keeping.
+
+Two false alarms recorded rather than dropped: `ghost-config.ps1` and `publish-lesson.ps1` resolve
+correctly relative to the skill's own directory, and the file's 26 em dashes are pre-existing in an
+internal skill rather than in reader-facing copy.
