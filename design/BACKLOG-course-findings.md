@@ -3931,3 +3931,66 @@ candidate) or *variable* (a buffering candidate), which is the split recorded as
 `grocery/` capture lanes and the 243 gates and audits record **no** duration at all. Extending the
 timing to them is a rung 2 and should not be started before rung 1 says a bottleneck read is worth
 having.
+
+### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `NEEDS A RULING - CONFIRM THE DIAGNOSIS, THEN IT IS A ONE-FIELD FIX` `seo`
+
+**Found 2026-09-07 while chasing the impression decline I24 measured.** Read from Search Console
+directly, not inferred.
+
+**What the numbers say.**
+
+| | |
+|---|---|
+| pages indexed | **1,330** |
+| pages NOT indexed | 311 (redirects 161, canonicals 76, 404 28, noindex 4, discovered-not-indexed 37, crawled-not-indexed 5) |
+| URLs offered in the sitemap | 1,098 |
+| pages receiving ANY impression in 28 days | **25** |
+| **Recipe rich results: VALID** | **1** |
+| Recipe rich results: INVALID | 0 |
+
+**Indexing is not the problem and images are not the problem.** The site is fully indexed. What
+collapsed is the Recipe rich result: Google recognised roughly **40** valid recipe items from mid
+July, and that fell to **1** between about 18 and 30 August - the same window and the same shape as
+the impression decline.
+
+**The mechanism, measured on a live page** (`/chicken-tikka-masala-burrito/`, fetched with a Googlebot
+user agent):
+
+- the page is paywalled - `gh-post-upgrade` and Subscribe markers are present
+- its `Recipe` JSON-LD carries **4 full `recipeInstructions` steps**
+- the last step's text is **NOT present in the visible body** Googlebot receives
+- `isAccessibleForFree`: **ABSENT** from the Recipe node
+- `hasPart`: **ABSENT** from the Recipe node
+
+That is structured data asserting content the page does not show, with no paywall declaration on the
+node making the assertion - the configuration Google's own paywalled-content guidance exists to
+prevent being read as cloaking.
+
+**The paywall claim EXISTS and is attached to the wrong node.** `build-card2.ps1` emits it as a
+SEPARATE `Article` node (`isAccessibleForFree=false`, `hasPart` with `cssSelector='.gh-content'`),
+conditional on the recipe being paid. Google reads the **Recipe** node for a recipe rich result, and
+an Article node beside it does not attach a paywall to the Recipe.
+
+**Why this is a ruling and not just a patch.** The fix is two fields on the Recipe node, but
+`sync-paywall-schema.ps1` is the other half: it ADDS and REMOVES the claim as a recipe moves in and
+out of the free rotation, and its `$PAYWALL_RX` is written to match only the one-line Article block -
+its own comment says "The Recipe node in the same field has no such key, so it can never be caught by
+this." Put the claim on the Recipe node without teaching the syncer, and a recipe that is freed keeps
+telling Google it is paywalled. **That is exactly the bug 2026-08-31 already fixed once**, where all
+20 free-rotation recipes claimed a paywall while serving to everyone.
+
+So it is: two fields in `build-card2.ps1`, a matching add/remove in `sync-paywall-schema.ps1`, fixtures
+for both directions, and a rebuild+propagate. Not large, but it touches the live publish path and it
+has a known way of going wrong.
+
+**Stated as a hypothesis, because it is one.** The mismatch is measured and the timeline fits. That it
+CAUSED the decline is the best available explanation and not a proven one - Google does not say why it
+stopped honouring markup. The cheapest confirmation is to fix one recipe, request indexing, and watch
+whether it returns to valid.
+
+**Also fixed today, separately:** 49 specs carried `head.image = ""`, which invalidates the Recipe rich
+result outright regardless of the above. They now carry the same image the other 535 use - strictly
+better than empty, and no photography. It does NOT address the 584-share-one-image weakness, which
+remains genuinely blocked on being able to photograph the food.
+
+---

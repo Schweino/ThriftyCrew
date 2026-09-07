@@ -1,336 +1,334 @@
 {
-    "name":  "French Chicken Fricassee",
-    "slug":  "french-chicken-fricassee",
-    "cuisine":  "French",
-    "protein":  "chicken",
-    "servings":  14,
-    "visibility":  "paid",
-    "source_url":  "https://foolproofliving.com/chicken-fricassee/",
-    "source_site":  "foolproofliving.com",
-    "manual_balance":  false,
-    "tuning":  [
-
-               ],
-    "writer_notes":  [
-                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\french-chicken-fricassee.json; no number computed in prose.",
-                         "MACROS transcribed from the food-macros-db recompute at 14 servings and independently re-verified by the writer with the same formula the build guard uses: 436 cal, 55 g protein, 11 g carbs, 18 g fat per serving. In band for this run (400 to 650 cal, 35 g carb or less). The mapper\u0027s own compute matched (436.1 / 55.3 / 11.3 / 17.9). Note the calorie margin: 436 sits 36 cal above the 400 floor. The mapper LOUDLY flagged that the source\u0027s published 569 cal / 31 g fat cannot be reproduced from label rows (our fat lands at 17.9 g); the -23.4% calorie gap is entirely a fat gap and our label-accurate figure stands.",
-                         "TARRAGON -\u003e FRESH PARSLEY is a SOURCE-SANCTIONED substitution: the source\u0027s own ingredient line reads \u0027If you can\u0027t find tarragon, you can use parsley.\u0027 Tarragon is absent board-wide (mapper board_defects_observed); parsley is carried. Prose names parsley as the herb and mentions tarragon only as the classic option a shopper may or may not find. No step calls for tarragon.",
-                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: chicken (steps 2,3,7,10), kosher salt (2,9), black pepper (2), butter (3), olive oil (3), portobello (4), onion (4), white wine (4), garlic (5), flour (5), chicken broth (6), egg yolk (8), sour cream (8), lemon juice (9), nutmeg (9), parsley (9). Walked the costed list against the steps both directions.",
-                         "EGG YOLK drift, carried from the mapper: exact 3.5x = 3.5 yolks, rounded UP to 4 whole yolks (+14.3% on the line, +2 cal/serving). A half yolk is not a cook measure. Purchase maps to the whole-egg commodity; macros book to the Egg Yolk food-DB row because the yolk carries nearly all the fat.",
-                         "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount. Once the recipe is costed, re-walk the bullets against cost_lines before publish.",
-                         "SALT FLATTENED at build: the mapper minted a non-canonical item \u0027Kosher Salt\u0027 (bid kosher-salt) that lives in NEITHER food-macros-db NOR db\\ingredients.json, so the build hard-failed the food-macros check. Rewrote the intake item to the batch-canonical \u0027Salt\u0027 (bid salt, brand Morton), buy string \u00273 1/2 tsp kosher\u0027, matching every other recipe in the batch (e.g. curry-ground-turkey-bowls displays \u0027Salt (Morton): ... kosher\u0027). Salt is zero-macro so no stat number moved; salt now prices at util 0.03. Prose still reads \u0027kosher salt\u0027, which the kosher buy string keeps truthful.",
-                         "COST UNDERSTATED - repair-pass flag: five items are unwired in db\\ingredients.json (no bid), so cost-recipes silently DROPPED four of them from the costed row at $0.00: Portobello Mushrooms 3.5 lb (1588 g), Dry White Wine 206 g, Sour Cream 270 g full-fat, Egg Yolk 4 large. Fresh Parsley (9 g) also unbid but immaterial. The 11 priced lines sum to exactly the batch total, so the headline 20.07 batch / 1.43 ps / 23.19 true / 1.66 true-ps EXCLUDES those four ingredients and is materially low (portobello alone would roughly double the batch at retail). Dry White Wine is the mapper\u0027s item_id null / blocking-term case; the portobello board cell is a canned-product form defect. These need bids wired (mapper/registrar) and a recost BEFORE this recipe enters a wave. Not a writer-lane fix; numbers are not mine to invent.",
-                         "PHANTOM REPAIR 2026-08-16: the tempering step read \u0027Stir a ladle of the hot sauce into the bowl\u0027, where \u0027hot sauce\u0027 meant the hot pan sauce (temperature adjective), but it collided with the condiment vocab name Hot Sauce and hard-failed audit-spec-contradictions PHANTOM. Source foolproofliving.com uses no hot-sauce condiment; the tempering is with the warm mushroom sauce. Reworded to \u0027hot pan sauce\u0027 in make_it and head.steps. No ingredient added. NOTE: this intake cannot rebuild into db\\recipes yet because Dry White Wine (bid white-wine) is not on the live feed (known CHEAPEST-FALLBACK blocker); the db\\recipes spec still carries the phantom until white-wine lands and this is rebuilt."
-                     ],
-    "cal_floor":  null,
-    "stat":  {
-                 "cal":  436,
-                 "protein":  55,
-                 "carbs":  11,
-                 "fat":  18,
-                 "cost_ps":  "5.84"
-             },
-    "intro_html":  "Fricassee is a fancy French word for a plain good idea. You brown the chicken, build a pan sauce out of everything stuck to the bottom, then let the two finish cooking together. No special cut, no long braise, no equipment you do not already own. Boneless breasts, sliced portobello, an onion, a splash of white wine, and a little sour cream and egg yolk whisked in at the end to pull the sauce together. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is a white-tablecloth dinner priced like a weeknight.",
-    "ingredients_display":  [
-                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb boneless skinless (about 14 breasts) (3175 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 1/2 tsp kosher (21 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 3/4 tsp (4 g)",
-                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3 1/2 tbsp (49 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp (47 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 1/2 medium, finely chopped (about 3 1/2 cups) (385 g)",
-                                "\u003cstrong\u003ePortobello Mushrooms (fresh (USDA)):\u003c/strong\u003e 3 1/2 lb, cleaned, trimmed and sliced (1588 g)",
-                                "\u003cstrong\u003eDry White Wine (generic (USDA)):\u003c/strong\u003e 3/4 cup plus 2 tbsp (206 g)",
-                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3 1/2 tbsp (28 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 7 cloves, minced (21 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 5 1/4 cups (1260 g)",
-                                "\u003cstrong\u003eSour Cream (generic (USDA)):\u003c/strong\u003e 1 cup plus 2 3/4 tbsp full-fat (270 g)",
-                                "\u003cstrong\u003eEgg Yolk (generic (USDA)):\u003c/strong\u003e 4 large yolks (68 g)",
-                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 1 3/4 tsp, freshly ground (4 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2 tbsp plus 1 tsp, freshly squeezed (35 g)",
-                                "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 2 1/4 tbsp minced (tarragon if you can find it) (9 g)"
-                            ],
-    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_lines":  [
-                       "Boneless Skinless Chicken Breast, 7 lb boneless skinless (about 14 breasts): ~$15.61. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
-                       "Butter, 3 1/2 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Olive Oil, 3 1/2 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 3 1/2 medium, finely chopped (about 3 1/2 cups): ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.99.\u003c/strong\u003e",
-                       "Portobello Mushrooms, 3 1/2 lb, cleaned, trimmed and sliced: ~$29.13. \u003cstrong\u003eBuy 10 6oz packs: $31.20.\u003c/strong\u003e",
-                       "Dry White Wine, 3/4 cup plus 2 tbsp: ~$1.09. \u003cstrong\u003eBuy 1 750ml bottle: $3.92.\u003c/strong\u003e",
-                       "All-Purpose Flour, 3 1/2 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Garlic, 7 cloves, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Chicken Broth, 5 1/4 cups: ~$1.92. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
-                       "Sour Cream, 1 cup plus 2 3/4 tbsp full-fat: ~$1.09. \u003cstrong\u003eBuy 1 16oz tub: $1.83.\u003c/strong\u003e",
-                       "Egg Yolk, 4 large yolks: ~$0.54. \u003cstrong\u003eBuy 1 12ct carton: $1.62.\u003c/strong\u003e",
-                       "Lemon Juice, 2 tbsp plus 1 tsp, freshly squeezed: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Fresh Parsley, 2 1/4 tbsp minced (tarragon if you can find it): ~$0.29. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, ground nutmeg): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $52.10 across 14 servings, so roughly $3.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $63.56 across 14 servings, roughly $4.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $81.69. Those containers then feed this batch and many more after it."
-                   ],
-    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a French chicken dinner that reads like a restaurant plate. The chicken and the mushrooms carry it; the wine and the sour cream just make it taste expensive.",
-    "shop_smart":  [
-                       "\u003cstrong\u003eSeven pounds of boneless breasts is the backbone.\u003c/strong\u003e That is about fourteen breasts, one per serving, and it is where most of the money and all of the protein live. Reach for the big family pack instead of the small trays so you are paying for chicken, not packaging.",
-                       "\u003cstrong\u003eThree and a half pounds of portobello do the heavy flavor work.\u003c/strong\u003e Sliced portobello browns deep and meaty, and that is what gives this sauce its body. If your store sells whole caps, buy them by weight and slice them at home.",
-                       "\u003cstrong\u003eA few onions and a head of garlic are the aromatics.\u003c/strong\u003e You need about three and a half onions chopped fine and seven cloves of garlic. Both are cheap staples that stretch across everything else you cook.",
-                       "\u003cstrong\u003eA splash of dry white wine deglazes the pan.\u003c/strong\u003e You only need just under a cup to lift the browned bits off the bottom. Any dry white you would actually drink works here, so skip the bottle labeled cooking wine.",
-                       "\u003cstrong\u003eFull-fat sour cream and a few egg yolks finish the sauce.\u003c/strong\u003e Buy the real full-fat tub rather than light, because the fat is what keeps the sauce from breaking, and a carton of eggs gives you the four yolks the recipe asks for.",
-                       "\u003cstrong\u003eButter, olive oil, flour, nutmeg, lemon, and parsley round it out.\u003c/strong\u003e These are pantry and produce backbone you most likely already have, so they barely move the cart. Tarragon is the classic herb for fricassee if your store carries it, and parsley is the everyday stand-in when it does not."
-                   ],
-    "make_it":  [
-                    "Weigh your empty Dutch oven or deep skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
-                    "Pat the chicken breasts dry with paper towels and season them all over with the kosher salt and black pepper.",
-                    "Melt the butter with the olive oil in the pot over medium-high heat. Working in batches so the pot is not crowded, sear the breasts about 4 minutes a side until browned. They will not be cooked through yet. Move them to a plate and cover with foil.",
-                    "Add the sliced portobello, the chopped onion, and the white wine to the same pot. Cook 8 to 10 minutes, stirring now and then, until the mushrooms are browned and the pan is nearly dry.",
-                    "Stir in the garlic and the flour and cook one minute, scraping the browned bits up off the bottom.",
-                    "Pour in the chicken broth, bring it to a boil, and let it loosen everything stuck to the pot.",
-                    "Nestle the chicken and any collected juices back in, cover, and cook over medium heat until a thermometer in the thickest breast reads 160 degrees F, about 5 to 10 minutes. Move the chicken to a clean platter and cover it again.",
-                    "Whisk the egg yolks and sour cream together in a small bowl. Stir a ladle of the hot pan sauce into the bowl first to warm it, then pour that mixture back into the pot, stirring the whole time so the sauce stays smooth and does not curdle.",
-                    "Stir in the lemon juice, the nutmeg, and the minced parsley and let the sauce simmer 5 minutes. Taste and adjust the salt. Return the chicken to the pot and turn each piece to coat.",
-                    "Weigh the full pot and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one breast and an even share of the mushroom sauce, aiming for that weight."
-                ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one chicken breast and an even ladle of the mushroom sauce, landing near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
-    "credit_html":  "Recipe adapted from \u003ca href=\"https://foolproofliving.com/chicken-fricassee/\" target=\"_blank\" rel=\"noopener\"\u003efoolproofliving.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  52.1,
-    "cost_batch_true":  63.56,
-    "cost_per_serving":  3.72,
-    "cost_per_serving_true":  4.54,
-    "cost_pantry_add":  18.13,
-    "cost_first_run":  81.69,
-    "scaler":  {
-                   "cost":  "63.56",
-                   "ing":  [
-                               {
-                                   "item":  "Boneless Skinless Chicken Breast",
-                                   "canon":  "Boneless Skinless Chicken Breast",
-                                   "grams":  3175,
-                                   "buy":  "7 lb boneless skinless (about 14 breasts)",
-                                   "bid":  "chicken-breast",
-                                   "gpu":  "453.592"
-                               },
-                               {
-                                   "item":  "Salt",
-                                   "canon":  "Salt",
-                                   "grams":  21,
-                                   "buy":  "3 1/2 tsp kosher",
-                                   "bid":  "salt",
-                                   "gpu":  "28.350"
-                               },
-                               {
-                                   "item":  "Black Pepper",
-                                   "canon":  "Black Pepper",
-                                   "grams":  4,
-                                   "buy":  "1 3/4 tsp",
-                                   "bid":  "black-pepper",
-                                   "gpu":  "28.350"
-                               },
-                               {
-                                   "item":  "Butter",
-                                   "canon":  "Butter",
-                                   "grams":  49,
-                                   "buy":  "3 1/2 tbsp",
-                                   "bid":  "butter",
-                                   "gpu":  "453.592"
-                               },
-                               {
-                                   "item":  "Olive Oil",
-                                   "canon":  "Olive Oil",
-                                   "grams":  47,
-                                   "buy":  "3 1/2 tbsp",
-                                   "bid":  "olive-oil",
-                                   "gpu":  "28.000"
-                               },
-                               {
-                                   "item":  "Yellow Onion",
-                                   "canon":  "Yellow Onion",
-                                   "grams":  385,
-                                   "buy":  "3 1/2 medium, finely chopped (about 3 1/2 cups)",
-                                   "bid":  "onions",
-                                   "gpu":  "453.592"
-                               },
-                               {
-                                   "item":  "Portobello Mushrooms",
-                                   "canon":  "Portobello Mushrooms",
-                                   "grams":  1588,
-                                   "buy":  "3 1/2 lb, cleaned, trimmed and sliced",
-                                   "bid":  "portobello-mushrooms",
-                                   "gpu":  "453.592"
-                               },
-                               {
-                                   "item":  "Dry White Wine",
-                                   "canon":  "Dry White Wine",
-                                   "grams":  206,
-                                   "buy":  "3/4 cup plus 2 tbsp",
-                                   "bid":  "white-wine",
-                                   "gpu":  "29.570"
-                               },
-                               {
-                                   "item":  "All-Purpose Flour",
-                                   "canon":  "All-Purpose Flour",
-                                   "grams":  28,
-                                   "buy":  "3 1/2 tbsp",
-                                   "bid":  "flour",
-                                   "gpu":  "453.592"
-                               },
-                               {
-                                   "item":  "Garlic",
-                                   "canon":  "Garlic",
-                                   "grams":  21,
-                                   "buy":  "7 cloves, minced",
-                                   "bid":  "garlic",
-                                   "gpu":  "42.600"
-                               },
-                               {
-                                   "item":  "Chicken Broth",
-                                   "canon":  "Chicken Broth",
-                                   "grams":  1260,
-                                   "buy":  "5 1/4 cups",
-                                   "bid":  "chicken-broth",
-                                   "gpu":  "29.570"
-                               },
-                               {
-                                   "item":  "Sour Cream",
-                                   "canon":  "Sour Cream",
-                                   "grams":  270,
-                                   "buy":  "1 cup plus 2 3/4 tbsp full-fat",
-                                   "bid":  "sour-cream",
-                                   "gpu":  "28.350"
-                               },
-                               {
-                                   "item":  "Egg Yolk",
-                                   "canon":  "Egg Yolk",
-                                   "grams":  68,
-                                   "buy":  "4 large yolks",
-                                   "bid":  "eggs",
-                                   "gpu":  "204.000"
-                               },
-                               {
-                                   "item":  "Ground Nutmeg",
-                                   "canon":  "Ground Nutmeg",
-                                   "grams":  4,
-                                   "buy":  "1 3/4 tsp, freshly ground",
-                                   "bid":  "ground-nutmeg",
-                                   "gpu":  "28.350"
-                               },
-                               {
-                                   "item":  "Lemon Juice",
-                                   "canon":  "Lemon Juice",
-                                   "grams":  35,
-                                   "buy":  "2 tbsp plus 1 tsp, freshly squeezed",
-                                   "bid":  "lemon-juice",
-                                   "gpu":  "29.570"
-                               },
-                               {
-                                   "item":  "Fresh Parsley",
-                                   "canon":  "Fresh Parsley",
-                                   "grams":  9,
-                                   "buy":  "2 1/4 tbsp minced (tarragon if you can find it)",
-                                   "bid":  "fresh-parsley",
-                                   "gpu":  "60.000"
-                               }
-                           ]
-               },
-    "head":  {
-                 "description":  "French chicken fricassee for meal prep: seared boneless chicken breasts finished in a creamy mushroom pan sauce with white wine, sour cream, and egg yolk, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
-                 "keywords":  "chicken fricassee, french chicken fricassee, low carb meal prep, high protein chicken dinner, creamy mushroom chicken",
-                 "image":  "",
-                 "prepTime":  "PT15M",
-                 "cookTime":  "PT35M",
-                 "totalTime":  "PT50M",
-                 "costPerServing":  5.84,
-                 "recipeIngredient":  [
-                                          "Boneless Skinless Chicken Breast, 7 lb boneless skinless (about 14 breasts) (3175 g)",
-                                          "Salt, 3 1/2 tsp kosher (21 g)",
-                                          "Black Pepper, 1 3/4 tsp (4 g)",
-                                          "Butter, 3 1/2 tbsp (49 g)",
-                                          "Olive Oil, 3 1/2 tbsp (47 g)",
-                                          "Yellow Onion, 3 1/2 medium, finely chopped (about 3 1/2 cups) (385 g)",
-                                          "Portobello Mushrooms, 3 1/2 lb, cleaned, trimmed and sliced (1588 g)",
-                                          "Dry White Wine, 3/4 cup plus 2 tbsp (206 g)",
-                                          "All-Purpose Flour, 3 1/2 tbsp (28 g)",
-                                          "Garlic, 7 cloves, minced (21 g)",
-                                          "Chicken Broth, 5 1/4 cups (1260 g)",
-                                          "Sour Cream, 1 cup plus 2 3/4 tbsp full-fat (270 g)",
-                                          "Egg Yolk, 4 large yolks (68 g)",
-                                          "Ground Nutmeg, 1 3/4 tsp, freshly ground (4 g)",
-                                          "Lemon Juice, 2 tbsp plus 1 tsp, freshly squeezed (35 g)",
-                                          "Fresh Parsley, 2 1/4 tbsp minced (tarragon if you can find it) (9 g)"
-                                      ],
-                 "steps":  [
-                               "Pat the chicken dry and season it with the kosher salt and black pepper.",
-                               "Sear the breasts in the butter and olive oil until browned but not cooked through, then set them aside.",
-                               "Cook the portobello, onion, and white wine until browned, then stir in the garlic and flour.",
-                               "Add the chicken broth, bring to a boil, return the chicken, and cook to 160 degrees F.",
-                               "Temper the egg yolks and sour cream with the hot pan sauce, stir the mixture back in, then add the lemon juice, nutmeg, and parsley and simmer.",
-                               "Weigh the pot, subtract the empty weight, and divide across 14 containers."
-                           ]
-             },
-    "ingredients_grams":  [
-                              {
-                                  "item":  "Boneless Skinless Chicken Breast",
-                                  "grams":  3175
-                              },
-                              {
-                                  "item":  "Salt",
-                                  "grams":  21
-                              },
-                              {
-                                  "item":  "Black Pepper",
-                                  "grams":  4
-                              },
-                              {
-                                  "item":  "Butter",
-                                  "grams":  49
-                              },
-                              {
-                                  "item":  "Olive Oil",
-                                  "grams":  47
-                              },
-                              {
-                                  "item":  "Yellow Onion",
-                                  "grams":  385
-                              },
-                              {
-                                  "item":  "Portobello Mushrooms",
-                                  "grams":  1588
-                              },
-                              {
-                                  "item":  "Dry White Wine",
-                                  "grams":  206
-                              },
-                              {
-                                  "item":  "All-Purpose Flour",
-                                  "grams":  28
-                              },
-                              {
-                                  "item":  "Garlic",
-                                  "grams":  21
-                              },
-                              {
-                                  "item":  "Chicken Broth",
-                                  "grams":  1260
-                              },
-                              {
-                                  "item":  "Sour Cream",
-                                  "grams":  270
-                              },
-                              {
-                                  "item":  "Egg Yolk",
-                                  "grams":  68
-                              },
-                              {
-                                  "item":  "Ground Nutmeg",
-                                  "grams":  4
-                              },
-                              {
-                                  "item":  "Lemon Juice",
-                                  "grams":  35
-                              },
-                              {
-                                  "item":  "Fresh Parsley",
-                                  "grams":  9
-                              }
-                          ]
+ "name": "French Chicken Fricassee",
+ "slug": "french-chicken-fricassee",
+ "cuisine": "French",
+ "protein": "chicken",
+ "servings": 14,
+ "visibility": "paid",
+ "source_url": "https://foolproofliving.com/chicken-fricassee/",
+ "source_site": "foolproofliving.com",
+ "manual_balance": false,
+ "tuning": [],
+ "writer_notes": [
+  "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Every gram and buy string transcribed from mapped\\french-chicken-fricassee.json; no number computed in prose.",
+  "MACROS transcribed from the food-macros-db recompute at 14 servings and independently re-verified by the writer with the same formula the build guard uses: 436 cal, 55 g protein, 11 g carbs, 18 g fat per serving. In band for this run (400 to 650 cal, 35 g carb or less). The mapper's own compute matched (436.1 / 55.3 / 11.3 / 17.9). Note the calorie margin: 436 sits 36 cal above the 400 floor. The mapper LOUDLY flagged that the source's published 569 cal / 31 g fat cannot be reproduced from label rows (our fat lands at 17.9 g); the -23.4% calorie gap is entirely a fat gap and our label-accurate figure stands.",
+  "TARRAGON -> FRESH PARSLEY is a SOURCE-SANCTIONED substitution: the source's own ingredient line reads 'If you can't find tarragon, you can use parsley.' Tarragon is absent board-wide (mapper board_defects_observed); parsley is carried. Prose names parsley as the herb and mentions tarragon only as the classic option a shopper may or may not find. No step calls for tarragon.",
+  "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: chicken (steps 2,3,7,10), kosher salt (2,9), black pepper (2), butter (3), olive oil (3), portobello (4), onion (4), white wine (4), garlic (5), flour (5), chicken broth (6), egg yolk (8), sour cream (8), lemon juice (9), nutmeg (9), parsley (9). Walked the costed list against the steps both directions.",
+  "EGG YOLK drift, carried from the mapper: exact 3.5x = 3.5 yolks, rounded UP to 4 whole yolks (+14.3% on the line, +2 cal/serving). A half yolk is not a cook measure. Purchase maps to the whole-egg commodity; macros book to the Egg Yolk food-DB row because the yolk carries nearly all the fat.",
+  "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. Once the recipe is costed, re-walk the bullets against cost_lines before publish.",
+  "SALT FLATTENED at build: the mapper minted a non-canonical item 'Kosher Salt' (bid kosher-salt) that lives in NEITHER food-macros-db NOR db\\ingredients.json, so the build hard-failed the food-macros check. Rewrote the intake item to the batch-canonical 'Salt' (bid salt, brand Morton), buy string '3 1/2 tsp kosher', matching every other recipe in the batch (e.g. curry-ground-turkey-bowls displays 'Salt (Morton): ... kosher'). Salt is zero-macro so no stat number moved; salt now prices at util 0.03. Prose still reads 'kosher salt', which the kosher buy string keeps truthful.",
+  "COST UNDERSTATED - repair-pass flag: five items are unwired in db\\ingredients.json (no bid), so cost-recipes silently DROPPED four of them from the costed row at $0.00: Portobello Mushrooms 3.5 lb (1588 g), Dry White Wine 206 g, Sour Cream 270 g full-fat, Egg Yolk 4 large. Fresh Parsley (9 g) also unbid but immaterial. The 11 priced lines sum to exactly the batch total, so the headline 20.07 batch / 1.43 ps / 23.19 true / 1.66 true-ps EXCLUDES those four ingredients and is materially low (portobello alone would roughly double the batch at retail). Dry White Wine is the mapper's item_id null / blocking-term case; the portobello board cell is a canned-product form defect. These need bids wired (mapper/registrar) and a recost BEFORE this recipe enters a wave. Not a writer-lane fix; numbers are not mine to invent.",
+  "PHANTOM REPAIR 2026-08-16: the tempering step read 'Stir a ladle of the hot sauce into the bowl', where 'hot sauce' meant the hot pan sauce (temperature adjective), but it collided with the condiment vocab name Hot Sauce and hard-failed audit-spec-contradictions PHANTOM. Source foolproofliving.com uses no hot-sauce condiment; the tempering is with the warm mushroom sauce. Reworded to 'hot pan sauce' in make_it and head.steps. No ingredient added. NOTE: this intake cannot rebuild into db\\recipes yet because Dry White Wine (bid white-wine) is not on the live feed (known CHEAPEST-FALLBACK blocker); the db\\recipes spec still carries the phantom until white-wine lands and this is rebuilt."
+ ],
+ "cal_floor": null,
+ "stat": {
+  "cal": 436,
+  "protein": 55,
+  "carbs": 11,
+  "fat": 18,
+  "cost_ps": "5.84"
+ },
+ "intro_html": "Fricassee is a fancy French word for a plain good idea. You brown the chicken, build a pan sauce out of everything stuck to the bottom, then let the two finish cooking together. No special cut, no long braise, no equipment you do not already own. Boneless breasts, sliced portobello, an onion, a splash of white wine, and a little sour cream and egg yolk whisked in at the end to pull the sauce together. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 15 grams of carbs. That is a white-tablecloth dinner priced like a weeknight.",
+ "ingredients_display": [
+  "<strong>Boneless Skinless Chicken Breast (Member's Mark):</strong> 7 lb boneless skinless (about 14 breasts) (3175 g)",
+  "<strong>Salt (Morton):</strong> 3 1/2 tsp kosher (21 g)",
+  "<strong>Black Pepper (Great Value):</strong> 1 3/4 tsp (4 g)",
+  "<strong>Butter (generic):</strong> 3 1/2 tbsp (49 g)",
+  "<strong>Olive Oil:</strong> 3 1/2 tbsp (47 g)",
+  "<strong>Yellow Onion:</strong> 3 1/2 medium, finely chopped (about 3 1/2 cups) (385 g)",
+  "<strong>Portobello Mushrooms (fresh (USDA)):</strong> 3 1/2 lb, cleaned, trimmed and sliced (1588 g)",
+  "<strong>Dry White Wine (generic (USDA)):</strong> 3/4 cup plus 2 tbsp (206 g)",
+  "<strong>All-Purpose Flour (Great Value):</strong> 3 1/2 tbsp (28 g)",
+  "<strong>Garlic:</strong> 7 cloves, minced (21 g)",
+  "<strong>Chicken Broth (Swanson):</strong> 5 1/4 cups (1260 g)",
+  "<strong>Sour Cream (generic (USDA)):</strong> 1 cup plus 2 3/4 tbsp full-fat (270 g)",
+  "<strong>Egg Yolk (generic (USDA)):</strong> 4 large yolks (68 g)",
+  "<strong>Ground Nutmeg (Great Value):</strong> 1 3/4 tsp, freshly ground (4 g)",
+  "<strong>Lemon Juice (ReaLemon):</strong> 2 tbsp plus 1 tsp, freshly squeezed (35 g)",
+  "<strong>Fresh Parsley (fresh (USDA)):</strong> 2 1/4 tbsp minced (tarragon if you can find it) (9 g)"
+ ],
+ "cost_note_html": "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+ "cost_lines": [
+  "Boneless Skinless Chicken Breast, 7 lb boneless skinless (about 14 breasts): ~$15.61. <strong>Buy 7 lbs: $15.61.</strong>",
+  "Butter, 3 1/2 tbsp: ~$0.32. <strong>Buy 1 lb box: $2.98.</strong>",
+  "Olive Oil, 3 1/2 tbsp: ~$0.47. <strong>Buy 1 (lasts several batches).</strong>",
+  "Yellow Onion, 3 1/2 medium, finely chopped (about 3 1/2 cups): ~$0.84. <strong>Buy 1 lb: $0.99.</strong>",
+  "Portobello Mushrooms, 3 1/2 lb, cleaned, trimmed and sliced: ~$29.13. <strong>Buy 10 6oz packs: $31.20.</strong>",
+  "Dry White Wine, 3/4 cup plus 2 tbsp: ~$1.09. <strong>Buy 1 750ml bottle: $3.92.</strong>",
+  "All-Purpose Flour, 3 1/2 tbsp: ~$0.03. <strong>Buy 1 (lasts several batches).</strong>",
+  "Garlic, 7 cloves, minced: ~$0.29. <strong>Buy 1 head: $0.58.</strong>",
+  "Chicken Broth, 5 1/4 cups: ~$1.92. <strong>Pantry staple; this batch alone uses about 2 32oz cartons.</strong>",
+  "Sour Cream, 1 cup plus 2 3/4 tbsp full-fat: ~$1.09. <strong>Buy 1 16oz tub: $1.83.</strong>",
+  "Egg Yolk, 4 large yolks: ~$0.54. <strong>Buy 1 12ct carton: $1.62.</strong>",
+  "Lemon Juice, 2 tbsp plus 1 tsp, freshly squeezed: ~$0.08. <strong>Buy 1 (lasts several batches).</strong>",
+  "Fresh Parsley, 2 1/4 tbsp minced (tarragon if you can find it): ~$0.29. <strong>Buy 1 bunch: $1.93.</strong>",
+  "Pantry seasonings (salt, black pepper, ground nutmeg): ~$0.40. <strong>From jars you keep on hand.</strong>",
+  "<strong>Batch total: about $52.10 across 14 servings, so roughly $3.72 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+  "<strong>True shopping cost: about $63.56 across 14 servings, roughly $4.54 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+  "<strong>Starting with an empty pantry? Add about $18.13 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $81.69. Those containers then feed this batch and many more after it."
+ ],
+ "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a French chicken dinner that reads like a restaurant plate. The chicken and the mushrooms carry it; the wine and the sour cream just make it taste expensive.",
+ "shop_smart": [
+  "<strong>Seven pounds of boneless breasts is the backbone.</strong> That is about fourteen breasts, one per serving, and it is where most of the money and all of the protein live. Reach for the big family pack instead of the small trays so you are paying for chicken, not packaging.",
+  "<strong>Three and a half pounds of portobello do the heavy flavor work.</strong> Sliced portobello browns deep and meaty, and that is what gives this sauce its body. If your store sells whole caps, buy them by weight and slice them at home.",
+  "<strong>A few onions and a head of garlic are the aromatics.</strong> You need about three and a half onions chopped fine and seven cloves of garlic. Both are cheap staples that stretch across everything else you cook.",
+  "<strong>A splash of dry white wine deglazes the pan.</strong> You only need just under a cup to lift the browned bits off the bottom. Any dry white you would actually drink works here, so skip the bottle labeled cooking wine.",
+  "<strong>Full-fat sour cream and a few egg yolks finish the sauce.</strong> Buy the real full-fat tub rather than light, because the fat is what keeps the sauce from breaking, and a carton of eggs gives you the four yolks the recipe asks for.",
+  "<strong>Butter, olive oil, flour, nutmeg, lemon, and parsley round it out.</strong> These are pantry and produce backbone you most likely already have, so they barely move the cart. Tarragon is the classic herb for fricassee if your store carries it, and parsley is the everyday stand-in when it does not."
+ ],
+ "make_it": [
+  "Weigh your empty Dutch oven or deep skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+  "Pat the chicken breasts dry with paper towels and season them all over with the kosher salt and black pepper.",
+  "Melt the butter with the olive oil in the pot over medium-high heat. Working in batches so the pot is not crowded, sear the breasts about 4 minutes a side until browned. They will not be cooked through yet. Move them to a plate and cover with foil.",
+  "Add the sliced portobello, the chopped onion, and the white wine to the same pot. Cook 8 to 10 minutes, stirring now and then, until the mushrooms are browned and the pan is nearly dry.",
+  "Stir in the garlic and the flour and cook one minute, scraping the browned bits up off the bottom.",
+  "Pour in the chicken broth, bring it to a boil, and let it loosen everything stuck to the pot.",
+  "Nestle the chicken and any collected juices back in, cover, and cook over medium heat until a thermometer in the thickest breast reads 160 degrees F, about 5 to 10 minutes. Move the chicken to a clean platter and cover it again.",
+  "Whisk the egg yolks and sour cream together in a small bowl. Stir a ladle of the hot pan sauce into the bowl first to warm it, then pour that mixture back into the pot, stirring the whole time so the sauce stays smooth and does not curdle.",
+  "Stir in the lemon juice, the nutmeg, and the minced parsley and let the sauce simmer 5 minutes. Taste and adjust the salt. Return the chicken to the pot and turn each piece to coat.",
+  "Weigh the full pot and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one breast and an even share of the mushroom sauce, aiming for that weight."
+ ],
+ "portion_html": "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one chicken breast and an even ladle of the mushroom sauce, landing near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+ "credit_html": "Recipe adapted from <a href=\"https://foolproofliving.com/chicken-fricassee/\" target=\"_blank\" rel=\"noopener\">foolproofliving.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+ "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+ "cost_batch": 52.1,
+ "cost_batch_true": 63.56,
+ "cost_per_serving": 3.72,
+ "cost_per_serving_true": 4.54,
+ "cost_pantry_add": 18.13,
+ "cost_first_run": 81.69,
+ "scaler": {
+  "cost": "63.56",
+  "ing": [
+   {
+    "item": "Boneless Skinless Chicken Breast",
+    "canon": "Boneless Skinless Chicken Breast",
+    "grams": 3175,
+    "buy": "7 lb boneless skinless (about 14 breasts)",
+    "bid": "chicken-breast",
+    "gpu": "453.592"
+   },
+   {
+    "item": "Salt",
+    "canon": "Salt",
+    "grams": 21,
+    "buy": "3 1/2 tsp kosher",
+    "bid": "salt",
+    "gpu": "28.350"
+   },
+   {
+    "item": "Black Pepper",
+    "canon": "Black Pepper",
+    "grams": 4,
+    "buy": "1 3/4 tsp",
+    "bid": "black-pepper",
+    "gpu": "28.350"
+   },
+   {
+    "item": "Butter",
+    "canon": "Butter",
+    "grams": 49,
+    "buy": "3 1/2 tbsp",
+    "bid": "butter",
+    "gpu": "453.592"
+   },
+   {
+    "item": "Olive Oil",
+    "canon": "Olive Oil",
+    "grams": 47,
+    "buy": "3 1/2 tbsp",
+    "bid": "olive-oil",
+    "gpu": "28.000"
+   },
+   {
+    "item": "Yellow Onion",
+    "canon": "Yellow Onion",
+    "grams": 385,
+    "buy": "3 1/2 medium, finely chopped (about 3 1/2 cups)",
+    "bid": "onions",
+    "gpu": "453.592"
+   },
+   {
+    "item": "Portobello Mushrooms",
+    "canon": "Portobello Mushrooms",
+    "grams": 1588,
+    "buy": "3 1/2 lb, cleaned, trimmed and sliced",
+    "bid": "portobello-mushrooms",
+    "gpu": "453.592"
+   },
+   {
+    "item": "Dry White Wine",
+    "canon": "Dry White Wine",
+    "grams": 206,
+    "buy": "3/4 cup plus 2 tbsp",
+    "bid": "white-wine",
+    "gpu": "29.570"
+   },
+   {
+    "item": "All-Purpose Flour",
+    "canon": "All-Purpose Flour",
+    "grams": 28,
+    "buy": "3 1/2 tbsp",
+    "bid": "flour",
+    "gpu": "453.592"
+   },
+   {
+    "item": "Garlic",
+    "canon": "Garlic",
+    "grams": 21,
+    "buy": "7 cloves, minced",
+    "bid": "garlic",
+    "gpu": "42.600"
+   },
+   {
+    "item": "Chicken Broth",
+    "canon": "Chicken Broth",
+    "grams": 1260,
+    "buy": "5 1/4 cups",
+    "bid": "chicken-broth",
+    "gpu": "29.570"
+   },
+   {
+    "item": "Sour Cream",
+    "canon": "Sour Cream",
+    "grams": 270,
+    "buy": "1 cup plus 2 3/4 tbsp full-fat",
+    "bid": "sour-cream",
+    "gpu": "28.350"
+   },
+   {
+    "item": "Egg Yolk",
+    "canon": "Egg Yolk",
+    "grams": 68,
+    "buy": "4 large yolks",
+    "bid": "eggs",
+    "gpu": "204.000"
+   },
+   {
+    "item": "Ground Nutmeg",
+    "canon": "Ground Nutmeg",
+    "grams": 4,
+    "buy": "1 3/4 tsp, freshly ground",
+    "bid": "ground-nutmeg",
+    "gpu": "28.350"
+   },
+   {
+    "item": "Lemon Juice",
+    "canon": "Lemon Juice",
+    "grams": 35,
+    "buy": "2 tbsp plus 1 tsp, freshly squeezed",
+    "bid": "lemon-juice",
+    "gpu": "29.570"
+   },
+   {
+    "item": "Fresh Parsley",
+    "canon": "Fresh Parsley",
+    "grams": 9,
+    "buy": "2 1/4 tbsp minced (tarragon if you can find it)",
+    "bid": "fresh-parsley",
+    "gpu": "60.000"
+   }
+  ]
+ },
+ "head": {
+  "description": "French chicken fricassee for meal prep: seared boneless chicken breasts finished in a creamy mushroom pan sauce with white wine, sour cream, and egg yolk, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+  "keywords": "chicken fricassee, french chicken fricassee, low carb meal prep, high protein chicken dinner, creamy mushroom chicken",
+  "image": "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+  "prepTime": "PT15M",
+  "cookTime": "PT35M",
+  "totalTime": "PT50M",
+  "costPerServing": 5.84,
+  "recipeIngredient": [
+   "Boneless Skinless Chicken Breast, 7 lb boneless skinless (about 14 breasts) (3175 g)",
+   "Salt, 3 1/2 tsp kosher (21 g)",
+   "Black Pepper, 1 3/4 tsp (4 g)",
+   "Butter, 3 1/2 tbsp (49 g)",
+   "Olive Oil, 3 1/2 tbsp (47 g)",
+   "Yellow Onion, 3 1/2 medium, finely chopped (about 3 1/2 cups) (385 g)",
+   "Portobello Mushrooms, 3 1/2 lb, cleaned, trimmed and sliced (1588 g)",
+   "Dry White Wine, 3/4 cup plus 2 tbsp (206 g)",
+   "All-Purpose Flour, 3 1/2 tbsp (28 g)",
+   "Garlic, 7 cloves, minced (21 g)",
+   "Chicken Broth, 5 1/4 cups (1260 g)",
+   "Sour Cream, 1 cup plus 2 3/4 tbsp full-fat (270 g)",
+   "Egg Yolk, 4 large yolks (68 g)",
+   "Ground Nutmeg, 1 3/4 tsp, freshly ground (4 g)",
+   "Lemon Juice, 2 tbsp plus 1 tsp, freshly squeezed (35 g)",
+   "Fresh Parsley, 2 1/4 tbsp minced (tarragon if you can find it) (9 g)"
+  ],
+  "steps": [
+   "Pat the chicken dry and season it with the kosher salt and black pepper.",
+   "Sear the breasts in the butter and olive oil until browned but not cooked through, then set them aside.",
+   "Cook the portobello, onion, and white wine until browned, then stir in the garlic and flour.",
+   "Add the chicken broth, bring to a boil, return the chicken, and cook to 160 degrees F.",
+   "Temper the egg yolks and sour cream with the hot pan sauce, stir the mixture back in, then add the lemon juice, nutmeg, and parsley and simmer.",
+   "Weigh the pot, subtract the empty weight, and divide across 14 containers."
+  ]
+ },
+ "ingredients_grams": [
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 3175
+  },
+  {
+   "item": "Salt",
+   "grams": 21
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 4
+  },
+  {
+   "item": "Butter",
+   "grams": 49
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 47
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 385
+  },
+  {
+   "item": "Portobello Mushrooms",
+   "grams": 1588
+  },
+  {
+   "item": "Dry White Wine",
+   "grams": 206
+  },
+  {
+   "item": "All-Purpose Flour",
+   "grams": 28
+  },
+  {
+   "item": "Garlic",
+   "grams": 21
+  },
+  {
+   "item": "Chicken Broth",
+   "grams": 1260
+  },
+  {
+   "item": "Sour Cream",
+   "grams": 270
+  },
+  {
+   "item": "Egg Yolk",
+   "grams": 68
+  },
+  {
+   "item": "Ground Nutmeg",
+   "grams": 4
+  },
+  {
+   "item": "Lemon Juice",
+   "grams": 35
+  },
+  {
+   "item": "Fresh Parsley",
+   "grams": 9
+  }
+ ]
 }
