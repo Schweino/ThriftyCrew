@@ -155,7 +155,7 @@ function Write-JsonFile {
   $text = if ($Content -is [string]) { $Content } else { $Content | ConvertTo-Json -Depth $Depth }
   if ($Ascii) {
     $bad = [regex]::Matches($text, '[^\x00-\x7F]')
-    if ($bad.Count) { throw ("Write-JsonFile -Ascii refused $Path - it carries $($bad.Count) non-ASCII character(s), so pinning it as ASCII would corrupt them. Escape them at the source (  form) or drop -Ascii.") }
+    if ($bad.Count) { throw ("Write-JsonFile -Ascii refused $Path - it carries $($bad.Count) non-ASCII character(s), so pinning it as ASCII would corrupt them. Escape them at the source (\uXXXX form) or drop -Ascii.") }
     [IO.File]::WriteAllText($Path, $text, (New-Object Text.UTF8Encoding($false)))
     return
   }

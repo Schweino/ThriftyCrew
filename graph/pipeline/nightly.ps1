@@ -644,7 +644,7 @@ try {
   } elseif (-not (Test-Path $sidecarPy)) {
     Record 'ml-eval' 'BLIND' 'no sidecar interpreter - the suite needs torch' 0
   } else {
-    $frozen = Join-Path $sidecar 'datarozen\phase3-baseline\commodity-defs.json'
+    $frozen = Join-Path $sidecar 'data\frozen\phase3-baseline\commodity-defs.json'
     $evalArgs = @((Join-Path $sidecar 'hardeval.py'), '--stage', 'score')
     if (Test-Path $frozen) { $evalArgs += @('--defs', $frozen) }
     $r = Invoke-Stage 'ml-eval' $sidecarPy $evalArgs ([math]::Min(1800, (Remaining)))

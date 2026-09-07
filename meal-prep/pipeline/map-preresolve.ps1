@@ -2900,10 +2900,10 @@ if ($runSelfTest) {
     @'
 param([switch]$Json, [Parameter(ValueFromRemainingArguments = $true)][string[]]$Name = @())
 $r = @(
-  [pscustomobject]@{ term='brown and wild rice blend'; tier='MAPPED'; commodity='rice'; resolved_by='include pattern /rice/'; unit='lb'; cheapest=0.4396 }
+  [pscustomobject]@{ term='brown and wild rice blend'; tier='MAPPED'; commodity='rice'; resolved_by='include pattern /\brice\b/'; unit='lb'; cheapest=0.4396 }
   [pscustomobject]@{ term='brown rice';                tier='MAPPED'; commodity='brown-rice'; resolved_by='board id/label'; unit='lb'; cheapest=0.88 }
   [pscustomobject]@{ term='quinoa';                    tier='MAPPED'; commodity='quinoa-uncooked'; resolved_by="search term 'quinoa'"; unit='oz'; cheapest=0.1372 }
-  [pscustomobject]@{ term='cauliflower rice';          tier='MAPPED'; commodity='rice'; resolved_by='include pattern /rice/'; unit='lb'; cheapest=0.4396 })
+  [pscustomobject]@{ term='cauliflower rice';          tier='MAPPED'; commodity='rice'; resolved_by='include pattern /\brice\b/'; unit='lb'; cheapest=0.4396 })
 [pscustomobject]@{ results = $r } | ConvertTo-Json -Depth 6
 '@ | Set-Content -Path $altStub -Encoding utf8
     $pick = Select-CheapestAlternative -Foods @('brown and wild rice blend','brown rice','quinoa','cauliflower rice') -PriceScript $altStub
@@ -2919,7 +2919,7 @@ $r = @(
   try {
     @'
 param([switch]$Json, [Parameter(ValueFromRemainingArguments = $true)][string[]]$Name = @())
-$r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by='include pattern /rice/'; unit='lb'; cheapest=0.10 },
+$r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by='include pattern /\brice\b/'; unit='lb'; cheapest=0.10 },
        [pscustomobject]@{ term='b'; tier='ABSENT'; commodity=$null; resolved_by='no commodity claims this term'; unit='lb'; cheapest=$null })
 [pscustomobject]@{ results = $r } | ConvertTo-Json -Depth 6
 '@ | Set-Content -Path $altStub2 -Encoding utf8

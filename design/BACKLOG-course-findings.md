@@ -3374,7 +3374,7 @@ legs because output costs several times input.
 
 - Per-lane token accounting exists and is good. meal-prep/pipeline/lane-tokens.ps1 and
   harvest-lane-tokens.ps1 reconstruct real spend by reading subagent transcripts, because the
-  Workflow tool's gent() never exposes usage to the caller and 738 of 738 invocations on the
+  Workflow tool's \agent() never exposes usage to the caller and 738 of 738 invocations on the
   2026-08-15/16 run self-reported nothing. harvest-lane-tokens.ps1 counts cache reads SEPARATELY
   and refuses to fold them into input, on the stated grounds that billing and burn diverge by an
   order of magnitude - a distinction the course never reaches.

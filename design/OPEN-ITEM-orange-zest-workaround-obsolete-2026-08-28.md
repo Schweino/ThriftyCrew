@@ -43,4 +43,4 @@ purchase. The yield convention is unchanged; only the unit it is expressed in.
 The rebid tool's hardcoded `board` = 'weekly' was left standing here (it is `oranges`, a weekly-board
 produce id), unlike the Lime Juice row where an exact sibling - `Lemon Juice`, same commodity class,
 live and working - said `recipe`. Nothing in live code reads that field; every reader is under
-meal-preprchive. Shipped in ca1939da.
+meal-prep\archive. Shipped in ca1939da.

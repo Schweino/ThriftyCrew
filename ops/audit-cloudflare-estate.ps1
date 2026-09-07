@@ -45,7 +45,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 # A detector that runs in the chain must be able to PROVE it ran to the end, or a crash halfway reads as a
-# pass. Same helper, same contract as opsudit-prompt-backup.ps1. Deliberately NOT emitted on the BLIND
+# pass. Same helper, same contract as ops\audit-prompt-backup.ps1. Deliberately NOT emitted on the BLIND
 # path: exit 3 means it evaluated nothing, and a completion marker there would vouch for an examination
 # that never happened.
 . (Join-Path (Split-Path $here -Parent) 'lib\guard-contract.ps1')

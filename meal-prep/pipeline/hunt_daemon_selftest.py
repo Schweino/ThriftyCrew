@@ -8529,7 +8529,7 @@ def _fooddb_near_name_matches_the_live_db():
     # fixture to expect a duplicate the estate had already cleaned.
     # ZERO SINCE 2026-09-04. The last three were MERGED through retire_food_db_row.py (d0606fa5):
     # Apples -> Apple, Green Bell Pepper -> Green Bell Peppers, Lemon -> Lemons. In every pair the row
-    # with zero citations was retired, and the merge ledger at dbood-db-merges.json carries both
+    # with zero citations was retired, and the merge ledger at db\food-db-merges.json carries both
     # rows verbatim so any of them can be reversed from its own record.
     #
     # An empty list is this fixture at its strongest, not at its weakest: for the first time since it

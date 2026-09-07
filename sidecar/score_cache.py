@@ -28,7 +28,7 @@ swap starts a fresh cache instead of serving stale vectors under a new name.
 LAYOUT   sidecar/out/embed-cache/
   <embed-model-slug>.npy          float32 matrix, one row per cached text, in index order
   <embed-model-slug>.index.json   ["text", ...]  row i of the matrix is the vector for text i
-  <rerank-model-slug>.scores.json {"querydoc": score, ...}
+  <rerank-model-slug>.scores.json {"query\x1fdoc": score, ...}
 
 Both files are rewritten whole after a run with misses; ~150 MB for 37k vectors, ~1 s. If a file is
 corrupt or the two embedding files disagree in length the cache is discarded and rebuilt, never trusted.

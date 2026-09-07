@@ -48,8 +48,8 @@ $CONFIG_OK = @(
   'expected-automations.json', 'densities.json', 'unit-vocabulary.json'
 )
 
-# THE BLOCK EXTRACTOR IS SHARED (2026-09-06). opsudit-mustfire-census.ps1 needs the identical answer,
-# and two copies of one rule is this estate's most reliable bug - opsudit-twin-drift.ps1 exists because
+# THE BLOCK EXTRACTOR IS SHARED (2026-09-06). ops\audit-mustfire-census.ps1 needs the identical answer,
+# and two copies of one rule is this estate's most reliable bug - ops\audit-twin-drift.ps1 exists because
 # of it. lib\selftest-lib.ps1 carries Get-SelfTestBlock, the account of the two hand-written scanners that
 # got it wrong, and its own frozen fixtures for both of those shapes.
 

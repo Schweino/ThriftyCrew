@@ -991,7 +991,7 @@ NUTRITION_REQUIRED = ("calories", "protein_g", "carbs_g")
 # serving. The rest keep their numbers and their basis and say why they are not verified - nothing is
 # lost, and nothing is claimed that was not measured.
 SERVING_LIKE = re.compile(r"^\s*(?:1\s*)?(?:serving|servings|portion|plate|bowl|about\s+1)?\s*$", re.I)
-SUB_SERVING = re.compile(r"(tablespoon|tbsp|teaspoon|tsp|cup|ounce|oz|gram|g|ml|piece|ball|"
+SUB_SERVING = re.compile(r"(tablespoon|tbsp|teaspoon|tsp|cup|ounce|oz|gram|\bg\b|ml|piece|ball|"
                          r"meatball|cookie|churro|muffin|bar|slice|square|each|per\s+\w+|roll|"
                          r"cracker|chip|wing|skewer|stick)", re.I)
 

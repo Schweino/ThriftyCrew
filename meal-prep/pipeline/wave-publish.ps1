@@ -221,7 +221,7 @@ function Get-CostBasisProblems {
 # thing worth reading.
 # ---------------------------------------------------------------------------------------------------
 
-# P8's ENDPOINT PREDICATES LIVE IN pipelineeed-endpoint-lib.ps1 (extracted 2026-08-23 when
+# P8's ENDPOINT PREDICATES LIVE IN pipeline\feed-endpoint-lib.ps1 (extracted 2026-08-23 when
 # wave-preaudit.ps1 needed the same answer one stage earlier). Get-CardFeedUrl,
 # Test-FeedUrlProducible, Get-GuardFeedUrl and $script:PRODUCIBLE_FEEDS come from there, unchanged;
 # the fixtures below still exercise them, which is what proves the move changed no rule.

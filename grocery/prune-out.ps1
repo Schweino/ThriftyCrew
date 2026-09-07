@@ -114,7 +114,7 @@ foreach ($fam in $script:DIR_FAMILIES) {
   }
 }
 # ---- THE ARCHIVE ITSELF NEEDS A CLOCK (2026-08-23) -------------------------------------------------
-# Everything above either deletes on a window or MOVES to outrchive\, and "archived, never deleted"
+# Everything above either deletes on a window or MOVES to out\archive\, and "archived, never deleted"
 # was the whole rule. Measured 2026-08-23: 91 MB, 57 files, oldest 2026-07-05, and NOTHING in the estate
 # reads it - the one other reference is test-precedence-ladders EXCLUDING it from a robocopy. Most of it
 # is not even a retained family: after-wm5-*, vettmp, scratch-out, one-off experiment output archived

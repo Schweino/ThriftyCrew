@@ -123,6 +123,15 @@ $static = @(
   # A must-fire that BREAKS turns its own line red and everybody sees it. One that is DELETED leaves a
   # green suite with one fewer case, and nobody counts tallies ([[exit-code-first-tally-second]]).
   @{ f = 'ops\audit-mustfire-census.ps1';      n = 'no self-test has quietly lost a must-fire assertion' }
+  # BOTH HALVES ONE MORE TIME. Every one of the 19 bytes this found on its first sweep was a backslash
+  # eaten by an escape at authoring time, almost always in a Windows path: out\archive became
+  # out<BEL>rchive because \a is BEL, pipeline\feed- became pipeline<FF>eed- because \f is form feed,
+  # db\built became db<BS>uilt because \b is backspace. CLAUDE.md already names the cause; this is the
+  # enforcement it never had, and the reason it needs one is that NOTHING ELSE SEES IT - the affected
+  # script's own self-test stays green, grep and sed DISPLAY the damage as a merely missing character,
+  # and a NUL makes grep classify the whole file as binary so every text search silently skips it
+  # (2026-09-07).
+  @{ f = 'ops\audit-source-control-bytes.ps1'; n = 'no tracked source file carries a raw control byte from an eaten backslash' }
   # BOTH HALVES AGAIN, and here the live half is the whole point. The discovery pass above runs this
   # file's -SelfTest and proves the enumeration works against a frozen root; THIS entry runs it against
   # the REAL root, which is the only place the debris actually lands. .gitignore line 3 is `/*`, so the
