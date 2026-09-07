@@ -3,10 +3,12 @@
   purpose, assert guards.ps1 exits 2, then restore and assert it exits 0 again.
   Every mutation is made on a COPY-then-restore basis; nothing is left changed.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$AllowLiveTree)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ps-source.ps1')   # Get-PsCodeOnly / Get-PsCodeLines - block comments too, no param() block so it cannot reset ours
 $root = $PSScriptRoot
 $pass = 0; $failed = 0
 
@@ -531,8 +533,11 @@ function Test-HasThrowingIdiom([string]$path) {
   # form), so test-guards reported "1 failed" on a completely healthy tree - measured 2026-07-30, the
   # only failing case in the whole suite. A gate that cries wolf is a gate that gets switched off, and
   # this one was crying wolf at the essay written to stop the bug.
-  $lines = @(Get-Content $path -ErrorAction SilentlyContinue)
-  return @($lines | Where-Object { $_ -notmatch '^\s*#' -and $_ -match '\(\[string\]\(Get-Content [^)]*\)\)\.Trim\(\)' }).Count -gt 0
+  # BLOCK comments too (2026-09-07). The line filter below caught the essay in publish-deals-page
+  # that documents this trap, but only because that essay is written as `#` lines; the same
+  # explanation in a block header would still have been read as a call site.
+  $lines = Get-PsCodeLines -Text ([IO.File]::ReadAllText($path))
+  return @($lines | Where-Object { $_ -match '\(\[string\]\(Get-Content [^)]*\)\)\.Trim\(\)' }).Count -gt 0
 }
 # MUST-FIRE + CLEAN TWIN for the scan itself, on frozen synthetic files - the founding false positive and
 # the real bug it is supposed to catch, side by side. bad.ps1 going unflagged means the sweep below can no

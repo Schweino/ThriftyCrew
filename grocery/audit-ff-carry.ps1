@@ -24,6 +24,7 @@
   Advisory (does NOT hard-gate publish - a transient throttle should not take the board down; the pull's recovery
   passes are the primary defense). -Alert emails once per NEW victim-set.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Alert, [switch]$SelfTest, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')

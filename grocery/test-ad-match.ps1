@@ -13,6 +13,7 @@
 
   Run: test-ad-match.ps1        (exit 0 clean, 1 on any failure)
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$LibPath = '')
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

@@ -9,6 +9,7 @@
     uncomputable  - couldn't parse a per-unit from the stored size (needs an eyeball)
   Run standalone anytime; resolve-worklist.ps1 uses the same LinkPerUnit for its weekly 'mismatch' reason.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([double]$Tolerance = 0.15)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

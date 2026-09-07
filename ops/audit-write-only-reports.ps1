@@ -30,6 +30,7 @@
 
   Exit: 0 = at or under the baseline. 2 = MORE write-only families than the baseline. 3 = could not evaluate.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Accept, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

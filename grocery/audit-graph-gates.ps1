@@ -34,6 +34,7 @@
   Usage: audit-graph-gates.ps1 [-Quiet] [-Python <path>] [-SkipImport] [-SelfTest]
   Exit 0 = ran (findings are advisory). Exit 2 = self-test regression. Exit 3 = BLIND.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Quiet, [string]$Python = '', [switch]$SkipImport, [switch]$SelfTest, [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

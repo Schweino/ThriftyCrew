@@ -59,6 +59,7 @@
 #   .\audit-band-censorship.ps1 -MedianFloor 0.3 widen the SCALE test (Find-BandCensorship's own note)
 #   .\audit-band-censorship.ps1 -SelfTest        frozen founding-bug fixture + three clean twins
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (nothing to judge).
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

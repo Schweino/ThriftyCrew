@@ -12,6 +12,7 @@
   Modes: (default) report + exit 2 if any uncategorized / multi-category / orphan-ref, else 0
          -Alert   send-alert.ps1 once per NEW issue-set (signature de-dup) - for the daily pipeline
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Alert, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')

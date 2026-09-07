@@ -21,6 +21,7 @@
 #   ops\verify-bot-commit-scope.ps1 -SelfTest    frozen must-fire fixtures + clean twins
 # Exit 0 = in scope, or not a bot commit at all. 1 = a bot commit strays outside the list (REFUSE).
 #      2 = self-test regression. 3 = BLIND (could not read the staged set).
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent

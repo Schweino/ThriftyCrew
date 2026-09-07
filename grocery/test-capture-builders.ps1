@@ -26,6 +26,7 @@
   Exit: 0 pass, 1 a case failed, 3 could not find the block (BLIND - nothing was proven).
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ps-source.ps1')   # Get-PsCodeOnly / Get-PsCodeLines - block comments too, no param() block so it cannot reset ours
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $src = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
 # A LINE ENDING IS NOT PART OF THE SUBJECT. Until 2026-09-07 the end marker was the literal
@@ -177,7 +178,7 @@ T 'E  the edge check compares against the COMMITTED blob, not the working tree' 
 # CODE ONLY. The comment above the fixed call site quotes the old expression verbatim, on purpose - that is
 # how the next reader learns what was wrong - and an assertion that cannot tell a quotation from a call site
 # would force the explanation out of the file to stay green. Comment lines are stripped before the test.
-$srcCode = (($src -split "`r?`n") | Where-Object { $_ -notmatch '^\s*#' }) -join "`n"
+$srcCode = Get-PsCodeOnly -Text $src
 T 'E  MUST-FIRE: no committed blob is read through the TEXT pipeline any more (that is the founding bug)' `
   ($srcCode -notmatch 'git -C \$repo show HEAD:public/[a-z\-]+\.json \| Out-String')
 T 'E  no working-tree Get-Content of public\smp-feed.json remains in the read-after-write block' `

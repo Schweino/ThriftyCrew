@@ -53,6 +53,7 @@ param(
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\bot-paths.ps1') # Get-BotInputPaths/-BotServedPaths: the ONE ownership list, also read by push-data and the pre-commit hook
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\chain-verdict-lib.ps1') # Read-ChainVerdictStatus: the ONE reading of the guard verdict, shared with push-data
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
@@ -672,19 +673,15 @@ else {
 # *** STILL: STAGE PIPELINE-OWNED PATHS ONLY - NEVER git add -A. *** (see the 2026-08-22 note above)
 $inputPaths  = Get-BotInputPaths
 $servedPaths = Get-BotServedPaths
-# the gate's own verdict, written by check-ad-cycles right after guards ran (never inferred from a log)
-$guardsBlocked = $false
-$verdictSeen = $false
-try {
-  $vf = Join-Path $OutDir 'chain-verdict.json'
-  if (Test-Path $vf) {
-    $v = Read-JsonFile $vf
-    if ([string]$v.date -eq $todayS) { $verdictSeen = $true; $guardsBlocked = [bool]$v.guards_blocked }
-  }
-} catch { Write-Output ('chain-verdict unreadable: ' + $_.Exception.Message) }
-$shipServed = $runDownstream -and $verdictSeen -and (-not $guardsBlocked)
+# the gate's own verdict, written by check-ad-cycles right after guards ran (never inferred from a log).
+# 2026-09-07: read through lib\chain-verdict-lib.ps1, which adds the freshness half the date check could
+# not do. Same day is not the same board: a PASS recorded before someone edited commodities.json is a
+# statement about inputs that no longer exist, and only PASS - today, and over the tree as it stands now -
+# ships the served paths. Every other status is treated exactly like a missing file.
+$verdict = Read-ChainVerdictStatus -Repo $repo -OutDir $OutDir -Today $todayS
+$shipServed = $runDownstream -and $verdict.ship_ok
 if ($runDownstream -and -not $shipServed) {
-  $why = if (-not $verdictSeen) { 'the chain wrote no verdict for today (it did not reach the guard stage)' } else { 'guards BLOCKED this board' }
+  $why = $verdict.why
   Write-Output ("publish: staging INPUTS only - $why, so public\** and the recipe files are NOT shipped. Readers keep the last good board.")
   $failed += 'guards-blocked'
 }

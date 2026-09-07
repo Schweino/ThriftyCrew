@@ -33,6 +33,7 @@
   Exit: 0 = accuracy clean and no store regressed on coverage. 2 = ANY accuracy violation, or coverage regressed.
   3 = BLIND (zero links were price-graded - the accuracy claim would be empty; a real violation still wins with 2).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$OutDir = "",
   [switch]$Baseline,   # write the current counts as the high-water mark

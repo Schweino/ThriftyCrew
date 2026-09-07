@@ -1,0 +1,265 @@
+<#
+  audit-arg-binding.ps1 - a CHECKING script must REFUSE an argument it does not understand.
+
+  WHY THIS EXISTS (2026-09-07). During the 09-07 triage an operator ran
+
+      ops\verify-bulk-edit.ps1 -Paths grocery\commodities.json
+
+  to check one edited file. There is no -Paths parameter on that script and there never was. A
+  PowerShell script without [CmdletBinding()] is a SIMPLE command: an argument matching no declared
+  parameter is not an error, it is dropped into $args and ignored. So both tokens vanished, the script
+  ran its UNSCOPED sweep over all 52 modified files, reported "0 finding(s)" and exited 0 - and the
+  operator read that as "my file is clean" when the file had never been singled out at all. Measured
+  again on HEAD 43f09cff4 while writing this: rc 0, 52 files, scope silently ignored.
+
+  THE CLASS, and why it is worse inside a checker than anywhere else. Everywhere else a dropped
+  argument produces the wrong OUTPUT, and wrong output tends to look wrong. In a verification tool a
+  dropped argument produces a PASS - the most reassuring output there is - over a question nobody
+  actually asked. It is the same shape as a could-not-look settling a question, except the tool prints
+  a green line while it does it. Two of the estate's older bugs have this shape already:
+  [[names-gate-cannot-see-a-lost-flag]] and the undeclared -SelfTest that lands in $args and would make
+  publish-deals-page perform a REAL publish (test-auditors pins that one by hand).
+
+  WHAT IT CHECKS. Every audit-, verify-, test-, validate-, check- script plus guards / run-gates /
+  sanity-check / regression-test / json-reader-parity under ops\ and grocery\ that declares a param()
+  block must carry [CmdletBinding()] above it. Archive, one-offs and out\ debris are out of scope: a
+  scrap script's arguments are nobody's evidence.
+
+  A RATCHET, NOT A GATE. 96 files were fixed in one sweep on 2026-09-07 and the count went to 0, but
+  the point is the CEILING, not today's number: a new checking script that forgets the attribute pushes
+  the count above the baseline and fails. The high-water mark may only go DOWN (lib\ratchet.ps1 decides
+  whether a fall is believable, so a broken scan cannot record 0 as the new permanent ceiling).
+
+  Usage:
+    .\audit-arg-binding.ps1            scan, report, ratchet against ops\out\arg-binding-baseline.json
+    .\audit-arg-binding.ps1 -Accept    record the CURRENT count as the new high-water mark
+    .\audit-arg-binding.ps1 -SelfTest  frozen fixtures: an unbound script fires, a bound one is silent
+
+  Exit: 0 = at or under the baseline. 2 = MORE unbound checking scripts than the baseline. 3 = BLIND.
+#>
+[CmdletBinding()]   # this file is itself in the class it audits
+param([switch]$SelfTest, [switch]$Accept, [string]$Root = '', [string]$BaselineFile = '')
+$ErrorActionPreference = 'Stop'
+$here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+$repo = Split-Path $here -Parent
+. (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\ratchet.ps1')
+
+# WHICH FILES ARE "CHECKING" SCRIPTS. Built by concatenation rather than written as one literal, so
+# this file's own name (audit-...) and the prose above cannot enrol or exempt anything by accident.
+$script:AB_CLASS_RX = '(?i)^(' + 'audit-|verify-|test-|validate-|check-' + ')|^(' +
+  'guards|run-gates|sanity-check|regression-test|json-reader-parity' + ')\.ps1$'
+
+function Test-IsCheckingScript {
+  <# Name-based on purpose: the question is what a READER of the filename expects the script to do.
+     A file called audit-anything that answers "clean" is evidence to somebody. #>
+  param([string]$Leaf)
+  return ($Leaf -match $script:AB_CLASS_RX)
+}
+
+function Get-ScriptParamBlockAst {
+  <# The SCRIPT's own param() block, via the real parser. $ast.ParamBlock is exactly that and nothing
+     else - not a function's, and not text that merely looks like one.
+
+     THE PARSER, NOT A REGEX, and the reason is a bug this file's own sweep committed. The first cut
+     matched (?m)^param\s*\( . grocery\test-capture-builders.ps1 defines FAKE builder scripts as
+     here-strings, and their param lines sit at column 0 INSIDE the string - so the regex found one,
+     called it the script's, and the sweep wrote [CmdletBinding()] into a fixture. That is
+     verify-bulk-edit's defect 2 (a frozen literal converted by a sweep) committed by the tool fixing
+     defect 7. A tokenizer cannot make that mistake, and it costs about a millisecond a file. #>
+  param([string]$Text)
+  $err = $null
+  $tok = $null
+  $ast = [System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$tok, [ref]$err)
+  if ($null -eq $ast) { return $null }
+  return $ast.ParamBlock
+}
+
+function Test-NeedsCmdletBinding {
+  <# Pure, over the file's TEXT, so the fixture drives exactly the live rule.
+     Returns $true when this source declares a SCRIPT param() block with no [CmdletBinding()] on it -
+     i.e. an argument that matches nothing is silently discarded.
+
+     THREE THINGS THAT ARE NOT FINDINGS, and each of them cost a false positive on the way here:
+       * no script param() block: nothing binds, so nothing can be silently dropped.
+       * a function's param block, or one inside a here-string fixture: not the script's.
+       * [CmdletBinding()] already declared, in any casing or spacing. #>
+  param([string]$Text)
+  $pb = Get-ScriptParamBlockAst $Text
+  if ($null -eq $pb) { return $false }
+  foreach ($a in @($pb.Attributes)) {
+    if ($a.TypeName.Name -match '(?i)^CmdletBinding$') { return $false }
+  }
+  return $true
+}
+
+function Get-ScriptParamBlock {
+  <# The SCRIPT's param() block text with its comments stripped, or '' if it has none.
+     Comments must go first: this rule looks for an automatic variable inside a DEFAULT VALUE, and
+     after the 2026-09-07 fix three of these blocks explain the trap in prose that names the very
+     variable. A rule that reads its own explanation is the estate's oldest false positive. #>
+  param([string]$Text)
+  $pb = Get-ScriptParamBlockAst $Text
+  if ($null -eq $pb) { return '' }
+  $blk = $pb.Extent.Text
+  return (($blk -split "`r?`n" | ForEach-Object { $_ -replace '#.*$', '' }) -join "`n")
+}
+
+function Test-BindingBreaksScriptRootDefault {
+  <# THE SECOND HALF OF THE SAME ATTRIBUTE, and it is a trap rather than an omission.
+
+     Under PS 5.1, [CmdletBinding()] makes a script an ADVANCED function, and a param default is then
+     evaluated in a scope where $PSScriptRoot, $PSCommandPath and $MyInvocation.MyCommand.Path are
+     EMPTY. `[string]$OutDir = (Join-Path $PSScriptRoot 'out')` throws at bind time, before the
+     script's first statement. Measured 2026-09-07 while adding the attribute to 96 files: three of
+     them did this, audit-coverage-regression.ps1 died on it, and the only symptom anywhere else was
+     guards.ps1 reporting a HARD FAIL on coverage regression - a real gate going red for a reason that
+     had nothing to do with coverage.
+
+     So the two rules ship together on purpose. Adding the attribute without this one converts a
+     silently-ignored argument into a silently-broken script, which is a worse trade. #>
+  param([string]$Text)
+  if (-not ($Text -match '(?i)\[\s*CmdletBinding\s*\(')) { return $false }
+  $blk = Get-ScriptParamBlock $Text
+  if (-not $blk) { return $false }
+  return ($blk -match '(?i)\$PSScriptRoot|\$PSCommandPath|\$MyInvocation')
+}
+
+if ($SelfTest) {
+  $script:bad = 0
+  function T([string]$n, [bool]$ok, [string]$got) {
+    if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }
+  }
+  # FROZEN LITERALS, single-quoted with doubled inner quotes. A fixture assembled with + would pass
+  # THREE positional arguments to T and run against a fragment ([[ps-concat-in-argument-is-three-args]]).
+  $founding = 'param([switch]$SelfTest, [switch]$Staged)'
+  T 'MUST FIRE  the founding line: verify-bulk-edit''s own param block, unbound (-Paths fell into $args and the sweep ran unscoped)' `
+    (Test-NeedsCmdletBinding $founding) 'not reported'
+  $fixed = "[CmdletBinding()]`nparam([switch]`$SelfTest, [switch]`$Staged)"
+  T 'MUST NOT FIRE  the same param block WITH the attribute is silent' `
+    (-not (Test-NeedsCmdletBinding $fixed)) 'reported'
+  $spaced = "[ CmdletBinding( ) ]`nparam([switch]`$Quiet)"
+  T 'MUST NOT FIRE  spacing inside the attribute does not defeat the check' `
+    (-not (Test-NeedsCmdletBinding $spaced)) 'reported'
+  $withHeader = "<#`n  a header that mentions param( and CmdletBinding in prose`n#>`nparam([switch]`$Quiet)"
+  T 'MUST FIRE  an attribute NAMED IN A COMMENT is prose, not a declaration' `
+    (Test-NeedsCmdletBinding $withHeader) 'not reported'
+  $noParam = "`$ErrorActionPreference = 'Stop'`nWrite-Output 'hello'"
+  T 'MUST NOT FIRE  a script with no param() block binds nothing and cannot drop an argument' `
+    (-not (Test-NeedsCmdletBinding $noParam)) 'reported'
+  $fnParam = "function Get-Thing {`n  param([string]`$Name)`n}`nGet-Thing 'x'"
+  T 'MUST NOT FIRE  an INDENTED param( is a function''s, not the script''s' `
+    (-not (Test-NeedsCmdletBinding $fnParam)) 'reported'
+  # MUST NOT FIRE, and this one is the sweep's own bug turned into a case. test-capture-builders.ps1
+  # writes FAKE builder scripts as here-strings; their param lines sit at column 0 inside the string,
+  # a regex called one of them the script's own, and the sweep edited a fixture. The parser cannot.
+  $inHereString = "Set-Content `$p -Value @'`nparam([string]`$In,[string]`$Date)`nexit 0`n'@"
+  T 'MUST NOT FIRE  a param line at column 0 INSIDE A HERE-STRING is a fixture, not a declaration (the sweep wrote into one)' `
+    (-not (Test-NeedsCmdletBinding $inHereString)) 'reported'
+  # CLEAN TWIN for the class filter: the naming rule still admits the real files and still excludes a
+  # builder. Losing this would make the audit either empty or estate-wide, and both look like a pass.
+  T 'CLEAN TWIN  the class admits the real checking scripts' `
+    ((Test-IsCheckingScript 'verify-bulk-edit.ps1') -and (Test-IsCheckingScript 'audit-coverage-gaps.ps1') -and
+     (Test-IsCheckingScript 'guards.ps1') -and (Test-IsCheckingScript 'run-gates.ps1')) 'a checking script was excluded'
+  T 'CLEAN TWIN  the class excludes builders and publishers, whose arguments are not evidence' `
+    ((-not (Test-IsCheckingScript 'build-deals-page.ps1')) -and (-not (Test-IsCheckingScript 'publish-deals-page.ps1')) -and
+     (-not (Test-IsCheckingScript 'compare-deals.ps1'))) 'a builder was pulled into the class'
+  # ---- rule 2: the trap the fix itself walked into (2026-09-07) -------------------------------------
+  $trap = "[CmdletBinding()]`nparam([string]`$OutDir = (Join-Path `$PSScriptRoot 'out'))"
+  T 'MUST FIRE  [CmdletBinding()] with $PSScriptRoot in a param DEFAULT - empty at bind time under PS 5.1, so the script dies before line one (audit-coverage-regression, which surfaced as a guards HARD FAIL)' `
+    (Test-BindingBreaksScriptRootDefault $trap) 'not reported'
+  $trapFixed = "[CmdletBinding()]`nparam([string]`$OutDir = '')`nif (-not `$OutDir) { `$OutDir = Join-Path `$PSScriptRoot 'out' }"
+  T 'MUST NOT FIRE  the same default resolved BELOW the block is correct and must stay silent' `
+    (-not (Test-BindingBreaksScriptRootDefault $trapFixed)) 'reported'
+  $trapNoAttr = "param([string]`$OutDir = (Join-Path `$PSScriptRoot 'out'))"
+  T 'MUST NOT FIRE  without the attribute the same default works, so it is not a finding on its own' `
+    (-not (Test-BindingBreaksScriptRootDefault $trapNoAttr)) 'reported'
+  # CLEAN TWIN, and it is why comments are stripped first: all three files fixed on 2026-09-07 now
+  # EXPLAIN the trap in a comment inside the param block, naming the variable. Matching raw text would
+  # report every one of them - a check that fires on its own fix is a check somebody deletes.
+  $trapProse = "[CmdletBinding()]`nparam(`n  # NOT (Join-Path `$PSScriptRoot 'out'): empty under CmdletBinding`n  [string]`$OutDir = ''`n)"
+  T 'CLEAN TWIN  the variable NAMED IN A COMMENT inside the param block is documentation, not a default' `
+    (-not (Test-BindingBreaksScriptRootDefault $trapProse)) 'reported'
+  # PS 5.1: @($null).Count is 1, so an empty finding set must not score 1 ([[ps-null-count-is-one]]).
+  $empty = @()
+  T 'an empty finding set counts 0, not the PS 5.1 @($null) 1' ((@($empty)).Count -eq 0) ([string](@($empty)).Count)
+  if ($bad -eq 0) { Write-Output 'ARG-BINDING SELF-TEST PASS'; Write-GuardComplete -Name 'arg-binding' -Summary 'selftest ok'; exit 0 }
+  Write-Output ("ARG-BINDING SELF-TEST FAILED ($bad)"); Write-GuardComplete -Name 'arg-binding' -Summary "selftest failed=$bad"; exit 2
+}
+
+# ---- live scan ----
+if (-not $Root) { $Root = $repo }
+$skipDirs = @('\archive\', '\out\', '\.claude\', '\node_modules\', '\.git\', '\worktrees\',
+              '\.venv\', '\venv\', '\site-packages\', '\dist-info\')
+$scanned = 0
+$findings = New-Object System.Collections.Generic.List[string]
+# Rule 2 is a HARD failure, not a ratchet entry. It is not a backlog: a script in this state cannot
+# run at all, so there is nothing to work down and nothing to grandfather.
+$broken = New-Object System.Collections.Generic.List[string]
+foreach ($sub in @('ops', 'grocery')) {
+  $d = Join-Path $Root $sub
+  if (-not (Test-Path $d)) { continue }
+  $files = @(Get-ChildItem $d -Recurse -Filter *.ps1 -File -ErrorAction SilentlyContinue)
+  foreach ($f in $files) {
+    $p = $f.FullName
+    $skip = $false
+    foreach ($sd in $skipDirs) { if ($p -like ('*' + $sd + '*')) { $skip = $true; break } }
+    if ($skip) { continue }
+    if (-not (Test-IsCheckingScript $f.Name)) { continue }
+    $scanned++
+    $txt = ''
+    try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
+    $rel = $p.Replace($Root, '').TrimStart('\', '/')
+    if (Test-NeedsCmdletBinding $txt) { [void]$findings.Add($rel) }
+    if (Test-BindingBreaksScriptRootDefault $txt) { [void]$broken.Add($rel) }
+  }
+}
+if ($scanned -eq 0) {
+  Write-Output 'arg-binding: BLIND - zero checking scripts reached the scan, so a clean result would prove nothing'
+  Write-GuardComplete -Name 'arg-binding' -Summary 'blind=nothing-scanned'
+  exit 3
+}
+$n = @($findings).Count
+# THE DENOMINATOR, ALWAYS. "0 findings" is a mood; "0 of 99 examined" is a measurement.
+Write-Output ("arg-binding: examined {0} checking script(s) under ops\ and grocery\; {1} declare param() with no [CmdletBinding()], so an undeclared argument is silently dropped" -f $scanned, $n)
+foreach ($w in $findings) { Write-Output ('  UNBOUND  ' + $w) }
+$nBroken = @($broken).Count
+Write-Output ("arg-binding: {0} of the same {1} carry [CmdletBinding()] AND an automatic script-location variable inside a param default, which is empty at bind time under PS 5.1" -f $nBroken, $scanned)
+foreach ($w in $broken) { Write-Output ('  DEAD-AT-BIND  ' + $w + '  (resolve the default below the param block)') }
+if ($nBroken -gt 0) {
+  Write-Output 'arg-binding: HARD FAIL - a script in this state throws before its first statement, and the symptom surfaces somewhere else entirely (on 2026-09-07 it read as a guards coverage-regression HARD FAIL).'
+  Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n dead_at_bind=$nBroken examined=$scanned"
+  exit 2
+}
+
+$blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'out\arg-binding-baseline.json' }
+$blDir = Split-Path $blF -Parent
+if (-not (Test-Path $blDir)) { New-Item -ItemType Directory -Force $blDir | Out-Null }
+$base = $null
+if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).unbound) } catch { $base = $null } }
+function Write-AbBaseline([int]$Count) {
+  @{ generated = (Get-Date).ToString('s'); unbound = $Count; examined = $scanned; names = @($findings)
+     note = 'High-water mark for the arg-binding ratchet (2026-09-07, the verify-bulk-edit -Paths drop). This number may only go DOWN. A run above it means a NEW checking script can silently ignore an argument it was given.' } |
+    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+}
+if ($Accept -or $null -eq $base) {
+  Write-AbBaseline $n
+  Write-Output ("  baseline written: $n unbound of $scanned examined. From here the number may only go DOWN.")
+  Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$n"
+  exit 0
+}
+$move = Test-RatchetMove -Name 'arg-binding' -Count $n -Baseline $base
+if ($move.Verdict -eq 'rose') {
+  Write-Output ("arg-binding: RATCHET BROKEN - $n unbound of $scanned examined, baseline $base. A checking script was added or edited so that an argument it does not declare is silently discarded, and its PASS then answers a question nobody asked.")
+  Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base"
+  exit 2
+}
+if ($move.Verdict -eq 'tightened') {
+  Write-AbBaseline $n
+  Write-Output ("  ratchet tightened: $n unbound, was $base. New baseline written.")
+} elseif ($move.Verdict -eq 'implausible') {
+  Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base)
+}
+Write-Output ("arg-binding: $n of $scanned examined are unbound, against a baseline of $base.")
+Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base"
+exit 0

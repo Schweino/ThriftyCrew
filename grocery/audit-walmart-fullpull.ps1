@@ -37,6 +37,7 @@
 # 70 restores the intent on the 90-day window: 20 days of notice, which comfortably fits a ~75-minute
 # full pull that runs one store per day and must dodge ad-rollover days. The CELL check below is the
 # real measure of collapse risk and is unchanged; this clock is the coarse backstop behind it.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([int]$WindowDays = 0, [int]$WarnAgeDays = 70, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

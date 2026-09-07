@@ -20,6 +20,7 @@
   Exit 0 = every weekly-ad store has a live, in-window ad.
   Exit 1 = at least one store's ad has closed or its pull is overdue.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [string]$Today = '', [switch]$Json)
 
 $ErrorActionPreference = 'Stop'

@@ -8,6 +8,7 @@
   Also cross-checks any entry that carries a store-published native_unit_price (>3% disagreement -> flag).
   Flags are ROUTED TO REVIEW (never auto-deleted) -> guards-<date>.json + console. Exit 1 if anything flags.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [string]$OutDir = "", [double]$OutlierFrac = 0.35, [double]$WowFrac = 0.40, [string]$HistoryFile = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

@@ -15,6 +15,7 @@
   Params: -Today <yyyy-MM-dd> (override for testing), -Force (pull regardless), -NoPull (use latest ads file),
           -NoDownstream (skip compare/history), -ScheduleFile <path> (default ad-schedule.json).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Today = "",
   [switch]$Force,
@@ -119,6 +120,7 @@ try {
 # as "test-auditors threw: ...", which reads like the test crashed rather than like the page never went
 # out. The helper sends the body BY FILE and makes a failed send its own loud log line. Full account, and
 # the reason every caller goes through it even when today's body looks short, in alert-lib.ps1.
+. (Join-Path (Split-Path $root -Parent) 'lib\chain-verdict-lib.ps1')   # Write-ChainVerdict: THE guard-verdict document, shared with capture-run and push-data
 . (Join-Path $root 'alert-lib.ps1')
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
 . (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
@@ -1062,12 +1064,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # could still reach every recipe card on the site while the board POST correctly stayed at last-good.
       # This file cannot answer that with an exit code - bakers-daily-scan and daily.yml both read its rc
       # and would change meaning - so it states the verdict where the publisher can read it.
+      # 2026-09-07: the document shape moved into lib\chain-verdict-lib.ps1 so that the WRITER and every
+      # READER share one definition of what a guard verdict is - including the input fingerprint, without
+      # which a same-day verdict says nothing about whether guards ever saw THIS board. $guardsRc is the
+      # exit code observed four lines above; nothing here can name a verdict it did not measure.
       try {
-        ([ordered]@{
-          date = $asofS; written = (Get-Date).ToString('s'); guards_rc = $guardsRc
-          guards_blocked = [bool]$guardsBlocked
-          note = 'Written by check-ad-cycles after guards. capture-run reads guards_blocked before it stages public\** or meal-prep\** - a board the gate rejected must never reach the edge.'
-        } | ConvertTo-Json -Depth 4) | Set-Content -Path (Join-Path $OutDir 'chain-verdict.json') -Encoding UTF8
+        [void](Write-ChainVerdict -Repo (Split-Path $root -Parent) -OutDir $OutDir -Date $asofS -GuardsRc $guardsRc -WrittenBy 'check-ad-cycles')
       } catch { Log ('chain-verdict write threw: ' + $_.Exception.Message) }
       if ($guardsBlocked) {
         # Do NOT reuse $boardChanged here: that would log "no price change today", which is a lie -

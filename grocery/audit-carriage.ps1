@@ -18,6 +18,7 @@
 #   -Thin       which bids ride on a single store, and what they would take down with them
 # Default runs all three. Read-only by design: reviving a recipe and taking one down are both Brad's
 # calls, and a watch that acts on its own findings is a watch nobody can trust with a wrong one.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 
 param([switch]$Live, [switch]$Revivable, [switch]$Thin, [switch]$Json, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

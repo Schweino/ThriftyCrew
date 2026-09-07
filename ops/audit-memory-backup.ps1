@@ -32,6 +32,7 @@
   Exit 0 clean, 2 a real finding, 3 BLIND (nothing to check - a pass that proves nothing).
   -Sync commits pending memory changes, then re-checks. -SelfTest runs frozen fixtures.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Sync, [switch]$SelfTest, [string]$MemoryDir = '')
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')

@@ -24,6 +24,7 @@
 # unchanged. -AllowFile matters more than it looks: the live allowlist is keyed commodity|store, so a real
 # allowlist entry added tomorrow could silently delete a fixture's gap and the test would pass by finding
 # nothing - the exact way the Lysol negative test stopped testing anything.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$CandidatesFile = "", [string]$ReportDir = "",
       [string]$CommoditiesFile = "", [string]$AllowFile = "", [string]$LedgerFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

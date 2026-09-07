@@ -18,6 +18,7 @@
 # belongs to the commodity-registrar. This check catches the doubanjiang class: a distinctive name that
 # never appears in what the search brings back. Claiming more would make it another gate that looks green
 # over the thing it cannot see.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 
 param([string]$OutDir = '', [int]$MinRows = 3, [switch]$Json, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

@@ -41,6 +41,7 @@
 $ErrorActionPreference = 'Continue'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')    # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\bot-paths.ps1')  # Get-BotInputPaths / Get-BotServedPaths: the ONE ownership list
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\chain-verdict-lib.ps1')  # Read-ChainVerdictStatus: the ONE reading of the guard verdict, shared with capture-run
 $root = $PSScriptRoot
 $repo = Split-Path $PSScriptRoot -Parent
 
@@ -49,21 +50,13 @@ $servedPaths = Get-BotServedPaths
 
 # THE GUARD VERDICT AS A VALUE, NEVER INFERRED FROM A LOG. check-ad-cycles writes it right after guards
 # run. A verdict from another DAY is not a verdict for this board, and an unreadable one admits nothing.
-$shipServed = $false
-$verdictWhy = 'no chain verdict for today was found'
-try {
-  $vf = Join-Path $root 'out\chain-verdict.json'
-  if (Test-Path -LiteralPath $vf) {
-    $v = Read-JsonFile $vf
-    $todayS = (Get-Date).ToString('yyyy-MM-dd')
-    if ([string]$v.date -eq $todayS) {
-      if ([bool]$v.guards_blocked) { $verdictWhy = 'guards BLOCKED today''s board' }
-      else { $shipServed = $true; $verdictWhy = 'guards passed today''s board' }
-    } else {
-      $verdictWhy = ("the newest chain verdict is for " + [string]$v.date + ", not today")
-    }
-  }
-} catch { $verdictWhy = ('chain-verdict unreadable: ' + $_.Exception.Message) }
+# 2026-09-07: nor is a verdict from earlier TODAY, if the artifacts guards scored have moved since. This
+# hand-run path is the one most exposed to that - it is used hours after the chain, by which time
+# commodities.json or the pins may well have been edited - so it reads through the shared library and
+# ships only on PASS. STALE-INPUTS is not a lesser BLOCKED; it means nobody has measured this board.
+$verdict = Read-ChainVerdictStatus -Repo $repo -OutDir (Join-Path $root 'out')
+$shipServed = $verdict.ship_ok
+$verdictWhy = $verdict.why
 
 $commitMsg = 'Local browser-store refresh ' + (Get-Date -Format 'yyyy-MM-dd HH:mm')
 $BotName   = 'smp-pipeline-bot'

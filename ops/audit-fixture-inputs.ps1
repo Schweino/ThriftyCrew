@@ -33,6 +33,7 @@
 #   ops\audit-fixture-inputs.ps1 -Update    rewrite the baseline (a deliberate act, after a real repair)
 #   ops\audit-fixture-inputs.ps1 -SelfTest  frozen must-fire fixtures + clean twins
 # Exit 0 = no new dependency. 1 = a NEW one. 2 = self-test regression. 3 = BLIND (no self-tests found).
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Update)
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent

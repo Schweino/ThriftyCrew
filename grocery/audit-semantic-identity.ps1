@@ -43,6 +43,7 @@
 # -Python exists so the BLIND path is TESTABLE. A failure mode nobody can exercise on demand is a
 # failure mode nobody has actually verified, and "it degrades gracefully" is the easiest claim in
 # software to believe and never check.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Python = '', [switch]$IncludeIdentity,
       # LANE 3 ONLY (phase 3, 2026-08-23). The contested questions come from the graph and are 97%
       # recipe-namespace, which the staple catalogue cannot define; the identity and coverage lanes
@@ -53,7 +54,9 @@ param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Py
       # thing that runs this - the 07:00 and 08:00 jobs do too - and flags passed by one caller
       # would mean the last sweep of the day silently overwrote contested-scores.json with a
       # 15-of-435 version scored by the wrong model. One default, every caller, one file.
-      [string]$ContestedDefs = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\data\commodity-defs-graph.json'),
+      # EMPTY, resolved below the block: [CmdletBinding()] leaves $PSScriptRoot empty in a param
+      # default under PS 5.1, and Split-Path '' -Parent throws. The default itself is unchanged.
+      [string]$ContestedDefs = '',
       # v3 WAS promoted here on 2026-08-23 and the promotion was REVERTED the same night. It beat v1
       # on all three cold hardeval numbers and filtered 18 of the live 435 where v1 filtered 21, and
       # every one of those differences turned out to be the training shuffle. Four seeds per arm:
@@ -61,7 +64,7 @@ param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Py
       # the recipe held fixed. A single training run cannot separate two fine-tunes on these arenas,
       # so ANY future candidate must be compared over >= 3 seeds before it reaches this line.
       # v1 stands because it is the model phase 3 documents and the one that has actually run.
-      [string]$Helper = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\models\resolve-ce-v1'),
+      [string]$Helper = '',
       [switch]$NoHelper,
       # PIN THE RULINGS THE HARNESS JUDGES AGAINST (2026-09-06, PLAN-top5 area 4). Empty = the live
       # known-wrong.json on the production path, and the FROZEN fixture under -SelfTest. The self-test's
@@ -72,6 +75,8 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+if (-not $ContestedDefs) { $ContestedDefs = Join-Path (Split-Path $root -Parent) 'sidecar\data\commodity-defs-graph.json' }
+if (-not $Helper)        { $Helper        = Join-Path (Split-Path $root -Parent) 'sidecar\models\resolve-ce-v1' }
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
 $OutDir  = Join-Path $root 'out'
 $sidecar = Join-Path (Split-Path $root -Parent) 'sidecar'

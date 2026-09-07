@@ -25,11 +25,13 @@
   Exit 0 = every gate passed. 1 = at least one failed. 3 = could not evaluate (found no self-tests at all,
   which would mean the discovery is broken rather than the tree being clean).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ListOnly, [int]$Jobs = 0)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\ps-source.ps1')   # Get-PsCodeOnly - no param() block, so it cannot reset ours
 
 # Self-tests that cannot run hermetically, with the reason. Keyed by file name, same standard as every other
 # allowlist here: a line is a decision someone defends in a diff, not a way to make the gate quiet.
@@ -66,7 +68,12 @@ foreach ($s in $scripts) {
   # lines are stripped first now, so writing about the switch can never enrol a script that does not
   # take it. This file's own recursion is the proof; the same shape would quietly enrol any script
   # whose header merely discusses self-testing, and then fail it for not accepting the argument.
-  $code = ($t -split "`r?`n" | Where-Object { $_ -notmatch '^\s*#' }) -join "`n"
+  # 2026-09-07: BLOCK comments too. The 2026-09-01 fix above stripped only LINE comments, so a
+  # `<# ... #>` header explaining why a file has NO self-test enrolled it AS one - the same defect
+  # this rule exists to prevent, one comment syntax over, and it means run-gates could report green
+  # coverage for a self-test that does not exist. Nine other places in the estate reduce source the
+  # same way, so the reduction lives in lib\ps-source.ps1 rather than here.
+  $code = Get-PsCodeOnly -Text $t
   if ($code -match '\[switch\]\$SelfTest' -or $code -match '\$__\w*SelfTest\s*=') { $withSelfTest += $s }
 }
 
@@ -79,6 +86,17 @@ if ($ListOnly) {
 if (-not $withSelfTest.Count) {
   Write-Output 'run-gates: COULD NOT EVALUATE - discovered zero self-tests, which means this discovery is broken, not that the tree is clean'
   Write-GuardComplete -Name 'run-gates' -Summary 'blind=no-selftests'
+  exit 3
+}
+# A FLOOR, NOT JUST A ZERO CHECK (2026-09-07). The test above only catches discovery collapsing to
+# nothing; a walk that lost most of the tree - a moved directory, a broken exclusion, a regex that
+# stopped matching - would find twelve, run twelve, and print a confident green. The Python half of
+# this file has carried exactly this floor since it shipped; the PowerShell half did not. 201 were
+# discovered on 2026-09-07 after the block-comment fix below removed 8 libraries that had been
+# enrolled by their own headers, so 150 is a wide margin that still notices a collapse.
+if ($withSelfTest.Count -lt 150) {
+  Write-Output ("run-gates: COULD NOT EVALUATE - PowerShell self-test DISCOVERY found only {0} suite(s); it found 201 on 2026-09-07. That is the walk broken, not the tree clean." -f $withSelfTest.Count)
+  Write-GuardComplete -Name 'run-gates' -Summary ("blind=selftest-discovery-collapsed n=" + $withSelfTest.Count)
   exit 3
 }
 
@@ -263,6 +281,8 @@ $static = @(
   # no Get-ScheduledTask), which is why it is a wrapper rather than install-grocery-tasks itself: that
   # file's default mode reads the live scheduler and this list passes no arguments.
   @{ f = 'ops\audit-task-registry.ps1';        n = 'every task the registrar registers is watched under the same name, and no legacy name survives in the registry' }
+  @{ f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
+  @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
 )
 # Same guard the loop applies, so nothing is spawned for a file the loop will skip.
 $staticJobs = [Collections.Generic.List[object]]::new(); $staticKeys = [Collections.Generic.List[string]]::new()

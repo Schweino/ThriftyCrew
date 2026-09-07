@@ -23,6 +23,7 @@
 
   Exit 0 = every case holds. Exit 1 = at least one rule no longer does what its case says.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$File = '', [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

@@ -24,8 +24,12 @@ INTENTIONAL DROPS
 
 EXIT CODES   0 = ok   2 = unacknowledged regression (publish should HOLD)
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
-  [string]$OutDir = (Join-Path $PSScriptRoot 'out'),
+  # NOT (Join-Path $PSScriptRoot 'out'): under [CmdletBinding()] PS 5.1 evaluates a param default
+  # with $PSScriptRoot EMPTY, and Join-Path then throws before the script's first line runs.
+  # Resolved below the block instead. (Proven minimally 2026-09-07; this file hard-failed guards.)
+  [string]$OutDir = '',
   [string]$New = "",              # newest board; default = newest comparison-*.json
   [string]$Prev = "",             # baseline;    default = newest comparison-*.json with an EARLIER date
   [int]$MaxDropPct = 10,
@@ -33,6 +37,7 @@ param(
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
+if (-not $OutDir) { $OutDir = Join-Path $PSScriptRoot 'out' }
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 function BoardFiles {

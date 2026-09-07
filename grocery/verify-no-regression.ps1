@@ -24,6 +24,7 @@
   matters (every OTHER commodity, which is where theft shows up) instead of forcing the caller to skip the
   check entirely. Pass ONLY the ids you edited.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [Parameter(Mandatory = $true)][string]$Baseline,
   [string]$New = "",

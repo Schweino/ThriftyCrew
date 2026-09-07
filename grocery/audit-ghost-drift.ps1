@@ -33,6 +33,7 @@
   Usage: .\audit-ghost-drift.ps1 [-ShowDiff] [-Discover] [-Accept <slug>] | -SelfTest
   Exit:  0 = every mapped tool matches (or is allowlisted), 1 = drift found, 3 = could not evaluate
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ShowDiff, [switch]$Discover, [string]$Accept = '', [switch]$Recipes, [int]$Limit = 0, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

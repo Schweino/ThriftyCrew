@@ -40,6 +40,7 @@
   { "bucket-name": [ <rule>, ... ], "_d1SizeGB": 4.03 }, exactly what the lifecycle endpoint returns.
   Useful when the only credential available is a browser session rather than an API token.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Quiet, [string]$CompareFile)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

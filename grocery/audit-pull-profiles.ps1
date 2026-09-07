@@ -20,6 +20,7 @@
   -SelfTest runs the frozen fixtures: the founding bug (a mirror that drifted from the registry)
   plus clean twins that must pass.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 
 $ErrorActionPreference = 'Stop'

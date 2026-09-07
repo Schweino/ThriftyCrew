@@ -53,6 +53,7 @@
     .\audit-json-encoding.ps1            check
     .\audit-json-encoding.ps1 -SelfTest
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [string]$Root = '')
 
 $ErrorActionPreference = 'Stop'

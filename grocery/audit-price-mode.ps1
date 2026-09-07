@@ -22,6 +22,7 @@
 
   Exit codes: 0 = clean, 2 = a store is shipping non-shelf prices, 3 = BLIND (no file examined for a mode-sensitive store).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$RegularDir = '')
 
 $ErrorActionPreference = 'Stop'

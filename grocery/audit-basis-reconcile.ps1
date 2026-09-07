@@ -55,6 +55,7 @@
 # is unchanged. It exists so a FIXTURE run can park its report beside its fixture instead of overwriting the
 # live one: test-auditors passes fixture boards via -CompareFile but the report path was hardcoded, so every
 # harness run replaced the real board's reconciliation with a fixture's.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [switch]$Strict, [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

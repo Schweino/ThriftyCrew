@@ -24,6 +24,7 @@
   audit that walks the tree by extension is a hazard in itself. This asks git for its file list and
   looks only at the source extensions where a control byte can never be legitimate.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path

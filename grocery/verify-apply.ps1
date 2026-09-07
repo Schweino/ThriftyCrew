@@ -27,6 +27,7 @@
 
   A human overturn wins: a keep=true verdict whose identity matches a suppressed item REMOVES the suppression.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [string]$VerdictFile = "", [string]$OutDir = "", [int]$MinStores = 2,
       # Write somewhere other than verified-<week>.json. Used to build a SECOND, MinStores-1 verified board
       # purely as the price-history input: history must bank verified numbers, but it must also keep tracking

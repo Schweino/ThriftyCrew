@@ -29,6 +29,7 @@
   Exit 0 = clean, 2 = a new orphan or a new out\ one-off, 3 = could not evaluate (never read that as "ok").
   Usage: audit-script-census.ps1 [-Root <dir>] [-ScanRoot <repo>] [-OutBaseline <n>]
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Root,                  # dir whose .ps1 are the population   (default: this script's dir)
   [string]$ScanRoot,              # dir whose exec files are searched    (default: the repo above $Root)

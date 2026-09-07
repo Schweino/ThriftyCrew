@@ -4,6 +4,7 @@
   per commodity, the ranked store entries that would publish (store, item, size, unit price, sale/everyday).
   This is the input an LLM judges in stage 2 (is each item the PLAIN commodity in a comparable form?).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

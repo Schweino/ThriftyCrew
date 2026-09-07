@@ -51,6 +51,7 @@
   Usage:  audit-shelf-signal.ps1            (exit 0 always; 3 only if it could not read a board)
           audit-shelf-signal.ps1 -SelfTest
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Root,
   [switch]$SelfTest

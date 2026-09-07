@@ -43,6 +43,7 @@
   Exit 0 = every case behaved. 1 = a case regressed (the semantics moved; step 2's precedence logic
   is now wrong). 3 = could not evaluate (the fixture tree could not be built).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

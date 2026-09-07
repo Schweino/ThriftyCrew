@@ -26,6 +26,7 @@
     ops\json-reader-parity.ps1 -OutFile <p>    write the full per-file record as JSON
   Exit 0 = the difference is exactly the expected set. 1 = findings. 3 = BLIND (no files found).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([int]$Limit = 0, [switch]$Deep, [string]$OutFile = '')
 $ErrorActionPreference = 'Continue'
 $repo = Split-Path $PSScriptRoot -Parent

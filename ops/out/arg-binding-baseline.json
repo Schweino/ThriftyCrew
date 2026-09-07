@@ -1,0 +1,9 @@
+﻿{
+    "unbound":  0,
+    "examined":  117,
+    "generated":  "2026-09-07T15:16:23",
+    "names":  [
+
+              ],
+    "note":  "High-water mark for the arg-binding ratchet (2026-09-07, the verify-bulk-edit -Paths drop). This number may only go DOWN. A run above it means a NEW checking script can silently ignore an argument it was given."
+}

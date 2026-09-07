@@ -53,6 +53,7 @@
 # cannot cross a `powershell -File` argument boundary, and PS 5.1 strips embedded double quotes
 # from a native exe's arguments, so a JSON literal would not survive either. The self-test drives
 # the live ratchet through this.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$List, [string]$OutDir = '', [string]$BaselineSpec = '')
 
 $ErrorActionPreference = 'Stop'

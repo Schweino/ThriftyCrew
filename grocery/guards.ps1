@@ -35,6 +35,7 @@
 # -NoIdentityGate: switch off the board-vs-identity parity check (guard 13). It ships ADVISORY and is
 # promoted to blocking by Brad, not by the builder (PLAN section 10.17); this flag plus dropping
 # -IdentityNamespace from check-ad-cycles is what makes step 1 revertible without a code revert.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Quiet, [switch]$NoIdentityGate)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

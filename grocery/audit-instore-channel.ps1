@@ -56,6 +56,7 @@
   It APPENDS: audit-sale-fallback.ps1 rewrites that file wholesale, so this must run AFTER it in the chain
   and must preserve what it wrote. Overwriting would silently drop the sale-fallback queue.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$WorklistFile = "", [string]$AllowlistFile = "", [switch]$NoWorklist)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

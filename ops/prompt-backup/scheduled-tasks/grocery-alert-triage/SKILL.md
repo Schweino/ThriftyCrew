@@ -33,6 +33,31 @@ gates it identically - it has demanded a `root_fix` (or a written `root_fix_none
 them. If a cheap item turns out on contact to be substantive, PROMOTE it to Class A and give it to the
 reviewer; the tier is a starting estimate, not a verdict. Cheapness is never a reason to skip the class fix.
 
+**WHAT YOU FIND WHILE FIXING IS PART OF THE RUN, NOT A LIST FOR BRAD (2026-09-07, his ruling).** A defect
+discovered during implementation is a defect this run found, so this run fixes it - the instance AND the
+class behind it - in the same plan, under the same gate, with the same `root_fix` / `must_fire_case` /
+`clean_twin` fields. Handing Brad a numbered backlog of things you were already standing in front of is
+not a report, it is homework, and it converts work you could have finished into work he has to schedule.
+NEVER FIX TO FIX. Every repair ships with whatever stops that alert class recurring, or a written
+`root_fix_none_because`. A run that closes an alert without answering "why can this happen again" has
+deferred the real work no matter how green the board looks.
+The founding case is 2026-09-07: the run closed 12 alerts across two rounds and then handed Brad 16 open
+items. Eight were genuine rulings. The other eight were discovered defects the run was already touching -
+`ops/verify-bulk-edit.ps1` missing `[CmdletBinding()]` so `-Paths` was silently swallowed and an UNSCOPED
+47-file sweep exited 0 inside a verification tool; `ops/run-gates.ps1` stripping line but not block
+comments so a `<# #>` header enrolled a file as having a self-test it did not have; a stale
+`chain-verdict.json` that would refuse a hand-run publish. All three were cheap, all three were in hand,
+and all three were written down instead of fixed.
+THE ONE THING THAT STILL GOES TO BRAD IS A RULING, NOT A FIX. A judgement about what we sell or what the
+business wants ("is pork and beans a baked bean", "should this guard block or advise") has no root cause
+to deduce and is his call; park it as needs-brad with the evidence and the consequence of each option, per
+the decisions-as-choices rule. A DEFECT is never that, however small, however far from the alert that
+found it. If you are unsure which one you are holding, ask whether a competent engineer could be wrong
+about it: a defect has a right answer, a ruling has a preference.
+CAP IT HONESTLY. If discovered work is genuinely too large to finish in the run, it does not silently
+become a list - it becomes its own queue item with a measurement, so the next scheduled run picks it up
+through the same machinery rather than depending on Brad to re-enter it by hand.
+
 The handoff is a FILE, never a message: `grocery/triage-plans/plan-<yyyy-MM-dd>[-N].json`, schema in
 `grocery/triage-plans/README.md`. Read that README once before you start so you can check the plan is
 well formed.
@@ -195,6 +220,11 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
 - Alert hygiene: if any queue entry carries `body_thin: true`, the ALERT is the bug as much as the
   condition it describes. Say so in the report; an alert nobody can classify from its own body cannot be
   triaged without hunting the data by hand.
+BEFORE YOU WRITE THE REPORT, RE-READ IT FOR DEFERRED WORK. Any line that tells Brad a defect exists and
+was not fixed is a line you should have spent fixing it. Go back and fix it, or say in the report why it
+was genuinely blocked (a foreign dirty file, another owner mid-edit, a decision only he can make). "I ran
+out of run" is not a blocker, it is an unbounded item that should have become a queue entry. The only
+things that belong in a to-Brad list are RULINGS and items with a named blocker.
 Report per item: queue id, classification, what shipped, and whether the board republished. Then the
 clean-tree line. If a stage failed, say so with its output rather than summarising it away.
 

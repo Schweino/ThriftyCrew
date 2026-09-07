@@ -42,6 +42,7 @@
 # in the output - so a real ruling on the real hummus row silenced the test that proves the fingerprint is
 # not over-broad. A fixture whose outcome depends on production data is not a fixture. Default is the live
 # list; the drill passes its own path.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [switch]$Strict, [string]$ReportDir = "", [string]$AllowFile = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

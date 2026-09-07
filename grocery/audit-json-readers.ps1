@@ -36,6 +36,7 @@
 #   .\audit-json-readers.ps1 -Baseline    (re-)write the high-water mark from the current count
 #   .\audit-json-readers.ps1 -SelfTest    frozen must-fire + clean twins
 # Exit 0 = at or below the baseline. Exit 2 = ratchet broken, or a self-test regression. Exit 3 = BLIND.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Root = '', [string]$OutDir = '', [switch]$Baseline, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')

@@ -51,6 +51,7 @@
     .\audit-capture-encoding.ps1 -SelfTest    frozen must-fire + clean twins
   Exit 0 = every capture is unambiguous. 2 = at least one is not. 3 = BLIND (no capture files to judge).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Root = '', [switch]$Fix, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')

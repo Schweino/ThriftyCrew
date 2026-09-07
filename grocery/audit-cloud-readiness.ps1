@@ -25,6 +25,7 @@
 
   Usage: .\audit-cloud-readiness.ps1 [-ShowAll] | -SelfTest
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ShowAll, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')

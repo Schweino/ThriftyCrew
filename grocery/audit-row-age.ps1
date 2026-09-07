@@ -25,6 +25,7 @@
 # Run:  .\audit-row-age.ps1               exit 0 clean, 1 = hard finding or ratchet regression
 #       .\audit-row-age.ps1 -Baseline     re-record the baseline (do this only after a deliberate change)
 #       .\audit-row-age.ps1 -SelfTest
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest,[switch]$Baseline,[int]$MaxDays=0,[double]$Tolerance=2.0,[string]$OutDir)
 # MaxDays defaults to the capture policy's carry (90) - Brad 2026-08-22: no 14-day window anywhere. The
 # self-test passes 14 explicitly because it tests the profiler's arithmetic, not the policy.

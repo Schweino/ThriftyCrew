@@ -48,6 +48,7 @@
     audit-store-taxonomy.ps1 -SelfTest       frozen must-fire + clean-twin fixtures, no live data
     audit-store-taxonomy.ps1 -FailOnFlag     exit 2 on any disagreement (NOT wired into the publish)
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Root = "",
   [string]$OutDir = "",

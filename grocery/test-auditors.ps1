@@ -1788,19 +1788,37 @@ if ($crSrc -match 'smp-pipeline-bot' -and $crSrc -match 'push origin HEAD:main')
 if ($crSrc -match '\$servedPaths' -and $crSrc -match '\$inputPaths') {
   Ok 'capture-run separates INPUT paths from SERVED paths'
 } else { Bad 'capture-run no longer separates served from input paths - a blocked board or a capture-only run can ship public\** again' }
-if ($crSrc -match '\$shipServed\s*=\s*\$runDownstream\s+-and\s+\$verdictSeen\s+-and\s+\(-not\s+\$guardsBlocked\)') {
-  Ok 'served files ship ONLY when the chain ran AND guards passed (verdict read, never inferred)'
+# 2026-09-07: the gate now reads through lib\chain-verdict-lib.ps1, whose ship_ok is true ONLY for a
+# verdict that is today's AND whose recorded input fingerprint still matches the tree. Pinning
+# `-and $verdict.ship_ok` pins the whole rule, because ship_ok is the only property that carries it.
+if ($crSrc -match '\$shipServed\s*=\s*\$runDownstream\s+-and\s+\$verdict\.ship_ok') {
+  Ok 'served files ship ONLY when the chain ran AND the guard verdict is a fresh pass (verdict read, never inferred)'
 } else { Bad 'the served-path gate changed shape - public\** may ship without a passing guard verdict' }
+if ($crSrc -match 'chain-verdict-lib\.ps1' -and $crSrc -notmatch '\[bool\]\$v\.guards_blocked') {
+  Ok 'capture-run reads the verdict through the shared library, not by re-deriving the date rule inline'
+} else { Bad 'capture-run reads chain-verdict.json by hand again - the date-only rule that trusted a stale PASS is back' }
 if ($crSrc -notmatch "git -C \$repo add -A -- '?public") {
   Ok 'capture-run never stages public\ unconditionally'
 } else { Bad 'capture-run stages public\ unconditionally again' }
 if ($crSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\tc-capture-run'\)") {
   Ok 'capture-run holds a machine-wide lock (overlapping scheduled + manual runs cannot share a git index)'
 } else { Bad 'capture-run LOST its mutex - two runs can rebase the same tree at once' }
-# the verdict must be WRITTEN by the chain, or the reader above silently degrades to "no verdict, no ship"
-if ($cacSrc -match 'chain-verdict\.json' -and $cacSrc -match 'guards_blocked') {
-  Ok 'check-ad-cycles states its guard verdict as a value (out\chain-verdict.json)'
-} else { Bad 'check-ad-cycles no longer writes chain-verdict.json - capture-run cannot tell a blocked board from a clean one' }
+# the verdict must be WRITTEN by the chain, or the reader above silently degrades to "no verdict, no ship".
+# ASSERT THE CALL, NOT A MENTION. Until 2026-09-07 this matched the strings 'chain-verdict.json' and
+# 'guards_blocked' anywhere in the file - and after the writer moved into the shared library, the ONLY
+# thing still satisfying it was a COMMENT on line 1279 explaining what the publisher reads. A check a
+# comment can pass is not a check. It now pins the call and the library that defines the document.
+$cacCode = ($cacSrc -split "`r?`n" | Where-Object { $_ -notmatch '^\s*#' }) -join "`n"
+$cvLibSrc = [IO.File]::ReadAllText((Join-Path (Split-Path $root -Parent) 'lib\chain-verdict-lib.ps1'))
+if ($cacCode -match 'Write-ChainVerdict\s+-Repo' -and $cacCode -match "chain-verdict-lib\.ps1") {
+  Ok 'check-ad-cycles states its guard verdict as a value, through the one writer (lib\chain-verdict-lib.ps1)'
+} else { Bad 'check-ad-cycles no longer CALLS Write-ChainVerdict - capture-run cannot tell a blocked board from a clean one' }
+if ($cacCode -match 'Write-ChainVerdict[^\n]*-GuardsRc\s+\$guardsRc') {
+  Ok 'the verdict carries the exit code guards actually returned, not a value the caller chose'
+} else { Bad 'check-ad-cycles passes something other than the observed $guardsRc to the verdict writer' }
+if ($cvLibSrc -match 'inputs_fingerprint' -and $cvLibSrc -match "'STALE-INPUTS'") {
+  Ok 'the guard verdict records an input fingerprint, so a same-day PASS over inputs that have since moved reads STALE and never ships'
+} else { Bad 'the chain verdict lost its input fingerprint - a PASS from before a commodities.json edit would ship an ungated board again' }
 # and the watchdog must ask the question that speaks for the READER, not for the pipeline
 $cwSrc = Get-Content (Join-Path $root 'capture-watchdog.ps1') -Raw
 # ASSERT THE QUESTION, NOT ITS PUNCTUATION. This used to pin the literal "log --author='smp-pipeline-bot'",

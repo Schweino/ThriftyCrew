@@ -16,6 +16,7 @@
   is entirely absent (0 prices -> skipped) is reported as a warning but is a separate/louder alarm, not a hard
   fail here (it would take the whole board down over one bad commodity).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$Embed = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

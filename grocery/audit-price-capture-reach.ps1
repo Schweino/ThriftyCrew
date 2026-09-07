@@ -40,6 +40,7 @@
   Usage: audit-price-capture-reach.ps1 [-OutDir <dir>] [-Quiet] [-SelfTest]
   Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [switch]$Quiet, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

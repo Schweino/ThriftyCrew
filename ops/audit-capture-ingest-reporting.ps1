@@ -30,11 +30,13 @@
 
   Self-test: powershell -File ops\audit-capture-ingest-reporting.ps1 -SelfTest
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\ps-source.ps1')   # Get-PsCodeOnly / Get-PsCodeLines - block comments too, no param() block so it cannot reset ours
 
 $READER = 'Import-CaptureCsv'
 $MUST_REPORT = @('CapturePlaceholderCount', 'CaptureIngestWarning')
@@ -48,7 +50,9 @@ function Get-TcIngestReportingProblems {
   $out = @()
   foreach ($f in @($Files)) {
     if ($f.Name -eq 'capture-lib.ps1') { continue }
-    $code = @($f.Lines | Where-Object { $_ -notmatch '^\s*#' })
+    # Get-PsCodeLines, not a line-comment filter: a `<`# block header naming the reader would make
+    # this file look like a CALLER of it and then demand reporting it never needed to do.
+    $code = Get-PsCodeLines -Text (@($f.Lines) -join "`n")
     $calls = $false
     foreach ($l in $code) { if ($l -match [regex]::Escape($Reader)) { $calls = $true; break } }
     if (-not $calls) { continue }
@@ -118,7 +122,7 @@ if (-not $files.Count) {
 }
 $problems = Get-TcIngestReportingProblems -Files $files -Reader $READER -MustReport $MUST_REPORT
 $problems = @($problems)
-$callers = @($files | Where-Object { $_.Name -ne 'capture-lib.ps1' -and (@($_.Lines | Where-Object { $_ -notmatch '^\s*#' -and $_ -match [regex]::Escape($READER) }).Count) }).Count
+$callers = @($files | Where-Object { $_.Name -ne 'capture-lib.ps1' -and (@(Get-PsCodeLines -Text (@($_.Lines) -join "`n") | Where-Object { $_ -match [regex]::Escape($READER) }).Count) }).Count
 
 if ($problems.Count) {
   Write-Output ("CAPTURE-INGEST-REPORTING AUDIT FAILED: {0} caller(s) of {1} drop rows at ingest without reporting it. A drop that nobody reads is a clean bill - a feed returning mostly placeholders would produce a small, confident board and a success line." -f $problems.Count, $READER)

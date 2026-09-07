@@ -11,6 +11,7 @@
   written to research-worklist.json for the weekly agent to research the next-cheapest everyday item, and the
   daily job alerts. Output: out\sale-fallback-gaps.json + out\research-worklist.json; exit 2 if any gaps.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$AutomationsFile = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

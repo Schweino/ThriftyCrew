@@ -65,6 +65,7 @@
     overwriting the live report (the audit-basis-reconcile lesson).
   Exit: 0 = every provable template resolves, 2 = a finding, 3 = could not evaluate (all UNPROVABLE).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [switch]$Alert,
   [switch]$Accept,

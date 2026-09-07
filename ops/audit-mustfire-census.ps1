@@ -25,6 +25,7 @@
 #   ops\audit-mustfire-census.ps1 -Update    rewrite the baseline (deliberate, after a real change)
 #   ops\audit-mustfire-census.ps1 -SelfTest  frozen must-fire fixtures + clean twins
 # Exit 0 = nothing lost. 1 = a file lost must-fire assertions. 2 = self-test regression. 3 = BLIND.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Update)
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent

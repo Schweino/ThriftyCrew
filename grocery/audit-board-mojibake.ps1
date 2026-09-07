@@ -29,6 +29,7 @@
 #
 # Run:  .\audit-board-mojibake.ps1
 #       .\audit-board-mojibake.ps1 -SelfTest
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [string]$OutDir, [string]$Board, [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }

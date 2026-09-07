@@ -16,6 +16,7 @@
   Run:  powershell -NoProfile -File grocery\test-push-data.ps1
   Exit: 0 pass, 1 a case failed, 3 could not find the lane (BLIND - nothing was proven).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)   # accepted so ops\run-gates.ps1 discovers this file; the cases run either way
 $ErrorActionPreference = 'Continue'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\bot-paths.ps1')

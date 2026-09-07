@@ -31,6 +31,7 @@
     .\audit-commodity-dupes.ps1
     .\audit-commodity-dupes.ps1 -SelfTest
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Root = '', [string]$OutDir = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }

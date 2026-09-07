@@ -16,12 +16,16 @@
   To guarantee the rules never drift, GLOBAL_EXCLUDE is parsed out of compare-deals.ps1 itself
   rather than copy-pasted here.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
-  [string]$FillsFile = "$PSScriptRoot\out\newitem-candidates.json"
+  # Resolved BELOW the block: under [CmdletBinding()] PS 5.1 expands $PSScriptRoot to '' inside a
+  # param default, so this string became "\out\newitem-candidates.json" - a path off the drive root.
+  [string]$FillsFile = ''
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
+if (-not $FillsFile) { $FillsFile = Join-Path $root 'out\newitem-candidates.json' }
 
 # --- pull the live GLOBAL_EXCLUDE straight out of compare-deals.ps1 (no copy = no drift)
 $src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw

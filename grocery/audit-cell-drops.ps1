@@ -11,6 +11,7 @@
   ZERO now that carry-forward walks the whole window - so anything listed is a real, new leak.
   ADVISORY (exit 1, never 2; exit 3 = BLIND, examined nothing): the board holding a true price matters more than perfect coverage.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([int]$CompareAgeDays = 5)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

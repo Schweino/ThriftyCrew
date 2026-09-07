@@ -34,6 +34,7 @@
   original, or a shard could not be run (then nothing is proven and the caller must treat match-lib as
   unverified - a corpus that quietly got smaller is the failure mode this whole file exists against).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Quiet, [int]$MaxNames = 0, [int]$Workers = 0,
       # SHARD MODE - set by the parent on its own children, never by a human. The parent hands over the
       # exact name list it built (so a shard can never be measuring a different corpus than its siblings),

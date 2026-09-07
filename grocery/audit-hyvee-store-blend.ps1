@@ -26,6 +26,7 @@
   Usage: audit-hyvee-store-blend.ps1 [-OutDir <dir>] [-Quiet]
   Exit 0 always (advisory). Exit 3 = BLIND (no file to read).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

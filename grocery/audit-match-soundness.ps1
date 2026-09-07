@@ -17,6 +17,7 @@
           -Accept    bless the CURRENT state as the new baseline (run after an intended rule change)
           -Alert     send-alert.ps1 once per NEW issue-set (signature de-dup) - for the daily pipeline
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # -ForceAccept: bless the baseline EVEN OVER outstanding DROP verdicts. The gate below exists because
   # -Accept used to be a rubber stamp: on 2026-07-29 it baselined "Smithfield ... Pork Loin Filet -> bacon"

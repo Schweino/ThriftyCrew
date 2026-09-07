@@ -18,6 +18,7 @@
 #        BOARD was right and the LINK was stale. Blocking a publish on that would hold a correct board.
 #    3 = could not evaluate (it had cells to check and checked none). The house rule: a check that examined
 #        nothing must never report ok.
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

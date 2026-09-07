@@ -19,6 +19,7 @@
   name can never deadlock the daily publish. Exit 0 = clean, 2 = wrong-class match found (do not publish),
   3 = BLIND (zero priced cells scanned - the guard proved nothing).
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

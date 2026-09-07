@@ -49,6 +49,7 @@
           audit-known-wrong.ps1 -ListFile <path>     (fixture list)
           audit-known-wrong.ps1 -Report              (also write out\known-wrong-report.json)
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Root,
   [string]$ListFile,

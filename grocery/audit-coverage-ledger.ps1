@@ -71,6 +71,7 @@
   unreadable ledger, for the reason audit-tile-integrity learned the hard way: accepting during the
   incident pins the high-water mark at its most useless value and disarms the ratchet permanently.
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$OutDir = '',
   [string]$BaselineFile = '',

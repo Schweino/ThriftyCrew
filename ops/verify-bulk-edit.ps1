@@ -30,6 +30,15 @@
 #   ops\verify-bulk-edit.ps1                 check every modified tracked file against HEAD
 #   ops\verify-bulk-edit.ps1 -SelfTest       frozen must-fire fixtures + clean twins
 # Exit 0 = every invariant holds. 1 = findings. 2 = self-test regression. 3 = BLIND (nothing to compare).
+# [CmdletBinding()] IS LOAD-BEARING HERE (2026-09-07). Without it a script is a simple command: an
+# argument that matches no declared parameter is not an error, it is dropped into $args and ignored.
+# Live during the 09-07 triage: an operator ran this file with `-Paths <one file>` to check a single
+# edit. There is no -Paths parameter and never was. PowerShell swallowed both tokens, the script ran
+# its UNSCOPED 47-file sweep over the whole working tree, found nothing, and exited 0 - which was read
+# as "my file is clean" when the file had never been singled out at all. The estate's
+# arg-silently-ignored shape, inside a VERIFICATION tool, which is the one place it can launder a
+# could-not-look into a pass. With this attribute the same command is a hard error at bind time.
+[CmdletBinding()]
 param([switch]$SelfTest, [switch]$Staged)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -229,8 +238,40 @@ if ($SelfTest) {
          ". (Join-Path `$__jioRoot 'lib\json-io.ps1')`n`$rc = Read-JsonFile `$p"
   $g = Get-DependencyGaps -Text $pre -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
   if (-not $g) { Write-Output '  PASS  CLEAN TWIN: the walk-up preamble NAMING the function in its throw message is not a call above the dot-source' } else { Write-Output "  FAIL  the estate's own correct preamble was reported as a defect ($g)"; $fail++ }
+  # ---- DEFECT 7: THE ARGUMENT NOBODY REFUSED (2026-09-07) -------------------------------------------
+  # The founding bug is this file's own: `-Paths <file>` bound to nothing, fell into $args, and the
+  # unscoped sweep exited 0. Asserting the ATTRIBUTE is present would be a check on a string; this
+  # spawns the real binder, because what matters is that PowerShell refuses the command.
+  # The flag name is BUILT, not written out, so this fixture is not itself a frozen literal that would
+  # freeze the header prose naming -Paths ([[selftest-greps-its-own-source]]).
+  # Start-Process, NOT `& powershell ... 2>&1`: redirecting a native exe's stderr inside PS 5.1 wraps
+  # each line in an ErrorRecord and, under EAP=Stop, terminates this script at exit code 0. The first
+  # cut of this very fixture did exactly that.
+  function Invoke-RcOnly {
+    param([string[]]$ScriptArgs)
+    $errF = Join-Path $env:TEMP ('vbe-fx-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.txt')
+    $all = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath) + $ScriptArgs
+    try {
+      $p = Start-Process -FilePath (Get-Command powershell).Source -ArgumentList $all -Wait -PassThru `
+             -NoNewWindow -RedirectStandardOutput $errF -RedirectStandardError ($errF + '.err')
+      return $p.ExitCode
+    } finally {
+      Remove-Item -LiteralPath $errF -Force -ErrorAction SilentlyContinue
+      Remove-Item -LiteralPath ($errF + '.err') -Force -ErrorAction SilentlyContinue
+    }
+  }
+  $bogus = '-' + 'Paths'
+  $rcBogus = Invoke-RcOnly -ScriptArgs @($bogus, 'somefile.json')
+  if ($rcBogus -ne 0) { Write-Output "  PASS  MUST FIRE: an undeclared parameter is a hard error, not a silent unscoped sweep (defect 7, rc=$rcBogus)" }
+  else { Write-Output '  FAIL  an undeclared parameter still binds to nothing and exits 0 - a scoped check that never scoped anything reads as clean'; $fail++ }
+  # CLEAN TWIN: the declared switch still binds and still runs. A fix that made every invocation fail
+  # would pass the must-fire above and be worthless.
+  $rcGood = Invoke-RcOnly -ScriptArgs @('-Staged')
+  if (@(0, 1, 3) -contains $rcGood) { Write-Output "  PASS  CLEAN TWIN: a DECLARED parameter still binds and the script still runs (rc=$rcGood)" }
+  else { Write-Output "  FAIL  a legitimate declared parameter stopped working (rc=$rcGood)"; $fail++ }
+
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal, dot-source below its callers) and every clean twin holds'
+  Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal, dot-source below its callers, undeclared parameter refused) and every clean twin holds'
   exit 0
 }
 
