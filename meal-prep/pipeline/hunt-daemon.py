@@ -8180,6 +8180,12 @@ class Daemon(object):
             for ch in self.CLOSES.get(name, ()):                  # or the next lane waits forever
                 self.ch[ch].close()
 
+    # THE LONGEST QUIET STRETCH THAT IS STILL ORDINARY, measured rather than chosen (2026-09-07,
+    # backlog E10). 3,490 s is the worst gap between lane events across 3,253 gaps in 17 completed
+    # runs; re-derive with meal-prep/pipeline/measure_heartbeat_gap.py when the lane mix changes.
+    # Rounded UP to the hour: a stall claim should be late and true rather than early and ignored.
+    LEGIT_QUIET_SEC = 3600
+
     async def status_heartbeat(self, every_sec):
         """Emit the status report every `every_sec` while the lanes drain.
 
@@ -8215,11 +8221,32 @@ class Daemon(object):
                        self.lane_lines, self.breaker.calls)
                 if key == prev:
                     still += 1
-                    self.log("")
-                    self.log("hunt-daemon heartbeat: NO PROGRESS for %d interval(s) (%d min) - "
-                             "accepted/resolved/qa-passed/lane-lines/agent-calls all unchanged. A "
-                             "hung lane looks exactly like a slow one; if this repeats, look."
-                             % (still, int(still * every_sec / 60)))
+                    quiet_sec = still * every_sec
+                    # CALIBRATED 2026-09-07 (backlog E10's open half), against 3,253 lane-event gaps
+                    # across 17 runs - meal-prep/pipeline/measure_heartbeat_gap.py, re-runnable:
+                    #     p50 1s   p90 39s   p95 100s   p99 542s   max 3490s
+                    # The longest LEGITIMATE quiet stretch on record is 3,490 s. The old message
+                    # called two intervals a stall and said "if this repeats, look" - and it repeats,
+                    # because ordinary slow work reaches nearly six. A stall warning that fires on
+                    # normal work is a stall warning nobody reads, which is the same argument this
+                    # estate makes about a gate that is red on day one.
+                    #
+                    # SECONDS, NOT INTERVALS, because the boundary is a measured duration and
+                    # --status-every is an argument: at 300 s the old "2 intervals" would have been
+                    # ten minutes, and at 1800 s ninety.
+                    if quiet_sec < self.LEGIT_QUIET_SEC:
+                        self.log("")
+                        self.log("hunt-daemon heartbeat: quiet for %d min - "
+                                 "accepted/resolved/qa-passed/lane-lines/agent-calls all unchanged. "
+                                 "Ordinary: the longest legitimate quiet stretch measured is %d min."
+                                 % (int(quiet_sec / 60), int(self.LEGIT_QUIET_SEC / 60)))
+                    else:
+                        self.log("")
+                        self.log("hunt-daemon heartbeat: NO PROGRESS for %d min, past the %d min "
+                                 "longest legitimate quiet stretch ever measured here (3,253 gaps "
+                                 "across 17 runs). A hung lane looks exactly like a slow one, and "
+                                 "this is no longer in the range of slow. Look."
+                                 % (int(quiet_sec / 60), int(self.LEGIT_QUIET_SEC / 60)))
                 else:
                     still = 0
                     prev = key

@@ -12673,9 +12673,43 @@ def _hb_heartbeat_reports_and_names_a_stall():
         joined = "\n".join(said)
         res.append(("MUST FIRE  the heartbeat emits a status report while the lanes drain",
                     "hunt-daemon status:" in joined, joined[:200] or "(said nothing)"))
-        res.append(("MUST FIRE  counters that never move are called out as NO PROGRESS, because a hung "
-                    "lane looks exactly like a slow one",
-                    "NO PROGRESS" in joined, joined[-260:] or "(said nothing)"))
+        # CALIBRATED 2026-09-07 (E10's open half). This used to assert that standing counters print
+        # NO PROGRESS immediately, and that was the defect: measured over 3,253 lane-event gaps in 17
+        # runs, ordinary quiet reaches 3,490 s - nearly six intervals at the shipped 600 s - so the
+        # old message called normal slow work a stall and said "if this repeats, look", and it
+        # repeated. Both sides are pinned so a later edit cannot collapse them back into one message.
+        res.append(("MUST NOT FIRE  a SHORT quiet stretch is reported as quiet and NOT as a stall - "
+                    "ordinary slow work reaches nearly six intervals, and a stall warning that fires "
+                    "on normal work is one nobody reads",
+                    ("quiet for" in joined) and ("NO PROGRESS" not in joined),
+                    joined[-260:] or "(said nothing)"))
+
+        # MUST FIRE - past the measured boundary it escalates. Driven by shrinking the boundary rather
+        # than by sleeping through an hour: the assertion is about the COMPARISON, and a fixture that
+        # waited out the real constant would not run.
+        d3 = daemon(run_dir=tmp)
+        d3.quiet = False
+        said3 = []
+        d3.log = lambda m: said3.append(str(m))
+        d3.status_report = lambda: "hunt-daemon status: drill-run\n  accepted        0"
+        d3.LEGIT_QUIET_SEC = 0.02
+
+        async def drive3():
+            hb3 = asyncio.ensure_future(d3.status_heartbeat(0.01))
+            await asyncio.sleep(0.25)
+            hb3.cancel()
+            try:
+                await hb3
+            except asyncio.CancelledError:
+                pass
+        arun(drive3())
+        joined3 = "\n".join(said3)
+        res.append(("MUST FIRE  a quiet stretch PAST the longest legitimate one measured is called out "
+                    "as NO PROGRESS, because a hung lane looks exactly like a slow one",
+                    "NO PROGRESS" in joined3, joined3[-260:] or "(said nothing)"))
+        res.append(("CLEAN TWIN the stall line names the boundary it passed, so the reader can judge "
+                    "it instead of trusting it",
+                    "longest legitimate quiet stretch" in joined3, joined3[-200:] or "(said nothing)"))
         res.append(("MUST FIRE  the heartbeat is cancellable - a reporting task that outlives the run "
                     "would hold the event loop open",
                     hb.cancelled() or hb.done(), "still running"))

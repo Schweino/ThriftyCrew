@@ -829,7 +829,7 @@ Three things this does NOT establish. Four pages is four pages. Haiku's fraction
 a general claim about Haiku. And nothing was measured about cost or latency, so even a clean
 agreement would not by itself have argued for the swap.
 
-### E10 - Long-running lanes have no progress tracking `PARTLY DONE` `9301d154`
+### E10 - Long-running lanes have no progress tracking `DONE - CALIBRATED 2026-09-07 AGAINST 3,253 GAPS` `9301d154`
 *Source: AI Agents Architecture (course 7).* The Recipe Hunter daemon runs far past the point where
 its initial plan is still near the front of context. Fix is a cheap end-of-iteration progress report
 every Nth loop; calibrate N by running plan-only and watching for where drift starts.
@@ -845,6 +845,37 @@ been checked against how long a real iteration takes, and the calibration this i
 watching where drift starts - does not apply to the defect that turned out to be there. What would
 be worth measuring instead is the longest legitimate gap between heartbeats, so a stall can be
 distinguished from a slow page fetch rather than merely being visible.
+
+**MEASURED 2026-09-07, and the interval was fine while the MESSAGE was wrong.**
+`meal-prep/pipeline/measure_heartbeat_gap.py` reads every run's `lane-log.jsonl` - one timestamped
+row per lane event - and takes the gap between consecutive rows, which is exactly how long the daemon
+went without the `lane_lines` counter moving. Over **3,253 gaps across 17 runs**:
+
+| p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|
+| 1 s | 39 s | 100 s | 542 s | **3,490 s** |
+
+**600 s as a reporting cadence is defensible** - it sits just above the p99. **What was wrong is the
+stall claim.** The longest LEGITIMATE quiet stretch is 3,490 s, which is 5.8 intervals, and the old
+message called two intervals NO PROGRESS and added "if this repeats, look". It repeats, on ordinary
+slow work. A stall warning that fires on normal work is a stall warning nobody reads - the same
+argument this estate makes about a gate that is red on day one.
+
+So the wording is split at the measured boundary and `LEGIT_QUIET_SEC = 3600` carries its derivation
+at the line: below it the run is **quiet** and says what the measured normal is; at or past it it is
+**NO PROGRESS** and names the boundary it passed, so a reader can judge the claim instead of trusting
+it. Counted in SECONDS rather than intervals, because the boundary is a duration and
+`--status-every` is an argument - at 300 s the old "2 intervals" meant ten minutes and at 1800 s
+ninety.
+
+**The overnight trap is handled and said out loud.** Eight gaps ran past an hour, the longest 10.9
+hours: those are runs somebody paused, not lanes being slow, so they are reported separately and
+excluded from the percentiles rather than silently kept - which makes the p99 meaningless - or
+silently dropped, which hides that a run was interrupted at all.
+
+**Both sides are pinned** in `hunt_daemon_selftest.py`, driven by a real interval, so a later edit
+cannot collapse them back into one message in either direction. The old fixture asserted the
+immediate NO PROGRESS and failed correctly the moment the behaviour changed.
 
 ### E18 - Tool arguments are untrusted model input, and our pattern does not validate them `DONE` `d2dc0cd5`
 *Source: AI Agents in TypeScript (course 10).* The Python decorator pattern in E11 **derives** a tool
