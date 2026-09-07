@@ -144,6 +144,25 @@ if (-not (Test-Path $py))      { Say 'harvest-crawl: CANNOT RUN - no python inte
 if (-not (Test-Path $harvest)) { Say 'harvest-crawl: CANNOT RUN - no harvest.py'; exit 2 }
 if (-not (Test-Path $logDir))  { New-Item -ItemType Directory -Force $logDir | Out-Null }
 
+# THE RUN RECORD (2026-09-06, backlog E29). This task runs -WindowStyle Hidden, so every line it
+# printed went to a console nobody ever saw, and its only persisted output was the subprocess text
+# appended below - which says what python did and nothing about whether THIS script finished or why.
+# crawl-<date>.log is KEPT: it holds output captured into a variable, which never reaches a
+# transcript. The transcript is the missing half, and Done() stamps the exit code as the last line so
+# "what happened on the 6th" is one tail away rather than a re-derivation from the task scheduler.
+# This sits AFTER the -SelfTest branch on purpose - a self-test has its own PASS/FAIL line and must
+# not leave a transcript behind on every gate run.
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'grocery\run-log-lib.ps1')
+# OutDir is grocery\out, NOT this lane's own $logDir: Start-RunLog appends 'logs' itself, and the
+# point of converging is that all five hidden tasks leave their run record in ONE place a human
+# looks at. crawl-<date>.log stays where it is - that is subprocess output, a different artefact.
+$runLog = Start-RunLog -Name 'harvest-crawl' -OutDir (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'grocery\out')
+function Done {
+  param([int]$Rc = 0)
+  Stop-RunLog -ExitCode $Rc -Path $runLog
+  exit $Rc
+}
+
 $stamp = (Get-Date).ToString('yyyy-MM-dd')
 $log = Join-Path $logDir ("crawl-{0}.log" -f $stamp)
 $args = @($harvest, '--crawl', '--limit', $Limit, '--per-domain', $PerDomain)
@@ -214,4 +233,4 @@ if ($idxStale) {
 }
 
 Say ("harvest-crawl: exit {0}  (log: {1})" -f $rc, $log)
-exit $rc
+Done $rc

@@ -2,28 +2,37 @@
   audit-run-log-claims.ps1 - the run-record library must describe the conventions that actually exist.
 
   WHY THIS EXISTS (2026-09-06, backlog E29). grocery\run-log-lib.ps1 opened with "ONE copy of the
-  'write this run down' rule" and it was one of THREE. Five scheduled tasks run -WindowStyle Hidden,
-  and only the three TC Grocery ones route through that library; the nightly matching chain writes its
-  own graph-nightly-status.json, and TC Recipe Harvest Crawl appends with Out-File at four sites.
+  'write this run down' rule" and it WAS one of three. Five scheduled tasks run -WindowStyle Hidden;
+  only the three TC Grocery ones routed through that library, while the nightly matching chain wrote
+  only its own graph-nightly-status.json and TC Recipe Harvest Crawl only appended crawl-<date>.log.
 
-  NOTHING IS UNLOGGED, so this is ergonomics and not correctness. The defect is the CLAIM. A file that
-  says it is the single copy of a rule and is not is worse than no claim at all, because the next
-  person to add a hidden task reads that line, sees a library, and has no way to learn that two other
-  tasks route around it. It also means the library's two hard-won rules - logging must never kill the
-  run, and every Add-Content/Start-Transcript under $ErrorActionPreference='Stop' must be guarded -
-  are ENFORCED for three tasks and merely hoped for in the other two.
+  Neither of those was a run record. Nightly's status file is written at the very END, so a run that
+  died before that line left nothing at all - indistinguishable from a run that never started - and
+  harvest's log says what python did and nothing about whether the script finished or why. Both now
+  dot-source the library as well, and both KEEP their own artefacts, which persist subprocess output
+  captured into a variable and so never reach a transcript.
 
-  WHAT THIS CAN AND CANNOT COVER, stated because E29 rejected the obvious gate for exactly this reason.
-  The tempting detector greps -WindowStyle Hidden out of every Register-ScheduledTask line and requires
-  the target to dot-source the library. It would be hermetic and it would MISS THREE OF THE FIVE TASKS,
-  because the TC Grocery registrations live in the Windows registry and not in any file a static
-  detector can read. A static gate can only cover what is in the tree, and the tasks that hurt are the
-  ones that are not.
+  THE CLAIM WAS THE ORIGINAL DEFECT. A file that says it is the single copy of a rule and is not is
+  worse than no claim at all, because the next person to add a hidden task reads that line, sees a
+  library, and has no way to learn that other tasks route around it. It also meant the library's two
+  hard-won rules - logging must never kill the run, and every Add-Content/Start-Transcript under
+  $ErrorActionPreference='Stop' must be guarded - were ENFORCED for three tasks and merely hoped for
+  in the other two. That is now true of all five, and this gate is what keeps it true.
 
-  So this gate checks the one thing that IS in the tree and IS checkable: that when a second logging
-  convention exists, the library's header names it. It is a documentation-drift gate. It cannot make
-  the conventions converge - that is E29's open half and needs a ruling on whether the registry
-  registrations move in-repo.
+  WHAT CHANGED ON 2026-09-06, and it is the whole reason this gate can now do its job. E29 rejected
+  the obvious detector - grep -WindowStyle Hidden out of every Register-ScheduledTask and require the
+  target to dot-source the library - because it would have MISSED THREE OF THE FIVE TASKS: the TC
+  Grocery registrations lived only in the Windows registry, where no static detector can reach. Those
+  definitions are now committed at ops\scheduled-tasks\*.xml, so the check is hermetic AND complete.
+
+  IT NOW CHECKS TWO THINGS:
+    1. every hidden scheduled task's target script dot-sources run-log-lib, read from the committed
+       task XML rather than from whatever the registry happens to hold
+    2. the library's header does not claim to be the only copy of a rule it is not
+
+  WHAT IT STILL CANNOT DO is notice a task that exists in the registry and NOT in ops\scheduled-tasks.
+  install-grocery-tasks.ps1 -Verify is the check for that, and it is deliberately not in this gate
+  because it reads live scheduler state and is not hermetic.
 
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 clean, 2 hard finding, 3 could-not-evaluate.
   Read the verdict LINE, not the number (backlog E2).
@@ -38,26 +47,45 @@ $repo = Split-Path $here -Parent
 
 $LIB = Join-Path $repo 'grocery\run-log-lib.ps1'
 
-# The OTHER conventions, each as (marker file, marker string, the name the header must use). A
-# convention is "present" when its marker still exists in the tree; when it is present the header must
-# name it, and when it is gone the header should stop claiming it.
-function Get-Conventions([string]$root) {
-  return @(
-    [pscustomobject]@{
-      Name    = 'graph-nightly-status.json'
-      Present = (Select-String -Path (Join-Path $root 'graph\pipeline\*.ps1') -Pattern 'graph-nightly-status' -SimpleMatch -List -ErrorAction SilentlyContinue) -ne $null
-      Why     = 'the nightly matching chain writes its own status file instead of using the library'
-    }
-    [pscustomobject]@{
-      Name    = 'harvest-crawl.ps1'
-      Present = (Select-String -Path (Join-Path $root 'meal-prep\pipeline\harvest-crawl.ps1') -Pattern 'Out-File' -SimpleMatch -List -ErrorAction SilentlyContinue) -ne $null
-      Why     = 'TC Recipe Harvest Crawl appends its own log with Out-File instead of using the library'
-    }
-  )
+$TASKDIR = Join-Path $repo 'ops\scheduled-tasks'
+
+function Get-HiddenTaskTargets([string]$root) {
+  <# Every -WindowStyle Hidden scheduled task's TARGET SCRIPT, read from the committed XML.
+
+     Returns [pscustomobject]@{ Task; Script; Exists; UsesRunLog }. The -File argument is what a task
+     actually runs, so that is what gets checked - not whatever a registrar script claims to install. #>
+  $out = New-Object System.Collections.Generic.List[object]
+  $dir = Join-Path $root 'ops\scheduled-tasks'
+  if (-not (Test-Path $dir)) { return $out }
+  foreach ($f in @(Get-ChildItem -Path $dir -Filter '*.xml' -File -ErrorAction SilentlyContinue)) {
+    $xml = [IO.File]::ReadAllText($f.FullName)
+    if ($xml -notmatch '-WindowStyle\s+Hidden') { continue }
+    $m = [regex]::Match($xml, '-File\s+"([^"]+)"')
+    if (-not $m.Success) { continue }
+    $script = $m.Groups[1].Value
+    $exists = Test-Path $script
+    $uses = $false
+    if ($exists) { $uses = ([IO.File]::ReadAllText($script) -match 'run-log-lib\.ps1') }
+    $out.Add([pscustomobject]@{ Task = $f.BaseName; Script = $script; Exists = $exists; UsesRunLog = $uses })
+  }
+  return $out
 }
 
 function Test-HeaderNames([string]$headerText, [string]$name) {
   return ($headerText -like ('*' + $name + '*'))
+}
+
+function Get-ClaimLine([string]$path) {
+  <# The TITLE line - "run-log-lib.ps1 - <what this file is>" - which is the file's assertion about
+     itself. Everything below it is commentary, and commentary must be free to QUOTE a false claim in
+     order to correct it. Greping the whole header cannot tell those apart, and the first version of
+     this gate fired on the very header that fixed the defect. #>
+  foreach ($line in [IO.File]::ReadAllLines($path)) {
+    $s = $line.Trim()
+    if ($s -match '^[A-Za-z0-9._-]+\.ps1\s+-\s+') { return $s }
+    if ($s -eq '#>') { break }
+  }
+  return ''
 }
 
 function Get-Header([string]$path) {
@@ -72,15 +100,22 @@ function Get-Header([string]$path) {
 if ($SelfTest) {
   $fail = 0
 
-  # MUST FIRE: the founding claim. A header asserting it is the only copy while another convention
-  # exists is the exact defect this gate was written for.
-  $bad = '<# run-log-lib.ps1 - ONE copy of the "write this run down" rule. #>'
-  if (-not (Test-HeaderNames $bad 'graph-nightly-status.json')) { Write-Output 'ok    MUST FIRE  a header that does not name an existing second convention is a finding' } else { Write-Output 'FAIL  the founding false claim passed'; $fail++ }
+  # MUST FIRE and its CLEAN TWIN, and the twin is the one that earned its place: the first version of
+  # this gate greped the whole header, so it fired on the corrected header BECAUSE that header quotes
+  # the old false claim in order to explain what changed. A file explaining its own history is what we
+  # want; the detector had to learn the difference between a claim and a quotation of one.
+  $tmpA = Join-Path ([IO.Path]::GetTempPath()) ('rlA-' + [guid]::NewGuid().ToString('N') + '.ps1')
+  $tmpB = Join-Path ([IO.Path]::GetTempPath()) ('rlB-' + [guid]::NewGuid().ToString('N') + '.ps1')
+  try {
+    "<#`n  run-log-lib.ps1 - ONE copy of the `"write this run down`" rule.`n#>" | Set-Content $tmpA -Encoding UTF8
+    if ((Get-ClaimLine $tmpA) -match 'ONE copy of the') { Write-Output 'ok    MUST FIRE  a TITLE line claiming to be the one copy is the defect' } else { Write-Output 'FAIL  the founding false claim would not be caught'; $fail++ }
 
-  # CLEAN TWIN: a header that does name it passes. Without this the gate could be "always fails".
-  $good = '<# covers the TC Grocery tasks; the chain uses graph-nightly-status.json and harvest-crawl.ps1 appends its own #>'
-  if (Test-HeaderNames $good 'graph-nightly-status.json') { Write-Output 'ok    CLEAN TWIN a header that names the other convention passes' } else { Write-Output 'FAIL  a correct header was reported as a finding'; $fail++ }
-  if (Test-HeaderNames $good 'harvest-crawl.ps1') { Write-Output 'ok    CLEAN TWIN both conventions are checked, not just the first' } else { Write-Output 'FAIL  only one convention is actually checked'; $fail++ }
+    "<#`n  run-log-lib.ps1 - the run-record rule for ALL FIVE hidden scheduled tasks.`n`n  This header used to open `"ONE copy of the write this run down rule`" and that was false.`n#>" | Set-Content $tmpB -Encoding UTF8
+    if ((Get-ClaimLine $tmpB) -notmatch 'ONE copy of the') { Write-Output 'ok    CLEAN TWIN a header that QUOTES the old claim to correct it is not the defect' } else { Write-Output 'FAIL  the detector cannot tell a claim from a quotation of one - the honest fix trips it'; $fail++ }
+    if ((Get-ClaimLine $tmpB) -like '*ALL FIVE*') { Write-Output 'ok    the title line is what gets read, not the whole comment block' } else { Write-Output ('FAIL  wrong line read as the claim: ' + (Get-ClaimLine $tmpB)); $fail++ }
+  } finally {
+    Remove-Item $tmpA, $tmpB -Force -ErrorAction SilentlyContinue
+  }
 
   # The header is the comment block, not the file. A mention in code must NOT satisfy the gate.
   $tmp = Join-Path ([IO.Path]::GetTempPath()) ('rl-' + [guid]::NewGuid().ToString('N') + '.ps1')
@@ -93,10 +128,12 @@ if ($SelfTest) {
   # comparison works and nothing about the estate.
   if (Test-Path $LIB) {
     $hdr = Get-Header $LIB
-    if ($hdr -notmatch 'ONE copy of the') { Write-Output 'ok    the live header no longer claims to be the only copy' } else { Write-Output 'FAIL  grocery\run-log-lib.ps1 still opens with the false ONE-copy claim'; $fail++ }
-    foreach ($c in (Get-Conventions $repo)) {
-      if (-not $c.Present) { Write-Output ("ok    convention gone from the tree, header need not name it: " + $c.Name); continue }
-      if (Test-HeaderNames $hdr $c.Name) { Write-Output ("ok    the live header names " + $c.Name) } else { Write-Output ("FAIL  the live header does not name " + $c.Name); $fail++ }
+    if ((Get-ClaimLine $LIB) -notmatch 'ONE copy of the') { Write-Output 'ok    the live TITLE line no longer claims to be the only copy' } else { Write-Output 'FAIL  grocery\run-log-lib.ps1 still opens with the false ONE-copy claim'; $fail++ }
+    $targets = Get-HiddenTaskTargets $repo
+    if ($targets.Count -ge 5) { Write-Output ("ok    all {0} hidden task definition(s) are readable from the repo" -f $targets.Count) } else { Write-Output ("FAIL  only {0} hidden task definition(s) found - the committed XML is incomplete, which is the hole E29 was about" -f $targets.Count); $fail++ }
+    foreach ($t2 in $targets) {
+      if (-not $t2.Exists) { Write-Output ("FAIL  " + $t2.Task + " points at a script that does not exist: " + $t2.Script); $fail++; continue }
+      if ($t2.UsesRunLog) { Write-Output ("ok    " + $t2.Task + " dot-sources run-log-lib") } else { Write-Output ("FAIL  " + $t2.Task + " runs hidden and does NOT dot-source run-log-lib: " + $t2.Script); $fail++ }
     }
   } else {
     Write-Output 'FAIL  grocery\run-log-lib.ps1 is missing'; $fail++
@@ -124,21 +161,27 @@ if ([string]::IsNullOrWhiteSpace($hdr)) {
   exit 3
 }
 
-$conv = Get-Conventions $repo
-$present = @($conv | Where-Object { $_.Present })
-$unnamed = @($present | Where-Object { -not (Test-HeaderNames $hdr $_.Name) })
+$targets = Get-HiddenTaskTargets $repo
+$unnamed = @($targets | Where-Object { $_.Exists -and (-not $_.UsesRunLog) })
+$missing = @($targets | Where-Object { -not $_.Exists })
 
-if ($hdr -match 'ONE copy of the') {
+if ((Get-ClaimLine $LIB) -match 'ONE copy of the') {
   Write-Output 'RUN-LOG CLAIMS AUDIT FAILED: grocery\run-log-lib.ps1 opens by calling itself the ONE copy of the run-record rule while other conventions exist in the tree. A file that claims to be the single copy of a rule and is not is worse than no claim - the next person to add a hidden task reads it, sees a library, and cannot learn that other tasks route around it.'
   Write-GuardComplete -Name 'run-log-claims' -Summary 'false-one-copy-claim'
   exit 2
 }
-if ($unnamed.Count -gt 0) {
-  foreach ($u in $unnamed) { Write-Output ("  unnamed convention  {0}  -  {1}" -f $u.Name, $u.Why) }
-  Write-Output ("RUN-LOG CLAIMS AUDIT FAILED: {0} run-logging convention(s) exist that grocery\run-log-lib.ps1's header does not name. Either bring that caller onto the library or name it in the header, so the next person adding a hidden task can see what is actually covered." -f $unnamed.Count)
-  Write-GuardComplete -Name 'run-log-claims' -Summary ("unnamed={0} present={1}" -f $unnamed.Count, $present.Count)
+if ($targets.Count -eq 0) {
+  Write-Output ('RUN-LOG CLAIMS COULD NOT EVALUATE: no hidden scheduled-task definition was readable from ops\scheduled-tasks. Discovery broken, NOT a clean tree.')
+  Write-GuardComplete -Name 'run-log-claims' -Summary 'blind=no-task-xml'
+  exit 3
+}
+foreach ($m in $missing) { Write-Output ("  target missing  {0}  ->  {1}" -f $m.Task, $m.Script) }
+foreach ($u in $unnamed) { Write-Output ("  no run record   {0}  ->  {1}" -f $u.Task, $u.Script) }
+if ($missing.Count -gt 0 -or $unnamed.Count -gt 0) {
+  Write-Output ("RUN-LOG CLAIMS AUDIT FAILED: of {0} hidden scheduled task(s), {1} target a script that does not exist and {2} run hidden without dot-sourcing run-log-lib. A task that runs with no console and no run record can only ever say its exit code, and this estate has already spent a day unable to learn why three jobs returned 1." -f $targets.Count, $missing.Count, $unnamed.Count)
+  Write-GuardComplete -Name 'run-log-claims' -Summary ("tasks={0} missing={1} norunlog={2}" -f $targets.Count, $missing.Count, $unnamed.Count)
   exit 2
 }
-Write-Output ("run-log-claims: PASSED - the header names all {0} other run-logging convention(s) in the tree. Convergence is still E29's open half and needs a ruling on the registry registrations." -f $present.Count)
-Write-GuardComplete -Name 'run-log-claims' -Summary ("present={0} unnamed=0" -f $present.Count)
+Write-Output ("run-log-claims: PASSED - all {0} hidden scheduled task(s) leave a run record through run-log-lib, checked from the committed task definitions rather than the registry." -f $targets.Count)
+Write-GuardComplete -Name 'run-log-claims' -Summary ("tasks={0} norunlog=0" -f $targets.Count)
 exit 0

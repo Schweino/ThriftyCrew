@@ -1,26 +1,27 @@
 <#
-  run-log-lib.ps1 - the run-record rule for the THREE TC Grocery tasks. NOT for all five.
+  run-log-lib.ps1 - the run-record rule for ALL FIVE hidden scheduled tasks.
 
-  READ THIS FIRST (corrected 2026-09-06, backlog E29). This header used to open "ONE
-  copy of the 'write this run down' rule" and that was false. Five scheduled tasks run
-  -WindowStyle Hidden and they use THREE different hand-rolled conventions:
+  READ THIS FIRST (2026-09-06, backlog E29). This header used to open "ONE copy of the
+  'write this run down' rule" and that was false when it was written: five tasks run
+  -WindowStyle Hidden and only three used this file. All five now do:
 
-    TC Grocery ad 07:00 / daily 08:00 / watchdog 09:30 -> THIS FILE, dot-sourced by
-                                                          capture-run.ps1 and
+    TC Grocery ad 07:00 / daily 08:00 / watchdog 10:30 -> capture-run.ps1,
                                                           capture-watchdog.ps1
-    nightly matching chain                             -> its own
-                                                          grocery\out\logs\graph-nightly-status.json
-    TC Recipe Harvest Crawl                            -> ad-hoc Out-File -Append at
-                                                          four sites in harvest-crawl.ps1
+    TC Graph Nightly Matching                          -> graph\pipeline\nightly.ps1
+    TC Recipe Harvest Crawl                            -> meal-prep\pipeline\harvest-crawl.ps1
 
-  A file that claims to be the single copy of a rule and is not is worse than no claim,
-  because the next person to add a hidden task reads that line, sees a library, and has
-  no way to know two other tasks route around it. NOTHING IS UNLOGGED - this is an
-  ergonomics defect, not a blind task - but the two rules below are ENFORCED for three
-  tasks and merely hoped for in the other two.
+  The last two KEEP their own artefacts - graph-nightly-status.json and crawl-<date>.log
+  - because those persist SUBPROCESS output captured into a variable, which never reaches
+  a transcript. What they gained is the run record itself: a transcript, and the exit code
+  stamped as the LAST line. Neither had one. Nightly's status file is written at the very
+  end, so a run that died before it left nothing at all, which is indistinguishable from a
+  run that never started.
 
-  ops\audit-run-log-claims.ps1 keeps this header honest. If you bring the graph or
-  harvest wrapper onto this library, update the table above and that audit will agree.
+  ops\audit-run-log-claims.ps1 keeps this true. It reads the committed task definitions in
+  ops\scheduled-tasks\*.xml and fails when a hidden task's target script does not
+  dot-source this file. That gate was impossible before those definitions were committed:
+  three of the five registrations lived only in the Windows registry, where no static
+  detector could reach them.
 
   WHY THIS EXISTS. The three TC Grocery tasks run with -WindowStyle Hidden and no
   redirect, so every line they printed went to a console nobody ever saw. On

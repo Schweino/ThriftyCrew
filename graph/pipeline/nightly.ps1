@@ -105,6 +105,26 @@ $grocery  = Join-Path $root 'grocery'
 $sidecar  = Join-Path $root 'sidecar'
 $statusF  = Join-Path $grocery 'out\logs\graph-nightly-status.json'
 
+# THE RUN RECORD (2026-09-06, backlog E29). This task runs -WindowStyle Hidden and its only persisted
+# output was the status JSON written at the very END - so a run that died before that line left
+# nothing at all, which is indistinguishable from a run that never started. graph-nightly-status.json
+# is KEPT; the transcript is the half that was missing, and Done() stamps the exit code last.
+# NOT STARTED UNDER -SelfTest: that branch has its own PASS/FAIL line, and starting a transcript for
+# it would leave a log behind on every run-gates run.
+. (Join-Path $grocery 'run-log-lib.ps1')
+$runLog = $null
+if (-not $SelfTest) {
+  # Start-RunLog appends 'logs' to OutDir itself, so this passes grocery\out and NOT grocery\out\logs -
+  # the latter would file the transcript under out\logs\logs and hide it from the one directory a
+  # human already opens.
+  $runLog = Start-RunLog -Name 'graph-nightly' -OutDir (Join-Path $grocery 'out')
+}
+function Done {
+  param([int]$Rc = 0)
+  Stop-RunLog -ExitCode $Rc -Path $runLog
+  exit $Rc
+}
+
 # VRAM the sweep needs, and the floor llama-server needs to be worth starting. Both are the numbers
 # already used elsewhere in the estate, restated here rather than imported so this script can
 # self-test with no other file loaded.
@@ -611,4 +631,4 @@ finally {
 # scheduled task that reports failure for "the GPU was busy" trains its owner to ignore it. The one
 # thing worth an alarm is a card this script could not hand back.
 if (-not $freed) { exit 3 }
-exit 0
+Done 0

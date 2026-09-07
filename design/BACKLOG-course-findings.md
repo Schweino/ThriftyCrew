@@ -947,8 +947,30 @@ powershell -File ops\install-grocery-tasks.ps1 -Install -FixName
 powershell -File ops\install-grocery-tasks.ps1 -Verify
 ```
 
-**Still open: the logging convergence**, which is the other half of Brad's ruling and touches two
-live jobs' scripts rather than their registrations.
+**THE DURABLE HALF, PART TWO: the conventions have converged, and the gate this item said could not
+be built now exists.** `graph/pipeline/nightly.ps1` and `meal-prep/pipeline/harvest-crawl.ps1` now
+dot-source `run-log-lib`, so all five hidden tasks leave a run record with the exit code as the last
+line. Both KEEP their own artefacts - `graph-nightly-status.json` and `crawl-<date>.log` - because
+those persist subprocess output captured into a variable, which never reaches a transcript. Neither
+of them was a run record: nightly's status file is written at the very END, so a run that died before
+that line left nothing at all, which is indistinguishable from a run that never started.
+
+All five records now land in `grocery/out/logs/`, which is the point of converging - one directory a
+human already opens. Nightly does not start a transcript under `-SelfTest`, or `run-gates` would
+leave a log behind on every run.
+
+**`ops/audit-run-log-claims.ps1` is now the detector E29 rejected as impossible.** It reads
+`ops/scheduled-tasks/*.xml`, extracts each task's `-File` target, and fails when a hidden task's
+script does not dot-source the library. That was unbuildable while three of the five registrations
+lived only in the registry; committing the definitions is what made it hermetic AND complete. It
+still cannot see a task present in the registry and absent from the repo - `install-grocery-tasks.ps1
+-Verify` is that check, and it stays out of the gate because it reads live scheduler state.
+
+**One detector defect found by the fix itself.** The ONE-copy check greped the whole header, so it
+fired on the CORRECTED header - which quotes the old false claim in order to explain what changed. A
+file explaining its own history is exactly what is wanted, so the detector learned the difference: it
+now reads the TITLE line, where a file's assertion about itself actually lives, and carries a clean
+twin proving a quoted historical claim does not trip it.
 
 ## Infrastructure and hygiene
 
