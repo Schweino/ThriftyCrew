@@ -1332,7 +1332,7 @@ whole gate surface for no behaviour change, and the files are individually consi
 
 ---
 
-### I12 - There is no NULL-RATE check anywhere in the estate, and it is the one scraper failure nothing watches `OPEN` `queue-2`
+### I12 - There is no NULL-RATE check anywhere in the estate, and it is the one scraper failure nothing watches `DONE` `queue-2`
 
 **Source:** course 10, `vsp-data-quality-profiling--monitoring` (Coursera). A thin course, but it
 names four standing data-quality checks - **freshness, volume, schema drift, null rate** - and
@@ -1381,6 +1381,39 @@ a null is before it can count one: `""`, `"N/A"`, `"-"` and a missing key are fo
 in these feeds and at least two of them currently survive as ordinary values.
 
 ---
+
+
+**BUILT 2026-09-07: `grocery/audit-null-rate.ps1`, wired into the daily chain after the encoding
+normalise and BEFORE anything prices.** The claim was verified independently - the same grep returns
+zero hits - and the three near-misses this item lists really are near-misses.
+
+**What it measures.** Per store and source, the BLANK rate of every field carried on at least half the
+rows. Blank counts as well as absent, which is the whole point: a moved selector usually leaves the
+key in place with an empty string behind it, and that is exactly the shape a does-the-key-exist check
+passes. Baselined across **31 store/source pairs** on the first run.
+
+**Two findings, and the second is one a rate comparison alone cannot produce.** A field whose blank
+rate climbs more than 25 points is the degraded-selector case. A field the baseline knew that has
+VANISHED from the rows is the other - a rate cannot rise for a field nothing emits, so comparing rates
+would report nothing at all.
+
+**It alerts and does not block**, for the same reason the encoding repair beside it is non-fatal: it
+is a first-line signal about the INPUT, the board's own guards still stand between a bad row and a
+published price, and withholding a day's prices on a young detector with a fresh baseline costs more
+than it saves. It names the store, the field and the size of the jump, which is what separates an
+actionable alarm from another red line nobody reads.
+
+**The baseline is a reference, not a ratchet.** A RISE is the finding and a fall is simply better data,
+so `lib/ratchet.ps1`'s asymmetry does not apply here - which is worth stating because the two shapes
+look alike and the wrong one was applied to four audits before I15 caught it.
+
+**The store comes from each file rather than from a map**, because `audit-row-age.ps1` already carries
+a store-to-glob table and a second copy is exactly what `audit-twin-drift.ps1` exists to catch.
+
+**The gate caught it before I did.** Committed as an orphan, `audit-script-census` failed with "ORPHAN
+audit-null-rate.ps1 - no executable file in the repo names it", which is the estate's own machinery
+refusing a detector with no caller. Wiring it into `capture-run.ps1` is what fixed it, not an
+allowlist entry.
 
 ### I13 - Every threshold in the estate is CHOSEN, because only two artefacts keep history `PARTLY DONE` `queue-2`
 

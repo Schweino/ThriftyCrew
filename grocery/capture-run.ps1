@@ -529,6 +529,34 @@ if ($runDownstream -and -not $WhatIf) {
   } catch { Write-Output ('capture-encoding normalise threw (not fatal, no price depends on it): ' + $_.Exception.Message) }
 }
 
+# NULL RATE, HERE, BEFORE ANYTHING PRICES (2026-09-07, backlog I12). The canonical way a scraper
+# degrades is not that it dies - that is loud, and freshness and volume both catch it. It is that ONE
+# FIELD stops being extracted while every row still arrives on time and in the usual quantity: a
+# selector moves, a price node changes shape, a unit string stops parsing. Freshness passes, volume
+# passes, and schema drift passes too because the KEY is still there and it is the VALUE that is now
+# blank. The first sign anybody sees is a wrong number on a page somebody paid to read.
+#
+# ALERTS, DOES NOT BLOCK, for the same reason the encoding repair above is non-fatal: this is a
+# first-line signal about the INPUT, the board's own guards still stand between a bad row and a
+# published price, and withholding a whole day's prices on a young detector with a fresh baseline
+# would cost more than it saves. It names the store, the field and the jump, which is what makes the
+# alarm actionable rather than another red line nobody reads.
+if ($runDownstream -and -not $WhatIf) {
+  try {
+    $nra = Join-Path $root 'audit-null-rate.ps1'
+    if (Test-Path $nra) {
+      Write-Output ''
+      Write-Output 'null-rate: has any captured field stopped carrying values while its rows kept arriving?'
+      $nrOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $nra
+      $nrRc = $LASTEXITCODE
+      foreach ($l in @($nrOut)) { if ([string]$l -match 'FAILED|blank rate|VANISHED|PASSED|COULD NOT') { Write-Output ('  ' + [string]$l) } }
+      if ($nrRc -eq 2) {
+        try { Send-Alert -Subject "Grocery: A CAPTURED FIELD WENT BLANK - $asofS" -Body (@($nrOut) -join "`n") | Out-Null } catch {}
+      }
+    }
+  } catch { Write-Output ('null-rate threw (not fatal, the board guards still stand): ' + $_.Exception.Message) }
+}
+
 if ($runDownstream) {
   Write-RunStatus 'downstream'
   Write-Output ''
