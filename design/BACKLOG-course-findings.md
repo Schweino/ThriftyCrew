@@ -704,14 +704,23 @@ solved problem teaches the next reader to re-solve it.
 **What is actually still open, measured 2026-09-06:**
 1. **No remote.** `git remote -v` is empty, so every commit is on the same disk as the working copy.
    This is the whole of the original exposure and none of it has moved. Still Brad's call.
-2. **Most of the store is untracked.** Committing three course files needed `git add` on two that
-   git had never seen - `CLAIMS-REGISTER.md` and `QUEUE-2.md` - and `procedure.md`,
-   `orchestration.md`, `CONSOLIDATE.md`, `PLAN-knowledge-architecture.md` and the whole `archive/`
-   are still untracked in the `course` skill alone. A repo that holds a fraction of the thing reads
-   as protection and is not.
-3. **No `.gitattributes`.** Committing there warns "LF will be replaced by CRLF the next time Git
-   touches it" on every file, which is E15 in a second repo: a fresh clone would be CRLF while the
-   working copy is LF. `* text=auto eol=lf` is the same one-line fix.
+2. **The repo is far behind the disk, not merely incomplete.** Measured after committing course
+   6's work: **42 untracked paths and 23 tracked files with real content drift** - one untouched
+   skill core diffs at 750 deletions, because the store has been rewritten by several courses and a
+   consolidation since the repo's two commits were made. A repo that holds a stale fraction reads
+   as protection and is not. Committing three course files needed `git add` on two files git had
+   never seen.
+3. **No `.gitattributes`, and the tree is already mixed.** Every commit warns "LF will be replaced
+   by CRLF the next time Git touches it", which is E15 in a second repo. **Five tracked memory files
+   are CRLF on disk today** while everything else is LF, so the tree was never uniformly one thing -
+   the same thing E15 found here. `* text=auto eol=lf` is the same one-line fix.
+
+   **Attempted during course 6 and deliberately backed out.** Adding the file immediately marked
+   dozens of paths modified, in a tree where nine files were being edited by concurrent sessions
+   (`CLAUDE.md`, seven agent definitions, `settings.json`). E15 recorded that this change breaks
+   things before it fixes them, and doing it under concurrent writers is how content gets lost. It
+   needs its own session with a clean tree, and it should be done together with item 2 rather than
+   before it.
 
 ### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `OPEN` `BRAD'S CALL`
 *Surfaced by the Claude Cowork run (course 11), then verified directly rather than taken on its
