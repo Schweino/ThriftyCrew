@@ -2141,7 +2141,7 @@ free: that file's own comments record that the split prompt wording is part of t
 earned by a 7-publisher measurement, so any change to what the model sees needs re-measuring rather
 than eyeballing.
 
-### I21 - E1's staging switch is off by default, and this course changes the argument for that default `OPEN` `queue-2`
+### I21 - E1's staging switch is off by default, and this course changes the argument for that default `DONE 2026-09-07` `queue-2`
 
 **Source:** course 13. **Does not re-file E1**, which is `PARTLY DONE` and correctly scoped; this is
 about the default, which E1 does not discuss.
@@ -2168,6 +2168,36 @@ argument in front of him, rather than as work to do.
 **Touches.** The default in `lib/ghost-lib.ps1`, and whoever or whatever is nominated as approver.
 E1 already notes `post-publish-reviewer` could move to run BEFORE the publish, which is what the item
 originally asked for. E1's R2 gap is unchanged and unaddressed by this.
+
+**RULED 2026-09-07 (Brad): on for agent runs, off for the daily chain.** Neither default was right
+for both, because they are not the same risk. The daily chain is a fixed sequence nobody planted
+text into, and staging it would put a human in the loop of every recipe publish for no threat model.
+An agent that read a third-party page is the case the course is about.
+
+**Where the line is drawn, and why there.** `meal-prep/pipeline/hunt_dispatch.py` `_child_env()`
+sets `TC_STAGE_WRITES` on the dispatched subprocess. `lib/ghost-lib.ps1` reads it from the
+ENVIRONMENT, so that one seam arms every PowerShell an agent invokes and nothing else - no flag has
+to be threaded through the call sites, and no caller can forget it. Checked rather than assumed that
+the publish lane is untouched: `wave-publish.ps1` is invoked by `hunt-daemon.py`, the daemon
+PROCESS, never through a dispatch. Four cases pin it, including the two CLEAN TWINs that an operator
+who set the variable themselves keeps their own queue and that the rest of the environment travels
+through.
+
+**Arming it found that approving a staged write would have corrupted the post.** `Add-TcStagedCall`
+recorded a `[byte[]]` body as the STRING `"(byte[] length N)"` - a description of the content, not
+the content - and `ops/review-staged.ps1 -Apply` replays with `-Body $e.body`. So the approver would
+have sent that literal description to Ghost as the post body. **And every real caller passes
+byte[]**: `publish.ps1:277`, `:280` and `wave-publish.ps1:1163` all send
+`[Text.Encoding]::UTF8.GetBytes(...)`, so the broken branch was not an edge case, it was the only
+branch the live chain takes. It was invisible because every existing self-test stages a STRING body,
+which round-trips fine - a mechanism tested only on the shape it never sees in production. Fixed
+before arming: base64 in `body_b64` with `body_bytes` beside it, restored on `-Apply`, and three
+must-fire cases pin the round trip byte for byte.
+
+**The general shape, which is the part worth keeping.** A safety mechanism that has never been
+exercised end to end is not a safety mechanism, and being off by default is what let it go
+unexercised for as long as it did. Turning something on is the moment to run its whole path, not
+just its entry point.
 
 ### I22 - The estate's single strongest defensive property is undocumented as one and pinned by no test `DONE 2026-09-07` `queue-2`
 

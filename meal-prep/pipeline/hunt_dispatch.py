@@ -305,15 +305,40 @@ def build_argv(agent, reconstruct=False, extra=None, resume=None):
     return argv
 
 
+def _child_env(base=None):
+    """The environment a dispatched agent runs in. Pure, so it is testable."""
+    e = dict(os.environ if base is None else base)
+    e.setdefault("TC_STAGE_WRITES", os.path.join(REPO, "ops", "staged-writes.jsonl"))
+    return e
+
+
 def _run(argv, prompt, timeout, cwd=None):
     """One headless invocation. The prompt goes on STDIN, never in argv: Windows caps a command line
     at 32,767 characters and a dossier batch alone can approach that, and `--tools`-style variadic
     flags will happily swallow a positional prompt (measured 2026-08-24: `--tools "" <prompt>` exits
     with 'Input must be provided either through stdin or as a prompt argument')."""
     t0 = time.time()
+    # STAGING IS ARMED FOR AGENT RUNS AND ONLY AGENT RUNS (2026-09-07, backlog I21). lib\ghost-lib.ps1
+    # reads TC_STAGE_WRITES from the ENVIRONMENT, so setting it here arms every PowerShell an agent
+    # invokes and nothing else. A mutating Ghost call is then QUEUED rather than sent, and
+    # ops\review-staged.ps1 drains it.
+    #
+    # WHY AGENTS AND NOT THE CHAIN. E1 left staging off on the argument that agents rarely err and the
+    # friction is constant. That is the wrong frame once nine agents read third-party pages: a write can
+    # be DIRECTED by text a stranger planted, not merely mistaken, and against that the approver is not
+    # error-catching - it is the boundary between a fooled model and a live paid site.
+    #
+    # THE DAILY CHAIN IS UNTOUCHED, and that was checked rather than assumed: wave-publish.ps1 is
+    # invoked by hunt-daemon.py, the daemon PROCESS, never through this function. The recipe publish
+    # ships exactly as it does today.
+    #
+    # THE VALUE IS A PATH, not a flag - it names the queue file. Built by _child_env() rather than
+    # inline, so a self-test can assert on it without spawning a subprocess: inline, a later edit
+    # could delete the whole seam and every test would still pass, which is precisely how the
+    # permission mode above came to be missing.
     try:
         p = subprocess.run(argv, input=prompt.encode("utf-8"), capture_output=True,
-                           timeout=timeout, cwd=cwd or REPO)
+                           timeout=timeout, cwd=cwd or REPO, env=_child_env())
     except subprocess.TimeoutExpired:
         return None, "timeout", "no answer within %ss" % timeout, round(time.time() - t0, 2)
     except OSError as e:
@@ -748,6 +773,19 @@ def selftest():
 
     print("hunt_dispatch self-test  (every dispatch is injected: zero tokens)")
     print("")
+
+    # ---- staging is armed for agent runs, and only agent runs (2026-09-07, backlog I21) ----------
+    e_arm = _child_env({})
+    T("MUST FIRE  a dispatched agent runs with write staging armed",
+      e_arm.get("TC_STAGE_WRITES", "").endswith("staged-writes.jsonl"), repr(e_arm.get("TC_STAGE_WRITES")))
+    T("MUST FIRE  the value is an ABSOLUTE path - lib/ghost-lib.ps1 opens it as given, and an agent "
+      "run from another cwd would otherwise scatter queues",
+      os.path.isabs(e_arm.get("TC_STAGE_WRITES", "")), repr(e_arm.get("TC_STAGE_WRITES")))
+    T("CLEAN TWIN an operator who set TC_STAGE_WRITES themselves keeps their own queue - setdefault, "
+      "not an overwrite",
+      _child_env({"TC_STAGE_WRITES": "X:/mine.jsonl"})["TC_STAGE_WRITES"] == "X:/mine.jsonl")
+    T("CLEAN TWIN the rest of the environment travels through untouched",
+      _child_env({"PATH": "/zzz", "TC_FOO": "1"}).get("PATH") == "/zzz")
 
     # ---- the frontmatter is the authority, and it is READ, never restated ------------------------
     tmp = tempfile.mkdtemp(prefix="agentdefs-")

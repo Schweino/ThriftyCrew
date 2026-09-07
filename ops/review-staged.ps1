@@ -93,6 +93,24 @@ if ($SelfTest) {
     $q = Read-TcQueue -Lines ([IO.File]::ReadAllLines($tmp))
     T 'the queue round-trips to one entry' ($q.Entries.Count -eq 1) ("Count=" + $q.Entries.Count)
     T 'the entry records the method and uri' (($q.Entries[0].method -eq 'PUT') -and ($q.Entries[0].uri -like 'https://invalid.invalid/*')) 'method/uri lost'
+
+    # THE BYTE[] ROUND-TRIP, WHICH IS THE ONLY SHAPE THE LIVE CHAIN ACTUALLY STAGES (2026-09-07).
+    # publish.ps1:277 and :280 and wave-publish.ps1:1163 all pass [Text.Encoding]::UTF8.GetBytes(...).
+    # Until today that branch stored the STRING "(byte[] length N)" and -Apply replayed it with
+    # -Body $e.body, so approving a staged write would have sent that description to Ghost as the post
+    # body. Every case above stages a STRING, which round-trips fine and hid it completely - a
+    # mechanism tested only on the shape it never sees in production.
+    $btmp = Join-Path ([IO.Path]::GetTempPath()) ('staged-bytes-' + [guid]::NewGuid().ToString('N') + '.jsonl')
+    try {
+      $origJson = '{"posts":[{"title":"byte round trip"}]}'
+      $null = Add-TcStagedCall -Queue $btmp -Method 'PUT' -Uri 'https://invalid.invalid/ghost/api/admin/posts/bbb/' -Headers @{} -Body ([Text.Encoding]::UTF8.GetBytes($origJson))
+      $bq = Read-TcQueue -Lines ([IO.File]::ReadAllLines($btmp))
+      $be = $bq.Entries[0]
+      T 'MUST FIRE  a byte[] body is stored as base64, not as a description of itself' ([string]$be.body_b64 -ne '' -and [string]$be.body -notlike '*byte`[`]*') ("body=" + [string]$be.body + " b64len=" + ([string]$be.body_b64).Length)
+      $round = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String([string]$be.body_b64))
+      T 'MUST FIRE  the staged bytes restore to the EXACT body that was going to be sent' ($round -eq $origJson) $round
+      T 'the byte length is recorded beside them' ([int]$be.body_bytes -eq [Text.Encoding]::UTF8.GetByteCount($origJson)) ([string]$be.body_bytes)
+    } finally { Remove-Item $btmp -Force -ErrorAction SilentlyContinue }
     # SECURITY: the Authorization header carries a live admin JWT and must never reach the queue file.
     $raw = [IO.File]::ReadAllText($tmp)
     T 'MUST FIRE  the queue file holds NO credential, only header NAMES' (-not ($raw -match 'SECRET-JWT')) 'a live admin JWT was written to disk'
@@ -212,7 +230,12 @@ foreach ($e in $entries) {
   try {
     # TC_STAGE_WRITES must be OFF for this process or the apply would re-stage its own queue forever.
     $env:TC_STAGE_WRITES = $null
-    $null = Invoke-GhostApi -Method $e.method -Uri $e.uri -Headers $h -Body $e.body
+    # RESTORE THE ORIGINAL BYTES (2026-09-07). A byte[] body is staged as base64 because recording it
+    # as "(byte[] length N)" and replaying THAT is what this line used to do - it would have sent the
+    # description to Ghost as the post body.
+    $replayBody = $e.body
+    if ($e.PSObject.Properties['body_b64'] -and $e.body_b64) { $replayBody = [Convert]::FromBase64String([string]$e.body_b64) }
+    $null = Invoke-GhostApi -Method $e.method -Uri $e.uri -Headers $h -Body $replayBody
     $sent++
     Write-Output ("  sent   [{0}] {1} {2}" -f $e.id, $e.method, $e.uri)
   } catch {

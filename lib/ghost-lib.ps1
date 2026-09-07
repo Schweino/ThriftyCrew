@@ -117,7 +117,16 @@ function Add-TcStagedCall {
     # HEADERS BY NAME ONLY. Authorization carries a live admin JWT; writing it to a queue file would
     # put a working credential on disk with no owner. -Apply re-mints one from the estate's key.
     header_names = @($Headers.Keys | Sort-Object)
-    body     = $(if ($null -eq $Body) { $null } elseif ($Body -is [byte[]]) { "(byte[] length $($Body.Length))" } else { [string]$Body })
+    # THE BYTES, NOT A DESCRIPTION OF THEM (2026-09-07, backlog I21). This recorded a byte[] as
+    # "(byte[] length N)" and review-staged.ps1 -Apply replays with -Body $e.body, so approving a
+    # staged write would have sent that literal string to Ghost. Every real caller passes byte[] -
+    # publish.ps1:277 and :280, wave-publish.ps1:1163 - so the broken branch was the only one the live
+    # chain takes. It was invisible because the self-tests stage a STRING body, which round-trips fine.
+    # Base64 and not decoded text: the bytes are what was going to be sent, and re-encoding through a
+    # string is how an encoding bug gets into the one path that has to be faithful.
+    body       = $(if ($null -eq $Body) { $null } elseif ($Body -is [byte[]]) { $null } else { [string]$Body })
+    body_b64   = $(if ($Body -is [byte[]]) { [Convert]::ToBase64String($Body) } else { $null })
+    body_bytes = $(if ($Body -is [byte[]]) { $Body.Length } else { $null })
     caller   = $(try { (Get-PSCallStack | Where-Object { $_.ScriptName -and $_.ScriptName -notlike '*ghost-lib.ps1' } | Select-Object -Last 1).ScriptName } catch { '' })
   }
   # JSON Lines: one line per call, so a crashed run leaves every call BEFORE the crash intact. A single
