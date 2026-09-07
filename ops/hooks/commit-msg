@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# commit-msg - refuse a commit message that begins with a UTF-8 byte order mark.
+#
+# WHY THIS EXISTS (2026-09-07). Commit 79c62b0f0's subject line starts EF BB BF:
+#
+#     $ git log -1 --format=%s 79c62b0f0 | head -c 6 | xxd -p
+#     efbbbf546865
+#
+# Under PS 5.1 `Set-Content -Encoding utf8` writes a BOM, and the estate's own rule is that commit
+# messages go in a FILE and ship with `git commit -F` (an inline -m executes backticks). So the rule
+# that keeps backticks out of a commit is the same rule that put a BOM into one. The three characters
+# then live inside the subject for ever: they break `git log --grep`, they sort oddly, and they show up
+# as garbage in any reader that is not expecting a BOM mid-stream. Cosmetic, but permanent, and the
+# fix cannot be retrospective - rewriting pushed history is worse than the blemish.
+#
+# WHY A commit-msg HOOK AND NOT pre-commit. A pre-commit hook CANNOT read the message it is about to
+# commit: at that point .git/COMMIT_EDITMSG still holds the PREVIOUS commit's text, which is a trap
+# this estate has already been bitten by. commit-msg receives the path to the real message as $1.
+#
+# WHY REFUSE RATHER THAN STRIP. A hook that silently rewrites what somebody wrote is a hook nobody can
+# reason about, and the author is standing right there with the file open. It names the file and the
+# one-line fix instead.
+#
+# Install:  powershell -File ops\install-hooks.ps1
+set -u
+
+msg="${1:-}"
+[ -z "$msg" ] && exit 0
+[ -f "$msg" ] || exit 0
+
+# The first three BYTES, read as bytes. Reading this as text is how the BOM became invisible in the
+# first place: most decoders swallow it and hand back a string that looks perfectly clean.
+first3="$(head -c 3 "$msg" | od -An -tx1 | tr -d ' \n')"
+if [ "$first3" = "efbbbf" ]; then
+  echo "commit-msg: BLOCKED. The message file starts with a UTF-8 BOM (EF BB BF), which would land" >&2
+  echo "            INSIDE the commit subject and stay there for the life of the repository." >&2
+  echo "            This is what PS 5.1's \`Set-Content -Encoding utf8\` does. Write it BOM-less:" >&2
+  echo "              [IO.File]::WriteAllText(\$p, \$body, (New-Object Text.UTF8Encoding(\$false)))" >&2
+  echo "            or use ops\\new-commit-message.ps1, then re-run the commit." >&2
+  echo "            File: $msg" >&2
+  exit 1
+fi
+exit 0

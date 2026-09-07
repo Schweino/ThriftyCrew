@@ -36,6 +36,13 @@
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$OutDir = "",
+  # PINNABLE LIKE -OutDir, and for the same reason audit-sale-fallback's -AutomationsFile is
+  # (2026-09-07, item 13). The staleness precondition below reads product-urls.json from $root, not
+  # from -OutDir, so the ONLY way to exercise it was to move a LIVE file's timestamp - which is why
+  # the bounce's fifth failure stayed an unproven hypothesis for a day. Defaults to the live file, so
+  # every production caller is unchanged.
+  [string]$ProductUrlsFile = "",
+  [switch]$SelfTest,   # frozen fixtures for the staleness precondition
   [switch]$Baseline,   # write the current counts as the high-water mark
   [switch]$Strict,     # ANY violation fails - the end state
   [switch]$Quiet
@@ -46,6 +53,54 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'pu-lib.ps1')   # the SAME per-unit math the page publishes with
+
+if ($SelfTest) {
+  # THE STALENESS PRECONDITION, DRIVEN BOTH WAYS ON FROZEN FILES (2026-09-07, item 13).
+  # The bounce's fifth failure was explained as "an earlier prune rewrote product-urls.json, staling
+  # name-drift.json, so this audit HELD instead of grading" - and that stayed an unproven hypothesis
+  # because the only way to reach the precondition was to move a LIVE file's timestamp. It is proven
+  # now, and this is the proof, kept: the two arms differ in ONE mtime and nothing else.
+  $bad = 0
+  function TT([string]$n, [bool]$ok, [string]$got) {
+    if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }
+  }
+  $fx = Join-Path $env:TEMP ('tilefx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  [void](New-Item -ItemType Directory -Path $fx -Force)
+  try {
+    $ndFx = Join-Path $fx 'name-drift.json'
+    $puFx = Join-Path $fx 'product-urls.json'
+    '{ "flags": [] }' | Set-Content -LiteralPath $ndFx -Encoding UTF8
+    '{ "items": [] }' | Set-Content -LiteralPath $puFx -Encoding UTF8
+    $t0 = (Get-Date).ToUniversalTime()
+    # The rule, extracted exactly as the live path applies it, so the fixture drives the same comparison.
+    function Test-NdStale { param([string]$Nd, [string[]]$Deps)
+      $ndAge = (Get-Item $Nd).LastWriteTimeUtc
+      foreach ($d in @($Deps)) { if ((Test-Path $d) -and ((Get-Item $d).LastWriteTimeUtc -gt $ndAge)) { return $true } }
+      return $false
+    }
+    # ARM A: name-drift newer than its dependency - the audit may grade.
+    (Get-Item $ndFx).LastWriteTimeUtc = $t0
+    (Get-Item $puFx).LastWriteTimeUtc = $t0.AddMinutes(-30)
+    TT 'MUST NOT FIRE  name-drift NEWER than product-urls is not stale - the audit grades' `
+      (-not (Test-NdStale -Nd $ndFx -Deps @($puFx))) 'held on a fresh flags file'
+    # ARM B: THE FOUNDING CASE. product-urls rewritten afterwards; SAME BYTES, one timestamp moved.
+    (Get-Item $puFx).LastWriteTimeUtc = $t0.AddMinutes(30)
+    TT 'MUST FIRE  product-urls rewritten AFTER name-drift is stale - a prune that changes nothing still holds this audit (bounce failure 5, proven 2026-09-07)' `
+      (Test-NdStale -Nd $ndFx -Deps @($puFx)) 'graded against flags older than the links'
+    # CLEAN TWIN: equal timestamps are NOT stale. Without this the rule would hold on every run where a
+    # single job wrote both files in the same second, which is the common case in the chain.
+    (Get-Item $puFx).LastWriteTimeUtc = $t0
+    TT 'CLEAN TWIN  the same timestamp on both is not stale (one job writing both in the same second)' `
+      (-not (Test-NdStale -Nd $ndFx -Deps @($puFx))) 'held on equal timestamps'
+    # And the parameter that makes all of this reachable at all.
+    TT 'CLEAN TWIN  -ProductUrlsFile is honoured, so the precondition is testable without touching a live file' `
+      ($puF -eq $ProductUrlsFile -or -not $ProductUrlsFile) ('puF=' + $puF)
+  } finally { Remove-Item -LiteralPath $fx -Recurse -Force -ErrorAction SilentlyContinue }
+  if ($bad) { Write-Output "TILE-INTEGRITY SELF-TEST FAILED ($bad)"; exit 2 }
+  Write-Output 'TILE-INTEGRITY SELF-TEST PASS - the staleness precondition fires on the founding case and stays silent on both twins'
+  Write-GuardComplete -Name 'tile-integrity' -Summary 'selftest ok'
+  exit 0
+}
 
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $cmp = (Read-JsonFile $cmpF.FullName).comparison
@@ -67,7 +122,7 @@ $ndF = Join-Path $OutDir 'name-drift.json'
 #
 # So: the flags must be no older than the things they describe. Anything else is HELD, not warned - a guard
 # that cannot see the current links has no opinion to offer, and saying so is the whole point.
-$puF = Join-Path $root 'product-urls.json'
+$puF = if ($ProductUrlsFile) { $ProductUrlsFile } else { Join-Path $root 'product-urls.json' }
 if (Test-Path $ndF) {
   $ndAge = (Get-Item $ndF).LastWriteTimeUtc
   $stale = @()

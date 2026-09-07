@@ -91,17 +91,34 @@ function Find-WriteOnlyFamilies {
     # PASS 1: which local variable holds which family, within this file.
     $alias = @{}
     foreach ($ln in $lines) {
+      # SKIPPING AN IMPOSSIBLE CASE IS NOT CHECKING LESS (2026-09-07, item 15). BOTH patterns in
+      # $WOR_PATH_RX require the literal '.json', so a line without one cannot name a family under
+      # either of them. An ordinal substring test in front of the regexes is therefore exactly the
+      # same check with the guaranteed-empty calls removed.
+      if ($ln.IndexOf('.json', [StringComparison]::OrdinalIgnoreCase) -lt 0) { continue }
       $am = [regex]::Match($ln, '^\s*(\$\w+)\s*=')
       if (-not $am.Success) { continue }
       $fams = Get-ReportFamilies $ln
       if (@($fams).Count -eq 1) { $alias[$am.Groups[1].Value.ToLower()] = @($fams)[0] }
     }
+    # THE ALIAS PATTERNS ARE BUILT ONCE PER FILE, not once per (line x alias). This was the single
+    # biggest cost in the gate: the shipped loop called [regex]::Escape and constructed a fresh regex
+    # INSIDE the line loop, so a file with 20 aliases and 5,000 lines built 100,000 of them. Same
+    # patterns, same order, same answers - only hoisted.
+    $aliasRx = New-Object System.Collections.Generic.List[object]
+    foreach ($k in @($alias.Keys)) {
+      $aliasRx.Add([pscustomobject]@{ rx = [regex]::new('(?i)' + [regex]::Escape($k) + '\b'); fam = $alias[$k] })
+    }
     # PASS 2: verbs, resolved through the aliases.
     foreach ($ln in $lines) {
       $named = New-Object System.Collections.Generic.List[string]
-      foreach ($x in (Get-ReportFamilies $ln)) { [void]$named.Add($x) }
-      foreach ($k in @($alias.Keys)) {
-        if ($ln -match ('(?i)' + [regex]::Escape($k) + '\b')) { [void]$named.Add($alias[$k]) }
+      if ($ln.IndexOf('.json', [StringComparison]::OrdinalIgnoreCase) -ge 0) {
+        foreach ($x in (Get-ReportFamilies $ln)) { [void]$named.Add($x) }
+      }
+      # Every alias KEY starts with '$' (it is captured as (\$\w+) above), so a line containing no
+      # '$' at all can match none of them. Another impossible case, not a narrower one.
+      if ($aliasRx.Count -and $ln.IndexOf('$') -ge 0) {
+        foreach ($a in $aliasRx) { if ($a.rx.IsMatch($ln)) { [void]$named.Add($a.fam) } }
       }
       if (@($named).Count -eq 0) { continue }
       $isW = Test-WriteVerb $ln
@@ -174,11 +191,32 @@ $srcs = @{}
 # package writing its own JSON has nothing to say about whether OUR reports have readers.
 $skipDirs = @('\archive\', '\out\', '\.claude\', '\node_modules\', '\.git\', '\worktrees\',
               '\.venv\', '\venv\', '\site-packages\', '\dist-info\')
-foreach ($f in (Get-ChildItem $Root -Recurse -Include *.ps1, *.py, *.js -File -ErrorAction SilentlyContinue)) {
-  $p = $f.FullName
-  $skip = $false
-  foreach ($d in $skipDirs) { if ($p -like ('*' + $d + '*')) { $skip = $true; break } }
-  if ($skip) { continue }
+# PRUNE THE DIRECTORY, DO NOT FILTER ITS FILES (2026-09-07, item 15). `Get-ChildItem -Recurse -Include`
+# enumerated 13,549 files and built a FileInfo for every one of them, to keep 610 - 6.2 seconds of the
+# gate spent constructing objects that the very next line threw away. The skip list is a set of path
+# SEGMENTS, so a directory whose own name is one of them can be dropped whole: every file beneath it
+# would have been filtered out anyway. Measured: 6,193ms -> 192ms, and the two walks return the SAME
+# 610 files - 0 only-current, 0 only-pruned, compared by name.
+# NO ROOT LIST, deliberately: naming the directories to walk is how a new one goes unscanned the day
+# somebody adds it, which is the failure this gate exists to notice in reports.
+$skipNames = @{}
+foreach ($d in $skipDirs) { $skipNames[$d.Trim('\').ToLower()] = $true }
+$walked = New-Object System.Collections.Generic.List[string]
+$stack = New-Object System.Collections.Generic.Stack[string]
+$stack.Push($Root)
+while ($stack.Count) {
+  $dir = $stack.Pop()
+  try {
+    foreach ($sub in [IO.Directory]::EnumerateDirectories($dir)) {
+      if ($skipNames.ContainsKey((Split-Path $sub -Leaf).ToLower())) { continue }
+      $stack.Push($sub)
+    }
+    foreach ($ff in [IO.Directory]::EnumerateFiles($dir)) {
+      if ($ff -match '\.(ps1|py|js)$') { [void]$walked.Add($ff) }
+    }
+  } catch { }
+}
+foreach ($p in $walked) {
   # THIS FILE MUST NOT SCAN ITSELF. Its own fixture strings name real families, so including it would make
   # every one of them look read - a detector that reads its own source cannot fail.
   if ($p -eq $PSCommandPath) { continue }

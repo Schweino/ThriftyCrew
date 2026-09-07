@@ -317,8 +317,17 @@ foreach ($t in $manifest) {
       continue
     }
   }
+  # WHICH DELTA IS THE READER LOOKING AT (2026-09-07, item 14)?  $r.delta is live vs the WORKING TREE,
+  # and the working tree is not always the thing that is published from - another session can be holding
+  # a recost in it. Measured that day: both tool pages reported "live is +14 bytes", and against the
+  # COMMITTED source the difference was ONE byte. Thirteen of the fourteen belonged to somebody else's
+  # in-flight edit, so the finding read four times larger than the drift actually was, and the operator
+  # who reads it has no way to tell. Report both whenever they disagree; the verdict is unchanged.
+  $dHead = $null
+  if ($null -ne $committed -and $committed -ne $local) { $dHead = $rc.delta }
   $drift += [pscustomobject]@{ slug = $t.slug; file = $t.file; delta = $r.delta; hash = $h
                                localMid = $r.localMid; liveMid = $r.liveMid; prefix = $r.prefix
+                               deltaVsHead = $dHead
                                committedReadable = ($null -ne $committed) }
 }
 
@@ -365,6 +374,9 @@ if ($unpublished.Count) {
 }
 foreach ($d in $drift) {
   Write-Output ("  DRIFT  {0,-26} live is {1:+#;-#;0} byte(s) vs {2}" -f $d.slug, $d.delta, $d.file)
+  if ($null -ne $d.deltaVsHead) {
+    Write-Output ("           {0} is UNCOMMITTED, so that number includes local work: vs the COMMITTED source live is {1:+#;-#;0} byte(s)" -f $d.file, $d.deltaVsHead)
+  }
   Write-LiveAge $d.slug
   if ($ShowDiff) {
     $lm = if ($d.localMid.Length -gt 220) { $d.localMid.Substring(0, 220) + '...' } else { $d.localMid }

@@ -27,6 +27,7 @@ $hookSrc = Join-Path $PSScriptRoot 'hooks\pre-commit'
 # reached back into the real tree for them would pass on a tree where the hook could never find them.
 $needed = @('ops\hooks\pre-commit', 'ops\verify-bulk-edit.ps1', 'ops\verify-bot-commit-scope.ps1',
             'ops\verify-commodities-gate.ps1', 'grocery\identity-lib.ps1',
+            'ops\hooks\commit-msg', 'ops\new-commit-message.ps1',
             'lib\bot-paths.ps1', 'lib\guard-contract.ps1')
 foreach ($f in $needed) {
   if (-not (Test-Path -LiteralPath (Join-Path $repo $f))) {
@@ -61,6 +62,13 @@ function New-HookRepo {
   $hook = Join-Path $w '.git\hooks\pre-commit'
   New-Item -ItemType Directory -Force (Split-Path $hook -Parent) | Out-Null
   [IO.File]::WriteAllText($hook, ([IO.File]::ReadAllText($hookSrc) -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
+  # commit-msg is installed the same way, and for the same reason: it is a shell script git runs
+  # through sh, so a CRLF shebang fails with a bare "not found" that names nothing useful.
+  $cmSrc = Join-Path $repo 'ops\hooks\commit-msg'
+  if (Test-Path $cmSrc) {
+    [IO.File]::WriteAllText((Join-Path $w '.git\hooks\commit-msg'),
+      ([IO.File]::ReadAllText($cmSrc) -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
+  }
   return $w
 }
 
@@ -73,6 +81,16 @@ function Try-Commit {
   } else {
     & git -C $Work commit -m $Message 2>&1
   }
+  $after = (@(& git -C $Work rev-parse HEAD) -join '').Trim()
+  return [pscustomobject]@{ Landed = ($after -ne $before); Text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n") }
+}
+
+function Try-CommitFile {
+  <# Same as Try-Commit but ships the message as a FILE with -F, which is the estate's own rule
+     (an inline -m executes backticks) and the only path on which a BOM can reach a subject. #>
+  param([string]$Work, [string]$MsgPath)
+  $before = (@(& git -C $Work rev-parse HEAD) -join '').Trim()
+  $out = & git -C $Work commit -F $MsgPath 2>&1
   $after = (@(& git -C $Work rev-parse HEAD) -join '').Trim()
   return [pscustomobject]@{ Landed = ($after -ne $before); Text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n") }
 }
@@ -149,6 +167,39 @@ try {
   & git -C $w9 add -A -- 'design/PLAN-y.md' | Out-Null
   $c9 = Try-Commit -Work $w9
   T 'CLEAN TWIN a commit staging no matching-rule input still commits normally' $c9.Landed $c9.Text
+
+  # ---- THE COMMIT-MSG ARM: A BOM MUST NOT REACH A SUBJECT (2026-09-07, item 16) --------------------
+  # Commit 79c62b0f0's subject starts EF BB BF, from PS 5.1's `Set-Content -Encoding utf8`. It is
+  # pushed and stays as it is; this is the forward-looking half. A pre-commit hook CANNOT see the
+  # message being written (COMMIT_EDITMSG still holds the previous commit's text), so this arm is a
+  # commit-msg hook, which receives the real message path as $1.
+  $wm1 = New-HookRepo
+  'x' | Set-Content (Join-Path $wm1 'grocery\out\regular\day2.json')
+  & git -C $wm1 add -A -- 'grocery/out/regular/day2.json' | Out-Null
+  $mb = Join-Path $wm1 'msg-bom.txt'
+  'A subject that would carry a BOM' | Set-Content -LiteralPath $mb -Encoding UTF8
+  $cm1 = Try-CommitFile -Work $wm1 -MsgPath $mb
+  T 'MUST FIRE  a commit message file with a UTF-8 BOM is REFUSED (the 79c62b0f0 shape)' `
+    ((-not $cm1.Landed) -and ($cm1.Text -match 'BOM')) $cm1.Text
+
+  # CLEAN TWIN - the identical message written BOM-less lands. Without this the arm could be refusing
+  # every -F commit and would still pass the case above.
+  $wm2 = New-HookRepo
+  'x' | Set-Content (Join-Path $wm2 'grocery\out\regular\day2.json')
+  & git -C $wm2 add -A -- 'grocery/out/regular/day2.json' | Out-Null
+  $mc = Join-Path $wm2 'msg-clean.txt'
+  [IO.File]::WriteAllText($mc, "A subject that would carry a BOM`n", (New-Object Text.UTF8Encoding($false)))
+  $cm2 = Try-CommitFile -Work $wm2 -MsgPath $mc
+  T 'CLEAN TWIN a BOM-less message file commits normally' $cm2.Landed $cm2.Text
+
+  # CLEAN TWIN - the TOOL and the CHECK agree. A helper whose own output the hook refuses is worse
+  # than no helper, because it teaches people that the hook is broken.
+  $wm3 = New-HookRepo
+  'x' | Set-Content (Join-Path $wm3 'grocery\out\regular\day2.json')
+  & git -C $wm3 add -A -- 'grocery/out/regular/day2.json' | Out-Null
+  $mh = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $wm3 'ops\new-commit-message.ps1') -Body "Written by the helper`n`nBody." -Path (Join-Path $wm3 'msg-helper.txt')
+  $cm3 = Try-CommitFile -Work $wm3 -MsgPath ([string]$mh)
+  T 'CLEAN TWIN ops\new-commit-message.ps1 output is accepted by the hook (tool and check agree)' $cm3.Landed $cm3.Text
 
   # ---- --no-verify IS STILL THE LOUD BYPASS ----------------------------------------------------------
   # It is deliberate, and audit-hook-installed asserts the hook is present so skipping it is a choice.
