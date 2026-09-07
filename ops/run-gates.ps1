@@ -25,7 +25,7 @@
   Exit 0 = every gate passed. 1 = at least one failed. 3 = could not evaluate (found no self-tests at all,
   which would mean the discovery is broken rather than the tree being clean).
 #>
-param([switch]$ListOnly)
+param([switch]$ListOnly, [int]$Jobs = 0)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
@@ -87,18 +87,34 @@ $pass = 0; # WHERE THE WALL CLOCK GOES (2026-09-07). Every gate below is a fresh
 # PS 5.1 spawn is ~209ms and a Python spawn ~68ms, so the spawn floor alone is tens of seconds before
 # any gate code runs. The summary prints the slowest gates and that floor, because "too slow" is not
 # actionable and "this gate costs 14s of a 190s run, and 52s of the run is process startup" is.
+$runSw = [Diagnostics.Stopwatch]::StartNew()
 $timings = [Collections.Generic.List[object]]::new()
 function Add-TcGateTiming { param([string]$Name, [double]$Ms, [int]$SpawnMs) $script:timings.Add([pscustomobject]@{ Name = $Name; Ms = $Ms; SpawnMs = $SpawnMs }) }
+# HOW WIDE (2026-09-07). 269 gates run serially cost 490s on a 32-processor machine that was idle
+# throughout. The gates are independent by construction - each is its own process with its own exit
+# code - so the serial loop was the entire cost and none of the safety. -Jobs 1 restores the old
+# behaviour exactly, and the library's own fixtures assert that concurrency 1 and the pool agree.
+if (-not $Jobs -or $Jobs -lt 1) { $Jobs = [Math]::Max(1, [Math]::Min(16, [Environment]::ProcessorCount - 2)) }
+. (Join-Path $repo 'lib\parallel-run.ps1')   # Invoke-TcParallel - no param() block, so it cannot reset ours
+$PSEXE = (Get-Command powershell).Source
 $fail = @()
 Write-Output ("run-gates: {0} self-test(s) discovered" -f $withSelfTest.Count)
+# ---- the pool runs them; the loop below judges them, unchanged ----
+$selfJobs = [Collections.Generic.List[object]]::new(); $selfKeys = [Collections.Generic.List[string]]::new()
+foreach ($s in $withSelfTest) {
+  [void]$selfKeys.Add([string]$s.FullName)
+  [void]$selfJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $s.FullName, '-SelfTest') })
+}
+$selfRes = Invoke-TcParallel -Jobs $selfJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+$selfBy = @{}; for ($i = 0; $i -lt $selfKeys.Count; $i++) { $selfBy[$selfKeys[$i]] = $selfRes[$i] }
 foreach ($s in $withSelfTest) {
   $rel = $s.FullName.Replace($repo, '').TrimStart('\')
   # NO 2>&1: merging a child's stderr under EAP=Stop makes its first stderr line a terminating throw in THIS
   # script. That trap has bitten test-auditors, guards and check-ad-cycles in this estate already.
-  $tsw = [Diagnostics.Stopwatch]::StartNew()
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $s.FullName -SelfTest
-  $tsw.Stop(); Add-TcGateTiming -Name ($s.FullName.Replace($repo, '')) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 209
-  $rc = $LASTEXITCODE
+  $gr = $selfBy[[string]$s.FullName]
+  $out = $gr.Out
+  Add-TcGateTiming -Name ($s.FullName.Replace($repo, '')) -Ms $gr.Ms -SpawnMs 209
+  $rc = $gr.ExitCode
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}" -f $rel) }
   else {
     $fail += $rel
@@ -248,13 +264,23 @@ $static = @(
   # file's default mode reads the live scheduler and this list passes no arguments.
   @{ f = 'ops\audit-task-registry.ps1';        n = 'every task the registrar registers is watched under the same name, and no legacy name survives in the registry' }
 )
+# Same guard the loop applies, so nothing is spawned for a file the loop will skip.
+$staticJobs = [Collections.Generic.List[object]]::new(); $staticKeys = [Collections.Generic.List[string]]::new()
+foreach ($g in $static) {
+  $pp = Join-Path $repo $g.f
+  if (-not (Test-Path $pp)) { continue }
+  [void]$staticKeys.Add([string]$g.f)
+  [void]$staticJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $pp) })
+}
+$staticRes = Invoke-TcParallel -Jobs $staticJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+$staticBy = @{}; for ($i = 0; $i -lt $staticKeys.Count; $i++) { $staticBy[$staticKeys[$i]] = $staticRes[$i] }
 foreach ($g in $static) {
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
-  $tsw = [Diagnostics.Stopwatch]::StartNew()
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $p
-  $tsw.Stop(); Add-TcGateTiming -Name ($g.f) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 209
-  $rc = $LASTEXITCODE
+  $gr = $staticBy[[string]$g.f]
+  $out = $gr.Out
+  Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 209
+  $rc = $gr.ExitCode
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
     $fail += $g.f
@@ -335,15 +361,24 @@ $pyStatic = @(
   # question even in principle. A gitignored corpus that is absent reads as not-read, never repaired.
   @{ f = 'ops\audit_corpus_provenance.py'; n = 'no NEW test corpus loses track of where its cases came from' }
 )
+$pyStaticJobs = [Collections.Generic.List[object]]::new(); $pyStaticKeys = [Collections.Generic.List[string]]::new()
+foreach ($g in $pyStatic) {
+  $pp = Join-Path $repo $g.f
+  if (-not (Test-Path $pp) -or -not $pyExe) { continue }
+  [void]$pyStaticKeys.Add([string]$g.f)
+  [void]$pyStaticJobs.Add([pscustomobject]@{ Exe = $pyExe; ArgList = @($pp) })
+}
+$pyStaticRes = Invoke-TcParallel -Jobs $pyStaticJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+$pyStaticBy = @{}; for ($i = 0; $i -lt $pyStaticKeys.Count; $i++) { $pyStaticBy[$pyStaticKeys[$i]] = $pyStaticRes[$i] }
 foreach ($g in $pyStatic) {
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
   if (-not $pyExe) { $fail += $g.f; Write-Output ("  FAIL  {0} - no Python 3 interpreter found, so this audit DID NOT RUN" -f $g.f); continue }
   # NO 2>&1 ON A NATIVE EXE under $ErrorActionPreference='Stop' - it turns a clean exit into a throw.
-  $tsw = [Diagnostics.Stopwatch]::StartNew()
-  $out = & $pyExe $p
-  $tsw.Stop(); Add-TcGateTiming -Name ($g.f) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 68
-  $rc = $LASTEXITCODE
+  $gr = $pyStaticBy[[string]$g.f]
+  $out = $gr.Out
+  Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 68
+  $rc = $gr.ExitCode
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
     $fail += $g.f
@@ -352,6 +387,17 @@ foreach ($g in $pyStatic) {
   }
 }
 
+# KEYED ON FILE PLUS ARGUMENT: a battery can appear twice in $pySuites with different arguments, and a
+# bare filename key would collapse both onto one result and score one of them against the other's output.
+$pySuiteJobs = [Collections.Generic.List[object]]::new(); $pySuiteKeys = [Collections.Generic.List[string]]::new()
+foreach ($g in $pySuites) {
+  $pp = Join-Path $repo $g.f
+  if (-not (Test-Path $pp) -or -not $pyExe) { continue }
+  [void]$pySuiteKeys.Add([string]$g.f + '|' + [string]$g.a)
+  [void]$pySuiteJobs.Add([pscustomobject]@{ Exe = $pyExe; ArgList = @($pp, [string]$g.a) })
+}
+$pySuiteRes = Invoke-TcParallel -Jobs $pySuiteJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+$pySuiteBy = @{}; for ($i = 0; $i -lt $pySuiteKeys.Count; $i++) { $pySuiteBy[$pySuiteKeys[$i]] = $pySuiteRes[$i] }
 foreach ($g in $pySuites) {
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
@@ -367,10 +413,10 @@ foreach ($g in $pySuites) {
   # suites and broke on the twenty-seventh the moment discovery widened the input - the same shape
   # capture-run.ps1 records from 2026-08-22. stderr now goes to the console where a human sees it;
   # the verdict was never in stderr, it is the exit code.
-  $tsw = [Diagnostics.Stopwatch]::StartNew()
-  $out = & $pyExe $p $g.a
-  $tsw.Stop(); Add-TcGateTiming -Name (($g.f + ' ' + [string]$g.a)) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 68
-  $rc = $LASTEXITCODE
+  $gr = $pySuiteBy[([string]$g.f + '|' + [string]$g.a)]
+  $out = $gr.Out
+  Add-TcGateTiming -Name (($g.f + ' ' + [string]$g.a)) -Ms $gr.Ms -SpawnMs 68
+  $rc = $gr.ExitCode
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
     $fail += $g.f
@@ -399,7 +445,11 @@ if ($timings.Count) {
   $totalMs = ($timings | Measure-Object -Property Ms -Sum).Sum
   $floorMs = ($timings | Measure-Object -Property SpawnMs -Sum).Sum
   Write-Output ''
-  Write-Output ("timing: {0} gate(s) in {1:N1}s, of which about {2:N1}s ({3:N0}%) is process startup - every gate is a fresh process, run serially." -f $timings.Count, ($totalMs / 1000), ($floorMs / 1000), (100 * $floorMs / [Math]::Max($totalMs, 1)))
+  # WALL AND WORK ARE DIFFERENT NUMBERS UNDER A POOL, and reporting the sum as the run time overstates
+  # it by the width: the first parallel run summed 569.9s of gate work into 131s of wall clock.
+  $wallS = $runSw.Elapsed.TotalSeconds
+  Write-Output ("timing: {0} gate(s), {1:N0}s wall at width {2}. {3:N0}s of gate work inside it, of which about {4:N0}s is process startup - every gate is still its own process." -f $timings.Count, $wallS, $Jobs, ($totalMs / 1000), ($floorMs / 1000))
+  if ($Jobs -gt 1) { Write-Output ("timing: serial would have been about {0:N0}s, so the pool is saving roughly {1:N0}s a run." -f ($totalMs / 1000), [Math]::Max(0, ($totalMs / 1000) - $wallS)) }
   Write-Output 'timing: slowest 15 -'
   foreach ($r in ($timings | Sort-Object Ms -Descending | Select-Object -First 15)) {
     Write-Output ("   {0,7:N0}ms  {1}" -f $r.Ms, $r.Name)
