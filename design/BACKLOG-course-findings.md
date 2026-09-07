@@ -54,7 +54,7 @@ items nobody had bucketed (E8, I3, I4).
 
 ## Safety and correctness
 
-### E1 - The estate takes irreversible actions with no safety layer `PARTLY DONE` `723be4ad`
+### E1 - The estate takes irreversible actions with no safety layer `DONE - CLOSED 2026-09-07; R2 HAS NO CALLERS AND BOTH PUBLISHERS ARE TAUGHT` `723be4ad`
 *Source: AI Agents Architecture (course 7).* Board cells, `known-wrong` rulings, Ghost publishes
 and R2 writes are all irreversible from an agent's side, and **`post-publish-reviewer` runs after
 the irreversible step**, which is the wrong side of it. Two cheap patterns: **staging** (reads
@@ -94,6 +94,47 @@ twin proving the journal still records when staging is off.
    journal switch (`TC_WRITE_JOURNAL`) is still off everywhere.
 4. **`publish.ps1:285` needs teaching before staging can be armed on the publish chain** - it GETs the
    public page after the PUT to confirm it shipped, and would report a failure when nothing shipped.
+
+---
+
+**CLOSED 2026-09-07. Three of the four were answered by looking rather than by building, and the
+fourth turned out to have a second half nobody had noticed.**
+
+**1. R2 has no callers to protect.** Grepped every tracked `.ps1` and `.py`: there is exactly one
+Cloudflare API call in the estate and it is a **GET** (`ops/audit-cloudflare-estate.ps1:292`, reading
+bucket lifecycle). No `PutObject`, no upload, no wrangler, no S3 client. The V3/V4 platform that used
+R2 was deleted in Aug 2026 and the buckets outlived the code that wrote them. So "route R2 through
+the seam" has nothing to route - and the guard that would catch a NEW one already exists:
+`audit-write-seam.ps1` carries `api\.cloudflare` in its owned-surfaces list and a frozen must-fire
+fixture for a mutating R2 lifecycle PUT. A new R2 write hard-fails the gate on the day it is added.
+
+**2. Neither mechanism would have caught the 2026-08-29 paywall leak.** Unchanged and still true: that
+PUT reported success without taking effect, and only a downstream audit could see it. Recorded as a
+limit of this layer, not as work.
+
+**3. Half armed since I21** (Brad's ruling, 2026-09-07): staging is ON for agent dispatches, off for
+the daily chain. Arming it immediately found that the approver would have corrupted the post - a
+`[byte[]]` body was recorded as the STRING `"(byte[] length N)"` and `-Apply` replayed that
+description to Ghost, on the only branch the live chain takes.
+
+**4. `publish.ps1` was already taught - and `wave-publish.ps1` was NOT, which nobody had looked
+for.** The estate has two mutating Ghost callers, and the second is the serveability ROLLBACK at
+`wave-publish.ps1:1163`, which drafts a post whose card the feed cannot price. With staging armed
+that PUT would be queued, the post would stay LIVE, and the code would have added the slug to
+`$drafted`, printed "drafted + held" and advanced the run state - **recording a recipe that is still
+live and still unpriceable as safely withdrawn, on the one path whose whole job is pulling down
+something that is hurting readers.** Now a staged rollback reports **STILL LIVE** and advances
+nothing, which is the truthful reading: until somebody applies the queued write, the post IS live.
+
+**The marker has one reading now.** `Test-TcStaged` lives in `lib/ghost-lib.ps1` beside the code that
+sets `__tc_staged`, and both publishers ask it instead of spelling out a property test. Three
+hand-written copies is how one of them ends up checking a renamed property and silently taking the
+not-staged branch. Four fixtures pin it, and the one that matters is `$null`: a real Ghost response
+has no such property and neither does a variable left unset by a throw, so both must read NOT staged
+- the alternative is a run that sent everything and reported it all queued.
+
+**What remains is not this item.** The journal switch (`TC_WRITE_JOURNAL`) is still off everywhere,
+and arming it is a separate decision with a separate argument.
 
 ### E2 - Bare numeric codes cross agent boundaries `DONE` `5a7fccf0`
 *Source: AI Agents in Python (course 6).* "An agent that receives error 32 is finished." Our gate
@@ -3072,8 +3113,17 @@ self-test (counted 2026-09-07, `grep -rl SelfTest --include=*.ps1`, worktrees ex
 of them proves a DETECTOR fires. None proves a ROUTE delivers. Email has been muted since
 2026-08-14 (`grocery/alerts-muted.json`, no expiry), the 6:30 triage agent is disabled, and
 `grocery/ALERTS.md` says plainly that until something reads the queue "an alert is a record, not a
-page". So the DELIVERY leg has not been exercised in roughly three weeks and nothing would report
-that it had stopped working. The queue leg is fine and deliberately so.
+page". So the DELIVERY leg has not been exercised and nothing would report that it had stopped
+working. The queue leg is fine and deliberately so.
+
+**CORRECTED 2026-09-07 by queue-4 course 2, which read the file.** The sentence above said email
+"has been muted since 2026-08-14 ... no expiry". **It was unmuted on 2026-08-31.**
+`grocery/alerts-muted.json` reads `"muted": false`, `"unmuted": "2026-08-31"`, with the reason that
+the mute had run 17 days and two queue items sat unseen; `send-alert.ps1 -SelfTest` asserts
+`muted:false -> not muted (in-place off switch)`. The mute MECHANISM is still expiry-less, which is
+the separate true point the `force-bypasses-the-daily-gate-not-the-mute` memory records. **The rung
+this item proposes is unaffected**, because the untested thing is the delivery leg and it is still
+untested whether muted or not. Logged as X7 in the claims register.
 
 **Rungs, cheapest first.**
 
@@ -3097,3 +3147,63 @@ backlog nobody is about to clear. Rung 1 is a report.
 
 **What it touches.** `grocery/alert-lib.ps1`, `grocery/alert-state.json`, `grocery/ALERTS.md`,
 `grocery/audit-alert-precision.ps1`. No board, no published page.
+
+### I33 - The estate has 15 days of latency history in git and has never read it `OPEN - RUNG 1 IS A READ, NOT A BUILD`
+
+**Source.** Queue-4 course 2, `site-reliability-engineering-principles` (Edureka), items 7 to 12, 18,
+19, 23 and 44. Vendor course, no measurements; claims C69 to C72 in
+`~/.claude/skills/course/CLAIMS-REGISTER.md`. The concepts are routed to `reliability-craft`; this
+item is only what the estate measurement found.
+
+**Measured 2026-09-07, main checkout, worktrees and `sidecar/.venv` excluded.** 28 scripts under
+`ops/`, 56 `grocery/audit-*.ps1`, and 217 `.ps1` files containing `SelfTest`; the sets overlap and
+the **distinct union is 243**. (`QUEUE-4.md`'s "249 gates" was not reproduced and is not used here.)
+**242 of them answer a boolean and record nothing about how long they took.** A text sweep for `SLO`,
+`error budget`, `burn rate`, `golden signal` and `blameless` across all tracked `.ps1`, `.py` and
+`.md` returned **zero files for each** - measured before this item was written. **Re-running it now
+returns one file for all five: this one.** Exclude `design/BACKLOG-course-findings.md` when you
+re-measure. `toil` is still zero. `runbook` returns seven, all prose, none with escalation timings or
+resolution criteria; `postmortem` returns two, both naming the V4 postmortem document rather than a
+practice.
+
+**The exception, and a correction to this item's own first draft.** `graph/pipeline/nightly.ps1`
+times each stage (line 324) and writes per-stage timings plus a total `elapsed_sec` (line 675) to
+`grocery/out/logs/graph-nightly-status.json`. **This item first said that file is gitignored and
+overwritten with no history. That was wrong**, and wrong in exactly the shape the
+`check-ignore-directory-form-lies` memory names: the assumption came from `grocery/out/` being an
+ignored directory and was never checked against the file path.
+
+Checked properly: `git check-ignore -v` on the file path **exits 1 (not ignored)** and
+`git ls-files --error-unmatch` succeeds. It is **tracked and committed daily**, 15 commits from
+2026-08-23 to 2026-09-07 with one gap on 2026-08-24. Reconstructed from `git show` per commit:
+
+| | |
+|---|---|
+| observations | 15 daily totals of the graph nightly chain |
+| range | **118 s to 199 s** |
+| mean / median | **161.7 s / 161 s** |
+| trend | none visible by eye over 15 points |
+
+**So the finding is not "we do not measure". It is "we measure one thing, keep it properly, and have
+never once looked at it."** In roughly three weeks nothing has read that series: no script consumes
+the file, no band exists around it, and producing the five numbers above meant walking git history by
+hand. That is why nobody has.
+
+**Rungs, cheapest first.**
+
+1. **Read what is already there.** A short script that walks
+   `git log -- grocery/out/logs/graph-nightly-status.json`, extracts `elapsed_sec` and the per-stage
+   timings, and prints the series. This is a read of committed data, changes nothing, and is the only
+   rung that should happen without a further ruling. Its output is the input every later rung needs.
+2. **Then decide whether a band is worth it**, using `data-quality-craft/checks-and-thresholds.md` 2
+   on band-versus-ratchet-versus-budget and `detecting-anomalies.md` 3 on deriving a cutoff rather
+   than choosing one. 15 points is thin; `experiment-craft` should rule on whether it can support a
+   band at all before one is written. **Do not hard-code a number** - the `no-hardcoded-bands` ruling
+   applies here as much as to prices.
+3. **Only then consider widening coverage** to the daily grocery chain or the capture lanes. Adding a
+   second uninspected timing series before anyone has read the first one buys nothing.
+4. **PARKED if rung 1 shows no variance worth acting on.** Recorded so this does not become a
+   standing invitation to build observability machinery for a one-box estate.
+
+**What it would touch.** Rung 1 is a new read-only script under `ops/` and nothing else. No gate
+changes, no agent changes, no data writes.

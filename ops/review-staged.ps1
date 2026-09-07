@@ -92,6 +92,18 @@ if ($SelfTest) {
     T 'MUST FIRE  a staged call fabricates no id field' ($null -eq $r.PSObject.Properties['id']) 'an id was invented'
     $q = Read-TcQueue -Lines ([IO.File]::ReadAllLines($tmp))
     T 'the queue round-trips to one entry' ($q.Entries.Count -eq 1) ("Count=" + $q.Entries.Count)
+    # THE MARKER'S ONE READING (2026-09-07, backlog E1). Test-TcStaged decides, at two publishers,
+    # whether a slug is reported as SHIPPED or as STILL LIVE. Pinned here rather than at the call
+    # sites because an inline property test could only have been asserted by a self-test grepping its
+    # own source, which cannot fail. [[selftest-greps-its-own-source]]
+    T 'MUST FIRE  a staged result reads as staged' (Test-TcStaged ([pscustomobject]@{ __tc_staged = $true })) 'a queued write would be reported as sent'
+    T 'MUST NOT FIRE  THE ONE THAT MATTERS - a real Ghost response has no such property and must read NOT staged, or a run that SENT everything reports it all queued' `
+      (-not (Test-TcStaged ([pscustomobject]@{ posts = @(1) }))) 'a live response read as staged'
+    T 'MUST NOT FIRE  $null - a variable left unset by a throw is not a staged write' `
+      (-not (Test-TcStaged $null)) 'null read as staged'
+    T 'CLEAN TWIN the property present but FALSE reads as not staged, so the flag means what it says' `
+      (-not (Test-TcStaged ([pscustomobject]@{ __tc_staged = $false }))) 'a false flag read as true'
+
     T 'the entry records the method and uri' (($q.Entries[0].method -eq 'PUT') -and ($q.Entries[0].uri -like 'https://invalid.invalid/*')) 'method/uri lost'
 
     # THE BYTE[] ROUND-TRIP, WHICH IS THE ONLY SHAPE THE LIVE CHAIN ACTUALLY STAGES (2026-09-07).

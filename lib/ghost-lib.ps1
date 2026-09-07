@@ -139,6 +139,25 @@ function Add-TcStagedCall {
   })
 }
 
+function Test-TcStaged {
+  <# Did this call get QUEUED instead of sent? One reading of the marker, in the file that sets it.
+
+     WHY A FUNCTION AND NOT A PROPERTY TEST AT EACH SITE (2026-09-07, backlog E1). Two publishers
+     branch on this - meal-prep\engine\publish.ps1 and wave-publish.ps1's serveability rollback - and
+     the branch decides whether a slug is reported as SHIPPED or as STILL LIVE. Three hand-written
+     copies of `$w.PSObject.Properties['__tc_staged'] -and $w.__tc_staged` is how one of them ends up
+     testing a property that has been renamed and silently taking the not-staged branch, which on the
+     rollback path means calling a live post withdrawn.
+
+     THE $null CASE IS THE ONE THAT MATTERS. A real Ghost response has no such property, and so does
+     a call that threw and left the variable unset; both must read as NOT staged, because the
+     alternative is a run that sent everything and reported it all queued. #>
+  param($Response)
+  if ($null -eq $Response) { return $false }
+  if (-not $Response.PSObject.Properties['__tc_staged']) { return $false }
+  return [bool]$Response.__tc_staged
+}
+
 function Get-TcQueueConcerns {
   <# The whole argument for staging over an undo log lives in this function: it looks at the SET.
      An undo log sees one call at a time and cannot ask any of these questions.

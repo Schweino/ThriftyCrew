@@ -291,7 +291,7 @@ foreach($slug in $Slugs){
     # publish would skip them as UNCHANGED. That is precisely the -VerifyOnly defect documented forty
     # lines below, which cost 14 of 15 rebuilt cards on 2026-09-01: a watermark may only be written by
     # the code path that did the work. `continue` here is what keeps that true.
-    if($wrote -and $wrote.PSObject.Properties['__tc_staged'] -and $wrote.__tc_staged){
+    if (Test-TcStaged $wrote) {
       $staged += $slug
       Write-Output ("STAGED  $slug :: queued for review, NOT sent. The live page is unchanged on purpose; run ops\review-staged.ps1 to apply or discard.")
       continue

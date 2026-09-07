@@ -1160,7 +1160,22 @@ if (-not $rollback.Count) {
       if (-not $p) { $stuck += ("{0}: not found live" -f $s); continue }
       # Ghost's collision check: the PUT must carry the post's own updated_at or it 409s.
       $body = (@{ posts = @(@{ id = $p.id; updated_at = $p.updated_at; status = 'draft' }) } | ConvertTo-Json -Depth 6 -Compress)
-      Invoke-GhostApi -Method 'PUT' -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Headers $hdr -Body $body | Out-Null
+      $wrote = Invoke-GhostApi -Method 'PUT' -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Headers $hdr -Body $body
+      # E1 STAGING, ON THE ROLLBACK PATH (2026-09-07). With TC_STAGE_WRITES armed this PUT is QUEUED,
+      # not sent, so the post is STILL LIVE. Without this branch the slug would go into $drafted,
+      # print "drafted + held", and advance the run state - recording a recipe that is still live and
+      # still unpriceable as safely withdrawn. That is the false-success shape publish.ps1 was taught
+      # to avoid, here on the one path whose whole job is pulling down something that is hurting
+      # readers.
+      #
+      # STAGED IS STUCK, NOT A THIRD STATE. Until somebody applies the queued write the post IS live,
+      # and STILL LIVE is what an operator has to act on. The state advance below is skipped for the
+      # same reason publish.ps1 refuses to stamp its hashes: a watermark may only be written by the
+      # code path that did the work.
+      if (Test-TcStaged $wrote) {
+        $stuck += ("{0}: the draft is QUEUED for review, not sent - the post is STILL LIVE until ops\review-staged.ps1 applies it" -f $s)
+        continue
+      }
       $drafted += $s
       & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'hunt-run.ps1') -Advance -RunDir $RunDir -Slug $s -To held -By 'wave-publish' -Detail 'serveability rollback: the feed its card fetches cannot price it' | Out-Null
     } catch {
