@@ -1829,7 +1829,7 @@ audit-null-rate.ps1 - no executable file in the repo names it", which is the est
 refusing a detector with no caller. Wiring it into `capture-run.ps1` is what fixed it, not an
 allowlist entry.
 
-### I13 - Every threshold in the estate is CHOSEN, because only two artefacts keep history `PARTLY DONE` `queue-2`
+### I13 - Every threshold in the estate is CHOSEN, because only two artefacts keep history `DONE - THE ONE DERIVABLE SET IS DERIVED; 4 OF 16 ARE TOO LOOSE` `queue-2`
 
 **Source:** course 10, same run as I12. This is the standing `no-hardcoded-bands` ruling (Brad,
 2026-09-04) arriving from the other direction: the reason bands get hard-coded here is that there is
@@ -1872,6 +1872,49 @@ append-only shape, so the same question can be asked of them.
 **Not proposed:** converting the existing baselines. They work, they are green, and rewriting a
 working ratchet to change where its number came from is churn across the whole gate surface for no
 behaviour change today.
+
+**DONE 2026-09-07. The afternoon's analysis this item asked for is now
+`grocery/analyse_coverage_tolerances.py`, run against 562 runs of history, and it pays off.**
+
+**What it does.** Per check, the DOWNWARD deviation from a ROLLING median of the preceding 15 runs,
+then the p95 of those against the hand-set `tolerance`. A tolerance has to sit above the ordinary
+variation and below the fall you want caught, so it prints both the p95 and the worst observed
+side by side.
+
+**The trap it is shaped around, and the reason a naive version would have been useless.** "How far
+does `examined` swing" answered by the max is dominated by STEP CHANGES, which are not noise:
+`audit-everyday-mismatch` fell from ~2,900 to ~2,500 on 2026-08-22 because a carry-forward fix
+retired 530 rows - real, permanent and explained. A tolerance sized to absorb that absorbs
+everything. A rolling reference follows a step within a few runs; a global one is distorted by it
+forever. That case is the file's founding must-not-fire fixture.
+
+**The result, and it is the opposite of the worry.** Nothing is crying wolf: **0 of 16 tolerances are
+too tight.** Four are too LOOSE - more than three times the worst fall ever observed - so the row is
+watched in name only:
+
+| Check | Tolerance | Ordinary variation (p95) | Worst ever observed | Runs |
+|---|---|---|---|---|
+| `guards/11-bakers-provenance` | 0.25 | 0.001 | **0.004** | 561 |
+| `guards/13-board-vs-identity-staple` | 0.10 | 0.000 | 0.002 | 169 |
+| `guards/13-board-vs-identity-recipe` | 0.10 | 0.006 | 0.017 | 169 |
+| `guards/5-multipack` | 0.50 | 0.023 | 0.136 | 561 |
+
+`guards/11-bakers-provenance` is the sharpest: it has never varied by more than **0.4%** across 561
+runs and would tolerate losing a **quarter** of its coverage in silence.
+
+**It changed nothing, deliberately.** A tolerance is a live gate, and moving one on the strength of an
+afternoon's arithmetic is how a guard gets loosened by a script instead of by a person. Tightening
+these four is a per-row decision for Brad - each one trades a smaller blind spot against the risk of
+firing on a legitimate future population change, and the history cannot see a change that has not
+happened yet.
+
+**Two rows are deliberately not judged**, and the tool says so rather than scoring them: `audit-ff-carry`
+carries `tolerance: 1` because its denominator is INVERSE - the number falls when the FF pull gets
+BETTER - and `pull-regular-hyvee` is judged by ratio against the day's slice rather than by a floor.
+
+**The larger version this item floated - a history line for the other seventeen baselines - is still
+not proposed.** The analysis paid off for the set that already had history; that is an argument for
+keeping this one, not for retrofitting append-only logs across the gate surface on spec.
 
 ---
 
@@ -2972,3 +3015,54 @@ truncates a hunt mid-wave could be worse than the overspend.
 
 **Deliberately not proposed: a gate.** Per the standing rule, a gate that is red on day one for a
 backlog nobody is about to clear teaches people to ignore red. Rungs 1 and 2 are reports.
+
+### I32 - No alert here can require a condition to PERSIST, and no alert ROUTE has been tested end to end `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+
+**Source.** Queue-4 course 1, `observability-engineering-metrics-logs-traces` (Edureka), items 34,
+37 and 38. A vendor course with no measurements; what it supplied is a mechanism and a vocabulary,
+not evidence. Registered as claims C66 and C67 in `~/.claude/skills/course/CLAIMS-REGISTER.md`.
+
+**What the estate does today.** Every gate and audit reads the newest artefact once, decides, and
+exits. Nothing in the tree expresses "this has been true for two consecutive runs". The nearest
+mechanism is the once-per-type-per-day gate in `grocery/send-alert.ps1`, and it is the OPPOSITE
+behaviour to what is missing: it withholds the second email about a persistent condition, where a
+duration window withholds the first notification of a transient one. So a condition that clears on
+its own before anyone reads it and a condition that has been true for a week arrive looking
+identical.
+
+**Why that matters here rather than generally.** `grocery/ALERTS.md` already records the specific
+harm in its own words: a non-zero exit from the 08:00 job is usually the guards refusing to publish,
+and reporting that as FAILED about a board that triage has since rebuilt "is how a real alert gets
+trained into noise". The fix applied there was `Test-RunSuperseded`, which is this problem solved
+once, by hand, for one alert. A duration window is the general form.
+
+**The second half, and it is cheaper to see than to fix.** 217 PowerShell files in this tree carry a
+self-test (counted 2026-09-07, `grep -rl SelfTest --include=*.ps1`, worktrees excluded) and every one
+of them proves a DETECTOR fires. None proves a ROUTE delivers. Email has been muted since
+2026-08-14 (`grocery/alerts-muted.json`, no expiry), the 6:30 triage agent is disabled, and
+`grocery/ALERTS.md` says plainly that until something reads the queue "an alert is a record, not a
+page". So the DELIVERY leg has not been exercised in roughly three weeks and nothing would report
+that it had stopped working. The queue leg is fine and deliberately so.
+
+**Rungs, cheapest first.**
+
+1. **Measure the prize before building anything.** Count, over `grocery/triage-queue.json`'s closed
+   items, how many firings cleared without action inside one run cycle. If that number is small, the
+   duration window buys nothing here and this item should be `PARKED`. Nobody has this number, and
+   `grocery/audit-alert-precision.ps1` is already reading the right file to produce it.
+2. **A persistence field on the alert.** `send-alert.ps1` already implements a per-type-per-day
+   decision and stamps `emitter` on a new queue item, so a per-type key and a durable record both
+   exist; what does not exist is a "first seen at run N" stamp an alert could require before it
+   pages. NOTE, because this was got wrong once during this run and corrected: `alert-state.json`
+   is **not** alert-type state. It holds one price-alert record per commodity (`{"chicken-breast":
+   {"price":1.99,...}}`) and is the wrong file to extend.
+3. **One end-to-end route test.** A deliberately triggered synthetic alert driven all the way to the
+   receiving channel, so "the detector fired" and "somebody was told" stop being the same claim.
+   Scope it to the DELIVERY leg only: `send-alert.ps1` writes the triage-queue entry before the mute
+   gate on purpose, so the queue leg is exercised on every alert already and is not what is untested.
+
+**Deliberately not proposed: a gate.** Per the standing rule, this would be red on day one for a
+backlog nobody is about to clear. Rung 1 is a report.
+
+**What it touches.** `grocery/alert-lib.ps1`, `grocery/alert-state.json`, `grocery/ALERTS.md`,
+`grocery/audit-alert-precision.ps1`. No board, no published page.
