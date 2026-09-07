@@ -30,7 +30,15 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repo = Resolve-Path (Join-Path $here '..')
 
 # Tab, LF and CR are the three that belong in source. Everything else below 0x20, plus DEL, does not.
-$LEGAL = @(9, 10, 13)
+# The regex says exactly that, and it is now the ONLY statement of the rule; a parallel list of the
+# legal byte values used to state the same thing a second time.
+$CTRL_RX = [regex]::new("[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]", 'Compiled')
+# ISO-8859-1, and the choice matters. The header says bytes rather than text because a decoder can
+# normalise or replace the very byte being hunted. This one cannot: it maps 0x00-0xFF to U+0000-U+00FF
+# one for one, no multi-byte sequences, no replacement character, no normalisation. So a regex over
+# the resulting string is still a BYTE view - and .NET runs it at native speed, where the per-byte
+# PowerShell loop this replaced cost 112s of a 490s gate run (measured 2026-09-07).
+$LATIN1 = [Text.Encoding]::GetEncoding(28591)
 $EXT   = @('.ps1', '.psm1', '.py', '.js', '.md', '.json', '.jsonl', '.txt', '.yml', '.yaml', '.css', '.html')
 
 function Find-TcControlBytes {
@@ -38,13 +46,16 @@ function Find-TcControlBytes {
      drive it against literal byte arrays rather than against files on disk. #>
   param([byte[]]$Bytes)
   $hits = @()
-  $line = 1
-  for ($i = 0; $i -lt $Bytes.Length; $i++) {
-    $b = $Bytes[$i]
-    if ($b -eq 10) { $line++; continue }
-    if (($b -lt 32 -and $LEGAL -notcontains $b) -or $b -eq 127) {
-      $hits += [pscustomobject]@{ Offset = $i; Line = $line; Byte = $b }
-    }
+  if ($null -eq $Bytes -or $Bytes.Length -eq 0) { return ,$hits }
+  $s = $LATIN1.GetString($Bytes)
+  $ms = $CTRL_RX.Matches($s)
+  # The overwhelmingly common answer, and the whole reason this is fast: one native regex sweep and out.
+  if ($ms.Count -eq 0) { return ,$hits }
+  foreach ($m in $ms) {
+    # Only a file that actually has a hit pays for line numbers, and IndexOf is native too.
+    $line = 1; $ix = -1
+    while ((($ix = $s.IndexOf("`n", $ix + 1)) -ge 0) -and ($ix -lt $m.Index)) { $line++ }
+    $hits += [pscustomobject]@{ Offset = $m.Index; Line = $line; Byte = [int][char]$s[$m.Index] }
   }
   # Unary comma: a single finding must stay an ARRAY, or .Count reads the object's own property and a
   # one-hit file can score wrong. Same collapse this estate keeps being bitten by.

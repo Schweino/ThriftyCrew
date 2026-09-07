@@ -82,13 +82,22 @@ if (-not $withSelfTest.Count) {
   exit 3
 }
 
-$pass = 0; $fail = @()
+$pass = 0; # WHERE THE WALL CLOCK GOES (2026-09-07). Every gate below is a fresh process - `powershell -File`
+# for the PowerShell lanes, the interpreter for the Python ones - run serially. On this machine a bare
+# PS 5.1 spawn is ~209ms and a Python spawn ~68ms, so the spawn floor alone is tens of seconds before
+# any gate code runs. The summary prints the slowest gates and that floor, because "too slow" is not
+# actionable and "this gate costs 14s of a 190s run, and 52s of the run is process startup" is.
+$timings = [Collections.Generic.List[object]]::new()
+function Add-TcGateTiming { param([string]$Name, [double]$Ms, [int]$SpawnMs) $script:timings.Add([pscustomobject]@{ Name = $Name; Ms = $Ms; SpawnMs = $SpawnMs }) }
+$fail = @()
 Write-Output ("run-gates: {0} self-test(s) discovered" -f $withSelfTest.Count)
 foreach ($s in $withSelfTest) {
   $rel = $s.FullName.Replace($repo, '').TrimStart('\')
   # NO 2>&1: merging a child's stderr under EAP=Stop makes its first stderr line a terminating throw in THIS
   # script. That trap has bitten test-auditors, guards and check-ad-cycles in this estate already.
+  $tsw = [Diagnostics.Stopwatch]::StartNew()
   $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $s.FullName -SelfTest
+  $tsw.Stop(); Add-TcGateTiming -Name ($s.FullName.Replace($repo, '')) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 209
   $rc = $LASTEXITCODE
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}" -f $rel) }
   else {
@@ -230,11 +239,21 @@ $static = @(
   # It is hermetic (frozen inputs, its own -OutFile) so it runs anywhere, and it is the only check that
   # compares the engine's ACTUAL output against an accepted baseline rather than re-deriving from it.
   @{ f = 'meal-prep\engine\golden-test.ps1';   n = 'the cost engine still produces its accepted output from frozen inputs' }
+  # A SCHEDULED TASK'S NAME IS A FOREIGN KEY IN TWO HAND-MAINTAINED TABLES (2026-09-07, queue
+  # 2026-09-07-dc7460): the $OWNED list in ops\install-grocery-tasks.ps1 and windows_tasks in
+  # grocery\expected-automations.json, which health-heartbeat reads. Nothing compared them at the moment
+  # either one changed, so a rename applied to the scheduler and the registrar at 06:30 passed every gate,
+  # and at 10:30 the heartbeat paged it as a phantom task plus an unwatched one. Hermetic (source only,
+  # no Get-ScheduledTask), which is why it is a wrapper rather than install-grocery-tasks itself: that
+  # file's default mode reads the live scheduler and this list passes no arguments.
+  @{ f = 'ops\audit-task-registry.ps1';        n = 'every task the registrar registers is watched under the same name, and no legacy name survives in the registry' }
 )
 foreach ($g in $static) {
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
+  $tsw = [Diagnostics.Stopwatch]::StartNew()
   $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $p
+  $tsw.Stop(); Add-TcGateTiming -Name ($g.f) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 209
   $rc = $LASTEXITCODE
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
@@ -321,7 +340,9 @@ foreach ($g in $pyStatic) {
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
   if (-not $pyExe) { $fail += $g.f; Write-Output ("  FAIL  {0} - no Python 3 interpreter found, so this audit DID NOT RUN" -f $g.f); continue }
   # NO 2>&1 ON A NATIVE EXE under $ErrorActionPreference='Stop' - it turns a clean exit into a throw.
+  $tsw = [Diagnostics.Stopwatch]::StartNew()
   $out = & $pyExe $p
+  $tsw.Stop(); Add-TcGateTiming -Name ($g.f) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 68
   $rc = $LASTEXITCODE
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
@@ -346,7 +367,9 @@ foreach ($g in $pySuites) {
   # suites and broke on the twenty-seventh the moment discovery widened the input - the same shape
   # capture-run.ps1 records from 2026-08-22. stderr now goes to the console where a human sees it;
   # the verdict was never in stderr, it is the exit code.
+  $tsw = [Diagnostics.Stopwatch]::StartNew()
   $out = & $pyExe $p $g.a
+  $tsw.Stop(); Add-TcGateTiming -Name (($g.f + ' ' + [string]$g.a)) -Ms $tsw.Elapsed.TotalMilliseconds -SpawnMs 68
   $rc = $LASTEXITCODE
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
@@ -369,6 +392,18 @@ if ($fail.Count) {
   Write-Output ("run-gates: FAILED - {0} gate(s) did not pass. This tree must not be pushed until they do; fix the cause, never the gate." -f $fail.Count)
 } else {
   Write-Output ("run-gates: PASSED - all {0} gate(s) passed." -f $pass)
+}
+# The profile, printed BEFORE the COMPLETE marker: the guard contract says that marker is the LAST
+# line on stdout, and anything after it breaks every reader that trusts the contract.
+if ($timings.Count) {
+  $totalMs = ($timings | Measure-Object -Property Ms -Sum).Sum
+  $floorMs = ($timings | Measure-Object -Property SpawnMs -Sum).Sum
+  Write-Output ''
+  Write-Output ("timing: {0} gate(s) in {1:N1}s, of which about {2:N1}s ({3:N0}%) is process startup - every gate is a fresh process, run serially." -f $timings.Count, ($totalMs / 1000), ($floorMs / 1000), (100 * $floorMs / [Math]::Max($totalMs, 1)))
+  Write-Output 'timing: slowest 15 -'
+  foreach ($r in ($timings | Sort-Object Ms -Descending | Select-Object -First 15)) {
+    Write-Output ("   {0,7:N0}ms  {1}" -f $r.Ms, $r.Name)
+  }
 }
 Write-GuardComplete -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count)
 exit $(if ($fail.Count) { 1 } else { 0 })
