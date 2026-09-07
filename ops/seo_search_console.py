@@ -23,10 +23,14 @@ A MISSING CREDENTIAL IS BLIND, NEVER CLEAN. Until the key exists this exits 3 an
 data" and "SEO data showing nothing" must never print the same, which is the failure this whole item
 is about.
 
-WHAT IT REFUSES TO SAY. The property was verified on 2026-08-31 and Search Console keeps no data from
-before a property existed, so the series starts there - and Google's own reporting lags two to three
-days. A trend over four points is not a trend, so `--report` states the window and the row count
-beside every number and refuses a direction under MIN_DAYS. `.claude/rules/measurement.md`.
+WHAT IT REFUSES TO SAY. Google's reporting lags two to three days, and a trend over four points is
+not a trend - so `--report` states the window and the row count beside every number and refuses a
+direction under MIN_DAYS. `.claude/rules/measurement.md`.
+
+AND A CORRECTION, MEASURED ON THE FIRST REAL PULL (2026-09-07). This file used to say the series
+"cannot be longer than the days since verification" on 2026-08-31. It can: the first pull returned a
+full 28 days back to 2026-08-08. Google serves history for a URL-prefix property from before it was
+verified, because the data belongs to the URL rather than to the verification.
 
 Exit 0 = pulled or reported. 2 = the API refused us. 3 = no credential, or nothing to report.
 """
@@ -72,8 +76,23 @@ def claim_set(client_email: str, now: int, scope: str = SCOPE, ttl: int = 3600) 
             "iat": now, "exp": now + min(ttl, 3600)}
 
 
-def query_body(start: str, end: str, dimensions=None, row_limit: int = 25) -> dict:
-    """The searchAnalytics request. Pure, so the date window is checkable without spending a call."""
+def top_by_impressions(rows, n=25):
+    """The n rows with the most impressions.
+
+    THE API RETURNS ROWS IN KEY ORDER, NOT BY IMPRESSIONS. Asking for rowLimit 25 and calling the
+    answer "top 25" recorded about, almond-milk, avocados, balance-transfer - the first 25
+    alphabetically - and silently dropped whatever the real top pages were. A field named "top" that
+    is not top is worse than no field, because it is the one that gets quoted.
+    """
+    return sorted(rows or [], key=lambda r: -int(r.get("impressions", 0)))[:n]
+
+
+def query_body(start: str, end: str, dimensions=None, row_limit: int = 1000) -> dict:
+    """The searchAnalytics request. Pure, so the date window is checkable without spending a call.
+
+    row_limit is large by default because the caller sorts: a small limit here is a truncation in KEY
+    order, which is not a sample of anything.
+    """
     return {"startDate": start, "endDate": end,
             "dimensions": list(dimensions or []), "rowLimit": row_limit,
             "dataState": "final"}
@@ -113,9 +132,10 @@ def judge_trend(history, min_days: int = MIN_DAYS) -> dict:
     n = len(history)
     if n < min_days:
         return {"verdict": "too-few-days", "n": n,
-                "line": ("%d recorded day(s), under the %d needed to state a direction. The property "
-                         "was verified 2026-08-31, so the series cannot be longer than the days "
-                         "since." % (n, min_days))}
+                "line": ("%d recorded pull(s), under the %d needed to state a direction. This counts "
+                         "PULLS of this series, not days of Google's data - the first pull returned "
+                         "28 days going back to 2026-08-08, because Google serves history for a "
+                         "URL-prefix property from before it was verified." % (n, min_days))}
     first, last = history[0], history[-1]
     fp, lp = first.get("position"), last.get("position")
     if fp is None or lp is None:
@@ -128,6 +148,19 @@ def judge_trend(history, min_days: int = MIN_DAYS) -> dict:
             "line": ("average position %s from %.2f to %.2f (%+.2f) over %d recorded day(s); "
                      "impressions %d -> %d. Lower is better."
                      % (v, fp, lp, d, n, first.get("impressions", 0), last.get("impressions", 0)))}
+
+
+def fold_by_window(rows):
+    """One record per window end date, newest kept.
+
+    judge_trend counted RECORDS, so running the job twice in a day would have inflated the series and
+    moved the 14-pull bar closer without a single new day of Google's data. Nearly did exactly that
+    while fixing the sort defect on 2026-09-07.
+    """
+    by = {}
+    for r in rows:
+        by[str(r.get("end") or r.get("pulled_at", ""))[:10]] = r
+    return [by[k] for k in sorted(by)]
 
 
 def load_history(path=None):
@@ -143,7 +176,7 @@ def load_history(path=None):
                         continue
     except OSError:
         return []
-    return rows
+    return fold_by_window(rows)
 
 
 # --------------------------------------------------------------------------- network half
@@ -235,6 +268,27 @@ def selftest():
       judge_trend([{"impressions": 1}] * 20)["verdict"] == "no-position",
       judge_trend([{"impressions": 1}] * 20)["line"])
 
+    api_order = [{"keys": ["about"], "impressions": 2}, {"keys": ["almond"], "impressions": 1},
+                 {"keys": ["zebra"], "impressions": 99}]
+    T("MUST FIRE  THE ONE THE FIRST REAL PULL EXPOSED - the API returns rows in KEY order, so a naive "
+      "slice records the first 25 alphabetically and calls them the top 25",
+      top_by_impressions(api_order, 1)[0]["keys"] == ["zebra"], str(top_by_impressions(api_order, 1)))
+    T("CLEAN TWIN sorting an empty result yields nothing rather than throwing",
+      top_by_impressions([], 5) == [], str(top_by_impressions([], 5)))
+
+    twice = [{"end": "2026-09-04", "position": 10.0, "impressions": 1},
+             {"end": "2026-09-04", "position": 20.0, "impressions": 2},
+             {"end": "2026-09-05", "position": 30.0, "impressions": 3}]
+    T("MUST FIRE  two pulls of the SAME window are one day, not two - counting records would inflate "
+      "the series and move the 14-pull bar closer with no new data",
+      len(fold_by_window(twice)) == 2, str(len(fold_by_window(twice))))
+    T("CLEAN TWIN the NEWEST pull of a repeated window is the one kept",
+      fold_by_window(twice)[0]["position"] == 20.0, str(fold_by_window(twice)[0]))
+    T("MUST NOT FIRE  the refusal line no longer claims the series cannot predate verification - the "
+      "first pull returned 28 days from 2026-08-08 and proved otherwise",
+      "cannot be longer" not in judge_trend([{"position": 1.0}])["line"],
+      judge_trend([{"position": 1.0}])["line"])
+
     b = query_body("2026-08-08", "2026-09-04", ["query"], 25)
     T("CLEAN TWIN the request carries the window it was asked for", (b["startDate"], b["endDate"]) == ("2026-08-08", "2026-09-04"), json.dumps(b))
     T("CLEAN TWIN dataState is final, so a partial day cannot enter the series",
@@ -250,8 +304,8 @@ def selftest():
         print("SEO-SEARCH-CONSOLE-SELFTEST-COMPLETE")
         return 1
     print("")
-    print("SELF-TEST PASS: 8 must-fire cases led by the reporting lag and by position being a RANK, "
-          "3 must-not-fire cases, and 4 clean twins")
+    print("SELF-TEST PASS: 10 must-fire cases led by the reporting lag, position being a RANK, and "
+          "the key-order slice the first real pull exposed; 4 must-not-fire cases and 6 clean twins")
     print("SEO-SEARCH-CONSOLE-SELFTEST-COMPLETE")
     return 0
 
@@ -306,8 +360,8 @@ def main() -> int:
     try:
         tok = access_token(key)
         overall = totals_from(search_analytics(tok, query_body(start, end, [], 1)).get("rows", []))
-        queries = search_analytics(tok, query_body(start, end, ["query"], 25)).get("rows", [])
-        pages = search_analytics(tok, query_body(start, end, ["page"], 25)).get("rows", [])
+        queries = top_by_impressions(search_analytics(tok, query_body(start, end, ["query"])).get("rows", []))
+        pages = top_by_impressions(search_analytics(tok, query_body(start, end, ["page"])).get("rows", []))
     except Exception as e:                                         # noqa: BLE001
         print("SEO SEARCH CONSOLE REFUSED: %s" % e)
         print("SEO-SEARCH-CONSOLE-COMPLETE refused=1")
@@ -318,10 +372,10 @@ def main() -> int:
                 "site": SITE, "start": start, "end": end, "days": a.days,
                 "top_queries": [{"q": (r.get("keys") or [""])[0], "clicks": r.get("clicks"),
                                  "impressions": r.get("impressions"),
-                                 "position": round(float(r.get("position", 0)), 2)} for r in queries[:25]],
+                                 "position": round(float(r.get("position", 0)), 2)} for r in queries],
                 "top_pages": [{"p": (r.get("keys") or [""])[0], "clicks": r.get("clicks"),
                                "impressions": r.get("impressions"),
-                               "position": round(float(r.get("position", 0)), 2)} for r in pages[:25]]})
+                               "position": round(float(r.get("position", 0)), 2)} for r in pages]})
     with io.open(HISTORY, "a", encoding="utf-8", newline="\n") as f:
         f.write(json.dumps(rec) + "\n")
 

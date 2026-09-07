@@ -2780,7 +2780,7 @@ asserting that an existing mechanical check does what it already does.
 
 ---
 
-### I24 - Nothing in this estate measures search performance, so no SEO change can be shown to have worked `PARTLY DONE 2026-09-07` `queue-2`
+### I24 - Nothing in this estate measures search performance, so no SEO change can be shown to have worked `DONE - THE SERIES IS LIVE 2026-09-07` `queue-2`
 
 > **The half that needs no credential is built. The half that does is still yours.**
 > `ops/audit-seo-surface.py`, baselined in `ops/seo-surface-baseline.json`, discovered by
@@ -2833,6 +2833,52 @@ asserting that an existing mechanical check does what it already does.
 > which is not this session's to create, and it remains the only thing that can answer whether
 > a change moved ranking. What exists now is a falsifiable record of the surface we control, so
 > a future "we fixed the images" claim can be checked instead of believed.
+
+**CLOSED 2026-09-07. Brad created the service account and added it to the property; the series is
+live.** `ops/seo_search_console.py` signs an RS256 service-account JWT, trades it for a token and
+queries `searchAnalytics` - no new dependencies, because `cryptography` and `requests` are already
+here and `google-auth` is not. It runs daily from `check-ad-cycles`, report-only. The key is
+gitignored at `ops/.gsc-key.json`; the series it writes is TRACKED, because being checkable is the
+whole point of the item.
+
+**First real measurement, window 2026-08-08 .. 2026-09-04:**
+
+| | |
+|---|---|
+| impressions | **292** |
+| clicks | **1** |
+| CTR | **0.34%** |
+| impression-weighted position | **40.33** |
+
+**Impressions are falling, and that is the headline.** Per day: ~15-22 through mid-August, 3-6 by the
+26th, and **2, 2, 1, 2** on 1-4 September. Roughly an 90% decline across the window. The numbers are
+small enough that a single day means nothing; the shape across three weeks is not nothing.
+
+**Zero clicks at positions that should convert.** `/chicken-tikka-masala-burrito/` took 39
+impressions at average position 18.97 and its query "chicken tikka masala burrito" sits at **position
+9.0 over 27 impressions with no clicks at all**. `/omaha-grocery-prices/` is at **position 7.47** over
+17 impressions, also zero. One click in 292 impressions is the kind of CTR that points at the result
+LOOKING wrong rather than at ranking - which is exactly what 584 recipes sharing one image, 49 of
+them empty, would produce. **That is a hypothesis this now makes testable, not a conclusion.**
+
+**Three defects the first real pull exposed in code written an hour earlier**, each invisible until
+something real came back:
+
+1. **"Top 25" was the first 25 ALPHABETICALLY.** The API returns rows in key order, so `rowLimit: 25`
+   recorded about, almond-milk, avocados, balance-transfer and silently dropped the actual top pages.
+   A field named "top" that is not top is worse than no field, because it is the one that gets quoted.
+2. **A false claim inside an honest-refusal message.** The file said the series "cannot be longer than
+   the days since verification" on 2026-08-31. It can, and the first pull proved it: 28 days back to
+   2026-08-08. **Google serves history for a URL-prefix property from before it was verified**,
+   because the data belongs to the URL rather than to the verification. Corrected in place.
+3. **Two pulls in one day counted as two days**, which would have moved the 14-pull bar closer with no
+   new data. Records are folded by window end date now. Nearly caused it while fixing defect 1.
+
+**What the fixtures pin, and two are the errors this metric invites.** The window ends **three days
+back**, because Search Console finalises late and asking for yesterday returns a hole that reads
+exactly like a collapse. Average position is **impression-weighted**, not a mean of means. And
+**position is a RANK** - falling from 50 to 45 is an improvement, and reading it the other way is the
+classic mistake.
 
 **Source:** course 15, *SEO: Audit Pages, Rank Higher* (John Whitworth, Coursera). Its own framework
 is on-page auditing, and applying it to this estate surfaced that the measurement layer underneath
@@ -3349,3 +3395,176 @@ guard invariant on purpose, asserts the gate exits 2, restores and asserts exit 
 windows with a crash-safe restore. That is the chaos loop against the gate layer, where a steady
 state is observable. Reasoning recorded in `reliability-craft/estate-inventory.md` so it is not
 re-derived as an open gap.
+
+### I35 - Every failure verdict here is reached on ONE observation, and synthetic monitoring's standard answer is to take a second `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+
+**Source.** `monitoring-and-observability-for-development-and-devops` (IBM/Coursera), item 15. The
+synthetic check loop it describes does not alert on a failing probe. When a checkpoint reports an
+error the system **immediately re-runs the same check from a DIFFERENT checkpoint**, and only when
+the second one reports the same error is it declared *confirmed* and an alert sent. Routed to
+`reliability-craft/telemetry-signals.md` 5, registered as claim C76.
+
+**Why it matters here.** This estate's capture layer is synthetic monitoring in everything but name:
+scripted transactions replayed on a schedule against seven store front-ends we do not control. And
+it fails in the field the way synthetic checks do - a bot wall, a lazy-load that did not scroll, a
+session that expired. The memory `bot-wall-verdict-discards-its-evidence` already records that a
+"store is cold" verdict was reached on one probe and was wrong, and its remedy is written as
+advice - *re-probe one term before calling a store cold* - rather than as a mechanism anything
+enforces. `fareway-capture-defects` is the same shape: a repeated exact 9 is an unscrolled page, not
+a shelf with nine items on it.
+
+**This is NOT item I32 and the two should not be merged.** I32 is about a condition having to
+PERSIST - the same observer, watched for longer, which is a duration window. This is a **second
+INDEPENDENT observation** - a different observer, immediately. They catch different things: duration
+filters a transient real condition, a second observer filters a broken instrument. An estate whose
+probes are the thing most likely to be broken needs the second one at least as much as the first.
+
+**Three rungs, and only the first should happen without a ruling.**
+
+1. **Count what a second observation would have changed.** Read the alert history and the capture
+   logs and count how many store-cold, zero-row and carry-expiry verdicts were reached on exactly
+   one observation, and how many of those were later reversed. That number is the size of the prize
+   and nobody has it. This is a read.
+2. **Then decide whether the second observation is affordable.** For a store pull it is not free -
+   Walmart's full pull is ~75 minutes - so the honest form is probably a re-probe of ONE term rather
+   than a re-run of the pull, which is exactly what the bot-wall memory already advises by hand.
+3. **Only then, mechanise it** for the verdicts rung 1 says were worth it. Note the precondition:
+   the estate has one checkpoint, so "a different checkpoint" is not literally available. The
+   available second observers are a different search term, a different session, or a different
+   store's agreement - not a different location.
+
+**What it would touch.** Rung 1 reads `grocery/alert-log.txt`, `grocery/out/capture-cursor-log.jsonl`
+and the coverage ledger. Rungs 2 and 3 would touch the capture verdict paths and `send-alert.ps1`.
+No gate weakens either way: this makes a verdict harder to reach, not easier.
+
+### I36 - Nothing in this repo has a stated log retention, and the logs are committed, so they grow forever `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS THE POLICY` `queue-4`
+
+**Source.** Same course, item 38, which sets a retention period from six analytical dimensions
+rather than one number: criticality, security, system maturity, run frequency, cost-effectiveness,
+and your own discovery-and-resolution time. Routed to
+`reliability-craft/logging-and-tracing.md` 3, registered as claim C74.
+
+**Measured 2026-09-07 in this checkout.** The only retention policy that exists anywhere in this
+estate is on the **R2 buckets**, declared in `ops/cloudflare-estate.json` and guarded by
+`ops/audit-cloudflare-estate.ps1`, which correctly treats a shortened retention as the dangerous
+direction. A `grep` for retention, rotation or pruning across `ops/` and `grocery/*.ps1` returns
+that audit and nothing else. Meanwhile, in git and growing without bound:
+
+| File | Size |
+|---|---|
+| `grocery/ad-cycle-log.txt` | 747,309 B |
+| `grocery/out/coverage-ledger-history.jsonl` | 253,363 B |
+| `grocery/out/capture-cursor-log.jsonl` | 16,688 B |
+| `grocery/alert-log.txt` | 9,073 B |
+
+These are appended by the daily chain and committed by the ~07:00 bot, so every byte is permanent
+and is carried by every clone and every worktree forever. That is not automatically wrong - it is
+cheap, and history has repeatedly been the thing that settled an argument here - but **it is a
+policy nobody has stated**, which means nobody can say whether the current answer is right.
+
+**What the six dimensions say about these specifically**, so the ruling has something to rule on:
+
+- **Criticality and security** argue for keeping `alert-log.txt` and the capture logs: they are the
+  only record of what the automated chain decided while nobody was watching.
+- **Discovery and resolution** is the dimension that computes rather than asserts, and it sets a
+  FLOOR: retention must exceed the time this estate typically takes to notice and fix a defect.
+  Several defects here were found weeks after they started, so the floor is months, not days.
+- **Cost-effectiveness** is the only one pulling down, and at three quarters of a megabyte it is
+  currently pulling very weakly. **This is the honest reason the item may end `PARKED`.**
+
+**Not to be confused with I33.** That item found a 15-day latency series sitting in git and concluded
+that *"the real gap is not retention, it is that nothing has ever read this"* - which is true and is
+a different question. I33 is about a series nobody consumes; this is about a policy nobody has
+written. A file can be read regularly and still have no stated lifetime.
+
+**The rung.** Write the answer down, per file, wherever the file is described - even if the answer
+is "keep forever, deliberately, because it is small and it is evidence". A stated forever is a
+policy; an unstated forever is an accident that looks identical until the day something starts
+appending a megabyte a run. **Explicitly NOT proposed: a pruning job.** Nothing here is big enough
+to justify code that deletes evidence, and deletion is the direction that cannot be undone.
+
+**What it would touch.** One paragraph in `docs/RUNTIME-MAP.md` or beside each writer. No code.
+
+---
+
+### I37 - 217 self-test files, and nothing has ever asked whether their cases would notice the detector being wrong `OPEN` `queue-4`
+
+**Source.** `introduction-software-testing` (queue-4 course 5, worked 2026-09-07), items 30 and 28.
+Routed to `software-craft/test-design-and-oracles.md` 6 and cross-linked from
+`tests-as-safety-net.md` 3b. Registered as claim C81, which says plainly that the value HERE is an
+inference and not a measurement.
+
+**The gap, stated exactly.** Measured in the main tree on 2026-09-07: **217** `.ps1` files carry a
+`-SelfTest`, and the three fixture labels occur **1,375** (`MUST FIRE`), **211** (`MUST NOT FIRE`)
+and **1,076** (`CLEAN TWIN`) times. Every one of those cases was written by someone who already knew
+what the bug was - `tests-as-safety-net.md` 3b calls this discipline *fixture-after* and records that
+the estate says so in its own comments, in the form `CLEAN TWIN - THE ONE THAT MADE THIS FILE
+NECESSARY`. That is a good discipline and it has a hard ceiling: **the suite's reach is bounded by
+what has already gone wrong.**
+
+Mutation testing asks the complementary question. Take a detector, make one small compiling change
+to it - a `-gt` that should be `-ge`, a regex that loses a `\b`, two same-typed variables swapped -
+and run its own self-test. If the suite stays green, that mutant *survived*, and it names the exact
+line where a case is missing. The estate's recorded scars are almost a list of the mutation
+operators: off-by-one comparisons, a norm regex without a word boundary that turned `Garlic` into
+`arlic`, `@($null).Count` being 1.
+
+**What it would touch.** Nothing in production. The cheapest useful version is a one-off script that,
+for a named `.ps1`, applies a small operator table to the source, writes the mutant to a temp copy,
+runs `-SelfTest`, and records killed-or-survived. Run it against five or six `ops/` detectors first.
+
+**Do the cheap experiment before proposing the tool.** Mutate ONE real detector by hand and run its
+self-test. A red result shrinks this item; a green one sizes it. That is an hour, and it is what C81
+asks for.
+
+**Two things it must not become.** It is not a new gate - a mutation score that has to stay above a
+number on every push is a ratchet nobody asked for, red on day one, which
+`.claude/rules/ops-and-gates.md` already forbids. And it never edits a tracked file: mutants are
+written to temp copies and the original is restored by hash, per the estate's own
+`neuter-numbers-get-predicted-not-measured` rule.
+
+---
+
+### I38 - Every parser here has only ever seen inputs a person wrote, and randomness is refused estate-wide on reproducibility grounds that do not apply to it `NEEDS A RULING` `queue-4`
+
+**Source.** Same course, items 4 and 8, plus the queue-4 entry that chose it. Routed to
+`software-craft/test-design-and-oracles.md` 5, and recorded in that file's section 11 as a gap the
+course names but does not fill.
+
+**Why this estate in particular.** It parses text it did not author all day - scraped store HTML,
+vendor JSON feeds, Walmart payloads whose price shape has already moved twice, ad PDFs, LLM
+returns. Measured 2026-09-07 in the main tree, worktrees and `archive/` excluded: **255 `.ps1` files
+mention `ConvertFrom-Json`**, over **819 matching lines** (lines, not verified call sites - some are
+comments). A `grep` for self-test cases whose `MUST FIRE` line mentions malformed, truncated,
+corrupt, empty or invalid input returns **6**. That 6 is a **lower bound from one narrow pattern**,
+not a census: a case could test hostile input while wording its label differently. The order of
+magnitude is what the item rests on, and it does not change if the true figure is 20.
+
+**The blocker is a ruling, not a tool, and this is the part worth reading.** `Get-Random` appears in
+exactly **three** files in the tree and **all three are refusals**:
+
+| File | What it says |
+|---|---|
+| `grocery/build-verification-sample.ps1` | "DETERMINISTIC, NOT RANDOM. No Get-Random anywhere" |
+| `grocery/test-auditors.ps1` | "Get-Random would silently make every past worklist unreproducible" |
+| `lib/ghost-lib.ps1` | uses the attempt index as jitter instead |
+
+**Each of those is correct for what it refuses**, which is unreproducible *work selection* - a
+verification sample or a retry schedule that cannot be replayed. None of them is an argument against
+generated test input, because **a seeded generator is reproducible**: record the seed beside the
+failure and the case replays byte for byte, which is exactly what the deterministic-sample rule was
+protecting. The risk is that three strongly-worded refusals get read as one estate-wide ban on
+`Get-Random`, and the ruling this item needs is simply that they do not extend to a seeded test-input
+generator.
+
+**What it would touch, if Brad rules it in.** One helper that generates hostile variants of a known-
+good fixture (truncate at a random offset, flip a byte, empty the file, nest deeper, swap a number
+for a string, insert a lone `"`), a seed printed on every run and re-fed on failure, and the verdict
+being *crash-or-hang* rather than a compared output - which is the one oracle that needs no expected
+value and is what would have caught the Zune loop in the course's own worked example. Scope it to
+the JSON and HTML entry points, not to the whole tree.
+
+**The honest counter-argument.** Most of these parse points read files this estate itself wrote one
+stage earlier over the git-bus, where the input is not adversarial and a fuzzer would find nothing.
+The value is concentrated at the boundary where outside bytes first arrive - the capture lanes and
+the feed readers - and an item that fuzzes everything would spend its budget on the wrong 200 files.

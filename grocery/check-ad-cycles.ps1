@@ -772,6 +772,25 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         }
       } catch { Log ('alert-precision threw: ' + $_.Exception.Message) }
+      # WHAT GOOGLE DID WITH OUR PAGES (2026-09-07, backlog I24). ops\audit-seo-surface.py measures the
+      # surface we CONTROL - one distinct recipe image across 584 recipes, 49 of them empty - and can
+      # say nothing about whether it costs us a reader. This records the response, so a future "we
+      # fixed the images" claim can be checked instead of believed.
+      #
+      # DAILY BECAUSE THE SERIES IS THE POINT. One pull is a number; the puller refuses to state a
+      # direction under 14 of them, and that bar is only reachable on a clock. REPORT-ONLY: exit 3 is
+      # no credential and exit 2 is Google refusing us, and neither is a reason to withhold a board.
+      try {
+        $gscPy = $null
+        foreach ($cand in @('C:\Codex\Python312\python.exe', 'python3', 'python')) {
+          try { $v = & $cand --version; if ($LASTEXITCODE -eq 0 -and ([string]$v) -match 'Python\s+3') { $gscPy = $cand; break } } catch { }
+        }
+        $gscScript = Join-Path (Split-Path $root -Parent) 'ops\seo_search_console.py'
+        if ($gscPy -and (Test-Path $gscScript)) {
+          $gscOut = & $gscPy $gscScript
+          foreach ($l in @($gscOut)) { Log ('search-console: ' + [string]$l) }
+        } else { Log 'search-console: no Python 3 interpreter or the puller is missing - NOT pulled, which is not the same as no traffic' }
+      } catch { Log ('search-console threw: ' + $_.Exception.Message) }
       # EXPORT THE FEED BEFORE ANYTHING RESOLVES IT (2026-08-22). compute-v2-perserving.ps1 is invoked with
       # -FeedPath out\smp-feed.json and export-feed.ps1 is what WRITES that file - and until today it wrote
       # it ~270 lines LATER in this same run. So compute-v2 resolved YESTERDAY's feed every single day and
