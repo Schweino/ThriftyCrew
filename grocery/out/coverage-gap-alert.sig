@@ -1,1 +1,1 @@
-﻿cinnamon-stick|Aldi;pecorino-romano|Fareway;red-potatoes|Fareway
+﻿anaheim-peppers|Fareway;baked-beans|Hy-Vee;couscous|Hy-Vee;quinoa-uncooked|Hy-Vee;sea-salt|Hy-Vee

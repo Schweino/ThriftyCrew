@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-06 21:32",
-    "board":  "comparison-2026-09-06.json",
-    "sidecar_generated":  "2026-09-06 21:32:11",
+    "generated":  "2026-09-07 08:20",
+    "board":  "comparison-2026-09-07.json",
+    "sidecar_generated":  "2026-09-07 08:20:50",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,45 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3164,
-                     "corpus":  41205,
-                     "rule_invisible":  7730
+                     "board_pairs":  3167,
+                     "corpus":  41209,
+                     "rule_invisible":  7731
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  3,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "80% Lean / 20% Fat Ground Beef and Pork Blend, 3 lb Roll, Fresh",
+                         "cos":  0.698,
+                         "score":  0.96278,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "laundry-pods",
+                         "commodity":  "Laundry Detergent Pods",
+                         "store":  "Baker\u0027s",
+                         "product":  "ARM \u0026 HAMMER Power Sheets Laundry Detergent Fresh Breeze",
+                         "cos":  0.683,
+                         "score":  0.927842,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "frozen-burritos",
+                         "commodity":  "Frozen Burritos",
+                         "store":  "Walmart",
+                         "product":  "El Monterey Beef, Bean \u0026 Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen)",
+                         "cos":  0.7284,
+                         "score":  0.923919,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ]
 }

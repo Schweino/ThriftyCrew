@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  138,
-    "cursor_next":  145,
+    "cursor_start":  145,
+    "cursor_next":  152,
     "total_terms":  602,
     "rotation_terms":  [
-                           "chipotle peppers in adobo sauce",
-                           "chipotle powder",
-                           "semi sweet chocolate chips",
-                           "chocolate milk",
-                           "beef chuck roast",
-                           "cilantro",
-                           "cinnamon sticks"
+                           "clam chowder canned",
+                           "mandarins clementines",
+                           "cocktail sauce",
+                           "baking cocoa powder",
+                           "whole coconut",
+                           "coconut aminos",
+                           "canned coconut milk"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "chipotle peppers in adobo sauce",
-                  "chipotle powder",
-                  "semi sweet chocolate chips",
-                  "chocolate milk",
-                  "beef chuck roast",
-                  "cilantro",
-                  "cinnamon sticks"
+                  "clam chowder canned",
+                  "mandarins clementines",
+                  "cocktail sauce",
+                  "baking cocoa powder",
+                  "whole coconut",
+                  "coconut aminos",
+                  "canned coconut milk"
               ],
     "commodities":  [
-                        "chipotle-in-adobo",
-                        "chipotle-powder",
-                        "chocolate-chips",
-                        "chocolate-milk",
-                        "chuck-roast",
-                        "cilantro",
-                        "cinnamon-stick"
+                        "clam-chowder",
+                        "clementines",
+                        "cocktail-sauce",
+                        "cocoa-powder",
+                        "coconut",
+                        "coconut-aminos",
+                        "coconut-milk"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

@@ -113,6 +113,20 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
+                              "id":  "avocado-oil",
+                              "commodity":  "Avocado Oil",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.6293,
+                              "size":  "27 oz",
+                              "item":  "Chosen Foods Avocado Oil",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
                               "id":  "baby-formula",
                               "commodity":  "Baby Formula",
                               "unit":  "oz",
@@ -274,20 +288,6 @@
                               "per_unit":  0.0528,
                               "size":  "32 fl oz",
                               "item":  "Our Family Chicken Broth 32 Fl Oz",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  true
-                          },
-                          {
-                              "id":  "chicken-broth",
-                              "commodity":  "Chicken Broth / Stock",
-                              "unit":  "floz",
-                              "store":  "Hy-Vee",
-                              "per_unit":  0.0622,
-                              "size":  "32 fl oz",
-                              "item":  "Hy-Vee Chicken Broth, Fat Free, Gluten Free",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false,
@@ -1093,6 +1093,20 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
+                              "id":  "sparkling-water",
+                              "commodity":  "Sparkling Water",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0818,
+                              "size":  "17 oz",
+                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
                               "id":  "relish",
                               "commodity":  "Sweet Relish",
                               "unit":  "oz",
@@ -1237,9 +1251,9 @@
                               "commodity":  "Vegetable / Canola Oil",
                               "unit":  "floz",
                               "store":  "Fareway",
-                              "per_unit":  0.0741,
+                              "per_unit":  0.0859,
                               "size":  "128 oz",
-                              "item":  "Fareway Vegetable Oil",
+                              "item":  "Fareway Canola Oil",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false,
@@ -1289,7 +1303,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-06.json",
+    "compare_file":  "comparison-2026-09-07.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -1524,6 +1538,20 @@
                                                      "per_unit":  0.07,
                                                      "size":  "64 oz",
                                                      "item":  "Motts 100 Apple Juice",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "avocado-oil",
+                                                     "commodity":  "Avocado Oil",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.6293,
+                                                     "size":  "27 oz",
+                                                     "item":  "Chosen Foods Avocado Oil",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -2175,6 +2203,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "sparkling-water",
+                                                     "commodity":  "Sparkling Water",
+                                                     "unit":  "floz",
+                                                     "store":  "Family Fare",
+                                                     "per_unit":  0.0818,
+                                                     "size":  "17 oz",
+                                                     "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "maple-syrup",
                                                      "commodity":  "Syrup (pancake / maple)",
                                                      "unit":  "floz",
@@ -2263,9 +2305,9 @@
                                                      "commodity":  "Vegetable / Canola Oil",
                                                      "unit":  "floz",
                                                      "store":  "Fareway",
-                                                     "per_unit":  0.0741,
+                                                     "per_unit":  0.0859,
                                                      "size":  "128 oz",
-                                                     "item":  "Fareway Vegetable Oil",
+                                                     "item":  "Fareway Canola Oil",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -2436,7 +2478,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-06T12:40:09",
+    "generated":  "2026-09-07T08:13:37",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",
@@ -2516,20 +2558,6 @@
                                                        "per_unit":  0.0528,
                                                        "size":  "32 fl oz",
                                                        "item":  "Our Family Chicken Broth 32 Fl Oz",
-                                                       "kind":  "volume",
-                                                       "row_kind":  "weight",
-                                                       "holds_crown":  false,
-                                                       "unit_kind":  "volume",
-                                                       "agrees_with_engine_divisor":  true
-                                                   },
-                                                   {
-                                                       "id":  "chicken-broth",
-                                                       "commodity":  "Chicken Broth / Stock",
-                                                       "unit":  "floz",
-                                                       "store":  "Hy-Vee",
-                                                       "per_unit":  0.0622,
-                                                       "size":  "32 fl oz",
-                                                       "item":  "Hy-Vee Chicken Broth, Fat Free, Gluten Free",
                                                        "kind":  "volume",
                                                        "row_kind":  "weight",
                                                        "holds_crown":  false,

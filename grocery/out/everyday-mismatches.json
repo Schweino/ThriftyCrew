@@ -13,6 +13,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "ground-beef-8020",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  6.99,
+        "link":  6.83,
+        "ratio":  0.98,
+        "price":  6.83,
+        "size":  "lb",
+        "boardItem":  "Ground Beef Roll 80 Lean 20 Fat",
+        "linkItem":  "Ground Beef Roll 80 Lean 20 Fat",
+        "board_src":  "main"
+    },
+    {
         "id":  "air-freshener",
         "store":  "Baker\u0027s",
         "unit":  "oz",
@@ -273,6 +286,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cereal",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1069,
+        "link":  0.1199,
+        "ratio":  1.12,
+        "price":  4.88,
+        "size":  "40.7 oz",
+        "boardItem":  "Frosted Flakes Cereal, 55 oz.",
+        "linkItem":  "Cheerios Cereal, 40.7 oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "breakfast-sausage",
         "store":  "Fareway",
         "unit":  "lb",
@@ -325,6 +351,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "brown-sugar",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  0.925,
+        "link":  0.985,
+        "ratio":  1.06,
+        "price":  1.97,
+        "size":  "32 oz",
+        "boardItem":  "That\u0027s Smart! Light Brown Sugar",
+        "linkItem":  "That\u0027s Smart! Light Brown Sugar",
+        "board_src":  "main"
+    },
+    {
         "id":  "brownie-mix",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -351,19 +390,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "canned-asparagus",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.3993,
-        "link":  0.3653,
-        "ratio":  0.91,
-        "price":  5.48,
-        "size":  "15 oz",
-        "boardItem":  "Green Giant Extra Long Asparagus Spears",
-        "linkItem":  "Green Giant Extra Long Asparagus Spears",
-        "board_src":  "main"
-    },
-    {
         "id":  "beef-stew",
         "store":  "Fareway",
         "unit":  "oz",
@@ -387,19 +413,6 @@
         "size":  "12.5 oz",
         "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
         "linkItem":  "Brookdale Chunk Chicken Breast",
-        "board_src":  "main"
-    },
-    {
-        "id":  "canned-chili",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.1876,
-        "link":  0.1592,
-        "ratio":  0.85,
-        "price":  3.98,
-        "size":  "25 oz",
-        "boardItem":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
-        "linkItem":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
         "board_src":  "main"
     },
     {
@@ -442,6 +455,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cat-litter",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  0.5141,
+        "link":  0.4232,
+        "ratio":  0.82,
+        "price":  18.62,
+        "size":  "44 lb",
+        "boardItem":  "Fresh Step Total Control Scented Clumping Litter with Febreze Freshness, 44 lbs.",
+        "linkItem":  "Fresh Step Total Control Scented Clumping Litter with Febreze Freshness, 44 lbs.",
+        "board_src":  "main"
+    },
+    {
         "id":  "cauliflower",
         "store":  "Aldi",
         "unit":  "each",
@@ -468,6 +494,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "charcoal",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  0.7779,
+        "link":  0.8169,
+        "ratio":  1.05,
+        "price":  6.29,
+        "size":  "7.7 lb",
+        "boardItem":  "Hy-Vee Charcoal Briquets",
+        "linkItem":  "Hy-Vee Charcoal Briquets",
+        "board_src":  "main"
+    },
+    {
         "id":  "cherries",
         "store":  "Hy-Vee",
         "unit":  "lb",
@@ -491,19 +530,6 @@
         "size":  "lb",
         "boardItem":  "Choice Black Angus Chuck Roast Per LB",
         "linkItem":  "USDA Choice Black Angus Chuck Roast",
-        "board_src":  "main"
-    },
-    {
-        "id":  "chuck-roast",
-        "store":  "Hy-Vee",
-        "unit":  "lb",
-        "board":  8.99,
-        "link":  7.99,
-        "ratio":  0.89,
-        "price":  7.99,
-        "size":  "lb",
-        "boardItem":  "Hy Vee Choice Reserve Boneless Chuck Roast",
-        "linkItem":  "Hy-Vee Choice Reserve Boneless Chuck Roast",
         "board_src":  "main"
     },
     {
@@ -585,19 +611,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "corn-dogs",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  1.3725,
-        "link":  1.245,
-        "ratio":  0.91,
-        "price":  4.98,
-        "size":  "4 ct",
-        "boardItem":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
-        "linkItem":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
-        "board_src":  "main"
-    },
-    {
         "id":  "corned-beef-hash",
         "store":  "Fareway",
         "unit":  "oz",
@@ -634,6 +647,32 @@
         "size":  "3 lb",
         "boardItem":  "Darigold Cottage Cheese, 3 lbs.",
         "linkItem":  "Darigold Cottage Cheese, 3 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cream-cheese",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.1812,
+        "link":  0.1862,
+        "ratio":  1.03,
+        "price":  1.49,
+        "size":  "8 oz",
+        "boardItem":  "Happy Farms Cream Cheese 8 OZ",
+        "linkItem":  "Happy Farms Cream Cheese",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cream-cheese",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.2488,
+        "link":  0.3113,
+        "ratio":  1.25,
+        "price":  2.49,
+        "size":  "8 oz",
+        "boardItem":  "Hy-Vee 1/3 Less Fat than Cream Cheese (Neufchatel Cheese)",
+        "linkItem":  "Hy-Vee 1/3 Less Fat than Cream Cheese (Neufchatel Cheese)",
         "board_src":  "main"
     },
     {
@@ -725,19 +764,6 @@
         "size":  "5 lb",
         "boardItem":  "Pure Being Chicken Rice Premium Grain Free Dog Food 5 LB",
         "linkItem":  "Pure Being Chicken and Rice Premium Dog Food",
-        "board_src":  "main"
-    },
-    {
-        "id":  "dog-food",
-        "store":  "Fareway",
-        "unit":  "lb",
-        "board":  1.7685,
-        "link":  1.5377,
-        "ratio":  0.87,
-        "price":  19.99,
-        "size":  "208 oz",
-        "boardItem":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
-        "linkItem":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
         "board_src":  "main"
     },
     {
@@ -871,19 +897,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "frozen-fruit",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.3431,
-        "link":  0.2806,
-        "ratio":  0.82,
-        "price":  4.49,
-        "size":  "16 oz",
-        "boardItem":  "Fareway Unsweetened Sliced Strawberries",
-        "linkItem":  "Fareway Unsweetened Sliced Strawberries",
-        "board_src":  "main"
-    },
-    {
         "id":  "frozen-waffles",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -920,6 +933,19 @@
         "size":  "2.5 oz",
         "boardItem":  "Thats Smart Garlic Powder",
         "linkItem":  "That\u0027s Smart Garlic Powder",
+        "board_src":  "main"
+    },
+    {
+        "id":  "graham-crackers",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.2424,
+        "link":  0.2076,
+        "ratio":  0.86,
+        "price":  2.99,
+        "size":  "14.4 oz",
+        "boardItem":  "Hy-Vee Graham Crackers With Honey",
+        "linkItem":  "Hy-Vee Graham Crackers With Honey",
         "board_src":  "main"
     },
     {
@@ -988,6 +1014,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "hummus",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.2488,
+        "link":  0.259,
+        "ratio":  1.04,
+        "price":  2.59,
+        "size":  "10 oz",
+        "boardItem":  "Park Street Deli Savory Pumpkin Hummus 8 OZ",
+        "linkItem":  "Park Street Deli Classic Hummus 10 OZ",
+        "board_src":  "main"
+    },
+    {
         "id":  "jalapenos",
         "store":  "Aldi",
         "unit":  "lb",
@@ -1053,15 +1092,28 @@
         "board_src":  "main"
     },
     {
+        "id":  "mangoes",
+        "store":  "Family Fare",
+        "unit":  "each",
+        "board":  2.29,
+        "link":  2.99,
+        "ratio":  1.31,
+        "price":  2.99,
+        "size":  "1 ct",
+        "boardItem":  "Red Mango, Small",
+        "linkItem":  "Red Mango, Small",
+        "board_src":  "main"
+    },
+    {
         "id":  "milk",
         "store":  "Aldi",
         "unit":  "gallon",
-        "board":  2.81,
+        "board":  2.86,
         "link":  3.01,
-        "ratio":  1.07,
+        "ratio":  1.05,
         "price":  3.01,
         "size":  "1 gal",
-        "boardItem":  "Friendly Farms 2 Milk 1 Gal",
+        "boardItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
         "linkItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
         "board_src":  "main"
     },
@@ -1128,19 +1180,6 @@
         "size":  "6 lb",
         "boardItem":  "Cara Cara Oranges, 6 lbs.",
         "linkItem":  "Navel Oranges, 6 lbs.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "paper-towels",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  2.2475,
-        "link":  1.745,
-        "ratio":  0.78,
-        "price":  6.98,
-        "size":  "4 ct",
-        "boardItem":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
-        "linkItem":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
         "board_src":  "main"
     },
     {
@@ -1232,6 +1271,19 @@
         "size":  "2 lb",
         "boardItem":  "Plum Bag 2 Lbs",
         "linkItem":  "Plums, Bag",
+        "board_src":  "main"
+    },
+    {
+        "id":  "plums",
+        "store":  "Family Fare",
+        "unit":  "lb",
+        "board":  3.99,
+        "link":  3.49,
+        "ratio":  0.87,
+        "price":  3.49,
+        "size":  "lb",
+        "boardItem":  "Fresh Plums, Red",
+        "linkItem":  "Fresh Plums, Red",
         "board_src":  "main"
     },
     {
@@ -1638,19 +1690,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "tortillas",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  0.279,
-        "link":  0.199,
-        "ratio":  0.71,
-        "price":  1.99,
-        "size":  "each",
-        "boardItem":  "Mission Super Soft Flour Tortillas, Fajita Size, 10 Count",
-        "linkItem":  "Mission Super Soft Flour Tortillas, Fajita Size, 10 Count",
-        "board_src":  "main"
-    },
-    {
         "id":  "turkey-bacon",
         "store":  "Aldi",
         "unit":  "oz",
@@ -1674,6 +1713,19 @@
         "size":  "2 oz",
         "boardItem":  "Hy Vee Pure Vanilla Extract",
         "linkItem":  "Hy Vee Pure Vanilla Extract",
+        "board_src":  "main"
+    },
+    {
+        "id":  "vegetable-oil",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.0859,
+        "link":  0.0741,
+        "ratio":  0.86,
+        "price":  9.48,
+        "size":  "128 oz",
+        "boardItem":  "Fareway Canola Oil",
+        "linkItem":  "Fareway Canola Oil",
         "board_src":  "main"
     },
     {
@@ -1986,6 +2038,19 @@
         "size":  "each",
         "boardItem":  "Fresh Red Bell Pepper, Each",
         "linkItem":  "Fresh Red Bell Pepper, Each",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "red-bell-pepper",
+        "store":  "Hy-Vee",
+        "unit":  "each",
+        "board":  1.99,
+        "link":  1.69,
+        "ratio":  0.85,
+        "price":  1.69,
+        "size":  "1 ct",
+        "boardItem":  "Red Bell Pepper",
+        "linkItem":  "Red Pepper",
         "board_src":  "recipe"
     },
     {

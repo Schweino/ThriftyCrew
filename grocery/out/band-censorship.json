@@ -1,5 +1,5 @@
 ﻿{
-    "compare_file":  "comparison-2026-09-06.json",
+    "compare_file":  "comparison-2026-09-07.json",
     "near_floor":  0.75,
     "findings":  [
                      {
@@ -43,9 +43,9 @@
                          "band_min":  1.5,
                          "floor_ratio":  0.995,
                          "save_pct":  49.6,
-                         "name":  "Totino\u0027s Party Pizza, Pepperoni, Thin Crust, 17g Protein, 40.8 oz, 4 Count (Frozen)",
+                         "name":  "Totino\u0027s Party Pizza, Triple Cheese, Thin Crust, 14g Protein, 39.2 oz, 4 Count (Frozen)",
                          "price_text":  "$5.97",
-                         "size_text":  "40.8 oz"
+                         "size_text":  "39.2 oz"
                      },
                      {
                          "commodity":  "frozen-pizza",
@@ -73,9 +73,9 @@
                          "band_min":  1.5,
                          "floor_ratio":  0.995,
                          "save_pct":  49.6,
-                         "name":  "Totino\u0027s Party Pizza, Triple Meat, Thin Crust, 19g Protein, 42 oz, 4 Count (Frozen)",
+                         "name":  "Totino\u0027s Party Pizza, Pepperoni, Thin Crust, 17g Protein, 40.8 oz, 4 Count (Frozen)",
                          "price_text":  "$5.97",
-                         "size_text":  "42 oz"
+                         "size_text":  "40.8 oz"
                      },
                      {
                          "commodity":  "frozen-pizza",
@@ -88,9 +88,9 @@
                          "band_min":  1.5,
                          "floor_ratio":  0.995,
                          "save_pct":  49.6,
-                         "name":  "Totino\u0027s Party Pizza, Triple Cheese, Thin Crust, 14g Protein, 39.2 oz, 4 Count (Frozen)",
+                         "name":  "Totino\u0027s Party Pizza, Triple Meat, Thin Crust, 19g Protein, 42 oz, 4 Count (Frozen)",
                          "price_text":  "$5.97",
-                         "size_text":  "39.2 oz"
+                         "size_text":  "42 oz"
                      },
                      {
                          "commodity":  "rotisserie-chicken",
@@ -103,7 +103,7 @@
                          "band_min":  4,
                          "floor_ratio":  0.9925,
                          "save_pct":  33.5,
-                         "name":  "Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz (Chilled)",
+                         "name":  "Freshness Guaranteed Traditional Rotisserie Chicken, 36 oz (Chilled)",
                          "price_text":  "$3.97",
                          "size_text":  "2.25 lb"
                      },
@@ -118,7 +118,7 @@
                          "band_min":  4,
                          "floor_ratio":  0.9925,
                          "save_pct":  33.5,
-                         "name":  "Freshness Guaranteed Traditional Rotisserie Chicken, 36 oz (Chilled)",
+                         "name":  "Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz (Chilled)",
                          "price_text":  "$3.97",
                          "size_text":  "2.25 lb"
                      },
@@ -228,21 +228,6 @@
                          "size_text":  "17.1 oz"
                      },
                      {
-                         "commodity":  "pepperoni",
-                         "label":  "Pepperoni (sliced)",
-                         "store":  "Sam\u0027s Club",
-                         "unit":  "oz",
-                         "board_price":  0.2638,
-                         "board_item":  "Member\u0027s Mark Sliced Pepperoni 16 oz., 2 pk.",
-                         "rejected":  0.1923,
-                         "band_min":  0.2,
-                         "floor_ratio":  0.9615,
-                         "save_pct":  27.1,
-                         "name":  "Member\u0027s Mark Cafe Sliced Pepperoni, Refrigerated, Case, 25 lbs.",
-                         "price_text":  "$76.92",
-                         "size_text":  "25 lb"
-                     },
-                     {
                          "commodity":  "frozen-pizza",
                          "label":  "Frozen Pizza",
                          "store":  "Sam\u0027s Club",
@@ -256,6 +241,21 @@
                          "name":  "Red Baron Pepperoni French Bread Frozen Personal Pizza, 5.40 oz., 9 pk.",
                          "price_text":  "$12.98",
                          "size_text":  "9 ct 5.40 oz"
+                     },
+                     {
+                         "commodity":  "pepperoni",
+                         "label":  "Pepperoni (sliced)",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "oz",
+                         "board_price":  0.2638,
+                         "board_item":  "Member\u0027s Mark Sliced Pepperoni 16 oz., 2 pk.",
+                         "rejected":  0.1923,
+                         "band_min":  0.2,
+                         "floor_ratio":  0.9615,
+                         "save_pct":  27.1,
+                         "name":  "Member\u0027s Mark Cafe Sliced Pepperoni, Refrigerated, Case, 25 lbs.",
+                         "price_text":  "$76.92",
+                         "size_text":  "25 lb"
                      },
                      {
                          "commodity":  "energy-drinks",
@@ -277,12 +277,12 @@
                          "label":  "Bacon",
                          "store":  "Fareway",
                          "unit":  "lb",
-                         "board_price":  4.99,
-                         "board_item":  "Farmland Hickory Smoked Classic Cut Bacon",
+                         "board_price":  4.44,
+                         "board_item":  "Hormel Black Label Bacon",
                          "rejected":  2.398,
                          "band_min":  2.5,
                          "floor_ratio":  0.9592,
-                         "save_pct":  51.9,
+                         "save_pct":  46,
                          "name":  "Webster City Bacon Ends",
                          "price_text":  "$11.99",
                          "size_text":  "80 oz"
@@ -433,9 +433,9 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.9173,
                          "save_pct":  67.6,
-                         "name":  "Febreze Odor Eliminating Air Freshener Gain Original Scent 0 25 OZ",
+                         "name":  "Febreze Air Freshener Linen Sky 0 25 OZ",
                          "price_text":  "$3.44",
-                         "size_text":  "1 ct"
+                         "size_text":  "7.5 ml"
                      },
                      {
                          "commodity":  "air-freshener",
@@ -448,9 +448,9 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.9173,
                          "save_pct":  67.6,
-                         "name":  "Febreze Air Freshener Linen Sky 0 25 OZ",
+                         "name":  "Febreze Odor Eliminating Air Freshener Gain Original Scent 0 25 OZ",
                          "price_text":  "$3.44",
-                         "size_text":  "7.5 ml"
+                         "size_text":  "1 ct"
                      },
                      {
                          "commodity":  "toothpaste",
@@ -500,21 +500,6 @@
                      {
                          "commodity":  "corn-dogs",
                          "label":  "Corn Dogs (frozen)",
-                         "store":  "Fareway",
-                         "unit":  "each",
-                         "board_price":  1.3725,
-                         "board_item":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
-                         "rejected":  0.2607,
-                         "band_min":  0.3,
-                         "floor_ratio":  0.869,
-                         "save_pct":  81,
-                         "name":  "State Fair Classic Mini Corn Dogs, Frozen",
-                         "price_text":  "$11.99",
-                         "size_text":  "46 ct"
-                     },
-                     {
-                         "commodity":  "corn-dogs",
-                         "label":  "Corn Dogs (frozen)",
                          "store":  "Family Fare",
                          "unit":  "each",
                          "board_price":  0.6244,
@@ -526,6 +511,21 @@
                          "name":  "State Fair Classic Mini Corn Dogs, Frozen 46 Ct",
                          "price_text":  "$11.99",
                          "size_text":  "30.36 oz"
+                     },
+                     {
+                         "commodity":  "corn-dogs",
+                         "label":  "Corn Dogs (frozen)",
+                         "store":  "Fareway",
+                         "unit":  "each",
+                         "board_price":  0.795,
+                         "board_item":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
+                         "rejected":  0.2607,
+                         "band_min":  0.3,
+                         "floor_ratio":  0.869,
+                         "save_pct":  67.2,
+                         "name":  "State Fair Classic Mini Corn Dogs, Frozen",
+                         "price_text":  "$11.99",
+                         "size_text":  "46 ct"
                      },
                      {
                          "commodity":  "dish-soap",
@@ -733,37 +733,22 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
+                         "name":  "Great Value Citrus Sunrise Shores Aerosol Air Freshener, 8 oz",
+                         "price_text":  "$0.97",
+                         "size_text":  "8 oz"
+                     },
+                     {
+                         "commodity":  "air-freshener",
+                         "label":  "Air Freshener",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board_price":  0.2027,
+                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
+                         "rejected":  0.1212,
+                         "band_min":  0.15,
+                         "floor_ratio":  0.808,
+                         "save_pct":  40.2,
                          "name":  "Great Value Aerosol Air Freshener, Twilight Woods, 8 oz",
-                         "price_text":  "$0.97",
-                         "size_text":  "8 oz"
-                     },
-                     {
-                         "commodity":  "air-freshener",
-                         "label":  "Air Freshener",
-                         "store":  "Walmart",
-                         "unit":  "oz",
-                         "board_price":  0.2027,
-                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
-                         "rejected":  0.1212,
-                         "band_min":  0.15,
-                         "floor_ratio":  0.808,
-                         "save_pct":  40.2,
-                         "name":  "Great Value Aerosol Air Freshener Linen Fresh",
-                         "price_text":  "$0.97",
-                         "size_text":  "8 oz"
-                     },
-                     {
-                         "commodity":  "air-freshener",
-                         "label":  "Air Freshener",
-                         "store":  "Walmart",
-                         "unit":  "oz",
-                         "board_price":  0.2027,
-                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
-                         "rejected":  0.1212,
-                         "band_min":  0.15,
-                         "floor_ratio":  0.808,
-                         "save_pct":  40.2,
-                         "name":  "Great Value Aerosol Air Freshener, Linen Fresh, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -793,7 +778,7 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
-                         "name":  "Great Value Aerosol Air Freshener, Tranquil Ocean Waves, 8 oz",
+                         "name":  "Great Value Aerosol Air Freshener, Linen Fresh, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -808,7 +793,7 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
-                         "name":  "Great Value Blooming Lavender Aerosol Air Freshener, 8 oz",
+                         "name":  "Great Value Aerosol Air Freshener Linen Fresh",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -838,7 +823,22 @@
                          "band_min":  0.15,
                          "floor_ratio":  0.808,
                          "save_pct":  40.2,
-                         "name":  "Great Value Citrus Sunrise Shores Aerosol Air Freshener, 8 oz",
+                         "name":  "Great Value Blooming Lavender Aerosol Air Freshener, 8 oz",
+                         "price_text":  "$0.97",
+                         "size_text":  "8 oz"
+                     },
+                     {
+                         "commodity":  "air-freshener",
+                         "label":  "Air Freshener",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board_price":  0.2027,
+                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
+                         "rejected":  0.1212,
+                         "band_min":  0.15,
+                         "floor_ratio":  0.808,
+                         "save_pct":  40.2,
+                         "name":  "Great Value Aerosol Air Freshener, Tranquil Ocean Waves, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -862,60 +862,30 @@
                          "label":  "Corn Dogs (frozen)",
                          "store":  "Fareway",
                          "unit":  "each",
-                         "board_price":  1.3725,
-                         "board_item":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
+                         "board_price":  0.795,
+                         "board_item":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
                          "rejected":  0.2389,
                          "band_min":  0.3,
                          "floor_ratio":  0.7963,
-                         "save_pct":  82.6,
+                         "save_pct":  69.9,
                          "name":  "State Fair Classic Mini Corn Dogs, Frozen",
                          "price_text":  "$10.99",
                          "size_text":  "46 ct"
                      },
                      {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.17,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.78,
-                         "save_pct":  60.5,
-                         "name":  "Great Value Microwavable Supreme Pizza, 7.2 oz (Frozen)",
-                         "price_text":  "$1.17",
-                         "size_text":  "7.2 oz"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.17,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.78,
-                         "save_pct":  60.5,
-                         "name":  "Great Value Microwavable Sausage \u0026 Pepperoni Combination Pizza, 7.2 oz (Frozen)",
-                         "price_text":  "$1.17",
-                         "size_text":  "7.2 oz"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.17,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.78,
-                         "save_pct":  60.5,
-                         "name":  "Great Value Microwavable Thin Crust Cheese Pizza, 7.2 oz (Frozen)",
-                         "price_text":  "$1.17",
-                         "size_text":  "7.2 oz"
+                         "commodity":  "sliced-cheese",
+                         "label":  "Sliced Cheese",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board_price":  0.2494,
+                         "board_item":  "Hy-Vee Singles American Cheese 24Ct",
+                         "rejected":  0.0625,
+                         "band_min":  0.08,
+                         "floor_ratio":  0.7812,
+                         "save_pct":  74.9,
+                         "name":  "Di Lusso premium sliced cheese, $9.99 lb.",
+                         "price_text":  "Di Lusso premium sliced cheese, $9.99 lb.",
+                         "size_text":  ""
                      },
                      {
                          "commodity":  "frozen-pizza",
@@ -948,6 +918,66 @@
                          "size_text":  "2557 ct"
                      },
                      {
+                         "commodity":  "frozen-pizza",
+                         "label":  "Frozen Pizza",
+                         "store":  "Walmart",
+                         "unit":  "each",
+                         "board_price":  2.96,
+                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
+                         "rejected":  1.17,
+                         "band_min":  1.5,
+                         "floor_ratio":  0.78,
+                         "save_pct":  60.5,
+                         "name":  "Great Value Microwavable Thin Crust Cheese Pizza, 7.2 oz (Frozen)",
+                         "price_text":  "$1.17",
+                         "size_text":  "7.2 oz"
+                     },
+                     {
+                         "commodity":  "frozen-pizza",
+                         "label":  "Frozen Pizza",
+                         "store":  "Walmart",
+                         "unit":  "each",
+                         "board_price":  2.96,
+                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
+                         "rejected":  1.17,
+                         "band_min":  1.5,
+                         "floor_ratio":  0.78,
+                         "save_pct":  60.5,
+                         "name":  "Great Value Microwavable Supreme Pizza, 7.2 oz (Frozen)",
+                         "price_text":  "$1.17",
+                         "size_text":  "7.2 oz"
+                     },
+                     {
+                         "commodity":  "frozen-pizza",
+                         "label":  "Frozen Pizza",
+                         "store":  "Walmart",
+                         "unit":  "each",
+                         "board_price":  2.96,
+                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
+                         "rejected":  1.17,
+                         "band_min":  1.5,
+                         "floor_ratio":  0.78,
+                         "save_pct":  60.5,
+                         "name":  "Great Value Microwavable Sausage \u0026 Pepperoni Combination Pizza, 7.2 oz (Frozen)",
+                         "price_text":  "$1.17",
+                         "size_text":  "7.2 oz"
+                     },
+                     {
+                         "commodity":  "fruit-punch",
+                         "label":  "Fruit Punch",
+                         "store":  "Fareway",
+                         "unit":  "floz",
+                         "board_price":  0.0554,
+                         "board_item":  "Minute Maid Zero Sugar Fruit Punch",
+                         "rejected":  0.0078,
+                         "band_min":  0.01,
+                         "floor_ratio":  0.78,
+                         "save_pct":  85.9,
+                         "name":  "Hawaiian Punch Multi-serve Polar Blast Juice Drink",
+                         "price_text":  "$3.99",
+                         "size_text":  "512 fl oz"
+                     },
+                     {
                          "commodity":  "facial-tissues",
                          "label":  "Facial Tissues",
                          "store":  "Walmart",
@@ -976,21 +1006,6 @@
                          "name":  "AriZona Arnold Palmer Half and Half - 16 fl oz (pack of 12)",
                          "price_text":  "$7.48",
                          "size_text":  "191.795 fl oz"
-                     },
-                     {
-                         "commodity":  "fruit-punch",
-                         "label":  "Fruit Punch",
-                         "store":  "Fareway",
-                         "unit":  "floz",
-                         "board_price":  0.0554,
-                         "board_item":  "Minute Maid Zero Sugar Fruit Punch",
-                         "rejected":  0.0078,
-                         "band_min":  0.01,
-                         "floor_ratio":  0.78,
-                         "save_pct":  85.9,
-                         "name":  "Hawaiian Punch Multi-serve Polar Blast Juice Drink",
-                         "price_text":  "$3.99",
-                         "size_text":  "512 fl oz"
                      },
                      {
                          "commodity":  "dinner-rolls",
@@ -1038,6 +1053,21 @@
                          "size_text":  "13.007 fl oz"
                      },
                      {
+                         "commodity":  "coffee",
+                         "label":  "Coffee (ground/beans)",
+                         "store":  "Fareway",
+                         "unit":  "oz",
+                         "board_price":  0.4184,
+                         "board_item":  "Fareway Coffee, Ground, Medium Roast Style, Classic Roast",
+                         "rejected":  0.0763,
+                         "band_min":  0.1,
+                         "floor_ratio":  0.763,
+                         "save_pct":  81.8,
+                         "name":  "Scooter\u0027s Coffee French Vanilla Ground Coffee",
+                         "price_text":  "$10.99",
+                         "size_text":  "12 x 12 oz"
+                     },
+                     {
                          "commodity":  "bread",
                          "label":  "Bread (loaf)",
                          "store":  "Walmart",
@@ -1068,7 +1098,7 @@
                          "size_text":  "50.7 fl oz"
                      }
                  ],
-    "cells":  41,
-    "generated":  "2026-09-06T12:40:09",
-    "flagged_file":  "flagged-2026-09-06.json"
+    "cells":  43,
+    "generated":  "2026-09-07T08:13:37",
+    "flagged_file":  "flagged-2026-09-07.json"
 }

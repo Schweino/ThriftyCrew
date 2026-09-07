@@ -1,1 +1,1 @@
-﻿cod|Walmart|Great Value Frozen Catfish Skinless Fillets, 2 lb Bag;cod|Walmart|Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen);french-bread|Baker's|Private Selection French Loaf Sliced;taco-sauce|Walmart|Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz
+﻿frozen-burritos|Walmart|El Monterey Beef, Bean & Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen);ground-beef-8020|Walmart|80% Lean / 20% Fat Ground Beef and Pork Blend, 3 lb Roll, Fresh;laundry-pods|Baker's|ARM & HAMMER Power Sheets Laundry Detergent Fresh Breeze
