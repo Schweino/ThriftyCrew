@@ -1228,7 +1228,7 @@ Three things were fixed on the way, and the second is the one worth remembering:
 Both stores are now on private remotes. **The allow-list has now swallowed a root dotfile three
 times across this estate**, which is the argument for a gate rather than a fourth memory entry.
 
-### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `OPEN` `BRAD'S CALL`
+### I6 - Bypass-permissions is opted in at the account level, with no sandbox under it `MEASURED - PREMISE WRONG ON BOTH HALVES`
 *Surfaced by the Claude Cowork run (course 11), then verified directly rather than taken on its
 word.* `%APPDATA%\Claude\claude_desktop_config.json` carries, for this account:
 
@@ -1255,6 +1255,34 @@ Two separate things to decide, and both are Brad's:
    precisely so results are attributable.
 
 **Nothing changed.** Permission settings are not mine to alter, and this is listed to be ruled on.
+
+
+**VERIFIED 2026-09-07 read-only, on Brad's ruling to check before acting - and the item is wrong on
+both counts.** It was right to say so itself: the sandbox claim came from an agent and was never
+independently confirmed.
+
+**1. The five account flags do not exist.** `%APPDATA%\Claude\claude_desktop_config.json` has exactly
+**two** keys: `coworkUserFilesPath` and `preferences`. None of `bypassPermissionsGateByAccount`,
+`bypassPermissionsOptInByAccount`, `coworkModelAutoFallbackByAccount`, `coworkBrowserToolsEnabled` or
+`coworkScheduledTasksEnabled` is present.
+
+**2. The sandbox is supported, and the claim was three months stale.** The
+`yukonSilver not supported (status=unsupported)` lines are from **2026-06-09 and 06-10**, in the
+**Roaming** copy of `cowork_vm_node.log` - a log that stopped being written on **08-20**. The CURRENT
+log is the **Local** one, last written 2026-09-05, and it shows the VM warming normally: "Fetching VM
+hash", "VM SHA matches current version, skipping", with no unsupported line anywhere. The old log
+itself shows the recovery beginning on 08-17: "Stale bundle present; refreshing in background".
+
+**The trap is one this estate already has a memory for** - `check-the-commit-clock-behind-a-recorded-measurement`.
+A three-month-old log line was read as current state, from the stale copy of two same-named files.
+Dating the measurement was the whole job.
+
+**What survives, and it is a different thing.** `~/.claude/settings.json` really does carry
+`defaultMode: bypassPermissions`, which governs **Claude Code**, not Cowork. That is a live question
+about the surface these sessions run on, and it is Brad's setting to change rather than mine - I will
+tighten my own permissions on request and will not loosen them, but I would rather he changed his
+prompting behaviour knowingly than found it altered underneath him. Carried forward as the only real
+residue of this item.
 
 ### I2 - Stray artifacts at the repo root `DONE` `558321d5`
 `3 cups sliced, for topping` (1 file) and `CodexThriftyCrewgroceryoutcaptures_sink` (empty - a
@@ -1305,10 +1333,19 @@ only line endings were meant to change. Restored byte-for-byte from HEAD and ver
 is now in the workspace `CLAUDE.md`: skip files containing a NUL byte, and verify against the
 pre-edit copy rather than your own output.
 
-### I5 - Coursera enrollment lapsed on `building-with-the-claude-api` `OPEN`
+### I5 - Coursera enrollment lapsed on `building-with-the-claude-api` `WONTFIX` - knowledge banked, only the completion record is missing
 Will not reinstate by clicking - three attempts. Course-specific, not account-wide. All content was
 already extracted and routed; outstanding are 6 ungraded dialogues and that course's progress ticks.
 Needs Brad to click enroll himself.
+
+
+**Brad's ruling 2026-09-07: close it.** The point of working a course here is the routed knowledge,
+and that landed - the skills carry it and `cc-course-source` records the run. What was outstanding was
+6 ungraded dialogues and Coursera's own progress ticks, which nothing in this estate reads. Enrolment
+would not reinstate by clicking after three attempts and it is course-specific rather than
+account-wide, so there is nothing here to fix on our side.
+
+Recorded rather than deleted, so nobody reopens it as debt.
 
 ### I8 - `run-gates` DISCOVERS PowerShell self-tests and HAND-LISTS the Python ones `DONE` `queue-2`
 *Source: Build Testable Python Packages for AI (queue 2, course 7).* The course's whole argument is
@@ -2302,7 +2339,59 @@ asserting that an existing mechanical check does what it already does.
 
 ---
 
-### I24 - Nothing in this estate measures search performance, so no SEO change can be shown to have worked `OPEN` `queue-2`
+### I24 - Nothing in this estate measures search performance, so no SEO change can be shown to have worked `PARTLY DONE 2026-09-07` `queue-2`
+
+> **The half that needs no credential is built. The half that does is still yours.**
+> `ops/audit-seo-surface.py`, baselined in `ops/seo-surface-baseline.json`, discovered by
+> `run-gates` through its hermetic parser self-test. Six fixture cases; the data audit runs
+> `--audit` and belongs in the daily chain rather than in `run-gates`, per that file's own
+> hermetic/data split.
+>
+> **First measurement, 2026-09-07, over 584 built recipes:**
+>
+> | | |
+> |---|---|
+> | distinct `Recipe.image` values | **1** |
+> | recipes carrying an **empty** image | **49** |
+> | distinct descriptions | 582 of 584 |
+> | duplicate descriptions | 2 |
+> | missing description or name | 0 |
+>
+> **The 49 empty images are new, and the hand-read missed them.** `seo-baseline-2026-08-31`
+> records that all recipes share one image, the site logo, and that is true of the 535 that
+> have one. The other 49 carry `"image": ""`. That is a different defect with a worse
+> consequence: a shared image is a weak signal, while an empty required property can
+> invalidate the Recipe rich result outright. Nobody had counted them because nobody had
+> counted anything.
+>
+> **What it deliberately does NOT measure, and the second one is a trap worth recording.**
+>
+> It does not measure Google's response - position, impressions, clicks - because that needs
+> the Search Console API and a credential. This measures the input, not the outcome.
+>
+> And it does not measure crawlable teaser length, **because that number cannot be taken from
+> this repository at all.** The baseline's ~49 crawlable words was read from the LIVE page,
+> where Ghost gates member-only content at serve time. The local built file is
+> `html|paywall|html` with the marker about **90% of the way through**, so counting words
+> before it returns roughly **5,900** - two orders of magnitude out, because it is a different
+> surface. That check was written, measured, found to disagree with the memory by 100x, and
+> removed rather than shipped. Measuring it honestly requires fetching the live page logged
+> out.
+>
+> **Ratchet, not a bar.** Each metric has a direction: `distinct_images` may only rise;
+> `empty_image`, `duplicate_descriptions`, `missing_description` and `missing_name` may only
+> fall. Baselined at today's numbers, so it is **not red on day one** - it records the exposure
+> and stops it worsening. A recipe count that collapses fails as a broken walk rather than
+> passing as a clean catalogue, which is `lib/ratchet.ps1`'s asymmetry.
+>
+> Proved by breaking each direction and restoring by bytes: `empty_image ROSE 0 -> 49`,
+> `distinct_images FELL 500 -> 1`, and a collapsed count caught by the walk guard while every
+> other metric improved. Exit 1 each time.
+>
+> **Still open and explicitly not done here:** the Search Console series. It needs a credential,
+> which is not this session's to create, and it remains the only thing that can answer whether
+> a change moved ranking. What exists now is a falsifiable record of the surface we control, so
+> a future "we fixed the images" claim can be checked instead of believed.
 
 **Source:** course 15, *SEO: Audit Pages, Rank Higher* (John Whitworth, Coursera). Its own framework
 is on-page auditing, and applying it to this estate surfaced that the measurement layer underneath
