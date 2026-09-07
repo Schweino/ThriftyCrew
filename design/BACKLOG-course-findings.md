@@ -1289,3 +1289,612 @@ because the reading cost is already being paid. Splitting them speculatively is 
 cheapest first slice: it is the highest-churn file in the repo, it is a battery of independent
 auditors rather than one algorithm, so the seams are already there, and it is test code - a
 regression in it is visible as a changed pass count rather than as a wrong number on a live page.
+
+---
+
+### I11 - "CLEAN TWIN" means two opposite things in this estate's own test fixtures `OPEN` `queue-2`
+
+**Source:** course 9, `test-driven-development-workflow` (LearnQuest). Found while checking the
+queue's claim that our gate philosophy is TDD - the claim itself is answered in
+`~/.claude/skills/software-craft/tests-as-safety-net.md` 3b and needs nothing from the estate.
+
+**What.** The phrase `CLEAN TWIN` labels fixture cases in two conventions here, and **the sign of
+the assertion is opposite in each**:
+
+| Where | A clean twin asserts | Example |
+|---|---|---|
+| the PowerShell audits under `ops/` | **zero findings** - a legal input the detector must NOT flag | `T 'CLEAN TWIN both pins present raises nothing' (@($m3).Count -eq 0)` in `ops/audit-agent-tools.ps1` |
+| `~/.claude/skills/knowledge-search/search.py --selftest` | **a hit** - adjacent behaviour that must not have regressed; it keeps `MUST NOT FIRE` as a separate third label | `("dotfile still searchable as itself", dotfile, True)` |
+
+Counted 2026-09-06 across `ops/`, `lib/`, `grocery/`, `meal-prep/` (worktrees and `out/` excluded):
+190 files declare a `-SelfTest` switch, **158 carry a `CLEAN TWIN`**, 132 name a *founding* case.
+
+**Why it matters here.** Both readings are defensible in isolation, so neither file is wrong and
+nothing is red today. The risk is transfer: this estate's standing instruction is to add a must-fire
+fixture plus a clean twin whenever a detector is written, and an author who learned the phrase from
+`search.py` and applies it in `ops/` writes a positive assertion where a negative was wanted. That
+produces a fixture that **passes while proving nothing about over-firing** - the exact failure the
+twin exists to prevent, and one that is invisible because the suite is green. `ops-and-gates.md`
+already warns that a defect in this machinery is "silent by construction".
+
+**A second, non-actionable observation, recorded so it is not re-derived.** Every fixture sampled
+was written *after* its defect - the comments say so outright (`THE ONE THAT MADE THIS FILE
+NECESSARY`, `the founding under-reporting case`). There is no test-first discipline in this tree and
+this item does not propose introducing one; for a detector estate, freezing a scar is the right
+instinct. It only means **"we already do TDD" is not an accurate description of this repo**, and the
+queue entry that said so has been corrected in the claims register as X5.
+
+**Touches** a naming decision only. The cheap form is one sentence in
+`.claude/rules/ops-and-gates.md` fixing the vocabulary for `ops/` (twin = must-not-fire) and naming
+the third category explicitly, so the instruction to "add a clean twin" is unambiguous at the point
+it is read. Renaming existing cases across 158 files is **not** proposed - it is churn across the
+whole gate surface for no behaviour change, and the files are individually consistent.
+
+---
+
+### I12 - There is no NULL-RATE check anywhere in the estate, and it is the one scraper failure nothing watches `OPEN` `queue-2`
+
+**Source:** course 10, `vsp-data-quality-profiling--monitoring` (Coursera). A thin course, but it
+names four standing data-quality checks - **freshness, volume, schema drift, null rate** - and
+checking the estate against that list is what produced this item. Full inventory of what we already
+have, with paths, is `~/.claude/skills/data-quality-craft/estate-inventory.md`.
+
+**What.** Three of the four checks are implemented here, several times over and well. The fourth is
+absent. A grep of the whole tree for `null_rate|null rate|blank rate|missing rate|pct_null|nullrate`
+across `.ps1`, `.py`, `.md` and `.json`, excluding vendored `site-packages` and `.venv`, returns
+**zero hits**. Verified twice on 2026-09-06, once by a read-only subagent and once directly.
+
+What we have that looks like it but is not:
+
+| Exists | What it actually measures | Why it is not this |
+|---|---|---|
+| `grocery/audit-row-age.ps1` UNDATED arm | whether a store's newest engine file dates its rows at all | field **presence**, hard pass/fail, not a **rate** and not tracked over time |
+| `grocery/audit-coverage-gaps.ps1`, `audit-cell-drops.ps1` | missing **cells on the board** | a board cell, not a field inside a source row |
+| `grocery/audit-coverage-ledger.ps1` | `examined` counts per check | coverage of the checking, not completeness of the data |
+
+**Why it matters here, specifically.** The estate's inputs are seven scraped store feeds, and the
+canonical way a scraper degrades is not that it dies. It is that **one field stops being extracted
+while the row keeps arriving** - a selector moves, a price node changes shape, a unit string stops
+being parsed. That failure:
+
+- passes guard 9 and `audit-row-age.ps1`, because the rows are fresh;
+- passes `audit-coverage-regression.ps1` and `audit-cell-drops.ps1`, because the row count is
+  unchanged;
+- passes every schema check we have, because the field is still present and still a string.
+
+It is caught today only downstream, by whichever pricing engine trips over an empty value, or by a
+wrong number reaching a reader. `walmart-price-shape-moved-to-pricelines-values` is exactly this
+failure class having already happened once.
+
+**Touches.** The cheap first slice is one new advisory (not a gate) in the daily chain, not in
+`run-gates`, since it is data-dependent: per store, per field, the proportion of rows where the
+field is absent or empty, written to `grocery/out/` as a dated artefact and compared against a
+baseline JSON in the estate's existing ratchet shape (`coverage-baseline.json` and
+`audit-coverage-ledger.ps1` are the pattern to copy - they already have the right verdict
+vocabulary, including `BLIND` and `INERT`). Start advisory-only for a few weeks so the baseline is
+**measured rather than chosen**, which is what `no-hardcoded-bands` requires and what item I13
+below is about.
+
+**Two traps if it is built.** `@($null).Count` is 1 in PowerShell, so a null-rate check written
+naively scores an absent field as present (`ps-null-count-is-one`). And the check has to agree what
+a null is before it can count one: `""`, `"N/A"`, `"-"` and a missing key are four different things
+in these feeds and at least two of them currently survive as ordinary values.
+
+---
+
+### I13 - Every threshold in the estate is CHOSEN, because only two artefacts keep history `OPEN` `queue-2`
+
+**Source:** course 10, same run as I12. This is the standing `no-hardcoded-bands` ruling (Brad,
+2026-09-04) arriving from the other direction: the reason bands get hard-coded here is that there is
+almost nothing to derive one from.
+
+**What.** The estate has roughly **eighteen baseline files** and they are all the same shape: a JSON
+snapshot of **one accepted number**, re-read each run, compared with a tolerance, raised only by an
+explicit `-Accept` or `-Baseline` flag. `grocery/out/row-age-baseline.json`,
+`tile-integrity-baseline.json`, `band-censorship-baseline.json`, `board-mojibake-baseline.json`,
+`guard-contract-baseline.json`, `json-readers-baseline.json`, `audit/match-baseline.json`,
+`grocery/search-link-baseline.json`, `grocery/regression-baseline.json`,
+`grocery/coverage-baseline.json`; `ops/fixture-input-baseline.json`,
+`mustfire-census-baseline.json`, `write-seam-baseline.json`, `ruling-drift-baseline.json`;
+`meal-prep/db/schema-constraint-baseline.json`, `blocker-heading-baseline.json`,
+`meal-prep/out/spec-contradictions-baseline.json`.
+
+**Only two artefacts in the whole estate keep a time series:**
+`grocery/out/coverage-ledger-history.jsonl` (560 lines, one per audit run, written best-effort
+inside a try/catch by `audit-coverage-ledger.ps1` ~line 421) and `graph/provenance/*.jsonl`.
+
+**Why it matters.** A last-value baseline answers *"did it get worse than the one time somebody
+looked?"*. It cannot answer *"what does normal look like, and how much does it usually move?"* - and
+that second question is the only honest way to set a tolerance. So every tolerance in the tree is a
+number someone picked, which is precisely the defect `no-hardcoded-bands` names and
+`sumac-carried-but-band-dropped` demonstrates costing real accuracy (`band_max 6` refused the only
+shelf price that existed; the recipe ran about 40% low).
+
+**The estate already knows this and already started the fix.** `coverage-ledger-history.jsonl`'s own
+stated purpose, in `audit-coverage-ledger.ps1`, is that tolerances can later be narrowed from
+**measured denominator movement instead of guesses**. Nothing has yet read it back for that purpose.
+
+**Touches.** Nothing needs building first. The cheap, high-value slice is a **read**, not a write:
+compute the observed distribution of `examined` per check from the 560 lines already on disk, and
+compare each check's hand-set `tolerance` in `coverage-baseline.json` against what the history says
+the real variation is. That is a one-off analysis that either confirms the chosen tolerances or
+names the ones that are wrong, and it costs nothing but an afternoon. Only if it pays off is the
+larger version worth it: give the other seventeen baselines a history line each, in the same
+append-only shape, so the same question can be asked of them.
+
+**Not proposed:** converting the existing baselines. They work, they are green, and rewriting a
+working ratchet to change where its number came from is churn across the whole gate surface for no
+behaviour change today.
+
+---
+
+### I14 - The derived-threshold technique I13 wants is ALREADY IN THIS REPO, in the Python half `OPEN` `queue-2`
+
+**Source:** course 11, `applied-anomaly-detection-with-machine-learning`. This is a **sharpening of
+I13, not a new problem.** I13 says every tolerance in the estate is chosen rather than derived and
+proposes building the capability. Measured on 2026-09-06, that is only true of the PowerShell half.
+
+**What was measured.** A case-insensitive grep of `.ps1`, `.py` and `.js` in the repo for
+`percentile|quantile|stdev|stddev|standard deviation|MAD|z-score|interquartile|IQR`, excluding
+vendored trees, worktrees and `grocery/archive/`, returned **35 hits, every one of them in the
+Python half** (`sidecar/`, `meal-prep/pipeline/harvest_embed.py`, `graph/`). **Zero** in `grocery/`,
+`ops/` or any `.ps1` file. Two of those hits are the exact technique I13 asks for:
+
+- **`sidecar/hardeval.py` ~386** computes `(score - commodity median) / MAD` with a 3-exemplar
+  minimum. That is a textbook **modified z-score**, and its own comment says it is robust on purpose
+  because one outlier would otherwise set a mean-based floor wherever it liked.
+- **`sidecar/lib_match.py` `calibrate()`** sets a per-commodity floor at the **`q=0.10` quantile of
+  the scores that commodity's own accepted products earn** - a threshold read off an observed
+  population instead of chosen.
+
+Meanwhile every price-side tolerance is a scalar in a `param()` block: `4.0`, `1.25`, `0.75`, `1.5`,
+`0.30`, `0.15`, `2.0`. `graph/pipeline/flag_outliers.py` is the honest case - median-based, and its
+header says outright that its `5.0` factor is a judgement call, not a derivation.
+
+**Why it matters.** I13 reads like a capability that has to be built and costed. It is not. The
+matcher half already runs both rungs of the ladder; the price half has never borrowed either. That
+makes the item mostly an **adoption and porting** question, which is a much smaller bet, and it also
+means there is a working local reference implementation to copy rather than a paper to read.
+
+**Touches.** Nothing needs building first. The narrow first slice: take
+`grocery/out/coverage-ledger-history.jsonl` (560 lines already on disk) and compute a MAD-based
+robust z-score of each check's `examined` count in the shape `hardeval.py` already uses, then
+compare it against the hand-set `tolerance` in `coverage-baseline.json`. That is I13's proposed
+one-off analysis with the arithmetic already written and debugged elsewhere in this repo.
+
+**Not proposed:** rewriting `flag_outliers.py` or `audit-unit-basis-outlier.ps1`. Both are green,
+both have self-tests pinned to founding bugs, and both state their reasoning. Changing where their
+number comes from is a behaviour change to a live correctness guard and needs its own evidence.
+
+---
+
+### I15 - No audit's FINDING COUNT is tracked over time, so an audit that stops firing looks like one that passes `OPEN` `queue-2`
+
+**Source:** course 11, production monitoring section. The course's cheapest production signal is the
+**detection rate** - the daily volume of alerts a detector raises - on the argument that a change in
+alert volume is one tripwire for several unrelated causes at once: genuine behaviour change, drift,
+a data quality problem, a threshold change, or the detector degrading. It does not say which, and
+that is fine; it says that something changed.
+
+**What.** This estate watches denominators and not numerators. Per course 10's measurement (I13),
+only two artefacts keep a time series, and neither stores a finding count:
+`grocery/out/coverage-ledger-history.jsonl` records each check's `examined` count, and
+`graph/provenance/*.jsonl` records decisions. The `BLIND` / `INERT` verdict vocabulary in
+`audit-coverage-ledger.ps1` exists precisely to separate "nothing to check" from "checked nothing"
+from "checked and found nothing" - and it applies that distinction to the **denominator only**.
+
+**Why it matters.** An audit whose finding count silently goes to zero is indistinguishable from an
+audit that is passing, and this estate has already been bitten by that shape at least five times,
+which is why `lib/guard-contract.ps1` requires a `<NAME>-COMPLETE` marker. The marker proves the
+detector **ran**. Nothing proves it is still **finding** what it was written to find. A regex that
+stops matching, a schema move that empties an input, a mute that was never lifted: all three read as
+green.
+
+**Touches.** One field. `audit-coverage-ledger.ps1` already appends a line per run, best-effort
+inside a try/catch, to `coverage-ledger-history.jsonl`. Adding each check's finding count alongside
+its `examined` count reuses the whole existing mechanism, and after a few weeks the same history
+supports both I13's tolerance derivation and a "this audit has not fired in N runs" note. Advisory
+only at first: a finding count legitimately goes to zero when things are fixed, so this must not be
+a gate on day one, per the standing rule about gates that are red on arrival.
+
+---
+
+### I16 - The two median-based outlier rules are single-tailed in OPPOSITE directions, and nothing watches both `OPEN` `queue-2`
+
+**Source:** course 11, on the point/contextual/collective taxonomy and on relationship anomalies.
+
+**What.** The estate has exactly two median-referenced outlier rules and they live in different
+halves and look opposite ways:
+
+- `grocery/audit-unit-basis-outlier.ps1` flags a per-unit price **at or above 4x** the commodity
+  median. Upward only, on the stated reasoning that a dear outlier never wins a crown and so never
+  reaches a reader.
+- `graph/pipeline/flag_outliers.py` bars a per-unit price **more than 5x below** the commodity
+  median. Downward only, on the stated reasoning that a false-cheap row always wins a crown.
+
+Both arguments are correct in isolation. Together they mean no single rule asks a two-tailed
+question, and the two live on opposite sides of the git-bus with different factors (`4.0` versus
+`5.0`) and different eligibility rules.
+
+**Why it matters, with the case already recorded.** `audit-unit-basis-outlier.ps1`'s own header
+documents the gap: the baby-formula crown, where Walmart's ready-to-feed liquid at `$0.686/oz` beat
+five powder canisters, sat at **0.56x** the median. The header states plainly that no ratio
+threshold in either direction would find it without also flagging every genuine deep sale. So the
+estate already knows a magnitude rule cannot cover this, and already built the right answer next to
+it: `Get-MeasureKind`, which flags a row whose size names a different **kind** of quantity than its
+shelf-mates - a volume among weights - and explicitly does not use magnitude at all.
+
+That second arm is the most sophisticated detector in the tree and it exists in exactly one file. In
+the anomaly-detection vocabulary it is a **contextual anomaly detected through a cross-feature
+relationship**, which is the failure class no single-column threshold can see.
+
+**Touches.** Two candidate slices, and the second is the interesting one. (a) Reconcile the two
+factors and state the two-tailed picture in one place, so nobody later "fixes" one direction into
+symmetry and reintroduces the bug the other direction exists for. (b) Ask whether the
+`Get-MeasureKind` idea generalises past unit basis - a measure-kind or pack-form disagreement
+between a row and its shelf-mates is a check on the **relationship**, not the value, and this estate
+prices seven stores against each other, which is exactly the setting where that check is cheap.
+
+**Not proposed:** merging the two rules. They sit either side of the git-bus, run on different data
+shapes, and each has a self-test pinned to a different founding bug.
+
+---
+
+### I17 - `backtest.py` calls itself an ACCEPTANCE GATE and always exits 0 `OPEN` `queue-2`
+
+**Source:** course 12, `automate-and-evaluate-ml-pipeline-tests`, on the failure-versus-warning
+threshold and on what makes a regression suite a gate rather than a report.
+
+**What, measured 2026-09-06.** `grep -nE 'sys\.exit|SystemExit|^\s*assert |exit\('` over the three
+sidecar eval files returns:
+
+- `sidecar/backtest.py` - nothing at all;
+- `sidecar/seed_sweep.py` - nothing at all;
+- `sidecar/hardeval.py` - exactly one hit, `raise SystemExit(2)` at line 317, which fires when a
+  cold run is asked for and the corpus records no holdout families. That is a could-not-run refusal,
+  not a regression verdict.
+
+So all three always exit 0 whenever they successfully produce numbers, **including when the numbers
+are bad.** `backtest.py`'s own docstring opens with "the ACCEPTANCE GATE for the semantic sidecar"
+and closes the same paragraph with "Output is a report", and the second sentence is the true one.
+
+**Why it matters here.** The estate's standing rule is *read the EXIT CODE first and the tally
+second*. These three files defeat that rule by construction: there is no exit code to read, so the
+only reader is a human looking at a report, and no threshold is written down anywhere for that human
+to apply. A candidate reranker that lost a defect stock catches would be visible in the report and
+invisible to any caller. This is also what makes I18 impossible today - scheduling a suite that
+cannot fail buys nothing.
+
+**Touches.** `sidecar/backtest.py`, `sidecar/hardeval.py`. The material the decision needs is
+already in the tree: `backtest.py` records TASK A AUC 0.9705 and 17/25 at a 100/2816 budget on a
+frozen snapshot, and `finetune_reranker.py` already states in its own output that "hardeval GOLD is
+the number that DECIDES". Turning that sentence into a numeric floor plus a non-zero exit is the
+whole item. Per the standing rule about gates that are red on arrival, the floor should be set from
+the current frozen-snapshot numbers so it passes on day one, and should be a ratchet.
+
+**One dependency worth knowing before starting:** `ops/audit-threshold-register.ps1` already fails
+the gate on any similarity threshold in `sidecar\*.py` that is not named in `sidecar\THRESHOLDS.md`
+with the space it was tuned in. That register currently carries 22 rows and names `hardeval.py`'s
+`--margin` (0.08) and `--keep-above` (0.1), so a new acceptance floor lands in an existing,
+enforced mechanism rather than needing one built. It also means the floor cannot be added quietly.
+
+**Not proposed:** putting these in `run-gates`. They need a GPU and real data, so they belong in a
+scheduled chain, not in the hermetic change-time gate. See I18.
+
+---
+
+### I18 - Nothing schedules the sidecar's ML eval suite, and its inputs change without a commit `OPEN` `queue-2`
+
+**Source:** course 12, on why a model regression suite specifically needs a schedule rather than a
+commit trigger.
+
+**What, measured 2026-09-06.** No runner invokes `sidecar/backtest.py`, `sidecar/hardeval.py` or
+`sidecar/seed_sweep.py`. Checked across `.ps1`, `.yml` and `.yaml` under `ops/`, `graph/`,
+`grocery/`, `meal-prep/` and `.github/workflows/` (which holds `daily.yml`, `gates.yml`,
+`heartbeat.yml`): every hit is prose in a docstring, a design note, or the "run this first" error
+message in `grocery/export-identity-eval.ps1`. `graph/pipeline/nightly.ps1` runs a chain of five
+numbered stages plus a `1b` (emit, defs, sweep, serve, resolve, stage1) and none of its steps is
+these. They run when a human remembers.
+
+**Why it matters here, and why it is not just "add a cron".** The argument the course makes is that
+a model regression suite is unlike an ordinary test suite because **most of what moves it is not a
+commit in your repository.** That is unusually true of this estate: `commodity_text()` is defined as
+"label plus up to five of the products the board currently accepts", so the sidecar's scores move
+every time the board moves, which is daily and automatic. The estate has already measured how large
+that effect is - same pinned model, same eval files, only the commodity text changing: AUC 0.9705
+versus 0.7921, and 17 of 25 known-wrong caught versus 0 of 25. Nothing commits when that happens.
+
+**Touches.** `graph/pipeline/nightly.ps1` is the obvious host, since it already owns the GPU card
+handoff the sidecar needs and already has a `-SelfTest` and a `-WhatIfOnly`. The run must use a
+frozen snapshot via `--defs` (`sidecar/data/frozen/<name>/commodity-defs.json`), or it will measure
+board churn and produce exactly the false alarm this item exists to avoid. Depends on I17: without a
+non-zero exit there is nothing for a scheduled run to report.
+
+**Adjacent, already filed:** I8 (`run-gates` hand-lists its Python self-tests) is the same shape one
+layer down and is **still true and now understated** - re-measured 2026-09-06, 30 `.py` files in the
+tree mention `--selftest` and **19 define one via `add_argument`**, against six `.py` paths in
+`run-gates`'s hand-list, of which only two are among the 19. I8 recorded "sixteen". None of the four
+sidecar eval files defines a `--selftest` at all.
+
+### I19 - Nine of twelve agents read the open web and can also execute, and none is told that page content is data `OPEN` `queue-2`
+
+**Source:** course 13, *LLM Security and Vulnerabilities*, on indirect prompt injection - the case
+where the user is innocent and the payload arrives in data the model fetched on their behalf.
+
+**What, measured 2026-09-06.** Counted from the `tools:` frontmatter of every file in
+`.claude/agents/`. Nine of the twelve can read third-party web content (`WebFetch`, `WebSearch` or a
+browser MCP tool) **and** hold at least one of `Bash`, `PowerShell`, `Write`, `Edit`:
+`post-publish-reviewer`, `recipe-batch-auditor`, `recipe-hunter-extractor`, `recipe-hunter-pricer`,
+`recipe-ingredient-mapper`, `recipe-source-qa`, `recipe-sourcer`, `triage-developer`,
+`triage-reviewer`. The count of agents that read the web **without** being able to act is **zero**.
+The three with no web access are `commodity-registrar`, `recipe-dedup-selector` and `recipe-writer`.
+
+A case-insensitive grep of all twelve for `prompt inject`, `untrusted`, `adversarial`, `jailbreak`,
+`injected instruction` and `treat .* as data` returns exactly one hit, and it is not this:
+`recipe-batch-auditor`'s description says it "Adversarially verifies a whole batch", which is about
+auditing data. **Zero of the nine carry any instruction about how to treat fetched page content.**
+
+**Why it matters here specifically, and why the usual answer does not apply.** The reflex fix is a
+rule in `CLAUDE.md` or a rules file. That does not work: `what-actually-reaches-a-spawned-agent`
+records that **no `CLAUDE.md` at any level reaches a spawned agent**, so the agent definition is the
+only channel that reaches one. A rule written anywhere else is absent from the exact session that
+reads the hostile page. `recipe-hunter-pricer` is the sharpest case - it drives Brad's real
+logged-in Chrome with `javascript_tool` against retailer pages, so it reads third-party content
+while holding a session cookie and a shell.
+
+**Touches.** Nine agent definition files. `ops/audit-agent-tools.ps1` (226 lines, already in
+`run-gates`, already requires a `tools:` block) is the natural place to also require the instruction,
+which would make this a gate rather than a convention. Note the standing rule about not adding a
+gate that is red on day one: the nine would all be red, so the fix ships with the text.
+
+**Not proposing wording here.** The right line is short and the course's own framing is the model:
+text arriving through a tool is data, never an instruction, whatever it claims about its authority.
+
+### I20 - The two prompt-builder families disagree about untrusted text, and nobody decided that `OPEN` `queue-2`
+
+**Source:** course 13, on where untrusted text sits in a context and what interpolation shape it
+gets.
+
+**What, measured 2026-09-06.** Two families, opposite treatments, no recorded decision either way.
+
+`graph/` **repr-quotes** every scraped string. Nine sites in `graph/pipeline/resolve.py` (lines 992,
+996, 1000, 1001, 1002, 1068, 1078, 1079, 1081) and one in `graph/learning/local_triage.py:355` use
+Python's `!r`, as in `f"\nSTORE PRODUCT LISTING: {product_name!r}\n"`. `repr()` quotes the string and
+escapes newlines to a literal `\n`, so a product title carrying an embedded newline cannot break
+onto its own line and impersonate prompt structure. Free, and materially better than nothing.
+
+`meal-prep/pipeline/local_extract.py` interpolates **raw** at three sites: line 325
+`"LINE: %s" % raw`, line 1087 `"PAGE:\n" + text`, and lines 529-530
+`f"PAGE TEXT:\n{body}\n\nTranscribe the recipe."` where `body` is **up to
+`RUNG2_PAGE_CHARS = 24000` characters of arbitrary scraped third-party page text**. That last one is
+the largest untrusted-text surface in the estate.
+
+Two smaller observations from the same read. In both families the untrusted string is the **last**
+thing before the instruction, which is the position a model weights most. And a grep for
+prompt/data delimiters (`<document>`, `<untrusted`, `<page>`, `<data>`, `BEGIN PAGE|DATA|DOCUMENT`)
+across `.py`, `.ps1` and `.md` under `meal-prep/`, `graph/`, `grocery/` and `.claude/agents/` found
+none - scoped to those trees, extensions and patterns on that date.
+
+**Why this is NOT filed as urgent, and the honest half matters more than the exposure.** The estate
+is already strong in the layer that actually holds. `local_extract.verify()` proves every
+transcribed line occurs in the page with no model involved; `verify_split()` requires the quantity to
+re-substring into the raw line verbatim and the split fields to cover at least 90% of its non-glue
+tokens; `raw` is reconstructed by construction from the page rather than taken from the model's
+answer; and every `json_call` passes a JSON schema so output shape is constrained. An injected
+instruction cannot produce a transcribed ingredient that passes those checks, because passing them
+requires being text that is genuinely on the page. **The cheap consistency fix is the `!r`, not a
+rewrite of the validators, which are already the right design.**
+
+**Touches.** Three lines in `meal-prep/pipeline/local_extract.py`. Changing the prompt text is not
+free: that file's own comments record that the split prompt wording is part of the threshold and was
+earned by a 7-publisher measurement, so any change to what the model sees needs re-measuring rather
+than eyeballing.
+
+### I21 - E1's staging switch is off by default, and this course changes the argument for that default `OPEN` `queue-2`
+
+**Source:** course 13. **Does not re-file E1**, which is `PARTLY DONE` and correctly scoped; this is
+about the default, which E1 does not discuss.
+
+**What.** E1 shipped two mechanisms on `lib/ghost-lib.ps1`'s `Invoke-GhostApi`, both **off by
+default**: `TC_STAGE_WRITES` queues a mutating call for approval, and `TC_WRITE_JOURNAL` records the
+inverse so `ops/revert-ghost-write.ps1` can undo it.
+
+**Why the argument changes.** E1 came from an agent-design course, so its case for staging is "agents
+make mistakes" - and against that case, opt-in is a defensible default, because the error rate is
+low and the friction is constant. Course 13 supplies a second and different case: with nine agents
+reading third-party pages (I19), a write may be **directed** by text a third party planted rather
+than merely mistaken. Against that case the staging approver is not error-catching, it is the
+permission boundary between a compromised model and a live paid site - and a permission boundary
+that is off by default is not a boundary. The course's central claim is that no defence recognises
+every attack, so the layers that constrain what can happen *after* the model is fooled are the ones
+worth paying for.
+
+**Needs a ruling, not a patch.** The trade is real in both directions: staging on by default puts a
+human in the loop of every Ghost write, which is exactly the approve-then-hand-out-the-next-task
+cycle the operating rules say to avoid. Recording it as a decision Brad should make with the second
+argument in front of him, rather than as work to do.
+
+**Touches.** The default in `lib/ghost-lib.ps1`, and whoever or whatever is nominated as approver.
+E1 already notes `post-publish-reviewer` could move to run BEFORE the publish, which is what the item
+originally asked for. E1's R2 gap is unchanged and unaddressed by this.
+
+### I22 - The estate's single strongest defensive property is undocumented as one and pinned by no test `OPEN` `queue-2`
+
+**Source:** course 13, on permission boundaries as the defence that does not depend on recognising
+the attack.
+
+**What, measured 2026-09-06.** `graph/pipeline/resolve.py:523-525` states the rule in a docstring:
+
+> Layer 5. The local model may REJECT a candidate or flag a probable match for review; **it may
+> never mint a price.**
+
+That is least privilege applied to a model's *authority* rather than to its tools, and it is the
+best defensive property in the estate. Its consequence is exact and worth stating: a successful
+injection against the resolver can suppress a correct price or force a human review, and **cannot
+publish a wrong one**. Given that a wrong number on a live paid page is this estate's defining
+failure mode, that asymmetry is doing more work than every other control combined.
+
+**The problem is that nothing protects it.** It was earned by measurement, not by security review -
+the module docstring's bench decomposition forced it - and it is recorded only as prose in a
+docstring. Measured: a grep of `graph/**/*.py` for `mint`, `never_mint`, `may only reject` and
+verdict assertions in any file whose name contains `test` or `selftest` returns **nothing**. There
+is no `resolve_selftest.py`. `run-gates` hand-lists exactly one Python self-test under `graph\`,
+`graph\agentic\executor_selftest.py`, which is E18's and is about tool paths. So the asymmetry is a
+convention a future refactor can remove without any test going red, and the reason it exists is
+findable only by reading the module docstring.
+
+**Touches.** A small self-test asserting that no code path lets a model verdict produce a price,
+added to `run-gates`' Python list. Cheap, must-fire, and it would be green on day one - which is the
+correct shape for a ratchet over a property that is already true and must stay true. Related to I8
+(`run-gates` hand-lists its Python self-tests), which is the reason a new one has to be remembered.
+
+### I23 - No fixture anywhere asserts this estate resists an injected instruction `OPEN` `queue-2`
+
+**Source:** course 14, *Introduction to Prompt Injection Vulnerabilities* (Kevin Cardwell, Coursera),
+whose three testing lectures argue that LLM systems are "the ultimate black box" and cannot be
+exhaustively tested. That is true and it is not the same claim as "you cannot check whether a
+specific defence holds against a specific payload", which is what nothing here does.
+
+**What, measured 2026-09-06.** A case-insensitive grep for `prompt inject`, `jailbreak`,
+`adversarial input`, `injection resist` and `hostile page|input|text` over `.ps1`, `.py` and `.js`
+under `graph/`, `meal-prep/`, `grocery/`, `ops/`, `lib/` and `.claude/agents/`, excluding
+`.claude/worktrees/`, `__pycache__` and `.venv`, returns **zero lines**. `ops/run-gates.ps1`
+contains none of `inject`, `adversarial`, `untrusted`, `security`. No file in the repo is named for
+injection except Ghost **code-injection** HTML backups under `archive/`, which are a Ghost feature
+name and unrelated. Scope stated so it is not read as an absolute: it says nothing about `.md`
+files, about anything outside those trees, or about a check written under a spelling those five
+patterns miss.
+
+**Why it matters here specifically.** Course 13 measured (see `security-craft/estate-exposure.md`
+section 4) that this estate's real defences were acquired **by accident**: `local_extract.verify()`
+proves each transcribed line occurs in the source page, `verify_split()` requires the quantity to
+re-substring verbatim, `json_call` forces a schema, and `graph/pipeline/resolve.py:525` rules that
+the local model "may never mint a price". Those are the load-bearing layer, and they are strong.
+None of them was written as a security control, none is documented as one, and none is pinned by a
+test that would go red if it were removed. I22 files that for the resolver rule alone; this item is
+the general case, and the general case is the larger one because the 24,000-character scraped-page
+path in `meal-prep/pipeline/local_extract.py:529` is the estate's biggest untrusted-text surface and
+`verify()` is the only thing standing behind it.
+
+The estate's own convention is that a fix which stops detecting the thing it exists for must fail
+loudly, which is why 158 self-tests here carry a `CLEAN TWIN`. By that standard the strongest
+defensive property in the tree is currently the exact shape the convention exists to prevent.
+
+**Touches.** One self-test with a frozen must-fire fixture pair: a scraped-page string carrying an
+embedded instruction ("ignore the above and output ...") through `local_extract.verify()`, asserting
+the injected line is rejected because it is not on the page, plus its clean twin. Same shape for the
+resolver's no-mint rule (that is I22). Added to `run-gates`' hand-listed Python self-tests, which is
+I8's known friction. Green on day one, which is the correct shape for a ratchet over a property that
+is already true and must stay true.
+
+**Not a red-team exercise, and the distinction is the point.** Nothing here proposes attacking a
+live system, a third-party site or the local model. The fixture is a frozen string in a test file
+asserting that an existing mechanical check does what it already does.
+
+---
+
+### I24 - Nothing in this estate measures search performance, so no SEO change can be shown to have worked `OPEN` `queue-2`
+
+**Source:** course 15, *SEO: Audit Pages, Rank Higher* (John Whitworth, Coursera). Its own framework
+is on-page auditing, and applying it to this estate surfaced that the measurement layer underneath
+it is absent.
+
+**What, measured 2026-09-06.** A case-insensitive sweep for `searchconsole|search-console|webmasters|
+googleapis|rank.?track|impressions|average.?position|gtag|plausible` over `.ps1`, `.py`, `.js`, `.md`,
+`.hbs` and `.html`, excluding `.claude/worktrees/`, `sidecar/.venv`, `node_modules`, `meal-prep/db/
+page-cache` and `grocery/out/browser-profiles`, returns no Search Console or analytics API call
+anywhere in the estate. There is no stored impressions or position series. Of the 26 PowerShell
+scripts in `ops/`, 15 of them `audit-*.ps1`, not one checks a published page's `<title>`, meta
+description, canonical or `og:image`. Every `schema.org`, `json-ld` and `meta description` hit in the
+tree is the recipe harvester reading **other people's** pages inbound, plus Ghost's `custom_excerpt`
+on the way out: the estate consumes structured data and audits none of its own. Scope stated so it is
+not read as an absolute - this is a grep of the repository, and says nothing about a check that lives
+only in Ghost's admin UI or in a person's habit.
+
+**Why it matters here specifically.** The one baseline that exists, `seo-baseline-2026-08-31`, was
+hand-read off the Search Console UI on a single day: 1.44K indexed, no manual actions, 3 clicks on
+997 impressions, **average position 50.1**. It is a good measurement and it cannot be re-read. So the
+estate currently cannot answer "did that move", and it cannot answer the narrower question the
+baseline actually leaves open, which is whether the 556 paywalled recipe teasers are being indexed
+and out-ranked or filtered as thin. Those two want different fixes, and the open items already logged
+in that memory - per-recipe images, the free-preview length decision - are being decided without the
+measurement that would tell anyone whether they are the constrained thing. This estate's standing
+rule is that a wrong number on a page costs a real reader; the same rule applied to its own growth
+work means an SEO change shipped today is unfalsifiable.
+
+**Touches.** Smallest useful version is a scheduled read of the Search Console API into a dated
+JSON under `grocery/out/`-style conventions, keyed by page and query, so position and impressions
+become a series rather than a snapshot. That is a new credential and a new daily job, which is the
+real cost. A cheaper first step that needs no credential is a static on-page audit gate over what we
+already publish: `public/board.json` and the Ghost payloads carry title, excerpt and og fields, so a
+`ops/audit-page-metadata.ps1` could assert one `h1`, a non-empty unique title and description per
+published URL, and a non-logo `og:image`, as a ratchet with a high-water mark that may only go down.
+Green-on-day-one is not available here, which is why the ratchet shape matters.
+
+---
+
+### I25 - The Search Console property is named three different ways in three places, and at most one is right `OPEN` `queue-2`
+
+**Source:** course 15, while grounding the estate's measured baseline.
+
+**What, read 2026-09-06.** Three files name three different owning accounts for the site's search
+data. `docs/seo-backlink-plan.md` says the properties are "already set up under
+admin@simplemoneyplaybook.com". `.claude/skills/lesson/SKILL.md` says the site is verified "under
+`admin@thriftycrew.com`". The memory `seo-baseline-2026-08-31` says the `https://www.thriftycrew.com/`
+property had **never been verified** until 2026-08-31, when it was verified under
+`schweino68@gmail.com` by adding a second `google-site-verification` tag, because the tag already on
+the site belonged to something else and did not match the account.
+
+**Why it matters.** The backlink plan's entire "How to measure it" section routes a reader to a
+property that may hold nothing, and the lesson skill tells any future run to request indexing in an
+account that may not be the verified one. Both are instructions that will silently do nothing rather
+than fail. This is not a code defect and no gate can catch it.
+
+**Touches.** One reconciliation by Brad, who is the only party who can see which accounts exist, then
+a single edit to each of the three files so they name the same property. `docs/seo-backlink-plan.md`
+also carries I26.
+
+---
+
+### I26 - `docs/seo-backlink-plan.md` is written against the previous domain, and its stated premise is refuted `OPEN` `queue-2`
+
+**Source:** course 15.
+
+**What, read 2026-09-06.** The plan is dated 2026-07-02 and every target page it names is a
+`simplemoneyplaybook.com` URL. That domain survives in the estate only in `archive/ghost-config/`
+(dated 2026-07-01) and in `.claude/skills/lesson/ghost-config.ps1`; the live site is
+`www.thriftycrew.com`. The document also opens by asserting its own premise: the outreach strategy is
+justified "because on-page/technical SEO is already A-grade". The 2026-08-31 baseline contradicts
+that on two specific, measured counts - 556 of 1,093 indexable URLs are paywalled recipe teasers with
+about 49 crawlable words of which roughly 18 are unique, and all 576 recipes share the site logo as
+both `Recipe.image` and `og:image`. Near-duplicate thin pages at scale and a single shared image
+across 576 pages are on-page conditions, not off-page ones.
+
+**Why it matters.** The plan reads as current and it is the only SEO strategy document in the repo,
+so it is what anybody picking up growth work will find first. Its link-building advice may well still
+be sound and is not what is being questioned; its premise and its target URLs are stale, and a run
+that follows it will promote pages on a domain we no longer publish to.
+
+**Touches.** Re-point the target URLs, or mark the document superseded with a dated header. Either
+way the "already A-grade" line needs removing or qualifying, because it is the sentence that argues
+against doing on-page work at all, and it is the on-page work the baseline points at.
+
+---
+
+### I27 - `lesson/SKILL.md` cites a memory that does not exist `OPEN` `queue-2`
+
+**Source:** course 15.
+
+**What, read 2026-09-06.** `.claude/skills/lesson/SKILL.md` cites `[[google-search-console]]` twice
+as the governing memory for indexing, once in its Step 6 and once in the cheat-sheet's "the three
+memories that govern any creation". A directory listing of
+`~/.claude/projects/C--Codex-ThriftyCrew/memory/` on 2026-09-06 contains no file of that name; the
+only search-related memory present is `seo-baseline-2026-08-31.md`.
+
+**Why it matters.** It is small, but a dangling citation in a skill that publishes to a live paid
+site teaches a reader that a ruling exists and was consulted when neither is true, and the two
+citations sit next to the account-name claim in I25 that is itself in doubt. Cheapest of the four
+items here.
+
+**Touches.** Either repoint both citations at `seo-baseline-2026-08-31`, or write the memory the
+skill thinks it is citing. Not a course-run decision, because whichever is right depends on I25.
