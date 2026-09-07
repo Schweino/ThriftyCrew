@@ -622,7 +622,26 @@ if ($g8dCells.Count -lt 2) {
   Set-G8dCell $g8dCells[0] ('Bananas, 49' + $g8dCent + ' lb.') 0.49 'per-lb marker'
   Set-G8dCell $g8dCells[1] 'Hy-Vee storage bags, 75 to 100 ct., $2.99' 0.0299 'per-100-pack'
   ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
-  CheckLoud 'ad-line provenance MUST NOT FIRE + CLEAN TWIN: a real cents price and a per-100-pack cell both reconcile' 0 'every ad-line cell publishes the price its own ad line quotes last'
+  # ASSERT THIS GUARD'S OWN VERDICT, NOT THE SUITE'S EXIT CODE (2026-09-07). A must-not-fire written as
+  # "expect exit 0" is hostage to every other invariant in a 31-run mutating suite: the first version of
+  # this case failed while the ad-line check was correctly SILENT, because audit-tile-integrity was red
+  # from an earlier case's prune (it rewrites product-urls.json, which stales name-drift.json - the chain
+  # itself re-runs name-drift for exactly that reason, and this suite does not). Reading the guard's own
+  # OK line proves it ran AND stayed quiet, which is the whole claim; the HARD FAIL check proves it is
+  # not merely absent from the output.
+  $g8dOut = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+  $g8dOk    = ($g8dOut -match 'every ad-line cell publishes the price its own ad line quotes last')
+  $g8dFired = ($g8dOut -match 'HARD FAIL: ad-line price provenance')
+  if ($g8dOk -and -not $g8dFired) {
+    Write-Output '  PASS  ad-line provenance MUST NOT FIRE + CLEAN TWIN: a real cents price (Bananas, 49c lb.) and a per-100-pack cell (storage bags, $2.99) both reconcile and the guard stays silent'
+    $script:pass++
+  } elseif (-not $g8dOk -and -not $g8dFired) {
+    Write-Output '  FAIL  ad-line provenance: the guard printed NEITHER its ok line nor a finding - it did not run, so its silence proves nothing'
+    FailEvidence $g8dOut; $script:failed++
+  } else {
+    Write-Output '  FAIL  ad-line provenance MUST NOT FIRE: a real cents price or a per-100-pack cell was reported as a wrong ad-line price - the guard is crying wolf'
+    FailEvidence $g8dOut; $script:failed++
+  }
   RestoreNow $g8dCmpF
 }
 

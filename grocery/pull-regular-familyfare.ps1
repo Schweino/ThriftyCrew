@@ -843,6 +843,46 @@ try {
     }
     Write-Output ("Family Fare: " + $sl.Prepended + " term(s) for " + @($plan.SaleExpiries).Count + " expiring sale(s) moved to the FRONT of today's slice: " + (($termList | Select-Object -First $sl.Prepended) -join ', '))
   }
+  # ---- THE CONFIRMED PULL-DROP VICTIMS GO TO THE FRONT TOO (2026-09-07, queue 2026-09-07-72756b) -----
+  # audit-ff-carry writes out\ff-carry-report.json with a confirmed_victims array, and its alert told the
+  # reader those victims 'lead the next window's slice automatically'. Nothing read that file. Repo-wide,
+  # 'ff-carry-report' and 'confirmed_victims' appeared ONLY in the writer and in two shape assertions in
+  # test-auditors - no consumer, no promotion path - so a genuinely dropped carried item waited its full
+  # turn in the 90-day rotation (the two found on 2026-09-07 were due in 33 and 58 windows). The human
+  # reading that alert was reassured by a mechanism that did not exist.
+  # SAME HELPER AS THE EXPIRIES, on purpose: Select-ExpiryFirstSlice is pure and already fixtured, and it
+  # enforces 'front of the slice, in the order given, stop at the budget'. A second ordering routine here
+  # would be a second set of rules to keep in step.
+  # 48 HOURS, because a stale report must not re-ask a term forever: once a victim is captured the next
+  # report drops it, but if the audit stops running the file freezes and would otherwise pin the front of
+  # every future slice. An unreadable or undated report promotes nothing and says so.
+  try {
+    $ffcF = Join-Path $OutDir 'ff-carry-report.json'
+    if (Test-Path $ffcF) {
+      $ffcDoc = Read-JsonFile $ffcF
+      # ONE implementation, shared with the fixture: Get-FfVictimTerms (capture-policy-lib.ps1) decides
+      # both the freshness and the term list, and test-capture-policy.ps1 drives that same function.
+      $ffcV = Get-FfVictimTerms -Report $ffcDoc -MaxAgeHours 48
+      $ffcTerms = @($ffcV.terms)
+      if ($ffcTerms.Count -eq 0) {
+        Write-Output ('Family Fare: no pull-drop victim promoted (' + $ffcV.reason + ')')
+      } else {
+        $slV = Select-ExpiryFirstSlice -Items $termList -Expiring $ffcTerms -KeyOf { param($t) @($t) } -Budget 0 -CursorStart 0
+        $termList = @($slV.Items)
+        $vAdded = [int]$slV.Prepended
+        if ($vAdded -gt 0) {
+          # counted into the budget exactly as an expiry is - one slot per TERM - and clamped by the same
+          # CallCap, so promoting a victim can never breach the Freshop window.
+          if ($script:TermBudget -lt [int]::MaxValue) { $script:TermBudget += $vAdded }
+          if ($plan.CallCap -gt 0 -and $script:TermBudget -gt [int]$plan.CallCap) {
+            Write-Output ('Family Fare: budget clamped to the store call cap ' + $plan.CallCap + ' after promoting pull-drop victims')
+            $script:TermBudget = [int]$plan.CallCap
+          }
+          Write-Output ('Family Fare: ' + $vAdded + ' confirmed pull-drop victim term(s) moved to the FRONT of today''s slice: ' + (($termList | Select-Object -First $vAdded) -join ', '))
+        }
+      }
+    }
+  } catch { Write-Output ('Family Fare: could not read ff-carry-report.json (' + $_.Exception.Message + ') - no victims promoted, which is not the same as none existing') }
   Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) today (" + $plan.RotationTerms + " rotation + " + @($plan.SaleExpiries).Count + " sale expiry, cap " + $plan.CallCap + "; quarter " + $plan.QuarterDays + "d)")
   if ([int]$plan.ExpiryDeferred -gt 0) {
     Write-Output ("Family Fare: " + $plan.ExpiryDeferred + " further expiry(ies) OWED and deferred by the cap (oldest owed since " + $plan.ExpiryOldest + ") - they are NOT dropped; sale-windows.json keeps them until a landed run records them.")

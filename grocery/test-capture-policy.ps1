@@ -61,6 +61,54 @@ try {
   if ($sl.Prepended -eq 2 -and $sl.Items.Count -eq $p.TermBudget -and $sl.CursorNext -eq ($p.TermBudget - 2)) { Ok "slice honours the budget ($($p.TermBudget)) and the cursor advances only by the rotation positions walked ($($sl.CursorNext))" }
   else { Bad "prepended=$($sl.Prepended) count=$($sl.Items.Count) cursorNext=$($sl.CursorNext)" }
 
+  # 4b. THE CONFIRMED PULL-DROP VICTIMS (2026-09-07, queue 2026-09-07-72756b) -----------------------
+  #     audit-ff-carry's alert said confirmed victims 'lead the next window's slice automatically'.
+  #     Nothing read out\ff-carry-report.json, so they led nothing: the two found on 2026-09-07 were
+  #     due in 33 and 58 windows of a 90-day rotation. These are the two REAL victims from that report,
+  #     frozen - jarred-gravy via 'turkey gravy jar' (term index 383 of 602) and 15-bean-soup-mix via
+  #     '15 bean soup mix' (index 552).
+  $vNow = [datetime]'2026-09-07T09:00:00'
+  $vRep = [pscustomobject]@{ generated = '2026-09-07T08:08:44'; empty_terms = 40
+    confirmed_victims = @(
+      [pscustomobject]@{ commodity = 'jarred-gravy';     product = 'Heinz Home Style Turkey Gravy, 12 Oz Jar'; term = 'turkey gravy jar' },
+      [pscustomobject]@{ commodity = '15-bean-soup-mix'; product = "Hurst's Hambeens 15 Bean Soup Mix 20 Oz"; term = '15 bean soup mix' }) }
+  $vFresh = Get-FfVictimTerms -Report $vRep -MaxAgeHours 48 -Now $vNow
+  if (@($vFresh.terms).Count -eq 2 -and $vFresh.terms[0] -eq 'turkey gravy jar' -and $vFresh.terms[1] -eq '15 bean soup mix') {
+    Ok "MUST-FIRE: a fresh carry report promotes both confirmed victims, in the order reported [$($vFresh.terms -join ', ')]"
+  } else { Bad "victims not promoted from a fresh report: [$(@($vFresh.terms) -join ', ')] ($($vFresh.reason))" }
+  #     ...and they must reach the FRONT of a real slice through the same helper the expiries use.
+  $vAll = @(@([pscustomobject]@{ term = 'apples'; id = 'apples' }, [pscustomobject]@{ term = 'bacon'; id = 'bacon' }) +
+            @([pscustomobject]@{ term = 'turkey gravy jar'; id = 'jarred-gravy' }, [pscustomobject]@{ term = '15 bean soup mix'; id = '15-bean-soup-mix' }))
+  $vSl = Select-ExpiryFirstSlice -Items $vAll -Expiring @($vFresh.terms) -KeyOf { param($t) @($t.term) } -Budget 0 -CursorStart 0
+  $vGot = @($vSl.Items | ForEach-Object { $_.term })
+  if ($vSl.Prepended -eq 2 -and $vGot[0] -eq 'turkey gravy jar' -and $vGot[1] -eq '15 bean soup mix' -and $vGot.Count -eq $vAll.Count) {
+    Ok "MUST-FIRE: both victim terms lead the slice and nothing is dropped: [$($vGot -join ', ')]"
+  } else { Bad "victims did not lead the slice: prepended=$($vSl.Prepended) [$($vGot -join ', ')]" }
+  #     CLEAN TWIN: a report from 72 h ago changes nothing. Once a victim is captured the next report
+  #     drops it; if the audit STOPS running the file freezes, and a frozen report must not pin the
+  #     front of every future slice forever.
+  $vStale = Get-FfVictimTerms -Report $vRep -MaxAgeHours 48 -Now ([datetime]'2026-09-10T09:00:00')
+  if (@($vStale.terms).Count -eq 0 -and $vStale.reason -match 'stale') { Ok "CLEAN-TWIN: a 72 h old carry report promotes nothing ($($vStale.reason))" }
+  else { Bad "a stale report still promoted [$(@($vStale.terms) -join ', ')]" }
+  #     CLEAN TWIN: an EMPTY victims array changes nothing - and must count 0, not the PS 5.1 @($null) 1.
+  $vEmpty = Get-FfVictimTerms -Report ([pscustomobject]@{ generated = '2026-09-07T08:08:44'; confirmed_victims = @() }) -MaxAgeHours 48 -Now $vNow
+  if (@($vEmpty.terms).Count -eq 0) { Ok 'CLEAN-TWIN: an empty confirmed_victims array promotes nothing (and does not count 1)' }
+  else { Bad "an empty victims array promoted [$(@($vEmpty.terms) -join ', ')]" }
+  #     MUST-FIRE: an UNDATED report is refused. An age that cannot be read is not an age of zero.
+  $vNoStamp = Get-FfVictimTerms -Report ([pscustomobject]@{ confirmed_victims = @([pscustomobject]@{ term = 'turkey gravy jar' }) }) -MaxAgeHours 48 -Now $vNow
+  if (@($vNoStamp.terms).Count -eq 0 -and $vNoStamp.reason -match 'generated') { Ok 'MUST-FIRE: a report with no readable generated stamp promotes nothing - blind is not fresh' }
+  else { Bad "an undated report promoted [$(@($vNoStamp.terms) -join ', ')] ($($vNoStamp.reason))" }
+  #     MUST-FIRE: the promise is gone from the alert text. The sentence that reassured a reader about a
+  #     mechanism that did not exist is the other half of this defect.
+  $ffcAlertSrc = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
+  if ($ffcAlertSrc -notmatch "lead the next window's slice automatically") { Ok 'MUST-FIRE: audit-ff-carry no longer claims victims lead the slice automatically' }
+  else { Bad 'audit-ff-carry still promises a consumer in its alert text' }
+  if ($ffcAlertSrc -match 'read from out') { Ok 'the alert now describes the consumer that actually exists' }
+  else { Bad 'the alert text does not name the real mechanism' }
+  #     ...and the PULLER really calls it. A pure function nothing invokes is the write-only report again.
+  $ffPullSrc = Get-Content (Join-Path $root 'pull-regular-familyfare.ps1') -Raw
+  if ($ffPullSrc -match 'Get-FfVictimTerms') { Ok 'pull-regular-familyfare READS the carry report - the consumer the alert promised now exists' }
+  else { Bad 'nothing in the Family Fare puller calls Get-FfVictimTerms - the report is write-only again' }
   # 5. an expiring item that ALSO sits inside the rotation window is taken once, not twice
   $sl2 = Select-ExpiryFirstSlice -Items $all -Expiring @('apples') -KeyOf { param($t) $t.id } -Budget 3 -CursorStart 0
   $g2 = @($sl2.Items | ForEach-Object { $_.term })

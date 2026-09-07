@@ -468,8 +468,8 @@
       ],
       "resolution_note": "Rotation latency is by design and depth held (5361 deals, 602 terms). The defect is the alert's promise: nothing reads ff-carry-report.json, so confirmed victims never led any slice. Wired confirmed_victims into the next window's front-of-slice via the existing expiry helper (48 h freshness, CallCap-clamped), corrected the alert text, and added a write-only-report ratchet (17 such families measured today).",
       "publish_batch": 2,
-      "status": "planned",
-      "premise_verified": null,
+      "status": "done",
+      "premise_verified": "TRUE, verified by the same scan the plan describes. Repo-wide (excluding archive, out and the worktrees) 'ff-carry-report' and 'confirmed_victims' appear in exactly three places: the writer at audit-ff-carry.ps1:252-253 and two JSON-SHAPE assertions in test-auditors.ps1:1938 and :1940. Nothing reads the file, so the alert's claim that confirmed victims 'lead the next window's slice automatically' described a mechanism that did not exist.",
       "deviation": null,
       "shipped_commit": null
     },
@@ -533,9 +533,9 @@
       ],
       "resolution_note": "The two reported drifts are line endings (145 and 272 CRs from a 09-03 CRLF publish, before the 09-06 eol=lf flip) plus today's 14-byte cost delta - nothing live-only to keep. The run also exposed a third, worse one the truncated alert hid: sams-club-worth-it has been live with 8 July prices since 07-11 while local carries 09-02. Republished all three; the drift comparison now folds CR, and the audit prints live age so an unpublished tool pages as STALE rather than as drift.",
       "publish_batch": 2,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "deviated",
+      "premise_verified": "TRUE, all three, and the third was worse than the alert could show. audit-ghost-drift reported exactly the plan's numbers: cheap-dinners-right-now +159, whats-for-dinner-tonight +286, sams-club-worth-it -35173. The third was reviewed byte by byte before anything was overwritten: outside the /*CN-DATA*/ price blob the live and local bodies are IDENTICAL at 20,370 characters each, and the only difference is week:\"2026-07-08\" against week:\"2026-09-02\" - live carried 116 priced items, local 403. So there was no live-only content to fold back, only a 61-day-old price array on a money page.",
+      "deviation": "TWO. (1) publish-tool-post.ps1 refused the republish, as designed, because it will not overwrite an UNREVIEWED live body. Its own message names -Force as the reviewed override, and the review it asks for was actually done (the byte comparison above) before -Force was used. The refusal itself was not touched, per do_not_touch. VERIFIED LIVE afterwards: www.thriftycrew.com/sams-club-worth-it/ now serves week 2026-09-02 with 403 items. (2) BLOCKED, deliberately: cheap-dinners-right-now and whats-for-dinner-tonight were NOT republished. Both local sources are foreign-dirty in another session's working tree, so publishing from the working copy would ship that session's uncommitted 08:34 splice to the live site, and publishing from HEAD would put OLDER costs live than the working copy holds. Their residual drift after the CR fold is exactly the +14-byte cost delta the plan measured, and their live age is 3 days, so nothing reader-facing is materially wrong. Left to their owner and reported.",
       "shipped_commit": null
     },
     {
@@ -575,5 +575,23 @@
     "memory store remote (4f672e): remove the deliberate private backup remote, or add a reviewed private-remote allowlist to the security guard ops/audit-memory-backup.ps1? It pages daily until one of these lands.",
     "CROWN-BY-CONTEST (0b232c root fix): should a new-contested name that holds a crown be a HARD guard (blocks publish) or stay advisory? The plan ships it advisory.",
     "band-censorship median discriminator (e9edb9): 0.4 x median clears the false positives but also retires four arguable real backlog findings (a 2-pack couscous, mini muffins, four 7.2 oz personal pizzas, a 25 lb pepperoni case); 0.3 keeps them but does not clear the 1/16 deli row. The plan ships 0.4 with the parse fix doing the unblocking; say if you want 0.3."
+  ],
+  "developer_bounce": [
+    {
+      "class": "a self-tightening RATCHET inside a suite that MUTATES its own subject corrupts its own baseline, and the failures then name guards nobody touched",
+      "found_while": "running grocery/run-test-guards-weekly.ps1 for item 2026-09-07-05e4c3's new ad-line provenance fixture",
+      "status": "bounced",
+      "why_new": "This is not another instance of anything in the plan. It is a different way for the SUITE to be wrong: the thing that fails is not a guard's rule but the interaction between a guard's SIDE EFFECT and a harness that runs it 31 times over deliberately broken data. Nothing in the estate's fixture-hygiene machinery covers a detector that WRITES state.",
+      "measurement": [
+        "audit-band-censorship.ps1 WRITES out/band-censorship-baseline.json from the live path at two sites (the 'first' branch and the 'tighten' branch). guards.ps1 invokes it, so every guards run can rewrite that file.",
+        "grocery/test-guards.ps1 invokes guards 31 times (count of RunGuards/RunGuardsOut/Check/CheckLoud call sites), most of them over a board it has deliberately mutated.",
+        "grocery/test-guards.ps1 contains the string 'band-censorship' ZERO times: the baseline is never passed to Backup(), so the crash-safe restore journal that protects 16 other mutation windows does not cover it. test-guards restores the DATA and nothing restores the high-water MARK.",
+        "Consequence observed in the 2026-09-07 11:54 hermetic run (run-test-guards-weekly.ps1, exit 1, verdict line 'negative tests: 28 passed, 5 failed'): four of the five failures are 'HARD FAIL ... band-censorship ratchet ... may only go down' on cases that mutate nothing of the kind - including the final case 'restored: guards pass again after every mutation is reverted', which runs with NO mutation in place. Guards on the real tree at 11:41 exited 0 with band-censorship 'ok', so the rule is fine and it is the harness's copy of the baseline that has moved.",
+        "The fifth failure was a different instance of the same family: audit-tile-integrity HELD because an earlier case's prune-bad-links rewrote product-urls.json, staling out/name-drift.json. check-ad-cycles.ps1:1024-1031 re-runs name-drift for exactly that reason; test-guards does not."
+      ],
+      "not_fixed_because": "The reviewer never measured this and a fix is a structural change to how the estate's mutation harness protects guard-written state - either test-guards Backup()s every ratchet baseline, or the ratchet writers gain a -NoRecord switch the harness passes. Both are real decisions about what a ratchet is allowed to do while under test, and inventing one here is out of role.",
+      "what_was_done_instead": "Only the fixture this session added was made robust to it: the ad-line provenance MUST-NOT-FIRE case now asserts that guard's OWN verdict line (its ok line present, its HARD FAIL absent) instead of the suite's exit code, so it cannot be failed by an unrelated red and cannot pass by the guard not running at all. Its MUST-FIRE case passed in the same hermetic run.",
+      "next_reviewer_should_test": "that out/band-censorship-baseline.json is byte-identical before and after a full run-test-guards-weekly.ps1, on a tree where guards exits 0 to begin with. If it moved, the harness wrote it."
+    }
   ]
 }

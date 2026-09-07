@@ -320,7 +320,7 @@ if ($Alert) {
     $body = "The Family Fare pull has no priced row for item(s) FF actually carries. Board shows 'No price yet' for:`n" +
             (($victims | ForEach-Object { $_.commodity + " <- " + $_.product + "`n    term '" + $_.term + "'" + (Get-FfTermDue ([string]$_.term)) }) -join "`n") +
             "`n`nThe term budget is " + $ffRot + " term(s) per landed window (capture-policy), about " + ($ffRot * $ffWindowsPerDay) +
-            " a day, so a term far from the cursor cannot be bought by re-running the sweep. Confirmed victims lead the next window's slice automatically; anything longer than that is the rotation working as designed."
+            " a day, so a term far from the cursor cannot be bought by re-running the sweep. Confirmed victims are read from out\ff-carry-report.json by the next window and asked FIRST, within the store call cap (wired 2026-09-07 - before that nothing read this file, so this sentence promised a mechanism that did not exist); anything longer than that is the rotation working as designed."
     try { Send-Alert -Subject "Grocery: Family Fare pull dropped a carried item - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }

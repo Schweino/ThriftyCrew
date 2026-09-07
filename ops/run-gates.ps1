@@ -134,6 +134,17 @@ $static = @(
   # around it entirely, ten of them in .claude\skills\lesson. A ratchet, so the number can only fall
   # (2026-09-06, backlog E1).
   @{ f = 'ops\audit-write-seam.ps1';           n = 'no NEW irreversible write bypasses the E1 safety layer' }
+  # AN AUDITOR THAT REPORTS INTO A FILE NOBODY OPENS IS A MEASUREMENT WITH NO CONSEQUENCE, and one whose
+  # ALERT describes a consumer that does not exist is worse: it suppresses the manual repair that would
+  # otherwise have happened. audit-ff-carry told its reader that confirmed victims "lead the next window's
+  # slice automatically" while NOTHING read out\ff-carry-report.json, so two genuinely dropped carried items
+  # were left 33 and 58 windows away in a 90-day rotation (2026-09-07, queue 2026-09-07-72756b). A ratchet:
+  # plenty of these reports are legitimately human-read, so what may only go down is the COUNT.
+  # REGISTERED HERE RATHER THAN LEFT TO DISCOVERY, and that distinction is the whole lesson: run-gates'
+  # discovery pass runs every -SelfTest it finds, which wires the FIXTURE and not the DETECTOR.
+  # audit-guard-contract caught this file shipping with no production caller - the same defect it exists
+  # to detect, in the detector itself.
+  @{ f = 'ops\audit-write-only-reports.ps1';   n = 'no NEW out\ report family is written by a script and read by none' }
   # THE FACT CHECK LIST, and the live half is the point: it reads the 584 real cards, which is where the
   # undeclared claims actually are. Hermetic - specs are tracked, so it works on a bare checkout. A
   # ratchet, because 340 assertions predate the field (2026-09-06, backlog E6).

@@ -391,6 +391,44 @@ function Get-CaptureWorklist {
   }
 }
 
+function Get-FfVictimTerms {
+  <#
+    .SYNOPSIS Which confirmed pull-drop victim terms may lead the next Family Fare window.
+    .DESCRIPTION
+      THE DEFECT (2026-09-07, queue 2026-09-07-72756b). audit-ff-carry writes
+      out\ff-carry-report.json with a confirmed_victims array and its alert told the reader those
+      victims 'lead the next window's slice automatically'. NOTHING READ THAT FILE. Repo-wide the
+      family name appeared only in the writer and in two JSON-shape assertions, so a genuinely
+      dropped carried item waited its full turn in the 90-day rotation - the two found that morning
+      were due in 33 and 58 windows. An auditor whose output has a writer and no reader is worse
+      than one with no output: the alert describes a repair lane that does not exist.
+
+      PURE on purpose - the report doc and the clock are both parameters - because the promotion
+      itself lives inside a network-bound puller nothing can fixture. The rule, stated once so it
+      can be tested (see test-capture-policy.ps1):
+        1. no report, or no readable `generated` stamp -> promote NOTHING and say which it was;
+           an undated report could be any age, and blind is not fresh.
+        2. older than -MaxAgeHours (48) -> promote NOTHING. Once a victim is captured the next
+           report drops it; if the AUDIT stops running the file freezes, and a frozen report would
+           otherwise pin the front of every future slice forever.
+        3. otherwise -> the distinct, non-empty terms, in the order the report lists them.
+      The caller counts one budget slot per TERM and clamps at the store call cap, exactly as it
+      does for a sale expiry, so promoting a victim can never breach the Freshop window.
+  #>
+  param($Report, [double]$MaxAgeHours = 48, $Now = $null)
+  if ($null -eq $Now) { $Now = Get-Date }
+  if ($null -eq $Report) { return [pscustomobject]@{ terms = @(); reason = 'no report' } }
+  $gen = $null
+  try { if ($Report.generated) { $gen = [datetime]$Report.generated } } catch { $gen = $null }
+  if ($null -eq $gen) { return [pscustomobject]@{ terms = @(); reason = 'no readable generated stamp' } }
+  $ageH = (([datetime]$Now) - $gen).TotalHours
+  if ($ageH -gt $MaxAgeHours) { return [pscustomobject]@{ terms = @(); reason = ('stale: ' + [int]$ageH + ' h old') } }
+  # ASSIGN THEN WRAP. @(Get-Thing ...) inline on a comma-returned array reads as ONE element in PS 5.1,
+  # so an empty victims array would count 1 and promote a null term.
+  $vs = @($Report.confirmed_victims)
+  $terms = @($vs | Where-Object { $_ -and $_.term } | ForEach-Object { [string]$_.term } | Where-Object { $_.Trim() -ne '' } | Select-Object -Unique)
+  return [pscustomobject]@{ terms = $terms; reason = ('fresh: ' + [int]$ageH + ' h old, ' + $terms.Count + ' term(s)') }
+}
 function Select-ExpiryFirstSlice {
   <#
     .SYNOPSIS Today's work slice with the expiring sales IN it, not merely budgeted for.

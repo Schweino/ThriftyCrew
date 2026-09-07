@@ -334,10 +334,29 @@ if ($Accept) {
   exit 0
 }
 
+# ---- HOW OLD IS THE LIVE PAGE (2026-09-07, queue 2026-09-07-e7286e) ----------------------------------
+# 'DRIFT sams-club-worth-it live is -35173 byte(s)' was the whole finding, and that page had been live
+# with 2026-07-08 prices for FIFTY-EIGHT DAYS. The word drift reads the same at one hour and at two
+# months, and nothing else watches these pages: nothing in the daily chain publishes a tool source, and
+# audit-surface-staleness compares LOCAL files to the manifest, so it stayed green throughout. The AGE
+# is the finding, so it is printed - and past a fortnight it gets its own line rather than sharing one.
+# Fetched only for the pages already reported, so a clean sweep pays nothing for it.
+$STALE_LIVE_DAYS = 14
+function Write-LiveAge([string]$Slug) {
+  $ua = Get-GhostPostUpdatedAt -Api $API -Key $key -Slug $Slug
+  if ($null -eq $ua) { Write-Output '           live age: COULD NOT READ updated_at - the age of this page is unknown, which is not the same as fresh'; return }
+  $v = Test-LivePageStale -UpdatedAt $ua -StaleDays $STALE_LIVE_DAYS
+  $days = $v.days
+  Write-Output ("           live updated_at {0} ({1} day(s) ago)" -f $ua.ToString('yyyy-MM-dd'), $days)
+  if ($v.stale) {
+    Write-Output ("           STALE LIVE PAGE  nothing has published this tool in {0} days. On a page that quotes prices that is not drift, it is a wrong number a reader is being shown right now." -f $days)
+  }
+}
 Write-Output ("ghost-drift: {0} of {1} mapped tool(s) match their local source" -f $clean.Count, $manifest.Count)
 foreach ($b in $blind) { Write-Output ("  BLIND  " + $b) }
 foreach ($u in $unpublished) {
   Write-Output ("  UNPUBLISHED  {0,-26} live matches the COMMITTED {1}; the working-tree copy is {2:+#;-#;0} byte(s) different and has not been published" -f $u.slug, $u.file, (-1 * $u.delta))
+  Write-LiveAge $u.slug
 }
 if ($unpublished.Count) {
   Write-Output ('  Those are not live drift: nothing edited the live page. Publish them when ready with')
@@ -345,6 +364,7 @@ if ($unpublished.Count) {
 }
 foreach ($d in $drift) {
   Write-Output ("  DRIFT  {0,-26} live is {1:+#;-#;0} byte(s) vs {2}" -f $d.slug, $d.delta, $d.file)
+  Write-LiveAge $d.slug
   if ($ShowDiff) {
     $lm = if ($d.localMid.Length -gt 220) { $d.localMid.Substring(0, 220) + '...' } else { $d.localMid }
     $vm = if ($d.liveMid.Length  -gt 220) { $d.liveMid.Substring(0, 220)  + '...' } else { $d.liveMid }

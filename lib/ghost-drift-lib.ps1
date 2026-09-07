@@ -36,7 +36,18 @@ function Get-CanonicalBody { param($Text)
      human editing a link to absolute in Ghost admin - the API returns the same bytes either way, so no
      comparison could. Everything else still compares byte for byte. #>
   if ([string]::IsNullOrEmpty($Text)) { return $Text }
-  return $Text.Replace('__GHOST_URL__/', '/').Replace($script:GD_SITE + '/', '/')
+  # SECOND PLATFORM-NEUTRAL FOLD: LINE ENDINGS (2026-09-07, queue 2026-09-07-e7286e).
+  # Two tools reported drift of exactly +159 and +286 bytes - one CR per line, 145 and 272 of them, plus a
+  # 14-byte cost delta. Both were last published on 2026-09-03 from a CRLF working copy, three days before
+  # the estate-wide eol=lf attribute (39ad18d3d) turned every source LF. So every byte-exact comparison
+  # against something published under the old regime now reads as drift by exactly its own line count, and
+  # the first difference lands at the first newline - which is why the reported excerpts looked identical.
+  # (The same regime change blinded grocery\test-capture-builders.ps1 the same morning, from the other side.)
+  # A line ending is a property of the checkout that wrote the file, not a change to what a reader sees.
+  # THE FOLD STAYS NARROW: an extra SPACE, a copy edit, a foreign host and a changed path all still fire -
+  # each has its own must-fire case below, and one of them is a copy edit inside a CRLF body, so the fold
+  # cannot hide an edit behind a line ending.
+  return $Text.Replace('__GHOST_URL__/', '/').Replace($script:GD_SITE + '/', '/').Replace("`r`n", "`n")
 }
 
 function Compare-ToolBody { param($Local, $Live)
@@ -93,6 +104,59 @@ function Test-Allowlisted { param($Allow, [string]$Slug, [string]$LiveHash)
 # Duplicated deliberately rather than imported: publish.ps1 is the estate's publisher and is not worth
 # editing for an audit's convenience. The self-test extracts publish.ps1's own Get-ContentHash and asserts
 # the two agree on the same input, so the copy cannot silently drift from the original.
+# ---- THE RECIPE NODE (2026-09-07, backlog I44) ------------------------------------------------------
+# The claim now lives on the Recipe node too, because that is the node Google reads for a recipe rich
+# result. These three functions are PURE so the fixtures drive them; the live path only composes them.
+$LDJSON_RX = '<script type="application/ld\+json">\s*([\s\S]*?)\s*</script>'
+
+function Get-TcRecipeNodeClaim {
+  <# $true when the head's Recipe node carries the paywall claim, $false when it does not, and $null
+     when the head has no Recipe node at all.
+
+     THREE ANSWERS, NOT TWO. "no Recipe node" is not "not claimed" - a head that lost its Recipe block
+     is a different failure and must not read as a tidy negative. #>
+  param([string]$Head)
+  foreach ($m in [regex]::Matches([string]$Head, $LDJSON_RX)) {
+    $doc = $null
+    try { $doc = $m.Groups[1].Value | ConvertFrom-Json } catch { continue }
+    if ($null -eq $doc) { continue }
+    if ([string]$doc.'@type' -ne 'Recipe') { continue }
+    return [bool]($doc.PSObject.Properties['isAccessibleForFree'] -and ($doc.isAccessibleForFree -eq $false))
+  }
+  return $null
+}
+
+function Set-TcRecipeNodeClaim {
+  <# Returns the head with the Recipe node's claim set (Paid) or cleared. Any other ld+json block is
+     returned byte-for-byte: this must never touch the Article block, which the caller owns.
+
+     PARSED RATHER THAN REGEXED because hasPart is a nested object, and stripping a nested object out
+     of pretty-printed JSON by pattern means balancing braces in text - which is how a head field ends
+     up truncated. #>
+  param([string]$Head, [bool]$Paid)
+  $out = [string]$Head
+  foreach ($m in [regex]::Matches([string]$Head, $LDJSON_RX)) {
+    $payload = $m.Groups[1].Value
+    $doc = $null
+    try { $doc = $payload | ConvertFrom-Json } catch { continue }
+    if ($null -eq $doc -or [string]$doc.'@type' -ne 'Recipe') { continue }
+    if ($Paid) {
+      if ($doc.PSObject.Properties['isAccessibleForFree']) { $doc.isAccessibleForFree = $false }
+      else { $doc | Add-Member -NotePropertyName isAccessibleForFree -NotePropertyValue $false }
+      $hp = [pscustomobject]@{ '@type' = 'WebPageElement'; isAccessibleForFree = $false; cssSelector = '.gh-content' }
+      if ($doc.PSObject.Properties['hasPart']) { $doc.hasPart = $hp }
+      else { $doc | Add-Member -NotePropertyName hasPart -NotePropertyValue $hp }
+    } else {
+      foreach ($k in @('isAccessibleForFree', 'hasPart')) {
+        if ($doc.PSObject.Properties[$k]) { $doc.PSObject.Properties.Remove($k) }
+      }
+    }
+    $new = $doc | ConvertTo-Json -Depth 12
+    $out = $out.Replace($m.Value, ("<script type=`"application/ld+json`">`n" + $new + "`n</script>"))
+  }
+  return $out
+}
+
 function Get-PublishedContentHash { param([string]$Body, [string]$Head, [string]$Name, [string]$Desc)
   $s = $Body + "`0" + $Head + "`0" + $Name + "`0" + $Desc
   $sha = [System.Security.Cryptography.SHA1]::Create()
@@ -130,6 +194,38 @@ function Join-GhostLexicalBody { param($Root)
     elseif ($t -eq 'paywall') { $out += $script:GD_PAYWALL_SENTINEL }
   }
   return $out
+}
+
+function Test-LivePageStale {
+  <# Is a live page old enough that its AGE is the finding, not its byte delta?
+     Pure and parameterised so the fixture can drive it: the live-age reader beside it is network-bound,
+     and a rule whose only test is a live API call is a rule with no test. StaleDays is the caller's, so
+     moving the threshold is a visible edit rather than a constant buried in a format string. #>
+  param($UpdatedAt, [int]$StaleDays = 14, $Now = $null)
+  if ($null -eq $Now) { $Now = Get-Date }
+  # AN UNREADABLE TIMESTAMP IS NOT FRESH. Returning stale=$false with no blind flag would make a page whose
+  # age cannot be read indistinguishable from one published this morning - blind is not clean.
+  if ($null -eq $UpdatedAt) { return [pscustomobject]@{ stale = $false; blind = $true; days = -1 } }
+  $d = [int][math]::Floor((([datetime]$Now) - ([datetime]$UpdatedAt)).TotalDays)
+  return [pscustomobject]@{ stale = ($d -gt $StaleDays); blind = $false; days = $d }
+}
+
+function Get-GhostPostUpdatedAt { param([string]$Api, [string]$Key, [string]$Slug)
+  <# WHEN was this page last published (2026-09-07, queue 2026-09-07-e7286e).
+     ghost-drift reported "sams-club-worth-it live is -35173 byte(s)" and nothing else. That page had been
+     live with 2026-07-08 prices for FIFTY-EIGHT DAYS on a money page, and the word "drift" carries no age -
+     it reads the same at one hour and at two months. Nothing in the daily chain publishes a tool page, so
+     a stale one has no other watcher: audit-surface-staleness compares LOCAL files to the manifest and
+     stays green. The age is the finding.
+     Returns $null rather than throwing, because an unreadable timestamp must not turn a real drift finding
+     into a crash - callers print the drift either way and simply say nothing about its age. #>
+  try {
+    $jwt = Get-GhostJWT -Key $Key
+    $p = (Invoke-RestMethod -Uri "$Api/ghost/api/admin/posts/slug/$Slug/?fields=id,slug,updated_at" `
+          -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45).posts[0]
+    if (-not $p -or -not $p.updated_at) { return $null }
+    return [datetime]$p.updated_at
+  } catch { return $null }
 }
 
 function Get-GhostCardBody { param([string]$Api, [string]$Key, [string]$Slug)
@@ -172,6 +268,48 @@ if ($__gdSelfTest) {
     (-not (Compare-ToolBody '<p>a b</p>' '<p>a  b</p>').same) 'whitespace-insensitive comparison'
   T 'MUST FIRE  a missing live body is BLIND, never clean' (Compare-ToolBody 'abc' $null).blind 'treated absent as clean'
   T 'MUST FIRE  an empty live body is BLIND too ([string] would coerce $null to this)' (Compare-ToolBody 'abc' '').blind 'treated empty as drift'
+
+  # ---- LINE ENDINGS ARE THE CHECKOUT, NOT THE CONTENT (2026-09-07, queue 2026-09-07-e7286e) -------------
+  # cheap-dinners-right-now and whats-for-dinner-tonight were reported as drifted by +159 and +286 bytes:
+  # one CR per line from a 2026-09-03 publish out of a CRLF working copy, three days before the eol=lf
+  # attribute turned the sources LF. The first difference landed at the first newline, so the printed
+  # excerpts looked identical and the finding was unreadable.
+  $lfBody   = "<p>line one</p>`n<p>line two</p>`n<p>line three</p>"
+  $crlfBody = $lfBody.Replace("`n", "`r`n")
+  T 'CLEAN TWIN  the same body published from a CRLF checkout is NOT drift' `
+    (Compare-ToolBody $lfBody $crlfBody).same 'a line ending is being reported as a content change'
+  T 'CLEAN TWIN  and it folds in the other direction too (a CRLF local against an LF live)' `
+    (Compare-ToolBody $crlfBody $lfBody).same 'the fold is one-directional'
+  # MUST FIRE: the fold must not become a place to hide an edit. Same CRLF live body, one word changed.
+  $crlfEdited = $crlfBody.Replace('line two', 'line five')
+  $rCr = Compare-ToolBody $lfBody $crlfEdited
+  T 'MUST FIRE  a copy edit INSIDE a CRLF body is still drift' (-not $rCr.same) 'the CR fold swallowed a real edit'
+  T 'MUST FIRE  and the differing region is still isolated to the words that changed' `
+    ($rCr.localMid -eq 'two' -and $rCr.liveMid -eq 'five') "[$($rCr.localMid)|$($rCr.liveMid)]"
+  # MUST FIRE: a lone CR is not a line ending pair and is not folded - only CRLF is.
+  T 'MUST FIRE  a bare CR that is not part of a CRLF pair is still drift' `
+    (-not (Compare-ToolBody "<p>a`nb</p>" "<p>a`r`n`rb</p>").same) 'folded a stray carriage return'
+
+  # ---- A LIVE PAGE'S AGE IS ITS OWN FINDING (2026-09-07, queue 2026-09-07-e7286e) -----------------------
+  # sams-club-worth-it was reported only as "live is -35173 byte(s)". It had been serving 2026-07-08 prices
+  # for 58 days on a money page, and nothing else could see it: no daily stage publishes a tool source, and
+  # audit-surface-staleness compares LOCAL files to the manifest so it stayed green throughout. `Now` is a
+  # parameter because a fixture pinned to the wall clock stops testing the day it is written.
+  $sNow = [datetime]'2026-09-07T12:00:00'
+  T 'MUST FIRE  the founding page: 2026-07-11 against 2026-09-07 is 58 days and reads STALE' `
+    ((Test-LivePageStale -UpdatedAt ([datetime]'2026-07-11T09:07:32') -StaleDays 14 -Now $sNow).stale -and
+     (Test-LivePageStale -UpdatedAt ([datetime]'2026-07-11T09:07:32') -StaleDays 14 -Now $sNow).days -eq 58) `
+    ([string](Test-LivePageStale -UpdatedAt ([datetime]'2026-07-11T09:07:32') -StaleDays 14 -Now $sNow).days)
+  T 'MUST NOT FIRE  the two CR-drifted tools, published 2026-09-03, are 3 days old and are NOT stale' `
+    (-not (Test-LivePageStale -UpdatedAt ([datetime]'2026-09-03T21:29:18') -StaleDays 14 -Now $sNow).stale) `
+    ([string](Test-LivePageStale -UpdatedAt ([datetime]'2026-09-03T21:29:18') -StaleDays 14 -Now $sNow).days)
+  T 'MUST NOT FIRE  exactly at the threshold is not past it (14 days is not > 14)' `
+    (-not (Test-LivePageStale -UpdatedAt $sNow.AddDays(-14) -StaleDays 14 -Now $sNow).stale) 'off-by-one at the bound'
+  T 'MUST FIRE  one day past the threshold is stale' `
+    ((Test-LivePageStale -UpdatedAt $sNow.AddDays(-15) -StaleDays 14 -Now $sNow).stale) 'the threshold never fires'
+  T 'MUST FIRE  an unreadable updated_at is BLIND, never fresh' `
+    ((Test-LivePageStale -UpdatedAt $null -StaleDays 14 -Now $sNow).blind -and
+     -not (Test-LivePageStale -UpdatedAt $null -StaleDays 14 -Now $sNow).stale) 'an unknown age read as fresh'
 
   $allow = @([pscustomobject]@{ slug = 'my-crew'; live_hash = 'AAAA1111BBBB2222' })
   T 'a reviewed drift is silenced' (Test-Allowlisted $allow 'my-crew' 'AAAA1111BBBB2222') 'still cried'
