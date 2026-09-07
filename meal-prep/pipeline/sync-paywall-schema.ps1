@@ -34,6 +34,41 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Resolve-Path (Join-Path $here '..\..')
 . (Join-Path $repo 'lib\ghost-lib.ps1')
+. (Join-Path $repo 'lib\ghost-drift-lib.ps1')   # Get-PublishedContentHash / Join-GhostLexicalBody
+
+# ---- THE PUBLISH JOURNAL (2026-09-07) --------------------------------------------------------------
+# This script changes PUBLISHED CONTENT, so it owes the journal an entry. Get-PublishedContentHash is
+# body + HEAD + title + excerpt, so rewriting a head out of band makes every live hash differ from
+# db\published-hashes.json - which opens publish.ps1's drift pre-flight and then refuses the publish,
+# because the built body has legitimately moved on since. Measured: a 563-card sync on 2026-09-07 left
+# propagate publishing 18 of 148 and withholding 130 stamps.
+$JOURNAL_PATH = Join-Path $repo 'meal-prep\db\published-hashes.json'
+
+function Read-TcJournal {
+  param([string]$Path)
+  $h = @{}
+  if (Test-Path $Path) {
+    $o = Get-Content $Path -Raw -Encoding UTF8 | ConvertFrom-Json
+    foreach ($pr in $o.PSObject.Properties) { $h[$pr.Name] = [string]$pr.Value }
+  }
+  return $h
+}
+
+function Update-TcJournalEntry {
+  <# Records $Hash as what is now published for $Slug. Returns $true only when it actually changed
+     something, so the caller can count real writes rather than attempts.
+
+     AN ABSENT SLUG IS LEFT ABSENT. No entry means "never published", and publish.ps1 skips its drift
+     pre-flight entirely on those; adding one would ARM a guard that was deliberately off. #>
+  param([hashtable]$Journal, [string]$Slug, [string]$Hash)
+  if ($null -eq $Journal) { return $false }
+  if ([string]::IsNullOrWhiteSpace($Slug) -or [string]::IsNullOrWhiteSpace($Hash)) { return $false }
+  if (-not $Journal.ContainsKey($Slug)) { return $false }
+  if ($Journal[$Slug] -eq $Hash) { return $false }
+  $Journal[$Slug] = $Hash
+  return $true
+}
+
 $apiUrl = 'https://map-to-success.ghost.io'
 $SITE = 'https://www.thriftycrew.com'
 
@@ -44,59 +79,6 @@ $SITE = 'https://www.thriftycrew.com'
 # whole payload is ONE line and `\{[^\r\n]*\}` matches it; the Recipe node is pretty-printed across
 # many lines and `[^\r\n]*` cannot span them. Set-TcRecipeNodeClaim owns that node, by parsing.
 $PAYWALL_RX = '<script type="application/ld\+json">\s*\{[^\r\n]*"isAccessibleForFree"[^\r\n]*\}\s*</script>\s*'
-
-# ---- THE RECIPE NODE (2026-09-07, backlog I44) ------------------------------------------------------
-# The claim now lives on the Recipe node too, because that is the node Google reads for a recipe rich
-# result. These three functions are PURE so the fixtures drive them; the live path only composes them.
-$LDJSON_RX = '<script type="application/ld\+json">\s*([\s\S]*?)\s*</script>'
-
-function Get-TcRecipeNodeClaim {
-  <# $true when the head's Recipe node carries the paywall claim, $false when it does not, and $null
-     when the head has no Recipe node at all.
-
-     THREE ANSWERS, NOT TWO. "no Recipe node" is not "not claimed" - a head that lost its Recipe block
-     is a different failure and must not read as a tidy negative. #>
-  param([string]$Head)
-  foreach ($m in [regex]::Matches([string]$Head, $script:LDJSON_RX)) {
-    $doc = $null
-    try { $doc = $m.Groups[1].Value | ConvertFrom-Json } catch { continue }
-    if ($null -eq $doc) { continue }
-    if ([string]$doc.'@type' -ne 'Recipe') { continue }
-    return [bool]($doc.PSObject.Properties['isAccessibleForFree'] -and ($doc.isAccessibleForFree -eq $false))
-  }
-  return $null
-}
-
-function Set-TcRecipeNodeClaim {
-  <# Returns the head with the Recipe node's claim set (Paid) or cleared. Any other ld+json block is
-     returned byte-for-byte: this must never touch the Article block, which the caller owns.
-
-     PARSED RATHER THAN REGEXED because hasPart is a nested object, and stripping a nested object out
-     of pretty-printed JSON by pattern means balancing braces in text - which is how a head field ends
-     up truncated. #>
-  param([string]$Head, [bool]$Paid)
-  $out = [string]$Head
-  foreach ($m in [regex]::Matches([string]$Head, $script:LDJSON_RX)) {
-    $payload = $m.Groups[1].Value
-    $doc = $null
-    try { $doc = $payload | ConvertFrom-Json } catch { continue }
-    if ($null -eq $doc -or [string]$doc.'@type' -ne 'Recipe') { continue }
-    if ($Paid) {
-      if ($doc.PSObject.Properties['isAccessibleForFree']) { $doc.isAccessibleForFree = $false }
-      else { $doc | Add-Member -NotePropertyName isAccessibleForFree -NotePropertyValue $false }
-      $hp = [pscustomobject]@{ '@type' = 'WebPageElement'; isAccessibleForFree = $false; cssSelector = '.gh-content' }
-      if ($doc.PSObject.Properties['hasPart']) { $doc.hasPart = $hp }
-      else { $doc | Add-Member -NotePropertyName hasPart -NotePropertyValue $hp }
-    } else {
-      foreach ($k in @('isAccessibleForFree', 'hasPart')) {
-        if ($doc.PSObject.Properties[$k]) { $doc.PSObject.Properties.Remove($k) }
-      }
-    }
-    $new = $doc | ConvertTo-Json -Depth 12
-    $out = $out.Replace($m.Value, ("<script type=`"application/ld+json`">`n" + $new + "`n</script>"))
-  }
-  return $out
-}
 
 function New-PaywallBlock([string]$slug, [string]$headline) {
   $o = [ordered]@{ '@context' = 'https://schema.org'; '@type' = 'Article'; isAccessibleForFree = $false
@@ -148,11 +130,34 @@ if ($SelfTest) {
   T 'CLEAN TWIN a malformed ld+json block is skipped, not fatal - one bad script tag must not lose the head' `
     ($null -eq (Get-TcRecipeNodeClaim "<script type=`"application/ld+json`">{not json</script>")) 'threw on unparseable json'
 
+  # ---- the publish journal (2026-09-07). The head is IN Get-PublishedContentHash, so a head this
+  # script rewrites invalidates the journal entry, and a stale entry refuses the next publish.
+  $j = @{ 'already-published' = 'OLDHASH'; 'a-neighbour' = 'KEEPME' }
+
+  T 'MUST FIRE  THE ONE THIS HALF EXISTS FOR - a card whose head we just rewrote gets its journal entry replaced, or publish.ps1 refuses it forever' `
+    ((Update-TcJournalEntry -Journal $j -Slug 'already-published' -Hash 'NEWHASH') -and ($j['already-published'] -eq 'NEWHASH')) ([string]$j['already-published'])
+
+  T 'MUST NOT FIRE  a slug that is NOT in the journal stays out of it - no entry means never published, and publish.ps1 skips its drift pre-flight on those, so adding one ARMS a guard that was deliberately off' `
+    ((-not (Update-TcJournalEntry -Journal $j -Slug 'never-published' -Hash 'NEWHASH')) -and (-not $j.ContainsKey('never-published'))) 'an unpublished slug was added to the journal'
+  T 'MUST NOT FIRE  an empty hash is refused - a live body that could not be read must leave the entry stale, because a wrong entry DISABLES the drift guard and a stale one only refuses the publish' `
+    ((-not (Update-TcJournalEntry -Journal $j -Slug 'already-published' -Hash '')) -and ($j['already-published'] -eq 'NEWHASH')) ([string]$j['already-published'])
+  T 'MUST NOT FIRE  a null journal does not throw' `
+    ((Update-TcJournalEntry -Journal $null -Slug 'already-published' -Hash 'X') -eq $false) 'threw or claimed a write'
+
+  T 'CLEAN TWIN every other entry survives untouched - this file is the whole publish ledger for 583 cards' `
+    (($j['a-neighbour'] -eq 'KEEPME') -and ($j.Count -eq 2)) ([string]$j.Count)
+  T 'CLEAN TWIN re-recording the SAME hash reports no write, so the run tally counts real changes rather than attempts' `
+    ((Update-TcJournalEntry -Journal $j -Slug 'already-published' -Hash 'NEWHASH') -eq $false) 'an unchanged entry counted as a write'
+  T 'CLEAN TWIN the hash recipe is the one publish.ps1 uses, and it still sees the head - the whole defect was the head being inside it' `
+    ((Get-PublishedContentHash -Body 'b' -Head 'h1' -Name 'n' -Desc 'd') -ne (Get-PublishedContentHash -Body 'b' -Head 'h2' -Name 'n' -Desc 'd')) 'the digest ignored the head'
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 4 must-fire cases led by the paid claim landing on the Recipe node and the freed one losing it, 4 must-not-fire cases including the Article block staying untouched, and 4 clean twins'
+  Write-Output 'SELF-TEST PASS: 5 must-fire cases led by the paid claim landing on the Recipe node and by a rewritten head re-stamping the publish journal, 7 must-not-fire cases including the Article block staying untouched and an unpublished slug staying out of the journal, and 7 clean twins'
   exit 0
 }
 
+$journal = Read-TcJournal $JOURNAL_PATH
+$journalWrites = 0
 $db = Get-Content (Join-Path $repo 'meal-prep\recipes-db.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $want = @{}
 foreach ($r in $db.recipes) { $want[[string]$r.slug] = $true }
@@ -237,10 +242,30 @@ foreach ($slug in (@($toRemove) + @($toAdd))) {
     Invoke-GhostApi -Method Put -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Headers $h2 -Body ([Text.Encoding]::UTF8.GetBytes($body)) | Out-Null
 
     # "did not throw" is not "Ghost took it" - re-read, the same way the rotation's flip does.
-    $chk = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/?fields=id,visibility,codeinjection_head" -Headers @{ Authorization = "Ghost " + (Get-GhostJWT -Key (Get-GhostKey -Root $repo)); 'Accept-Version' = 'v5.0' }).posts[0]
+    $chk = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/?formats=lexical&fields=id,visibility,codeinjection_head,title,custom_excerpt,lexical" -Headers @{ Authorization = "Ghost " + (Get-GhostJWT -Key (Get-GhostKey -Root $repo)); 'Accept-Version' = 'v5.0' }).posts[0]
     $nowHas = [bool]([regex]::IsMatch([string]$chk.codeinjection_head, $PAYWALL_RX))
     $nowFree = ([string]$chk.visibility -eq 'public')
     if ($nowFree -eq $nowHas) { $errors += ("{0}: after the write Ghost still reports free={1} claim={2}" -f $slug, $nowFree, $nowHas); continue }
+    # THE JOURNAL, FROM THE POST GHOST ACTUALLY STORES (2026-09-07). Same re-read, no extra request.
+    # Skipped rather than guessed if the body cannot be read - a wrong entry here disables the drift
+    # guard for that card, which is worse than leaving it stale and having the publish refuse.
+    try {
+      $chkLex = if ($chk.lexical) { $chk.lexical | ConvertFrom-Json } else { $null }
+      $chkBody = if ($chkLex) { Join-GhostLexicalBody -Root $chkLex.root } else { '' }
+      if ($chkBody) {
+        $liveHash = Get-PublishedContentHash -Body $chkBody -Head ([string]$chk.codeinjection_head) `
+                      -Name ([string]$chk.title) -Desc ([string]$chk.custom_excerpt)
+        # Per slug, not at the end: a crash mid-run must not lose the entries already earned.
+        if (Update-TcJournalEntry -Journal $journal -Slug $slug -Hash $liveHash) {
+          $journalWrites++
+          ($journal | ConvertTo-Json) | Set-Content $JOURNAL_PATH -Encoding UTF8
+        }
+      } else {
+        $errors += ("{0}: head written, but the live body could not be read so the publish journal is now stale for it" -f $slug)
+      }
+    } catch {
+      $errors += ("{0}: head written, but the publish journal could not be updated ({1})" -f $slug, $_.Exception.Message)
+    }
     Write-Output ("   {0}  {1}" -f $(if ($isFree) { 'removed ' } else { 'added   ' }), $slug)
   } catch {
     $errors += ("{0}: {1}" -f $slug, $_.Exception.Message)
@@ -253,5 +278,6 @@ if (@($errors).Count) {
   foreach ($e in $errors) { Write-Output ('   ' + $e) }
   exit 1
 }
+Write-Output ("publish journal re-stamped for {0} card(s) whose head changed." -f $journalWrites)
 Write-Output 'paywall schema in sync with Ghost visibility.'
 exit 0
