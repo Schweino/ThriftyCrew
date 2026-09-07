@@ -598,6 +598,46 @@ try {
     if ($r.Ok) { Record 'stage1' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
     elseif ($r.TimedOut) { Record 'stage1' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
     else { Record 'stage1' 'FAILED' ("rc=" + $r.ExitCode) $r.Elapsed }
+
+  # -- 6. THE ML REGRESSION SUITE, ON A SCHEDULE (2026-09-07, backlog I18) ---------------------------
+  # Nothing ran hardeval, backtest or seed_sweep on any schedule; they ran when a human remembered.
+  # A model regression suite needs a schedule rather than a commit trigger, because most of what moves
+  # it is not a commit here: commodity_text() is "label plus up to five products the board currently
+  # accepts", so every score moves when the BOARD moves - daily, automatically, nothing committed. The
+  # estate measured that at AUC 0.9705 to 0.7921 on the same pinned model with only the defs changed.
+  #
+  # WEEKLY AND NON-FATAL. The suite wants the card and this chain already runs five stages inside a
+  # hard deadline; a sixth every night would cost the resolve lane time for something that has to be
+  # TRACKED rather than watched. A failure records BLIND and never breaks the chain - a regression
+  # report that can take down the nightly matching run is the worse trade.
+  #
+  # FROZEN DEFS, DELIBERATELY. hardeval compares against a baseline, and backtest.py's own header
+  # records what happens without them: the same model scored 17/25 one day and 24/24 another because
+  # the BOARD changed. A weekly number measured against today's shelf would track the shelf.
+  $evalStamp = Join-Path $grocery 'out\logs\ml-eval-last.txt'
+  $evalDue = $true
+  try {
+    if (Test-Path $evalStamp) {
+      $last = [datetime]((Get-Content $evalStamp -Raw -Encoding UTF8).Trim())
+      $evalDue = ((Get-Date) - $last).TotalDays -ge 7
+    }
+  } catch { $evalDue = $true }
+  if (-not $evalDue) {
+    Record 'ml-eval' 'SKIP' 'ran within the last 7 days' 0
+  } elseif (-not (Test-Path $sidecarPy)) {
+    Record 'ml-eval' 'BLIND' 'no sidecar interpreter - the suite needs torch' 0
+  } else {
+    $frozen = Join-Path $sidecar 'datarozen\phase3-baseline\commodity-defs.json'
+    $evalArgs = @((Join-Path $sidecar 'hardeval.py'), '--stage', 'score')
+    if (Test-Path $frozen) { $evalArgs += @('--defs', $frozen) }
+    $r = Invoke-Stage 'ml-eval' $sidecarPy $evalArgs ([math]::Min(1800, (Remaining)))
+    if ($r.Ok) {
+      Record 'ml-eval' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed
+      try { (Get-Date).ToString('s') | Set-Content $evalStamp -Encoding UTF8 } catch { }
+    }
+    elseif ($r.TimedOut) { Record 'ml-eval' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
+    else { Record 'ml-eval' 'BLIND' ("rc=" + $r.ExitCode + " - tracked, never fatal") $r.Elapsed }
+  }
   }
 }
 catch {

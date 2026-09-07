@@ -1745,7 +1745,7 @@ and refusing a fall to zero would punish the success it exists to reach.
 Wired: `audit-write-seam`, `audit-ruling-drift`, `audit-fact-claims`. `audit-mustfire-census` and
 `audit-fixture-inputs` already treat a DROP as a hard fail and needed nothing.
 
-### I16 - The two median-based outlier rules are single-tailed in OPPOSITE directions, and nothing watches both `OPEN` `queue-2`
+### I16 - The two median-based outlier rules are single-tailed in OPPOSITE directions, and nothing watches both `DONE` `queue-2`
 
 **Source:** course 11, on the point/contextual/collective taxonomy and on relationship anomalies.
 
@@ -1785,6 +1785,21 @@ prices seven stores against each other, which is exactly the setting where that 
 shapes, and each has a self-test pinned to a different founding bug.
 
 ---
+
+
+**CLOSED 2026-09-07 by STATING THE PAIR, not by making either rule two-tailed** - and the item's own
+analysis is why. The case it cites, the baby-formula crown where Walmart ready-to-feed liquid beat
+five powder canisters, sat at **0.56x the median**, inside both thresholds.
+`audit-unit-basis-outlier.ps1`'s header already records that no ratio in either direction finds it
+without also flagging every genuine deep sale. So a two-tailed magnitude rule would add noise, not
+coverage, and the right instrument was already built beside it: `Get-MeasureKind`, which asks whether
+a row's size names a different KIND of quantity.
+
+Both files now state the pair explicitly - 4.0x above in `grocery/`, 5.0x below in `graph/`, opposite
+sides of the git-bus - and record that the asymmetry is deliberate and not symmetric in its reasons: a
+DEAR outlier never wins a crown and never reaches a reader, while a FALSE-CHEAP row always does. Each
+carries the instruction not to "fix" it into two tails, and points at `Get-MeasureKind` as the thing to
+extend instead.
 
 ### I17 - `backtest.py` calls itself an ACCEPTANCE GATE and always exits 0 `DONE` `queue-2`
 
@@ -1862,7 +1877,7 @@ The rule lives in `sidecar/backtest_veto.py` so it imports nothing heavy and `ru
 it on the pinned interpreter. Its must-fire is a candidate that wins at every other budget and loses
 ONE known-wrong pair at one of them.
 
-### I18 - Nothing schedules the sidecar's ML eval suite, and its inputs change without a commit `OPEN` `queue-2`
+### I18 - Nothing schedules the sidecar's ML eval suite, and its inputs change without a commit `DONE` `queue-2`
 
 **Source:** course 12, on why a model regression suite specifically needs a schedule rather than a
 commit trigger.
@@ -1894,6 +1909,25 @@ layer down and is **still true and now understated** - re-measured 2026-09-06, 3
 tree mention `--selftest` and **19 define one via `add_argument`**, against six `.py` paths in
 `run-gates`'s hand-list, of which only two are among the 19. I8 recorded "sixteen". None of the four
 sidecar eval files defines a `--selftest` at all.
+
+
+**CLOSED 2026-09-07: a weekly `ml-eval` stage in `graph/pipeline/nightly.ps1`.** Nothing ran
+`hardeval`, `backtest` or `seed_sweep` on any schedule - they ran when a human remembered.
+
+**A schedule rather than a commit trigger, which is the item's actual point.** Most of what moves
+these scores is not a commit here: `commodity_text()` is "label plus up to five of the products the
+board currently accepts", so every score moves when the BOARD moves - daily, automatically, with
+nothing committed. The estate already measured that at **AUC 0.9705 to 0.7921** on the same pinned
+model with only the defs changed.
+
+**Weekly, not nightly, and non-fatal.** The suite wants the card and the chain already runs five
+stages inside a hard deadline; a sixth every night would cost the resolve lane time for something that
+has to be tracked rather than watched. A failure records BLIND and never breaks the chain - a
+regression report that can take down the nightly matching run is the worse trade.
+
+**Against FROZEN defs**, because `backtest.py`'s header records what happens without them: the same
+model scored 17/25 one day and 24/24 another, and the board had changed, not the model. A weekly number
+measured against today's shelf would track the shelf.
 
 ### I19 - Nine of twelve agents read the open web and can also execute, and none is told that page content is data `DONE 2026-09-07` `queue-2`
 
@@ -2256,7 +2290,7 @@ Green-on-day-one is not available here, which is why the ratchet shape matters.
 
 ---
 
-### I25 - The Search Console property is named three different ways in three places, and at most one is right `OPEN` `queue-2`
+### I25 - The Search Console property is named three different ways in three places, and at most one is right `DONE` `queue-2`
 
 **Source:** course 15, while grounding the estate's measured baseline.
 
@@ -2279,7 +2313,18 @@ also carries I26.
 
 ---
 
-### I26 - `docs/seo-backlink-plan.md` is written against the previous domain, and its stated premise is refuted `OPEN` `queue-2`
+
+**CLOSED 2026-09-07.** Three files named three different owning accounts and at most one could be
+right. The authority is the memory `seo-baseline-2026-08-31`: the property is
+`https://www.thriftycrew.com/` (URL-prefix) under **`schweino68@gmail.com`**, and it had **never been
+verified** until 2026-08-31 - the `google-site-verification` tag already on the site belonged to
+something else and never took, so a second tag was added.
+
+`docs/seo-backlink-plan.md` claimed the properties were already set up under an
+`admin@simplemoneyplaybook.com` address; `.claude/skills/lesson/SKILL.md` said
+`admin@thriftycrew.com`. Both now state the verified account and cite the memory that holds it.
+
+### I26 - `docs/seo-backlink-plan.md` is written against the previous domain, and its stated premise is refuted `DONE` `queue-2`
 
 **Source:** course 15.
 
@@ -2303,6 +2348,19 @@ way the "already A-grade" line needs removing or qualifying, because it is the s
 against doing on-page work at all, and it is the on-page work the baseline points at.
 
 ---
+
+
+**CLOSED 2026-09-07.** The plan was written 2026-07-02 and every promoted URL still pointed at
+`simplemoneyplaybook.com`, so anyone following it would have pitched the previous domain - six
+references in the file that decides where outreach effort goes.
+
+**The four promoted tool pages were checked on the live domain before anything was rewritten** and
+each returns **200** at `www.thriftycrew.com`: `/where-do-you-stand/`, `/true-cost-calculator/`,
+`/can-i-afford-this/`, `/need-or-want/`. A plan pointing at a 404 would be no improvement on one
+pointing at the old domain.
+
+The file carries a banner recording what was corrected and why, and it is the only place the old
+domain still appears - as history rather than as a target.
 
 ### I27 - `lesson/SKILL.md` cites a memory that does not exist `DONE` `queue-2`
 

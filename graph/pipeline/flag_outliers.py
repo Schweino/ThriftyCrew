@@ -29,6 +29,14 @@ being hunted, so the bad rows cannot drag the threshold toward themselves. Only
 the downward direction is flagged because an implausibly HIGH per-unit price is
 harmless — it simply never wins a crown — while an implausibly low one always does.
 
+THIS RULE HAS A TWIN AND THEY LOOK OPPOSITE WAYS ON PURPOSE (2026-09-07, backlog I16).
+grocery/audit-unit-basis-outlier.ps1 flags a per-unit price at or above 4.0x ABOVE the commodity
+median; this one bars more than 5.0x BELOW it. Different factors, opposite directions, opposite
+sides of the git-bus. Deliberate, and the reasons are not symmetric: a false-cheap row always wins
+a crown and reaches a reader, while a dear one never does. Neither is the instrument for the
+baby-formula case (0.56x the median, inside both thresholds) - Get-MeasureKind is. Do not make
+either one two-tailed; it would flag rows that cannot reach anybody.
+
 ON THE FACTOR. 5.0 is a judgement call, not a derivation, and it is stated here
 rather than buried: real grocery price dispersion for one commodity runs roughly
 2-3x between the cheapest and typical offering, so a >5x gap is far outside it.

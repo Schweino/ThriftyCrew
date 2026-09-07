@@ -1,15 +1,28 @@
 # Thrifty Crew — Backlink & Outreach Plan
 
+> **DOMAIN AND ACCOUNT CORRECTED 2026-09-07 (backlog I25, I26).** This plan was written 2026-07-02
+> against `simplemoneyplaybook.com` and every target URL still pointed there, so anyone following it
+> would have pitched the previous domain. All four promoted tool pages were checked on the live domain
+> before rewriting and each returns 200 at `www.thriftycrew.com`.
+>
+> It also claimed the search properties were "already set up" under an `admin@` address. They were
+> not. The memory `seo-baseline-2026-08-31` is the authority: the property is
+> `https://www.thriftycrew.com/` (URL-prefix) under **schweino68@gmail.com**, and it had **never been
+> verified** until 2026-08-31 - the `google-site-verification` tag already on the site belonged to
+> something else and never took, so a SECOND tag was added. Three files named three different owning
+> accounts and at most one could be right.
+
+
 _Created 2026-07-02. The goal: earn the one thing the site can't build on its own — authority (links) — because on-page/technical SEO is already A-grade. Finance is a YMYL niche, so **editorial, relevant links win; spammy volume gets penalized.**_
 
 ## The strategy in one line
 **Your paid lessons won't earn links. Your FREE interactive tools will.** Point almost every outreach at a tool (or a free lesson/recipe) — those are the genuinely useful, embeddable, link-worthy assets. Your flagship link magnet is **"Where Do You Stand?"** (net worth by age, real Fed data): data-backed interactive tools are the single most-linked format in personal finance.
 
 Target pages to promote:
-- https://www.simplemoneyplaybook.com/where-do-you-stand/  (flagship)
-- https://www.simplemoneyplaybook.com/true-cost-calculator/
-- https://www.simplemoneyplaybook.com/can-i-afford-this/
-- https://www.simplemoneyplaybook.com/need-or-want/
+- https://www.thriftycrew.com/where-do-you-stand/  (flagship)
+- https://www.thriftycrew.com/true-cost-calculator/
+- https://www.thriftycrew.com/can-i-afford-this/
+- https://www.thriftycrew.com/need-or-want/
 - Free lessons + recipes + the /about/ story (for author/E-E-A-T links)
 
 ---
@@ -65,7 +78,7 @@ Buying links · PBNs · mass directory blasts · comment/forum spam · large-sca
 **B) Resource-link (net worth by age)**
 > Subject: Interactive version of the SCF net-worth-by-age data
 >
-> Hi [name] — your article cites the Fed's net-worth-by-age figures. I made a free interactive tool that lets readers see where they personally land against those numbers (real 2022 SCF data, private, no signup): https://www.simplemoneyplaybook.com/where-do-you-stand/ . Might be a useful resource link for readers. — Brad
+> Hi [name] — your article cites the Fed's net-worth-by-age figures. I made a free interactive tool that lets readers see where they personally land against those numbers (real 2022 SCF data, private, no signup): https://www.thriftycrew.com/where-do-you-stand/ . Might be a useful resource link for readers. — Brad
 
 **C) Podcast pitch**
 > Subject: Guest idea — from a jail cell + $20k debt to rebuilt: the small-choices money playbook
@@ -76,6 +89,6 @@ Buying links · PBNs · mass directory blasts · comment/forum spam · large-sca
 
 ## How to measure it
 - **Social/shares:** Ghost Admin → Analytics → Sources (the `?ref=share-*` tags on the share buttons show up here).
-- **Backlinks:** Google Search Console → Links (populates as Google discovers them) and Bing Webmaster Tools → Backlinks. Both already set up under admin@simplemoneyplaybook.com.
+- **Backlinks:** Google Search Console → Links (populates as Google discovers them) and Bing Webmaster Tools → Backlinks. Both already set up under schweino68@gmail.com.
 
 **Realistic expectation:** a handful of good, relevant links + a few podcast/roundup placements over the next 2–3 months will do more than 100 junk links — and will start moving the free tools up for their target keywords. Patience + relevance beats volume every time in this niche.

@@ -123,7 +123,7 @@ If anything is off, fix the field and re-run the publish script (it upserts). (A
 
 ## Step 6 — Search visibility (the site is live and indexed)
 
-The site is verified in **Google Search Console AND Bing Webmaster Tools** under `admin@thriftycrew.com` . The **sitemap auto-updates** the moment you publish (Ghost regenerates `/sitemap.xml`), so a new lesson is discoverable on its own. Nothing per-post is required. Two optional nudges for a lesson you want ranking fast:
+The site is verified in **Google Search Console AND Bing Webmaster Tools** under **`schweino68@gmail.com`** (memory `seo-baseline-2026-08-31`, which is the authority - three files named three different accounts and this is the verified one; the property is the URL-prefix `https://www.thriftycrew.com/`, verified 2026-08-31) . The **sitemap auto-updates** the moment you publish (Ghost regenerates `/sitemap.xml`), so a new lesson is discoverable on its own. Nothing per-post is required. Two optional nudges for a lesson you want ranking fast:
 - In **Google Search Console** -> URL Inspection -> paste the new URL -> **Request indexing** (jumps the crawl queue).
 - Site-verification lives in a `google-site-verification` meta tag inside the site Code Injection. **Never strip it** when editing the injection.
 

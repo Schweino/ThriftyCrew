@@ -40,6 +40,19 @@ function Test-PackShape([string]$size) {
 }
 
 # ---- THE OTHER TAIL (2026-08-08) -------------------------------------------------------------------------
+# THIS RULE HAS A TWIN AND THEY LOOK OPPOSITE WAYS ON PURPOSE (2026-09-07, backlog I16).
+# graph\pipeline\flag_outliers.py bars a per-unit price more than 5.0x BELOW the commodity median;
+# this one flags at or above 4.0x ABOVE it. Different factors, opposite directions, opposite sides of
+# the git-bus, and neither asks a two-tailed question. That is deliberate and the reasons are not
+# symmetric: a DEAR outlier never wins a crown and so never reaches a reader, while a FALSE-CHEAP row
+# always wins one. Watching both directions here would flag rows that cannot reach anybody.
+#
+# AND A MAGNITUDE RULE IS THE WRONG INSTRUMENT FOR THE CASE THAT ACTUALLY COST US, which the header
+# below already records: the baby-formula crown sat at 0.56x the median, well inside both thresholds.
+# No ratio in either direction finds it without also flagging every genuine deep sale. Get-MeasureKind
+# is the answer to that class - a row whose size names a different KIND of quantity - and it is the
+# thing to extend when this rule feels insufficient. Do not "fix" this by making it two-tailed.
+#
 # Find-BasisOutliers only ever looks UPWARD: it flags a row at or above $Ratio x the median, i.e. one that
 # looks too EXPENSIVE. An expensive outlier is real but harmless - it never takes the cheapest slot, so it
 # never reaches a reader. The damaging direction is the opposite one, and this audit was structurally blind
