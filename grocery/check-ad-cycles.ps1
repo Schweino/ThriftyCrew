@@ -791,6 +791,22 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           foreach ($l in @($gscOut)) { Log ('search-console: ' + [string]$l) }
         } else { Log 'search-console: no Python 3 interpreter or the puller is missing - NOT pulled, which is not the same as no traffic' }
       } catch { Log ('search-console threw: ' + $_.Exception.Message) }
+      # ARE THE PRICE COMPARISONS ON THE LIVE CARDS STILL TRUE (2026-09-07, backlog E6)? "Ground turkey
+      # undercuts ground beef" is true at $2.66 against $6.17. When beef falls, that sentence on a live
+      # paid page becomes FALSE and nothing would ever notice - a fact_claims declaration is a one-time
+      # act and this board is rebuilt daily. THAT is why this runs here rather than in run-gates.
+      # Alerts, never blocks: a contradicted claim is a prose fix, not a reason to withhold a board.
+      try {
+        $pca = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-price-claims.ps1'
+        if (Test-Path $pca) {
+          $pcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $pca
+          $pcRc = $LASTEXITCODE
+          foreach ($l in @($pcOut)) { Log ('price-claims: ' + [string]$l) }
+          if ($pcRc -eq 2) {
+            try { Send-Alert -Subject "A live card's price comparison is now BACKWARDS - $asofS" -Body (@($pcOut) -join "`n") | Out-Null } catch {}
+          }
+        }
+      } catch { Log ('price-claims threw: ' + $_.Exception.Message) }
       # EXPORT THE FEED BEFORE ANYTHING RESOLVES IT (2026-08-22). compute-v2-perserving.ps1 is invoked with
       # -FeedPath out\smp-feed.json and export-feed.ps1 is what WRITES that file - and until today it wrote
       # it ~270 lines LATER in this same run. So compute-v2 resolved YESTERDAY's feed every single day and

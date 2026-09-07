@@ -70,11 +70,32 @@ $script:MACHINE_FIELD_PATTERNS = @(
   @('("cost_ps":\s*")[^"]*(")',                 '${1}MASKED${2}'),
   @('("costPerServing":\s*)[0-9]+(?:\.[0-9]+)?', '${1}0')
 )
+
+# UNRENDERED AUTHORED FIELDS - A SEPARATE LIST, AND THE SEPARATION IS THE POINT (2026-09-07, E6).
+# MACHINE_FIELD_PATTERNS above is pinned VERBATIM against reanchor-machine-fields.ps1 because those
+# are the fields reanchor REWRITES every day. These are not machine-written; they are authored, and
+# they simply never reach a reader. Putting them in that list made the source pin fail, correctly -
+# it would have put two meanings under one name.
+#
+# WHY THEY ARE MASKED AT ALL. This hash decides what gets REPUBLISHED. Nothing in meal-prep\engine or
+# any builder reads fact_claims or price_claims - only the two audits do - so a card whose
+# declaration changed produces identical output, and republishing it spends a Ghost write on a live
+# paid site for a change no reader can see.
+#
+# fact_claims has had this problem since E6 shipped and it has never bitten, because no spec had ever
+# declared one. The day somebody began clearing the 332 undeclared claims, every card they touched
+# would have republished. Found on the first real declaration: a mechanism whose cost appears the
+# first time anybody actually uses it.
+$script:UNRENDERED_FIELD_PATTERNS = @(
+  @('("fact_claims":\s*\[)[\s\S]*?(\])',  '${1}MASKED${2}'),
+  @('("price_claims":\s*\[)[\s\S]*?(\])', '${1}MASKED${2}')
+)
 function Get-SpecHash([string]$Path) {
   $bytes = [IO.File]::ReadAllBytes($Path)
   $hasBom = ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)
   $text = [Text.Encoding]::UTF8.GetString($(if ($hasBom) { $bytes[3..($bytes.Length-1)] } else { $bytes }))
   foreach ($p in $script:MACHINE_FIELD_PATTERNS) { $text = [regex]::Replace($text, $p[0], $p[1]) }
+  foreach ($p in $script:UNRENDERED_FIELD_PATTERNS) { $text = [regex]::Replace($text, $p[0], $p[1]) }
   $payload = [Text.Encoding]::UTF8.GetBytes($(if ($hasBom) { 'BOM:' + $text } else { $text }))
   $sha = [System.Security.Cryptography.SHA1]::Create()
   return ([BitConverter]::ToString($sha.ComputeHash($payload)) -replace '-', '')
@@ -116,6 +137,24 @@ if ($SelfTest) {
     [IO.File]::WriteAllBytes((Join-Path $tmp 'b.json2'), [Text.Encoding]::UTF8.GetBytes('{"x":1}'))
     [IO.File]::WriteAllBytes((Join-Path $tmp 'b2.json2'), (@(0xEF,0xBB,0xBF) + [Text.Encoding]::UTF8.GetBytes('{"x":1}')))
     T 'CLEAN TWIN a BOM flip still dirties (masking never widens beyond the two fields)' ((Get-SpecHash (Join-Path $tmp 'b.json2')) -ne (Get-SpecHash (Join-Path $tmp 'b2.json2'))) 'BOM invisible'
+    # THE DECLARATIONS ARE MASKED, AND A PROSE EDIT BESIDE THEM STILL IS NOT (2026-09-07, E6).
+    Set-Content (Join-Path $tmp 'd1.json') '{"prose":"same","price_claims":[{"cheaper":"a","dearer":"b"}]}' -Encoding UTF8
+    $hd1 = Get-SpecHash (Join-Path $tmp 'd1.json')
+    Set-Content (Join-Path $tmp 'd1.json') '{"prose":"same","price_claims":[{"cheaper":"x","dearer":"y"},{"cheaper":"p","dearer":"q"}]}' -Encoding UTF8
+    T 'MUST NOT FIRE  declaring a price claim does NOT dirty the spec - it never reaches a reader, and republishing for it spends a Ghost write for nothing' `
+      ($hd1 -eq (Get-SpecHash (Join-Path $tmp 'd1.json'))) 'a declaration would have republished the card'
+    Set-Content (Join-Path $tmp 'd2.json') '{"prose":"same","fact_claims":["a"]}' -Encoding UTF8
+    $hd2 = Get-SpecHash (Join-Path $tmp 'd2.json')
+    Set-Content (Join-Path $tmp 'd2.json') '{"prose":"same","fact_claims":["a","b"]}' -Encoding UTF8
+    T 'MUST NOT FIRE  fact_claims is the same - it has been unmasked since E6 shipped and would have bitten the first person to clear the backlog' `
+      ($hd2 -eq (Get-SpecHash (Join-Path $tmp 'd2.json'))) 'declaring a fact claim would have republished the card'
+    Set-Content (Join-Path $tmp 'd3.json') '{"prose":"one","price_claims":[{"cheaper":"a","dearer":"b"}]}' -Encoding UTF8
+    $hd3 = Get-SpecHash (Join-Path $tmp 'd3.json')
+    Set-Content (Join-Path $tmp 'd3.json') '{"prose":"TWO","price_claims":[{"cheaper":"a","dearer":"b"}]}' -Encoding UTF8
+    T 'MUST FIRE  CLEAN TWIN - a PROSE edit next to a declaration still dirties, so the mask never widens past the fields it names' `
+      ($hd3 -ne (Get-SpecHash (Join-Path $tmp 'd3.json'))) 'a prose edit went invisible'
+    Remove-Item (Join-Path $tmp 'd1.json'), (Join-Path $tmp 'd2.json'), (Join-Path $tmp 'd3.json') -Force -ErrorAction SilentlyContinue
+
     # SOURCE PIN: the mask must be the SAME two patterns reanchor-machine-fields re-anchors with. If that
     # file's patterns change, this fails until the mask follows - the drift can never be silent.
     $raSrc = [IO.File]::ReadAllText((Join-Path $here 'reanchor-machine-fields.ps1'))

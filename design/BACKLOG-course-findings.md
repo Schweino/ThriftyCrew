@@ -837,7 +837,7 @@ coverage analysis. The general form - a term whose deletion no self-test notices
 by mutation across the whole gate, which is a bigger build than this item asks for and has no defect
 behind it yet.
 
-### E6 - Fact Check List before we publish `PARTLY DONE` `a90b2081`
+### E6 - Fact Check List before we publish `DONE - VERIFY THEM, DO NOT DECLARE THEM 2026-09-07` `a90b2081`
 *Source: Prompt Engineering (course 4).* Ask the generator for the fundamental claims that would
 undermine its own output, then diff that list against the prose. Cheap pre-publish check, close in
 spirit to what `post-publish-reviewer` does afterwards - and on the correct side of the publish,
@@ -849,6 +849,107 @@ which is E1's whole point.
 declare. **Partly, because 584 live cards assert things nothing checks and 340 of those assertions
 were never declared** - those are baselined, so the gate holds the line without going red on day one
 over a backlog nobody can clear in a sitting. Clearing the 340 is what is left.
+
+---
+
+**WORKED 2026-09-07, and reading the 340 instead of counting them found that they are not 340 of one
+thing.** `-All` and `-Json` were added first, because the gate line printed 15 and said "and 325
+more": "each one declared or removed lowers the mark" is advice nobody can follow against a list they
+cannot see.
+
+| Class | Count | What they are |
+|---|---|---|
+| `price-compare` | **332** | real, unbacked comparative price assertions |
+| `storage` / food safety | **8** | **all eight false positives** |
+| `carriage` | **0** | none at all |
+
+**THE FOOD-SAFETY CLASS HAD PRECISION ZERO, and it is the class this audit's own header calls the
+most serious** - "a wrong one is a health claim". All eight hits were marinating or cooking steps:
+*"Refrigerate at least 4 hours and preferably overnight"*, *"toss in the marinade and refrigerate at
+least 2 hours"*, and one where `keeps` meant maintain - *"the lowest heat that KEEPS IT MOVING"* next
+to *"3.5 to 4 hours"*. **That is E22 in the flesh:** green on its fixture, and on the live corpus only
+ever wrong about the thing that matters most. A detector like that trains people to skim exactly the
+class they should read.
+
+**The fix is a principle, not a patch for those eight.** A food-safety claim is an **UPPER** bound -
+how long the finished food is still good for, *"keeps 5 days"*, *"freezes up to 3 months"*. A
+marinating instruction is a **LOWER** bound - how long to leave it before cooking. **A floor says
+nothing about when food stops being safe**, so it cannot be the claim this class exists to catch.
+Marinating prose, "at least"/"minimum" durations, and keep-as-maintain are excluded; the upper-bound
+must-fire still fires, and the three live shapes are frozen as must-not-fire cases. Ratchet
+**tightened 340 -> 332**.
+
+**Zero carriage claims is worth stating rather than passing over.** That is the class where the
+estate has the strongest system of record - `grocery/carriage.json`, which already refuses to publish
+a recipe whose ingredient has no store evidence - and no card is routing around it in prose.
+
+**STILL OPEN, and it is a RULING rather than a defect list.** The 332 are real: *"Ground turkey
+usually undercuts ground beef by a couple dollars a pound"*, *"the same green salsa in a taller jar
+is routinely half the price"*, *"frozen broccoli is cheaper than fresh"*. They are qualitative
+comparative claims made in the writer's voice across **274 of 584 live cards**, and clearing them
+means an editorial decision on each: verify against the board and declare, soften the wording, or
+rule that generic culinary comparison is acceptable house voice and narrow the class.
+
+**Not a code task, and not one to decide unilaterally on a live paid site.** The gate holds the line
+against NEW ones either way, which is what it was built for. `-All` and `-Json` are there so the 332
+can actually be worked when the ruling is made.
+
+---
+
+**RULED 2026-09-07. Brad asked for the LONG TERM solution rather than a choice between narrowings,
+and measuring the residual produced a better answer than any of the three options offered.**
+
+**The 332 contain nothing demonstrably false.** Eleven carry a number or a ratio - the only ones that
+can be flatly wrong - and all eleven were checked against the 2026-09-07 board. None is contradicted.
+*"Ground turkey undercuts ground beef by a couple dollars a pound"* is true and UNDERSTATES it
+($2.663 against $6.170, a $3.51 gap). *"Chicken thigh is cheaper than breast"*: $0.98 against $1.99.
+The pork loin claim - *"about two dollars a pound, roughly half the price of tenderloin"* - is
+consistent with the board once you read the ordinary shelf prices ($3.59 Aldi, $3.88 Hy-Vee, $3.97
+Walmart, $3.99 Fareway) rather than Sam's $2.98 membership price, which is what I anchored on first
+and had to correct.
+
+**THE PART A DECLARATION CANNOT DO IS THE PART THAT MATTERS: THESE CLAIMS DECAY.** Ground turkey
+undercuts 93/7 beef today. If beef falls to $3.00 in November that sentence on a live paid page
+becomes false, and **nothing in this estate would notice**. A declaration is a one-time act; the
+board is rebuilt every day. No quantity of declaring reaches that failure, and it is the only one
+here that costs a reader money.
+
+**So the declaration became the INPUT to a check rather than an echo of the prose.**
+`meal-prep/pipeline/audit-price-claims.ps1` reads a structured entry -
+
+    "price_claims": [ { "cheaper": "ground-turkey", "dearer": "ground-beef-93-7",
+                        "basis": "per lb", "says": "..." } ]
+
+- resolves both ids against the newest board and asks whether the claim is **still** true. It runs
+daily from `check-ad-cycles`, alerting rather than blocking, because a contradicted claim is a prose
+fix and not a reason to withhold a correct board. `fact_claims` finally earns its keep: it is
+machine-readable input to something that can answer.
+
+**Verdicts are `supported`, `tie`, `CONTRADICTED`, `unpriceable`, and the middle two are what keep it
+credible.** Two commodities within 5% are a tie, not a refutation - reporting a tie as a contradiction
+is how a check like this gets switched off. A commodity the board does not price is `unpriceable`
+and says in words that this is NOT evidence the claim holds.
+
+**Proved in both directions.** The first real declaration - the ground turkey claim, on
+`baked-ziti-with-ground-turkey-and-ricotta` - reports `supported: ground-turkey 2.663 vs
+ground-beef-93-7 6.170 (56.8% cheaper)`. Against a copy of the board with turkey moved to $9.99 it
+reports `CONTRADICTED ... the claim is now BACKWARDS by 61.9%` and exits 2.
+
+**And declaring it turned up a latent defect that had been waiting since E6 shipped.** `Get-SpecHash`
+hashes the whole spec, so adding `price_claims` marked the card dirty and the next `propagate` would
+have **republished it** - a Ghost write on a live paid site for a field no builder renders.
+**`fact_claims` has had the identical problem all along** and never bit only because no spec had ever
+declared one: the day anybody started clearing the 332 by declaring them, every card they touched
+would have republished. Both are masked now, in a SEPARATE list from `MACHINE_FIELD_PATTERNS` -
+that list is pinned verbatim against `reanchor-machine-fields.ps1` because those are fields reanchor
+REWRITES daily, and the source pin correctly refused the first attempt to fold two meanings under one
+name. Three fixtures, including the clean twin that a prose edit beside a declaration still dirties.
+
+**What is NOT proposed: back-declaring the other 331.** They are qualitative - buy whole not pre-cut,
+buy frozen not fresh, buy in bulk - and that is the site's editorial substance rather than unbacked
+pricing. Two separate attempts to split them mechanically were wrong, which is itself the finding.
+The gate still counts them and the mark can only fall; what changed is that the ones worth declaring
+now buy something real when they are.
 
 ### E27 - The reranker fine-tuner ships the LAST epoch, not the best one `DONE - SHIPPED`
 *Source: Fine-Tuning Transformers with Hugging Face (queue 2, course 5).* `sidecar/finetune_reranker.py`
@@ -3767,3 +3868,66 @@ is which of two things this estate wants: a lightweight written record per schem
 proposed in `changing-a-schema.md` 4, uncorroborated as C84), or an actual staged-migration
 capability, which nothing here currently knows how to do and which would want its own course first.
 Recommending neither until Brad rules, because the second is much the larger bet.
+
+----
+
+### I42 - the estate runs ETL in `grocery/` and ELT in `graph/`, has never named which is which, and so never asks whether a transform's input is still obtainable `NEEDS A RULING` `queue-4`
+
+**Source.** `etl-and-data-pipelines-shell-airflow-kafka` (Coursera, IBM, Yan Luo, queue-4 course 8,
+worked 2026-09-07), module 1. Routed to `data-quality-craft/moving-data-in-flight.md` sections 1, 3
+and 7. Claims C87 and C88.
+
+**Measured 2026-09-07**, main checkout, worktrees and `sidecar/.venv` excluded. Neither `ETL` nor
+`ELT` appears in any first-party file in this repo. The only hits are third-party packages under
+`sidecar/.venv`.
+
+**What is actually true, and it is a real split rather than an inconsistency.**
+
+| Lane | Shape | The bargain it takes |
+|---|---|---|
+| `grocery/` capture to board | **ETL** - pull, normalise, write `comparison-*.json` | transform is re-run daily instead of the raw being kept. `known-wrong.json` exists because of this |
+| `graph/` | **ELT-ish** - events ingested as they arrived, derivations computed from them | a derivation change can be re-run over history, which is only possible because the raw survived |
+
+**Why it matters here specifically.** The course's one careful teaching is that an ETL transform is
+a one-way door **unless the raw is stored**, and the axis it never names is whether the source is
+re-acquirable. A shop's shelf price on a given morning **is not re-acquirable at any price**. So
+every point in the capture lane where a raw response is parsed and discarded is a place where
+evidence is destroyed and nobody decided to destroy it.
+
+**What rung 1 would be, and it is a read rather than a build.** For each capture lane, answer one
+question: after the transform, does the raw source response still exist anywhere on disk or in git?
+One table, one row per store. `grocery/out/` already holds a lot of intermediate JSON, so the answer
+may be "mostly yes, by accident", which would shrink this to a documentation item.
+
+**The ruling needed.** If the answer is "no" for any lane, the question is whether raw retention is
+worth its disk cost against a repo the ~07:00 bot commits whole and I36's unbounded log growth. That
+is a trade Brad decides, not one a course run decides.
+
+----
+
+### I43 - the estate records per-stage latency for one chain, commits it daily, and has never read it to name a bottleneck `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4`
+
+**Source.** Same course, module 2 lectures 20 and 21. Routed to
+`reliability-craft/pipeline-throughput.md`. Claim C90.
+
+**This is the per-STAGE sibling of I33, which read the same file's TOTALS.** I33 established that
+`grocery/out/logs/graph-nightly-status.json` is tracked and committed daily with 15 days of history,
+and read `elapsed_sec` from it: 118 s to 199 s, mean 161.7 s, no visible trend. **What it did not
+read is the `stages` array in the same file**, which carries `{stage, state, detail, sec}` per stage,
+written by `graph/pipeline/nightly.ps1` (timing at line 324, emission at line 675). Verified
+2026-09-07 by reading the file.
+
+**Why it matters.** The course's operative rule is that a staged pipeline's latency is owned by its
+**slowest stage**, so an end-to-end number says the chain is slow and only a per-stage number says
+what to fix. We have the per-stage number, in git, for every night, and have never looked at it.
+That is the cheapest unread measurement in the estate.
+
+**What rung 1 is.** `git log` the file, pull the `stages` array per commit, and produce one table:
+stage, median seconds, share of total, variance across the 15 days. The output answers two questions
+at once - which stage is the bottleneck, and whether it is *consistently* slow (a parallelisation
+candidate) or *variable* (a buffering candidate), which is the split recorded as claim C90.
+
+**What is genuinely absent, stated separately so this item is not read as bigger than it is.** The
+`grocery/` capture lanes and the 243 gates and audits record **no** duration at all. Extending the
+timing to them is a rung 2 and should not be started before rung 1 says a bottleneck read is worth
+having.
